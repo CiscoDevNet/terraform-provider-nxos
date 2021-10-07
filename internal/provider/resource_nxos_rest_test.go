@@ -14,6 +14,13 @@ func TestAccNxosRest_interface(t *testing.T) {
 		ProviderFactories: providerFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccNxosRestConfig_empty(),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("nxos_rest.l1PhysIf", "class_name", "l1PhysIf"),
+					resource.TestCheckResourceAttr("nxos_rest.l1PhysIf", "id", "sys/intf/phys-[eth1/1]"),
+				),
+			},
+			{
 				Config: testAccNxosRestConfig_interface("Create description"),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_rest.l1PhysIf", "class_name", "l1PhysIf"),
@@ -35,6 +42,15 @@ func TestAccNxosRest_interface(t *testing.T) {
 			},
 		},
 	})
+}
+
+func testAccNxosRestConfig_empty() string {
+	return `
+	resource "nxos_rest" "l1PhysIf" {
+		dn = "sys/intf/phys-[eth1/1]"
+		class_name = "l1PhysIf"
+	}
+	`
 }
 
 func testAccNxosRestConfig_interface(description string) string {

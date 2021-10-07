@@ -14,6 +14,7 @@ func prepareBody(d *schema.ResourceData) (nxos.Body, error) {
 	content := d.Get("content")
 	contentStrMap := toStrMap(content.(map[string]interface{}))
 
+	body.Str = fmt.Sprintf("{\"%s\":{\"attributes\":{}}}", className)
 	for attr, value := range contentStrMap {
 		body = body.Set(fmt.Sprintf("%s.attributes.%s", className, attr), value)
 	}

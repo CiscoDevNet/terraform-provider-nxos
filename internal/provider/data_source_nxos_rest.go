@@ -2,84 +2,106 @@ package provider
 
 import (
 	"context"
-	"log"
+	"fmt"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-func dataSourceNxosRest() *schema.Resource {
-	return &schema.Resource{
-		Description: "This data source can read one NXOS object.",
+type dataSourceRestType struct{}
 
-		ReadContext: dataSourceNxosRestRead,
+func (t dataSourceRestType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+	return tfsdk.Schema{
+		// This description is used by the documentation generator and the language server.
+		MarkdownDescription: "This data source can read one NXOS object.",
 
-		Schema: map[string]*schema.Schema{
+		Attributes: map[string]tfsdk.Attribute{
 			"id": {
-				Description: "The distinguished name of the object.",
-				Type:        schema.TypeString,
-				Computed:    true,
+				MarkdownDescription: "The distinguished name of the object.",
+				Type:                types.StringType,
+				Computed:            true,
 			},
 			"dn": {
-				Type:        schema.TypeString,
-				Description: "Distinguished name of object to be retrieved, e.g. sys/intf/phys-[eth1/1].",
-				Required:    true,
+				MarkdownDescription: "Distinguished name of object to be retrieved, e.g. sys/intf/phys-[eth1/1].",
+				Type:                types.StringType,
+				Required:            true,
 			},
 			"class_name": {
-				Type:        schema.TypeString,
-				Description: "Class name of object being retrieved.",
-				Computed:    true,
+				MarkdownDescription: "Class name of object being retrieved.",
+				Type:                types.StringType,
+				Computed:            true,
 			},
 			"content": {
-				Type:        schema.TypeMap,
-				Description: "Map of key-value pairs which represents the attributes of object being retrieved.",
-				Computed:    true,
+				MarkdownDescription: "Map of key-value pairs which represents the attributes of object being retrieved.",
+				Type:                types.MapType{ElemType: types.StringType},
+				Computed:            true,
 			},
 		},
-	}
+	}, nil
 }
 
-func dataSourceNxosRestRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	log.Printf("[DEBUG] %s: Beginning Read", d.Id())
-	client := meta.(apiClient).Client
+func (t dataSourceRestType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
+	provider, diags := convertProviderType(in)
 
-	for attempts := 0; ; attempts++ {
-		res, err := client.GetDn(d.Get("dn").(string))
+	return dataSourceRest{
+		provider: provider,
+	}, diags
+}
 
-		if err != nil {
-			if ok := backoff(attempts, meta.(apiClient).Retries); !ok {
-				return diag.FromErr(err)
-			}
-			log.Printf("[ERROR] Failed to read object: %s, retries: %v", err, attempts)
-			continue
-		}
+type dataSourceRest struct {
+	provider provider
+}
 
-		// Check if we received an empty response without errors -> object has been deleted
-		if !res.Exists() && err == nil {
-			d.SetId("")
-			break
-		}
+func (d dataSourceRest) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+	var config, state Rest
 
+	// Read config
+	diags := req.Config.Get(ctx, &config)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.Id.Value))
+
+	res, err := d.provider.client.GetDn(config.Dn.Value)
+
+	if err != nil {
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
+		return
+	}
+
+	// Check if we received an empty response without errors -> object has been deleted
+	if !res.Exists() && err == nil {
+		state.Id.Value = ""
+	} else {
 		// Set class_name
 		var className string
 		for class := range res.Map() {
 			className = class
 		}
-		d.Set("class_name", className)
+
+		state.ClassName.Value = className
+		state.Dn.Value = config.Dn.Value
 
 		// Set content
-		content := make(map[string]interface{})
+		content := make(map[string]attr.Value)
 
 		for attr, value := range res.Get(className + ".attributes").Map() {
-			content[attr] = value.String()
+			content[attr] = types.String{Value: value.String()}
 		}
-		d.Set("content", content)
+		state.Content.Elems = content
+		state.Content.ElemType = types.StringType
 
 		// Set id
-		d.SetId(d.Get("dn").(string))
-		break
+		state.Id.Value = state.Dn.Value
 	}
 
-	log.Printf("[DEBUG] %s: Read finished successfully", d.Id())
-	return nil
+	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.Id.Value))
+
+	diags = resp.State.Set(ctx, &state)
+	resp.Diagnostics.Append(diags...)
 }

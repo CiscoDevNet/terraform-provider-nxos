@@ -1,21 +1,22 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/netascode/go-nxos"
 )
 
-func prepareBody(d *schema.ResourceData) (nxos.Body, error) {
+func prepareBody(ctx context.Context, d Rest) (nxos.Body, diag.Diagnostics) {
 	body := nxos.Body{}
 
-	className := d.Get("class_name").(string)
-	content := d.Get("content")
-	contentStrMap := toStrMap(content.(map[string]interface{}))
+	className := d.ClassName.Value
 
 	body.Str = fmt.Sprintf("{\"%s\":{\"attributes\":{}}}", className)
-	for attr, value := range contentStrMap {
+	var content map[string]string
+	d.Content.ElementsAs(ctx, &content, false)
+	for attr, value := range content {
 		body = body.Set(fmt.Sprintf("%s.attributes.%s", className, attr), value)
 	}
 	return body, nil

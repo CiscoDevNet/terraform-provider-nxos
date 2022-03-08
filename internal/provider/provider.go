@@ -5,137 +5,264 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"strings"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/frankgreco/terraform-helpers/validators"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 )
 
-func init() {
-	// Set descriptions to support markdown syntax, this will be used in document generation
-	// and the language server.
-	schema.DescriptionKind = schema.StringMarkdown
+// provider satisfies the tfsdk.Provider interface and usually is included
+// with all Resource and DataSource implementations.
+type provider struct {
+	client nxos.Client
 
-	// Customize the content of descriptions when output. For example you can add defaults on
-	// to the exported descriptions if present.
-	schema.SchemaDescriptionBuilder = func(s *schema.Schema) string {
-		desc := s.Description
-		if s.Default != nil {
-			desc += fmt.Sprintf(" Defaults to `%v`.", s.Default)
-		}
-		return strings.TrimSpace(desc)
-	}
+	// configured is set to true at the end of the Configure method.
+	// This can be used in Resource and DataSource implementations to verify
+	// that the provider was previously configured.
+	configured bool
+
+	// version is set to the provider version on release, "dev" when the
+	// provider is built and ran locally, and "test" when running acceptance
+	// testing.
+	version string
 }
 
-func New(version string) func() *schema.Provider {
-	return func() *schema.Provider {
-		p := &schema.Provider{
-			Schema: map[string]*schema.Schema{
-				"username": {
-					Type:        schema.TypeString,
-					Required:    true,
-					DefaultFunc: schema.EnvDefaultFunc("NXOS_USERNAME", nil),
-					Description: "Username for the NXOS device account. This can also be set as the NXOS_USERNAME environment variable.",
-				},
-				"password": {
-					Type:        schema.TypeString,
-					Optional:    true,
-					DefaultFunc: schema.EnvDefaultFunc("NXOS_PASSWORD", nil),
-					Description: "Password for the NXOS device account. This can also be set as the NXOS_PASSWORD environment variable.",
-				},
-				"url": {
-					Type:        schema.TypeString,
-					Required:    true,
-					DefaultFunc: schema.EnvDefaultFunc("NXOS_URL", nil),
-					Description: "URL of the Cisco NXOS device. This can also be set as the NXOS_URL environment variable.",
-				},
-				"insecure": {
-					Type:     schema.TypeBool,
-					Optional: true,
-					DefaultFunc: func() (interface{}, error) {
-						if v := os.Getenv("NXOS_INSECURE"); v != "" {
-							return strconv.ParseBool(v)
-						}
-						return true, nil
-					},
-					Description: "Allow insecure HTTPS client. This can also be set as the NXOS_INSECURE environment variable. Defaults to `true`.",
-				},
-				"retries": {
-					Type:     schema.TypeInt,
-					Optional: true,
-					DefaultFunc: func() (interface{}, error) {
-						if v := os.Getenv("NXOS_RETRIES"); v != "" {
-							return strconv.Atoi(v)
-						}
-						return 3, nil
-					},
-					ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
-						v := val.(int)
-						if v < 0 || v > 9 {
-							errs = append(errs, fmt.Errorf("%q must be between 0 and 9 inclusive, got: %d", key, v))
-						}
-						return
-					},
-					Description: "Number of retries for REST API calls. This can also be set as the NXOS_RETRIES environment variable. Defaults to `3`.",
+// providerData can be used to store data from the Terraform configuration.
+type providerData struct {
+	Username types.String `tfsdk:"username"`
+	Password types.String `tfsdk:"password"`
+	URL      types.String `tfsdk:"url"`
+	Insecure types.Bool   `tfsdk:"insecure"`
+	Retries  types.Int64  `tfsdk:"retries"`
+}
+
+func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderRequest, resp *tfsdk.ConfigureProviderResponse) {
+	// Retrieve provider data from configuration
+	var config providerData
+	diags := req.Config.Get(ctx, &config)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	// User must provide a username to the provider
+	var username string
+	if config.Username.Unknown {
+		// Cannot connect to client with an unknown value
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as username",
+		)
+		return
+	}
+
+	if config.Username.Null {
+		username = os.Getenv("NXOS_USERNAME")
+	} else {
+		username = config.Username.Value
+	}
+
+	if username == "" {
+		// Error vs warning - empty value must stop execution
+		resp.Diagnostics.AddError(
+			"Unable to find username",
+			"Username cannot be an empty string",
+		)
+		return
+	}
+
+	// User must provide a password to the provider
+	var password string
+	if config.Password.Unknown {
+		// Cannot connect to client with an unknown value
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as password",
+		)
+		return
+	}
+
+	if config.Password.Null {
+		password = os.Getenv("NXOS_PASSWORD")
+	} else {
+		password = config.Password.Value
+	}
+
+	if password == "" {
+		// Error vs warning - empty value must stop execution
+		resp.Diagnostics.AddError(
+			"Unable to find password",
+			"Password cannot be an empty string",
+		)
+		return
+	}
+
+	// User must provide a username to the provider
+	var url string
+	if config.URL.Unknown {
+		// Cannot connect to client with an unknown value
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as url",
+		)
+		return
+	}
+
+	if config.URL.Null {
+		url = os.Getenv("NXOS_URL")
+	} else {
+		url = config.URL.Value
+	}
+
+	if url == "" {
+		// Error vs warning - empty value must stop execution
+		resp.Diagnostics.AddError(
+			"Unable to find url",
+			"URL cannot be an empty string",
+		)
+		return
+	}
+
+	var insecure bool
+	if config.Insecure.Unknown {
+		// Cannot connect to client with an unknown value
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as insecure",
+		)
+		return
+	}
+
+	if config.Insecure.Null {
+		insecureStr := os.Getenv("NXOS_INSECURE")
+		if insecureStr == "" {
+			insecure = true
+		} else {
+			insecure, _ = strconv.ParseBool(insecureStr)
+		}
+	} else {
+		insecure = config.Insecure.Value
+	}
+
+	var retries int64
+	if config.Retries.Unknown {
+		// Cannot connect to client with an unknown value
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as retries",
+		)
+		return
+	}
+
+	if config.Retries.Null {
+		retriesStr := os.Getenv("NXOS_RETRIES")
+		if retriesStr == "" {
+			retries = 4
+		} else {
+			retries, _ = strconv.ParseInt(retriesStr, 0, 64)
+		}
+	} else {
+		retries = config.Retries.Value
+	}
+
+	// Create a new NXOS client and set it to the provider client
+	c, err := nxos.NewClient(url, username, password, insecure, nxos.MaxRetries(int(retries)))
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Unable to create client",
+			"Unable to create nxos client:\n\n"+err.Error(),
+		)
+		return
+	}
+
+	p.client = c
+
+	p.configured = true
+}
+
+func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceType, diag.Diagnostics) {
+	return map[string]tfsdk.ResourceType{
+		"nxos_rest": resourceRestType{},
+	}, nil
+}
+
+func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSourceType, diag.Diagnostics) {
+	return map[string]tfsdk.DataSourceType{
+		"nxos_rest": dataSourceRestType{},
+	}, nil
+}
+
+func (p *provider) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+	return tfsdk.Schema{
+		Attributes: map[string]tfsdk.Attribute{
+			"username": {
+				MarkdownDescription: "Username for the NXOS device account. This can also be set as the NXOS_USERNAME environment variable.",
+				Type:                types.StringType,
+				Optional:            true,
+			},
+			"password": {
+				MarkdownDescription: "Password for the NXOS device account. This can also be set as the NXOS_PASSWORD environment variable.",
+				Type:                types.StringType,
+				Optional:            true,
+				Sensitive:           true,
+			},
+			"url": {
+				MarkdownDescription: "URL of the Cisco NXOS device. This can also be set as the NXOS_URL environment variable.",
+				Type:                types.StringType,
+				Optional:            true,
+			},
+			"insecure": {
+				MarkdownDescription: "Allow insecure HTTPS client. This can also be set as the NXOS_INSECURE environment variable. Defaults to `true`.",
+				Type:                types.BoolType,
+				Optional:            true,
+			},
+			"retries": {
+				MarkdownDescription: "Number of retries for REST API calls. This can also be set as the NXOS_RETRIES environment variable. Defaults to `3`.",
+				Type:                types.Int64Type,
+				Optional:            true,
+				Validators: []tfsdk.AttributeValidator{
+					validators.Range(0, 9),
 				},
 			},
-			DataSourcesMap: map[string]*schema.Resource{
-				"nxos_rest": dataSourceNxosRest(),
-			},
-			ResourcesMap: map[string]*schema.Resource{
-				"nxos_rest": resourceNxosRest(),
-			},
+		},
+	}, nil
+}
+
+func New(version string) func() tfsdk.Provider {
+	return func() tfsdk.Provider {
+		return &provider{
+			version: version,
 		}
-
-		p.ConfigureContextFunc = configure(version, p)
-
-		return p
 	}
 }
 
-type apiClient struct {
-	Username   string
-	Password   string
-	URL        string
-	IsInsecure bool
-	Retries    int
-	Client     nxos.Client
-}
+// convertProviderType is a helper function for NewResource and NewDataSource
+// implementations to associate the concrete provider type. Alternatively,
+// this helper can be skipped and the provider type can be directly type
+// asserted (e.g. provider: in.(*provider)), however using this can prevent
+// potential panics.
+func convertProviderType(in tfsdk.Provider) (provider, diag.Diagnostics) {
+	var diags diag.Diagnostics
 
-func (c apiClient) Valid() diag.Diagnostics {
+	p, ok := in.(*provider)
 
-	if c.Username == "" {
-		return diag.FromErr(fmt.Errorf("Username must be provided for the NXOS provider"))
+	if !ok {
+		diags.AddError(
+			"Unexpected Provider Instance Type",
+			fmt.Sprintf("While creating the data source or resource, an unexpected provider type (%T) was received. This is always a bug in the provider code and should be reported to the provider developers.", p),
+		)
+		return provider{}, diags
 	}
 
-	if c.Password == "" {
-		return diag.FromErr(fmt.Errorf("Password must be provided for the NXOS provider"))
+	if p == nil {
+		diags.AddError(
+			"Unexpected Provider Instance Type",
+			"While creating the data source or resource, an unexpected empty provider instance was received. This is always a bug in the provider code and should be reported to the provider developers.",
+		)
+		return provider{}, diags
 	}
 
-	if c.URL == "" {
-		return diag.FromErr(fmt.Errorf("The URL must be provided for the NXOS provider"))
-	}
-
-	return nil
-}
-
-func configure(version string, p *schema.Provider) func(context.Context, *schema.ResourceData) (interface{}, diag.Diagnostics) {
-	return func(c context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
-		cl := apiClient{
-			Username:   d.Get("username").(string),
-			Password:   d.Get("password").(string),
-			URL:        d.Get("url").(string),
-			IsInsecure: d.Get("insecure").(bool),
-			Retries:    d.Get("retries").(int),
-		}
-
-		if diag := cl.Valid(); diag != nil {
-			return nil, diag
-		}
-
-		cl.Client, _ = nxos.NewClient(cl.URL, cl.Username, cl.Password, cl.IsInsecure)
-
-		return cl, nil
-	}
+	return *p, diags
 }

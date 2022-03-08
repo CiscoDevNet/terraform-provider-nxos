@@ -5,13 +5,12 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 func TestAccNxosRest_interface(t *testing.T) {
 	resource.Test(t, resource.TestCase{
-		PreCheck:          func() { testAccPreCheck(t) },
-		ProviderFactories: providerFactories,
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosRestConfig_empty(),
@@ -29,10 +28,9 @@ func TestAccNxosRest_interface(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:      "nxos_rest.l1PhysIf",
-				ImportState:       true,
-				ImportStateId:     "l1PhysIf:sys/intf/phys-[eth1/1]",
-				ImportStateVerify: true,
+				ResourceName:  "nxos_rest.l1PhysIf",
+				ImportState:   true,
+				ImportStateId: "l1PhysIf:sys/intf/phys-[eth1/1]",
 			},
 			{
 				Config: testAccNxosRestConfig_interface("Updated description"),
@@ -64,42 +62,4 @@ func testAccNxosRestConfig_interface(description string) string {
 		}
 	}
 	`, description)
-}
-
-func testAccCheckNxosRestDestroy(s *terraform.State) error {
-	client := testAccProvider.Meta().(apiClient).Client
-
-	for _, rs := range s.RootModule().Resources {
-
-		if rs.Type == "nxos_rest" {
-			_, err := client.Get(rs.Primary.ID)
-			if err == nil {
-				return fmt.Errorf("Resource nxos_rest %s still exists", rs.Primary.ID)
-			}
-
-		} else {
-			continue
-		}
-	}
-
-	return nil
-}
-
-func testAccCheckNxosRestStillExists(s *terraform.State) error {
-	client := testAccProvider.Meta().(apiClient).Client
-
-	for _, rs := range s.RootModule().Resources {
-
-		if rs.Type == "nxos_rest" {
-			_, err := client.Get(rs.Primary.ID)
-			if err != nil {
-				return fmt.Errorf("Error retrieving resource nxos_rest %s", rs.Primary.ID)
-			}
-
-		} else {
-			continue
-		}
-	}
-
-	return nil
 }

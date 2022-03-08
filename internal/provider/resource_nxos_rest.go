@@ -3,187 +3,209 @@ package provider
 import (
 	"context"
 	"fmt"
-	"log"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-go/tftypes"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
 )
 
-func resourceNxosRest() *schema.Resource {
-	return &schema.Resource{
-		Description: "Manages NXOS Model Objects via REST API calls. This resource can only manage a single API object. It is able to read the state and therefore reconcile configuration drift.",
+type resourceRestType struct{}
 
-		CreateContext: resourceNxosRestCreate,
-		UpdateContext: resourceNxosRestUpdate,
-		ReadContext:   resourceNxosRestRead,
-		DeleteContext: resourceNxosRestDelete,
-		Importer: &schema.ResourceImporter{
-			StateContext: resourceNxosRestImport,
-		},
+func (t resourceRestType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+	return tfsdk.Schema{
+		// This description is used by the documentation generator and the language server.
+		MarkdownDescription: "Manages NXOS Model Objects via REST API calls. This resource can only manage a single API object. It is able to read the state and therefore reconcile configuration drift.",
 
-		Schema: map[string]*schema.Schema{
+		Attributes: map[string]tfsdk.Attribute{
 			"id": {
-				Description: "The distinguished name of the object.",
-				Type:        schema.TypeString,
-				Computed:    true,
-			},
-			"dn": {
-				Type:        schema.TypeString,
-				Description: "Distinguished name of object being managed including its relative name, e.g. sys/intf/phys-[eth1/1].",
-				Required:    true,
-				ForceNew:    true,
-			},
-			"class_name": {
-				Type:        schema.TypeString,
-				Description: "Which class object is being created. (Make sure there is no colon in the classname)",
-				Required:    true,
-				ForceNew:    true,
-			},
-			"content": {
-				Type:        schema.TypeMap,
-				Description: "Map of key-value pairs that need to be passed to the Model object as parameters.",
-				Optional:    true,
-				Computed:    true,
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					content := d.Get("content")
-					contentStrMap := toStrMap(content.(map[string]interface{}))
-					key := strings.Split(k, ".")[1]
-					if _, ok := contentStrMap[key]; ok {
-						return false
-					}
-					return true
+				MarkdownDescription: "The distinguished name of the object.",
+				Type:                types.StringType,
+				Computed:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					tfsdk.UseStateForUnknown(),
 				},
 			},
+			"dn": {
+				MarkdownDescription: "Distinguished name of object being managed including its relative name, e.g. sys/intf/phys-[eth1/1].",
+				Type:                types.StringType,
+				Required:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					tfsdk.RequiresReplace(),
+				},
+			},
+			"class_name": {
+				MarkdownDescription: "Which class object is being created. (Make sure there is no colon in the classname)",
+				Type:                types.StringType,
+				Required:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					tfsdk.RequiresReplace(),
+				},
+			},
+			"content": {
+				Type:                types.MapType{ElemType: types.StringType},
+				MarkdownDescription: "Map of key-value pairs that need to be passed to the Model object as parameters.",
+				Optional:            true,
+				Computed:            true,
+			},
 		},
-	}
+	}, nil
 }
 
-func resourceNxosRestRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	log.Printf("[DEBUG] %s: Beginning Read", d.Id())
-	client := meta.(apiClient).Client
+func (t resourceRestType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
+	provider, diags := convertProviderType(in)
 
-	for attempts := 0; ; attempts++ {
-		res, err := client.GetDn(d.Get("dn").(string), nxos.Query("rsp-prop-include", "config-only"))
+	return resourceRest{
+		provider: provider,
+	}, diags
+}
 
-		if err != nil {
-			if ok := backoff(attempts, meta.(apiClient).Retries); !ok {
-				return diag.FromErr(err)
-			}
-			log.Printf("[ERROR] Failed to read object: %s, retries: %v", err, attempts)
-			continue
-		}
+type resourceRest struct {
+	provider provider
+}
 
-		// Check if we received an empty response without errors -> object has been deleted
-		if !res.Exists() && err == nil {
-			d.SetId("")
-			return nil
-		}
+func (r resourceRest) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+	var plan Rest
 
-		className := d.Get("class_name").(string)
-		dn := d.Get("dn").(string)
-		d.SetId(dn)
+	// Read plan
+	diags := req.Plan.Get(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
-		newContent := make(map[string]interface{})
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.Id.Value))
 
+	body, _ := prepareBody(ctx, plan)
+	_, err := r.provider.client.Post(plan.Dn.Value, body.Str)
+	if err != nil {
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
+		return
+	}
+
+	plan.Id = plan.Dn
+	plan.Content.Unknown = false
+
+	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.Id.Value))
+
+	diags = resp.State.Set(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
+}
+
+func (r resourceRest) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+	var state Rest
+
+	// Read state
+	diags := req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.Value))
+
+	res, err := r.provider.client.GetDn(state.Dn.Value, nxos.Query("rsp-prop-include", "config-only"))
+	if err != nil {
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
+		return
+	}
+
+	// Check if we received an empty response without errors -> object has been deleted
+	if !res.Exists() && err == nil {
+		state.Id.Value = ""
+	} else {
+		className := state.ClassName.Value
+		state.Id.Value = state.Dn.Value
+
+		stateContent := state.Content
+		newContent := make(map[string]attr.Value)
 		for attr, value := range res.Get(className + ".attributes").Map() {
-			newContent[attr] = value.String()
+			if _, ok := stateContent.Elems[attr]; ok {
+				newContent[attr] = types.String{Value: value.Str}
+			}
 		}
 
-		d.Set("content", newContent)
-		break
+		state.Content.Elems = newContent
 	}
 
-	log.Printf("[DEBUG] %s: Read finished successfully", d.Id())
-	return nil
+	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.Value))
+
+	diags = resp.State.Set(ctx, &state)
+	resp.Diagnostics.Append(diags...)
 }
 
-func resourceNxosRestCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	log.Printf("[DEBUG] %s: Beginning Create", d.Id())
-	client := meta.(apiClient).Client
+func (r resourceRest) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+	var plan Rest
 
-	for attempts := 0; ; attempts++ {
-		body, _ := prepareBody(d)
-		_, err := client.Post(d.Get("dn").(string), body.Str)
-
-		if err == nil {
-			break
-		}
-		if ok := backoff(attempts, meta.(apiClient).Retries); !ok {
-			return diag.FromErr(err)
-		}
-		log.Printf("[ERROR] Failed to update object: %s, retries: %v", err, attempts)
+	// Read plan
+	diags := req.Plan.Get(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
 	}
 
-	log.Printf("[DEBUG] %s: Create finished successfully", d.Id())
-	return resourceNxosRestRead(ctx, d, meta)
-}
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.Value))
 
-func resourceNxosRestUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	log.Printf("[DEBUG] %s: Beginning Update", d.Id())
-	client := meta.(apiClient).Client
-
-	for attempts := 0; ; attempts++ {
-		body, _ := prepareBody(d)
-		_, err := client.Post(d.Get("dn").(string), body.Str)
-
-		if err == nil {
-			break
-		}
-		if ok := backoff(attempts, meta.(apiClient).Retries); !ok {
-			return diag.FromErr(err)
-		}
-		log.Printf("[ERROR] Failed to update object: %s, retries: %v", err, attempts)
+	body, _ := prepareBody(ctx, plan)
+	_, err := r.provider.client.Post(plan.Dn.Value, body.Str)
+	if err != nil {
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
+		return
 	}
 
-	log.Printf("[DEBUG] %s: Update finished successfully", d.Id())
-	return resourceNxosRestRead(ctx, d, meta)
+	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.Value))
+
+	diags = resp.State.Set(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
 }
 
-func resourceNxosRestDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	log.Printf("[DEBUG] %s: Beginning Destroy", d.Id())
-	client := meta.(apiClient).Client
+func (r resourceRest) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+	var state Rest
 
-	for attempts := 0; ; attempts++ {
-		res, err := client.DeleteDn(d.Get("dn").(string))
+	// Read state
+	diags := req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
-		if err == nil {
-			break
-		}
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.Value))
+
+	res, err := r.provider.client.DeleteDn(state.Dn.Value)
+	if err != nil {
 		errCode := res.Get("imdata.0.error.attributes.code").Str
 		// Ignore errors of type "Cannot delete object"
-		if errCode == "107" {
-			break
+		if errCode != "107" {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
+			return
 		}
-		if ok := backoff(attempts, meta.(apiClient).Retries); !ok {
-			return diag.FromErr(err)
-		}
-		log.Printf("[ERROR] Failed to delete object: %s, retries: %v", err, attempts)
 	}
 
-	d.SetId("")
-	log.Printf("[DEBUG] %s: Destroy finished successfully", d.Id())
-	return nil
+	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Id.Value))
+
+	resp.State.RemoveResource(ctx)
 }
 
-func resourceNxosRestImport(ctx context.Context, d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
-	log.Printf("[DEBUG] %s: Beginning Import", d.Id())
+func (r resourceRest) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
+	idParts := strings.Split(req.ID, ":")
 
-	parts := strings.SplitN(d.Id(), ":", 2)
-
-	if len(parts) != 2 || parts[0] == "" || parts[1] == "" {
-		return nil, fmt.Errorf("Unexpected format of ID (%s), expected class_name:dn", d.Id())
+	if len(idParts) != 2 || idParts[0] == "" || idParts[1] == "" {
+		resp.Diagnostics.AddError(
+			"Unexpected Import Identifier",
+			fmt.Sprintf("Unexpected format of ID (%s), expected class_name:dn", req.ID),
+		)
+		return
 	}
 
-	d.Set("dn", parts[1])
-	d.Set("class_name", parts[0])
-	d.SetId(parts[1])
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Import", idParts[1]))
 
-	if diags := resourceNxosRestRead(ctx, d, meta); diags.HasError() {
-		return nil, fmt.Errorf("Could not read object when importing: %s", diags[0].Summary)
-	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, tftypes.NewAttributePath().WithAttributeName("dn"), idParts[1])...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, tftypes.NewAttributePath().WithAttributeName("class_name"), idParts[0])...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, tftypes.NewAttributePath().WithAttributeName("id"), idParts[1])...)
 
-	log.Printf("[DEBUG] %s: Import finished successfully", d.Id())
-	return []*schema.ResourceData{d}, nil
+	tflog.Debug(ctx, fmt.Sprintf("%s: Import finished successfully", idParts[1]))
 }

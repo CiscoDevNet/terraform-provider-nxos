@@ -44,5 +44,5 @@ resource "nxos_rest" "l1PhysIf" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import nxos_rest.l1PhysIf l1PhysIf:sys/intf/phys-[eth1/1]
+terraform import "nxos_rest.l1PhysIf" "l1PhysIf:sys/intf/phys-[eth1/1]"
 ```

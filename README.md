@@ -4,17 +4,17 @@
 
 ## Requirements
 
--	[Terraform](https://www.terraform.io/downloads.html) >= 1.0.0
--	[Go](https://golang.org/doc/install) >= 1.16
+- [Terraform](https://www.terraform.io/downloads.html) >= 1.0
+- [Go](https://golang.org/doc/install) >= 1.17
 
 ## Building The Provider
 
 1. Clone the repository
 2. Enter the repository directory
-3. Build the provider using the Go `install` command: 
+3. Build the provider using the Go `install` command:
 
-```sh
-$ go install
+```shell
+go install
 ```
 
 ## Adding Dependencies
@@ -24,7 +24,7 @@ Please see the Go documentation for the most up to date information about using 
 
 To add a new dependency `github.com/author/dependency` to your Terraform provider:
 
-```
+```shell
 go get github.com/author/dependency
 go mod tidy
 ```
@@ -51,6 +51,6 @@ In order to run the full suite of Acceptance tests, run `make testacc`. Make sur
 
 *Note:* Acceptance tests create real resources.
 
-```sh
-$ make testacc
+```shell
+make testacc
 ```

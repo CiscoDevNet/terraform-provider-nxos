@@ -80,7 +80,7 @@ func (r resourceRest) Create(ctx context.Context, req tfsdk.CreateResourceReques
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.Id.Value))
 
-	body, _ := prepareBody(ctx, plan)
+	body, _ := plan.renderBody(ctx)
 	_, err := r.provider.client.Post(plan.Dn.Value, body.Str)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
@@ -150,7 +150,7 @@ func (r resourceRest) Update(ctx context.Context, req tfsdk.UpdateResourceReques
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.Value))
 
-	body, _ := prepareBody(ctx, plan)
+	body, _ := plan.renderBody(ctx)
 	_, err := r.provider.client.Post(plan.Dn.Value, body.Str)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))

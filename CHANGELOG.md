@@ -1,3 +1,7 @@
+## 0.2.1
+
+- Add nxos_pyhsical_interface resource and data source
+
 ## 0.2.0
 
 - Transition to Terraform Plugin Framework

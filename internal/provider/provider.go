@@ -38,6 +38,42 @@ type providerData struct {
 	Retries  types.Int64  `tfsdk:"retries"`
 }
 
+func (p *provider) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+	return tfsdk.Schema{
+		Attributes: map[string]tfsdk.Attribute{
+			"username": {
+				MarkdownDescription: "Username for the NXOS device account. This can also be set as the NXOS_USERNAME environment variable.",
+				Type:                types.StringType,
+				Optional:            true,
+			},
+			"password": {
+				MarkdownDescription: "Password for the NXOS device account. This can also be set as the NXOS_PASSWORD environment variable.",
+				Type:                types.StringType,
+				Optional:            true,
+				Sensitive:           true,
+			},
+			"url": {
+				MarkdownDescription: "URL of the Cisco NXOS device. This can also be set as the NXOS_URL environment variable.",
+				Type:                types.StringType,
+				Optional:            true,
+			},
+			"insecure": {
+				MarkdownDescription: "Allow insecure HTTPS client. This can also be set as the NXOS_INSECURE environment variable. Defaults to `true`.",
+				Type:                types.BoolType,
+				Optional:            true,
+			},
+			"retries": {
+				MarkdownDescription: "Number of retries for REST API calls. This can also be set as the NXOS_RETRIES environment variable. Defaults to `3`.",
+				Type:                types.Int64Type,
+				Optional:            true,
+				Validators: []tfsdk.AttributeValidator{
+					validators.Range(0, 9),
+				},
+			},
+		},
+	}, nil
+}
+
 func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderRequest, resp *tfsdk.ConfigureProviderResponse) {
 	// Retrieve provider data from configuration
 	var config providerData
@@ -184,49 +220,15 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 
 func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceType, diag.Diagnostics) {
 	return map[string]tfsdk.ResourceType{
-		"nxos_rest": resourceRestType{},
+		"nxos_rest":               resourceRestType{},
+		"nxos_physical_interface": resourcePhysicalInterfaceType{},
 	}, nil
 }
 
 func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSourceType, diag.Diagnostics) {
 	return map[string]tfsdk.DataSourceType{
-		"nxos_rest": dataSourceRestType{},
-	}, nil
-}
-
-func (p *provider) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
-		Attributes: map[string]tfsdk.Attribute{
-			"username": {
-				MarkdownDescription: "Username for the NXOS device account. This can also be set as the NXOS_USERNAME environment variable.",
-				Type:                types.StringType,
-				Optional:            true,
-			},
-			"password": {
-				MarkdownDescription: "Password for the NXOS device account. This can also be set as the NXOS_PASSWORD environment variable.",
-				Type:                types.StringType,
-				Optional:            true,
-				Sensitive:           true,
-			},
-			"url": {
-				MarkdownDescription: "URL of the Cisco NXOS device. This can also be set as the NXOS_URL environment variable.",
-				Type:                types.StringType,
-				Optional:            true,
-			},
-			"insecure": {
-				MarkdownDescription: "Allow insecure HTTPS client. This can also be set as the NXOS_INSECURE environment variable. Defaults to `true`.",
-				Type:                types.BoolType,
-				Optional:            true,
-			},
-			"retries": {
-				MarkdownDescription: "Number of retries for REST API calls. This can also be set as the NXOS_RETRIES environment variable. Defaults to `3`.",
-				Type:                types.Int64Type,
-				Optional:            true,
-				Validators: []tfsdk.AttributeValidator{
-					validators.Range(0, 9),
-				},
-			},
-		},
+		"nxos_rest":               dataSourceRestType{},
+		"nxos_physical_interface": dataSourcePhysicalInterfaceType{},
 	}, nil
 }
 

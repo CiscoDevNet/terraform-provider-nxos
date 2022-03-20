@@ -1,0 +1,188 @@
+---
+name: Physical Interface
+class_name: l1PhysIf
+dn: sys/intf/phys-[%s]
+ds_description: |-
+  This data source can read the configuration of a physical interface.
+res_description: |-
+  This resource can manage a physical interface.\n\n- API Documentation: [l1PhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/l1:PhysIf/)
+attributes:
+  - nxos_name: id
+    tf_name: interface_id
+    type: String
+    id: true
+    description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+    example: eth1/10
+  - nxos_name: FECMode
+    tf_name: fec_mode
+    type: String
+    description: 'FEC mode.'
+    enum_values:
+      - fc-fec
+      - rs-fec
+      - fec-off
+      - auto
+      - rs-ieee
+      - rs-cons16
+      - kp-fec
+    default_value: auto
+    example: auto
+  - nxos_name: accessVlan
+    tf_name: access_vlan
+    type: String
+    description: 'Access VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
+    default_value: vlan-1
+    example: vlan-10
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'Administrative port state.'
+    enum_values:
+      - up
+      - down
+    default_value: up
+    example: up
+  - nxos_name: autoNeg
+    tf_name: auto_negotiation
+    type: String
+    description: 'Administrative port auto-negotiation.'
+    enum_values:
+      - 'on'
+      - 'off'
+      - 25G
+    default_value: 'on'
+    example: 'on'
+  - nxos_name: bw
+    tf_name: bandwidth
+    type: Int64
+    description: 'The bandwidth parameter for a routed interface, port channel, or subinterface.'
+    min_int: 0
+    max_int: 3200000000
+    default_value: 0
+    example: 1000
+  - nxos_name: delay
+    tf_name: delay
+    type: Int64
+    description: 'The administrative port delay time.'
+    min_int: 1
+    max_int: 16777215
+    default_value: 1
+    example: 10
+  - nxos_name: descr
+    tf_name: description
+    type: String
+    description: 'Interface description.'
+    example: My Description
+  - nxos_name: duplex
+    tf_name: duplex
+    type: String
+    description: 'Duplex.'
+    enum_values:
+      - auto
+      - full
+      - half
+    default_value: auto
+    example: auto
+  - nxos_name: linkLog
+    tf_name: link_logging
+    type: String
+    description: 'Administrative link logging.'
+    enum_values:
+      - default
+      - enable
+      - disable
+    default_value: default
+    example: enable
+  - nxos_name: medium
+    tf_name: medium
+    type: String
+    description: 'The administrative port medium type.'
+    enum_values:
+      - broadcast
+      - p2p
+    default_value: broadcast
+    example: broadcast
+  - nxos_name: mode
+    tf_name: mode
+    type: String
+    description: 'Administrative port mode.'
+    enum_values:
+      - access
+      - trunk
+      - fex-fabric
+      - dot1q-tunnel
+      - promiscuous
+      - host
+      - trunk_secondary
+      - trunk_promiscuous
+      - vntag
+    default_value: access
+    example: trunk
+  - nxos_name: mtu
+    tf_name: mtu
+    type: Int64
+    description: 'Administrative port MTU.'
+    min_int: 576
+    max_int: 9216
+    default_value: 1500
+    example: 9216
+  - nxos_name: nativeVlan
+    tf_name: native_vlan
+    type: String
+    description: 'Native VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
+    default_value: vlan-1
+    example: vlan-10
+  - nxos_name: speed
+    tf_name: speed
+    type: String
+    description: 'Administrative port speed.'
+    enum_values:
+      - unknown
+      - 100M
+      - 1G
+      - 10G
+      - 40G
+      - auto
+      - auto 100M
+      - auto 100M 1G
+      - 100G
+      - 25G
+      - 10M
+      - 50G
+      - 200G
+      - 400G
+      - 2.5G
+      - 5G
+      - auto 2.5G 5G 10G
+      - auto 100M 1G 2.5G 5G
+    default_value: auto
+    example: auto
+  - nxos_name: speedGroup
+    tf_name: speed_group
+    type: String
+    description: 'Speed group.'
+    enum_values:
+      - unknown
+      - '1000'
+      - '10000'
+      - '40000'
+      - auto
+      - '25000'
+    default_value: auto
+    example: auto
+  - nxos_name: trunkVlans
+    tf_name: trunk_vlans
+    type: String
+    description: 'List of trunk VLANs.'
+    default_value: 1-4094
+    example: 100-200,300
+  - nxos_name: uniDirectionalEthernet
+    tf_name: uni_directional_ethernet
+    type: String
+    description: 'UDE (Uni-Directional Ethernet).'
+    enum_values:
+      - disable
+      - send-only
+      - receive-only
+    default_value: disable
+    example: disable

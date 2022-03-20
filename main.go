@@ -10,6 +10,9 @@ import (
 
 // Run "go generate" to format example terraform files and generate the docs for the registry/website
 
+// Run the resource and datasource generation tool.
+//go:generate go run gen/generator.go
+
 // If you do not have terraform installed, you can remove the formatting command, but its suggested to
 // ensure the documentation is formatted properly.
 //go:generate terraform fmt -recursive ./examples/

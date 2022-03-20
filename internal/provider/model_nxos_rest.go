@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 )
@@ -16,7 +15,7 @@ type Rest struct {
 	Content   types.Map    `tfsdk:"content"`
 }
 
-func (data Rest) renderBody(ctx context.Context) (nxos.Body, diag.Diagnostics) {
+func (data Rest) toBody(ctx context.Context) nxos.Body {
 	body := nxos.Body{}
 
 	className := data.ClassName.Value
@@ -29,5 +28,5 @@ func (data Rest) renderBody(ctx context.Context) (nxos.Body, diag.Diagnostics) {
 		body = body.Set(fmt.Sprintf("%s.attributes.%s", className, attr), value)
 	}
 
-	return body, nil
+	return body
 }

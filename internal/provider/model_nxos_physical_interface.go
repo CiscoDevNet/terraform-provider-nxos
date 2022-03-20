@@ -48,14 +48,14 @@ func (data PhysicalInterface) toBody() nxos.Body {
 		Set("accessVlan", data.AccessVlan.Value).
 		Set("adminSt", data.AdminSt.Value).
 		Set("autoNeg", data.AutoNeg.Value).
-		Set("bw", strconv.Itoa(int(data.Bw.Value))).
-		Set("delay", strconv.Itoa(int(data.Delay.Value))).
+		Set("bw", strconv.FormatInt(data.Bw.Value, 10)).
+		Set("delay", strconv.FormatInt(data.Delay.Value, 10)).
 		Set("descr", data.Descr.Value).
 		Set("duplex", data.Duplex.Value).
 		Set("linkLog", data.LinkLog.Value).
 		Set("medium", data.Medium.Value).
 		Set("mode", data.Mode.Value).
-		Set("mtu", strconv.Itoa(int(data.Mtu.Value))).
+		Set("mtu", strconv.FormatInt(data.Mtu.Value, 10)).
 		Set("nativeVlan", data.NativeVlan.Value).
 		Set("speed", data.Speed.Value).
 		Set("speedGroup", data.SpeedGroup.Value).

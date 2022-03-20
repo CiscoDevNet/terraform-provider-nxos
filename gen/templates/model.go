@@ -36,7 +36,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 	{{- $lenAttr := len .Attributes}}
 	{{- range $index, $item := .Attributes}}
 		{{- if eq .Type "Int64"}}
-		Set("{{.NxosName}}", strconv.Itoa(int(data.{{toTitle .NxosName}}.Value)))
+		Set("{{.NxosName}}", strconv.FormatInt(data.{{toTitle .NxosName}}.Value, 10))
 		{{- else}}
 		Set("{{.NxosName}}", data.{{toTitle .NxosName}}.Value)
 		{{- end}}

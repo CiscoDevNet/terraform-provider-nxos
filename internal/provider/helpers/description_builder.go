@@ -27,7 +27,7 @@ func (d *Description) AddStringEnumDescription(values ...string) *Description {
 	return d
 }
 
-func (d *Description) AddIntegerRangeDescription(min, max int) *Description {
+func (d *Description) AddIntegerRangeDescription(min, max int64) *Description {
 	d.String = fmt.Sprintf("%s\n  - Range: `%v`-`%v`", d.String, min, max)
 	return d
 }

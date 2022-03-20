@@ -5,7 +5,10 @@ package provider
 
 import (
 	"fmt"
+	{{ $strconv := false }}{{ range .Attributes}}{{ if eq .Type "Int64"}}{{ $strconv = true }}{{ end}}{{- end}}
+	{{- if $strconv }}
 	"strconv"
+	{{- end}}
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -21,7 +24,7 @@ type {{camelCase .Name}} struct {
 
 func (data {{camelCase .Name}}) getDn() string {
 {{- if hasId .Attributes}}
-	return fmt.Sprintf("{{.Dn}}", data.{{toTitle (getIdNxosName .Attributes)}}.Value)
+	return fmt.Sprintf("{{.Dn}}"{{range .Attributes}}{{if eq .Id true}}, data.{{toTitle .NxosName}}.Value{{end}}{{end}})
 {{- else}}
 	return {{.Dn}}
 {{- end}}
@@ -35,6 +38,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 	attrs := nxos.Body{}.
 	{{- $lenAttr := len .Attributes}}
 	{{- range $index, $item := .Attributes}}
+	{{- if ne .ReferenceOnly true}}
 		{{- if eq .Type "Int64"}}
 		Set("{{.NxosName}}", strconv.FormatInt(data.{{toTitle .NxosName}}.Value, 10))
 		{{- else}}
@@ -42,16 +46,27 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 		{{- end}}
 		{{- if not (isLast $index $lenAttr)}}.{{- end}}
 	{{- end}}
+	{{- end}}
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 	data.Dn.Value = res.Get("*.attributes.dn").String()
 	{{- range .Attributes}}
+	{{- if ne .ReferenceOnly true}}
 	{{- if eq .Type "Int64"}}
 	data.{{toTitle .NxosName}}.Value = res.Get("*.attributes.{{.NxosName}}").Int()
 	{{- else}}
 	data.{{toTitle .NxosName}}.Value = res.Get("*.attributes.{{.NxosName}}").String()
+	{{- end}}
+	{{- end}}
+	{{- end}}
+}
+
+func (data *{{camelCase .Name}}) fromPlan(plan {{camelCase .Name}}) {
+	{{- range .Attributes}}
+	{{- if eq .ReferenceOnly true}}
+	data.{{toTitle .NxosName}}.Value = plan.{{toTitle .NxosName}}.Value
 	{{- end}}
 	{{- end}}
 }

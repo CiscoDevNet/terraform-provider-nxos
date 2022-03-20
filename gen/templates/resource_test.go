@@ -14,8 +14,13 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
+			{{- range .Parents}}
 			{
-				Config: testAccNxos{{camelCase .Name}}Config_minimum(),
+				Config: testAccNxos{{camelCase .}}Config_all(),
+			},
+			{{- end}}
+			{
+				Config: {{- range .Parents}}testAccNxos{{camelCase .}}Config_all()+{{end}}testAccNxos{{camelCase .Name}}Config_minimum(),
 				Check: resource.ComposeTestCheckFunc(
 					{{- $name := .Name }}
 					{{- range  .Attributes}}
@@ -26,7 +31,7 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccNxos{{camelCase .Name}}Config_all(),
+				Config: {{- range .Parents}}testAccNxos{{camelCase .}}Config_all()+{{end}}testAccNxos{{camelCase .Name}}Config_all(),
 				Check: resource.ComposeTestCheckFunc(
 					{{- $name := .Name }}
 					{{- range  .Attributes}}
@@ -37,12 +42,7 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 			{
 				ResourceName:  "nxos_{{snakeCase $name}}.test",
 				ImportState:   true,
-				{{- $dn := .Dn }}
-				{{- range  .Attributes}}
-				{{- if eq .Id true}}
-				ImportStateId: "{{sprintf $dn .Example}}",
-				{{- end}}
-				{{- end}}
+				ImportStateId: "{{getExampleDn .Dn .Attributes}}",
 			},
 		},
 	})

@@ -75,20 +75,22 @@ type YamlConfig struct {
 	Dn             string                `yaml:"dn"`
 	DsDescription  string                `yaml:"ds_description"`
 	ResDescription string                `yaml:"res_description"`
+	Parents        []string              `yaml:"parents"`
 	Attributes     []YamlConfigAttribute `yaml:"attributes"`
 }
 
 type YamlConfigAttribute struct {
-	NxosName     string   `yaml:"nxos_name"`
-	TfName       string   `yaml:"tf_name"`
-	Type         string   `yaml:"type"`
-	Id           bool     `yaml:"id"`
-	Description  string   `yaml:"description"`
-	Example      string   `yaml:"example"`
-	EnumValues   []string `yaml:"enum_values"`
-	MinInt       int      `yaml:"min_int"`
-	MaxInt       int      `yaml:"max_int"`
-	DefaultValue string   `yaml:"default_value"`
+	NxosName      string   `yaml:"nxos_name"`
+	TfName        string   `yaml:"tf_name"`
+	Type          string   `yaml:"type"`
+	Id            bool     `yaml:"id"`
+	ReferenceOnly bool     `yaml:"reference_only"`
+	Description   string   `yaml:"description"`
+	Example       string   `yaml:"example"`
+	EnumValues    []string `yaml:"enum_values"`
+	MinInt        int      `yaml:"min_int"`
+	MaxInt        int      `yaml:"max_int"`
+	DefaultValue  string   `yaml:"default_value"`
 }
 
 // Templating helper function to convert first character in string to uppercase
@@ -133,14 +135,15 @@ func HasId(attributes []YamlConfigAttribute) bool {
 	return false
 }
 
-// Templating helper function to return nxos_name of id attribute
-func GetIdNxosName(attributes []YamlConfigAttribute) string {
+// Templating helper function to get example dn
+func GetExampleDn(dn string, attributes []YamlConfigAttribute) string {
+	a := make([]interface{}, 0, len(attributes))
 	for _, attr := range attributes {
 		if attr.Id {
-			return attr.NxosName
+			a = append(a, attr.Example)
 		}
 	}
-	return ""
+	return fmt.Sprintf(dn, a...)
 }
 
 // Templating helper function to identify last element of list
@@ -150,13 +153,13 @@ func IsLast(index int, len int) bool {
 
 // Map of templating functions
 var functions = template.FuncMap{
-	"toTitle":       ToTitle,
-	"camelCase":     CamelCase,
-	"snakeCase":     SnakeCase,
-	"hasId":         HasId,
-	"getIdNxosName": GetIdNxosName,
-	"isLast":        IsLast,
-	"sprintf":       fmt.Sprintf,
+	"toTitle":      ToTitle,
+	"camelCase":    CamelCase,
+	"snakeCase":    SnakeCase,
+	"hasId":        HasId,
+	"getExampleDn": GetExampleDn,
+	"isLast":       IsLast,
+	"sprintf":      fmt.Sprintf,
 }
 
 func main() {

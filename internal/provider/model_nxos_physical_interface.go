@@ -4,6 +4,7 @@ package provider
 
 import (
 	"fmt"
+	
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -84,4 +85,7 @@ func (data *PhysicalInterface) fromBody(res gjson.Result) {
 	data.SpeedGroup.Value = res.Get("*.attributes.speedGroup").String()
 	data.TrunkVlans.Value = res.Get("*.attributes.trunkVlans").String()
 	data.UniDirectionalEthernet.Value = res.Get("*.attributes.uniDirectionalEthernet").String()
+}
+
+func (data *PhysicalInterface) fromPlan(plan PhysicalInterface) {
 }

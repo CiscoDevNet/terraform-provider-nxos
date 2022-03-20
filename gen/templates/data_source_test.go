@@ -14,12 +14,20 @@ func TestAccDataSourceNxos{{camelCase .Name}}(t *testing.T) {
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
+			{{- range .Parents}}
+			{
+				Config: testAccNxos{{camelCase .}}Config_all(),
+			},
+			{{- end}}
+			{
+				Config: {{range .Parents}}testAccNxos{{camelCase .}}Config_all()+{{end}}testAccNxos{{camelCase .Name}}Config_all(),
+			},
 			{
 				Config: testAccDataSourceNxos{{camelCase .Name}}Config,
 				Check: resource.ComposeTestCheckFunc(
 					{{- $name := .Name }}
 					{{- range  .Attributes}}
-					{{- if eq .Id true}}
+					{{- if ne .ReferenceOnly true}}
 					resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"),
 					{{- end}}
 					{{- end}}

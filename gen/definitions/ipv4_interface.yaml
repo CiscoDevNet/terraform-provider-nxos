@@ -1,0 +1,40 @@
+---
+name: IPv4 Interface
+class_name: ipv4If
+dn: sys/ipv4/inst/dom-[%s]/if-[%s]
+ds_description: |-
+  This data source can read an IPv4 interface.
+res_description: |-
+  This resource can manage an IPv4 interface.\n\n- API Documentation: [ipv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/ipv4:If/)
+attributes:
+  - nxos_name: dom
+    tf_name: vrf
+    type: String
+    id: true
+    reference_only: true
+    description: 'VRF name.'
+    example: 'default'
+  - nxos_name: id
+    tf_name: interface_id
+    type: String
+    id: true
+    description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+    example: eth1/59
+  - nxos_name: unnumbered
+    tf_name: unnumbered
+    type: String
+    description: 'IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+    default_value: unspecified
+    example: unspecified
+  - nxos_name: urpf
+    tf_name: urpf
+    type: String
+    description: 'URPF (unicast Reverse Path Forwarding).'
+    enum_values:
+      - disabled
+      - strict
+      - loose
+      - loose-allow-default
+      - strict-allow-vni-hosts
+    default_value: disabled
+    example: disabled

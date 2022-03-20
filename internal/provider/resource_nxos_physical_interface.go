@@ -272,6 +272,7 @@ func (r resourcePhysicalInterface) Create(ctx context.Context, req tfsdk.CreateR
 	}
 
 	state.fromBody(res)
+	state.fromPlan(plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
 
@@ -332,6 +333,7 @@ func (r resourcePhysicalInterface) Update(ctx context.Context, req tfsdk.UpdateR
 	}
 
 	state.fromBody(res)
+	state.fromPlan(plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
 

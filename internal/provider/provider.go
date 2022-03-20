@@ -220,15 +220,19 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 
 func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceType, diag.Diagnostics) {
 	return map[string]tfsdk.ResourceType{
-		"nxos_rest":               resourceRestType{},
-		"nxos_physical_interface": resourcePhysicalInterfaceType{},
+		"nxos_rest":                   resourceRestType{},
+		"nxos_physical_interface":     resourcePhysicalInterfaceType{},
+		"nxos_ipv4_interface":         resourceIPv4InterfaceType{},
+		"nxos_ipv4_interface_address": resourceIPv4InterfaceAddressType{},
 	}, nil
 }
 
 func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSourceType, diag.Diagnostics) {
 	return map[string]tfsdk.DataSourceType{
-		"nxos_rest":               dataSourceRestType{},
-		"nxos_physical_interface": dataSourcePhysicalInterfaceType{},
+		"nxos_rest":                   dataSourceRestType{},
+		"nxos_physical_interface":     dataSourcePhysicalInterfaceType{},
+		"nxos_ipv4_interface":         dataSourceIPv4InterfaceType{},
+		"nxos_ipv4_interface_address": dataSourceIPv4InterfaceAddressType{},
 	}, nil
 }
 

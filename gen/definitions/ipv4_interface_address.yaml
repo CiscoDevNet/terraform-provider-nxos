@@ -1,0 +1,31 @@
+---
+name: IPv4 Interface Address
+class_name: ipv4Addr
+dn: sys/ipv4/inst/dom-[%s]/if-[%s]/addr-[%s]
+ds_description: |-
+  This data source can read an IPv4 interface address.
+res_description: |-
+  This resource can manage an IPv4 interface address.\n\n- API Documentation: [ipv4Addr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/ipv4:Addr/)
+parents:
+  - IPv4 Interface
+attributes:
+  - nxos_name: dom
+    tf_name: vrf
+    type: String
+    id: true
+    reference_only: true
+    description: 'VRF name.'
+    example: 'default'
+  - nxos_name: id
+    tf_name: interface_id
+    type: String
+    id: true
+    reference_only: true
+    description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+    example: eth1/59
+  - nxos_name: addr
+    tf_name: address
+    type: String
+    id: true
+    description: 'IPv4 address.'
+    example: '1.1.1.1/24'

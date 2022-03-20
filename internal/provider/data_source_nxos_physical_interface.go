@@ -151,6 +151,7 @@ func (d dataSourcePhysicalInterface) Read(ctx context.Context, req tfsdk.ReadDat
 	}
 
 	state.fromBody(res)
+	state.fromPlan(config)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getDn()))
 

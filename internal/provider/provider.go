@@ -233,6 +233,7 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 		"nxos_feature_interface_vlan": resourceFeatureInterfaceVLANType{},
 		"nxos_feature_pim":            resourceFeaturePIMType{},
 		"nxos_feature_dhcp":           resourceFeatureDHCPType{},
+		"nxos_feature_lldp":           resourceFeatureLLDPType{},
 	}, nil
 }
 
@@ -251,6 +252,7 @@ func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSou
 		"nxos_feature_interface_vlan": dataSourceFeatureInterfaceVLANType{},
 		"nxos_feature_pim":            dataSourceFeaturePIMType{},
 		"nxos_feature_dhcp":           dataSourceFeatureDHCPType{},
+		"nxos_feature_lldp":           dataSourceFeatureLLDPType{},
 	}, nil
 }
 

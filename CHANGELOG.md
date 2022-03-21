@@ -6,6 +6,7 @@
 - Add nxos_feature_interface_vlan resource and data source
 - Add nxos_feature_pim resource and data source
 - Add nxos_feature_dhcp resource and data source
+- Add nxos_feature_lldp resource and data source
 
 ## 0.2.3
 

@@ -241,6 +241,7 @@ func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSou
 		"nxos_vrf":                    dataSourceVRFType{},
 		"nxos_vrf_container":          dataSourceVRFContainerType{},
 		"nxos_bridge_domain":          dataSourceBridgeDomainType{},
+		"nxos_svi_interface":          dataSourceSVIInterfaceType{},
 		"nxos_svi_interface_vrf":      dataSourceSVIInterfaceVRFType{},
 	}, nil
 }

@@ -1,3 +1,7 @@
+## 0.2.4 (unreleased)
+
+- Add nxos_svi_interface resource and data source
+
 ## 0.2.3
 
 - Fix links in resource documentation

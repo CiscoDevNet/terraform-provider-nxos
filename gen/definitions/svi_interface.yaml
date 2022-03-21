@@ -1,0 +1,62 @@
+---
+name: SVI Interface
+class_name: sviIf
+dn: sys/intf/svi-[%s]
+ds_description: |-
+  This data source can read an SVI interface.
+res_description: |-
+  This resource can manage an SVI interface.\n\n- API Documentation: [sviIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Interfaces/svi:If/)
+attributes:
+  - nxos_name: id
+    tf_name: interface_id
+    type: String
+    id: true
+    description: 'Must match first field in the output of `show intf brief`. Example: `vlan100`.'
+    example: vlan293
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'Administrative port state.'
+    enum_values:
+      - up
+      - down
+    default_value: up
+    example: down
+  - nxos_name: bw
+    tf_name: bandwidth
+    type: Int64
+    description: 'Specifies the administrative port bandwidth.'
+    min_int: 1
+    max_int: 400000000
+    default_value: 1000000
+    example: 1000
+  - nxos_name: delay
+    tf_name: delay
+    type: Int64
+    description: 'Specifies the administrative port delay.'
+    min_int: 1
+    max_int: 16777215
+    default_value: 1
+    example: 10
+  - nxos_name: descr
+    tf_name: description
+    type: String
+    description: 'Interface description.'
+    example: My Description
+  - nxos_name: medium
+    tf_name: medium
+    type: String
+    description: 'The administrative port medium type.'
+    enum_values:
+      - bcast
+      - p2p
+    default_value: bcast
+    example: bcast
+  - nxos_name: mtu
+    tf_name: mtu
+    type: Int64
+    description: 'Administrative port MTU.'
+    min_int: 576
+    max_int: 9216
+    default_value: 1500
+    example: 9216

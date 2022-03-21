@@ -4,7 +4,9 @@
 package provider
 
 import (
+	{{- if hasId .Attributes }}
 	"fmt"
+	{{- end}}
 	{{ $strconv := false }}{{ range .Attributes}}{{ if eq .Type "Int64"}}{{ $strconv = true }}{{ end}}{{- end}}
 	{{- if $strconv }}
 	"strconv"
@@ -26,7 +28,7 @@ func (data {{camelCase .Name}}) getDn() string {
 {{- if hasId .Attributes}}
 	return fmt.Sprintf("{{.Dn}}"{{range .Attributes}}{{if eq .Id true}}, data.{{toTitle .NxosName}}.Value{{end}}{{end}})
 {{- else}}
-	return {{.Dn}}
+	return "{{.Dn}}"
 {{- end}}
 }
 

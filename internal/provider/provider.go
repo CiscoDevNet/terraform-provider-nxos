@@ -229,6 +229,7 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 		"nxos_bridge_domain":          resourceBridgeDomainType{},
 		"nxos_svi_interface":          resourceSVIInterfaceType{},
 		"nxos_svi_interface_vrf":      resourceSVIInterfaceVRFType{},
+		"nxos_feature_ospf":           resourceFeatureOSPFType{},
 	}, nil
 }
 
@@ -243,6 +244,7 @@ func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSou
 		"nxos_bridge_domain":          dataSourceBridgeDomainType{},
 		"nxos_svi_interface":          dataSourceSVIInterfaceType{},
 		"nxos_svi_interface_vrf":      dataSourceSVIInterfaceVRFType{},
+		"nxos_feature_ospf":           dataSourceFeatureOSPFType{},
 	}, nil
 }
 

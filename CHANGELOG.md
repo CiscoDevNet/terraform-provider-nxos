@@ -1,6 +1,7 @@
 ## 0.2.4 (unreleased)
 
 - Add nxos_svi_interface resource and data source
+- Add nxos_svi_interface_vrf resource and data source
 
 ## 0.2.3
 

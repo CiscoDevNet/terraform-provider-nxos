@@ -224,6 +224,9 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 		"nxos_physical_interface":     resourcePhysicalInterfaceType{},
 		"nxos_ipv4_interface":         resourceIPv4InterfaceType{},
 		"nxos_ipv4_interface_address": resourceIPv4InterfaceAddressType{},
+		"nxos_vrf":                    resourceVRFType{},
+		"nxos_vrf_container":          resourceVRFContainerType{},
+		"nxos_bridge_domain":          resourceBridgeDomainType{},
 	}, nil
 }
 
@@ -233,6 +236,9 @@ func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSou
 		"nxos_physical_interface":     dataSourcePhysicalInterfaceType{},
 		"nxos_ipv4_interface":         dataSourceIPv4InterfaceType{},
 		"nxos_ipv4_interface_address": dataSourceIPv4InterfaceAddressType{},
+		"nxos_vrf":                    dataSourceVRFType{},
+		"nxos_vrf_container":          dataSourceVRFContainerType{},
+		"nxos_bridge_domain":          dataSourceBridgeDomainType{},
 	}, nil
 }
 

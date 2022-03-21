@@ -1,0 +1,27 @@
+---
+name: Bridge Domain
+class_name: l2BD
+dn: sys/bd/bd-[%s]
+ds_description: |-
+  This data source can read a bridge domain.
+res_description: |-
+  This resource can manage a bridge domain.\n\n- API Documentation: [ipv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/l2:BD/)
+attributes:
+  - nxos_name: fabEncap
+    tf_name: fabric_encap
+    type: String
+    id: true
+    description: 'Fabric encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
+    default_value: unknown
+    example: vlan-10
+  - nxos_name: accEncap
+    tf_name: access_encap
+    type: String
+    description: 'Access encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
+    default_value: unknown
+    example: unknown
+  - nxos_name: name
+    tf_name: name
+    type: String
+    description: 'Bridge domain name.'
+    example: VLAN10

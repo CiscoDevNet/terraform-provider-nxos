@@ -1,0 +1,15 @@
+---
+name: VRF Container
+class_name: ipv4Dom
+dn: sys/ipv4/inst/dom-[%s]
+ds_description: |-
+  This data source can read a VRF container.
+res_description: |-
+  This resource can manage a VRF container.\n\n- API Documentation: [ipv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/l3:Inst/)
+attributes:
+  - nxos_name: name
+    tf_name: name
+    type: String
+    id: true
+    description: 'VRF name.'
+    example: 'VRF1'

@@ -1,3 +1,7 @@
+## 0.2.3
+
+- Fix links in resource documentation
+
 ## 0.2.2
 
 - Add nxos_ipv4_interface resource and data source

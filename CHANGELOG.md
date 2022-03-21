@@ -4,6 +4,7 @@
 - Add nxos_svi_interface_vrf resource and data source
 - Add nxos_feature_ospf resource and data source
 - Add nxos_feature_interface_vlan resource and data source
+- Add nxos_feature_pim resource and data source
 
 ## 0.2.3
 

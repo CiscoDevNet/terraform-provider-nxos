@@ -231,6 +231,7 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 		"nxos_svi_interface_vrf":      resourceSVIInterfaceVRFType{},
 		"nxos_feature_ospf":           resourceFeatureOSPFType{},
 		"nxos_feature_interface_vlan": resourceFeatureInterfaceVLANType{},
+		"nxos_feature_pim":            resourceFeaturePIMType{},
 	}, nil
 }
 
@@ -247,6 +248,7 @@ func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSou
 		"nxos_svi_interface_vrf":      dataSourceSVIInterfaceVRFType{},
 		"nxos_feature_ospf":           dataSourceFeatureOSPFType{},
 		"nxos_feature_interface_vlan": dataSourceFeatureInterfaceVLANType{},
+		"nxos_feature_pim":            dataSourceFeaturePIMType{},
 	}, nil
 }
 

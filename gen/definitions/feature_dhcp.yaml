@@ -1,0 +1,18 @@
+---
+name: Feature DHCP
+class_name: fmDhcp
+dn: sys/fm/dhcp
+ds_description: |-
+  This data source can read the DHCP feature configuration.
+res_description: |-
+  This resource can manage the DHCP feature configuration.\n\n- API Documentation: [fmDhcp](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Dhcp/)
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'Administrative state.'
+    enum_value:
+      - enabled
+      - disabled
+    default_value: disabled
+    example: enabled

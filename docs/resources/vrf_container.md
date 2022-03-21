@@ -4,14 +4,14 @@ page_title: "nxos_vrf_container Resource - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This resource can manage a VRF container.
-  API Documentation: ipv4If https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/l3:Inst/
+  API Documentation: ipv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:Dom/
 ---
 
 # nxos_vrf_container (Resource)
 
 This resource can manage a VRF container.
 
-- API Documentation: [ipv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/l3:Inst/)
+- API Documentation: [ipv4Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:Dom/)
 
 ## Example Usage
 

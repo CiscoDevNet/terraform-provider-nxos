@@ -5,7 +5,7 @@ dn: sys/ipv4/inst/dom-[%s]/if-[%s]/addr-[%s]
 ds_description: |-
   This data source can read an IPv4 interface address.
 res_description: |-
-  This resource can manage an IPv4 interface address.\n\n- API Documentation: [ipv4Addr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/ipv4:Addr/)
+  This resource can manage an IPv4 interface address.\n\n- API Documentation: [ipv4Addr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:Addr/)
 parents:
   - IPv4 Interface
 attributes:

@@ -20,7 +20,7 @@ type resourceBridgeDomainType struct{}
 func (t resourceBridgeDomainType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage a bridge domain.\n\n- API Documentation: [ipv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/l2:BD/)",
+		MarkdownDescription: "This resource can manage a bridge domain.\n\n- API Documentation: [l2BD](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%202/l2:BD/)",
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {

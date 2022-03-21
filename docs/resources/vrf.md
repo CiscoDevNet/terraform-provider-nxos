@@ -4,14 +4,14 @@ page_title: "nxos_vrf Resource - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This resource can manage a VRF.
-  API Documentation: ipv4If https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/l3:Inst/
+  API Documentation: l3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:Inst/
 ---
 
 # nxos_vrf (Resource)
 
 This resource can manage a VRF.
 
-- API Documentation: [ipv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/l3:Inst/)
+- API Documentation: [l3Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:Inst/)
 
 ## Example Usage
 

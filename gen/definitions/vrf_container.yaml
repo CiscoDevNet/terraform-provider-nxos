@@ -5,7 +5,7 @@ dn: sys/ipv4/inst/dom-[%s]
 ds_description: |-
   This data source can read a VRF container.
 res_description: |-
-  This resource can manage a VRF container.\n\n- API Documentation: [ipv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/l3:Inst/)
+  This resource can manage a VRF container.\n\n- API Documentation: [ipv4Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:Dom/)
 attributes:
   - nxos_name: name
     tf_name: name

@@ -5,7 +5,7 @@ dn: sys/ipv4/inst/dom-[%s]/if-[%s]
 ds_description: |-
   This data source can read an IPv4 interface.
 res_description: |-
-  This resource can manage an IPv4 interface.\n\n- API Documentation: [ipv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/ipv4:If/)
+  This resource can manage an IPv4 interface.\n\n- API Documentation: [ipv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:If/)
 attributes:
   - nxos_name: dom
     tf_name: vrf

@@ -20,7 +20,7 @@ type resourceIPv4InterfaceAddressType struct{}
 func (t resourceIPv4InterfaceAddressType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage an IPv4 interface address.\n\n- API Documentation: [ipv4Addr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/ipv4:Addr/)",
+		MarkdownDescription: "This resource can manage an IPv4 interface address.\n\n- API Documentation: [ipv4Addr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:Addr/)",
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {

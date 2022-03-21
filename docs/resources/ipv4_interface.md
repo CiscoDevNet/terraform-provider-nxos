@@ -4,14 +4,14 @@ page_title: "nxos_ipv4_interface Resource - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This resource can manage an IPv4 interface.
-  API Documentation: ipv4If https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/ipv4:If/
+  API Documentation: ipv4If https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:If/
 ---
 
 # nxos_ipv4_interface (Resource)
 
 This resource can manage an IPv4 interface.
 
-- API Documentation: [ipv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/ipv4:If/)
+- API Documentation: [ipv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:If/)
 
 ## Example Usage
 

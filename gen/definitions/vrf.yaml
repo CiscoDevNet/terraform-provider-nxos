@@ -5,7 +5,7 @@ dn: sys/inst-[%s]
 ds_description: |-
   This data source can read a VRF.
 res_description: |-
-  This resource can manage a VRF.\n\n- API Documentation: [ipv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/l3:Inst/)
+  This resource can manage a VRF.\n\n- API Documentation: [l3Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:Inst/)
 attributes:
   - nxos_name: name
     tf_name: name

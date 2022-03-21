@@ -20,7 +20,7 @@ type resourceVRFType struct{}
 func (t resourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage a VRF.\n\n- API Documentation: [ipv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/l3:Inst/)",
+		MarkdownDescription: "This resource can manage a VRF.\n\n- API Documentation: [l3Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:Inst/)",
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {

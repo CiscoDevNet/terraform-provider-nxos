@@ -24,7 +24,7 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					{{- $name := .Name }}
 					{{- range  .Attributes}}
-					{{- if eq .Id true}}
+					{{- if or (eq .Id true) (eq .Mandatory true)}}
 					resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"),
 					{{- end}}
 					{{- end}}
@@ -52,7 +52,7 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 	return `
 	resource "nxos_{{snakeCase $name}}" "test" {
 	{{- range  .Attributes}}
-	{{- if eq .Id true}}
+	{{- if or (eq .Id true) (eq .Mandatory true)}}
 		{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
 	{{- end}}
 	{{- end}}

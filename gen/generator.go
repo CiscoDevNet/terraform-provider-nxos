@@ -85,6 +85,7 @@ type YamlConfigAttribute struct {
 	Type          string   `yaml:"type"`
 	Id            bool     `yaml:"id"`
 	ReferenceOnly bool     `yaml:"reference_only"`
+	Mandatory     bool     `yaml:"mandatory"`
 	Description   string   `yaml:"description"`
 	Example       string   `yaml:"example"`
 	EnumValues    []string `yaml:"enum_values"`

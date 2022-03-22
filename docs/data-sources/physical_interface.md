@@ -36,6 +36,7 @@ data "nxos_physical_interface" "example" {
 - **duplex** (String) Duplex.
 - **fec_mode** (String) FEC mode.
 - **id** (String) The distinguished name of the object.
+- **layer** (String) Administrative port layer.
 - **link_logging** (String) Administrative link logging.
 - **medium** (String) The administrative port medium type.
 - **mode** (String) Administrative port mode.

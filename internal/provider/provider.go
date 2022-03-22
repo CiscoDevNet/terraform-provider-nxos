@@ -236,6 +236,7 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 		"nxos_feature_lldp":           resourceFeatureLLDPType{},
 		"nxos_loopback_interface":     resourceLoopbackInterfaceType{},
 		"nxos_loopback_interface_vrf": resourceLoopbackInterfaceVRFType{},
+		"nxos_physical_interface_vrf": resourcePhysicalInterfaceVRFType{},
 	}, nil
 }
 
@@ -257,6 +258,7 @@ func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSou
 		"nxos_feature_lldp":           dataSourceFeatureLLDPType{},
 		"nxos_loopback_interface":     dataSourceLoopbackInterfaceType{},
 		"nxos_loopback_interface_vrf": dataSourceLoopbackInterfaceVRFType{},
+		"nxos_physical_interface_vrf": dataSourcePhysicalInterfaceVRFType{},
 	}, nil
 }
 

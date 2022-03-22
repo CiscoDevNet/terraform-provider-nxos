@@ -9,6 +9,8 @@
 - Add nxos_feature_lldp resource and data source
 - Add nxos_loopback_interface resource and data source
 - Add nxos_loopback_interface_vrf resource and data source
+- Add nxos_physical_interface_vrf resource and data source
+- Add layer attribute to nxos_physical_interface resource and data source
 
 ## 0.2.3
 

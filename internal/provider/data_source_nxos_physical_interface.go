@@ -70,6 +70,11 @@ func (t dataSourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.S
 				Type:                types.StringType,
 				Computed:            true,
 			},
+			"layer": {
+				MarkdownDescription: "Administrative port layer.",
+				Type:                types.StringType,
+				Computed:            true,
+			},
 			"link_logging": {
 				MarkdownDescription: "Administrative link logging.",
 				Type:                types.StringType,

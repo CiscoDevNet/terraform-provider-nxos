@@ -126,6 +126,18 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 					helpers.StringDefaultModifier("auto"),
 				},
 			},
+			"layer": {
+				MarkdownDescription: helpers.NewDescription("Administrative port layer.").AddStringEnumDescription("Layer2", "Layer3", ).AddDefaultValueDescription("Layer2").String,
+				Type:                types.StringType,
+				Optional:            true,
+				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("Layer2", "Layer3", ),
+				},
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					helpers.StringDefaultModifier("Layer2"),
+				},
+			},
 			"link_logging": {
 				MarkdownDescription: helpers.NewDescription("Administrative link logging.").AddStringEnumDescription("default", "enable", "disable", ).AddDefaultValueDescription("default").String,
 				Type:                types.StringType,

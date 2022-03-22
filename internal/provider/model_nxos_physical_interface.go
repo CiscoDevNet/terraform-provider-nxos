@@ -23,6 +23,7 @@ type PhysicalInterface struct {
 	Delay types.Int64 `tfsdk:"delay"`
 	Descr types.String `tfsdk:"description"`
 	Duplex types.String `tfsdk:"duplex"`
+	Layer types.String `tfsdk:"layer"`
 	LinkLog types.String `tfsdk:"link_logging"`
 	Medium types.String `tfsdk:"medium"`
 	Mode types.String `tfsdk:"mode"`
@@ -53,6 +54,7 @@ func (data PhysicalInterface) toBody() nxos.Body {
 		Set("delay", strconv.FormatInt(data.Delay.Value, 10)).
 		Set("descr", data.Descr.Value).
 		Set("duplex", data.Duplex.Value).
+		Set("layer", data.Layer.Value).
 		Set("linkLog", data.LinkLog.Value).
 		Set("medium", data.Medium.Value).
 		Set("mode", data.Mode.Value).
@@ -76,6 +78,7 @@ func (data *PhysicalInterface) fromBody(res gjson.Result) {
 	data.Delay.Value = res.Get("*.attributes.delay").Int()
 	data.Descr.Value = res.Get("*.attributes.descr").String()
 	data.Duplex.Value = res.Get("*.attributes.duplex").String()
+	data.Layer.Value = res.Get("*.attributes.layer").String()
 	data.LinkLog.Value = res.Get("*.attributes.linkLog").String()
 	data.Medium.Value = res.Get("*.attributes.medium").String()
 	data.Mode.Value = res.Get("*.attributes.mode").String()

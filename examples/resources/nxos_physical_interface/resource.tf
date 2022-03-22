@@ -1,20 +1,21 @@
 resource "nxos_physical_interface" "example" {
   interface_id             = "eth1/10"
   fec_mode                 = "auto"
-  access_vlan              = "vlan-10"
+  access_vlan              = "unknown"
   admin_state              = "up"
   auto_negotiation         = "on"
   bandwidth                = 1000
   delay                    = 10
   description              = "My Description"
   duplex                   = "auto"
+  layer                    = "Layer3"
   link_logging             = "enable"
   medium                   = "broadcast"
-  mode                     = "trunk"
+  mode                     = "access"
   mtu                      = 9216
-  native_vlan              = "vlan-10"
+  native_vlan              = "unknown"
   speed                    = "auto"
   speed_group              = "auto"
-  trunk_vlans              = "100-200,300"
+  trunk_vlans              = "1-4094"
   uni_directional_ethernet = "disable"
 }

@@ -24,21 +24,22 @@ func TestAccNxosPhysicalInterface(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "interface_id", "eth1/10"),
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "fec_mode", "auto"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "access_vlan", "vlan-10"),
+					resource.TestCheckResourceAttr("nxos_physical_interface.test", "access_vlan", "unknown"),
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "admin_state", "up"),
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "auto_negotiation", "on"),
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "bandwidth", "1000"),
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "delay", "10"),
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "description", "My Description"),
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "duplex", "auto"),
+					resource.TestCheckResourceAttr("nxos_physical_interface.test", "layer", "Layer3"),
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "link_logging", "enable"),
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "medium", "broadcast"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "mode", "trunk"),
+					resource.TestCheckResourceAttr("nxos_physical_interface.test", "mode", "access"),
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "mtu", "9216"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "native_vlan", "vlan-10"),
+					resource.TestCheckResourceAttr("nxos_physical_interface.test", "native_vlan", "unknown"),
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "speed", "auto"),
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "speed_group", "auto"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "trunk_vlans", "100-200,300"),
+					resource.TestCheckResourceAttr("nxos_physical_interface.test", "trunk_vlans", "1-4094"),
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "uni_directional_ethernet", "disable"),
 				),
 			},
@@ -64,21 +65,22 @@ func testAccNxosPhysicalInterfaceConfig_all() string {
 	resource "nxos_physical_interface" "test" {
 		interface_id = "eth1/10"
 		fec_mode = "auto"
-		access_vlan = "vlan-10"
+		access_vlan = "unknown"
 		admin_state = "up"
 		auto_negotiation = "on"
 		bandwidth = 1000
 		delay = 10
 		description = "My Description"
 		duplex = "auto"
+		layer = "Layer3"
 		link_logging = "enable"
 		medium = "broadcast"
-		mode = "trunk"
+		mode = "access"
 		mtu = 9216
-		native_vlan = "vlan-10"
+		native_vlan = "unknown"
 		speed = "auto"
 		speed_group = "auto"
-		trunk_vlans = "100-200,300"
+		trunk_vlans = "1-4094"
 		uni_directional_ethernet = "disable"
 	}
 	`

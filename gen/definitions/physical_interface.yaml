@@ -32,7 +32,7 @@ attributes:
     type: String
     description: 'Access VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
     default_value: vlan-1
-    example: vlan-10
+    example: unknown
   - nxos_name: adminSt
     tf_name: admin_state
     type: String
@@ -83,6 +83,15 @@ attributes:
       - half
     default_value: auto
     example: auto
+  - nxos_name: layer
+    tf_name: layer
+    type: String
+    description: 'Administrative port layer.'
+    enum_values:
+      - Layer2
+      - Layer3
+    default_value: Layer2
+    example: Layer3
   - nxos_name: linkLog
     tf_name: link_logging
     type: String
@@ -117,7 +126,7 @@ attributes:
       - trunk_promiscuous
       - vntag
     default_value: access
-    example: trunk
+    example: access
   - nxos_name: mtu
     tf_name: mtu
     type: Int64
@@ -131,7 +140,7 @@ attributes:
     type: String
     description: 'Native VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
     default_value: vlan-1
-    example: vlan-10
+    example: unknown
   - nxos_name: speed
     tf_name: speed
     type: String
@@ -175,7 +184,7 @@ attributes:
     type: String
     description: 'List of trunk VLANs.'
     default_value: 1-4094
-    example: 100-200,300
+    example: 1-4094
   - nxos_name: uniDirectionalEthernet
     tf_name: uni_directional_ethernet
     type: String

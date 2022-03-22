@@ -22,7 +22,7 @@ func TestAccDataSourceNxosIPv4InterfaceAddress(t *testing.T) {
 			{
 				Config: testAccDataSourceNxosIPv4InterfaceAddressConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_ipv4_interface_address.test", "address", "1.1.1.1/24"),
+					resource.TestCheckResourceAttr("data.nxos_ipv4_interface_address.test", "address", "24.63.46.49/30"),
 				),
 			},
 		},
@@ -33,6 +33,6 @@ const testAccDataSourceNxosIPv4InterfaceAddressConfig = `
 data "nxos_ipv4_interface_address" "test" {
   vrf = "default"
   interface_id = "eth1/59"
-  address = "1.1.1.1/24"
+  address = "24.63.46.49/30"
 }
 `

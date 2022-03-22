@@ -1,0 +1,65 @@
+---
+name: OSPF VRF
+class_name: ospfDom
+dn: sys/ospf/inst-[%s]/dom-[%s]
+ds_description: |-
+  This data source can read the OSPF VRF configuration.
+res_description: |-
+  This resource can manage the OSPF VRF configuration.\n\n- API Documentation: [ospfDom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:Dom/)
+parents:
+  - OSPF
+  - OSPF Instance
+attributes:
+  - nxos_name: inst
+    tf_name: instance_name
+    type: String
+    id: true
+    reference_only: true
+    description: 'OSPF instance name.'
+    example: OSPF1
+  - nxos_name: name
+    tf_name: name
+    type: String
+    id: true
+    description: 'VRF name.'
+    example: VRF1
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'Administrative state.'
+    enum_value:
+      - enabled
+      - disabled
+    default_value: enabled
+    example: enabled
+  - nxos_name: bwRef
+    tf_name: bandwidth_reference
+    type: Int64
+    min_int: 0
+    max_int: 4294967295
+    default_value: 40000
+    description: 'Bandwidth reference value.'
+    example: 400000
+  - nxos_name: bwRefUnit
+    tf_name: banwidth_reference_unit
+    type: String
+    description: 'Bandwidth reference unit.'
+    enum_value:
+      - mbps
+      - gbps
+    default_value: mbps
+    example: mbps
+  - nxos_name: dist
+    tf_name: distance
+    type: Int64
+    min_int: 1
+    max_int: 255
+    default_value: 110
+    description: 'Administrative distance preference.'
+    example: 110
+  - nxos_name: rtrId
+    tf_name: router_id
+    type: String
+    description: 'Router ID.'
+    default_value: 0.0.0.0
+    example: 34.56.78.90

@@ -1,0 +1,26 @@
+---
+name: OSPF Instance
+class_name: ospfInst
+dn: sys/ospf/inst-[%s]
+ds_description: |-
+  This data source can read the OSPF instance configuration.
+res_description: |-
+  This resource can manage the OSPF instance configuration.\n\n- API Documentation: [ospfInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:Inst/)
+parents:
+  - OSPF
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'Administrative state.'
+    enum_value:
+      - enabled
+      - disabled
+    default_value: enabled
+    example: enabled
+  - nxos_name: name
+    tf_name: name
+    type: String
+    id: true
+    description: 'OSPF instance name.'
+    example: OSPF1

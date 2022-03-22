@@ -242,6 +242,9 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 		"nxos_dhcp_relay_interface":   resourceDHCPRelayInterfaceType{},
 		"nxos_dhcp_relay_address":     resourceDHCPRelayAddressType{},
 		"nxos_ethernet_settings":      resourceEthernetSettingsType{},
+		"nxos_ospf":                   resourceOSPFType{},
+		"nxos_ospf_instance":          resourceOSPFInstanceType{},
+		"nxos_ospf_vrf":               resourceOSPFVRFType{},
 	}, nil
 }
 
@@ -269,6 +272,9 @@ func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSou
 		"nxos_dhcp_relay_interface":   dataSourceDHCPRelayInterfaceType{},
 		"nxos_dhcp_relay_address":     dataSourceDHCPRelayAddressType{},
 		"nxos_ethernet_settings":      dataSourceEthernetSettingsType{},
+		"nxos_ospf":                   dataSourceOSPFType{},
+		"nxos_ospf_instance":          dataSourceOSPFInstanceType{},
+		"nxos_ospf_vrf":               dataSourceOSPFVRFType{},
 	}, nil
 }
 

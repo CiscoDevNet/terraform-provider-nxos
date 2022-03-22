@@ -14,9 +14,14 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
-			{{- range .Parents}}
+			{{- $configs := ""}}
+			{{- if len .Parents}}
+			{{- $configs = printf "%s%s%s" "testAccNxos" (camelCase (index .Parents 0)) "Config_all()"}}
+			{{- end}}
+			{{- range $index, $item := .Parents}}
+			{{- if ge $index 1}}{{$configs = printf "%s%s%s%s" $configs "+testAccNxos" (camelCase .) "Config_all()"}}{{end}}
 			{
-				Config: testAccNxos{{camelCase .}}Config_all(),
+				Config: {{$configs}},
 			},
 			{{- end}}
 			{

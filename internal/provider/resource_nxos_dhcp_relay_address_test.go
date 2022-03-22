@@ -14,10 +14,13 @@ func TestAccNxosDHCPRelayAddress(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosDHCPRelayInterfaceConfig_all(),
+				Config: testAccNxosFeatureDHCPConfig_all(),
 			},
 			{
-				Config:testAccNxosDHCPRelayInterfaceConfig_all()+testAccNxosDHCPRelayAddressConfig_minimum(),
+				Config: testAccNxosFeatureDHCPConfig_all()+testAccNxosDHCPRelayInterfaceConfig_all(),
+			},
+			{
+				Config:testAccNxosFeatureDHCPConfig_all()+testAccNxosDHCPRelayInterfaceConfig_all()+testAccNxosDHCPRelayAddressConfig_minimum(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_dhcp_relay_address.test", "interface_id", "eth1/10"),
 					resource.TestCheckResourceAttr("nxos_dhcp_relay_address.test", "vrf", "VRF1"),
@@ -25,7 +28,7 @@ func TestAccNxosDHCPRelayAddress(t *testing.T) {
 				),
 			},
 			{
-				Config:testAccNxosDHCPRelayInterfaceConfig_all()+testAccNxosDHCPRelayAddressConfig_all(),
+				Config:testAccNxosFeatureDHCPConfig_all()+testAccNxosDHCPRelayInterfaceConfig_all()+testAccNxosDHCPRelayAddressConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_dhcp_relay_address.test", "interface_id", "eth1/10"),
 					resource.TestCheckResourceAttr("nxos_dhcp_relay_address.test", "vrf", "VRF1"),

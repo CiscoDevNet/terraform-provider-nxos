@@ -14,10 +14,13 @@ func TestAccDataSourceNxosDHCPRelayAddress(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosDHCPRelayInterfaceConfig_all(),
+				Config: testAccNxosFeatureDHCPConfig_all(),
 			},
 			{
-				Config: testAccNxosDHCPRelayInterfaceConfig_all()+testAccNxosDHCPRelayAddressConfig_all(),
+				Config: testAccNxosFeatureDHCPConfig_all()+testAccNxosDHCPRelayInterfaceConfig_all(),
+			},
+			{
+				Config: testAccNxosFeatureDHCPConfig_all()+testAccNxosDHCPRelayInterfaceConfig_all()+testAccNxosDHCPRelayAddressConfig_all(),
 			},
 			{
 				Config: testAccDataSourceNxosDHCPRelayAddressConfig,

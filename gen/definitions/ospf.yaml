@@ -1,0 +1,18 @@
+---
+name: OSPF
+class_name: ospfEntity
+dn: sys/ospf
+ds_description: |-
+  This data source can read the global OSPF configuration.
+res_description: |-
+  This resource can manage the global OSPF configuration.\n\n- API Documentation: [ospfEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:Entity/)
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'Administrative state.'
+    enum_value:
+      - enabled
+      - disabled
+    default_value: enabled
+    example: enabled

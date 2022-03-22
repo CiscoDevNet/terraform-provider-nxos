@@ -28,4 +28,4 @@ attributes:
     type: String
     id: true
     description: 'IPv4 address.'
-    example: '1.1.1.1/24'
+    example: '24.63.46.49/30'

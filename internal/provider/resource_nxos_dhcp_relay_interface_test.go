@@ -14,13 +14,16 @@ func TestAccNxosDHCPRelayInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config:testAccNxosDHCPRelayInterfaceConfig_minimum(),
+				Config: testAccNxosFeatureDHCPConfig_all(),
+			},
+			{
+				Config:testAccNxosFeatureDHCPConfig_all()+testAccNxosDHCPRelayInterfaceConfig_minimum(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_dhcp_relay_interface.test", "interface_id", "eth1/10"),
 				),
 			},
 			{
-				Config:testAccNxosDHCPRelayInterfaceConfig_all(),
+				Config:testAccNxosFeatureDHCPConfig_all()+testAccNxosDHCPRelayInterfaceConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_dhcp_relay_interface.test", "interface_id", "eth1/10"),
 				),

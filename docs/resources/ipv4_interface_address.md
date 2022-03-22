@@ -19,7 +19,7 @@ This resource can manage an IPv4 interface address.
 resource "nxos_ipv4_interface_address" "example" {
   vrf          = "default"
   interface_id = "eth1/59"
-  address      = "1.1.1.1/24"
+  address      = "24.63.46.49/30"
 }
 ```
 
@@ -41,5 +41,5 @@ resource "nxos_ipv4_interface_address" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import nxos_ipv4_interface_address.example "sys/ipv4/inst/dom-[default]/if-[eth1/59]/addr-[1.1.1.1/24]"
+terraform import nxos_ipv4_interface_address.example "sys/ipv4/inst/dom-[default]/if-[eth1/59]/addr-[24.63.46.49/30]"
 ```

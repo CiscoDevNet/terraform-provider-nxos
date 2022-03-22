@@ -21,7 +21,7 @@ func TestAccNxosIPv4InterfaceAddress(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ipv4_interface_address.test", "vrf", "default"),
 					resource.TestCheckResourceAttr("nxos_ipv4_interface_address.test", "interface_id", "eth1/59"),
-					resource.TestCheckResourceAttr("nxos_ipv4_interface_address.test", "address", "1.1.1.1/24"),
+					resource.TestCheckResourceAttr("nxos_ipv4_interface_address.test", "address", "24.63.46.49/30"),
 				),
 			},
 			{
@@ -29,13 +29,13 @@ func TestAccNxosIPv4InterfaceAddress(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ipv4_interface_address.test", "vrf", "default"),
 					resource.TestCheckResourceAttr("nxos_ipv4_interface_address.test", "interface_id", "eth1/59"),
-					resource.TestCheckResourceAttr("nxos_ipv4_interface_address.test", "address", "1.1.1.1/24"),
+					resource.TestCheckResourceAttr("nxos_ipv4_interface_address.test", "address", "24.63.46.49/30"),
 				),
 			},
 			{
 				ResourceName:  "nxos_ipv4_interface_address.test",
 				ImportState:   true,
-				ImportStateId: "sys/ipv4/inst/dom-[default]/if-[eth1/59]/addr-[1.1.1.1/24]",
+				ImportStateId: "sys/ipv4/inst/dom-[default]/if-[eth1/59]/addr-[24.63.46.49/30]",
 			},
 		},
 	})
@@ -46,7 +46,7 @@ func testAccNxosIPv4InterfaceAddressConfig_minimum() string {
 	resource "nxos_ipv4_interface_address" "test" {
 		vrf = "default"
 		interface_id = "eth1/59"
-		address = "1.1.1.1/24"
+		address = "24.63.46.49/30"
 	}
 	`
 }
@@ -56,7 +56,7 @@ func testAccNxosIPv4InterfaceAddressConfig_all() string {
 	resource "nxos_ipv4_interface_address" "test" {
 		vrf = "default"
 		interface_id = "eth1/59"
-		address = "1.1.1.1/24"
+		address = "24.63.46.49/30"
 	}
 	`
 }

@@ -1,0 +1,29 @@
+---
+name: Loopback Interface
+class_name: l3LbRtdIf
+dn: sys/intf/lb-[%s]
+ds_description: |-
+  This data source can read a Loopback interface.
+res_description: |-
+  This resource can manage a Loopback interface.\n\n- API Documentation: [l3LbRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:LbRtdIf/)
+attributes:
+  - nxos_name: id
+    tf_name: interface_id
+    type: String
+    id: true
+    description: 'Must match first field in the output of `show intf brief`. Example: `lo123`.'
+    example: lo123
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'Administrative state.'
+    enum_values:
+      - up
+      - down
+    default_value: up
+    example: down
+  - nxos_name: descr
+    tf_name: description
+    type: String
+    description: 'Interface description.'
+    example: My Description

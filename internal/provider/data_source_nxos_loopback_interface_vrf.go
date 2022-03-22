@@ -12,12 +12,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-type dataSourceSVIInterfaceVRFType struct{}
+type dataSourceLoopbackInterfaceVRFType struct{}
 
-func (t dataSourceSVIInterfaceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t dataSourceLoopbackInterfaceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read an SVI interface VRF association.",
+		MarkdownDescription: "This data source can read a loopback interface VRF association.",
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -26,7 +26,7 @@ func (t dataSourceSVIInterfaceVRFType) GetSchema(ctx context.Context) (tfsdk.Sch
 				Computed:            true,
 			},
 			"interface_id": {
-				MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `vlan100`.",
+				MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `lo123`.",
 				Type:                types.StringType,
 				Required:            true,
 			},
@@ -39,20 +39,20 @@ func (t dataSourceSVIInterfaceVRFType) GetSchema(ctx context.Context) (tfsdk.Sch
 	}, nil
 }
 
-func (t dataSourceSVIInterfaceVRFType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
+func (t dataSourceLoopbackInterfaceVRFType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
-	return dataSourceSVIInterfaceVRF{
+	return dataSourceLoopbackInterfaceVRF{
 		provider: provider,
 	}, diags
 }
 
-type dataSourceSVIInterfaceVRF struct {
+type dataSourceLoopbackInterfaceVRF struct {
 	provider provider
 }
 
-func (d dataSourceSVIInterfaceVRF) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
-	var config, state SVIInterfaceVRF
+func (d dataSourceLoopbackInterfaceVRF) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+	var config, state LoopbackInterfaceVRF
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

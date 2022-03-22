@@ -20,7 +20,7 @@ type resourceLoopbackInterfaceType struct{}
 func (t resourceLoopbackInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage a Loopback interface.\n\n- API Documentation: [l3LbRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:LbRtdIf/)",
+		MarkdownDescription: "This resource can manage a loopback interface.\n\n- API Documentation: [l3LbRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:LbRtdIf/)",
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {

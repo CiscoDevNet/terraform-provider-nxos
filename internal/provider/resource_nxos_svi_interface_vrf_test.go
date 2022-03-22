@@ -20,14 +20,14 @@ func TestAccNxosSVIInterfaceVRF(t *testing.T) {
 				Config:testAccNxosSVIInterfaceConfig_all()+testAccNxosSVIInterfaceVRFConfig_minimum(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_svi_interface_vrf.test", "interface_id", "vlan293"),
-					resource.TestCheckResourceAttr("nxos_svi_interface_vrf.test", "vrf_dn", "sys/inst-default"),
+					resource.TestCheckResourceAttr("nxos_svi_interface_vrf.test", "vrf_dn", "sys/inst-VRF123"),
 				),
 			},
 			{
 				Config:testAccNxosSVIInterfaceConfig_all()+testAccNxosSVIInterfaceVRFConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_svi_interface_vrf.test", "interface_id", "vlan293"),
-					resource.TestCheckResourceAttr("nxos_svi_interface_vrf.test", "vrf_dn", "sys/inst-default"),
+					resource.TestCheckResourceAttr("nxos_svi_interface_vrf.test", "vrf_dn", "sys/inst-VRF123"),
 				),
 			},
 			{
@@ -43,7 +43,7 @@ func testAccNxosSVIInterfaceVRFConfig_minimum() string {
 	return `
 	resource "nxos_svi_interface_vrf" "test" {
 		interface_id = "vlan293"
-		vrf_dn = "sys/inst-default"
+		vrf_dn = "sys/inst-VRF123"
 	}
 	`
 }
@@ -52,7 +52,7 @@ func testAccNxosSVIInterfaceVRFConfig_all() string {
 	return `
 	resource "nxos_svi_interface_vrf" "test" {
 		interface_id = "vlan293"
-		vrf_dn = "sys/inst-default"
+		vrf_dn = "sys/inst-VRF123"
 	}
 	`
 }

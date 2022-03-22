@@ -17,7 +17,7 @@ type dataSourceLoopbackInterfaceType struct{}
 func (t dataSourceLoopbackInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read a Loopback interface.",
+		MarkdownDescription: "This data source can read a loopback interface.",
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {

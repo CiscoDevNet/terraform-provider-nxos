@@ -22,7 +22,7 @@ func TestAccDataSourceNxosSVIInterfaceVRF(t *testing.T) {
 			{
 				Config: testAccDataSourceNxosSVIInterfaceVRFConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_svi_interface_vrf.test", "vrf_dn", "sys/inst-default"),
+					resource.TestCheckResourceAttr("data.nxos_svi_interface_vrf.test", "vrf_dn", "sys/inst-VRF123"),
 				),
 			},
 		},

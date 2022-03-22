@@ -8,6 +8,7 @@
 - Add nxos_feature_dhcp resource and data source
 - Add nxos_feature_lldp resource and data source
 - Add nxos_loopback_interface resource and data source
+- Add nxos_loopback_interface_vrf resource and data source
 
 ## 0.2.3
 

@@ -235,6 +235,7 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 		"nxos_feature_dhcp":           resourceFeatureDHCPType{},
 		"nxos_feature_lldp":           resourceFeatureLLDPType{},
 		"nxos_loopback_interface":     resourceLoopbackInterfaceType{},
+		"nxos_loopback_interface_vrf": resourceLoopbackInterfaceVRFType{},
 	}, nil
 }
 
@@ -255,6 +256,7 @@ func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSou
 		"nxos_feature_dhcp":           dataSourceFeatureDHCPType{},
 		"nxos_feature_lldp":           dataSourceFeatureLLDPType{},
 		"nxos_loopback_interface":     dataSourceLoopbackInterfaceType{},
+		"nxos_loopback_interface_vrf": dataSourceLoopbackInterfaceVRFType{},
 	}, nil
 }
 

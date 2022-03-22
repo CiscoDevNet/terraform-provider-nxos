@@ -15,12 +15,12 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourceSVIInterfaceVRFType struct{}
+type resourceLoopbackInterfaceVRFType struct{}
 
-func (t resourceSVIInterfaceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t resourceLoopbackInterfaceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage an SVI interface VRF association.\n\n- API Documentation: [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)",
+		MarkdownDescription: "This resource can manage a loopback interface VRF association.\n\n- API Documentation: [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)",
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceSVIInterfaceVRFType) GetSchema(ctx context.Context) (tfsdk.Schem
 				},
 			},
 			"interface_id": {
-				MarkdownDescription: helpers.NewDescription("Must match first field in the output of `show intf brief`. Example: `vlan100`.").String,
+				MarkdownDescription: helpers.NewDescription("Must match first field in the output of `show intf brief`. Example: `lo123`.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -48,20 +48,20 @@ func (t resourceSVIInterfaceVRFType) GetSchema(ctx context.Context) (tfsdk.Schem
 	}, nil
 }
 
-func (t resourceSVIInterfaceVRFType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
+func (t resourceLoopbackInterfaceVRFType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
-	return resourceSVIInterfaceVRF{
+	return resourceLoopbackInterfaceVRF{
 		provider: provider,
 	}, diags
 }
 
-type resourceSVIInterfaceVRF struct {
+type resourceLoopbackInterfaceVRF struct {
 	provider provider
 }
 
-func (r resourceSVIInterfaceVRF) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
-	var plan, state SVIInterfaceVRF
+func (r resourceLoopbackInterfaceVRF) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+	var plan, state LoopbackInterfaceVRF
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -96,8 +96,8 @@ func (r resourceSVIInterfaceVRF) Create(ctx context.Context, req tfsdk.CreateRes
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceSVIInterfaceVRF) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
-	var state SVIInterfaceVRF
+func (r resourceLoopbackInterfaceVRF) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+	var state LoopbackInterfaceVRF
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -122,8 +122,8 @@ func (r resourceSVIInterfaceVRF) Read(ctx context.Context, req tfsdk.ReadResourc
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceSVIInterfaceVRF) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
-	var plan, state SVIInterfaceVRF
+func (r resourceLoopbackInterfaceVRF) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+	var plan, state LoopbackInterfaceVRF
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -157,8 +157,8 @@ func (r resourceSVIInterfaceVRF) Update(ctx context.Context, req tfsdk.UpdateRes
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceSVIInterfaceVRF) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
-	var state SVIInterfaceVRF
+func (r resourceLoopbackInterfaceVRF) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+	var state LoopbackInterfaceVRF
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -184,6 +184,6 @@ func (r resourceSVIInterfaceVRF) Delete(ctx context.Context, req tfsdk.DeleteRes
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceSVIInterfaceVRF) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
+func (r resourceLoopbackInterfaceVRF) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
 	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
 }

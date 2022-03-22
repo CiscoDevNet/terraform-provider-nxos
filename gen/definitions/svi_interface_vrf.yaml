@@ -3,9 +3,9 @@ name: SVI Interface VRF
 class_name: nwRtVrfMbr
 dn: sys/intf/svi-[%s]/rtvrfMbr
 ds_description: |-
-  This data source can read an SVI interface.
+  This data source can read an SVI interface VRF association.
 res_description: |-
-  This resource can manage an SVI interface.\n\n- API Documentation: [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
+  This resource can manage an SVI interface VRF association.\n\n- API Documentation: [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 parents:
   - SVI Interface
 attributes:
@@ -21,4 +21,4 @@ attributes:
     type: String
     mandatory: true
     description: 'DN of VRF. For example: `sys/inst-VRF1`.'
-    example: sys/inst-default
+    example: sys/inst-VRF123

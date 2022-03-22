@@ -3,12 +3,12 @@
 page_title: "nxos_svi_interface_vrf Data Source - terraform-provider-nxos"
 subcategory: ""
 description: |-
-  This data source can read an SVI interface.
+  This data source can read an SVI interface VRF association.
 ---
 
 # nxos_svi_interface_vrf (Data Source)
 
-This data source can read an SVI interface.
+This data source can read an SVI interface VRF association.
 
 ## Example Usage
 

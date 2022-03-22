@@ -1,0 +1,25 @@
+---
+name: Subinterface VRF
+class_name: nwRtVrfMbr
+dn: sys/intf/encrtd-[%s]/rtvrfMbr
+ds_description: |-
+  This data source can read a subinterface VRF association.
+res_description: |-
+  This resource can manage a subinterface VRF association.\n\n- API Documentation: [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
+parents:
+  - Physical Interface
+  - Subinterface
+attributes:
+  - nxos_name: id
+    tf_name: interface_id
+    type: String
+    id: true
+    reference_only: true
+    description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1.10`.'
+    example: eth1/10.124
+  - nxos_name: tDn
+    tf_name: vrf_dn
+    type: String
+    mandatory: true
+    description: 'DN of VRF. For example: `sys/inst-VRF1`.'
+    example: sys/inst-VRF123

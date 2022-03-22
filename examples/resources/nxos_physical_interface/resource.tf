@@ -12,7 +12,7 @@ resource "nxos_physical_interface" "example" {
   link_logging             = "enable"
   medium                   = "broadcast"
   mode                     = "access"
-  mtu                      = 9216
+  mtu                      = 1500
   native_vlan              = "unknown"
   speed                    = "auto"
   speed_group              = "auto"

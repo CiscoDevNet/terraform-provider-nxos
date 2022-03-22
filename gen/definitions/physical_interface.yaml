@@ -134,7 +134,7 @@ attributes:
     min_int: 576
     max_int: 9216
     default_value: 1500
-    example: 9216
+    example: 1500
   - nxos_name: nativeVlan
     tf_name: native_vlan
     type: String

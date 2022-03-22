@@ -32,7 +32,7 @@ func TestAccDataSourceNxosPhysicalInterface(t *testing.T) {
 					resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "link_logging", "enable"),
 					resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "medium", "broadcast"),
 					resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "mode", "access"),
-					resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "mtu", "9216"),
+					resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "mtu", "1500"),
 					resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "native_vlan", "unknown"),
 					resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "speed", "auto"),
 					resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "speed_group", "auto"),

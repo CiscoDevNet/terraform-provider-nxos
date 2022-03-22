@@ -239,6 +239,7 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 		"nxos_physical_interface_vrf": resourcePhysicalInterfaceVRFType{},
 		"nxos_subinterface":           resourceSubinterfaceType{},
 		"nxos_subinterface_vrf":       resourceSubinterfaceVRFType{},
+		"nxos_dhcp_relay_interface":   resourceDHCPRelayInterfaceType{},
 	}, nil
 }
 
@@ -263,6 +264,7 @@ func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSou
 		"nxos_physical_interface_vrf": dataSourcePhysicalInterfaceVRFType{},
 		"nxos_subinterface":           dataSourceSubinterfaceType{},
 		"nxos_subinterface_vrf":       dataSourceSubinterfaceVRFType{},
+		"nxos_dhcp_relay_interface":   dataSourceDHCPRelayInterfaceType{},
 	}, nil
 }
 

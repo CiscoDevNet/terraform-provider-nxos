@@ -15,6 +15,7 @@
 - Add nxos_subinterface_vrf resource and data source
 - Add nxos_dhcp_relay_interface resource and data source
 - Add nxos_dhcp_relay_address resource and data source
+- Add nxos_ethernet_settings resource and data source
 
 ## 0.2.3
 

@@ -1,0 +1,17 @@
+---
+name: Ethernet Settings
+class_name: ethpmInst
+dn: sys/ethpm/inst
+ds_description: |-
+  This data source can read global ethernet settings.
+res_description: |-
+  This resource can manage global ethernet settings.\n\n- API Documentation: [ethpmInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Interfaces/ethpm:Inst/)
+attributes:
+  - nxos_name: systemJumboMtu
+    tf_name: mtu
+    type: Int64
+    description: 'System jumbo MTU.'
+    min_int: 576
+    max_int: 9216
+    default_value: 9216
+    example: 9216

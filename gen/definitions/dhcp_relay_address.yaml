@@ -1,0 +1,30 @@
+---
+name: DHCP Relay Address
+class_name: dhcpRelayAddr
+dn: sys/dhcp/inst/relayif-[%s]/addr-[%s]-[%s]
+ds_description: |-
+  This data source can read a DHCP relay address.
+res_description: |-
+  This resource can manage a DHCP relay address.\n\n- API Documentation: [dhcpRelayAddr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/DHCP/dhcp:RelayAddr/)
+parents:
+  - DHCP Relay Interface
+attributes:
+  - nxos_name: id
+    tf_name: interface_id
+    type: String
+    id: true
+    reference_only: true
+    description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+    example: eth1/10
+  - nxos_name: vrf
+    tf_name: vrf
+    type: String
+    id: true
+    description: 'VRF name.'
+    example: VRF1
+  - nxos_name: address
+    tf_name: address
+    type: String
+    id: true
+    description: 'IPv4 or IPv6 address.'
+    example: 1.1.1.1

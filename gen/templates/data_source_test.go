@@ -32,7 +32,7 @@ func TestAccDataSourceNxos{{camelCase .Name}}(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					{{- $name := .Name }}
 					{{- range  .Attributes}}
-					{{- if ne .ReferenceOnly true}}
+					{{- if and (ne .ReferenceOnly true) (ne .ReadOnly true)}}
 					resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"),
 					{{- end}}
 					{{- end}}

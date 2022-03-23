@@ -4,7 +4,6 @@ package provider
 
 import (
 	"fmt"
-	
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -12,9 +11,9 @@ import (
 )
 
 type IPv4InterfaceAddress struct {
-	Dn types.String `tfsdk:"id"`
-	Dom types.String `tfsdk:"vrf"`
-	Id types.String `tfsdk:"interface_id"`
+	Dn   types.String `tfsdk:"id"`
+	Dom  types.String `tfsdk:"vrf"`
+	Id   types.String `tfsdk:"interface_id"`
 	Addr types.String `tfsdk:"address"`
 }
 

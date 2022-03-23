@@ -17,7 +17,7 @@ func TestAccDataSourceNxosDHCPRelayInterface(t *testing.T) {
 				Config: testAccNxosFeatureDHCPConfig_all(),
 			},
 			{
-				Config: testAccNxosFeatureDHCPConfig_all()+testAccNxosDHCPRelayInterfaceConfig_all(),
+				Config: testAccNxosFeatureDHCPConfig_all() + testAccNxosDHCPRelayInterfaceConfig_all(),
 			},
 			{
 				Config: testAccDataSourceNxosDHCPRelayInterfaceConfig,

@@ -17,13 +17,13 @@ func TestAccNxosDHCPRelayInterface(t *testing.T) {
 				Config: testAccNxosFeatureDHCPConfig_all(),
 			},
 			{
-				Config:testAccNxosFeatureDHCPConfig_all()+testAccNxosDHCPRelayInterfaceConfig_minimum(),
+				Config: testAccNxosFeatureDHCPConfig_all() + testAccNxosDHCPRelayInterfaceConfig_minimum(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_dhcp_relay_interface.test", "interface_id", "eth1/10"),
 				),
 			},
 			{
-				Config:testAccNxosFeatureDHCPConfig_all()+testAccNxosDHCPRelayInterfaceConfig_all(),
+				Config: testAccNxosFeatureDHCPConfig_all() + testAccNxosDHCPRelayInterfaceConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_dhcp_relay_interface.test", "interface_id", "eth1/10"),
 				),

@@ -17,14 +17,14 @@ func TestAccNxosPhysicalInterfaceVRF(t *testing.T) {
 				Config: testAccNxosPhysicalInterfaceConfig_all(),
 			},
 			{
-				Config:testAccNxosPhysicalInterfaceConfig_all()+testAccNxosPhysicalInterfaceVRFConfig_minimum(),
+				Config: testAccNxosPhysicalInterfaceConfig_all() + testAccNxosPhysicalInterfaceVRFConfig_minimum(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_physical_interface_vrf.test", "interface_id", "eth1/10"),
 					resource.TestCheckResourceAttr("nxos_physical_interface_vrf.test", "vrf_dn", "sys/inst-default"),
 				),
 			},
 			{
-				Config:testAccNxosPhysicalInterfaceConfig_all()+testAccNxosPhysicalInterfaceVRFConfig_all(),
+				Config: testAccNxosPhysicalInterfaceConfig_all() + testAccNxosPhysicalInterfaceVRFConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_physical_interface_vrf.test", "interface_id", "eth1/10"),
 					resource.TestCheckResourceAttr("nxos_physical_interface_vrf.test", "vrf_dn", "sys/inst-default"),

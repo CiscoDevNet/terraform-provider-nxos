@@ -17,13 +17,13 @@ func TestAccNxosOSPFInterface(t *testing.T) {
 				Config: testAccNxosOSPFConfig_all(),
 			},
 			{
-				Config: testAccNxosOSPFConfig_all()+testAccNxosOSPFInstanceConfig_all(),
+				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all(),
 			},
 			{
-				Config: testAccNxosOSPFConfig_all()+testAccNxosOSPFInstanceConfig_all()+testAccNxosOSPFVRFConfig_all(),
+				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all() + testAccNxosOSPFVRFConfig_all(),
 			},
 			{
-				Config:testAccNxosOSPFConfig_all()+testAccNxosOSPFInstanceConfig_all()+testAccNxosOSPFVRFConfig_all()+testAccNxosOSPFInterfaceConfig_minimum(),
+				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all() + testAccNxosOSPFVRFConfig_all() + testAccNxosOSPFInterfaceConfig_minimum(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ospf_interface.test", "instance_name", "OSPF1"),
 					resource.TestCheckResourceAttr("nxos_ospf_interface.test", "vrf_name", "default"),
@@ -31,7 +31,7 @@ func TestAccNxosOSPFInterface(t *testing.T) {
 				),
 			},
 			{
-				Config:testAccNxosOSPFConfig_all()+testAccNxosOSPFInstanceConfig_all()+testAccNxosOSPFVRFConfig_all()+testAccNxosOSPFInterfaceConfig_all(),
+				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all() + testAccNxosOSPFVRFConfig_all() + testAccNxosOSPFInterfaceConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ospf_interface.test", "instance_name", "OSPF1"),
 					resource.TestCheckResourceAttr("nxos_ospf_interface.test", "vrf_name", "default"),

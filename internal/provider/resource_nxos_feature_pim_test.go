@@ -14,12 +14,11 @@ func TestAccNxosFeaturePIM(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config:testAccNxosFeaturePIMConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-				),
+				Config: testAccNxosFeaturePIMConfig_minimum(),
+				Check:  resource.ComposeTestCheckFunc(),
 			},
 			{
-				Config:testAccNxosFeaturePIMConfig_all(),
+				Config: testAccNxosFeaturePIMConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_feature_pim.test", "admin_state", "enabled"),
 				),

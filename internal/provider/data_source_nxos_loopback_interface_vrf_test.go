@@ -17,7 +17,7 @@ func TestAccDataSourceNxosLoopbackInterfaceVRF(t *testing.T) {
 				Config: testAccNxosLoopbackInterfaceConfig_all(),
 			},
 			{
-				Config: testAccNxosLoopbackInterfaceConfig_all()+testAccNxosLoopbackInterfaceVRFConfig_all(),
+				Config: testAccNxosLoopbackInterfaceConfig_all() + testAccNxosLoopbackInterfaceVRFConfig_all(),
 			},
 			{
 				Config: testAccDataSourceNxosLoopbackInterfaceVRFConfig,

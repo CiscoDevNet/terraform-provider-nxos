@@ -17,13 +17,13 @@ func TestAccNxosSubinterface(t *testing.T) {
 				Config: testAccNxosPhysicalInterfaceConfig_all(),
 			},
 			{
-				Config:testAccNxosPhysicalInterfaceConfig_all()+testAccNxosSubinterfaceConfig_minimum(),
+				Config: testAccNxosPhysicalInterfaceConfig_all() + testAccNxosSubinterfaceConfig_minimum(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_subinterface.test", "interface_id", "eth1/10.124"),
 				),
 			},
 			{
-				Config:testAccNxosPhysicalInterfaceConfig_all()+testAccNxosSubinterfaceConfig_all(),
+				Config: testAccNxosPhysicalInterfaceConfig_all() + testAccNxosSubinterfaceConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_subinterface.test", "interface_id", "eth1/10.124"),
 					resource.TestCheckResourceAttr("nxos_subinterface.test", "admin_state", "down"),

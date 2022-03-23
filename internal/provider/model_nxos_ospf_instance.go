@@ -4,7 +4,6 @@ package provider
 
 import (
 	"fmt"
-	
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -12,9 +11,9 @@ import (
 )
 
 type OSPFInstance struct {
-	Dn types.String `tfsdk:"id"`
+	Dn      types.String `tfsdk:"id"`
 	AdminSt types.String `tfsdk:"admin_state"`
-	Name types.String `tfsdk:"name"`
+	Name    types.String `tfsdk:"name"`
 }
 
 func (data OSPFInstance) getDn() string {

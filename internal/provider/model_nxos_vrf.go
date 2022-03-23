@@ -4,7 +4,6 @@ package provider
 
 import (
 	"fmt"
-	
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -12,8 +11,8 @@ import (
 )
 
 type VRF struct {
-	Dn types.String `tfsdk:"id"`
-	Name types.String `tfsdk:"name"`
+	Dn    types.String `tfsdk:"id"`
+	Name  types.String `tfsdk:"name"`
 	Descr types.String `tfsdk:"description"`
 }
 

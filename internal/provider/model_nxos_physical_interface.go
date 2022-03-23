@@ -4,7 +4,7 @@ package provider
 
 import (
 	"fmt"
-	
+
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -13,25 +13,25 @@ import (
 )
 
 type PhysicalInterface struct {
-	Dn types.String `tfsdk:"id"`
-	Id types.String `tfsdk:"interface_id"`
-	FECMode types.String `tfsdk:"fec_mode"`
-	AccessVlan types.String `tfsdk:"access_vlan"`
-	AdminSt types.String `tfsdk:"admin_state"`
-	AutoNeg types.String `tfsdk:"auto_negotiation"`
-	Bw types.Int64 `tfsdk:"bandwidth"`
-	Delay types.Int64 `tfsdk:"delay"`
-	Descr types.String `tfsdk:"description"`
-	Duplex types.String `tfsdk:"duplex"`
-	Layer types.String `tfsdk:"layer"`
-	LinkLog types.String `tfsdk:"link_logging"`
-	Medium types.String `tfsdk:"medium"`
-	Mode types.String `tfsdk:"mode"`
-	Mtu types.Int64 `tfsdk:"mtu"`
-	NativeVlan types.String `tfsdk:"native_vlan"`
-	Speed types.String `tfsdk:"speed"`
-	SpeedGroup types.String `tfsdk:"speed_group"`
-	TrunkVlans types.String `tfsdk:"trunk_vlans"`
+	Dn                     types.String `tfsdk:"id"`
+	Id                     types.String `tfsdk:"interface_id"`
+	FECMode                types.String `tfsdk:"fec_mode"`
+	AccessVlan             types.String `tfsdk:"access_vlan"`
+	AdminSt                types.String `tfsdk:"admin_state"`
+	AutoNeg                types.String `tfsdk:"auto_negotiation"`
+	Bw                     types.Int64  `tfsdk:"bandwidth"`
+	Delay                  types.Int64  `tfsdk:"delay"`
+	Descr                  types.String `tfsdk:"description"`
+	Duplex                 types.String `tfsdk:"duplex"`
+	Layer                  types.String `tfsdk:"layer"`
+	LinkLog                types.String `tfsdk:"link_logging"`
+	Medium                 types.String `tfsdk:"medium"`
+	Mode                   types.String `tfsdk:"mode"`
+	Mtu                    types.Int64  `tfsdk:"mtu"`
+	NativeVlan             types.String `tfsdk:"native_vlan"`
+	Speed                  types.String `tfsdk:"speed"`
+	SpeedGroup             types.String `tfsdk:"speed_group"`
+	TrunkVlans             types.String `tfsdk:"trunk_vlans"`
 	UniDirectionalEthernet types.String `tfsdk:"uni_directional_ethernet"`
 }
 

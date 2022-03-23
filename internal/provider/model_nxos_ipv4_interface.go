@@ -4,7 +4,6 @@ package provider
 
 import (
 	"fmt"
-	
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -12,11 +11,11 @@ import (
 )
 
 type IPv4Interface struct {
-	Dn types.String `tfsdk:"id"`
-	Dom types.String `tfsdk:"vrf"`
-	Id types.String `tfsdk:"interface_id"`
+	Dn         types.String `tfsdk:"id"`
+	Dom        types.String `tfsdk:"vrf"`
+	Id         types.String `tfsdk:"interface_id"`
 	Unnumbered types.String `tfsdk:"unnumbered"`
-	Urpf types.String `tfsdk:"urpf"`
+	Urpf       types.String `tfsdk:"urpf"`
 }
 
 func (data IPv4Interface) getDn() string {

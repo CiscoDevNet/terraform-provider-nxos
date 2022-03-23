@@ -17,17 +17,17 @@ func TestAccNxosSubinterfaceVRF(t *testing.T) {
 				Config: testAccNxosPhysicalInterfaceConfig_all(),
 			},
 			{
-				Config: testAccNxosPhysicalInterfaceConfig_all()+testAccNxosSubinterfaceConfig_all(),
+				Config: testAccNxosPhysicalInterfaceConfig_all() + testAccNxosSubinterfaceConfig_all(),
 			},
 			{
-				Config:testAccNxosPhysicalInterfaceConfig_all()+testAccNxosSubinterfaceConfig_all()+testAccNxosSubinterfaceVRFConfig_minimum(),
+				Config: testAccNxosPhysicalInterfaceConfig_all() + testAccNxosSubinterfaceConfig_all() + testAccNxosSubinterfaceVRFConfig_minimum(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_subinterface_vrf.test", "interface_id", "eth1/10.124"),
 					resource.TestCheckResourceAttr("nxos_subinterface_vrf.test", "vrf_dn", "sys/inst-VRF123"),
 				),
 			},
 			{
-				Config:testAccNxosPhysicalInterfaceConfig_all()+testAccNxosSubinterfaceConfig_all()+testAccNxosSubinterfaceVRFConfig_all(),
+				Config: testAccNxosPhysicalInterfaceConfig_all() + testAccNxosSubinterfaceConfig_all() + testAccNxosSubinterfaceVRFConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_subinterface_vrf.test", "interface_id", "eth1/10.124"),
 					resource.TestCheckResourceAttr("nxos_subinterface_vrf.test", "vrf_dn", "sys/inst-VRF123"),

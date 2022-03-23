@@ -17,7 +17,7 @@ func TestAccDataSourceNxosPIMInstance(t *testing.T) {
 				Config: testAccNxosPIMConfig_all(),
 			},
 			{
-				Config: testAccNxosPIMConfig_all()+testAccNxosPIMInstanceConfig_all(),
+				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all(),
 			},
 			{
 				Config: testAccDataSourceNxosPIMInstanceConfig,

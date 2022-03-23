@@ -4,7 +4,7 @@ package provider
 
 import (
 	"fmt"
-	
+
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -13,14 +13,14 @@ import (
 )
 
 type SVIInterface struct {
-	Dn types.String `tfsdk:"id"`
-	Id types.String `tfsdk:"interface_id"`
+	Dn      types.String `tfsdk:"id"`
+	Id      types.String `tfsdk:"interface_id"`
 	AdminSt types.String `tfsdk:"admin_state"`
-	Bw types.Int64 `tfsdk:"bandwidth"`
-	Delay types.Int64 `tfsdk:"delay"`
-	Descr types.String `tfsdk:"description"`
-	Medium types.String `tfsdk:"medium"`
-	Mtu types.Int64 `tfsdk:"mtu"`
+	Bw      types.Int64  `tfsdk:"bandwidth"`
+	Delay   types.Int64  `tfsdk:"delay"`
+	Descr   types.String `tfsdk:"description"`
+	Medium  types.String `tfsdk:"medium"`
+	Mtu     types.Int64  `tfsdk:"mtu"`
 }
 
 func (data SVIInterface) getDn() string {

@@ -14,12 +14,11 @@ func TestAccNxosFeatureOSPF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config:testAccNxosFeatureOSPFConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-				),
+				Config: testAccNxosFeatureOSPFConfig_minimum(),
+				Check:  resource.ComposeTestCheckFunc(),
 			},
 			{
-				Config:testAccNxosFeatureOSPFConfig_all(),
+				Config: testAccNxosFeatureOSPFConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_feature_ospf.test", "admin_state", "enabled"),
 				),

@@ -14,13 +14,13 @@ func TestAccNxosPhysicalInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config:testAccNxosPhysicalInterfaceConfig_minimum(),
+				Config: testAccNxosPhysicalInterfaceConfig_minimum(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "interface_id", "eth1/10"),
 				),
 			},
 			{
-				Config:testAccNxosPhysicalInterfaceConfig_all(),
+				Config: testAccNxosPhysicalInterfaceConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "interface_id", "eth1/10"),
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "fec_mode", "auto"),

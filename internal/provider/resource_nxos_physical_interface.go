@@ -40,12 +40,12 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"fec_mode": {
-				MarkdownDescription: helpers.NewDescription("FEC mode.").AddStringEnumDescription("fc-fec", "rs-fec", "fec-off", "auto", "rs-ieee", "rs-cons16", "kp-fec", ).AddDefaultValueDescription("auto").String,
+				MarkdownDescription: helpers.NewDescription("FEC mode.").AddStringEnumDescription("fc-fec", "rs-fec", "fec-off", "auto", "rs-ieee", "rs-cons16", "kp-fec").AddDefaultValueDescription("auto").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("fc-fec", "rs-fec", "fec-off", "auto", "rs-ieee", "rs-cons16", "kp-fec", ),
+					helpers.StringEnumValidator("fc-fec", "rs-fec", "fec-off", "auto", "rs-ieee", "rs-cons16", "kp-fec"),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("auto"),
@@ -61,24 +61,24 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"admin_state": {
-				MarkdownDescription: helpers.NewDescription("Administrative port state.").AddStringEnumDescription("up", "down", ).AddDefaultValueDescription("up").String,
+				MarkdownDescription: helpers.NewDescription("Administrative port state.").AddStringEnumDescription("up", "down").AddDefaultValueDescription("up").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("up", "down", ),
+					helpers.StringEnumValidator("up", "down"),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("up"),
 				},
 			},
 			"auto_negotiation": {
-				MarkdownDescription: helpers.NewDescription("Administrative port auto-negotiation.").AddStringEnumDescription("on", "off", "25G", ).AddDefaultValueDescription("on").String,
+				MarkdownDescription: helpers.NewDescription("Administrative port auto-negotiation.").AddStringEnumDescription("on", "off", "25G").AddDefaultValueDescription("on").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("on", "off", "25G", ),
+					helpers.StringEnumValidator("on", "off", "25G"),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("on"),
@@ -115,60 +115,60 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				Computed:            true,
 			},
 			"duplex": {
-				MarkdownDescription: helpers.NewDescription("Duplex.").AddStringEnumDescription("auto", "full", "half", ).AddDefaultValueDescription("auto").String,
+				MarkdownDescription: helpers.NewDescription("Duplex.").AddStringEnumDescription("auto", "full", "half").AddDefaultValueDescription("auto").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("auto", "full", "half", ),
+					helpers.StringEnumValidator("auto", "full", "half"),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("auto"),
 				},
 			},
 			"layer": {
-				MarkdownDescription: helpers.NewDescription("Administrative port layer.").AddStringEnumDescription("Layer2", "Layer3", ).AddDefaultValueDescription("Layer2").String,
+				MarkdownDescription: helpers.NewDescription("Administrative port layer.").AddStringEnumDescription("Layer2", "Layer3").AddDefaultValueDescription("Layer2").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("Layer2", "Layer3", ),
+					helpers.StringEnumValidator("Layer2", "Layer3"),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("Layer2"),
 				},
 			},
 			"link_logging": {
-				MarkdownDescription: helpers.NewDescription("Administrative link logging.").AddStringEnumDescription("default", "enable", "disable", ).AddDefaultValueDescription("default").String,
+				MarkdownDescription: helpers.NewDescription("Administrative link logging.").AddStringEnumDescription("default", "enable", "disable").AddDefaultValueDescription("default").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("default", "enable", "disable", ),
+					helpers.StringEnumValidator("default", "enable", "disable"),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("default"),
 				},
 			},
 			"medium": {
-				MarkdownDescription: helpers.NewDescription("The administrative port medium type.").AddStringEnumDescription("broadcast", "p2p", ).AddDefaultValueDescription("broadcast").String,
+				MarkdownDescription: helpers.NewDescription("The administrative port medium type.").AddStringEnumDescription("broadcast", "p2p").AddDefaultValueDescription("broadcast").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("broadcast", "p2p", ),
+					helpers.StringEnumValidator("broadcast", "p2p"),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("broadcast"),
 				},
 			},
 			"mode": {
-				MarkdownDescription: helpers.NewDescription("Administrative port mode.").AddStringEnumDescription("access", "trunk", "fex-fabric", "dot1q-tunnel", "promiscuous", "host", "trunk_secondary", "trunk_promiscuous", "vntag", ).AddDefaultValueDescription("access").String,
+				MarkdownDescription: helpers.NewDescription("Administrative port mode.").AddStringEnumDescription("access", "trunk", "fex-fabric", "dot1q-tunnel", "promiscuous", "host", "trunk_secondary", "trunk_promiscuous", "vntag").AddDefaultValueDescription("access").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("access", "trunk", "fex-fabric", "dot1q-tunnel", "promiscuous", "host", "trunk_secondary", "trunk_promiscuous", "vntag", ),
+					helpers.StringEnumValidator("access", "trunk", "fex-fabric", "dot1q-tunnel", "promiscuous", "host", "trunk_secondary", "trunk_promiscuous", "vntag"),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("access"),
@@ -196,24 +196,24 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"speed": {
-				MarkdownDescription: helpers.NewDescription("Administrative port speed.").AddStringEnumDescription("unknown", "100M", "1G", "10G", "40G", "auto", "auto 100M", "auto 100M 1G", "100G", "25G", "10M", "50G", "200G", "400G", "2.5G", "5G", "auto 2.5G 5G 10G", "auto 100M 1G 2.5G 5G", ).AddDefaultValueDescription("auto").String,
+				MarkdownDescription: helpers.NewDescription("Administrative port speed.").AddStringEnumDescription("unknown", "100M", "1G", "10G", "40G", "auto", "auto 100M", "auto 100M 1G", "100G", "25G", "10M", "50G", "200G", "400G", "2.5G", "5G", "auto 2.5G 5G 10G", "auto 100M 1G 2.5G 5G").AddDefaultValueDescription("auto").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("unknown", "100M", "1G", "10G", "40G", "auto", "auto 100M", "auto 100M 1G", "100G", "25G", "10M", "50G", "200G", "400G", "2.5G", "5G", "auto 2.5G 5G 10G", "auto 100M 1G 2.5G 5G", ),
+					helpers.StringEnumValidator("unknown", "100M", "1G", "10G", "40G", "auto", "auto 100M", "auto 100M 1G", "100G", "25G", "10M", "50G", "200G", "400G", "2.5G", "5G", "auto 2.5G 5G 10G", "auto 100M 1G 2.5G 5G"),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("auto"),
 				},
 			},
 			"speed_group": {
-				MarkdownDescription: helpers.NewDescription("Speed group.").AddStringEnumDescription("unknown", "1000", "10000", "40000", "auto", "25000", ).AddDefaultValueDescription("auto").String,
+				MarkdownDescription: helpers.NewDescription("Speed group.").AddStringEnumDescription("unknown", "1000", "10000", "40000", "auto", "25000").AddDefaultValueDescription("auto").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("unknown", "1000", "10000", "40000", "auto", "25000", ),
+					helpers.StringEnumValidator("unknown", "1000", "10000", "40000", "auto", "25000"),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("auto"),
@@ -229,12 +229,12 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"uni_directional_ethernet": {
-				MarkdownDescription: helpers.NewDescription("UDE (Uni-Directional Ethernet).").AddStringEnumDescription("disable", "send-only", "receive-only", ).AddDefaultValueDescription("disable").String,
+				MarkdownDescription: helpers.NewDescription("UDE (Uni-Directional Ethernet).").AddStringEnumDescription("disable", "send-only", "receive-only").AddDefaultValueDescription("disable").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("disable", "send-only", "receive-only", ),
+					helpers.StringEnumValidator("disable", "send-only", "receive-only"),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("disable"),

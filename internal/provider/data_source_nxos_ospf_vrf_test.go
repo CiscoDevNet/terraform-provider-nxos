@@ -17,10 +17,10 @@ func TestAccDataSourceNxosOSPFVRF(t *testing.T) {
 				Config: testAccNxosOSPFConfig_all(),
 			},
 			{
-				Config: testAccNxosOSPFConfig_all()+testAccNxosOSPFInstanceConfig_all(),
+				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all(),
 			},
 			{
-				Config: testAccNxosOSPFConfig_all()+testAccNxosOSPFInstanceConfig_all()+testAccNxosOSPFVRFConfig_all(),
+				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all() + testAccNxosOSPFVRFConfig_all(),
 			},
 			{
 				Config: testAccDataSourceNxosOSPFVRFConfig,

@@ -3,7 +3,6 @@
 package provider
 
 import (
-	
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -12,8 +11,8 @@ import (
 )
 
 type EthernetSettings struct {
-	Dn types.String `tfsdk:"id"`
-	SystemJumboMtu types.Int64 `tfsdk:"mtu"`
+	Dn             types.String `tfsdk:"id"`
+	SystemJumboMtu types.Int64  `tfsdk:"mtu"`
 }
 
 func (data EthernetSettings) getDn() string {

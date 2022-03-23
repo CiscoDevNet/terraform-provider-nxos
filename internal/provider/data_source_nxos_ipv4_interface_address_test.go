@@ -17,7 +17,7 @@ func TestAccDataSourceNxosIPv4InterfaceAddress(t *testing.T) {
 				Config: testAccNxosIPv4InterfaceConfig_all(),
 			},
 			{
-				Config: testAccNxosIPv4InterfaceConfig_all()+testAccNxosIPv4InterfaceAddressConfig_all(),
+				Config: testAccNxosIPv4InterfaceConfig_all() + testAccNxosIPv4InterfaceAddressConfig_all(),
 			},
 			{
 				Config: testAccDataSourceNxosIPv4InterfaceAddressConfig,

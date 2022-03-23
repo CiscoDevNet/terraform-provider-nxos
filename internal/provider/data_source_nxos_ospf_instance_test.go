@@ -17,7 +17,7 @@ func TestAccDataSourceNxosOSPFInstance(t *testing.T) {
 				Config: testAccNxosOSPFConfig_all(),
 			},
 			{
-				Config: testAccNxosOSPFConfig_all()+testAccNxosOSPFInstanceConfig_all(),
+				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all(),
 			},
 			{
 				Config: testAccDataSourceNxosOSPFInstanceConfig,

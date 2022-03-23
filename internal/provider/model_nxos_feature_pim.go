@@ -3,15 +3,13 @@
 package provider
 
 import (
-	
-
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
 )
 
 type FeaturePIM struct {
-	Dn types.String `tfsdk:"id"`
+	Dn      types.String `tfsdk:"id"`
 	AdminSt types.String `tfsdk:"admin_state"`
 }
 

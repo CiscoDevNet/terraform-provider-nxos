@@ -4,29 +4,29 @@ package provider
 
 import (
 	"fmt"
-	
+
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
-	"github.com/tidwall/gjson"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
+	"github.com/tidwall/gjson"
 )
 
 type OSPFInterface struct {
-	Dn types.String `tfsdk:"id"`
-	Inst types.String `tfsdk:"instance_name"`
-	Name types.String `tfsdk:"vrf_name"`
-	Id types.String `tfsdk:"interface_id"`
-	AdvertiseSecondaries types.Bool `tfsdk:"advertise_secondaries"`
-	Area types.String `tfsdk:"area"`
-	BfdCtrl types.String `tfsdk:"bfd"`
-	Cost types.Int64 `tfsdk:"cost"`
-	DeadIntvl types.Int64 `tfsdk:"dead_interval"`
-	HelloIntvl types.Int64 `tfsdk:"hello_interval"`
-	NwT types.String `tfsdk:"network_type"`
-	PassiveCtrl types.String `tfsdk:"passive"`
-	Prio types.Int64 `tfsdk:"priority"`
+	Dn                   types.String `tfsdk:"id"`
+	Inst                 types.String `tfsdk:"instance_name"`
+	Name                 types.String `tfsdk:"vrf_name"`
+	Id                   types.String `tfsdk:"interface_id"`
+	AdvertiseSecondaries types.Bool   `tfsdk:"advertise_secondaries"`
+	Area                 types.String `tfsdk:"area"`
+	BfdCtrl              types.String `tfsdk:"bfd"`
+	Cost                 types.Int64  `tfsdk:"cost"`
+	DeadIntvl            types.Int64  `tfsdk:"dead_interval"`
+	HelloIntvl           types.Int64  `tfsdk:"hello_interval"`
+	NwT                  types.String `tfsdk:"network_type"`
+	PassiveCtrl          types.String `tfsdk:"passive"`
+	Prio                 types.Int64  `tfsdk:"priority"`
 }
 
 func (data OSPFInterface) getDn() string {

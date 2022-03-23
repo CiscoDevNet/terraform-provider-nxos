@@ -17,14 +17,14 @@ func TestAccNxosSVIInterfaceVRF(t *testing.T) {
 				Config: testAccNxosSVIInterfaceConfig_all(),
 			},
 			{
-				Config:testAccNxosSVIInterfaceConfig_all()+testAccNxosSVIInterfaceVRFConfig_minimum(),
+				Config: testAccNxosSVIInterfaceConfig_all() + testAccNxosSVIInterfaceVRFConfig_minimum(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_svi_interface_vrf.test", "interface_id", "vlan293"),
 					resource.TestCheckResourceAttr("nxos_svi_interface_vrf.test", "vrf_dn", "sys/inst-VRF123"),
 				),
 			},
 			{
-				Config:testAccNxosSVIInterfaceConfig_all()+testAccNxosSVIInterfaceVRFConfig_all(),
+				Config: testAccNxosSVIInterfaceConfig_all() + testAccNxosSVIInterfaceVRFConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_svi_interface_vrf.test", "interface_id", "vlan293"),
 					resource.TestCheckResourceAttr("nxos_svi_interface_vrf.test", "vrf_dn", "sys/inst-VRF123"),

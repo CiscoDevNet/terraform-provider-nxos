@@ -17,7 +17,7 @@ func TestAccDataSourceNxosSubinterface(t *testing.T) {
 				Config: testAccNxosPhysicalInterfaceConfig_all(),
 			},
 			{
-				Config: testAccNxosPhysicalInterfaceConfig_all()+testAccNxosSubinterfaceConfig_all(),
+				Config: testAccNxosPhysicalInterfaceConfig_all() + testAccNxosSubinterfaceConfig_all(),
 			},
 			{
 				Config: testAccDataSourceNxosSubinterfaceConfig,

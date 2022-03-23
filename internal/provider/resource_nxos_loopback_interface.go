@@ -40,12 +40,12 @@ func (t resourceLoopbackInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"admin_state": {
-				MarkdownDescription: helpers.NewDescription("Administrative state.").AddStringEnumDescription("up", "down", ).AddDefaultValueDescription("up").String,
+				MarkdownDescription: helpers.NewDescription("Administrative state.").AddStringEnumDescription("up", "down").AddDefaultValueDescription("up").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("up", "down", ),
+					helpers.StringEnumValidator("up", "down"),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("up"),

@@ -57,12 +57,12 @@ func (t resourceIPv4InterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema,
 				},
 			},
 			"urpf": {
-				MarkdownDescription: helpers.NewDescription("URPF (unicast Reverse Path Forwarding).").AddStringEnumDescription("disabled", "strict", "loose", "loose-allow-default", "strict-allow-vni-hosts", ).AddDefaultValueDescription("disabled").String,
+				MarkdownDescription: helpers.NewDescription("URPF (unicast Reverse Path Forwarding).").AddStringEnumDescription("disabled", "strict", "loose", "loose-allow-default", "strict-allow-vni-hosts").AddDefaultValueDescription("disabled").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("disabled", "strict", "loose", "loose-allow-default", "strict-allow-vni-hosts", ),
+					helpers.StringEnumValidator("disabled", "strict", "loose", "loose-allow-default", "strict-allow-vni-hosts"),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("disabled"),

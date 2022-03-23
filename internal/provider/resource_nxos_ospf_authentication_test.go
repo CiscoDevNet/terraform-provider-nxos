@@ -17,16 +17,16 @@ func TestAccNxosOSPFAuthentication(t *testing.T) {
 				Config: testAccNxosOSPFConfig_all(),
 			},
 			{
-				Config: testAccNxosOSPFConfig_all()+testAccNxosOSPFInstanceConfig_all(),
+				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all(),
 			},
 			{
-				Config: testAccNxosOSPFConfig_all()+testAccNxosOSPFInstanceConfig_all()+testAccNxosOSPFVRFConfig_all(),
+				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all() + testAccNxosOSPFVRFConfig_all(),
 			},
 			{
-				Config: testAccNxosOSPFConfig_all()+testAccNxosOSPFInstanceConfig_all()+testAccNxosOSPFVRFConfig_all()+testAccNxosOSPFInterfaceConfig_all(),
+				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all() + testAccNxosOSPFVRFConfig_all() + testAccNxosOSPFInterfaceConfig_all(),
 			},
 			{
-				Config:testAccNxosOSPFConfig_all()+testAccNxosOSPFInstanceConfig_all()+testAccNxosOSPFVRFConfig_all()+testAccNxosOSPFInterfaceConfig_all()+testAccNxosOSPFAuthenticationConfig_minimum(),
+				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all() + testAccNxosOSPFVRFConfig_all() + testAccNxosOSPFInterfaceConfig_all() + testAccNxosOSPFAuthenticationConfig_minimum(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "instance_name", "OSPF1"),
 					resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "vrf_name", "default"),
@@ -34,7 +34,7 @@ func TestAccNxosOSPFAuthentication(t *testing.T) {
 				),
 			},
 			{
-				Config:testAccNxosOSPFConfig_all()+testAccNxosOSPFInstanceConfig_all()+testAccNxosOSPFVRFConfig_all()+testAccNxosOSPFInterfaceConfig_all()+testAccNxosOSPFAuthenticationConfig_all(),
+				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all() + testAccNxosOSPFVRFConfig_all() + testAccNxosOSPFInterfaceConfig_all() + testAccNxosOSPFAuthenticationConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "instance_name", "OSPF1"),
 					resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "vrf_name", "default"),

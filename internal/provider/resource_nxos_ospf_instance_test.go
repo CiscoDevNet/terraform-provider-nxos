@@ -17,13 +17,13 @@ func TestAccNxosOSPFInstance(t *testing.T) {
 				Config: testAccNxosOSPFConfig_all(),
 			},
 			{
-				Config:testAccNxosOSPFConfig_all()+testAccNxosOSPFInstanceConfig_minimum(),
+				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_minimum(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ospf_instance.test", "name", "OSPF1"),
 				),
 			},
 			{
-				Config:testAccNxosOSPFConfig_all()+testAccNxosOSPFInstanceConfig_all(),
+				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ospf_instance.test", "admin_state", "enabled"),
 					resource.TestCheckResourceAttr("nxos_ospf_instance.test", "name", "OSPF1"),

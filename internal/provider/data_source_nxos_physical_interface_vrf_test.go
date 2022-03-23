@@ -17,7 +17,7 @@ func TestAccDataSourceNxosPhysicalInterfaceVRF(t *testing.T) {
 				Config: testAccNxosPhysicalInterfaceConfig_all(),
 			},
 			{
-				Config: testAccNxosPhysicalInterfaceConfig_all()+testAccNxosPhysicalInterfaceVRFConfig_all(),
+				Config: testAccNxosPhysicalInterfaceConfig_all() + testAccNxosPhysicalInterfaceVRFConfig_all(),
 			},
 			{
 				Config: testAccDataSourceNxosPhysicalInterfaceVRFConfig,

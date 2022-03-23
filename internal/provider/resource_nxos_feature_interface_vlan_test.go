@@ -14,12 +14,11 @@ func TestAccNxosFeatureInterfaceVLAN(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config:testAccNxosFeatureInterfaceVLANConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-				),
+				Config: testAccNxosFeatureInterfaceVLANConfig_minimum(),
+				Check:  resource.ComposeTestCheckFunc(),
 			},
 			{
-				Config:testAccNxosFeatureInterfaceVLANConfig_all(),
+				Config: testAccNxosFeatureInterfaceVLANConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_feature_interface_vlan.test", "admin_state", "enabled"),
 				),

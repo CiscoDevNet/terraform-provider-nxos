@@ -4,7 +4,6 @@ package provider
 
 import (
 	"fmt"
-	
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -12,8 +11,8 @@ import (
 )
 
 type PhysicalInterfaceVRF struct {
-	Dn types.String `tfsdk:"id"`
-	Id types.String `tfsdk:"interface_id"`
+	Dn  types.String `tfsdk:"id"`
+	Id  types.String `tfsdk:"interface_id"`
 	TDn types.String `tfsdk:"vrf_dn"`
 }
 

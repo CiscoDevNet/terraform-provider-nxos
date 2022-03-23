@@ -4,7 +4,7 @@ package provider
 
 import (
 	"fmt"
-	
+
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -13,14 +13,14 @@ import (
 )
 
 type OSPFVRF struct {
-	Dn types.String `tfsdk:"id"`
-	Inst types.String `tfsdk:"instance_name"`
-	Name types.String `tfsdk:"name"`
-	AdminSt types.String `tfsdk:"admin_state"`
-	BwRef types.Int64 `tfsdk:"bandwidth_reference"`
+	Dn        types.String `tfsdk:"id"`
+	Inst      types.String `tfsdk:"instance_name"`
+	Name      types.String `tfsdk:"name"`
+	AdminSt   types.String `tfsdk:"admin_state"`
+	BwRef     types.Int64  `tfsdk:"bandwidth_reference"`
 	BwRefUnit types.String `tfsdk:"banwidth_reference_unit"`
-	Dist types.Int64 `tfsdk:"distance"`
-	RtrId types.String `tfsdk:"router_id"`
+	Dist      types.Int64  `tfsdk:"distance"`
+	RtrId     types.String `tfsdk:"router_id"`
 }
 
 func (data OSPFVRF) getDn() string {

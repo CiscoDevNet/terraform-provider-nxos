@@ -17,7 +17,7 @@ func TestAccDataSourceNxosSVIInterfaceVRF(t *testing.T) {
 				Config: testAccNxosSVIInterfaceConfig_all(),
 			},
 			{
-				Config: testAccNxosSVIInterfaceConfig_all()+testAccNxosSVIInterfaceVRFConfig_all(),
+				Config: testAccNxosSVIInterfaceConfig_all() + testAccNxosSVIInterfaceVRFConfig_all(),
 			},
 			{
 				Config: testAccDataSourceNxosSVIInterfaceVRFConfig,

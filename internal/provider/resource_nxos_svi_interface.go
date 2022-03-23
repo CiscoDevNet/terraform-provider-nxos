@@ -40,12 +40,12 @@ func (t resourceSVIInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"admin_state": {
-				MarkdownDescription: helpers.NewDescription("Administrative port state.").AddStringEnumDescription("up", "down", ).AddDefaultValueDescription("up").String,
+				MarkdownDescription: helpers.NewDescription("Administrative port state.").AddStringEnumDescription("up", "down").AddDefaultValueDescription("up").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("up", "down", ),
+					helpers.StringEnumValidator("up", "down"),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("up"),
@@ -82,12 +82,12 @@ func (t resourceSVIInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				Computed:            true,
 			},
 			"medium": {
-				MarkdownDescription: helpers.NewDescription("The administrative port medium type.").AddStringEnumDescription("bcast", "p2p", ).AddDefaultValueDescription("bcast").String,
+				MarkdownDescription: helpers.NewDescription("The administrative port medium type.").AddStringEnumDescription("bcast", "p2p").AddDefaultValueDescription("bcast").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("bcast", "p2p", ),
+					helpers.StringEnumValidator("bcast", "p2p"),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("bcast"),

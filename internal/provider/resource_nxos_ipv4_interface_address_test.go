@@ -17,7 +17,7 @@ func TestAccNxosIPv4InterfaceAddress(t *testing.T) {
 				Config: testAccNxosIPv4InterfaceConfig_all(),
 			},
 			{
-				Config:testAccNxosIPv4InterfaceConfig_all()+testAccNxosIPv4InterfaceAddressConfig_minimum(),
+				Config: testAccNxosIPv4InterfaceConfig_all() + testAccNxosIPv4InterfaceAddressConfig_minimum(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ipv4_interface_address.test", "vrf", "default"),
 					resource.TestCheckResourceAttr("nxos_ipv4_interface_address.test", "interface_id", "eth1/59"),
@@ -25,7 +25,7 @@ func TestAccNxosIPv4InterfaceAddress(t *testing.T) {
 				),
 			},
 			{
-				Config:testAccNxosIPv4InterfaceConfig_all()+testAccNxosIPv4InterfaceAddressConfig_all(),
+				Config: testAccNxosIPv4InterfaceConfig_all() + testAccNxosIPv4InterfaceAddressConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ipv4_interface_address.test", "vrf", "default"),
 					resource.TestCheckResourceAttr("nxos_ipv4_interface_address.test", "interface_id", "eth1/59"),

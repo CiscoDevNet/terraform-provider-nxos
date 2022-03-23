@@ -14,12 +14,11 @@ func TestAccNxosEthernetSettings(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config:testAccNxosEthernetSettingsConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-				),
+				Config: testAccNxosEthernetSettingsConfig_minimum(),
+				Check:  resource.ComposeTestCheckFunc(),
 			},
 			{
-				Config:testAccNxosEthernetSettingsConfig_all(),
+				Config: testAccNxosEthernetSettingsConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ethernet_settings.test", "mtu", "9216"),
 				),

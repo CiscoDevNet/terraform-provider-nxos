@@ -4,7 +4,6 @@ package provider
 
 import (
 	"fmt"
-	
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -12,9 +11,9 @@ import (
 )
 
 type DHCPRelayAddress struct {
-	Dn types.String `tfsdk:"id"`
-	Id types.String `tfsdk:"interface_id"`
-	Vrf types.String `tfsdk:"vrf"`
+	Dn      types.String `tfsdk:"id"`
+	Id      types.String `tfsdk:"interface_id"`
+	Vrf     types.String `tfsdk:"vrf"`
 	Address types.String `tfsdk:"address"`
 }
 

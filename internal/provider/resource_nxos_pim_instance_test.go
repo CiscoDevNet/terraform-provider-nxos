@@ -17,12 +17,11 @@ func TestAccNxosPIMInstance(t *testing.T) {
 				Config: testAccNxosPIMConfig_all(),
 			},
 			{
-				Config:testAccNxosPIMConfig_all()+testAccNxosPIMInstanceConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-				),
+				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_minimum(),
+				Check:  resource.ComposeTestCheckFunc(),
 			},
 			{
-				Config:testAccNxosPIMConfig_all()+testAccNxosPIMInstanceConfig_all(),
+				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_pim_instance.test", "admin_state", "enabled"),
 				),

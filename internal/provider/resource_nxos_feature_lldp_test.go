@@ -14,12 +14,11 @@ func TestAccNxosFeatureLLDP(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config:testAccNxosFeatureLLDPConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-				),
+				Config: testAccNxosFeatureLLDPConfig_minimum(),
+				Check:  resource.ComposeTestCheckFunc(),
 			},
 			{
-				Config:testAccNxosFeatureLLDPConfig_all(),
+				Config: testAccNxosFeatureLLDPConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_feature_lldp.test", "admin_state", "enabled"),
 				),

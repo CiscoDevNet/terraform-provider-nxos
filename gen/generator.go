@@ -18,7 +18,11 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const definitionsPath = "./gen/definitions/"
+const (
+	definitionsPath  = "./gen/definitions/"
+	providerTemplate = "./gen/templates/provider.go"
+	providerLocation = "./internal/provider/provider.go"
+)
 
 type t struct {
 	path   string
@@ -166,8 +170,9 @@ var functions = template.FuncMap{
 
 func main() {
 	items, _ := ioutil.ReadDir(definitionsPath)
+	configs := make([]YamlConfig, len(items))
 	// Iterate over definitions
-	for _, filename := range items {
+	for i, filename := range items {
 		yamlFile, err := ioutil.ReadFile(filepath.Join(definitionsPath, filename.Name()))
 		if err != nil {
 			log.Fatalf("Error reading file: %v", err)
@@ -178,7 +183,10 @@ func main() {
 		if err != nil {
 			log.Fatalf("Error parsing yaml: %v", err)
 		}
+		configs[i] = config
+	}
 
+	for _, config := range configs {
 		// Iterate over templates
 		for _, t := range templates {
 			file, err := os.Open(t.path)
@@ -216,7 +224,7 @@ func main() {
 				log.Fatalf("Error executing template: %v", err)
 			}
 
-			if strings.HasSuffix(t.path, ".g") {
+			if strings.HasSuffix(t.path, ".go") {
 				// format go code
 				fOutput, err := format.Source(output.Bytes())
 				if err != nil {
@@ -228,4 +236,45 @@ func main() {
 			}
 		}
 	}
+
+	// Render provider.go
+	file, err := os.Open(providerTemplate)
+	if err != nil {
+		log.Fatalf("Error opening template: %v", err)
+	}
+	defer file.Close()
+
+	// skip first line with 'build-ignore' directive for go files
+	scanner := bufio.NewScanner(file)
+	scanner.Scan()
+	var temp string
+	for scanner.Scan() {
+		temp = temp + scanner.Text() + "\n"
+	}
+
+	template, err := template.New(path.Base(providerTemplate)).Funcs(functions).Parse(temp)
+	if err != nil {
+		log.Fatalf("Error parsing template: %v", err)
+	}
+
+	// create output file
+	outputFile := filepath.Join(providerLocation)
+	os.MkdirAll(filepath.Dir(outputFile), 0755)
+	f, err := os.Create(outputFile)
+	if err != nil {
+		log.Fatalf("Error creating output file: %v", err)
+	}
+
+	output := new(bytes.Buffer)
+	err = template.Execute(output, configs)
+	if err != nil {
+		log.Fatalf("Error executing template: %v", err)
+	}
+
+	// format go code
+	fOutput, err := format.Source(output.Bytes())
+	if err != nil {
+		log.Fatalf("Error formatting go in %s: %v", providerTemplate, err)
+	}
+	f.Write(fOutput)
 }

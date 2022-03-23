@@ -14,13 +14,13 @@ func TestAccNxosSVIInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config:testAccNxosSVIInterfaceConfig_minimum(),
+				Config: testAccNxosSVIInterfaceConfig_minimum(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_svi_interface.test", "interface_id", "vlan293"),
 				),
 			},
 			{
-				Config:testAccNxosSVIInterfaceConfig_all(),
+				Config: testAccNxosSVIInterfaceConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_svi_interface.test", "interface_id", "vlan293"),
 					resource.TestCheckResourceAttr("nxos_svi_interface.test", "admin_state", "down"),

@@ -17,14 +17,14 @@ func TestAccNxosLoopbackInterfaceVRF(t *testing.T) {
 				Config: testAccNxosLoopbackInterfaceConfig_all(),
 			},
 			{
-				Config:testAccNxosLoopbackInterfaceConfig_all()+testAccNxosLoopbackInterfaceVRFConfig_minimum(),
+				Config: testAccNxosLoopbackInterfaceConfig_all() + testAccNxosLoopbackInterfaceVRFConfig_minimum(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_loopback_interface_vrf.test", "interface_id", "lo123"),
 					resource.TestCheckResourceAttr("nxos_loopback_interface_vrf.test", "vrf_dn", "sys/inst-default"),
 				),
 			},
 			{
-				Config:testAccNxosLoopbackInterfaceConfig_all()+testAccNxosLoopbackInterfaceVRFConfig_all(),
+				Config: testAccNxosLoopbackInterfaceConfig_all() + testAccNxosLoopbackInterfaceVRFConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_loopback_interface_vrf.test", "interface_id", "lo123"),
 					resource.TestCheckResourceAttr("nxos_loopback_interface_vrf.test", "vrf_dn", "sys/inst-default"),

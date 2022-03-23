@@ -14,12 +14,11 @@ func TestAccNxosFeatureDHCP(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config:testAccNxosFeatureDHCPConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-				),
+				Config: testAccNxosFeatureDHCPConfig_minimum(),
+				Check:  resource.ComposeTestCheckFunc(),
 			},
 			{
-				Config:testAccNxosFeatureDHCPConfig_all(),
+				Config: testAccNxosFeatureDHCPConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_feature_dhcp.test", "admin_state", "enabled"),
 				),

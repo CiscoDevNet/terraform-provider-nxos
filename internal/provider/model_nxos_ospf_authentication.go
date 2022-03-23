@@ -4,27 +4,27 @@ package provider
 
 import (
 	"fmt"
-	
+
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
-	"github.com/tidwall/gjson"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
+	"github.com/tidwall/gjson"
 )
 
 type OSPFAuthentication struct {
-	Dn types.String `tfsdk:"id"`
-	Inst types.String `tfsdk:"instance_name"`
-	Name types.String `tfsdk:"vrf_name"`
-	Id types.String `tfsdk:"interface_id"`
-	Key types.String `tfsdk:"key"`
-	KeyId types.Int64 `tfsdk:"key_id"`
-	KeySecureMode types.Bool `tfsdk:"key_secure_mode"`
-	Keychain types.String `tfsdk:"keychain"`
-	Md5key types.String `tfsdk:"md5_key"`
-	Md5keySecureMode types.Bool `tfsdk:"md5_key_secure_mode"`
-	Type types.String `tfsdk:"type"`
+	Dn               types.String `tfsdk:"id"`
+	Inst             types.String `tfsdk:"instance_name"`
+	Name             types.String `tfsdk:"vrf_name"`
+	Id               types.String `tfsdk:"interface_id"`
+	Key              types.String `tfsdk:"key"`
+	KeyId            types.Int64  `tfsdk:"key_id"`
+	KeySecureMode    types.Bool   `tfsdk:"key_secure_mode"`
+	Keychain         types.String `tfsdk:"keychain"`
+	Md5key           types.String `tfsdk:"md5_key"`
+	Md5keySecureMode types.Bool   `tfsdk:"md5_key_secure_mode"`
+	Type             types.String `tfsdk:"type"`
 }
 
 func (data OSPFAuthentication) getDn() string {

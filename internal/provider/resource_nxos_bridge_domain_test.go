@@ -14,13 +14,13 @@ func TestAccNxosBridgeDomain(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config:testAccNxosBridgeDomainConfig_minimum(),
+				Config: testAccNxosBridgeDomainConfig_minimum(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_bridge_domain.test", "fabric_encap", "vlan-10"),
 				),
 			},
 			{
-				Config:testAccNxosBridgeDomainConfig_all(),
+				Config: testAccNxosBridgeDomainConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_bridge_domain.test", "fabric_encap", "vlan-10"),
 					resource.TestCheckResourceAttr("nxos_bridge_domain.test", "access_encap", "unknown"),

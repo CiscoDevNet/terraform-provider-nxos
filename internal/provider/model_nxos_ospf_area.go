@@ -4,7 +4,7 @@ package provider
 
 import (
 	"fmt"
-	
+
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -13,13 +13,13 @@ import (
 )
 
 type OSPFArea struct {
-	Dn types.String `tfsdk:"id"`
-	Inst types.String `tfsdk:"instance_name"`
-	Name types.String `tfsdk:"vrf_name"`
-	Id types.String `tfsdk:"area_id"`
+	Dn       types.String `tfsdk:"id"`
+	Inst     types.String `tfsdk:"instance_name"`
+	Name     types.String `tfsdk:"vrf_name"`
+	Id       types.String `tfsdk:"area_id"`
 	AuthType types.String `tfsdk:"authentication_type"`
-	Cost types.Int64 `tfsdk:"cost"`
-	Type types.String `tfsdk:"type"`
+	Cost     types.Int64  `tfsdk:"cost"`
+	Type     types.String `tfsdk:"type"`
 }
 
 func (data OSPFArea) getDn() string {

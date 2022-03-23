@@ -4,7 +4,6 @@ package provider
 
 import (
 	"fmt"
-	
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -12,10 +11,10 @@ import (
 )
 
 type BridgeDomain struct {
-	Dn types.String `tfsdk:"id"`
+	Dn       types.String `tfsdk:"id"`
 	FabEncap types.String `tfsdk:"fabric_encap"`
 	AccEncap types.String `tfsdk:"access_encap"`
-	Name types.String `tfsdk:"name"`
+	Name     types.String `tfsdk:"name"`
 }
 
 func (data BridgeDomain) getDn() string {

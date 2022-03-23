@@ -40,12 +40,12 @@ func (t resourceSubinterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"admin_state": {
-				MarkdownDescription: helpers.NewDescription("Administrative state.").AddStringEnumDescription("up", "down", ).AddDefaultValueDescription("up").String,
+				MarkdownDescription: helpers.NewDescription("Administrative state.").AddStringEnumDescription("up", "down").AddDefaultValueDescription("up").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("up", "down", ),
+					helpers.StringEnumValidator("up", "down"),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("up"),
@@ -91,24 +91,24 @@ func (t resourceSubinterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"link_logging": {
-				MarkdownDescription: helpers.NewDescription("Administrative link logging.").AddStringEnumDescription("default", "enable", "disable", ).AddDefaultValueDescription("default").String,
+				MarkdownDescription: helpers.NewDescription("Administrative link logging.").AddStringEnumDescription("default", "enable", "disable").AddDefaultValueDescription("default").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("default", "enable", "disable", ),
+					helpers.StringEnumValidator("default", "enable", "disable"),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("default"),
 				},
 			},
 			"medium": {
-				MarkdownDescription: helpers.NewDescription("The administrative port medium type.").AddStringEnumDescription("broadcast", "p2p", ).AddDefaultValueDescription("broadcast").String,
+				MarkdownDescription: helpers.NewDescription("The administrative port medium type.").AddStringEnumDescription("broadcast", "p2p").AddDefaultValueDescription("broadcast").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("broadcast", "p2p", ),
+					helpers.StringEnumValidator("broadcast", "p2p"),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("broadcast"),

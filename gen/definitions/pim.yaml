@@ -1,0 +1,18 @@
+---
+name: PIM
+class_name: pimEntity
+dn: sys/pim
+ds_description: |-
+  This data source can read the global PIM configuration.
+res_description: |-
+  This resource can manage the global PIM configuration.\n\n- API Documentation: [pimEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:Entity/)
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'Administrative state.'
+    enum_value:
+      - enabled
+      - disabled
+    default_value: enabled
+    example: enabled

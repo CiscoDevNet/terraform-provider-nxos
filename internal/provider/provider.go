@@ -248,6 +248,7 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 		"nxos_ospf_area":              resourceOSPFAreaType{},
 		"nxos_ospf_interface":         resourceOSPFInterfaceType{},
 		"nxos_ospf_authentication":    resourceOSPFAuthenticationType{},
+		"nxos_pim":                    resourcePIMType{},
 	}, nil
 }
 
@@ -281,6 +282,7 @@ func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSou
 		"nxos_ospf_area":              dataSourceOSPFAreaType{},
 		"nxos_ospf_interface":         dataSourceOSPFInterfaceType{},
 		"nxos_ospf_authentication":    dataSourceOSPFAuthenticationType{},
+		"nxos_pim":                    dataSourcePIMType{},
 	}, nil
 }
 

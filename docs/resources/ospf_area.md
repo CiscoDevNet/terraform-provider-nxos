@@ -18,7 +18,7 @@ This resource can manage the OSPF Area configuration.
 ```terraform
 resource "nxos_ospf_area" "example" {
   instance_name       = "OSPF1"
-  vrf_name            = "VRF1"
+  vrf_name            = "default"
   area_id             = "0.0.0.10"
   authentication_type = "none"
   cost                = 10
@@ -55,5 +55,5 @@ resource "nxos_ospf_area" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import nxos_ospf_area.example "sys/ospf/inst-[OSPF1]/dom-[VRF1]/area-[0.0.0.10]"
+terraform import nxos_ospf_area.example "sys/ospf/inst-[OSPF1]/dom-[default]/area-[0.0.0.10]"
 ```

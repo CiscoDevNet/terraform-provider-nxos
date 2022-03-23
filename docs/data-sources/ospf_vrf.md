@@ -15,7 +15,7 @@ This data source can read the OSPF VRF configuration.
 ```terraform
 data "nxos_ospf_vrf" "example" {
   instance_name = "OSPF1"
-  name          = "VRF1"
+  name          = "default"
 }
 ```
 

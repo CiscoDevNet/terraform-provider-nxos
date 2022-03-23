@@ -7,7 +7,7 @@ import (
 	{{- if hasId .Attributes }}
 	"fmt"
 	{{- end}}
-	{{ $strconv := false }}{{ range .Attributes}}{{ if eq .Type "Int64"}}{{ $strconv = true }}{{ end}}{{- end}}
+	{{ $strconv := false }}{{ range .Attributes}}{{ if or (eq .Type "Int64") (eq .Type "Bool")}}{{ $strconv = true }}{{ end}}{{- end}}
 	{{- if $strconv }}
 	"strconv"
 	{{- end}}
@@ -15,6 +15,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	{{- $helpers := false }}{{ range .Attributes}}{{ if eq .Type "Bool"}}{{ $helpers = true }}{{ end}}{{- end}}
+	{{- if $helpers }}
+	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
+	{{- end}}
 )
 
 type {{camelCase .Name}} struct {
@@ -43,7 +47,9 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 	{{- if ne .ReferenceOnly true}}
 		{{- if eq .Type "Int64"}}
 		Set("{{.NxosName}}", strconv.FormatInt(data.{{toTitle .NxosName}}.Value, 10))
-		{{- else}}
+		{{- else if eq .Type "Bool"}}
+		Set("{{.NxosName}}", strconv.FormatBool(data.{{toTitle .NxosName}}.Value))
+		{{- else if eq .Type "String"}}
 		Set("{{.NxosName}}", data.{{toTitle .NxosName}}.Value)
 		{{- end}}
 		{{- if not (isLast $index $lenAttr)}}.{{- end}}
@@ -58,7 +64,9 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 	{{- if ne .ReferenceOnly true}}
 	{{- if eq .Type "Int64"}}
 	data.{{toTitle .NxosName}}.Value = res.Get("*.attributes.{{.NxosName}}").Int()
-	{{- else}}
+	{{- else if eq .Type "Bool"}}
+	data.{{toTitle .NxosName}}.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.{{.NxosName}}").String())
+	{{- else if eq .Type "String"}}
 	data.{{toTitle .NxosName}}.Value = res.Get("*.attributes.{{.NxosName}}").String()
 	{{- end}}
 	{{- end}}

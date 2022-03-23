@@ -18,7 +18,7 @@ This resource can manage the OSPF VRF configuration.
 ```terraform
 resource "nxos_ospf_vrf" "example" {
   instance_name           = "OSPF1"
-  name                    = "VRF1"
+  name                    = "default"
   admin_state             = "enabled"
   bandwidth_reference     = 400000
   banwidth_reference_unit = "mbps"
@@ -59,5 +59,5 @@ resource "nxos_ospf_vrf" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import nxos_ospf_vrf.example "sys/ospf/inst-[OSPF1]/dom-[VRF1]"
+terraform import nxos_ospf_vrf.example "sys/ospf/inst-[OSPF1]/dom-[default]"
 ```

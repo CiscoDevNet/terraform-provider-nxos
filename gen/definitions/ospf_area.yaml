@@ -24,7 +24,7 @@ attributes:
     id: true
     reference_only: true
     description: 'VRF name.'
-    example: VRF1
+    example: default
   - nxos_name: id
     tf_name: area_id
     type: String

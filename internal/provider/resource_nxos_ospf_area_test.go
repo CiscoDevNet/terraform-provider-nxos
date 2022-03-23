@@ -26,7 +26,7 @@ func TestAccNxosOSPFArea(t *testing.T) {
 				Config:testAccNxosOSPFConfig_all()+testAccNxosOSPFInstanceConfig_all()+testAccNxosOSPFVRFConfig_all()+testAccNxosOSPFAreaConfig_minimum(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ospf_area.test", "instance_name", "OSPF1"),
-					resource.TestCheckResourceAttr("nxos_ospf_area.test", "vrf_name", "VRF1"),
+					resource.TestCheckResourceAttr("nxos_ospf_area.test", "vrf_name", "default"),
 					resource.TestCheckResourceAttr("nxos_ospf_area.test", "area_id", "0.0.0.10"),
 				),
 			},
@@ -34,7 +34,7 @@ func TestAccNxosOSPFArea(t *testing.T) {
 				Config:testAccNxosOSPFConfig_all()+testAccNxosOSPFInstanceConfig_all()+testAccNxosOSPFVRFConfig_all()+testAccNxosOSPFAreaConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ospf_area.test", "instance_name", "OSPF1"),
-					resource.TestCheckResourceAttr("nxos_ospf_area.test", "vrf_name", "VRF1"),
+					resource.TestCheckResourceAttr("nxos_ospf_area.test", "vrf_name", "default"),
 					resource.TestCheckResourceAttr("nxos_ospf_area.test", "area_id", "0.0.0.10"),
 					resource.TestCheckResourceAttr("nxos_ospf_area.test", "authentication_type", "none"),
 					resource.TestCheckResourceAttr("nxos_ospf_area.test", "cost", "10"),
@@ -44,7 +44,7 @@ func TestAccNxosOSPFArea(t *testing.T) {
 			{
 				ResourceName:  "nxos_ospf_area.test",
 				ImportState:   true,
-				ImportStateId: "sys/ospf/inst-[OSPF1]/dom-[VRF1]/area-[0.0.0.10]",
+				ImportStateId: "sys/ospf/inst-[OSPF1]/dom-[default]/area-[0.0.0.10]",
 			},
 		},
 	})
@@ -54,7 +54,7 @@ func testAccNxosOSPFAreaConfig_minimum() string {
 	return `
 	resource "nxos_ospf_area" "test" {
 		instance_name = "OSPF1"
-		vrf_name = "VRF1"
+		vrf_name = "default"
 		area_id = "0.0.0.10"
 	}
 	`
@@ -64,7 +64,7 @@ func testAccNxosOSPFAreaConfig_all() string {
 	return `
 	resource "nxos_ospf_area" "test" {
 		instance_name = "OSPF1"
-		vrf_name = "VRF1"
+		vrf_name = "default"
 		area_id = "0.0.0.10"
 		authentication_type = "none"
 		cost = 10

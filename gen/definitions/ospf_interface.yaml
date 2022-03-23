@@ -1,0 +1,107 @@
+---
+name: OSPF Interface
+class_name: ospfIf
+dn: sys/ospf/inst-[%s]/dom-[%s]/if-[%s]
+ds_description: |-
+  This data source can read the OSPF interface configuration.
+res_description: |-
+  This resource can manage the OSPF interface configuration.\n\n- API Documentation: [ospfIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:If/)
+parents:
+  - OSPF
+  - OSPF Instance
+  - OSPF VRF
+attributes:
+  - nxos_name: inst
+    tf_name: instance_name
+    type: String
+    id: true
+    reference_only: true
+    description: 'OSPF instance name.'
+    example: OSPF1
+  - nxos_name: name
+    tf_name: vrf_name
+    type: String
+    id: true
+    reference_only: true
+    description: 'VRF name.'
+    example: default
+  - nxos_name: id
+    tf_name: interface_id
+    type: String
+    id: true
+    description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+    example: eth1/10
+  - nxos_name: advertiseSecondaries
+    tf_name: advertise_secondaries
+    type: Bool
+    description: 'Advertise secondary IP addresses.'
+    default_value: true
+    example: false
+  - nxos_name: area
+    tf_name: area
+    type: String
+    description: 'Area identifier to which a network or interface belongs in IPv4 address format.'
+    default_value: 0.0.0.0
+    example: 0.0.0.10
+  - nxos_name: bfdCtrl
+    tf_name: bfd
+    type: String
+    description: 'Bidirectional Forwarding Detection (BFD).'
+    enum_value:
+      - unspecified
+      - enabled
+      - disabled
+    default_value: unspecified
+    example: disabled
+  - nxos_name: cost
+    tf_name: cost
+    type: Int64
+    min_int: 0
+    max_int: 65535
+    default_value: 0
+    description: 'Specifies the cost of interface.'
+    example: 1000
+  - nxos_name: deadIntvl
+    tf_name: dead_interval
+    type: Int64
+    min_int: 0
+    max_int: 65535
+    default_value: 0
+    description: 'Dead interval, interval after which router declares that neighbor as down.'
+    example: 60
+  - nxos_name: helloIntvl
+    tf_name: hello_interval
+    type: Int64
+    min_int: 0
+    max_int: 65535
+    default_value: 10
+    description: 'Hello interval, interval between hello packets that OSPF sends on the interface.'
+    example: 15
+  - nxos_name: nwT
+    tf_name: network_type
+    type: String
+    description: 'Network type.'
+    enum_value:
+      - unspecified
+      - p2p
+      - bcast
+    default_value: unspecified
+    example: p2p
+  - nxos_name: passiveCtrl
+    tf_name: passive
+    type: String
+    description: 'Passive interface control. Interface can be configured as passive or non-passive.'
+    enum_value:
+      - unspecified
+      - enabled
+      - disabled
+    default_value: unspecified
+    example: enabled
+  - nxos_name: prio
+    tf_name: priority
+    type: Int64
+    min_int: 0
+    max_int: 255
+    default_value: 1
+    description: 'Priority, used in determining the designated router on this network.'
+    example: 10

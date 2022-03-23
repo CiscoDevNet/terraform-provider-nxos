@@ -71,7 +71,9 @@ func (t resource{{camelCase .Name}}Type) GetSchema(ctx context.Context) (tfsdk.S
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					{{- if eq .Type "Int64"}}
 					helpers.IntegerDefaultModifier({{.DefaultValue}}),
-					{{- else}}
+					{{- else if eq .Type "Bool"}}
+					helpers.BooleanDefaultModifier({{.DefaultValue}}),
+					{{- else if eq .Type "String"}}
 					helpers.StringDefaultModifier("{{.DefaultValue}}"),
 					{{- end}}
 				},

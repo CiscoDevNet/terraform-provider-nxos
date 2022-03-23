@@ -22,7 +22,7 @@ attributes:
     type: String
     id: true
     description: 'VRF name.'
-    example: VRF1
+    example: default
   - nxos_name: adminSt
     tf_name: admin_state
     type: String

@@ -20,6 +20,7 @@
 - Add nxos_ospf_instance resource and data source
 - Add nxos_ospf_vrf resource and data source
 - Add nxos_ospf_area resource and data source
+- Add nxos_ospf_interface resource and data source
 
 ## 0.2.3
 

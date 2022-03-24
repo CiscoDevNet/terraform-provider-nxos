@@ -1,0 +1,33 @@
+---
+name: PIM VRF
+class_name: pimDom
+dn: sys/pim/inst/dom-[%s]
+ds_description: |-
+  This data source can read the PIM VRF configuration.
+res_description: |-
+  This resource can manage the PIM VRF configuration.\n\n- API Documentation: [pimDom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:Dom/)
+parents:
+  - PIM
+  - PIM Instance
+attributes:
+  - nxos_name: name
+    tf_name: name
+    type: String
+    id: true
+    description: 'VRF name.'
+    example: default
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'Administrative state.'
+    enum_value:
+      - enabled
+      - disabled
+    default_value: enabled
+    example: enabled
+  - nxos_name: bfd
+    tf_name: bfd
+    type: Bool
+    description: 'BFD.'
+    default_value: false
+    example: true

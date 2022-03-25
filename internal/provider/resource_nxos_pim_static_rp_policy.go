@@ -15,12 +15,12 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourcePIMInterfaceType struct{}
+type resourcePIMStaticRPPolicyType struct{}
 
-func (t resourcePIMInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t resourcePIMStaticRPPolicyType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the PIM interface configuration.\n\n- API Documentation: [pimIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:If/)",
+		MarkdownDescription: "This resource can manage the PIM Static RP policy configuration.\n\n- API Documentation: [pimStaticRPP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:StaticRPP/)",
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -39,80 +39,30 @@ func (t resourcePIMInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 					tfsdk.RequiresReplace(),
 				},
 			},
-			"interface_id": {
-				MarkdownDescription: helpers.NewDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
-				Type:                types.StringType,
-				Required:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
-				},
-			},
-			"admin_state": {
-				MarkdownDescription: helpers.NewDescription("Administrative state.").AddDefaultValueDescription("enabled").String,
+			"name": {
+				MarkdownDescription: helpers.NewDescription("Policy name.").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					helpers.StringDefaultModifier("enabled"),
-				},
-			},
-			"bfd": {
-				MarkdownDescription: helpers.NewDescription("BFD.").AddDefaultValueDescription("disabled").String,
-				Type:                types.StringType,
-				Optional:            true,
-				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					helpers.StringDefaultModifier("disabled"),
-				},
-			},
-			"dr_priority": {
-				MarkdownDescription: helpers.NewDescription("Designated Router priority level.").AddIntegerRangeDescription(1, 4294967295).AddDefaultValueDescription("1").String,
-				Type:                types.Int64Type,
-				Optional:            true,
-				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(1, 4294967295),
-				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					helpers.IntegerDefaultModifier(1),
-				},
-			},
-			"passive": {
-				MarkdownDescription: helpers.NewDescription("Passive interface.").AddDefaultValueDescription("false").String,
-				Type:                types.BoolType,
-				Optional:            true,
-				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					helpers.BooleanDefaultModifier(false),
-				},
-			},
-			"sparse_mode": {
-				MarkdownDescription: helpers.NewDescription("Sparse mode.").AddDefaultValueDescription("false").String,
-				Type:                types.BoolType,
-				Optional:            true,
-				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					helpers.BooleanDefaultModifier(false),
-				},
 			},
 		},
 	}, nil
 }
 
-func (t resourcePIMInterfaceType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
+func (t resourcePIMStaticRPPolicyType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
-	return resourcePIMInterface{
+	return resourcePIMStaticRPPolicy{
 		provider: provider,
 	}, diags
 }
 
-type resourcePIMInterface struct {
+type resourcePIMStaticRPPolicy struct {
 	provider provider
 }
 
-func (r resourcePIMInterface) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
-	var plan, state PIMInterface
+func (r resourcePIMStaticRPPolicy) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+	var plan, state PIMStaticRPPolicy
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -147,8 +97,8 @@ func (r resourcePIMInterface) Create(ctx context.Context, req tfsdk.CreateResour
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourcePIMInterface) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
-	var state PIMInterface
+func (r resourcePIMStaticRPPolicy) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+	var state PIMStaticRPPolicy
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -173,8 +123,8 @@ func (r resourcePIMInterface) Read(ctx context.Context, req tfsdk.ReadResourceRe
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourcePIMInterface) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
-	var plan, state PIMInterface
+func (r resourcePIMStaticRPPolicy) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+	var plan, state PIMStaticRPPolicy
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -208,8 +158,8 @@ func (r resourcePIMInterface) Update(ctx context.Context, req tfsdk.UpdateResour
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourcePIMInterface) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
-	var state PIMInterface
+func (r resourcePIMStaticRPPolicy) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+	var state PIMStaticRPPolicy
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -235,6 +185,6 @@ func (r resourcePIMInterface) Delete(ctx context.Context, req tfsdk.DeleteResour
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourcePIMInterface) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
+func (r resourcePIMStaticRPPolicy) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
 	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
 }

@@ -14,7 +14,7 @@ This data source can read the PIM interface configuration.
 
 ```terraform
 data "nxos_pim_interface" "example" {
-  name         = "default"
+  vrf_name     = "default"
   interface_id = "eth1/10"
 }
 ```
@@ -25,7 +25,7 @@ data "nxos_pim_interface" "example" {
 ### Required
 
 - **interface_id** (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
-- **name** (String) VRF name.
+- **vrf_name** (String) VRF name.
 
 ### Read-Only
 

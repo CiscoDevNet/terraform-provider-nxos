@@ -25,14 +25,14 @@ func TestAccNxosPIMInterface(t *testing.T) {
 			{
 				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all() + testAccNxosPIMInterfaceConfig_minimum(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_pim_interface.test", "name", "default"),
+					resource.TestCheckResourceAttr("nxos_pim_interface.test", "vrf_name", "default"),
 					resource.TestCheckResourceAttr("nxos_pim_interface.test", "interface_id", "eth1/10"),
 				),
 			},
 			{
 				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all() + testAccNxosPIMInterfaceConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_pim_interface.test", "name", "default"),
+					resource.TestCheckResourceAttr("nxos_pim_interface.test", "vrf_name", "default"),
 					resource.TestCheckResourceAttr("nxos_pim_interface.test", "interface_id", "eth1/10"),
 					resource.TestCheckResourceAttr("nxos_pim_interface.test", "admin_state", "enabled"),
 					resource.TestCheckResourceAttr("nxos_pim_interface.test", "bfd", "enabled"),
@@ -53,7 +53,7 @@ func TestAccNxosPIMInterface(t *testing.T) {
 func testAccNxosPIMInterfaceConfig_minimum() string {
 	return `
 	resource "nxos_pim_interface" "test" {
-		name = "default"
+		vrf_name = "default"
 		interface_id = "eth1/10"
 	}
 	`
@@ -62,7 +62,7 @@ func testAccNxosPIMInterfaceConfig_minimum() string {
 func testAccNxosPIMInterfaceConfig_all() string {
 	return `
 	resource "nxos_pim_interface" "test" {
-		name = "default"
+		vrf_name = "default"
 		interface_id = "eth1/10"
 		admin_state = "enabled"
 		bfd = "enabled"

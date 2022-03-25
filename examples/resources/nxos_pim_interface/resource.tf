@@ -1,5 +1,5 @@
 resource "nxos_pim_interface" "example" {
-  name         = "default"
+  vrf_name     = "default"
   interface_id = "eth1/10"
   admin_state  = "enabled"
   bfd          = "enabled"

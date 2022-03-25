@@ -12,9 +12,10 @@ parents:
   - PIM VRF
 attributes:
   - nxos_name: name
-    tf_name: name
+    tf_name: vrf_name
     type: String
     id: true
+    reference_only: true
     description: 'VRF name.'
     example: default
   - nxos_name: id

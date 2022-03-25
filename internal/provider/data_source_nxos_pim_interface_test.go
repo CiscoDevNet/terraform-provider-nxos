@@ -28,7 +28,6 @@ func TestAccDataSourceNxosPIMInterface(t *testing.T) {
 			{
 				Config: testAccDataSourceNxosPIMInterfaceConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_pim_interface.test", "name", "default"),
 					resource.TestCheckResourceAttr("data.nxos_pim_interface.test", "interface_id", "eth1/10"),
 					resource.TestCheckResourceAttr("data.nxos_pim_interface.test", "admin_state", "enabled"),
 					resource.TestCheckResourceAttr("data.nxos_pim_interface.test", "bfd", "enabled"),
@@ -43,7 +42,7 @@ func TestAccDataSourceNxosPIMInterface(t *testing.T) {
 
 const testAccDataSourceNxosPIMInterfaceConfig = `
 data "nxos_pim_interface" "test" {
-  name = "default"
+  vrf_name = "default"
   interface_id = "eth1/10"
 }
 `

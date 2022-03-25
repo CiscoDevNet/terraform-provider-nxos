@@ -12,12 +12,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-type dataSourcePIMInterfaceType struct{}
+type dataSourcePIMStaticRPPolicyType struct{}
 
-func (t dataSourcePIMInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t dataSourcePIMStaticRPPolicyType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the PIM interface configuration.",
+		MarkdownDescription: "This data source can read the PIM Static RP policy configuration.",
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -30,54 +30,29 @@ func (t dataSourcePIMInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema
 				Type:                types.StringType,
 				Required:            true,
 			},
-			"interface_id": {
-				MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
+			"name": {
+				MarkdownDescription: "Policy name.",
 				Type:                types.StringType,
-				Required:            true,
-			},
-			"admin_state": {
-				MarkdownDescription: "Administrative state.",
-				Type:                types.StringType,
-				Computed:            true,
-			},
-			"bfd": {
-				MarkdownDescription: "BFD.",
-				Type:                types.StringType,
-				Computed:            true,
-			},
-			"dr_priority": {
-				MarkdownDescription: "Designated Router priority level.",
-				Type:                types.Int64Type,
-				Computed:            true,
-			},
-			"passive": {
-				MarkdownDescription: "Passive interface.",
-				Type:                types.BoolType,
-				Computed:            true,
-			},
-			"sparse_mode": {
-				MarkdownDescription: "Sparse mode.",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
 		},
 	}, nil
 }
 
-func (t dataSourcePIMInterfaceType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
+func (t dataSourcePIMStaticRPPolicyType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
-	return dataSourcePIMInterface{
+	return dataSourcePIMStaticRPPolicy{
 		provider: provider,
 	}, diags
 }
 
-type dataSourcePIMInterface struct {
+type dataSourcePIMStaticRPPolicy struct {
 	provider provider
 }
 
-func (d dataSourcePIMInterface) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
-	var config, state PIMInterface
+func (d dataSourcePIMStaticRPPolicy) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+	var config, state PIMStaticRPPolicy
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

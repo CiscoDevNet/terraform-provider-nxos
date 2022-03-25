@@ -1,5 +1,5 @@
 ---
-name: Default QOS Class map
+name: Default QOS Class Map
 class_name: ipqosCMapInst
 dn: sys/ipqos/dflt/c/name-[%s]
 ds_description: |-

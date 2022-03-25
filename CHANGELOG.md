@@ -28,6 +28,9 @@
 - Add nxos_pim_interface resource and data source
 - Add nxos_pim_static_rp_policy resource and data source
 - Add nxos_pim_static_rp resource and data source
+- Add nxos_pim_static_rp_group_list resource and data source
+- Add nxos_pim_ssm_policy resource and data source
+- Add nxos_pim_ssm_range resource and data source
 
 ## 0.2.3
 

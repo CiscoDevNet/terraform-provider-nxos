@@ -1,0 +1,63 @@
+---
+name: PIM Interface
+class_name: pimIf
+dn: sys/pim/inst/dom-[%s]/if-[%s]
+ds_description: |-
+  This data source can read the PIM interface configuration.
+res_description: |-
+  This resource can manage the PIM interface configuration.\n\n- API Documentation: [pimIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:If/)
+parents:
+  - PIM
+  - PIM Instance
+  - PIM VRF
+attributes:
+  - nxos_name: name
+    tf_name: name
+    type: String
+    id: true
+    description: 'VRF name.'
+    example: default
+  - nxos_name: id
+    tf_name: interface_id
+    type: String
+    id: true
+    description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+    example: eth1/10
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'Administrative state.'
+    enum_value:
+      - enabled
+      - disabled
+    default_value: enabled
+    example: enabled
+  - nxos_name: bfdInst
+    tf_name: bfd
+    type: String
+    description: 'BFD.'
+    enum_value:
+      - enabled
+      - disabled
+    default_value: disabled
+    example: enabled
+  - nxos_name: drPrio
+    tf_name: dr_priority
+    type: Int64
+    min_int: 1
+    max_int: 4294967295
+    default_value: 1
+    description: 'Designated Router priority level.'
+    example: 10
+  - nxos_name: passive
+    tf_name: passive
+    type: Bool
+    description: 'Passive interface.'
+    default_value: false
+    example: false
+  - nxos_name: pimSparseMode
+    tf_name: sparse_mode
+    type: Bool
+    description: 'Sparse mode.'
+    default_value: false
+    example: true

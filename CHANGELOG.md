@@ -25,6 +25,7 @@
 - Add nxos_pim resource and data source
 - Add nxos_pim_instance resource and data source
 - Add nxos_pim_vrf resource and data source
+- Add nxos_pim_interface resource and data source
 
 ## 0.2.3
 

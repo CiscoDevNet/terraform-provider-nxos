@@ -224,6 +224,7 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 	return map[string]tfsdk.ResourceType{
 		"nxos_rest":                     resourceRestType{},
 		"nxos_bridge_domain":            resourceBridgeDomainType{},
+		"nxos_default_qos_class_map":    resourceDefaultQOSClassMapType{},
 		"nxos_dhcp_relay_address":       resourceDHCPRelayAddressType{},
 		"nxos_dhcp_relay_interface":     resourceDHCPRelayInterfaceType{},
 		"nxos_ethernet_settings":        resourceEthernetSettingsType{},
@@ -266,6 +267,7 @@ func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSou
 	return map[string]tfsdk.DataSourceType{
 		"nxos_rest":                     dataSourceRestType{},
 		"nxos_bridge_domain":            dataSourceBridgeDomainType{},
+		"nxos_default_qos_class_map":    dataSourceDefaultQOSClassMapType{},
 		"nxos_dhcp_relay_address":       dataSourceDHCPRelayAddressType{},
 		"nxos_dhcp_relay_interface":     dataSourceDHCPRelayInterfaceType{},
 		"nxos_ethernet_settings":        dataSourceEthernetSettingsType{},

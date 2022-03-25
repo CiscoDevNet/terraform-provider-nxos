@@ -1,0 +1,25 @@
+---
+name: Default QOS Class map
+class_name: ipqosCMapInst
+dn: sys/ipqos/dflt/c/name-[%s]
+ds_description: |-
+  This data source can read the default QoS class map configuration.
+res_description: |-
+  This resource can manage the default QoS class map configuration.\n\n- API Documentation: [ipqosCMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:CMapInst/)
+attributes:
+  - nxos_name: name
+    tf_name: name
+    type: String
+    id: true
+    description: 'Class map name.'
+    example: Voice
+  - nxos_name: matchType
+    tf_name: match_type
+    type: String
+    description: 'Match type.'
+    enum_value:
+      - match-any
+      - match-all
+      - match-first
+    default_value: match-all
+    example: match-any

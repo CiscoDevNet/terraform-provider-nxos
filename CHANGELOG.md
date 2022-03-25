@@ -31,6 +31,7 @@
 - Add nxos_pim_static_rp_group_list resource and data source
 - Add nxos_pim_ssm_policy resource and data source
 - Add nxos_pim_ssm_range resource and data source
+- Add nxos_default_qos_class_map resource and data source
 
 ## 0.2.3
 

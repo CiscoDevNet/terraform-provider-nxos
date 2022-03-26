@@ -35,6 +35,7 @@
 - Add nxos_default_qos_class_map_dscp resource and data source
 - Add nxos_default_qos_policy_map resource and data source
 - Add nxos_default_qos_policy_map_match_class_map resource and data source
+- Add nxos_default_qos_policy_map_match_class_map_set_qos_group resource and data source
 
 ## 0.2.3
 

@@ -1,0 +1,25 @@
+---
+name: Default QOS Policy Interface IN Policy Map
+class_name: ipqosInst
+dn: sys/ipqos/dflt/policy/in/intf-[%s]/pmap
+ds_description: |-
+  This data source can read the default QoS policy interface IN policy map configuration.
+res_description: |-
+  This resource can manage the default QoS policy interface IN policy map configuration.\n\n- API Documentation: [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Inst/)
+parents:
+  - Default QOS Policy Map
+  - Default QOS Policy Interface IN
+attributes:
+  - nxos_name: interface_id
+    tf_name: interface_id
+    type: String
+    id: true
+    reference_only: true
+    description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+    example: eth1/10
+  - nxos_name: name
+    tf_name: policy_map_name
+    type: String
+    mandatory: true
+    description: 'Policy map name.'
+    example: PM1

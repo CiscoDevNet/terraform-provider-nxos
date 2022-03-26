@@ -1,0 +1,25 @@
+---
+name: Queuing QOS Policy Map
+class_name: ipqosPMapInst
+dn: sys/ipqos/queuing/p/name-[%s]
+ds_description: |-
+  This data source can read the queuing QoS policy map configuration.
+res_description: |-
+  This resource can manage the queuing QoS policy map configuration.\n\n- API Documentation: [ipqosPMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:PMapInst/)
+attributes:
+  - nxos_name: name
+    tf_name: name
+    type: String
+    id: true
+    description: 'Policy map name.'
+    example: PM1
+  - nxos_name: matchType
+    tf_name: match_type
+    type: String
+    description: 'Match type.'
+    enum_value:
+      - match-any
+      - match-all
+      - match-first
+    default_value: match-all
+    example: match-any

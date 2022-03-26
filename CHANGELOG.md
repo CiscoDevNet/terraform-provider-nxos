@@ -40,6 +40,7 @@
 - Add nxos_default_qos_policy_interface_in resource and data source
 - Add nxos_default_qos_policy_interface_in_policy_map resource and data source
 - Add nxos_queuing_qos_policy_map resource and data source
+- Add nxos_queuing_qos_policy_map_match_class_map resource and data source
 
 ## 0.2.3
 

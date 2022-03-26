@@ -1,0 +1,24 @@
+---
+name: Queuing QOS Policy Map Match Class Map
+class_name: ipqosMatchCMap
+dn: sys/ipqos/queuing/p/name-[%s]/cmap-[%s]
+ds_description: |-
+  This data source can read the queuing QoS policy map match class map configuration.
+res_description: |-
+  This resource can manage the queuing QoS policy map match class map configuration.\n\n- API Documentation: [ipqosMatchCMap](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:MatchCMap/)
+parents:
+  - Queuing QOS Policy Map
+attributes:
+  - nxos_name: policy_map_name
+    tf_name: policy_map_name
+    type: String
+    id: true
+    reference_only: true
+    description: 'Policy map name.'
+    example: PM1
+  - nxos_name: name
+    tf_name: name
+    type: String
+    id: true
+    description: 'Class map name.'
+    example: c-out-q1

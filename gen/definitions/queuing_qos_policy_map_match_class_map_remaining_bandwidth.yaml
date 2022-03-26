@@ -1,0 +1,34 @@
+---
+name: Queuing QOS Policy Map Match Class Map Remaining Bandwidth
+class_name: ipqosSetRemBW
+dn: sys/ipqos/queuing/p/name-[%s]/cmap-[%s]/setRemBW
+ds_description: |-
+  This data source can read the queuing QoS policy map match class map remaining bandwidth configuration.
+res_description: |-
+  This resource can manage the queuing QoS policy map match class map remaining bandwidth configuration.\n\n- API Documentation: [ipqosSetRemBW](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:SetRemBW/)
+parents:
+  - Queuing QOS Policy Map
+  - Queuing QOS Policy Map Match Class Map
+attributes:
+  - nxos_name: policy_map_name
+    tf_name: policy_map_name
+    type: String
+    id: true
+    reference_only: true
+    description: 'Policy map name.'
+    example: PM1
+  - nxos_name: class_map_name
+    tf_name: class_map_name
+    type: String
+    id: true
+    reference_only: true
+    description: 'Class map name.'
+    example: c-out-q1
+  - nxos_name: val
+    tf_name: value
+    type: Int64
+    mandatory: true
+    description: 'Remaining bandwidth percent.'
+    min_int: 0
+    max_int: 100
+    example: 10

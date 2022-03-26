@@ -264,12 +264,13 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 		"nxos_queuing_qos_policy_map":                               resourceQueuingQOSPolicyMapType{},
 		"nxos_queuing_qos_policy_map_match_class_map":               resourceQueuingQOSPolicyMapMatchClassMapType{},
 		"nxos_queuing_qos_policy_map_match_class_map_priority":      resourceQueuingQOSPolicyMapMatchClassMapPriorityType{},
-		"nxos_subinterface":                                         resourceSubinterfaceType{},
-		"nxos_subinterface_vrf":                                     resourceSubinterfaceVRFType{},
-		"nxos_svi_interface":                                        resourceSVIInterfaceType{},
-		"nxos_svi_interface_vrf":                                    resourceSVIInterfaceVRFType{},
-		"nxos_vrf":                                                  resourceVRFType{},
-		"nxos_vrf_container":                                        resourceVRFContainerType{},
+		"nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth": resourceQueuingQOSPolicyMapMatchClassMapRemainingBandwidthType{},
+		"nxos_subinterface":      resourceSubinterfaceType{},
+		"nxos_subinterface_vrf":  resourceSubinterfaceVRFType{},
+		"nxos_svi_interface":     resourceSVIInterfaceType{},
+		"nxos_svi_interface_vrf": resourceSVIInterfaceVRFType{},
+		"nxos_vrf":               resourceVRFType{},
+		"nxos_vrf_container":     resourceVRFContainerType{},
 	}, nil
 }
 
@@ -317,12 +318,13 @@ func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSou
 		"nxos_queuing_qos_policy_map":                               dataSourceQueuingQOSPolicyMapType{},
 		"nxos_queuing_qos_policy_map_match_class_map":               dataSourceQueuingQOSPolicyMapMatchClassMapType{},
 		"nxos_queuing_qos_policy_map_match_class_map_priority":      dataSourceQueuingQOSPolicyMapMatchClassMapPriorityType{},
-		"nxos_subinterface":                                         dataSourceSubinterfaceType{},
-		"nxos_subinterface_vrf":                                     dataSourceSubinterfaceVRFType{},
-		"nxos_svi_interface":                                        dataSourceSVIInterfaceType{},
-		"nxos_svi_interface_vrf":                                    dataSourceSVIInterfaceVRFType{},
-		"nxos_vrf":                                                  dataSourceVRFType{},
-		"nxos_vrf_container":                                        dataSourceVRFContainerType{},
+		"nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth": dataSourceQueuingQOSPolicyMapMatchClassMapRemainingBandwidthType{},
+		"nxos_subinterface":      dataSourceSubinterfaceType{},
+		"nxos_subinterface_vrf":  dataSourceSubinterfaceVRFType{},
+		"nxos_svi_interface":     dataSourceSVIInterfaceType{},
+		"nxos_svi_interface_vrf": dataSourceSVIInterfaceVRFType{},
+		"nxos_vrf":               dataSourceVRFType{},
+		"nxos_vrf_container":     dataSourceVRFContainerType{},
 	}, nil
 }
 

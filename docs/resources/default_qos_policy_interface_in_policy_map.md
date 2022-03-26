@@ -3,13 +3,13 @@
 page_title: "nxos_default_qos_policy_interface_in_policy_map Resource - terraform-provider-nxos"
 subcategory: ""
 description: |-
-  This resource can manage the default QoS policy interface IN policy map configuration.
+  This resource can manage the default QoS policy interface in policy map configuration.
   API Documentation: ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Inst/
 ---
 
 # nxos_default_qos_policy_interface_in_policy_map (Resource)
 
-This resource can manage the default QoS policy interface IN policy map configuration.
+This resource can manage the default QoS policy interface in policy map configuration.
 
 - API Documentation: [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Inst/)
 

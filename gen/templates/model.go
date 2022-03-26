@@ -41,7 +41,10 @@ func (data {{camelCase .Name}}) getClassName() string {
 }
 
 func (data {{camelCase .Name}}) toBody() nxos.Body {
+	{{- $lenAttr := len .Attributes}}
+	{{- if ge $lenAttr 1 }}
 	attrs := nxos.Body{}.
+	{{- end}}
 	{{- $lenAttr := len .Attributes}}
 	{{- range $index, $item := .Attributes}}
 	{{- if ne .ReferenceOnly true}}
@@ -55,7 +58,11 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 		{{- if not (isLast $index $lenAttr)}}.{{- end}}
 	{{- end}}
 	{{- end}}
+	{{- if ge $lenAttr 1 }}
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	{{- else}}
+	return nxos.Body{Str: `{"` + data.getClassName() + `":{"attributes":{}}}`}
+	{{- end}}
 }
 
 func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {

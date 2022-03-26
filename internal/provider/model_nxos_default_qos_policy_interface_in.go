@@ -10,29 +10,29 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-type DefaultQOSPolicyInterfaceIN struct {
+type DefaultQOSPolicyInterfaceIn struct {
 	Dn   types.String `tfsdk:"id"`
 	Name types.String `tfsdk:"interface_id"`
 }
 
-func (data DefaultQOSPolicyInterfaceIN) getDn() string {
+func (data DefaultQOSPolicyInterfaceIn) getDn() string {
 	return fmt.Sprintf("sys/ipqos/dflt/policy/in/intf-[%s]", data.Name.Value)
 }
 
-func (data DefaultQOSPolicyInterfaceIN) getClassName() string {
+func (data DefaultQOSPolicyInterfaceIn) getClassName() string {
 	return "ipqosIf"
 }
 
-func (data DefaultQOSPolicyInterfaceIN) toBody() nxos.Body {
+func (data DefaultQOSPolicyInterfaceIn) toBody() nxos.Body {
 	attrs := nxos.Body{}.
 		Set("name", data.Name.Value)
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
-func (data *DefaultQOSPolicyInterfaceIN) fromBody(res gjson.Result) {
+func (data *DefaultQOSPolicyInterfaceIn) fromBody(res gjson.Result) {
 	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Name.Value = res.Get("*.attributes.name").String()
 }
 
-func (data *DefaultQOSPolicyInterfaceIN) fromPlan(plan DefaultQOSPolicyInterfaceIN) {
+func (data *DefaultQOSPolicyInterfaceIn) fromPlan(plan DefaultQOSPolicyInterfaceIn) {
 }

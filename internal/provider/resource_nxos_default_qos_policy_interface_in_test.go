@@ -8,19 +8,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccNxosDefaultQOSPolicyInterfaceIN(t *testing.T) {
+func TestAccNxosDefaultQOSPolicyInterfaceIn(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosDefaultQOSPolicyInterfaceINConfig_minimum(),
+				Config: testAccNxosDefaultQOSPolicyInterfaceInConfig_minimum(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_default_qos_policy_interface_in.test", "interface_id", "eth1/10"),
 				),
 			},
 			{
-				Config: testAccNxosDefaultQOSPolicyInterfaceINConfig_all(),
+				Config: testAccNxosDefaultQOSPolicyInterfaceInConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_default_qos_policy_interface_in.test", "interface_id", "eth1/10"),
 				),
@@ -34,7 +34,7 @@ func TestAccNxosDefaultQOSPolicyInterfaceIN(t *testing.T) {
 	})
 }
 
-func testAccNxosDefaultQOSPolicyInterfaceINConfig_minimum() string {
+func testAccNxosDefaultQOSPolicyInterfaceInConfig_minimum() string {
 	return `
 	resource "nxos_default_qos_policy_interface_in" "test" {
 		interface_id = "eth1/10"
@@ -42,7 +42,7 @@ func testAccNxosDefaultQOSPolicyInterfaceINConfig_minimum() string {
 	`
 }
 
-func testAccNxosDefaultQOSPolicyInterfaceINConfig_all() string {
+func testAccNxosDefaultQOSPolicyInterfaceInConfig_all() string {
 	return `
 	resource "nxos_default_qos_policy_interface_in" "test" {
 		interface_id = "eth1/10"

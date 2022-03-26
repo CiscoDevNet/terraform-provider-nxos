@@ -1,0 +1,8 @@
+---
+name: Queuing QOS Policy System Out
+class_name: ipqosSystem
+dn: sys/ipqos/queuing/policy/out/sys
+ds_description: |-
+  This data source can read the queuing QoS policy system out configuration.
+res_description: |-
+  This resource can manage the queuing QoS policy system out configuration.\n\n- API Documentation: [ipqosSystem](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:System/)

@@ -15,12 +15,12 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourceDefaultQOSPolicyInterfaceINType struct{}
+type resourceDefaultQOSPolicyInterfaceInType struct{}
 
-func (t resourceDefaultQOSPolicyInterfaceINType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t resourceDefaultQOSPolicyInterfaceInType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the default QoS policy interface IN configuration.\n\n- API Documentation: [ipqosIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:If/)",
+		MarkdownDescription: "This resource can manage the default QoS policy interface in configuration.\n\n- API Documentation: [ipqosIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:If/)",
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -43,20 +43,20 @@ func (t resourceDefaultQOSPolicyInterfaceINType) GetSchema(ctx context.Context) 
 	}, nil
 }
 
-func (t resourceDefaultQOSPolicyInterfaceINType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
+func (t resourceDefaultQOSPolicyInterfaceInType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
-	return resourceDefaultQOSPolicyInterfaceIN{
+	return resourceDefaultQOSPolicyInterfaceIn{
 		provider: provider,
 	}, diags
 }
 
-type resourceDefaultQOSPolicyInterfaceIN struct {
+type resourceDefaultQOSPolicyInterfaceIn struct {
 	provider provider
 }
 
-func (r resourceDefaultQOSPolicyInterfaceIN) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
-	var plan, state DefaultQOSPolicyInterfaceIN
+func (r resourceDefaultQOSPolicyInterfaceIn) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+	var plan, state DefaultQOSPolicyInterfaceIn
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -91,8 +91,8 @@ func (r resourceDefaultQOSPolicyInterfaceIN) Create(ctx context.Context, req tfs
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceDefaultQOSPolicyInterfaceIN) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
-	var state DefaultQOSPolicyInterfaceIN
+func (r resourceDefaultQOSPolicyInterfaceIn) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+	var state DefaultQOSPolicyInterfaceIn
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -117,8 +117,8 @@ func (r resourceDefaultQOSPolicyInterfaceIN) Read(ctx context.Context, req tfsdk
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceDefaultQOSPolicyInterfaceIN) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
-	var plan, state DefaultQOSPolicyInterfaceIN
+func (r resourceDefaultQOSPolicyInterfaceIn) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+	var plan, state DefaultQOSPolicyInterfaceIn
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -152,8 +152,8 @@ func (r resourceDefaultQOSPolicyInterfaceIN) Update(ctx context.Context, req tfs
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceDefaultQOSPolicyInterfaceIN) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
-	var state DefaultQOSPolicyInterfaceIN
+func (r resourceDefaultQOSPolicyInterfaceIn) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+	var state DefaultQOSPolicyInterfaceIn
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -179,6 +179,6 @@ func (r resourceDefaultQOSPolicyInterfaceIN) Delete(ctx context.Context, req tfs
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceDefaultQOSPolicyInterfaceIN) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
+func (r resourceDefaultQOSPolicyInterfaceIn) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
 	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
 }

@@ -8,7 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccNxosDefaultQOSPolicyInterfaceINPolicyMap(t *testing.T) {
+func TestAccNxosDefaultQOSPolicyInterfaceInPolicyMap(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -17,17 +17,17 @@ func TestAccNxosDefaultQOSPolicyInterfaceINPolicyMap(t *testing.T) {
 				Config: testAccNxosDefaultQOSPolicyMapConfig_all(),
 			},
 			{
-				Config: testAccNxosDefaultQOSPolicyMapConfig_all() + testAccNxosDefaultQOSPolicyInterfaceINConfig_all(),
+				Config: testAccNxosDefaultQOSPolicyMapConfig_all() + testAccNxosDefaultQOSPolicyInterfaceInConfig_all(),
 			},
 			{
-				Config: testAccNxosDefaultQOSPolicyMapConfig_all() + testAccNxosDefaultQOSPolicyInterfaceINConfig_all() + testAccNxosDefaultQOSPolicyInterfaceINPolicyMapConfig_minimum(),
+				Config: testAccNxosDefaultQOSPolicyMapConfig_all() + testAccNxosDefaultQOSPolicyInterfaceInConfig_all() + testAccNxosDefaultQOSPolicyInterfaceInPolicyMapConfig_minimum(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_default_qos_policy_interface_in_policy_map.test", "interface_id", "eth1/10"),
 					resource.TestCheckResourceAttr("nxos_default_qos_policy_interface_in_policy_map.test", "policy_map_name", "PM1"),
 				),
 			},
 			{
-				Config: testAccNxosDefaultQOSPolicyMapConfig_all() + testAccNxosDefaultQOSPolicyInterfaceINConfig_all() + testAccNxosDefaultQOSPolicyInterfaceINPolicyMapConfig_all(),
+				Config: testAccNxosDefaultQOSPolicyMapConfig_all() + testAccNxosDefaultQOSPolicyInterfaceInConfig_all() + testAccNxosDefaultQOSPolicyInterfaceInPolicyMapConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_default_qos_policy_interface_in_policy_map.test", "interface_id", "eth1/10"),
 					resource.TestCheckResourceAttr("nxos_default_qos_policy_interface_in_policy_map.test", "policy_map_name", "PM1"),
@@ -42,7 +42,7 @@ func TestAccNxosDefaultQOSPolicyInterfaceINPolicyMap(t *testing.T) {
 	})
 }
 
-func testAccNxosDefaultQOSPolicyInterfaceINPolicyMapConfig_minimum() string {
+func testAccNxosDefaultQOSPolicyInterfaceInPolicyMapConfig_minimum() string {
 	return `
 	resource "nxos_default_qos_policy_interface_in_policy_map" "test" {
 		interface_id = "eth1/10"
@@ -51,7 +51,7 @@ func testAccNxosDefaultQOSPolicyInterfaceINPolicyMapConfig_minimum() string {
 	`
 }
 
-func testAccNxosDefaultQOSPolicyInterfaceINPolicyMapConfig_all() string {
+func testAccNxosDefaultQOSPolicyInterfaceInPolicyMapConfig_all() string {
 	return `
 	resource "nxos_default_qos_policy_interface_in_policy_map" "test" {
 		interface_id = "eth1/10"

@@ -8,16 +8,16 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccDataSourceNxosDefaultQOSPolicyInterfaceIN(t *testing.T) {
+func TestAccDataSourceNxosDefaultQOSPolicyInterfaceIn(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosDefaultQOSPolicyInterfaceINConfig_all(),
+				Config: testAccNxosDefaultQOSPolicyInterfaceInConfig_all(),
 			},
 			{
-				Config: testAccDataSourceNxosDefaultQOSPolicyInterfaceINConfig,
+				Config: testAccDataSourceNxosDefaultQOSPolicyInterfaceInConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_default_qos_policy_interface_in.test", "interface_id", "eth1/10"),
 				),
@@ -26,7 +26,7 @@ func TestAccDataSourceNxosDefaultQOSPolicyInterfaceIN(t *testing.T) {
 	})
 }
 
-const testAccDataSourceNxosDefaultQOSPolicyInterfaceINConfig = `
+const testAccDataSourceNxosDefaultQOSPolicyInterfaceInConfig = `
 data "nxos_default_qos_policy_interface_in" "test" {
   interface_id = "eth1/10"
 }

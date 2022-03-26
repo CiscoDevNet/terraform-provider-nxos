@@ -1,11 +1,11 @@
 ---
-name: Default QOS Policy Interface IN
+name: Default QOS Policy Interface In
 class_name: ipqosIf
 dn: sys/ipqos/dflt/policy/in/intf-[%s]
 ds_description: |-
-  This data source can read the default QoS policy interface IN configuration.
+  This data source can read the default QoS policy interface in configuration.
 res_description: |-
-  This resource can manage the default QoS policy interface IN configuration.\n\n- API Documentation: [ipqosIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:If/)
+  This resource can manage the default QoS policy interface in configuration.\n\n- API Documentation: [ipqosIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:If/)
 attributes:
   - nxos_name: name
     tf_name: interface_id

@@ -10,31 +10,31 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-type DefaultQOSPolicyInterfaceINPolicyMap struct {
+type DefaultQOSPolicyInterfaceInPolicyMap struct {
 	Dn           types.String `tfsdk:"id"`
 	Interface_id types.String `tfsdk:"interface_id"`
 	Name         types.String `tfsdk:"policy_map_name"`
 }
 
-func (data DefaultQOSPolicyInterfaceINPolicyMap) getDn() string {
+func (data DefaultQOSPolicyInterfaceInPolicyMap) getDn() string {
 	return fmt.Sprintf("sys/ipqos/dflt/policy/in/intf-[%s]/pmap", data.Interface_id.Value)
 }
 
-func (data DefaultQOSPolicyInterfaceINPolicyMap) getClassName() string {
+func (data DefaultQOSPolicyInterfaceInPolicyMap) getClassName() string {
 	return "ipqosInst"
 }
 
-func (data DefaultQOSPolicyInterfaceINPolicyMap) toBody() nxos.Body {
+func (data DefaultQOSPolicyInterfaceInPolicyMap) toBody() nxos.Body {
 	attrs := nxos.Body{}.
 		Set("name", data.Name.Value)
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
-func (data *DefaultQOSPolicyInterfaceINPolicyMap) fromBody(res gjson.Result) {
+func (data *DefaultQOSPolicyInterfaceInPolicyMap) fromBody(res gjson.Result) {
 	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Name.Value = res.Get("*.attributes.name").String()
 }
 
-func (data *DefaultQOSPolicyInterfaceINPolicyMap) fromPlan(plan DefaultQOSPolicyInterfaceINPolicyMap) {
+func (data *DefaultQOSPolicyInterfaceInPolicyMap) fromPlan(plan DefaultQOSPolicyInterfaceInPolicyMap) {
 	data.Interface_id.Value = plan.Interface_id.Value
 }

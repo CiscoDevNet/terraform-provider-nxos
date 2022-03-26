@@ -3,12 +3,12 @@
 page_title: "nxos_default_qos_policy_interface_in Data Source - terraform-provider-nxos"
 subcategory: ""
 description: |-
-  This data source can read the default QoS policy interface IN configuration.
+  This data source can read the default QoS policy interface in configuration.
 ---
 
 # nxos_default_qos_policy_interface_in (Data Source)
 
-This data source can read the default QoS policy interface IN configuration.
+This data source can read the default QoS policy interface in configuration.
 
 ## Example Usage
 

@@ -12,12 +12,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-type dataSourceDefaultQOSPolicyInterfaceINPolicyMapType struct{}
+type dataSourceDefaultQOSPolicyInterfaceInPolicyMapType struct{}
 
-func (t dataSourceDefaultQOSPolicyInterfaceINPolicyMapType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t dataSourceDefaultQOSPolicyInterfaceInPolicyMapType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the default QoS policy interface IN policy map configuration.",
+		MarkdownDescription: "This data source can read the default QoS policy interface in policy map configuration.",
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -39,20 +39,20 @@ func (t dataSourceDefaultQOSPolicyInterfaceINPolicyMapType) GetSchema(ctx contex
 	}, nil
 }
 
-func (t dataSourceDefaultQOSPolicyInterfaceINPolicyMapType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
+func (t dataSourceDefaultQOSPolicyInterfaceInPolicyMapType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
-	return dataSourceDefaultQOSPolicyInterfaceINPolicyMap{
+	return dataSourceDefaultQOSPolicyInterfaceInPolicyMap{
 		provider: provider,
 	}, diags
 }
 
-type dataSourceDefaultQOSPolicyInterfaceINPolicyMap struct {
+type dataSourceDefaultQOSPolicyInterfaceInPolicyMap struct {
 	provider provider
 }
 
-func (d dataSourceDefaultQOSPolicyInterfaceINPolicyMap) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
-	var config, state DefaultQOSPolicyInterfaceINPolicyMap
+func (d dataSourceDefaultQOSPolicyInterfaceInPolicyMap) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+	var config, state DefaultQOSPolicyInterfaceInPolicyMap
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

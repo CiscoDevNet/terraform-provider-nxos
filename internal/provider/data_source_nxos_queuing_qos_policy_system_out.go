@@ -12,12 +12,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-type dataSourceDefaultQOSPolicyInterfaceInType struct{}
+type dataSourceQueuingQOSPolicySystemOutType struct{}
 
-func (t dataSourceDefaultQOSPolicyInterfaceInType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t dataSourceQueuingQOSPolicySystemOutType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the default QoS policy interface in configuration.",
+		MarkdownDescription: "This data source can read the queuing QoS policy system out configuration.",
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -25,29 +25,24 @@ func (t dataSourceDefaultQOSPolicyInterfaceInType) GetSchema(ctx context.Context
 				Type:                types.StringType,
 				Computed:            true,
 			},
-			"interface_id": {
-				MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
-				Type:                types.StringType,
-				Required:            true,
-			},
 		},
 	}, nil
 }
 
-func (t dataSourceDefaultQOSPolicyInterfaceInType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
+func (t dataSourceQueuingQOSPolicySystemOutType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
-	return dataSourceDefaultQOSPolicyInterfaceIn{
+	return dataSourceQueuingQOSPolicySystemOut{
 		provider: provider,
 	}, diags
 }
 
-type dataSourceDefaultQOSPolicyInterfaceIn struct {
+type dataSourceQueuingQOSPolicySystemOut struct {
 	provider provider
 }
 
-func (d dataSourceDefaultQOSPolicyInterfaceIn) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
-	var config, state DefaultQOSPolicyInterfaceIn
+func (d dataSourceQueuingQOSPolicySystemOut) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+	var config, state QueuingQOSPolicySystemOut
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

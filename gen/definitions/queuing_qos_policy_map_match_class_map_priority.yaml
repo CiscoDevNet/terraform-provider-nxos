@@ -1,0 +1,34 @@
+---
+name: Queuing QOS Policy Map Match Class Map Priority
+class_name: ipqosPriority
+dn: sys/ipqos/queuing/p/name-[%s]/cmap-[%s]/prio
+ds_description: |-
+  This data source can read the queuing QoS policy map match class map priority configuration.
+res_description: |-
+  This resource can manage the queuing QoS policy map match class map priority configuration.\n\n- API Documentation: [ipqosPriority](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Priority/)
+parents:
+  - Queuing QOS Policy Map
+  - Queuing QOS Policy Map Match Class Map
+attributes:
+  - nxos_name: policy_map_name
+    tf_name: policy_map_name
+    type: String
+    id: true
+    reference_only: true
+    description: 'Policy map name.'
+    example: PM1
+  - nxos_name: class_map_name
+    tf_name: class_map_name
+    type: String
+    id: true
+    reference_only: true
+    description: 'Class map name.'
+    example: c-out-q1
+  - nxos_name: level
+    tf_name: level
+    type: Int64
+    mandatory: true
+    description: 'Priority level.'
+    min_int: 1
+    max_int: 8
+    example: 1

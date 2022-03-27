@@ -5,6 +5,8 @@ subcategory: ""
 description: |-
   This resource can manage the PIM Static RP group list configuration.
   API Documentation: pimRPGrpList https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:RPGrpList/
+  Parent resources
+  nxospimstatic_rp https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_static_rp
 ---
 
 # nxos_pim_static_rp_group_list (Resource)
@@ -12,6 +14,10 @@ description: |-
 This resource can manage the PIM Static RP group list configuration.
 
 - API Documentation: [pimRPGrpList](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:RPGrpList/)
+
+### Parent resources
+
+- [nxos_pim_static_rp](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_static_rp)
 
 ## Example Usage
 

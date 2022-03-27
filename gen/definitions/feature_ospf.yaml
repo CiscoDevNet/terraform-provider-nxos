@@ -2,10 +2,9 @@
 name: Feature OSPF
 class_name: fmOspf
 dn: sys/fm/ospf
-ds_description: |-
-  This data source can read the OSPF feature configuration.
-res_description: |-
-  This resource can manage the OSPF feature configuration.\n\n- API Documentation: [fmOspf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Ospf/)
+ds_description: This data source can read the OSPF feature configuration.
+res_description: This resource can manage the OSPF feature configuration.
+doc_path: Feature%20Management/fm:Ospf/
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state

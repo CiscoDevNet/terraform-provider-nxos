@@ -2,10 +2,11 @@
 name: Physical Interface
 class_name: l1PhysIf
 dn: sys/intf/phys-[%s]
-ds_description: |-
-  This data source can read the configuration of a physical interface.
-res_description: |-
-  This resource can manage a physical interface.\n\n- API Documentation: [l1PhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/l1:PhysIf/)
+ds_description: This data source can read the configuration of a physical interface.
+res_description: This resource can manage a physical interface.
+doc_path: System/l1:PhysIf/
+children:
+  - Physical Interface VRF
 attributes:
   - nxos_name: id
     tf_name: interface_id

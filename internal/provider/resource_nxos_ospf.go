@@ -20,7 +20,7 @@ type resourceOSPFType struct{}
 func (t resourceOSPFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the global OSPF configuration.\n\n- API Documentation: [ospfEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:Entity/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the global OSPF configuration.", "ospfEntity", "Routing%20and%20Forwarding/ospf:Entity/").AddChildren("ospf_instance").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceOSPFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Dia
 				},
 			},
 			"admin_state": {
-				MarkdownDescription: helpers.NewDescription("Administrative state.").AddDefaultValueDescription("enabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddDefaultValueDescription("enabled").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,

@@ -2,10 +2,11 @@
 name: Default QOS Policy Map
 class_name: ipqosPMapInst
 dn: sys/ipqos/dflt/p/name-[%s]
-ds_description: |-
-  This data source can read the default QoS policy map configuration.
-res_description: |-
-  This resource can manage the default QoS policy map configuration.\n\n- API Documentation: [ipqosPMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:PMapInst/)
+ds_description: This data source can read the default QoS policy map configuration.
+res_description: This resource can manage the default QoS policy map configuration.
+doc_path: Qos/ipqos:PMapInst/
+children:
+  - Default QOS Policy Map Match Class Map
 attributes:
   - nxos_name: name
     tf_name: name

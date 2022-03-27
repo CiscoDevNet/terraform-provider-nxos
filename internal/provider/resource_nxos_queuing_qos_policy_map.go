@@ -20,7 +20,7 @@ type resourceQueuingQOSPolicyMapType struct{}
 func (t resourceQueuingQOSPolicyMapType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the queuing QoS policy map configuration.\n\n- API Documentation: [ipqosPMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:PMapInst/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the queuing QoS policy map configuration.", "ipqosPMapInst", "Qos/ipqos:PMapInst/").AddChildren("queuing_qos_policy_map_match_class_map").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceQueuingQOSPolicyMapType) GetSchema(ctx context.Context) (tfsdk.S
 				},
 			},
 			"name": {
-				MarkdownDescription: helpers.NewDescription("Policy map name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Policy map name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourceQueuingQOSPolicyMapType) GetSchema(ctx context.Context) (tfsdk.S
 				},
 			},
 			"match_type": {
-				MarkdownDescription: helpers.NewDescription("Match type.").AddDefaultValueDescription("match-all").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Match type.").AddDefaultValueDescription("match-all").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,

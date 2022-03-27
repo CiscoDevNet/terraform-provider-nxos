@@ -4,11 +4,14 @@ page_title: "nxos_vrf Data Source - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This data source can read a VRF.
+  API Documentation: l3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:Inst/
 ---
 
 # nxos_vrf (Data Source)
 
 This data source can read a VRF.
+
+- API Documentation: [l3Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:Inst/)
 
 ## Example Usage
 

@@ -2,10 +2,9 @@
 name: Ethernet
 class_name: ethpmInst
 dn: sys/ethpm/inst
-ds_description: |-
-  This data source can read global ethernet settings.
-res_description: |-
-  This resource can manage global ethernet settings.\n\n- API Documentation: [ethpmInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Interfaces/ethpm:Inst/)
+ds_description: This data source can read global ethernet settings.
+res_description: This resource can manage global ethernet settings.
+doc_path: Interfaces/ethpm:Inst/
 attributes:
   - nxos_name: systemJumboMtu
     tf_name: mtu

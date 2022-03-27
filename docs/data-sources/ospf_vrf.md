@@ -4,11 +4,14 @@ page_title: "nxos_ospf_vrf Data Source - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This data source can read the OSPF VRF configuration.
+  API Documentation: ospfDom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:Dom/
 ---
 
 # nxos_ospf_vrf (Data Source)
 
 This data source can read the OSPF VRF configuration.
+
+- API Documentation: [ospfDom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:Dom/)
 
 ## Example Usage
 

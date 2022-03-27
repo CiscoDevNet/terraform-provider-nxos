@@ -20,7 +20,7 @@ type resourceDHCPRelayInterfaceType struct{}
 func (t resourceDHCPRelayInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage a DHCP relay interface.\n\n- API Documentation: [dhcpRelayIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/DHCP/dhcp:RelayIf/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a DHCP relay interface.", "dhcpRelayIf", "DHCP/dhcp:RelayIf/").AddParents("dhcp_relay_address").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceDHCPRelayInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sc
 				},
 			},
 			"interface_id": {
-				MarkdownDescription: helpers.NewDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{

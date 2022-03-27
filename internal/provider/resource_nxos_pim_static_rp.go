@@ -20,7 +20,7 @@ type resourcePIMStaticRPType struct{}
 func (t resourcePIMStaticRPType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the PIM Static RP configuration.\n\n- API Documentation: [pimStaticRP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:StaticRP/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the PIM Static RP configuration.", "pimStaticRP", "Layer%203/pim:StaticRP/").AddParents("pim_static_rp_policy").AddChildren("pim_static_rp_group_list").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourcePIMStaticRPType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 				},
 			},
 			"vrf_name": {
-				MarkdownDescription: helpers.NewDescription("VRF name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourcePIMStaticRPType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 				},
 			},
 			"address": {
-				MarkdownDescription: helpers.NewDescription("Address.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Address.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{

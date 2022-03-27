@@ -20,7 +20,7 @@ type resourcePIMSSMRangeType struct{}
 func (t resourcePIMSSMRangeType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the PIM SSM range configuration.\n\n- API Documentation: [pimSSMRangeP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:SSMRangeP/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the PIM SSM range configuration.", "pimSSMRangeP", "Layer%203/pim:SSMRangeP/").AddParents("pim_ssm_policy").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourcePIMSSMRangeType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 				},
 			},
 			"vrf_name": {
-				MarkdownDescription: helpers.NewDescription("VRF name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourcePIMSSMRangeType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 				},
 			},
 			"group_list_1": {
-				MarkdownDescription: helpers.NewDescription("Group list 1.").AddDefaultValueDescription("0.0.0.0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Group list 1.").AddDefaultValueDescription("0.0.0.0").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -49,7 +49,7 @@ func (t resourcePIMSSMRangeType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 				},
 			},
 			"group_list_2": {
-				MarkdownDescription: helpers.NewDescription("Group list 2.").AddDefaultValueDescription("0.0.0.0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Group list 2.").AddDefaultValueDescription("0.0.0.0").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -58,7 +58,7 @@ func (t resourcePIMSSMRangeType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 				},
 			},
 			"group_list_3": {
-				MarkdownDescription: helpers.NewDescription("Group list 3.").AddDefaultValueDescription("0.0.0.0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Group list 3.").AddDefaultValueDescription("0.0.0.0").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -67,7 +67,7 @@ func (t resourcePIMSSMRangeType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 				},
 			},
 			"group_list_4": {
-				MarkdownDescription: helpers.NewDescription("Group list 4.").AddDefaultValueDescription("0.0.0.0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Group list 4.").AddDefaultValueDescription("0.0.0.0").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -76,19 +76,19 @@ func (t resourcePIMSSMRangeType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 				},
 			},
 			"prefix_list": {
-				MarkdownDescription: helpers.NewDescription("Prefix list name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Prefix list name.").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 			},
 			"route_map": {
-				MarkdownDescription: helpers.NewDescription("Route map name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Route map name.").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 			},
 			"ssm_none": {
-				MarkdownDescription: helpers.NewDescription("Exclude standard SSM range (232.0.0.0/8).").AddDefaultValueDescription("false").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Exclude standard SSM range (232.0.0.0/8).").AddDefaultValueDescription("false").String,
 				Type:                types.BoolType,
 				Optional:            true,
 				Computed:            true,

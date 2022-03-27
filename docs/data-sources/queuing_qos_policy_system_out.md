@@ -4,11 +4,14 @@ page_title: "nxos_queuing_qos_policy_system_out Data Source - terraform-provider
 subcategory: ""
 description: |-
   This data source can read the queuing QoS policy system out configuration.
+  API Documentation: ipqosSystem https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:System/
 ---
 
 # nxos_queuing_qos_policy_system_out (Data Source)
 
 This data source can read the queuing QoS policy system out configuration.
+
+- API Documentation: [ipqosSystem](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:System/)
 
 ## Example Usage
 

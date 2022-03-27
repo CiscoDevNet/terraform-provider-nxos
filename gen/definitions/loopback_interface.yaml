@@ -2,10 +2,11 @@
 name: Loopback Interface
 class_name: l3LbRtdIf
 dn: sys/intf/lb-[%s]
-ds_description: |-
-  This data source can read a loopback interface.
-res_description: |-
-  This resource can manage a loopback interface.\n\n- API Documentation: [l3LbRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:LbRtdIf/)
+ds_description: This data source can read a loopback interface.
+res_description: This resource can manage a loopback interface.
+doc_path: Layer%203/l3:LbRtdIf/
+children:
+  - Loopback Interface VRF
 attributes:
   - nxos_name: id
     tf_name: interface_id

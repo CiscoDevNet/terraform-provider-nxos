@@ -20,7 +20,7 @@ type resourcePIMSSMPolicyType struct{}
 func (t resourcePIMSSMPolicyType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the PIM SSM policy configuration.\n\n- API Documentation: [pimSSMPatP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:SSMPatP/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the PIM SSM policy configuration.", "pimSSMPatP", "Layer%203/pim:SSMPatP/").AddParents("pim_vrf").AddChildren("pim_ssm_range").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourcePIMSSMPolicyType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"vrf_name": {
-				MarkdownDescription: helpers.NewDescription("VRF name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourcePIMSSMPolicyType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"name": {
-				MarkdownDescription: helpers.NewDescription("Policy name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Policy name.").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,

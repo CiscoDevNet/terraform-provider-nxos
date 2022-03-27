@@ -5,6 +5,8 @@ subcategory: ""
 description: |-
   This resource can manage a subinterface.
   API Documentation: l3EncRtdIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:EncRtdIf/
+  Child resources
+  nxossubinterfacevrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/subinterface_vrf
 ---
 
 # nxos_subinterface (Resource)
@@ -12,6 +14,10 @@ description: |-
 This resource can manage a subinterface.
 
 - API Documentation: [l3EncRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:EncRtdIf/)
+
+### Child resources
+
+- [nxos_subinterface_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/subinterface_vrf)
 
 ## Example Usage
 

@@ -20,7 +20,7 @@ type resourceQueuingQOSPolicySystemOutPolicyMapType struct{}
 func (t resourceQueuingQOSPolicySystemOutPolicyMapType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the queuing QoS policy system out policy map configuration.\n\n- API Documentation: [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Inst/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the queuing QoS policy system out policy map configuration.", "ipqosInst", "Qos/ipqos:Inst/").AddParents("queuing_qos_policy_system_out").AddReferences("queuing_qos_policy_map").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceQueuingQOSPolicySystemOutPolicyMapType) GetSchema(ctx context.Co
 				},
 			},
 			"policy_map_name": {
-				MarkdownDescription: helpers.NewDescription("Policy map name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Policy map name.").String,
 				Type:                types.StringType,
 				Required:            true,
 			},

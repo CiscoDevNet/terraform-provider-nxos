@@ -4,11 +4,14 @@ page_title: "nxos_default_qos_policy_map_match_class_map_set_qos_group Data Sour
 subcategory: ""
 description: |-
   This data source can read the default QoS policy map match class map set QoS group configuration.
+  API Documentation: ipqosSetQoSGrp https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:SetQoSGrp/
 ---
 
 # nxos_default_qos_policy_map_match_class_map_set_qos_group (Data Source)
 
 This data source can read the default QoS policy map match class map set QoS group configuration.
+
+- API Documentation: [ipqosSetQoSGrp](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:SetQoSGrp/)
 
 ## Example Usage
 

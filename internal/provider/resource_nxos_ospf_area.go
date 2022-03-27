@@ -20,7 +20,7 @@ type resourceOSPFAreaType struct{}
 func (t resourceOSPFAreaType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the OSPF Area configuration.\n\n- API Documentation: [ospfArea](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:Area/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the OSPF Area configuration.", "ospfArea", "Routing%20and%20Forwarding/ospf:Area/").AddParents("ospf_vrf").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceOSPFAreaType) GetSchema(ctx context.Context) (tfsdk.Schema, diag
 				},
 			},
 			"instance_name": {
-				MarkdownDescription: helpers.NewDescription("OSPF instance name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("OSPF instance name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourceOSPFAreaType) GetSchema(ctx context.Context) (tfsdk.Schema, diag
 				},
 			},
 			"vrf_name": {
-				MarkdownDescription: helpers.NewDescription("VRF name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -48,7 +48,7 @@ func (t resourceOSPFAreaType) GetSchema(ctx context.Context) (tfsdk.Schema, diag
 				},
 			},
 			"area_id": {
-				MarkdownDescription: helpers.NewDescription("Area identifier to which a network or interface belongs in IPv4 address format.").AddDefaultValueDescription("0.0.0.0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Area identifier to which a network or interface belongs in IPv4 address format.").AddDefaultValueDescription("0.0.0.0").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -56,7 +56,7 @@ func (t resourceOSPFAreaType) GetSchema(ctx context.Context) (tfsdk.Schema, diag
 				},
 			},
 			"authentication_type": {
-				MarkdownDescription: helpers.NewDescription("Authentication type.").AddDefaultValueDescription("unspecified").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Authentication type.").AddDefaultValueDescription("unspecified").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -65,7 +65,7 @@ func (t resourceOSPFAreaType) GetSchema(ctx context.Context) (tfsdk.Schema, diag
 				},
 			},
 			"cost": {
-				MarkdownDescription: helpers.NewDescription("Area cost, specifies cost for default summary LSAs. Used with nssa/stub area types.").AddIntegerRangeDescription(0, 16777215).AddDefaultValueDescription("1").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Area cost, specifies cost for default summary LSAs. Used with nssa/stub area types.").AddIntegerRangeDescription(0, 16777215).AddDefaultValueDescription("1").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -77,7 +77,7 @@ func (t resourceOSPFAreaType) GetSchema(ctx context.Context) (tfsdk.Schema, diag
 				},
 			},
 			"type": {
-				MarkdownDescription: helpers.NewDescription("Area type.").AddDefaultValueDescription("regular").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Area type.").AddDefaultValueDescription("regular").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,

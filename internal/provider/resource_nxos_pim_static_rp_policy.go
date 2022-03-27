@@ -20,7 +20,7 @@ type resourcePIMStaticRPPolicyType struct{}
 func (t resourcePIMStaticRPPolicyType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the PIM Static RP policy configuration.\n\n- API Documentation: [pimStaticRPP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:StaticRPP/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the PIM Static RP policy configuration.", "pimStaticRPP", "Layer%203/pim:StaticRPP/").AddParents("pim_vrf").AddChildren("pim_static_rp").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourcePIMStaticRPPolicyType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"vrf_name": {
-				MarkdownDescription: helpers.NewDescription("VRF name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourcePIMStaticRPPolicyType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"name": {
-				MarkdownDescription: helpers.NewDescription("Policy name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Policy name.").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,

@@ -20,7 +20,7 @@ type resourceOSPFAuthenticationType struct{}
 func (t resourceOSPFAuthenticationType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the OSPF authentication configuration.\n\n- API Documentation: [ospfAuthNewP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:AuthNewP/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the OSPF authentication configuration.", "ospfAuthNewP", "Routing%20and%20Forwarding/ospf:AuthNewP/").AddParents("ospf_interface").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceOSPFAuthenticationType) GetSchema(ctx context.Context) (tfsdk.Sc
 				},
 			},
 			"instance_name": {
-				MarkdownDescription: helpers.NewDescription("OSPF instance name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("OSPF instance name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourceOSPFAuthenticationType) GetSchema(ctx context.Context) (tfsdk.Sc
 				},
 			},
 			"vrf_name": {
-				MarkdownDescription: helpers.NewDescription("VRF name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -48,7 +48,7 @@ func (t resourceOSPFAuthenticationType) GetSchema(ctx context.Context) (tfsdk.Sc
 				},
 			},
 			"interface_id": {
-				MarkdownDescription: helpers.NewDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -56,13 +56,13 @@ func (t resourceOSPFAuthenticationType) GetSchema(ctx context.Context) (tfsdk.Sc
 				},
 			},
 			"key": {
-				MarkdownDescription: helpers.NewDescription("Key used for authentication.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Key used for authentication.").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 			},
 			"key_id": {
-				MarkdownDescription: helpers.NewDescription("Key ID used for authentication.").AddIntegerRangeDescription(0, 255).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Key ID used for authentication.").AddIntegerRangeDescription(0, 255).AddDefaultValueDescription("0").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -74,7 +74,7 @@ func (t resourceOSPFAuthenticationType) GetSchema(ctx context.Context) (tfsdk.Sc
 				},
 			},
 			"key_secure_mode": {
-				MarkdownDescription: helpers.NewDescription("Encrypted authentication key or plain text key.").AddDefaultValueDescription("false").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Encrypted authentication key or plain text key.").AddDefaultValueDescription("false").String,
 				Type:                types.BoolType,
 				Optional:            true,
 				Computed:            true,
@@ -83,19 +83,19 @@ func (t resourceOSPFAuthenticationType) GetSchema(ctx context.Context) (tfsdk.Sc
 				},
 			},
 			"keychain": {
-				MarkdownDescription: helpers.NewDescription("Authentication keychain.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Authentication keychain.").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 			},
 			"md5_key": {
-				MarkdownDescription: helpers.NewDescription("Key used for md5 authentication.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Key used for md5 authentication.").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 			},
 			"md5_key_secure_mode": {
-				MarkdownDescription: helpers.NewDescription("Encrypted authentication md5 key or plain text key.").AddDefaultValueDescription("false").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Encrypted authentication md5 key or plain text key.").AddDefaultValueDescription("false").String,
 				Type:                types.BoolType,
 				Optional:            true,
 				Computed:            true,
@@ -104,7 +104,7 @@ func (t resourceOSPFAuthenticationType) GetSchema(ctx context.Context) (tfsdk.Sc
 				},
 			},
 			"type": {
-				MarkdownDescription: helpers.NewDescription("Authentication type.").AddDefaultValueDescription("unspecified").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Authentication type.").AddDefaultValueDescription("unspecified").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,

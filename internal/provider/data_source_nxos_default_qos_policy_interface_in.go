@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
 type dataSourceDefaultQOSPolicyInterfaceInType struct{}
@@ -17,7 +18,7 @@ type dataSourceDefaultQOSPolicyInterfaceInType struct{}
 func (t dataSourceDefaultQOSPolicyInterfaceInType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the default QoS policy interface in configuration.",
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the default QoS policy interface in configuration.", "ipqosIf", "Qos/ipqos:If/").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {

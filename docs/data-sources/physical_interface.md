@@ -4,11 +4,14 @@ page_title: "nxos_physical_interface Data Source - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This data source can read the configuration of a physical interface.
+  API Documentation: l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/l1:PhysIf/
 ---
 
 # nxos_physical_interface (Data Source)
 
 This data source can read the configuration of a physical interface.
+
+- API Documentation: [l1PhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/l1:PhysIf/)
 
 ## Example Usage
 

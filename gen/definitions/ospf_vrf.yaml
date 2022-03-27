@@ -2,10 +2,16 @@
 name: OSPF VRF
 class_name: ospfDom
 dn: sys/ospf/inst-[%s]/dom-[%s]
-ds_description: |-
-  This data source can read the OSPF VRF configuration.
-res_description: |-
-  This resource can manage the OSPF VRF configuration.\n\n- API Documentation: [ospfDom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:Dom/)
+ds_description: This data source can read the OSPF VRF configuration.
+res_description: This resource can manage the OSPF VRF configuration.
+doc_path: Routing%20and%20Forwarding/ospf:Dom/
+parents:
+  - OSPF Instance
+children:
+  - OSPF Interface
+  - OSPF Area
+references:
+  - VRF
 attributes:
   - nxos_name: inst
     tf_name: instance_name

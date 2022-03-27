@@ -20,7 +20,7 @@ type resourceDefaultQOSPolicyInterfaceInPolicyMapType struct{}
 func (t resourceDefaultQOSPolicyInterfaceInPolicyMapType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the default QoS policy interface in policy map configuration.\n\n- API Documentation: [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Inst/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the default QoS policy interface in policy map configuration.", "ipqosInst", "Qos/ipqos:Inst/").AddParents("default_qos_policy_interface_in").AddReferences("default_qos_policy_map").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceDefaultQOSPolicyInterfaceInPolicyMapType) GetSchema(ctx context.
 				},
 			},
 			"interface_id": {
-				MarkdownDescription: helpers.NewDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourceDefaultQOSPolicyInterfaceInPolicyMapType) GetSchema(ctx context.
 				},
 			},
 			"policy_map_name": {
-				MarkdownDescription: helpers.NewDescription("Policy map name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Policy map name.").String,
 				Type:                types.StringType,
 				Required:            true,
 			},

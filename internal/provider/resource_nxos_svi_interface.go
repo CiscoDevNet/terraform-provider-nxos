@@ -20,7 +20,7 @@ type resourceSVIInterfaceType struct{}
 func (t resourceSVIInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage an SVI interface.\n\n- API Documentation: [sviIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Interfaces/svi:If/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage an SVI interface.", "sviIf", "Interfaces/svi:If/").AddChildren("svi_interface_vrf").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceSVIInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"interface_id": {
-				MarkdownDescription: helpers.NewDescription("Must match first field in the output of `show intf brief`. Example: `vlan100`.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `vlan100`.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourceSVIInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"admin_state": {
-				MarkdownDescription: helpers.NewDescription("Administrative port state.").AddStringEnumDescription("up", "down").AddDefaultValueDescription("up").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative port state.").AddStringEnumDescription("up", "down").AddDefaultValueDescription("up").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -52,7 +52,7 @@ func (t resourceSVIInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"bandwidth": {
-				MarkdownDescription: helpers.NewDescription("Specifies the administrative port bandwidth.").AddIntegerRangeDescription(1, 400000000).AddDefaultValueDescription("1000000").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies the administrative port bandwidth.").AddIntegerRangeDescription(1, 400000000).AddDefaultValueDescription("1000000").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -64,7 +64,7 @@ func (t resourceSVIInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"delay": {
-				MarkdownDescription: helpers.NewDescription("Specifies the administrative port delay.").AddIntegerRangeDescription(1, 16777215).AddDefaultValueDescription("1").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies the administrative port delay.").AddIntegerRangeDescription(1, 16777215).AddDefaultValueDescription("1").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -76,13 +76,13 @@ func (t resourceSVIInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"description": {
-				MarkdownDescription: helpers.NewDescription("Interface description.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Interface description.").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 			},
 			"medium": {
-				MarkdownDescription: helpers.NewDescription("The administrative port medium type.").AddStringEnumDescription("bcast", "p2p").AddDefaultValueDescription("bcast").String,
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative port medium type.").AddStringEnumDescription("bcast", "p2p").AddDefaultValueDescription("bcast").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -94,7 +94,7 @@ func (t resourceSVIInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"mtu": {
-				MarkdownDescription: helpers.NewDescription("Administrative port MTU.").AddIntegerRangeDescription(576, 9216).AddDefaultValueDescription("1500").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative port MTU.").AddIntegerRangeDescription(576, 9216).AddDefaultValueDescription("1500").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,

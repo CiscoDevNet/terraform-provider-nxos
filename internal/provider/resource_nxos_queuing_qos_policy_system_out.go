@@ -12,6 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
+	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
 type resourceQueuingQOSPolicySystemOutType struct{}
@@ -19,7 +20,7 @@ type resourceQueuingQOSPolicySystemOutType struct{}
 func (t resourceQueuingQOSPolicySystemOutType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the queuing QoS policy system out configuration.\n\n- API Documentation: [ipqosSystem](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:System/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the queuing QoS policy system out configuration.", "ipqosSystem", "Qos/ipqos:System/").AddChildren("queuing_qos_policy_system_out_policy_map").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {

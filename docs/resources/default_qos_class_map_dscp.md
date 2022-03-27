@@ -5,6 +5,8 @@ subcategory: ""
 description: |-
   This resource can manage the default QoS class map DSCP configuration.
   API Documentation: ipqosDscp https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Dscp/
+  Parent resources
+  nxosdefaultqosclassmap https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/default_qos_class_map
 ---
 
 # nxos_default_qos_class_map_dscp (Resource)
@@ -12,6 +14,10 @@ description: |-
 This resource can manage the default QoS class map DSCP configuration.
 
 - API Documentation: [ipqosDscp](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Dscp/)
+
+### Parent resources
+
+- [nxos_default_qos_class_map](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/default_qos_class_map)
 
 ## Example Usage
 

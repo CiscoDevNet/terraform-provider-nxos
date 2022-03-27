@@ -2,10 +2,9 @@
 name: VRF
 class_name: l3Inst
 dn: sys/inst-[%s]
-ds_description: |-
-  This data source can read a VRF.
-res_description: |-
-  This resource can manage a VRF.\n\n- API Documentation: [l3Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:Inst/)
+ds_description: This data source can read a VRF.
+res_description: This resource can manage a VRF.
+doc_path: Layer%203/l3:Inst/
 attributes:
   - nxos_name: name
     tf_name: name

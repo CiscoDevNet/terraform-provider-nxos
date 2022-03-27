@@ -2,10 +2,13 @@
 name: OSPF Instance
 class_name: ospfInst
 dn: sys/ospf/inst-[%s]
-ds_description: |-
-  This data source can read the OSPF instance configuration.
-res_description: |-
-  This resource can manage the OSPF instance configuration.\n\n- API Documentation: [ospfInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:Inst/)
+ds_description: This data source can read the OSPF instance configuration.
+res_description: This resource can manage the OSPF instance configuration.
+doc_path: Routing%20and%20Forwarding/ospf:Inst/
+parents:
+  - OSPF
+children:
+  - OSPF VRF
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state

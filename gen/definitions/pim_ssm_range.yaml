@@ -2,10 +2,11 @@
 name: PIM SSM Range
 class_name: pimSSMRangeP
 dn: sys/pim/inst/dom-[%s]/ssm/range
-ds_description: |-
-  This data source can read the PIM SSM range configuration.
-res_description: |-
-  This resource can manage the PIM SSM range configuration.\n\n- API Documentation: [pimSSMRangeP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:SSMRangeP/)
+ds_description: This data source can read the PIM SSM range configuration.
+res_description: This resource can manage the PIM SSM range configuration.
+doc_path: Layer%203/pim:SSMRangeP/
+parents:
+  - PIM SSM Policy
 attributes:
   - nxos_name: vrf_name
     tf_name: vrf_name

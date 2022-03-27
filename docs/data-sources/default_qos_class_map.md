@@ -4,11 +4,14 @@ page_title: "nxos_default_qos_class_map Data Source - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This data source can read the default QoS class map configuration.
+  API Documentation: ipqosCMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:CMapInst/
 ---
 
 # nxos_default_qos_class_map (Data Source)
 
 This data source can read the default QoS class map configuration.
+
+- API Documentation: [ipqosCMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:CMapInst/)
 
 ## Example Usage
 

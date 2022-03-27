@@ -2,10 +2,13 @@
 name: PIM SSM Policy
 class_name: pimSSMPatP
 dn: sys/pim/inst/dom-[%s]/ssm
-ds_description: |-
-  This data source can read the PIM SSM policy configuration.
-res_description: |-
-  This resource can manage the PIM SSM policy configuration.\n\n- API Documentation: [pimSSMPatP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:SSMPatP/)
+ds_description: This data source can read the PIM SSM policy configuration.
+res_description: This resource can manage the PIM SSM policy configuration.
+doc_path: Layer%203/pim:SSMPatP/
+parents:
+  - PIM VRF
+children:
+  - PIM SSM Range
 attributes:
   - nxos_name: vrf_name
     tf_name: vrf_name

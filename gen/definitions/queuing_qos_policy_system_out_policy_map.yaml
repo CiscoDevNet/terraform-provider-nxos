@@ -2,10 +2,13 @@
 name: Queuing QOS Policy System Out Policy Map
 class_name: ipqosInst
 dn: sys/ipqos/queuing/policy/out/sys/pmap
-ds_description: |-
-  This data source can read the queuing QoS policy system out policy map configuration.
-res_description: |-
-  This resource can manage the queuing QoS policy system out policy map configuration.\n\n- API Documentation: [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Inst/)
+ds_description: This data source can read the queuing QoS policy system out policy map configuration.
+res_description: This resource can manage the queuing QoS policy system out policy map configuration.
+doc_path: Qos/ipqos:Inst/
+parents:
+  - Queuing QOS Policy System Out
+references:
+  - Queuing QOS Policy Map
 attributes:
   - nxos_name: name
     tf_name: policy_map_name

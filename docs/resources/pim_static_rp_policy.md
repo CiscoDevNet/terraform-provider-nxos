@@ -5,6 +5,10 @@ subcategory: ""
 description: |-
   This resource can manage the PIM Static RP policy configuration.
   API Documentation: pimStaticRPP https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:StaticRPP/
+  Parent resources
+  nxospimvrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_vrf
+  Child resources
+  nxospimstatic_rp https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_static_rp
 ---
 
 # nxos_pim_static_rp_policy (Resource)
@@ -12,6 +16,14 @@ description: |-
 This resource can manage the PIM Static RP policy configuration.
 
 - API Documentation: [pimStaticRPP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:StaticRPP/)
+
+### Parent resources
+
+- [nxos_pim_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_vrf)
+
+### Child resources
+
+- [nxos_pim_static_rp](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_static_rp)
 
 ## Example Usage
 

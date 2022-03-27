@@ -4,11 +4,14 @@ page_title: "nxos_default_qos_policy_map Data Source - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This data source can read the default QoS policy map configuration.
+  API Documentation: ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:PMapInst/
 ---
 
 # nxos_default_qos_policy_map (Data Source)
 
 This data source can read the default QoS policy map configuration.
+
+- API Documentation: [ipqosPMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:PMapInst/)
 
 ## Example Usage
 

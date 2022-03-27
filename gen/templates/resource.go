@@ -13,9 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
-	{{- if ge (len .Attributes) 1}}
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
-	{{- end}}
 )
 
 type resource{{camelCase .Name}}Type struct{}
@@ -23,7 +21,17 @@ type resource{{camelCase .Name}}Type struct{}
 func (t resource{{camelCase .Name}}Type) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "{{.ResDescription}}",
+		MarkdownDescription: helpers.NewResourceDescription("{{.ResDescription}}", "{{.ClassName}}", "{{.DocPath}}")
+			{{- if len .Parents -}}
+			.AddParents({{range .Parents}}"{{snakeCase .}}", {{end}})
+			{{- end -}}
+			{{- if len .Children -}}
+			.AddChildren({{range .Children}}"{{snakeCase .}}", {{end}})
+			{{- end -}}
+			{{- if len .References -}}
+			.AddReferences({{range .References}}"{{snakeCase .}}", {{end}})
+			{{- end -}}
+			.String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -36,7 +44,7 @@ func (t resource{{camelCase .Name}}Type) GetSchema(ctx context.Context) (tfsdk.S
 			},
 			{{- range  .Attributes}}
 			"{{.TfName}}": {
-				MarkdownDescription: helpers.NewDescription("{{.Description}}")
+				MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
 					{{- if len .EnumValues -}}
 					.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
 					{{- end -}}

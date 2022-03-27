@@ -20,7 +20,7 @@ type resourceVRFContainerType struct{}
 func (t resourceVRFContainerType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage a VRF container.\n\n- API Documentation: [ipv4Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:Dom/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a VRF container.", "ipv4Dom", "Layer%203/ipv4:Dom/").AddChildren("ipv4_interface").AddReferences("vrf").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceVRFContainerType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"name": {
-				MarkdownDescription: helpers.NewDescription("VRF name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{

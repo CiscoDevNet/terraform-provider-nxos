@@ -20,7 +20,7 @@ type resourceLoopbackInterfaceType struct{}
 func (t resourceLoopbackInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage a loopback interface.\n\n- API Documentation: [l3LbRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:LbRtdIf/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a loopback interface.", "l3LbRtdIf", "Layer%203/l3:LbRtdIf/").AddChildren("loopback_interface_vrf").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceLoopbackInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"interface_id": {
-				MarkdownDescription: helpers.NewDescription("Must match first field in the output of `show intf brief`. Example: `lo123`.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `lo123`.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourceLoopbackInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"admin_state": {
-				MarkdownDescription: helpers.NewDescription("Administrative state.").AddStringEnumDescription("up", "down").AddDefaultValueDescription("up").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("up", "down").AddDefaultValueDescription("up").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -52,7 +52,7 @@ func (t resourceLoopbackInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"description": {
-				MarkdownDescription: helpers.NewDescription("Interface description.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Interface description.").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,

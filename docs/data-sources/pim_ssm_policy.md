@@ -4,11 +4,14 @@ page_title: "nxos_pim_ssm_policy Data Source - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This data source can read the PIM SSM policy configuration.
+  API Documentation: pimSSMPatP https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:SSMPatP/
 ---
 
 # nxos_pim_ssm_policy (Data Source)
 
 This data source can read the PIM SSM policy configuration.
+
+- API Documentation: [pimSSMPatP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:SSMPatP/)
 
 ## Example Usage
 

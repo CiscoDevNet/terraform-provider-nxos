@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
 type dataSource{{camelCase .Name}}Type struct{}
@@ -18,7 +19,7 @@ type dataSource{{camelCase .Name}}Type struct{}
 func (t dataSource{{camelCase .Name}}Type) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "{{.DsDescription}}",
+		MarkdownDescription: helpers.NewResourceDescription("{{.DsDescription}}", "{{.ClassName}}", "{{.DocPath}}").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {

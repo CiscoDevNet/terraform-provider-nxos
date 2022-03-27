@@ -2,10 +2,13 @@
 name: DHCP Relay Address
 class_name: dhcpRelayAddr
 dn: sys/dhcp/inst/relayif-[%s]/addr-[%s]-[%s]
-ds_description: |-
-  This data source can read a DHCP relay address.
-res_description: |-
-  This resource can manage a DHCP relay address.\n\n- API Documentation: [dhcpRelayAddr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/DHCP/dhcp:RelayAddr/)
+ds_description: This data source can read a DHCP relay address.
+res_description: This resource can manage a DHCP relay address.
+doc_path: DHCP/dhcp:RelayAddr/
+parents:
+  - DHCP Relay Interface
+references:
+  - VRF
 attributes:
   - nxos_name: id
     tf_name: interface_id

@@ -79,6 +79,10 @@ type YamlConfig struct {
 	Dn                string                `yaml:"dn"`
 	DsDescription     string                `yaml:"ds_description"`
 	ResDescription    string                `yaml:"res_description"`
+	DocPath           string                `yaml:"doc_path"`
+	Parents           []string              `yaml:"parents"`
+	Children          []string              `yaml:"children"`
+	References        []string              `yaml:"references"`
 	Attributes        []YamlConfigAttribute `yaml:"attributes"`
 	TestPrerequisites []YamlTest            `yaml:"test_prerequisites"`
 }

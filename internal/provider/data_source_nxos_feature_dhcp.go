@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
 type dataSourceFeatureDHCPType struct{}
@@ -17,7 +18,7 @@ type dataSourceFeatureDHCPType struct{}
 func (t dataSourceFeatureDHCPType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the DHCP feature configuration.",
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the DHCP feature configuration.", "fmDhcp", "Feature%20Management/fm:Dhcp/").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {

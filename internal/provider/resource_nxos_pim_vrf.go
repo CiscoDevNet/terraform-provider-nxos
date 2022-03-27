@@ -20,7 +20,7 @@ type resourcePIMVRFType struct{}
 func (t resourcePIMVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the PIM VRF configuration.\n\n- API Documentation: [pimDom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:Dom/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the PIM VRF configuration.", "pimDom", "Layer%203/pim:Dom/").AddParents("pim_instance").AddChildren("pim_interface", "pim_ssm_policy", "pim_static_rp_policy").AddReferences("vrf").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourcePIMVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.D
 				},
 			},
 			"name": {
-				MarkdownDescription: helpers.NewDescription("VRF name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourcePIMVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.D
 				},
 			},
 			"admin_state": {
-				MarkdownDescription: helpers.NewDescription("Administrative state.").AddDefaultValueDescription("enabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddDefaultValueDescription("enabled").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -49,7 +49,7 @@ func (t resourcePIMVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.D
 				},
 			},
 			"bfd": {
-				MarkdownDescription: helpers.NewDescription("BFD.").AddDefaultValueDescription("false").String,
+				MarkdownDescription: helpers.NewAttributeDescription("BFD.").AddDefaultValueDescription("false").String,
 				Type:                types.BoolType,
 				Optional:            true,
 				Computed:            true,

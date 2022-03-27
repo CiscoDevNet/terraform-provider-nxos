@@ -20,7 +20,7 @@ type resourceOSPFInstanceType struct{}
 func (t resourceOSPFInstanceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the OSPF instance configuration.\n\n- API Documentation: [ospfInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:Inst/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the OSPF instance configuration.", "ospfInst", "Routing%20and%20Forwarding/ospf:Inst/").AddParents("ospf").AddChildren("ospf_vrf").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceOSPFInstanceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"admin_state": {
-				MarkdownDescription: helpers.NewDescription("Administrative state.").AddDefaultValueDescription("enabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddDefaultValueDescription("enabled").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -41,7 +41,7 @@ func (t resourceOSPFInstanceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"name": {
-				MarkdownDescription: helpers.NewDescription("OSPF instance name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("OSPF instance name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{

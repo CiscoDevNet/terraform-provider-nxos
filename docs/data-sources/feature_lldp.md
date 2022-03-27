@@ -4,11 +4,14 @@ page_title: "nxos_feature_lldp Data Source - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This data source can read the LLDP feature configuration.
+  API Documentation: fmLldp https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Lldp/
 ---
 
 # nxos_feature_lldp (Data Source)
 
 This data source can read the LLDP feature configuration.
+
+- API Documentation: [fmLldp](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Lldp/)
 
 ## Example Usage
 

@@ -20,7 +20,7 @@ type resourceIPv4InterfaceType struct{}
 func (t resourceIPv4InterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage an IPv4 interface.\n\n- API Documentation: [ipv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:If/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage an IPv4 interface.", "ipv4If", "Layer%203/ipv4:If/").AddParents("vrf_container").AddChildren("ipv4_interface_address").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceIPv4InterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema,
 				},
 			},
 			"vrf": {
-				MarkdownDescription: helpers.NewDescription("VRF name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourceIPv4InterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema,
 				},
 			},
 			"interface_id": {
-				MarkdownDescription: helpers.NewDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -48,7 +48,7 @@ func (t resourceIPv4InterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema,
 				},
 			},
 			"unnumbered": {
-				MarkdownDescription: helpers.NewDescription("IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.").AddDefaultValueDescription("unspecified").String,
+				MarkdownDescription: helpers.NewAttributeDescription("IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.").AddDefaultValueDescription("unspecified").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -57,7 +57,7 @@ func (t resourceIPv4InterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema,
 				},
 			},
 			"urpf": {
-				MarkdownDescription: helpers.NewDescription("URPF (unicast Reverse Path Forwarding).").AddStringEnumDescription("disabled", "strict", "loose", "loose-allow-default", "strict-allow-vni-hosts").AddDefaultValueDescription("disabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("URPF (unicast Reverse Path Forwarding).").AddStringEnumDescription("disabled", "strict", "loose", "loose-allow-default", "strict-allow-vni-hosts").AddDefaultValueDescription("disabled").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,

@@ -20,7 +20,7 @@ type resourceDefaultQOSClassMapDSCPType struct{}
 func (t resourceDefaultQOSClassMapDSCPType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the default QoS class map DSCP configuration.\n\n- API Documentation: [ipqosDscp](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Dscp/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the default QoS class map DSCP configuration.", "ipqosDscp", "Qos/ipqos:Dscp/").AddParents("default_qos_class_map").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceDefaultQOSClassMapDSCPType) GetSchema(ctx context.Context) (tfsd
 				},
 			},
 			"class_map_name": {
-				MarkdownDescription: helpers.NewDescription("Class map name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Class map name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourceDefaultQOSClassMapDSCPType) GetSchema(ctx context.Context) (tfsd
 				},
 			},
 			"value": {
-				MarkdownDescription: helpers.NewDescription("DSCP value.").AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("DSCP value.").AddDefaultValueDescription("0").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{

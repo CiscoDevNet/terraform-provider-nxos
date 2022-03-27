@@ -2,10 +2,11 @@
 name: PIM Static RP Group List
 class_name: pimRPGrpList
 dn: sys/pim/inst/dom-[%s]/staticrp/rp-[%s]/rpgrplist-[%s]
-ds_description: |-
-  This data source can read the PIM Static RP group list configuration.
-res_description: |-
-  This resource can manage the PIM Static RP group list configuration.\n\n- API Documentation: [pimRPGrpList](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:RPGrpList/)
+ds_description: This data source can read the PIM Static RP group list configuration.
+res_description: This resource can manage the PIM Static RP group list configuration.
+doc_path: Layer%203/pim:RPGrpList/
+parents:
+  - PIM Static RP
 attributes:
   - nxos_name: vrf_name
     tf_name: vrf_name

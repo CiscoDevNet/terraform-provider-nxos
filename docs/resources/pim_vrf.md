@@ -5,6 +5,12 @@ subcategory: ""
 description: |-
   This resource can manage the PIM VRF configuration.
   API Documentation: pimDom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:Dom/
+  Parent resources
+  nxospiminstance https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_instance
+  Child resources
+  nxospiminterface https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_interfacenxospimssm_policy https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_ssm_policynxospimstaticrppolicy https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_static_rp_policy
+  Referenced resources
+  nxos_vrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf
 ---
 
 # nxos_pim_vrf (Resource)
@@ -12,6 +18,20 @@ description: |-
 This resource can manage the PIM VRF configuration.
 
 - API Documentation: [pimDom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:Dom/)
+
+### Parent resources
+
+- [nxos_pim_instance](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_instance)
+
+### Child resources
+
+- [nxos_pim_interface](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_interface)
+- [nxos_pim_ssm_policy](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_ssm_policy)
+- [nxos_pim_static_rp_policy](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_static_rp_policy)
+
+### Referenced resources
+
+- [nxos_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf)
 
 ## Example Usage
 

@@ -2,10 +2,11 @@
 name: SVI Interface
 class_name: sviIf
 dn: sys/intf/svi-[%s]
-ds_description: |-
-  This data source can read an SVI interface.
-res_description: |-
-  This resource can manage an SVI interface.\n\n- API Documentation: [sviIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Interfaces/svi:If/)
+ds_description: This data source can read an SVI interface.
+res_description: This resource can manage an SVI interface.
+doc_path: Interfaces/svi:If/
+children:
+  - SVI Interface VRF
 attributes:
   - nxos_name: id
     tf_name: interface_id

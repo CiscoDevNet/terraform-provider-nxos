@@ -20,7 +20,7 @@ type resourcePhysicalInterfaceType struct{}
 func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage a physical interface.\n\n- API Documentation: [l1PhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/l1:PhysIf/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a physical interface.", "l1PhysIf", "System/l1:PhysIf/").AddChildren("physical_interface_vrf").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"interface_id": {
-				MarkdownDescription: helpers.NewDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"fec_mode": {
-				MarkdownDescription: helpers.NewDescription("FEC mode.").AddStringEnumDescription("fc-fec", "rs-fec", "fec-off", "auto", "rs-ieee", "rs-cons16", "kp-fec").AddDefaultValueDescription("auto").String,
+				MarkdownDescription: helpers.NewAttributeDescription("FEC mode.").AddStringEnumDescription("fc-fec", "rs-fec", "fec-off", "auto", "rs-ieee", "rs-cons16", "kp-fec").AddDefaultValueDescription("auto").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -52,7 +52,7 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"access_vlan": {
-				MarkdownDescription: helpers.NewDescription("Access VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").AddDefaultValueDescription("vlan-1").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Access VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").AddDefaultValueDescription("vlan-1").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -61,7 +61,7 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"admin_state": {
-				MarkdownDescription: helpers.NewDescription("Administrative port state.").AddStringEnumDescription("up", "down").AddDefaultValueDescription("up").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative port state.").AddStringEnumDescription("up", "down").AddDefaultValueDescription("up").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -73,7 +73,7 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"auto_negotiation": {
-				MarkdownDescription: helpers.NewDescription("Administrative port auto-negotiation.").AddStringEnumDescription("on", "off", "25G").AddDefaultValueDescription("on").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative port auto-negotiation.").AddStringEnumDescription("on", "off", "25G").AddDefaultValueDescription("on").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -85,7 +85,7 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"bandwidth": {
-				MarkdownDescription: helpers.NewDescription("The bandwidth parameter for a routed interface, port channel, or subinterface.").AddIntegerRangeDescription(0, 3200000000).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("The bandwidth parameter for a routed interface, port channel, or subinterface.").AddIntegerRangeDescription(0, 3200000000).AddDefaultValueDescription("0").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -97,7 +97,7 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"delay": {
-				MarkdownDescription: helpers.NewDescription("The administrative port delay time.").AddIntegerRangeDescription(1, 16777215).AddDefaultValueDescription("1").String,
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative port delay time.").AddIntegerRangeDescription(1, 16777215).AddDefaultValueDescription("1").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -109,13 +109,13 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"description": {
-				MarkdownDescription: helpers.NewDescription("Interface description.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Interface description.").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 			},
 			"duplex": {
-				MarkdownDescription: helpers.NewDescription("Duplex.").AddStringEnumDescription("auto", "full", "half").AddDefaultValueDescription("auto").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Duplex.").AddStringEnumDescription("auto", "full", "half").AddDefaultValueDescription("auto").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -127,7 +127,7 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"layer": {
-				MarkdownDescription: helpers.NewDescription("Administrative port layer.").AddStringEnumDescription("Layer2", "Layer3").AddDefaultValueDescription("Layer2").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative port layer.").AddStringEnumDescription("Layer2", "Layer3").AddDefaultValueDescription("Layer2").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -139,7 +139,7 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"link_logging": {
-				MarkdownDescription: helpers.NewDescription("Administrative link logging.").AddStringEnumDescription("default", "enable", "disable").AddDefaultValueDescription("default").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative link logging.").AddStringEnumDescription("default", "enable", "disable").AddDefaultValueDescription("default").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -151,7 +151,7 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"medium": {
-				MarkdownDescription: helpers.NewDescription("The administrative port medium type.").AddStringEnumDescription("broadcast", "p2p").AddDefaultValueDescription("broadcast").String,
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative port medium type.").AddStringEnumDescription("broadcast", "p2p").AddDefaultValueDescription("broadcast").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -163,7 +163,7 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"mode": {
-				MarkdownDescription: helpers.NewDescription("Administrative port mode.").AddStringEnumDescription("access", "trunk", "fex-fabric", "dot1q-tunnel", "promiscuous", "host", "trunk_secondary", "trunk_promiscuous", "vntag").AddDefaultValueDescription("access").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative port mode.").AddStringEnumDescription("access", "trunk", "fex-fabric", "dot1q-tunnel", "promiscuous", "host", "trunk_secondary", "trunk_promiscuous", "vntag").AddDefaultValueDescription("access").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -175,7 +175,7 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"mtu": {
-				MarkdownDescription: helpers.NewDescription("Administrative port MTU.").AddIntegerRangeDescription(576, 9216).AddDefaultValueDescription("1500").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative port MTU.").AddIntegerRangeDescription(576, 9216).AddDefaultValueDescription("1500").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -187,7 +187,7 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"native_vlan": {
-				MarkdownDescription: helpers.NewDescription("Native VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").AddDefaultValueDescription("vlan-1").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Native VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").AddDefaultValueDescription("vlan-1").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -196,7 +196,7 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"speed": {
-				MarkdownDescription: helpers.NewDescription("Administrative port speed.").AddStringEnumDescription("unknown", "100M", "1G", "10G", "40G", "auto", "auto 100M", "auto 100M 1G", "100G", "25G", "10M", "50G", "200G", "400G", "2.5G", "5G", "auto 2.5G 5G 10G", "auto 100M 1G 2.5G 5G").AddDefaultValueDescription("auto").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative port speed.").AddStringEnumDescription("unknown", "100M", "1G", "10G", "40G", "auto", "auto 100M", "auto 100M 1G", "100G", "25G", "10M", "50G", "200G", "400G", "2.5G", "5G", "auto 2.5G 5G 10G", "auto 100M 1G 2.5G 5G").AddDefaultValueDescription("auto").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -208,7 +208,7 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"speed_group": {
-				MarkdownDescription: helpers.NewDescription("Speed group.").AddStringEnumDescription("unknown", "1000", "10000", "40000", "auto", "25000").AddDefaultValueDescription("auto").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Speed group.").AddStringEnumDescription("unknown", "1000", "10000", "40000", "auto", "25000").AddDefaultValueDescription("auto").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -220,7 +220,7 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"trunk_vlans": {
-				MarkdownDescription: helpers.NewDescription("List of trunk VLANs.").AddDefaultValueDescription("1-4094").String,
+				MarkdownDescription: helpers.NewAttributeDescription("List of trunk VLANs.").AddDefaultValueDescription("1-4094").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -229,7 +229,7 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				},
 			},
 			"uni_directional_ethernet": {
-				MarkdownDescription: helpers.NewDescription("UDE (Uni-Directional Ethernet).").AddStringEnumDescription("disable", "send-only", "receive-only").AddDefaultValueDescription("disable").String,
+				MarkdownDescription: helpers.NewAttributeDescription("UDE (Uni-Directional Ethernet).").AddStringEnumDescription("disable", "send-only", "receive-only").AddDefaultValueDescription("disable").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,

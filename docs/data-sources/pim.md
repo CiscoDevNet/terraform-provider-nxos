@@ -4,11 +4,14 @@ page_title: "nxos_pim Data Source - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This data source can read the global PIM configuration.
+  API Documentation: pimEntity https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:Entity/
 ---
 
 # nxos_pim (Data Source)
 
 This data source can read the global PIM configuration.
+
+- API Documentation: [pimEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:Entity/)
 
 ## Example Usage
 

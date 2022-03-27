@@ -4,11 +4,14 @@ page_title: "nxos_ospf_authentication Data Source - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This data source can read the OSPF authentication configuration.
+  API Documentation: ospfAuthNewP https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:AuthNewP/
 ---
 
 # nxos_ospf_authentication (Data Source)
 
 This data source can read the OSPF authentication configuration.
+
+- API Documentation: [ospfAuthNewP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:AuthNewP/)
 
 ## Example Usage
 

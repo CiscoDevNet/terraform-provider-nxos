@@ -20,7 +20,7 @@ type resourceDHCPRelayAddressType struct{}
 func (t resourceDHCPRelayAddressType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage a DHCP relay address.\n\n- API Documentation: [dhcpRelayAddr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/DHCP/dhcp:RelayAddr/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a DHCP relay address.", "dhcpRelayAddr", "DHCP/dhcp:RelayAddr/").AddParents("dhcp_relay_interface").AddReferences("vrf").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceDHCPRelayAddressType) GetSchema(ctx context.Context) (tfsdk.Sche
 				},
 			},
 			"interface_id": {
-				MarkdownDescription: helpers.NewDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourceDHCPRelayAddressType) GetSchema(ctx context.Context) (tfsdk.Sche
 				},
 			},
 			"vrf": {
-				MarkdownDescription: helpers.NewDescription("VRF name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -48,7 +48,7 @@ func (t resourceDHCPRelayAddressType) GetSchema(ctx context.Context) (tfsdk.Sche
 				},
 			},
 			"address": {
-				MarkdownDescription: helpers.NewDescription("IPv4 or IPv6 address.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 or IPv6 address.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{

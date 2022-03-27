@@ -4,11 +4,14 @@ page_title: "nxos_ospf_area Data Source - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This data source can read the OSPF Area configuration.
+  API Documentation: ospfArea https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:Area/
 ---
 
 # nxos_ospf_area (Data Source)
 
 This data source can read the OSPF Area configuration.
+
+- API Documentation: [ospfArea](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:Area/)
 
 ## Example Usage
 

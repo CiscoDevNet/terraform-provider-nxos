@@ -20,7 +20,7 @@ type resourceEthernetType struct{}
 func (t resourceEthernetType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage global ethernet settings.\n\n- API Documentation: [ethpmInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Interfaces/ethpm:Inst/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage global ethernet settings.", "ethpmInst", "Interfaces/ethpm:Inst/").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceEthernetType) GetSchema(ctx context.Context) (tfsdk.Schema, diag
 				},
 			},
 			"mtu": {
-				MarkdownDescription: helpers.NewDescription("System jumbo MTU.").AddIntegerRangeDescription(576, 9216).AddDefaultValueDescription("9216").String,
+				MarkdownDescription: helpers.NewAttributeDescription("System jumbo MTU.").AddIntegerRangeDescription(576, 9216).AddDefaultValueDescription("9216").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,

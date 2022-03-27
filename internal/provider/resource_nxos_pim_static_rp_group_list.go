@@ -20,7 +20,7 @@ type resourcePIMStaticRPGroupListType struct{}
 func (t resourcePIMStaticRPGroupListType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the PIM Static RP group list configuration.\n\n- API Documentation: [pimRPGrpList](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:RPGrpList/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the PIM Static RP group list configuration.", "pimRPGrpList", "Layer%203/pim:RPGrpList/").AddParents("pim_static_rp").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourcePIMStaticRPGroupListType) GetSchema(ctx context.Context) (tfsdk.
 				},
 			},
 			"vrf_name": {
-				MarkdownDescription: helpers.NewDescription("VRF name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourcePIMStaticRPGroupListType) GetSchema(ctx context.Context) (tfsdk.
 				},
 			},
 			"rp_address": {
-				MarkdownDescription: helpers.NewDescription("RP address.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("RP address.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -48,7 +48,7 @@ func (t resourcePIMStaticRPGroupListType) GetSchema(ctx context.Context) (tfsdk.
 				},
 			},
 			"address": {
-				MarkdownDescription: helpers.NewDescription("Group list address information.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Group list address information.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -56,7 +56,7 @@ func (t resourcePIMStaticRPGroupListType) GetSchema(ctx context.Context) (tfsdk.
 				},
 			},
 			"bidir": {
-				MarkdownDescription: helpers.NewDescription("Flag to treat Group Ranges as BiDir.").AddDefaultValueDescription("false").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Flag to treat Group Ranges as BiDir.").AddDefaultValueDescription("false").String,
 				Type:                types.BoolType,
 				Optional:            true,
 				Computed:            true,
@@ -65,7 +65,7 @@ func (t resourcePIMStaticRPGroupListType) GetSchema(ctx context.Context) (tfsdk.
 				},
 			},
 			"override": {
-				MarkdownDescription: helpers.NewDescription("Flag to override RP preference to use Static over Dynamic RP.").AddDefaultValueDescription("false").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Flag to override RP preference to use Static over Dynamic RP.").AddDefaultValueDescription("false").String,
 				Type:                types.BoolType,
 				Optional:            true,
 				Computed:            true,

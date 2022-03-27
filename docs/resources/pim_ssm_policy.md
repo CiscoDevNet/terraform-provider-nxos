@@ -5,6 +5,10 @@ subcategory: ""
 description: |-
   This resource can manage the PIM SSM policy configuration.
   API Documentation: pimSSMPatP https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:SSMPatP/
+  Parent resources
+  nxospimvrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_vrf
+  Child resources
+  nxospimssm_range https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_ssm_range
 ---
 
 # nxos_pim_ssm_policy (Resource)
@@ -12,6 +16,14 @@ description: |-
 This resource can manage the PIM SSM policy configuration.
 
 - API Documentation: [pimSSMPatP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:SSMPatP/)
+
+### Parent resources
+
+- [nxos_pim_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_vrf)
+
+### Child resources
+
+- [nxos_pim_ssm_range](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_ssm_range)
 
 ## Example Usage
 

@@ -4,11 +4,14 @@ page_title: "nxos_vrf_container Data Source - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This data source can read a VRF container.
+  API Documentation: ipv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:Dom/
 ---
 
 # nxos_vrf_container (Data Source)
 
 This data source can read a VRF container.
+
+- API Documentation: [ipv4Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:Dom/)
 
 ## Example Usage
 

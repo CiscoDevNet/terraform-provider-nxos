@@ -20,7 +20,7 @@ type resourceFeatureLLDPType struct{}
 func (t resourceFeatureLLDPType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the LLDP feature configuration.\n\n- API Documentation: [fmLldp](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Lldp/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the LLDP feature configuration.", "fmLldp", "Feature%20Management/fm:Lldp/").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceFeatureLLDPType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 				},
 			},
 			"admin_state": {
-				MarkdownDescription: helpers.NewDescription("Administrative state.").AddDefaultValueDescription("disabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddDefaultValueDescription("disabled").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,

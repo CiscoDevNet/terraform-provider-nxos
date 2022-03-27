@@ -5,6 +5,10 @@ subcategory: ""
 description: |-
   This resource can manage the OSPF interface configuration.
   API Documentation: ospfIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:If/
+  Parent resources
+  nxosospfinterface https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ospf_interface
+  Child resources
+  nxosospfauthentication https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ospf_authentication
 ---
 
 # nxos_ospf_interface (Resource)
@@ -12,6 +16,14 @@ description: |-
 This resource can manage the OSPF interface configuration.
 
 - API Documentation: [ospfIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:If/)
+
+### Parent resources
+
+- [nxos_ospf_interface](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ospf_interface)
+
+### Child resources
+
+- [nxos_ospf_authentication](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ospf_authentication)
 
 ## Example Usage
 

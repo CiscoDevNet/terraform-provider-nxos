@@ -4,11 +4,14 @@ page_title: "nxos_svi_interface Data Source - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This data source can read an SVI interface.
+  API Documentation: sviIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Interfaces/svi:If/
 ---
 
 # nxos_svi_interface (Data Source)
 
 This data source can read an SVI interface.
+
+- API Documentation: [sviIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Interfaces/svi:If/)
 
 ## Example Usage
 

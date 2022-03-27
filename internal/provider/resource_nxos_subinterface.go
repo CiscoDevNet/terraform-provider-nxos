@@ -20,7 +20,7 @@ type resourceSubinterfaceType struct{}
 func (t resourceSubinterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage a subinterface.\n\n- API Documentation: [l3EncRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:EncRtdIf/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a subinterface.", "l3EncRtdIf", "Layer%203/l3:EncRtdIf/").AddChildren("subinterface_vrf").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceSubinterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"interface_id": {
-				MarkdownDescription: helpers.NewDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1.10`.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1.10`.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourceSubinterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"admin_state": {
-				MarkdownDescription: helpers.NewDescription("Administrative state.").AddStringEnumDescription("up", "down").AddDefaultValueDescription("up").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("up", "down").AddDefaultValueDescription("up").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -52,7 +52,7 @@ func (t resourceSubinterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"bandwidth": {
-				MarkdownDescription: helpers.NewDescription("Specifies the administrative port bandwidth.").AddIntegerRangeDescription(0, 3200000000).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies the administrative port bandwidth.").AddIntegerRangeDescription(0, 3200000000).AddDefaultValueDescription("0").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -64,7 +64,7 @@ func (t resourceSubinterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"delay": {
-				MarkdownDescription: helpers.NewDescription("Specifies the administrative port delay.").AddIntegerRangeDescription(1, 16777215).AddDefaultValueDescription("1").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies the administrative port delay.").AddIntegerRangeDescription(1, 16777215).AddDefaultValueDescription("1").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -76,13 +76,13 @@ func (t resourceSubinterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"description": {
-				MarkdownDescription: helpers.NewDescription("Interface description.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Interface description.").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 			},
 			"encap": {
-				MarkdownDescription: helpers.NewDescription("Subinterface encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").AddDefaultValueDescription("unknown").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Subinterface encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").AddDefaultValueDescription("unknown").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -91,7 +91,7 @@ func (t resourceSubinterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"link_logging": {
-				MarkdownDescription: helpers.NewDescription("Administrative link logging.").AddStringEnumDescription("default", "enable", "disable").AddDefaultValueDescription("default").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative link logging.").AddStringEnumDescription("default", "enable", "disable").AddDefaultValueDescription("default").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -103,7 +103,7 @@ func (t resourceSubinterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"medium": {
-				MarkdownDescription: helpers.NewDescription("The administrative port medium type.").AddStringEnumDescription("broadcast", "p2p").AddDefaultValueDescription("broadcast").String,
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative port medium type.").AddStringEnumDescription("broadcast", "p2p").AddDefaultValueDescription("broadcast").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -115,7 +115,7 @@ func (t resourceSubinterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"mtu": {
-				MarkdownDescription: helpers.NewDescription("Administrative port MTU.").AddIntegerRangeDescription(576, 9216).AddDefaultValueDescription("1500").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative port MTU.").AddIntegerRangeDescription(576, 9216).AddDefaultValueDescription("1500").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,

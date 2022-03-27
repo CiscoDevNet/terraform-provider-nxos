@@ -2,10 +2,13 @@
 name: Loopback Interface VRF
 class_name: nwRtVrfMbr
 dn: sys/intf/lb-[%s]/rtvrfMbr
-ds_description: |-
-  This data source can read a loopback interface VRF association.
-res_description: |-
-  This resource can manage a loopback interface VRF association.\n\n- API Documentation: [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
+ds_description: This data source can read a loopback interface VRF association.
+res_description: This resource can manage a loopback interface VRF association.
+doc_path: Routing%20and%20Forwarding/nw:RtVrfMbr/
+parents:
+  - Loopback Interface
+references:
+  - VRF
 attributes:
   - nxos_name: id
     tf_name: interface_id

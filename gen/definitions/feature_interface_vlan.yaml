@@ -2,10 +2,9 @@
 name: Feature Interface VLAN
 class_name: fmInterfaceVlan
 dn: sys/fm/ifvlan
-ds_description: |-
-  This data source can read the Interface VLAN feature configuration.
-res_description: |-
-  This resource can manage the Interface VLAN feature configuration.\n\n- API Documentation: [fmInterfaceVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:InterfaceVlan/)
+ds_description: This data source can read the Interface VLAN feature configuration.
+res_description: This resource can manage the Interface VLAN feature configuration.
+doc_path: Feature%20Management/fm:InterfaceVlan/
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state

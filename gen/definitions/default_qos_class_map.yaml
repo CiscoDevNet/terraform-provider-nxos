@@ -2,10 +2,11 @@
 name: Default QOS Class Map
 class_name: ipqosCMapInst
 dn: sys/ipqos/dflt/c/name-[%s]
-ds_description: |-
-  This data source can read the default QoS class map configuration.
-res_description: |-
-  This resource can manage the default QoS class map configuration.\n\n- API Documentation: [ipqosCMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:CMapInst/)
+ds_description: This data source can read the default QoS class map configuration.
+res_description: This resource can manage the default QoS class map configuration.
+doc_path: Qos/ipqos:CMapInst/
+children:
+  - Default QOS Class Map DSCP
 attributes:
   - nxos_name: name
     tf_name: name

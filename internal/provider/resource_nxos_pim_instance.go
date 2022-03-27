@@ -20,7 +20,7 @@ type resourcePIMInstanceType struct{}
 func (t resourcePIMInstanceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the PIM instance configuration.\n\n- API Documentation: [pimInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:Inst/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the PIM instance configuration.", "pimInst", "Layer%203/pim:Inst/").AddParents("pim").AddChildren("pim_vrf").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourcePIMInstanceType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 				},
 			},
 			"admin_state": {
-				MarkdownDescription: helpers.NewDescription("Administrative state.").AddDefaultValueDescription("enabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddDefaultValueDescription("enabled").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,

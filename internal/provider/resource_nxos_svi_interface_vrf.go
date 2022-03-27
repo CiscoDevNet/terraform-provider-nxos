@@ -20,7 +20,7 @@ type resourceSVIInterfaceVRFType struct{}
 func (t resourceSVIInterfaceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage an SVI interface VRF association.\n\n- API Documentation: [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage an SVI interface VRF association.", "nwRtVrfMbr", "Routing%20and%20Forwarding/nw:RtVrfMbr/").AddParents("svi_interface").AddReferences("vrf").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceSVIInterfaceVRFType) GetSchema(ctx context.Context) (tfsdk.Schem
 				},
 			},
 			"interface_id": {
-				MarkdownDescription: helpers.NewDescription("Must match first field in the output of `show intf brief`. Example: `vlan100`.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `vlan100`.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourceSVIInterfaceVRFType) GetSchema(ctx context.Context) (tfsdk.Schem
 				},
 			},
 			"vrf_dn": {
-				MarkdownDescription: helpers.NewDescription("DN of VRF. For example: `sys/inst-VRF1`.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("DN of VRF. For example: `sys/inst-VRF1`.").String,
 				Type:                types.StringType,
 				Required:            true,
 			},

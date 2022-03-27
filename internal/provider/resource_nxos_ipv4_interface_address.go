@@ -20,7 +20,7 @@ type resourceIPv4InterfaceAddressType struct{}
 func (t resourceIPv4InterfaceAddressType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage an IPv4 interface address.\n\n- API Documentation: [ipv4Addr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:Addr/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage an IPv4 interface address.", "ipv4Addr", "Layer%203/ipv4:Addr/").AddParents("ipv4_interface").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceIPv4InterfaceAddressType) GetSchema(ctx context.Context) (tfsdk.
 				},
 			},
 			"vrf": {
-				MarkdownDescription: helpers.NewDescription("VRF name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourceIPv4InterfaceAddressType) GetSchema(ctx context.Context) (tfsdk.
 				},
 			},
 			"interface_id": {
-				MarkdownDescription: helpers.NewDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -48,7 +48,7 @@ func (t resourceIPv4InterfaceAddressType) GetSchema(ctx context.Context) (tfsdk.
 				},
 			},
 			"address": {
-				MarkdownDescription: helpers.NewDescription("IPv4 address.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 address.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{

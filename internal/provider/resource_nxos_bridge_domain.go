@@ -20,7 +20,7 @@ type resourceBridgeDomainType struct{}
 func (t resourceBridgeDomainType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage a bridge domain.\n\n- API Documentation: [l2BD](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%202/l2:BD/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a bridge domain.", "l2BD", "Layer%202/l2:BD/").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceBridgeDomainType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"fabric_encap": {
-				MarkdownDescription: helpers.NewDescription("Fabric encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").AddDefaultValueDescription("unknown").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Fabric encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").AddDefaultValueDescription("unknown").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourceBridgeDomainType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"access_encap": {
-				MarkdownDescription: helpers.NewDescription("Access encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").AddDefaultValueDescription("unknown").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Access encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").AddDefaultValueDescription("unknown").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -49,7 +49,7 @@ func (t resourceBridgeDomainType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"name": {
-				MarkdownDescription: helpers.NewDescription("Bridge domain name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Bridge domain name.").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,

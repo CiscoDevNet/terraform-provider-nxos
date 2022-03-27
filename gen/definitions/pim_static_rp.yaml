@@ -2,10 +2,13 @@
 name: PIM Static RP
 class_name: pimStaticRP
 dn: sys/pim/inst/dom-[%s]/staticrp/rp-[%s]
-ds_description: |-
-  This data source can read the PIM Static RP configuration.
-res_description: |-
-  This resource can manage the PIM Static RP configuration.\n\n- API Documentation: [pimStaticRP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:StaticRP/)
+ds_description: This data source can read the PIM Static RP configuration.
+res_description: This resource can manage the PIM Static RP configuration.
+doc_path: Layer%203/pim:StaticRP/
+parents:
+  - PIM Static RP Policy
+children:
+  - PIM Static RP Group List
 attributes:
   - nxos_name: vrf_name
     tf_name: vrf_name

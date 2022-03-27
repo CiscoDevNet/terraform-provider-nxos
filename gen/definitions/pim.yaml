@@ -2,10 +2,11 @@
 name: PIM
 class_name: pimEntity
 dn: sys/pim
-ds_description: |-
-  This data source can read the global PIM configuration.
-res_description: |-
-  This resource can manage the global PIM configuration.\n\n- API Documentation: [pimEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:Entity/)
+ds_description: This data source can read the global PIM configuration.
+res_description: This resource can manage the global PIM configuration.
+doc_path: Layer%203/pim:Entity/
+children:
+  - PIM Instance
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state

@@ -2,10 +2,11 @@
 name: Default QOS Policy Map Match Class Map Police
 class_name: ipqosPolice
 dn: sys/ipqos/dflt/p/name-[%s]/cmap-[%s]/police
-ds_description: |-
-  This data source can read the default QoS policy map match class map police configuration.
-res_description: |-
-  This resource can manage the default QoS policy map match class map police configuration.\n\n- API Documentation: [ipqosPolice](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Police/)
+ds_description: This data source can read the default QoS policy map match class map police configuration.
+res_description: This resource can manage the default QoS policy map match class map police configuration.
+doc_path: Qos/ipqos:Police/
+parents:
+  - Default QOS Policy Map Match Class Map
 attributes:
   - nxos_name: policy_map_name
     tf_name: policy_map_name

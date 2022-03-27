@@ -20,7 +20,7 @@ type resourceDefaultQOSClassMapType struct{}
 func (t resourceDefaultQOSClassMapType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the default QoS class map configuration.\n\n- API Documentation: [ipqosCMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:CMapInst/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the default QoS class map configuration.", "ipqosCMapInst", "Qos/ipqos:CMapInst/").AddChildren("default_qos_class_map_dscp").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceDefaultQOSClassMapType) GetSchema(ctx context.Context) (tfsdk.Sc
 				},
 			},
 			"name": {
-				MarkdownDescription: helpers.NewDescription("Class map name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Class map name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourceDefaultQOSClassMapType) GetSchema(ctx context.Context) (tfsdk.Sc
 				},
 			},
 			"match_type": {
-				MarkdownDescription: helpers.NewDescription("Match type.").AddDefaultValueDescription("match-all").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Match type.").AddDefaultValueDescription("match-all").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,

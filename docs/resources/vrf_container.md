@@ -5,6 +5,10 @@ subcategory: ""
 description: |-
   This resource can manage a VRF container.
   API Documentation: ipv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:Dom/
+  Child resources
+  nxosipv4interface https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_interface
+  Referenced resources
+  nxos_vrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf
 ---
 
 # nxos_vrf_container (Resource)
@@ -12,6 +16,14 @@ description: |-
 This resource can manage a VRF container.
 
 - API Documentation: [ipv4Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:Dom/)
+
+### Child resources
+
+- [nxos_ipv4_interface](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_interface)
+
+### Referenced resources
+
+- [nxos_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf)
 
 ## Example Usage
 

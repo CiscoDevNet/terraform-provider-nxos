@@ -20,7 +20,7 @@ type resourceQueuingQOSPolicyMapMatchClassMapType struct{}
 func (t resourceQueuingQOSPolicyMapMatchClassMapType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the queuing QoS policy map match class map configuration.\n\n- API Documentation: [ipqosMatchCMap](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:MatchCMap/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the queuing QoS policy map match class map configuration.", "ipqosMatchCMap", "Qos/ipqos:MatchCMap/").AddParents("queuing_qos_policy_map").AddChildren("queuing_qos_policy_map_match_class_map_priority", "queuing_qos_policy_map_match_class_map_remaining_bandwidth").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceQueuingQOSPolicyMapMatchClassMapType) GetSchema(ctx context.Cont
 				},
 			},
 			"policy_map_name": {
-				MarkdownDescription: helpers.NewDescription("Policy map name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Policy map name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourceQueuingQOSPolicyMapMatchClassMapType) GetSchema(ctx context.Cont
 				},
 			},
 			"name": {
-				MarkdownDescription: helpers.NewDescription("Class map name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Class map name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{

@@ -20,7 +20,7 @@ type resourcePIMInterfaceType struct{}
 func (t resourcePIMInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the PIM interface configuration.\n\n- API Documentation: [pimIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:If/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the PIM interface configuration.", "pimIf", "Layer%203/pim:If/").AddParents("pim_vrf").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourcePIMInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"vrf_name": {
-				MarkdownDescription: helpers.NewDescription("VRF name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourcePIMInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"interface_id": {
-				MarkdownDescription: helpers.NewDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -48,7 +48,7 @@ func (t resourcePIMInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"admin_state": {
-				MarkdownDescription: helpers.NewDescription("Administrative state.").AddDefaultValueDescription("enabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddDefaultValueDescription("enabled").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -57,7 +57,7 @@ func (t resourcePIMInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"bfd": {
-				MarkdownDescription: helpers.NewDescription("BFD.").AddDefaultValueDescription("disabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("BFD.").AddDefaultValueDescription("disabled").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -66,7 +66,7 @@ func (t resourcePIMInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"dr_priority": {
-				MarkdownDescription: helpers.NewDescription("Designated Router priority level.").AddIntegerRangeDescription(1, 4294967295).AddDefaultValueDescription("1").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Designated Router priority level.").AddIntegerRangeDescription(1, 4294967295).AddDefaultValueDescription("1").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -78,7 +78,7 @@ func (t resourcePIMInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"passive": {
-				MarkdownDescription: helpers.NewDescription("Passive interface.").AddDefaultValueDescription("false").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Passive interface.").AddDefaultValueDescription("false").String,
 				Type:                types.BoolType,
 				Optional:            true,
 				Computed:            true,
@@ -87,7 +87,7 @@ func (t resourcePIMInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"sparse_mode": {
-				MarkdownDescription: helpers.NewDescription("Sparse mode.").AddDefaultValueDescription("false").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Sparse mode.").AddDefaultValueDescription("false").String,
 				Type:                types.BoolType,
 				Optional:            true,
 				Computed:            true,

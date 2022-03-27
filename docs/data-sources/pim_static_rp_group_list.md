@@ -4,11 +4,14 @@ page_title: "nxos_pim_static_rp_group_list Data Source - terraform-provider-nxos
 subcategory: ""
 description: |-
   This data source can read the PIM Static RP group list configuration.
+  API Documentation: pimRPGrpList https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:RPGrpList/
 ---
 
 # nxos_pim_static_rp_group_list (Data Source)
 
 This data source can read the PIM Static RP group list configuration.
+
+- API Documentation: [pimRPGrpList](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:RPGrpList/)
 
 ## Example Usage
 

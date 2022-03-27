@@ -20,7 +20,7 @@ type resourceOSPFVRFType struct{}
 func (t resourceOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the OSPF VRF configuration.\n\n- API Documentation: [ospfDom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:Dom/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the OSPF VRF configuration.", "ospfDom", "Routing%20and%20Forwarding/ospf:Dom/").AddParents("ospf_instance").AddChildren("ospf_interface", "ospf_area").AddReferences("vrf").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.
 				},
 			},
 			"instance_name": {
-				MarkdownDescription: helpers.NewDescription("OSPF instance name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("OSPF instance name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourceOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.
 				},
 			},
 			"name": {
-				MarkdownDescription: helpers.NewDescription("VRF name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -48,7 +48,7 @@ func (t resourceOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.
 				},
 			},
 			"admin_state": {
-				MarkdownDescription: helpers.NewDescription("Administrative state.").AddDefaultValueDescription("enabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddDefaultValueDescription("enabled").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -57,7 +57,7 @@ func (t resourceOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.
 				},
 			},
 			"bandwidth_reference": {
-				MarkdownDescription: helpers.NewDescription("Bandwidth reference value.").AddIntegerRangeDescription(0, 4294967295).AddDefaultValueDescription("40000").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Bandwidth reference value.").AddIntegerRangeDescription(0, 4294967295).AddDefaultValueDescription("40000").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -69,7 +69,7 @@ func (t resourceOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.
 				},
 			},
 			"banwidth_reference_unit": {
-				MarkdownDescription: helpers.NewDescription("Bandwidth reference unit.").AddDefaultValueDescription("mbps").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Bandwidth reference unit.").AddDefaultValueDescription("mbps").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -78,7 +78,7 @@ func (t resourceOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.
 				},
 			},
 			"distance": {
-				MarkdownDescription: helpers.NewDescription("Administrative distance preference.").AddIntegerRangeDescription(1, 255).AddDefaultValueDescription("110").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative distance preference.").AddIntegerRangeDescription(1, 255).AddDefaultValueDescription("110").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -90,7 +90,7 @@ func (t resourceOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.
 				},
 			},
 			"router_id": {
-				MarkdownDescription: helpers.NewDescription("Router ID.").AddDefaultValueDescription("0.0.0.0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Router ID.").AddDefaultValueDescription("0.0.0.0").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,

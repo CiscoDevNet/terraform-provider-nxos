@@ -4,11 +4,14 @@ page_title: "nxos_svi_interface_vrf Data Source - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This data source can read an SVI interface VRF association.
+  API Documentation: nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
 ---
 
 # nxos_svi_interface_vrf (Data Source)
 
 This data source can read an SVI interface VRF association.
+
+- API Documentation: [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 
 ## Example Usage
 

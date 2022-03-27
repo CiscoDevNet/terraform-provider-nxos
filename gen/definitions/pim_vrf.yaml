@@ -2,10 +2,17 @@
 name: PIM VRF
 class_name: pimDom
 dn: sys/pim/inst/dom-[%s]
-ds_description: |-
-  This data source can read the PIM VRF configuration.
-res_description: |-
-  This resource can manage the PIM VRF configuration.\n\n- API Documentation: [pimDom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:Dom/)
+ds_description: This data source can read the PIM VRF configuration.
+res_description: This resource can manage the PIM VRF configuration.
+doc_path: Layer%203/pim:Dom/
+parents:
+  - PIM Instance
+children:
+  - PIM Interface
+  - PIM SSM Policy
+  - PIM Static RP Policy
+references:
+  - VRF
 attributes:
   - nxos_name: name
     tf_name: name

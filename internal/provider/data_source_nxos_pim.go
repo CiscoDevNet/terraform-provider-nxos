@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
 type dataSourcePIMType struct{}
@@ -17,7 +18,7 @@ type dataSourcePIMType struct{}
 func (t dataSourcePIMType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the global PIM configuration.",
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the global PIM configuration.", "pimEntity", "Layer%203/pim:Entity/").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {

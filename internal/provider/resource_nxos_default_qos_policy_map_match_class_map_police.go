@@ -20,7 +20,7 @@ type resourceDefaultQOSPolicyMapMatchClassMapPoliceType struct{}
 func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the default QoS policy map match class map police configuration.\n\n- API Documentation: [ipqosPolice](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Police/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the default QoS policy map match class map police configuration.", "ipqosPolice", "Qos/ipqos:Police/").AddParents("default_qos_policy_map_match_class_map").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"policy_map_name": {
-				MarkdownDescription: helpers.NewDescription("Policy map name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Policy map name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"class_map_name": {
-				MarkdownDescription: helpers.NewDescription("Class map name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Class map name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -48,7 +48,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"bc_rate": {
-				MarkdownDescription: helpers.NewDescription("CIR burst rate.").AddIntegerRangeDescription(0, 536870912).AddDefaultValueDescription("200").String,
+				MarkdownDescription: helpers.NewAttributeDescription("CIR burst rate.").AddIntegerRangeDescription(0, 536870912).AddDefaultValueDescription("200").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -60,7 +60,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"bc_unit": {
-				MarkdownDescription: helpers.NewDescription("CIR burst rate unit.").AddStringEnumDescription("unspecified", "bytes", "kbytes", "mbytes", "ms", "us", "packets").AddDefaultValueDescription("ms").String,
+				MarkdownDescription: helpers.NewAttributeDescription("CIR burst rate unit.").AddStringEnumDescription("unspecified", "bytes", "kbytes", "mbytes", "ms", "us", "packets").AddDefaultValueDescription("ms").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -72,7 +72,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"be_rate": {
-				MarkdownDescription: helpers.NewDescription("PIR burst rate.").AddIntegerRangeDescription(0, 536870912).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("PIR burst rate.").AddIntegerRangeDescription(0, 536870912).AddDefaultValueDescription("0").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -84,7 +84,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"be_unit": {
-				MarkdownDescription: helpers.NewDescription("PIR burst rate unit.").AddStringEnumDescription("unspecified", "bytes", "kbytes", "mbytes", "ms", "us", "packets").AddDefaultValueDescription("unspecified").String,
+				MarkdownDescription: helpers.NewAttributeDescription("PIR burst rate unit.").AddStringEnumDescription("unspecified", "bytes", "kbytes", "mbytes", "ms", "us", "packets").AddDefaultValueDescription("unspecified").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -96,7 +96,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"cir_rate": {
-				MarkdownDescription: helpers.NewDescription("CIR rate.").AddIntegerRangeDescription(0, 100000000000).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("CIR rate.").AddIntegerRangeDescription(0, 100000000000).AddDefaultValueDescription("0").String,
 				Type:                types.Int64Type,
 				Required:            true,
 				Validators: []tfsdk.AttributeValidator{
@@ -107,7 +107,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"cir_unit": {
-				MarkdownDescription: helpers.NewDescription("CIR rate unit.").AddStringEnumDescription("unspecified", "bps", "kbps", "mbps", "gbps", "pps", "pct").AddDefaultValueDescription("bps").String,
+				MarkdownDescription: helpers.NewAttributeDescription("CIR rate unit.").AddStringEnumDescription("unspecified", "bps", "kbps", "mbps", "gbps", "pps", "pct").AddDefaultValueDescription("bps").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -119,7 +119,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"conform_action": {
-				MarkdownDescription: helpers.NewDescription("Conform action.").AddStringEnumDescription("unspecified", "transmit", "drop", "set-cos-transmit", "set-dscp-transmit", "set-prec-transmit", "set-qos-transmit").AddDefaultValueDescription("transmit").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Conform action.").AddStringEnumDescription("unspecified", "transmit", "drop", "set-cos-transmit", "set-dscp-transmit", "set-prec-transmit", "set-qos-transmit").AddDefaultValueDescription("transmit").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -131,7 +131,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"conform_set_cos": {
-				MarkdownDescription: helpers.NewDescription("Set CoS for conforming traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Set CoS for conforming traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -143,7 +143,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"conform_set_dscp": {
-				MarkdownDescription: helpers.NewDescription("Set DSCP for conforming traffic.").AddIntegerRangeDescription(0, 63).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Set DSCP for conforming traffic.").AddIntegerRangeDescription(0, 63).AddDefaultValueDescription("0").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -155,7 +155,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"conform_set_precedence": {
-				MarkdownDescription: helpers.NewDescription("Set precedence for conforming traffic.").AddStringEnumDescription("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network").AddDefaultValueDescription("routine").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Set precedence for conforming traffic.").AddStringEnumDescription("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network").AddDefaultValueDescription("routine").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -167,7 +167,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"conform_set_qos_group": {
-				MarkdownDescription: helpers.NewDescription("Set qos-group for conforming traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Set qos-group for conforming traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -179,7 +179,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"exceed_action": {
-				MarkdownDescription: helpers.NewDescription("Exceed action.").AddStringEnumDescription("unspecified", "transmit", "drop", "set-cos-transmit", "set-dscp-transmit", "set-prec-transmit", "set-qos-transmit").AddDefaultValueDescription("unspecified").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Exceed action.").AddStringEnumDescription("unspecified", "transmit", "drop", "set-cos-transmit", "set-dscp-transmit", "set-prec-transmit", "set-qos-transmit").AddDefaultValueDescription("unspecified").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -191,7 +191,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"exceed_set_cos": {
-				MarkdownDescription: helpers.NewDescription("Set CoS for exceeding traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Set CoS for exceeding traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -203,7 +203,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"exceed_set_dscp": {
-				MarkdownDescription: helpers.NewDescription("Set DSCP for exceeding traffic.").AddIntegerRangeDescription(0, 63).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Set DSCP for exceeding traffic.").AddIntegerRangeDescription(0, 63).AddDefaultValueDescription("0").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -215,7 +215,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"exceed_set_precedence": {
-				MarkdownDescription: helpers.NewDescription("Set precedence for exceeding traffic.").AddStringEnumDescription("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network").AddDefaultValueDescription("routine").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Set precedence for exceeding traffic.").AddStringEnumDescription("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network").AddDefaultValueDescription("routine").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -227,7 +227,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"exceed_set_qos_group": {
-				MarkdownDescription: helpers.NewDescription("Set qos-group for exceeding traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Set qos-group for exceeding traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -239,7 +239,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"pir_rate": {
-				MarkdownDescription: helpers.NewDescription("PIR rate.").AddIntegerRangeDescription(0, 100000000000).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("PIR rate.").AddIntegerRangeDescription(0, 100000000000).AddDefaultValueDescription("0").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -251,7 +251,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"pir_unit": {
-				MarkdownDescription: helpers.NewDescription("PIR rate unit.").AddStringEnumDescription("unspecified", "bps", "kbps", "mbps", "gbps", "pps", "pct").AddDefaultValueDescription("unspecified").String,
+				MarkdownDescription: helpers.NewAttributeDescription("PIR rate unit.").AddStringEnumDescription("unspecified", "bps", "kbps", "mbps", "gbps", "pps", "pct").AddDefaultValueDescription("unspecified").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -263,7 +263,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"violate_action": {
-				MarkdownDescription: helpers.NewDescription("Violate action.").AddStringEnumDescription("unspecified", "transmit", "drop", "set-cos-transmit", "set-dscp-transmit", "set-prec-transmit", "set-qos-transmit").AddDefaultValueDescription("drop").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Violate action.").AddStringEnumDescription("unspecified", "transmit", "drop", "set-cos-transmit", "set-dscp-transmit", "set-prec-transmit", "set-qos-transmit").AddDefaultValueDescription("drop").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -275,7 +275,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"violate_set_cos": {
-				MarkdownDescription: helpers.NewDescription("Set CoS for violating traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Set CoS for violating traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -287,7 +287,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"violate_set_dscp": {
-				MarkdownDescription: helpers.NewDescription("Set DSCP for violating traffic.").AddIntegerRangeDescription(0, 63).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Set DSCP for violating traffic.").AddIntegerRangeDescription(0, 63).AddDefaultValueDescription("0").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
@@ -299,7 +299,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"violate_set_precedence": {
-				MarkdownDescription: helpers.NewDescription("Set precedence for violating traffic.").AddStringEnumDescription("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network").AddDefaultValueDescription("routine").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Set precedence for violating traffic.").AddStringEnumDescription("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network").AddDefaultValueDescription("routine").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -311,7 +311,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapPoliceType) GetSchema(ctx contex
 				},
 			},
 			"violate_set_qos_group": {
-				MarkdownDescription: helpers.NewDescription("Set qos-group for violating traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Set qos-group for violating traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,

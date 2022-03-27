@@ -20,7 +20,7 @@ type resourceQueuingQOSPolicyMapMatchClassMapRemainingBandwidthType struct{}
 func (t resourceQueuingQOSPolicyMapMatchClassMapRemainingBandwidthType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the queuing QoS policy map match class map remaining bandwidth configuration.\n\n- API Documentation: [ipqosSetRemBW](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:SetRemBW/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the queuing QoS policy map match class map remaining bandwidth configuration.", "ipqosSetRemBW", "Qos/ipqos:SetRemBW/").AddParents("queuing_qos_policy_map_match_class_map").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceQueuingQOSPolicyMapMatchClassMapRemainingBandwidthType) GetSchem
 				},
 			},
 			"policy_map_name": {
-				MarkdownDescription: helpers.NewDescription("Policy map name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Policy map name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourceQueuingQOSPolicyMapMatchClassMapRemainingBandwidthType) GetSchem
 				},
 			},
 			"class_map_name": {
-				MarkdownDescription: helpers.NewDescription("Class map name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Class map name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -48,7 +48,7 @@ func (t resourceQueuingQOSPolicyMapMatchClassMapRemainingBandwidthType) GetSchem
 				},
 			},
 			"value": {
-				MarkdownDescription: helpers.NewDescription("Remaining bandwidth percent.").AddIntegerRangeDescription(0, 100).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Remaining bandwidth percent.").AddIntegerRangeDescription(0, 100).String,
 				Type:                types.Int64Type,
 				Required:            true,
 				Validators: []tfsdk.AttributeValidator{

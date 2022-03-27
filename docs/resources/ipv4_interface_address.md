@@ -5,6 +5,8 @@ subcategory: ""
 description: |-
   This resource can manage an IPv4 interface address.
   API Documentation: ipv4Addr https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:Addr/
+  Parent resources
+  nxosipv4interface https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_interface
 ---
 
 # nxos_ipv4_interface_address (Resource)
@@ -12,6 +14,10 @@ description: |-
 This resource can manage an IPv4 interface address.
 
 - API Documentation: [ipv4Addr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:Addr/)
+
+### Parent resources
+
+- [nxos_ipv4_interface](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_interface)
 
 ## Example Usage
 

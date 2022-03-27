@@ -20,7 +20,7 @@ type resourceVRFType struct{}
 func (t resourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage a VRF.\n\n- API Documentation: [l3Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:Inst/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a VRF.", "l3Inst", "Layer%203/l3:Inst/").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diag
 				},
 			},
 			"name": {
-				MarkdownDescription: helpers.NewDescription("VRF name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diag
 				},
 			},
 			"description": {
-				MarkdownDescription: helpers.NewDescription("VRF description.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("VRF description.").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,

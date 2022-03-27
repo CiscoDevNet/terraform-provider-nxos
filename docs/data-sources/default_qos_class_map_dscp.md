@@ -4,11 +4,14 @@ page_title: "nxos_default_qos_class_map_dscp Data Source - terraform-provider-nx
 subcategory: ""
 description: |-
   This data source can read the default QoS class map DSCP configuration.
+  API Documentation: ipqosDscp https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Dscp/
 ---
 
 # nxos_default_qos_class_map_dscp (Data Source)
 
 This data source can read the default QoS class map DSCP configuration.
+
+- API Documentation: [ipqosDscp](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Dscp/)
 
 ## Example Usage
 

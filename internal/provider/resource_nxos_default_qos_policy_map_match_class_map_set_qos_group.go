@@ -20,7 +20,7 @@ type resourceDefaultQOSPolicyMapMatchClassMapSetQOSGroupType struct{}
 func (t resourceDefaultQOSPolicyMapMatchClassMapSetQOSGroupType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the default QoS policy map match class map set QoS group configuration.\n\n- API Documentation: [ipqosSetQoSGrp](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:SetQoSGrp/)",
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the default QoS policy map match class map set QoS group configuration.", "ipqosSetQoSGrp", "Qos/ipqos:SetQoSGrp/").AddParents("default_qos_policy_map_match_class_map").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -32,7 +32,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapSetQOSGroupType) GetSchema(ctx c
 				},
 			},
 			"policy_map_name": {
-				MarkdownDescription: helpers.NewDescription("Policy map name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Policy map name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -40,7 +40,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapSetQOSGroupType) GetSchema(ctx c
 				},
 			},
 			"class_map_name": {
-				MarkdownDescription: helpers.NewDescription("Class map name.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Class map name.").String,
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
@@ -48,7 +48,7 @@ func (t resourceDefaultQOSPolicyMapMatchClassMapSetQOSGroupType) GetSchema(ctx c
 				},
 			},
 			"qos_group_id": {
-				MarkdownDescription: helpers.NewDescription("QoS group ID.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("QoS group ID.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
 				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,

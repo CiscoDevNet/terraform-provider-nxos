@@ -15,9 +15,9 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourceEthernetSettingsType struct{}
+type resourceEthernetType struct{}
 
-func (t resourceEthernetSettingsType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t resourceEthernetType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This resource can manage global ethernet settings.\n\n- API Documentation: [ethpmInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Interfaces/ethpm:Inst/)",
@@ -47,20 +47,20 @@ func (t resourceEthernetSettingsType) GetSchema(ctx context.Context) (tfsdk.Sche
 	}, nil
 }
 
-func (t resourceEthernetSettingsType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
+func (t resourceEthernetType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
-	return resourceEthernetSettings{
+	return resourceEthernet{
 		provider: provider,
 	}, diags
 }
 
-type resourceEthernetSettings struct {
+type resourceEthernet struct {
 	provider provider
 }
 
-func (r resourceEthernetSettings) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
-	var plan, state EthernetSettings
+func (r resourceEthernet) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+	var plan, state Ethernet
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -95,8 +95,8 @@ func (r resourceEthernetSettings) Create(ctx context.Context, req tfsdk.CreateRe
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceEthernetSettings) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
-	var state EthernetSettings
+func (r resourceEthernet) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+	var state Ethernet
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -121,8 +121,8 @@ func (r resourceEthernetSettings) Read(ctx context.Context, req tfsdk.ReadResour
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceEthernetSettings) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
-	var plan, state EthernetSettings
+func (r resourceEthernet) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+	var plan, state Ethernet
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -156,8 +156,8 @@ func (r resourceEthernetSettings) Update(ctx context.Context, req tfsdk.UpdateRe
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceEthernetSettings) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
-	var state EthernetSettings
+func (r resourceEthernet) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+	var state Ethernet
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -183,6 +183,6 @@ func (r resourceEthernetSettings) Delete(ctx context.Context, req tfsdk.DeleteRe
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceEthernetSettings) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
+func (r resourceEthernet) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
 	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
 }

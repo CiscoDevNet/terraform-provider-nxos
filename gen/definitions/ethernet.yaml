@@ -1,5 +1,5 @@
 ---
-name: Ethernet Settings
+name: Ethernet
 class_name: ethpmInst
 dn: sys/ethpm/inst
 ds_description: |-

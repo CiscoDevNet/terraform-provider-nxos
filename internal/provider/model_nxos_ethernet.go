@@ -10,29 +10,29 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-type EthernetSettings struct {
+type Ethernet struct {
 	Dn             types.String `tfsdk:"id"`
 	SystemJumboMtu types.Int64  `tfsdk:"mtu"`
 }
 
-func (data EthernetSettings) getDn() string {
+func (data Ethernet) getDn() string {
 	return "sys/ethpm/inst"
 }
 
-func (data EthernetSettings) getClassName() string {
+func (data Ethernet) getClassName() string {
 	return "ethpmInst"
 }
 
-func (data EthernetSettings) toBody() nxos.Body {
+func (data Ethernet) toBody() nxos.Body {
 	attrs := nxos.Body{}.
 		Set("systemJumboMtu", strconv.FormatInt(data.SystemJumboMtu.Value, 10))
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
-func (data *EthernetSettings) fromBody(res gjson.Result) {
+func (data *Ethernet) fromBody(res gjson.Result) {
 	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.SystemJumboMtu.Value = res.Get("*.attributes.systemJumboMtu").Int()
 }
 
-func (data *EthernetSettings) fromPlan(plan EthernetSettings) {
+func (data *Ethernet) fromPlan(plan Ethernet) {
 }

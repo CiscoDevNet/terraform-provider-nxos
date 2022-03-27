@@ -8,19 +8,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccNxosEthernetSettings(t *testing.T) {
+func TestAccNxosEthernet(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosEthernetSettingsConfig_all(),
+				Config: testAccNxosEthernetConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ethernet_settings.test", "mtu", "9216"),
+					resource.TestCheckResourceAttr("nxos_ethernet.test", "mtu", "9216"),
 				),
 			},
 			{
-				ResourceName:  "nxos_ethernet_settings.test",
+				ResourceName:  "nxos_ethernet.test",
 				ImportState:   true,
 				ImportStateId: "sys/ethpm/inst",
 			},
@@ -28,16 +28,16 @@ func TestAccNxosEthernetSettings(t *testing.T) {
 	})
 }
 
-func testAccNxosEthernetSettingsConfig_minimum() string {
+func testAccNxosEthernetConfig_minimum() string {
 	return `
-	resource "nxos_ethernet_settings" "test" {
+	resource "nxos_ethernet" "test" {
 	}
 	`
 }
 
-func testAccNxosEthernetSettingsConfig_all() string {
+func testAccNxosEthernetConfig_all() string {
 	return `
-	resource "nxos_ethernet_settings" "test" {
+	resource "nxos_ethernet" "test" {
 		mtu = 9216
 	}
 	`

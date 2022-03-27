@@ -12,9 +12,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-type dataSourceEthernetSettingsType struct{}
+type dataSourceEthernetType struct{}
 
-func (t dataSourceEthernetSettingsType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t dataSourceEthernetType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This data source can read global ethernet settings.",
@@ -34,20 +34,20 @@ func (t dataSourceEthernetSettingsType) GetSchema(ctx context.Context) (tfsdk.Sc
 	}, nil
 }
 
-func (t dataSourceEthernetSettingsType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
+func (t dataSourceEthernetType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
-	return dataSourceEthernetSettings{
+	return dataSourceEthernet{
 		provider: provider,
 	}, diags
 }
 
-type dataSourceEthernetSettings struct {
+type dataSourceEthernet struct {
 	provider provider
 }
 
-func (d dataSourceEthernetSettings) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
-	var config, state EthernetSettings
+func (d dataSourceEthernet) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+	var config, state Ethernet
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

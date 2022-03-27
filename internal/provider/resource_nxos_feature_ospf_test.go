@@ -31,6 +31,7 @@ func TestAccNxosFeatureOSPF(t *testing.T) {
 func testAccNxosFeatureOSPFConfig_minimum() string {
 	return `
 	resource "nxos_feature_ospf" "test" {
+		admin_state = "enabled"
 	}
 	`
 }

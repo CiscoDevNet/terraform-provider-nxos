@@ -215,7 +215,7 @@ func (r resource{{camelCase .Name}}) Delete(ctx context.Context, req tfsdk.Delet
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Dn.Value))
-
+{{ if not .NoDelete}}
 	res, err := r.provider.client.DeleteDn(state.Dn.Value)
 	if err != nil {
 		errCode := res.Get("imdata.0.error.attributes.code").Str
@@ -225,7 +225,7 @@ func (r resource{{camelCase .Name}}) Delete(ctx context.Context, req tfsdk.Delet
 			return
 		}
 	}
-
+{{ end}}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Dn.Value))
 
 	resp.State.RemoveResource(ctx)

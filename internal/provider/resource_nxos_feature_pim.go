@@ -32,13 +32,9 @@ func (t resourceFeaturePIMType) GetSchema(ctx context.Context) (tfsdk.Schema, di
 				},
 			},
 			"admin_state": {
-				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddDefaultValueDescription("disabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").String,
 				Type:                types.StringType,
-				Optional:            true,
-				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					helpers.StringDefaultModifier("disabled"),
-				},
+				Required:            true,
 			},
 		},
 	}, nil
@@ -164,16 +160,6 @@ func (r resourceFeaturePIM) Delete(ctx context.Context, req tfsdk.DeleteResource
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Dn.Value))
-
-	res, err := r.provider.client.DeleteDn(state.Dn.Value)
-	if err != nil {
-		errCode := res.Get("imdata.0.error.attributes.code").Str
-		// Ignore errors of type "Cannot delete object"
-		if errCode != "107" {
-			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
-			return
-		}
-	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Dn.Value))
 

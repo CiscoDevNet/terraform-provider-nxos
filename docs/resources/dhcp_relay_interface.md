@@ -5,7 +5,7 @@ subcategory: ""
 description: |-
   This resource can manage a DHCP relay interface.
   API Documentation: dhcpRelayIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/DHCP/dhcp:RelayIf/
-  Parent resources
+  Child resources
   nxosdhcprelay_address https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/dhcp_relay_address
 ---
 
@@ -15,7 +15,7 @@ This resource can manage a DHCP relay interface.
 
 - API Documentation: [dhcpRelayIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/DHCP/dhcp:RelayIf/)
 
-### Parent resources
+### Child resources
 
 - [nxos_dhcp_relay_address](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/dhcp_relay_address)
 

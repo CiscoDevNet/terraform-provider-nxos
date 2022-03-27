@@ -20,7 +20,7 @@ type resourceDHCPRelayInterfaceType struct{}
 func (t resourceDHCPRelayInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a DHCP relay interface.", "dhcpRelayIf", "DHCP/dhcp:RelayIf/").AddParents("dhcp_relay_address").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a DHCP relay interface.", "dhcpRelayIf", "DHCP/dhcp:RelayIf/").AddChildren("dhcp_relay_address").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {

@@ -31,6 +31,7 @@ func TestAccNxosFeatureDHCP(t *testing.T) {
 func testAccNxosFeatureDHCPConfig_minimum() string {
 	return `
 	resource "nxos_feature_dhcp" "test" {
+		admin_state = "enabled"
 	}
 	`
 }

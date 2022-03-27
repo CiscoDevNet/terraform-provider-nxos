@@ -77,6 +77,7 @@ type YamlConfig struct {
 	Name              string                `yaml:"name"`
 	ClassName         string                `yaml:"class_name"`
 	Dn                string                `yaml:"dn"`
+	NoDelete          bool                  `yaml:"no_delete"`
 	DsDescription     string                `yaml:"ds_description"`
 	ResDescription    string                `yaml:"res_description"`
 	DocPath           string                `yaml:"doc_path"`

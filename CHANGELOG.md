@@ -1,3 +1,13 @@
+## 0.2.5 (unreleased)
+
+- Fix redundant authentications
+- Fix default retries value (3)
+- Make admin_state attribute of nxos_feature_dhcp resource mandatory
+- Make admin_state attribute of nxos_feature_interface_vlan resource mandatory
+- Make admin_state attribute of nxos_feature_lldp resource mandatory
+- Make admin_state attribute of nxos_feature_ospf resource mandatory
+- Make admin_state attribute of nxos_feature_pim resource mandatory
+
 ## 0.2.4
 
 - Add nxos_svi_interface resource and data source

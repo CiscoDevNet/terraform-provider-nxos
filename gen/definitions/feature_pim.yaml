@@ -2,6 +2,7 @@
 name: Feature PIM
 class_name: fmPim
 dn: sys/fm/pim
+no_delete: true
 ds_description: This data source can read the PIM feature configuration.
 res_description: This resource can manage the PIM feature configuration.
 doc_path: Feature%20Management/fm:Pim/
@@ -9,9 +10,9 @@ attributes:
   - nxos_name: adminSt
     tf_name: admin_state
     type: String
+    mandatory: true
     description: 'Administrative state.'
     enum_value:
       - enabled
       - disabled
-    default_value: disabled
     example: enabled

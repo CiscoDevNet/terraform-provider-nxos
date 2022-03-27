@@ -19,7 +19,7 @@ import (
 // provider satisfies the tfsdk.Provider interface and usually is included
 // with all Resource and DataSource implementations.
 type provider struct {
-	client nxos.Client
+	client *nxos.Client
 
 	// configured is set to true at the end of the Configure method.
 	// This can be used in Resource and DataSource implementations to verify
@@ -198,7 +198,7 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 	if config.Retries.Null {
 		retriesStr := os.Getenv("NXOS_RETRIES")
 		if retriesStr == "" {
-			retries = 4
+			retries = 3
 		} else {
 			retries, _ = strconv.ParseInt(retriesStr, 0, 64)
 		}
@@ -216,7 +216,7 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 		return
 	}
 
-	p.client = c
+	p.client = &c
 
 	p.configured = true
 }

@@ -197,7 +197,7 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 	if config.Retries.Null {
 		retriesStr := os.Getenv("NXOS_RETRIES")
 		if retriesStr == "" {
-			retries = 4
+			retries = 3
 		} else {
 			retries, _ = strconv.ParseInt(retriesStr, 0, 64)
 		}

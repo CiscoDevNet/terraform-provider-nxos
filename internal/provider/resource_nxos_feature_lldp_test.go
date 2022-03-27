@@ -31,6 +31,7 @@ func TestAccNxosFeatureLLDP(t *testing.T) {
 func testAccNxosFeatureLLDPConfig_minimum() string {
 	return `
 	resource "nxos_feature_lldp" "test" {
+		admin_state = "enabled"
 	}
 	`
 }

@@ -31,6 +31,7 @@ func TestAccNxosFeaturePIM(t *testing.T) {
 func testAccNxosFeaturePIMConfig_minimum() string {
 	return `
 	resource "nxos_feature_pim" "test" {
+		admin_state = "enabled"
 	}
 	`
 }

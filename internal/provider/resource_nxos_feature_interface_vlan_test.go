@@ -31,6 +31,7 @@ func TestAccNxosFeatureInterfaceVLAN(t *testing.T) {
 func testAccNxosFeatureInterfaceVLANConfig_minimum() string {
 	return `
 	resource "nxos_feature_interface_vlan" "test" {
+		admin_state = "enabled"
 	}
 	`
 }

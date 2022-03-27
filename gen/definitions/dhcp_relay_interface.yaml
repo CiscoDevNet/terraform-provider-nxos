@@ -5,7 +5,7 @@ dn: sys/dhcp/inst/relayif-[%s]
 ds_description: This data source can read a DHCP relay interface.
 res_description: This resource can manage a DHCP relay interface.
 doc_path: DHCP/dhcp:RelayIf/
-parents:
+children:
   - DHCP Relay Address
 attributes:
   - nxos_name: id

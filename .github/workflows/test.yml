@@ -65,5 +65,5 @@ jobs:
           NXOS_USERNAME: ${{ secrets.NXOS_USERNAME }}
           NXOS_PASSWORD: ${{ secrets.NXOS_PASSWORD }}
           NXOS_URL: ${{ secrets.NXOS_URL }}
-        run: go test -v -cover ./internal/provider/
+        run: go test -v -cover -timeout 45m ./internal/provider/
         timeout-minutes: 45

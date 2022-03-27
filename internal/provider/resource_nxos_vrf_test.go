@@ -14,12 +14,6 @@ func TestAccNxosVRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosVRFConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_vrf.test", "name", "VRF1"),
-				),
-			},
-			{
 				Config: testAccNxosVRFConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_vrf.test", "name", "VRF1"),

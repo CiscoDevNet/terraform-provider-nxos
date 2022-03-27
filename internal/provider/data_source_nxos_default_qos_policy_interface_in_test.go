@@ -14,9 +14,6 @@ func TestAccDataSourceNxosDefaultQOSPolicyInterfaceIn(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosDefaultQOSPolicyInterfaceInConfig_all(),
-			},
-			{
 				Config: testAccDataSourceNxosDefaultQOSPolicyInterfaceInConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_default_qos_policy_interface_in.test", "interface_id", "eth1/10"),
@@ -27,7 +24,13 @@ func TestAccDataSourceNxosDefaultQOSPolicyInterfaceIn(t *testing.T) {
 }
 
 const testAccDataSourceNxosDefaultQOSPolicyInterfaceInConfig = `
+
+resource "nxos_default_qos_policy_interface_in" "test" {
+  interface_id = "eth1/10"
+}
+
 data "nxos_default_qos_policy_interface_in" "test" {
   interface_id = "eth1/10"
+  depends_on = [nxos_default_qos_policy_interface_in.test]
 }
 `

@@ -14,16 +14,7 @@ func TestAccDataSourceNxosOSPFVRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosOSPFConfig_all(),
-			},
-			{
-				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all(),
-			},
-			{
-				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all() + testAccNxosOSPFVRFConfig_all(),
-			},
-			{
-				Config: testAccDataSourceNxosOSPFVRFConfig,
+				Config: testAccDataSourceNxosOSPFVRFPrerequisitesConfig + testAccDataSourceNxosOSPFVRFConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "name", "default"),
 					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "admin_state", "enabled"),
@@ -37,9 +28,41 @@ func TestAccDataSourceNxosOSPFVRF(t *testing.T) {
 	})
 }
 
+const testAccDataSourceNxosOSPFVRFPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/ospf"
+  class_name = "ospfEntity"
+  content = {
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/ospf/inst-[OSPF1]"
+  class_name = "ospfInst"
+  content = {
+      name = "OSPF1"
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+`
+
 const testAccDataSourceNxosOSPFVRFConfig = `
+
+resource "nxos_ospf_vrf" "test" {
+  instance_name = "OSPF1"
+  name = "default"
+  admin_state = "enabled"
+  bandwidth_reference = 400000
+  banwidth_reference_unit = "mbps"
+  distance = 110
+  router_id = "34.56.78.90"
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
+}
+
 data "nxos_ospf_vrf" "test" {
   instance_name = "OSPF1"
   name = "default"
+  depends_on = [nxos_ospf_vrf.test]
 }
 `

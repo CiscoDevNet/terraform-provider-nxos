@@ -14,20 +14,7 @@ func TestAccNxosDefaultQOSPolicyInterfaceInPolicyMap(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosDefaultQOSPolicyMapConfig_all(),
-			},
-			{
-				Config: testAccNxosDefaultQOSPolicyMapConfig_all() + testAccNxosDefaultQOSPolicyInterfaceInConfig_all(),
-			},
-			{
-				Config: testAccNxosDefaultQOSPolicyMapConfig_all() + testAccNxosDefaultQOSPolicyInterfaceInConfig_all() + testAccNxosDefaultQOSPolicyInterfaceInPolicyMapConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_default_qos_policy_interface_in_policy_map.test", "interface_id", "eth1/10"),
-					resource.TestCheckResourceAttr("nxos_default_qos_policy_interface_in_policy_map.test", "policy_map_name", "PM1"),
-				),
-			},
-			{
-				Config: testAccNxosDefaultQOSPolicyMapConfig_all() + testAccNxosDefaultQOSPolicyInterfaceInConfig_all() + testAccNxosDefaultQOSPolicyInterfaceInPolicyMapConfig_all(),
+				Config: testAccNxosDefaultQOSPolicyInterfaceInPolicyMapPrerequisitesConfig + testAccNxosDefaultQOSPolicyInterfaceInPolicyMapConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_default_qos_policy_interface_in_policy_map.test", "interface_id", "eth1/10"),
 					resource.TestCheckResourceAttr("nxos_default_qos_policy_interface_in_policy_map.test", "policy_map_name", "PM1"),
@@ -42,11 +29,31 @@ func TestAccNxosDefaultQOSPolicyInterfaceInPolicyMap(t *testing.T) {
 	})
 }
 
+const testAccNxosDefaultQOSPolicyInterfaceInPolicyMapPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/ipqos/dflt/p/name-[PM1]"
+  class_name = "ipqosPMapInst"
+  content = {
+      name = "PM1"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/ipqos/dflt/policy/in/intf-[eth1/10]"
+  class_name = "ipqosIf"
+  content = {
+      name = "eth1/10"
+  }
+}
+
+`
+
 func testAccNxosDefaultQOSPolicyInterfaceInPolicyMapConfig_minimum() string {
 	return `
 	resource "nxos_default_qos_policy_interface_in_policy_map" "test" {
 		interface_id = "eth1/10"
 		policy_map_name = "PM1"
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`
 }
@@ -56,6 +63,7 @@ func testAccNxosDefaultQOSPolicyInterfaceInPolicyMapConfig_all() string {
 	resource "nxos_default_qos_policy_interface_in_policy_map" "test" {
 		interface_id = "eth1/10"
 		policy_map_name = "PM1"
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`
 }

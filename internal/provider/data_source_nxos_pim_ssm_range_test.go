@@ -14,22 +14,7 @@ func TestAccDataSourceNxosPIMSSMRange(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosPIMConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all() + testAccNxosPIMSSMPolicyConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all() + testAccNxosPIMSSMPolicyConfig_all() + testAccNxosPIMSSMRangeConfig_all(),
-			},
-			{
-				Config: testAccDataSourceNxosPIMSSMRangeConfig,
+				Config: testAccDataSourceNxosPIMSSMRangePrerequisitesConfig + testAccDataSourceNxosPIMSSMRangeConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_pim_ssm_range.test", "group_list_1", "232.0.0.0/8"),
 					resource.TestCheckResourceAttr("data.nxos_pim_ssm_range.test", "group_list_2", "233.0.0.0/8"),
@@ -44,8 +29,57 @@ func TestAccDataSourceNxosPIMSSMRange(t *testing.T) {
 	})
 }
 
+const testAccDataSourceNxosPIMSSMRangePrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/pim"
+  class_name = "pimEntity"
+  content = {
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/pim/inst"
+  class_name = "pimInst"
+  content = {
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+resource "nxos_rest" "PreReq2" {
+  dn = "sys/pim/inst/dom-[default]"
+  class_name = "pimDom"
+  content = {
+      name = "default"
+  }
+  depends_on = [nxos_rest.PreReq1, ]
+}
+
+resource "nxos_rest" "PreReq3" {
+  dn = "sys/pim/inst/dom-[default]/ssm"
+  class_name = "pimSSMPatP"
+  content = {
+  }
+  depends_on = [nxos_rest.PreReq2, ]
+}
+
+`
+
 const testAccDataSourceNxosPIMSSMRangeConfig = `
+
+resource "nxos_pim_ssm_range" "test" {
+  vrf_name = "default"
+  group_list_1 = "232.0.0.0/8"
+  group_list_2 = "233.0.0.0/8"
+  group_list_3 = "0.0.0.0"
+  group_list_4 = "0.0.0.0"
+  prefix_list = ""
+  route_map = ""
+  ssm_none = false
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
+}
+
 data "nxos_pim_ssm_range" "test" {
   vrf_name = "default"
+  depends_on = [nxos_pim_ssm_range.test]
 }
 `

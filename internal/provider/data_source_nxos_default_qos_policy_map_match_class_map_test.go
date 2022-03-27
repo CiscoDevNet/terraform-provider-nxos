@@ -14,16 +14,7 @@ func TestAccDataSourceNxosDefaultQOSPolicyMapMatchClassMap(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosDefaultQOSClassMapConfig_all(),
-			},
-			{
-				Config: testAccNxosDefaultQOSClassMapConfig_all() + testAccNxosDefaultQOSPolicyMapConfig_all(),
-			},
-			{
-				Config: testAccNxosDefaultQOSClassMapConfig_all() + testAccNxosDefaultQOSPolicyMapConfig_all() + testAccNxosDefaultQOSPolicyMapMatchClassMapConfig_all(),
-			},
-			{
-				Config: testAccDataSourceNxosDefaultQOSPolicyMapMatchClassMapConfig,
+				Config: testAccDataSourceNxosDefaultQOSPolicyMapMatchClassMapPrerequisitesConfig + testAccDataSourceNxosDefaultQOSPolicyMapMatchClassMapConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_default_qos_policy_map_match_class_map.test", "name", "Voice"),
 				),
@@ -32,9 +23,36 @@ func TestAccDataSourceNxosDefaultQOSPolicyMapMatchClassMap(t *testing.T) {
 	})
 }
 
+const testAccDataSourceNxosDefaultQOSPolicyMapMatchClassMapPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/ipqos/dflt/p/name-[PM1]"
+  class_name = "ipqosPMapInst"
+  content = {
+      name = "PM1"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/ipqos/dflt/c/name-[Voice]"
+  class_name = "ipqosCMapInst"
+  content = {
+      name = "Voice"
+  }
+}
+
+`
+
 const testAccDataSourceNxosDefaultQOSPolicyMapMatchClassMapConfig = `
+
+resource "nxos_default_qos_policy_map_match_class_map" "test" {
+  policy_map_name = "PM1"
+  name = "Voice"
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
+}
+
 data "nxos_default_qos_policy_map_match_class_map" "test" {
   policy_map_name = "PM1"
   name = "Voice"
+  depends_on = [nxos_default_qos_policy_map_match_class_map.test]
 }
 `

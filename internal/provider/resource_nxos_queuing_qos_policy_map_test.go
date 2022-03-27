@@ -14,12 +14,6 @@ func TestAccNxosQueuingQOSPolicyMap(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosQueuingQOSPolicyMapConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_queuing_qos_policy_map.test", "name", "PM1"),
-				),
-			},
-			{
 				Config: testAccNxosQueuingQOSPolicyMapConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_queuing_qos_policy_map.test", "name", "PM1"),

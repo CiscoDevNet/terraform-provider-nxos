@@ -14,13 +14,7 @@ func TestAccDataSourceNxosPIMInstance(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosPIMConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all(),
-			},
-			{
-				Config: testAccDataSourceNxosPIMInstanceConfig,
+				Config: testAccDataSourceNxosPIMInstancePrerequisitesConfig + testAccDataSourceNxosPIMInstanceConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_pim_instance.test", "admin_state", "enabled"),
 				),
@@ -29,7 +23,24 @@ func TestAccDataSourceNxosPIMInstance(t *testing.T) {
 	})
 }
 
+const testAccDataSourceNxosPIMInstancePrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/pim"
+  class_name = "pimEntity"
+  content = {
+  }
+}
+
+`
+
 const testAccDataSourceNxosPIMInstanceConfig = `
+
+resource "nxos_pim_instance" "test" {
+  admin_state = "enabled"
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
 data "nxos_pim_instance" "test" {
+  depends_on = [nxos_pim_instance.test]
 }
 `

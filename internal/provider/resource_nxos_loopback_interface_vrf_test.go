@@ -14,17 +14,7 @@ func TestAccNxosLoopbackInterfaceVRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosLoopbackInterfaceConfig_all(),
-			},
-			{
-				Config: testAccNxosLoopbackInterfaceConfig_all() + testAccNxosLoopbackInterfaceVRFConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_loopback_interface_vrf.test", "interface_id", "lo123"),
-					resource.TestCheckResourceAttr("nxos_loopback_interface_vrf.test", "vrf_dn", "sys/inst-default"),
-				),
-			},
-			{
-				Config: testAccNxosLoopbackInterfaceConfig_all() + testAccNxosLoopbackInterfaceVRFConfig_all(),
+				Config: testAccNxosLoopbackInterfaceVRFPrerequisitesConfig + testAccNxosLoopbackInterfaceVRFConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_loopback_interface_vrf.test", "interface_id", "lo123"),
 					resource.TestCheckResourceAttr("nxos_loopback_interface_vrf.test", "vrf_dn", "sys/inst-default"),
@@ -39,11 +29,23 @@ func TestAccNxosLoopbackInterfaceVRF(t *testing.T) {
 	})
 }
 
+const testAccNxosLoopbackInterfaceVRFPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/intf/lb-[lo123]"
+  class_name = "l3LbRtdIf"
+  content = {
+      id = "lo123"
+  }
+}
+
+`
+
 func testAccNxosLoopbackInterfaceVRFConfig_minimum() string {
 	return `
 	resource "nxos_loopback_interface_vrf" "test" {
 		interface_id = "lo123"
 		vrf_dn = "sys/inst-default"
+  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }
@@ -53,6 +55,7 @@ func testAccNxosLoopbackInterfaceVRFConfig_all() string {
 	resource "nxos_loopback_interface_vrf" "test" {
 		interface_id = "lo123"
 		vrf_dn = "sys/inst-default"
+  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }

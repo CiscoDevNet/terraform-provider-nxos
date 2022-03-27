@@ -14,26 +14,7 @@ func TestAccNxosPIMStaticRP(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosPIMConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all() + testAccNxosPIMStaticRPPolicyConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all() + testAccNxosPIMStaticRPPolicyConfig_all() + testAccNxosPIMStaticRPConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_pim_static_rp.test", "vrf_name", "default"),
-					resource.TestCheckResourceAttr("nxos_pim_static_rp.test", "address", "1.2.3.4"),
-				),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all() + testAccNxosPIMStaticRPPolicyConfig_all() + testAccNxosPIMStaticRPConfig_all(),
+				Config: testAccNxosPIMStaticRPPrerequisitesConfig + testAccNxosPIMStaticRPConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_pim_static_rp.test", "vrf_name", "default"),
 					resource.TestCheckResourceAttr("nxos_pim_static_rp.test", "address", "1.2.3.4"),
@@ -48,11 +29,47 @@ func TestAccNxosPIMStaticRP(t *testing.T) {
 	})
 }
 
+const testAccNxosPIMStaticRPPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/pim"
+  class_name = "pimEntity"
+  content = {
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/pim/inst"
+  class_name = "pimInst"
+  content = {
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+resource "nxos_rest" "PreReq2" {
+  dn = "sys/pim/inst/dom-[default]"
+  class_name = "pimDom"
+  content = {
+      name = "default"
+  }
+  depends_on = [nxos_rest.PreReq1, ]
+}
+
+resource "nxos_rest" "PreReq3" {
+  dn = "sys/pim/inst/dom-[default]/staticrp"
+  class_name = "pimStaticRPP"
+  content = {
+  }
+  depends_on = [nxos_rest.PreReq2, ]
+}
+
+`
+
 func testAccNxosPIMStaticRPConfig_minimum() string {
 	return `
 	resource "nxos_pim_static_rp" "test" {
 		vrf_name = "default"
 		address = "1.2.3.4"
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 	}
 	`
 }
@@ -62,6 +79,7 @@ func testAccNxosPIMStaticRPConfig_all() string {
 	resource "nxos_pim_static_rp" "test" {
 		vrf_name = "default"
 		address = "1.2.3.4"
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 	}
 	`
 }

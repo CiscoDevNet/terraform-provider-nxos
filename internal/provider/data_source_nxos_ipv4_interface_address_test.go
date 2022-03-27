@@ -14,13 +14,7 @@ func TestAccDataSourceNxosIPv4InterfaceAddress(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosIPv4InterfaceConfig_all(),
-			},
-			{
-				Config: testAccNxosIPv4InterfaceConfig_all() + testAccNxosIPv4InterfaceAddressConfig_all(),
-			},
-			{
-				Config: testAccDataSourceNxosIPv4InterfaceAddressConfig,
+				Config: testAccDataSourceNxosIPv4InterfaceAddressPrerequisitesConfig + testAccDataSourceNxosIPv4InterfaceAddressConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_ipv4_interface_address.test", "address", "24.63.46.49/30"),
 				),
@@ -29,10 +23,30 @@ func TestAccDataSourceNxosIPv4InterfaceAddress(t *testing.T) {
 	})
 }
 
+const testAccDataSourceNxosIPv4InterfaceAddressPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/ipv4/inst/dom-[default]/if-[eth1/59]"
+  class_name = "ipv4If"
+  content = {
+      id = "eth1/59"
+  }
+}
+
+`
+
 const testAccDataSourceNxosIPv4InterfaceAddressConfig = `
+
+resource "nxos_ipv4_interface_address" "test" {
+  vrf = "default"
+  interface_id = "eth1/59"
+  address = "24.63.46.49/30"
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
 data "nxos_ipv4_interface_address" "test" {
   vrf = "default"
   interface_id = "eth1/59"
   address = "24.63.46.49/30"
+  depends_on = [nxos_ipv4_interface_address.test]
 }
 `

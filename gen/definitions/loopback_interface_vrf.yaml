@@ -6,8 +6,6 @@ ds_description: |-
   This data source can read a loopback interface VRF association.
 res_description: |-
   This resource can manage a loopback interface VRF association.\n\n- API Documentation: [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
-parents:
-  - Loopback Interface
 attributes:
   - nxos_name: id
     tf_name: interface_id
@@ -22,3 +20,9 @@ attributes:
     mandatory: true
     description: 'DN of VRF. For example: `sys/inst-VRF1`.'
     example: sys/inst-default
+test_prerequisites:
+  - dn: sys/intf/lb-[lo123]
+    class_name: l3LbRtdIf
+    attributes:
+      - name: id
+        value: lo123

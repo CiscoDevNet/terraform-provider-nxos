@@ -14,12 +14,6 @@ func TestAccNxosDefaultQOSClassMap(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosDefaultQOSClassMapConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_default_qos_class_map.test", "name", "Voice"),
-				),
-			},
-			{
 				Config: testAccNxosDefaultQOSClassMapConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_default_qos_class_map.test", "name", "Voice"),

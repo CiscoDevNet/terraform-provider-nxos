@@ -14,9 +14,6 @@ func TestAccDataSourceNxosFeatureInterfaceVLAN(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosFeatureInterfaceVLANConfig_all(),
-			},
-			{
 				Config: testAccDataSourceNxosFeatureInterfaceVLANConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_feature_interface_vlan.test", "admin_state", "enabled"),
@@ -27,6 +24,12 @@ func TestAccDataSourceNxosFeatureInterfaceVLAN(t *testing.T) {
 }
 
 const testAccDataSourceNxosFeatureInterfaceVLANConfig = `
+
+resource "nxos_feature_interface_vlan" "test" {
+  admin_state = "enabled"
+}
+
 data "nxos_feature_interface_vlan" "test" {
+  depends_on = [nxos_feature_interface_vlan.test]
 }
 `

@@ -14,21 +14,7 @@ func TestAccNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidth(t *testing.T)
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosQueuingQOSPolicyMapConfig_all(),
-			},
-			{
-				Config: testAccNxosQueuingQOSPolicyMapConfig_all() + testAccNxosQueuingQOSPolicyMapMatchClassMapConfig_all(),
-			},
-			{
-				Config: testAccNxosQueuingQOSPolicyMapConfig_all() + testAccNxosQueuingQOSPolicyMapMatchClassMapConfig_all() + testAccNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidthConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth.test", "policy_map_name", "PM1"),
-					resource.TestCheckResourceAttr("nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth.test", "class_map_name", "c-out-q1"),
-					resource.TestCheckResourceAttr("nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth.test", "value", "10"),
-				),
-			},
-			{
-				Config: testAccNxosQueuingQOSPolicyMapConfig_all() + testAccNxosQueuingQOSPolicyMapMatchClassMapConfig_all() + testAccNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidthConfig_all(),
+				Config: testAccNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidthPrerequisitesConfig + testAccNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidthConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth.test", "policy_map_name", "PM1"),
 					resource.TestCheckResourceAttr("nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth.test", "class_map_name", "c-out-q1"),
@@ -44,12 +30,33 @@ func TestAccNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidth(t *testing.T)
 	})
 }
 
+const testAccNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidthPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/ipqos/queuing/p/name-[PM1]"
+  class_name = "ipqosPMapInst"
+  content = {
+      name = "PM1"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q1]"
+  class_name = "ipqosMatchCMap"
+  content = {
+      name = "c-out-q1"
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+`
+
 func testAccNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidthConfig_minimum() string {
 	return `
 	resource "nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth" "test" {
 		policy_map_name = "PM1"
 		class_map_name = "c-out-q1"
 		value = 10
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`
 }
@@ -60,6 +67,7 @@ func testAccNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidthConfig_all() s
 		policy_map_name = "PM1"
 		class_map_name = "c-out-q1"
 		value = 10
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`
 }

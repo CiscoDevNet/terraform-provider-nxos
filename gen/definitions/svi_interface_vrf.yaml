@@ -6,8 +6,6 @@ ds_description: |-
   This data source can read an SVI interface VRF association.
 res_description: |-
   This resource can manage an SVI interface VRF association.\n\n- API Documentation: [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
-parents:
-  - SVI Interface
 attributes:
   - nxos_name: id
     tf_name: interface_id
@@ -22,3 +20,9 @@ attributes:
     mandatory: true
     description: 'DN of VRF. For example: `sys/inst-VRF1`.'
     example: sys/inst-VRF123
+test_prerequisites:
+  - dn: sys/intf/svi-[vlan293]
+    class_name: sviIf
+    attributes:
+      - name: id
+        value: vlan293

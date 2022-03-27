@@ -14,19 +14,7 @@ func TestAccDataSourceNxosPIMSSMPolicy(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosPIMConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all() + testAccNxosPIMSSMPolicyConfig_all(),
-			},
-			{
-				Config: testAccDataSourceNxosPIMSSMPolicyConfig,
+				Config: testAccDataSourceNxosPIMSSMPolicyPrerequisitesConfig + testAccDataSourceNxosPIMSSMPolicyConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_pim_ssm_policy.test", "name", "SSM"),
 				),
@@ -35,8 +23,43 @@ func TestAccDataSourceNxosPIMSSMPolicy(t *testing.T) {
 	})
 }
 
+const testAccDataSourceNxosPIMSSMPolicyPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/pim"
+  class_name = "pimEntity"
+  content = {
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/pim/inst"
+  class_name = "pimInst"
+  content = {
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+resource "nxos_rest" "PreReq2" {
+  dn = "sys/pim/inst/dom-[default]"
+  class_name = "pimDom"
+  content = {
+      name = "default"
+  }
+  depends_on = [nxos_rest.PreReq1, ]
+}
+
+`
+
 const testAccDataSourceNxosPIMSSMPolicyConfig = `
+
+resource "nxos_pim_ssm_policy" "test" {
+  vrf_name = "default"
+  name = "SSM"
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
+}
+
 data "nxos_pim_ssm_policy" "test" {
   vrf_name = "default"
+  depends_on = [nxos_pim_ssm_policy.test]
 }
 `

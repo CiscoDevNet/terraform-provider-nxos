@@ -6,9 +6,6 @@ ds_description: |-
   This data source can read the default QoS policy map match class map configuration.
 res_description: |-
   This resource can manage the default QoS policy map match class map configuration.\n\n- API Documentation: [ipqosMatchCMap](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:MatchCMap/)
-parents:
-  - Default QOS Class Map
-  - Default QOS Policy Map
 attributes:
   - nxos_name: policy_map_name
     tf_name: policy_map_name
@@ -23,3 +20,14 @@ attributes:
     id: true
     description: 'Class map name.'
     example: Voice
+test_prerequisites:
+  - dn: sys/ipqos/dflt/p/name-[PM1]
+    class_name: ipqosPMapInst
+    attributes:
+      - name: name
+        value: PM1
+  - dn: sys/ipqos/dflt/c/name-[Voice]
+    class_name: ipqosCMapInst
+    attributes:
+      - name: name
+        value: Voice

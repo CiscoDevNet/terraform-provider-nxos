@@ -14,16 +14,7 @@ func TestAccDataSourceNxosPIMVRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosPIMConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all(),
-			},
-			{
-				Config: testAccDataSourceNxosPIMVRFConfig,
+				Config: testAccDataSourceNxosPIMVRFPrerequisitesConfig + testAccDataSourceNxosPIMVRFConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_pim_vrf.test", "name", "default"),
 					resource.TestCheckResourceAttr("data.nxos_pim_vrf.test", "admin_state", "enabled"),
@@ -34,8 +25,35 @@ func TestAccDataSourceNxosPIMVRF(t *testing.T) {
 	})
 }
 
+const testAccDataSourceNxosPIMVRFPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/pim"
+  class_name = "pimEntity"
+  content = {
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/pim/inst"
+  class_name = "pimInst"
+  content = {
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+`
+
 const testAccDataSourceNxosPIMVRFConfig = `
+
+resource "nxos_pim_vrf" "test" {
+  name = "default"
+  admin_state = "enabled"
+  bfd = true
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
+}
+
 data "nxos_pim_vrf" "test" {
   name = "default"
+  depends_on = [nxos_pim_vrf.test]
 }
 `

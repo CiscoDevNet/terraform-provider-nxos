@@ -14,12 +14,6 @@ func TestAccNxosLoopbackInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosLoopbackInterfaceConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_loopback_interface.test", "interface_id", "lo123"),
-				),
-			},
-			{
 				Config: testAccNxosLoopbackInterfaceConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_loopback_interface.test", "interface_id", "lo123"),

@@ -14,16 +14,7 @@ func TestAccDataSourceNxosDHCPRelayAddress(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosFeatureDHCPConfig_all(),
-			},
-			{
-				Config: testAccNxosFeatureDHCPConfig_all() + testAccNxosDHCPRelayInterfaceConfig_all(),
-			},
-			{
-				Config: testAccNxosFeatureDHCPConfig_all() + testAccNxosDHCPRelayInterfaceConfig_all() + testAccNxosDHCPRelayAddressConfig_all(),
-			},
-			{
-				Config: testAccDataSourceNxosDHCPRelayAddressConfig,
+				Config: testAccDataSourceNxosDHCPRelayAddressPrerequisitesConfig + testAccDataSourceNxosDHCPRelayAddressConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_dhcp_relay_address.test", "vrf", "VRF1"),
 					resource.TestCheckResourceAttr("data.nxos_dhcp_relay_address.test", "address", "1.1.1.1"),
@@ -33,10 +24,39 @@ func TestAccDataSourceNxosDHCPRelayAddress(t *testing.T) {
 	})
 }
 
+const testAccDataSourceNxosDHCPRelayAddressPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/dhcp"
+  class_name = "fmDhcp"
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/dhcp/inst/relayif-[eth1/10]"
+  class_name = "dhcpRelayIf"
+  content = {
+      id = "eth1/10"
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+`
+
 const testAccDataSourceNxosDHCPRelayAddressConfig = `
+
+resource "nxos_dhcp_relay_address" "test" {
+  interface_id = "eth1/10"
+  vrf = "VRF1"
+  address = "1.1.1.1"
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
+}
+
 data "nxos_dhcp_relay_address" "test" {
   interface_id = "eth1/10"
   vrf = "VRF1"
   address = "1.1.1.1"
+  depends_on = [nxos_dhcp_relay_address.test]
 }
 `

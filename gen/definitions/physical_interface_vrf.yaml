@@ -6,8 +6,6 @@ ds_description: |-
   This data source can read a physical interface VRF association.
 res_description: |-
   This resource can manage a physical interface VRF association.\n\n- API Documentation: [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
-parents:
-  - Physical Interface
 attributes:
   - nxos_name: id
     tf_name: interface_id
@@ -22,3 +20,9 @@ attributes:
     mandatory: true
     description: 'DN of VRF. For example: `sys/inst-VRF1`.'
     example: sys/inst-default
+test_prerequisites:
+  - dn: sys/intf/phys-[eth1/10]
+    class_name: l1PhysIf
+    attributes:
+      - name: id
+        value: eth1/10

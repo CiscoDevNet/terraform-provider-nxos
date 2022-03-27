@@ -14,16 +14,7 @@ func TestAccNxosDHCPRelayInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosFeatureDHCPConfig_all(),
-			},
-			{
-				Config: testAccNxosFeatureDHCPConfig_all() + testAccNxosDHCPRelayInterfaceConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_dhcp_relay_interface.test", "interface_id", "eth1/10"),
-				),
-			},
-			{
-				Config: testAccNxosFeatureDHCPConfig_all() + testAccNxosDHCPRelayInterfaceConfig_all(),
+				Config: testAccNxosDHCPRelayInterfacePrerequisitesConfig + testAccNxosDHCPRelayInterfaceConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_dhcp_relay_interface.test", "interface_id", "eth1/10"),
 				),
@@ -37,10 +28,22 @@ func TestAccNxosDHCPRelayInterface(t *testing.T) {
 	})
 }
 
+const testAccNxosDHCPRelayInterfacePrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/dhcp"
+  class_name = "fmDhcp"
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+`
+
 func testAccNxosDHCPRelayInterfaceConfig_minimum() string {
 	return `
 	resource "nxos_dhcp_relay_interface" "test" {
 		interface_id = "eth1/10"
+  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }
@@ -49,6 +52,7 @@ func testAccNxosDHCPRelayInterfaceConfig_all() string {
 	return `
 	resource "nxos_dhcp_relay_interface" "test" {
 		interface_id = "eth1/10"
+  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }

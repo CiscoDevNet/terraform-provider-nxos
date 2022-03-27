@@ -6,9 +6,6 @@ ds_description: |-
   This data source can read a DHCP relay address.
 res_description: |-
   This resource can manage a DHCP relay address.\n\n- API Documentation: [dhcpRelayAddr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/DHCP/dhcp:RelayAddr/)
-parents:
-  - Feature DHCP
-  - DHCP Relay Interface
 attributes:
   - nxos_name: id
     tf_name: interface_id
@@ -29,3 +26,15 @@ attributes:
     id: true
     description: 'IPv4 or IPv6 address.'
     example: 1.1.1.1
+test_prerequisites:
+  - dn: sys/fm/dhcp
+    class_name: fmDhcp
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/dhcp/inst/relayif-[eth1/10]
+    class_name: dhcpRelayIf
+    attributes:
+      - name: id
+        value: eth1/10
+    dependencies: [0]

@@ -14,19 +14,7 @@ func TestAccDataSourceNxosPIMInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosPIMConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all() + testAccNxosPIMInterfaceConfig_all(),
-			},
-			{
-				Config: testAccDataSourceNxosPIMInterfaceConfig,
+				Config: testAccDataSourceNxosPIMInterfacePrerequisitesConfig + testAccDataSourceNxosPIMInterfaceConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_pim_interface.test", "interface_id", "eth1/10"),
 					resource.TestCheckResourceAttr("data.nxos_pim_interface.test", "admin_state", "enabled"),
@@ -40,9 +28,49 @@ func TestAccDataSourceNxosPIMInterface(t *testing.T) {
 	})
 }
 
+const testAccDataSourceNxosPIMInterfacePrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/pim"
+  class_name = "pimEntity"
+  content = {
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/pim/inst"
+  class_name = "pimInst"
+  content = {
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+resource "nxos_rest" "PreReq2" {
+  dn = "sys/pim/inst/dom-[default]"
+  class_name = "pimDom"
+  content = {
+      name = "default"
+  }
+  depends_on = [nxos_rest.PreReq1, ]
+}
+
+`
+
 const testAccDataSourceNxosPIMInterfaceConfig = `
+
+resource "nxos_pim_interface" "test" {
+  vrf_name = "default"
+  interface_id = "eth1/10"
+  admin_state = "enabled"
+  bfd = "enabled"
+  dr_priority = 10
+  passive = false
+  sparse_mode = true
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
+}
+
 data "nxos_pim_interface" "test" {
   vrf_name = "default"
   interface_id = "eth1/10"
+  depends_on = [nxos_pim_interface.test]
 }
 `

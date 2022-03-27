@@ -6,10 +6,6 @@ ds_description: |-
   This data source can read the PIM Static RP policy configuration.
 res_description: |-
   This resource can manage the PIM Static RP policy configuration.\n\n- API Documentation: [pimStaticRPP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:StaticRPP/)
-parents:
-  - PIM
-  - PIM Instance
-  - PIM VRF
 attributes:
   - nxos_name: vrf_name
     tf_name: vrf_name
@@ -23,3 +19,15 @@ attributes:
     type: String
     description: 'Policy name.'
     example: RP
+test_prerequisites:
+  - dn: sys/pim
+    class_name: pimEntity
+  - dn: sys/pim/inst
+    class_name: pimInst
+    dependencies: [0]
+  - dn: sys/pim/inst/dom-[default]
+    class_name: pimDom
+    attributes:
+      - name: name
+        value: default
+    dependencies: [1]

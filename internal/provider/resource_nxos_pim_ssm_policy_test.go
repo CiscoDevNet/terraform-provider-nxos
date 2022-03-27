@@ -14,22 +14,7 @@ func TestAccNxosPIMSSMPolicy(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosPIMConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all() + testAccNxosPIMSSMPolicyConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_pim_ssm_policy.test", "vrf_name", "default"),
-				),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all() + testAccNxosPIMSSMPolicyConfig_all(),
+				Config: testAccNxosPIMSSMPolicyPrerequisitesConfig + testAccNxosPIMSSMPolicyConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_pim_ssm_policy.test", "vrf_name", "default"),
 					resource.TestCheckResourceAttr("nxos_pim_ssm_policy.test", "name", "SSM"),
@@ -44,10 +29,38 @@ func TestAccNxosPIMSSMPolicy(t *testing.T) {
 	})
 }
 
+const testAccNxosPIMSSMPolicyPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/pim"
+  class_name = "pimEntity"
+  content = {
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/pim/inst"
+  class_name = "pimInst"
+  content = {
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+resource "nxos_rest" "PreReq2" {
+  dn = "sys/pim/inst/dom-[default]"
+  class_name = "pimDom"
+  content = {
+      name = "default"
+  }
+  depends_on = [nxos_rest.PreReq1, ]
+}
+
+`
+
 func testAccNxosPIMSSMPolicyConfig_minimum() string {
 	return `
 	resource "nxos_pim_ssm_policy" "test" {
 		vrf_name = "default"
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 	}
 	`
 }
@@ -57,6 +70,7 @@ func testAccNxosPIMSSMPolicyConfig_all() string {
 	resource "nxos_pim_ssm_policy" "test" {
 		vrf_name = "default"
 		name = "SSM"
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 	}
 	`
 }

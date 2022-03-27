@@ -14,9 +14,6 @@ func TestAccDataSourceNxosDefaultQOSPolicyMap(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosDefaultQOSPolicyMapConfig_all(),
-			},
-			{
 				Config: testAccDataSourceNxosDefaultQOSPolicyMapConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_default_qos_policy_map.test", "name", "PM1"),
@@ -28,7 +25,14 @@ func TestAccDataSourceNxosDefaultQOSPolicyMap(t *testing.T) {
 }
 
 const testAccDataSourceNxosDefaultQOSPolicyMapConfig = `
+
+resource "nxos_default_qos_policy_map" "test" {
+  name = "PM1"
+  match_type = "match-any"
+}
+
 data "nxos_default_qos_policy_map" "test" {
   name = "PM1"
+  depends_on = [nxos_default_qos_policy_map.test]
 }
 `

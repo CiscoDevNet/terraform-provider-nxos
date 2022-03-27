@@ -14,9 +14,6 @@ func TestAccDataSourceNxosPIM(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosPIMConfig_all(),
-			},
-			{
 				Config: testAccDataSourceNxosPIMConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_pim.test", "admin_state", "enabled"),
@@ -27,6 +24,12 @@ func TestAccDataSourceNxosPIM(t *testing.T) {
 }
 
 const testAccDataSourceNxosPIMConfig = `
+
+resource "nxos_pim" "test" {
+  admin_state = "enabled"
+}
+
 data "nxos_pim" "test" {
+  depends_on = [nxos_pim.test]
 }
 `

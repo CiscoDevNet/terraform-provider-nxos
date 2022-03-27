@@ -6,8 +6,6 @@ ds_description: |-
   This data source can read an IPv4 interface address.
 res_description: |-
   This resource can manage an IPv4 interface address.\n\n- API Documentation: [ipv4Addr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:Addr/)
-parents:
-  - IPv4 Interface
 attributes:
   - nxos_name: dom
     tf_name: vrf
@@ -29,3 +27,9 @@ attributes:
     id: true
     description: 'IPv4 address.'
     example: '24.63.46.49/30'
+test_prerequisites:
+  - dn: sys/ipv4/inst/dom-[default]/if-[eth1/59]
+    class_name: ipv4If
+    attributes:
+      - name: id
+        value: eth1/59

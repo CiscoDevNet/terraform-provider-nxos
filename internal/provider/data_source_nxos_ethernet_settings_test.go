@@ -14,9 +14,6 @@ func TestAccDataSourceNxosEthernetSettings(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosEthernetSettingsConfig_all(),
-			},
-			{
 				Config: testAccDataSourceNxosEthernetSettingsConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_ethernet_settings.test", "mtu", "9216"),
@@ -27,6 +24,12 @@ func TestAccDataSourceNxosEthernetSettings(t *testing.T) {
 }
 
 const testAccDataSourceNxosEthernetSettingsConfig = `
+
+resource "nxos_ethernet_settings" "test" {
+  mtu = 9216
+}
+
 data "nxos_ethernet_settings" "test" {
+  depends_on = [nxos_ethernet_settings.test]
 }
 `

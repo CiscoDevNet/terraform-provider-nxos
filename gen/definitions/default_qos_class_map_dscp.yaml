@@ -6,8 +6,6 @@ ds_description: |-
   This data source can read the default QoS class map DSCP configuration.
 res_description: |-
   This resource can manage the default QoS class map DSCP configuration.\n\n- API Documentation: [ipqosDscp](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Dscp/)
-parents:
-  - Default QOS Class Map
 attributes:
   - nxos_name: class_map_name
     tf_name: class_map_name
@@ -23,3 +21,9 @@ attributes:
     description: 'DSCP value.'
     default_value: '0'
     example: ef
+test_prerequisites:
+  - dn: sys/ipqos/dflt/c/name-[Voice]
+    class_name: ipqosCMapInst
+    attributes:
+      - name: name
+        value: Voice

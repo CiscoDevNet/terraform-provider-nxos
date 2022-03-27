@@ -14,13 +14,6 @@ func TestAccNxosIPv4Interface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosIPv4InterfaceConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "vrf", "default"),
-					resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "interface_id", "eth1/59"),
-				),
-			},
-			{
 				Config: testAccNxosIPv4InterfaceConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "vrf", "default"),

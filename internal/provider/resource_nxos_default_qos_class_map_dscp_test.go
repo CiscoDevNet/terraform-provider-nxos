@@ -14,17 +14,7 @@ func TestAccNxosDefaultQOSClassMapDSCP(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosDefaultQOSClassMapConfig_all(),
-			},
-			{
-				Config: testAccNxosDefaultQOSClassMapConfig_all() + testAccNxosDefaultQOSClassMapDSCPConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_default_qos_class_map_dscp.test", "class_map_name", "Voice"),
-					resource.TestCheckResourceAttr("nxos_default_qos_class_map_dscp.test", "value", "ef"),
-				),
-			},
-			{
-				Config: testAccNxosDefaultQOSClassMapConfig_all() + testAccNxosDefaultQOSClassMapDSCPConfig_all(),
+				Config: testAccNxosDefaultQOSClassMapDSCPPrerequisitesConfig + testAccNxosDefaultQOSClassMapDSCPConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_default_qos_class_map_dscp.test", "class_map_name", "Voice"),
 					resource.TestCheckResourceAttr("nxos_default_qos_class_map_dscp.test", "value", "ef"),
@@ -39,11 +29,23 @@ func TestAccNxosDefaultQOSClassMapDSCP(t *testing.T) {
 	})
 }
 
+const testAccNxosDefaultQOSClassMapDSCPPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/ipqos/dflt/c/name-[Voice]"
+  class_name = "ipqosCMapInst"
+  content = {
+      name = "Voice"
+  }
+}
+
+`
+
 func testAccNxosDefaultQOSClassMapDSCPConfig_minimum() string {
 	return `
 	resource "nxos_default_qos_class_map_dscp" "test" {
 		class_map_name = "Voice"
 		value = "ef"
+  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }
@@ -53,6 +55,7 @@ func testAccNxosDefaultQOSClassMapDSCPConfig_all() string {
 	resource "nxos_default_qos_class_map_dscp" "test" {
 		class_map_name = "Voice"
 		value = "ef"
+  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }

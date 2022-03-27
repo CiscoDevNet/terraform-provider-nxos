@@ -14,13 +14,7 @@ func TestAccDataSourceNxosSVIInterfaceVRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosSVIInterfaceConfig_all(),
-			},
-			{
-				Config: testAccNxosSVIInterfaceConfig_all() + testAccNxosSVIInterfaceVRFConfig_all(),
-			},
-			{
-				Config: testAccDataSourceNxosSVIInterfaceVRFConfig,
+				Config: testAccDataSourceNxosSVIInterfaceVRFPrerequisitesConfig + testAccDataSourceNxosSVIInterfaceVRFConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_svi_interface_vrf.test", "vrf_dn", "sys/inst-VRF123"),
 				),
@@ -29,8 +23,27 @@ func TestAccDataSourceNxosSVIInterfaceVRF(t *testing.T) {
 	})
 }
 
+const testAccDataSourceNxosSVIInterfaceVRFPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/intf/svi-[vlan293]"
+  class_name = "sviIf"
+  content = {
+      id = "vlan293"
+  }
+}
+
+`
+
 const testAccDataSourceNxosSVIInterfaceVRFConfig = `
+
+resource "nxos_svi_interface_vrf" "test" {
+  interface_id = "vlan293"
+  vrf_dn = "sys/inst-VRF123"
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
 data "nxos_svi_interface_vrf" "test" {
   interface_id = "vlan293"
+  depends_on = [nxos_svi_interface_vrf.test]
 }
 `

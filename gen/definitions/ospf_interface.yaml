@@ -6,10 +6,6 @@ ds_description: |-
   This data source can read the OSPF interface configuration.
 res_description: |-
   This resource can manage the OSPF interface configuration.\n\n- API Documentation: [ospfIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:If/)
-parents:
-  - OSPF
-  - OSPF Instance
-  - OSPF VRF
 attributes:
   - nxos_name: inst
     tf_name: instance_name
@@ -105,3 +101,18 @@ attributes:
     default_value: 1
     description: 'Priority, used in determining the designated router on this network.'
     example: 10
+test_prerequisites:
+  - dn: sys/ospf
+    class_name: ospfEntity
+  - dn: sys/ospf/inst-[OSPF1]
+    class_name: ospfInst
+    attributes:
+      - name: name
+        value: OSPF1
+    dependencies: [0]
+  - dn: sys/ospf/inst-[OSPF1]/dom-[default]
+    class_name: ospfDom
+    attributes:
+      - name: name
+        value: default
+    dependencies: [1]

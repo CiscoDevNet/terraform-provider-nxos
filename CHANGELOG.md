@@ -44,6 +44,7 @@
 - Add nxos_queuing_qos_policy_map_match_class_map_priority resource and data source
 - Add nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth resource and data source
 - Add nxos_queuing_qos_policy_system_out resource and data source
+- Add nxos_queuing_qos_policy_system_out_policy_map resource and data source
 
 ## 0.2.3
 

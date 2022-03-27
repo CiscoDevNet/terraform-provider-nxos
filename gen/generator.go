@@ -74,13 +74,13 @@ var templates = []t{
 }
 
 type YamlConfig struct {
-	Name           string                `yaml:"name"`
-	ClassName      string                `yaml:"class_name"`
-	Dn             string                `yaml:"dn"`
-	DsDescription  string                `yaml:"ds_description"`
-	ResDescription string                `yaml:"res_description"`
-	Parents        []string              `yaml:"parents"`
-	Attributes     []YamlConfigAttribute `yaml:"attributes"`
+	Name              string                `yaml:"name"`
+	ClassName         string                `yaml:"class_name"`
+	Dn                string                `yaml:"dn"`
+	DsDescription     string                `yaml:"ds_description"`
+	ResDescription    string                `yaml:"res_description"`
+	Attributes        []YamlConfigAttribute `yaml:"attributes"`
+	TestPrerequisites []YamlTest            `yaml:"test_prerequisites"`
 }
 
 type YamlConfigAttribute struct {
@@ -97,6 +97,19 @@ type YamlConfigAttribute struct {
 	MinInt        int      `yaml:"min_int"`
 	MaxInt        int      `yaml:"max_int"`
 	DefaultValue  string   `yaml:"default_value"`
+}
+
+type YamlTest struct {
+	Dn           string              `yaml:"dn"`
+	ClassName    string              `yaml:"class_name"`
+	Attributes   []YamlTestAttribute `yaml:"attributes"`
+	Dependencies []string            `yaml:"dependencies"`
+}
+
+type YamlTestAttribute struct {
+	Name      string `yaml:"name"`
+	Value     string `yaml:"value"`
+	Reference string `yaml:"reference"`
 }
 
 // Templating helper function to convert first character in string to uppercase

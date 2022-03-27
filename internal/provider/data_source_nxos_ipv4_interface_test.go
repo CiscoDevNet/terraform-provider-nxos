@@ -14,9 +14,6 @@ func TestAccDataSourceNxosIPv4Interface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosIPv4InterfaceConfig_all(),
-			},
-			{
 				Config: testAccDataSourceNxosIPv4InterfaceConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_ipv4_interface.test", "interface_id", "eth1/59"),
@@ -29,8 +26,17 @@ func TestAccDataSourceNxosIPv4Interface(t *testing.T) {
 }
 
 const testAccDataSourceNxosIPv4InterfaceConfig = `
+
+resource "nxos_ipv4_interface" "test" {
+  vrf = "default"
+  interface_id = "eth1/59"
+  unnumbered = "unspecified"
+  urpf = "disabled"
+}
+
 data "nxos_ipv4_interface" "test" {
   vrf = "default"
   interface_id = "eth1/59"
+  depends_on = [nxos_ipv4_interface.test]
 }
 `

@@ -14,9 +14,6 @@ func TestAccDataSourceNxosDefaultQOSClassMap(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosDefaultQOSClassMapConfig_all(),
-			},
-			{
 				Config: testAccDataSourceNxosDefaultQOSClassMapConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_default_qos_class_map.test", "name", "Voice"),
@@ -28,7 +25,14 @@ func TestAccDataSourceNxosDefaultQOSClassMap(t *testing.T) {
 }
 
 const testAccDataSourceNxosDefaultQOSClassMapConfig = `
+
+resource "nxos_default_qos_class_map" "test" {
+  name = "Voice"
+  match_type = "match-any"
+}
+
 data "nxos_default_qos_class_map" "test" {
   name = "Voice"
+  depends_on = [nxos_default_qos_class_map.test]
 }
 `

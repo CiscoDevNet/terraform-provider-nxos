@@ -14,9 +14,6 @@ func TestAccDataSourceNxosBridgeDomain(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosBridgeDomainConfig_all(),
-			},
-			{
 				Config: testAccDataSourceNxosBridgeDomainConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_bridge_domain.test", "fabric_encap", "vlan-10"),
@@ -29,7 +26,15 @@ func TestAccDataSourceNxosBridgeDomain(t *testing.T) {
 }
 
 const testAccDataSourceNxosBridgeDomainConfig = `
+
+resource "nxos_bridge_domain" "test" {
+  fabric_encap = "vlan-10"
+  access_encap = "unknown"
+  name = "VLAN10"
+}
+
 data "nxos_bridge_domain" "test" {
   fabric_encap = "vlan-10"
+  depends_on = [nxos_bridge_domain.test]
 }
 `

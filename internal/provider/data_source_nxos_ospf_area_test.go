@@ -14,19 +14,7 @@ func TestAccDataSourceNxosOSPFArea(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosOSPFConfig_all(),
-			},
-			{
-				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all(),
-			},
-			{
-				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all() + testAccNxosOSPFVRFConfig_all(),
-			},
-			{
-				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all() + testAccNxosOSPFVRFConfig_all() + testAccNxosOSPFAreaConfig_all(),
-			},
-			{
-				Config: testAccDataSourceNxosOSPFAreaConfig,
+				Config: testAccDataSourceNxosOSPFAreaPrerequisitesConfig + testAccDataSourceNxosOSPFAreaConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_ospf_area.test", "area_id", "0.0.0.10"),
 					resource.TestCheckResourceAttr("data.nxos_ospf_area.test", "authentication_type", "none"),
@@ -38,10 +26,50 @@ func TestAccDataSourceNxosOSPFArea(t *testing.T) {
 	})
 }
 
+const testAccDataSourceNxosOSPFAreaPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/ospf"
+  class_name = "ospfEntity"
+  content = {
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/ospf/inst-[OSPF1]"
+  class_name = "ospfInst"
+  content = {
+      name = "OSPF1"
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+resource "nxos_rest" "PreReq2" {
+  dn = "sys/ospf/inst-[OSPF1]/dom-[default]"
+  class_name = "ospfDom"
+  content = {
+      name = "default"
+  }
+  depends_on = [nxos_rest.PreReq1, ]
+}
+
+`
+
 const testAccDataSourceNxosOSPFAreaConfig = `
+
+resource "nxos_ospf_area" "test" {
+  instance_name = "OSPF1"
+  vrf_name = "default"
+  area_id = "0.0.0.10"
+  authentication_type = "none"
+  cost = 10
+  type = "stub"
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
+}
+
 data "nxos_ospf_area" "test" {
   instance_name = "OSPF1"
   vrf_name = "default"
   area_id = "0.0.0.10"
+  depends_on = [nxos_ospf_area.test]
 }
 `

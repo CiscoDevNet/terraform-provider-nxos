@@ -14,17 +14,7 @@ func TestAccNxosPhysicalInterfaceVRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosPhysicalInterfaceConfig_all(),
-			},
-			{
-				Config: testAccNxosPhysicalInterfaceConfig_all() + testAccNxosPhysicalInterfaceVRFConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_physical_interface_vrf.test", "interface_id", "eth1/10"),
-					resource.TestCheckResourceAttr("nxos_physical_interface_vrf.test", "vrf_dn", "sys/inst-default"),
-				),
-			},
-			{
-				Config: testAccNxosPhysicalInterfaceConfig_all() + testAccNxosPhysicalInterfaceVRFConfig_all(),
+				Config: testAccNxosPhysicalInterfaceVRFPrerequisitesConfig + testAccNxosPhysicalInterfaceVRFConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_physical_interface_vrf.test", "interface_id", "eth1/10"),
 					resource.TestCheckResourceAttr("nxos_physical_interface_vrf.test", "vrf_dn", "sys/inst-default"),
@@ -39,11 +29,23 @@ func TestAccNxosPhysicalInterfaceVRF(t *testing.T) {
 	})
 }
 
+const testAccNxosPhysicalInterfaceVRFPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/intf/phys-[eth1/10]"
+  class_name = "l1PhysIf"
+  content = {
+      id = "eth1/10"
+  }
+}
+
+`
+
 func testAccNxosPhysicalInterfaceVRFConfig_minimum() string {
 	return `
 	resource "nxos_physical_interface_vrf" "test" {
 		interface_id = "eth1/10"
 		vrf_dn = "sys/inst-default"
+  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }
@@ -53,6 +55,7 @@ func testAccNxosPhysicalInterfaceVRFConfig_all() string {
 	resource "nxos_physical_interface_vrf" "test" {
 		interface_id = "eth1/10"
 		vrf_dn = "sys/inst-default"
+  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }

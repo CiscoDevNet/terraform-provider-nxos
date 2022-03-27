@@ -14,22 +14,7 @@ func TestAccDataSourceNxosOSPFAuthentication(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosOSPFConfig_all(),
-			},
-			{
-				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all(),
-			},
-			{
-				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all() + testAccNxosOSPFVRFConfig_all(),
-			},
-			{
-				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all() + testAccNxosOSPFVRFConfig_all() + testAccNxosOSPFInterfaceConfig_all(),
-			},
-			{
-				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all() + testAccNxosOSPFVRFConfig_all() + testAccNxosOSPFInterfaceConfig_all() + testAccNxosOSPFAuthenticationConfig_all(),
-			},
-			{
-				Config: testAccDataSourceNxosOSPFAuthenticationConfig,
+				Config: testAccDataSourceNxosOSPFAuthenticationPrerequisitesConfig + testAccDataSourceNxosOSPFAuthenticationConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_ospf_authentication.test", "key_id", "1"),
 					resource.TestCheckResourceAttr("data.nxos_ospf_authentication.test", "key_secure_mode", "false"),
@@ -42,10 +27,63 @@ func TestAccDataSourceNxosOSPFAuthentication(t *testing.T) {
 	})
 }
 
+const testAccDataSourceNxosOSPFAuthenticationPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/ospf"
+  class_name = "ospfEntity"
+  content = {
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/ospf/inst-[OSPF1]"
+  class_name = "ospfInst"
+  content = {
+      name = "OSPF1"
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+resource "nxos_rest" "PreReq2" {
+  dn = "sys/ospf/inst-[OSPF1]/dom-[default]"
+  class_name = "ospfDom"
+  content = {
+      name = "default"
+  }
+  depends_on = [nxos_rest.PreReq1, ]
+}
+
+resource "nxos_rest" "PreReq3" {
+  dn = "sys/ospf/inst-[OSPF1]/dom-[default]/if-[eth1/10]"
+  class_name = "ospfIf"
+  content = {
+      id = "eth1/10"
+  }
+  depends_on = [nxos_rest.PreReq2, ]
+}
+
+`
+
 const testAccDataSourceNxosOSPFAuthenticationConfig = `
+
+resource "nxos_ospf_authentication" "test" {
+  instance_name = "OSPF1"
+  vrf_name = "default"
+  interface_id = "eth1/10"
+  key = "mykey"
+  key_id = 1
+  key_secure_mode = false
+  keychain = "mykeychain"
+  md5_key = "mymdkey"
+  md5_key_secure_mode = false
+  type = "none"
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
+}
+
 data "nxos_ospf_authentication" "test" {
   instance_name = "OSPF1"
   vrf_name = "default"
   interface_id = "eth1/10"
+  depends_on = [nxos_ospf_authentication.test]
 }
 `

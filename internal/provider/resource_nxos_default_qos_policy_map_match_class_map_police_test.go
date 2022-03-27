@@ -14,24 +14,7 @@ func TestAccNxosDefaultQOSPolicyMapMatchClassMapPolice(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosDefaultQOSClassMapConfig_all(),
-			},
-			{
-				Config: testAccNxosDefaultQOSClassMapConfig_all() + testAccNxosDefaultQOSPolicyMapConfig_all(),
-			},
-			{
-				Config: testAccNxosDefaultQOSClassMapConfig_all() + testAccNxosDefaultQOSPolicyMapConfig_all() + testAccNxosDefaultQOSPolicyMapMatchClassMapConfig_all(),
-			},
-			{
-				Config: testAccNxosDefaultQOSClassMapConfig_all() + testAccNxosDefaultQOSPolicyMapConfig_all() + testAccNxosDefaultQOSPolicyMapMatchClassMapConfig_all() + testAccNxosDefaultQOSPolicyMapMatchClassMapPoliceConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_default_qos_policy_map_match_class_map_police.test", "policy_map_name", "PM1"),
-					resource.TestCheckResourceAttr("nxos_default_qos_policy_map_match_class_map_police.test", "class_map_name", "Voice"),
-					resource.TestCheckResourceAttr("nxos_default_qos_policy_map_match_class_map_police.test", "cir_rate", "10000"),
-				),
-			},
-			{
-				Config: testAccNxosDefaultQOSClassMapConfig_all() + testAccNxosDefaultQOSPolicyMapConfig_all() + testAccNxosDefaultQOSPolicyMapMatchClassMapConfig_all() + testAccNxosDefaultQOSPolicyMapMatchClassMapPoliceConfig_all(),
+				Config: testAccNxosDefaultQOSPolicyMapMatchClassMapPolicePrerequisitesConfig + testAccNxosDefaultQOSPolicyMapMatchClassMapPoliceConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_default_qos_policy_map_match_class_map_police.test", "policy_map_name", "PM1"),
 					resource.TestCheckResourceAttr("nxos_default_qos_policy_map_match_class_map_police.test", "class_map_name", "Voice"),
@@ -69,12 +52,41 @@ func TestAccNxosDefaultQOSPolicyMapMatchClassMapPolice(t *testing.T) {
 	})
 }
 
+const testAccNxosDefaultQOSPolicyMapMatchClassMapPolicePrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/ipqos/dflt/p/name-[PM1]"
+  class_name = "ipqosPMapInst"
+  content = {
+      name = "PM1"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/ipqos/dflt/c/name-[Voice]"
+  class_name = "ipqosCMapInst"
+  content = {
+      name = "Voice"
+  }
+}
+
+resource "nxos_rest" "PreReq2" {
+  dn = "sys/ipqos/dflt/p/name-[PM1]/cmap-[Voice]"
+  class_name = "ipqosMatchCMap"
+  content = {
+      name = "Voice"
+  }
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
+}
+
+`
+
 func testAccNxosDefaultQOSPolicyMapMatchClassMapPoliceConfig_minimum() string {
 	return `
 	resource "nxos_default_qos_policy_map_match_class_map_police" "test" {
 		policy_map_name = "PM1"
 		class_map_name = "Voice"
 		cir_rate = 10000
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 	}
 	`
 }
@@ -107,6 +119,7 @@ func testAccNxosDefaultQOSPolicyMapMatchClassMapPoliceConfig_all() string {
 		violate_set_dscp = 0
 		violate_set_precedence = "routine"
 		violate_set_qos_group = 0
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 	}
 	`
 }

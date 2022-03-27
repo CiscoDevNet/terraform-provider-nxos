@@ -14,30 +14,7 @@ func TestAccNxosPIMStaticRPGroupList(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosPIMConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all() + testAccNxosPIMStaticRPPolicyConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all() + testAccNxosPIMStaticRPPolicyConfig_all() + testAccNxosPIMStaticRPConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all() + testAccNxosPIMStaticRPPolicyConfig_all() + testAccNxosPIMStaticRPConfig_all() + testAccNxosPIMStaticRPGroupListConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_pim_static_rp_group_list.test", "vrf_name", "default"),
-					resource.TestCheckResourceAttr("nxos_pim_static_rp_group_list.test", "rp_address", "1.2.3.4"),
-					resource.TestCheckResourceAttr("nxos_pim_static_rp_group_list.test", "address", "224.0.0.0/4"),
-				),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all() + testAccNxosPIMStaticRPPolicyConfig_all() + testAccNxosPIMStaticRPConfig_all() + testAccNxosPIMStaticRPGroupListConfig_all(),
+				Config: testAccNxosPIMStaticRPGroupListPrerequisitesConfig + testAccNxosPIMStaticRPGroupListConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_pim_static_rp_group_list.test", "vrf_name", "default"),
 					resource.TestCheckResourceAttr("nxos_pim_static_rp_group_list.test", "rp_address", "1.2.3.4"),
@@ -55,12 +32,57 @@ func TestAccNxosPIMStaticRPGroupList(t *testing.T) {
 	})
 }
 
+const testAccNxosPIMStaticRPGroupListPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/pim"
+  class_name = "pimEntity"
+  content = {
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/pim/inst"
+  class_name = "pimInst"
+  content = {
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+resource "nxos_rest" "PreReq2" {
+  dn = "sys/pim/inst/dom-[default]"
+  class_name = "pimDom"
+  content = {
+      name = "default"
+  }
+  depends_on = [nxos_rest.PreReq1, ]
+}
+
+resource "nxos_rest" "PreReq3" {
+  dn = "sys/pim/inst/dom-[default]/staticrp"
+  class_name = "pimStaticRPP"
+  content = {
+  }
+  depends_on = [nxos_rest.PreReq2, ]
+}
+
+resource "nxos_rest" "PreReq4" {
+  dn = "sys/pim/inst/dom-[default]/staticrp/rp-[1.2.3.4]"
+  class_name = "pimStaticRP"
+  content = {
+      addr = "1.2.3.4"
+  }
+  depends_on = [nxos_rest.PreReq3, ]
+}
+
+`
+
 func testAccNxosPIMStaticRPGroupListConfig_minimum() string {
 	return `
 	resource "nxos_pim_static_rp_group_list" "test" {
 		vrf_name = "default"
 		rp_address = "1.2.3.4"
 		address = "224.0.0.0/4"
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
 	}
 	`
 }
@@ -73,6 +95,7 @@ func testAccNxosPIMStaticRPGroupListConfig_all() string {
 		address = "224.0.0.0/4"
 		bidir = true
 		override = true
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
 	}
 	`
 }

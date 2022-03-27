@@ -6,11 +6,6 @@ ds_description: |-
   This data source can read the PIM SSM range configuration.
 res_description: |-
   This resource can manage the PIM SSM range configuration.\n\n- API Documentation: [pimSSMRangeP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:SSMRangeP/)
-parents:
-  - PIM
-  - PIM Instance
-  - PIM VRF
-  - PIM SSM Policy
 attributes:
   - nxos_name: vrf_name
     tf_name: vrf_name
@@ -59,3 +54,18 @@ attributes:
     description: 'Exclude standard SSM range (232.0.0.0/8).'
     default_value: false
     example: false
+test_prerequisites:
+  - dn: sys/pim
+    class_name: pimEntity
+  - dn: sys/pim/inst
+    class_name: pimInst
+    dependencies: [0]
+  - dn: sys/pim/inst/dom-[default]
+    class_name: pimDom
+    attributes:
+      - name: name
+        value: default
+    dependencies: [1]
+  - dn: sys/pim/inst/dom-[default]/ssm
+    class_name: pimSSMPatP
+    dependencies: [2]

@@ -14,9 +14,6 @@ func TestAccDataSourceNxosFeatureDHCP(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosFeatureDHCPConfig_all(),
-			},
-			{
 				Config: testAccDataSourceNxosFeatureDHCPConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_feature_dhcp.test", "admin_state", "enabled"),
@@ -27,6 +24,12 @@ func TestAccDataSourceNxosFeatureDHCP(t *testing.T) {
 }
 
 const testAccDataSourceNxosFeatureDHCPConfig = `
+
+resource "nxos_feature_dhcp" "test" {
+  admin_state = "enabled"
+}
+
 data "nxos_feature_dhcp" "test" {
+  depends_on = [nxos_feature_dhcp.test]
 }
 `

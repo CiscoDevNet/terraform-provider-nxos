@@ -14,16 +14,7 @@ func TestAccDataSourceNxosSubinterfaceVRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosPhysicalInterfaceConfig_all(),
-			},
-			{
-				Config: testAccNxosPhysicalInterfaceConfig_all() + testAccNxosSubinterfaceConfig_all(),
-			},
-			{
-				Config: testAccNxosPhysicalInterfaceConfig_all() + testAccNxosSubinterfaceConfig_all() + testAccNxosSubinterfaceVRFConfig_all(),
-			},
-			{
-				Config: testAccDataSourceNxosSubinterfaceVRFConfig,
+				Config: testAccDataSourceNxosSubinterfaceVRFPrerequisitesConfig + testAccDataSourceNxosSubinterfaceVRFConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_subinterface_vrf.test", "vrf_dn", "sys/inst-VRF123"),
 				),
@@ -32,8 +23,27 @@ func TestAccDataSourceNxosSubinterfaceVRF(t *testing.T) {
 	})
 }
 
+const testAccDataSourceNxosSubinterfaceVRFPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/intf/encrtd-[eth1/10.124]"
+  class_name = "l3EncRtdIf"
+  content = {
+      id = "eth1/10.124"
+  }
+}
+
+`
+
 const testAccDataSourceNxosSubinterfaceVRFConfig = `
+
+resource "nxos_subinterface_vrf" "test" {
+  interface_id = "eth1/10.124"
+  vrf_dn = "sys/inst-VRF123"
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
 data "nxos_subinterface_vrf" "test" {
   interface_id = "eth1/10.124"
+  depends_on = [nxos_subinterface_vrf.test]
 }
 `

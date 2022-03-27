@@ -14,13 +14,7 @@ func TestAccDataSourceNxosPhysicalInterfaceVRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosPhysicalInterfaceConfig_all(),
-			},
-			{
-				Config: testAccNxosPhysicalInterfaceConfig_all() + testAccNxosPhysicalInterfaceVRFConfig_all(),
-			},
-			{
-				Config: testAccDataSourceNxosPhysicalInterfaceVRFConfig,
+				Config: testAccDataSourceNxosPhysicalInterfaceVRFPrerequisitesConfig + testAccDataSourceNxosPhysicalInterfaceVRFConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_physical_interface_vrf.test", "vrf_dn", "sys/inst-default"),
 				),
@@ -29,8 +23,27 @@ func TestAccDataSourceNxosPhysicalInterfaceVRF(t *testing.T) {
 	})
 }
 
+const testAccDataSourceNxosPhysicalInterfaceVRFPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/intf/phys-[eth1/10]"
+  class_name = "l1PhysIf"
+  content = {
+      id = "eth1/10"
+  }
+}
+
+`
+
 const testAccDataSourceNxosPhysicalInterfaceVRFConfig = `
+
+resource "nxos_physical_interface_vrf" "test" {
+  interface_id = "eth1/10"
+  vrf_dn = "sys/inst-default"
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
 data "nxos_physical_interface_vrf" "test" {
   interface_id = "eth1/10"
+  depends_on = [nxos_physical_interface_vrf.test]
 }
 `

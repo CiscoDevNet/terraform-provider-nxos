@@ -14,12 +14,6 @@ func TestAccNxosDefaultQOSPolicyMap(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosDefaultQOSPolicyMapConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "name", "PM1"),
-				),
-			},
-			{
 				Config: testAccNxosDefaultQOSPolicyMapConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "name", "PM1"),

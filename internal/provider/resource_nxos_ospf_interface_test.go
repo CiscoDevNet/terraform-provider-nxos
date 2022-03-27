@@ -14,24 +14,7 @@ func TestAccNxosOSPFInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosOSPFConfig_all(),
-			},
-			{
-				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all(),
-			},
-			{
-				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all() + testAccNxosOSPFVRFConfig_all(),
-			},
-			{
-				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all() + testAccNxosOSPFVRFConfig_all() + testAccNxosOSPFInterfaceConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ospf_interface.test", "instance_name", "OSPF1"),
-					resource.TestCheckResourceAttr("nxos_ospf_interface.test", "vrf_name", "default"),
-					resource.TestCheckResourceAttr("nxos_ospf_interface.test", "interface_id", "eth1/10"),
-				),
-			},
-			{
-				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all() + testAccNxosOSPFVRFConfig_all() + testAccNxosOSPFInterfaceConfig_all(),
+				Config: testAccNxosOSPFInterfacePrerequisitesConfig + testAccNxosOSPFInterfaceConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ospf_interface.test", "instance_name", "OSPF1"),
 					resource.TestCheckResourceAttr("nxos_ospf_interface.test", "vrf_name", "default"),
@@ -56,12 +39,41 @@ func TestAccNxosOSPFInterface(t *testing.T) {
 	})
 }
 
+const testAccNxosOSPFInterfacePrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/ospf"
+  class_name = "ospfEntity"
+  content = {
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/ospf/inst-[OSPF1]"
+  class_name = "ospfInst"
+  content = {
+      name = "OSPF1"
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+resource "nxos_rest" "PreReq2" {
+  dn = "sys/ospf/inst-[OSPF1]/dom-[default]"
+  class_name = "ospfDom"
+  content = {
+      name = "default"
+  }
+  depends_on = [nxos_rest.PreReq1, ]
+}
+
+`
+
 func testAccNxosOSPFInterfaceConfig_minimum() string {
 	return `
 	resource "nxos_ospf_interface" "test" {
 		instance_name = "OSPF1"
 		vrf_name = "default"
 		interface_id = "eth1/10"
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 	}
 	`
 }
@@ -81,6 +93,7 @@ func testAccNxosOSPFInterfaceConfig_all() string {
 		network_type = "p2p"
 		passive = "enabled"
 		priority = 10
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 	}
 	`
 }

@@ -14,9 +14,6 @@ func TestAccDataSourceNxosVRFContainer(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosVRFContainerConfig_all(),
-			},
-			{
 				Config: testAccDataSourceNxosVRFContainerConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_vrf_container.test", "name", "VRF1"),
@@ -27,7 +24,13 @@ func TestAccDataSourceNxosVRFContainer(t *testing.T) {
 }
 
 const testAccDataSourceNxosVRFContainerConfig = `
+
+resource "nxos_vrf_container" "test" {
+  name = "VRF1"
+}
+
 data "nxos_vrf_container" "test" {
   name = "VRF1"
+  depends_on = [nxos_vrf_container.test]
 }
 `

@@ -14,21 +14,8 @@ func TestAccDataSourceNxos{{camelCase .Name}}(t *testing.T) {
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
-			{{- $configs := ""}}
-			{{- if len .Parents}}
-			{{- $configs = printf "%s%s%s" "testAccNxos" (camelCase (index .Parents 0)) "Config_all()"}}
-			{{- end}}
-			{{- range $index, $item := .Parents}}
-			{{- if ge $index 1}}{{$configs = printf "%s%s%s%s" $configs "+testAccNxos" (camelCase .) "Config_all()"}}{{end}}
 			{
-				Config: {{$configs}},
-			},
-			{{- end}}
-			{
-				Config: {{range .Parents}}testAccNxos{{camelCase .}}Config_all()+{{end}}testAccNxos{{camelCase .Name}}Config_all(),
-			},
-			{
-				Config: testAccDataSourceNxos{{camelCase .Name}}Config,
+				Config: {{if .TestPrerequisites}}testAccDataSourceNxos{{camelCase .Name}}PrerequisitesConfig+{{end}}testAccDataSourceNxos{{camelCase .Name}}Config,
 				Check: resource.ComposeTestCheckFunc(
 					{{- $name := .Name }}
 					{{- range  .Attributes}}
@@ -42,12 +29,42 @@ func TestAccDataSourceNxos{{camelCase .Name}}(t *testing.T) {
 	})
 }
 
+{{- if .TestPrerequisites}}
+const testAccDataSourceNxos{{camelCase .Name}}PrerequisitesConfig = `
+{{- range $index, $item := .TestPrerequisites}}
+resource "nxos_rest" "PreReq{{$index}}" {
+  dn = "{{.Dn}}"
+  class_name = "{{.ClassName}}"
+  content = {
+    {{- range  .Attributes}}
+      {{.Name}} = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}
+    {{- end}}
+  }
+  {{- if .Dependencies}}
+  depends_on = [{{range .Dependencies}}nxos_rest.PreReq{{.}}, {{end}}]
+  {{- end}}
+}
+{{ end}}
+`
+{{- end}}
+
 const testAccDataSourceNxos{{camelCase .Name}}Config = `
+
+resource "nxos_{{snakeCase $name}}" "test" {
+{{- range  .Attributes}}
+  {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+{{- end}}
+{{- if .TestPrerequisites}}
+  depends_on = [{{range $index, $item := .TestPrerequisites}}nxos_rest.PreReq{{$index}}, {{end}}]
+{{- end}}
+}
+
 data "nxos_{{snakeCase .Name}}" "test" {
 {{- range  .Attributes}}
 {{- if eq .Id true}}
   {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
 {{- end}}
 {{- end}}
+  depends_on = [nxos_{{snakeCase $name}}.test]
 }
 `

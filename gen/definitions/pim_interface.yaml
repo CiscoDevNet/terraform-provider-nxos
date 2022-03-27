@@ -6,10 +6,6 @@ ds_description: |-
   This data source can read the PIM interface configuration.
 res_description: |-
   This resource can manage the PIM interface configuration.\n\n- API Documentation: [pimIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:If/)
-parents:
-  - PIM
-  - PIM Instance
-  - PIM VRF
 attributes:
   - nxos_name: name
     tf_name: vrf_name
@@ -62,3 +58,15 @@ attributes:
     description: 'Sparse mode.'
     default_value: false
     example: true
+test_prerequisites:
+  - dn: sys/pim
+    class_name: pimEntity
+  - dn: sys/pim/inst
+    class_name: pimInst
+    dependencies: [0]
+  - dn: sys/pim/inst/dom-[default]
+    class_name: pimDom
+    attributes:
+      - name: name
+        value: default
+    dependencies: [1]

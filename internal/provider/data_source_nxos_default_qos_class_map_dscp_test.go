@@ -14,13 +14,7 @@ func TestAccDataSourceNxosDefaultQOSClassMapDSCP(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosDefaultQOSClassMapConfig_all(),
-			},
-			{
-				Config: testAccNxosDefaultQOSClassMapConfig_all() + testAccNxosDefaultQOSClassMapDSCPConfig_all(),
-			},
-			{
-				Config: testAccDataSourceNxosDefaultQOSClassMapDSCPConfig,
+				Config: testAccDataSourceNxosDefaultQOSClassMapDSCPPrerequisitesConfig + testAccDataSourceNxosDefaultQOSClassMapDSCPConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_default_qos_class_map_dscp.test", "value", "ef"),
 				),
@@ -29,9 +23,28 @@ func TestAccDataSourceNxosDefaultQOSClassMapDSCP(t *testing.T) {
 	})
 }
 
+const testAccDataSourceNxosDefaultQOSClassMapDSCPPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/ipqos/dflt/c/name-[Voice]"
+  class_name = "ipqosCMapInst"
+  content = {
+      name = "Voice"
+  }
+}
+
+`
+
 const testAccDataSourceNxosDefaultQOSClassMapDSCPConfig = `
+
+resource "nxos_default_qos_class_map_dscp" "test" {
+  class_map_name = "Voice"
+  value = "ef"
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
 data "nxos_default_qos_class_map_dscp" "test" {
   class_map_name = "Voice"
   value = "ef"
+  depends_on = [nxos_default_qos_class_map_dscp.test]
 }
 `

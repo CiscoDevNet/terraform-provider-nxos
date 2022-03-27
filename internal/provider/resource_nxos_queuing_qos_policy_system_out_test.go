@@ -14,10 +14,6 @@ func TestAccNxosQueuingQOSPolicySystemOut(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosQueuingQOSPolicySystemOutConfig_minimum(),
-				Check:  resource.ComposeTestCheckFunc(),
-			},
-			{
 				Config: testAccNxosQueuingQOSPolicySystemOutConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(),
 			},

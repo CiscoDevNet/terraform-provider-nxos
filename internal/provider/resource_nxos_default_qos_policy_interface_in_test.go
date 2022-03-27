@@ -14,12 +14,6 @@ func TestAccNxosDefaultQOSPolicyInterfaceIn(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosDefaultQOSPolicyInterfaceInConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_default_qos_policy_interface_in.test", "interface_id", "eth1/10"),
-				),
-			},
-			{
 				Config: testAccNxosDefaultQOSPolicyInterfaceInConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_default_qos_policy_interface_in.test", "interface_id", "eth1/10"),

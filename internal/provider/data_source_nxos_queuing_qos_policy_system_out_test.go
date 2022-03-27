@@ -14,9 +14,6 @@ func TestAccDataSourceNxosQueuingQOSPolicySystemOut(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosQueuingQOSPolicySystemOutConfig_all(),
-			},
-			{
 				Config: testAccDataSourceNxosQueuingQOSPolicySystemOutConfig,
 				Check:  resource.ComposeTestCheckFunc(),
 			},
@@ -25,6 +22,11 @@ func TestAccDataSourceNxosQueuingQOSPolicySystemOut(t *testing.T) {
 }
 
 const testAccDataSourceNxosQueuingQOSPolicySystemOutConfig = `
+
+resource "nxos_queuing_qos_policy_system_out" "test" {
+}
+
 data "nxos_queuing_qos_policy_system_out" "test" {
+  depends_on = [nxos_queuing_qos_policy_system_out.test]
 }
 `

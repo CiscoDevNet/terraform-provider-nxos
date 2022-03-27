@@ -6,9 +6,6 @@ ds_description: |-
   This data source can read the OSPF VRF configuration.
 res_description: |-
   This resource can manage the OSPF VRF configuration.\n\n- API Documentation: [ospfDom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:Dom/)
-parents:
-  - OSPF
-  - OSPF Instance
 attributes:
   - nxos_name: inst
     tf_name: instance_name
@@ -63,3 +60,12 @@ attributes:
     description: 'Router ID.'
     default_value: 0.0.0.0
     example: 34.56.78.90
+test_prerequisites:
+  - dn: sys/ospf
+    class_name: ospfEntity
+  - dn: sys/ospf/inst-[OSPF1]
+    class_name: ospfInst
+    attributes:
+      - name: name
+        value: OSPF1
+    dependencies: [0]

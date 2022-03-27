@@ -14,23 +14,7 @@ func TestAccNxosPIMInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosPIMConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all(),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all() + testAccNxosPIMInterfaceConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_pim_interface.test", "vrf_name", "default"),
-					resource.TestCheckResourceAttr("nxos_pim_interface.test", "interface_id", "eth1/10"),
-				),
-			},
-			{
-				Config: testAccNxosPIMConfig_all() + testAccNxosPIMInstanceConfig_all() + testAccNxosPIMVRFConfig_all() + testAccNxosPIMInterfaceConfig_all(),
+				Config: testAccNxosPIMInterfacePrerequisitesConfig + testAccNxosPIMInterfaceConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_pim_interface.test", "vrf_name", "default"),
 					resource.TestCheckResourceAttr("nxos_pim_interface.test", "interface_id", "eth1/10"),
@@ -50,11 +34,39 @@ func TestAccNxosPIMInterface(t *testing.T) {
 	})
 }
 
+const testAccNxosPIMInterfacePrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/pim"
+  class_name = "pimEntity"
+  content = {
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/pim/inst"
+  class_name = "pimInst"
+  content = {
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+resource "nxos_rest" "PreReq2" {
+  dn = "sys/pim/inst/dom-[default]"
+  class_name = "pimDom"
+  content = {
+      name = "default"
+  }
+  depends_on = [nxos_rest.PreReq1, ]
+}
+
+`
+
 func testAccNxosPIMInterfaceConfig_minimum() string {
 	return `
 	resource "nxos_pim_interface" "test" {
 		vrf_name = "default"
 		interface_id = "eth1/10"
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 	}
 	`
 }
@@ -69,6 +81,7 @@ func testAccNxosPIMInterfaceConfig_all() string {
 		dr_priority = 10
 		passive = false
 		sparse_mode = true
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 	}
 	`
 }

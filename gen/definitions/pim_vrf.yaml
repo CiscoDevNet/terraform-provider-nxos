@@ -6,9 +6,6 @@ ds_description: |-
   This data source can read the PIM VRF configuration.
 res_description: |-
   This resource can manage the PIM VRF configuration.\n\n- API Documentation: [pimDom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:Dom/)
-parents:
-  - PIM
-  - PIM Instance
 attributes:
   - nxos_name: name
     tf_name: name
@@ -31,3 +28,9 @@ attributes:
     description: 'BFD.'
     default_value: false
     example: true
+test_prerequisites:
+  - dn: sys/pim
+    class_name: pimEntity
+  - dn: sys/pim/inst
+    class_name: pimInst
+    dependencies: [0]

@@ -14,13 +14,7 @@ func TestAccDataSourceNxosQueuingQOSPolicyMapMatchClassMap(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosQueuingQOSPolicyMapConfig_all(),
-			},
-			{
-				Config: testAccNxosQueuingQOSPolicyMapConfig_all() + testAccNxosQueuingQOSPolicyMapMatchClassMapConfig_all(),
-			},
-			{
-				Config: testAccDataSourceNxosQueuingQOSPolicyMapMatchClassMapConfig,
+				Config: testAccDataSourceNxosQueuingQOSPolicyMapMatchClassMapPrerequisitesConfig + testAccDataSourceNxosQueuingQOSPolicyMapMatchClassMapConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_queuing_qos_policy_map_match_class_map.test", "name", "c-out-q1"),
 				),
@@ -29,9 +23,28 @@ func TestAccDataSourceNxosQueuingQOSPolicyMapMatchClassMap(t *testing.T) {
 	})
 }
 
+const testAccDataSourceNxosQueuingQOSPolicyMapMatchClassMapPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/ipqos/queuing/p/name-[PM1]"
+  class_name = "ipqosPMapInst"
+  content = {
+      name = "PM1"
+  }
+}
+
+`
+
 const testAccDataSourceNxosQueuingQOSPolicyMapMatchClassMapConfig = `
+
+resource "nxos_queuing_qos_policy_map_match_class_map" "test" {
+  policy_map_name = "PM1"
+  name = "c-out-q1"
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
 data "nxos_queuing_qos_policy_map_match_class_map" "test" {
   policy_map_name = "PM1"
   name = "c-out-q1"
+  depends_on = [nxos_queuing_qos_policy_map_match_class_map.test]
 }
 `

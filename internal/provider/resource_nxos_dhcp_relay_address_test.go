@@ -14,21 +14,7 @@ func TestAccNxosDHCPRelayAddress(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosFeatureDHCPConfig_all(),
-			},
-			{
-				Config: testAccNxosFeatureDHCPConfig_all() + testAccNxosDHCPRelayInterfaceConfig_all(),
-			},
-			{
-				Config: testAccNxosFeatureDHCPConfig_all() + testAccNxosDHCPRelayInterfaceConfig_all() + testAccNxosDHCPRelayAddressConfig_minimum(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_dhcp_relay_address.test", "interface_id", "eth1/10"),
-					resource.TestCheckResourceAttr("nxos_dhcp_relay_address.test", "vrf", "VRF1"),
-					resource.TestCheckResourceAttr("nxos_dhcp_relay_address.test", "address", "1.1.1.1"),
-				),
-			},
-			{
-				Config: testAccNxosFeatureDHCPConfig_all() + testAccNxosDHCPRelayInterfaceConfig_all() + testAccNxosDHCPRelayAddressConfig_all(),
+				Config: testAccNxosDHCPRelayAddressPrerequisitesConfig + testAccNxosDHCPRelayAddressConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_dhcp_relay_address.test", "interface_id", "eth1/10"),
 					resource.TestCheckResourceAttr("nxos_dhcp_relay_address.test", "vrf", "VRF1"),
@@ -44,12 +30,33 @@ func TestAccNxosDHCPRelayAddress(t *testing.T) {
 	})
 }
 
+const testAccNxosDHCPRelayAddressPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/dhcp"
+  class_name = "fmDhcp"
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/dhcp/inst/relayif-[eth1/10]"
+  class_name = "dhcpRelayIf"
+  content = {
+      id = "eth1/10"
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+`
+
 func testAccNxosDHCPRelayAddressConfig_minimum() string {
 	return `
 	resource "nxos_dhcp_relay_address" "test" {
 		interface_id = "eth1/10"
 		vrf = "VRF1"
 		address = "1.1.1.1"
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`
 }
@@ -60,6 +67,7 @@ func testAccNxosDHCPRelayAddressConfig_all() string {
 		interface_id = "eth1/10"
 		vrf = "VRF1"
 		address = "1.1.1.1"
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`
 }

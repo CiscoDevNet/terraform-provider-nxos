@@ -14,19 +14,7 @@ func TestAccDataSourceNxosOSPFInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosOSPFConfig_all(),
-			},
-			{
-				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all(),
-			},
-			{
-				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all() + testAccNxosOSPFVRFConfig_all(),
-			},
-			{
-				Config: testAccNxosOSPFConfig_all() + testAccNxosOSPFInstanceConfig_all() + testAccNxosOSPFVRFConfig_all() + testAccNxosOSPFInterfaceConfig_all(),
-			},
-			{
-				Config: testAccDataSourceNxosOSPFInterfaceConfig,
+				Config: testAccDataSourceNxosOSPFInterfacePrerequisitesConfig + testAccDataSourceNxosOSPFInterfaceConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_ospf_interface.test", "interface_id", "eth1/10"),
 					resource.TestCheckResourceAttr("data.nxos_ospf_interface.test", "advertise_secondaries", "false"),
@@ -44,10 +32,56 @@ func TestAccDataSourceNxosOSPFInterface(t *testing.T) {
 	})
 }
 
+const testAccDataSourceNxosOSPFInterfacePrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/ospf"
+  class_name = "ospfEntity"
+  content = {
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/ospf/inst-[OSPF1]"
+  class_name = "ospfInst"
+  content = {
+      name = "OSPF1"
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+resource "nxos_rest" "PreReq2" {
+  dn = "sys/ospf/inst-[OSPF1]/dom-[default]"
+  class_name = "ospfDom"
+  content = {
+      name = "default"
+  }
+  depends_on = [nxos_rest.PreReq1, ]
+}
+
+`
+
 const testAccDataSourceNxosOSPFInterfaceConfig = `
+
+resource "nxos_ospf_interface" "test" {
+  instance_name = "OSPF1"
+  vrf_name = "default"
+  interface_id = "eth1/10"
+  advertise_secondaries = false
+  area = "0.0.0.10"
+  bfd = "disabled"
+  cost = 1000
+  dead_interval = 60
+  hello_interval = 15
+  network_type = "p2p"
+  passive = "enabled"
+  priority = 10
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
+}
+
 data "nxos_ospf_interface" "test" {
   instance_name = "OSPF1"
   vrf_name = "default"
   interface_id = "eth1/10"
+  depends_on = [nxos_ospf_interface.test]
 }
 `

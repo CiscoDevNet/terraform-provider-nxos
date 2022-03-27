@@ -6,12 +6,6 @@ ds_description: |-
   This data source can read the PIM Static RP group list configuration.
 res_description: |-
   This resource can manage the PIM Static RP group list configuration.\n\n- API Documentation: [pimRPGrpList](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:RPGrpList/)
-parents:
-  - PIM
-  - PIM Instance
-  - PIM VRF
-  - PIM Static RP Policy
-  - PIM Static RP
 attributes:
   - nxos_name: vrf_name
     tf_name: vrf_name
@@ -45,3 +39,24 @@ attributes:
     description: 'Flag to override RP preference to use Static over Dynamic RP.'
     default_value: false
     example: true
+test_prerequisites:
+  - dn: sys/pim
+    class_name: pimEntity
+  - dn: sys/pim/inst
+    class_name: pimInst
+    dependencies: [0]
+  - dn: sys/pim/inst/dom-[default]
+    class_name: pimDom
+    attributes:
+      - name: name
+        value: default
+    dependencies: [1]
+  - dn: sys/pim/inst/dom-[default]/staticrp
+    class_name: pimStaticRPP
+    dependencies: [2]
+  - dn: sys/pim/inst/dom-[default]/staticrp/rp-[1.2.3.4]
+    class_name: pimStaticRP
+    attributes:
+      - name: addr
+        value: 1.2.3.4
+    dependencies: [3]

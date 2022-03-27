@@ -6,11 +6,6 @@ ds_description: |-
   This data source can read the OSPF authentication configuration.
 res_description: |-
   This resource can manage the OSPF authentication configuration.\n\n- API Documentation: [ospfAuthNewP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:AuthNewP/)
-parents:
-  - OSPF
-  - OSPF Instance
-  - OSPF VRF
-  - OSPF Interface
 attributes:
   - nxos_name: inst
     tf_name: instance_name
@@ -81,3 +76,24 @@ attributes:
       - unspecified
     default_value: unspecified
     example: none
+test_prerequisites:
+  - dn: sys/ospf
+    class_name: ospfEntity
+  - dn: sys/ospf/inst-[OSPF1]
+    class_name: ospfInst
+    attributes:
+      - name: name
+        value: OSPF1
+    dependencies: [0]
+  - dn: sys/ospf/inst-[OSPF1]/dom-[default]
+    class_name: ospfDom
+    attributes:
+      - name: name
+        value: default
+    dependencies: [1]
+  - dn: sys/ospf/inst-[OSPF1]/dom-[default]/if-[eth1/10]
+    class_name: ospfIf
+    attributes:
+      - name: id
+        value: eth1/10
+    dependencies: [2]

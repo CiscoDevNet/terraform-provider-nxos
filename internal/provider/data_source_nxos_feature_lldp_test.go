@@ -14,9 +14,6 @@ func TestAccDataSourceNxosFeatureLLDP(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosFeatureLLDPConfig_all(),
-			},
-			{
 				Config: testAccDataSourceNxosFeatureLLDPConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_feature_lldp.test", "admin_state", "enabled"),
@@ -27,6 +24,12 @@ func TestAccDataSourceNxosFeatureLLDP(t *testing.T) {
 }
 
 const testAccDataSourceNxosFeatureLLDPConfig = `
+
+resource "nxos_feature_lldp" "test" {
+  admin_state = "enabled"
+}
+
 data "nxos_feature_lldp" "test" {
+  depends_on = [nxos_feature_lldp.test]
 }
 `

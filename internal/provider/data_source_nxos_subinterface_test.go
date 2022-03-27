@@ -14,12 +14,6 @@ func TestAccDataSourceNxosSubinterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosPhysicalInterfaceConfig_all(),
-			},
-			{
-				Config: testAccNxosPhysicalInterfaceConfig_all() + testAccNxosSubinterfaceConfig_all(),
-			},
-			{
 				Config: testAccDataSourceNxosSubinterfaceConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_subinterface.test", "interface_id", "eth1/10.124"),
@@ -38,7 +32,21 @@ func TestAccDataSourceNxosSubinterface(t *testing.T) {
 }
 
 const testAccDataSourceNxosSubinterfaceConfig = `
+
+resource "nxos_subinterface" "test" {
+  interface_id = "eth1/10.124"
+  admin_state = "down"
+  bandwidth = 1000
+  delay = 10
+  description = "My Description"
+  encap = "vlan-124"
+  link_logging = "enable"
+  medium = "broadcast"
+  mtu = 1500
+}
+
 data "nxos_subinterface" "test" {
   interface_id = "eth1/10.124"
+  depends_on = [nxos_subinterface.test]
 }
 `

@@ -14,9 +14,6 @@ func TestAccDataSourceNxosFeatureOSPF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosFeatureOSPFConfig_all(),
-			},
-			{
 				Config: testAccDataSourceNxosFeatureOSPFConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_feature_ospf.test", "admin_state", "enabled"),
@@ -27,6 +24,12 @@ func TestAccDataSourceNxosFeatureOSPF(t *testing.T) {
 }
 
 const testAccDataSourceNxosFeatureOSPFConfig = `
+
+resource "nxos_feature_ospf" "test" {
+  admin_state = "enabled"
+}
+
 data "nxos_feature_ospf" "test" {
+  depends_on = [nxos_feature_ospf.test]
 }
 `

@@ -6,8 +6,6 @@ ds_description: |-
   This data source can read a subinterface.
 res_description: |-
   This resource can manage a subinterface.\n\n- API Documentation: [l3EncRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:EncRtdIf/)
-parents:
-  - Physical Interface
 attributes:
   - nxos_name: id
     tf_name: interface_id

@@ -41,28 +41,36 @@ func TestAccNxosOSPFInterface(t *testing.T) {
 
 const testAccNxosOSPFInterfacePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/bfd"
+  class_name = "fmBfd"
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
   dn = "sys/ospf"
   class_name = "ospfEntity"
   content = {
   }
 }
 
-resource "nxos_rest" "PreReq1" {
+resource "nxos_rest" "PreReq2" {
   dn = "sys/ospf/inst-[OSPF1]"
   class_name = "ospfInst"
   content = {
       name = "OSPF1"
   }
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_rest.PreReq1, ]
 }
 
-resource "nxos_rest" "PreReq2" {
+resource "nxos_rest" "PreReq3" {
   dn = "sys/ospf/inst-[OSPF1]/dom-[default]"
   class_name = "ospfDom"
   content = {
       name = "default"
   }
-  depends_on = [nxos_rest.PreReq1, ]
+  depends_on = [nxos_rest.PreReq2, ]
 }
 
 `
@@ -73,7 +81,7 @@ func testAccNxosOSPFInterfaceConfig_minimum() string {
 		instance_name = "OSPF1"
 		vrf_name = "default"
 		interface_id = "eth1/10"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 	}
 	`
 }
@@ -93,7 +101,7 @@ func testAccNxosOSPFInterfaceConfig_all() string {
 		network_type = "p2p"
 		passive = "enabled"
 		priority = 10
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 	}
 	`
 }

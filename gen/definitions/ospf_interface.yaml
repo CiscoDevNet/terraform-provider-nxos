@@ -105,6 +105,11 @@ attributes:
     description: 'Priority, used in determining the designated router on this network.'
     example: 10
 test_prerequisites:
+  - dn: sys/fm/bfd
+    class_name: fmBfd
+    attributes:
+      - name: adminSt
+        value: enabled
   - dn: sys/ospf
     class_name: ospfEntity
   - dn: sys/ospf/inst-[OSPF1]
@@ -112,10 +117,10 @@ test_prerequisites:
     attributes:
       - name: name
         value: OSPF1
-    dependencies: [0]
+    dependencies: [1]
   - dn: sys/ospf/inst-[OSPF1]/dom-[default]
     class_name: ospfDom
     attributes:
       - name: name
         value: default
-    dependencies: [1]
+    dependencies: [2]

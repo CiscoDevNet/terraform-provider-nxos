@@ -1,3 +1,7 @@
+## 0.3.0 (unreleased)
+
+- Fix option to manage multiple devices
+
 ## 0.2.5
 
 - Fix redundant authentications

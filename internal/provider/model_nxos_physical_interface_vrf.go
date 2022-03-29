@@ -11,9 +11,10 @@ import (
 )
 
 type PhysicalInterfaceVRF struct {
-	Dn  types.String `tfsdk:"id"`
-	Id  types.String `tfsdk:"interface_id"`
-	TDn types.String `tfsdk:"vrf_dn"`
+	Device types.String `tfsdk:"device"`
+	Dn     types.String `tfsdk:"id"`
+	Id     types.String `tfsdk:"interface_id"`
+	TDn    types.String `tfsdk:"vrf_dn"`
 }
 
 func (data PhysicalInterfaceVRF) getDn() string {
@@ -36,5 +37,6 @@ func (data *PhysicalInterfaceVRF) fromBody(res gjson.Result) {
 }
 
 func (data *PhysicalInterfaceVRF) fromPlan(plan PhysicalInterfaceVRF) {
+	data.Device = plan.Device
 	data.Id.Value = plan.Id.Value
 }

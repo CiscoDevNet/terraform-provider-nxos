@@ -14,6 +14,7 @@ import (
 )
 
 type PIMStaticRPGroupList struct {
+	Device      types.String `tfsdk:"device"`
 	Dn          types.String `tfsdk:"id"`
 	Vrf_name    types.String `tfsdk:"vrf_name"`
 	Addr        types.String `tfsdk:"rp_address"`
@@ -46,6 +47,7 @@ func (data *PIMStaticRPGroupList) fromBody(res gjson.Result) {
 }
 
 func (data *PIMStaticRPGroupList) fromPlan(plan PIMStaticRPGroupList) {
+	data.Device = plan.Device
 	data.Vrf_name.Value = plan.Vrf_name.Value
 	data.Addr.Value = plan.Addr.Value
 }

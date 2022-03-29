@@ -40,6 +40,10 @@ resource "nxos_vrf_container" "example" {
 
 - **name** (String) VRF name.
 
+### Optional
+
+- **device** (String) A device name from the provider configuration.
+
 ### Read-Only
 
 - **id** (String) The distinguished name of the object.

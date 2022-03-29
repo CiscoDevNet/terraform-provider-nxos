@@ -42,6 +42,7 @@ resource "nxos_loopback_interface" "example" {
   - Choices: `up`, `down`
   - Default value: `up`
 - **description** (String) Interface description.
+- **device** (String) A device name from the provider configuration.
 
 ### Read-Only
 

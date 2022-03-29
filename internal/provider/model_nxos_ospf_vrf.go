@@ -13,6 +13,7 @@ import (
 )
 
 type OSPFVRF struct {
+	Device    types.String `tfsdk:"device"`
 	Dn        types.String `tfsdk:"id"`
 	Inst      types.String `tfsdk:"instance_name"`
 	Name      types.String `tfsdk:"name"`
@@ -53,5 +54,6 @@ func (data *OSPFVRF) fromBody(res gjson.Result) {
 }
 
 func (data *OSPFVRF) fromPlan(plan OSPFVRF) {
+	data.Device = plan.Device
 	data.Inst.Value = plan.Inst.Value
 }

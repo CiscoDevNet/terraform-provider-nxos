@@ -9,6 +9,7 @@ import (
 )
 
 type PIM struct {
+	Device  types.String `tfsdk:"device"`
 	Dn      types.String `tfsdk:"id"`
 	AdminSt types.String `tfsdk:"admin_state"`
 }
@@ -33,4 +34,5 @@ func (data *PIM) fromBody(res gjson.Result) {
 }
 
 func (data *PIM) fromPlan(plan PIM) {
+	data.Device = plan.Device
 }

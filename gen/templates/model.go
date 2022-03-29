@@ -22,6 +22,7 @@ import (
 )
 
 type {{camelCase .Name}} struct {
+	Device types.String `tfsdk:"device"`
 	Dn types.String `tfsdk:"id"`
 {{- range .Attributes}}
 	{{toTitle .NxosName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
@@ -81,6 +82,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 }
 
 func (data *{{camelCase .Name}}) fromPlan(plan {{camelCase .Name}}) {
+	data.Device = plan.Device
 	{{- range .Attributes}}
 	{{- if or (eq .ReferenceOnly true) (eq .ReadOnly true)}}
 	data.{{toTitle .NxosName}}.Value = plan.{{toTitle .NxosName}}.Value

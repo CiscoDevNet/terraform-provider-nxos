@@ -32,6 +32,10 @@ data "nxos_ospf_interface" "example" {
 - **interface_id** (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - **vrf_name** (String) VRF name.
 
+### Optional
+
+- **device** (String) A device name from the provider configuration.
+
 ### Read-Only
 
 - **advertise_secondaries** (Boolean) Advertise secondary IP addresses.

@@ -28,6 +28,10 @@ data "nxos_queuing_qos_policy_map" "example" {
 
 - **name** (String) Policy map name.
 
+### Optional
+
+- **device** (String) A device name from the provider configuration.
+
 ### Read-Only
 
 - **id** (String) The distinguished name of the object.

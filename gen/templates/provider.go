@@ -20,6 +20,7 @@ import (
 // with all Resource and DataSource implementations.
 type provider struct {
 	client *nxos.Client
+	devices map[string]string
 
 	// configured is set to true at the end of the Configure method.
 	// This can be used in Resource and DataSource implementations to verify
@@ -39,6 +40,12 @@ type providerData struct {
 	URL      types.String `tfsdk:"url"`
 	Insecure types.Bool   `tfsdk:"insecure"`
 	Retries  types.Int64  `tfsdk:"retries"`
+	Devices  []providerDataDevice  `tfsdk:"devices"`
+}
+
+type providerDataDevice struct {
+	Name types.String `tfsdk:"name"`
+	URL      types.String `tfsdk:"url"`
 }
 
 func (p *provider) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
@@ -72,6 +79,22 @@ func (p *provider) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostic
 				Validators: []tfsdk.AttributeValidator{
 					validators.Range(0, 9),
 				},
+			},
+			"devices": {
+				MarkdownDescription: "This can be used to manage a list of devices from a single provider. All devices must use the same credentials. Each resource and data source has an optional attribute named `device`, which can then select a device by its name from this list.",
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"name": {
+						MarkdownDescription: "Device name.",
+						Type:                types.StringType,
+						Required:            true,
+					},
+					"url": {
+						MarkdownDescription: "URL of the Cisco NXOS device.",
+						Type:                types.StringType,
+						Required:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
 			},
 		},
 	}, nil
@@ -216,8 +239,13 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 		return
 	}
 
-	p.client = &c
+	devices := make(map[string]string)
+    for _, device := range config.Devices {
+		devices[device.Name.Value] = device.URL.Value
+	}
 
+	p.client = &c
+	p.devices = devices
 	p.configured = true
 }
 

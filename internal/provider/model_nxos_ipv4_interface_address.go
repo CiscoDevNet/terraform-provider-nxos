@@ -11,10 +11,11 @@ import (
 )
 
 type IPv4InterfaceAddress struct {
-	Dn   types.String `tfsdk:"id"`
-	Dom  types.String `tfsdk:"vrf"`
-	Id   types.String `tfsdk:"interface_id"`
-	Addr types.String `tfsdk:"address"`
+	Device types.String `tfsdk:"device"`
+	Dn     types.String `tfsdk:"id"`
+	Dom    types.String `tfsdk:"vrf"`
+	Id     types.String `tfsdk:"interface_id"`
+	Addr   types.String `tfsdk:"address"`
 }
 
 func (data IPv4InterfaceAddress) getDn() string {
@@ -37,6 +38,7 @@ func (data *IPv4InterfaceAddress) fromBody(res gjson.Result) {
 }
 
 func (data *IPv4InterfaceAddress) fromPlan(plan IPv4InterfaceAddress) {
+	data.Device = plan.Device
 	data.Dom.Value = plan.Dom.Value
 	data.Id.Value = plan.Id.Value
 }

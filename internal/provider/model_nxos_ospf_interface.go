@@ -14,6 +14,7 @@ import (
 )
 
 type OSPFInterface struct {
+	Device               types.String `tfsdk:"device"`
 	Dn                   types.String `tfsdk:"id"`
 	Inst                 types.String `tfsdk:"instance_name"`
 	Name                 types.String `tfsdk:"vrf_name"`
@@ -67,6 +68,7 @@ func (data *OSPFInterface) fromBody(res gjson.Result) {
 }
 
 func (data *OSPFInterface) fromPlan(plan OSPFInterface) {
+	data.Device = plan.Device
 	data.Inst.Value = plan.Inst.Value
 	data.Name.Value = plan.Name.Value
 }

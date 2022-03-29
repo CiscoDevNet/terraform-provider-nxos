@@ -9,8 +9,9 @@ import (
 )
 
 type QueuingQOSPolicySystemOutPolicyMap struct {
-	Dn   types.String `tfsdk:"id"`
-	Name types.String `tfsdk:"policy_map_name"`
+	Device types.String `tfsdk:"device"`
+	Dn     types.String `tfsdk:"id"`
+	Name   types.String `tfsdk:"policy_map_name"`
 }
 
 func (data QueuingQOSPolicySystemOutPolicyMap) getDn() string {
@@ -33,4 +34,5 @@ func (data *QueuingQOSPolicySystemOutPolicyMap) fromBody(res gjson.Result) {
 }
 
 func (data *QueuingQOSPolicySystemOutPolicyMap) fromPlan(plan QueuingQOSPolicySystemOutPolicyMap) {
+	data.Device = plan.Device
 }

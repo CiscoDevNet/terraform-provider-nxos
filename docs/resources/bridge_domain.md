@@ -35,6 +35,7 @@ resource "nxos_bridge_domain" "example" {
 
 - **access_encap** (String) Access encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
   - Default value: `unknown`
+- **device** (String) A device name from the provider configuration.
 - **name** (String) Bridge domain name.
 
 ### Read-Only

@@ -32,6 +32,10 @@ data "nxos_pim_static_rp_group_list" "example" {
 - **rp_address** (String) RP address.
 - **vrf_name** (String) VRF name.
 
+### Optional
+
+- **device** (String) A device name from the provider configuration.
+
 ### Read-Only
 
 - **bidir** (Boolean) Flag to treat Group Ranges as BiDir.

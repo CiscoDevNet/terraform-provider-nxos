@@ -11,8 +11,9 @@ import (
 )
 
 type DefaultQOSPolicyInterfaceIn struct {
-	Dn   types.String `tfsdk:"id"`
-	Name types.String `tfsdk:"interface_id"`
+	Device types.String `tfsdk:"device"`
+	Dn     types.String `tfsdk:"id"`
+	Name   types.String `tfsdk:"interface_id"`
 }
 
 func (data DefaultQOSPolicyInterfaceIn) getDn() string {
@@ -35,4 +36,5 @@ func (data *DefaultQOSPolicyInterfaceIn) fromBody(res gjson.Result) {
 }
 
 func (data *DefaultQOSPolicyInterfaceIn) fromPlan(plan DefaultQOSPolicyInterfaceIn) {
+	data.Device = plan.Device
 }

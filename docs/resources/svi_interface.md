@@ -52,6 +52,7 @@ resource "nxos_svi_interface" "example" {
   - Range: `1`-`16777215`
   - Default value: `1`
 - **description** (String) Interface description.
+- **device** (String) A device name from the provider configuration.
 - **medium** (String) The administrative port medium type.
   - Choices: `bcast`, `p2p`
   - Default value: `bcast`

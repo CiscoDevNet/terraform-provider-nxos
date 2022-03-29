@@ -32,6 +32,10 @@ data "nxos_ospf_area" "example" {
 - **instance_name** (String) OSPF instance name.
 - **vrf_name** (String) VRF name.
 
+### Optional
+
+- **device** (String) A device name from the provider configuration.
+
 ### Read-Only
 
 - **authentication_type** (String) Authentication type.

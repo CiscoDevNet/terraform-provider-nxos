@@ -47,6 +47,7 @@ resource "nxos_ospf_authentication" "example" {
 
 ### Optional
 
+- **device** (String) A device name from the provider configuration.
 - **key** (String) Key used for authentication.
 - **key_id** (Number) Key ID used for authentication.
   - Range: `0`-`255`

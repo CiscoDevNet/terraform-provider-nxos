@@ -28,6 +28,10 @@ data "nxos_bridge_domain" "example" {
 
 - **fabric_encap** (String) Fabric encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
 
+### Optional
+
+- **device** (String) A device name from the provider configuration.
+
 ### Read-Only
 
 - **access_encap** (String) Access encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.

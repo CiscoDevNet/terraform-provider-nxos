@@ -69,6 +69,7 @@ resource "nxos_physical_interface" "example" {
   - Range: `1`-`16777215`
   - Default value: `1`
 - **description** (String) Interface description.
+- **device** (String) A device name from the provider configuration.
 - **duplex** (String) Duplex.
   - Choices: `auto`, `full`, `half`
   - Default value: `auto`

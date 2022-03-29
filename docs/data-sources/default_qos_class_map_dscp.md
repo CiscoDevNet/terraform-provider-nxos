@@ -30,6 +30,10 @@ data "nxos_default_qos_class_map_dscp" "example" {
 - **class_map_name** (String) Class map name.
 - **value** (String) DSCP value.
 
+### Optional
+
+- **device** (String) A device name from the provider configuration.
+
 ### Read-Only
 
 - **id** (String) The distinguished name of the object.

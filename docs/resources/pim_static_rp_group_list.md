@@ -44,6 +44,7 @@ resource "nxos_pim_static_rp_group_list" "example" {
 
 - **bidir** (Boolean) Flag to treat Group Ranges as BiDir.
   - Default value: `false`
+- **device** (String) A device name from the provider configuration.
 - **override** (Boolean) Flag to override RP preference to use Static over Dynamic RP.
   - Default value: `false`
 

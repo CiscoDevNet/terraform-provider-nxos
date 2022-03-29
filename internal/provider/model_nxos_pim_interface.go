@@ -14,6 +14,7 @@ import (
 )
 
 type PIMInterface struct {
+	Device        types.String `tfsdk:"device"`
 	Dn            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"vrf_name"`
 	Id            types.String `tfsdk:"interface_id"`
@@ -54,5 +55,6 @@ func (data *PIMInterface) fromBody(res gjson.Result) {
 }
 
 func (data *PIMInterface) fromPlan(plan PIMInterface) {
+	data.Device = plan.Device
 	data.Name.Value = plan.Name.Value
 }

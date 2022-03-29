@@ -9,6 +9,7 @@ import (
 )
 
 type FeatureDHCP struct {
+	Device  types.String `tfsdk:"device"`
 	Dn      types.String `tfsdk:"id"`
 	AdminSt types.String `tfsdk:"admin_state"`
 }
@@ -33,4 +34,5 @@ func (data *FeatureDHCP) fromBody(res gjson.Result) {
 }
 
 func (data *FeatureDHCP) fromPlan(plan FeatureDHCP) {
+	data.Device = plan.Device
 }

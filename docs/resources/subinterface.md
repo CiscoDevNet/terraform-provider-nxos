@@ -54,6 +54,7 @@ resource "nxos_subinterface" "example" {
   - Range: `1`-`16777215`
   - Default value: `1`
 - **description** (String) Interface description.
+- **device** (String) A device name from the provider configuration.
 - **encap** (String) Subinterface encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
   - Default value: `unknown`
 - **link_logging** (String) Administrative link logging.

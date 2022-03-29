@@ -37,6 +37,10 @@ resource "nxos_default_qos_class_map_dscp" "example" {
 - **value** (String) DSCP value.
   - Default value: `0`
 
+### Optional
+
+- **device** (String) A device name from the provider configuration.
+
 ### Read-Only
 
 - **id** (String) The distinguished name of the object.

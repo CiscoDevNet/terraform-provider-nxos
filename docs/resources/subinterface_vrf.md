@@ -42,6 +42,10 @@ resource "nxos_subinterface_vrf" "example" {
 - **interface_id** (String) Must match first field in the output of `show intf brief`. Example: `eth1/1.10`.
 - **vrf_dn** (String) DN of VRF. For example: `sys/inst-VRF1`.
 
+### Optional
+
+- **device** (String) A device name from the provider configuration.
+
 ### Read-Only
 
 - **id** (String) The distinguished name of the object.

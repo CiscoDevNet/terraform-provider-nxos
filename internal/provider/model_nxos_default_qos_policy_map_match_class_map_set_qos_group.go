@@ -13,6 +13,7 @@ import (
 )
 
 type DefaultQOSPolicyMapMatchClassMapSetQOSGroup struct {
+	Device          types.String `tfsdk:"device"`
 	Dn              types.String `tfsdk:"id"`
 	Policy_map_name types.String `tfsdk:"policy_map_name"`
 	Class_map_name  types.String `tfsdk:"class_map_name"`
@@ -39,6 +40,7 @@ func (data *DefaultQOSPolicyMapMatchClassMapSetQOSGroup) fromBody(res gjson.Resu
 }
 
 func (data *DefaultQOSPolicyMapMatchClassMapSetQOSGroup) fromPlan(plan DefaultQOSPolicyMapMatchClassMapSetQOSGroup) {
+	data.Device = plan.Device
 	data.Policy_map_name.Value = plan.Policy_map_name.Value
 	data.Class_map_name.Value = plan.Class_map_name.Value
 }

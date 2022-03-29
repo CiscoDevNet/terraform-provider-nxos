@@ -11,6 +11,7 @@ import (
 )
 
 type PIMStaticRP struct {
+	Device   types.String `tfsdk:"device"`
 	Dn       types.String `tfsdk:"id"`
 	Vrf_name types.String `tfsdk:"vrf_name"`
 	Addr     types.String `tfsdk:"address"`
@@ -36,5 +37,6 @@ func (data *PIMStaticRP) fromBody(res gjson.Result) {
 }
 
 func (data *PIMStaticRP) fromPlan(plan PIMStaticRP) {
+	data.Device = plan.Device
 	data.Vrf_name.Value = plan.Vrf_name.Value
 }

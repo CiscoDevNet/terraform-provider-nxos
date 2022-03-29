@@ -39,6 +39,10 @@ resource "nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth" "exam
 - **value** (Number) Remaining bandwidth percent.
   - Range: `0`-`100`
 
+### Optional
+
+- **device** (String) A device name from the provider configuration.
+
 ### Read-Only
 
 - **id** (String) The distinguished name of the object.

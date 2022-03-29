@@ -28,6 +28,10 @@ data "nxos_svi_interface" "example" {
 
 - **interface_id** (String) Must match first field in the output of `show intf brief`. Example: `vlan100`.
 
+### Optional
+
+- **device** (String) A device name from the provider configuration.
+
 ### Read-Only
 
 - **admin_state** (String) Administrative port state.

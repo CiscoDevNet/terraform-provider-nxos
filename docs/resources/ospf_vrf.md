@@ -63,6 +63,7 @@ resource "nxos_ospf_vrf" "example" {
   - Default value: `40000`
 - **banwidth_reference_unit** (String) Bandwidth reference unit.
   - Default value: `mbps`
+- **device** (String) A device name from the provider configuration.
 - **distance** (Number) Administrative distance preference.
   - Range: `1`-`255`
   - Default value: `110`

@@ -43,6 +43,7 @@ resource "nxos_pim_ssm_range" "example" {
 
 ### Optional
 
+- **device** (String) A device name from the provider configuration.
 - **group_list_1** (String) Group list 1.
   - Default value: `0.0.0.0`
 - **group_list_2** (String) Group list 2.

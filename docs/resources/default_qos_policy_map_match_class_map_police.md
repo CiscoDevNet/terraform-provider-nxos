@@ -94,6 +94,7 @@ resource "nxos_default_qos_policy_map_match_class_map_police" "example" {
 - **conform_set_qos_group** (Number) Set qos-group for conforming traffic.
   - Range: `0`-`7`
   - Default value: `0`
+- **device** (String) A device name from the provider configuration.
 - **exceed_action** (String) Exceed action.
   - Choices: `unspecified`, `transmit`, `drop`, `set-cos-transmit`, `set-dscp-transmit`, `set-prec-transmit`, `set-qos-transmit`
   - Default value: `unspecified`

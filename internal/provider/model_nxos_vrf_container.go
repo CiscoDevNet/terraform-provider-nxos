@@ -11,8 +11,9 @@ import (
 )
 
 type VRFContainer struct {
-	Dn   types.String `tfsdk:"id"`
-	Name types.String `tfsdk:"name"`
+	Device types.String `tfsdk:"device"`
+	Dn     types.String `tfsdk:"id"`
+	Name   types.String `tfsdk:"name"`
 }
 
 func (data VRFContainer) getDn() string {
@@ -35,4 +36,5 @@ func (data *VRFContainer) fromBody(res gjson.Result) {
 }
 
 func (data *VRFContainer) fromPlan(plan VRFContainer) {
+	data.Device = plan.Device
 }

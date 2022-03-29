@@ -14,6 +14,7 @@ import (
 )
 
 type PIMSSMRange struct {
+	Device   types.String `tfsdk:"device"`
 	Dn       types.String `tfsdk:"id"`
 	Vrf_name types.String `tfsdk:"vrf_name"`
 	GrpList  types.String `tfsdk:"group_list_1"`
@@ -57,5 +58,6 @@ func (data *PIMSSMRange) fromBody(res gjson.Result) {
 }
 
 func (data *PIMSSMRange) fromPlan(plan PIMSSMRange) {
+	data.Device = plan.Device
 	data.Vrf_name.Value = plan.Vrf_name.Value
 }

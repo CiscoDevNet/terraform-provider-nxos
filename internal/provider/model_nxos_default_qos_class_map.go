@@ -11,6 +11,7 @@ import (
 )
 
 type DefaultQOSClassMap struct {
+	Device    types.String `tfsdk:"device"`
 	Dn        types.String `tfsdk:"id"`
 	Name      types.String `tfsdk:"name"`
 	MatchType types.String `tfsdk:"match_type"`
@@ -38,4 +39,5 @@ func (data *DefaultQOSClassMap) fromBody(res gjson.Result) {
 }
 
 func (data *DefaultQOSClassMap) fromPlan(plan DefaultQOSClassMap) {
+	data.Device = plan.Device
 }

@@ -42,6 +42,10 @@ resource "nxos_default_qos_policy_interface_in_policy_map" "example" {
 - **interface_id** (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - **policy_map_name** (String) Policy map name.
 
+### Optional
+
+- **device** (String) A device name from the provider configuration.
+
 ### Read-Only
 
 - **id** (String) The distinguished name of the object.

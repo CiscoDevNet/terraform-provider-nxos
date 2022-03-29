@@ -30,6 +30,10 @@ data "nxos_queuing_qos_policy_map_match_class_map" "example" {
 - **name** (String) Class map name.
 - **policy_map_name** (String) Policy map name.
 
+### Optional
+
+- **device** (String) A device name from the provider configuration.
+
 ### Read-Only
 
 - **id** (String) The distinguished name of the object.

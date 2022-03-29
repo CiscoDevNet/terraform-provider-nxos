@@ -32,6 +32,7 @@ resource "nxos_vrf" "example" {
 ### Optional
 
 - **description** (String) VRF description.
+- **device** (String) A device name from the provider configuration.
 
 ### Read-Only
 

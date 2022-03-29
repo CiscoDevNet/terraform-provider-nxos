@@ -14,6 +14,7 @@ import (
 )
 
 type PIMVRF struct {
+	Device  types.String `tfsdk:"device"`
 	Dn      types.String `tfsdk:"id"`
 	Name    types.String `tfsdk:"name"`
 	AdminSt types.String `tfsdk:"admin_state"`
@@ -44,4 +45,5 @@ func (data *PIMVRF) fromBody(res gjson.Result) {
 }
 
 func (data *PIMVRF) fromPlan(plan PIMVRF) {
+	data.Device = plan.Device
 }

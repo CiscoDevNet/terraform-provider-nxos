@@ -56,6 +56,7 @@ resource "nxos_pim_vrf" "example" {
   - Default value: `enabled`
 - **bfd** (Boolean) BFD.
   - Default value: `false`
+- **device** (String) A device name from the provider configuration.
 
 ### Read-Only
 

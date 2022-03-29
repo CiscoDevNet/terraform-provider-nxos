@@ -49,6 +49,7 @@ resource "nxos_ospf_area" "example" {
 - **cost** (Number) Area cost, specifies cost for default summary LSAs. Used with nssa/stub area types.
   - Range: `0`-`16777215`
   - Default value: `1`
+- **device** (String) A device name from the provider configuration.
 - **type** (String) Area type.
   - Default value: `regular`
 

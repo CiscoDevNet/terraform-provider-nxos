@@ -11,8 +11,9 @@ import (
 )
 
 type DHCPRelayInterface struct {
-	Dn types.String `tfsdk:"id"`
-	Id types.String `tfsdk:"interface_id"`
+	Device types.String `tfsdk:"device"`
+	Dn     types.String `tfsdk:"id"`
+	Id     types.String `tfsdk:"interface_id"`
 }
 
 func (data DHCPRelayInterface) getDn() string {
@@ -35,4 +36,5 @@ func (data *DHCPRelayInterface) fromBody(res gjson.Result) {
 }
 
 func (data *DHCPRelayInterface) fromPlan(plan DHCPRelayInterface) {
+	data.Device = plan.Device
 }

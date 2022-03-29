@@ -28,6 +28,10 @@ data "nxos_pim_ssm_range" "example" {
 
 - **vrf_name** (String) VRF name.
 
+### Optional
+
+- **device** (String) A device name from the provider configuration.
+
 ### Read-Only
 
 - **group_list_1** (String) Group list 1.

@@ -11,6 +11,7 @@ import (
 )
 
 type BridgeDomain struct {
+	Device   types.String `tfsdk:"device"`
 	Dn       types.String `tfsdk:"id"`
 	FabEncap types.String `tfsdk:"fabric_encap"`
 	AccEncap types.String `tfsdk:"access_encap"`
@@ -41,4 +42,5 @@ func (data *BridgeDomain) fromBody(res gjson.Result) {
 }
 
 func (data *BridgeDomain) fromPlan(plan BridgeDomain) {
+	data.Device = plan.Device
 }

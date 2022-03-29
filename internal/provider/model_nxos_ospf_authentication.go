@@ -14,6 +14,7 @@ import (
 )
 
 type OSPFAuthentication struct {
+	Device           types.String `tfsdk:"device"`
 	Dn               types.String `tfsdk:"id"`
 	Inst             types.String `tfsdk:"instance_name"`
 	Name             types.String `tfsdk:"vrf_name"`
@@ -57,6 +58,7 @@ func (data *OSPFAuthentication) fromBody(res gjson.Result) {
 }
 
 func (data *OSPFAuthentication) fromPlan(plan OSPFAuthentication) {
+	data.Device = plan.Device
 	data.Inst.Value = plan.Inst.Value
 	data.Name.Value = plan.Name.Value
 	data.Id.Value = plan.Id.Value

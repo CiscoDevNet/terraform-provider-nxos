@@ -34,6 +34,7 @@ resource "nxos_pim" "example" {
 
 - **admin_state** (String) Administrative state.
   - Default value: `enabled`
+- **device** (String) A device name from the provider configuration.
 
 ### Read-Only
 

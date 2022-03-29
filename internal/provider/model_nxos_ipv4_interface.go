@@ -11,6 +11,7 @@ import (
 )
 
 type IPv4Interface struct {
+	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
 	Dom        types.String `tfsdk:"vrf"`
 	Id         types.String `tfsdk:"interface_id"`
@@ -42,5 +43,6 @@ func (data *IPv4Interface) fromBody(res gjson.Result) {
 }
 
 func (data *IPv4Interface) fromPlan(plan IPv4Interface) {
+	data.Device = plan.Device
 	data.Dom.Value = plan.Dom.Value
 }

@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-nxos"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
@@ -21,6 +22,11 @@ func (t dataSourcePhysicalInterfaceVRFType) GetSchema(ctx context.Context) (tfsd
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read a physical interface VRF association.", "nwRtVrfMbr", "Routing%20and%20Forwarding/nw:RtVrfMbr/").String,
 
 		Attributes: map[string]tfsdk.Attribute{
+			"device": {
+				MarkdownDescription: "A device name from the provider configuration.",
+				Type:                types.StringType,
+				Optional:            true,
+			},
 			"id": {
 				MarkdownDescription: "The distinguished name of the object.",
 				Type:                types.StringType,
@@ -64,7 +70,7 @@ func (d dataSourcePhysicalInterfaceVRF) Read(ctx context.Context, req tfsdk.Read
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getDn()))
 
-	res, err := d.provider.client.GetDn(config.getDn())
+	res, err := d.provider.client.GetDn(config.getDn(), nxos.OverrideUrl(d.provider.devices[config.Device.Value]))
 
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

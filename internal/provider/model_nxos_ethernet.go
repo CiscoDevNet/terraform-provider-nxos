@@ -11,6 +11,7 @@ import (
 )
 
 type Ethernet struct {
+	Device         types.String `tfsdk:"device"`
 	Dn             types.String `tfsdk:"id"`
 	SystemJumboMtu types.Int64  `tfsdk:"mtu"`
 }
@@ -35,4 +36,5 @@ func (data *Ethernet) fromBody(res gjson.Result) {
 }
 
 func (data *Ethernet) fromPlan(plan Ethernet) {
+	data.Device = plan.Device
 }

@@ -293,8 +293,8 @@ github.com/mitchellh/reflectwalk v1.0.0/go.mod h1:mSTlrgnPZtwu0c4WaC2kGObEpuNDbx
 github.com/mitchellh/reflectwalk v1.0.2 h1:G2LzWKi524PWgd3mLHV8Y5k7s6XUvT0Gef6zxSIeXaQ=
 github.com/mitchellh/reflectwalk v1.0.2/go.mod h1:mSTlrgnPZtwu0c4WaC2kGObEpuNDbx0jmZXqmk4esnw=
 github.com/nbio/st v0.0.0-20140626010706-e9e8d9816f32/go.mod h1:9wM+0iRr9ahx58uYLpLIr5fm8diHn0JbqRycJi6w0Ms=
-github.com/netascode/go-nxos v0.2.1 h1:VvZAeKCeiHefQEyu4ulTqm6ePt4zvlYvQgybvdKLlx4=
-github.com/netascode/go-nxos v0.2.1/go.mod h1:qDsKZRwGbZ5bwE7d8Z0/tI/snSb2pVQO8OA90rBqdEg=
+github.com/netascode/go-nxos v0.2.2 h1:DEieo2z4q4LDpcVHz8NF/phgAoX+0+sOrh3Y+lXA61c=
+github.com/netascode/go-nxos v0.2.2/go.mod h1:qDsKZRwGbZ5bwE7d8Z0/tI/snSb2pVQO8OA90rBqdEg=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
 github.com/nsf/jsondiff v0.0.0-20200515183724-f29ed568f4ce h1:RPclfga2SEJmgMmz2k+Mg7cowZ8yv4Trqw9UsJby758=
 github.com/nsf/jsondiff v0.0.0-20200515183724-f29ed568f4ce/go.mod h1:uFMI8w+ref4v2r9jz+c9i1IfIttS/OkmLfrk1jne5hs=

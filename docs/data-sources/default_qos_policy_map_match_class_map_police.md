@@ -30,6 +30,10 @@ data "nxos_default_qos_policy_map_match_class_map_police" "example" {
 - **class_map_name** (String) Class map name.
 - **policy_map_name** (String) Policy map name.
 
+### Optional
+
+- **device** (String) A device name from the provider configuration.
+
 ### Read-Only
 
 - **bc_rate** (Number) CIR burst rate.

@@ -42,6 +42,10 @@ resource "nxos_pim_static_rp" "example" {
 - **address** (String) Address.
 - **vrf_name** (String) VRF name.
 
+### Optional
+
+- **device** (String) A device name from the provider configuration.
+
 ### Read-Only
 
 - **id** (String) The distinguished name of the object.

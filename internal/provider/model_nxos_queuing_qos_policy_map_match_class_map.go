@@ -11,6 +11,7 @@ import (
 )
 
 type QueuingQOSPolicyMapMatchClassMap struct {
+	Device          types.String `tfsdk:"device"`
 	Dn              types.String `tfsdk:"id"`
 	Policy_map_name types.String `tfsdk:"policy_map_name"`
 	Name            types.String `tfsdk:"name"`
@@ -36,5 +37,6 @@ func (data *QueuingQOSPolicyMapMatchClassMap) fromBody(res gjson.Result) {
 }
 
 func (data *QueuingQOSPolicyMapMatchClassMap) fromPlan(plan QueuingQOSPolicyMapMatchClassMap) {
+	data.Device = plan.Device
 	data.Policy_map_name.Value = plan.Policy_map_name.Value
 }

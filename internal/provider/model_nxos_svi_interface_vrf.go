@@ -11,9 +11,10 @@ import (
 )
 
 type SVIInterfaceVRF struct {
-	Dn  types.String `tfsdk:"id"`
-	Id  types.String `tfsdk:"interface_id"`
-	TDn types.String `tfsdk:"vrf_dn"`
+	Device types.String `tfsdk:"device"`
+	Dn     types.String `tfsdk:"id"`
+	Id     types.String `tfsdk:"interface_id"`
+	TDn    types.String `tfsdk:"vrf_dn"`
 }
 
 func (data SVIInterfaceVRF) getDn() string {
@@ -36,5 +37,6 @@ func (data *SVIInterfaceVRF) fromBody(res gjson.Result) {
 }
 
 func (data *SVIInterfaceVRF) fromPlan(plan SVIInterfaceVRF) {
+	data.Device = plan.Device
 	data.Id.Value = plan.Id.Value
 }

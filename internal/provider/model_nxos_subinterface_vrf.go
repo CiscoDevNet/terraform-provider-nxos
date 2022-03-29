@@ -11,9 +11,10 @@ import (
 )
 
 type SubinterfaceVRF struct {
-	Dn  types.String `tfsdk:"id"`
-	Id  types.String `tfsdk:"interface_id"`
-	TDn types.String `tfsdk:"vrf_dn"`
+	Device types.String `tfsdk:"device"`
+	Dn     types.String `tfsdk:"id"`
+	Id     types.String `tfsdk:"interface_id"`
+	TDn    types.String `tfsdk:"vrf_dn"`
 }
 
 func (data SubinterfaceVRF) getDn() string {
@@ -36,5 +37,6 @@ func (data *SubinterfaceVRF) fromBody(res gjson.Result) {
 }
 
 func (data *SubinterfaceVRF) fromPlan(plan SubinterfaceVRF) {
+	data.Device = plan.Device
 	data.Id.Value = plan.Id.Value
 }

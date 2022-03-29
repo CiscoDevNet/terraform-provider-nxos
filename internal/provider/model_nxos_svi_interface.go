@@ -13,6 +13,7 @@ import (
 )
 
 type SVIInterface struct {
+	Device  types.String `tfsdk:"device"`
 	Dn      types.String `tfsdk:"id"`
 	Id      types.String `tfsdk:"interface_id"`
 	AdminSt types.String `tfsdk:"admin_state"`
@@ -55,4 +56,5 @@ func (data *SVIInterface) fromBody(res gjson.Result) {
 }
 
 func (data *SVIInterface) fromPlan(plan SVIInterface) {
+	data.Device = plan.Device
 }

@@ -11,6 +11,7 @@ import (
 )
 
 type LoopbackInterface struct {
+	Device  types.String `tfsdk:"device"`
 	Dn      types.String `tfsdk:"id"`
 	Id      types.String `tfsdk:"interface_id"`
 	AdminSt types.String `tfsdk:"admin_state"`
@@ -41,4 +42,5 @@ func (data *LoopbackInterface) fromBody(res gjson.Result) {
 }
 
 func (data *LoopbackInterface) fromPlan(plan LoopbackInterface) {
+	data.Device = plan.Device
 }

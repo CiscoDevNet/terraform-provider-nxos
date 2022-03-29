@@ -44,6 +44,10 @@ resource "nxos_dhcp_relay_address" "example" {
 - **interface_id** (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - **vrf** (String) VRF name.
 
+### Optional
+
+- **device** (String) A device name from the provider configuration.
+
 ### Read-Only
 
 - **id** (String) The distinguished name of the object.

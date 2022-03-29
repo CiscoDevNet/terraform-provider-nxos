@@ -67,6 +67,7 @@ resource "nxos_ospf_interface" "example" {
 - **dead_interval** (Number) Dead interval, interval after which router declares that neighbor as down.
   - Range: `0`-`65535`
   - Default value: `0`
+- **device** (String) A device name from the provider configuration.
 - **hello_interval** (Number) Hello interval, interval between hello packets that OSPF sends on the interface.
   - Range: `0`-`65535`
   - Default value: `10`

@@ -11,6 +11,7 @@ import (
 )
 
 type DefaultQOSClassMapDSCP struct {
+	Device         types.String `tfsdk:"device"`
 	Dn             types.String `tfsdk:"id"`
 	Class_map_name types.String `tfsdk:"class_map_name"`
 	Val            types.String `tfsdk:"value"`
@@ -36,5 +37,6 @@ func (data *DefaultQOSClassMapDSCP) fromBody(res gjson.Result) {
 }
 
 func (data *DefaultQOSClassMapDSCP) fromPlan(plan DefaultQOSClassMapDSCP) {
+	data.Device = plan.Device
 	data.Class_map_name.Value = plan.Class_map_name.Value
 }

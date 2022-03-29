@@ -28,6 +28,10 @@ data "nxos_dhcp_relay_interface" "example" {
 
 - **interface_id** (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 
+### Optional
+
+- **device** (String) A device name from the provider configuration.
+
 ### Read-Only
 
 - **id** (String) The distinguished name of the object.

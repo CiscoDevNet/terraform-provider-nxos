@@ -11,6 +11,7 @@ import (
 )
 
 type DHCPRelayAddress struct {
+	Device  types.String `tfsdk:"device"`
 	Dn      types.String `tfsdk:"id"`
 	Id      types.String `tfsdk:"interface_id"`
 	Vrf     types.String `tfsdk:"vrf"`
@@ -39,5 +40,6 @@ func (data *DHCPRelayAddress) fromBody(res gjson.Result) {
 }
 
 func (data *DHCPRelayAddress) fromPlan(plan DHCPRelayAddress) {
+	data.Device = plan.Device
 	data.Id.Value = plan.Id.Value
 }

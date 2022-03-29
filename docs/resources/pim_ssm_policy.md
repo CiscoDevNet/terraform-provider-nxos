@@ -43,6 +43,7 @@ resource "nxos_pim_ssm_policy" "example" {
 
 ### Optional
 
+- **device** (String) A device name from the provider configuration.
 - **name** (String) Policy name.
 
 ### Read-Only

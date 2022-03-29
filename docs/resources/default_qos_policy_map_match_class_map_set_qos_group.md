@@ -39,6 +39,7 @@ resource "nxos_default_qos_policy_map_match_class_map_set_qos_group" "example" {
 
 ### Optional
 
+- **device** (String) A device name from the provider configuration.
 - **qos_group_id** (Number) QoS group ID.
   - Range: `0`-`7`
   - Default value: `0`

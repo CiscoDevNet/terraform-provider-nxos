@@ -26,6 +26,7 @@ resource "nxos_ethernet" "example" {
 
 ### Optional
 
+- **device** (String) A device name from the provider configuration.
 - **mtu** (Number) System jumbo MTU.
   - Range: `576`-`9216`
   - Default value: `9216`

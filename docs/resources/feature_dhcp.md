@@ -28,6 +28,10 @@ resource "nxos_feature_dhcp" "example" {
 
 - **admin_state** (String) Administrative state.
 
+### Optional
+
+- **device** (String) A device name from the provider configuration.
+
 ### Read-Only
 
 - **id** (String) The distinguished name of the object.

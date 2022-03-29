@@ -30,6 +30,10 @@ data "nxos_ospf_vrf" "example" {
 - **instance_name** (String) OSPF instance name.
 - **name** (String) VRF name.
 
+### Optional
+
+- **device** (String) A device name from the provider configuration.
+
 ### Read-Only
 
 - **admin_state** (String) Administrative state.

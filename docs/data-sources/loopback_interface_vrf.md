@@ -28,6 +28,10 @@ data "nxos_loopback_interface_vrf" "example" {
 
 - **interface_id** (String) Must match first field in the output of `show intf brief`. Example: `lo123`.
 
+### Optional
+
+- **device** (String) A device name from the provider configuration.
+
 ### Read-Only
 
 - **id** (String) The distinguished name of the object.

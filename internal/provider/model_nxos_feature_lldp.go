@@ -9,6 +9,7 @@ import (
 )
 
 type FeatureLLDP struct {
+	Device  types.String `tfsdk:"device"`
 	Dn      types.String `tfsdk:"id"`
 	AdminSt types.String `tfsdk:"admin_state"`
 }
@@ -33,4 +34,5 @@ func (data *FeatureLLDP) fromBody(res gjson.Result) {
 }
 
 func (data *FeatureLLDP) fromPlan(plan FeatureLLDP) {
+	data.Device = plan.Device
 }

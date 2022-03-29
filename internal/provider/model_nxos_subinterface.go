@@ -13,6 +13,7 @@ import (
 )
 
 type Subinterface struct {
+	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
 	Id         types.String `tfsdk:"interface_id"`
 	AdminSt    types.String `tfsdk:"admin_state"`
@@ -61,4 +62,5 @@ func (data *Subinterface) fromBody(res gjson.Result) {
 }
 
 func (data *Subinterface) fromPlan(plan Subinterface) {
+	data.Device = plan.Device
 }

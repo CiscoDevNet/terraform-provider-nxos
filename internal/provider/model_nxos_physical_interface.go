@@ -13,6 +13,7 @@ import (
 )
 
 type PhysicalInterface struct {
+	Device                 types.String `tfsdk:"device"`
 	Dn                     types.String `tfsdk:"id"`
 	Id                     types.String `tfsdk:"interface_id"`
 	FECMode                types.String `tfsdk:"fec_mode"`
@@ -91,4 +92,5 @@ func (data *PhysicalInterface) fromBody(res gjson.Result) {
 }
 
 func (data *PhysicalInterface) fromPlan(plan PhysicalInterface) {
+	data.Device = plan.Device
 }

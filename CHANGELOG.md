@@ -1,4 +1,4 @@
-## 0.3.0 (unreleased)
+## 0.3.0
 
 - Add option to manage multiple devices
 - Add nxos_feature_bfd resource and data source

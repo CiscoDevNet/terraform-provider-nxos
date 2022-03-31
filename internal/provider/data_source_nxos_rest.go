@@ -16,7 +16,7 @@ type dataSourceRestType struct{}
 func (t dataSourceRestType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read one NXOS object.",
+		MarkdownDescription: "This data source can read one NX-OS object.",
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {

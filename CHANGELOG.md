@@ -1,6 +1,6 @@
 ## 0.3.0 (unreleased)
 
-- Fix option to manage multiple devices
+- Add option to manage multiple devices
 - Add nxos_feature_bfd resource and data source
 
 ## 0.2.5

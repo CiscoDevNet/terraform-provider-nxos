@@ -3,12 +3,12 @@
 layout: ""
 page_title: "Provider: NXOS"
 description: |-
-  The NXOS provider provides resources to interact with a Cisco NX-OS device.
+  The NXOS provider provides resources to interact with one or more Cisco NX-OS devices.
 ---
 
 # NXOS Provider
 
-The NXOS provider provides resources to interact with a Cisco NX-OS device.
+The NXOS provider provides resources to interact with one or [more](https://registry.terraform.io/providers/netascode/nxos/latest/docs/guides/manage_multiple_devices) Cisco NX-OS devices.
 
 ## Example Usage
 

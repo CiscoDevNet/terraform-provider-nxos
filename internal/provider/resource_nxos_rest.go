@@ -19,7 +19,7 @@ type resourceRestType struct{}
 func (t resourceRestType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "Manages NXOS Model Objects via REST API calls. This resource can only manage a single API object. It is able to read the state and therefore reconcile configuration drift.",
+		MarkdownDescription: "Manages NX-OS Model Objects via REST API calls. This resource can only manage a single API object. It is able to read the state and therefore reconcile configuration drift.",
 
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {

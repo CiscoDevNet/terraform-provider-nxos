@@ -3,12 +3,12 @@
 page_title: "nxos_rest Resource - terraform-provider-nxos"
 subcategory: ""
 description: |-
-  Manages NXOS Model Objects via REST API calls. This resource can only manage a single API object. It is able to read the state and therefore reconcile configuration drift.
+  Manages NX-OS Model Objects via REST API calls. This resource can only manage a single API object. It is able to read the state and therefore reconcile configuration drift.
 ---
 
 # nxos_rest (Resource)
 
-Manages NXOS Model Objects via REST API calls. This resource can only manage a single API object. It is able to read the state and therefore reconcile configuration drift.
+Manages NX-OS Model Objects via REST API calls. This resource can only manage a single API object. It is able to read the state and therefore reconcile configuration drift.
 
 ## Example Usage
 

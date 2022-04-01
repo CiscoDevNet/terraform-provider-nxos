@@ -12,6 +12,7 @@
 - Add nxos_feature_pvlan resource and data source
 - Add nxos_feature_ssh resource and data source
 - Add nxos_feature_tacacs resource and data source
+- Add nxos_feature_telnet resource and data source
 
 ## 0.3.0
 

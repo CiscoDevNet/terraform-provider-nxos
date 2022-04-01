@@ -1,0 +1,14 @@
+---
+name: System
+class_name: topSystem
+dn: sys
+no_delete: true
+ds_description: This data source can read the system configuration.
+res_description: This resource can manage the system configuration.
+doc_path: System/top:System/
+attributes:
+  - nxos_name: name
+    tf_name: name
+    type: String
+    description: 'The system name (hostname).'
+    example: 'LEAF1'

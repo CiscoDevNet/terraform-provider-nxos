@@ -317,6 +317,7 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 		"nxos_subinterface_vrf":  resourceSubinterfaceVRFType{},
 		"nxos_svi_interface":     resourceSVIInterfaceType{},
 		"nxos_svi_interface_vrf": resourceSVIInterfaceVRFType{},
+		"nxos_system":            resourceSystemType{},
 		"nxos_vrf":               resourceVRFType{},
 		"nxos_vrf_container":     resourceVRFContainerType{},
 	}, nil
@@ -391,6 +392,7 @@ func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSou
 		"nxos_subinterface_vrf":  dataSourceSubinterfaceVRFType{},
 		"nxos_svi_interface":     dataSourceSVIInterfaceType{},
 		"nxos_svi_interface_vrf": dataSourceSVIInterfaceVRFType{},
+		"nxos_system":            dataSourceSystemType{},
 		"nxos_vrf":               dataSourceVRFType{},
 		"nxos_vrf_container":     dataSourceVRFContainerType{},
 	}, nil

@@ -10,37 +10,37 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccNxosFeatureMACsec(t *testing.T) {
+func TestAccNxosFeatureNetflow(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosFeatureMACsecConfig_all(),
+				Config: testAccNxosFeatureNetflowConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_feature_macsec.test", "admin_state", "enabled"),
+					resource.TestCheckResourceAttr("nxos_feature_netflow.test", "admin_state", "enabled"),
 				),
 			},
 			{
-				ResourceName:  "nxos_feature_macsec.test",
+				ResourceName:  "nxos_feature_netflow.test",
 				ImportState:   true,
-				ImportStateId: "sys/fm/macsec",
+				ImportStateId: "sys/fm/netflow",
 			},
 		},
 	})
 }
 
-func testAccNxosFeatureMACsecConfig_minimum() string {
+func testAccNxosFeatureNetflowConfig_minimum() string {
 	return `
-	resource "nxos_feature_macsec" "test" {
+	resource "nxos_feature_netflow" "test" {
 		admin_state = "enabled"
 	}
 	`
 }
 
-func testAccNxosFeatureMACsecConfig_all() string {
+func testAccNxosFeatureNetflowConfig_all() string {
 	return `
-	resource "nxos_feature_macsec" "test" {
+	resource "nxos_feature_netflow" "test" {
 		admin_state = "enabled"
 	}
 	`

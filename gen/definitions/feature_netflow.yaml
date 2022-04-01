@@ -1,0 +1,19 @@
+---
+name: Feature Netflow
+class_name: fmNetflow
+dn: sys/fm/netflow
+no_delete: true
+exclude_test: true
+ds_description: This data source can read the Netflow feature configuration.
+res_description: This resource can manage the Netflow feature configuration.
+doc_path: Feature%20Management/fm:Netflow/
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    mandatory: true
+    description: 'Administrative state.'
+    enum_value:
+      - enabled
+      - disabled
+    example: enabled

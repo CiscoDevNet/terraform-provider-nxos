@@ -1,3 +1,3 @@
 resource "nxos_feature_macsec" "example" {
-  admin_state = "disabled"
+  admin_state = "enabled"
 }

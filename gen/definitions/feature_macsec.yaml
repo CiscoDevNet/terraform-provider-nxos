@@ -16,4 +16,4 @@ attributes:
     enum_value:
       - enabled
       - disabled
-    example: disabled
+    example: enabled

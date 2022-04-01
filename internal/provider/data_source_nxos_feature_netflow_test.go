@@ -10,28 +10,28 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccDataSourceNxosFeatureMACsec(t *testing.T) {
+func TestAccDataSourceNxosFeatureNetflow(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosFeatureMACsecConfig,
+				Config: testAccDataSourceNxosFeatureNetflowConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_feature_macsec.test", "admin_state", "enabled"),
+					resource.TestCheckResourceAttr("data.nxos_feature_netflow.test", "admin_state", "enabled"),
 				),
 			},
 		},
 	})
 }
 
-const testAccDataSourceNxosFeatureMACsecConfig = `
+const testAccDataSourceNxosFeatureNetflowConfig = `
 
-resource "nxos_feature_macsec" "test" {
+resource "nxos_feature_netflow" "test" {
   admin_state = "enabled"
 }
 
-data "nxos_feature_macsec" "test" {
-  depends_on = [nxos_feature_macsec.test]
+data "nxos_feature_netflow" "test" {
+  depends_on = [nxos_feature_netflow.test]
 }
 `

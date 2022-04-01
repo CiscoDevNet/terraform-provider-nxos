@@ -18,14 +18,14 @@ func TestAccDataSourceNxosISISVRF(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "name", "default"),
 					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "admin_state", "enabled"),
-					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "authentication_key_l1", ""),
-					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "authentication_key_l2", ""),
+					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "authentication_check_l1", "false"),
+					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "authentication_check_l2", "false"),
 					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "authentication_type_l1", "unknown"),
 					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "authentication_type_l2", "unknown"),
 					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "bandwidth_reference", "400000"),
 					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "banwidth_reference_unit", "mbps"),
 					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "is_type", "l2"),
-					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "metric_type", "transition"),
+					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "metric_type", "wide"),
 					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "mtu", "2000"),
 					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "net", "49.0001.0000.0000.3333.00"),
 					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "passive_default", "l12"),
@@ -60,6 +60,8 @@ resource "nxos_isis_vrf" "test" {
   instance_name = "ISIS1"
   name = "default"
   admin_state = "enabled"
+  authentication_check_l1 = false
+  authentication_check_l2 = false
   authentication_key_l1 = ""
   authentication_key_l2 = ""
   authentication_type_l1 = "unknown"
@@ -67,7 +69,7 @@ resource "nxos_isis_vrf" "test" {
   bandwidth_reference = 400000
   banwidth_reference_unit = "mbps"
   is_type = "l2"
-  metric_type = "transition"
+  metric_type = "wide"
   mtu = 2000
   net = "49.0001.0000.0000.3333.00"
   passive_default = "l12"

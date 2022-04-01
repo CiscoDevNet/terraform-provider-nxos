@@ -32,14 +32,28 @@ attributes:
       - disabled
     default_value: enabled
     example: enabled
+  - nxos_name: authCheckLvl1
+    tf_name: authentication_check_l1
+    type: Bool
+    description: 'Authentication Check for ISIS on Level-1.'
+    default_value: true
+    example: false
+  - nxos_name: authCheckLvl2
+    tf_name: authentication_check_l2
+    type: Bool
+    description: 'Authentication Check for ISIS on Level-2.'
+    default_value: true
+    example: false
   - nxos_name: authKeyLvl1
     tf_name: authentication_key_l1
     type: String
+    read_only: true
     description: 'Authentication Key for IS-IS on Level-1.'
     example: ''
   - nxos_name: authKeyLvl2
     tf_name: authentication_key_l2
     type: String
+    read_only: true
     description: 'Authentication Key for IS-IS on Level-2.'
     example: ''
   - nxos_name: authTypeLvl1
@@ -98,7 +112,7 @@ attributes:
       - wide
       - transition
     default_value: wide
-    example: transition
+    example: wide
   - nxos_name: mtu
     tf_name: mtu
     type: Int64

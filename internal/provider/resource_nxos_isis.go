@@ -20,7 +20,7 @@ type resourceISISType struct{}
 func (t resourceISISType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the global IS-IS configuration.", "isisEntity", "Routing%20and%20Forwarding/isis:Entity/").AddChildren("isis_instance").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the global IS-IS configuration.", "isisEntity", "Routing%20and%20Forwarding/isis:Entity/").AddChildren("isis_instance", "isis_interface").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {

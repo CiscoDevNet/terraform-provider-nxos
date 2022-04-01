@@ -47,6 +47,16 @@ func (t dataSourceISISVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, dia
 				Type:                types.StringType,
 				Computed:            true,
 			},
+			"authentication_check_l1": {
+				MarkdownDescription: "Authentication Check for ISIS on Level-1.",
+				Type:                types.BoolType,
+				Computed:            true,
+			},
+			"authentication_check_l2": {
+				MarkdownDescription: "Authentication Check for ISIS on Level-2.",
+				Type:                types.BoolType,
+				Computed:            true,
+			},
 			"authentication_key_l1": {
 				MarkdownDescription: "Authentication Key for IS-IS on Level-1.",
 				Type:                types.StringType,

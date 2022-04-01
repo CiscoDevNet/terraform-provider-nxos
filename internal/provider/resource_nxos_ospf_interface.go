@@ -20,7 +20,7 @@ type resourceOSPFInterfaceType struct{}
 func (t resourceOSPFInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the OSPF interface configuration.", "ospfIf", "Routing%20and%20Forwarding/ospf:If/").AddParents("ospf_interface").AddChildren("ospf_authentication").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the OSPF interface configuration.", "ospfIf", "Routing%20and%20Forwarding/ospf:If/").AddParents("ospf_vrf").AddChildren("ospf_authentication").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {

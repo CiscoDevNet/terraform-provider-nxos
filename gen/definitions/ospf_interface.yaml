@@ -6,7 +6,7 @@ ds_description: This data source can read the OSPF interface configuration.
 res_description: This resource can manage the OSPF interface configuration.
 doc_path: Routing%20and%20Forwarding/ospf:If/
 parents:
-  - OSPF Interface
+  - OSPF VRF
 children:
   - OSPF Authentication
 attributes:

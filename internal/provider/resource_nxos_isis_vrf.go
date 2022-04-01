@@ -61,6 +61,24 @@ func (t resourceISISVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.
 					helpers.StringDefaultModifier("enabled"),
 				},
 			},
+			"authentication_check_l1": {
+				MarkdownDescription: helpers.NewAttributeDescription("Authentication Check for ISIS on Level-1.").AddDefaultValueDescription("true").String,
+				Type:                types.BoolType,
+				Optional:            true,
+				Computed:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					helpers.BooleanDefaultModifier(true),
+				},
+			},
+			"authentication_check_l2": {
+				MarkdownDescription: helpers.NewAttributeDescription("Authentication Check for ISIS on Level-2.").AddDefaultValueDescription("true").String,
+				Type:                types.BoolType,
+				Optional:            true,
+				Computed:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					helpers.BooleanDefaultModifier(true),
+				},
+			},
 			"authentication_key_l1": {
 				MarkdownDescription: helpers.NewAttributeDescription("Authentication Key for IS-IS on Level-1.").String,
 				Type:                types.StringType,

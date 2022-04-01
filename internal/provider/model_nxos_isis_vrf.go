@@ -9,26 +9,29 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
+	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/tidwall/gjson"
 )
 
 type ISISVRF struct {
-	Device       types.String `tfsdk:"device"`
-	Dn           types.String `tfsdk:"id"`
-	Inst         types.String `tfsdk:"instance_name"`
-	Name         types.String `tfsdk:"name"`
-	AdminSt      types.String `tfsdk:"admin_state"`
-	AuthKeyLvl1  types.String `tfsdk:"authentication_key_l1"`
-	AuthKeyLvl2  types.String `tfsdk:"authentication_key_l2"`
-	AuthTypeLvl1 types.String `tfsdk:"authentication_type_l1"`
-	AuthTypeLvl2 types.String `tfsdk:"authentication_type_l2"`
-	BwRef        types.Int64  `tfsdk:"bandwidth_reference"`
-	BwRefUnit    types.String `tfsdk:"banwidth_reference_unit"`
-	IsType       types.String `tfsdk:"is_type"`
-	MetricStyle  types.String `tfsdk:"metric_type"`
-	Mtu          types.Int64  `tfsdk:"mtu"`
-	Net          types.String `tfsdk:"net"`
-	PassiveDflt  types.String `tfsdk:"passive_default"`
+	Device        types.String `tfsdk:"device"`
+	Dn            types.String `tfsdk:"id"`
+	Inst          types.String `tfsdk:"instance_name"`
+	Name          types.String `tfsdk:"name"`
+	AdminSt       types.String `tfsdk:"admin_state"`
+	AuthCheckLvl1 types.Bool   `tfsdk:"authentication_check_l1"`
+	AuthCheckLvl2 types.Bool   `tfsdk:"authentication_check_l2"`
+	AuthKeyLvl1   types.String `tfsdk:"authentication_key_l1"`
+	AuthKeyLvl2   types.String `tfsdk:"authentication_key_l2"`
+	AuthTypeLvl1  types.String `tfsdk:"authentication_type_l1"`
+	AuthTypeLvl2  types.String `tfsdk:"authentication_type_l2"`
+	BwRef         types.Int64  `tfsdk:"bandwidth_reference"`
+	BwRefUnit     types.String `tfsdk:"banwidth_reference_unit"`
+	IsType        types.String `tfsdk:"is_type"`
+	MetricStyle   types.String `tfsdk:"metric_type"`
+	Mtu           types.Int64  `tfsdk:"mtu"`
+	Net           types.String `tfsdk:"net"`
+	PassiveDflt   types.String `tfsdk:"passive_default"`
 }
 
 func (data ISISVRF) getDn() string {
@@ -43,6 +46,8 @@ func (data ISISVRF) toBody() nxos.Body {
 	attrs := nxos.Body{}.
 		Set("name", data.Name.Value).
 		Set("adminSt", data.AdminSt.Value).
+		Set("authCheckLvl1", strconv.FormatBool(data.AuthCheckLvl1.Value)).
+		Set("authCheckLvl2", strconv.FormatBool(data.AuthCheckLvl2.Value)).
 		Set("authKeyLvl1", data.AuthKeyLvl1.Value).
 		Set("authKeyLvl2", data.AuthKeyLvl2.Value).
 		Set("authTypeLvl1", data.AuthTypeLvl1.Value).
@@ -61,8 +66,8 @@ func (data *ISISVRF) fromBody(res gjson.Result) {
 	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Name.Value = res.Get("*.attributes.name").String()
 	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
-	data.AuthKeyLvl1.Value = res.Get("*.attributes.authKeyLvl1").String()
-	data.AuthKeyLvl2.Value = res.Get("*.attributes.authKeyLvl2").String()
+	data.AuthCheckLvl1.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.authCheckLvl1").String())
+	data.AuthCheckLvl2.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.authCheckLvl2").String())
 	data.AuthTypeLvl1.Value = res.Get("*.attributes.authTypeLvl1").String()
 	data.AuthTypeLvl2.Value = res.Get("*.attributes.authTypeLvl2").String()
 	data.BwRef.Value = res.Get("*.attributes.bwRef").Int()
@@ -77,4 +82,6 @@ func (data *ISISVRF) fromBody(res gjson.Result) {
 func (data *ISISVRF) fromPlan(plan ISISVRF) {
 	data.Device = plan.Device
 	data.Inst.Value = plan.Inst.Value
+	data.AuthKeyLvl1.Value = plan.AuthKeyLvl1.Value
+	data.AuthKeyLvl2.Value = plan.AuthKeyLvl2.Value
 }

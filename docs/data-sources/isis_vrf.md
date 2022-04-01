@@ -37,6 +37,8 @@ data "nxos_isis_vrf" "example" {
 ### Read-Only
 
 - **admin_state** (String) Administrative state.
+- **authentication_check_l1** (Boolean) Authentication Check for ISIS on Level-1.
+- **authentication_check_l2** (Boolean) Authentication Check for ISIS on Level-2.
 - **authentication_key_l1** (String) Authentication Key for IS-IS on Level-1.
 - **authentication_key_l2** (String) Authentication Key for IS-IS on Level-2.
 - **authentication_type_l1** (String) IS-IS Authentication-Type for Level-1.

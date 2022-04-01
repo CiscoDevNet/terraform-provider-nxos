@@ -15,6 +15,7 @@
 - Add nxos_feature_telnet resource and data source
 - Add nxos_feature_udld resource and data source
 - Add nxos_feature_vpc resource and data source
+- Add nxos_feature_vn_segment resource and data source
 
 ## 0.3.0
 

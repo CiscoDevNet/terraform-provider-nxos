@@ -20,6 +20,7 @@
 - Add nxos_system resource and data source
 - Add nxos_isis resource and data source
 - Add nxos_isis_instance resource and data source
+- Add nxos_isis_vrf resource and data source
 
 ## 0.3.0
 

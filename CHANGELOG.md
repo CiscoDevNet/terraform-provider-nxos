@@ -9,6 +9,7 @@
 - Add nxos_feature_netflow resource and data source
 - Add nxos_feature_ospfv3 resource and data source
 - Add nxos_feature_ptp resource and data source
+- Add nxos_feature_pvlan resource and data source
 
 ## 0.3.0
 

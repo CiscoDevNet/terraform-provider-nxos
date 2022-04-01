@@ -53,43 +53,43 @@ resource "nxos_isis_vrf" "example" {
 
 ### Required
 
-- **instance_name** (String) IS-IS instance name.
-- **name** (String) VRF name.
+- `instance_name` (String) IS-IS instance name.
+- `name` (String) VRF name.
 
 ### Optional
 
-- **admin_state** (String) Administrative state.
+- `admin_state` (String) Administrative state.
   - Default value: `enabled`
-- **authentication_check_l1** (Boolean) Authentication Check for ISIS on Level-1.
+- `authentication_check_l1` (Boolean) Authentication Check for ISIS on Level-1.
   - Default value: `true`
-- **authentication_check_l2** (Boolean) Authentication Check for ISIS on Level-2.
+- `authentication_check_l2` (Boolean) Authentication Check for ISIS on Level-2.
   - Default value: `true`
-- **authentication_key_l1** (String) Authentication Key for IS-IS on Level-1.
-- **authentication_key_l2** (String) Authentication Key for IS-IS on Level-2.
-- **authentication_type_l1** (String) IS-IS Authentication-Type for Level-1.
+- `authentication_key_l1` (String) Authentication Key for IS-IS on Level-1.
+- `authentication_key_l2` (String) Authentication Key for IS-IS on Level-2.
+- `authentication_type_l1` (String) IS-IS Authentication-Type for Level-1.
   - Default value: `unknown`
-- **authentication_type_l2** (String) IS-IS Authentication-Type for Level-2.
+- `authentication_type_l2` (String) IS-IS Authentication-Type for Level-2.
   - Default value: `unknown`
-- **bandwidth_reference** (Number) The IS-IS domain bandwidth reference. This sets the default reference bandwidth used for calculating the IS-IS cost metric.
+- `bandwidth_reference` (Number) The IS-IS domain bandwidth reference. This sets the default reference bandwidth used for calculating the IS-IS cost metric.
   - Range: `0`-`4294967295`
   - Default value: `40000`
-- **banwidth_reference_unit** (String) Bandwidth reference unit.
+- `banwidth_reference_unit` (String) Bandwidth reference unit.
   - Default value: `mbps`
-- **device** (String) A device name from the provider configuration.
-- **is_type** (String) IS-IS domain type.
+- `device` (String) A device name from the provider configuration.
+- `is_type` (String) IS-IS domain type.
   - Default value: `l12`
-- **metric_type** (String) IS-IS metric type.
+- `metric_type` (String) IS-IS metric type.
   - Default value: `wide`
-- **mtu** (Number) The configuration of link-state packet (LSP) maximum transmission units (MTU) is supported. You can enable up to 4352 bytes.
+- `mtu` (Number) The configuration of link-state packet (LSP) maximum transmission units (MTU) is supported. You can enable up to 4352 bytes.
   - Range: `256`-`4352`
   - Default value: `1492`
-- **net** (String) Holds IS-IS domain NET (address) value.
-- **passive_default** (String) IS-IS Domain passive-interface default level.
+- `net` (String) Holds IS-IS domain NET (address) value.
+- `passive_default` (String) IS-IS Domain passive-interface default level.
   - Default value: `unknown`
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

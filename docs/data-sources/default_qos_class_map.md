@@ -26,15 +26,15 @@ data "nxos_default_qos_class_map" "example" {
 
 ### Required
 
-- **name** (String) Class map name.
+- `name` (String) Class map name.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
-- **match_type** (String) Match type.
+- `id` (String) The distinguished name of the object.
+- `match_type` (String) Match type.
 
 

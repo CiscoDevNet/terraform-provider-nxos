@@ -27,16 +27,16 @@ resource "nxos_vrf" "example" {
 
 ### Required
 
-- **name** (String) VRF name.
+- `name` (String) VRF name.
 
 ### Optional
 
-- **description** (String) VRF description.
-- **device** (String) A device name from the provider configuration.
+- `description` (String) VRF description.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

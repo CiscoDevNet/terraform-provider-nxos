@@ -28,25 +28,25 @@ data "nxos_ospf_interface" "example" {
 
 ### Required
 
-- **instance_name** (String) OSPF instance name.
-- **interface_id** (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
-- **vrf_name** (String) VRF name.
+- `instance_name` (String) OSPF instance name.
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `vrf_name` (String) VRF name.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **advertise_secondaries** (Boolean) Advertise secondary IP addresses.
-- **area** (String) Area identifier to which a network or interface belongs in IPv4 address format.
-- **bfd** (String) Bidirectional Forwarding Detection (BFD).
-- **cost** (Number) Specifies the cost of interface.
-- **dead_interval** (Number) Dead interval, interval after which router declares that neighbor as down.
-- **hello_interval** (Number) Hello interval, interval between hello packets that OSPF sends on the interface.
-- **id** (String) The distinguished name of the object.
-- **network_type** (String) Network type.
-- **passive** (String) Passive interface control. Interface can be configured as passive or non-passive.
-- **priority** (Number) Priority, used in determining the designated router on this network.
+- `advertise_secondaries` (Boolean) Advertise secondary IP addresses.
+- `area` (String) Area identifier to which a network or interface belongs in IPv4 address format.
+- `bfd` (String) Bidirectional Forwarding Detection (BFD).
+- `cost` (Number) Specifies the cost of interface.
+- `dead_interval` (Number) Dead interval, interval after which router declares that neighbor as down.
+- `hello_interval` (Number) Hello interval, interval between hello packets that OSPF sends on the interface.
+- `id` (String) The distinguished name of the object.
+- `network_type` (String) Network type.
+- `passive` (String) Passive interface control. Interface can be configured as passive or non-passive.
+- `priority` (Number) Priority, used in determining the designated router on this network.
 
 

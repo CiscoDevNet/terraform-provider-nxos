@@ -27,20 +27,20 @@ data "nxos_ospf_vrf" "example" {
 
 ### Required
 
-- **instance_name** (String) OSPF instance name.
-- **name** (String) VRF name.
+- `instance_name` (String) OSPF instance name.
+- `name` (String) VRF name.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **admin_state** (String) Administrative state.
-- **bandwidth_reference** (Number) Bandwidth reference value.
-- **banwidth_reference_unit** (String) Bandwidth reference unit.
-- **distance** (Number) Administrative distance preference.
-- **id** (String) The distinguished name of the object.
-- **router_id** (String) Router ID.
+- `admin_state` (String) Administrative state.
+- `bandwidth_reference` (Number) Bandwidth reference value.
+- `banwidth_reference_unit` (String) Bandwidth reference unit.
+- `distance` (Number) Administrative distance preference.
+- `id` (String) The distinguished name of the object.
+- `router_id` (String) Router ID.
 
 

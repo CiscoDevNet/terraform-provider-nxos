@@ -34,19 +34,19 @@ resource "nxos_default_qos_policy_map_match_class_map_set_qos_group" "example" {
 
 ### Required
 
-- **class_map_name** (String) Class map name.
-- **policy_map_name** (String) Policy map name.
+- `class_map_name` (String) Class map name.
+- `policy_map_name` (String) Policy map name.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
-- **qos_group_id** (Number) QoS group ID.
+- `device` (String) A device name from the provider configuration.
+- `qos_group_id` (Number) QoS group ID.
   - Range: `0`-`7`
   - Default value: `0`
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

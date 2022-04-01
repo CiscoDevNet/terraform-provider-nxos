@@ -56,85 +56,85 @@ resource "nxos_default_qos_policy_map_match_class_map_police" "example" {
 
 ### Required
 
-- **cir_rate** (Number) CIR rate.
+- `cir_rate` (Number) CIR rate.
   - Range: `0`-`100000000000`
   - Default value: `0`
-- **class_map_name** (String) Class map name.
-- **policy_map_name** (String) Policy map name.
+- `class_map_name` (String) Class map name.
+- `policy_map_name` (String) Policy map name.
 
 ### Optional
 
-- **bc_rate** (Number) CIR burst rate.
+- `bc_rate` (Number) CIR burst rate.
   - Range: `0`-`536870912`
   - Default value: `200`
-- **bc_unit** (String) CIR burst rate unit.
+- `bc_unit` (String) CIR burst rate unit.
   - Choices: `unspecified`, `bytes`, `kbytes`, `mbytes`, `ms`, `us`, `packets`
   - Default value: `ms`
-- **be_rate** (Number) PIR burst rate.
+- `be_rate` (Number) PIR burst rate.
   - Range: `0`-`536870912`
   - Default value: `0`
-- **be_unit** (String) PIR burst rate unit.
+- `be_unit` (String) PIR burst rate unit.
   - Choices: `unspecified`, `bytes`, `kbytes`, `mbytes`, `ms`, `us`, `packets`
   - Default value: `unspecified`
-- **cir_unit** (String) CIR rate unit.
+- `cir_unit` (String) CIR rate unit.
   - Choices: `unspecified`, `bps`, `kbps`, `mbps`, `gbps`, `pps`, `pct`
   - Default value: `bps`
-- **conform_action** (String) Conform action.
+- `conform_action` (String) Conform action.
   - Choices: `unspecified`, `transmit`, `drop`, `set-cos-transmit`, `set-dscp-transmit`, `set-prec-transmit`, `set-qos-transmit`
   - Default value: `transmit`
-- **conform_set_cos** (Number) Set CoS for conforming traffic.
+- `conform_set_cos` (Number) Set CoS for conforming traffic.
   - Range: `0`-`7`
   - Default value: `0`
-- **conform_set_dscp** (Number) Set DSCP for conforming traffic.
+- `conform_set_dscp` (Number) Set DSCP for conforming traffic.
   - Range: `0`-`63`
   - Default value: `0`
-- **conform_set_precedence** (String) Set precedence for conforming traffic.
+- `conform_set_precedence` (String) Set precedence for conforming traffic.
   - Choices: `routine`, `priority`, `immediate`, `flash`, `flash-override`, `critical`, `internet`, `network`
   - Default value: `routine`
-- **conform_set_qos_group** (Number) Set qos-group for conforming traffic.
+- `conform_set_qos_group` (Number) Set qos-group for conforming traffic.
   - Range: `0`-`7`
   - Default value: `0`
-- **device** (String) A device name from the provider configuration.
-- **exceed_action** (String) Exceed action.
+- `device` (String) A device name from the provider configuration.
+- `exceed_action` (String) Exceed action.
   - Choices: `unspecified`, `transmit`, `drop`, `set-cos-transmit`, `set-dscp-transmit`, `set-prec-transmit`, `set-qos-transmit`
   - Default value: `unspecified`
-- **exceed_set_cos** (Number) Set CoS for exceeding traffic.
+- `exceed_set_cos` (Number) Set CoS for exceeding traffic.
   - Range: `0`-`7`
   - Default value: `0`
-- **exceed_set_dscp** (Number) Set DSCP for exceeding traffic.
+- `exceed_set_dscp` (Number) Set DSCP for exceeding traffic.
   - Range: `0`-`63`
   - Default value: `0`
-- **exceed_set_precedence** (String) Set precedence for exceeding traffic.
+- `exceed_set_precedence` (String) Set precedence for exceeding traffic.
   - Choices: `routine`, `priority`, `immediate`, `flash`, `flash-override`, `critical`, `internet`, `network`
   - Default value: `routine`
-- **exceed_set_qos_group** (Number) Set qos-group for exceeding traffic.
+- `exceed_set_qos_group` (Number) Set qos-group for exceeding traffic.
   - Range: `0`-`7`
   - Default value: `0`
-- **pir_rate** (Number) PIR rate.
+- `pir_rate` (Number) PIR rate.
   - Range: `0`-`100000000000`
   - Default value: `0`
-- **pir_unit** (String) PIR rate unit.
+- `pir_unit` (String) PIR rate unit.
   - Choices: `unspecified`, `bps`, `kbps`, `mbps`, `gbps`, `pps`, `pct`
   - Default value: `unspecified`
-- **violate_action** (String) Violate action.
+- `violate_action` (String) Violate action.
   - Choices: `unspecified`, `transmit`, `drop`, `set-cos-transmit`, `set-dscp-transmit`, `set-prec-transmit`, `set-qos-transmit`
   - Default value: `drop`
-- **violate_set_cos** (Number) Set CoS for violating traffic.
+- `violate_set_cos` (Number) Set CoS for violating traffic.
   - Range: `0`-`7`
   - Default value: `0`
-- **violate_set_dscp** (Number) Set DSCP for violating traffic.
+- `violate_set_dscp` (Number) Set DSCP for violating traffic.
   - Range: `0`-`63`
   - Default value: `0`
-- **violate_set_precedence** (String) Set precedence for violating traffic.
+- `violate_set_precedence` (String) Set precedence for violating traffic.
   - Choices: `routine`, `priority`, `immediate`, `flash`, `flash-override`, `critical`, `internet`, `network`
   - Default value: `routine`
-- **violate_set_qos_group** (Number) Set qos-group for violating traffic.
+- `violate_set_qos_group` (Number) Set qos-group for violating traffic.
   - Range: `0`-`7`
   - Default value: `0`
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

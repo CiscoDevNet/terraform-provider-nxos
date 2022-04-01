@@ -50,64 +50,64 @@ resource "nxos_physical_interface" "example" {
 
 ### Required
 
-- **interface_id** (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 
 ### Optional
 
-- **access_vlan** (String) Access VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `access_vlan` (String) Access VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
   - Default value: `vlan-1`
-- **admin_state** (String) Administrative port state.
+- `admin_state` (String) Administrative port state.
   - Choices: `up`, `down`
   - Default value: `up`
-- **auto_negotiation** (String) Administrative port auto-negotiation.
+- `auto_negotiation` (String) Administrative port auto-negotiation.
   - Choices: `on`, `off`, `25G`
   - Default value: `on`
-- **bandwidth** (Number) The bandwidth parameter for a routed interface, port channel, or subinterface.
+- `bandwidth` (Number) The bandwidth parameter for a routed interface, port channel, or subinterface.
   - Range: `0`-`3200000000`
   - Default value: `0`
-- **delay** (Number) The administrative port delay time.
+- `delay` (Number) The administrative port delay time.
   - Range: `1`-`16777215`
   - Default value: `1`
-- **description** (String) Interface description.
-- **device** (String) A device name from the provider configuration.
-- **duplex** (String) Duplex.
+- `description` (String) Interface description.
+- `device` (String) A device name from the provider configuration.
+- `duplex` (String) Duplex.
   - Choices: `auto`, `full`, `half`
   - Default value: `auto`
-- **fec_mode** (String) FEC mode.
+- `fec_mode` (String) FEC mode.
   - Choices: `fc-fec`, `rs-fec`, `fec-off`, `auto`, `rs-ieee`, `rs-cons16`, `kp-fec`
   - Default value: `auto`
-- **layer** (String) Administrative port layer.
+- `layer` (String) Administrative port layer.
   - Choices: `Layer2`, `Layer3`
   - Default value: `Layer2`
-- **link_logging** (String) Administrative link logging.
+- `link_logging` (String) Administrative link logging.
   - Choices: `default`, `enable`, `disable`
   - Default value: `default`
-- **medium** (String) The administrative port medium type.
+- `medium` (String) The administrative port medium type.
   - Choices: `broadcast`, `p2p`
   - Default value: `broadcast`
-- **mode** (String) Administrative port mode.
+- `mode` (String) Administrative port mode.
   - Choices: `access`, `trunk`, `fex-fabric`, `dot1q-tunnel`, `promiscuous`, `host`, `trunk_secondary`, `trunk_promiscuous`, `vntag`
   - Default value: `access`
-- **mtu** (Number) Administrative port MTU.
+- `mtu` (Number) Administrative port MTU.
   - Range: `576`-`9216`
   - Default value: `1500`
-- **native_vlan** (String) Native VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `native_vlan` (String) Native VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
   - Default value: `vlan-1`
-- **speed** (String) Administrative port speed.
+- `speed` (String) Administrative port speed.
   - Choices: `unknown`, `100M`, `1G`, `10G`, `40G`, `auto`, `auto 100M`, `auto 100M 1G`, `100G`, `25G`, `10M`, `50G`, `200G`, `400G`, `2.5G`, `5G`, `auto 2.5G 5G 10G`, `auto 100M 1G 2.5G 5G`
   - Default value: `auto`
-- **speed_group** (String) Speed group.
+- `speed_group` (String) Speed group.
   - Choices: `unknown`, `1000`, `10000`, `40000`, `auto`, `25000`
   - Default value: `auto`
-- **trunk_vlans** (String) List of trunk VLANs.
+- `trunk_vlans` (String) List of trunk VLANs.
   - Default value: `1-4094`
-- **uni_directional_ethernet** (String) UDE (Uni-Directional Ethernet).
+- `uni_directional_ethernet` (String) UDE (Uni-Directional Ethernet).
   - Choices: `disable`, `send-only`, `receive-only`
   - Default value: `disable`
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

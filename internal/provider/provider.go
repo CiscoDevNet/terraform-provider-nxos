@@ -8,11 +8,11 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/frankgreco/terraform-helpers/validators"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
+	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
 // provider satisfies the tfsdk.Provider interface and usually is included
@@ -76,7 +76,7 @@ func (p *provider) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostic
 				Type:                types.Int64Type,
 				Optional:            true,
 				Validators: []tfsdk.AttributeValidator{
-					validators.Range(0, 9),
+					helpers.IntegerRangeValidator(0, 9),
 				},
 			},
 			"devices": {

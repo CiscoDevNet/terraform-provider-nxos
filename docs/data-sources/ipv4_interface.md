@@ -27,17 +27,17 @@ data "nxos_ipv4_interface" "example" {
 
 ### Required
 
-- **interface_id** (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
-- **vrf** (String) VRF name.
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `vrf` (String) VRF name.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
-- **unnumbered** (String) IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.
-- **urpf** (String) URPF (unicast Reverse Path Forwarding).
+- `id` (String) The distinguished name of the object.
+- `unnumbered` (String) IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `urpf` (String) URPF (unicast Reverse Path Forwarding).
 
 

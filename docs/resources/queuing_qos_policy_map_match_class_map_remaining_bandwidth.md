@@ -34,18 +34,18 @@ resource "nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth" "exam
 
 ### Required
 
-- **class_map_name** (String) Class map name.
-- **policy_map_name** (String) Policy map name.
-- **value** (Number) Remaining bandwidth percent.
+- `class_map_name` (String) Class map name.
+- `policy_map_name` (String) Policy map name.
+- `value` (Number) Remaining bandwidth percent.
   - Range: `0`-`100`
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

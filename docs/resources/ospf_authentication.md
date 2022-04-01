@@ -41,29 +41,29 @@ resource "nxos_ospf_authentication" "example" {
 
 ### Required
 
-- **instance_name** (String) OSPF instance name.
-- **interface_id** (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
-- **vrf_name** (String) VRF name.
+- `instance_name` (String) OSPF instance name.
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `vrf_name` (String) VRF name.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
-- **key** (String) Key used for authentication.
-- **key_id** (Number) Key ID used for authentication.
+- `device` (String) A device name from the provider configuration.
+- `key` (String) Key used for authentication.
+- `key_id` (Number) Key ID used for authentication.
   - Range: `0`-`255`
   - Default value: `0`
-- **key_secure_mode** (Boolean) Encrypted authentication key or plain text key.
+- `key_secure_mode` (Boolean) Encrypted authentication key or plain text key.
   - Default value: `false`
-- **keychain** (String) Authentication keychain.
-- **md5_key** (String) Key used for md5 authentication.
-- **md5_key_secure_mode** (Boolean) Encrypted authentication md5 key or plain text key.
+- `keychain` (String) Authentication keychain.
+- `md5_key` (String) Key used for md5 authentication.
+- `md5_key_secure_mode` (Boolean) Encrypted authentication md5 key or plain text key.
   - Default value: `false`
-- **type** (String) Authentication type.
+- `type` (String) Authentication type.
   - Default value: `unspecified`
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

@@ -26,15 +26,15 @@ data "nxos_pim_ssm_policy" "example" {
 
 ### Required
 
-- **vrf_name** (String) VRF name.
+- `vrf_name` (String) VRF name.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
-- **name** (String) Policy name.
+- `id` (String) The distinguished name of the object.
+- `name` (String) Policy name.
 
 

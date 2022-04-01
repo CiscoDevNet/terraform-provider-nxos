@@ -34,18 +34,18 @@ resource "nxos_queuing_qos_policy_map_match_class_map_priority" "example" {
 
 ### Required
 
-- **class_map_name** (String) Class map name.
-- **level** (Number) Priority level.
+- `class_map_name` (String) Class map name.
+- `level` (Number) Priority level.
   - Range: `1`-`8`
-- **policy_map_name** (String) Policy map name.
+- `policy_map_name` (String) Policy map name.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

@@ -41,21 +41,21 @@ resource "nxos_ipv4_interface" "example" {
 
 ### Required
 
-- **interface_id** (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
-- **vrf** (String) VRF name.
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `vrf` (String) VRF name.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
-- **unnumbered** (String) IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `device` (String) A device name from the provider configuration.
+- `unnumbered` (String) IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.
   - Default value: `unspecified`
-- **urpf** (String) URPF (unicast Reverse Path Forwarding).
+- `urpf` (String) URPF (unicast Reverse Path Forwarding).
   - Choices: `disabled`, `strict`, `loose`, `loose-allow-default`, `strict-allow-vni-hosts`
   - Default value: `disabled`
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

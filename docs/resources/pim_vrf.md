@@ -48,19 +48,19 @@ resource "nxos_pim_vrf" "example" {
 
 ### Required
 
-- **name** (String) VRF name.
+- `name` (String) VRF name.
 
 ### Optional
 
-- **admin_state** (String) Administrative state.
+- `admin_state` (String) Administrative state.
   - Default value: `enabled`
-- **bfd** (Boolean) BFD.
+- `bfd` (Boolean) BFD.
   - Default value: `false`
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

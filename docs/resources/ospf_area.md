@@ -37,25 +37,25 @@ resource "nxos_ospf_area" "example" {
 
 ### Required
 
-- **area_id** (String) Area identifier to which a network or interface belongs in IPv4 address format.
+- `area_id` (String) Area identifier to which a network or interface belongs in IPv4 address format.
   - Default value: `0.0.0.0`
-- **instance_name** (String) OSPF instance name.
-- **vrf_name** (String) VRF name.
+- `instance_name` (String) OSPF instance name.
+- `vrf_name` (String) VRF name.
 
 ### Optional
 
-- **authentication_type** (String) Authentication type.
+- `authentication_type` (String) Authentication type.
   - Default value: `unspecified`
-- **cost** (Number) Area cost, specifies cost for default summary LSAs. Used with nssa/stub area types.
+- `cost` (Number) Area cost, specifies cost for default summary LSAs. Used with nssa/stub area types.
   - Range: `0`-`16777215`
   - Default value: `1`
-- **device** (String) A device name from the provider configuration.
-- **type** (String) Area type.
+- `device` (String) A device name from the provider configuration.
+- `type` (String) Area type.
   - Default value: `regular`
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

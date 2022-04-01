@@ -39,17 +39,17 @@ resource "nxos_ospf_instance" "example" {
 
 ### Required
 
-- **name** (String) OSPF instance name.
+- `name` (String) OSPF instance name.
 
 ### Optional
 
-- **admin_state** (String) Administrative state.
+- `admin_state` (String) Administrative state.
   - Default value: `enabled`
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

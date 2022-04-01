@@ -28,16 +28,16 @@ resource "nxos_rest" "l1PhysIf" {
 
 ### Required
 
-- **class_name** (String) Which class object is being created. (Make sure there is no colon in the classname)
-- **dn** (String) Distinguished name of object being managed including its relative name, e.g. sys/intf/phys-[eth1/1].
+- `class_name` (String) Which class object is being created. (Make sure there is no colon in the classname)
+- `dn` (String) Distinguished name of object being managed including its relative name, e.g. sys/intf/phys-[eth1/1].
 
 ### Optional
 
-- **content** (Map of String) Map of key-value pairs that need to be passed to the Model object as parameters.
+- `content` (Map of String) Map of key-value pairs that need to be passed to the Model object as parameters.
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

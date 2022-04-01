@@ -26,32 +26,32 @@ data "nxos_physical_interface" "example" {
 
 ### Required
 
-- **interface_id** (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **access_vlan** (String) Access VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
-- **admin_state** (String) Administrative port state.
-- **auto_negotiation** (String) Administrative port auto-negotiation.
-- **bandwidth** (Number) The bandwidth parameter for a routed interface, port channel, or subinterface.
-- **delay** (Number) The administrative port delay time.
-- **description** (String) Interface description.
-- **duplex** (String) Duplex.
-- **fec_mode** (String) FEC mode.
-- **id** (String) The distinguished name of the object.
-- **layer** (String) Administrative port layer.
-- **link_logging** (String) Administrative link logging.
-- **medium** (String) The administrative port medium type.
-- **mode** (String) Administrative port mode.
-- **mtu** (Number) Administrative port MTU.
-- **native_vlan** (String) Native VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
-- **speed** (String) Administrative port speed.
-- **speed_group** (String) Speed group.
-- **trunk_vlans** (String) List of trunk VLANs.
-- **uni_directional_ethernet** (String) UDE (Uni-Directional Ethernet).
+- `access_vlan` (String) Access VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `admin_state` (String) Administrative port state.
+- `auto_negotiation` (String) Administrative port auto-negotiation.
+- `bandwidth` (Number) The bandwidth parameter for a routed interface, port channel, or subinterface.
+- `delay` (Number) The administrative port delay time.
+- `description` (String) Interface description.
+- `duplex` (String) Duplex.
+- `fec_mode` (String) FEC mode.
+- `id` (String) The distinguished name of the object.
+- `layer` (String) Administrative port layer.
+- `link_logging` (String) Administrative link logging.
+- `medium` (String) The administrative port medium type.
+- `mode` (String) Administrative port mode.
+- `mtu` (Number) Administrative port MTU.
+- `native_vlan` (String) Native VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `speed` (String) Administrative port speed.
+- `speed_group` (String) Speed group.
+- `trunk_vlans` (String) List of trunk VLANs.
+- `uni_directional_ethernet` (String) UDE (Uni-Directional Ethernet).
 
 

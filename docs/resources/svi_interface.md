@@ -38,31 +38,31 @@ resource "nxos_svi_interface" "example" {
 
 ### Required
 
-- **interface_id** (String) Must match first field in the output of `show intf brief`. Example: `vlan100`.
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `vlan100`.
 
 ### Optional
 
-- **admin_state** (String) Administrative port state.
+- `admin_state` (String) Administrative port state.
   - Choices: `up`, `down`
   - Default value: `up`
-- **bandwidth** (Number) Specifies the administrative port bandwidth.
+- `bandwidth` (Number) Specifies the administrative port bandwidth.
   - Range: `1`-`400000000`
   - Default value: `1000000`
-- **delay** (Number) Specifies the administrative port delay.
+- `delay` (Number) Specifies the administrative port delay.
   - Range: `1`-`16777215`
   - Default value: `1`
-- **description** (String) Interface description.
-- **device** (String) A device name from the provider configuration.
-- **medium** (String) The administrative port medium type.
+- `description` (String) Interface description.
+- `device` (String) A device name from the provider configuration.
+- `medium` (String) The administrative port medium type.
   - Choices: `bcast`, `p2p`
   - Default value: `bcast`
-- **mtu** (Number) Administrative port MTU.
+- `mtu` (Number) Administrative port MTU.
   - Range: `576`-`9216`
   - Default value: `1500`
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

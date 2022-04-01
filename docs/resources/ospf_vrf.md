@@ -51,28 +51,28 @@ resource "nxos_ospf_vrf" "example" {
 
 ### Required
 
-- **instance_name** (String) OSPF instance name.
-- **name** (String) VRF name.
+- `instance_name` (String) OSPF instance name.
+- `name` (String) VRF name.
 
 ### Optional
 
-- **admin_state** (String) Administrative state.
+- `admin_state` (String) Administrative state.
   - Default value: `enabled`
-- **bandwidth_reference** (Number) Bandwidth reference value.
+- `bandwidth_reference` (Number) Bandwidth reference value.
   - Range: `0`-`4294967295`
   - Default value: `40000`
-- **banwidth_reference_unit** (String) Bandwidth reference unit.
+- `banwidth_reference_unit` (String) Bandwidth reference unit.
   - Default value: `mbps`
-- **device** (String) A device name from the provider configuration.
-- **distance** (Number) Administrative distance preference.
+- `device` (String) A device name from the provider configuration.
+- `distance` (Number) Administrative distance preference.
   - Range: `1`-`255`
   - Default value: `110`
-- **router_id** (String) Router ID.
+- `router_id` (String) Router ID.
   - Default value: `0.0.0.0`
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

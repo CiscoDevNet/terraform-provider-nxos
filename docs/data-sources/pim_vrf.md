@@ -26,16 +26,16 @@ data "nxos_pim_vrf" "example" {
 
 ### Required
 
-- **name** (String) VRF name.
+- `name` (String) VRF name.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **admin_state** (String) Administrative state.
-- **bfd** (Boolean) BFD.
-- **id** (String) The distinguished name of the object.
+- `admin_state` (String) Administrative state.
+- `bfd` (Boolean) BFD.
+- `id` (String) The distinguished name of the object.
 
 

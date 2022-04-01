@@ -59,75 +59,75 @@ resource "nxos_isis_interface" "example" {
 
 ### Required
 
-- **interface_id** (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 
 ### Optional
 
-- **authentication_check** (Boolean) Authentication Check for ISIS without specific level.
+- `authentication_check` (Boolean) Authentication Check for ISIS without specific level.
   - Default value: `true`
-- **authentication_check_l1** (Boolean) Authentication Check for ISIS on Level-1.
+- `authentication_check_l1` (Boolean) Authentication Check for ISIS on Level-1.
   - Default value: `true`
-- **authentication_check_l2** (Boolean) Authentication Check for ISIS on Level-2.
+- `authentication_check_l2` (Boolean) Authentication Check for ISIS on Level-2.
   - Default value: `true`
-- **authentication_key** (String) Authentication Key for IS-IS without specific level.
-- **authentication_key_l1** (String) Authentication Key for IS-IS on Level-1.
-- **authentication_key_l2** (String) Authentication Key for IS-IS on Level-2.
-- **authentication_type** (String) IS-IS Authentication-Type without specific level.
+- `authentication_key` (String) Authentication Key for IS-IS without specific level.
+- `authentication_key_l1` (String) Authentication Key for IS-IS on Level-1.
+- `authentication_key_l2` (String) Authentication Key for IS-IS on Level-2.
+- `authentication_type` (String) IS-IS Authentication-Type without specific level.
   - Default value: `unknown`
-- **authentication_type_l1** (String) IS-IS Authentication-Type for Level-1.
+- `authentication_type_l1` (String) IS-IS Authentication-Type for Level-1.
   - Default value: `unknown`
-- **authentication_type_l2** (String) IS-IS Authentication-Type for Level-2.
+- `authentication_type_l2` (String) IS-IS Authentication-Type for Level-2.
   - Default value: `unknown`
-- **circuit_type** (String) Circuit type.
+- `circuit_type` (String) Circuit type.
   - Default value: `l12`
-- **device** (String) A device name from the provider configuration.
-- **hello_interval** (Number) Hello interval.
+- `device` (String) A device name from the provider configuration.
+- `hello_interval` (Number) Hello interval.
   - Range: `1`-`65535`
   - Default value: `10`
-- **hello_interval_l1** (Number) Hello interval Level-1.
+- `hello_interval_l1` (Number) Hello interval Level-1.
   - Range: `1`-`65535`
   - Default value: `10`
-- **hello_interval_l2** (Number) Hello interval Level-2.
+- `hello_interval_l2` (Number) Hello interval Level-2.
   - Range: `1`-`65535`
   - Default value: `10`
-- **hello_multiplier** (Number) Hello multiplier.
+- `hello_multiplier` (Number) Hello multiplier.
   - Range: `3`-`1000`
   - Default value: `3`
-- **hello_multiplier_l1** (Number) Hello multiplier Level-1.
+- `hello_multiplier_l1` (Number) Hello multiplier Level-1.
   - Range: `3`-`1000`
   - Default value: `3`
-- **hello_multiplier_l2** (Number) Hello multiplier Level-2.
+- `hello_multiplier_l2` (Number) Hello multiplier Level-2.
   - Range: `3`-`1000`
   - Default value: `3`
-- **hello_padding** (String) Hello padding.
+- `hello_padding` (String) Hello padding.
   - Default value: `always`
-- **metric_l1** (Number) Interface metric Level-1.
+- `metric_l1` (Number) Interface metric Level-1.
   - Range: `0`-`16777216`
   - Default value: `16777216`
-- **metric_l2** (Number) Interface metric Level-2.
+- `metric_l2` (Number) Interface metric Level-2.
   - Range: `0`-`16777216`
   - Default value: `16777216`
-- **mtu_check** (Boolean) MTU Check for IS-IS without specific level.
+- `mtu_check` (Boolean) MTU Check for IS-IS without specific level.
   - Default value: `false`
-- **mtu_check_l1** (Boolean) MTU Check for IS-IS on Level-1.
+- `mtu_check_l1` (Boolean) MTU Check for IS-IS on Level-1.
   - Default value: `false`
-- **mtu_check_l2** (Boolean) MTU Check for IS-IS on Level-2.
+- `mtu_check_l2` (Boolean) MTU Check for IS-IS on Level-2.
   - Default value: `false`
-- **network_type_p2p** (String) Enabling Point-to-Point Network Type on IS-IS Interface.
+- `network_type_p2p` (String) Enabling Point-to-Point Network Type on IS-IS Interface.
   - Default value: `off`
-- **passive** (String) IS-IS Passive Interface Info.
+- `passive` (String) IS-IS Passive Interface Info.
   - Default value: `inheritDef`
-- **priority_l1** (Number) Circuit priority.
+- `priority_l1` (Number) Circuit priority.
   - Range: `0`-`127`
   - Default value: `64`
-- **priority_l2** (Number) Circuit priority.
+- `priority_l2` (Number) Circuit priority.
   - Range: `0`-`127`
   - Default value: `64`
-- **vrf** (String) VRF.
+- `vrf` (String) VRF.
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

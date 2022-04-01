@@ -49,39 +49,39 @@ resource "nxos_ospf_interface" "example" {
 
 ### Required
 
-- **instance_name** (String) OSPF instance name.
-- **interface_id** (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
-- **vrf_name** (String) VRF name.
+- `instance_name` (String) OSPF instance name.
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `vrf_name` (String) VRF name.
 
 ### Optional
 
-- **advertise_secondaries** (Boolean) Advertise secondary IP addresses.
+- `advertise_secondaries` (Boolean) Advertise secondary IP addresses.
   - Default value: `true`
-- **area** (String) Area identifier to which a network or interface belongs in IPv4 address format.
+- `area` (String) Area identifier to which a network or interface belongs in IPv4 address format.
   - Default value: `0.0.0.0`
-- **bfd** (String) Bidirectional Forwarding Detection (BFD).
+- `bfd` (String) Bidirectional Forwarding Detection (BFD).
   - Default value: `unspecified`
-- **cost** (Number) Specifies the cost of interface.
+- `cost` (Number) Specifies the cost of interface.
   - Range: `0`-`65535`
   - Default value: `0`
-- **dead_interval** (Number) Dead interval, interval after which router declares that neighbor as down.
+- `dead_interval` (Number) Dead interval, interval after which router declares that neighbor as down.
   - Range: `0`-`65535`
   - Default value: `0`
-- **device** (String) A device name from the provider configuration.
-- **hello_interval** (Number) Hello interval, interval between hello packets that OSPF sends on the interface.
+- `device` (String) A device name from the provider configuration.
+- `hello_interval` (Number) Hello interval, interval between hello packets that OSPF sends on the interface.
   - Range: `0`-`65535`
   - Default value: `10`
-- **network_type** (String) Network type.
+- `network_type` (String) Network type.
   - Default value: `unspecified`
-- **passive** (String) Passive interface control. Interface can be configured as passive or non-passive.
+- `passive` (String) Passive interface control. Interface can be configured as passive or non-passive.
   - Default value: `unspecified`
-- **priority** (Number) Priority, used in determining the designated router on this network.
+- `priority` (Number) Priority, used in determining the designated router on this network.
   - Range: `0`-`255`
   - Default value: `1`
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

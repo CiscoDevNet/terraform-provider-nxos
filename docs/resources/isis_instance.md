@@ -39,17 +39,17 @@ resource "nxos_isis_instance" "example" {
 
 ### Required
 
-- **name** (String) IS-IS instance name.
+- `name` (String) IS-IS instance name.
 
 ### Optional
 
-- **admin_state** (String) Administrative state.
+- `admin_state` (String) Administrative state.
   - Default value: `enabled`
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

@@ -25,11 +25,11 @@ data "nxos_ethernet" "example" {
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
-- **mtu** (Number) System jumbo MTU.
+- `id` (String) The distinguished name of the object.
+- `mtu` (Number) System jumbo MTU.
 
 

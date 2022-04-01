@@ -25,11 +25,11 @@ data "nxos_system" "example" {
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
-- **name** (String) The system name (hostname).
+- `id` (String) The distinguished name of the object.
+- `name` (String) The system name (hostname).
 
 

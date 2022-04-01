@@ -38,15 +38,15 @@ resource "nxos_queuing_qos_policy_system_out_policy_map" "example" {
 
 ### Required
 
-- **policy_map_name** (String) Policy map name.
+- `policy_map_name` (String) Policy map name.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

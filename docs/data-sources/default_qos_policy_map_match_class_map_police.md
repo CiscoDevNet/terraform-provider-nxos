@@ -27,38 +27,38 @@ data "nxos_default_qos_policy_map_match_class_map_police" "example" {
 
 ### Required
 
-- **class_map_name** (String) Class map name.
-- **policy_map_name** (String) Policy map name.
+- `class_map_name` (String) Class map name.
+- `policy_map_name` (String) Policy map name.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **bc_rate** (Number) CIR burst rate.
-- **bc_unit** (String) CIR burst rate unit.
-- **be_rate** (Number) PIR burst rate.
-- **be_unit** (String) PIR burst rate unit.
-- **cir_rate** (Number) CIR rate.
-- **cir_unit** (String) CIR rate unit.
-- **conform_action** (String) Conform action.
-- **conform_set_cos** (Number) Set CoS for conforming traffic.
-- **conform_set_dscp** (Number) Set DSCP for conforming traffic.
-- **conform_set_precedence** (String) Set precedence for conforming traffic.
-- **conform_set_qos_group** (Number) Set qos-group for conforming traffic.
-- **exceed_action** (String) Exceed action.
-- **exceed_set_cos** (Number) Set CoS for exceeding traffic.
-- **exceed_set_dscp** (Number) Set DSCP for exceeding traffic.
-- **exceed_set_precedence** (String) Set precedence for exceeding traffic.
-- **exceed_set_qos_group** (Number) Set qos-group for exceeding traffic.
-- **id** (String) The distinguished name of the object.
-- **pir_rate** (Number) PIR rate.
-- **pir_unit** (String) PIR rate unit.
-- **violate_action** (String) Violate action.
-- **violate_set_cos** (Number) Set CoS for violating traffic.
-- **violate_set_dscp** (Number) Set DSCP for violating traffic.
-- **violate_set_precedence** (String) Set precedence for violating traffic.
-- **violate_set_qos_group** (Number) Set qos-group for violating traffic.
+- `bc_rate` (Number) CIR burst rate.
+- `bc_unit` (String) CIR burst rate unit.
+- `be_rate` (Number) PIR burst rate.
+- `be_unit` (String) PIR burst rate unit.
+- `cir_rate` (Number) CIR rate.
+- `cir_unit` (String) CIR rate unit.
+- `conform_action` (String) Conform action.
+- `conform_set_cos` (Number) Set CoS for conforming traffic.
+- `conform_set_dscp` (Number) Set DSCP for conforming traffic.
+- `conform_set_precedence` (String) Set precedence for conforming traffic.
+- `conform_set_qos_group` (Number) Set qos-group for conforming traffic.
+- `exceed_action` (String) Exceed action.
+- `exceed_set_cos` (Number) Set CoS for exceeding traffic.
+- `exceed_set_dscp` (Number) Set DSCP for exceeding traffic.
+- `exceed_set_precedence` (String) Set precedence for exceeding traffic.
+- `exceed_set_qos_group` (Number) Set qos-group for exceeding traffic.
+- `id` (String) The distinguished name of the object.
+- `pir_rate` (Number) PIR rate.
+- `pir_unit` (String) PIR rate unit.
+- `violate_action` (String) Violate action.
+- `violate_set_cos` (Number) Set CoS for violating traffic.
+- `violate_set_dscp` (Number) Set DSCP for violating traffic.
+- `violate_set_precedence` (String) Set precedence for violating traffic.
+- `violate_set_qos_group` (Number) Set qos-group for violating traffic.
 
 

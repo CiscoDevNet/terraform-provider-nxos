@@ -26,15 +26,15 @@ data "nxos_isis_instance" "example" {
 
 ### Required
 
-- **name** (String) IS-IS instance name.
+- `name` (String) IS-IS instance name.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **admin_state** (String) Administrative state.
-- **id** (String) The distinguished name of the object.
+- `admin_state` (String) Administrative state.
+- `id` (String) The distinguished name of the object.
 
 

@@ -36,21 +36,21 @@ resource "nxos_pim_static_rp_group_list" "example" {
 
 ### Required
 
-- **address** (String) Group list address information.
-- **rp_address** (String) RP address.
-- **vrf_name** (String) VRF name.
+- `address` (String) Group list address information.
+- `rp_address` (String) RP address.
+- `vrf_name` (String) VRF name.
 
 ### Optional
 
-- **bidir** (Boolean) Flag to treat Group Ranges as BiDir.
+- `bidir` (Boolean) Flag to treat Group Ranges as BiDir.
   - Default value: `false`
-- **device** (String) A device name from the provider configuration.
-- **override** (Boolean) Flag to override RP preference to use Static over Dynamic RP.
+- `device` (String) A device name from the provider configuration.
+- `override` (Boolean) Flag to override RP preference to use Static over Dynamic RP.
   - Default value: `false`
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

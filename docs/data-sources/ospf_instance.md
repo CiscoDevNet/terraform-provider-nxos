@@ -26,15 +26,15 @@ data "nxos_ospf_instance" "example" {
 
 ### Required
 
-- **name** (String) OSPF instance name.
+- `name` (String) OSPF instance name.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **admin_state** (String) Administrative state.
-- **id** (String) The distinguished name of the object.
+- `admin_state` (String) Administrative state.
+- `id` (String) The distinguished name of the object.
 
 

@@ -32,15 +32,15 @@ resource "nxos_default_qos_policy_interface_in" "example" {
 
 ### Required
 
-- **interface_id** (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

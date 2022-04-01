@@ -23,12 +23,12 @@ data "nxos_rest" "l1PhysIf" {
 
 ### Required
 
-- **dn** (String) Distinguished name of object to be retrieved, e.g. sys/intf/phys-[eth1/1].
+- `dn` (String) Distinguished name of object to be retrieved, e.g. sys/intf/phys-[eth1/1].
 
 ### Read-Only
 
-- **class_name** (String) Class name of object being retrieved.
-- **content** (Map of String) Map of key-value pairs which represents the attributes of object being retrieved.
-- **id** (String) The distinguished name of the object.
+- `class_name` (String) Class name of object being retrieved.
+- `content` (Map of String) Map of key-value pairs which represents the attributes of object being retrieved.
+- `id` (String) The distinguished name of the object.
 
 

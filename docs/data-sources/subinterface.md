@@ -26,22 +26,22 @@ data "nxos_subinterface" "example" {
 
 ### Required
 
-- **interface_id** (String) Must match first field in the output of `show intf brief`. Example: `eth1/1.10`.
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1.10`.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **admin_state** (String) Administrative state.
-- **bandwidth** (Number) Specifies the administrative port bandwidth.
-- **delay** (Number) Specifies the administrative port delay.
-- **description** (String) Interface description.
-- **encap** (String) Subinterface encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
-- **id** (String) The distinguished name of the object.
-- **link_logging** (String) Administrative link logging.
-- **medium** (String) The administrative port medium type.
-- **mtu** (Number) Administrative port MTU.
+- `admin_state` (String) Administrative state.
+- `bandwidth` (Number) Specifies the administrative port bandwidth.
+- `delay` (Number) Specifies the administrative port delay.
+- `description` (String) Interface description.
+- `encap` (String) Subinterface encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `id` (String) The distinguished name of the object.
+- `link_logging` (String) Administrative link logging.
+- `medium` (String) The administrative port medium type.
+- `mtu` (Number) Administrative port MTU.
 
 

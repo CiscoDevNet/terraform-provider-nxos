@@ -26,15 +26,15 @@ data "nxos_vrf" "example" {
 
 ### Required
 
-- **name** (String) VRF name.
+- `name` (String) VRF name.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **description** (String) VRF description.
-- **id** (String) The distinguished name of the object.
+- `description` (String) VRF description.
+- `id` (String) The distinguished name of the object.
 
 

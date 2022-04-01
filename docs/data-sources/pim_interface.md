@@ -27,20 +27,20 @@ data "nxos_pim_interface" "example" {
 
 ### Required
 
-- **interface_id** (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
-- **vrf_name** (String) VRF name.
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `vrf_name` (String) VRF name.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **admin_state** (String) Administrative state.
-- **bfd** (String) BFD.
-- **dr_priority** (Number) Designated Router priority level.
-- **id** (String) The distinguished name of the object.
-- **passive** (Boolean) Passive interface.
-- **sparse_mode** (Boolean) Sparse mode.
+- `admin_state` (String) Administrative state.
+- `bfd` (String) BFD.
+- `dr_priority` (Number) Designated Router priority level.
+- `id` (String) The distinguished name of the object.
+- `passive` (Boolean) Passive interface.
+- `sparse_mode` (Boolean) Sparse mode.
 
 

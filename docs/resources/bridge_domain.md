@@ -28,19 +28,19 @@ resource "nxos_bridge_domain" "example" {
 
 ### Required
 
-- **fabric_encap** (String) Fabric encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `fabric_encap` (String) Fabric encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
   - Default value: `unknown`
 
 ### Optional
 
-- **access_encap** (String) Access encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `access_encap` (String) Access encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
   - Default value: `unknown`
-- **device** (String) A device name from the provider configuration.
-- **name** (String) Bridge domain name.
+- `device` (String) A device name from the provider configuration.
+- `name` (String) Bridge domain name.
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

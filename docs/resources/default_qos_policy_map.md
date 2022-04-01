@@ -33,17 +33,17 @@ resource "nxos_default_qos_policy_map" "example" {
 
 ### Required
 
-- **name** (String) Policy map name.
+- `name` (String) Policy map name.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
-- **match_type** (String) Match type.
+- `device` (String) A device name from the provider configuration.
+- `match_type` (String) Match type.
   - Default value: `match-all`
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

@@ -26,15 +26,15 @@ resource "nxos_feature_ptp" "example" {
 
 ### Required
 
-- **admin_state** (String) Administrative state.
+- `admin_state` (String) Administrative state.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **id** (String) The distinguished name of the object.
+- `id` (String) The distinguished name of the object.
 
 ## Import
 

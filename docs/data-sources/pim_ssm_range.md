@@ -26,21 +26,21 @@ data "nxos_pim_ssm_range" "example" {
 
 ### Required
 
-- **vrf_name** (String) VRF name.
+- `vrf_name` (String) VRF name.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **group_list_1** (String) Group list 1.
-- **group_list_2** (String) Group list 2.
-- **group_list_3** (String) Group list 3.
-- **group_list_4** (String) Group list 4.
-- **id** (String) The distinguished name of the object.
-- **prefix_list** (String) Prefix list name.
-- **route_map** (String) Route map name.
-- **ssm_none** (Boolean) Exclude standard SSM range (232.0.0.0/8).
+- `group_list_1` (String) Group list 1.
+- `group_list_2` (String) Group list 2.
+- `group_list_3` (String) Group list 3.
+- `group_list_4` (String) Group list 4.
+- `id` (String) The distinguished name of the object.
+- `prefix_list` (String) Prefix list name.
+- `route_map` (String) Route map name.
+- `ssm_none` (Boolean) Exclude standard SSM range (232.0.0.0/8).
 
 

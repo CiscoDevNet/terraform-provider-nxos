@@ -26,16 +26,16 @@ data "nxos_loopback_interface" "example" {
 
 ### Required
 
-- **interface_id** (String) Must match first field in the output of `show intf brief`. Example: `lo123`.
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `lo123`.
 
 ### Optional
 
-- **device** (String) A device name from the provider configuration.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- **admin_state** (String) Administrative state.
-- **description** (String) Interface description.
-- **id** (String) The distinguished name of the object.
+- `admin_state` (String) Administrative state.
+- `description` (String) Interface description.
+- `id` (String) The distinguished name of the object.
 
 

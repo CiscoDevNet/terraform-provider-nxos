@@ -1,0 +1,18 @@
+---
+name: Feature OSPFv3
+class_name: fmOspfv3
+dn: sys/fm/ospfv3
+no_delete: true
+ds_description: This data source can read the OSPFv3 feature configuration.
+res_description: This resource can manage the OSPFv3 feature configuration.
+doc_path: Feature%20Management/fm:Ospfv3/
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    mandatory: true
+    description: 'Administrative state.'
+    enum_value:
+      - enabled
+      - disabled
+    example: enabled

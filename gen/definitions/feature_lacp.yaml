@@ -1,0 +1,18 @@
+---
+name: Feature LACP
+class_name: fmLacp
+dn: sys/fm/lacp
+no_delete: true
+ds_description: This data source can read the LACP feature configuration.
+res_description: This resource can manage the LACP feature configuration.
+doc_path: Feature%20Management/fm:Lacp/
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    mandatory: true
+    description: 'Administrative state.'
+    enum_value:
+      - enabled
+      - disabled
+    example: enabled

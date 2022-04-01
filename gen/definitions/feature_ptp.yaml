@@ -1,0 +1,18 @@
+---
+name: Feature PTP
+class_name: fmPtp
+dn: sys/fm/ptp
+no_delete: true
+ds_description: This data source can read the PTP feature configuration.
+res_description: This resource can manage the PTP feature configuration.
+doc_path: Feature%20Management/fm:Ptp/
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    mandatory: true
+    description: 'Administrative state.'
+    enum_value:
+      - enabled
+      - disabled
+    example: enabled

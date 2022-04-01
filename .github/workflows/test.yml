@@ -23,11 +23,19 @@ env:
   GO_VERSION: '1.17'
 
 jobs:
+  consecutiveness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mktcode/consecutive-workflow-action@0b779df0b7f31f656194b3aa004cc29dd406393b
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
   # Ensure project builds before running testing matrix
   build:
     name: Build
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    needs: [consecutiveness]
     steps:
       - uses: actions/setup-go@v2
         with:

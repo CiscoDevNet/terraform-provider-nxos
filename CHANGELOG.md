@@ -5,6 +5,7 @@
 - Add nxos_feature_hsrp resource and data source
 - Add nxos_feature_isis resource and data source
 - Add nxos_feature_lacp resource and data source
+- Add nxos_feature_macsec resource and data source
 
 ## 0.3.0
 

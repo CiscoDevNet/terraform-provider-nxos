@@ -1,3 +1,7 @@
+## 0.3.1 (unreleased)
+
+- Add nxos_feature_bgp resource and data source
+
 ## 0.3.0
 
 - Add option to manage multiple devices

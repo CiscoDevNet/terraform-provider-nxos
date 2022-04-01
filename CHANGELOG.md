@@ -1,6 +1,7 @@
 ## 0.3.1 (unreleased)
 
 - Add nxos_feature_bgp resource and data source
+- Add nxos_feature_evpn resource and data source
 
 ## 0.3.0
 

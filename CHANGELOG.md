@@ -1,3 +1,7 @@
+## 0.3.2 (unreleased)
+
+- Fix documentation
+
 ## 0.3.1
 
 - Add nxos_feature_bgp resource and data source

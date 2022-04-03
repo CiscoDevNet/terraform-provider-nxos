@@ -3,13 +3,13 @@
 page_title: "nxos_feature_evpn Data Source - terraform-provider-nxos"
 subcategory: ""
 description: |-
-  This data source can read the EVPN feature configuration.
+  This data source can read the EVPN feature (aka nv overlay evpn) configuration.
   API Documentation: fmEvpn https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Evpn/
 ---
 
 # nxos_feature_evpn (Data Source)
 
-This data source can read the EVPN feature configuration.
+This data source can read the EVPN feature (aka nv overlay evpn) configuration.
 
 - API Documentation: [fmEvpn](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Evpn/)
 

@@ -14,12 +14,12 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type dataSourceFeatureHmmType struct{}
+type dataSourceFeatureHMMType struct{}
 
-func (t dataSourceFeatureHmmType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t dataSourceFeatureHMMType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the HMM feature (aka feature fabric forwarding) configuration.", "fmHmm", "Feature%20Management/fm:Hmm/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the HMM feature (aka `feature fabric forwarding`) configuration.", "fmHmm", "Feature%20Management/fm:Hmm/").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {
@@ -41,20 +41,20 @@ func (t dataSourceFeatureHmmType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 	}, nil
 }
 
-func (t dataSourceFeatureHmmType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
+func (t dataSourceFeatureHMMType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
-	return dataSourceFeatureHmm{
+	return dataSourceFeatureHMM{
 		provider: provider,
 	}, diags
 }
 
-type dataSourceFeatureHmm struct {
+type dataSourceFeatureHMM struct {
 	provider provider
 }
 
-func (d dataSourceFeatureHmm) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
-	var config, state FeatureHmm
+func (d dataSourceFeatureHMM) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+	var config, state FeatureHMM
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

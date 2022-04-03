@@ -9,7 +9,7 @@ description: |-
 
 # nxos_feature_hmm (Data Source)
 
-This data source can read the HMM feature (aka feature fabric forwarding) configuration.
+This data source can read the HMM feature (aka `feature fabric forwarding`) configuration.
 
 - API Documentation: [fmHmm](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Hmm/)
 

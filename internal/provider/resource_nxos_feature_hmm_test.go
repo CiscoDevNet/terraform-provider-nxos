@@ -8,13 +8,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccNxosFeatureHmm(t *testing.T) {
+func TestAccNxosFeatureHMM(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosFeatureHmmConfig_all(),
+				Config: testAccNxosFeatureHMMConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_feature_hmm.test", "admin_state", "enabled"),
 				),
@@ -28,7 +28,7 @@ func TestAccNxosFeatureHmm(t *testing.T) {
 	})
 }
 
-func testAccNxosFeatureHmmConfig_minimum() string {
+func testAccNxosFeatureHMMConfig_minimum() string {
 	return `
 	resource "nxos_feature_hmm" "test" {
 		admin_state = "enabled"
@@ -36,7 +36,7 @@ func testAccNxosFeatureHmmConfig_minimum() string {
 	`
 }
 
-func testAccNxosFeatureHmmConfig_all() string {
+func testAccNxosFeatureHMMConfig_all() string {
 	return `
 	resource "nxos_feature_hmm" "test" {
 		admin_state = "enabled"

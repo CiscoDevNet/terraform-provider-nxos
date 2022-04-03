@@ -9,7 +9,7 @@ description: |-
 
 # nxos_feature_evpn (Resource)
 
-This resource can manage the EVPN feature (aka nv overlay evpn) configuration.
+This resource can manage the EVPN feature (aka `nv overlay evpn`) configuration.
 
 - API Documentation: [fmEvpn](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Evpn/)
 

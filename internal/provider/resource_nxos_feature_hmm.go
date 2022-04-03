@@ -15,12 +15,12 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourceFeatureHmmType struct{}
+type resourceFeatureHMMType struct{}
 
-func (t resourceFeatureHmmType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t resourceFeatureHMMType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the HMM feature (aka feature fabric forwarding) configuration.", "fmHmm", "Feature%20Management/fm:Hmm/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the HMM feature (aka `feature fabric forwarding`) configuration.", "fmHmm", "Feature%20Management/fm:Hmm/").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {
@@ -45,20 +45,20 @@ func (t resourceFeatureHmmType) GetSchema(ctx context.Context) (tfsdk.Schema, di
 	}, nil
 }
 
-func (t resourceFeatureHmmType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
+func (t resourceFeatureHMMType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
-	return resourceFeatureHmm{
+	return resourceFeatureHMM{
 		provider: provider,
 	}, diags
 }
 
-type resourceFeatureHmm struct {
+type resourceFeatureHMM struct {
 	provider provider
 }
 
-func (r resourceFeatureHmm) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
-	var plan, state FeatureHmm
+func (r resourceFeatureHMM) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+	var plan, state FeatureHMM
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -93,8 +93,8 @@ func (r resourceFeatureHmm) Create(ctx context.Context, req tfsdk.CreateResource
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceFeatureHmm) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
-	var state FeatureHmm
+func (r resourceFeatureHMM) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+	var state FeatureHMM
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -119,8 +119,8 @@ func (r resourceFeatureHmm) Read(ctx context.Context, req tfsdk.ReadResourceRequ
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceFeatureHmm) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
-	var plan, state FeatureHmm
+func (r resourceFeatureHMM) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+	var plan, state FeatureHMM
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -154,8 +154,8 @@ func (r resourceFeatureHmm) Update(ctx context.Context, req tfsdk.UpdateResource
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceFeatureHmm) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
-	var state FeatureHmm
+func (r resourceFeatureHMM) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+	var state FeatureHMM
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -171,6 +171,6 @@ func (r resourceFeatureHmm) Delete(ctx context.Context, req tfsdk.DeleteResource
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceFeatureHmm) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
+func (r resourceFeatureHMM) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
 	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
 }

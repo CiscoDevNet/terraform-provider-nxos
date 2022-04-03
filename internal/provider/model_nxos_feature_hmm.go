@@ -8,31 +8,31 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-type FeatureHmm struct {
+type FeatureHMM struct {
 	Device  types.String `tfsdk:"device"`
 	Dn      types.String `tfsdk:"id"`
 	AdminSt types.String `tfsdk:"admin_state"`
 }
 
-func (data FeatureHmm) getDn() string {
+func (data FeatureHMM) getDn() string {
 	return "sys/fm/hmm"
 }
 
-func (data FeatureHmm) getClassName() string {
+func (data FeatureHMM) getClassName() string {
 	return "fmHmm"
 }
 
-func (data FeatureHmm) toBody() nxos.Body {
+func (data FeatureHMM) toBody() nxos.Body {
 	attrs := nxos.Body{}.
 		Set("adminSt", data.AdminSt.Value)
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
-func (data *FeatureHmm) fromBody(res gjson.Result) {
+func (data *FeatureHMM) fromBody(res gjson.Result) {
 	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
 }
 
-func (data *FeatureHmm) fromPlan(plan FeatureHmm) {
+func (data *FeatureHMM) fromPlan(plan FeatureHMM) {
 	data.Device = plan.Device
 }

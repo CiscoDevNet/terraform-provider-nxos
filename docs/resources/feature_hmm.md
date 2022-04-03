@@ -9,7 +9,7 @@ description: |-
 
 # nxos_feature_hmm (Resource)
 
-This resource can manage the HMM feature (aka feature fabric forwarding) configuration.
+This resource can manage the HMM feature (aka `feature fabric forwarding`) configuration.
 
 - API Documentation: [fmHmm](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Hmm/)
 

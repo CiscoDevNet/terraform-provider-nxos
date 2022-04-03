@@ -1,0 +1,27 @@
+---
+name: BGP Instance
+class_name: bgpInst
+dn: sys/bgp/inst
+ds_description: This data source can read the BGP instance configuration.
+res_description: This resource can manage the BGP instance configuration.
+doc_path: Routing%20and%20Forwarding/bgp:Inst/
+parents:
+  - BGP
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'Administrative state.'
+    enum_value:
+      - enabled
+      - disabled
+    default_value: enabled
+    example: enabled
+  - nxos_name: asn
+    tf_name: asn
+    type: String
+    description: 'Autonomous system number.'
+    example: '65001'
+test_prerequisites:
+  - dn: sys/bgp
+    class_name: bgpEntity

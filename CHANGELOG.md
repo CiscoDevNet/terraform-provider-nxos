@@ -2,6 +2,7 @@
 
 - Add nxos_feature_hmm resource and data source
 - Add nxos_bgp resource and data source
+- Add nxos_bgp_instance resource and data source
 
 ## 0.3.2
 

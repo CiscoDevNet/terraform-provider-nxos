@@ -20,7 +20,7 @@ type resourceFeatureEVPNType struct{}
 func (t resourceFeatureEVPNType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the EVPN feature configuration.", "fmEvpn", "Feature%20Management/fm:Evpn/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the EVPN feature (aka nv overlay evpn) configuration.", "fmEvpn", "Feature%20Management/fm:Evpn/").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {

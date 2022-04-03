@@ -3,8 +3,8 @@ name: Feature EVPN
 class_name: fmEvpn
 dn: sys/fm/evpn
 no_delete: true
-ds_description: This data source can read the EVPN feature configuration.
-res_description: This resource can manage the EVPN feature configuration.
+ds_description: This data source can read the EVPN feature (aka nv overlay evpn) configuration.
+res_description: This resource can manage the EVPN feature (aka nv overlay evpn) configuration.
 doc_path: Feature%20Management/fm:Evpn/
 attributes:
   - nxos_name: adminSt

@@ -251,6 +251,7 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceType, diag.Diagnostics) {
 	return map[string]tfsdk.ResourceType{
 		"nxos_rest":                                                 resourceRestType{},
+		"nxos_bgp":                                                  resourceBGPType{},
 		"nxos_bridge_domain":                                        resourceBridgeDomainType{},
 		"nxos_default_qos_class_map":                                resourceDefaultQOSClassMapType{},
 		"nxos_default_qos_class_map_dscp":                           resourceDefaultQOSClassMapDSCPType{},
@@ -331,6 +332,7 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSourceType, diag.Diagnostics) {
 	return map[string]tfsdk.DataSourceType{
 		"nxos_rest":                                                 dataSourceRestType{},
+		"nxos_bgp":                                                  dataSourceBGPType{},
 		"nxos_bridge_domain":                                        dataSourceBridgeDomainType{},
 		"nxos_default_qos_class_map":                                dataSourceDefaultQOSClassMapType{},
 		"nxos_default_qos_class_map_dscp":                           dataSourceDefaultQOSClassMapDSCPType{},

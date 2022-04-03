@@ -1,0 +1,19 @@
+---
+name: BGP
+class_name: bgpEntity
+dn: sys/bgp
+ds_description: This data source can read the global BGP configuration.
+res_description: This resource can manage the global BGP configuration.
+doc_path: Routing%20and%20Forwarding/bgp:Entity/
+children:
+  - BGP Instance
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'Administrative state.'
+    enum_value:
+      - enabled
+      - disabled
+    default_value: enabled
+    example: enabled

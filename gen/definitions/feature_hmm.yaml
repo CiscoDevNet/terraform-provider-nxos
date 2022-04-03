@@ -1,0 +1,18 @@
+---
+name: Feature Hmm
+class_name: fmHmm
+dn: sys/fm/hmm
+no_delete: true
+ds_description: This data source can read the HMM feature (aka feature fabric forwarding) configuration.
+res_description: This resource can manage the HMM feature (aka feature fabric forwarding) configuration.
+doc_path: Feature%20Management/fm:Hmm/
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    mandatory: true
+    description: 'Administrative state.'
+    enum_value:
+      - enabled
+      - disabled
+    example: enabled

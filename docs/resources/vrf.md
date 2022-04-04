@@ -5,6 +5,8 @@ subcategory: ""
 description: |-
   This resource can manage a VRF.
   API Documentation: l3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:Inst/
+  Child resources
+  nxosvrfdomain https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf_domain
 ---
 
 # nxos_vrf (Resource)
@@ -12,6 +14,10 @@ description: |-
 This resource can manage a VRF.
 
 - API Documentation: [l3Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:Inst/)
+
+### Child resources
+
+- [nxos_vrf_domain](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf_domain)
 
 ## Example Usage
 

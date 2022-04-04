@@ -5,7 +5,11 @@ package provider
 
 import (
 	{{- if hasId .Attributes }}
+	{{- if .ReplaceNotation}}
+	"strings"
+	{{- else}}
 	"fmt"
+	{{- end}}
 	{{- end}}
 	{{ $strconv := false }}{{ range .Attributes}}{{ if or (eq .Type "Int64") (eq .Type "Bool")}}{{ $strconv = true }}{{ end}}{{- end}}
 	{{- if $strconv }}
@@ -29,9 +33,21 @@ type {{camelCase .Name}} struct {
 {{- end}}
 }
 
+{{- if .ReplaceNotation}}
+// Helper function to get Dn, should be moved to helpers
+func Replacer(format string, args ...string) string {
+	r := strings.NewReplacer(args...)
+	return r.Replace(format)
+}
+{{- end}}
+
 func (data {{camelCase .Name}}) getDn() string {
 {{- if hasId .Attributes}}
+	{{- if .ReplaceNotation}}
+	return Replacer("{{.Dn}}"{{range .Attributes}}{{if eq .Id true}}, "|{{.NxosName}}|", data.{{toTitle .NxosName}}.Value{{end}}{{end}})
+	{{- else}}
 	return fmt.Sprintf("{{.Dn}}"{{range .Attributes}}{{if eq .Id true}}, data.{{toTitle .NxosName}}.Value{{end}}{{end}})
+	{{- end}}
 {{- else}}
 	return "{{.Dn}}"
 {{- end}}

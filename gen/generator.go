@@ -87,6 +87,7 @@ type YamlConfig struct {
 	References        []string              `yaml:"references"`
 	Attributes        []YamlConfigAttribute `yaml:"attributes"`
 	TestPrerequisites []YamlTest            `yaml:"test_prerequisites"`
+	ReplaceNotation   bool                  `yaml:"replace_notation"`
 }
 
 type YamlConfigAttribute struct {

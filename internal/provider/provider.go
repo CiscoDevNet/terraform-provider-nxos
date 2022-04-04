@@ -324,6 +324,7 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 		"nxos_system":            resourceSystemType{},
 		"nxos_vrf":               resourceVRFType{},
 		"nxos_vrf_container":     resourceVRFContainerType{},
+		"nxos_vrf_domain":        resourceVRFDomainType{},
 	}, nil
 }
 
@@ -403,6 +404,7 @@ func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSou
 		"nxos_system":            dataSourceSystemType{},
 		"nxos_vrf":               dataSourceVRFType{},
 		"nxos_vrf_container":     dataSourceVRFContainerType{},
+		"nxos_vrf_domain":        dataSourceVRFDomainType{},
 	}, nil
 }
 

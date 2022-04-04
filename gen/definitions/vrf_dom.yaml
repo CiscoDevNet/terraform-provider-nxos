@@ -1,0 +1,23 @@
+---
+name: VRF Domain
+class_name: rtctrlDom
+dn: sys/inst-[|vrf|]/dom-[|vrf|]
+ds_description: This data source can read a VRF Route Distinguisher and VRF VNI.
+res_description: This resource can manage a VRF Route Distinguisher and VRF VNI.
+doc_path: Routing%20and%20Forwarding/rtctrl:Dom/
+replace_notation: true
+parents:
+  - VRF
+attributes:
+  - nxos_name: vrf
+    tf_name: vrf
+    type: String
+    id: true
+    reference_only: true
+    description: 'VRF name.'
+    example: VRF1
+  - nxos_name: rd
+    tf_name: rd
+    type: String
+    description: 'RD value.'
+    example: 'rd:unknown:0:0'

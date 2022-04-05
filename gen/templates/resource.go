@@ -61,13 +61,7 @@ func (t resource{{camelCase .Name}}Type) GetSchema(ctx context.Context) (tfsdk.S
 					{{- end -}}
 					.String,
 				Type:                types.{{.Type}}Type,
-				{{- if eq .Id true}}
-				Required:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
-				},
-				{{- else}}
-				{{- if eq .Mandatory true}}
+				{{- if or (eq .Id true) (eq .Mandatory true)}}
 				Required:            true,
 				{{- else}}
 				Optional:            true,
@@ -82,9 +76,11 @@ func (t resource{{camelCase .Name}}Type) GetSchema(ctx context.Context) (tfsdk.S
 					helpers.IntegerRangeValidator({{.MinInt}}, {{.MaxInt}}),
 				},
 				{{- end}}
-				{{- if len .DefaultValue}}
+				{{- if or (len .DefaultValue) (eq .Id true)}}
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					{{- if eq .Type "Int64"}}
+					{{- if eq .Id true}}
+					tfsdk.RequiresReplace(),
+					{{- else if eq .Type "Int64"}}
 					helpers.IntegerDefaultModifier({{.DefaultValue}}),
 					{{- else if eq .Type "Bool"}}
 					helpers.BooleanDefaultModifier({{.DefaultValue}}),
@@ -92,7 +88,6 @@ func (t resource{{camelCase .Name}}Type) GetSchema(ctx context.Context) (tfsdk.S
 					helpers.StringDefaultModifier("{{.DefaultValue}}"),
 					{{- end}}
 				},
-				{{- end}}
 				{{- end}}
 			},
 			{{- end}}

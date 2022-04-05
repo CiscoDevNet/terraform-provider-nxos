@@ -48,6 +48,9 @@ func (t resourceVRFDomainAfType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 				MarkdownDescription: helpers.NewAttributeDescription("Address family.").AddStringEnumDescription("ipv4-ucast", "ipv6-ucast").String,
 				Type:                types.StringType,
 				Required:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("ipv4-ucast", "ipv6-ucast"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					tfsdk.RequiresReplace(),
 				},

@@ -7,6 +7,8 @@ description: |-
   API Documentation: rtctrlAfCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:AfCtrl/
   Parent resources
   nxosvrfdomain_af https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf_domain_af
+  Child resources
+  nxosvrfdomainafcontrol_direction https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf_domain_af_control_direction
 ---
 
 # nxos_vrf_domain_af_control (Resource)
@@ -18,6 +20,10 @@ This resource can manage a VRF Address Family Network Control Policy.
 ### Parent resources
 
 - [nxos_vrf_domain_af](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf_domain_af)
+
+### Child resources
+
+- [nxos_vrf_domain_af_control_direction](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf_domain_af_control_direction)
 
 ## Example Usage
 

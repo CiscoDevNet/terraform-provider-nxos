@@ -48,6 +48,9 @@ func (t resourceVRFDomainAfControlDirectionType) GetSchema(ctx context.Context) 
 				MarkdownDescription: helpers.NewAttributeDescription("Address family.").AddStringEnumDescription("ipv4-ucast", "ipv6-ucast").String,
 				Type:                types.StringType,
 				Required:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("ipv4-ucast", "ipv6-ucast"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					tfsdk.RequiresReplace(),
 				},
@@ -56,6 +59,9 @@ func (t resourceVRFDomainAfControlDirectionType) GetSchema(ctx context.Context) 
 				MarkdownDescription: helpers.NewAttributeDescription("Route Control type.").AddStringEnumDescription("ipv4-ucast", "ipv6-ucast", "l2vpn-evpn").String,
 				Type:                types.StringType,
 				Required:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("ipv4-ucast", "ipv6-ucast", "l2vpn-evpn"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					tfsdk.RequiresReplace(),
 				},
@@ -64,6 +70,9 @@ func (t resourceVRFDomainAfControlDirectionType) GetSchema(ctx context.Context) 
 				MarkdownDescription: helpers.NewAttributeDescription("Route Target direction.").AddStringEnumDescription("import", "export").String,
 				Type:                types.StringType,
 				Required:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("import", "export"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					tfsdk.RequiresReplace(),
 				},

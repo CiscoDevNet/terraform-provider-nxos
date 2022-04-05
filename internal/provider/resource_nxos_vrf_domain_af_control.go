@@ -20,7 +20,7 @@ type resourceVRFDomainAfControlType struct{}
 func (t resourceVRFDomainAfControlType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a VRF Address Family Network Control Policy.", "rtctrlAfCtrl", "Routing%20and%20Forwarding/rtctrl:AfCtrl/").AddParents("vrf_domain_af").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a VRF Address Family Network Control Policy.", "rtctrlAfCtrl", "Routing%20and%20Forwarding/rtctrl:AfCtrl/").AddParents("vrf_domain_af").AddChildren("vrf_domain_af_control_direction").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {
@@ -48,6 +48,9 @@ func (t resourceVRFDomainAfControlType) GetSchema(ctx context.Context) (tfsdk.Sc
 				MarkdownDescription: helpers.NewAttributeDescription("Address family.").AddStringEnumDescription("ipv4-ucast", "ipv6-ucast").String,
 				Type:                types.StringType,
 				Required:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("ipv4-ucast", "ipv6-ucast"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					tfsdk.RequiresReplace(),
 				},
@@ -56,6 +59,9 @@ func (t resourceVRFDomainAfControlType) GetSchema(ctx context.Context) (tfsdk.Sc
 				MarkdownDescription: helpers.NewAttributeDescription("Route Control type.").AddStringEnumDescription("ipv4-ucast", "ipv6-ucast", "l2vpn-evpn").String,
 				Type:                types.StringType,
 				Required:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("ipv4-ucast", "ipv6-ucast", "l2vpn-evpn"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					tfsdk.RequiresReplace(),
 				},

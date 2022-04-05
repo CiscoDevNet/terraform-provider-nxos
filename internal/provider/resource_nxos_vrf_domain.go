@@ -20,7 +20,7 @@ type resourceVRFDomainType struct{}
 func (t resourceVRFDomainType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a VRF Route Distinguisher and VRF VNI.", "rtctrlDom", "Routing%20and%20Forwarding/rtctrl:Dom/").AddParents("vrf").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a VRF Route Distinguisher and VRF VNI.", "rtctrlDom", "Routing%20and%20Forwarding/rtctrl:Dom/").AddParents("vrf").AddChildren("vrf_domain_af").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {

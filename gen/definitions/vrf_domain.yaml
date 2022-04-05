@@ -5,9 +5,10 @@ dn: sys/inst-[%s]/dom-[%[1]s]
 ds_description: This data source can read a VRF Route Distinguisher and VRF VNI.
 res_description: This resource can manage a VRF Route Distinguisher and VRF VNI.
 doc_path: Routing%20and%20Forwarding/rtctrl:Dom/
-replace_notation: true
 parents:
   - VRF
+children:
+  - VRF Domain Af
 attributes:
   - nxos_name: vrf
     tf_name: vrf

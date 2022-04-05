@@ -1,0 +1,28 @@
+---
+name: VRF Domain Af
+class_name: rtctrlDomAf
+dn: sys/inst-[%s]/dom-[%[1]s]/af-[%s]
+ds_description: This data source can read a VRF Address Family.
+res_description: This resource can manage a VRF Address Family.
+doc_path: Routing%20and%20Forwarding/rtctrl:DomAf/
+parents:
+  - VRF Domain
+children:
+  - VRF Domain Af Control
+attributes:
+  - nxos_name: vrf
+    tf_name: vrf
+    type: String
+    id: true
+    reference_only: true
+    description: 'VRF name.'
+    example: VRF1
+  - nxos_name: type
+    tf_name: af
+    type: String
+    id: true
+    description: 'Address family.'
+    enum_values:
+      - ipv4-ucast
+      - ipv6-ucast
+    example: ipv4-ucast

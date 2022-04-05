@@ -1,0 +1,54 @@
+---
+name: VRF Domain Af Control Direction RT
+class_name: rtctrlRttEntry
+dn: sys/inst-[%s]/dom-[%[1]s]/af-[%s]/ctrl-[%s]/rttp-[%s]/ent-[%s]
+ds_description: This data source can read a VRF RT Entry.
+res_description: This resource can manage a VRF RT Entry.
+doc_path: Routing%20and%20Forwarding/rtctrl:RttEntry/
+parents:
+  - VRF Domain Af Control Direction
+attributes:
+  - nxos_name: vrf
+    tf_name: vrf
+    type: String
+    id: true
+    reference_only: true
+    description: 'VRF name.'
+    example: VRF1
+  - nxos_name: af_type
+    tf_name: af
+    type: String
+    id: true
+    reference_only: true
+    description: 'Address family.'
+    enum_values:
+      - ipv4-ucast
+      - ipv6-ucast
+    example: ipv4-ucast
+  - nxos_name: rt_type
+    tf_name: rt_type
+    type: String
+    id: true
+    reference_only: true
+    description: 'Route Control type.'
+    enum_values:
+      - ipv4-ucast
+      - ipv6-ucast
+      - l2vpn-evpn
+    example: ipv4-ucast
+  - nxos_name: type
+    tf_name: direction
+    type: String
+    id: true
+    reference_only: true
+    description: 'Route Target direction.'
+    enum_values:
+      - import
+      - export
+    example: import
+  - nxos_name: rtt
+    tf_name: rt
+    type: String
+    id: true
+    description: 'Route Target.'
+    example: route-target:as2-nn2:2:2

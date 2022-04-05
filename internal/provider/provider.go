@@ -323,6 +323,7 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 		"nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth": resourceQueuingQOSPolicyMapMatchClassMapRemainingBandwidthType{},
 		"nxos_queuing_qos_policy_system_out":                              resourceQueuingQOSPolicySystemOutType{},
 		"nxos_queuing_qos_policy_system_out_policy_map":                   resourceQueuingQOSPolicySystemOutPolicyMapType{},
+<<<<<<< HEAD
 		"nxos_subinterface":      resourceSubinterfaceType{},
 		"nxos_subinterface_vrf":  resourceSubinterfaceVRFType{},
 		"nxos_svi_interface":     resourceSVIInterfaceType{},
@@ -330,6 +331,20 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 		"nxos_system":            resourceSystemType{},
 		"nxos_vrf":               resourceVRFType{},
 		"nxos_vrf_domain":        resourceVRFDomainType{},
+=======
+		"nxos_subinterface":                       resourceSubinterfaceType{},
+		"nxos_subinterface_vrf":                   resourceSubinterfaceVRFType{},
+		"nxos_svi_interface":                      resourceSVIInterfaceType{},
+		"nxos_svi_interface_vrf":                  resourceSVIInterfaceVRFType{},
+		"nxos_system":                             resourceSystemType{},
+		"nxos_vrf":                                resourceVRFType{},
+		"nxos_vrf_container":                      resourceVRFContainerType{},
+		"nxos_vrf_domain":                         resourceVRFDomainType{},
+		"nxos_vrf_domain_af":                      resourceVRFDomainAfType{},
+		"nxos_vrf_domain_af_control":              resourceVRFDomainAfControlType{},
+		"nxos_vrf_domain_af_control_direction":    resourceVRFDomainAfControlDirectionType{},
+		"nxos_vrf_domain_af_control_direction_rt": resourceVRFDomainAfControlDirectionRTType{},
+>>>>>>> ea47663... added vrf resources
 	}, nil
 }
 
@@ -408,13 +423,17 @@ func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSou
 		"nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth": dataSourceQueuingQOSPolicyMapMatchClassMapRemainingBandwidthType{},
 		"nxos_queuing_qos_policy_system_out":                              dataSourceQueuingQOSPolicySystemOutType{},
 		"nxos_queuing_qos_policy_system_out_policy_map":                   dataSourceQueuingQOSPolicySystemOutPolicyMapType{},
-		"nxos_subinterface":      dataSourceSubinterfaceType{},
-		"nxos_subinterface_vrf":  dataSourceSubinterfaceVRFType{},
-		"nxos_svi_interface":     dataSourceSVIInterfaceType{},
-		"nxos_svi_interface_vrf": dataSourceSVIInterfaceVRFType{},
-		"nxos_system":            dataSourceSystemType{},
-		"nxos_vrf":               dataSourceVRFType{},
-		"nxos_vrf_domain":        dataSourceVRFDomainType{},
+		"nxos_subinterface":                       dataSourceSubinterfaceType{},
+		"nxos_subinterface_vrf":                   dataSourceSubinterfaceVRFType{},
+		"nxos_svi_interface":                      dataSourceSVIInterfaceType{},
+		"nxos_svi_interface_vrf":                  dataSourceSVIInterfaceVRFType{},
+		"nxos_system":                             dataSourceSystemType{},
+		"nxos_vrf":                                dataSourceVRFType{},
+		"nxos_vrf_domain":                         dataSourceVRFDomainType{},
+		"nxos_vrf_domain_af":                      dataSourceVRFDomainAfType{},
+		"nxos_vrf_domain_af_control":              dataSourceVRFDomainAfControlType{},
+		"nxos_vrf_domain_af_control_direction":    dataSourceVRFDomainAfControlDirectionType{},
+		"nxos_vrf_domain_af_control_direction_rt": dataSourceVRFDomainAfControlDirectionRTType{},
 	}, nil
 }
 

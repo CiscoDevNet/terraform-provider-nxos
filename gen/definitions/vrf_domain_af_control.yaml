@@ -1,0 +1,39 @@
+---
+name: VRF Domain Af Control
+class_name: rtctrlAfCtrl
+dn: sys/inst-[%s]/dom-[%[1]s]/af-[%s]/ctrl-[%s]
+ds_description: This data source can read a VRF Address Family Network Control Policy.
+res_description: This resource can manage a VRF Address Family Network Control Policy.
+doc_path: Routing%20and%20Forwarding/rtctrl:AfCtrl/
+parents:
+  - VRF Domain Af
+children:
+  - VRF Domain Af Control Direction
+attributes:
+  - nxos_name: vrf
+    tf_name: vrf
+    type: String
+    id: true
+    reference_only: true
+    description: 'VRF name.'
+    example: VRF1
+  - nxos_name: af_type
+    tf_name: af
+    type: String
+    id: true
+    reference_only: true
+    description: 'Address family.'
+    enum_values:
+      - ipv4-ucast
+      - ipv6-ucast
+    example: ipv4-ucast
+  - nxos_name: type
+    tf_name: rt_type
+    type: String
+    id: true
+    description: 'Route Control type.'
+    enum_values:
+      - ipv4-ucast
+      - ipv6-ucast
+      - l2vpn-evpn
+    example: ipv4-ucast

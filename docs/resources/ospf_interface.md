@@ -60,6 +60,7 @@ resource "nxos_ospf_interface" "example" {
 - `area` (String) Area identifier to which a network or interface belongs in IPv4 address format.
   - Default value: `0.0.0.0`
 - `bfd` (String) Bidirectional Forwarding Detection (BFD).
+  - Choices: `unspecified`, `enabled`, `disabled`
   - Default value: `unspecified`
 - `cost` (Number) Specifies the cost of interface.
   - Range: `0`-`65535`
@@ -72,8 +73,10 @@ resource "nxos_ospf_interface" "example" {
   - Range: `0`-`65535`
   - Default value: `10`
 - `network_type` (String) Network type.
+  - Choices: `unspecified`, `p2p`, `bcast`
   - Default value: `unspecified`
 - `passive` (String) Passive interface control. Interface can be configured as passive or non-passive.
+  - Choices: `unspecified`, `enabled`, `disabled`
   - Default value: `unspecified`
 - `priority` (Number) Priority, used in determining the designated router on this network.
   - Range: `0`-`255`

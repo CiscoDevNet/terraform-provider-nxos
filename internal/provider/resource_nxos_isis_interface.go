@@ -90,37 +90,49 @@ func (t resourceISISInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema,
 				Computed:            true,
 			},
 			"authentication_type": {
-				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type without specific level.").AddDefaultValueDescription("unknown").String,
+				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type without specific level.").AddStringEnumDescription("clear", "md5", "unknown").AddDefaultValueDescription("unknown").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("clear", "md5", "unknown"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("unknown"),
 				},
 			},
 			"authentication_type_l1": {
-				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type for Level-1.").AddDefaultValueDescription("unknown").String,
+				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type for Level-1.").AddStringEnumDescription("clear", "md5", "unknown").AddDefaultValueDescription("unknown").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("clear", "md5", "unknown"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("unknown"),
 				},
 			},
 			"authentication_type_l2": {
-				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type for Level-2.").AddDefaultValueDescription("unknown").String,
+				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type for Level-2.").AddStringEnumDescription("clear", "md5", "unknown").AddDefaultValueDescription("unknown").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("clear", "md5", "unknown"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("unknown"),
 				},
 			},
 			"circuit_type": {
-				MarkdownDescription: helpers.NewAttributeDescription("Circuit type.").AddDefaultValueDescription("l12").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Circuit type.").AddStringEnumDescription("l1", "l2", "l12").AddDefaultValueDescription("l12").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("l1", "l2", "l12"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("l12"),
 				},
@@ -204,10 +216,13 @@ func (t resourceISISInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema,
 				},
 			},
 			"hello_padding": {
-				MarkdownDescription: helpers.NewAttributeDescription("Hello padding.").AddDefaultValueDescription("always").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Hello padding.").AddStringEnumDescription("always", "transient", "never").AddDefaultValueDescription("always").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("always", "transient", "never"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("always"),
 				},
@@ -264,19 +279,25 @@ func (t resourceISISInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema,
 				},
 			},
 			"network_type_p2p": {
-				MarkdownDescription: helpers.NewAttributeDescription("Enabling Point-to-Point Network Type on IS-IS Interface.").AddDefaultValueDescription("off").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Enabling Point-to-Point Network Type on IS-IS Interface.").AddStringEnumDescription("off", "on", "useAllISMac").AddDefaultValueDescription("off").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("off", "on", "useAllISMac"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("off"),
 				},
 			},
 			"passive": {
-				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Passive Interface Info.").AddDefaultValueDescription("inheritDef").String,
+				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Passive Interface Info.").AddStringEnumDescription("l1", "l2", "l12", "noL1", "noL2", "noL12", "inheritDef").AddDefaultValueDescription("inheritDef").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("l1", "l2", "l12", "noL1", "noL2", "noL12", "inheritDef"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("inheritDef"),
 				},

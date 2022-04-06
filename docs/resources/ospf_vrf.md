@@ -57,11 +57,13 @@ resource "nxos_ospf_vrf" "example" {
 ### Optional
 
 - `admin_state` (String) Administrative state.
+  - Choices: `enabled`, `disabled`
   - Default value: `enabled`
 - `bandwidth_reference` (Number) Bandwidth reference value.
   - Range: `0`-`4294967295`
   - Default value: `40000`
 - `banwidth_reference_unit` (String) Bandwidth reference unit.
+  - Choices: `mbps`, `gbps`
   - Default value: `mbps`
 - `device` (String) A device name from the provider configuration.
 - `distance` (Number) Administrative distance preference.

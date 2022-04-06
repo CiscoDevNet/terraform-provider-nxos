@@ -53,10 +53,13 @@ func (t resourceISISVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.
 				},
 			},
 			"admin_state": {
-				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddDefaultValueDescription("enabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("enabled", "disabled"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("enabled"),
 				},
@@ -92,19 +95,25 @@ func (t resourceISISVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.
 				Computed:            true,
 			},
 			"authentication_type_l1": {
-				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type for Level-1.").AddDefaultValueDescription("unknown").String,
+				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type for Level-1.").AddStringEnumDescription("clear", "md5", "unknown").AddDefaultValueDescription("unknown").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("clear", "md5", "unknown"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("unknown"),
 				},
 			},
 			"authentication_type_l2": {
-				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type for Level-2.").AddDefaultValueDescription("unknown").String,
+				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type for Level-2.").AddStringEnumDescription("clear", "md5", "unknown").AddDefaultValueDescription("unknown").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("clear", "md5", "unknown"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("unknown"),
 				},
@@ -122,28 +131,37 @@ func (t resourceISISVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.
 				},
 			},
 			"banwidth_reference_unit": {
-				MarkdownDescription: helpers.NewAttributeDescription("Bandwidth reference unit.").AddDefaultValueDescription("mbps").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Bandwidth reference unit.").AddStringEnumDescription("mbps", "gbps").AddDefaultValueDescription("mbps").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("mbps", "gbps"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("mbps"),
 				},
 			},
 			"is_type": {
-				MarkdownDescription: helpers.NewAttributeDescription("IS-IS domain type.").AddDefaultValueDescription("l12").String,
+				MarkdownDescription: helpers.NewAttributeDescription("IS-IS domain type.").AddStringEnumDescription("l1", "l2", "l12").AddDefaultValueDescription("l12").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("l1", "l2", "l12"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("l12"),
 				},
 			},
 			"metric_type": {
-				MarkdownDescription: helpers.NewAttributeDescription("IS-IS metric type.").AddDefaultValueDescription("wide").String,
+				MarkdownDescription: helpers.NewAttributeDescription("IS-IS metric type.").AddStringEnumDescription("narrow", "wide", "transition").AddDefaultValueDescription("wide").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("narrow", "wide", "transition"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("wide"),
 				},
@@ -167,10 +185,13 @@ func (t resourceISISVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.
 				Computed:            true,
 			},
 			"passive_default": {
-				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Domain passive-interface default level.").AddDefaultValueDescription("unknown").String,
+				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Domain passive-interface default level.").AddStringEnumDescription("l1", "l2", "l12", "unknown").AddDefaultValueDescription("unknown").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("l1", "l2", "l12", "unknown"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("unknown"),
 				},

@@ -109,10 +109,13 @@ func (t resourceOSPFAuthenticationType) GetSchema(ctx context.Context) (tfsdk.Sc
 				},
 			},
 			"type": {
-				MarkdownDescription: helpers.NewAttributeDescription("Authentication type.").AddDefaultValueDescription("unspecified").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Authentication type.").AddStringEnumDescription("none", "simple", "md5", "unspecified").AddDefaultValueDescription("unspecified").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("none", "simple", "md5", "unspecified"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("unspecified"),
 				},

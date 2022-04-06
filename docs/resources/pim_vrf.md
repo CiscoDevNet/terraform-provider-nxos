@@ -53,6 +53,7 @@ resource "nxos_pim_vrf" "example" {
 ### Optional
 
 - `admin_state` (String) Administrative state.
+  - Choices: `enabled`, `disabled`
   - Default value: `enabled`
 - `bfd` (Boolean) BFD.
   - Default value: `false`

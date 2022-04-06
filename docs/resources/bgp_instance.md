@@ -34,6 +34,7 @@ resource "nxos_bgp_instance" "example" {
 ### Optional
 
 - `admin_state` (String) Administrative state.
+  - Choices: `enabled`, `disabled`
   - Default value: `enabled`
 - `asn` (String) Autonomous system number.
 - `device` (String) A device name from the provider configuration.

@@ -79,10 +79,13 @@ func (t resourceOSPFInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema,
 				},
 			},
 			"bfd": {
-				MarkdownDescription: helpers.NewAttributeDescription("Bidirectional Forwarding Detection (BFD).").AddDefaultValueDescription("unspecified").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Bidirectional Forwarding Detection (BFD).").AddStringEnumDescription("unspecified", "enabled", "disabled").AddDefaultValueDescription("unspecified").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("unspecified", "enabled", "disabled"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("unspecified"),
 				},
@@ -124,19 +127,25 @@ func (t resourceOSPFInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema,
 				},
 			},
 			"network_type": {
-				MarkdownDescription: helpers.NewAttributeDescription("Network type.").AddDefaultValueDescription("unspecified").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Network type.").AddStringEnumDescription("unspecified", "p2p", "bcast").AddDefaultValueDescription("unspecified").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("unspecified", "p2p", "bcast"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("unspecified"),
 				},
 			},
 			"passive": {
-				MarkdownDescription: helpers.NewAttributeDescription("Passive interface control. Interface can be configured as passive or non-passive.").AddDefaultValueDescription("unspecified").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Passive interface control. Interface can be configured as passive or non-passive.").AddStringEnumDescription("unspecified", "enabled", "disabled").AddDefaultValueDescription("unspecified").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("unspecified", "enabled", "disabled"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("unspecified"),
 				},

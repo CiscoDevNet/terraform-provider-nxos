@@ -54,7 +54,7 @@ attributes:
     tf_name: authentication_type
     type: String
     description: 'IS-IS Authentication-Type without specific level.'
-    enum_value:
+    enum_values:
       - clear
       - md5
       - unknown
@@ -64,7 +64,7 @@ attributes:
     tf_name: authentication_type_l1
     type: String
     description: 'IS-IS Authentication-Type for Level-1.'
-    enum_value:
+    enum_values:
       - clear
       - md5
       - unknown
@@ -74,7 +74,7 @@ attributes:
     tf_name: authentication_type_l2
     type: String
     description: 'IS-IS Authentication-Type for Level-2.'
-    enum_value:
+    enum_values:
       - clear
       - md5
       - unknown
@@ -84,7 +84,7 @@ attributes:
     tf_name: circuit_type
     type: String
     description: 'Circuit type.'
-    enum_value:
+    enum_values:
       - l1
       - l2
       - l12
@@ -147,7 +147,7 @@ attributes:
     tf_name: hello_padding
     type: String
     description: 'Hello padding.'
-    enum_value:
+    enum_values:
       - always
       - transient
       - never
@@ -191,7 +191,7 @@ attributes:
     tf_name: network_type_p2p
     type: String
     description: 'Enabling Point-to-Point Network Type on IS-IS Interface.'
-    enum_value:
+    enum_values:
       - 'off'
       - 'on'
       - useAllISMac
@@ -201,7 +201,7 @@ attributes:
     tf_name: passive
     type: String
     description: 'IS-IS Passive Interface Info.'
-    enum_value:
+    enum_values:
       - l1
       - l2
       - l12

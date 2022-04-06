@@ -27,6 +27,7 @@ resource "nxos_feature_ospf" "example" {
 ### Required
 
 - `admin_state` (String) Administrative state.
+  - Choices: `enabled`, `disabled`
 
 ### Optional
 

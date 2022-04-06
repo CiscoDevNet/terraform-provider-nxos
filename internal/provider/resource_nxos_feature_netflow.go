@@ -37,9 +37,12 @@ func (t resourceFeatureNetflowType) GetSchema(ctx context.Context) (tfsdk.Schema
 				},
 			},
 			"admin_state": {
-				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").String,
 				Type:                types.StringType,
 				Required:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("enabled", "disabled"),
+				},
 			},
 		},
 	}, nil

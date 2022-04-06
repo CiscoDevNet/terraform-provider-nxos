@@ -59,6 +59,7 @@ resource "nxos_isis_vrf" "example" {
 ### Optional
 
 - `admin_state` (String) Administrative state.
+  - Choices: `enabled`, `disabled`
   - Default value: `enabled`
 - `authentication_check_l1` (Boolean) Authentication Check for ISIS on Level-1.
   - Default value: `true`
@@ -67,24 +68,30 @@ resource "nxos_isis_vrf" "example" {
 - `authentication_key_l1` (String) Authentication Key for IS-IS on Level-1.
 - `authentication_key_l2` (String) Authentication Key for IS-IS on Level-2.
 - `authentication_type_l1` (String) IS-IS Authentication-Type for Level-1.
+  - Choices: `clear`, `md5`, `unknown`
   - Default value: `unknown`
 - `authentication_type_l2` (String) IS-IS Authentication-Type for Level-2.
+  - Choices: `clear`, `md5`, `unknown`
   - Default value: `unknown`
 - `bandwidth_reference` (Number) The IS-IS domain bandwidth reference. This sets the default reference bandwidth used for calculating the IS-IS cost metric.
   - Range: `0`-`4294967295`
   - Default value: `40000`
 - `banwidth_reference_unit` (String) Bandwidth reference unit.
+  - Choices: `mbps`, `gbps`
   - Default value: `mbps`
 - `device` (String) A device name from the provider configuration.
 - `is_type` (String) IS-IS domain type.
+  - Choices: `l1`, `l2`, `l12`
   - Default value: `l12`
 - `metric_type` (String) IS-IS metric type.
+  - Choices: `narrow`, `wide`, `transition`
   - Default value: `wide`
 - `mtu` (Number) The configuration of link-state packet (LSP) maximum transmission units (MTU) is supported. You can enable up to 4352 bytes.
   - Range: `256`-`4352`
   - Default value: `1492`
 - `net` (String) Holds IS-IS domain NET (address) value.
 - `passive_default` (String) IS-IS Domain passive-interface default level.
+  - Choices: `l1`, `l2`, `l12`, `unknown`
   - Default value: `unknown`
 
 ### Read-Only

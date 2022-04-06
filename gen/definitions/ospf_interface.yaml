@@ -46,7 +46,7 @@ attributes:
     tf_name: bfd
     type: String
     description: 'Bidirectional Forwarding Detection (BFD).'
-    enum_value:
+    enum_values:
       - unspecified
       - enabled
       - disabled
@@ -80,7 +80,7 @@ attributes:
     tf_name: network_type
     type: String
     description: 'Network type.'
-    enum_value:
+    enum_values:
       - unspecified
       - p2p
       - bcast
@@ -90,7 +90,7 @@ attributes:
     tf_name: passive
     type: String
     description: 'Passive interface control. Interface can be configured as passive or non-passive.'
-    enum_value:
+    enum_values:
       - unspecified
       - enabled
       - disabled

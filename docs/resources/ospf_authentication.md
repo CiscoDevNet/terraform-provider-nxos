@@ -59,6 +59,7 @@ resource "nxos_ospf_authentication" "example" {
 - `md5_key_secure_mode` (Boolean) Encrypted authentication md5 key or plain text key.
   - Default value: `false`
 - `type` (String) Authentication type.
+  - Choices: `none`, `simple`, `md5`, `unspecified`
   - Default value: `unspecified`
 
 ### Read-Only

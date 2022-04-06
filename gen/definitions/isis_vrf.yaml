@@ -27,7 +27,7 @@ attributes:
     tf_name: admin_state
     type: String
     description: 'Administrative state.'
-    enum_value:
+    enum_values:
       - enabled
       - disabled
     default_value: enabled
@@ -60,7 +60,7 @@ attributes:
     tf_name: authentication_type_l1
     type: String
     description: 'IS-IS Authentication-Type for Level-1.'
-    enum_value:
+    enum_values:
       - clear
       - md5
       - unknown
@@ -70,7 +70,7 @@ attributes:
     tf_name: authentication_type_l2
     type: String
     description: 'IS-IS Authentication-Type for Level-2.'
-    enum_value:
+    enum_values:
       - clear
       - md5
       - unknown
@@ -88,7 +88,7 @@ attributes:
     tf_name: banwidth_reference_unit
     type: String
     description: 'Bandwidth reference unit.'
-    enum_value:
+    enum_values:
       - mbps
       - gbps
     default_value: mbps
@@ -97,7 +97,7 @@ attributes:
     tf_name: is_type
     type: String
     description: 'IS-IS domain type.'
-    enum_value:
+    enum_values:
       - l1
       - l2
       - l12
@@ -107,7 +107,7 @@ attributes:
     tf_name: metric_type
     type: String
     description: 'IS-IS metric type.'
-    enum_value:
+    enum_values:
       - narrow
       - wide
       - transition
@@ -130,7 +130,7 @@ attributes:
     tf_name: passive_default
     type: String
     description: 'IS-IS Domain passive-interface default level.'
-    enum_value:
+    enum_values:
       - l1
       - l2
       - l12

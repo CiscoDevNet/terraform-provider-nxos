@@ -61,10 +61,13 @@ func (t resourceOSPFAreaType) GetSchema(ctx context.Context) (tfsdk.Schema, diag
 				},
 			},
 			"authentication_type": {
-				MarkdownDescription: helpers.NewAttributeDescription("Authentication type.").AddDefaultValueDescription("unspecified").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Authentication type.").AddStringEnumDescription("none", "simple", "md5", "unspecified").AddDefaultValueDescription("unspecified").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("none", "simple", "md5", "unspecified"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("unspecified"),
 				},
@@ -82,10 +85,13 @@ func (t resourceOSPFAreaType) GetSchema(ctx context.Context) (tfsdk.Schema, diag
 				},
 			},
 			"type": {
-				MarkdownDescription: helpers.NewAttributeDescription("Area type.").AddDefaultValueDescription("regular").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Area type.").AddStringEnumDescription("regular", "stub", "nssa").AddDefaultValueDescription("regular").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("regular", "stub", "nssa"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("regular"),
 				},

@@ -27,6 +27,7 @@ resource "nxos_feature_lldp" "example" {
 ### Required
 
 - `admin_state` (String) Administrative state.
+  - Choices: `enabled`, `disabled`
 
 ### Optional
 

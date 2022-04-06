@@ -33,7 +33,7 @@ attributes:
     tf_name: authentication_type
     type: String
     description: 'Authentication type.'
-    enum_value:
+    enum_values:
       - none
       - simple
       - md5
@@ -52,7 +52,7 @@ attributes:
     tf_name: type
     type: String
     description: 'Area type.'
-    enum_value:
+    enum_values:
       - regular
       - stub
       - nssa

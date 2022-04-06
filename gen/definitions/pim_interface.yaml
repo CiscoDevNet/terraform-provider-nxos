@@ -25,7 +25,7 @@ attributes:
     tf_name: admin_state
     type: String
     description: 'Administrative state.'
-    enum_value:
+    enum_values:
       - enabled
       - disabled
     default_value: enabled
@@ -34,7 +34,7 @@ attributes:
     tf_name: bfd
     type: String
     description: 'BFD.'
-    enum_value:
+    enum_values:
       - enabled
       - disabled
     default_value: disabled

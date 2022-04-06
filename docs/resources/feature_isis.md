@@ -27,6 +27,7 @@ resource "nxos_feature_isis" "example" {
 ### Required
 
 - `admin_state` (String) Administrative state.
+  - Choices: `enabled`, `disabled`
 
 ### Optional
 

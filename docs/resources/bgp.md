@@ -33,6 +33,7 @@ resource "nxos_bgp" "example" {
 ### Optional
 
 - `admin_state` (String) Administrative state.
+  - Choices: `enabled`, `disabled`
   - Default value: `enabled`
 - `device` (String) A device name from the provider configuration.
 

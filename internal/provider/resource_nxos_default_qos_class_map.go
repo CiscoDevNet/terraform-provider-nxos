@@ -45,10 +45,13 @@ func (t resourceDefaultQOSClassMapType) GetSchema(ctx context.Context) (tfsdk.Sc
 				},
 			},
 			"match_type": {
-				MarkdownDescription: helpers.NewAttributeDescription("Match type.").AddDefaultValueDescription("match-all").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Match type.").AddStringEnumDescription("match-any", "match-all", "match-first").AddDefaultValueDescription("match-all").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("match-any", "match-all", "match-first"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("match-all"),
 				},

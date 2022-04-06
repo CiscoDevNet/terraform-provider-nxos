@@ -27,6 +27,7 @@ resource "nxos_feature_lacp" "example" {
 ### Required
 
 - `admin_state` (String) Administrative state.
+  - Choices: `enabled`, `disabled`
 
 ### Optional
 

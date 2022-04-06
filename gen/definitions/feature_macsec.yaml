@@ -13,7 +13,7 @@ attributes:
     type: String
     mandatory: true
     description: 'Administrative state.'
-    enum_value:
+    enum_values:
       - enabled
       - disabled
     example: enabled

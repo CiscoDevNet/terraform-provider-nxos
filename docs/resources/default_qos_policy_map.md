@@ -39,6 +39,7 @@ resource "nxos_default_qos_policy_map" "example" {
 
 - `device` (String) A device name from the provider configuration.
 - `match_type` (String) Match type.
+  - Choices: `match-any`, `match-all`, `match-first`
   - Default value: `match-all`
 
 ### Read-Only

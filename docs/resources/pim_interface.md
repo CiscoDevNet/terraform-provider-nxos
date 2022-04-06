@@ -44,8 +44,10 @@ resource "nxos_pim_interface" "example" {
 ### Optional
 
 - `admin_state` (String) Administrative state.
+  - Choices: `enabled`, `disabled`
   - Default value: `enabled`
 - `bfd` (String) BFD.
+  - Choices: `enabled`, `disabled`
   - Default value: `disabled`
 - `device` (String) A device name from the provider configuration.
 - `dr_priority` (Number) Designated Router priority level.

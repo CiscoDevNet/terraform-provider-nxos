@@ -73,12 +73,16 @@ resource "nxos_isis_interface" "example" {
 - `authentication_key_l1` (String) Authentication Key for IS-IS on Level-1.
 - `authentication_key_l2` (String) Authentication Key for IS-IS on Level-2.
 - `authentication_type` (String) IS-IS Authentication-Type without specific level.
+  - Choices: `clear`, `md5`, `unknown`
   - Default value: `unknown`
 - `authentication_type_l1` (String) IS-IS Authentication-Type for Level-1.
+  - Choices: `clear`, `md5`, `unknown`
   - Default value: `unknown`
 - `authentication_type_l2` (String) IS-IS Authentication-Type for Level-2.
+  - Choices: `clear`, `md5`, `unknown`
   - Default value: `unknown`
 - `circuit_type` (String) Circuit type.
+  - Choices: `l1`, `l2`, `l12`
   - Default value: `l12`
 - `device` (String) A device name from the provider configuration.
 - `hello_interval` (Number) Hello interval.
@@ -100,6 +104,7 @@ resource "nxos_isis_interface" "example" {
   - Range: `3`-`1000`
   - Default value: `3`
 - `hello_padding` (String) Hello padding.
+  - Choices: `always`, `transient`, `never`
   - Default value: `always`
 - `metric_l1` (Number) Interface metric Level-1.
   - Range: `0`-`16777216`
@@ -114,8 +119,10 @@ resource "nxos_isis_interface" "example" {
 - `mtu_check_l2` (Boolean) MTU Check for IS-IS on Level-2.
   - Default value: `false`
 - `network_type_p2p` (String) Enabling Point-to-Point Network Type on IS-IS Interface.
+  - Choices: `off`, `on`, `useAllISMac`
   - Default value: `off`
 - `passive` (String) IS-IS Passive Interface Info.
+  - Choices: `l1`, `l2`, `l12`, `noL1`, `noL2`, `noL12`, `inheritDef`
   - Default value: `inheritDef`
 - `priority_l1` (Number) Circuit priority.
   - Range: `0`-`127`

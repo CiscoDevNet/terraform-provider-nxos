@@ -1,0 +1,29 @@
+---
+name: HMM Instance
+class_name: hmmFwdInst
+dn: sys/hmm/fwdinst
+ds_description: This data source can read the HMM Fabric Forwarding Instance configuration.
+res_description: This resource can manage the HMM Fabric Forwarding Instance configuration.
+doc_path: Host%20Mobility/hmm:FwdInst/
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'Administrative state.'
+    enum_values:
+      - enabled
+      - disabled
+    default_value: enabled
+    example: enabled
+  - nxos_name: amac
+    tf_name: anycast_mac
+    type: String
+    description: 'Anycast Gateway MAC address.'
+    default_value: enabled
+    example: '20:20:00:00:10:10'
+test_prerequisites:
+  - dn: sys/fm/hmm
+    class_name: fmHmm
+  - dn: sys/hmm
+    class_name: hmmEntity
+    depends_on: [0]

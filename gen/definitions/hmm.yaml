@@ -1,0 +1,22 @@
+---
+name: HMM
+class_name: hmmEntity
+dn: sys/hmm
+ds_description: This data source can read the Host Mobility Manager (HMM) Entity configuration.
+res_description: This resource can manage the Host Mobility Manager (HMM) Entity configuration.
+doc_path: Host%20Mobility/hmm:Entity/
+children:
+  - HMM Instance
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'Administrative state.'
+    enum_values:
+      - enabled
+      - disabled
+    default_value: enabled
+    example: enabled
+test_prerequisites:
+  - dn: sys/fm/hmm
+    class_name: fmHmm

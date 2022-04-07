@@ -1,0 +1,65 @@
+---
+name: BGP Instance Domain PeerContainer
+class_name: bgpPeerCont
+dn: sys/bgp/inst/dom-[%s]/peercont-[%s]
+ds_description: This data source can read the BGP peer template configuration.
+res_description: This resource can manage the BGP peer template configuration.
+doc_path: Routing%20and%20Forwarding/bgp:PeerCont/
+parents:
+  - BGP Instance Domain
+children:
+  - BGP Instance Domain PeerContainer Af
+references:
+  - BGP Instance Domain Peer
+attributes:
+  - nxos_name: vrf_name
+    tf_name: vrf
+    type: String
+    id: true
+    reference_only: true
+    description: 'VRF name.'
+    example: default
+  - nxos_name: name
+    tf_name: template_name
+    type: String
+    id: true
+    description: 'Peer template name.'
+    example: SPINE-PEERS
+  - nxos_name: asn
+    tf_name: asn
+    type: String
+    description: 'Autonomous system number.'
+    example: '65002'
+  - nxos_name: peerType
+    tf_name: peer_type
+    type: String
+    description: 'Neighbor Fabric Type.'
+    enum_values:
+      - fabric-internal
+      - fabric-external
+      - fabric-border-leaf
+    default_value: 'fabric-internal'
+    example: 'fabric-internal'
+  - nxos_name: srcIf
+    tf_name: source_interface
+    type: String
+    description: 'Source Interface. Must match first field in the output of `show intf brief`.'
+    default_value: 'unspecified'
+    example: 'lo0'
+test_prerequisites:
+  - dn: sys/bgp
+    class_name: bgpEntity
+  - dn: sys/bgp/inst
+    class_name: bgpInst
+    attributes:
+      - name: adminSt
+        value: enabled
+      - name: asn
+        value: '65001'
+    dependencies: [0]
+  - dn: sys/bgp/inst/dom-[default]
+    class_name: bgpDom
+    attributes:
+      - name: name
+        value: default
+    dependencies: [0, 1]

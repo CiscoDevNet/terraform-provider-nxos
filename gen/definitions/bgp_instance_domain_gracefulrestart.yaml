@@ -1,0 +1,50 @@
+---
+name: BGP Instance Domain GracefulRestart
+class_name: bgpGr
+dn: sys/bgp/inst/dom-[%s]/gr
+ds_description: This data source can read the BGP domain (VRF) graceful restart configuration.
+res_description: This resource can manage the BGP domain (VRF) graceful restart configuration.
+doc_path: Routing%20and%20Forwarding/bgp:Gr/
+parents:
+  - BGP Instance Domain
+attributes:
+  - nxos_name: name
+    tf_name: vrf
+    type: String
+    id: true
+    reference_only: true
+    description: 'VRF name.'
+    example: default
+  - nxos_name: restartIntvl
+    tf_name: restart_interval
+    type: Int64
+    description: 'The graceful restart interval.'
+    min_int: 1
+    max_int: 3600
+    default_value: 120
+    example: 240
+  - nxos_name: staleIntvl
+    tf_name: stale_interval
+    type: Int64
+    description: 'The stale interval for routes advertised by the BGP peer.'
+    min_int: 1
+    max_int: 3600
+    default_value: 300
+    example: 1800
+test_prerequisites:
+  - dn: sys/bgp
+    class_name: bgpEntity
+  - dn: sys/bgp/inst
+    class_name: bgpInst
+    attributes:
+      - name: adminSt
+        value: enabled
+      - name: asn
+        value: '65001'
+    dependencies: [0]
+  - dn: sys/bgp/inst/dom-[default]
+    class_name: bgpDom
+    attributes:
+      - name: name
+        value: default
+    dependencies: [0, 1]

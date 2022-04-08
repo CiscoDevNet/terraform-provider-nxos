@@ -8,19 +8,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccNxosVRFContainer(t *testing.T) {
+func TestAccNxosIPv4VRF(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosVRFContainerConfig_all(),
+				Config: testAccNxosIPv4VRFConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_vrf_container.test", "name", "VRF1"),
+					resource.TestCheckResourceAttr("nxos_ipv4_vrf.test", "name", "VRF1"),
 				),
 			},
 			{
-				ResourceName:  "nxos_vrf_container.test",
+				ResourceName:  "nxos_ipv4_vrf.test",
 				ImportState:   true,
 				ImportStateId: "sys/ipv4/inst/dom-[VRF1]",
 			},
@@ -28,17 +28,17 @@ func TestAccNxosVRFContainer(t *testing.T) {
 	})
 }
 
-func testAccNxosVRFContainerConfig_minimum() string {
+func testAccNxosIPv4VRFConfig_minimum() string {
 	return `
-	resource "nxos_vrf_container" "test" {
+	resource "nxos_ipv4_vrf" "test" {
 		name = "VRF1"
 	}
 	`
 }
 
-func testAccNxosVRFContainerConfig_all() string {
+func testAccNxosIPv4VRFConfig_all() string {
 	return `
-	resource "nxos_vrf_container" "test" {
+	resource "nxos_ipv4_vrf" "test" {
 		name = "VRF1"
 	}
 	`

@@ -15,12 +15,12 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourceVRFContainerType struct{}
+type resourceIPv4VRFType struct{}
 
-func (t resourceVRFContainerType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t resourceIPv4VRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a VRF container.", "ipv4Dom", "Layer%203/ipv4:Dom/").AddChildren("ipv4_interface").AddReferences("vrf").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IPv4 VRF information.", "ipv4Dom", "Layer%203/ipv4:Dom/").AddChildren("ipv4_interface").AddReferences("vrf").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {
@@ -48,20 +48,20 @@ func (t resourceVRFContainerType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 	}, nil
 }
 
-func (t resourceVRFContainerType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
+func (t resourceIPv4VRFType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
-	return resourceVRFContainer{
+	return resourceIPv4VRF{
 		provider: provider,
 	}, diags
 }
 
-type resourceVRFContainer struct {
+type resourceIPv4VRF struct {
 	provider provider
 }
 
-func (r resourceVRFContainer) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
-	var plan, state VRFContainer
+func (r resourceIPv4VRF) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+	var plan, state IPv4VRF
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -96,8 +96,8 @@ func (r resourceVRFContainer) Create(ctx context.Context, req tfsdk.CreateResour
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceVRFContainer) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
-	var state VRFContainer
+func (r resourceIPv4VRF) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+	var state IPv4VRF
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -122,8 +122,8 @@ func (r resourceVRFContainer) Read(ctx context.Context, req tfsdk.ReadResourceRe
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceVRFContainer) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
-	var plan, state VRFContainer
+func (r resourceIPv4VRF) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+	var plan, state IPv4VRF
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -157,8 +157,8 @@ func (r resourceVRFContainer) Update(ctx context.Context, req tfsdk.UpdateResour
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceVRFContainer) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
-	var state VRFContainer
+func (r resourceIPv4VRF) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+	var state IPv4VRF
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -184,6 +184,6 @@ func (r resourceVRFContainer) Delete(ctx context.Context, req tfsdk.DeleteResour
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceVRFContainer) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
+func (r resourceIPv4VRF) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
 	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
 }

@@ -14,12 +14,12 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type dataSourceVRFContainerType struct{}
+type dataSourceIPv4VRFType struct{}
 
-func (t dataSourceVRFContainerType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t dataSourceIPv4VRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read a VRF container.", "ipv4Dom", "Layer%203/ipv4:Dom/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the IPv4 VRF information.", "ipv4Dom", "Layer%203/ipv4:Dom/").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {
@@ -41,20 +41,20 @@ func (t dataSourceVRFContainerType) GetSchema(ctx context.Context) (tfsdk.Schema
 	}, nil
 }
 
-func (t dataSourceVRFContainerType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
+func (t dataSourceIPv4VRFType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
-	return dataSourceVRFContainer{
+	return dataSourceIPv4VRF{
 		provider: provider,
 	}, diags
 }
 
-type dataSourceVRFContainer struct {
+type dataSourceIPv4VRF struct {
 	provider provider
 }
 
-func (d dataSourceVRFContainer) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
-	var config, state VRFContainer
+func (d dataSourceIPv4VRF) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+	var config, state IPv4VRF
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

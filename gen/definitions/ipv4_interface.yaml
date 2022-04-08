@@ -6,7 +6,7 @@ ds_description: This data source can read an IPv4 interface.
 res_description: This resource can manage an IPv4 interface.
 doc_path: Layer%203/ipv4:If/
 parents:
-  - VRF Container
+  - IPv4 VRF
 children:
   - IPv4 Interface Address
 attributes:

@@ -1,9 +1,9 @@
 ---
-name: VRF Container
+name: IPv4 VRF
 class_name: ipv4Dom
 dn: sys/ipv4/inst/dom-[%s]
-ds_description: This data source can read a VRF container.
-res_description: This resource can manage a VRF container.
+ds_description: This data source can read the IPv4 VRF information.
+res_description: This resource can manage the IPv4 VRF information.
 doc_path: Layer%203/ipv4:Dom/
 children:
   - IPv4 Interface

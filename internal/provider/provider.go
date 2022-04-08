@@ -293,6 +293,7 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 		"nxos_hmm_instance":                                         resourceHMMInstanceType{},
 		"nxos_ipv4_interface":                                       resourceIPv4InterfaceType{},
 		"nxos_ipv4_interface_address":                               resourceIPv4InterfaceAddressType{},
+		"nxos_ipv4_vrf":                                             resourceIPv4VRFType{},
 		"nxos_isis":                                                 resourceISISType{},
 		"nxos_isis_instance":                                        resourceISISInstanceType{},
 		"nxos_isis_interface":                                       resourceISISInterfaceType{},
@@ -328,7 +329,6 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 		"nxos_svi_interface_vrf": resourceSVIInterfaceVRFType{},
 		"nxos_system":            resourceSystemType{},
 		"nxos_vrf":               resourceVRFType{},
-		"nxos_vrf_container":     resourceVRFContainerType{},
 	}, nil
 }
 
@@ -377,6 +377,7 @@ func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSou
 		"nxos_hmm_instance":                                         dataSourceHMMInstanceType{},
 		"nxos_ipv4_interface":                                       dataSourceIPv4InterfaceType{},
 		"nxos_ipv4_interface_address":                               dataSourceIPv4InterfaceAddressType{},
+		"nxos_ipv4_vrf":                                             dataSourceIPv4VRFType{},
 		"nxos_isis":                                                 dataSourceISISType{},
 		"nxos_isis_instance":                                        dataSourceISISInstanceType{},
 		"nxos_isis_interface":                                       dataSourceISISInterfaceType{},
@@ -412,7 +413,6 @@ func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSou
 		"nxos_svi_interface_vrf": dataSourceSVIInterfaceVRFType{},
 		"nxos_system":            dataSourceSystemType{},
 		"nxos_vrf":               dataSourceVRFType{},
-		"nxos_vrf_container":     dataSourceVRFContainerType{},
 	}, nil
 }
 

@@ -10,31 +10,31 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-type VRFContainer struct {
+type IPv4VRF struct {
 	Device types.String `tfsdk:"device"`
 	Dn     types.String `tfsdk:"id"`
 	Name   types.String `tfsdk:"name"`
 }
 
-func (data VRFContainer) getDn() string {
+func (data IPv4VRF) getDn() string {
 	return fmt.Sprintf("sys/ipv4/inst/dom-[%s]", data.Name.Value)
 }
 
-func (data VRFContainer) getClassName() string {
+func (data IPv4VRF) getClassName() string {
 	return "ipv4Dom"
 }
 
-func (data VRFContainer) toBody() nxos.Body {
+func (data IPv4VRF) toBody() nxos.Body {
 	attrs := nxos.Body{}.
 		Set("name", data.Name.Value)
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
-func (data *VRFContainer) fromBody(res gjson.Result) {
+func (data *IPv4VRF) fromBody(res gjson.Result) {
 	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Name.Value = res.Get("*.attributes.name").String()
 }
 
-func (data *VRFContainer) fromPlan(plan VRFContainer) {
+func (data *IPv4VRF) fromPlan(plan IPv4VRF) {
 	data.Device = plan.Device
 }

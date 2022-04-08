@@ -6,7 +6,7 @@ description: |-
   This resource can manage an IPv4 interface.
   API Documentation: ipv4If https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:If/
   Parent resources
-  nxosvrfcontainer https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf_container
+  nxosipv4vrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_vrf
   Child resources
   nxosipv4interface_address https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_interface_address
 ---
@@ -19,7 +19,7 @@ This resource can manage an IPv4 interface.
 
 ### Parent resources
 
-- [nxos_vrf_container](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf_container)
+- [nxos_ipv4_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_vrf)
 
 ### Child resources
 

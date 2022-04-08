@@ -8,29 +8,29 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccDataSourceNxosVRFContainer(t *testing.T) {
+func TestAccDataSourceNxosIPv4VRF(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosVRFContainerConfig,
+				Config: testAccDataSourceNxosIPv4VRFConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_vrf_container.test", "name", "VRF1"),
+					resource.TestCheckResourceAttr("data.nxos_ipv4_vrf.test", "name", "VRF1"),
 				),
 			},
 		},
 	})
 }
 
-const testAccDataSourceNxosVRFContainerConfig = `
+const testAccDataSourceNxosIPv4VRFConfig = `
 
-resource "nxos_vrf_container" "test" {
+resource "nxos_ipv4_vrf" "test" {
   name = "VRF1"
 }
 
-data "nxos_vrf_container" "test" {
+data "nxos_ipv4_vrf" "test" {
   name = "VRF1"
-  depends_on = [nxos_vrf_container.test]
+  depends_on = [nxos_ipv4_vrf.test]
 }
 `

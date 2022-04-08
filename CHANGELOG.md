@@ -5,6 +5,7 @@
 - Add nxos_bgp_instance resource and data source
 - Add nxos_hmm resource and data source
 - Add nxos_hmm_instance resource and data source
+- Rename nxos_vrf_container resource and data source to nxos_ipv4_vrf
 
 ## 0.3.2
 

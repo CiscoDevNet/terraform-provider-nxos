@@ -26,4 +26,4 @@ test_prerequisites:
     class_name: fmHmm
   - dn: sys/hmm
     class_name: hmmEntity
-    depends_on: [0]
+    dependencies: [0]

@@ -15,12 +15,12 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourceBGPInstanceType struct{}
+type resourceBGPVRFType struct{}
 
-func (t resourceBGPInstanceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t resourceBGPVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP instance configuration.", "bgpInst", "Routing%20and%20Forwarding/bgp:Inst/").AddParents("bgp").AddChildren("bgp_vrf").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP domain (VRF) configuration.", "bgpDom", "Routing%20and%20Forwarding/bgp:Dom/").AddParents("bgp_instance").AddChildren("bgp_address_family", "bgp_graceful_restart", "bgp_peer", "bgp_peer_template").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {
@@ -36,20 +36,16 @@ func (t resourceBGPInstanceType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 					tfsdk.UseStateForUnknown(),
 				},
 			},
-			"admin_state": {
-				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+			"name": {
+				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Type:                types.StringType,
-				Optional:            true,
-				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("enabled", "disabled"),
-				},
+				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					helpers.StringDefaultModifier("enabled"),
+					tfsdk.RequiresReplace(),
 				},
 			},
-			"asn": {
-				MarkdownDescription: helpers.NewAttributeDescription("Autonomous system number.").String,
+			"router_id": {
+				MarkdownDescription: helpers.NewAttributeDescription("Router ID.").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
@@ -58,20 +54,20 @@ func (t resourceBGPInstanceType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 	}, nil
 }
 
-func (t resourceBGPInstanceType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
+func (t resourceBGPVRFType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
-	return resourceBGPInstance{
+	return resourceBGPVRF{
 		provider: provider,
 	}, diags
 }
 
-type resourceBGPInstance struct {
+type resourceBGPVRF struct {
 	provider provider
 }
 
-func (r resourceBGPInstance) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
-	var plan, state BGPInstance
+func (r resourceBGPVRF) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+	var plan, state BGPVRF
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -106,8 +102,8 @@ func (r resourceBGPInstance) Create(ctx context.Context, req tfsdk.CreateResourc
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceBGPInstance) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
-	var state BGPInstance
+func (r resourceBGPVRF) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+	var state BGPVRF
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -132,8 +128,8 @@ func (r resourceBGPInstance) Read(ctx context.Context, req tfsdk.ReadResourceReq
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceBGPInstance) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
-	var plan, state BGPInstance
+func (r resourceBGPVRF) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+	var plan, state BGPVRF
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -167,8 +163,8 @@ func (r resourceBGPInstance) Update(ctx context.Context, req tfsdk.UpdateResourc
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceBGPInstance) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
-	var state BGPInstance
+func (r resourceBGPVRF) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+	var state BGPVRF
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -194,6 +190,6 @@ func (r resourceBGPInstance) Delete(ctx context.Context, req tfsdk.DeleteResourc
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceBGPInstance) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
+func (r resourceBGPVRF) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
 	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
 }

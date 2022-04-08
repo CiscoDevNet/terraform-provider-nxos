@@ -15,12 +15,12 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourceBGPInstanceType struct{}
+type resourceBGPPeerTemplateAddressFamilyType struct{}
 
-func (t resourceBGPInstanceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t resourceBGPPeerTemplateAddressFamilyType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP instance configuration.", "bgpInst", "Routing%20and%20Forwarding/bgp:Inst/").AddParents("bgp").AddChildren("bgp_vrf").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP peer template address family configuration.", "bgpPeerAf", "Routing%20and%20Forwarding/bgp:PeerAf/").AddParents("bgp_peer_template").AddChildren("bgp_peer_template_max_prefix").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {
@@ -36,42 +36,75 @@ func (t resourceBGPInstanceType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 					tfsdk.UseStateForUnknown(),
 				},
 			},
-			"admin_state": {
-				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+			"vrf": {
+				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Type:                types.StringType,
-				Optional:            true,
-				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("enabled", "disabled"),
-				},
+				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					helpers.StringDefaultModifier("enabled"),
+					tfsdk.RequiresReplace(),
 				},
 			},
-			"asn": {
-				MarkdownDescription: helpers.NewAttributeDescription("Autonomous system number.").String,
+			"template_name": {
+				MarkdownDescription: helpers.NewAttributeDescription("Peer template name.").String,
+				Type:                types.StringType,
+				Required:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					tfsdk.RequiresReplace(),
+				},
+			},
+			"address_family": {
+				MarkdownDescription: helpers.NewAttributeDescription("Address Family.").AddStringEnumDescription("ipv4-ucast", "ipv4-mcast", "vpnv4-ucast", "ipv6-ucast", "ipv6-mcast", "vpnv6-ucast", "vpnv6-mcast", "l2vpn-evpn", "ipv4-lucast", "ipv6-lucast", "lnkstate", "ipv4-mvpn", "ipv6-mvpn", "l2vpn-vpls", "ipv4-mdt").AddDefaultValueDescription("ipv4-ucast").String,
+				Type:                types.StringType,
+				Required:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("ipv4-ucast", "ipv4-mcast", "vpnv4-ucast", "ipv6-ucast", "ipv6-mcast", "vpnv6-ucast", "vpnv6-mcast", "l2vpn-evpn", "ipv4-lucast", "ipv6-lucast", "lnkstate", "ipv4-mvpn", "ipv6-mvpn", "l2vpn-vpls", "ipv4-mdt"),
+				},
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					tfsdk.RequiresReplace(),
+				},
+			},
+			"control": {
+				MarkdownDescription: helpers.NewAttributeDescription("Peer address-family control.").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+			},
+			"send_community_extended": {
+				MarkdownDescription: helpers.NewAttributeDescription("Send-community extended.").AddDefaultValueDescription("disabled").String,
+				Type:                types.StringType,
+				Optional:            true,
+				Computed:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					helpers.StringDefaultModifier("disabled"),
+				},
+			},
+			"send_community_standard": {
+				MarkdownDescription: helpers.NewAttributeDescription("Send-community standard.").AddDefaultValueDescription("disabled").String,
+				Type:                types.StringType,
+				Optional:            true,
+				Computed:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					helpers.StringDefaultModifier("disabled"),
+				},
 			},
 		},
 	}, nil
 }
 
-func (t resourceBGPInstanceType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
+func (t resourceBGPPeerTemplateAddressFamilyType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
-	return resourceBGPInstance{
+	return resourceBGPPeerTemplateAddressFamily{
 		provider: provider,
 	}, diags
 }
 
-type resourceBGPInstance struct {
+type resourceBGPPeerTemplateAddressFamily struct {
 	provider provider
 }
 
-func (r resourceBGPInstance) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
-	var plan, state BGPInstance
+func (r resourceBGPPeerTemplateAddressFamily) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+	var plan, state BGPPeerTemplateAddressFamily
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -106,8 +139,8 @@ func (r resourceBGPInstance) Create(ctx context.Context, req tfsdk.CreateResourc
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceBGPInstance) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
-	var state BGPInstance
+func (r resourceBGPPeerTemplateAddressFamily) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+	var state BGPPeerTemplateAddressFamily
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -132,8 +165,8 @@ func (r resourceBGPInstance) Read(ctx context.Context, req tfsdk.ReadResourceReq
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceBGPInstance) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
-	var plan, state BGPInstance
+func (r resourceBGPPeerTemplateAddressFamily) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+	var plan, state BGPPeerTemplateAddressFamily
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -167,8 +200,8 @@ func (r resourceBGPInstance) Update(ctx context.Context, req tfsdk.UpdateResourc
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceBGPInstance) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
-	var state BGPInstance
+func (r resourceBGPPeerTemplateAddressFamily) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+	var state BGPPeerTemplateAddressFamily
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -194,6 +227,6 @@ func (r resourceBGPInstance) Delete(ctx context.Context, req tfsdk.DeleteResourc
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceBGPInstance) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
+func (r resourceBGPPeerTemplateAddressFamily) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
 	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
 }

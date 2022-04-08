@@ -15,12 +15,12 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourceBGPInstanceType struct{}
+type resourceBGPGracefulRestartType struct{}
 
-func (t resourceBGPInstanceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t resourceBGPGracefulRestartType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP instance configuration.", "bgpInst", "Routing%20and%20Forwarding/bgp:Inst/").AddParents("bgp").AddChildren("bgp_vrf").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP domain (VRF) graceful restart configuration.", "bgpGr", "Routing%20and%20Forwarding/bgp:Gr/").AddParents("bgp_vrf").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {
@@ -36,42 +36,56 @@ func (t resourceBGPInstanceType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 					tfsdk.UseStateForUnknown(),
 				},
 			},
-			"admin_state": {
-				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+			"vrf": {
+				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Type:                types.StringType,
+				Required:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					tfsdk.RequiresReplace(),
+				},
+			},
+			"restart_interval": {
+				MarkdownDescription: helpers.NewAttributeDescription("The graceful restart interval.").AddIntegerRangeDescription(1, 3600).AddDefaultValueDescription("120").String,
+				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
 				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("enabled", "disabled"),
+					helpers.IntegerRangeValidator(1, 3600),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					helpers.StringDefaultModifier("enabled"),
+					helpers.IntegerDefaultModifier(120),
 				},
 			},
-			"asn": {
-				MarkdownDescription: helpers.NewAttributeDescription("Autonomous system number.").String,
-				Type:                types.StringType,
+			"stale_interval": {
+				MarkdownDescription: helpers.NewAttributeDescription("The stale interval for routes advertised by the BGP peer.").AddIntegerRangeDescription(1, 3600).AddDefaultValueDescription("300").String,
+				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.IntegerRangeValidator(1, 3600),
+				},
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					helpers.IntegerDefaultModifier(300),
+				},
 			},
 		},
 	}, nil
 }
 
-func (t resourceBGPInstanceType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
+func (t resourceBGPGracefulRestartType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
-	return resourceBGPInstance{
+	return resourceBGPGracefulRestart{
 		provider: provider,
 	}, diags
 }
 
-type resourceBGPInstance struct {
+type resourceBGPGracefulRestart struct {
 	provider provider
 }
 
-func (r resourceBGPInstance) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
-	var plan, state BGPInstance
+func (r resourceBGPGracefulRestart) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+	var plan, state BGPGracefulRestart
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -106,8 +120,8 @@ func (r resourceBGPInstance) Create(ctx context.Context, req tfsdk.CreateResourc
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceBGPInstance) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
-	var state BGPInstance
+func (r resourceBGPGracefulRestart) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+	var state BGPGracefulRestart
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -132,8 +146,8 @@ func (r resourceBGPInstance) Read(ctx context.Context, req tfsdk.ReadResourceReq
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceBGPInstance) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
-	var plan, state BGPInstance
+func (r resourceBGPGracefulRestart) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+	var plan, state BGPGracefulRestart
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -167,8 +181,8 @@ func (r resourceBGPInstance) Update(ctx context.Context, req tfsdk.UpdateResourc
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceBGPInstance) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
-	var state BGPInstance
+func (r resourceBGPGracefulRestart) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+	var state BGPGracefulRestart
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -194,6 +208,6 @@ func (r resourceBGPInstance) Delete(ctx context.Context, req tfsdk.DeleteResourc
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceBGPInstance) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
+func (r resourceBGPGracefulRestart) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
 	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
 }

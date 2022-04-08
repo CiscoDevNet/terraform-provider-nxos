@@ -1,0 +1,73 @@
+---
+name: BGP Address Family
+class_name: bgpGr
+dn: sys/bgp/inst/dom-[%s]/af-[%s]
+ds_description: This data source can read the BGP (VRF) address family configuration.
+res_description: This resource can manage the BGP (VRF) address family configuration.
+doc_path: Routing%20and%20Forwarding/bgp:DomAf/
+parents:
+  - BGP VRF
+attributes:
+  - nxos_name: name
+    tf_name: vrf
+    type: String
+    id: true
+    reference_only: true
+    description: 'VRF name.'
+    example: default
+  - nxos_name: type
+    tf_name: address_family
+    type: String
+    id: true
+    description: 'Address Family.'
+    enum_values:
+      - ipv4-ucast
+      - ipv4-mcast
+      - vpnv4-ucast
+      - ipv6-ucast
+      - ipv6-mcast
+      - vpnv6-ucast
+      - vpnv6-mcast
+      - l2vpn-evpn
+      - ipv4-lucast
+      - ipv6-lucast
+      - lnkstate
+      - ipv4-mvpn
+      - ipv6-mvpn
+      - l2vpn-vpls
+      - ipv4-mdt
+    default_value: 'ipv4-ucast'
+    example: 'ipv4-ucast'
+  - nxos_name: critNhTimeout
+    tf_name: critical_nexthop_timeout
+    type: Int64
+    description: 'The next-hop address tracking delay timer for critical next-hop reachability routes.'
+    min_int: 1
+    max_int: 4294967295
+    default_value: 3000
+    example: 1800
+  - nxos_name: nonCritNhTimeout
+    tf_name: non_critical_nexthop_timeout
+    type: Int64
+    description: 'The next-hop address tracking delay timer for non-critical next-hop reachability routes.'
+    min_int: 1
+    max_int: 4294967295
+    default_value: 10000
+    example: 1800
+test_prerequisites:
+  - dn: sys/bgp
+    class_name: bgpEntity
+  - dn: sys/bgp/inst
+    class_name: bgpInst
+    attributes:
+      - name: adminSt
+        value: enabled
+      - name: asn
+        value: '65001'
+    dependencies: [0]
+  - dn: sys/bgp/inst/dom-[default]
+    class_name: bgpDom
+    attributes:
+      - name: name
+        value: default
+    dependencies: [1]

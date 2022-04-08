@@ -37,6 +37,7 @@ resource "nxos_rest" "PreReq1" {
   class_name = "hmmEntity"
   content = {
   }
+  depends_on = [nxos_rest.PreReq0, ]
 }
 
 `

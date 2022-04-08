@@ -15,12 +15,12 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourceBGPInstanceType struct{}
+type resourceBGPPeerTemplateType struct{}
 
-func (t resourceBGPInstanceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t resourceBGPPeerTemplateType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP instance configuration.", "bgpInst", "Routing%20and%20Forwarding/bgp:Inst/").AddParents("bgp").AddChildren("bgp_vrf").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP peer template configuration.", "bgpPeerCont", "Routing%20and%20Forwarding/bgp:PeerCont/").AddParents("bgp_vrf").AddChildren("bgp_peer_template_address_family").AddReferences("bgp_peer").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {
@@ -36,16 +36,20 @@ func (t resourceBGPInstanceType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 					tfsdk.UseStateForUnknown(),
 				},
 			},
-			"admin_state": {
-				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+			"vrf": {
+				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Type:                types.StringType,
-				Optional:            true,
-				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("enabled", "disabled"),
-				},
+				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					helpers.StringDefaultModifier("enabled"),
+					tfsdk.RequiresReplace(),
+				},
+			},
+			"template_name": {
+				MarkdownDescription: helpers.NewAttributeDescription("Peer template name.").String,
+				Type:                types.StringType,
+				Required:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					tfsdk.RequiresReplace(),
 				},
 			},
 			"asn": {
@@ -54,24 +58,45 @@ func (t resourceBGPInstanceType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 				Optional:            true,
 				Computed:            true,
 			},
+			"peer_type": {
+				MarkdownDescription: helpers.NewAttributeDescription("Neighbor Fabric Type.").AddStringEnumDescription("fabric-internal", "fabric-external", "fabric-border-leaf").AddDefaultValueDescription("fabric-internal").String,
+				Type:                types.StringType,
+				Optional:            true,
+				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("fabric-internal", "fabric-external", "fabric-border-leaf"),
+				},
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					helpers.StringDefaultModifier("fabric-internal"),
+				},
+			},
+			"source_interface": {
+				MarkdownDescription: helpers.NewAttributeDescription("Source Interface. Must match first field in the output of `show intf brief`.").AddDefaultValueDescription("unspecified").String,
+				Type:                types.StringType,
+				Optional:            true,
+				Computed:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					helpers.StringDefaultModifier("unspecified"),
+				},
+			},
 		},
 	}, nil
 }
 
-func (t resourceBGPInstanceType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
+func (t resourceBGPPeerTemplateType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
-	return resourceBGPInstance{
+	return resourceBGPPeerTemplate{
 		provider: provider,
 	}, diags
 }
 
-type resourceBGPInstance struct {
+type resourceBGPPeerTemplate struct {
 	provider provider
 }
 
-func (r resourceBGPInstance) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
-	var plan, state BGPInstance
+func (r resourceBGPPeerTemplate) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+	var plan, state BGPPeerTemplate
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -106,8 +131,8 @@ func (r resourceBGPInstance) Create(ctx context.Context, req tfsdk.CreateResourc
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceBGPInstance) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
-	var state BGPInstance
+func (r resourceBGPPeerTemplate) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+	var state BGPPeerTemplate
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -132,8 +157,8 @@ func (r resourceBGPInstance) Read(ctx context.Context, req tfsdk.ReadResourceReq
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceBGPInstance) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
-	var plan, state BGPInstance
+func (r resourceBGPPeerTemplate) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+	var plan, state BGPPeerTemplate
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -167,8 +192,8 @@ func (r resourceBGPInstance) Update(ctx context.Context, req tfsdk.UpdateResourc
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceBGPInstance) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
-	var state BGPInstance
+func (r resourceBGPPeerTemplate) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+	var state BGPPeerTemplate
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -194,6 +219,6 @@ func (r resourceBGPInstance) Delete(ctx context.Context, req tfsdk.DeleteResourc
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceBGPInstance) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
+func (r resourceBGPPeerTemplate) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
 	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
 }

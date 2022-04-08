@@ -8,7 +8,7 @@ description: |-
   Parent resources
   nxos_bgp https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp
   Child resources
-  nxosbgpinstance_domain https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_instance_domain
+  nxosbgpvrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_vrf
 ---
 
 # nxos_bgp_instance (Resource)
@@ -23,7 +23,7 @@ This resource can manage the BGP instance configuration.
 
 ### Child resources
 
-- [nxos_bgp_instance_domain](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_instance_domain)
+- [nxos_bgp_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_vrf)
 
 ## Example Usage
 

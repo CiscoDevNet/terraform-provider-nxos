@@ -6,6 +6,18 @@
 - Add nxos_hmm resource and data source
 - Add nxos_hmm_instance resource and data source
 - Rename nxos_vrf_container resource and data source to nxos_ipv4_vrf
+- Add nxos_vrf_routing resource and data source
+- Add nxos_vrf_address_family resource and data source
+- Add nxos_vrf_route_target_address_family resource and data source
+- Add nxos_vrf_route_target_direction resource and data source
+- Add nxos_vrf_route_target resource and data source
+- Add nxos_bgp_vrf resource and data source
+- Add nxos_bgp_address_family resource and data source
+- Add nxos_bgp_graceful_restart resource and data source
+- Add nxos_bgp_peer resource and data source
+- Add nxos_bgp_peer_template resource and data source
+- Add nxos_bgp_peer_template_address_family resource and data source
+- Add nxos_bgp_peer_template_max_prefix resource and data source
 
 ## 0.3.2
 

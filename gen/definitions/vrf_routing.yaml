@@ -1,0 +1,36 @@
+---
+name: VRF Routing
+class_name: rtctrlDom
+dn: sys/inst-[%s]/dom-[%[1]s]
+ds_description: This data source can read a VRF Route Distinguisher and VRF VNI.
+res_description: This resource can manage a VRF Route Distinguisher and VRF VNI.
+doc_path: Routing%20and%20Forwarding/rtctrl:Dom/
+parents:
+  - VRF
+children:
+  - VRF Address Family
+attributes:
+  - nxos_name: vrf
+    tf_name: vrf
+    type: String
+    id: true
+    reference_only: true
+    description: 'VRF name.'
+    example: VRF1
+  - nxos_name: rd
+    tf_name: route_distinguisher
+    type: String
+    description: 'Route Distinguisher value in NX-OS DME format.'
+    default_value: 'unknown:unknown:0:0'
+    example: 'rd:unknown:0:0'
+test_prerequisites:
+  - dn: sys/inst-[VRF1]
+    class_name: l3Inst
+    attributes:
+      - name: name
+        value: VRF1
+  - dn: sys/ipv4/inst/dom-[VRF1]
+    class_name: l3Inst
+    attributes:
+      - name: name
+        value: VRF1

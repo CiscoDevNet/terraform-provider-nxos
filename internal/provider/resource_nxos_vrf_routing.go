@@ -15,12 +15,12 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourceVRFType struct{}
+type resourceVRFRoutingType struct{}
 
-func (t resourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t resourceVRFRoutingType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a VRF.", "l3Inst", "Layer%203/l3:Inst/").AddChildren("vrf_domain").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a VRF Route Distinguisher and VRF VNI.", "rtctrlDom", "Routing%20and%20Forwarding/rtctrl:Dom/").AddParents("vrf").AddChildren("vrf_address_family").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {
@@ -36,7 +36,7 @@ func (t resourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diag
 					tfsdk.UseStateForUnknown(),
 				},
 			},
-			"name": {
+			"vrf": {
 				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Type:                types.StringType,
 				Required:            true,
@@ -44,30 +44,33 @@ func (t resourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diag
 					tfsdk.RequiresReplace(),
 				},
 			},
-			"description": {
-				MarkdownDescription: helpers.NewAttributeDescription("VRF description.").String,
+			"route_distinguisher": {
+				MarkdownDescription: helpers.NewAttributeDescription("Route Distinguisher value in NX-OS DME format.").AddDefaultValueDescription("unknown:unknown:0:0").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					helpers.StringDefaultModifier("unknown:unknown:0:0"),
+				},
 			},
 		},
 	}, nil
 }
 
-func (t resourceVRFType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
+func (t resourceVRFRoutingType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
-	return resourceVRF{
+	return resourceVRFRouting{
 		provider: provider,
 	}, diags
 }
 
-type resourceVRF struct {
+type resourceVRFRouting struct {
 	provider provider
 }
 
-func (r resourceVRF) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
-	var plan, state VRF
+func (r resourceVRFRouting) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+	var plan, state VRFRouting
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -102,8 +105,8 @@ func (r resourceVRF) Create(ctx context.Context, req tfsdk.CreateResourceRequest
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceVRF) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
-	var state VRF
+func (r resourceVRFRouting) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+	var state VRFRouting
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -128,8 +131,8 @@ func (r resourceVRF) Read(ctx context.Context, req tfsdk.ReadResourceRequest, re
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceVRF) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
-	var plan, state VRF
+func (r resourceVRFRouting) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+	var plan, state VRFRouting
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -163,8 +166,8 @@ func (r resourceVRF) Update(ctx context.Context, req tfsdk.UpdateResourceRequest
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceVRF) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
-	var state VRF
+func (r resourceVRFRouting) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+	var state VRFRouting
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -190,6 +193,6 @@ func (r resourceVRF) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceVRF) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
+func (r resourceVRFRouting) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
 	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
 }

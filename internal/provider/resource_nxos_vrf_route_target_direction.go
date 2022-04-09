@@ -15,12 +15,12 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourceVRFType struct{}
+type resourceVRFRouteTargetDirectionType struct{}
 
-func (t resourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t resourceVRFRouteTargetDirectionType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a VRF.", "l3Inst", "Layer%203/l3:Inst/").AddChildren("vrf_domain").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a VRF Route Target direction.", "rtctrlRttP", "Routing%20and%20Forwarding/rtctrl:RttP/").AddParents("vrf_route_target_address_family").AddChildren("vrf_route_target").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {
@@ -36,7 +36,7 @@ func (t resourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diag
 					tfsdk.UseStateForUnknown(),
 				},
 			},
-			"name": {
+			"vrf": {
 				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Type:                types.StringType,
 				Required:            true,
@@ -44,30 +44,57 @@ func (t resourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diag
 					tfsdk.RequiresReplace(),
 				},
 			},
-			"description": {
-				MarkdownDescription: helpers.NewAttributeDescription("VRF description.").String,
+			"address_family": {
+				MarkdownDescription: helpers.NewAttributeDescription("Address family.").AddStringEnumDescription("ipv4-ucast", "ipv6-ucast").String,
 				Type:                types.StringType,
-				Optional:            true,
-				Computed:            true,
+				Required:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("ipv4-ucast", "ipv6-ucast"),
+				},
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					tfsdk.RequiresReplace(),
+				},
+			},
+			"route_target_address_family": {
+				MarkdownDescription: helpers.NewAttributeDescription("Route Target Address Family.").AddStringEnumDescription("ipv4-ucast", "ipv6-ucast", "l2vpn-evpn").String,
+				Type:                types.StringType,
+				Required:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("ipv4-ucast", "ipv6-ucast", "l2vpn-evpn"),
+				},
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					tfsdk.RequiresReplace(),
+				},
+			},
+			"direction": {
+				MarkdownDescription: helpers.NewAttributeDescription("Route Target direction.").AddStringEnumDescription("import", "export").String,
+				Type:                types.StringType,
+				Required:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("import", "export"),
+				},
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					tfsdk.RequiresReplace(),
+				},
 			},
 		},
 	}, nil
 }
 
-func (t resourceVRFType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
+func (t resourceVRFRouteTargetDirectionType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
-	return resourceVRF{
+	return resourceVRFRouteTargetDirection{
 		provider: provider,
 	}, diags
 }
 
-type resourceVRF struct {
+type resourceVRFRouteTargetDirection struct {
 	provider provider
 }
 
-func (r resourceVRF) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
-	var plan, state VRF
+func (r resourceVRFRouteTargetDirection) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+	var plan, state VRFRouteTargetDirection
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -102,8 +129,8 @@ func (r resourceVRF) Create(ctx context.Context, req tfsdk.CreateResourceRequest
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceVRF) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
-	var state VRF
+func (r resourceVRFRouteTargetDirection) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+	var state VRFRouteTargetDirection
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -128,8 +155,8 @@ func (r resourceVRF) Read(ctx context.Context, req tfsdk.ReadResourceRequest, re
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceVRF) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
-	var plan, state VRF
+func (r resourceVRFRouteTargetDirection) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+	var plan, state VRFRouteTargetDirection
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -163,8 +190,8 @@ func (r resourceVRF) Update(ctx context.Context, req tfsdk.UpdateResourceRequest
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceVRF) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
-	var state VRF
+func (r resourceVRFRouteTargetDirection) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+	var state VRFRouteTargetDirection
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -190,6 +217,6 @@ func (r resourceVRF) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceVRF) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
+func (r resourceVRFRouteTargetDirection) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
 	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
 }

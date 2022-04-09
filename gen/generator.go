@@ -187,6 +187,54 @@ var functions = template.FuncMap{
 	"sprintf":      fmt.Sprintf,
 }
 
+func renderTemplate(templatePath, outputPath string, config interface{}) {
+	file, err := os.Open(templatePath)
+	if err != nil {
+		log.Fatalf("Error opening template: %v", err)
+	}
+	defer file.Close()
+
+	// skip first line with 'build-ignore' directive for go files
+	scanner := bufio.NewScanner(file)
+	if strings.HasSuffix(templatePath, ".go") {
+		scanner.Scan()
+	}
+	var temp string
+	for scanner.Scan() {
+		temp = temp + scanner.Text() + "\n"
+	}
+
+	template, err := template.New(path.Base(templatePath)).Funcs(functions).Parse(temp)
+	if err != nil {
+		log.Fatalf("Error parsing template: %v", err)
+	}
+
+	// create output file
+	outputFile := filepath.Join(outputPath)
+	os.MkdirAll(filepath.Dir(outputFile), 0755)
+	f, err := os.Create(outputFile)
+	if err != nil {
+		log.Fatalf("Error creating output file: %v", err)
+	}
+
+	output := new(bytes.Buffer)
+	err = template.Execute(output, config)
+	if err != nil {
+		log.Fatalf("Error executing template: %v", err)
+	}
+
+	if strings.HasSuffix(templatePath, ".go") {
+		// format go code
+		fOutput, err := format.Source(output.Bytes())
+		if err != nil {
+			log.Fatalf("Error formatting go in %s: %v", templatePath, err)
+		}
+		f.Write(fOutput)
+	} else {
+		f.Write(output.Bytes())
+	}
+}
+
 func main() {
 	items, _ := ioutil.ReadDir(definitionsPath)
 	configs := make([]YamlConfig, len(items))
@@ -208,92 +256,9 @@ func main() {
 	for _, config := range configs {
 		// Iterate over templates
 		for _, t := range templates {
-			file, err := os.Open(t.path)
-			if err != nil {
-				log.Fatalf("Error opening template: %v", err)
-			}
-			defer file.Close()
-
-			// skip first line with 'build-ignore' directive for go files
-			scanner := bufio.NewScanner(file)
-			if strings.HasSuffix(t.path, ".go") {
-				scanner.Scan()
-			}
-			var temp string
-			for scanner.Scan() {
-				temp = temp + scanner.Text() + "\n"
-			}
-
-			template, err := template.New(path.Base(t.path)).Funcs(functions).Parse(temp)
-			if err != nil {
-				log.Fatalf("Error parsing template: %v", err)
-			}
-
-			// create output file
-			outputFile := filepath.Join(t.prefix + SnakeCase(config.Name) + t.suffix)
-			os.MkdirAll(filepath.Dir(outputFile), 0755)
-			f, err := os.Create(outputFile)
-			if err != nil {
-				log.Fatalf("Error creating output file: %v", err)
-			}
-
-			output := new(bytes.Buffer)
-			err = template.Execute(output, config)
-			if err != nil {
-				log.Fatalf("Error executing template: %v", err)
-			}
-
-			if strings.HasSuffix(t.path, ".go") {
-				// format go code
-				fOutput, err := format.Source(output.Bytes())
-				if err != nil {
-					log.Fatalf("Error formatting go in %s: %v", t.path, err)
-				}
-				f.Write(fOutput)
-			} else {
-				f.Write(output.Bytes())
-			}
+			renderTemplate(t.path, t.prefix+SnakeCase(config.Name)+t.suffix, config)
 		}
 	}
 
-	// Render provider.go
-	file, err := os.Open(providerTemplate)
-	if err != nil {
-		log.Fatalf("Error opening template: %v", err)
-	}
-	defer file.Close()
-
-	// skip first line with 'build-ignore' directive for go files
-	scanner := bufio.NewScanner(file)
-	scanner.Scan()
-	var temp string
-	for scanner.Scan() {
-		temp = temp + scanner.Text() + "\n"
-	}
-
-	template, err := template.New(path.Base(providerTemplate)).Funcs(functions).Parse(temp)
-	if err != nil {
-		log.Fatalf("Error parsing template: %v", err)
-	}
-
-	// create output file
-	outputFile := filepath.Join(providerLocation)
-	os.MkdirAll(filepath.Dir(outputFile), 0755)
-	f, err := os.Create(outputFile)
-	if err != nil {
-		log.Fatalf("Error creating output file: %v", err)
-	}
-
-	output := new(bytes.Buffer)
-	err = template.Execute(output, configs)
-	if err != nil {
-		log.Fatalf("Error executing template: %v", err)
-	}
-
-	// format go code
-	fOutput, err := format.Source(output.Bytes())
-	if err != nil {
-		log.Fatalf("Error formatting go in %s: %v", providerTemplate, err)
-	}
-	f.Write(fOutput)
+	renderTemplate(providerTemplate, providerLocation, configs)
 }

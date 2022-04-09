@@ -1,0 +1,108 @@
+---
+name: BGP Peer Template Max Prefix
+class_name: bgpMaxPfxP
+dn: sys/bgp/inst/dom-[%s]/peercont-[%s]/af-[%s]/maxpfxp
+ds_description: This data source can read the BGP peer template Maximum Prefix Policy configuration.
+res_description: This resource can manage the BGP peer template Maximum Prefix Policy configuration.
+doc_path: Routing%20and%20Forwarding/bgp:MaxPfxP/
+parents:
+  - BGP Peer Template Address Family
+attributes:
+  - nxos_name: vrf_name
+    tf_name: vrf
+    type: String
+    id: true
+    reference_only: true
+    description: 'VRF name.'
+    example: default
+  - nxos_name: name
+    tf_name: template_name
+    type: String
+    id: true
+    reference_only: true
+    description: 'Peer template name.'
+    example: SPINE-PEERS
+  - nxos_name: type
+    tf_name: address_family
+    type: String
+    id: true
+    reference_only: true
+    description: 'Address Family.'
+    enum_values:
+      - ipv4-ucast
+      - ipv4-mcast
+      - vpnv4-ucast
+      - ipv6-ucast
+      - ipv6-mcast
+      - vpnv6-ucast
+      - vpnv6-mcast
+      - l2vpn-evpn
+      - ipv4-lucast
+      - ipv6-lucast
+      - lnkstate
+      - ipv4-mvpn
+      - ipv6-mvpn
+      - l2vpn-vpls
+      - ipv4-mdt
+    default_value: 'ipv4-ucast'
+    example: 'ipv4-ucast'
+  - nxos_name: action
+    tf_name: action
+    type: String
+    description: 'Action to do when limit is exceeded.'
+    enum_value:
+      - log
+      - shut
+      - restart
+    default_value: shut
+    example: log
+  - nxos_name: maxPfx
+    tf_name: maximum_prefix
+    type: Int64
+    description: 'Maximum number of prefixes allowed from the peer.'
+    min_int: 0
+    max_int: 4294967295
+    example: 10000
+  - nxos_name: restartTime
+    tf_name: restart_time
+    type: Int64
+    description: 'The period of time in minutes before restarting the peer when the prefix limit is reached.'
+    default_value: 0
+    example: 0
+  - nxos_name: thresh
+    tf_name: threshold
+    type: Int64
+    description: 'The period of time in minutes before restarting the peer when the prefix limit is reached.'
+    min_int: 0
+    max_int: 100
+    default_value: 0
+    example: 30
+test_prerequisites:
+  - dn: sys/bgp
+    class_name: bgpEntity
+  - dn: sys/bgp/inst
+    class_name: bgpInst
+    attributes:
+      - name: adminSt
+        value: enabled
+      - name: asn
+        value: '65001'
+    dependencies: [0]
+  - dn: sys/bgp/inst/dom-[default]
+    class_name: bgpDom
+    attributes:
+      - name: name
+        value: default
+    dependencies: [1]
+  - dn: sys/bgp/inst/dom-[default]/peercont-[SPINE-PEERS]
+    class_name: bgpPeerCont
+    attributes:
+      - name: name
+        value: SPINE-PEERS
+    dependencies: [2]
+  - dn: sys/bgp/inst/dom-[default]/peercont-[SPINE-PEERS]/af-[ipv4-ucast]
+    class_name: bgpPeerAf
+    attributes:
+      - name: type
+        value: ipv4-ucast
+    dependencies: [3]

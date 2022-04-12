@@ -1,6 +1,6 @@
 ---
 name: BGP Address Family
-class_name: bgpGr
+class_name: bgpDomAf
 dn: sys/bgp/inst/dom-[%s]/af-[%s]
 ds_description: This data source can read the BGP (VRF) address family configuration.
 res_description: This resource can manage the BGP (VRF) address family configuration.

@@ -3,13 +3,13 @@
 page_title: "nxos_vrf_route_target_address_family Data Source - terraform-provider-nxos"
 subcategory: ""
 description: |-
-  This data source can read a VRF Address Family Network Control Policy.
+  This data source can read a VRF Route Target Address Family.
   API Documentation: rtctrlAfCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:AfCtrl/
 ---
 
 # nxos_vrf_route_target_address_family (Data Source)
 
-This data source can read a VRF Address Family Network Control Policy.
+This data source can read a VRF Route Target Address Family.
 
 - API Documentation: [rtctrlAfCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:AfCtrl/)
 

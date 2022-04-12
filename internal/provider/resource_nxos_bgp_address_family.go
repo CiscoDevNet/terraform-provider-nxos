@@ -20,7 +20,7 @@ type resourceBGPAddressFamilyType struct{}
 func (t resourceBGPAddressFamilyType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP (VRF) address family configuration.", "bgpGr", "Routing%20and%20Forwarding/bgp:DomAf/").AddParents("bgp_vrf").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP (VRF) address family configuration.", "bgpDomAf", "Routing%20and%20Forwarding/bgp:DomAf/").AddParents("bgp_vrf").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {

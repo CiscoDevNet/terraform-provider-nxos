@@ -30,7 +30,7 @@ test_prerequisites:
       - name: name
         value: VRF1
   - dn: sys/ipv4/inst/dom-[VRF1]
-    class_name: l3Inst
+    class_name: ipv4Dom
     attributes:
       - name: name
         value: VRF1

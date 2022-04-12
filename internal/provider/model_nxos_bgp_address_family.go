@@ -26,7 +26,7 @@ func (data BGPAddressFamily) getDn() string {
 }
 
 func (data BGPAddressFamily) getClassName() string {
-	return "bgpGr"
+	return "bgpDomAf"
 }
 
 func (data BGPAddressFamily) toBody() nxos.Body {

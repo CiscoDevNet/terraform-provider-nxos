@@ -4,7 +4,7 @@ page_title: "nxos_bgp_address_family Resource - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This resource can manage the BGP (VRF) address family configuration.
-  API Documentation: bgpGr https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:DomAf/
+  API Documentation: bgpDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:DomAf/
   Parent resources
   nxosbgpvrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_vrf
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the BGP (VRF) address family configuration.
 
-- API Documentation: [bgpGr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:DomAf/)
+- API Documentation: [bgpDomAf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:DomAf/)
 
 ### Parent resources
 

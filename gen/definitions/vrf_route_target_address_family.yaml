@@ -2,8 +2,8 @@
 name: VRF Route Target Address Family
 class_name: rtctrlAfCtrl
 dn: sys/inst-[%s]/dom-[%[1]s]/af-[%s]/ctrl-[%s]
-ds_description: This data source can read a VRF Address Family Network Control Policy.
-res_description: This resource can manage a VRF Address Family Network Control Policy.
+ds_description: This data source can read a VRF Route Target Address Family.
+res_description: This resource can manage a VRF Route Target Address Family.
 doc_path: Routing%20and%20Forwarding/rtctrl:AfCtrl/
 parents:
   - VRF Address Family

@@ -20,7 +20,7 @@ type resourceVRFRouteTargetAddressFamilyType struct{}
 func (t resourceVRFRouteTargetAddressFamilyType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a VRF Address Family Network Control Policy.", "rtctrlAfCtrl", "Routing%20and%20Forwarding/rtctrl:AfCtrl/").AddParents("vrf_address_family").AddChildren("vrf_route_target_direction").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a VRF Route Target Address Family.", "rtctrlAfCtrl", "Routing%20and%20Forwarding/rtctrl:AfCtrl/").AddParents("vrf_address_family").AddChildren("vrf_route_target_direction").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {

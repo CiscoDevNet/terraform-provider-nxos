@@ -40,7 +40,7 @@ resource "nxos_rest" "PreReq0" {
 
 resource "nxos_rest" "PreReq1" {
   dn = "sys/ipv4/inst/dom-[VRF1]"
-  class_name = "l3Inst"
+  class_name = "ipv4Dom"
   content = {
       name = "VRF1"
   }

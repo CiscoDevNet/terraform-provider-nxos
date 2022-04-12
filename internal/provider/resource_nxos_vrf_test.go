@@ -18,6 +18,7 @@ func TestAccNxosVRF(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_vrf.test", "name", "VRF1"),
 					resource.TestCheckResourceAttr("nxos_vrf.test", "description", "My VRF1 Description"),
+					resource.TestCheckResourceAttr("nxos_vrf.test", "encap", "vxlan-103901"),
 				),
 			},
 			{
@@ -42,6 +43,7 @@ func testAccNxosVRFConfig_all() string {
 	resource "nxos_vrf" "test" {
 		name = "VRF1"
 		description = "My VRF1 Description"
+		encap = "vxlan-103901"
 	}
 	`
 }

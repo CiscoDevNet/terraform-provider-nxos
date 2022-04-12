@@ -18,6 +18,7 @@ func TestAccDataSourceNxosVRF(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_vrf.test", "name", "VRF1"),
 					resource.TestCheckResourceAttr("data.nxos_vrf.test", "description", "My VRF1 Description"),
+					resource.TestCheckResourceAttr("data.nxos_vrf.test", "encap", "vxlan-103901"),
 				),
 			},
 		},
@@ -29,6 +30,7 @@ const testAccDataSourceNxosVRFConfig = `
 resource "nxos_vrf" "test" {
   name = "VRF1"
   description = "My VRF1 Description"
+  encap = "vxlan-103901"
 }
 
 data "nxos_vrf" "test" {

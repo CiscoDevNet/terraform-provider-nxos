@@ -6,7 +6,7 @@ description: |-
   This resource can manage a VRF.
   API Documentation: l3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:Inst/
   Child resources
-  nxosvrfdomain https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf_domain
+  nxosvrfrouting https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf_routing
 ---
 
 # nxos_vrf (Resource)
@@ -17,7 +17,7 @@ This resource can manage a VRF.
 
 ### Child resources
 
-- [nxos_vrf_domain](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf_domain)
+- [nxos_vrf_routing](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf_routing)
 
 ## Example Usage
 
@@ -25,6 +25,7 @@ This resource can manage a VRF.
 resource "nxos_vrf" "example" {
   name        = "VRF1"
   description = "My VRF1 Description"
+  encap       = "vxlan-103901"
 }
 ```
 
@@ -39,6 +40,8 @@ resource "nxos_vrf" "example" {
 
 - `description` (String) VRF description.
 - `device` (String) A device name from the provider configuration.
+- `encap` (String) Encap for this Context, supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.
+  - Default value: `unknown`
 
 ### Read-Only
 

@@ -6,7 +6,7 @@ ds_description: This data source can read a VRF.
 res_description: This resource can manage a VRF.
 doc_path: Layer%203/l3:Inst/
 children:
-  - VRF Domain
+  - VRF Routing
 attributes:
   - nxos_name: name
     tf_name: name
@@ -19,3 +19,9 @@ attributes:
     type: String
     description: 'VRF description.'
     example: My VRF1 Description
+  - nxos_name: encap
+    tf_name: encap
+    type: String
+    description: 'Encap for this Context, supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.'
+    default_value: unknown
+    example: vxlan-103901

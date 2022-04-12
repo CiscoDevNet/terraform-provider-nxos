@@ -20,7 +20,7 @@ type resourceVRFType struct{}
 func (t resourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a VRF.", "l3Inst", "Layer%203/l3:Inst/").AddChildren("vrf_domain").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a VRF.", "l3Inst", "Layer%203/l3:Inst/").AddChildren("vrf_routing").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {
@@ -49,6 +49,15 @@ func (t resourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diag
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+			},
+			"encap": {
+				MarkdownDescription: helpers.NewAttributeDescription("Encap for this Context, supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.").AddDefaultValueDescription("unknown").String,
+				Type:                types.StringType,
+				Optional:            true,
+				Computed:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					helpers.StringDefaultModifier("unknown"),
+				},
 			},
 		},
 	}, nil

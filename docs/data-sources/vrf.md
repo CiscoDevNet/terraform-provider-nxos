@@ -35,6 +35,7 @@ data "nxos_vrf" "example" {
 ### Read-Only
 
 - `description` (String) VRF description.
+- `encap` (String) Encap for this Context, supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.
 - `id` (String) The distinguished name of the object.
 
 

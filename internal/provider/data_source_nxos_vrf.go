@@ -42,6 +42,11 @@ func (t dataSourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Di
 				Type:                types.StringType,
 				Computed:            true,
 			},
+			"encap": {
+				MarkdownDescription: "Encap for this Context, supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.",
+				Type:                types.StringType,
+				Computed:            true,
+			},
 		},
 	}, nil
 }

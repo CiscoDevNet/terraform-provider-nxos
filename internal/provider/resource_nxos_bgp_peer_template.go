@@ -36,14 +36,6 @@ func (t resourceBGPPeerTemplateType) GetSchema(ctx context.Context) (tfsdk.Schem
 					tfsdk.UseStateForUnknown(),
 				},
 			},
-			"vrf": {
-				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
-				Type:                types.StringType,
-				Required:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
-				},
-			},
 			"template_name": {
 				MarkdownDescription: helpers.NewAttributeDescription("Peer template name.").String,
 				Type:                types.StringType,
@@ -53,7 +45,13 @@ func (t resourceBGPPeerTemplateType) GetSchema(ctx context.Context) (tfsdk.Schem
 				},
 			},
 			"asn": {
-				MarkdownDescription: helpers.NewAttributeDescription("Autonomous system number.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Peer template Autonomous system number.").String,
+				Type:                types.StringType,
+				Optional:            true,
+				Computed:            true,
+			},
+			"description": {
+				MarkdownDescription: helpers.NewAttributeDescription("Peer template description.").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,

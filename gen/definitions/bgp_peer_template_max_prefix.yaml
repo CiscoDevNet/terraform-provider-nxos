@@ -1,20 +1,13 @@
 ---
 name: BGP Peer Template Max Prefix
 class_name: bgpMaxPfxP
-dn: sys/bgp/inst/dom-[%s]/peercont-[%s]/af-[%s]/maxpfxp
+dn: sys/bgp/inst/dom-[default]/peercont-[%s]/af-[%s]/maxpfxp
 ds_description: This data source can read the BGP peer template Maximum Prefix Policy configuration.
 res_description: This resource can manage the BGP peer template Maximum Prefix Policy configuration.
 doc_path: Routing%20and%20Forwarding/bgp:MaxPfxP/
 parents:
   - BGP Peer Template Address Family
 attributes:
-  - nxos_name: vrf_name
-    tf_name: vrf
-    type: String
-    id: true
-    reference_only: true
-    description: 'VRF name.'
-    example: default
   - nxos_name: name
     tf_name: template_name
     type: String

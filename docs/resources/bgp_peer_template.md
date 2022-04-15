@@ -35,9 +35,9 @@ This resource can manage the BGP peer template configuration.
 
 ```terraform
 resource "nxos_bgp_peer_template" "example" {
-  vrf              = "default"
   template_name    = "SPINE-PEERS"
   asn              = "65002"
+  description      = "My Description"
   peer_type        = "fabric-internal"
   source_interface = "lo0"
 }
@@ -49,11 +49,11 @@ resource "nxos_bgp_peer_template" "example" {
 ### Required
 
 - `template_name` (String) Peer template name.
-- `vrf` (String) VRF name.
 
 ### Optional
 
-- `asn` (String) Autonomous system number.
+- `asn` (String) Peer template Autonomous system number.
+- `description` (String) Peer template description.
 - `device` (String) A device name from the provider configuration.
 - `peer_type` (String) Neighbor Fabric Type.
   - Choices: `fabric-internal`, `fabric-external`, `fabric-border-leaf`

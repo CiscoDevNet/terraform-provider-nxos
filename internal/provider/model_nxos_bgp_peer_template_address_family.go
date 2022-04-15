@@ -13,7 +13,6 @@ import (
 type BGPPeerTemplateAddressFamily struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
-	Vrf_name   types.String `tfsdk:"vrf"`
 	Name       types.String `tfsdk:"template_name"`
 	Type       types.String `tfsdk:"address_family"`
 	Ctrl       types.String `tfsdk:"control"`
@@ -22,7 +21,7 @@ type BGPPeerTemplateAddressFamily struct {
 }
 
 func (data BGPPeerTemplateAddressFamily) getDn() string {
-	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/peercont-[%s]/af-[%s]", data.Vrf_name.Value, data.Name.Value, data.Type.Value)
+	return fmt.Sprintf("sys/bgp/inst/dom-[default]/peercont-[%s]/af-[%s]", data.Name.Value, data.Type.Value)
 }
 
 func (data BGPPeerTemplateAddressFamily) getClassName() string {
@@ -48,6 +47,5 @@ func (data *BGPPeerTemplateAddressFamily) fromBody(res gjson.Result) {
 
 func (data *BGPPeerTemplateAddressFamily) fromPlan(plan BGPPeerTemplateAddressFamily) {
 	data.Device = plan.Device
-	data.Vrf_name.Value = plan.Vrf_name.Value
 	data.Name.Value = plan.Name.Value
 }

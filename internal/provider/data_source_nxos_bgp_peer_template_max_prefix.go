@@ -32,11 +32,6 @@ func (t dataSourceBGPPeerTemplateMaxPrefixType) GetSchema(ctx context.Context) (
 				Type:                types.StringType,
 				Computed:            true,
 			},
-			"vrf": {
-				MarkdownDescription: "VRF name.",
-				Type:                types.StringType,
-				Required:            true,
-			},
 			"template_name": {
 				MarkdownDescription: "Peer template name.",
 				Type:                types.StringType,

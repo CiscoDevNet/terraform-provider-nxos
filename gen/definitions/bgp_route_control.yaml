@@ -1,0 +1,70 @@
+---
+name: BGP Route Control
+class_name: bgpRtCtrl
+dn: sys/bgp/inst/dom-[%s]/rtctrl
+ds_description: This data source can read the BGP Route Control configuration.
+res_description: This resource can manage the BGP Route Control configuration.
+doc_path: Routing%20and%20Forwarding/bgp:RtCtrl/
+parents:
+  - BGP VRF
+attributes:
+  - nxos_name: name
+    tf_name: vrf
+    type: String
+    id: true
+    reference_only: true
+    description: 'VRF name.'
+    example: default
+  - nxos_name: enforceFirstAs
+    tf_name: enforce_first_as
+    type: String
+    description: 'Enforce First AS For Ebgp. Can be configured only for VRF default.'
+    enum_values:
+      - enabled
+      - disabled
+    default_value: enabled
+    example: disabled
+  - nxos_name: fibAccelerate
+    tf_name: fib_accelerate
+    type: String
+    description: 'Accelerate the hardware updates for IP/IPv6 adjacencies for neighbor. Can be configured only for VRF default.'
+    enum_values:
+      - enabled
+      - disabled
+    default_value: disabled
+    example: enabled
+  - nxos_name: logNeighborChanges
+    tf_name: log_neighbor_changes
+    type: String
+    description: 'Log Neighbor Changes.'
+    enum_values:
+      - enabled
+      - disabled
+    default_value: disabled
+    example: enabled
+  - nxos_name: supprRt
+    tf_name: suppress_routes
+    type: String
+    description: 'Suppress Routes: Advertise only routes that are programmed in hardware to peers. Can be configured only for VRF default.'
+    enum_values:
+      - enabled
+      - disabled
+    default_value: enabled
+    example: disabled
+test_prerequisites:
+  - dn: sys/bgp
+    class_name: bgpEntity
+  - dn: sys/bgp/inst
+    class_name: bgpInst
+    attributes:
+      - name: adminSt
+        value: enabled
+      - name: asn
+        value: '65001'
+    dependencies: [0]
+  - dn: sys/bgp/inst/dom-[default]
+    class_name: bgpDom
+    attributes:
+      - name: name
+        value: default
+    dependencies: [1]

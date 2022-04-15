@@ -13,15 +13,15 @@ import (
 type BGPPeerTemplate struct {
 	Device   types.String `tfsdk:"device"`
 	Dn       types.String `tfsdk:"id"`
-	Vrf_name types.String `tfsdk:"vrf"`
 	Name     types.String `tfsdk:"template_name"`
 	Asn      types.String `tfsdk:"asn"`
+	Desc     types.String `tfsdk:"description"`
 	PeerType types.String `tfsdk:"peer_type"`
 	SrcIf    types.String `tfsdk:"source_interface"`
 }
 
 func (data BGPPeerTemplate) getDn() string {
-	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/peercont-[%s]", data.Vrf_name.Value, data.Name.Value)
+	return fmt.Sprintf("sys/bgp/inst/dom-[default]/peercont-[%s]", data.Name.Value)
 }
 
 func (data BGPPeerTemplate) getClassName() string {
@@ -32,6 +32,7 @@ func (data BGPPeerTemplate) toBody() nxos.Body {
 	attrs := nxos.Body{}.
 		Set("name", data.Name.Value).
 		Set("asn", data.Asn.Value).
+		Set("desc", data.Desc.Value).
 		Set("peerType", data.PeerType.Value).
 		Set("srcIf", data.SrcIf.Value)
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
@@ -41,11 +42,11 @@ func (data *BGPPeerTemplate) fromBody(res gjson.Result) {
 	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Name.Value = res.Get("*.attributes.name").String()
 	data.Asn.Value = res.Get("*.attributes.asn").String()
+	data.Desc.Value = res.Get("*.attributes.desc").String()
 	data.PeerType.Value = res.Get("*.attributes.peerType").String()
 	data.SrcIf.Value = res.Get("*.attributes.srcIf").String()
 }
 
 func (data *BGPPeerTemplate) fromPlan(plan BGPPeerTemplate) {
 	data.Device = plan.Device
-	data.Vrf_name.Value = plan.Vrf_name.Value
 }

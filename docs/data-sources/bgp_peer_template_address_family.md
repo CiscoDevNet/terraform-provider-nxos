@@ -17,7 +17,6 @@ This data source can read the BGP peer template address family configuration.
 
 ```terraform
 data "nxos_bgp_peer_template_address_family" "example" {
-  vrf            = "default"
   template_name  = "SPINE-PEERS"
   address_family = "ipv4-ucast"
 }
@@ -30,7 +29,6 @@ data "nxos_bgp_peer_template_address_family" "example" {
 
 - `address_family` (String) Address Family.
 - `template_name` (String) Peer template name.
-- `vrf` (String) VRF name.
 
 ### Optional
 

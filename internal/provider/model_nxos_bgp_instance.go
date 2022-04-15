@@ -9,10 +9,11 @@ import (
 )
 
 type BGPInstance struct {
-	Device  types.String `tfsdk:"device"`
-	Dn      types.String `tfsdk:"id"`
-	AdminSt types.String `tfsdk:"admin_state"`
-	Asn     types.String `tfsdk:"asn"`
+	Device      types.String `tfsdk:"device"`
+	Dn          types.String `tfsdk:"id"`
+	AdminSt     types.String `tfsdk:"admin_state"`
+	Asn         types.String `tfsdk:"asn"`
+	EnhancedErr types.String `tfsdk:"enhanced_error_handling"`
 }
 
 func (data BGPInstance) getDn() string {
@@ -26,7 +27,8 @@ func (data BGPInstance) getClassName() string {
 func (data BGPInstance) toBody() nxos.Body {
 	attrs := nxos.Body{}.
 		Set("adminSt", data.AdminSt.Value).
-		Set("asn", data.Asn.Value)
+		Set("asn", data.Asn.Value).
+		Set("enhancedErr", data.EnhancedErr.Value)
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
@@ -34,6 +36,7 @@ func (data *BGPInstance) fromBody(res gjson.Result) {
 	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
 	data.Asn.Value = res.Get("*.attributes.asn").String()
+	data.EnhancedErr.Value = res.Get("*.attributes.enhancedErr").String()
 }
 
 func (data *BGPInstance) fromPlan(plan BGPInstance) {

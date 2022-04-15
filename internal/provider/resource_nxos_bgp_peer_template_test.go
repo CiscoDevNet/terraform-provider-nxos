@@ -16,9 +16,9 @@ func TestAccNxosBGPPeerTemplate(t *testing.T) {
 			{
 				Config: testAccNxosBGPPeerTemplatePrerequisitesConfig + testAccNxosBGPPeerTemplateConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "vrf", "default"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "template_name", "SPINE-PEERS"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "asn", "65002"),
+					resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "description", "My Description"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "peer_type", "fabric-internal"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "source_interface", "lo0"),
 				),
@@ -64,7 +64,6 @@ resource "nxos_rest" "PreReq2" {
 func testAccNxosBGPPeerTemplateConfig_minimum() string {
 	return `
 	resource "nxos_bgp_peer_template" "test" {
-		vrf = "default"
 		template_name = "SPINE-PEERS"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 	}
@@ -74,9 +73,9 @@ func testAccNxosBGPPeerTemplateConfig_minimum() string {
 func testAccNxosBGPPeerTemplateConfig_all() string {
 	return `
 	resource "nxos_bgp_peer_template" "test" {
-		vrf = "default"
 		template_name = "SPINE-PEERS"
 		asn = "65002"
+		description = "My Description"
 		peer_type = "fabric-internal"
 		source_interface = "lo0"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]

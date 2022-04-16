@@ -90,19 +90,20 @@ type YamlConfig struct {
 }
 
 type YamlConfigAttribute struct {
-	NxosName      string   `yaml:"nxos_name"`
-	TfName        string   `yaml:"tf_name"`
-	Type          string   `yaml:"type"`
-	Id            bool     `yaml:"id"`
-	ReferenceOnly bool     `yaml:"reference_only"`
-	Mandatory     bool     `yaml:"mandatory"`
-	ReadOnly      bool     `yaml:"read_only"`
-	Description   string   `yaml:"description"`
-	Example       string   `yaml:"example"`
-	EnumValues    []string `yaml:"enum_values"`
-	MinInt        int      `yaml:"min_int"`
-	MaxInt        int      `yaml:"max_int"`
-	DefaultValue  string   `yaml:"default_value"`
+	NxosName        string   `yaml:"nxos_name"`
+	TfName          string   `yaml:"tf_name"`
+	Type            string   `yaml:"type"`
+	Id              bool     `yaml:"id"`
+	ReferenceOnly   bool     `yaml:"reference_only"`
+	Mandatory       bool     `yaml:"mandatory"`
+	ReadOnly        bool     `yaml:"read_only"`
+	Description     string   `yaml:"description"`
+	Example         string   `yaml:"example"`
+	EnumValues      []string `yaml:"enum_values"`
+	MinInt          int      `yaml:"min_int"`
+	MaxInt          int      `yaml:"max_int"`
+	DefaultValue    string   `yaml:"default_value"`
+	RequiresReplace bool     `yaml:"requires_replace"`
 }
 
 type YamlTest struct {

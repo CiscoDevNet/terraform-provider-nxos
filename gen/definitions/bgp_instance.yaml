@@ -23,6 +23,7 @@ attributes:
   - nxos_name: asn
     tf_name: asn
     type: String
+    requires_replace: true
     description: 'Autonomous system number.'
     example: '65001'
 test_prerequisites:

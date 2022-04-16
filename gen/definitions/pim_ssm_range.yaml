@@ -5,6 +5,7 @@ dn: sys/pim/inst/dom-[%s]/ssm/range
 ds_description: This data source can read the PIM SSM range configuration.
 res_description: This resource can manage the PIM SSM range configuration.
 doc_path: Layer%203/pim:SSMRangeP/
+doc_category: PIM
 parents:
   - PIM SSM Policy
 attributes:

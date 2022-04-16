@@ -6,6 +6,7 @@ no_delete: true
 ds_description: This data source can read the LACP feature configuration.
 res_description: This resource can manage the LACP feature configuration.
 doc_path: Feature%20Management/fm:Lacp/
+doc_category: Feature
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state

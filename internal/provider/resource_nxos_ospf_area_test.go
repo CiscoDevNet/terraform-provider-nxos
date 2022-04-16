@@ -17,7 +17,7 @@ func TestAccNxosOSPFArea(t *testing.T) {
 				Config: testAccNxosOSPFAreaPrerequisitesConfig + testAccNxosOSPFAreaConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ospf_area.test", "instance_name", "OSPF1"),
-					resource.TestCheckResourceAttr("nxos_ospf_area.test", "vrf_name", "default"),
+					resource.TestCheckResourceAttr("nxos_ospf_area.test", "vrf_name", "VRF1"),
 					resource.TestCheckResourceAttr("nxos_ospf_area.test", "area_id", "0.0.0.10"),
 					resource.TestCheckResourceAttr("nxos_ospf_area.test", "authentication_type", "none"),
 					resource.TestCheckResourceAttr("nxos_ospf_area.test", "cost", "10"),
@@ -27,7 +27,7 @@ func TestAccNxosOSPFArea(t *testing.T) {
 			{
 				ResourceName:  "nxos_ospf_area.test",
 				ImportState:   true,
-				ImportStateId: "sys/ospf/inst-[OSPF1]/dom-[default]/area-[0.0.0.10]",
+				ImportStateId: "sys/ospf/inst-[OSPF1]/dom-[VRF1]/area-[0.0.0.10]",
 			},
 		},
 	})
@@ -51,10 +51,10 @@ resource "nxos_rest" "PreReq1" {
 }
 
 resource "nxos_rest" "PreReq2" {
-  dn = "sys/ospf/inst-[OSPF1]/dom-[default]"
+  dn = "sys/ospf/inst-[OSPF1]/dom-[VRF1]"
   class_name = "ospfDom"
   content = {
-      name = "default"
+      name = "VRF1"
   }
   depends_on = [nxos_rest.PreReq1, ]
 }
@@ -65,7 +65,7 @@ func testAccNxosOSPFAreaConfig_minimum() string {
 	return `
 	resource "nxos_ospf_area" "test" {
 		instance_name = "OSPF1"
-		vrf_name = "default"
+		vrf_name = "VRF1"
 		area_id = "0.0.0.10"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 	}
@@ -76,7 +76,7 @@ func testAccNxosOSPFAreaConfig_all() string {
 	return `
 	resource "nxos_ospf_area" "test" {
 		instance_name = "OSPF1"
-		vrf_name = "default"
+		vrf_name = "VRF1"
 		area_id = "0.0.0.10"
 		authentication_type = "none"
 		cost = 10

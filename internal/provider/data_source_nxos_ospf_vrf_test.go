@@ -16,7 +16,7 @@ func TestAccDataSourceNxosOSPFVRF(t *testing.T) {
 			{
 				Config: testAccDataSourceNxosOSPFVRFPrerequisitesConfig + testAccDataSourceNxosOSPFVRFConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "name", "default"),
+					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "name", "VRF1"),
 					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "admin_state", "enabled"),
 					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "bandwidth_reference", "400000"),
 					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "banwidth_reference_unit", "mbps"),
@@ -51,7 +51,7 @@ const testAccDataSourceNxosOSPFVRFConfig = `
 
 resource "nxos_ospf_vrf" "test" {
   instance_name = "OSPF1"
-  name = "default"
+  name = "VRF1"
   admin_state = "enabled"
   bandwidth_reference = 400000
   banwidth_reference_unit = "mbps"
@@ -62,7 +62,7 @@ resource "nxos_ospf_vrf" "test" {
 
 data "nxos_ospf_vrf" "test" {
   instance_name = "OSPF1"
-  name = "default"
+  name = "VRF1"
   depends_on = [nxos_ospf_vrf.test]
 }
 `

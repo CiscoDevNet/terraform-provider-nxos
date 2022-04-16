@@ -5,6 +5,7 @@ dn: sys/bgp/inst
 ds_description: This data source can read the BGP instance configuration.
 res_description: This resource can manage the BGP instance configuration.
 doc_path: Routing%20and%20Forwarding/bgp:Inst/
+doc_category: BGP
 parents:
   - BGP
 children:

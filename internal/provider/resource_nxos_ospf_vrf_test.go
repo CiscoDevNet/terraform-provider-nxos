@@ -17,7 +17,7 @@ func TestAccNxosOSPFVRF(t *testing.T) {
 				Config: testAccNxosOSPFVRFPrerequisitesConfig + testAccNxosOSPFVRFConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "instance_name", "OSPF1"),
-					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "name", "default"),
+					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "name", "VRF1"),
 					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "admin_state", "enabled"),
 					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "bandwidth_reference", "400000"),
 					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "banwidth_reference_unit", "mbps"),
@@ -28,7 +28,7 @@ func TestAccNxosOSPFVRF(t *testing.T) {
 			{
 				ResourceName:  "nxos_ospf_vrf.test",
 				ImportState:   true,
-				ImportStateId: "sys/ospf/inst-[OSPF1]/dom-[default]",
+				ImportStateId: "sys/ospf/inst-[OSPF1]/dom-[VRF1]",
 			},
 		},
 	})
@@ -57,7 +57,7 @@ func testAccNxosOSPFVRFConfig_minimum() string {
 	return `
 	resource "nxos_ospf_vrf" "test" {
 		instance_name = "OSPF1"
-		name = "default"
+		name = "VRF1"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`
@@ -67,7 +67,7 @@ func testAccNxosOSPFVRFConfig_all() string {
 	return `
 	resource "nxos_ospf_vrf" "test" {
 		instance_name = "OSPF1"
-		name = "default"
+		name = "VRF1"
 		admin_state = "enabled"
 		bandwidth_reference = 400000
 		banwidth_reference_unit = "mbps"

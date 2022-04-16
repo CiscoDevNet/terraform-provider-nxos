@@ -37,13 +37,21 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/intf/phys-[eth1/10]"
+  class_name = "l1PhysIf"
+  content = {
+      layer = "Layer3"
+  }
+}
+
 `
 
 func testAccNxosDHCPRelayInterfaceConfig_minimum() string {
 	return `
 	resource "nxos_dhcp_relay_interface" "test" {
 		interface_id = "eth1/10"
-  		depends_on = [nxos_rest.PreReq0, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`
 }
@@ -52,7 +60,7 @@ func testAccNxosDHCPRelayInterfaceConfig_all() string {
 	return `
 	resource "nxos_dhcp_relay_interface" "test" {
 		interface_id = "eth1/10"
-  		depends_on = [nxos_rest.PreReq0, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`
 }

@@ -58,12 +58,30 @@ resource "nxos_rest" "PreReq2" {
 }
 
 resource "nxos_rest" "PreReq3" {
-  dn = "sys/ospf/inst-[OSPF1]/dom-[default]"
+  dn = "sys/ospf/inst-[OSPF1]/dom-[VRF1]"
   class_name = "ospfDom"
   content = {
-      name = "default"
+      name = "VRF1"
   }
   depends_on = [nxos_rest.PreReq2, ]
+}
+
+resource "nxos_rest" "PreReq4" {
+  dn = "sys/intf/phys-[eth1/10]"
+  class_name = "l1PhysIf"
+  content = {
+      layer = "Layer3"
+  }
+  depends_on = [nxos_rest.PreReq3, ]
+}
+
+resource "nxos_rest" "PreReq5" {
+  dn = "sys/intf/phys-[eth1/10]/rtvrfMbr"
+  class_name = "nwRtVrfMbr"
+  content = {
+      tDn = "sys/inst-VRF1"
+  }
+  depends_on = [nxos_rest.PreReq4, ]
 }
 
 `
@@ -72,7 +90,7 @@ const testAccDataSourceNxosOSPFInterfaceConfig = `
 
 resource "nxos_ospf_interface" "test" {
   instance_name = "OSPF1"
-  vrf_name = "default"
+  vrf_name = "VRF1"
   interface_id = "eth1/10"
   advertise_secondaries = false
   area = "0.0.0.10"
@@ -83,12 +101,12 @@ resource "nxos_ospf_interface" "test" {
   network_type = "p2p"
   passive = "enabled"
   priority = 10
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]
 }
 
 data "nxos_ospf_interface" "test" {
   instance_name = "OSPF1"
-  vrf_name = "default"
+  vrf_name = "VRF1"
   interface_id = "eth1/10"
   depends_on = [nxos_ospf_interface.test]
 }

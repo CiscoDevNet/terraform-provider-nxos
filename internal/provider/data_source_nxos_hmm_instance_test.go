@@ -29,15 +29,24 @@ resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/hmm"
   class_name = "fmHmm"
   content = {
+      adminSt = "enabled"
   }
 }
 
 resource "nxos_rest" "PreReq1" {
+  dn = "sys/fm/evpn"
+  class_name = "fmEvpn"
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq2" {
   dn = "sys/hmm"
   class_name = "hmmEntity"
   content = {
   }
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 }
 
 `
@@ -47,7 +56,7 @@ const testAccDataSourceNxosHMMInstanceConfig = `
 resource "nxos_hmm_instance" "test" {
   admin_state = "enabled"
   anycast_mac = "20:20:00:00:10:10"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 }
 
 data "nxos_hmm_instance" "test" {

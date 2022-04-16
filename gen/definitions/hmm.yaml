@@ -5,6 +5,7 @@ dn: sys/hmm
 ds_description: This data source can read the Host Mobility Manager (HMM) Entity configuration.
 res_description: This resource can manage the Host Mobility Manager (HMM) Entity configuration.
 doc_path: Host%20Mobility/hmm:Entity/
+doc_category: HMM
 children:
   - HMM Instance
 attributes:
@@ -20,3 +21,11 @@ attributes:
 test_prerequisites:
   - dn: sys/fm/hmm
     class_name: fmHmm
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/fm/evpn
+    class_name: fmEvpn
+    attributes:
+      - name: adminSt
+        value: enabled

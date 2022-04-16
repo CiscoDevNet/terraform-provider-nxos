@@ -5,6 +5,7 @@ dn: sys/bgp/inst/dom-[%s]/gr
 ds_description: This data source can read the BGP domain (VRF) graceful restart configuration.
 res_description: This resource can manage the BGP domain (VRF) graceful restart configuration.
 doc_path: Routing%20and%20Forwarding/bgp:Gr/
+doc_category: BGP
 parents:
   - BGP VRF
 attributes:

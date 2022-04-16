@@ -5,6 +5,7 @@ dn: sys/pim
 ds_description: This data source can read the global PIM configuration.
 res_description: This resource can manage the global PIM configuration.
 doc_path: Layer%203/pim:Entity/
+doc_category: PIM
 children:
   - PIM Instance
 attributes:

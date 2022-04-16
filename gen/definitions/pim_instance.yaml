@@ -5,6 +5,7 @@ dn: sys/pim/inst
 ds_description: This data source can read the PIM instance configuration.
 res_description: This resource can manage the PIM instance configuration.
 doc_path: Layer%203/pim:Inst/
+doc_category: PIM
 parents:
   - PIM
 children:

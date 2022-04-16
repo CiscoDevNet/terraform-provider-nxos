@@ -5,6 +5,7 @@ dn: sys/ipqos/queuing/p/name-[%s]
 ds_description: This data source can read the queuing QoS policy map configuration.
 res_description: This resource can manage the queuing QoS policy map configuration.
 doc_path: Qos/ipqos:PMapInst/
+doc_category: QoS
 children:
   - Queuing QOS Policy Map Match Class Map
 attributes:

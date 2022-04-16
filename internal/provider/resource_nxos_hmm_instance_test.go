@@ -34,15 +34,24 @@ resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/hmm"
   class_name = "fmHmm"
   content = {
+      adminSt = "enabled"
   }
 }
 
 resource "nxos_rest" "PreReq1" {
+  dn = "sys/fm/evpn"
+  class_name = "fmEvpn"
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq2" {
   dn = "sys/hmm"
   class_name = "hmmEntity"
   content = {
   }
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 }
 
 `
@@ -50,7 +59,7 @@ resource "nxos_rest" "PreReq1" {
 func testAccNxosHMMInstanceConfig_minimum() string {
 	return `
 	resource "nxos_hmm_instance" "test" {
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 	}
 	`
 }
@@ -60,7 +69,7 @@ func testAccNxosHMMInstanceConfig_all() string {
 	resource "nxos_hmm_instance" "test" {
 		admin_state = "enabled"
 		anycast_mac = "20:20:00:00:10:10"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 	}
 	`
 }

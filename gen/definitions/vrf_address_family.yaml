@@ -5,6 +5,7 @@ dn: sys/inst-[%s]/dom-[%[1]s]/af-[%s]
 ds_description: This data source can read a VRF Address Family.
 res_description: This resource can manage a VRF Address Family.
 doc_path: Routing%20and%20Forwarding/rtctrl:DomAf/
+doc_category: VRF
 parents:
   - VRF Routing
 children:

@@ -25,11 +25,19 @@ func TestAccDataSourceNxosIPv4InterfaceAddress(t *testing.T) {
 
 const testAccDataSourceNxosIPv4InterfaceAddressPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
-  dn = "sys/ipv4/inst/dom-[default]/if-[eth1/59]"
+  dn = "sys/ipv4/inst/dom-[default]"
+  class_name = "ipv4Dom"
+  content = {
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/ipv4/inst/dom-[default]/if-[eth1/10]"
   class_name = "ipv4If"
   content = {
-      id = "eth1/59"
+      id = "eth1/10"
   }
+  depends_on = [nxos_rest.PreReq0, ]
 }
 
 `
@@ -38,14 +46,14 @@ const testAccDataSourceNxosIPv4InterfaceAddressConfig = `
 
 resource "nxos_ipv4_interface_address" "test" {
   vrf = "default"
-  interface_id = "eth1/59"
+  interface_id = "eth1/10"
   address = "24.63.46.49/30"
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 }
 
 data "nxos_ipv4_interface_address" "test" {
   vrf = "default"
-  interface_id = "eth1/59"
+  interface_id = "eth1/10"
   address = "24.63.46.49/30"
   depends_on = [nxos_ipv4_interface_address.test]
 }

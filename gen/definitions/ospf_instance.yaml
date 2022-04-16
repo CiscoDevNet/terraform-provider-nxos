@@ -5,6 +5,7 @@ dn: sys/ospf/inst-[%s]
 ds_description: This data source can read the OSPF instance configuration.
 res_description: This resource can manage the OSPF instance configuration.
 doc_path: Routing%20and%20Forwarding/ospf:Inst/
+doc_category: OSPF
 parents:
   - OSPF
 children:

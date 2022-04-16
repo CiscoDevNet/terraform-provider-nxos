@@ -5,6 +5,7 @@ dn: sys/ospf/inst-[%s]/dom-[%s]/if-[%s]/authnew
 ds_description: This data source can read the OSPF authentication configuration.
 res_description: This resource can manage the OSPF authentication configuration.
 doc_path: Routing%20and%20Forwarding/ospf:AuthNewP/
+doc_category: OSPF
 parents:
   - OSPF Interface
 attributes:
@@ -21,7 +22,7 @@ attributes:
     id: true
     reference_only: true
     description: 'VRF name.'
-    example: default
+    example: VRF1
   - nxos_name: id
     tf_name: interface_id
     type: String
@@ -34,7 +35,7 @@ attributes:
     type: String
     read_only: true
     description: 'Key used for authentication.'
-    example: mykey
+    example: 0 mykey
   - nxos_name: keyId
     tf_name: key_id
     type: Int64
@@ -59,7 +60,7 @@ attributes:
     type: String
     read_only: true
     description: 'Key used for md5 authentication.'
-    example: mymdkey
+    example: 0 mymd5key
   - nxos_name: md5keySecureMode
     tf_name: md5_key_secure_mode
     type: Bool
@@ -86,15 +87,27 @@ test_prerequisites:
       - name: name
         value: OSPF1
     dependencies: [0]
-  - dn: sys/ospf/inst-[OSPF1]/dom-[default]
+  - dn: sys/ospf/inst-[OSPF1]/dom-[VRF1]
     class_name: ospfDom
     attributes:
       - name: name
-        value: default
+        value: VRF1
     dependencies: [1]
-  - dn: sys/ospf/inst-[OSPF1]/dom-[default]/if-[eth1/10]
+  - dn: sys/intf/phys-[eth1/10]
+    class_name: l1PhysIf
+    attributes:
+      - name: layer
+        value: Layer3
+    dependencies: [2]
+  - dn: sys/intf/phys-[eth1/10]/rtvrfMbr
+    class_name: nwRtVrfMbr
+    attributes:
+      - name: tDn
+        value: sys/inst-VRF1
+    dependencies: [3]
+  - dn: sys/ospf/inst-[OSPF1]/dom-[VRF1]/if-[eth1/10]
     class_name: ospfIf
     attributes:
       - name: id
         value: eth1/10
-    dependencies: [2]
+    dependencies: [4]

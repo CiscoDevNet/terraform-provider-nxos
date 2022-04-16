@@ -5,6 +5,7 @@ dn: sys/ethpm/inst
 ds_description: This data source can read global ethernet settings.
 res_description: This resource can manage global ethernet settings.
 doc_path: Interfaces/ethpm:Inst/
+doc_category: Switching
 attributes:
   - nxos_name: systemJumboMtu
     tf_name: mtu

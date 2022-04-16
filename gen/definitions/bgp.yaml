@@ -5,6 +5,7 @@ dn: sys/bgp
 ds_description: This data source can read the global BGP configuration.
 res_description: This resource can manage the global BGP configuration.
 doc_path: Routing%20and%20Forwarding/bgp:Entity/
+doc_category: BGP
 children:
   - BGP Instance
 attributes:

@@ -5,6 +5,7 @@ dn: sys/dhcp/inst/relayif-[%s]/addr-[%s]-[%s]
 ds_description: This data source can read a DHCP relay address.
 res_description: This resource can manage a DHCP relay address.
 doc_path: DHCP/dhcp:RelayAddr/
+doc_category: DHCP
 parents:
   - DHCP Relay Interface
 references:
@@ -35,9 +36,14 @@ test_prerequisites:
     attributes:
       - name: adminSt
         value: enabled
+  - dn: sys/intf/phys-[eth1/10]
+    class_name: l1PhysIf
+    attributes:
+      - name: layer
+        value: Layer3
   - dn: sys/dhcp/inst/relayif-[eth1/10]
     class_name: dhcpRelayIf
     attributes:
       - name: id
         value: eth1/10
-    dependencies: [0]
+    dependencies: [0, 1]

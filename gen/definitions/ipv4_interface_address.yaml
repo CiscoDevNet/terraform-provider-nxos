@@ -5,6 +5,7 @@ dn: sys/ipv4/inst/dom-[%s]/if-[%s]/addr-[%s]
 ds_description: This data source can read an IPv4 interface address.
 res_description: This resource can manage an IPv4 interface address.
 doc_path: Layer%203/ipv4:Addr/
+doc_category: IPv4
 parents:
   - IPv4 Interface
 attributes:
@@ -21,7 +22,7 @@ attributes:
     id: true
     reference_only: true
     description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
-    example: eth1/59
+    example: eth1/10
   - nxos_name: addr
     tf_name: address
     type: String
@@ -29,8 +30,11 @@ attributes:
     description: 'IPv4 address.'
     example: '24.63.46.49/30'
 test_prerequisites:
-  - dn: sys/ipv4/inst/dom-[default]/if-[eth1/59]
+  - dn: sys/ipv4/inst/dom-[default]
+    class_name: ipv4Dom
+  - dn: sys/ipv4/inst/dom-[default]/if-[eth1/10]
     class_name: ipv4If
     attributes:
       - name: id
-        value: eth1/59
+        value: eth1/10
+    dependencies: [0]

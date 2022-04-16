@@ -5,6 +5,7 @@ dn: sys/isis
 ds_description: This data source can read the global IS-IS configuration.
 res_description: This resource can manage the global IS-IS configuration.
 doc_path: Routing%20and%20Forwarding/isis:Entity/
+doc_category: ISIS
 children:
   - ISIS Instance
   - ISIS Interface

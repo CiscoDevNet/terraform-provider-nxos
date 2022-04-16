@@ -5,6 +5,7 @@ dn: sys/isis/inst-[%s]/dom-[%s]
 ds_description: This data source can read the IS-IS VRF configuration.
 res_description: This resource can manage the IS-IS VRF configuration.
 doc_path: Routing%20and%20Forwarding/isis:Dom/
+doc_category: ISIS
 parents:
   - ISIS Instance
 references:

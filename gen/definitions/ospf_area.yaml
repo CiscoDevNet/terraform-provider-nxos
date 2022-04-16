@@ -5,6 +5,7 @@ dn: sys/ospf/inst-[%s]/dom-[%s]/area-[%s]
 ds_description: This data source can read the OSPF Area configuration.
 res_description: This resource can manage the OSPF Area configuration.
 doc_path: Routing%20and%20Forwarding/ospf:Area/
+doc_category: OSPF
 parents:
   - OSPF VRF
 attributes:
@@ -21,7 +22,7 @@ attributes:
     id: true
     reference_only: true
     description: 'VRF name.'
-    example: default
+    example: VRF1
   - nxos_name: id
     tf_name: area_id
     type: String
@@ -67,9 +68,9 @@ test_prerequisites:
       - name: name
         value: OSPF1
     dependencies: [0]
-  - dn: sys/ospf/inst-[OSPF1]/dom-[default]
+  - dn: sys/ospf/inst-[OSPF1]/dom-[VRF1]
     class_name: ospfDom
     attributes:
       - name: name
-        value: default
+        value: VRF1
     dependencies: [1]

@@ -5,6 +5,7 @@ dn: sys/hmm/fwdinst
 ds_description: This data source can read the HMM Fabric Forwarding Instance configuration.
 res_description: This resource can manage the HMM Fabric Forwarding Instance configuration.
 doc_path: Host%20Mobility/hmm:FwdInst/
+doc_category: HMM
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state
@@ -24,6 +25,14 @@ attributes:
 test_prerequisites:
   - dn: sys/fm/hmm
     class_name: fmHmm
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/fm/evpn
+    class_name: fmEvpn
+    attributes:
+      - name: adminSt
+        value: enabled
   - dn: sys/hmm
     class_name: hmmEntity
-    dependencies: [0]
+    dependencies: [0, 1]

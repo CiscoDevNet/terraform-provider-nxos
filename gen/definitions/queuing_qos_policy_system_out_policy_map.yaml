@@ -5,6 +5,7 @@ dn: sys/ipqos/queuing/policy/out/sys/pmap
 ds_description: This data source can read the queuing QoS policy system out policy map configuration.
 res_description: This resource can manage the queuing QoS policy system out policy map configuration.
 doc_path: Qos/ipqos:Inst/
+doc_category: QoS
 parents:
   - Queuing QOS Policy System Out
 references:
@@ -60,13 +61,13 @@ test_prerequisites:
       - name: val
         value: 10
     dependencies: [6]
-  - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q4]
+  - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q-default]
     class_name: ipqosMatchCMap
     attributes:
       - name: name
-        value: c-out-q4
+        value: c-out-q-default
     dependencies: [1]
-  - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q4]/setRemBW
+  - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q-default]/setRemBW
     class_name: ipqosSetRemBW
     attributes:
       - name: val

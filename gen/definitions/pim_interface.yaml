@@ -5,6 +5,7 @@ dn: sys/pim/inst/dom-[%s]/if-[%s]
 ds_description: This data source can read the PIM interface configuration.
 res_description: This resource can manage the PIM interface configuration.
 doc_path: Layer%203/pim:If/
+doc_category: PIM
 parents:
   - PIM VRF
 attributes:

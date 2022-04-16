@@ -5,6 +5,7 @@ dn: sys/ipqos/dflt/c/name-[%s]
 ds_description: This data source can read the default QoS class map configuration.
 res_description: This resource can manage the default QoS class map configuration.
 doc_path: Qos/ipqos:CMapInst/
+doc_category: QoS
 children:
   - Default QOS Class Map DSCP
 attributes:

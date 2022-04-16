@@ -1,6 +1,6 @@
 resource "nxos_ospf_vrf" "example" {
   instance_name           = "OSPF1"
-  name                    = "default"
+  name                    = "VRF1"
   admin_state             = "enabled"
   bandwidth_reference     = 400000
   banwidth_reference_unit = "mbps"

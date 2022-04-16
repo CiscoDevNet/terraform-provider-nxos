@@ -5,6 +5,7 @@ dn: sys/isis/inst-[%s]
 ds_description: This data source can read the IS-IS instance configuration.
 res_description: This resource can manage the IS-IS instance configuration.
 doc_path: Routing%20and%20Forwarding/isis:Inst/
+doc_category: ISIS
 parents:
   - ISIS
 children:

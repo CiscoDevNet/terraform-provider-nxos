@@ -5,6 +5,7 @@ dn: sys/ospf/inst-[%s]/dom-[%s]
 ds_description: This data source can read the OSPF VRF configuration.
 res_description: This resource can manage the OSPF VRF configuration.
 doc_path: Routing%20and%20Forwarding/ospf:Dom/
+doc_category: OSPF
 parents:
   - OSPF Instance
 children:
@@ -25,7 +26,7 @@ attributes:
     type: String
     id: true
     description: 'VRF name.'
-    example: default
+    example: VRF1
   - nxos_name: adminSt
     tf_name: admin_state
     type: String

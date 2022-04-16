@@ -34,12 +34,20 @@ resource "nxos_rest" "PreReq0" {
 }
 
 resource "nxos_rest" "PreReq1" {
+  dn = "sys/intf/phys-[eth1/10]"
+  class_name = "l1PhysIf"
+  content = {
+      layer = "Layer3"
+  }
+}
+
+resource "nxos_rest" "PreReq2" {
   dn = "sys/dhcp/inst/relayif-[eth1/10]"
   class_name = "dhcpRelayIf"
   content = {
       id = "eth1/10"
   }
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 }
 
 `
@@ -50,7 +58,7 @@ resource "nxos_dhcp_relay_address" "test" {
   interface_id = "eth1/10"
   vrf = "VRF1"
   address = "1.1.1.1"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 }
 
 data "nxos_dhcp_relay_address" "test" {

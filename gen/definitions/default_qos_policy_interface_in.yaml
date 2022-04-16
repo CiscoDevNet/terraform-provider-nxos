@@ -5,6 +5,7 @@ dn: sys/ipqos/dflt/policy/in/intf-[%s]
 ds_description: This data source can read the default QoS policy interface in configuration.
 res_description: This resource can manage the default QoS policy interface in configuration.
 doc_path: Qos/ipqos:If/
+doc_category: QoS
 children:
   - Default QOS Policy Interface In Policy Map
 attributes:

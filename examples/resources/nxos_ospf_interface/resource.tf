@@ -1,6 +1,6 @@
 resource "nxos_ospf_interface" "example" {
   instance_name         = "OSPF1"
-  vrf_name              = "default"
+  vrf_name              = "VRF1"
   interface_id          = "eth1/10"
   advertise_secondaries = false
   area                  = "0.0.0.10"

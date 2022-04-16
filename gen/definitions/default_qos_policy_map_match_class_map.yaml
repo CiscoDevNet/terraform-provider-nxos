@@ -5,6 +5,7 @@ dn: sys/ipqos/dflt/p/name-[%s]/cmap-[%s]
 ds_description: This data source can read the default QoS policy map match class map configuration.
 res_description: This resource can manage the default QoS policy map match class map configuration.
 doc_path: Qos/ipqos:MatchCMap/
+doc_category: QoS
 parents:
   - Default QOS Policy Map
 children:

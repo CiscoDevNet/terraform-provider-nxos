@@ -5,6 +5,7 @@ dn: sys/intf/svi-[%s]
 ds_description: This data source can read an SVI interface.
 res_description: This resource can manage an SVI interface.
 doc_path: Interfaces/svi:If/
+doc_category: Interface
 children:
   - SVI Interface VRF
 attributes:

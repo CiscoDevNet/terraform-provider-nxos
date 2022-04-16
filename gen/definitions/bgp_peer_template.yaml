@@ -5,6 +5,7 @@ dn: sys/bgp/inst/dom-[%s]/peercont-[%s]
 ds_description: This data source can read the BGP peer template configuration.
 res_description: This resource can manage the BGP peer template configuration.
 doc_path: Routing%20and%20Forwarding/bgp:PeerCont/
+doc_category: BGP
 parents:
   - BGP VRF
 children:

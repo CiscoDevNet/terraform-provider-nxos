@@ -5,6 +5,7 @@ dn: sys/ospf
 ds_description: This data source can read the global OSPF configuration.
 res_description: This resource can manage the global OSPF configuration.
 doc_path: Routing%20and%20Forwarding/ospf:Entity/
+doc_category: OSPF
 children:
   - OSPF Instance
 attributes:

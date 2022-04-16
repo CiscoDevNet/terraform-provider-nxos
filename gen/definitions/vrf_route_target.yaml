@@ -5,6 +5,7 @@ dn: sys/inst-[%s]/dom-[%[1]s]/af-[%s]/ctrl-[%s]/rttp-[%s]/ent-[%s]
 ds_description: This data source can read a VRF Route Target Entry.
 res_description: This resource can manage a VRF Route Target Entry.
 doc_path: Routing%20and%20Forwarding/rtctrl:RttEntry/
+doc_category: VRF
 parents:
   - VRF Route Target Direction
 attributes:

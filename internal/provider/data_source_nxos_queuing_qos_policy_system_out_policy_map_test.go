@@ -94,16 +94,16 @@ resource "nxos_rest" "PreReq7" {
 }
 
 resource "nxos_rest" "PreReq8" {
-  dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q4]"
+  dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q-default]"
   class_name = "ipqosMatchCMap"
   content = {
-      name = "c-out-q4"
+      name = "c-out-q-default"
   }
   depends_on = [nxos_rest.PreReq1, ]
 }
 
 resource "nxos_rest" "PreReq9" {
-  dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q4]/setRemBW"
+  dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q-default]/setRemBW"
   class_name = "ipqosSetRemBW"
   content = {
       val = "10"

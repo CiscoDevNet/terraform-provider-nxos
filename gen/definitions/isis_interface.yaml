@@ -5,6 +5,7 @@ dn: sys/isis/if-[%s]
 ds_description: This data source can read the IS-IS interface configuration.
 res_description: This resource can manage the IS-IS interface configuration.
 doc_path: Routing%20and%20Forwarding/isis:InternalIf/
+doc_category: ISIS
 parents:
   - ISIS
 attributes:

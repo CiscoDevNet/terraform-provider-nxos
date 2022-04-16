@@ -32,13 +32,21 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/intf/phys-[eth1/10]"
+  class_name = "l1PhysIf"
+  content = {
+      layer = "Layer3"
+  }
+}
+
 `
 
 const testAccDataSourceNxosDHCPRelayInterfaceConfig = `
 
 resource "nxos_dhcp_relay_interface" "test" {
   interface_id = "eth1/10"
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 }
 
 data "nxos_dhcp_relay_interface" "test" {

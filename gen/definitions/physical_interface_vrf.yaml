@@ -5,6 +5,7 @@ dn: sys/intf/phys-[%s]/rtvrfMbr
 ds_description: This data source can read a physical interface VRF association.
 res_description: This resource can manage a physical interface VRF association.
 doc_path: Routing%20and%20Forwarding/nw:RtVrfMbr/
+doc_category: Interface
 parents:
   - Physical Interface
 references:

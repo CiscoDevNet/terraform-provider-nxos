@@ -5,6 +5,7 @@ dn: sys/bgp/inst/dom-[%s]/peer-[%s]
 ds_description: This data source can read the BGP peer configuration.
 res_description: This resource can manage the BGP peer configuration.
 doc_path: Routing%20and%20Forwarding/bgp:Peer/
+doc_category: BGP
 parents:
   - BGP VRF
 children:

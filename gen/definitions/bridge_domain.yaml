@@ -5,6 +5,7 @@ dn: sys/bd/bd-[%s]
 ds_description: This data source can read a bridge domain.
 res_description: This resource can manage a bridge domain.
 doc_path: Layer%202/l2:BD/
+doc_category: Switching
 attributes:
   - nxos_name: fabEncap
     tf_name: fabric_encap

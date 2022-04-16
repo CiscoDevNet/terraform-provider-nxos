@@ -44,10 +44,10 @@ resource "nxos_rest" "PreReq1" {
 }
 
 resource "nxos_rest" "PreReq2" {
-  dn = "sys/ospf/inst-[OSPF1]/dom-[default]"
+  dn = "sys/ospf/inst-[OSPF1]/dom-[VRF1]"
   class_name = "ospfDom"
   content = {
-      name = "default"
+      name = "VRF1"
   }
   depends_on = [nxos_rest.PreReq1, ]
 }
@@ -58,7 +58,7 @@ const testAccDataSourceNxosOSPFAreaConfig = `
 
 resource "nxos_ospf_area" "test" {
   instance_name = "OSPF1"
-  vrf_name = "default"
+  vrf_name = "VRF1"
   area_id = "0.0.0.10"
   authentication_type = "none"
   cost = 10
@@ -68,7 +68,7 @@ resource "nxos_ospf_area" "test" {
 
 data "nxos_ospf_area" "test" {
   instance_name = "OSPF1"
-  vrf_name = "default"
+  vrf_name = "VRF1"
   area_id = "0.0.0.10"
   depends_on = [nxos_ospf_area.test]
 }

@@ -5,6 +5,7 @@ dn: sys/bgp/inst/dom-[%s]
 ds_description: This data source can read the BGP domain (VRF) configuration.
 res_description: This resource can manage the BGP domain (VRF) configuration.
 doc_path: Routing%20and%20Forwarding/bgp:Dom/
+doc_category: BGP
 parents:
   - BGP Instance
 children:

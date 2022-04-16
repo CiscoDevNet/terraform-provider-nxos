@@ -5,6 +5,7 @@ dn: sys/pim/inst/dom-[%s]/staticrp
 ds_description: This data source can read the PIM Static RP policy configuration.
 res_description: This resource can manage the PIM Static RP policy configuration.
 doc_path: Layer%203/pim:StaticRPP/
+doc_category: PIM
 parents:
   - PIM VRF
 children:

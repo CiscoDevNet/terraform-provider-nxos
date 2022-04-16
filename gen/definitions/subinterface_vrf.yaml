@@ -5,6 +5,7 @@ dn: sys/intf/encrtd-[%s]/rtvrfMbr
 ds_description: This data source can read a subinterface VRF association.
 res_description: This resource can manage a subinterface VRF association.
 doc_path: Routing%20and%20Forwarding/nw:RtVrfMbr/
+doc_category: Interface
 parents:
   - Subinterface
 references:

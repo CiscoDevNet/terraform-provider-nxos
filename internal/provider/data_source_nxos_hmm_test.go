@@ -28,6 +28,15 @@ resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/hmm"
   class_name = "fmHmm"
   content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/fm/evpn"
+  class_name = "fmEvpn"
+  content = {
+      adminSt = "enabled"
   }
 }
 
@@ -37,7 +46,7 @@ const testAccDataSourceNxosHMMConfig = `
 
 resource "nxos_hmm" "test" {
   admin_state = "enabled"
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 }
 
 data "nxos_hmm" "test" {

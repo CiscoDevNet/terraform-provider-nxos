@@ -5,6 +5,7 @@ dn: sys/pim/inst/dom-[%s]
 ds_description: This data source can read the PIM VRF configuration.
 res_description: This resource can manage the PIM VRF configuration.
 doc_path: Layer%203/pim:Dom/
+doc_category: PIM
 parents:
   - PIM Instance
 children:

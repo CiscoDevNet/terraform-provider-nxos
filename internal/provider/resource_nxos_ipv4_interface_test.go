@@ -14,10 +14,10 @@ func TestAccNxosIPv4Interface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosIPv4InterfaceConfig_all(),
+				Config: testAccNxosIPv4InterfacePrerequisitesConfig + testAccNxosIPv4InterfaceConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "vrf", "default"),
-					resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "interface_id", "eth1/59"),
+					resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "interface_id", "eth1/10"),
 					resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "unnumbered", "unspecified"),
 					resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "urpf", "disabled"),
 				),
@@ -25,17 +25,28 @@ func TestAccNxosIPv4Interface(t *testing.T) {
 			{
 				ResourceName:  "nxos_ipv4_interface.test",
 				ImportState:   true,
-				ImportStateId: "sys/ipv4/inst/dom-[default]/if-[eth1/59]",
+				ImportStateId: "sys/ipv4/inst/dom-[default]/if-[eth1/10]",
 			},
 		},
 	})
 }
 
+const testAccNxosIPv4InterfacePrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/ipv4/inst/dom-[default]"
+  class_name = "ipv4Dom"
+  content = {
+  }
+}
+
+`
+
 func testAccNxosIPv4InterfaceConfig_minimum() string {
 	return `
 	resource "nxos_ipv4_interface" "test" {
 		vrf = "default"
-		interface_id = "eth1/59"
+		interface_id = "eth1/10"
+  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }
@@ -44,9 +55,10 @@ func testAccNxosIPv4InterfaceConfig_all() string {
 	return `
 	resource "nxos_ipv4_interface" "test" {
 		vrf = "default"
-		interface_id = "eth1/59"
+		interface_id = "eth1/10"
 		unnumbered = "unspecified"
 		urpf = "disabled"
+  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }

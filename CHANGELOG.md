@@ -1,3 +1,8 @@
+## 0.3.4 (unreleased)
+
+- Add nxos_bgp_peer_address_family resource and data source
+- Add nxos_bgp_route_control resource and data source
+
 ## 0.3.3
 
 - Add nxos_feature_hmm resource and data source

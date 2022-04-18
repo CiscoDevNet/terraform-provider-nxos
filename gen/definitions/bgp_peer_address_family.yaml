@@ -7,8 +7,6 @@ res_description: This resource can manage the BGP peer address family configurat
 doc_path: Routing%20and%20Forwarding/bgp:PeerAf/
 parents:
   - BGP Peer
-references:
-  - BGP Peer Template Address Family
 attributes:
   - nxos_name: vrf_name
     tf_name: vrf

@@ -20,7 +20,7 @@ type resourceBGPPeerTemplateType struct{}
 func (t resourceBGPPeerTemplateType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP peer template configuration.", "bgpPeerCont", "Routing%20and%20Forwarding/bgp:PeerCont/").AddParents("bgp_vrf").AddChildren("bgp_peer_template_address_family").AddReferences("bgp_peer").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP peer template configuration.", "bgpPeerCont", "Routing%20and%20Forwarding/bgp:PeerCont/").AddParents("bgp_vrf").AddChildren("bgp_peer_template_address_family").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {

@@ -9,8 +9,6 @@ parents:
   - BGP VRF
 children:
   - BGP Peer Template Address Family
-references:
-  - BGP Peer
 attributes:
   - nxos_name: name
     tf_name: template_name

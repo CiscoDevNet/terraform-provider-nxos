@@ -9,8 +9,6 @@ parents:
   - BGP Peer Template
 children:
   - BGP Peer Template Max Prefix
-references:
-  - BGP Peer Address Family
 attributes:
   - nxos_name: name
     tf_name: template_name

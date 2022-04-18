@@ -9,8 +9,6 @@ description: |-
   nxosbgppeer_template https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer_template
   Child resources
   nxosbgppeertemplatemax_prefix https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer_template_max_prefix
-  Referenced resources
-  nxosbgppeeraddressfamily https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer_address_family
 ---
 
 # nxos_bgp_peer_template_address_family (Resource)
@@ -26,10 +24,6 @@ This resource can manage the BGP peer template address family configuration.
 ### Child resources
 
 - [nxos_bgp_peer_template_max_prefix](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer_template_max_prefix)
-
-### Referenced resources
-
-- [nxos_bgp_peer_address_family](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer_address_family)
 
 ## Example Usage
 

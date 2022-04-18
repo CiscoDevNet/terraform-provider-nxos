@@ -9,6 +9,8 @@ description: |-
   nxosbgpinstance https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_instance
   Child resources
   nxosbgpaddress_family https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_address_familynxosbgpgraceful_restart https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_graceful_restartnxosbgppeer https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peernxosbgppeer_template https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer_template
+  Referenced resources
+  nxos_vrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf
 ---
 
 # nxos_bgp_vrf (Resource)
@@ -27,6 +29,10 @@ This resource can manage the BGP domain (VRF) configuration.
 - [nxos_bgp_graceful_restart](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_graceful_restart)
 - [nxos_bgp_peer](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer)
 - [nxos_bgp_peer_template](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer_template)
+
+### Referenced resources
+
+- [nxos_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf)
 
 ## Example Usage
 

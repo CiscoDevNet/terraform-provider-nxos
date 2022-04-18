@@ -9,8 +9,6 @@ description: |-
   nxosbgpvrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_vrf
   Child resources
   nxosbgppeertemplateaddress_family https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer_template_address_family
-  Referenced resources
-  nxosbgppeer https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer
 ---
 
 # nxos_bgp_peer_template (Resource)
@@ -26,10 +24,6 @@ This resource can manage the BGP peer template configuration.
 ### Child resources
 
 - [nxos_bgp_peer_template_address_family](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer_template_address_family)
-
-### Referenced resources
-
-- [nxos_bgp_peer](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer)
 
 ## Example Usage
 

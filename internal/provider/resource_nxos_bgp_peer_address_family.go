@@ -20,7 +20,7 @@ type resourceBGPPeerAddressFamilyType struct{}
 func (t resourceBGPPeerAddressFamilyType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP peer address family configuration.", "bgpPeerAf", "Routing%20and%20Forwarding/bgp:PeerAf/").AddParents("bgp_peer").AddReferences("bgp_peer_template_address_family").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP peer address family configuration.", "bgpPeerAf", "Routing%20and%20Forwarding/bgp:PeerAf/").AddParents("bgp_peer").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {

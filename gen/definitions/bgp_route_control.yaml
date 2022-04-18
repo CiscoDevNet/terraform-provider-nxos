@@ -5,6 +5,7 @@ dn: sys/bgp/inst/dom-[%s]/rtctrl
 ds_description: This data source can read the BGP Route Control configuration.
 res_description: This resource can manage the BGP Route Control configuration.
 doc_path: Routing%20and%20Forwarding/bgp:RtCtrl/
+doc_category: BGP
 parents:
   - BGP VRF
 attributes:

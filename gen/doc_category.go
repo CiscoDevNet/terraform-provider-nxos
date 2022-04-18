@@ -66,4 +66,18 @@ func main() {
 			ioutil.WriteFile(filename, []byte(s), 0644)
 		}
 	}
+
+	// update nxos_rest resource and data source
+	for _, path := range docPaths {
+		filename := path + "rest.md"
+		content, err := ioutil.ReadFile(filename)
+		if err != nil {
+			log.Fatalf("Error opening documentation: %v", err)
+		}
+
+		s := string(content)
+		s = strings.ReplaceAll(s, `subcategory: ""`, `subcategory: "General"`)
+
+		ioutil.WriteFile(filename, []byte(s), 0644)
+	}
 }

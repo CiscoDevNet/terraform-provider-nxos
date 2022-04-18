@@ -1,10 +1,11 @@
 ---
 name: NVE VNI Ingress Replication
 class_name: nvoIngRepl
-dn:  sys/eps/epId-[1]/nws/vni-[%v]/IngRepl
+dn: sys/eps/epId-[1]/nws/vni-[%v]/IngRepl
 ds_description: This data source can read the configuration of Ingress Replication for Virtual Network ID (VNI).
 res_description: This resource can manage the configuration of Ingress Replication for Virtual Network ID (VNI).
 doc_path: Network%20Virtualization/nvo:IngRepl/
+doc_category: NVE
 parents:
   - NVE VNI
 attributes:

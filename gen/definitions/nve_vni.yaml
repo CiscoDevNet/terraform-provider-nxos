@@ -1,14 +1,15 @@
 ---
 name: NVE VNI
 class_name: nvoNw
-dn:  sys/eps/epId-[1]/nws/vni-[%v]
+dn: sys/eps/epId-[1]/nws/vni-[%v]
 ds_description: This data source can read the configuration of Virtual Network ID (VNI).
 res_description: This resource can manage the configuration of Virtual Network ID (VNI).
 doc_path: Network%20Virtualization/nvo:Nw/
+doc_category: NVE
 parents:
   - NVE VNI Container
 children:
-  - NVE VNI Ingress Replication 
+  - NVE VNI Ingress Replication
 attributes:
   - nxos_name: vni
     tf_name: vni

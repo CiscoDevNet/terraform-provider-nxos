@@ -5,6 +5,7 @@ dn: sys/bgp/inst/dom-[%s]/peer-[%s]/af-[%s]
 ds_description: This data source can read the BGP peer address family configuration.
 res_description: This resource can manage the BGP peer address family configuration.
 doc_path: Routing%20and%20Forwarding/bgp:PeerAf/
+doc_category: BGP
 parents:
   - BGP Peer
 attributes:

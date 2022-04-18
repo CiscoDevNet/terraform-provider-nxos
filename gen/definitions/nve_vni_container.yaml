@@ -1,10 +1,11 @@
 ---
 name: NVE VNI Container
 class_name: nvoNws
-dn:  sys/eps/epId-[1]/nws
+dn: sys/eps/epId-[1]/nws
 ds_description: This data source can read the configuration of Container object for Virtual Network IDs (VNIs).
 res_description: This resource can manage the configuration of Container object for Virtual Network IDs (VNIs).
 doc_path: Network%20Virtualization/nvo:Nws/
+doc_category: NVE
 parents:
   - NVE Interface
 children:

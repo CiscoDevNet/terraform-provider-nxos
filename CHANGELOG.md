@@ -1,4 +1,4 @@
-## 0.3.4 (unreleased)
+## 0.3.4
 
 - Add nxos_bgp_peer_address_family resource and data source
 - Add nxos_bgp_route_control resource and data source

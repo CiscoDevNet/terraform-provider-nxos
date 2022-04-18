@@ -29,7 +29,6 @@ This resource can manage the BGP peer template address family configuration.
 
 ```terraform
 resource "nxos_bgp_peer_template_address_family" "example" {
-  vrf                     = "default"
   template_name           = "SPINE-PEERS"
   address_family          = "ipv4-ucast"
   control                 = "rr-client"
@@ -44,10 +43,9 @@ resource "nxos_bgp_peer_template_address_family" "example" {
 ### Required
 
 - `address_family` (String) Address Family.
-  - Choices: `ipv4-ucast`, `ipv4-mcast`, `vpnv4-ucast`, `ipv6-ucast`, `ipv6-mcast`, `vpnv6-ucast`, `vpnv6-mcast`, `l2vpn-evpn`, `ipv4-lucast`, `ipv6-lucast`, `lnkstate`, `ipv4-mvpn`, `ipv6-mvpn`, `l2vpn-vpls`, `ipv4-mdt`
+  - Choices: `ipv4-ucast`, `vpnv4-ucast`, `ipv6-ucast`, `vpnv6-ucast`, `l2vpn-evpn`, `lnkstate`
   - Default value: `ipv4-ucast`
 - `template_name` (String) Peer template name.
-- `vrf` (String) VRF name.
 
 ### Optional
 

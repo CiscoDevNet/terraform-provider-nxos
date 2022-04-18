@@ -15,7 +15,6 @@ import (
 type BGPPeerTemplateMaxPrefix struct {
 	Device      types.String `tfsdk:"device"`
 	Dn          types.String `tfsdk:"id"`
-	Vrf_name    types.String `tfsdk:"vrf"`
 	Name        types.String `tfsdk:"template_name"`
 	Type        types.String `tfsdk:"address_family"`
 	Action      types.String `tfsdk:"action"`
@@ -25,7 +24,7 @@ type BGPPeerTemplateMaxPrefix struct {
 }
 
 func (data BGPPeerTemplateMaxPrefix) getDn() string {
-	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/peercont-[%s]/af-[%s]/maxpfxp", data.Vrf_name.Value, data.Name.Value, data.Type.Value)
+	return fmt.Sprintf("sys/bgp/inst/dom-[default]/peercont-[%s]/af-[%s]/maxpfxp", data.Name.Value, data.Type.Value)
 }
 
 func (data BGPPeerTemplateMaxPrefix) getClassName() string {
@@ -51,7 +50,6 @@ func (data *BGPPeerTemplateMaxPrefix) fromBody(res gjson.Result) {
 
 func (data *BGPPeerTemplateMaxPrefix) fromPlan(plan BGPPeerTemplateMaxPrefix) {
 	data.Device = plan.Device
-	data.Vrf_name.Value = plan.Vrf_name.Value
 	data.Name.Value = plan.Name.Value
 	data.Type.Value = plan.Type.Value
 }

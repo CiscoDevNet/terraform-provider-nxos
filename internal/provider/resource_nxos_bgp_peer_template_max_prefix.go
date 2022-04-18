@@ -36,14 +36,6 @@ func (t resourceBGPPeerTemplateMaxPrefixType) GetSchema(ctx context.Context) (tf
 					tfsdk.UseStateForUnknown(),
 				},
 			},
-			"vrf": {
-				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
-				Type:                types.StringType,
-				Required:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
-				},
-			},
 			"template_name": {
 				MarkdownDescription: helpers.NewAttributeDescription("Peer template name.").String,
 				Type:                types.StringType,

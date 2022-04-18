@@ -26,6 +26,12 @@ attributes:
     requires_replace: true
     description: 'Autonomous system number.'
     example: '65001'
+  - nxos_name: enhancedErr
+    tf_name: enhanced_error_handling
+    type: Bool
+    description: 'Enable BGP Enhanced Error Handling.'
+    default_value: true
+    example: false
 test_prerequisites:
   - dn: sys/bgp
     class_name: bgpEntity

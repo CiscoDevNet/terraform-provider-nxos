@@ -1,7 +1,7 @@
 ---
 name: BGP Peer Template Address Family
 class_name: bgpPeerAf
-dn: sys/bgp/inst/dom-[%s]/peercont-[%s]/af-[%s]
+dn: sys/bgp/inst/dom-[default]/peercont-[%s]/af-[%s]
 ds_description: This data source can read the BGP peer template address family configuration.
 res_description: This resource can manage the BGP peer template address family configuration.
 doc_path: Routing%20and%20Forwarding/bgp:PeerAf/
@@ -11,13 +11,6 @@ parents:
 children:
   - BGP Peer Template Max Prefix
 attributes:
-  - nxos_name: vrf_name
-    tf_name: vrf
-    type: String
-    id: true
-    reference_only: true
-    description: 'VRF name.'
-    example: default
   - nxos_name: name
     tf_name: template_name
     type: String
@@ -32,20 +25,11 @@ attributes:
     description: 'Address Family.'
     enum_values:
       - ipv4-ucast
-      - ipv4-mcast
       - vpnv4-ucast
       - ipv6-ucast
-      - ipv6-mcast
       - vpnv6-ucast
-      - vpnv6-mcast
       - l2vpn-evpn
-      - ipv4-lucast
-      - ipv6-lucast
       - lnkstate
-      - ipv4-mvpn
-      - ipv6-mvpn
-      - l2vpn-vpls
-      - ipv4-mdt
     default_value: 'ipv4-ucast'
     example: 'ipv4-ucast'
   - nxos_name: ctrl

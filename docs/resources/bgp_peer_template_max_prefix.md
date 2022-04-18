@@ -23,7 +23,6 @@ This resource can manage the BGP peer template Maximum Prefix Policy configurati
 
 ```terraform
 resource "nxos_bgp_peer_template_max_prefix" "example" {
-  vrf            = "default"
   template_name  = "SPINE-PEERS"
   address_family = "ipv4-ucast"
   action         = "log"
@@ -42,7 +41,6 @@ resource "nxos_bgp_peer_template_max_prefix" "example" {
   - Choices: `ipv4-ucast`, `ipv4-mcast`, `vpnv4-ucast`, `ipv6-ucast`, `ipv6-mcast`, `vpnv6-ucast`, `vpnv6-mcast`, `l2vpn-evpn`, `ipv4-lucast`, `ipv6-lucast`, `lnkstate`, `ipv4-mvpn`, `ipv6-mvpn`, `l2vpn-vpls`, `ipv4-mdt`
   - Default value: `ipv4-ucast`
 - `template_name` (String) Peer template name.
-- `vrf` (String) VRF name.
 
 ### Optional
 

@@ -16,7 +16,6 @@ func TestAccNxosBGPPeerTemplateAddressFamily(t *testing.T) {
 			{
 				Config: testAccNxosBGPPeerTemplateAddressFamilyPrerequisitesConfig + testAccNxosBGPPeerTemplateAddressFamilyConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_bgp_peer_template_address_family.test", "vrf", "default"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer_template_address_family.test", "template_name", "SPINE-PEERS"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer_template_address_family.test", "address_family", "ipv4-ucast"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer_template_address_family.test", "control", "rr-client"),
@@ -74,7 +73,6 @@ resource "nxos_rest" "PreReq3" {
 func testAccNxosBGPPeerTemplateAddressFamilyConfig_minimum() string {
 	return `
 	resource "nxos_bgp_peer_template_address_family" "test" {
-		vrf = "default"
 		template_name = "SPINE-PEERS"
 		address_family = "ipv4-ucast"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
@@ -85,7 +83,6 @@ func testAccNxosBGPPeerTemplateAddressFamilyConfig_minimum() string {
 func testAccNxosBGPPeerTemplateAddressFamilyConfig_all() string {
 	return `
 	resource "nxos_bgp_peer_template_address_family" "test" {
-		vrf = "default"
 		template_name = "SPINE-PEERS"
 		address_family = "ipv4-ucast"
 		control = "rr-client"

@@ -76,7 +76,6 @@ resource "nxos_rest" "PreReq4" {
 const testAccDataSourceNxosBGPPeerTemplateMaxPrefixConfig = `
 
 resource "nxos_bgp_peer_template_max_prefix" "test" {
-  vrf = "default"
   template_name = "SPINE-PEERS"
   address_family = "ipv4-ucast"
   action = "log"
@@ -87,7 +86,6 @@ resource "nxos_bgp_peer_template_max_prefix" "test" {
 }
 
 data "nxos_bgp_peer_template_max_prefix" "test" {
-  vrf = "default"
   template_name = "SPINE-PEERS"
   address_family = "ipv4-ucast"
   depends_on = [nxos_bgp_peer_template_max_prefix.test]

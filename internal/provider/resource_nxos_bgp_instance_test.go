@@ -18,6 +18,7 @@ func TestAccNxosBGPInstance(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_bgp_instance.test", "admin_state", "enabled"),
 					resource.TestCheckResourceAttr("nxos_bgp_instance.test", "asn", "65001"),
+					resource.TestCheckResourceAttr("nxos_bgp_instance.test", "enhanced_error_handling", "false"),
 				),
 			},
 			{
@@ -52,6 +53,7 @@ func testAccNxosBGPInstanceConfig_all() string {
 	resource "nxos_bgp_instance" "test" {
 		admin_state = "enabled"
 		asn = "65001"
+		enhanced_error_handling = false
   		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`

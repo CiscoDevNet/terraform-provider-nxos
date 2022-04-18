@@ -36,14 +36,6 @@ func (t resourceBGPPeerTemplateAddressFamilyType) GetSchema(ctx context.Context)
 					tfsdk.UseStateForUnknown(),
 				},
 			},
-			"vrf": {
-				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
-				Type:                types.StringType,
-				Required:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
-				},
-			},
 			"template_name": {
 				MarkdownDescription: helpers.NewAttributeDescription("Peer template name.").String,
 				Type:                types.StringType,
@@ -53,11 +45,11 @@ func (t resourceBGPPeerTemplateAddressFamilyType) GetSchema(ctx context.Context)
 				},
 			},
 			"address_family": {
-				MarkdownDescription: helpers.NewAttributeDescription("Address Family.").AddStringEnumDescription("ipv4-ucast", "ipv4-mcast", "vpnv4-ucast", "ipv6-ucast", "ipv6-mcast", "vpnv6-ucast", "vpnv6-mcast", "l2vpn-evpn", "ipv4-lucast", "ipv6-lucast", "lnkstate", "ipv4-mvpn", "ipv6-mvpn", "l2vpn-vpls", "ipv4-mdt").AddDefaultValueDescription("ipv4-ucast").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Address Family.").AddStringEnumDescription("ipv4-ucast", "vpnv4-ucast", "ipv6-ucast", "vpnv6-ucast", "l2vpn-evpn", "lnkstate").AddDefaultValueDescription("ipv4-ucast").String,
 				Type:                types.StringType,
 				Required:            true,
 				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("ipv4-ucast", "ipv4-mcast", "vpnv4-ucast", "ipv6-ucast", "ipv6-mcast", "vpnv6-ucast", "vpnv6-mcast", "l2vpn-evpn", "ipv4-lucast", "ipv6-lucast", "lnkstate", "ipv4-mvpn", "ipv6-mvpn", "l2vpn-vpls", "ipv4-mdt"),
+					helpers.StringEnumValidator("ipv4-ucast", "vpnv4-ucast", "ipv6-ucast", "vpnv6-ucast", "l2vpn-evpn", "lnkstate"),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					tfsdk.RequiresReplace(),

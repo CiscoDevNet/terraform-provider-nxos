@@ -9,8 +9,6 @@ description: |-
   nxosbgpvrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_vrf
   Child resources
   nxosbgppeertemplateaddress_family https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer_template_address_family
-  Referenced resources
-  nxosbgppeer https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer
 ---
 
 # nxos_bgp_peer_template (Resource)
@@ -27,17 +25,13 @@ This resource can manage the BGP peer template configuration.
 
 - [nxos_bgp_peer_template_address_family](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer_template_address_family)
 
-### Referenced resources
-
-- [nxos_bgp_peer](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer)
-
 ## Example Usage
 
 ```terraform
 resource "nxos_bgp_peer_template" "example" {
-  vrf              = "default"
   template_name    = "SPINE-PEERS"
   asn              = "65002"
+  description      = "My Description"
   peer_type        = "fabric-internal"
   source_interface = "lo0"
 }
@@ -49,11 +43,11 @@ resource "nxos_bgp_peer_template" "example" {
 ### Required
 
 - `template_name` (String) Peer template name.
-- `vrf` (String) VRF name.
 
 ### Optional
 
-- `asn` (String) Autonomous system number.
+- `asn` (String) Peer template Autonomous system number.
+- `description` (String) Peer template description.
 - `device` (String) A device name from the provider configuration.
 - `peer_type` (String) Neighbor Fabric Type.
   - Choices: `fabric-internal`, `fabric-external`, `fabric-border-leaf`

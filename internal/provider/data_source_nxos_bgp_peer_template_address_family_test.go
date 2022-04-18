@@ -67,7 +67,6 @@ resource "nxos_rest" "PreReq3" {
 const testAccDataSourceNxosBGPPeerTemplateAddressFamilyConfig = `
 
 resource "nxos_bgp_peer_template_address_family" "test" {
-  vrf = "default"
   template_name = "SPINE-PEERS"
   address_family = "ipv4-ucast"
   control = "rr-client"
@@ -77,7 +76,6 @@ resource "nxos_bgp_peer_template_address_family" "test" {
 }
 
 data "nxos_bgp_peer_template_address_family" "test" {
-  vrf = "default"
   template_name = "SPINE-PEERS"
   address_family = "ipv4-ucast"
   depends_on = [nxos_bgp_peer_template_address_family.test]

@@ -1,7 +1,7 @@
 ---
 name: BGP Peer Template
 class_name: bgpPeerCont
-dn: sys/bgp/inst/dom-[%s]/peercont-[%s]
+dn: sys/bgp/inst/dom-[default]/peercont-[%s]
 ds_description: This data source can read the BGP peer template configuration.
 res_description: This resource can manage the BGP peer template configuration.
 doc_path: Routing%20and%20Forwarding/bgp:PeerCont/
@@ -10,16 +10,7 @@ parents:
   - BGP VRF
 children:
   - BGP Peer Template Address Family
-references:
-  - BGP Peer
 attributes:
-  - nxos_name: vrf_name
-    tf_name: vrf
-    type: String
-    id: true
-    reference_only: true
-    description: 'VRF name.'
-    example: default
   - nxos_name: name
     tf_name: template_name
     type: String
@@ -29,8 +20,13 @@ attributes:
   - nxos_name: asn
     tf_name: asn
     type: String
-    description: 'Autonomous system number.'
+    description: 'Peer template Autonomous system number.'
     example: '65002'
+  - nxos_name: desc
+    tf_name: description
+    type: String
+    description: 'Peer template description.'
+    example: My Description
   - nxos_name: peerType
     tf_name: peer_type
     type: String

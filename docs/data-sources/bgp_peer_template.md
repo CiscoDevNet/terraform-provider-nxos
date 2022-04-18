@@ -17,7 +17,6 @@ This data source can read the BGP peer template configuration.
 
 ```terraform
 data "nxos_bgp_peer_template" "example" {
-  vrf           = "default"
   template_name = "SPINE-PEERS"
 }
 ```
@@ -28,7 +27,6 @@ data "nxos_bgp_peer_template" "example" {
 ### Required
 
 - `template_name` (String) Peer template name.
-- `vrf` (String) VRF name.
 
 ### Optional
 
@@ -36,7 +34,8 @@ data "nxos_bgp_peer_template" "example" {
 
 ### Read-Only
 
-- `asn` (String) Autonomous system number.
+- `asn` (String) Peer template Autonomous system number.
+- `description` (String) Peer template description.
 - `id` (String) The distinguished name of the object.
 - `peer_type` (String) Neighbor Fabric Type.
 - `source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`.

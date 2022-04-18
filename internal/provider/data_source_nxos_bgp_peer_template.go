@@ -32,18 +32,18 @@ func (t dataSourceBGPPeerTemplateType) GetSchema(ctx context.Context) (tfsdk.Sch
 				Type:                types.StringType,
 				Computed:            true,
 			},
-			"vrf": {
-				MarkdownDescription: "VRF name.",
-				Type:                types.StringType,
-				Required:            true,
-			},
 			"template_name": {
 				MarkdownDescription: "Peer template name.",
 				Type:                types.StringType,
 				Required:            true,
 			},
 			"asn": {
-				MarkdownDescription: "Autonomous system number.",
+				MarkdownDescription: "Peer template Autonomous system number.",
+				Type:                types.StringType,
+				Computed:            true,
+			},
+			"description": {
+				MarkdownDescription: "Peer template description.",
 				Type:                types.StringType,
 				Computed:            true,
 			},

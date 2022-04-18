@@ -34,6 +34,7 @@ resource "nxos_rest" "l1PhysIf" {
 ### Optional
 
 - `content` (Map of String) Map of key-value pairs that need to be passed to the Model object as parameters.
+- `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 

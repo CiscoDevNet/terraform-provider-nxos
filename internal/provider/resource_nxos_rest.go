@@ -22,6 +22,11 @@ func (t resourceRestType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Dia
 		MarkdownDescription: "Manages NX-OS Model Objects via REST API calls. This resource can only manage a single API object. It is able to read the state and therefore reconcile configuration drift.",
 
 		Attributes: map[string]tfsdk.Attribute{
+			"device": {
+				MarkdownDescription: "A device name from the provider configuration.",
+				Type:                types.StringType,
+				Optional:            true,
+			},
 			"id": {
 				MarkdownDescription: "The distinguished name of the object.",
 				Type:                types.StringType,
@@ -81,7 +86,7 @@ func (r resourceRest) Create(ctx context.Context, req tfsdk.CreateResourceReques
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.Id.Value))
 
 	body := plan.toBody(ctx)
-	_, err := r.provider.client.Post(plan.Dn.Value, body.Str)
+	_, err := r.provider.client.Post(plan.Dn.Value, body.Str, nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 		return
@@ -108,7 +113,7 @@ func (r resourceRest) Read(ctx context.Context, req tfsdk.ReadResourceRequest, r
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.Value))
 
-	res, err := r.provider.client.GetDn(state.Dn.Value, nxos.Query("rsp-prop-include", "config-only"))
+	res, err := r.provider.client.GetDn(state.Dn.Value, nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[state.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -151,7 +156,7 @@ func (r resourceRest) Update(ctx context.Context, req tfsdk.UpdateResourceReques
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.Value))
 
 	body := plan.toBody(ctx)
-	_, err := r.provider.client.Post(plan.Dn.Value, body.Str)
+	_, err := r.provider.client.Post(plan.Dn.Value, body.Str, nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 		return
@@ -175,7 +180,7 @@ func (r resourceRest) Delete(ctx context.Context, req tfsdk.DeleteResourceReques
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.Value))
 
-	res, err := r.provider.client.DeleteDn(state.Dn.Value)
+	res, err := r.provider.client.DeleteDn(state.Dn.Value, nxos.OverrideUrl(r.provider.devices[state.Device.Value]))
 	if err != nil {
 		errCode := res.Get("imdata.0.error.attributes.code").Str
 		// Ignore errors of type "Cannot delete object"

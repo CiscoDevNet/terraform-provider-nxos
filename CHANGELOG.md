@@ -6,6 +6,7 @@
 - Add nxos_nve_vni_container resource and data source
 - Add nxos_nve_vni resource and data source
 - Add nxos_nve_vni_ingress_replication resource and data source
+- Add device attribute to nxos_rest resource and data source
 
 ## 0.3.3
 

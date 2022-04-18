@@ -25,6 +25,10 @@ data "nxos_rest" "l1PhysIf" {
 
 - `dn` (String) Distinguished name of object to be retrieved, e.g. sys/intf/phys-[eth1/1].
 
+### Optional
+
+- `device` (String) A device name from the provider configuration.
+
 ### Read-Only
 
 - `class_name` (String) Class name of object being retrieved.

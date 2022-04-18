@@ -9,6 +9,7 @@ import (
 )
 
 type Rest struct {
+	Device    types.String `tfsdk:"device"`
 	Id        types.String `tfsdk:"id"`
 	Dn        types.String `tfsdk:"dn"`
 	ClassName types.String `tfsdk:"class_name"`

@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-nxos"
 )
 
 type dataSourceRestType struct{}
@@ -19,6 +20,11 @@ func (t dataSourceRestType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.D
 		MarkdownDescription: "This data source can read one NX-OS object.",
 
 		Attributes: map[string]tfsdk.Attribute{
+			"device": {
+				MarkdownDescription: "A device name from the provider configuration.",
+				Type:                types.StringType,
+				Optional:            true,
+			},
 			"id": {
 				MarkdownDescription: "The distinguished name of the object.",
 				Type:                types.StringType,
@@ -67,7 +73,7 @@ func (d dataSourceRest) Read(ctx context.Context, req tfsdk.ReadDataSourceReques
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.Id.Value))
 
-	res, err := d.provider.client.GetDn(config.Dn.Value)
+	res, err := d.provider.client.GetDn(config.Dn.Value, nxos.OverrideUrl(d.provider.devices[config.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -85,6 +91,7 @@ func (d dataSourceRest) Read(ctx context.Context, req tfsdk.ReadDataSourceReques
 
 		state.ClassName.Value = className
 		state.Dn.Value = config.Dn.Value
+		state.Device = config.Device
 
 		// Set content
 		content := make(map[string]attr.Value)

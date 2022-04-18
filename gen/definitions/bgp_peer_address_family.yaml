@@ -6,9 +6,7 @@ ds_description: This data source can read the BGP peer address family configurat
 res_description: This resource can manage the BGP peer address family configuration.
 doc_path: Routing%20and%20Forwarding/bgp:PeerAf/
 parents:
-  - BGP Peer Template
-children:
-  - BGP Peer Template Max Prefix
+  - BGP Peer
 references:
   - BGP Peer Template Address Family
 attributes:

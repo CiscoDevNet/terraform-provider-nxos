@@ -1,0 +1,81 @@
+---
+name: NVE Interface
+class_name: nvoEp
+dn:  sys/eps/epId-[1]
+ds_description: This data source can read the NVE interface configuration.
+res_description: This resource can manage the NVE interface configuration.
+doc_path: Network%20Virtualization/nvo:Ep/
+children:
+  - NVE VNI Container
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'Administrative state.'
+    enum_values:
+      - enabled
+      - disabled
+    default_value: disabled
+    example: enabled
+  - nxos_name: advertiseVmac
+    tf_name: advertise_virtual_mac
+    type: Bool
+    description: 'Enable or disable Virtual MAC Advertisement in VPC mode.'
+    default_value: false
+    example: true
+  - nxos_name: holdDownTime
+    tf_name: hold_down_time
+    type: Int64
+    description: 'Hold Down Time.'
+    min_int: 1
+    max_int: 1500
+    default_value: 180
+    example: 60
+  - nxos_name: hostReach
+    tf_name: host_reachability_protocol
+    type: String
+    description: 'Host Reachability Protocol.'
+    enum_values:
+      - Flood-and-learn
+      - bgp
+      - controller
+      - openflow
+      - openflowIR
+    default_value: Flood-and-learn
+    example: bgp
+  - nxos_name: ingressReplProtoBGP
+    tf_name: ingress_replication_protocol_bgp
+    type: Bool
+    description: 'VxLAN Ingress Replication Protocol BGP.'
+    default_value: false
+    example: true
+  - nxos_name: multisiteBordergwInterface
+    tf_name: multisite_source_interface
+    type: String
+    description: 'Interface representing the Multisite Border Gateway. Must match first field in the output of `show int brief`.'
+    default_value: 'unspecified'
+    example: 'unspecified'
+  - nxos_name: sourceInterface
+    tf_name: source_interface
+    type: String
+    description: 'Source Interface associated with the NVE. Must match first field in the output of `show int brief`.'
+    default_value: 'unspecified'
+    example: 'lo0'
+  - nxos_name: suppressMacRoute
+    tf_name: supress_mac_route
+    type: Bool
+    description: 'Suppress MAC Route.'
+    default_value: false
+    example: true
+test_prerequisites:
+  - dn: sys/fm/nvo
+    class_name: fmNvo
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/fm/evpn
+    class_name: fmEvpn
+    attributes:
+      - name: adminSt
+        value: enabled
+    dependencies: [0]

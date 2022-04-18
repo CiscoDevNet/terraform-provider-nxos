@@ -1,0 +1,75 @@
+---
+name: NVE VNI
+class_name: nvoNw
+dn:  sys/eps/epId-[1]/nws/vni-[%v]
+ds_description: This data source can read the configuration of Virtual Network ID (VNI).
+res_description: This resource can manage the configuration of Virtual Network ID (VNI).
+doc_path: Network%20Virtualization/nvo:Nw/
+parents:
+  - NVE VNI Container
+children:
+  - NVE VNI Ingress Replication 
+attributes:
+  - nxos_name: vni
+    tf_name: vni
+    type: Int64
+    id: true
+    description: 'Virtual Network ID.'
+    min_int: 1
+    max_int: 16777214
+    example: 103100
+  - nxos_name: associateVrfFlag
+    tf_name: associate_vrf
+    type: Bool
+    description: 'Configures VNI as L3 VNI.'
+    default_value: false
+    example: false
+  - nxos_name: mcastGroup
+    tf_name: multicast_group
+    type: String
+    description: 'Configures multicast group address for VNI.'
+    example: '239.1.1.1'
+  - nxos_name: multisiteIngRepl
+    tf_name: multisite_ingrress_replication
+    type: String
+    description: 'Enable or disable Multisite Ingress Replication for VNI(s).'
+    enum_values:
+      - enable
+      - disable
+      - enableOptimized
+    default_value: disable
+    example: disable
+  - nxos_name: suppressARP
+    tf_name: supress_arp
+    type: String
+    description: 'Enable or disable ARP suppression for VNI(s).'
+    enum_values:
+      - enabled
+      - disabled
+      - off
+    default_value: off
+    example: off
+test_prerequisites:
+  - dn: sys/fm/nvo
+    class_name: fmNvo
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/fm/evpn
+    class_name: fmEvpn
+    attributes:
+      - name: adminSt
+        value: enabled
+    dependencies: [0]
+  - dn: sys/eps/epId-[1]
+    class_name: nvoEp
+    attributes:
+      - name: adminSt
+        value: enabled
+      - name: hostReach
+        value: bgp
+    dependencies: [1]
+  - dn: sys/eps/epId-[1]/nws
+    class_name: nvoNws
+    attributes:
+    dependencies: [2]

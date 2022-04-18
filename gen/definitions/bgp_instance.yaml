@@ -26,13 +26,10 @@ attributes:
     example: '65001'
   - nxos_name: enhancedErr
     tf_name: enhanced_error_handling
-    type: String
+    type: Bool
     description: 'Enable BGP Enhanced Error Handling.'
-    enum_values:
-      - yes
-      - no
-    default_value: yes
-    example: no
+    default_value: true
+    example: false
 test_prerequisites:
   - dn: sys/bgp
     class_name: bgpEntity

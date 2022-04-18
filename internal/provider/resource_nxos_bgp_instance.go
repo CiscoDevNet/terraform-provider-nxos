@@ -55,15 +55,12 @@ func (t resourceBGPInstanceType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 				Computed:            true,
 			},
 			"enhanced_error_handling": {
-				MarkdownDescription: helpers.NewAttributeDescription("Enable BGP Enhanced Error Handling.").AddStringEnumDescription("yes", "no").AddDefaultValueDescription("yes").String,
-				Type:                types.StringType,
+				MarkdownDescription: helpers.NewAttributeDescription("Enable BGP Enhanced Error Handling.").AddDefaultValueDescription("true").String,
+				Type:                types.BoolType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("yes", "no"),
-				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					helpers.StringDefaultModifier("yes"),
+					helpers.BooleanDefaultModifier(true),
 				},
 			},
 		},

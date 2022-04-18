@@ -3,8 +3,11 @@
 package provider
 
 import (
+	"strconv"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
+	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/tidwall/gjson"
 )
 
@@ -13,7 +16,7 @@ type BGPInstance struct {
 	Dn          types.String `tfsdk:"id"`
 	AdminSt     types.String `tfsdk:"admin_state"`
 	Asn         types.String `tfsdk:"asn"`
-	EnhancedErr types.String `tfsdk:"enhanced_error_handling"`
+	EnhancedErr types.Bool   `tfsdk:"enhanced_error_handling"`
 }
 
 func (data BGPInstance) getDn() string {
@@ -28,7 +31,7 @@ func (data BGPInstance) toBody() nxos.Body {
 	attrs := nxos.Body{}.
 		Set("adminSt", data.AdminSt.Value).
 		Set("asn", data.Asn.Value).
-		Set("enhancedErr", data.EnhancedErr.Value)
+		Set("enhancedErr", strconv.FormatBool(data.EnhancedErr.Value))
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
@@ -36,7 +39,7 @@ func (data *BGPInstance) fromBody(res gjson.Result) {
 	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
 	data.Asn.Value = res.Get("*.attributes.asn").String()
-	data.EnhancedErr.Value = res.Get("*.attributes.enhancedErr").String()
+	data.EnhancedErr.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.enhancedErr").String())
 }
 
 func (data *BGPInstance) fromPlan(plan BGPInstance) {

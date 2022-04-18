@@ -31,7 +31,7 @@ This resource can manage the BGP instance configuration.
 resource "nxos_bgp_instance" "example" {
   admin_state             = "enabled"
   asn                     = "65001"
-  enhanced_error_handling = "no"
+  enhanced_error_handling = false
 }
 ```
 
@@ -45,9 +45,8 @@ resource "nxos_bgp_instance" "example" {
   - Default value: `enabled`
 - `asn` (String) Autonomous system number.
 - `device` (String) A device name from the provider configuration.
-- `enhanced_error_handling` (String) Enable BGP Enhanced Error Handling.
-  - Choices: `yes`, `no`
-  - Default value: `yes`
+- `enhanced_error_handling` (Boolean) Enable BGP Enhanced Error Handling.
+  - Default value: `true`
 
 ### Read-Only
 

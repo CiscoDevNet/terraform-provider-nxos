@@ -44,7 +44,7 @@ func (t dataSourceBGPInstanceType) GetSchema(ctx context.Context) (tfsdk.Schema,
 			},
 			"enhanced_error_handling": {
 				MarkdownDescription: "Enable BGP Enhanced Error Handling.",
-				Type:                types.StringType,
+				Type:                types.BoolType,
 				Computed:            true,
 			},
 		},

@@ -31,7 +31,7 @@ data "nxos_bgp_instance" "example" {
 
 - `admin_state` (String) Administrative state.
 - `asn` (String) Autonomous system number.
-- `enhanced_error_handling` (String) Enable BGP Enhanced Error Handling.
+- `enhanced_error_handling` (Boolean) Enable BGP Enhanced Error Handling.
 - `id` (String) The distinguished name of the object.
 
 

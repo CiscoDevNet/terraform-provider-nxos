@@ -1,4 +1,4 @@
-## 0.3.5 (unreleased)
+## 0.3.5
 
 - URL provider configuration attribute is now optional
 - Add a list of supported DME objects and its corresponding resources and data sources to documentation

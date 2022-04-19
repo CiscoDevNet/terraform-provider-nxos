@@ -29,7 +29,7 @@ provider "nxos" {
 - `insecure` (Boolean) Allow insecure HTTPS client. This can also be set as the NXOS_INSECURE environment variable. Defaults to `true`.
 - `password` (String, Sensitive) Password for the NXOS device account. This can also be set as the NXOS_PASSWORD environment variable.
 - `retries` (Number) Number of retries for REST API calls. This can also be set as the NXOS_RETRIES environment variable. Defaults to `3`.
-- `url` (String) URL of the Cisco NXOS device. This can also be set as the NXOS_URL environment variable.
+- `url` (String) URL of the Cisco NXOS device. This can also be set as the NXOS_URL environment variable. if no URL is specified, the URL of the first device from the `devices` list is being used.
 - `username` (String) Username for the NXOS device account. This can also be set as the NXOS_USERNAME environment variable.
 
 <a id="nestedatt--devices"></a>

@@ -1,0 +1,16 @@
+---
+subcategory: "Guides"
+page_title: "Supported Objects"
+description: |-
+    Supported Objects.
+---
+
+# Supported Objects
+
+For the following DME objects a corresponding Terraform resource and data source exists. All other objects can be managed with the `nxos_rest` [resource](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/rest).
+
+| DME object | Terraform Resource | Terraform Data Source |
+|------------|--------------------|-----------------------|
+{{- range .}}
+| [{{.ClassName}}](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/{{.DocPath}}) | [nxos_{{snakeCase .Name}}](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/{{snakeCase .Name}}) | [nxos_{{snakeCase .Name}}](https://registry.terraform.io/providers/netascode/nxos/latest/docs/data-sources/{{snakeCase .Name}}) |
+{{- end}}

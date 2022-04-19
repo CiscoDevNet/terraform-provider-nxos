@@ -22,6 +22,8 @@ const (
 	definitionsPath  = "./gen/definitions/"
 	providerTemplate = "./gen/templates/provider.go"
 	providerLocation = "./internal/provider/provider.go"
+	objectsTemplate  = "./gen/templates/supported_objects.md.tmpl"
+	objectsLocation  = "./templates/guides/supported_objects.md.tmpl"
 )
 
 type t struct {
@@ -262,4 +264,5 @@ func main() {
 	}
 
 	renderTemplate(providerTemplate, providerLocation, configs)
+	renderTemplate(objectsTemplate, objectsLocation, configs)
 }

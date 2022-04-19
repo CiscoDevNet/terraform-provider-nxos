@@ -1,3 +1,7 @@
+## 0.3.5 (unreleased)
+
+- URL provider configuration attribute is now optional
+
 ## 0.3.4
 
 - Add nxos_bgp_peer_address_family resource and data source

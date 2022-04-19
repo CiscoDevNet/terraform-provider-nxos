@@ -63,7 +63,7 @@ func (p *provider) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostic
 				Sensitive:           true,
 			},
 			"url": {
-				MarkdownDescription: "URL of the Cisco NXOS device. This can also be set as the NXOS_URL environment variable.",
+				MarkdownDescription: "URL of the Cisco NXOS device. This can also be set as the NXOS_URL environment variable. if no URL is specified, the URL of the first device from the `devices` list is being used.",
 				Type:                types.StringType,
 				Optional:            true,
 			},
@@ -176,6 +176,9 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 		url = os.Getenv("NXOS_URL")
 	} else {
 		url = config.URL.Value
+		if url == "" && len(config.Devices) > 0 {
+			url = config.Devices[0].URL.Value
+		}
 	}
 
 	if url == "" {

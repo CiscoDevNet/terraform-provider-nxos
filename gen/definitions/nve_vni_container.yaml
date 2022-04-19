@@ -10,7 +10,6 @@ parents:
   - NVE Interface
 children:
   - NVE VNI
-attributes:
 test_prerequisites:
   - dn: sys/fm/nvo
     class_name: fmNvo

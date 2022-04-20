@@ -9,7 +9,7 @@ require (
 	github.com/hashicorp/terraform-plugin-log v0.3.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.14.0
 	github.com/netascode/go-nxos v0.2.2
-	github.com/tidwall/gjson v1.14.0
+	github.com/tidwall/gjson v1.14.1
 )
 
 require (

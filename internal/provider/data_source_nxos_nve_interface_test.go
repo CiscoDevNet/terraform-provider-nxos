@@ -23,7 +23,7 @@ func TestAccDataSourceNxosNVEInterface(t *testing.T) {
 					resource.TestCheckResourceAttr("data.nxos_nve_interface.test", "ingress_replication_protocol_bgp", "true"),
 					resource.TestCheckResourceAttr("data.nxos_nve_interface.test", "multisite_source_interface", "unspecified"),
 					resource.TestCheckResourceAttr("data.nxos_nve_interface.test", "source_interface", "lo0"),
-					resource.TestCheckResourceAttr("data.nxos_nve_interface.test", "supress_mac_route", "true"),
+					resource.TestCheckResourceAttr("data.nxos_nve_interface.test", "suppress_mac_route", "true"),
 				),
 			},
 		},
@@ -60,7 +60,7 @@ resource "nxos_nve_interface" "test" {
   ingress_replication_protocol_bgp = true
   multisite_source_interface = "unspecified"
   source_interface = "lo0"
-  supress_mac_route = true
+  suppress_mac_route = true
   depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 }
 

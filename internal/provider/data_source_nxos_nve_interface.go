@@ -67,7 +67,7 @@ func (t dataSourceNVEInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema
 				Type:                types.StringType,
 				Computed:            true,
 			},
-			"supress_mac_route": {
+			"suppress_mac_route": {
 				MarkdownDescription: "Suppress MAC Route.",
 				Type:                types.BoolType,
 				Computed:            true,

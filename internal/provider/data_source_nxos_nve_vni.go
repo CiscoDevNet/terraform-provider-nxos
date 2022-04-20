@@ -52,7 +52,7 @@ func (t dataSourceNVEVNIType) GetSchema(ctx context.Context) (tfsdk.Schema, diag
 				Type:                types.StringType,
 				Computed:            true,
 			},
-			"supress_arp": {
+			"suppress_arp": {
 				MarkdownDescription: "Enable or disable ARP suppression for VNI(s).",
 				Type:                types.StringType,
 				Computed:            true,

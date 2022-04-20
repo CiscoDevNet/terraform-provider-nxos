@@ -3,5 +3,5 @@ resource "nxos_nve_vni" "example" {
   associate_vrf                  = false
   multicast_group                = "239.1.1.1"
   multisite_ingrress_replication = "disable"
-  supress_arp                    = "off"
+  suppress_arp                   = "off"
 }

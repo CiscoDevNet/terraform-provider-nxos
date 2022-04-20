@@ -108,7 +108,7 @@ func (t resourceNVEInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 					helpers.StringDefaultModifier("unspecified"),
 				},
 			},
-			"supress_mac_route": {
+			"suppress_mac_route": {
 				MarkdownDescription: helpers.NewAttributeDescription("Suppress MAC Route.").AddDefaultValueDescription("false").String,
 				Type:                types.BoolType,
 				Optional:            true,

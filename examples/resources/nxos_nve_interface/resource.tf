@@ -6,5 +6,5 @@ resource "nxos_nve_interface" "example" {
   ingress_replication_protocol_bgp = true
   multisite_source_interface       = "unspecified"
   source_interface                 = "lo0"
-  supress_mac_route                = true
+  suppress_mac_route               = true
 }

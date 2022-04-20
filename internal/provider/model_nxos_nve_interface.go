@@ -21,7 +21,7 @@ type NVEInterface struct {
 	IngressReplProtoBGP        types.Bool   `tfsdk:"ingress_replication_protocol_bgp"`
 	MultisiteBordergwInterface types.String `tfsdk:"multisite_source_interface"`
 	SourceInterface            types.String `tfsdk:"source_interface"`
-	SuppressMacRoute           types.Bool   `tfsdk:"supress_mac_route"`
+	SuppressMacRoute           types.Bool   `tfsdk:"suppress_mac_route"`
 }
 
 func (data NVEInterface) getDn() string {

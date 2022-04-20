@@ -30,7 +30,7 @@ resource "nxos_nve_interface" "example" {
   ingress_replication_protocol_bgp = true
   multisite_source_interface       = "unspecified"
   source_interface                 = "lo0"
-  supress_mac_route                = true
+  suppress_mac_route               = true
 }
 ```
 
@@ -57,7 +57,7 @@ resource "nxos_nve_interface" "example" {
   - Default value: `unspecified`
 - `source_interface` (String) Source Interface associated with the NVE. Must match first field in the output of `show int brief`.
   - Default value: `unspecified`
-- `supress_mac_route` (Boolean) Suppress MAC Route.
+- `suppress_mac_route` (Boolean) Suppress MAC Route.
   - Default value: `false`
 
 ### Read-Only

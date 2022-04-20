@@ -63,7 +63,7 @@ attributes:
     default_value: 'unspecified'
     example: 'lo0'
   - nxos_name: suppressMacRoute
-    tf_name: supress_mac_route
+    tf_name: suppress_mac_route
     type: Bool
     description: 'Suppress MAC Route.'
     default_value: false

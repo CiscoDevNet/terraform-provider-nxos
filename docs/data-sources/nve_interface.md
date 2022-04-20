@@ -37,6 +37,6 @@ data "nxos_nve_interface" "example" {
 - `ingress_replication_protocol_bgp` (Boolean) VxLAN Ingress Replication Protocol BGP.
 - `multisite_source_interface` (String) Interface representing the Multisite Border Gateway. Must match first field in the output of `show int brief`.
 - `source_interface` (String) Source Interface associated with the NVE. Must match first field in the output of `show int brief`.
-- `supress_mac_route` (Boolean) Suppress MAC Route.
+- `suppress_mac_route` (Boolean) Suppress MAC Route.
 
 

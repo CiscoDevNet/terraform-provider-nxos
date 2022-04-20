@@ -10,6 +10,12 @@ description: |-
 
 The NXOS provider provides resources to interact with one or [more](https://registry.terraform.io/providers/netascode/nxos/latest/docs/guides/manage_multiple_devices) Cisco NX-OS devices.
 
+It communicates with NX-OS devices via the NX-API REST, which requires the following device configuration.
+
+```
+feature nxapi
+```
+
 ## Example Usage
 
 ```terraform
@@ -29,7 +35,7 @@ provider "nxos" {
 - `insecure` (Boolean) Allow insecure HTTPS client. This can also be set as the NXOS_INSECURE environment variable. Defaults to `true`.
 - `password` (String, Sensitive) Password for the NXOS device account. This can also be set as the NXOS_PASSWORD environment variable.
 - `retries` (Number) Number of retries for REST API calls. This can also be set as the NXOS_RETRIES environment variable. Defaults to `3`.
-- `url` (String) URL of the Cisco NXOS device. This can also be set as the NXOS_URL environment variable. if no URL is specified, the URL of the first device from the `devices` list is being used.
+- `url` (String) URL of the Cisco NXOS device. This can also be set as the NXOS_URL environment variable. If no URL is provided, the URL of the first device from the `devices` list is being used.
 - `username` (String) Username for the NXOS device account. This can also be set as the NXOS_USERNAME environment variable.
 
 <a id="nestedatt--devices"></a>

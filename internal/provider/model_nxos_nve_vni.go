@@ -20,7 +20,7 @@ type NVEVNI struct {
 	AssociateVrfFlag types.Bool   `tfsdk:"associate_vrf"`
 	McastGroup       types.String `tfsdk:"multicast_group"`
 	MultisiteIngRepl types.String `tfsdk:"multisite_ingrress_replication"`
-	SuppressARP      types.String `tfsdk:"supress_arp"`
+	SuppressARP      types.String `tfsdk:"suppress_arp"`
 }
 
 func (data NVEVNI) getDn() string {

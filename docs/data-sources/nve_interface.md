@@ -35,8 +35,11 @@ data "nxos_nve_interface" "example" {
 - `host_reachability_protocol` (String) Host Reachability Protocol.
 - `id` (String) The distinguished name of the object.
 - `ingress_replication_protocol_bgp` (Boolean) VxLAN Ingress Replication Protocol BGP.
+- `multicast_group_l2` (String) Base multicast group address for L2.
+- `multicast_group_l3` (String) Base multicast group address for L3.
 - `multisite_source_interface` (String) Interface representing the Multisite Border Gateway. Must match first field in the output of `show int brief`.
 - `source_interface` (String) Source Interface associated with the NVE. Must match first field in the output of `show int brief`.
-- `supress_mac_route` (Boolean) Suppress MAC Route.
+- `suppress_arp` (Boolean) Suppress ARP.
+- `suppress_mac_route` (Boolean) Suppress MAC Route.
 
 

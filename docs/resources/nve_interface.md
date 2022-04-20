@@ -28,9 +28,12 @@ resource "nxos_nve_interface" "example" {
   hold_down_time                   = 60
   host_reachability_protocol       = "bgp"
   ingress_replication_protocol_bgp = true
+  multicast_group_l2               = "0.0.0.0"
+  multicast_group_l3               = "0.0.0.0"
   multisite_source_interface       = "unspecified"
   source_interface                 = "lo0"
-  supress_mac_route                = true
+  suppress_arp                     = true
+  suppress_mac_route               = true
 }
 ```
 
@@ -53,11 +56,17 @@ resource "nxos_nve_interface" "example" {
   - Default value: `Flood-and-learn`
 - `ingress_replication_protocol_bgp` (Boolean) VxLAN Ingress Replication Protocol BGP.
   - Default value: `false`
+- `multicast_group_l2` (String) Base multicast group address for L2.
+  - Default value: `0.0.0.0`
+- `multicast_group_l3` (String) Base multicast group address for L3.
+  - Default value: `0.0.0.0`
 - `multisite_source_interface` (String) Interface representing the Multisite Border Gateway. Must match first field in the output of `show int brief`.
   - Default value: `unspecified`
 - `source_interface` (String) Source Interface associated with the NVE. Must match first field in the output of `show int brief`.
   - Default value: `unspecified`
-- `supress_mac_route` (Boolean) Suppress MAC Route.
+- `suppress_arp` (Boolean) Suppress ARP.
+  - Default value: `false`
+- `suppress_mac_route` (Boolean) Suppress MAC Route.
   - Default value: `false`
 
 ### Read-Only

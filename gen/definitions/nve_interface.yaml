@@ -50,6 +50,18 @@ attributes:
     description: 'VxLAN Ingress Replication Protocol BGP.'
     default_value: false
     example: true
+  - nxos_name: mcastGroupL2
+    tf_name: multicast_group_l2
+    type: String
+    description: 'Base multicast group address for L2.'
+    default_value: '0.0.0.0'
+    example: '0.0.0.0'
+  - nxos_name: mcastGroupL3
+    tf_name: multicast_group_l3
+    type: String
+    description: 'Base multicast group address for L3.'
+    default_value: '0.0.0.0'
+    example: '0.0.0.0'
   - nxos_name: multisiteBordergwInterface
     tf_name: multisite_source_interface
     type: String
@@ -62,8 +74,14 @@ attributes:
     description: 'Source Interface associated with the NVE. Must match first field in the output of `show int brief`.'
     default_value: 'unspecified'
     example: 'lo0'
+  - nxos_name: suppressARP
+    tf_name: suppress_arp
+    type: Bool
+    description: 'Suppress ARP.'
+    default_value: false
+    example: true
   - nxos_name: suppressMacRoute
-    tf_name: supress_mac_route
+    tf_name: suppress_mac_route
     type: Bool
     description: 'Suppress MAC Route.'
     default_value: false

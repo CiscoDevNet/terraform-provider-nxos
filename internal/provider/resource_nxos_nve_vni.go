@@ -53,14 +53,17 @@ func (t resourceNVEVNIType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.D
 				Optional:            true,
 				Computed:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					helpers.BooleanDefaultModifier(false),
+					tfsdk.RequiresReplace(),
 				},
 			},
 			"multicast_group": {
-				MarkdownDescription: helpers.NewAttributeDescription("Configures multicast group address for VNI.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configures multicast group address for VNI.").AddDefaultValueDescription("0.0.0.0").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					helpers.StringDefaultModifier("0.0.0.0"),
+				},
 			},
 			"multisite_ingrress_replication": {
 				MarkdownDescription: helpers.NewAttributeDescription("Enable or disable Multisite Ingress Replication for VNI(s).").AddStringEnumDescription("enable", "disable", "enableOptimized").AddDefaultValueDescription("disable").String,
@@ -74,7 +77,7 @@ func (t resourceNVEVNIType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.D
 					helpers.StringDefaultModifier("disable"),
 				},
 			},
-			"supress_arp": {
+			"suppress_arp": {
 				MarkdownDescription: helpers.NewAttributeDescription("Enable or disable ARP suppression for VNI(s).").AddStringEnumDescription("enabled", "disabled", "off").AddDefaultValueDescription("off").String,
 				Type:                types.StringType,
 				Optional:            true,

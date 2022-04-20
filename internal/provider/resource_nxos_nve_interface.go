@@ -90,6 +90,24 @@ func (t resourceNVEInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 					helpers.BooleanDefaultModifier(false),
 				},
 			},
+			"multicast_group_l2": {
+				MarkdownDescription: helpers.NewAttributeDescription("Base multicast group address for L2.").AddDefaultValueDescription("0.0.0.0").String,
+				Type:                types.StringType,
+				Optional:            true,
+				Computed:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					helpers.StringDefaultModifier("0.0.0.0"),
+				},
+			},
+			"multicast_group_l3": {
+				MarkdownDescription: helpers.NewAttributeDescription("Base multicast group address for L3.").AddDefaultValueDescription("0.0.0.0").String,
+				Type:                types.StringType,
+				Optional:            true,
+				Computed:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					helpers.StringDefaultModifier("0.0.0.0"),
+				},
+			},
 			"multisite_source_interface": {
 				MarkdownDescription: helpers.NewAttributeDescription("Interface representing the Multisite Border Gateway. Must match first field in the output of `show int brief`.").AddDefaultValueDescription("unspecified").String,
 				Type:                types.StringType,
@@ -108,7 +126,16 @@ func (t resourceNVEInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 					helpers.StringDefaultModifier("unspecified"),
 				},
 			},
-			"supress_mac_route": {
+			"suppress_arp": {
+				MarkdownDescription: helpers.NewAttributeDescription("Suppress ARP.").AddDefaultValueDescription("false").String,
+				Type:                types.BoolType,
+				Optional:            true,
+				Computed:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					helpers.BooleanDefaultModifier(false),
+				},
+			},
+			"suppress_mac_route": {
 				MarkdownDescription: helpers.NewAttributeDescription("Suppress MAC Route.").AddDefaultValueDescription("false").String,
 				Type:                types.BoolType,
 				Optional:            true,

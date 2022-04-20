@@ -21,9 +21,12 @@ func TestAccDataSourceNxosNVEInterface(t *testing.T) {
 					resource.TestCheckResourceAttr("data.nxos_nve_interface.test", "hold_down_time", "60"),
 					resource.TestCheckResourceAttr("data.nxos_nve_interface.test", "host_reachability_protocol", "bgp"),
 					resource.TestCheckResourceAttr("data.nxos_nve_interface.test", "ingress_replication_protocol_bgp", "true"),
+					resource.TestCheckResourceAttr("data.nxos_nve_interface.test", "multicast_group_l2", "0.0.0.0"),
+					resource.TestCheckResourceAttr("data.nxos_nve_interface.test", "multicast_group_l3", "0.0.0.0"),
 					resource.TestCheckResourceAttr("data.nxos_nve_interface.test", "multisite_source_interface", "unspecified"),
 					resource.TestCheckResourceAttr("data.nxos_nve_interface.test", "source_interface", "lo0"),
-					resource.TestCheckResourceAttr("data.nxos_nve_interface.test", "supress_mac_route", "true"),
+					resource.TestCheckResourceAttr("data.nxos_nve_interface.test", "suppress_arp", "true"),
+					resource.TestCheckResourceAttr("data.nxos_nve_interface.test", "suppress_mac_route", "true"),
 				),
 			},
 		},
@@ -58,9 +61,12 @@ resource "nxos_nve_interface" "test" {
   hold_down_time = 60
   host_reachability_protocol = "bgp"
   ingress_replication_protocol_bgp = true
+  multicast_group_l2 = "0.0.0.0"
+  multicast_group_l3 = "0.0.0.0"
   multisite_source_interface = "unspecified"
   source_interface = "lo0"
-  supress_mac_route = true
+  suppress_arp = true
+  suppress_mac_route = true
   depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 }
 

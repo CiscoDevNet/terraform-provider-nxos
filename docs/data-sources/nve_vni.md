@@ -38,6 +38,6 @@ data "nxos_nve_vni" "example" {
 - `id` (String) The distinguished name of the object.
 - `multicast_group` (String) Configures multicast group address for VNI.
 - `multisite_ingrress_replication` (String) Enable or disable Multisite Ingress Replication for VNI(s).
-- `supress_arp` (String) Enable or disable ARP suppression for VNI(s).
+- `suppress_arp` (String) Enable or disable ARP suppression for VNI(s).
 
 

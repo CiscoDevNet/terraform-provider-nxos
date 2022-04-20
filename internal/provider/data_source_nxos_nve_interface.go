@@ -57,6 +57,16 @@ func (t dataSourceNVEInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema
 				Type:                types.BoolType,
 				Computed:            true,
 			},
+			"multicast_group_l2": {
+				MarkdownDescription: "Base multicast group address for L2.",
+				Type:                types.StringType,
+				Computed:            true,
+			},
+			"multicast_group_l3": {
+				MarkdownDescription: "Base multicast group address for L3.",
+				Type:                types.StringType,
+				Computed:            true,
+			},
 			"multisite_source_interface": {
 				MarkdownDescription: "Interface representing the Multisite Border Gateway. Must match first field in the output of `show int brief`.",
 				Type:                types.StringType,
@@ -67,7 +77,12 @@ func (t dataSourceNVEInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema
 				Type:                types.StringType,
 				Computed:            true,
 			},
-			"supress_mac_route": {
+			"suppress_arp": {
+				MarkdownDescription: "Suppress ARP.",
+				Type:                types.BoolType,
+				Computed:            true,
+			},
+			"suppress_mac_route": {
 				MarkdownDescription: "Suppress MAC Route.",
 				Type:                types.BoolType,
 				Computed:            true,

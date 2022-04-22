@@ -26,7 +26,7 @@ func TestAccNxosNVEInterface(t *testing.T) {
 					resource.TestCheckResourceAttr("nxos_nve_interface.test", "multisite_source_interface", "unspecified"),
 					resource.TestCheckResourceAttr("nxos_nve_interface.test", "source_interface", "lo0"),
 					resource.TestCheckResourceAttr("nxos_nve_interface.test", "suppress_arp", "true"),
-					resource.TestCheckResourceAttr("nxos_nve_interface.test", "suppress_mac_route", "true"),
+					resource.TestCheckResourceAttr("nxos_nve_interface.test", "suppress_mac_route", "false"),
 				),
 			},
 			{
@@ -79,7 +79,7 @@ func testAccNxosNVEInterfaceConfig_all() string {
 		multisite_source_interface = "unspecified"
 		source_interface = "lo0"
 		suppress_arp = true
-		suppress_mac_route = true
+		suppress_mac_route = false
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`

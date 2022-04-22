@@ -85,7 +85,7 @@ attributes:
     type: Bool
     description: 'Suppress MAC Route.'
     default_value: false
-    example: true
+    example: false
 test_prerequisites:
   - dn: sys/fm/nvo
     class_name: fmNvo

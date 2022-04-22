@@ -9,5 +9,5 @@ resource "nxos_nve_interface" "example" {
   multisite_source_interface       = "unspecified"
   source_interface                 = "lo0"
   suppress_arp                     = true
-  suppress_mac_route               = true
+  suppress_mac_route               = false
 }

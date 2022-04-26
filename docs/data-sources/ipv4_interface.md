@@ -36,6 +36,8 @@ data "nxos_ipv4_interface" "example" {
 
 ### Read-Only
 
+- `drop_glean` (String) ip drop-glean enabled/disabled.
+- `forward` (String) ip forward enabled/disabled.
 - `id` (String) The distinguished name of the object.
 - `unnumbered` (String) IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `urpf` (String) URPF (unicast Reverse Path Forwarding).

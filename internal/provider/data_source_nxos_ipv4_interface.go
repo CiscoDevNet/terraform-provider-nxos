@@ -42,6 +42,16 @@ func (t dataSourceIPv4InterfaceType) GetSchema(ctx context.Context) (tfsdk.Schem
 				Type:                types.StringType,
 				Required:            true,
 			},
+			"drop_glean": {
+				MarkdownDescription: "ip drop-glean enabled/disabled.",
+				Type:                types.StringType,
+				Computed:            true,
+			},
+			"forward": {
+				MarkdownDescription: "ip forward enabled/disabled.",
+				Type:                types.StringType,
+				Computed:            true,
+			},
 			"unnumbered": {
 				MarkdownDescription: "IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.",
 				Type:                types.StringType,

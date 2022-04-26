@@ -18,6 +18,8 @@ func TestAccNxosIPv4Interface(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "vrf", "default"),
 					resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "interface_id", "eth1/10"),
+					resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "drop_glean", "disabled"),
+					resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "forward", "disabled"),
 					resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "unnumbered", "unspecified"),
 					resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "urpf", "disabled"),
 				),
@@ -56,6 +58,8 @@ func testAccNxosIPv4InterfaceConfig_all() string {
 	resource "nxos_ipv4_interface" "test" {
 		vrf = "default"
 		interface_id = "eth1/10"
+		drop_glean = "disabled"
+		forward = "disabled"
 		unnumbered = "unspecified"
 		urpf = "disabled"
   		depends_on = [nxos_rest.PreReq0, ]

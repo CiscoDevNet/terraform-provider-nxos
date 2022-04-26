@@ -52,6 +52,30 @@ func (t resourceIPv4InterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema,
 					tfsdk.RequiresReplace(),
 				},
 			},
+			"drop_glean": {
+				MarkdownDescription: helpers.NewAttributeDescription("ip drop-glean enabled/disabled.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+				Type:                types.StringType,
+				Optional:            true,
+				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("enabled", "disabled"),
+				},
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					helpers.StringDefaultModifier("disabled"),
+				},
+			},
+			"forward": {
+				MarkdownDescription: helpers.NewAttributeDescription("ip forward enabled/disabled.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+				Type:                types.StringType,
+				Optional:            true,
+				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("enabled", "disabled"),
+				},
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					helpers.StringDefaultModifier("disabled"),
+				},
+			},
 			"unnumbered": {
 				MarkdownDescription: helpers.NewAttributeDescription("IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.").AddDefaultValueDescription("unspecified").String,
 				Type:                types.StringType,

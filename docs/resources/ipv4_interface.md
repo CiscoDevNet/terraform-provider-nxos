@@ -31,6 +31,8 @@ This resource can manage an IPv4 interface.
 resource "nxos_ipv4_interface" "example" {
   vrf          = "default"
   interface_id = "eth1/10"
+  drop_glean   = "disabled"
+  forward      = "disabled"
   unnumbered   = "unspecified"
   urpf         = "disabled"
 }
@@ -47,6 +49,12 @@ resource "nxos_ipv4_interface" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
+- `drop_glean` (String) ip drop-glean enabled/disabled.
+  - Choices: `enabled`, `disabled`
+  - Default value: `disabled`
+- `forward` (String) ip forward enabled/disabled.
+  - Choices: `enabled`, `disabled`
+  - Default value: `disabled`
 - `unnumbered` (String) IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.
   - Default value: `unspecified`
 - `urpf` (String) URPF (unicast Reverse Path Forwarding).

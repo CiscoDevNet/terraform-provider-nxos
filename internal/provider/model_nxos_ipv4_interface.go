@@ -15,6 +15,8 @@ type IPv4Interface struct {
 	Dn         types.String `tfsdk:"id"`
 	Dom        types.String `tfsdk:"vrf"`
 	Id         types.String `tfsdk:"interface_id"`
+	DropGlean  types.String `tfsdk:"drop_glean"`
+	Forward    types.String `tfsdk:"forward"`
 	Unnumbered types.String `tfsdk:"unnumbered"`
 	Urpf       types.String `tfsdk:"urpf"`
 }
@@ -30,6 +32,8 @@ func (data IPv4Interface) getClassName() string {
 func (data IPv4Interface) toBody() nxos.Body {
 	attrs := nxos.Body{}.
 		Set("id", data.Id.Value).
+		Set("dropGlean", data.DropGlean.Value).
+		Set("forward", data.Forward.Value).
 		Set("unnumbered", data.Unnumbered.Value).
 		Set("urpf", data.Urpf.Value)
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
@@ -38,6 +42,8 @@ func (data IPv4Interface) toBody() nxos.Body {
 func (data *IPv4Interface) fromBody(res gjson.Result) {
 	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Id.Value = res.Get("*.attributes.id").String()
+	data.DropGlean.Value = res.Get("*.attributes.dropGlean").String()
+	data.Forward.Value = res.Get("*.attributes.forward").String()
 	data.Unnumbered.Value = res.Get("*.attributes.unnumbered").String()
 	data.Urpf.Value = res.Get("*.attributes.urpf").String()
 }

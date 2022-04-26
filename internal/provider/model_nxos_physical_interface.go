@@ -26,6 +26,8 @@ type PhysicalInterface struct {
 	Duplex                 types.String `tfsdk:"duplex"`
 	Layer                  types.String `tfsdk:"layer"`
 	LinkLog                types.String `tfsdk:"link_logging"`
+	LinkDebounce           types.Int64  `tfsdk:"link_debounce_down"`
+	LinkDebounceLinkUp     types.Int64  `tfsdk:"link_debounce_up"`
 	Medium                 types.String `tfsdk:"medium"`
 	Mode                   types.String `tfsdk:"mode"`
 	Mtu                    types.Int64  `tfsdk:"mtu"`
@@ -34,6 +36,7 @@ type PhysicalInterface struct {
 	SpeedGroup             types.String `tfsdk:"speed_group"`
 	TrunkVlans             types.String `tfsdk:"trunk_vlans"`
 	UniDirectionalEthernet types.String `tfsdk:"uni_directional_ethernet"`
+	UserCfgdFlags          types.String `tfsdk:"user_configured_flags"`
 }
 
 func (data PhysicalInterface) getDn() string {
@@ -57,6 +60,8 @@ func (data PhysicalInterface) toBody() nxos.Body {
 		Set("duplex", data.Duplex.Value).
 		Set("layer", data.Layer.Value).
 		Set("linkLog", data.LinkLog.Value).
+		Set("linkDebounce", strconv.FormatInt(data.LinkDebounce.Value, 10)).
+		Set("linkDebounceLinkUp", strconv.FormatInt(data.LinkDebounceLinkUp.Value, 10)).
 		Set("medium", data.Medium.Value).
 		Set("mode", data.Mode.Value).
 		Set("mtu", strconv.FormatInt(data.Mtu.Value, 10)).
@@ -64,7 +69,8 @@ func (data PhysicalInterface) toBody() nxos.Body {
 		Set("speed", data.Speed.Value).
 		Set("speedGroup", data.SpeedGroup.Value).
 		Set("trunkVlans", data.TrunkVlans.Value).
-		Set("uniDirectionalEthernet", data.UniDirectionalEthernet.Value)
+		Set("uniDirectionalEthernet", data.UniDirectionalEthernet.Value).
+		Set("userCfgdFlags", data.UserCfgdFlags.Value)
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
@@ -81,6 +87,8 @@ func (data *PhysicalInterface) fromBody(res gjson.Result) {
 	data.Duplex.Value = res.Get("*.attributes.duplex").String()
 	data.Layer.Value = res.Get("*.attributes.layer").String()
 	data.LinkLog.Value = res.Get("*.attributes.linkLog").String()
+	data.LinkDebounce.Value = res.Get("*.attributes.linkDebounce").Int()
+	data.LinkDebounceLinkUp.Value = res.Get("*.attributes.linkDebounceLinkUp").Int()
 	data.Medium.Value = res.Get("*.attributes.medium").String()
 	data.Mode.Value = res.Get("*.attributes.mode").String()
 	data.Mtu.Value = res.Get("*.attributes.mtu").Int()
@@ -89,6 +97,7 @@ func (data *PhysicalInterface) fromBody(res gjson.Result) {
 	data.SpeedGroup.Value = res.Get("*.attributes.speedGroup").String()
 	data.TrunkVlans.Value = res.Get("*.attributes.trunkVlans").String()
 	data.UniDirectionalEthernet.Value = res.Get("*.attributes.uniDirectionalEthernet").String()
+	data.UserCfgdFlags.Value = res.Get("*.attributes.userCfgdFlags").String()
 }
 
 func (data *PhysicalInterface) fromPlan(plan PhysicalInterface) {

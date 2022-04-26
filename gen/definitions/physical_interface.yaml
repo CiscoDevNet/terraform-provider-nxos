@@ -104,6 +104,22 @@ attributes:
       - disable
     default_value: default
     example: enable
+  - nxos_name: linkDebounce
+    tf_name: link_debounce_down
+    type: Int64
+    description: 'Administrative port link debounce interval.'
+    min_int: 0
+    max_int: 20000
+    default_value: 100
+    example: 200
+  - nxos_name: linkDebounceLinkUp
+    tf_name: link_debounce_up
+    type: Int64
+    description: 'Link Debounce Interval - LinkUp Event.'
+    min_int: 0
+    max_int: 20000
+    default_value: 0
+    example: 0
   - nxos_name: medium
     tf_name: medium
     type: String
@@ -197,3 +213,8 @@ attributes:
       - receive-only
     default_value: disable
     example: disable
+  - nxos_name: userCfgdFlags
+    tf_name: user_configured_flags
+    type: String
+    description: 'Port User Config Flags.'
+    example: 'admin_layer,admin_mtu,admin_state'

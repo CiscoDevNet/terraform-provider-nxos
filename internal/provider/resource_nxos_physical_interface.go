@@ -155,6 +155,30 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 					helpers.StringDefaultModifier("default"),
 				},
 			},
+			"link_debounce_down": {
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative port link debounce interval.").AddIntegerRangeDescription(0, 20000).AddDefaultValueDescription("100").String,
+				Type:                types.Int64Type,
+				Optional:            true,
+				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.IntegerRangeValidator(0, 20000),
+				},
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					helpers.IntegerDefaultModifier(100),
+				},
+			},
+			"link_debounce_up": {
+				MarkdownDescription: helpers.NewAttributeDescription("Link Debounce Interval - LinkUp Event.").AddIntegerRangeDescription(0, 20000).AddDefaultValueDescription("0").String,
+				Type:                types.Int64Type,
+				Optional:            true,
+				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.IntegerRangeValidator(0, 20000),
+				},
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					helpers.IntegerDefaultModifier(0),
+				},
+			},
 			"medium": {
 				MarkdownDescription: helpers.NewAttributeDescription("The administrative port medium type.").AddStringEnumDescription("broadcast", "p2p").AddDefaultValueDescription("broadcast").String,
 				Type:                types.StringType,
@@ -244,6 +268,12 @@ func (t resourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.Sch
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("disable"),
 				},
+			},
+			"user_configured_flags": {
+				MarkdownDescription: helpers.NewAttributeDescription("Port User Config Flags.").String,
+				Type:                types.StringType,
+				Optional:            true,
+				Computed:            true,
 			},
 		},
 	}, nil

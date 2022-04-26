@@ -87,6 +87,16 @@ func (t dataSourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.S
 				Type:                types.StringType,
 				Computed:            true,
 			},
+			"link_debounce_down": {
+				MarkdownDescription: "Administrative port link debounce interval.",
+				Type:                types.Int64Type,
+				Computed:            true,
+			},
+			"link_debounce_up": {
+				MarkdownDescription: "Link Debounce Interval - LinkUp Event.",
+				Type:                types.Int64Type,
+				Computed:            true,
+			},
 			"medium": {
 				MarkdownDescription: "The administrative port medium type.",
 				Type:                types.StringType,
@@ -124,6 +134,11 @@ func (t dataSourcePhysicalInterfaceType) GetSchema(ctx context.Context) (tfsdk.S
 			},
 			"uni_directional_ethernet": {
 				MarkdownDescription: "UDE (Uni-Directional Ethernet).",
+				Type:                types.StringType,
+				Computed:            true,
+			},
+			"user_configured_flags": {
+				MarkdownDescription: "Port User Config Flags.",
 				Type:                types.StringType,
 				Computed:            true,
 			},

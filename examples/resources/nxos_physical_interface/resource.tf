@@ -10,6 +10,8 @@ resource "nxos_physical_interface" "example" {
   duplex                   = "auto"
   layer                    = "Layer3"
   link_logging             = "enable"
+  link_debounce_down       = 200
+  link_debounce_up         = 0
   medium                   = "broadcast"
   mode                     = "access"
   mtu                      = 1500
@@ -18,4 +20,5 @@ resource "nxos_physical_interface" "example" {
   speed_group              = "auto"
   trunk_vlans              = "1-4094"
   uni_directional_ethernet = "disable"
+  user_configured_flags    = "admin_layer,admin_mtu,admin_state"
 }

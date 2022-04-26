@@ -34,6 +34,8 @@ resource "nxos_physical_interface" "example" {
   duplex                   = "auto"
   layer                    = "Layer3"
   link_logging             = "enable"
+  link_debounce_down       = 200
+  link_debounce_up         = 0
   medium                   = "broadcast"
   mode                     = "access"
   mtu                      = 1500
@@ -42,6 +44,7 @@ resource "nxos_physical_interface" "example" {
   speed_group              = "auto"
   trunk_vlans              = "1-4094"
   uni_directional_ethernet = "disable"
+  user_configured_flags    = "admin_layer,admin_mtu,admin_state"
 }
 ```
 
@@ -79,6 +82,12 @@ resource "nxos_physical_interface" "example" {
 - `layer` (String) Administrative port layer.
   - Choices: `Layer2`, `Layer3`
   - Default value: `Layer2`
+- `link_debounce_down` (Number) Administrative port link debounce interval.
+  - Range: `0`-`20000`
+  - Default value: `100`
+- `link_debounce_up` (Number) Link Debounce Interval - LinkUp Event.
+  - Range: `0`-`20000`
+  - Default value: `0`
 - `link_logging` (String) Administrative link logging.
   - Choices: `default`, `enable`, `disable`
   - Default value: `default`
@@ -104,6 +113,7 @@ resource "nxos_physical_interface" "example" {
 - `uni_directional_ethernet` (String) UDE (Uni-Directional Ethernet).
   - Choices: `disable`, `send-only`, `receive-only`
   - Default value: `disable`
+- `user_configured_flags` (String) Port User Config Flags.
 
 ### Read-Only
 

@@ -32,14 +32,33 @@ func TestAccNxosHMMInterface(t *testing.T) {
 
 const testAccNxosHMMInterfacePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
-  dn = "sys/fm/hmm"
-  class_name = "fmHmm"
+  dn = "sys/fm/ifvlan"
+  class_name = "fmInterfaceVlan"
+  delete = false
   content = {
       adminSt = "enabled"
   }
 }
 
 resource "nxos_rest" "PreReq1" {
+  dn = "sys/intf/svi-[vlan10]"
+  class_name = "sviIf"
+  content = {
+      id = "vlan10"
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+resource "nxos_rest" "PreReq2" {
+  dn = "sys/fm/hmm"
+  class_name = "fmHmm"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq3" {
   dn = "sys/fm/evpn"
   class_name = "fmEvpn"
   content = {
@@ -47,22 +66,22 @@ resource "nxos_rest" "PreReq1" {
   }
 }
 
-resource "nxos_rest" "PreReq2" {
+resource "nxos_rest" "PreReq4" {
   dn = "sys/hmm"
   class_name = "hmmEntity"
   content = {
   }
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
+  depends_on = [nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 }
 
-resource "nxos_rest" "PreReq3" {
+resource "nxos_rest" "PreReq5" {
   dn = "sys/hmm/fwdinst"
   class_name = "hmmFwdInst"
   content = {
       adminSt = "enabled"
       amac = "20:20:00:00:10:10"
   }
-  depends_on = [nxos_rest.PreReq2, ]
+  depends_on = [nxos_rest.PreReq1, nxos_rest.PreReq4, ]
 }
 
 `
@@ -71,7 +90,7 @@ func testAccNxosHMMInterfaceConfig_minimum() string {
 	return `
 	resource "nxos_hmm_interface" "test" {
 		interface_id = "vlan10"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]
 	}
 	`
 }
@@ -82,7 +101,7 @@ func testAccNxosHMMInterfaceConfig_all() string {
 		interface_id = "vlan10"
 		admin_state = "enabled"
 		mode = "anycastGW"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]
 	}
 	`
 }

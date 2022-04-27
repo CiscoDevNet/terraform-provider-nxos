@@ -35,8 +35,21 @@ attributes:
     default_value: standard
     example: anycastGW
 test_prerequisites:
+  - dn: sys/fm/ifvlan
+    class_name: fmInterfaceVlan
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/intf/svi-[vlan10]
+    class_name: sviIf
+    attributes:
+      - name: id
+        value: vlan10
+    dependencies: [0]
   - dn: sys/fm/hmm
     class_name: fmHmm
+    no_delete: true
     attributes:
       - name: adminSt
         value: enabled
@@ -47,7 +60,7 @@ test_prerequisites:
         value: enabled
   - dn: sys/hmm
     class_name: hmmEntity
-    dependencies: [0, 1]
+    dependencies: [2, 3]
   - dn: sys/hmm/fwdinst
     class_name: hmmFwdInst
     attributes:
@@ -55,4 +68,4 @@ test_prerequisites:
         value: enabled
       - name: amac
         value: '20:20:00:00:10:10'
-    dependencies: [2]
+    dependencies: [1, 4]

@@ -1,4 +1,4 @@
-## 0.3.6 (unreleased)
+## 0.3.6
 
 - Add delete attribute to nxos_rest resource
 - Add attributes to nxos_physical_interface resource

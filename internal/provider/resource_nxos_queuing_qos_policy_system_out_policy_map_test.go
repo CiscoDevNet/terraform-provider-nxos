@@ -56,6 +56,7 @@ resource "nxos_rest" "PreReq2" {
 resource "nxos_rest" "PreReq3" {
   dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q1]/prio"
   class_name = "ipqosPriority"
+  delete = false
   content = {
       level = "1"
   }
@@ -74,6 +75,7 @@ resource "nxos_rest" "PreReq4" {
 resource "nxos_rest" "PreReq5" {
   dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q2]/setRemBW"
   class_name = "ipqosSetRemBW"
+  delete = false
   content = {
       val = "10"
   }
@@ -92,6 +94,7 @@ resource "nxos_rest" "PreReq6" {
 resource "nxos_rest" "PreReq7" {
   dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q3]/setRemBW"
   class_name = "ipqosSetRemBW"
+  delete = false
   content = {
       val = "10"
   }
@@ -110,6 +113,7 @@ resource "nxos_rest" "PreReq8" {
 resource "nxos_rest" "PreReq9" {
   dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q-default]/setRemBW"
   class_name = "ipqosSetRemBW"
+  delete = false
   content = {
       val = "10"
   }

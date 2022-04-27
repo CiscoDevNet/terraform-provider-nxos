@@ -37,19 +37,29 @@ func TestAccDataSourceNxosISISVRF(t *testing.T) {
 
 const testAccDataSourceNxosISISVRFPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
-  dn = "sys/isis"
-  class_name = "isisEntity"
+  dn = "sys/fm/isis"
+  class_name = "fmIsis"
+  delete = false
   content = {
+      adminSt = "enabled"
   }
 }
 
 resource "nxos_rest" "PreReq1" {
+  dn = "sys/isis"
+  class_name = "isisEntity"
+  content = {
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+resource "nxos_rest" "PreReq2" {
   dn = "sys/isis/inst-[ISIS1]"
   class_name = "isisInst"
   content = {
       name = "ISIS1"
   }
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_rest.PreReq1, ]
 }
 
 `
@@ -73,7 +83,7 @@ resource "nxos_isis_vrf" "test" {
   mtu = 2000
   net = "49.0001.0000.0000.3333.00"
   passive_default = "l12"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 }
 
 data "nxos_isis_vrf" "test" {

@@ -32,10 +32,20 @@ func TestAccNxosBGPInstance(t *testing.T) {
 
 const testAccNxosBGPInstancePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/bgp"
+  class_name = "fmBgp"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
   dn = "sys/bgp"
   class_name = "bgpEntity"
   content = {
   }
+  depends_on = [nxos_rest.PreReq0, ]
 }
 
 `
@@ -43,7 +53,7 @@ resource "nxos_rest" "PreReq0" {
 func testAccNxosBGPInstanceConfig_minimum() string {
 	return `
 	resource "nxos_bgp_instance" "test" {
-  		depends_on = [nxos_rest.PreReq0, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`
 }
@@ -54,7 +64,7 @@ func testAccNxosBGPInstanceConfig_all() string {
 		admin_state = "enabled"
 		asn = "65001"
 		enhanced_error_handling = false
-  		depends_on = [nxos_rest.PreReq0, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`
 }

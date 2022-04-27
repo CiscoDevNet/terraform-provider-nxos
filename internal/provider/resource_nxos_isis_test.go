@@ -14,7 +14,7 @@ func TestAccNxosISIS(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosISISConfig_all(),
+				Config: testAccNxosISISPrerequisitesConfig + testAccNxosISISConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_isis.test", "admin_state", "enabled"),
 				),
@@ -28,9 +28,22 @@ func TestAccNxosISIS(t *testing.T) {
 	})
 }
 
+const testAccNxosISISPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/isis"
+  class_name = "fmIsis"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+`
+
 func testAccNxosISISConfig_minimum() string {
 	return `
 	resource "nxos_isis" "test" {
+  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }
@@ -39,6 +52,7 @@ func testAccNxosISISConfig_all() string {
 	return `
 	resource "nxos_isis" "test" {
 		admin_state = "enabled"
+  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }

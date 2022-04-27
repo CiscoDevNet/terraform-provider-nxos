@@ -25,8 +25,15 @@ attributes:
     description: 'DN of VRF. For example: `sys/inst-VRF1`.'
     example: sys/inst-VRF123
 test_prerequisites:
+  - dn: sys/fm/ifvlan
+    class_name: fmInterfaceVlan
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
   - dn: sys/intf/svi-[vlan293]
     class_name: sviIf
     attributes:
       - name: id
         value: vlan293
+    dependencies: [0]

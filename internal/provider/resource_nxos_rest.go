@@ -12,6 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
+	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
 type resourceRestType struct{}
@@ -19,7 +20,7 @@ type resourceRestType struct{}
 func (t resourceRestType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "Manages NX-OS Model Objects via REST API calls. This resource can only manage a single API object. It is able to read the state and therefore reconcile configuration drift.",
+		MarkdownDescription: "Manages NX-OS DME Objects via REST API calls. This resource can only manage a single API object. It is able to read the state and therefore reconcile configuration drift.",
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {
@@ -49,6 +50,14 @@ func (t resourceRestType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Dia
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					tfsdk.RequiresReplace(),
+				},
+			},
+			"delete": {
+				MarkdownDescription: "Delete object during destroy operation. Default value is `true`.",
+				Type:                types.BoolType,
+				Optional:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					helpers.BooleanDefaultModifier(true),
 				},
 			},
 			"content": {
@@ -180,13 +189,15 @@ func (r resourceRest) Delete(ctx context.Context, req tfsdk.DeleteResourceReques
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.Value))
 
-	res, err := r.provider.client.DeleteDn(state.Dn.Value, nxos.OverrideUrl(r.provider.devices[state.Device.Value]))
-	if err != nil {
-		errCode := res.Get("imdata.0.error.attributes.code").Str
-		// Ignore errors of type "Cannot delete object"
-		if errCode != "1" && errCode != "107" {
-			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
-			return
+	if state.Delete.Value {
+		res, err := r.provider.client.DeleteDn(state.Dn.Value, nxos.OverrideUrl(r.provider.devices[state.Device.Value]))
+		if err != nil {
+			errCode := res.Get("imdata.0.error.attributes.code").Str
+			// Ignore errors of type "Cannot delete object"
+			if errCode != "1" && errCode != "107" {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+				return
+			}
 		}
 	}
 

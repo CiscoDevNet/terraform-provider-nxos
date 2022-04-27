@@ -14,7 +14,7 @@ func TestAccNxosPIM(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosPIMConfig_all(),
+				Config: testAccNxosPIMPrerequisitesConfig + testAccNxosPIMConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_pim.test", "admin_state", "enabled"),
 				),
@@ -28,9 +28,22 @@ func TestAccNxosPIM(t *testing.T) {
 	})
 }
 
+const testAccNxosPIMPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/pim"
+  class_name = "fmPim"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+`
+
 func testAccNxosPIMConfig_minimum() string {
 	return `
 	resource "nxos_pim" "test" {
+  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }
@@ -39,6 +52,7 @@ func testAccNxosPIMConfig_all() string {
 	return `
 	resource "nxos_pim" "test" {
 		admin_state = "enabled"
+  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }

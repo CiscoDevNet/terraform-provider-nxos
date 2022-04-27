@@ -25,17 +25,24 @@ attributes:
     description: 'Address.'
     example: 1.2.3.4
 test_prerequisites:
+  - dn: sys/fm/pim
+    class_name: fmPim
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
   - dn: sys/pim
     class_name: pimEntity
+    dependencies: [0]
   - dn: sys/pim/inst
     class_name: pimInst
-    dependencies: [0]
+    dependencies: [1]
   - dn: sys/pim/inst/dom-[default]
     class_name: pimDom
     attributes:
       - name: name
         value: default
-    dependencies: [1]
+    dependencies: [2]
   - dn: sys/pim/inst/dom-[default]/staticrp
     class_name: pimStaticRPP
-    dependencies: [2]
+    dependencies: [3]

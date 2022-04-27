@@ -26,10 +26,20 @@ func TestAccDataSourceNxosOSPFInstance(t *testing.T) {
 
 const testAccDataSourceNxosOSPFInstancePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/ospf"
+  class_name = "fmOspf"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
   dn = "sys/ospf"
   class_name = "ospfEntity"
   content = {
   }
+  depends_on = [nxos_rest.PreReq0, ]
 }
 
 `
@@ -39,7 +49,7 @@ const testAccDataSourceNxosOSPFInstanceConfig = `
 resource "nxos_ospf_instance" "test" {
   admin_state = "enabled"
   name = "OSPF1"
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 }
 
 data "nxos_ospf_instance" "test" {

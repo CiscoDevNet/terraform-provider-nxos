@@ -60,17 +60,24 @@ attributes:
     default_value: regular
     example: stub
 test_prerequisites:
+  - dn: sys/fm/ospf
+    class_name: fmOspf
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
   - dn: sys/ospf
     class_name: ospfEntity
+    dependencies: [0]
   - dn: sys/ospf/inst-[OSPF1]
     class_name: ospfInst
     attributes:
       - name: name
         value: OSPF1
-    dependencies: [0]
+    dependencies: [1]
   - dn: sys/ospf/inst-[OSPF1]/dom-[VRF1]
     class_name: ospfDom
     attributes:
       - name: name
         value: VRF1
-    dependencies: [1]
+    dependencies: [2]

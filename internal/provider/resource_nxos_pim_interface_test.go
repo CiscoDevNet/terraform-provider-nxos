@@ -36,27 +36,37 @@ func TestAccNxosPIMInterface(t *testing.T) {
 
 const testAccNxosPIMInterfacePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
-  dn = "sys/pim"
-  class_name = "pimEntity"
+  dn = "sys/fm/pim"
+  class_name = "fmPim"
+  delete = false
   content = {
+      adminSt = "enabled"
   }
 }
 
 resource "nxos_rest" "PreReq1" {
-  dn = "sys/pim/inst"
-  class_name = "pimInst"
+  dn = "sys/pim"
+  class_name = "pimEntity"
   content = {
   }
   depends_on = [nxos_rest.PreReq0, ]
 }
 
 resource "nxos_rest" "PreReq2" {
+  dn = "sys/pim/inst"
+  class_name = "pimInst"
+  content = {
+  }
+  depends_on = [nxos_rest.PreReq1, ]
+}
+
+resource "nxos_rest" "PreReq3" {
   dn = "sys/pim/inst/dom-[default]"
   class_name = "pimDom"
   content = {
       name = "default"
   }
-  depends_on = [nxos_rest.PreReq1, ]
+  depends_on = [nxos_rest.PreReq2, ]
 }
 
 `
@@ -66,7 +76,7 @@ func testAccNxosPIMInterfaceConfig_minimum() string {
 	resource "nxos_pim_interface" "test" {
 		vrf_name = "default"
 		interface_id = "eth1/10"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 	}
 	`
 }
@@ -81,7 +91,7 @@ func testAccNxosPIMInterfaceConfig_all() string {
 		dr_priority = 10
 		passive = false
 		sparse_mode = true
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 	}
 	`
 }

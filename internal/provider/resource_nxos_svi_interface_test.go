@@ -14,7 +14,7 @@ func TestAccNxosSVIInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosSVIInterfaceConfig_all(),
+				Config: testAccNxosSVIInterfacePrerequisitesConfig + testAccNxosSVIInterfaceConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_svi_interface.test", "interface_id", "vlan293"),
 					resource.TestCheckResourceAttr("nxos_svi_interface.test", "admin_state", "down"),
@@ -34,10 +34,23 @@ func TestAccNxosSVIInterface(t *testing.T) {
 	})
 }
 
+const testAccNxosSVIInterfacePrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/ifvlan"
+  class_name = "fmInterfaceVlan"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+`
+
 func testAccNxosSVIInterfaceConfig_minimum() string {
 	return `
 	resource "nxos_svi_interface" "test" {
 		interface_id = "vlan293"
+  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }
@@ -52,6 +65,7 @@ func testAccNxosSVIInterfaceConfig_all() string {
 		description = "My Description"
 		medium = "bcast"
 		mtu = 9216
+  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }

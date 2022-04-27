@@ -89,11 +89,13 @@ attributes:
 test_prerequisites:
   - dn: sys/fm/nvo
     class_name: fmNvo
+    no_delete: true
     attributes:
       - name: adminSt
         value: enabled
   - dn: sys/fm/evpn
     class_name: fmEvpn
+    no_delete: true
     attributes:
       - name: adminSt
         value: enabled

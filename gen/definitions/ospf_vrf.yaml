@@ -68,11 +68,18 @@ attributes:
     default_value: 0.0.0.0
     example: 34.56.78.90
 test_prerequisites:
+  - dn: sys/fm/ospf
+    class_name: fmOspf
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
   - dn: sys/ospf
     class_name: ospfEntity
+    dependencies: [0]
   - dn: sys/ospf/inst-[OSPF1]
     class_name: ospfInst
     attributes:
       - name: name
         value: OSPF1
-    dependencies: [0]
+    dependencies: [1]

@@ -26,10 +26,20 @@ func TestAccDataSourceNxosISISInstance(t *testing.T) {
 
 const testAccDataSourceNxosISISInstancePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/isis"
+  class_name = "fmIsis"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
   dn = "sys/isis"
   class_name = "isisEntity"
   content = {
   }
+  depends_on = [nxos_rest.PreReq0, ]
 }
 
 `
@@ -39,7 +49,7 @@ const testAccDataSourceNxosISISInstanceConfig = `
 resource "nxos_isis_instance" "test" {
   name = "ISIS1"
   admin_state = "enabled"
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 }
 
 data "nxos_isis_instance" "test" {

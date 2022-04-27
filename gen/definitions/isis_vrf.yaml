@@ -139,11 +139,18 @@ attributes:
     default_value: unknown
     example: l12
 test_prerequisites:
+  - dn: sys/fm/isis
+    class_name: fmIsis
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
   - dn: sys/isis
     class_name: isisEntity
+    dependencies: [0]
   - dn: sys/isis/inst-[ISIS1]
     class_name: isisInst
     attributes:
       - name: name
         value: ISIS1
-    dependencies: [0]
+    dependencies: [1]

@@ -33,6 +33,7 @@ attributes:
 test_prerequisites:
   - dn: sys/fm/dhcp
     class_name: fmDhcp
+    no_delete: true
     attributes:
       - name: adminSt
         value: enabled

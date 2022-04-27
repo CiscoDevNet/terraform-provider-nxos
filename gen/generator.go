@@ -111,6 +111,7 @@ type YamlConfigAttribute struct {
 type YamlTest struct {
 	Dn           string              `yaml:"dn"`
 	ClassName    string              `yaml:"class_name"`
+	NoDelete     bool                `yaml:"no_delete"`
 	Attributes   []YamlTestAttribute `yaml:"attributes"`
 	Dependencies []string            `yaml:"dependencies"`
 }

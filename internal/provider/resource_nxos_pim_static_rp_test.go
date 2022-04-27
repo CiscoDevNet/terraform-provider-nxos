@@ -31,35 +31,45 @@ func TestAccNxosPIMStaticRP(t *testing.T) {
 
 const testAccNxosPIMStaticRPPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
-  dn = "sys/pim"
-  class_name = "pimEntity"
+  dn = "sys/fm/pim"
+  class_name = "fmPim"
+  delete = false
   content = {
+      adminSt = "enabled"
   }
 }
 
 resource "nxos_rest" "PreReq1" {
-  dn = "sys/pim/inst"
-  class_name = "pimInst"
+  dn = "sys/pim"
+  class_name = "pimEntity"
   content = {
   }
   depends_on = [nxos_rest.PreReq0, ]
 }
 
 resource "nxos_rest" "PreReq2" {
-  dn = "sys/pim/inst/dom-[default]"
-  class_name = "pimDom"
+  dn = "sys/pim/inst"
+  class_name = "pimInst"
   content = {
-      name = "default"
   }
   depends_on = [nxos_rest.PreReq1, ]
 }
 
 resource "nxos_rest" "PreReq3" {
+  dn = "sys/pim/inst/dom-[default]"
+  class_name = "pimDom"
+  content = {
+      name = "default"
+  }
+  depends_on = [nxos_rest.PreReq2, ]
+}
+
+resource "nxos_rest" "PreReq4" {
   dn = "sys/pim/inst/dom-[default]/staticrp"
   class_name = "pimStaticRPP"
   content = {
   }
-  depends_on = [nxos_rest.PreReq2, ]
+  depends_on = [nxos_rest.PreReq3, ]
 }
 
 `
@@ -69,7 +79,7 @@ func testAccNxosPIMStaticRPConfig_minimum() string {
 	resource "nxos_pim_static_rp" "test" {
 		vrf_name = "default"
 		address = "1.2.3.4"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
 	}
 	`
 }
@@ -79,7 +89,7 @@ func testAccNxosPIMStaticRPConfig_all() string {
 	resource "nxos_pim_static_rp" "test" {
 		vrf_name = "default"
 		address = "1.2.3.4"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
 	}
 	`
 }

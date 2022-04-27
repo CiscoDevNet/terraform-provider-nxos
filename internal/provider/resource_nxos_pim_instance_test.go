@@ -30,10 +30,20 @@ func TestAccNxosPIMInstance(t *testing.T) {
 
 const testAccNxosPIMInstancePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/pim"
+  class_name = "fmPim"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
   dn = "sys/pim"
   class_name = "pimEntity"
   content = {
   }
+  depends_on = [nxos_rest.PreReq0, ]
 }
 
 `
@@ -41,7 +51,7 @@ resource "nxos_rest" "PreReq0" {
 func testAccNxosPIMInstanceConfig_minimum() string {
 	return `
 	resource "nxos_pim_instance" "test" {
-  		depends_on = [nxos_rest.PreReq0, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`
 }
@@ -50,7 +60,7 @@ func testAccNxosPIMInstanceConfig_all() string {
 	return `
 	resource "nxos_pim_instance" "test" {
 		admin_state = "enabled"
-  		depends_on = [nxos_rest.PreReq0, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`
 }

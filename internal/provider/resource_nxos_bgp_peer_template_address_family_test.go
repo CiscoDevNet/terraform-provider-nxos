@@ -34,38 +34,48 @@ func TestAccNxosBGPPeerTemplateAddressFamily(t *testing.T) {
 
 const testAccNxosBGPPeerTemplateAddressFamilyPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
-  dn = "sys/bgp"
-  class_name = "bgpEntity"
+  dn = "sys/fm/bgp"
+  class_name = "fmBgp"
+  delete = false
   content = {
+      adminSt = "enabled"
   }
 }
 
 resource "nxos_rest" "PreReq1" {
+  dn = "sys/bgp"
+  class_name = "bgpEntity"
+  content = {
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+resource "nxos_rest" "PreReq2" {
   dn = "sys/bgp/inst"
   class_name = "bgpInst"
   content = {
       adminSt = "enabled"
       asn = "65001"
   }
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_rest.PreReq1, ]
 }
 
-resource "nxos_rest" "PreReq2" {
+resource "nxos_rest" "PreReq3" {
   dn = "sys/bgp/inst/dom-[default]"
   class_name = "bgpDom"
   content = {
       name = "default"
   }
-  depends_on = [nxos_rest.PreReq1, ]
+  depends_on = [nxos_rest.PreReq2, ]
 }
 
-resource "nxos_rest" "PreReq3" {
+resource "nxos_rest" "PreReq4" {
   dn = "sys/bgp/inst/dom-[default]/peercont-[SPINE-PEERS]"
   class_name = "bgpPeerCont"
   content = {
       name = "SPINE-PEERS"
   }
-  depends_on = [nxos_rest.PreReq2, ]
+  depends_on = [nxos_rest.PreReq3, ]
 }
 
 `
@@ -75,7 +85,7 @@ func testAccNxosBGPPeerTemplateAddressFamilyConfig_minimum() string {
 	resource "nxos_bgp_peer_template_address_family" "test" {
 		template_name = "SPINE-PEERS"
 		address_family = "ipv4-ucast"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
 	}
 	`
 }
@@ -88,7 +98,7 @@ func testAccNxosBGPPeerTemplateAddressFamilyConfig_all() string {
 		control = "rr-client"
 		send_community_extended = "enabled"
 		send_community_standard = "enabled"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
 	}
 	`
 }

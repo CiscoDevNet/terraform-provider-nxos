@@ -39,6 +39,9 @@ const testAccNxos{{camelCase .Name}}PrerequisitesConfig = `
 resource "nxos_rest" "PreReq{{$index}}" {
   dn = "{{.Dn}}"
   class_name = "{{.ClassName}}"
+  {{- if .NoDelete}}
+  delete = false
+  {{- end}}
   content = {
     {{- range  .Attributes}}
       {{.Name}} = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}

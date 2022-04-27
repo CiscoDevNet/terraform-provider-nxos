@@ -1,3 +1,7 @@
+## 0.3.6 (unreleased)
+
+- Add delete attribute to nxos_rest resource
+
 ## 0.3.5
 
 - URL provider configuration attribute is now optional

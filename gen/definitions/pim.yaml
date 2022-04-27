@@ -18,3 +18,10 @@ attributes:
       - disabled
     default_value: enabled
     example: enabled
+test_prerequisites:
+  - dn: sys/fm/pim
+    class_name: fmPim
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled

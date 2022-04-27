@@ -62,3 +62,10 @@ attributes:
     max_int: 9216
     default_value: 1500
     example: 9216
+test_prerequisites:
+  - dn: sys/fm/ifvlan
+    class_name: fmInterfaceVlan
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled

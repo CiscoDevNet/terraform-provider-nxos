@@ -42,23 +42,30 @@ attributes:
     default_value: false
     example: true
 test_prerequisites:
+  - dn: sys/fm/pim
+    class_name: fmPim
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
   - dn: sys/pim
     class_name: pimEntity
+    dependencies: [0]
   - dn: sys/pim/inst
     class_name: pimInst
-    dependencies: [0]
+    dependencies: [1]
   - dn: sys/pim/inst/dom-[default]
     class_name: pimDom
     attributes:
       - name: name
         value: default
-    dependencies: [1]
+    dependencies: [2]
   - dn: sys/pim/inst/dom-[default]/staticrp
     class_name: pimStaticRPP
-    dependencies: [2]
+    dependencies: [3]
   - dn: sys/pim/inst/dom-[default]/staticrp/rp-[1.2.3.4]
     class_name: pimStaticRP
     attributes:
       - name: addr
         value: 1.2.3.4
-    dependencies: [3]
+    dependencies: [4]

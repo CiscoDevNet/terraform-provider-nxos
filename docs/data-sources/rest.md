@@ -3,12 +3,12 @@
 page_title: "nxos_rest Data Source - terraform-provider-nxos"
 subcategory: "General"
 description: |-
-  This data source can read one NX-OS object.
+  This data source can read one NX-OS DME object.
 ---
 
 # nxos_rest (Data Source)
 
-This data source can read one NX-OS object.
+This data source can read one NX-OS DME object.
 
 ## Example Usage
 

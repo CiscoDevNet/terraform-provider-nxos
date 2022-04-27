@@ -34,29 +34,39 @@ func TestAccNxosBGPPeerTemplate(t *testing.T) {
 
 const testAccNxosBGPPeerTemplatePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
-  dn = "sys/bgp"
-  class_name = "bgpEntity"
+  dn = "sys/fm/bgp"
+  class_name = "fmBgp"
+  delete = false
   content = {
+      adminSt = "enabled"
   }
 }
 
 resource "nxos_rest" "PreReq1" {
+  dn = "sys/bgp"
+  class_name = "bgpEntity"
+  content = {
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+resource "nxos_rest" "PreReq2" {
   dn = "sys/bgp/inst"
   class_name = "bgpInst"
   content = {
       adminSt = "enabled"
       asn = "65001"
   }
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_rest.PreReq1, ]
 }
 
-resource "nxos_rest" "PreReq2" {
+resource "nxos_rest" "PreReq3" {
   dn = "sys/bgp/inst/dom-[default]"
   class_name = "bgpDom"
   content = {
       name = "default"
   }
-  depends_on = [nxos_rest.PreReq1, ]
+  depends_on = [nxos_rest.PreReq2, ]
 }
 
 `
@@ -65,7 +75,7 @@ func testAccNxosBGPPeerTemplateConfig_minimum() string {
 	return `
 	resource "nxos_bgp_peer_template" "test" {
 		template_name = "SPINE-PEERS"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 	}
 	`
 }
@@ -78,7 +88,7 @@ func testAccNxosBGPPeerTemplateConfig_all() string {
 		description = "My Description"
 		peer_type = "fabric-internal"
 		source_interface = "lo0"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 	}
 	`
 }

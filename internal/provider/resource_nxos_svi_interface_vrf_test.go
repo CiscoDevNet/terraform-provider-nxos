@@ -31,11 +31,21 @@ func TestAccNxosSVIInterfaceVRF(t *testing.T) {
 
 const testAccNxosSVIInterfaceVRFPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/ifvlan"
+  class_name = "fmInterfaceVlan"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
   dn = "sys/intf/svi-[vlan293]"
   class_name = "sviIf"
   content = {
       id = "vlan293"
   }
+  depends_on = [nxos_rest.PreReq0, ]
 }
 
 `
@@ -45,7 +55,7 @@ func testAccNxosSVIInterfaceVRFConfig_minimum() string {
 	resource "nxos_svi_interface_vrf" "test" {
 		interface_id = "vlan293"
 		vrf_dn = "sys/inst-VRF123"
-  		depends_on = [nxos_rest.PreReq0, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`
 }
@@ -55,7 +65,7 @@ func testAccNxosSVIInterfaceVRFConfig_all() string {
 	resource "nxos_svi_interface_vrf" "test" {
 		interface_id = "vlan293"
 		vrf_dn = "sys/inst-VRF123"
-  		depends_on = [nxos_rest.PreReq0, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`
 }

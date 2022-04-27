@@ -28,28 +28,38 @@ func TestAccDataSourceNxosOSPFArea(t *testing.T) {
 
 const testAccDataSourceNxosOSPFAreaPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
-  dn = "sys/ospf"
-  class_name = "ospfEntity"
+  dn = "sys/fm/ospf"
+  class_name = "fmOspf"
+  delete = false
   content = {
+      adminSt = "enabled"
   }
 }
 
 resource "nxos_rest" "PreReq1" {
-  dn = "sys/ospf/inst-[OSPF1]"
-  class_name = "ospfInst"
+  dn = "sys/ospf"
+  class_name = "ospfEntity"
   content = {
-      name = "OSPF1"
   }
   depends_on = [nxos_rest.PreReq0, ]
 }
 
 resource "nxos_rest" "PreReq2" {
+  dn = "sys/ospf/inst-[OSPF1]"
+  class_name = "ospfInst"
+  content = {
+      name = "OSPF1"
+  }
+  depends_on = [nxos_rest.PreReq1, ]
+}
+
+resource "nxos_rest" "PreReq3" {
   dn = "sys/ospf/inst-[OSPF1]/dom-[VRF1]"
   class_name = "ospfDom"
   content = {
       name = "VRF1"
   }
-  depends_on = [nxos_rest.PreReq1, ]
+  depends_on = [nxos_rest.PreReq2, ]
 }
 
 `
@@ -63,7 +73,7 @@ resource "nxos_ospf_area" "test" {
   authentication_type = "none"
   cost = 10
   type = "stub"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 }
 
 data "nxos_ospf_area" "test" {

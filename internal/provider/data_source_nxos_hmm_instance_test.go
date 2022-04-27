@@ -28,6 +28,7 @@ const testAccDataSourceNxosHMMInstancePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/hmm"
   class_name = "fmHmm"
+  delete = false
   content = {
       adminSt = "enabled"
   }

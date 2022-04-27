@@ -31,10 +31,20 @@ func TestAccNxosISISInstance(t *testing.T) {
 
 const testAccNxosISISInstancePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/isis"
+  class_name = "fmIsis"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
   dn = "sys/isis"
   class_name = "isisEntity"
   content = {
   }
+  depends_on = [nxos_rest.PreReq0, ]
 }
 
 `
@@ -43,7 +53,7 @@ func testAccNxosISISInstanceConfig_minimum() string {
 	return `
 	resource "nxos_isis_instance" "test" {
 		name = "ISIS1"
-  		depends_on = [nxos_rest.PreReq0, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`
 }
@@ -53,7 +63,7 @@ func testAccNxosISISInstanceConfig_all() string {
 	resource "nxos_isis_instance" "test" {
 		name = "ISIS1"
 		admin_state = "enabled"
-  		depends_on = [nxos_rest.PreReq0, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`
 }

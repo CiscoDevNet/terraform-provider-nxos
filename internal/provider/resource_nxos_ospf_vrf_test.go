@@ -36,19 +36,29 @@ func TestAccNxosOSPFVRF(t *testing.T) {
 
 const testAccNxosOSPFVRFPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
-  dn = "sys/ospf"
-  class_name = "ospfEntity"
+  dn = "sys/fm/ospf"
+  class_name = "fmOspf"
+  delete = false
   content = {
+      adminSt = "enabled"
   }
 }
 
 resource "nxos_rest" "PreReq1" {
+  dn = "sys/ospf"
+  class_name = "ospfEntity"
+  content = {
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+resource "nxos_rest" "PreReq2" {
   dn = "sys/ospf/inst-[OSPF1]"
   class_name = "ospfInst"
   content = {
       name = "OSPF1"
   }
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_rest.PreReq1, ]
 }
 
 `
@@ -58,7 +68,7 @@ func testAccNxosOSPFVRFConfig_minimum() string {
 	resource "nxos_ospf_vrf" "test" {
 		instance_name = "OSPF1"
 		name = "VRF1"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 	}
 	`
 }
@@ -73,7 +83,7 @@ func testAccNxosOSPFVRFConfig_all() string {
 		banwidth_reference_unit = "mbps"
 		distance = 110
 		router_id = "34.56.78.90"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 	}
 	`
 }

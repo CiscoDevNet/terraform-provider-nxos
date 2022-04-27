@@ -14,7 +14,7 @@ func TestAccNxosOSPF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosOSPFConfig_all(),
+				Config: testAccNxosOSPFPrerequisitesConfig + testAccNxosOSPFConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ospf.test", "admin_state", "enabled"),
 				),
@@ -28,9 +28,22 @@ func TestAccNxosOSPF(t *testing.T) {
 	})
 }
 
+const testAccNxosOSPFPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/ospf"
+  class_name = "fmOspf"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+`
+
 func testAccNxosOSPFConfig_minimum() string {
 	return `
 	resource "nxos_ospf" "test" {
+  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }
@@ -39,6 +52,7 @@ func testAccNxosOSPFConfig_all() string {
 	return `
 	resource "nxos_ospf" "test" {
 		admin_state = "enabled"
+  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }

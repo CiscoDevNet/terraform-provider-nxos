@@ -229,5 +229,12 @@ attributes:
     description: 'Circuit priority.'
     example: 80
 test_prerequisites:
+  - dn: sys/fm/isis
+    class_name: fmIsis
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
   - dn: sys/isis
     class_name: isisEntity
+    dependencies: [0]

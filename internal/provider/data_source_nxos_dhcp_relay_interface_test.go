@@ -27,6 +27,7 @@ const testAccDataSourceNxosDHCPRelayInterfacePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/dhcp"
   class_name = "fmDhcp"
+  delete = false
   content = {
       adminSt = "enabled"
   }

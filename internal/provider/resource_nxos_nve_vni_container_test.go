@@ -30,6 +30,7 @@ const testAccNxosNVEVNIContainerPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/nvo"
   class_name = "fmNvo"
+  delete = false
   content = {
       adminSt = "enabled"
   }
@@ -38,6 +39,7 @@ resource "nxos_rest" "PreReq0" {
 resource "nxos_rest" "PreReq1" {
   dn = "sys/fm/evpn"
   class_name = "fmEvpn"
+  delete = false
   content = {
       adminSt = "enabled"
   }

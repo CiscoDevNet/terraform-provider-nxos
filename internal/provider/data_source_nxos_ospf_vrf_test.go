@@ -30,19 +30,29 @@ func TestAccDataSourceNxosOSPFVRF(t *testing.T) {
 
 const testAccDataSourceNxosOSPFVRFPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
-  dn = "sys/ospf"
-  class_name = "ospfEntity"
+  dn = "sys/fm/ospf"
+  class_name = "fmOspf"
+  delete = false
   content = {
+      adminSt = "enabled"
   }
 }
 
 resource "nxos_rest" "PreReq1" {
+  dn = "sys/ospf"
+  class_name = "ospfEntity"
+  content = {
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+resource "nxos_rest" "PreReq2" {
   dn = "sys/ospf/inst-[OSPF1]"
   class_name = "ospfInst"
   content = {
       name = "OSPF1"
   }
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_rest.PreReq1, ]
 }
 
 `
@@ -57,7 +67,7 @@ resource "nxos_ospf_vrf" "test" {
   banwidth_reference_unit = "mbps"
   distance = 110
   router_id = "34.56.78.90"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 }
 
 data "nxos_ospf_vrf" "test" {

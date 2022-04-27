@@ -33,5 +33,12 @@ attributes:
     default_value: true
     example: false
 test_prerequisites:
+  - dn: sys/fm/bgp
+    class_name: fmBgp
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
   - dn: sys/bgp
     class_name: bgpEntity
+    dependencies: [0]

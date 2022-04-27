@@ -27,5 +27,12 @@ attributes:
     description: 'OSPF instance name.'
     example: OSPF1
 test_prerequisites:
+  - dn: sys/fm/ospf
+    class_name: fmOspf
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
   - dn: sys/ospf
     class_name: ospfEntity
+    dependencies: [0]

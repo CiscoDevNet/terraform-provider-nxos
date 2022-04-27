@@ -33,6 +33,7 @@ test_prerequisites:
     dependencies: [1]
   - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q1]/prio
     class_name: ipqosPriority
+    no_delete: true
     attributes:
       - name: level
         value: 1
@@ -45,6 +46,7 @@ test_prerequisites:
     dependencies: [1]
   - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q2]/setRemBW
     class_name: ipqosSetRemBW
+    no_delete: true
     attributes:
       - name: val
         value: 10
@@ -57,6 +59,7 @@ test_prerequisites:
     dependencies: [1]
   - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q3]/setRemBW
     class_name: ipqosSetRemBW
+    no_delete: true
     attributes:
       - name: val
         value: 10
@@ -69,6 +72,7 @@ test_prerequisites:
     dependencies: [1]
   - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q-default]/setRemBW
     class_name: ipqosSetRemBW
+    no_delete: true
     attributes:
       - name: val
         value: 10

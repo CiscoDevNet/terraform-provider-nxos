@@ -18,3 +18,10 @@ attributes:
       - disabled
     default_value: enabled
     example: enabled
+test_prerequisites:
+  - dn: sys/fm/ospf
+    class_name: fmOspf
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled

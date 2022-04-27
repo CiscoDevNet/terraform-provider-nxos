@@ -32,18 +32,28 @@ func TestAccNxosPIMVRF(t *testing.T) {
 
 const testAccNxosPIMVRFPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
-  dn = "sys/pim"
-  class_name = "pimEntity"
+  dn = "sys/fm/pim"
+  class_name = "fmPim"
+  delete = false
   content = {
+      adminSt = "enabled"
   }
 }
 
 resource "nxos_rest" "PreReq1" {
+  dn = "sys/pim"
+  class_name = "pimEntity"
+  content = {
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+resource "nxos_rest" "PreReq2" {
   dn = "sys/pim/inst"
   class_name = "pimInst"
   content = {
   }
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_rest.PreReq1, ]
 }
 
 `
@@ -52,7 +62,7 @@ func testAccNxosPIMVRFConfig_minimum() string {
 	return `
 	resource "nxos_pim_vrf" "test" {
 		name = "default"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 	}
 	`
 }
@@ -63,7 +73,7 @@ func testAccNxosPIMVRFConfig_all() string {
 		name = "default"
 		admin_state = "enabled"
 		bfd = true
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 	}
 	`
 }

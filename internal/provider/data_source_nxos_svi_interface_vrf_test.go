@@ -25,11 +25,21 @@ func TestAccDataSourceNxosSVIInterfaceVRF(t *testing.T) {
 
 const testAccDataSourceNxosSVIInterfaceVRFPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/ifvlan"
+  class_name = "fmInterfaceVlan"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
   dn = "sys/intf/svi-[vlan293]"
   class_name = "sviIf"
   content = {
       id = "vlan293"
   }
+  depends_on = [nxos_rest.PreReq0, ]
 }
 
 `
@@ -39,7 +49,7 @@ const testAccDataSourceNxosSVIInterfaceVRFConfig = `
 resource "nxos_svi_interface_vrf" "test" {
   interface_id = "vlan293"
   vrf_dn = "sys/inst-VRF123"
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 }
 
 data "nxos_svi_interface_vrf" "test" {

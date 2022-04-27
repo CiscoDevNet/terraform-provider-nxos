@@ -56,8 +56,15 @@ attributes:
     default_value: 10000
     example: 1800
 test_prerequisites:
+  - dn: sys/fm/bgp
+    class_name: fmBgp
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
   - dn: sys/bgp
     class_name: bgpEntity
+    dependencies: [0]
   - dn: sys/bgp/inst
     class_name: bgpInst
     attributes:
@@ -65,10 +72,10 @@ test_prerequisites:
         value: enabled
       - name: asn
         value: '65001'
-    dependencies: [0]
+    dependencies: [1]
   - dn: sys/bgp/inst/dom-[default]
     class_name: bgpDom
     attributes:
       - name: name
         value: default
-    dependencies: [1]
+    dependencies: [2]

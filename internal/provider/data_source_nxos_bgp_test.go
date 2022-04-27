@@ -14,7 +14,7 @@ func TestAccDataSourceNxosBGP(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosBGPConfig,
+				Config: testAccDataSourceNxosBGPPrerequisitesConfig + testAccDataSourceNxosBGPConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_bgp.test", "admin_state", "enabled"),
 				),
@@ -23,10 +23,23 @@ func TestAccDataSourceNxosBGP(t *testing.T) {
 	})
 }
 
+const testAccDataSourceNxosBGPPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/bgp"
+  class_name = "fmBgp"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+`
+
 const testAccDataSourceNxosBGPConfig = `
 
 resource "nxos_bgp" "test" {
   admin_state = "enabled"
+  depends_on = [nxos_rest.PreReq0, ]
 }
 
 data "nxos_bgp" "test" {

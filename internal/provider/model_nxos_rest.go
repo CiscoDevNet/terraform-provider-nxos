@@ -13,6 +13,15 @@ type Rest struct {
 	Id        types.String `tfsdk:"id"`
 	Dn        types.String `tfsdk:"dn"`
 	ClassName types.String `tfsdk:"class_name"`
+	Delete    types.Bool   `tfsdk:"delete"`
+	Content   types.Map    `tfsdk:"content"`
+}
+
+type RestDataSource struct {
+	Device    types.String `tfsdk:"device"`
+	Id        types.String `tfsdk:"id"`
+	Dn        types.String `tfsdk:"dn"`
+	ClassName types.String `tfsdk:"class_name"`
 	Content   types.Map    `tfsdk:"content"`
 }
 

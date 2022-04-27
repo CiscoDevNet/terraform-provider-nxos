@@ -3,12 +3,12 @@
 page_title: "nxos_rest Resource - terraform-provider-nxos"
 subcategory: "General"
 description: |-
-  Manages NX-OS Model Objects via REST API calls. This resource can only manage a single API object. It is able to read the state and therefore reconcile configuration drift.
+  Manages NX-OS DME Objects via REST API calls. This resource can only manage a single API object. It is able to read the state and therefore reconcile configuration drift.
 ---
 
 # nxos_rest (Resource)
 
-Manages NX-OS Model Objects via REST API calls. This resource can only manage a single API object. It is able to read the state and therefore reconcile configuration drift.
+Manages NX-OS DME Objects via REST API calls. This resource can only manage a single API object. It is able to read the state and therefore reconcile configuration drift.
 
 ## Example Usage
 
@@ -34,6 +34,7 @@ resource "nxos_rest" "l1PhysIf" {
 ### Optional
 
 - `content` (Map of String) Map of key-value pairs that need to be passed to the Model object as parameters.
+- `delete` (Boolean) Delete object during destroy operation. Default value is `true`.
 - `device` (String) A device name from the provider configuration.
 
 ### Read-Only

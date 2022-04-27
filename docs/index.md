@@ -33,10 +33,10 @@ provider "nxos" {
 
 - `devices` (Attributes List) This can be used to manage a list of devices from a single provider. All devices must use the same credentials. Each resource and data source has an optional attribute named `device`, which can then select a device by its name from this list. (see [below for nested schema](#nestedatt--devices))
 - `insecure` (Boolean) Allow insecure HTTPS client. This can also be set as the NXOS_INSECURE environment variable. Defaults to `true`.
-- `password` (String, Sensitive) Password for the NXOS device account. This can also be set as the NXOS_PASSWORD environment variable.
+- `password` (String, Sensitive) Password for the NX-OS device account. This can also be set as the NXOS_PASSWORD environment variable.
 - `retries` (Number) Number of retries for REST API calls. This can also be set as the NXOS_RETRIES environment variable. Defaults to `3`.
-- `url` (String) URL of the Cisco NXOS device. This can also be set as the NXOS_URL environment variable. If no URL is provided, the URL of the first device from the `devices` list is being used.
-- `username` (String) Username for the NXOS device account. This can also be set as the NXOS_USERNAME environment variable.
+- `url` (String) URL of the Cisco NX-OS device. This can also be set as the NXOS_URL environment variable. If no URL is provided, the URL of the first device from the `devices` list is being used.
+- `username` (String) Username for the NX-OS device account. This can also be set as the NXOS_USERNAME environment variable.
 
 <a id="nestedatt--devices"></a>
 ### Nested Schema for `devices`
@@ -44,4 +44,4 @@ provider "nxos" {
 Optional:
 
 - `name` (String) Device name.
-- `url` (String) URL of the Cisco NXOS device.
+- `url` (String) URL of the Cisco NX-OS device.

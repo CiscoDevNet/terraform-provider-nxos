@@ -27,7 +27,7 @@ attributes:
     # CLI does not allow to change tgis attribute:
     # nexus(config-if-nve)# member vni 20
     # nexus(config-if-nve-vni)# exit
-    # nexus(config-if-nve)# member vni 20 associate-vrf 
+    # nexus(config-if-nve)# member vni 20 associate-vrf
     # VNI validation failed: VNI-VRF association mismatch [vni:20]
     description: 'Configures VNI as L3 VNI.'
     default_value: false
@@ -61,11 +61,13 @@ attributes:
 test_prerequisites:
   - dn: sys/fm/nvo
     class_name: fmNvo
+    no_delete: true
     attributes:
       - name: adminSt
         value: enabled
   - dn: sys/fm/evpn
     class_name: fmEvpn
+    no_delete: true
     attributes:
       - name: adminSt
         value: enabled

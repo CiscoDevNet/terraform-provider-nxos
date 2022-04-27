@@ -51,18 +51,18 @@ func (p *provider) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostic
 	return tfsdk.Schema{
 		Attributes: map[string]tfsdk.Attribute{
 			"username": {
-				MarkdownDescription: "Username for the NXOS device account. This can also be set as the NXOS_USERNAME environment variable.",
+				MarkdownDescription: "Username for the NX-OS device account. This can also be set as the NXOS_USERNAME environment variable.",
 				Type:                types.StringType,
 				Optional:            true,
 			},
 			"password": {
-				MarkdownDescription: "Password for the NXOS device account. This can also be set as the NXOS_PASSWORD environment variable.",
+				MarkdownDescription: "Password for the NX-OS device account. This can also be set as the NXOS_PASSWORD environment variable.",
 				Type:                types.StringType,
 				Optional:            true,
 				Sensitive:           true,
 			},
 			"url": {
-				MarkdownDescription: "URL of the Cisco NXOS device. This can also be set as the NXOS_URL environment variable. If no URL is provided, the URL of the first device from the `devices` list is being used.",
+				MarkdownDescription: "URL of the Cisco NX-OS device. This can also be set as the NXOS_URL environment variable. If no URL is provided, the URL of the first device from the `devices` list is being used.",
 				Type:                types.StringType,
 				Optional:            true,
 			},
@@ -89,7 +89,7 @@ func (p *provider) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostic
 						Required:            true,
 					},
 					"url": {
-						MarkdownDescription: "URL of the Cisco NXOS device.",
+						MarkdownDescription: "URL of the Cisco NX-OS device.",
 						Type:                types.StringType,
 						Required:            true,
 					},
@@ -231,7 +231,7 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 		retries = config.Retries.Value
 	}
 
-	// Create a new NXOS client and set it to the provider client
+	// Create a new NX-OS client and set it to the provider client
 	c, err := nxos.NewClient(url, username, password, insecure, nxos.MaxRetries(int(retries)))
 	if err != nil {
 		resp.Diagnostics.AddError(

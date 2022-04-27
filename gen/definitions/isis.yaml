@@ -19,3 +19,10 @@ attributes:
       - disabled
     default_value: enabled
     example: enabled
+test_prerequisites:
+  - dn: sys/fm/isis
+    class_name: fmIsis
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled

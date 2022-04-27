@@ -21,6 +21,7 @@ attributes:
 test_prerequisites:
   - dn: sys/fm/hmm
     class_name: fmHmm
+    no_delete: true
     attributes:
       - name: adminSt
         value: enabled

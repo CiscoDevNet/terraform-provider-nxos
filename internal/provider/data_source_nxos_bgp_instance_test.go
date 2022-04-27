@@ -27,10 +27,20 @@ func TestAccDataSourceNxosBGPInstance(t *testing.T) {
 
 const testAccDataSourceNxosBGPInstancePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/bgp"
+  class_name = "fmBgp"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
   dn = "sys/bgp"
   class_name = "bgpEntity"
   content = {
   }
+  depends_on = [nxos_rest.PreReq0, ]
 }
 
 `
@@ -41,7 +51,7 @@ resource "nxos_bgp_instance" "test" {
   admin_state = "enabled"
   asn = "65001"
   enhanced_error_handling = false
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 }
 
 data "nxos_bgp_instance" "test" {

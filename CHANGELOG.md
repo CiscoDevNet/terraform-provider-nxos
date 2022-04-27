@@ -1,6 +1,9 @@
 ## 0.3.6 (unreleased)
 
 - Add delete attribute to nxos_rest resource
+- Add attributes to nxos_physical_interface resource
+- Add attributes to nxos_ipv4_interface resource
+- Add nxos_hmm_interface resource and data source
 
 ## 0.3.5
 

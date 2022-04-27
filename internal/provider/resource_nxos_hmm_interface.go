@@ -15,12 +15,12 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourceHMMInstanceType struct{}
+type resourceHMMInterfaceType struct{}
 
-func (t resourceHMMInstanceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t resourceHMMInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the HMM Fabric Forwarding Instance configuration.", "hmmFwdInst", "Host%20Mobility/hmm:FwdInst/").AddParents("hmm").AddChildren("hmm_interface").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the HMM Fabric Forwarding mode information related to an Interface.", "hmmFwdIf", "Host%20Mobility/hmm:FwdIf/").AddParents("hmm_instance").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {
@@ -36,6 +36,14 @@ func (t resourceHMMInstanceType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 					tfsdk.UseStateForUnknown(),
 				},
 			},
+			"interface_id": {
+				MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `vlan10`.").String,
+				Type:                types.StringType,
+				Required:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					tfsdk.RequiresReplace(),
+				},
+			},
 			"admin_state": {
 				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
 				Type:                types.StringType,
@@ -48,33 +56,36 @@ func (t resourceHMMInstanceType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 					helpers.StringDefaultModifier("enabled"),
 				},
 			},
-			"anycast_mac": {
-				MarkdownDescription: helpers.NewAttributeDescription("Anycast Gateway MAC address.").AddDefaultValueDescription("enabled").String,
+			"mode": {
+				MarkdownDescription: helpers.NewAttributeDescription("HMM Fabric Forwarding mode information for the interface.").AddStringEnumDescription("standard", "anycastGW", "proxyGW").AddDefaultValueDescription("standard").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("standard", "anycastGW", "proxyGW"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					helpers.StringDefaultModifier("enabled"),
+					helpers.StringDefaultModifier("standard"),
 				},
 			},
 		},
 	}, nil
 }
 
-func (t resourceHMMInstanceType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
+func (t resourceHMMInterfaceType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
-	return resourceHMMInstance{
+	return resourceHMMInterface{
 		provider: provider,
 	}, diags
 }
 
-type resourceHMMInstance struct {
+type resourceHMMInterface struct {
 	provider provider
 }
 
-func (r resourceHMMInstance) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
-	var plan, state HMMInstance
+func (r resourceHMMInterface) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+	var plan, state HMMInterface
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -109,8 +120,8 @@ func (r resourceHMMInstance) Create(ctx context.Context, req tfsdk.CreateResourc
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceHMMInstance) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
-	var state HMMInstance
+func (r resourceHMMInterface) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+	var state HMMInterface
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -135,8 +146,8 @@ func (r resourceHMMInstance) Read(ctx context.Context, req tfsdk.ReadResourceReq
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceHMMInstance) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
-	var plan, state HMMInstance
+func (r resourceHMMInterface) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+	var plan, state HMMInterface
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -170,8 +181,8 @@ func (r resourceHMMInstance) Update(ctx context.Context, req tfsdk.UpdateResourc
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceHMMInstance) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
-	var state HMMInstance
+func (r resourceHMMInterface) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+	var state HMMInterface
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -197,6 +208,6 @@ func (r resourceHMMInstance) Delete(ctx context.Context, req tfsdk.DeleteResourc
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceHMMInstance) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
+func (r resourceHMMInterface) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
 	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
 }

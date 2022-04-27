@@ -17,6 +17,8 @@ func TestAccDataSourceNxosIPv4Interface(t *testing.T) {
 				Config: testAccDataSourceNxosIPv4InterfacePrerequisitesConfig + testAccDataSourceNxosIPv4InterfaceConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_ipv4_interface.test", "interface_id", "eth1/10"),
+					resource.TestCheckResourceAttr("data.nxos_ipv4_interface.test", "drop_glean", "disabled"),
+					resource.TestCheckResourceAttr("data.nxos_ipv4_interface.test", "forward", "disabled"),
 					resource.TestCheckResourceAttr("data.nxos_ipv4_interface.test", "unnumbered", "unspecified"),
 					resource.TestCheckResourceAttr("data.nxos_ipv4_interface.test", "urpf", "disabled"),
 				),
@@ -40,6 +42,8 @@ const testAccDataSourceNxosIPv4InterfaceConfig = `
 resource "nxos_ipv4_interface" "test" {
   vrf = "default"
   interface_id = "eth1/10"
+  drop_glean = "disabled"
+  forward = "disabled"
   unnumbered = "unspecified"
   urpf = "disabled"
   depends_on = [nxos_rest.PreReq0, ]

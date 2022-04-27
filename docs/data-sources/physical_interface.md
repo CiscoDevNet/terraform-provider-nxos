@@ -44,6 +44,8 @@ data "nxos_physical_interface" "example" {
 - `fec_mode` (String) FEC mode.
 - `id` (String) The distinguished name of the object.
 - `layer` (String) Administrative port layer.
+- `link_debounce_down` (Number) Administrative port link debounce interval.
+- `link_debounce_up` (Number) Link Debounce Interval - LinkUp Event.
 - `link_logging` (String) Administrative link logging.
 - `medium` (String) The administrative port medium type.
 - `mode` (String) Administrative port mode.
@@ -53,5 +55,6 @@ data "nxos_physical_interface" "example" {
 - `speed_group` (String) Speed group.
 - `trunk_vlans` (String) List of trunk VLANs.
 - `uni_directional_ethernet` (String) UDE (Uni-Directional Ethernet).
+- `user_configured_flags` (String) Port User Config Flags.
 
 

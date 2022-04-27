@@ -27,6 +27,8 @@ func TestAccNxosPhysicalInterface(t *testing.T) {
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "duplex", "auto"),
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "layer", "Layer3"),
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "link_logging", "enable"),
+					resource.TestCheckResourceAttr("nxos_physical_interface.test", "link_debounce_down", "200"),
+					resource.TestCheckResourceAttr("nxos_physical_interface.test", "link_debounce_up", "0"),
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "medium", "broadcast"),
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "mode", "access"),
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "mtu", "1500"),
@@ -35,6 +37,7 @@ func TestAccNxosPhysicalInterface(t *testing.T) {
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "speed_group", "auto"),
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "trunk_vlans", "1-4094"),
 					resource.TestCheckResourceAttr("nxos_physical_interface.test", "uni_directional_ethernet", "disable"),
+					resource.TestCheckResourceAttr("nxos_physical_interface.test", "user_configured_flags", "admin_layer,admin_mtu,admin_state"),
 				),
 			},
 			{
@@ -68,6 +71,8 @@ func testAccNxosPhysicalInterfaceConfig_all() string {
 		duplex = "auto"
 		layer = "Layer3"
 		link_logging = "enable"
+		link_debounce_down = 200
+		link_debounce_up = 0
 		medium = "broadcast"
 		mode = "access"
 		mtu = 1500
@@ -76,6 +81,7 @@ func testAccNxosPhysicalInterfaceConfig_all() string {
 		speed_group = "auto"
 		trunk_vlans = "1-4094"
 		uni_directional_ethernet = "disable"
+		user_configured_flags = "admin_layer,admin_mtu,admin_state"
 	}
 	`
 }

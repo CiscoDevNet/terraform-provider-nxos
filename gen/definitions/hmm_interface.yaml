@@ -1,0 +1,58 @@
+---
+name: HMM Interface
+class_name: hmmFwdIf
+dn: sys/hmm/fwdinst/if-[%s]
+ds_description: This data source can read the HMM Fabric Forwarding mode information related to an Interface.
+res_description: This resource can manage the HMM Fabric Forwarding mode information related to an Interface.
+doc_path: Host%20Mobility/hmm:FwdIf/
+doc_category: HMM
+parents:
+  - HMM Instance
+attributes:
+  - nxos_name: id
+    tf_name: interface_id
+    type: String
+    id: true
+    description: 'Must match first field in the output of `show intf brief`. Example: `vlan10`.'
+    example: vlan10
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'Administrative state.'
+    enum_values:
+      - enabled
+      - disabled
+    default_value: enabled
+    example: enabled
+  - nxos_name: mode
+    tf_name: mode
+    type: String
+    description: 'HMM Fabric Forwarding mode information for the interface.'
+    enum_values:
+      - standard
+      - anycastGW
+      - proxyGW
+    default_value: standard
+    example: anycastGW
+test_prerequisites:
+  - dn: sys/fm/hmm
+    class_name: fmHmm
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/fm/evpn
+    class_name: fmEvpn
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/hmm
+    class_name: hmmEntity
+    dependencies: [0, 1]
+  - dn: sys/hmm/fwdinst
+    class_name: hmmFwdInst
+    attributes:
+      - name: adminSt
+        value: enabled
+      - name: amac
+        value: '20:20:00:00:10:10'
+    dependencies: [2]

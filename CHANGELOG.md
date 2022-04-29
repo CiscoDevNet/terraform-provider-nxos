@@ -1,3 +1,7 @@
+## 0.3.7 (unreleased)
+
+- Fix nxos_rest resource object deletion
+
 ## 0.3.6
 
 - Add delete attribute to nxos_rest resource

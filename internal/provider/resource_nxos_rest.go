@@ -56,6 +56,7 @@ func (t resourceRestType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Dia
 				MarkdownDescription: "Delete object during destroy operation. Default value is `true`.",
 				Type:                types.BoolType,
 				Optional:            true,
+				Computed:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.BooleanDefaultModifier(true),
 				},

@@ -29,11 +29,11 @@ This resource can manage the configuration of Virtual Network ID (VNI).
 
 ```terraform
 resource "nxos_nve_vni" "example" {
-  vni                            = 103100
-  associate_vrf                  = false
-  multicast_group                = "239.1.1.1"
-  multisite_ingrress_replication = "disable"
-  suppress_arp                   = "off"
+  vni                           = 103100
+  associate_vrf                 = false
+  multicast_group               = "239.1.1.1"
+  multisite_ingress_replication = "disable"
+  suppress_arp                  = "off"
 }
 ```
 
@@ -52,7 +52,7 @@ resource "nxos_nve_vni" "example" {
 - `device` (String) A device name from the provider configuration.
 - `multicast_group` (String) Configures multicast group address for VNI.
   - Default value: `0.0.0.0`
-- `multisite_ingrress_replication` (String) Enable or disable Multisite Ingress Replication for VNI(s).
+- `multisite_ingress_replication` (String) Enable or disable Multisite Ingress Replication for VNI(s).
   - Choices: `enable`, `disable`, `enableOptimized`
   - Default value: `disable`
 - `suppress_arp` (String) Enable or disable ARP suppression for VNI(s).

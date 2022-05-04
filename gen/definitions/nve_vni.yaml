@@ -39,7 +39,7 @@ attributes:
     default_value: '0.0.0.0'
     example: '239.1.1.1'
   - nxos_name: multisiteIngRepl
-    tf_name: multisite_ingrress_replication
+    tf_name: multisite_ingress_replication
     type: String
     description: 'Enable or disable Multisite Ingress Replication for VNI(s).'
     enum_values:

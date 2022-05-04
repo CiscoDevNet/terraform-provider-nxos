@@ -19,7 +19,7 @@ type NVEVNI struct {
 	Vni              types.Int64  `tfsdk:"vni"`
 	AssociateVrfFlag types.Bool   `tfsdk:"associate_vrf"`
 	McastGroup       types.String `tfsdk:"multicast_group"`
-	MultisiteIngRepl types.String `tfsdk:"multisite_ingrress_replication"`
+	MultisiteIngRepl types.String `tfsdk:"multisite_ingress_replication"`
 	SuppressARP      types.String `tfsdk:"suppress_arp"`
 }
 

@@ -19,7 +19,7 @@ func TestAccNxosNVEVNI(t *testing.T) {
 					resource.TestCheckResourceAttr("nxos_nve_vni.test", "vni", "103100"),
 					resource.TestCheckResourceAttr("nxos_nve_vni.test", "associate_vrf", "false"),
 					resource.TestCheckResourceAttr("nxos_nve_vni.test", "multicast_group", "239.1.1.1"),
-					resource.TestCheckResourceAttr("nxos_nve_vni.test", "multisite_ingrress_replication", "disable"),
+					resource.TestCheckResourceAttr("nxos_nve_vni.test", "multisite_ingress_replication", "disable"),
 					resource.TestCheckResourceAttr("nxos_nve_vni.test", "suppress_arp", "off"),
 				),
 			},
@@ -87,7 +87,7 @@ func testAccNxosNVEVNIConfig_all() string {
 		vni = 103100
 		associate_vrf = false
 		multicast_group = "239.1.1.1"
-		multisite_ingrress_replication = "disable"
+		multisite_ingress_replication = "disable"
 		suppress_arp = "off"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 	}

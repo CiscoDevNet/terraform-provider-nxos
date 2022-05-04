@@ -47,7 +47,7 @@ func (t dataSourceNVEVNIType) GetSchema(ctx context.Context) (tfsdk.Schema, diag
 				Type:                types.StringType,
 				Computed:            true,
 			},
-			"multisite_ingrress_replication": {
+			"multisite_ingress_replication": {
 				MarkdownDescription: "Enable or disable Multisite Ingress Replication for VNI(s).",
 				Type:                types.StringType,
 				Computed:            true,

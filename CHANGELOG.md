@@ -1,3 +1,7 @@
+## 0.3.8 (unreleased)
+
+- BREAKING CHANGE: Fix typo in nxos_nve_vni resource (multisite_ingrress_replication -> multisite_ingress_replication)
+
 ## 0.3.7
 
 - Fix nxos_rest resource object deletion

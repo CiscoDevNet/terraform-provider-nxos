@@ -37,7 +37,7 @@ data "nxos_nve_vni" "example" {
 - `associate_vrf` (Boolean) Configures VNI as L3 VNI.
 - `id` (String) The distinguished name of the object.
 - `multicast_group` (String) Configures multicast group address for VNI.
-- `multisite_ingrress_replication` (String) Enable or disable Multisite Ingress Replication for VNI(s).
+- `multisite_ingress_replication` (String) Enable or disable Multisite Ingress Replication for VNI(s).
 - `suppress_arp` (String) Enable or disable ARP suppression for VNI(s).
 
 

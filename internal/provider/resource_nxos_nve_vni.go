@@ -65,7 +65,7 @@ func (t resourceNVEVNIType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.D
 					helpers.StringDefaultModifier("0.0.0.0"),
 				},
 			},
-			"multisite_ingrress_replication": {
+			"multisite_ingress_replication": {
 				MarkdownDescription: helpers.NewAttributeDescription("Enable or disable Multisite Ingress Replication for VNI(s).").AddStringEnumDescription("enable", "disable", "enableOptimized").AddDefaultValueDescription("disable").String,
 				Type:                types.StringType,
 				Optional:            true,

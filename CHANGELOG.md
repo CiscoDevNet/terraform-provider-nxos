@@ -1,4 +1,4 @@
-## 0.3.8 (unreleased)
+## 0.3.8
 
 - BREAKING CHANGE: Fix typo in nxos_nve_vni resource (multisite_ingrress_replication -> multisite_ingress_replication)
 

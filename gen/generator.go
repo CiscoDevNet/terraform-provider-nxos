@@ -19,11 +19,14 @@ import (
 )
 
 const (
-	definitionsPath  = "./gen/definitions/"
-	providerTemplate = "./gen/templates/provider.go"
-	providerLocation = "./internal/provider/provider.go"
-	objectsTemplate  = "./gen/templates/supported_objects.md.tmpl"
-	objectsLocation  = "./templates/guides/supported_objects.md.tmpl"
+	definitionsPath   = "./gen/definitions/"
+	providerTemplate  = "./gen/templates/provider.go"
+	providerLocation  = "./internal/provider/provider.go"
+	objectsTemplate   = "./gen/templates/supported_objects.md.tmpl"
+	objectsLocation   = "./templates/guides/supported_objects.md.tmpl"
+	changelogTemplate = "./gen/templates/changelog.md.tmpl"
+	changelogLocation = "./templates/guides/changelog.md.tmpl"
+	changelogOriginal = "./CHANGELOG.md"
 )
 
 type t struct {
@@ -266,4 +269,10 @@ func main() {
 
 	renderTemplate(providerTemplate, providerLocation, configs)
 	renderTemplate(objectsTemplate, objectsLocation, configs)
+
+	changelog, err := ioutil.ReadFile(changelogOriginal)
+	if err != nil {
+		log.Fatalf("Error reading changelog: %v", err)
+	}
+	renderTemplate(changelogTemplate, changelogLocation, string(changelog))
 }

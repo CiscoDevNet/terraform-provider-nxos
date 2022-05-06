@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## 0.3.9 (unreleased)
+## 0.3.9
 
 - Update documentation
 

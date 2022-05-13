@@ -16,6 +16,7 @@ type IPv4InterfaceAddress struct {
 	Dom    types.String `tfsdk:"vrf"`
 	Id     types.String `tfsdk:"interface_id"`
 	Addr   types.String `tfsdk:"address"`
+	Type   types.String `tfsdk:"type"`
 }
 
 func (data IPv4InterfaceAddress) getDn() string {
@@ -28,13 +29,15 @@ func (data IPv4InterfaceAddress) getClassName() string {
 
 func (data IPv4InterfaceAddress) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("addr", data.Addr.Value)
+		Set("addr", data.Addr.Value).
+		Set("type", data.Type.Value)
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *IPv4InterfaceAddress) fromBody(res gjson.Result) {
 	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Addr.Value = res.Get("*.attributes.addr").String()
+	data.Type.Value = res.Get("*.attributes.type").String()
 }
 
 func (data *IPv4InterfaceAddress) fromPlan(plan IPv4InterfaceAddress) {

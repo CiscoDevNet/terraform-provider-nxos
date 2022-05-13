@@ -19,6 +19,7 @@ func TestAccNxosIPv4InterfaceAddress(t *testing.T) {
 					resource.TestCheckResourceAttr("nxos_ipv4_interface_address.test", "vrf", "default"),
 					resource.TestCheckResourceAttr("nxos_ipv4_interface_address.test", "interface_id", "eth1/10"),
 					resource.TestCheckResourceAttr("nxos_ipv4_interface_address.test", "address", "24.63.46.49/30"),
+					resource.TestCheckResourceAttr("nxos_ipv4_interface_address.test", "type", "primary"),
 				),
 			},
 			{
@@ -66,6 +67,7 @@ func testAccNxosIPv4InterfaceAddressConfig_all() string {
 		vrf = "default"
 		interface_id = "eth1/10"
 		address = "24.63.46.49/30"
+		type = "primary"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`

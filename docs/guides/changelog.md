@@ -7,9 +7,9 @@ description: |-
 
 # Changelog
 
-## 0.3.10 (unreleased)
+## 0.3.10
 
-- Ignore Error Codes 1 and 107 ("Cannot delete object...") when deleting objects.
+- Ignore error codes 1 and 107 ("Cannot delete object...") when deleting objects.
 
 ## 0.3.9
 

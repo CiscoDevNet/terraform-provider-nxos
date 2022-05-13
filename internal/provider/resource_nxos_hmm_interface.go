@@ -197,7 +197,7 @@ func (r resourceHMMInterface) Delete(ctx context.Context, req tfsdk.DeleteResour
 	if err != nil {
 		errCode := res.Get("imdata.0.error.attributes.code").Str
 		// Ignore errors of type "Cannot delete object"
-		if errCode != "107" {
+		if errCode != "1" && errCode != "107" {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
 		}

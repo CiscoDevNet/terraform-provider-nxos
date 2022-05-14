@@ -29,6 +29,15 @@ attributes:
     id: true
     description: 'IPv4 address.'
     example: '24.63.46.49/30'
+  - nxos_name: type
+    tf_name: type
+    type: String
+    description: 'Address type.'
+    enum_values:
+      - primary
+      - secondary
+    default: 'primary'
+    example: 'primary'
 test_prerequisites:
   - dn: sys/ipv4/inst/dom-[default]
     class_name: ipv4Dom

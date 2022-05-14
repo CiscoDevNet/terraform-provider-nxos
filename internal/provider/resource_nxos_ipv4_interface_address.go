@@ -60,6 +60,15 @@ func (t resourceIPv4InterfaceAddressType) GetSchema(ctx context.Context) (tfsdk.
 					tfsdk.RequiresReplace(),
 				},
 			},
+			"type": {
+				MarkdownDescription: helpers.NewAttributeDescription("Address type.").AddStringEnumDescription("primary", "secondary").String,
+				Type:                types.StringType,
+				Optional:            true,
+				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("primary", "secondary"),
+				},
+			},
 		},
 	}, nil
 }

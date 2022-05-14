@@ -47,6 +47,11 @@ func (t dataSourceIPv4InterfaceAddressType) GetSchema(ctx context.Context) (tfsd
 				Type:                types.StringType,
 				Required:            true,
 			},
+			"type": {
+				MarkdownDescription: "Address type.",
+				Type:                types.StringType,
+				Computed:            true,
+			},
 		},
 	}, nil
 }

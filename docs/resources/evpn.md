@@ -34,6 +34,7 @@ resource "nxos_evpn" "example" {
 
 - `admin_state` (String) Administrative state.
   - Choices: `enabled`, `disabled`
+  - Default value: `enabled`
 
 ### Optional
 

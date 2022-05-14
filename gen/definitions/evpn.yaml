@@ -17,6 +17,7 @@ attributes:
     enum_values:
       - enabled
       - disabled
+    default_value: enabled
     example: enabled
 test_prerequisites:
   - dn: sys/fm/nvo

@@ -1,0 +1,34 @@
+---
+name: EVPN
+class_name: rtctrlL2Evpn
+dn: sys/evpn
+ds_description: This data source can read a global EVPN configuration.
+res_description: This resource can manage a global EVPN configuration.
+doc_path: Routing%20and%20Forwarding/rtctrl:L2Evpn/
+doc_category: EVPN
+children:
+  - EVPN VNI
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'Administrative state.'
+    enum_values:
+      - enabled
+      - disabled
+    default_value: enabled
+    example: enabled
+test_prerequisites:
+  - dn: sys/fm/nvo
+    class_name: fmNvo
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/fm/evpn
+    class_name: fmEvpn
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+    dependencies: [0]

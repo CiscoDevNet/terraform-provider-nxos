@@ -39,7 +39,8 @@ func (t resourceEVPNType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Dia
 			"admin_state": {
 				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
 				Type:                types.StringType,
-				Required:            true,
+				Optional:            true,
+				Computed:            true,
 				Validators: []tfsdk.AttributeValidator{
 					helpers.StringEnumValidator("enabled", "disabled"),
 				},

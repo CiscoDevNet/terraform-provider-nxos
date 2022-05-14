@@ -12,7 +12,6 @@ attributes:
   - nxos_name: adminSt
     tf_name: admin_state
     type: String
-    mandatory: true
     description: 'Administrative state.'
     enum_values:
       - enabled

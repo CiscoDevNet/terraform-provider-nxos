@@ -53,7 +53,6 @@ resource "nxos_rest" "PreReq1" {
 func testAccNxosEVPNConfig_minimum() string {
 	return `
 	resource "nxos_evpn" "test" {
-		admin_state = "enabled"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`

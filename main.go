@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 	"github.com/netascode/terraform-provider-nxos/internal/provider"
 )
 
@@ -34,11 +34,11 @@ var (
 )
 
 func main() {
-	opts := tfsdk.ServeOpts{
-		Name: "registry.terraform.io/netascode/nxos",
+	opts := providerserver.ServeOpts{
+		Address: "registry.terraform.io/netascode/nxos",
 	}
 
-	err := tfsdk.Serve(context.Background(), provider.New(version), opts)
+	err := providerserver.Serve(context.Background(), provider.New(version), opts)
 
 	if err != nil {
 		log.Fatal(err.Error())

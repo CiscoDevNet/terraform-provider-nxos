@@ -7,6 +7,14 @@ description: |-
 
 # Changelog
 
+## 0.3.11 (unreleased)
+
+- Add type attribute to nxos_ipv4_interface_address resource
+- Add nxos_evpn resource and data source
+- Add nxos_evpn_vni resource and data source
+- Add nxos_evpn_vni_route_target resource and data source
+- Add nxos_evpn_vni_route_target_direction resource and data source
+
 ## 0.3.10
 
 - Ignore error codes 1 and 107 ("Cannot delete object...") when deleting objects.

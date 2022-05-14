@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## 0.3.11 (unreleased)
+## 0.3.11
 
 - Add type attribute to nxos_ipv4_interface_address resource
 - Add nxos_evpn resource and data source

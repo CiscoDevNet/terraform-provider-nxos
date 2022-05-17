@@ -36,7 +36,7 @@ attributes:
     enum_values:
       - primary
       - secondary
-    default: 'primary'
+    default_value: 'primary'
     example: 'primary'
 test_prerequisites:
   - dn: sys/intf/phys-[eth1/10]

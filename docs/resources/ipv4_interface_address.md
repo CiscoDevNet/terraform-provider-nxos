@@ -44,6 +44,7 @@ resource "nxos_ipv4_interface_address" "example" {
 - `device` (String) A device name from the provider configuration.
 - `type` (String) Address type.
   - Choices: `primary`, `secondary`
+  - Default value: `primary`
 
 ### Read-Only
 

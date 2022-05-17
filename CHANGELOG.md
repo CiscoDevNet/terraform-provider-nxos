@@ -1,3 +1,7 @@
+## 0.3.12 (unreleased)
+
+- Fix type attribute default value of nxos_ipv4_interface_address resource
+
 ## 0.3.11
 
 - Add type attribute to nxos_ipv4_interface_address resource

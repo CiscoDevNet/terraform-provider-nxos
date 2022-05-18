@@ -38,12 +38,12 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/setup-python@v3
-      - run: pip install yamale
-      - run: yamale -s gen/schema/schema.yaml gen/definitions/
       - uses: actions/setup-go@v3
         with:
           go-version: ${{ env.GO_VERSION }}
       - uses: actions/checkout@v3
+      - run: pip install yamale
+      - run: yamale -s gen/schema/schema.yaml gen/definitions/
       - run: go mod download
       - run: go generate
       - run: git diff --exit-code

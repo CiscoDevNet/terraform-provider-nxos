@@ -41,7 +41,7 @@ attributes:
     tf_name: control
     type: String
     description: 'Peer address-family control.'
-    enum_value:
+    enum_values:
       - rr-client
       - nh-self
       - dis-peer-as-check
@@ -55,7 +55,7 @@ attributes:
     tf_name: send_community_extended
     type: String
     description: 'Send-community extended.'
-    enum_value:
+    enum_values:
       - enabled
       - disabled
     default_value: disabled
@@ -64,7 +64,7 @@ attributes:
     tf_name: send_community_standard
     type: String
     description: 'Send-community standard.'
-    enum_value:
+    enum_values:
       - enabled
       - disabled
     default_value: disabled

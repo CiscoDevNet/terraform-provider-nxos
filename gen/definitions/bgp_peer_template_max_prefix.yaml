@@ -44,7 +44,7 @@ attributes:
     tf_name: action
     type: String
     description: 'Action to do when limit is exceeded.'
-    enum_value:
+    enum_values:
       - log
       - shut
       - restart

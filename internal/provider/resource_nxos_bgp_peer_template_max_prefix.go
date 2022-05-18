@@ -56,10 +56,13 @@ func (t resourceBGPPeerTemplateMaxPrefixType) GetSchema(ctx context.Context) (tf
 				},
 			},
 			"action": {
-				MarkdownDescription: helpers.NewAttributeDescription("Action to do when limit is exceeded.").AddDefaultValueDescription("shut").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Action to do when limit is exceeded.").AddStringEnumDescription("log", "shut", "restart").AddDefaultValueDescription("shut").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("log", "shut", "restart"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("shut"),
 				},

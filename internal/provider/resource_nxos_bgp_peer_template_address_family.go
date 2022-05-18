@@ -56,25 +56,34 @@ func (t resourceBGPPeerTemplateAddressFamilyType) GetSchema(ctx context.Context)
 				},
 			},
 			"control": {
-				MarkdownDescription: helpers.NewAttributeDescription("Peer address-family control.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Peer address-family control.").AddStringEnumDescription("rr-client", "nh-self", "dis-peer-as-check", "allow-self-as", "default-originate", "advertisement-interval", "suppress-inactive", "nh-self-all").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("rr-client", "nh-self", "dis-peer-as-check", "allow-self-as", "default-originate", "advertisement-interval", "suppress-inactive", "nh-self-all"),
+				},
 			},
 			"send_community_extended": {
-				MarkdownDescription: helpers.NewAttributeDescription("Send-community extended.").AddDefaultValueDescription("disabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Send-community extended.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("enabled", "disabled"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("disabled"),
 				},
 			},
 			"send_community_standard": {
-				MarkdownDescription: helpers.NewAttributeDescription("Send-community standard.").AddDefaultValueDescription("disabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Send-community standard.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringEnumValidator("enabled", "disabled"),
+				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("disabled"),
 				},

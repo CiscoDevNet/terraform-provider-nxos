@@ -45,6 +45,7 @@ resource "nxos_bgp_peer_template_max_prefix" "example" {
 ### Optional
 
 - `action` (String) Action to do when limit is exceeded.
+  - Choices: `log`, `shut`, `restart`
   - Default value: `shut`
 - `device` (String) A device name from the provider configuration.
 - `maximum_prefix` (Number) Maximum number of prefixes allowed from the peer.

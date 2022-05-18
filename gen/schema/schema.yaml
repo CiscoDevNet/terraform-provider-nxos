@@ -1,0 +1,43 @@
+---
+name: str()
+class_name: str()
+dn: str()
+no_delete: bool(required=False)
+exclude_test: bool(required=False)
+ds_description: str()
+res_description: str()
+doc_path: str()
+doc_category: str()
+parents: list(str(), required=False)
+children: list(str(), required=False)
+references: list(str(), required=False)
+attributes: list(include('attribute'), required=False)
+test_prerequisites: list(include('test_prerequisite'), required=False)
+---
+attribute:
+  nxos_name: str()
+  tf_name: str()
+  type: enum('String', 'Int64', 'Bool')
+  id: bool(required=False)
+  reference_only: bool(required=False)
+  mandatory: bool(required=False)
+  read_only: bool(required=False)
+  description: str()
+  example: any(str(), int(), bool())
+  enum_values: list(str(), required=False)
+  min_int: int(required=False)
+  max_int: int(required=False)
+  default_value: any(str(), int(), bool(), required=False)
+  requires_replace: bool(required=False)
+
+test_prerequisite:
+  dn: str()
+  class_name: str()
+  no_delete: bool(required=False)
+  attributes: list(include('test_attribute'), required=False)
+  dependencies: list(int(), required=False)
+
+test_attribute:
+  name: str()
+  value: any(str(), int(), bool())
+  reference: str(required=False)

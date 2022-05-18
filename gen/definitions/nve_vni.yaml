@@ -55,9 +55,9 @@ attributes:
     enum_values:
       - enabled
       - disabled
-      - off
-    default_value: off
-    example: off
+      - 'off'
+    default_value: 'off'
+    example: 'off'
 test_prerequisites:
   - dn: sys/fm/nvo
     class_name: fmNvo

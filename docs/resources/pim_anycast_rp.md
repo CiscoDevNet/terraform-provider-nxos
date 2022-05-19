@@ -7,6 +7,8 @@ description: |-
   API Documentation: pimAcastRPFuncP https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:AcastRPFuncP/
   Parent resources
   nxospimvrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_vrf
+  Child resources
+  nxospimanycastrppeer https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_anycast_rp_peer
 ---
 
 # nxos_pim_anycast_rp (Resource)
@@ -18,6 +20,10 @@ This resource can manage the PIM Anycast RP configuration.
 ### Parent resources
 
 - [nxos_pim_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_vrf)
+
+### Child resources
+
+- [nxos_pim_anycast_rp_peer](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_anycast_rp_peer)
 
 ## Example Usage
 

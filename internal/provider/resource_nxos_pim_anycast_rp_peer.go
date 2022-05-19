@@ -15,12 +15,12 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourcePIMAnycastRPType struct{}
+type resourcePIMAnycastRPPeerType struct{}
 
-func (t resourcePIMAnycastRPType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t resourcePIMAnycastRPPeerType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the PIM Anycast RP configuration.", "pimAcastRPFuncP", "Layer%203/pim:AcastRPFuncP/").AddParents("pim_vrf").AddChildren("pim_anycast_rp_peer").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the PIM Anycast RP peer configuration.", "pimAcastRPPeer", "Layer%203/pim:AcastRPPeer/").AddParents("pim_anycast_rp").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {
@@ -44,36 +44,40 @@ func (t resourcePIMAnycastRPType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 					tfsdk.RequiresReplace(),
 				},
 			},
-			"local_interface": {
-				MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+			"address": {
+				MarkdownDescription: helpers.NewAttributeDescription("Anycast RP address.").String,
 				Type:                types.StringType,
-				Optional:            true,
-				Computed:            true,
+				Required:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					tfsdk.RequiresReplace(),
+				},
 			},
-			"source_interface": {
-				MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+			"rp_set_address": {
+				MarkdownDescription: helpers.NewAttributeDescription("RP set address.").String,
 				Type:                types.StringType,
-				Optional:            true,
-				Computed:            true,
+				Required:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					tfsdk.RequiresReplace(),
+				},
 			},
 		},
 	}, nil
 }
 
-func (t resourcePIMAnycastRPType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
+func (t resourcePIMAnycastRPPeerType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
-	return resourcePIMAnycastRP{
+	return resourcePIMAnycastRPPeer{
 		provider: provider,
 	}, diags
 }
 
-type resourcePIMAnycastRP struct {
+type resourcePIMAnycastRPPeer struct {
 	provider provider
 }
 
-func (r resourcePIMAnycastRP) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
-	var plan, state PIMAnycastRP
+func (r resourcePIMAnycastRPPeer) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+	var plan, state PIMAnycastRPPeer
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -108,8 +112,8 @@ func (r resourcePIMAnycastRP) Create(ctx context.Context, req tfsdk.CreateResour
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourcePIMAnycastRP) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
-	var state PIMAnycastRP
+func (r resourcePIMAnycastRPPeer) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+	var state PIMAnycastRPPeer
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -134,8 +138,8 @@ func (r resourcePIMAnycastRP) Read(ctx context.Context, req tfsdk.ReadResourceRe
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourcePIMAnycastRP) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
-	var plan, state PIMAnycastRP
+func (r resourcePIMAnycastRPPeer) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+	var plan, state PIMAnycastRPPeer
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -169,8 +173,8 @@ func (r resourcePIMAnycastRP) Update(ctx context.Context, req tfsdk.UpdateResour
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourcePIMAnycastRP) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
-	var state PIMAnycastRP
+func (r resourcePIMAnycastRPPeer) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+	var state PIMAnycastRPPeer
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -196,6 +200,6 @@ func (r resourcePIMAnycastRP) Delete(ctx context.Context, req tfsdk.DeleteResour
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourcePIMAnycastRP) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
+func (r resourcePIMAnycastRPPeer) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
 	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
 }

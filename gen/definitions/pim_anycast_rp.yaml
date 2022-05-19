@@ -8,6 +8,8 @@ doc_path: Layer%203/pim:AcastRPFuncP/
 doc_category: PIM
 parents:
   - PIM VRF
+children:
+  - PIM Anycast RP Peer
 attributes:
   - nxos_name: name
     tf_name: vrf_name

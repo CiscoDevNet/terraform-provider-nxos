@@ -10,6 +10,7 @@ description: |-
 ## 0.3.13 (unreleased)
 
 - Add nxos_pim_anycast_rp resource and data source
+- Add nxos_pim_anycast_rp_peer resource and data source
 
 ## 0.3.12
 

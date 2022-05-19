@@ -1,3 +1,7 @@
+## 0.3.13 (unreleased)
+
+- Add nxos_pim_anycast_rp resource and data source
+
 ## 0.3.12
 
 - Fix type attribute default value of nxos_ipv4_interface_address resource

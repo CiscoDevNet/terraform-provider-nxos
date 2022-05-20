@@ -20,7 +20,7 @@ type resourcePIMVRFType struct{}
 func (t resourcePIMVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the PIM VRF configuration.", "pimDom", "Layer%203/pim:Dom/").AddParents("pim_instance").AddChildren("pim_interface", "pim_ssm_policy", "pim_static_rp_policy").AddReferences("vrf").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the PIM VRF configuration.", "pimDom", "Layer%203/pim:Dom/").AddParents("pim_instance").AddChildren("pim_interface", "pim_ssm_policy", "pim_static_rp_policy", "pim_anycast_rp").AddReferences("vrf").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {

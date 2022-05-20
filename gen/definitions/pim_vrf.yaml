@@ -12,6 +12,7 @@ children:
   - PIM Interface
   - PIM SSM Policy
   - PIM Static RP Policy
+  - PIM Anycast RP
 references:
   - VRF
 attributes:

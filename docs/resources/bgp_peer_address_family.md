@@ -26,7 +26,7 @@ resource "nxos_bgp_peer_address_family" "example" {
   vrf                     = "default"
   address                 = "192.168.0.1"
   address_family          = "ipv4-ucast"
-  control                 = "rr-client"
+  control                 = "nh-self,rr-client"
   send_community_extended = "enabled"
   send_community_standard = "enabled"
 }
@@ -45,8 +45,9 @@ resource "nxos_bgp_peer_address_family" "example" {
 
 ### Optional
 
-- `control` (String) Peer address-family control.
-  - Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`
+- `control` (String) Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:
+  - Single value. Example: `nh-self`
+  - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.
 - `device` (String) A device name from the provider configuration.
 - `send_community_extended` (String) Send-community extended.
   - Choices: `enabled`, `disabled`

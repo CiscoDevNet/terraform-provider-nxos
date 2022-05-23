@@ -40,17 +40,8 @@ attributes:
   - nxos_name: ctrl
     tf_name: control
     type: String
-    description: 'Peer address-family control.'
-    enum_values:
-      - rr-client
-      - nh-self
-      - dis-peer-as-check
-      - allow-self-as
-      - default-originate
-      - advertisement-interval
-      - suppress-inactive
-      - nh-self-all
-    example: 'rr-client'
+    description: 'Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:\n  - Single value. Example: `nh-self`\n  - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.'
+    example: 'nh-self,rr-client'
   - nxos_name: sendComExt
     tf_name: send_community_extended
     type: String

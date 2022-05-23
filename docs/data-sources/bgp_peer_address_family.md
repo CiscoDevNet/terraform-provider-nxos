@@ -38,7 +38,9 @@ data "nxos_bgp_peer_address_family" "example" {
 
 ### Read-Only
 
-- `control` (String) Peer address-family control.
+- `control` (String) Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:
+  - Single value. Example: `nh-self`
+  - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.
 - `id` (String) The distinguished name of the object.
 - `send_community_extended` (String) Send-community extended.
 - `send_community_standard` (String) Send-community standard.

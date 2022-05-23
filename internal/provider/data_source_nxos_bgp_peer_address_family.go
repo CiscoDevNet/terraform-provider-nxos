@@ -48,7 +48,7 @@ func (t dataSourceBGPPeerAddressFamilyType) GetSchema(ctx context.Context) (tfsd
 				Required:            true,
 			},
 			"control": {
-				MarkdownDescription: "Peer address-family control.",
+				MarkdownDescription: "Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:\n  - Single value. Example: `nh-self`\n  - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.",
 				Type:                types.StringType,
 				Computed:            true,
 			},

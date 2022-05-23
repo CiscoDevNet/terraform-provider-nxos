@@ -18,7 +18,7 @@ func TestAccNxosBGPPeerTemplateAddressFamily(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_bgp_peer_template_address_family.test", "template_name", "SPINE-PEERS"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer_template_address_family.test", "address_family", "ipv4-ucast"),
-					resource.TestCheckResourceAttr("nxos_bgp_peer_template_address_family.test", "control", "rr-client"),
+					resource.TestCheckResourceAttr("nxos_bgp_peer_template_address_family.test", "control", "nh-self,rr-client"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer_template_address_family.test", "send_community_extended", "enabled"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer_template_address_family.test", "send_community_standard", "enabled"),
 				),
@@ -95,7 +95,7 @@ func testAccNxosBGPPeerTemplateAddressFamilyConfig_all() string {
 	resource "nxos_bgp_peer_template_address_family" "test" {
 		template_name = "SPINE-PEERS"
 		address_family = "ipv4-ucast"
-		control = "rr-client"
+		control = "nh-self,rr-client"
 		send_community_extended = "enabled"
 		send_community_standard = "enabled"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]

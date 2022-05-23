@@ -41,7 +41,6 @@ attributes:
     tf_name: control
     type: String
     description: 'Peer address-family control.'
-    default_value: ''
     example: 'rr-client'
   - nxos_name: sendComExt
     tf_name: send_community_extended

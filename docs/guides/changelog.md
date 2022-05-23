@@ -7,6 +7,11 @@ description: |-
 
 # Changelog
 
+## 0.3.14 (unreleased)
+
+- Allow multiple values for control attribute of nxos_bgp_peer_address_family and nxos_bgp_peer_template_address_family resources
+- Handle deletion of non-existent objects gracefully
+
 ## 0.3.13
 
 - Add nxos_pim_anycast_rp resource and data source

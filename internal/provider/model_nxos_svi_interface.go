@@ -45,7 +45,6 @@ func (data SVIInterface) toBody() nxos.Body {
 }
 
 func (data *SVIInterface) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Id.Value = res.Get("*.attributes.id").String()
 	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
 	data.Bw.Value = res.Get("*.attributes.bw").Int()
@@ -57,4 +56,5 @@ func (data *SVIInterface) fromBody(res gjson.Result) {
 
 func (data *SVIInterface) fromPlan(plan SVIInterface) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

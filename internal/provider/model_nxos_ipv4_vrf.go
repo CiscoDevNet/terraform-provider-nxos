@@ -31,10 +31,10 @@ func (data IPv4VRF) toBody() nxos.Body {
 }
 
 func (data *IPv4VRF) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Name.Value = res.Get("*.attributes.name").String()
 }
 
 func (data *IPv4VRF) fromPlan(plan IPv4VRF) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

@@ -34,12 +34,12 @@ func (data PIMAnycastRPPeer) toBody() nxos.Body {
 }
 
 func (data *PIMAnycastRPPeer) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Addr.Value = res.Get("*.attributes.addr").String()
 	data.RpSetAddr.Value = res.Get("*.attributes.rpSetAddr").String()
 }
 
 func (data *PIMAnycastRPPeer) fromPlan(plan PIMAnycastRPPeer) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Name.Value = plan.Name.Value
 }

@@ -39,7 +39,6 @@ func (data BGPPeerTemplate) toBody() nxos.Body {
 }
 
 func (data *BGPPeerTemplate) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Name.Value = res.Get("*.attributes.name").String()
 	data.Asn.Value = res.Get("*.attributes.asn").String()
 	data.Desc.Value = res.Get("*.attributes.desc").String()
@@ -49,4 +48,5 @@ func (data *BGPPeerTemplate) fromBody(res gjson.Result) {
 
 func (data *BGPPeerTemplate) fromPlan(plan BGPPeerTemplate) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

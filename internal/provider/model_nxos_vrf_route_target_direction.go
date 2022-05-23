@@ -34,12 +34,12 @@ func (data VRFRouteTargetDirection) toBody() nxos.Body {
 }
 
 func (data *VRFRouteTargetDirection) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Type.Value = res.Get("*.attributes.type").String()
 }
 
 func (data *VRFRouteTargetDirection) fromPlan(plan VRFRouteTargetDirection) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Vrf.Value = plan.Vrf.Value
 	data.Af_type.Value = plan.Af_type.Value
 	data.Rt_type.Value = plan.Rt_type.Value

@@ -36,12 +36,12 @@ func (data BGPGracefulRestart) toBody() nxos.Body {
 }
 
 func (data *BGPGracefulRestart) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.RestartIntvl.Value = res.Get("*.attributes.restartIntvl").Int()
 	data.StaleIntvl.Value = res.Get("*.attributes.staleIntvl").Int()
 }
 
 func (data *BGPGracefulRestart) fromPlan(plan BGPGracefulRestart) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Name.Value = plan.Name.Value
 }

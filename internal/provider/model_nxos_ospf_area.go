@@ -41,7 +41,6 @@ func (data OSPFArea) toBody() nxos.Body {
 }
 
 func (data *OSPFArea) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Id.Value = res.Get("*.attributes.id").String()
 	data.AuthType.Value = res.Get("*.attributes.authType").String()
 	data.Cost.Value = res.Get("*.attributes.cost").Int()
@@ -50,6 +49,7 @@ func (data *OSPFArea) fromBody(res gjson.Result) {
 
 func (data *OSPFArea) fromPlan(plan OSPFArea) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Inst.Value = plan.Inst.Value
 	data.Name.Value = plan.Name.Value
 }

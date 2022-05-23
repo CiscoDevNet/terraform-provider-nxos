@@ -45,7 +45,6 @@ func (data PIMInterface) toBody() nxos.Body {
 }
 
 func (data *PIMInterface) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Id.Value = res.Get("*.attributes.id").String()
 	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
 	data.BfdInst.Value = res.Get("*.attributes.bfdInst").String()
@@ -56,5 +55,6 @@ func (data *PIMInterface) fromBody(res gjson.Result) {
 
 func (data *PIMInterface) fromPlan(plan PIMInterface) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Name.Value = plan.Name.Value
 }

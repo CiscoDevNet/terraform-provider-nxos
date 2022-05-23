@@ -32,11 +32,11 @@ func (data PIMStaticRPPolicy) toBody() nxos.Body {
 }
 
 func (data *PIMStaticRPPolicy) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Name.Value = res.Get("*.attributes.name").String()
 }
 
 func (data *PIMStaticRPPolicy) fromPlan(plan PIMStaticRPPolicy) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Vrf_name.Value = plan.Vrf_name.Value
 }

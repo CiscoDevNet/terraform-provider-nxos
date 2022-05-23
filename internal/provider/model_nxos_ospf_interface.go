@@ -54,7 +54,6 @@ func (data OSPFInterface) toBody() nxos.Body {
 }
 
 func (data *OSPFInterface) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Id.Value = res.Get("*.attributes.id").String()
 	data.AdvertiseSecondaries.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.advertiseSecondaries").String())
 	data.Area.Value = res.Get("*.attributes.area").String()
@@ -69,6 +68,7 @@ func (data *OSPFInterface) fromBody(res gjson.Result) {
 
 func (data *OSPFInterface) fromPlan(plan OSPFInterface) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Inst.Value = plan.Inst.Value
 	data.Name.Value = plan.Name.Value
 }

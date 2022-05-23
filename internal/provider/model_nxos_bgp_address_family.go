@@ -38,7 +38,6 @@ func (data BGPAddressFamily) toBody() nxos.Body {
 }
 
 func (data *BGPAddressFamily) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Type.Value = res.Get("*.attributes.type").String()
 	data.CritNhTimeout.Value = res.Get("*.attributes.critNhTimeout").Int()
 	data.NonCritNhTimeout.Value = res.Get("*.attributes.nonCritNhTimeout").Int()
@@ -46,5 +45,6 @@ func (data *BGPAddressFamily) fromBody(res gjson.Result) {
 
 func (data *BGPAddressFamily) fromPlan(plan BGPAddressFamily) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Name.Value = plan.Name.Value
 }

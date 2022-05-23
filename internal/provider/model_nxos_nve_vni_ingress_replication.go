@@ -32,11 +32,11 @@ func (data NVEVNIIngressReplication) toBody() nxos.Body {
 }
 
 func (data *NVEVNIIngressReplication) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Proto.Value = res.Get("*.attributes.proto").String()
 }
 
 func (data *NVEVNIIngressReplication) fromPlan(plan NVEVNIIngressReplication) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Vni.Value = plan.Vni.Value
 }

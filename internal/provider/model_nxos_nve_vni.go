@@ -42,7 +42,6 @@ func (data NVEVNI) toBody() nxos.Body {
 }
 
 func (data *NVEVNI) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Vni.Value = res.Get("*.attributes.vni").Int()
 	data.AssociateVrfFlag.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.associateVrfFlag").String())
 	data.McastGroup.Value = res.Get("*.attributes.mcastGroup").String()
@@ -52,4 +51,5 @@ func (data *NVEVNI) fromBody(res gjson.Result) {
 
 func (data *NVEVNI) fromPlan(plan NVEVNI) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

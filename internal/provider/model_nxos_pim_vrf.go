@@ -38,7 +38,6 @@ func (data PIMVRF) toBody() nxos.Body {
 }
 
 func (data *PIMVRF) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Name.Value = res.Get("*.attributes.name").String()
 	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
 	data.Bfd.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.bfd").String())
@@ -46,4 +45,5 @@ func (data *PIMVRF) fromBody(res gjson.Result) {
 
 func (data *PIMVRF) fromPlan(plan PIMVRF) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

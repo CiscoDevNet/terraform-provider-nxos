@@ -52,7 +52,6 @@ func (data NVEInterface) toBody() nxos.Body {
 }
 
 func (data *NVEInterface) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
 	data.AdvertiseVmac.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.advertiseVmac").String())
 	data.HoldDownTime.Value = res.Get("*.attributes.holdDownTime").Int()
@@ -68,4 +67,5 @@ func (data *NVEInterface) fromBody(res gjson.Result) {
 
 func (data *NVEInterface) fromPlan(plan NVEInterface) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

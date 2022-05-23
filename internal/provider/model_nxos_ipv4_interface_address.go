@@ -35,13 +35,13 @@ func (data IPv4InterfaceAddress) toBody() nxos.Body {
 }
 
 func (data *IPv4InterfaceAddress) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Addr.Value = res.Get("*.attributes.addr").String()
 	data.Type.Value = res.Get("*.attributes.type").String()
 }
 
 func (data *IPv4InterfaceAddress) fromPlan(plan IPv4InterfaceAddress) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Dom.Value = plan.Dom.Value
 	data.Id.Value = plan.Id.Value
 }

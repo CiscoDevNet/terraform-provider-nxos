@@ -35,7 +35,6 @@ func (data LoopbackInterface) toBody() nxos.Body {
 }
 
 func (data *LoopbackInterface) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Id.Value = res.Get("*.attributes.id").String()
 	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
 	data.Descr.Value = res.Get("*.attributes.descr").String()
@@ -43,4 +42,5 @@ func (data *LoopbackInterface) fromBody(res gjson.Result) {
 
 func (data *LoopbackInterface) fromPlan(plan LoopbackInterface) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

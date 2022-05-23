@@ -40,7 +40,6 @@ func (data PIMStaticRPGroupList) toBody() nxos.Body {
 }
 
 func (data *PIMStaticRPGroupList) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.GrpListName.Value = res.Get("*.attributes.grpListName").String()
 	data.Bidir.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.bidir").String())
 	data.Override.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.override").String())
@@ -48,6 +47,7 @@ func (data *PIMStaticRPGroupList) fromBody(res gjson.Result) {
 
 func (data *PIMStaticRPGroupList) fromPlan(plan PIMStaticRPGroupList) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Vrf_name.Value = plan.Vrf_name.Value
 	data.Addr.Value = plan.Addr.Value
 }

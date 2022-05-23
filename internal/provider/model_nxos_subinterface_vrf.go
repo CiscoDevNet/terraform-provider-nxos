@@ -32,11 +32,11 @@ func (data SubinterfaceVRF) toBody() nxos.Body {
 }
 
 func (data *SubinterfaceVRF) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.TDn.Value = res.Get("*.attributes.tDn").String()
 }
 
 func (data *SubinterfaceVRF) fromPlan(plan SubinterfaceVRF) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Id.Value = plan.Id.Value
 }

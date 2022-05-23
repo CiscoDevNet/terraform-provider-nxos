@@ -35,12 +35,12 @@ func (data DefaultQOSPolicyMapMatchClassMapSetQOSGroup) toBody() nxos.Body {
 }
 
 func (data *DefaultQOSPolicyMapMatchClassMapSetQOSGroup) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Id.Value = res.Get("*.attributes.id").Int()
 }
 
 func (data *DefaultQOSPolicyMapMatchClassMapSetQOSGroup) fromPlan(plan DefaultQOSPolicyMapMatchClassMapSetQOSGroup) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Policy_map_name.Value = plan.Policy_map_name.Value
 	data.Class_map_name.Value = plan.Class_map_name.Value
 }

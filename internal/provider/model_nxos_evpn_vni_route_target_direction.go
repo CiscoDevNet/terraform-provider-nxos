@@ -32,11 +32,11 @@ func (data EVPNVNIRouteTargetDirection) toBody() nxos.Body {
 }
 
 func (data *EVPNVNIRouteTargetDirection) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Type.Value = res.Get("*.attributes.type").String()
 }
 
 func (data *EVPNVNIRouteTargetDirection) fromPlan(plan EVPNVNIRouteTargetDirection) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Encap.Value = plan.Encap.Value
 }

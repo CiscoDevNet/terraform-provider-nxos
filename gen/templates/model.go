@@ -67,7 +67,6 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 }
 
 func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	{{- range .Attributes}}
 	{{- if and (ne .ReferenceOnly true) (ne .ReadOnly true)}}
 	{{- if eq .Type "Int64"}}
@@ -83,6 +82,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 
 func (data *{{camelCase .Name}}) fromPlan(plan {{camelCase .Name}}) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	{{- range .Attributes}}
 	{{- if or (eq .ReferenceOnly true) (eq .ReadOnly true)}}
 	data.{{toTitle .NxosName}}.Value = plan.{{toTitle .NxosName}}.Value

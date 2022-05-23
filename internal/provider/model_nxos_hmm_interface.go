@@ -35,7 +35,6 @@ func (data HMMInterface) toBody() nxos.Body {
 }
 
 func (data *HMMInterface) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Id.Value = res.Get("*.attributes.id").String()
 	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
 	data.Mode.Value = res.Get("*.attributes.mode").String()
@@ -43,4 +42,5 @@ func (data *HMMInterface) fromBody(res gjson.Result) {
 
 func (data *HMMInterface) fromPlan(plan HMMInterface) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

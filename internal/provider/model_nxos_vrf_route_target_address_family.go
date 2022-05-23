@@ -33,12 +33,12 @@ func (data VRFRouteTargetAddressFamily) toBody() nxos.Body {
 }
 
 func (data *VRFRouteTargetAddressFamily) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Type.Value = res.Get("*.attributes.type").String()
 }
 
 func (data *VRFRouteTargetAddressFamily) fromPlan(plan VRFRouteTargetAddressFamily) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Vrf.Value = plan.Vrf.Value
 	data.Af_type.Value = plan.Af_type.Value
 }

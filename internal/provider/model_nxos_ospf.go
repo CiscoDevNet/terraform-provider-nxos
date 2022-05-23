@@ -29,10 +29,10 @@ func (data OSPF) toBody() nxos.Body {
 }
 
 func (data *OSPF) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
 }
 
 func (data *OSPF) fromPlan(plan OSPF) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

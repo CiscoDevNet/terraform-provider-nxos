@@ -26,9 +26,9 @@ func (data NVEVNIContainer) toBody() nxos.Body {
 }
 
 func (data *NVEVNIContainer) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 }
 
 func (data *NVEVNIContainer) fromPlan(plan NVEVNIContainer) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

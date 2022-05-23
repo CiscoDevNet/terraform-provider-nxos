@@ -49,7 +49,6 @@ func (data Subinterface) toBody() nxos.Body {
 }
 
 func (data *Subinterface) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Id.Value = res.Get("*.attributes.id").String()
 	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
 	data.Bw.Value = res.Get("*.attributes.bw").Int()
@@ -63,4 +62,5 @@ func (data *Subinterface) fromBody(res gjson.Result) {
 
 func (data *Subinterface) fromPlan(plan Subinterface) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

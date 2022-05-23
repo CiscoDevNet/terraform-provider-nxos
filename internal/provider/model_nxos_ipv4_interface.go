@@ -40,7 +40,6 @@ func (data IPv4Interface) toBody() nxos.Body {
 }
 
 func (data *IPv4Interface) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Id.Value = res.Get("*.attributes.id").String()
 	data.DropGlean.Value = res.Get("*.attributes.dropGlean").String()
 	data.Forward.Value = res.Get("*.attributes.forward").String()
@@ -50,5 +49,6 @@ func (data *IPv4Interface) fromBody(res gjson.Result) {
 
 func (data *IPv4Interface) fromPlan(plan IPv4Interface) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Dom.Value = plan.Dom.Value
 }

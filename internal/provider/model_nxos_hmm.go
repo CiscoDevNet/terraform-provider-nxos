@@ -29,10 +29,10 @@ func (data HMM) toBody() nxos.Body {
 }
 
 func (data *HMM) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
 }
 
 func (data *HMM) fromPlan(plan HMM) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

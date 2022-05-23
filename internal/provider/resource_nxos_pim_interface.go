@@ -151,6 +151,7 @@ func (r resourcePIMInterface) Create(ctx context.Context, req tfsdk.CreateResour
 
 	state.fromBody(res)
 	state.fromPlan(plan)
+	state.Dn.Value = plan.getDn()
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
 

@@ -79,7 +79,6 @@ func (data DefaultQOSPolicyMapMatchClassMapPolice) toBody() nxos.Body {
 }
 
 func (data *DefaultQOSPolicyMapMatchClassMapPolice) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.BcRate.Value = res.Get("*.attributes.bcRate").Int()
 	data.BcUnit.Value = res.Get("*.attributes.bcUnit").String()
 	data.BeRate.Value = res.Get("*.attributes.beRate").Int()
@@ -107,6 +106,7 @@ func (data *DefaultQOSPolicyMapMatchClassMapPolice) fromBody(res gjson.Result) {
 
 func (data *DefaultQOSPolicyMapMatchClassMapPolice) fromPlan(plan DefaultQOSPolicyMapMatchClassMapPolice) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Policy_map_name.Value = plan.Policy_map_name.Value
 	data.Class_map_name.Value = plan.Class_map_name.Value
 }

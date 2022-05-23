@@ -38,7 +38,6 @@ func (data BGPRouteControl) toBody() nxos.Body {
 }
 
 func (data *BGPRouteControl) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.EnforceFirstAs.Value = res.Get("*.attributes.enforceFirstAs").String()
 	data.FibAccelerate.Value = res.Get("*.attributes.fibAccelerate").String()
 	data.LogNeighborChanges.Value = res.Get("*.attributes.logNeighborChanges").String()
@@ -47,5 +46,6 @@ func (data *BGPRouteControl) fromBody(res gjson.Result) {
 
 func (data *BGPRouteControl) fromPlan(plan BGPRouteControl) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Name.Value = plan.Name.Value
 }

@@ -31,10 +31,10 @@ func (data DHCPRelayInterface) toBody() nxos.Body {
 }
 
 func (data *DHCPRelayInterface) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Id.Value = res.Get("*.attributes.id").String()
 }
 
 func (data *DHCPRelayInterface) fromPlan(plan DHCPRelayInterface) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

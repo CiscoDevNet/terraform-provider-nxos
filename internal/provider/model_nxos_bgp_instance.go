@@ -36,7 +36,6 @@ func (data BGPInstance) toBody() nxos.Body {
 }
 
 func (data *BGPInstance) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
 	data.Asn.Value = res.Get("*.attributes.asn").String()
 	data.EnhancedErr.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.enhancedErr").String())
@@ -44,4 +43,5 @@ func (data *BGPInstance) fromBody(res gjson.Result) {
 
 func (data *BGPInstance) fromPlan(plan BGPInstance) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

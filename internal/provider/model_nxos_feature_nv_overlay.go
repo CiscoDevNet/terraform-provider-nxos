@@ -29,10 +29,10 @@ func (data FeatureNVOverlay) toBody() nxos.Body {
 }
 
 func (data *FeatureNVOverlay) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
 }
 
 func (data *FeatureNVOverlay) fromPlan(plan FeatureNVOverlay) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

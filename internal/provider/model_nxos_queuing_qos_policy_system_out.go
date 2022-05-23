@@ -26,9 +26,9 @@ func (data QueuingQOSPolicySystemOut) toBody() nxos.Body {
 }
 
 func (data *QueuingQOSPolicySystemOut) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 }
 
 func (data *QueuingQOSPolicySystemOut) fromPlan(plan QueuingQOSPolicySystemOut) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

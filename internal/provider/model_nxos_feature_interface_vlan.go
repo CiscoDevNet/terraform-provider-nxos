@@ -29,10 +29,10 @@ func (data FeatureInterfaceVLAN) toBody() nxos.Body {
 }
 
 func (data *FeatureInterfaceVLAN) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
 }
 
 func (data *FeatureInterfaceVLAN) fromPlan(plan FeatureInterfaceVLAN) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

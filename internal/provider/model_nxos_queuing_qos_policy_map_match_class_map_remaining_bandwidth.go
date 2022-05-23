@@ -35,12 +35,12 @@ func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) toBody() nxos.Bod
 }
 
 func (data *QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Val.Value = res.Get("*.attributes.val").Int()
 }
 
 func (data *QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) fromPlan(plan QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Policy_map_name.Value = plan.Policy_map_name.Value
 	data.Class_map_name.Value = plan.Class_map_name.Value
 }

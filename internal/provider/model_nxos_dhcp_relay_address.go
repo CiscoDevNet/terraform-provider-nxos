@@ -34,12 +34,12 @@ func (data DHCPRelayAddress) toBody() nxos.Body {
 }
 
 func (data *DHCPRelayAddress) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Vrf.Value = res.Get("*.attributes.vrf").String()
 	data.Address.Value = res.Get("*.attributes.address").String()
 }
 
 func (data *DHCPRelayAddress) fromPlan(plan DHCPRelayAddress) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Id.Value = plan.Id.Value
 }

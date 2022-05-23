@@ -49,7 +49,6 @@ func (data OSPFAuthentication) toBody() nxos.Body {
 }
 
 func (data *OSPFAuthentication) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.KeyId.Value = res.Get("*.attributes.keyId").Int()
 	data.KeySecureMode.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.keySecureMode").String())
 	data.Keychain.Value = res.Get("*.attributes.keychain").String()
@@ -59,6 +58,7 @@ func (data *OSPFAuthentication) fromBody(res gjson.Result) {
 
 func (data *OSPFAuthentication) fromPlan(plan OSPFAuthentication) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Inst.Value = plan.Inst.Value
 	data.Name.Value = plan.Name.Value
 	data.Id.Value = plan.Id.Value

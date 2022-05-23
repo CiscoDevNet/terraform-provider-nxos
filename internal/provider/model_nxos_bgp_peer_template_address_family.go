@@ -38,7 +38,6 @@ func (data BGPPeerTemplateAddressFamily) toBody() nxos.Body {
 }
 
 func (data *BGPPeerTemplateAddressFamily) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Type.Value = res.Get("*.attributes.type").String()
 	data.Ctrl.Value = res.Get("*.attributes.ctrl").String()
 	data.SendComExt.Value = res.Get("*.attributes.sendComExt").String()
@@ -47,5 +46,6 @@ func (data *BGPPeerTemplateAddressFamily) fromBody(res gjson.Result) {
 
 func (data *BGPPeerTemplateAddressFamily) fromPlan(plan BGPPeerTemplateAddressFamily) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Name.Value = plan.Name.Value
 }

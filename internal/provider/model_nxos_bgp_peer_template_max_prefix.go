@@ -41,7 +41,6 @@ func (data BGPPeerTemplateMaxPrefix) toBody() nxos.Body {
 }
 
 func (data *BGPPeerTemplateMaxPrefix) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Action.Value = res.Get("*.attributes.action").String()
 	data.MaxPfx.Value = res.Get("*.attributes.maxPfx").Int()
 	data.RestartTime.Value = res.Get("*.attributes.restartTime").Int()
@@ -50,6 +49,7 @@ func (data *BGPPeerTemplateMaxPrefix) fromBody(res gjson.Result) {
 
 func (data *BGPPeerTemplateMaxPrefix) fromPlan(plan BGPPeerTemplateMaxPrefix) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Name.Value = plan.Name.Value
 	data.Type.Value = plan.Type.Value
 }

@@ -35,7 +35,6 @@ func (data BridgeDomain) toBody() nxos.Body {
 }
 
 func (data *BridgeDomain) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.FabEncap.Value = res.Get("*.attributes.fabEncap").String()
 	data.AccEncap.Value = res.Get("*.attributes.accEncap").String()
 	data.Name.Value = res.Get("*.attributes.name").String()
@@ -43,4 +42,5 @@ func (data *BridgeDomain) fromBody(res gjson.Result) {
 
 func (data *BridgeDomain) fromPlan(plan BridgeDomain) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

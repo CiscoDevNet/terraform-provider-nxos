@@ -47,7 +47,6 @@ func (data PIMSSMRange) toBody() nxos.Body {
 }
 
 func (data *PIMSSMRange) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.GrpList.Value = res.Get("*.attributes.grpList").String()
 	data.GrpList1.Value = res.Get("*.attributes.grpList1").String()
 	data.GrpList2.Value = res.Get("*.attributes.grpList2").String()
@@ -59,5 +58,6 @@ func (data *PIMSSMRange) fromBody(res gjson.Result) {
 
 func (data *PIMSSMRange) fromPlan(plan PIMSSMRange) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Vrf_name.Value = plan.Vrf_name.Value
 }

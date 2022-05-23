@@ -32,11 +32,11 @@ func (data VRFRouting) toBody() nxos.Body {
 }
 
 func (data *VRFRouting) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Rd.Value = res.Get("*.attributes.rd").String()
 }
 
 func (data *VRFRouting) fromPlan(plan VRFRouting) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Vrf.Value = plan.Vrf.Value
 }

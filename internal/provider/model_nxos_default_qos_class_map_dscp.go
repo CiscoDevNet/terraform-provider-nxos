@@ -32,11 +32,11 @@ func (data DefaultQOSClassMapDSCP) toBody() nxos.Body {
 }
 
 func (data *DefaultQOSClassMapDSCP) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Val.Value = res.Get("*.attributes.val").String()
 }
 
 func (data *DefaultQOSClassMapDSCP) fromPlan(plan DefaultQOSClassMapDSCP) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Class_map_name.Value = plan.Class_map_name.Value
 }

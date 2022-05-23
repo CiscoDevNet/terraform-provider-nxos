@@ -35,7 +35,6 @@ func (data VRF) toBody() nxos.Body {
 }
 
 func (data *VRF) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Name.Value = res.Get("*.attributes.name").String()
 	data.Descr.Value = res.Get("*.attributes.descr").String()
 	data.Encap.Value = res.Get("*.attributes.encap").String()
@@ -43,4 +42,5 @@ func (data *VRF) fromBody(res gjson.Result) {
 
 func (data *VRF) fromPlan(plan VRF) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

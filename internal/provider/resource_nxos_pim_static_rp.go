@@ -97,6 +97,7 @@ func (r resourcePIMStaticRP) Create(ctx context.Context, req tfsdk.CreateResourc
 
 	state.fromBody(res)
 	state.fromPlan(plan)
+	state.Dn.Value = plan.getDn()
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
 

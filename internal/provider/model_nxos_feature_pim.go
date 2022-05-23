@@ -29,10 +29,10 @@ func (data FeaturePIM) toBody() nxos.Body {
 }
 
 func (data *FeaturePIM) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
 }
 
 func (data *FeaturePIM) fromPlan(plan FeaturePIM) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

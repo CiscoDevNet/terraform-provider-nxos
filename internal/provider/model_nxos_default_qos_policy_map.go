@@ -33,11 +33,11 @@ func (data DefaultQOSPolicyMap) toBody() nxos.Body {
 }
 
 func (data *DefaultQOSPolicyMap) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Name.Value = res.Get("*.attributes.name").String()
 	data.MatchType.Value = res.Get("*.attributes.matchType").String()
 }
 
 func (data *DefaultQOSPolicyMap) fromPlan(plan DefaultQOSPolicyMap) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

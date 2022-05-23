@@ -98,6 +98,7 @@ func (r resourceVRFRouting) Create(ctx context.Context, req tfsdk.CreateResource
 
 	state.fromBody(res)
 	state.fromPlan(plan)
+	state.Dn.Value = plan.getDn()
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
 

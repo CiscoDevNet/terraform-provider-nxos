@@ -34,12 +34,12 @@ func (data PIMAnycastRP) toBody() nxos.Body {
 }
 
 func (data *PIMAnycastRP) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.LocalIf.Value = res.Get("*.attributes.localIf").String()
 	data.SrcIf.Value = res.Get("*.attributes.srcIf").String()
 }
 
 func (data *PIMAnycastRP) fromPlan(plan PIMAnycastRP) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Name.Value = plan.Name.Value
 }

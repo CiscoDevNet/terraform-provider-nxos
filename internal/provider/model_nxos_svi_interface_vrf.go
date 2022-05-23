@@ -32,11 +32,11 @@ func (data SVIInterfaceVRF) toBody() nxos.Body {
 }
 
 func (data *SVIInterfaceVRF) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.TDn.Value = res.Get("*.attributes.tDn").String()
 }
 
 func (data *SVIInterfaceVRF) fromPlan(plan SVIInterfaceVRF) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Id.Value = plan.Id.Value
 }

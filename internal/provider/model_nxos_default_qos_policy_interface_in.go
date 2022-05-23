@@ -31,10 +31,10 @@ func (data DefaultQOSPolicyInterfaceIn) toBody() nxos.Body {
 }
 
 func (data *DefaultQOSPolicyInterfaceIn) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Name.Value = res.Get("*.attributes.name").String()
 }
 
 func (data *DefaultQOSPolicyInterfaceIn) fromPlan(plan DefaultQOSPolicyInterfaceIn) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

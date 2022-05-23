@@ -33,11 +33,11 @@ func (data ISISInstance) toBody() nxos.Body {
 }
 
 func (data *ISISInstance) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Name.Value = res.Get("*.attributes.name").String()
 	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
 }
 
 func (data *ISISInstance) fromPlan(plan ISISInstance) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

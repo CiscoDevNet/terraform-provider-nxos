@@ -35,12 +35,12 @@ func (data QueuingQOSPolicyMapMatchClassMapPriority) toBody() nxos.Body {
 }
 
 func (data *QueuingQOSPolicyMapMatchClassMapPriority) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Level.Value = res.Get("*.attributes.level").Int()
 }
 
 func (data *QueuingQOSPolicyMapMatchClassMapPriority) fromPlan(plan QueuingQOSPolicyMapMatchClassMapPriority) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Policy_map_name.Value = plan.Policy_map_name.Value
 	data.Class_map_name.Value = plan.Class_map_name.Value
 }

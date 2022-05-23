@@ -63,7 +63,6 @@ func (data ISISVRF) toBody() nxos.Body {
 }
 
 func (data *ISISVRF) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Name.Value = res.Get("*.attributes.name").String()
 	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
 	data.AuthCheckLvl1.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.authCheckLvl1").String())
@@ -81,6 +80,7 @@ func (data *ISISVRF) fromBody(res gjson.Result) {
 
 func (data *ISISVRF) fromPlan(plan ISISVRF) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Inst.Value = plan.Inst.Value
 	data.AuthKeyLvl1.Value = plan.AuthKeyLvl1.Value
 	data.AuthKeyLvl2.Value = plan.AuthKeyLvl2.Value

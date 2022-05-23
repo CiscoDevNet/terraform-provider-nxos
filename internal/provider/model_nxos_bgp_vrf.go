@@ -33,11 +33,11 @@ func (data BGPVRF) toBody() nxos.Body {
 }
 
 func (data *BGPVRF) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Name.Value = res.Get("*.attributes.name").String()
 	data.RtrId.Value = res.Get("*.attributes.rtrId").String()
 }
 
 func (data *BGPVRF) fromPlan(plan BGPVRF) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

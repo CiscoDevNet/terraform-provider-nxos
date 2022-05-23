@@ -29,10 +29,10 @@ func (data FeatureBGP) toBody() nxos.Body {
 }
 
 func (data *FeatureBGP) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
 }
 
 func (data *FeatureBGP) fromPlan(plan FeatureBGP) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

@@ -33,11 +33,11 @@ func (data EVPNVNI) toBody() nxos.Body {
 }
 
 func (data *EVPNVNI) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Encap.Value = res.Get("*.attributes.encap").String()
 	data.Rd.Value = res.Get("*.attributes.rd").String()
 }
 
 func (data *EVPNVNI) fromPlan(plan EVPNVNI) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

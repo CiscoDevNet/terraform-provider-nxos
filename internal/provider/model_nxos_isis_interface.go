@@ -88,7 +88,6 @@ func (data ISISInterface) toBody() nxos.Body {
 }
 
 func (data *ISISInterface) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Id.Value = res.Get("*.attributes.id").String()
 	data.AuthCheck.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.authCheck").String())
 	data.AuthCheckLvl1.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.authCheckLvl1").String())
@@ -118,6 +117,7 @@ func (data *ISISInterface) fromBody(res gjson.Result) {
 
 func (data *ISISInterface) fromPlan(plan ISISInterface) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.AuthKey.Value = plan.AuthKey.Value
 	data.AuthKeyLvl1.Value = plan.AuthKeyLvl1.Value
 	data.AuthKeyLvl2.Value = plan.AuthKeyLvl2.Value

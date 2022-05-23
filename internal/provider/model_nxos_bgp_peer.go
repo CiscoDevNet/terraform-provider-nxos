@@ -42,7 +42,6 @@ func (data BGPPeer) toBody() nxos.Body {
 }
 
 func (data *BGPPeer) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.Addr.Value = res.Get("*.attributes.addr").String()
 	data.Asn.Value = res.Get("*.attributes.asn").String()
 	data.Name.Value = res.Get("*.attributes.name").String()
@@ -53,5 +52,6 @@ func (data *BGPPeer) fromBody(res gjson.Result) {
 
 func (data *BGPPeer) fromPlan(plan BGPPeer) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 	data.Vrf_name.Value = plan.Vrf_name.Value
 }

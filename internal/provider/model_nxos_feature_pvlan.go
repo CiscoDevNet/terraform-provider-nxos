@@ -29,10 +29,10 @@ func (data FeaturePVLAN) toBody() nxos.Body {
 }
 
 func (data *FeaturePVLAN) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
 }
 
 func (data *FeaturePVLAN) fromPlan(plan FeaturePVLAN) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

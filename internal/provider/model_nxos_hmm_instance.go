@@ -31,11 +31,11 @@ func (data HMMInstance) toBody() nxos.Body {
 }
 
 func (data *HMMInstance) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
 	data.Amac.Value = res.Get("*.attributes.amac").String()
 }
 
 func (data *HMMInstance) fromPlan(plan HMMInstance) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

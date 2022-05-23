@@ -31,10 +31,10 @@ func (data Ethernet) toBody() nxos.Body {
 }
 
 func (data *Ethernet) fromBody(res gjson.Result) {
-	data.Dn.Value = res.Get("*.attributes.dn").String()
 	data.SystemJumboMtu.Value = res.Get("*.attributes.systemJumboMtu").Int()
 }
 
 func (data *Ethernet) fromPlan(plan Ethernet) {
 	data.Device = plan.Device
+	data.Dn.Value = plan.Dn.Value
 }

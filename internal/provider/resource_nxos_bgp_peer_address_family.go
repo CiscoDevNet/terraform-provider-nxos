@@ -64,13 +64,10 @@ func (t resourceBGPPeerAddressFamilyType) GetSchema(ctx context.Context) (tfsdk.
 				},
 			},
 			"control": {
-				MarkdownDescription: helpers.NewAttributeDescription("Peer address-family control.").AddStringEnumDescription("rr-client", "nh-self", "dis-peer-as-check", "allow-self-as", "default-originate", "advertisement-interval", "suppress-inactive", "nh-self-all").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Peer address-family control.").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("rr-client", "nh-self", "dis-peer-as-check", "allow-self-as", "default-originate", "advertisement-interval", "suppress-inactive", "nh-self-all"),
-				},
 			},
 			"send_community_extended": {
 				MarkdownDescription: helpers.NewAttributeDescription("Send-community extended.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,

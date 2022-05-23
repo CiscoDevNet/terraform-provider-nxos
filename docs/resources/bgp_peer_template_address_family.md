@@ -50,7 +50,6 @@ resource "nxos_bgp_peer_template_address_family" "example" {
 ### Optional
 
 - `control` (String) Peer address-family control.
-  - Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`
 - `device` (String) A device name from the provider configuration.
 - `send_community_extended` (String) Send-community extended.
   - Choices: `enabled`, `disabled`

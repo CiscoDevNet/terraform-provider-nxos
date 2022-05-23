@@ -41,15 +41,7 @@ attributes:
     tf_name: control
     type: String
     description: 'Peer address-family control.'
-    enum_values:
-      - rr-client
-      - nh-self
-      - dis-peer-as-check
-      - allow-self-as
-      - default-originate
-      - advertisement-interval
-      - suppress-inactive
-      - nh-self-all
+    default_value: ''
     example: 'rr-client'
   - nxos_name: sendComExt
     tf_name: send_community_extended

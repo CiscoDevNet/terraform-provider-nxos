@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.3.15 (unreleased)
+
+- Fix asn attribute of BGP data sources
+
 ## 0.3.14
 
 - Allow multiple values for control attribute of nxos_bgp_peer_address_family and nxos_bgp_peer_template_address_family resources

@@ -43,11 +43,11 @@ resource "nxos_bgp_peer_template" "example" {
 
 ### Required
 
+- `asn` (String) Autonomous system number.
 - `template_name` (String) Peer template name.
 
 ### Optional
 
-- `asn` (String) Autonomous system number.
 - `description` (String) Peer template description.
 - `device` (String) A device name from the provider configuration.
 - `peer_type` (String) Neighbor Fabric Type.

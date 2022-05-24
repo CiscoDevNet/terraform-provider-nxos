@@ -41,6 +41,7 @@ resource "nxos_bgp_peer_template_max_prefix" "example" {
 - `address_family` (String) Address Family.
   - Choices: `ipv4-ucast`, `ipv4-mcast`, `vpnv4-ucast`, `ipv6-ucast`, `ipv6-mcast`, `vpnv6-ucast`, `vpnv6-mcast`, `l2vpn-evpn`, `ipv4-lucast`, `ipv6-lucast`, `lnkstate`, `ipv4-mvpn`, `ipv6-mvpn`, `l2vpn-vpls`, `ipv4-mdt`
   - Default value: `ipv4-ucast`
+- `asn` (String) Autonomous system number.
 - `template_name` (String) Peer template name.
 
 ### Optional
@@ -48,7 +49,6 @@ resource "nxos_bgp_peer_template_max_prefix" "example" {
 - `action` (String) Action to do when limit is exceeded.
   - Choices: `log`, `shut`, `restart`
   - Default value: `shut`
-- `asn` (String) Autonomous system number.
 - `device` (String) A device name from the provider configuration.
 - `maximum_prefix` (Number) Maximum number of prefixes allowed from the peer.
   - Range: `0`-`4294967295`

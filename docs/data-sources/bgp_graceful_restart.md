@@ -34,7 +34,6 @@ data "nxos_bgp_graceful_restart" "example" {
 
 ### Read-Only
 
-- `asn` (String) Autonomous system number.
 - `id` (String) The distinguished name of the object.
 - `restart_interval` (Number) The graceful restart interval.
 - `stale_interval` (Number) The stale interval for routes advertised by the BGP peer.

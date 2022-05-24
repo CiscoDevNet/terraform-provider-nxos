@@ -39,8 +39,7 @@ func (t resourceBGPGracefulRestartType) GetSchema(ctx context.Context) (tfsdk.Sc
 			"asn": {
 				MarkdownDescription: helpers.NewAttributeDescription("Autonomous system number.").String,
 				Type:                types.StringType,
-				Optional:            true,
-				Computed:            true,
+				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					tfsdk.RequiresReplace(),
 				},

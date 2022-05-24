@@ -39,11 +39,11 @@ resource "nxos_bgp_address_family" "example" {
 - `address_family` (String) Address Family.
   - Choices: `ipv4-ucast`, `ipv4-mcast`, `vpnv4-ucast`, `ipv6-ucast`, `ipv6-mcast`, `vpnv6-ucast`, `vpnv6-mcast`, `l2vpn-evpn`, `ipv4-lucast`, `ipv6-lucast`, `lnkstate`, `ipv4-mvpn`, `ipv6-mvpn`, `l2vpn-vpls`, `ipv4-mdt`
   - Default value: `ipv4-ucast`
+- `asn` (String) Autonomous system number.
 - `vrf` (String) VRF name.
 
 ### Optional
 
-- `asn` (String) Autonomous system number.
 - `critical_nexthop_timeout` (Number) The next-hop address tracking delay timer for critical next-hop reachability routes.
   - Range: `1`-`4294967295`
   - Default value: `3000`

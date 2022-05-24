@@ -39,8 +39,7 @@ func (t resourceBGPPeerTemplateMaxPrefixType) GetSchema(ctx context.Context) (tf
 			"asn": {
 				MarkdownDescription: helpers.NewAttributeDescription("Autonomous system number.").String,
 				Type:                types.StringType,
-				Optional:            true,
-				Computed:            true,
+				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					tfsdk.RequiresReplace(),
 				},

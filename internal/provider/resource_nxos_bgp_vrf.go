@@ -39,8 +39,7 @@ func (t resourceBGPVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.D
 			"asn": {
 				MarkdownDescription: helpers.NewAttributeDescription("Autonomous system number.").String,
 				Type:                types.StringType,
-				Optional:            true,
-				Computed:            true,
+				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					tfsdk.RequiresReplace(),
 				},

@@ -84,6 +84,7 @@ resource "nxos_rest" "PreReq4" {
 func testAccNxosBGPPeerTemplateAddressFamilyConfig_minimum() string {
 	return `
 	resource "nxos_bgp_peer_template_address_family" "test" {
+		asn = "65001"
 		template_name = "SPINE-PEERS"
 		address_family = "ipv4-ucast"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]

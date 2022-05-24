@@ -34,7 +34,6 @@ data "nxos_bgp_peer_template" "example" {
 
 ### Read-Only
 
-- `asn` (String) Autonomous system number.
 - `description` (String) Peer template description.
 - `id` (String) The distinguished name of the object.
 - `peer_type` (String) Neighbor Fabric Type.

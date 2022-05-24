@@ -75,6 +75,7 @@ resource "nxos_rest" "PreReq3" {
 func testAccNxosBGPRouteControlConfig_minimum() string {
 	return `
 	resource "nxos_bgp_route_control" "test" {
+		asn = "65001"
 		vrf = "default"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 	}

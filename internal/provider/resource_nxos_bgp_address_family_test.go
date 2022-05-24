@@ -74,6 +74,7 @@ resource "nxos_rest" "PreReq3" {
 func testAccNxosBGPAddressFamilyConfig_minimum() string {
 	return `
 	resource "nxos_bgp_address_family" "test" {
+		asn = "65001"
 		vrf = "default"
 		address_family = "ipv4-ucast"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]

@@ -59,7 +59,7 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 	return `
 	resource "nxos_{{snakeCase $name}}" "test" {
 	{{- range  .Attributes}}
-	{{- if or (eq .Id true) (eq .Mandatory true)}}
+	{{- if or (eq .Id true) (eq .ReferenceOnly true) (eq .Mandatory true)}}
 		{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
 	{{- end}}
 	{{- end}}

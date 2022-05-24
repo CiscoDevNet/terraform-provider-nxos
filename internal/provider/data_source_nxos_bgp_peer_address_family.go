@@ -32,11 +32,6 @@ func (t dataSourceBGPPeerAddressFamilyType) GetSchema(ctx context.Context) (tfsd
 				Type:                types.StringType,
 				Computed:            true,
 			},
-			"asn": {
-				MarkdownDescription: "Autonomous system number.",
-				Type:                types.StringType,
-				Computed:            true,
-			},
 			"vrf": {
 				MarkdownDescription: "VRF name.",
 				Type:                types.StringType,

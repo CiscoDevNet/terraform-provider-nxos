@@ -75,6 +75,7 @@ resource "nxos_rest" "PreReq3" {
 func testAccNxosBGPPeerTemplateConfig_minimum() string {
 	return `
 	resource "nxos_bgp_peer_template" "test" {
+		asn = "65001"
 		template_name = "SPINE-PEERS"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 	}

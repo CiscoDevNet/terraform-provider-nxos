@@ -37,11 +37,11 @@ resource "nxos_bgp_route_control" "example" {
 
 ### Required
 
+- `asn` (String) Autonomous system number.
 - `vrf` (String) VRF name.
 
 ### Optional
 
-- `asn` (String) Autonomous system number.
 - `device` (String) A device name from the provider configuration.
 - `enforce_first_as` (String) Enforce First AS For Ebgp. Can be configured only for VRF default.
   - Choices: `enabled`, `disabled`

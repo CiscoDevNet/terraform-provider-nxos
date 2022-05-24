@@ -77,6 +77,7 @@ resource "nxos_rest" "PreReq3" {
 func testAccNxosBGPPeerConfig_minimum() string {
 	return `
 	resource "nxos_bgp_peer" "test" {
+		asn = "65001"
 		vrf = "default"
 		address = "192.168.0.1"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]

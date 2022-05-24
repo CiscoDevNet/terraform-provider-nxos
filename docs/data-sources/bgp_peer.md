@@ -36,7 +36,6 @@ data "nxos_bgp_peer" "example" {
 
 ### Read-Only
 
-- `asn` (String) Autonomous system number.
 - `description` (String) Peer description.
 - `id` (String) The distinguished name of the object.
 - `peer_template` (String) Peer template name.

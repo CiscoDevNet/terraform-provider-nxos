@@ -35,11 +35,11 @@ resource "nxos_bgp_graceful_restart" "example" {
 
 ### Required
 
+- `asn` (String) Autonomous system number.
 - `vrf` (String) VRF name.
 
 ### Optional
 
-- `asn` (String) Autonomous system number.
 - `device` (String) A device name from the provider configuration.
 - `restart_interval` (Number) The graceful restart interval.
   - Range: `1`-`3600`

@@ -63,6 +63,7 @@ resource "nxos_rest" "PreReq2" {
 func testAccNxosBGPVRFConfig_minimum() string {
 	return `
 	resource "nxos_bgp_vrf" "test" {
+		asn = "65001"
 		name = "default"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 	}

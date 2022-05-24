@@ -52,11 +52,11 @@ resource "nxos_bgp_peer" "example" {
 ### Required
 
 - `address` (String) Peer address.
+- `asn` (String) Autonomous system number.
 - `vrf` (String) VRF name.
 
 ### Optional
 
-- `asn` (String) Autonomous system number.
 - `description` (String) Peer description.
 - `device` (String) A device name from the provider configuration.
 - `peer_template` (String) Peer template name.

@@ -46,11 +46,11 @@ resource "nxos_bgp_peer_template_address_family" "example" {
 - `address_family` (String) Address Family.
   - Choices: `ipv4-ucast`, `vpnv4-ucast`, `ipv6-ucast`, `vpnv6-ucast`, `l2vpn-evpn`, `lnkstate`
   - Default value: `ipv4-ucast`
+- `asn` (String) Autonomous system number.
 - `template_name` (String) Peer template name.
 
 ### Optional
 
-- `asn` (String) Autonomous system number.
 - `control` (String) Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:
   - Single value. Example: `nh-self`
   - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.

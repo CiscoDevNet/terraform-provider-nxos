@@ -50,11 +50,11 @@ resource "nxos_bgp_vrf" "example" {
 
 ### Required
 
+- `asn` (String) Autonomous system number.
 - `name` (String) VRF name.
 
 ### Optional
 
-- `asn` (String) Autonomous system number.
 - `device` (String) A device name from the provider configuration.
 - `router_id` (String) Router ID.
 

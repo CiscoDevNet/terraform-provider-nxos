@@ -15,6 +15,7 @@ import (
 type BGPAddressFamily struct {
 	Device           types.String `tfsdk:"device"`
 	Dn               types.String `tfsdk:"id"`
+	Asn              types.String `tfsdk:"asn"`
 	Name             types.String `tfsdk:"vrf"`
 	Type             types.String `tfsdk:"address_family"`
 	CritNhTimeout    types.Int64  `tfsdk:"critical_nexthop_timeout"`
@@ -46,5 +47,6 @@ func (data *BGPAddressFamily) fromBody(res gjson.Result) {
 func (data *BGPAddressFamily) fromPlan(plan BGPAddressFamily) {
 	data.Device = plan.Device
 	data.Dn.Value = plan.Dn.Value
+	data.Asn.Value = plan.Asn.Value
 	data.Name.Value = plan.Name.Value
 }

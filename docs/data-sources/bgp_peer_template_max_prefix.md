@@ -37,6 +37,7 @@ data "nxos_bgp_peer_template_max_prefix" "example" {
 ### Read-Only
 
 - `action` (String) Action to do when limit is exceeded.
+- `asn` (String) Autonomous system number.
 - `id` (String) The distinguished name of the object.
 - `maximum_prefix` (Number) Maximum number of prefixes allowed from the peer.
 - `restart_time` (Number) The period of time in minutes before restarting the peer when the prefix limit is reached.

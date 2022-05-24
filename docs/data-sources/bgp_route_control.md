@@ -34,6 +34,7 @@ data "nxos_bgp_route_control" "example" {
 
 ### Read-Only
 
+- `asn` (String) Autonomous system number.
 - `enforce_first_as` (String) Enforce First AS For Ebgp. Can be configured only for VRF default.
 - `fib_accelerate` (String) Accelerate the hardware updates for IP/IPv6 adjacencies for neighbor. Can be configured only for VRF default.
 - `id` (String) The distinguished name of the object.

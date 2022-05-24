@@ -15,6 +15,7 @@ import (
 type BGPGracefulRestart struct {
 	Device       types.String `tfsdk:"device"`
 	Dn           types.String `tfsdk:"id"`
+	Asn          types.String `tfsdk:"asn"`
 	Name         types.String `tfsdk:"vrf"`
 	RestartIntvl types.Int64  `tfsdk:"restart_interval"`
 	StaleIntvl   types.Int64  `tfsdk:"stale_interval"`
@@ -43,5 +44,6 @@ func (data *BGPGracefulRestart) fromBody(res gjson.Result) {
 func (data *BGPGracefulRestart) fromPlan(plan BGPGracefulRestart) {
 	data.Device = plan.Device
 	data.Dn.Value = plan.Dn.Value
+	data.Asn.Value = plan.Asn.Value
 	data.Name.Value = plan.Name.Value
 }

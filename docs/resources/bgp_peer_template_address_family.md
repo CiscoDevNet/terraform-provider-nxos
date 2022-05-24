@@ -29,6 +29,7 @@ This resource can manage the BGP peer template address family configuration.
 
 ```terraform
 resource "nxos_bgp_peer_template_address_family" "example" {
+  asn                     = "65001"
   template_name           = "SPINE-PEERS"
   address_family          = "ipv4-ucast"
   control                 = "nh-self,rr-client"
@@ -49,6 +50,7 @@ resource "nxos_bgp_peer_template_address_family" "example" {
 
 ### Optional
 
+- `asn` (String) Autonomous system number.
 - `control` (String) Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:
   - Single value. Example: `nh-self`
   - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.

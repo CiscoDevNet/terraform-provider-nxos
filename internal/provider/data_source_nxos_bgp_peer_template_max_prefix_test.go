@@ -86,6 +86,7 @@ resource "nxos_rest" "PreReq5" {
 const testAccDataSourceNxosBGPPeerTemplateMaxPrefixConfig = `
 
 resource "nxos_bgp_peer_template_max_prefix" "test" {
+  asn = "65001"
   template_name = "SPINE-PEERS"
   address_family = "ipv4-ucast"
   action = "log"

@@ -13,6 +13,7 @@ import (
 type BGPVRF struct {
 	Device types.String `tfsdk:"device"`
 	Dn     types.String `tfsdk:"id"`
+	Asn    types.String `tfsdk:"asn"`
 	Name   types.String `tfsdk:"name"`
 	RtrId  types.String `tfsdk:"router_id"`
 }
@@ -40,4 +41,5 @@ func (data *BGPVRF) fromBody(res gjson.Result) {
 func (data *BGPVRF) fromPlan(plan BGPVRF) {
 	data.Device = plan.Device
 	data.Dn.Value = plan.Dn.Value
+	data.Asn.Value = plan.Asn.Value
 }

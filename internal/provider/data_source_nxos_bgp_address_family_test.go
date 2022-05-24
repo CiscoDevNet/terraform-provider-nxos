@@ -67,6 +67,7 @@ resource "nxos_rest" "PreReq3" {
 const testAccDataSourceNxosBGPAddressFamilyConfig = `
 
 resource "nxos_bgp_address_family" "test" {
+  asn = "65001"
   vrf = "default"
   address_family = "ipv4-ucast"
   critical_nexthop_timeout = 1800

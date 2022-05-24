@@ -16,6 +16,7 @@ func TestAccNxosBGPPeerTemplateMaxPrefix(t *testing.T) {
 			{
 				Config: testAccNxosBGPPeerTemplateMaxPrefixPrerequisitesConfig + testAccNxosBGPPeerTemplateMaxPrefixConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("nxos_bgp_peer_template_max_prefix.test", "asn", "65001"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer_template_max_prefix.test", "template_name", "SPINE-PEERS"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer_template_max_prefix.test", "address_family", "ipv4-ucast"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer_template_max_prefix.test", "action", "log"),
@@ -103,6 +104,7 @@ func testAccNxosBGPPeerTemplateMaxPrefixConfig_minimum() string {
 func testAccNxosBGPPeerTemplateMaxPrefixConfig_all() string {
 	return `
 	resource "nxos_bgp_peer_template_max_prefix" "test" {
+		asn = "65001"
 		template_name = "SPINE-PEERS"
 		address_family = "ipv4-ucast"
 		action = "log"

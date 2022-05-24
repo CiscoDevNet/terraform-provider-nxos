@@ -32,6 +32,11 @@ func (t dataSourceBGPPeerTemplateAddressFamilyType) GetSchema(ctx context.Contex
 				Type:                types.StringType,
 				Computed:            true,
 			},
+			"asn": {
+				MarkdownDescription: "Autonomous system number.",
+				Type:                types.StringType,
+				Computed:            true,
+			},
 			"template_name": {
 				MarkdownDescription: "Peer template name.",
 				Type:                types.StringType,

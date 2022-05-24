@@ -11,6 +11,13 @@ parents:
 children:
   - BGP Peer Template Address Family
 attributes:
+  - nxos_name: bgp_asn
+    tf_name: asn
+    type: String
+    reference_only: true
+    requires_replace: true
+    description: 'Autonomous system number.'
+    example: '65001'
   - nxos_name: name
     tf_name: template_name
     type: String
@@ -18,9 +25,9 @@ attributes:
     description: 'Peer template name.'
     example: SPINE-PEERS
   - nxos_name: asn
-    tf_name: asn
+    tf_name: remote_asn
     type: String
-    description: 'Peer template Autonomous system number.'
+    description: 'Peer template autonomous system number.'
     example: '65002'
   - nxos_name: desc
     tf_name: description

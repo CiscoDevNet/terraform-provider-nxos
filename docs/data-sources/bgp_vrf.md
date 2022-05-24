@@ -34,6 +34,7 @@ data "nxos_bgp_vrf" "example" {
 
 ### Read-Only
 
+- `asn` (String) Autonomous system number.
 - `id` (String) The distinguished name of the object.
 - `router_id` (String) Router ID.
 

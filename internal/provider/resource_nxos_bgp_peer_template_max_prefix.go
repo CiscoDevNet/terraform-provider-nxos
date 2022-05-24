@@ -36,6 +36,15 @@ func (t resourceBGPPeerTemplateMaxPrefixType) GetSchema(ctx context.Context) (tf
 					tfsdk.UseStateForUnknown(),
 				},
 			},
+			"asn": {
+				MarkdownDescription: helpers.NewAttributeDescription("Autonomous system number.").String,
+				Type:                types.StringType,
+				Optional:            true,
+				Computed:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					tfsdk.RequiresReplace(),
+				},
+			},
 			"template_name": {
 				MarkdownDescription: helpers.NewAttributeDescription("Peer template name.").String,
 				Type:                types.StringType,

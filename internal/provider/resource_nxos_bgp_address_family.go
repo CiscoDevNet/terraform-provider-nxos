@@ -36,6 +36,15 @@ func (t resourceBGPAddressFamilyType) GetSchema(ctx context.Context) (tfsdk.Sche
 					tfsdk.UseStateForUnknown(),
 				},
 			},
+			"asn": {
+				MarkdownDescription: helpers.NewAttributeDescription("Autonomous system number.").String,
+				Type:                types.StringType,
+				Optional:            true,
+				Computed:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					tfsdk.RequiresReplace(),
+				},
+			},
 			"vrf": {
 				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Type:                types.StringType,

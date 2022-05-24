@@ -11,6 +11,9 @@ description: |-
 
 - Allow multiple values for control attribute of nxos_bgp_peer_address_family and nxos_bgp_peer_template_address_family resources
 - Handle deletion of non-existent objects gracefully
+- BREAKING CHANGE: Add asn attribute to nxos_bgp_address_family, nxos_bgp_graceful_restart, nxos_bgp_peer_address_family, nxos_bgp_peer_template_address_family, nxos_bgp_peer_template_max_prefix, nxos_bgp_peer_template, nxos_bgp_peer, nxos_route_control and nxos_bgp_vrf resources.
+- BREAKING CHANGE: Rename asn attribute of nxos_bgp_peer resource to remote_asn
+- BREAKING CHANGE: Rename asn attribute of nxos_bgp_peer_template resource to remote_asn
 
 ## 0.3.13
 

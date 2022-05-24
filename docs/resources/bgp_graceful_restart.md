@@ -23,6 +23,7 @@ This resource can manage the BGP domain (VRF) graceful restart configuration.
 
 ```terraform
 resource "nxos_bgp_graceful_restart" "example" {
+  asn              = "65001"
   vrf              = "default"
   restart_interval = 240
   stale_interval   = 1800
@@ -38,6 +39,7 @@ resource "nxos_bgp_graceful_restart" "example" {
 
 ### Optional
 
+- `asn` (String) Autonomous system number.
 - `device` (String) A device name from the provider configuration.
 - `restart_interval` (Number) The graceful restart interval.
   - Range: `1`-`3600`

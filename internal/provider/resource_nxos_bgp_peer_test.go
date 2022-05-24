@@ -16,9 +16,10 @@ func TestAccNxosBGPPeer(t *testing.T) {
 			{
 				Config: testAccNxosBGPPeerPrerequisitesConfig + testAccNxosBGPPeerConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("nxos_bgp_peer.test", "asn", "65001"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer.test", "vrf", "default"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer.test", "address", "192.168.0.1"),
-					resource.TestCheckResourceAttr("nxos_bgp_peer.test", "asn", "65002"),
+					resource.TestCheckResourceAttr("nxos_bgp_peer.test", "remote_asn", "65002"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer.test", "description", "My description"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer.test", "peer_template", "SPINE-PEERS"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer.test", "peer_type", "fabric-internal"),
@@ -86,9 +87,10 @@ func testAccNxosBGPPeerConfig_minimum() string {
 func testAccNxosBGPPeerConfig_all() string {
 	return `
 	resource "nxos_bgp_peer" "test" {
+		asn = "65001"
 		vrf = "default"
 		address = "192.168.0.1"
-		asn = "65002"
+		remote_asn = "65002"
 		description = "My description"
 		peer_template = "SPINE-PEERS"
 		peer_type = "fabric-internal"

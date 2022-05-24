@@ -16,6 +16,7 @@ func TestAccNxosBGPVRF(t *testing.T) {
 			{
 				Config: testAccNxosBGPVRFPrerequisitesConfig + testAccNxosBGPVRFConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("nxos_bgp_vrf.test", "asn", "65001"),
 					resource.TestCheckResourceAttr("nxos_bgp_vrf.test", "name", "default"),
 					resource.TestCheckResourceAttr("nxos_bgp_vrf.test", "router_id", "1.1.1.1"),
 				),
@@ -71,6 +72,7 @@ func testAccNxosBGPVRFConfig_minimum() string {
 func testAccNxosBGPVRFConfig_all() string {
 	return `
 	resource "nxos_bgp_vrf" "test" {
+		asn = "65001"
 		name = "default"
 		router_id = "1.1.1.1"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]

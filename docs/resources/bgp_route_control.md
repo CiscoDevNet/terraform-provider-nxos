@@ -23,6 +23,7 @@ This resource can manage the BGP Route Control configuration.
 
 ```terraform
 resource "nxos_bgp_route_control" "example" {
+  asn                  = "65001"
   vrf                  = "default"
   enforce_first_as     = "disabled"
   fib_accelerate       = "enabled"
@@ -40,6 +41,7 @@ resource "nxos_bgp_route_control" "example" {
 
 ### Optional
 
+- `asn` (String) Autonomous system number.
 - `device` (String) A device name from the provider configuration.
 - `enforce_first_as` (String) Enforce First AS For Ebgp. Can be configured only for VRF default.
   - Choices: `enabled`, `disabled`

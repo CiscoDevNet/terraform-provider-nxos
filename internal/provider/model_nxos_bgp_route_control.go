@@ -13,6 +13,7 @@ import (
 type BGPRouteControl struct {
 	Device             types.String `tfsdk:"device"`
 	Dn                 types.String `tfsdk:"id"`
+	Asn                types.String `tfsdk:"asn"`
 	Name               types.String `tfsdk:"vrf"`
 	EnforceFirstAs     types.String `tfsdk:"enforce_first_as"`
 	FibAccelerate      types.String `tfsdk:"fib_accelerate"`
@@ -47,5 +48,6 @@ func (data *BGPRouteControl) fromBody(res gjson.Result) {
 func (data *BGPRouteControl) fromPlan(plan BGPRouteControl) {
 	data.Device = plan.Device
 	data.Dn.Value = plan.Dn.Value
+	data.Asn.Value = plan.Asn.Value
 	data.Name.Value = plan.Name.Value
 }

@@ -34,10 +34,11 @@ data "nxos_bgp_peer_template" "example" {
 
 ### Read-Only
 
-- `asn` (String) Peer template Autonomous system number.
+- `asn` (String) Autonomous system number.
 - `description` (String) Peer template description.
 - `id` (String) The distinguished name of the object.
 - `peer_type` (String) Neighbor Fabric Type.
+- `remote_asn` (String) Peer template autonomous system number.
 - `source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`.
 
 

@@ -41,6 +41,7 @@ data "nxos_bgp_peer" "example" {
 - `id` (String) The distinguished name of the object.
 - `peer_template` (String) Peer template name.
 - `peer_type` (String) Neighbor Fabric Type.
+- `remote_asn` (String) Peer autonomous system number.
 - `source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`.
 
 

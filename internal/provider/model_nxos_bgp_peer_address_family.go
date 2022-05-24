@@ -13,6 +13,7 @@ import (
 type BGPPeerAddressFamily struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
+	Asn        types.String `tfsdk:"asn"`
 	Vrf_name   types.String `tfsdk:"vrf"`
 	Addr       types.String `tfsdk:"address"`
 	Type       types.String `tfsdk:"address_family"`
@@ -48,6 +49,7 @@ func (data *BGPPeerAddressFamily) fromBody(res gjson.Result) {
 func (data *BGPPeerAddressFamily) fromPlan(plan BGPPeerAddressFamily) {
 	data.Device = plan.Device
 	data.Dn.Value = plan.Dn.Value
+	data.Asn.Value = plan.Asn.Value
 	data.Vrf_name.Value = plan.Vrf_name.Value
 	data.Addr.Value = plan.Addr.Value
 }

@@ -36,6 +36,7 @@ data "nxos_bgp_address_family" "example" {
 
 ### Read-Only
 
+- `asn` (String) Autonomous system number.
 - `critical_nexthop_timeout` (Number) The next-hop address tracking delay timer for critical next-hop reachability routes.
 - `id` (String) The distinguished name of the object.
 - `non_critical_nexthop_timeout` (Number) The next-hop address tracking delay timer for non-critical next-hop reachability routes.

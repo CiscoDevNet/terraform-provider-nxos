@@ -13,9 +13,17 @@ children:
   - BGP Graceful Restart
   - BGP Peer
   - BGP Peer Template
+  - BGP Route Control
 references:
   - VRF
 attributes:
+  - nxos_name: asn
+    tf_name: asn
+    type: String
+    reference_only: true
+    requires_replace: true
+    description: 'Autonomous system number.'
+    example: '65001'
   - nxos_name: name
     tf_name: name
     type: String

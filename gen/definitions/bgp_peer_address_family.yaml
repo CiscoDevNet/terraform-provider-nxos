@@ -9,6 +9,13 @@ doc_category: BGP
 parents:
   - BGP Peer
 attributes:
+  - nxos_name: asn
+    tf_name: asn
+    type: String
+    reference_only: true
+    requires_replace: true
+    description: 'Autonomous system number.'
+    example: '65001'
   - nxos_name: vrf_name
     tf_name: vrf
     type: String

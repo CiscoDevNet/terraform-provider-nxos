@@ -23,6 +23,7 @@ This resource can manage the BGP (VRF) address family configuration.
 
 ```terraform
 resource "nxos_bgp_address_family" "example" {
+  asn                          = "65001"
   vrf                          = "default"
   address_family               = "ipv4-ucast"
   critical_nexthop_timeout     = 1800
@@ -42,6 +43,7 @@ resource "nxos_bgp_address_family" "example" {
 
 ### Optional
 
+- `asn` (String) Autonomous system number.
 - `critical_nexthop_timeout` (Number) The next-hop address tracking delay timer for critical next-hop reachability routes.
   - Range: `1`-`4294967295`
   - Default value: `3000`

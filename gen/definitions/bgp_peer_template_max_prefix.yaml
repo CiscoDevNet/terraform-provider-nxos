@@ -9,6 +9,13 @@ doc_category: BGP
 parents:
   - BGP Peer Template Address Family
 attributes:
+  - nxos_name: asn
+    tf_name: asn
+    type: String
+    reference_only: true
+    requires_replace: true
+    description: 'Autonomous system number.'
+    example: '65001'
   - nxos_name: name
     tf_name: template_name
     type: String

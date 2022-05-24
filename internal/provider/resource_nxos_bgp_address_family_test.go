@@ -16,6 +16,7 @@ func TestAccNxosBGPAddressFamily(t *testing.T) {
 			{
 				Config: testAccNxosBGPAddressFamilyPrerequisitesConfig + testAccNxosBGPAddressFamilyConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("nxos_bgp_address_family.test", "asn", "65001"),
 					resource.TestCheckResourceAttr("nxos_bgp_address_family.test", "vrf", "default"),
 					resource.TestCheckResourceAttr("nxos_bgp_address_family.test", "address_family", "ipv4-ucast"),
 					resource.TestCheckResourceAttr("nxos_bgp_address_family.test", "critical_nexthop_timeout", "1800"),
@@ -83,6 +84,7 @@ func testAccNxosBGPAddressFamilyConfig_minimum() string {
 func testAccNxosBGPAddressFamilyConfig_all() string {
 	return `
 	resource "nxos_bgp_address_family" "test" {
+		asn = "65001"
 		vrf = "default"
 		address_family = "ipv4-ucast"
 		critical_nexthop_timeout = 1800

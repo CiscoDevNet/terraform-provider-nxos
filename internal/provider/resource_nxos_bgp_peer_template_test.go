@@ -16,8 +16,9 @@ func TestAccNxosBGPPeerTemplate(t *testing.T) {
 			{
 				Config: testAccNxosBGPPeerTemplatePrerequisitesConfig + testAccNxosBGPPeerTemplateConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "asn", "65001"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "template_name", "SPINE-PEERS"),
-					resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "asn", "65002"),
+					resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "remote_asn", "65002"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "description", "My Description"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "peer_type", "fabric-internal"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "source_interface", "lo0"),
@@ -83,8 +84,9 @@ func testAccNxosBGPPeerTemplateConfig_minimum() string {
 func testAccNxosBGPPeerTemplateConfig_all() string {
 	return `
 	resource "nxos_bgp_peer_template" "test" {
+		asn = "65001"
 		template_name = "SPINE-PEERS"
-		asn = "65002"
+		remote_asn = "65002"
 		description = "My Description"
 		peer_type = "fabric-internal"
 		source_interface = "lo0"

@@ -15,6 +15,7 @@ import (
 type BGPPeerTemplateMaxPrefix struct {
 	Device      types.String `tfsdk:"device"`
 	Dn          types.String `tfsdk:"id"`
+	Asn         types.String `tfsdk:"asn"`
 	Name        types.String `tfsdk:"template_name"`
 	Type        types.String `tfsdk:"address_family"`
 	Action      types.String `tfsdk:"action"`
@@ -50,6 +51,7 @@ func (data *BGPPeerTemplateMaxPrefix) fromBody(res gjson.Result) {
 func (data *BGPPeerTemplateMaxPrefix) fromPlan(plan BGPPeerTemplateMaxPrefix) {
 	data.Device = plan.Device
 	data.Dn.Value = plan.Dn.Value
+	data.Asn.Value = plan.Asn.Value
 	data.Name.Value = plan.Name.Value
 	data.Type.Value = plan.Type.Value
 }

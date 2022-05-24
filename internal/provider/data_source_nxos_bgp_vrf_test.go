@@ -57,6 +57,7 @@ resource "nxos_rest" "PreReq2" {
 const testAccDataSourceNxosBGPVRFConfig = `
 
 resource "nxos_bgp_vrf" "test" {
+  asn = "65001"
   name = "default"
   router_id = "1.1.1.1"
   depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]

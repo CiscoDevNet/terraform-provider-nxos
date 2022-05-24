@@ -16,6 +16,7 @@ func TestAccNxosBGPRouteControl(t *testing.T) {
 			{
 				Config: testAccNxosBGPRouteControlPrerequisitesConfig + testAccNxosBGPRouteControlConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("nxos_bgp_route_control.test", "asn", "65001"),
 					resource.TestCheckResourceAttr("nxos_bgp_route_control.test", "vrf", "default"),
 					resource.TestCheckResourceAttr("nxos_bgp_route_control.test", "enforce_first_as", "disabled"),
 					resource.TestCheckResourceAttr("nxos_bgp_route_control.test", "fib_accelerate", "enabled"),
@@ -83,6 +84,7 @@ func testAccNxosBGPRouteControlConfig_minimum() string {
 func testAccNxosBGPRouteControlConfig_all() string {
 	return `
 	resource "nxos_bgp_route_control" "test" {
+		asn = "65001"
 		vrf = "default"
 		enforce_first_as = "disabled"
 		fib_accelerate = "enabled"

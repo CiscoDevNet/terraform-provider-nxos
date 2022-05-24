@@ -20,7 +20,7 @@ type resourceBGPVRFType struct{}
 func (t resourceBGPVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP domain (VRF) configuration.", "bgpDom", "Routing%20and%20Forwarding/bgp:Dom/").AddParents("bgp_instance").AddChildren("bgp_address_family", "bgp_graceful_restart", "bgp_peer", "bgp_peer_template").AddReferences("vrf").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP domain (VRF) configuration.", "bgpDom", "Routing%20and%20Forwarding/bgp:Dom/").AddParents("bgp_instance").AddChildren("bgp_address_family", "bgp_graceful_restart", "bgp_peer", "bgp_peer_template", "bgp_route_control").AddReferences("vrf").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {
@@ -34,6 +34,15 @@ func (t resourceBGPVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.D
 				Computed:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					tfsdk.UseStateForUnknown(),
+				},
+			},
+			"asn": {
+				MarkdownDescription: helpers.NewAttributeDescription("Autonomous system number.").String,
+				Type:                types.StringType,
+				Optional:            true,
+				Computed:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					tfsdk.RequiresReplace(),
 				},
 			},
 			"name": {

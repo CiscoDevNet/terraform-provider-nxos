@@ -16,6 +16,7 @@ func TestAccNxosBGPGracefulRestart(t *testing.T) {
 			{
 				Config: testAccNxosBGPGracefulRestartPrerequisitesConfig + testAccNxosBGPGracefulRestartConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("nxos_bgp_graceful_restart.test", "asn", "65001"),
 					resource.TestCheckResourceAttr("nxos_bgp_graceful_restart.test", "vrf", "default"),
 					resource.TestCheckResourceAttr("nxos_bgp_graceful_restart.test", "restart_interval", "240"),
 					resource.TestCheckResourceAttr("nxos_bgp_graceful_restart.test", "stale_interval", "1800"),
@@ -81,6 +82,7 @@ func testAccNxosBGPGracefulRestartConfig_minimum() string {
 func testAccNxosBGPGracefulRestartConfig_all() string {
 	return `
 	resource "nxos_bgp_graceful_restart" "test" {
+		asn = "65001"
 		vrf = "default"
 		restart_interval = 240
 		stale_interval = 1800

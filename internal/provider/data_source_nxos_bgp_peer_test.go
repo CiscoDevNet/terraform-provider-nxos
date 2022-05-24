@@ -17,7 +17,7 @@ func TestAccDataSourceNxosBGPPeer(t *testing.T) {
 				Config: testAccDataSourceNxosBGPPeerPrerequisitesConfig + testAccDataSourceNxosBGPPeerConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "address", "192.168.0.1"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "asn", "65002"),
+					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "remote_asn", "65002"),
 					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "description", "My description"),
 					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "peer_template", "SPINE-PEERS"),
 					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "peer_type", "fabric-internal"),
@@ -70,9 +70,10 @@ resource "nxos_rest" "PreReq3" {
 const testAccDataSourceNxosBGPPeerConfig = `
 
 resource "nxos_bgp_peer" "test" {
+  asn = "65001"
   vrf = "default"
   address = "192.168.0.1"
-  asn = "65002"
+  remote_asn = "65002"
   description = "My description"
   peer_template = "SPINE-PEERS"
   peer_type = "fabric-internal"

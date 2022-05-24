@@ -35,9 +35,10 @@ This resource can manage the BGP peer configuration.
 
 ```terraform
 resource "nxos_bgp_peer" "example" {
+  asn              = "65001"
   vrf              = "default"
   address          = "192.168.0.1"
-  asn              = "65002"
+  remote_asn       = "65002"
   description      = "My description"
   peer_template    = "SPINE-PEERS"
   peer_type        = "fabric-internal"
@@ -62,6 +63,7 @@ resource "nxos_bgp_peer" "example" {
 - `peer_type` (String) Neighbor Fabric Type.
   - Choices: `fabric-internal`, `fabric-external`, `fabric-border-leaf`
   - Default value: `fabric-internal`
+- `remote_asn` (String) Peer autonomous system number.
 - `source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`.
   - Default value: `unspecified`
 

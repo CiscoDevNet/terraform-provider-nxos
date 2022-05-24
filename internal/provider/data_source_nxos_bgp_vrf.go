@@ -32,6 +32,11 @@ func (t dataSourceBGPVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag
 				Type:                types.StringType,
 				Computed:            true,
 			},
+			"asn": {
+				MarkdownDescription: "Autonomous system number.",
+				Type:                types.StringType,
+				Computed:            true,
+			},
 			"name": {
 				MarkdownDescription: "VRF name.",
 				Type:                types.StringType,

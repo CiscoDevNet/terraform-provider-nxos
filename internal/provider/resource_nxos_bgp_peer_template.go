@@ -36,6 +36,15 @@ func (t resourceBGPPeerTemplateType) GetSchema(ctx context.Context) (tfsdk.Schem
 					tfsdk.UseStateForUnknown(),
 				},
 			},
+			"asn": {
+				MarkdownDescription: helpers.NewAttributeDescription("Autonomous system number.").String,
+				Type:                types.StringType,
+				Optional:            true,
+				Computed:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					tfsdk.RequiresReplace(),
+				},
+			},
 			"template_name": {
 				MarkdownDescription: helpers.NewAttributeDescription("Peer template name.").String,
 				Type:                types.StringType,
@@ -44,8 +53,8 @@ func (t resourceBGPPeerTemplateType) GetSchema(ctx context.Context) (tfsdk.Schem
 					tfsdk.RequiresReplace(),
 				},
 			},
-			"asn": {
-				MarkdownDescription: helpers.NewAttributeDescription("Peer template Autonomous system number.").String,
+			"remote_asn": {
+				MarkdownDescription: helpers.NewAttributeDescription("Peer template autonomous system number.").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,

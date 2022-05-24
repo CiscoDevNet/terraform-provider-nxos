@@ -13,9 +13,10 @@ import (
 type BGPPeer struct {
 	Device   types.String `tfsdk:"device"`
 	Dn       types.String `tfsdk:"id"`
+	Bgp_asn  types.String `tfsdk:"asn"`
 	Vrf_name types.String `tfsdk:"vrf"`
 	Addr     types.String `tfsdk:"address"`
-	Asn      types.String `tfsdk:"asn"`
+	Asn      types.String `tfsdk:"remote_asn"`
 	Name     types.String `tfsdk:"description"`
 	PeerImp  types.String `tfsdk:"peer_template"`
 	PeerType types.String `tfsdk:"peer_type"`
@@ -53,5 +54,6 @@ func (data *BGPPeer) fromBody(res gjson.Result) {
 func (data *BGPPeer) fromPlan(plan BGPPeer) {
 	data.Device = plan.Device
 	data.Dn.Value = plan.Dn.Value
+	data.Bgp_asn.Value = plan.Bgp_asn.Value
 	data.Vrf_name.Value = plan.Vrf_name.Value
 }

@@ -68,6 +68,7 @@ resource "nxos_rest" "PreReq3" {
 const testAccDataSourceNxosBGPRouteControlConfig = `
 
 resource "nxos_bgp_route_control" "test" {
+  asn = "65001"
   vrf = "default"
   enforce_first_as = "disabled"
   fib_accelerate = "enabled"

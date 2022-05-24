@@ -16,6 +16,7 @@ func TestAccNxosBGPPeerAddressFamily(t *testing.T) {
 			{
 				Config: testAccNxosBGPPeerAddressFamilyPrerequisitesConfig + testAccNxosBGPPeerAddressFamilyConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("nxos_bgp_peer_address_family.test", "asn", "65001"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer_address_family.test", "vrf", "default"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer_address_family.test", "address", "192.168.0.1"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer_address_family.test", "address_family", "ipv4-ucast"),
@@ -96,6 +97,7 @@ func testAccNxosBGPPeerAddressFamilyConfig_minimum() string {
 func testAccNxosBGPPeerAddressFamilyConfig_all() string {
 	return `
 	resource "nxos_bgp_peer_address_family" "test" {
+		asn = "65001"
 		vrf = "default"
 		address = "192.168.0.1"
 		address_family = "ipv4-ucast"

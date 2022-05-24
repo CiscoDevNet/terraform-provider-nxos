@@ -8,7 +8,7 @@ description: |-
   Parent resources
   nxosbgpinstance https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_instance
   Child resources
-  nxosbgpaddress_family https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_address_familynxosbgpgraceful_restart https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_graceful_restartnxosbgppeer https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peernxosbgppeer_template https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer_template
+  nxosbgpaddress_family https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_address_familynxosbgpgraceful_restart https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_graceful_restartnxosbgppeer https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peernxosbgppeer_template https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer_templatenxosbgproute_control https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_route_control
   Referenced resources
   nxos_vrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf
 ---
@@ -29,6 +29,7 @@ This resource can manage the BGP domain (VRF) configuration.
 - [nxos_bgp_graceful_restart](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_graceful_restart)
 - [nxos_bgp_peer](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer)
 - [nxos_bgp_peer_template](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer_template)
+- [nxos_bgp_route_control](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_route_control)
 
 ### Referenced resources
 
@@ -38,6 +39,7 @@ This resource can manage the BGP domain (VRF) configuration.
 
 ```terraform
 resource "nxos_bgp_vrf" "example" {
+  asn       = "65001"
   name      = "default"
   router_id = "1.1.1.1"
 }
@@ -52,6 +54,7 @@ resource "nxos_bgp_vrf" "example" {
 
 ### Optional
 
+- `asn` (String) Autonomous system number.
 - `device` (String) A device name from the provider configuration.
 - `router_id` (String) Router ID.
 

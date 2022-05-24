@@ -1,6 +1,7 @@
 resource "nxos_bgp_peer_template" "example" {
+  asn              = "65001"
   template_name    = "SPINE-PEERS"
-  asn              = "65002"
+  remote_asn       = "65002"
   description      = "My Description"
   peer_type        = "fabric-internal"
   source_interface = "lo0"

@@ -21,7 +21,7 @@ attribute:
   id: bool(required=False)
   reference_only: bool(required=False)
   mandatory: bool(required=False)
-  read_only: bool(required=False)
+  write_only: bool(required=False)
   description: str()
   example: any(str(), int(), bool())
   enum_values: list(str(), required=False)

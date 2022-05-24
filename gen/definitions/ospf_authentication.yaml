@@ -33,7 +33,7 @@ attributes:
   - nxos_name: key
     tf_name: key
     type: String
-    read_only: true
+    write_only: true
     description: 'Key used for authentication.'
     example: 0 mykey
   - nxos_name: keyId
@@ -58,7 +58,7 @@ attributes:
   - nxos_name: md5key
     tf_name: md5_key
     type: String
-    read_only: true
+    write_only: true
     description: 'Key used for md5 authentication.'
     example: 0 mymd5key
   - nxos_name: md5keySecureMode

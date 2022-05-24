@@ -48,13 +48,13 @@ attributes:
   - nxos_name: authKeyLvl1
     tf_name: authentication_key_l1
     type: String
-    read_only: true
+    write_only: true
     description: 'Authentication Key for IS-IS on Level-1.'
     example: ''
   - nxos_name: authKeyLvl2
     tf_name: authentication_key_l2
     type: String
-    read_only: true
+    write_only: true
     description: 'Authentication Key for IS-IS on Level-2.'
     example: ''
   - nxos_name: authTypeLvl1

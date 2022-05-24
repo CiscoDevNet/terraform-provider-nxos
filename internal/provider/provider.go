@@ -173,10 +173,11 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 
 	if config.URL.Null {
 		url = os.Getenv("NXOS_URL")
-	} else {
-		url = config.URL.Value
-		if url == "" && len(config.Devices) > 0 {
-			url = config.Devices[0].URL.Value
+		if url == "" {
+			url = config.URL.Value
+			if url == "" && len(config.Devices) > 0 {
+				url = config.Devices[0].URL.Value
+			}
 		}
 	}
 

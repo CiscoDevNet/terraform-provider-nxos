@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## 0.3.15 (unreleased)
+## 0.3.15
 
 - Fix asn attribute of BGP data sources
 

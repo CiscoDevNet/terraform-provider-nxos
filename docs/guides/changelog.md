@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## 0.3.16 (unreleased)
+## 0.3.16
 
 - Allow provider config without url attribute in case devices attribute is being used
 

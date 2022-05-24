@@ -74,6 +74,7 @@ resource "nxos_bgp_graceful_restart" "test" {
 }
 
 data "nxos_bgp_graceful_restart" "test" {
+  asn = "65001"
   vrf = "default"
   depends_on = [nxos_bgp_graceful_restart.test]
 }

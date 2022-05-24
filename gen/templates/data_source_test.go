@@ -65,7 +65,7 @@ resource "nxos_{{snakeCase $name}}" "test" {
 
 data "nxos_{{snakeCase .Name}}" "test" {
 {{- range  .Attributes}}
-{{- if eq .Id true}}
+{{- if or (eq .Id true) (eq .ReferenceOnly true)}}
   {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
 {{- end}}
 {{- end}}

@@ -97,6 +97,7 @@ resource "nxos_bgp_peer_template_max_prefix" "test" {
 }
 
 data "nxos_bgp_peer_template_max_prefix" "test" {
+  asn = "65001"
   template_name = "SPINE-PEERS"
   address_family = "ipv4-ucast"
   depends_on = [nxos_bgp_peer_template_max_prefix.test]

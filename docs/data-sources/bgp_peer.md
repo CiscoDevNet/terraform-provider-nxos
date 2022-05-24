@@ -17,6 +17,7 @@ This data source can read the BGP peer configuration.
 
 ```terraform
 data "nxos_bgp_peer" "example" {
+  asn     = "65001"
   vrf     = "default"
   address = "192.168.0.1"
 }
@@ -28,6 +29,7 @@ data "nxos_bgp_peer" "example" {
 ### Required
 
 - `address` (String) Peer address.
+- `asn` (String) Autonomous system number.
 - `vrf` (String) VRF name.
 
 ### Optional

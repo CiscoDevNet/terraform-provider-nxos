@@ -79,6 +79,7 @@ resource "nxos_bgp_peer_template" "test" {
 }
 
 data "nxos_bgp_peer_template" "test" {
+  asn = "65001"
   template_name = "SPINE-PEERS"
   depends_on = [nxos_bgp_peer_template.test]
 }

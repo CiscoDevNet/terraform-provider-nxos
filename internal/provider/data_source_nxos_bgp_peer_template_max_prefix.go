@@ -32,6 +32,11 @@ func (t dataSourceBGPPeerTemplateMaxPrefixType) GetSchema(ctx context.Context) (
 				Type:                types.StringType,
 				Computed:            true,
 			},
+			"asn": {
+				MarkdownDescription: "Autonomous system number.",
+				Type:                types.StringType,
+				Required:            true,
+			},
 			"template_name": {
 				MarkdownDescription: "Peer template name.",
 				Type:                types.StringType,

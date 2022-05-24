@@ -17,6 +17,7 @@ This data source can read the BGP (VRF) address family configuration.
 
 ```terraform
 data "nxos_bgp_address_family" "example" {
+  asn            = "65001"
   vrf            = "default"
   address_family = "ipv4-ucast"
 }
@@ -28,6 +29,7 @@ data "nxos_bgp_address_family" "example" {
 ### Required
 
 - `address_family` (String) Address Family.
+- `asn` (String) Autonomous system number.
 - `vrf` (String) VRF name.
 
 ### Optional

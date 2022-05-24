@@ -17,6 +17,7 @@ This data source can read the BGP domain (VRF) graceful restart configuration.
 
 ```terraform
 data "nxos_bgp_graceful_restart" "example" {
+  asn = "65001"
   vrf = "default"
 }
 ```
@@ -26,6 +27,7 @@ data "nxos_bgp_graceful_restart" "example" {
 
 ### Required
 
+- `asn` (String) Autonomous system number.
 - `vrf` (String) VRF name.
 
 ### Optional

@@ -34,17 +34,15 @@ func (t dataSource{{camelCase .Name}}Type) GetSchema(ctx context.Context) (tfsdk
 				Computed:            true,
 			},
 			{{- range .Attributes}}
-			{{- if not (and (eq .ReferenceOnly true) (eq .Id false))}}
 			"{{.TfName}}": {
 				MarkdownDescription: "{{.Description}}",
 				Type:                types.{{.Type}}Type,
-				{{- if eq .Id true}}
+				{{- if or (eq .Id true) (eq .ReferenceOnly true)}}
 				Required:            true,
 				{{- else}}
 				Computed:            true,
 				{{- end}}
 			},
-			{{- end}}
 			{{- end}}
 		},
 	}, nil

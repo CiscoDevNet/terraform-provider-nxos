@@ -78,6 +78,7 @@ resource "nxos_bgp_route_control" "test" {
 }
 
 data "nxos_bgp_route_control" "test" {
+  asn = "65001"
   vrf = "default"
   depends_on = [nxos_bgp_route_control.test]
 }

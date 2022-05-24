@@ -17,6 +17,7 @@ This data source can read the BGP domain (VRF) configuration.
 
 ```terraform
 data "nxos_bgp_vrf" "example" {
+  asn  = "65001"
   name = "default"
 }
 ```
@@ -26,6 +27,7 @@ data "nxos_bgp_vrf" "example" {
 
 ### Required
 
+- `asn` (String) Autonomous system number.
 - `name` (String) VRF name.
 
 ### Optional

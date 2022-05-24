@@ -64,6 +64,7 @@ resource "nxos_bgp_vrf" "test" {
 }
 
 data "nxos_bgp_vrf" "test" {
+  asn = "65001"
   name = "default"
   depends_on = [nxos_bgp_vrf.test]
 }

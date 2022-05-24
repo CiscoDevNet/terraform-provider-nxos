@@ -17,6 +17,7 @@ This data source can read the BGP peer template configuration.
 
 ```terraform
 data "nxos_bgp_peer_template" "example" {
+  asn           = "65001"
   template_name = "SPINE-PEERS"
 }
 ```
@@ -26,6 +27,7 @@ data "nxos_bgp_peer_template" "example" {
 
 ### Required
 
+- `asn` (String) Autonomous system number.
 - `template_name` (String) Peer template name.
 
 ### Optional

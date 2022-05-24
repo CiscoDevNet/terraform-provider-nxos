@@ -17,6 +17,7 @@ This data source can read the BGP peer template Maximum Prefix Policy configurat
 
 ```terraform
 data "nxos_bgp_peer_template_max_prefix" "example" {
+  asn            = "65001"
   template_name  = "SPINE-PEERS"
   address_family = "ipv4-ucast"
 }
@@ -28,6 +29,7 @@ data "nxos_bgp_peer_template_max_prefix" "example" {
 ### Required
 
 - `address_family` (String) Address Family.
+- `asn` (String) Autonomous system number.
 - `template_name` (String) Peer template name.
 
 ### Optional

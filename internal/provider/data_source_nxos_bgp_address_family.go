@@ -32,6 +32,11 @@ func (t dataSourceBGPAddressFamilyType) GetSchema(ctx context.Context) (tfsdk.Sc
 				Type:                types.StringType,
 				Computed:            true,
 			},
+			"asn": {
+				MarkdownDescription: "Autonomous system number.",
+				Type:                types.StringType,
+				Required:            true,
+			},
 			"vrf": {
 				MarkdownDescription: "VRF name.",
 				Type:                types.StringType,

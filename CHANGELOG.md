@@ -1,3 +1,7 @@
+## 0.3.17 (unreleased)
+
+- Fix provider config url attribute
+
 ## 0.3.16
 
 - Allow provider config without url attribute in case devices attribute is being used

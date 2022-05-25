@@ -1,4 +1,4 @@
-## 0.3.17 (unreleased)
+## 0.3.17
 
 - Fix provider config url attribute
 

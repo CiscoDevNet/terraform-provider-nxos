@@ -47,8 +47,8 @@ resource "nxos_pim_interface" "example" {
   - Choices: `enabled`, `disabled`
   - Default value: `enabled`
 - `bfd` (String) BFD.
-  - Choices: `unspecified`, `enabled`, `disabled`
-  - Default value: `disabled`
+  - Choices: `none`, `enabled`, `disabled`
+  - Default value: `none`
 - `device` (String) A device name from the provider configuration.
 - `dr_priority` (Number) Designated Router priority level.
   - Range: `1`-`4294967295`

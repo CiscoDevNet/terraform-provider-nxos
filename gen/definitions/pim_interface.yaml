@@ -36,10 +36,10 @@ attributes:
     type: String
     description: 'BFD.'
     enum_values:
-      - unspecified
+      - none
       - enabled
       - disabled
-    default_value: disabled
+    default_value: none
     example: enabled
   - nxos_name: drPrio
     tf_name: dr_priority

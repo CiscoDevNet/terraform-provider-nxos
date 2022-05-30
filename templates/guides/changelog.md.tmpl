@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.3.19 (unreleased)
+
+- Change option (unspecified -> none) of bfd attribute of pim_interface resource
+
 ## 0.3.18
 
 - Add unspecified option to bfd attribute of pim_interface resource

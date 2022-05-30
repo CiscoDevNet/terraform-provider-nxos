@@ -36,6 +36,7 @@ attributes:
     type: String
     description: 'BFD.'
     enum_values:
+      - unspecified
       - enabled
       - disabled
     default_value: disabled

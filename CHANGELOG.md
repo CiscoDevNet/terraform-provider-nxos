@@ -1,3 +1,7 @@
+## 0.3.18 (unreleased)
+
+- Add unspecified option to bfd attribute of pim_interface resource
+
 ## 0.3.17
 
 - Fix provider config url attribute

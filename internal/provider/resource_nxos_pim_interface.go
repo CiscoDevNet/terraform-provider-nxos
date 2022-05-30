@@ -65,12 +65,12 @@ func (t resourcePIMInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				},
 			},
 			"bfd": {
-				MarkdownDescription: helpers.NewAttributeDescription("BFD.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("BFD.").AddStringEnumDescription("unspecified", "enabled", "disabled").AddDefaultValueDescription("disabled").String,
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("enabled", "disabled"),
+					helpers.StringEnumValidator("unspecified", "enabled", "disabled"),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
 					helpers.StringDefaultModifier("disabled"),

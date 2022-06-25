@@ -25,9 +25,12 @@ attribute:
   description: str()
   example: any(str(), int(), bool())
   enum_values: list(str(), required=False)
+  allow_non_enum_values: bool(required=False)
+  omit_empty_value: bool(required=False)
   min_int: int(required=False)
   max_int: int(required=False)
   default_value: any(str(), int(), bool(), required=False)
+  exclude_test: bool(required=False)
   requires_replace: bool(required=False)
 
 test_prerequisite:

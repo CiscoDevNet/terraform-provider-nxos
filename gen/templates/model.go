@@ -59,6 +59,13 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 		{{- if not (isLast $index $lenAttr)}}.{{- end}}
 	{{- end}}
 	{{- end}}
+	{{- range .Attributes}}
+	{{- if and (eq .Type "String") (eq .OmitEmptyValue true)}}
+	if data.{{toTitle .NxosName}}.Value == "" {
+		attrs = attrs.Delete("{{.NxosName}}")
+	}
+	{{- end}}
+	{{- end}}
 	{{- if ge $lenAttr 1 }}
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 	{{- else}}

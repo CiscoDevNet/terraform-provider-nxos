@@ -20,7 +20,7 @@ type resourceIPv4AccessListType struct{}
 func (t resourceIPv4AccessListType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage IPv4 Access Lists.", "ipv4aclACL", "Security%20and%20Policing/ipv4acl:ACL/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage IPv4 Access Lists.", "ipv4aclACL", "Security%20and%20Policing/ipv4acl:ACL/").AddChildren("ipv4_access_list_entry").String,
 
 		Attributes: map[string]tfsdk.Attribute{
 			"device": {

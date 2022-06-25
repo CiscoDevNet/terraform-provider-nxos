@@ -20,7 +20,9 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					{{- $name := .Name }}
 					{{- range  .Attributes}}
+					{{- if ne .ExcludeTest true}}
 					resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"),
+					{{- end}}
 					{{- end}}
 				),
 			},
@@ -74,7 +76,9 @@ func testAccNxos{{camelCase .Name}}Config_all() string {
 	return `
 	resource "nxos_{{snakeCase $name}}" "test" {
 	{{- range  .Attributes}}
+	{{- if ne .ExcludeTest true}}
 		{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+	{{- end}}
 	{{- end}}
 	{{- if .TestPrerequisites}}
   		depends_on = [{{range $index, $item := .TestPrerequisites}}nxos_rest.PreReq{{$index}}, {{end}}]

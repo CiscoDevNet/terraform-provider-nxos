@@ -67,7 +67,7 @@ func (t resource{{camelCase .Name}}Type) GetSchema(ctx context.Context) (tfsdk.S
 				Optional:            true,
 				Computed:            true,
 				{{- end}}
-				{{- if len .EnumValues}}
+				{{- if and (len .EnumValues) (not .AllowNonEnumValues) }}
 				Validators: []tfsdk.AttributeValidator{
 					helpers.StringEnumValidator({{range .EnumValues}}"{{.}}", {{end}}),
 				},

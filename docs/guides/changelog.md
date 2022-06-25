@@ -10,6 +10,7 @@ description: |-
 ## 0.3.20 (unreleased)
 
 - Add nxos_ipv4_access_list resource and data source
+- Add nxos_ipv4_access_list_entry resource and data source
 
 ## 0.3.19
 

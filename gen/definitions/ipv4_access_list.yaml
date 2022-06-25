@@ -6,6 +6,8 @@ ds_description: This data source can read IPv4 Access Lists.
 res_description: This resource can manage IPv4 Access Lists.
 doc_path: Security%20and%20Policing/ipv4acl:ACL/
 doc_category: IPv4
+children:
+  - IPv4 Access List Entry
 attributes:
   - nxos_name: name
     tf_name: name

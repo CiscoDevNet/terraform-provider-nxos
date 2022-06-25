@@ -1,0 +1,17 @@
+---
+name: IPv4 Access List Policy Egress Interface
+class_name: aclIf
+dn: sys/acl/ipv4/policy/egress/intf-[%s]
+ds_description: This data source can read an IPv4 Access List Policy Egress Interface.
+res_description: This resource can manage an IPv4 Access List Policy Egress Interface.
+doc_path: Security%20and%20Policing/acl:If/
+doc_category: IPv4
+children:
+  - IPv4 Access List Policy Egress Interface Instance
+attributes:
+  - nxos_name: name
+    tf_name: interface_id
+    type: String
+    id: true
+    description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+    example: eth1/10

@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.3.20 (unreleased)
+
+- Add nxos_ipv4_access_list resource and data source
+
 ## 0.3.19
 
 - Change option (unspecified -> none) of bfd attribute of pim_interface resource

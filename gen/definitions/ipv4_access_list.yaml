@@ -1,0 +1,15 @@
+---
+name: IPv4 Access List
+class_name: ipv4aclACL
+dn: sys/acl/ipv4/name-[%s]
+ds_description: This data source can read IPv4 Access Lists.
+res_description: This resource can manage IPv4 Access Lists.
+doc_path: Security%20and%20Policing/ipv4acl:ACL/
+doc_category: IPv4
+attributes:
+  - nxos_name: name
+    tf_name: name
+    type: String
+    id: true
+    description: 'Access list name.'
+    example: 'ACL1'

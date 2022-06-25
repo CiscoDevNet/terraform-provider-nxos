@@ -233,12 +233,12 @@ func (t resourceIPv4AccessListEntryType) GetSchema(ctx context.Context) (tfsdk.S
 				},
 			},
 			"precedence": {
-				MarkdownDescription: helpers.NewAttributeDescription("Precedence.").AddIntegerRangeDescription(0, 8).String,
-				Type:                types.Int64Type,
+				MarkdownDescription: helpers.NewAttributeDescription("Precedence. Either `unspecified` or a number between 0 and 7.").AddDefaultValueDescription("unspecified").String,
+				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(0, 8),
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					helpers.StringDefaultModifier("unspecified"),
 				},
 			},
 			"protocol": {

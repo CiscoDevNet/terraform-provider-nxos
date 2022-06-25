@@ -153,8 +153,8 @@ func (t dataSourceIPv4AccessListEntryType) GetSchema(ctx context.Context) (tfsdk
 				Computed:            true,
 			},
 			"precedence": {
-				MarkdownDescription: "Precedence.",
-				Type:                types.Int64Type,
+				MarkdownDescription: "Precedence. Either `unspecified` or a number between 0 and 7.",
+				Type:                types.StringType,
 				Computed:            true,
 			},
 			"protocol": {

@@ -40,7 +40,7 @@ type IPv4AccessListEntry struct {
 	PktLen1         types.String `tfsdk:"packet_length_1"`
 	PktLen2         types.String `tfsdk:"packet_length_2"`
 	PktLenOp        types.String `tfsdk:"packet_length_operator"`
-	Precedence      types.Int64  `tfsdk:"precedence"`
+	Precedence      types.String `tfsdk:"precedence"`
 	Protocol        types.String `tfsdk:"protocol"`
 	ProtocolMask    types.String `tfsdk:"protocol_mask"`
 	Psh             types.Bool   `tfsdk:"psh"`
@@ -98,7 +98,7 @@ func (data IPv4AccessListEntry) toBody() nxos.Body {
 		Set("pktLen1", data.PktLen1.Value).
 		Set("pktLen2", data.PktLen2.Value).
 		Set("pktLenOp", data.PktLenOp.Value).
-		Set("precedence", strconv.FormatInt(data.Precedence.Value, 10)).
+		Set("precedence", data.Precedence.Value).
 		Set("protocol", data.Protocol.Value).
 		Set("protocolMask", data.ProtocolMask.Value).
 		Set("psh", strconv.FormatBool(data.Psh.Value)).
@@ -121,31 +121,49 @@ func (data IPv4AccessListEntry) toBody() nxos.Body {
 		Set("urg", strconv.FormatBool(data.Urg.Value)).
 		Set("vlan", strconv.FormatInt(data.Vlan.Value, 10)).
 		Set("vni", data.Vni.Value)
-	if data.DstAddrGroup.Value == "" {
+	if data.Dscp.IsUnknown() || data.Dscp.IsNull() {
+		attrs = attrs.Delete("dscp")
+	}
+	if data.DstAddrGroup.IsUnknown() || data.DstAddrGroup.IsNull() {
 		attrs = attrs.Delete("dstAddrGroup")
 	}
-	if data.DstPortGroup.Value == "" {
+	if data.DstPortGroup.IsUnknown() || data.DstPortGroup.IsNull() {
 		attrs = attrs.Delete("dstPortGroup")
 	}
-	if data.DstPrefixMask.Value == "" {
+	if data.DstPrefix.IsUnknown() || data.DstPrefix.IsNull() {
+		attrs = attrs.Delete("dstPrefix")
+	}
+	if data.DstPrefixLength.IsUnknown() || data.DstPrefixLength.IsNull() {
+		attrs = attrs.Delete("dstPrefixLength")
+	}
+	if data.DstPrefixMask.IsUnknown() || data.DstPrefixMask.IsNull() {
 		attrs = attrs.Delete("dstPrefixMask")
 	}
-	if data.ProtocolMask.Value == "" {
+	if data.Protocol.IsUnknown() || data.Protocol.IsNull() {
+		attrs = attrs.Delete("protocol")
+	}
+	if data.ProtocolMask.IsUnknown() || data.ProtocolMask.IsNull() {
 		attrs = attrs.Delete("protocolMask")
 	}
-	if data.Remark.Value == "" {
+	if data.Remark.IsUnknown() || data.Remark.IsNull() {
 		attrs = attrs.Delete("remark")
 	}
-	if data.SrcAddrGroup.Value == "" {
+	if data.SrcAddrGroup.IsUnknown() || data.SrcAddrGroup.IsNull() {
 		attrs = attrs.Delete("srcAddrGroup")
 	}
-	if data.SrcPortGroup.Value == "" {
+	if data.SrcPortGroup.IsUnknown() || data.SrcPortGroup.IsNull() {
 		attrs = attrs.Delete("srcPortGroup")
 	}
-	if data.SrcPrefixMask.Value == "" {
+	if data.SrcPrefix.IsUnknown() || data.SrcPrefix.IsNull() {
+		attrs = attrs.Delete("srcPrefix")
+	}
+	if data.SrcPrefixLength.IsUnknown() || data.SrcPrefixLength.IsNull() {
+		attrs = attrs.Delete("srcPrefixLength")
+	}
+	if data.SrcPrefixMask.IsUnknown() || data.SrcPrefixMask.IsNull() {
 		attrs = attrs.Delete("srcPrefixMask")
 	}
-	if data.TimeRange.Value == "" {
+	if data.TimeRange.IsUnknown() || data.TimeRange.IsNull() {
 		attrs = attrs.Delete("timeRange")
 	}
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
@@ -175,7 +193,7 @@ func (data *IPv4AccessListEntry) fromBody(res gjson.Result) {
 	data.PktLen1.Value = res.Get("*.attributes.pktLen1").String()
 	data.PktLen2.Value = res.Get("*.attributes.pktLen2").String()
 	data.PktLenOp.Value = res.Get("*.attributes.pktLenOp").String()
-	data.Precedence.Value = res.Get("*.attributes.precedence").Int()
+	data.Precedence.Value = res.Get("*.attributes.precedence").String()
 	data.Protocol.Value = res.Get("*.attributes.protocol").String()
 	data.ProtocolMask.Value = res.Get("*.attributes.protocolMask").String()
 	data.Psh.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.psh").String())

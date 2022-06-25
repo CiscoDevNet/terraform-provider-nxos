@@ -23,7 +23,7 @@ resource "nxos_ipv4_access_list_entry" "example" {
   packet_length_1           = "19"
   packet_length_2           = "9210"
   packet_length_operator    = "range"
-  precedence                = 0
+  precedence                = "0"
   protocol                  = "tcp"
   protocol_mask             = "tcp"
   psh                       = false

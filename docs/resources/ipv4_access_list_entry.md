@@ -47,7 +47,7 @@ resource "nxos_ipv4_access_list_entry" "example" {
   packet_length_1           = "19"
   packet_length_2           = "9210"
   packet_length_operator    = "range"
-  precedence                = 0
+  precedence                = "0"
   protocol                  = "tcp"
   protocol_mask             = "tcp"
   psh                       = false
@@ -122,8 +122,8 @@ resource "nxos_ipv4_access_list_entry" "example" {
 - `packet_length_operator` (String) Packet length operator.
   - Choices: `none`, `lt`, `gt`, `eq`, `neq`, `range`
   - Default value: `none`
-- `precedence` (Number) Precedence.
-  - Range: `0`-`8`
+- `precedence` (String) Precedence. Either `unspecified` or a number between 0 and 7.
+  - Default value: `unspecified`
 - `protocol` (String) Protocol name or number.
   - Choices: `ip`, `icmp`, `igmp`, `tcp`, `udp`, `gre`, `esp`, `ahp`, `eigrp`, `ospf`, `nos`, `pim`, `pcp`, `udf`
 - `protocol_mask` (String) Protocol mask name or number.

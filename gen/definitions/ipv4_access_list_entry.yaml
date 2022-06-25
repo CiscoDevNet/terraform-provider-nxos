@@ -42,6 +42,7 @@ attributes:
     type: Int64
     min_int: 0
     max_int: 63
+    omit_empty_value: true
     description: 'Match DSCP.'
     example: 0
   - nxos_name: dstAddrGroup
@@ -90,11 +91,13 @@ attributes:
   - nxos_name: dstPrefix
     tf_name: destination_prefix
     type: String
+    omit_empty_value: true
     description: 'Destination prefix.'
     example: 10.1.1.0
   - nxos_name: dstPrefixLength
     tf_name: destination_prefix_length
     type: String
+    omit_empty_value: true
     description: 'Destination prefix length.'
     example: 24
   - nxos_name: dstPrefixMask
@@ -186,12 +189,11 @@ attributes:
     example: range
   - nxos_name: precedence
     tf_name: precedence
-    type: Int64
-    min_int: 0
-    max_int: 8
-    description: 'Precedence.'
+    type: String
+    description: 'Precedence. Either `unspecified` or a number between 0 and 7.'
+    default_value: unspecified
     exclude_test: true
-    example: 0
+    example: '0'
   - nxos_name: protocol
     tf_name: protocol
     type: String
@@ -211,6 +213,7 @@ attributes:
       - pcp
       - udf
     allow_non_enum_values: true
+    omit_empty_value: true
     description: 'Protocol name or number.'
     example: tcp
   - nxos_name: protocolMask
@@ -310,11 +313,13 @@ attributes:
   - nxos_name: srcPrefix
     tf_name: source_prefix
     type: String
+    omit_empty_value: true
     description: 'Source prefix.'
     example: 20.1.0.0
   - nxos_name: srcPrefixLength
     tf_name: source_prefix_length
     type: String
+    omit_empty_value: true
     description: 'Source prefix length.'
     example: 16
   - nxos_name: srcPrefixMask

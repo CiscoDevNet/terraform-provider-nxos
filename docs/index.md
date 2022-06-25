@@ -13,6 +13,7 @@ The NXOS provider provides resources to interact with one or [more](https://regi
 The following example repositories exist to demonstrate the use of the provider:
 
 - [Nexus 9000 EVPN Fabric](https://github.com/netascode/terraform-nxos-evpn-example)
+- [Nexus 9000 ACLs](https://github.com/netascode/terraform-nxos-acl-example)
 
 It communicates with NX-OS devices via the NX-API REST, which requires the following device configuration.
 

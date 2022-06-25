@@ -59,7 +59,7 @@ data "nxos_ipv4_access_list_entry" "example" {
 - `packet_length_1` (String) First packet length. Either `invalid` or a number between 19 and 9210.
 - `packet_length_2` (String) Second packet length. Either `invalid` or a number between 19 and 9210.
 - `packet_length_operator` (String) Packet length operator.
-- `precedence` (Number) Precedence.
+- `precedence` (String) Precedence. Either `unspecified` or a number between 0 and 7.
 - `protocol` (String) Protocol name or number.
 - `protocol_mask` (String) Protocol mask name or number.
 - `psh` (Boolean) Match TCP PSH flag.

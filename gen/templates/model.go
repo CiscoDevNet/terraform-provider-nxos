@@ -60,8 +60,8 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 	{{- end}}
 	{{- end}}
 	{{- range .Attributes}}
-	{{- if and (eq .Type "String") (eq .OmitEmptyValue true)}}
-	if data.{{toTitle .NxosName}}.Value == "" {
+	{{- if eq .OmitEmptyValue true}}
+	if data.{{toTitle .NxosName}}.IsUnknown() || data.{{toTitle .NxosName}}.IsNull() {
 		attrs = attrs.Delete("{{.NxosName}}")
 	}
 	{{- end}}

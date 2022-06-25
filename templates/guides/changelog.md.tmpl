@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## 0.3.20 (unreleased)
+## 0.3.20
 
 - Add nxos_ipv4_access_list resource and data source
 - Add nxos_ipv4_access_list_entry resource and data source

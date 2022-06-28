@@ -22,10 +22,10 @@ type IPv4AccessListEntry struct {
 	Action          types.String `tfsdk:"action"`
 	Dscp            types.Int64  `tfsdk:"dscp"`
 	DstAddrGroup    types.String `tfsdk:"destination_address_group"`
-	DstPort1        types.Int64  `tfsdk:"destination_port_1"`
-	DstPort2        types.Int64  `tfsdk:"destination_port_2"`
+	DstPort1        types.String `tfsdk:"destination_port_1"`
+	DstPort2        types.String `tfsdk:"destination_port_2"`
 	DstPortGroup    types.String `tfsdk:"destination_port_group"`
-	DstPortMask     types.Int64  `tfsdk:"destination_port_mask"`
+	DstPortMask     types.String `tfsdk:"destination_port_mask"`
 	DstPortOp       types.String `tfsdk:"destination_port_operator"`
 	DstPrefix       types.String `tfsdk:"destination_prefix"`
 	DstPrefixLength types.String `tfsdk:"destination_prefix_length"`
@@ -49,10 +49,10 @@ type IPv4AccessListEntry struct {
 	Rev             types.Bool   `tfsdk:"rev"`
 	Rst             types.Bool   `tfsdk:"rst"`
 	SrcAddrGroup    types.String `tfsdk:"source_address_group"`
-	SrcPort1        types.Int64  `tfsdk:"source_port_1"`
-	SrcPort2        types.Int64  `tfsdk:"source_port_2"`
+	SrcPort1        types.String `tfsdk:"source_port_1"`
+	SrcPort2        types.String `tfsdk:"source_port_2"`
 	SrcPortGroup    types.String `tfsdk:"source_port_group"`
-	SrcPortMask     types.Int64  `tfsdk:"source_port_mask"`
+	SrcPortMask     types.String `tfsdk:"source_port_mask"`
 	SrcPortOp       types.String `tfsdk:"source_port_operator"`
 	SrcPrefix       types.String `tfsdk:"source_prefix"`
 	SrcPrefixLength types.String `tfsdk:"source_prefix_length"`
@@ -80,10 +80,10 @@ func (data IPv4AccessListEntry) toBody() nxos.Body {
 		Set("action", data.Action.Value).
 		Set("dscp", strconv.FormatInt(data.Dscp.Value, 10)).
 		Set("dstAddrGroup", data.DstAddrGroup.Value).
-		Set("dstPort1", strconv.FormatInt(data.DstPort1.Value, 10)).
-		Set("dstPort2", strconv.FormatInt(data.DstPort2.Value, 10)).
+		Set("dstPort1", data.DstPort1.Value).
+		Set("dstPort2", data.DstPort2.Value).
 		Set("dstPortGroup", data.DstPortGroup.Value).
-		Set("dstPortMask", strconv.FormatInt(data.DstPortMask.Value, 10)).
+		Set("dstPortMask", data.DstPortMask.Value).
 		Set("dstPortOp", data.DstPortOp.Value).
 		Set("dstPrefix", data.DstPrefix.Value).
 		Set("dstPrefixLength", data.DstPrefixLength.Value).
@@ -107,10 +107,10 @@ func (data IPv4AccessListEntry) toBody() nxos.Body {
 		Set("rev", strconv.FormatBool(data.Rev.Value)).
 		Set("rst", strconv.FormatBool(data.Rst.Value)).
 		Set("srcAddrGroup", data.SrcAddrGroup.Value).
-		Set("srcPort1", strconv.FormatInt(data.SrcPort1.Value, 10)).
-		Set("srcPort2", strconv.FormatInt(data.SrcPort2.Value, 10)).
+		Set("srcPort1", data.SrcPort1.Value).
+		Set("srcPort2", data.SrcPort2.Value).
 		Set("srcPortGroup", data.SrcPortGroup.Value).
-		Set("srcPortMask", strconv.FormatInt(data.SrcPortMask.Value, 10)).
+		Set("srcPortMask", data.SrcPortMask.Value).
 		Set("srcPortOp", data.SrcPortOp.Value).
 		Set("srcPrefix", data.SrcPrefix.Value).
 		Set("srcPrefixLength", data.SrcPrefixLength.Value).
@@ -127,8 +127,17 @@ func (data IPv4AccessListEntry) toBody() nxos.Body {
 	if data.DstAddrGroup.IsUnknown() || data.DstAddrGroup.IsNull() {
 		attrs = attrs.Delete("dstAddrGroup")
 	}
+	if data.DstPort1.IsUnknown() || data.DstPort1.IsNull() {
+		attrs = attrs.Delete("dstPort1")
+	}
+	if data.DstPort2.IsUnknown() || data.DstPort2.IsNull() {
+		attrs = attrs.Delete("dstPort2")
+	}
 	if data.DstPortGroup.IsUnknown() || data.DstPortGroup.IsNull() {
 		attrs = attrs.Delete("dstPortGroup")
+	}
+	if data.DstPortMask.IsUnknown() || data.DstPortMask.IsNull() {
+		attrs = attrs.Delete("dstPortMask")
 	}
 	if data.DstPrefix.IsUnknown() || data.DstPrefix.IsNull() {
 		attrs = attrs.Delete("dstPrefix")
@@ -151,8 +160,17 @@ func (data IPv4AccessListEntry) toBody() nxos.Body {
 	if data.SrcAddrGroup.IsUnknown() || data.SrcAddrGroup.IsNull() {
 		attrs = attrs.Delete("srcAddrGroup")
 	}
+	if data.SrcPort1.IsUnknown() || data.SrcPort1.IsNull() {
+		attrs = attrs.Delete("srcPort1")
+	}
+	if data.SrcPort2.IsUnknown() || data.SrcPort2.IsNull() {
+		attrs = attrs.Delete("srcPort2")
+	}
 	if data.SrcPortGroup.IsUnknown() || data.SrcPortGroup.IsNull() {
 		attrs = attrs.Delete("srcPortGroup")
+	}
+	if data.SrcPortMask.IsUnknown() || data.SrcPortMask.IsNull() {
+		attrs = attrs.Delete("srcPortMask")
 	}
 	if data.SrcPrefix.IsUnknown() || data.SrcPrefix.IsNull() {
 		attrs = attrs.Delete("srcPrefix")
@@ -175,10 +193,10 @@ func (data *IPv4AccessListEntry) fromBody(res gjson.Result) {
 	data.Action.Value = res.Get("*.attributes.action").String()
 	data.Dscp.Value = res.Get("*.attributes.dscp").Int()
 	data.DstAddrGroup.Value = res.Get("*.attributes.dstAddrGroup").String()
-	data.DstPort1.Value = res.Get("*.attributes.dstPort1").Int()
-	data.DstPort2.Value = res.Get("*.attributes.dstPort2").Int()
+	data.DstPort1.Value = res.Get("*.attributes.dstPort1").String()
+	data.DstPort2.Value = res.Get("*.attributes.dstPort2").String()
 	data.DstPortGroup.Value = res.Get("*.attributes.dstPortGroup").String()
-	data.DstPortMask.Value = res.Get("*.attributes.dstPortMask").Int()
+	data.DstPortMask.Value = res.Get("*.attributes.dstPortMask").String()
 	data.DstPortOp.Value = res.Get("*.attributes.dstPortOp").String()
 	data.DstPrefix.Value = res.Get("*.attributes.dstPrefix").String()
 	data.DstPrefixLength.Value = res.Get("*.attributes.dstPrefixLength").String()
@@ -202,10 +220,10 @@ func (data *IPv4AccessListEntry) fromBody(res gjson.Result) {
 	data.Rev.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.rev").String())
 	data.Rst.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.rst").String())
 	data.SrcAddrGroup.Value = res.Get("*.attributes.srcAddrGroup").String()
-	data.SrcPort1.Value = res.Get("*.attributes.srcPort1").Int()
-	data.SrcPort2.Value = res.Get("*.attributes.srcPort2").Int()
+	data.SrcPort1.Value = res.Get("*.attributes.srcPort1").String()
+	data.SrcPort2.Value = res.Get("*.attributes.srcPort2").String()
 	data.SrcPortGroup.Value = res.Get("*.attributes.srcPortGroup").String()
-	data.SrcPortMask.Value = res.Get("*.attributes.srcPortMask").Int()
+	data.SrcPortMask.Value = res.Get("*.attributes.srcPortMask").String()
 	data.SrcPortOp.Value = res.Get("*.attributes.srcPortOp").String()
 	data.SrcPrefix.Value = res.Get("*.attributes.srcPrefix").String()
 	data.SrcPrefixLength.Value = res.Get("*.attributes.srcPrefixLength").String()

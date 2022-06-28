@@ -63,13 +63,13 @@ func (t dataSourceIPv4AccessListEntryType) GetSchema(ctx context.Context) (tfsdk
 				Computed:            true,
 			},
 			"destination_port_1": {
-				MarkdownDescription: "First destination port number.",
-				Type:                types.Int64Type,
+				MarkdownDescription: "First destination port number or name.",
+				Type:                types.StringType,
 				Computed:            true,
 			},
 			"destination_port_2": {
-				MarkdownDescription: "Second destination port number.",
-				Type:                types.Int64Type,
+				MarkdownDescription: "Second destination port number or name.",
+				Type:                types.StringType,
 				Computed:            true,
 			},
 			"destination_port_group": {
@@ -78,8 +78,8 @@ func (t dataSourceIPv4AccessListEntryType) GetSchema(ctx context.Context) (tfsdk
 				Computed:            true,
 			},
 			"destination_port_mask": {
-				MarkdownDescription: "Destination port mask number.",
-				Type:                types.Int64Type,
+				MarkdownDescription: "Destination port mask number or name.",
+				Type:                types.StringType,
 				Computed:            true,
 			},
 			"destination_port_operator": {
@@ -198,13 +198,13 @@ func (t dataSourceIPv4AccessListEntryType) GetSchema(ctx context.Context) (tfsdk
 				Computed:            true,
 			},
 			"source_port_1": {
-				MarkdownDescription: "First source port number.",
-				Type:                types.Int64Type,
+				MarkdownDescription: "First source port name or number.",
+				Type:                types.StringType,
 				Computed:            true,
 			},
 			"source_port_2": {
-				MarkdownDescription: "Second source port number.",
-				Type:                types.Int64Type,
+				MarkdownDescription: "Second source port name or number.",
+				Type:                types.StringType,
 				Computed:            true,
 			},
 			"source_port_group": {
@@ -213,8 +213,8 @@ func (t dataSourceIPv4AccessListEntryType) GetSchema(ctx context.Context) (tfsdk
 				Computed:            true,
 			},
 			"source_port_mask": {
-				MarkdownDescription: "Source port mask number.",
-				Type:                types.Int64Type,
+				MarkdownDescription: "Source port mask name or number.",
+				Type:                types.StringType,
 				Computed:            true,
 			},
 			"source_port_operator": {

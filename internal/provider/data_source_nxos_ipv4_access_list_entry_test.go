@@ -68,8 +68,8 @@ resource "nxos_ipv4_access_list_entry" "test" {
   ack = false
   action = "permit"
   dscp = 0
-  destination_port_1 = 443
-  destination_port_2 = 0
+  destination_port_1 = "443"
+  destination_port_2 = "0"
   destination_port_operator = "eq"
   destination_prefix = "10.1.1.0"
   destination_prefix_length = "24"
@@ -84,8 +84,8 @@ resource "nxos_ipv4_access_list_entry" "test" {
   psh = false
   rev = false
   rst = false
-  source_port_1 = 443
-  source_port_2 = 0
+  source_port_1 = "443"
+  source_port_2 = "0"
   source_port_operator = "eq"
   source_prefix = "20.1.0.0"
   source_prefix_length = "16"

@@ -54,13 +54,123 @@ attributes:
     example: AG1
   - nxos_name: dstPort1
     tf_name: destination_port_1
-    type: Int64
-    description: 'First destination port number.'
+    type: String
+    enum_values:
+      - echo
+      - discard
+      - daytime
+      - chargen
+      - ftp-data
+      - ftp
+      - telnet
+      - smtp
+      - time
+      - nameserver
+      - whois
+      - tacacs
+      - domain
+      - bootps
+      - bootpc
+      - tftp
+      - gopher
+      - finger
+      - www
+      - hostname
+      - pop2
+      - pop3
+      - sunrpc
+      - ident
+      - nntp
+      - ntp
+      - netbios-ns
+      - netbios-dgm
+      - netbios-ss
+      - snmp
+      - snmptrap
+      - xdmcp
+      - bgp
+      - irc
+      - dnsix
+      - mobile-ip
+      - pim-auto-rp
+      - isakmp
+      - biff
+      - exec
+      - who
+      - login
+      - syslog
+      - cmd
+      - lpd
+      - talk
+      - rip
+      - uucp
+      - klogin
+      - kshell
+      - drip
+      - non500-isakmp
+    allow_non_enum_values: true
+    omit_empty_value: true
+    description: 'First destination port number or name.'
     example: 443
   - nxos_name: dstPort2
     tf_name: destination_port_2
-    type: Int64
-    description: 'Second destination port number.'
+    type: String
+    enum_values:
+      - echo
+      - discard
+      - daytime
+      - chargen
+      - ftp-data
+      - ftp
+      - telnet
+      - smtp
+      - time
+      - nameserver
+      - whois
+      - tacacs
+      - domain
+      - bootps
+      - bootpc
+      - tftp
+      - gopher
+      - finger
+      - www
+      - hostname
+      - pop2
+      - pop3
+      - sunrpc
+      - ident
+      - nntp
+      - ntp
+      - netbios-ns
+      - netbios-dgm
+      - netbios-ss
+      - snmp
+      - snmptrap
+      - xdmcp
+      - bgp
+      - irc
+      - dnsix
+      - mobile-ip
+      - pim-auto-rp
+      - isakmp
+      - biff
+      - exec
+      - who
+      - login
+      - syslog
+      - cmd
+      - lpd
+      - talk
+      - rip
+      - uucp
+      - klogin
+      - kshell
+      - drip
+      - non500-isakmp
+    allow_non_enum_values: true
+    omit_empty_value: true
+    description: 'Second destination port number or name.'
     example: 0
   - nxos_name: dstPortGroup
     tf_name: destination_port_group
@@ -71,8 +181,63 @@ attributes:
     example: PG1
   - nxos_name: dstPortMask
     tf_name: destination_port_mask
-    type: Int64
-    description: 'Destination port mask number.'
+    type: String
+    enum_values:
+      - echo
+      - discard
+      - daytime
+      - chargen
+      - ftp-data
+      - ftp
+      - telnet
+      - smtp
+      - time
+      - nameserver
+      - whois
+      - tacacs
+      - domain
+      - bootps
+      - bootpc
+      - tftp
+      - gopher
+      - finger
+      - www
+      - hostname
+      - pop2
+      - pop3
+      - sunrpc
+      - ident
+      - nntp
+      - ntp
+      - netbios-ns
+      - netbios-dgm
+      - netbios-ss
+      - snmp
+      - snmptrap
+      - xdmcp
+      - bgp
+      - irc
+      - dnsix
+      - mobile-ip
+      - pim-auto-rp
+      - isakmp
+      - biff
+      - exec
+      - who
+      - login
+      - syslog
+      - cmd
+      - lpd
+      - talk
+      - rip
+      - uucp
+      - klogin
+      - kshell
+      - drip
+      - non500-isakmp
+    allow_non_enum_values: true
+    omit_empty_value: true
+    description: 'Destination port mask number or name.'
     exclude_test: true
     example: 0
   - nxos_name: dstPortOp
@@ -276,13 +441,123 @@ attributes:
     example: AG2
   - nxos_name: srcPort1
     tf_name: source_port_1
-    type: Int64
-    description: 'First source port number.'
+    type: String
+    enum_values:
+      - echo
+      - discard
+      - daytime
+      - chargen
+      - ftp-data
+      - ftp
+      - telnet
+      - smtp
+      - time
+      - nameserver
+      - whois
+      - tacacs
+      - domain
+      - bootps
+      - bootpc
+      - tftp
+      - gopher
+      - finger
+      - www
+      - hostname
+      - pop2
+      - pop3
+      - sunrpc
+      - ident
+      - nntp
+      - ntp
+      - netbios-ns
+      - netbios-dgm
+      - netbios-ss
+      - snmp
+      - snmptrap
+      - xdmcp
+      - bgp
+      - irc
+      - dnsix
+      - mobile-ip
+      - pim-auto-rp
+      - isakmp
+      - biff
+      - exec
+      - who
+      - login
+      - syslog
+      - cmd
+      - lpd
+      - talk
+      - rip
+      - uucp
+      - klogin
+      - kshell
+      - drip
+      - non500-isakmp
+    allow_non_enum_values: true
+    omit_empty_value: true
+    description: 'First source port name or number.'
     example: 443
   - nxos_name: srcPort2
     tf_name: source_port_2
-    type: Int64
-    description: 'Second source port number.'
+    type: String
+    enum_values:
+      - echo
+      - discard
+      - daytime
+      - chargen
+      - ftp-data
+      - ftp
+      - telnet
+      - smtp
+      - time
+      - nameserver
+      - whois
+      - tacacs
+      - domain
+      - bootps
+      - bootpc
+      - tftp
+      - gopher
+      - finger
+      - www
+      - hostname
+      - pop2
+      - pop3
+      - sunrpc
+      - ident
+      - nntp
+      - ntp
+      - netbios-ns
+      - netbios-dgm
+      - netbios-ss
+      - snmp
+      - snmptrap
+      - xdmcp
+      - bgp
+      - irc
+      - dnsix
+      - mobile-ip
+      - pim-auto-rp
+      - isakmp
+      - biff
+      - exec
+      - who
+      - login
+      - syslog
+      - cmd
+      - lpd
+      - talk
+      - rip
+      - uucp
+      - klogin
+      - kshell
+      - drip
+      - non500-isakmp
+    allow_non_enum_values: true
+    omit_empty_value: true
+    description: 'Second source port name or number.'
     example: 0
   - nxos_name: srcPortGroup
     tf_name: source_port_group
@@ -293,8 +568,63 @@ attributes:
     example: PG2
   - nxos_name: srcPortMask
     tf_name: source_port_mask
-    type: Int64
-    description: 'Source port mask number.'
+    type: String
+    enum_values:
+      - echo
+      - discard
+      - daytime
+      - chargen
+      - ftp-data
+      - ftp
+      - telnet
+      - smtp
+      - time
+      - nameserver
+      - whois
+      - tacacs
+      - domain
+      - bootps
+      - bootpc
+      - tftp
+      - gopher
+      - finger
+      - www
+      - hostname
+      - pop2
+      - pop3
+      - sunrpc
+      - ident
+      - nntp
+      - ntp
+      - netbios-ns
+      - netbios-dgm
+      - netbios-ss
+      - snmp
+      - snmptrap
+      - xdmcp
+      - bgp
+      - irc
+      - dnsix
+      - mobile-ip
+      - pim-auto-rp
+      - isakmp
+      - biff
+      - exec
+      - who
+      - login
+      - syslog
+      - cmd
+      - lpd
+      - talk
+      - rip
+      - uucp
+      - klogin
+      - kshell
+      - drip
+      - non500-isakmp
+    allow_non_enum_values: true
+    omit_empty_value: true
+    description: 'Source port mask name or number.'
     exclude_test: true
     example: 0
   - nxos_name: srcPortOp

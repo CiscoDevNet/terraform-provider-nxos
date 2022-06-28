@@ -39,10 +39,10 @@ data "nxos_ipv4_access_list_entry" "example" {
 - `ack` (Boolean) Match TCP ACK flag.
 - `action` (String) Action.
 - `destination_address_group` (String) Destination address group.
-- `destination_port_1` (Number) First destination port number.
-- `destination_port_2` (Number) Second destination port number.
+- `destination_port_1` (String) First destination port number or name.
+- `destination_port_2` (String) Second destination port number or name.
 - `destination_port_group` (String) Destination port group.
-- `destination_port_mask` (Number) Destination port mask number.
+- `destination_port_mask` (String) Destination port mask number or name.
 - `destination_port_operator` (String) Destination port operator.
 - `destination_prefix` (String) Destination prefix.
 - `destination_prefix_length` (String) Destination prefix length.
@@ -68,10 +68,10 @@ data "nxos_ipv4_access_list_entry" "example" {
 - `rev` (Boolean) Match TCP REV flag.
 - `rst` (Boolean) Match TCP RST flag.
 - `source_address_group` (String) Source address group.
-- `source_port_1` (Number) First source port number.
-- `source_port_2` (Number) Second source port number.
+- `source_port_1` (String) First source port name or number.
+- `source_port_2` (String) Second source port name or number.
 - `source_port_group` (String) Source port group.
-- `source_port_mask` (Number) Source port mask number.
+- `source_port_mask` (String) Source port mask name or number.
 - `source_port_operator` (String) Source port operator.
 - `source_prefix` (String) Source prefix.
 - `source_prefix_length` (String) Source prefix length.

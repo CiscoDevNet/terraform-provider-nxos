@@ -29,10 +29,10 @@ resource "nxos_ipv4_access_list_entry" "example" {
   action                    = "permit"
   dscp                      = 0
   destination_address_group = "AG1"
-  destination_port_1        = 443
-  destination_port_2        = 0
+  destination_port_1        = "443"
+  destination_port_2        = "0"
   destination_port_group    = "PG1"
-  destination_port_mask     = 0
+  destination_port_mask     = "0"
   destination_port_operator = "eq"
   destination_prefix        = "10.1.1.0"
   destination_prefix_length = "24"
@@ -56,10 +56,10 @@ resource "nxos_ipv4_access_list_entry" "example" {
   rev                       = false
   rst                       = false
   source_address_group      = "AG2"
-  source_port_1             = 443
-  source_port_2             = 0
+  source_port_1             = "443"
+  source_port_2             = "0"
   source_port_group         = "PG2"
-  source_port_mask          = 0
+  source_port_mask          = "0"
   source_port_operator      = "eq"
   source_prefix             = "20.1.0.0"
   source_prefix_length      = "16"
@@ -88,10 +88,13 @@ resource "nxos_ipv4_access_list_entry" "example" {
   - Choices: `invalid`, `permit`, `deny`
   - Default value: `invalid`
 - `destination_address_group` (String) Destination address group.
-- `destination_port_1` (Number) First destination port number.
-- `destination_port_2` (Number) Second destination port number.
+- `destination_port_1` (String) First destination port number or name.
+  - Choices: `echo`, `discard`, `daytime`, `chargen`, `ftp-data`, `ftp`, `telnet`, `smtp`, `time`, `nameserver`, `whois`, `tacacs`, `domain`, `bootps`, `bootpc`, `tftp`, `gopher`, `finger`, `www`, `hostname`, `pop2`, `pop3`, `sunrpc`, `ident`, `nntp`, `ntp`, `netbios-ns`, `netbios-dgm`, `netbios-ss`, `snmp`, `snmptrap`, `xdmcp`, `bgp`, `irc`, `dnsix`, `mobile-ip`, `pim-auto-rp`, `isakmp`, `biff`, `exec`, `who`, `login`, `syslog`, `cmd`, `lpd`, `talk`, `rip`, `uucp`, `klogin`, `kshell`, `drip`, `non500-isakmp`
+- `destination_port_2` (String) Second destination port number or name.
+  - Choices: `echo`, `discard`, `daytime`, `chargen`, `ftp-data`, `ftp`, `telnet`, `smtp`, `time`, `nameserver`, `whois`, `tacacs`, `domain`, `bootps`, `bootpc`, `tftp`, `gopher`, `finger`, `www`, `hostname`, `pop2`, `pop3`, `sunrpc`, `ident`, `nntp`, `ntp`, `netbios-ns`, `netbios-dgm`, `netbios-ss`, `snmp`, `snmptrap`, `xdmcp`, `bgp`, `irc`, `dnsix`, `mobile-ip`, `pim-auto-rp`, `isakmp`, `biff`, `exec`, `who`, `login`, `syslog`, `cmd`, `lpd`, `talk`, `rip`, `uucp`, `klogin`, `kshell`, `drip`, `non500-isakmp`
 - `destination_port_group` (String) Destination port group.
-- `destination_port_mask` (Number) Destination port mask number.
+- `destination_port_mask` (String) Destination port mask number or name.
+  - Choices: `echo`, `discard`, `daytime`, `chargen`, `ftp-data`, `ftp`, `telnet`, `smtp`, `time`, `nameserver`, `whois`, `tacacs`, `domain`, `bootps`, `bootpc`, `tftp`, `gopher`, `finger`, `www`, `hostname`, `pop2`, `pop3`, `sunrpc`, `ident`, `nntp`, `ntp`, `netbios-ns`, `netbios-dgm`, `netbios-ss`, `snmp`, `snmptrap`, `xdmcp`, `bgp`, `irc`, `dnsix`, `mobile-ip`, `pim-auto-rp`, `isakmp`, `biff`, `exec`, `who`, `login`, `syslog`, `cmd`, `lpd`, `talk`, `rip`, `uucp`, `klogin`, `kshell`, `drip`, `non500-isakmp`
 - `destination_port_operator` (String) Destination port operator.
   - Choices: `none`, `lt`, `gt`, `eq`, `neq`, `range`
   - Default value: `none`
@@ -134,10 +137,13 @@ resource "nxos_ipv4_access_list_entry" "example" {
 - `rev` (Boolean) Match TCP REV flag.
 - `rst` (Boolean) Match TCP RST flag.
 - `source_address_group` (String) Source address group.
-- `source_port_1` (Number) First source port number.
-- `source_port_2` (Number) Second source port number.
+- `source_port_1` (String) First source port name or number.
+  - Choices: `echo`, `discard`, `daytime`, `chargen`, `ftp-data`, `ftp`, `telnet`, `smtp`, `time`, `nameserver`, `whois`, `tacacs`, `domain`, `bootps`, `bootpc`, `tftp`, `gopher`, `finger`, `www`, `hostname`, `pop2`, `pop3`, `sunrpc`, `ident`, `nntp`, `ntp`, `netbios-ns`, `netbios-dgm`, `netbios-ss`, `snmp`, `snmptrap`, `xdmcp`, `bgp`, `irc`, `dnsix`, `mobile-ip`, `pim-auto-rp`, `isakmp`, `biff`, `exec`, `who`, `login`, `syslog`, `cmd`, `lpd`, `talk`, `rip`, `uucp`, `klogin`, `kshell`, `drip`, `non500-isakmp`
+- `source_port_2` (String) Second source port name or number.
+  - Choices: `echo`, `discard`, `daytime`, `chargen`, `ftp-data`, `ftp`, `telnet`, `smtp`, `time`, `nameserver`, `whois`, `tacacs`, `domain`, `bootps`, `bootpc`, `tftp`, `gopher`, `finger`, `www`, `hostname`, `pop2`, `pop3`, `sunrpc`, `ident`, `nntp`, `ntp`, `netbios-ns`, `netbios-dgm`, `netbios-ss`, `snmp`, `snmptrap`, `xdmcp`, `bgp`, `irc`, `dnsix`, `mobile-ip`, `pim-auto-rp`, `isakmp`, `biff`, `exec`, `who`, `login`, `syslog`, `cmd`, `lpd`, `talk`, `rip`, `uucp`, `klogin`, `kshell`, `drip`, `non500-isakmp`
 - `source_port_group` (String) Source port group.
-- `source_port_mask` (Number) Source port mask number.
+- `source_port_mask` (String) Source port mask name or number.
+  - Choices: `echo`, `discard`, `daytime`, `chargen`, `ftp-data`, `ftp`, `telnet`, `smtp`, `time`, `nameserver`, `whois`, `tacacs`, `domain`, `bootps`, `bootpc`, `tftp`, `gopher`, `finger`, `www`, `hostname`, `pop2`, `pop3`, `sunrpc`, `ident`, `nntp`, `ntp`, `netbios-ns`, `netbios-dgm`, `netbios-ss`, `snmp`, `snmptrap`, `xdmcp`, `bgp`, `irc`, `dnsix`, `mobile-ip`, `pim-auto-rp`, `isakmp`, `biff`, `exec`, `who`, `login`, `syslog`, `cmd`, `lpd`, `talk`, `rip`, `uucp`, `klogin`, `kshell`, `drip`, `non500-isakmp`
 - `source_port_operator` (String) Source port operator.
   - Choices: `none`, `lt`, `gt`, `eq`, `neq`, `range`
   - Default value: `none`

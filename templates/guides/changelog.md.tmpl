@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.3.21 (unreleased)
+
+- Fix handling named ports in nxos_ipv4_access_list_entry resource
+
 ## 0.3.20
 
 - Add nxos_ipv4_access_list resource and data source

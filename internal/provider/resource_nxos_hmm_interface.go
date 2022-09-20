@@ -25,7 +25,7 @@ func NewHMMInterfaceResource() resource.Resource {
 }
 
 type HMMInterfaceResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *HMMInterfaceResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -93,7 +93,7 @@ func (r *HMMInterfaceResource) Configure(ctx context.Context, req resource.Confi
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

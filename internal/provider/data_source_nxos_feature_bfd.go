@@ -23,7 +23,7 @@ func NewFeatureBFDDataSource() datasource.DataSource {
 }
 
 type FeatureBFDDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *FeatureBFDDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -61,7 +61,7 @@ func (d *FeatureBFDDataSource) Configure(ctx context.Context, req datasource.Con
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

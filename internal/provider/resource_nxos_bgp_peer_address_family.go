@@ -25,7 +25,7 @@ func NewBGPPeerAddressFamilyResource() resource.Resource {
 }
 
 type BGPPeerAddressFamilyResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *BGPPeerAddressFamilyResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -126,7 +126,7 @@ func (r *BGPPeerAddressFamilyResource) Configure(ctx context.Context, req resour
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

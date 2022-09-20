@@ -25,7 +25,7 @@ func NewBGPPeerResource() resource.Resource {
 }
 
 type BGPPeerResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *BGPPeerResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -124,7 +124,7 @@ func (r *BGPPeerResource) Configure(ctx context.Context, req resource.ConfigureR
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

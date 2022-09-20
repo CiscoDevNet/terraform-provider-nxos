@@ -23,7 +23,7 @@ func NewOSPFAuthenticationDataSource() datasource.DataSource {
 }
 
 type OSPFAuthenticationDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *OSPFAuthenticationDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -106,7 +106,7 @@ func (d *OSPFAuthenticationDataSource) Configure(ctx context.Context, req dataso
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

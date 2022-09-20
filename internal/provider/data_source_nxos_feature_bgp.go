@@ -23,7 +23,7 @@ func NewFeatureBGPDataSource() datasource.DataSource {
 }
 
 type FeatureBGPDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *FeatureBGPDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -61,7 +61,7 @@ func (d *FeatureBGPDataSource) Configure(ctx context.Context, req datasource.Con
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

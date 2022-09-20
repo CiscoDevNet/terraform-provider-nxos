@@ -259,8 +259,8 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		devices: devices,
 	}
 
-	resp.DataSourceData = data
-	resp.ResourceData = data
+	resp.DataSourceData = &data
+	resp.ResourceData = &data
 }
 
 func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource {

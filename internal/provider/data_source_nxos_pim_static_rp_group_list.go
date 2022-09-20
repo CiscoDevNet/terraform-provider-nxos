@@ -23,7 +23,7 @@ func NewPIMStaticRPGroupListDataSource() datasource.DataSource {
 }
 
 type PIMStaticRPGroupListDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *PIMStaticRPGroupListDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -81,7 +81,7 @@ func (d *PIMStaticRPGroupListDataSource) Configure(ctx context.Context, req data
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

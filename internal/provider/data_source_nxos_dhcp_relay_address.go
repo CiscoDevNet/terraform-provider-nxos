@@ -23,7 +23,7 @@ func NewDHCPRelayAddressDataSource() datasource.DataSource {
 }
 
 type DHCPRelayAddressDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *DHCPRelayAddressDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -71,7 +71,7 @@ func (d *DHCPRelayAddressDataSource) Configure(ctx context.Context, req datasour
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

@@ -23,7 +23,7 @@ func NewPIMInterfaceDataSource() datasource.DataSource {
 }
 
 type PIMInterfaceDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *PIMInterfaceDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -91,7 +91,7 @@ func (d *PIMInterfaceDataSource) Configure(ctx context.Context, req datasource.C
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

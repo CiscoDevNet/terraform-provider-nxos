@@ -25,7 +25,7 @@ func NewPIMVRFResource() resource.Resource {
 }
 
 type PIMVRFResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *PIMVRFResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -90,7 +90,7 @@ func (r *PIMVRFResource) Configure(ctx context.Context, req resource.ConfigureRe
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

@@ -25,7 +25,7 @@ func NewVRFRouteTargetAddressFamilyResource() resource.Resource {
 }
 
 type VRFRouteTargetAddressFamilyResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *VRFRouteTargetAddressFamilyResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -91,7 +91,7 @@ func (r *VRFRouteTargetAddressFamilyResource) Configure(ctx context.Context, req
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

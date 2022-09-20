@@ -25,7 +25,7 @@ func NewFeatureLACPResource() resource.Resource {
 }
 
 type FeatureLACPResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *FeatureLACPResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -69,7 +69,7 @@ func (r *FeatureLACPResource) Configure(ctx context.Context, req resource.Config
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

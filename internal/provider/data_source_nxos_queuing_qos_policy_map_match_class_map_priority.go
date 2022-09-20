@@ -23,7 +23,7 @@ func NewQueuingQOSPolicyMapMatchClassMapPriorityDataSource() datasource.DataSour
 }
 
 type QueuingQOSPolicyMapMatchClassMapPriorityDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *QueuingQOSPolicyMapMatchClassMapPriorityDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -71,7 +71,7 @@ func (d *QueuingQOSPolicyMapMatchClassMapPriorityDataSource) Configure(ctx conte
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

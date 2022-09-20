@@ -25,7 +25,7 @@ func NewOSPFAreaResource() resource.Resource {
 }
 
 type OSPFAreaResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *OSPFAreaResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -121,7 +121,7 @@ func (r *OSPFAreaResource) Configure(ctx context.Context, req resource.Configure
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

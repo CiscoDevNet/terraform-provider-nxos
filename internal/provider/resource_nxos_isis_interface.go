@@ -25,7 +25,7 @@ func NewISISInterfaceResource() resource.Resource {
 }
 
 type ISISInterfaceResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *ISISInterfaceResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -351,7 +351,7 @@ func (r *ISISInterfaceResource) Configure(ctx context.Context, req resource.Conf
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

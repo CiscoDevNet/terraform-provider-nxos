@@ -23,7 +23,7 @@ func NewDefaultQOSPolicyInterfaceInDataSource() datasource.DataSource {
 }
 
 type DefaultQOSPolicyInterfaceInDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *DefaultQOSPolicyInterfaceInDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -61,7 +61,7 @@ func (d *DefaultQOSPolicyInterfaceInDataSource) Configure(ctx context.Context, r
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

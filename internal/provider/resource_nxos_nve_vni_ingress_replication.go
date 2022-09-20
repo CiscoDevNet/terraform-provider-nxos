@@ -25,7 +25,7 @@ func NewNVEVNIIngressReplicationResource() resource.Resource {
 }
 
 type NVEVNIIngressReplicationResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *NVEVNIIngressReplicationResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -84,7 +84,7 @@ func (r *NVEVNIIngressReplicationResource) Configure(ctx context.Context, req re
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

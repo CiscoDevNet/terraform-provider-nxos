@@ -23,7 +23,7 @@ func NewBGPPeerTemplateAddressFamilyDataSource() datasource.DataSource {
 }
 
 type BGPPeerTemplateAddressFamilyDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *BGPPeerTemplateAddressFamilyDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -86,7 +86,7 @@ func (d *BGPPeerTemplateAddressFamilyDataSource) Configure(ctx context.Context, 
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

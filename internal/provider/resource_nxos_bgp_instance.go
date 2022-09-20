@@ -25,7 +25,7 @@ func NewBGPInstanceResource() resource.Resource {
 }
 
 type BGPInstanceResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *BGPInstanceResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -91,7 +91,7 @@ func (r *BGPInstanceResource) Configure(ctx context.Context, req resource.Config
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

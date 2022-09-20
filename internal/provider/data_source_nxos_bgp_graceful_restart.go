@@ -23,7 +23,7 @@ func NewBGPGracefulRestartDataSource() datasource.DataSource {
 }
 
 type BGPGracefulRestartDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *BGPGracefulRestartDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -76,7 +76,7 @@ func (d *BGPGracefulRestartDataSource) Configure(ctx context.Context, req dataso
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

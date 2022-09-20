@@ -25,7 +25,7 @@ func NewDefaultQOSPolicyMapResource() resource.Resource {
 }
 
 type DefaultQOSPolicyMapResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *DefaultQOSPolicyMapResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -81,7 +81,7 @@ func (r *DefaultQOSPolicyMapResource) Configure(ctx context.Context, req resourc
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

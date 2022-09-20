@@ -25,7 +25,7 @@ func NewPIMAnycastRPResource() resource.Resource {
 }
 
 type PIMAnycastRPResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *PIMAnycastRPResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -81,7 +81,7 @@ func (r *PIMAnycastRPResource) Configure(ctx context.Context, req resource.Confi
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

@@ -25,7 +25,7 @@ func NewLoopbackInterfaceResource() resource.Resource {
 }
 
 type LoopbackInterfaceResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *LoopbackInterfaceResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -87,7 +87,7 @@ func (r *LoopbackInterfaceResource) Configure(ctx context.Context, req resource.
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

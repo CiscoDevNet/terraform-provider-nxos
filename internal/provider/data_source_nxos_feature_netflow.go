@@ -23,7 +23,7 @@ func NewFeatureNetflowDataSource() datasource.DataSource {
 }
 
 type FeatureNetflowDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *FeatureNetflowDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -61,7 +61,7 @@ func (d *FeatureNetflowDataSource) Configure(ctx context.Context, req datasource
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

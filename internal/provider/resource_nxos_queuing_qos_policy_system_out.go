@@ -25,7 +25,7 @@ func NewQueuingQOSPolicySystemOutResource() resource.Resource {
 }
 
 type QueuingQOSPolicySystemOutResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *QueuingQOSPolicySystemOutResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -61,7 +61,7 @@ func (r *QueuingQOSPolicySystemOutResource) Configure(ctx context.Context, req r
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

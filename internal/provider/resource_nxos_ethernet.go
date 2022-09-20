@@ -25,7 +25,7 @@ func NewEthernetResource() resource.Resource {
 }
 
 type EthernetResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *EthernetResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -73,7 +73,7 @@ func (r *EthernetResource) Configure(ctx context.Context, req resource.Configure
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

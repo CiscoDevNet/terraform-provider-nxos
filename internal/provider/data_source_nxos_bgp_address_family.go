@@ -23,7 +23,7 @@ func NewBGPAddressFamilyDataSource() datasource.DataSource {
 }
 
 type BGPAddressFamilyDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *BGPAddressFamilyDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -81,7 +81,7 @@ func (d *BGPAddressFamilyDataSource) Configure(ctx context.Context, req datasour
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

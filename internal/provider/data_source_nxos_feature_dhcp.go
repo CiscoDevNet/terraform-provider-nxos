@@ -23,7 +23,7 @@ func NewFeatureDHCPDataSource() datasource.DataSource {
 }
 
 type FeatureDHCPDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *FeatureDHCPDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -61,7 +61,7 @@ func (d *FeatureDHCPDataSource) Configure(ctx context.Context, req datasource.Co
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

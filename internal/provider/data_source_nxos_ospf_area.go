@@ -23,7 +23,7 @@ func NewOSPFAreaDataSource() datasource.DataSource {
 }
 
 type OSPFAreaDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *OSPFAreaDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -86,7 +86,7 @@ func (d *OSPFAreaDataSource) Configure(ctx context.Context, req datasource.Confi
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

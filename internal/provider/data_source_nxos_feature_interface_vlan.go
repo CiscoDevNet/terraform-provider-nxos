@@ -23,7 +23,7 @@ func NewFeatureInterfaceVLANDataSource() datasource.DataSource {
 }
 
 type FeatureInterfaceVLANDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *FeatureInterfaceVLANDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -61,7 +61,7 @@ func (d *FeatureInterfaceVLANDataSource) Configure(ctx context.Context, req data
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

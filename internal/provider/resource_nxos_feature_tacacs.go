@@ -25,7 +25,7 @@ func NewFeatureTACACSResource() resource.Resource {
 }
 
 type FeatureTACACSResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *FeatureTACACSResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -69,7 +69,7 @@ func (r *FeatureTACACSResource) Configure(ctx context.Context, req resource.Conf
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

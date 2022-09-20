@@ -23,7 +23,7 @@ func NewFeatureLLDPDataSource() datasource.DataSource {
 }
 
 type FeatureLLDPDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *FeatureLLDPDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -61,7 +61,7 @@ func (d *FeatureLLDPDataSource) Configure(ctx context.Context, req datasource.Co
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

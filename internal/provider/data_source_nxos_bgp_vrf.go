@@ -23,7 +23,7 @@ func NewBGPVRFDataSource() datasource.DataSource {
 }
 
 type BGPVRFDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *BGPVRFDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -71,7 +71,7 @@ func (d *BGPVRFDataSource) Configure(ctx context.Context, req datasource.Configu
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

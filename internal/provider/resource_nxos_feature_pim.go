@@ -25,7 +25,7 @@ func NewFeaturePIMResource() resource.Resource {
 }
 
 type FeaturePIMResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *FeaturePIMResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -69,7 +69,7 @@ func (r *FeaturePIMResource) Configure(ctx context.Context, req resource.Configu
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

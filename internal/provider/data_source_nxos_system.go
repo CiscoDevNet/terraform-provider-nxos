@@ -23,7 +23,7 @@ func NewSystemDataSource() datasource.DataSource {
 }
 
 type SystemDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *SystemDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -61,7 +61,7 @@ func (d *SystemDataSource) Configure(ctx context.Context, req datasource.Configu
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

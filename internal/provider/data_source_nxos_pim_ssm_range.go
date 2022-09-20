@@ -23,7 +23,7 @@ func NewPIMSSMRangeDataSource() datasource.DataSource {
 }
 
 type PIMSSMRangeDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *PIMSSMRangeDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -96,7 +96,7 @@ func (d *PIMSSMRangeDataSource) Configure(ctx context.Context, req datasource.Co
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

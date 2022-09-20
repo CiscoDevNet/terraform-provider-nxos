@@ -25,7 +25,7 @@ func NewDefaultQOSPolicyMapMatchClassMapResource() resource.Resource {
 }
 
 type DefaultQOSPolicyMapMatchClassMapResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *DefaultQOSPolicyMapMatchClassMapResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -77,7 +77,7 @@ func (r *DefaultQOSPolicyMapMatchClassMapResource) Configure(ctx context.Context
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

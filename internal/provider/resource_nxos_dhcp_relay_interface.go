@@ -25,7 +25,7 @@ func NewDHCPRelayInterfaceResource() resource.Resource {
 }
 
 type DHCPRelayInterfaceResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *DHCPRelayInterfaceResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -69,7 +69,7 @@ func (r *DHCPRelayInterfaceResource) Configure(ctx context.Context, req resource
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

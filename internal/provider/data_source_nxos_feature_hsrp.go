@@ -23,7 +23,7 @@ func NewFeatureHSRPDataSource() datasource.DataSource {
 }
 
 type FeatureHSRPDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *FeatureHSRPDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -61,7 +61,7 @@ func (d *FeatureHSRPDataSource) Configure(ctx context.Context, req datasource.Co
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

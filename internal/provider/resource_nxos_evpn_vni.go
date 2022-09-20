@@ -25,7 +25,7 @@ func NewEVPNVNIResource() resource.Resource {
 }
 
 type EVPNVNIResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *EVPNVNIResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -78,7 +78,7 @@ func (r *EVPNVNIResource) Configure(ctx context.Context, req resource.ConfigureR
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

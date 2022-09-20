@@ -23,7 +23,7 @@ func NewNVEVNIContainerDataSource() datasource.DataSource {
 }
 
 type NVEVNIContainerDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *NVEVNIContainerDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -56,7 +56,7 @@ func (d *NVEVNIContainerDataSource) Configure(ctx context.Context, req datasourc
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

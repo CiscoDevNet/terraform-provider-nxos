@@ -23,7 +23,7 @@ func NewBGPPeerTemplateDataSource() datasource.DataSource {
 }
 
 type BGPPeerTemplateDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *BGPPeerTemplateDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -86,7 +86,7 @@ func (d *BGPPeerTemplateDataSource) Configure(ctx context.Context, req datasourc
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

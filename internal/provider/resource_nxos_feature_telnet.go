@@ -25,7 +25,7 @@ func NewFeatureTelnetResource() resource.Resource {
 }
 
 type FeatureTelnetResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *FeatureTelnetResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -69,7 +69,7 @@ func (r *FeatureTelnetResource) Configure(ctx context.Context, req resource.Conf
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

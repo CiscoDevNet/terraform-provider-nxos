@@ -25,7 +25,7 @@ func NewFeatureBGPResource() resource.Resource {
 }
 
 type FeatureBGPResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *FeatureBGPResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -69,7 +69,7 @@ func (r *FeatureBGPResource) Configure(ctx context.Context, req resource.Configu
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

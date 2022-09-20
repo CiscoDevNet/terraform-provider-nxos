@@ -25,7 +25,7 @@ func NewLoopbackInterfaceVRFResource() resource.Resource {
 }
 
 type LoopbackInterfaceVRFResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *LoopbackInterfaceVRFResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -74,7 +74,7 @@ func (r *LoopbackInterfaceVRFResource) Configure(ctx context.Context, req resour
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

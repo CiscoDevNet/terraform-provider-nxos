@@ -25,7 +25,7 @@ func NewNVEVNIResource() resource.Resource {
 }
 
 type NVEVNIResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *NVEVNIResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -114,7 +114,7 @@ func (r *NVEVNIResource) Configure(ctx context.Context, req resource.ConfigureRe
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

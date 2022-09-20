@@ -23,7 +23,7 @@ func NewDefaultQOSPolicyMapMatchClassMapPoliceDataSource() datasource.DataSource
 }
 
 type DefaultQOSPolicyMapMatchClassMapPoliceDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *DefaultQOSPolicyMapMatchClassMapPoliceDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -181,7 +181,7 @@ func (d *DefaultQOSPolicyMapMatchClassMapPoliceDataSource) Configure(ctx context
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

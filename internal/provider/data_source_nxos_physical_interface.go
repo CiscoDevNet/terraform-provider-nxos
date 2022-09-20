@@ -23,7 +23,7 @@ func NewPhysicalInterfaceDataSource() datasource.DataSource {
 }
 
 type PhysicalInterfaceDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *PhysicalInterfaceDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -166,7 +166,7 @@ func (d *PhysicalInterfaceDataSource) Configure(ctx context.Context, req datasou
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

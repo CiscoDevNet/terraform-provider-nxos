@@ -23,7 +23,7 @@ func NewPhysicalInterfaceVRFDataSource() datasource.DataSource {
 }
 
 type PhysicalInterfaceVRFDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *PhysicalInterfaceVRFDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -66,7 +66,7 @@ func (d *PhysicalInterfaceVRFDataSource) Configure(ctx context.Context, req data
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

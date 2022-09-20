@@ -25,7 +25,7 @@ func NewFeatureVPCResource() resource.Resource {
 }
 
 type FeatureVPCResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *FeatureVPCResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -69,7 +69,7 @@ func (r *FeatureVPCResource) Configure(ctx context.Context, req resource.Configu
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

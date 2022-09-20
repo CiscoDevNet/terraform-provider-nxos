@@ -25,7 +25,7 @@ func NewOSPFAuthenticationResource() resource.Resource {
 }
 
 type OSPFAuthenticationResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *OSPFAuthenticationResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -145,7 +145,7 @@ func (r *OSPFAuthenticationResource) Configure(ctx context.Context, req resource
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

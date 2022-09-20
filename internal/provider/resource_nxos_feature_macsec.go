@@ -25,7 +25,7 @@ func NewFeatureMACsecResource() resource.Resource {
 }
 
 type FeatureMACsecResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *FeatureMACsecResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -69,7 +69,7 @@ func (r *FeatureMACsecResource) Configure(ctx context.Context, req resource.Conf
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

@@ -25,7 +25,7 @@ func NewFeatureInterfaceVLANResource() resource.Resource {
 }
 
 type FeatureInterfaceVLANResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *FeatureInterfaceVLANResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -69,7 +69,7 @@ func (r *FeatureInterfaceVLANResource) Configure(ctx context.Context, req resour
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

@@ -25,7 +25,7 @@ func NewIPv4AccessListResource() resource.Resource {
 }
 
 type IPv4AccessListResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *IPv4AccessListResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -69,7 +69,7 @@ func (r *IPv4AccessListResource) Configure(ctx context.Context, req resource.Con
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

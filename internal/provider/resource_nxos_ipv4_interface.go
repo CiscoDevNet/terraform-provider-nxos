@@ -25,7 +25,7 @@ func NewIPv4InterfaceResource() resource.Resource {
 }
 
 type IPv4InterfaceResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *IPv4InterfaceResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -122,7 +122,7 @@ func (r *IPv4InterfaceResource) Configure(ctx context.Context, req resource.Conf
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

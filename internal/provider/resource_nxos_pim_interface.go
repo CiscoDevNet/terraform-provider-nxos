@@ -25,7 +25,7 @@ func NewPIMInterfaceResource() resource.Resource {
 }
 
 type PIMInterfaceResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *PIMInterfaceResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -131,7 +131,7 @@ func (r *PIMInterfaceResource) Configure(ctx context.Context, req resource.Confi
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

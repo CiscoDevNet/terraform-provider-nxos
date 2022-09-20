@@ -23,7 +23,7 @@ func NewIPv4VRFDataSource() datasource.DataSource {
 }
 
 type IPv4VRFDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *IPv4VRFDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -61,7 +61,7 @@ func (d *IPv4VRFDataSource) Configure(ctx context.Context, req datasource.Config
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

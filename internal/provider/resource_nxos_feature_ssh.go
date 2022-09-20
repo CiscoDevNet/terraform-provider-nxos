@@ -25,7 +25,7 @@ func NewFeatureSSHResource() resource.Resource {
 }
 
 type FeatureSSHResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *FeatureSSHResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -69,7 +69,7 @@ func (r *FeatureSSHResource) Configure(ctx context.Context, req resource.Configu
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

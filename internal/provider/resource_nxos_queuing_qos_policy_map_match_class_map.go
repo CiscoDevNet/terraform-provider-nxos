@@ -25,7 +25,7 @@ func NewQueuingQOSPolicyMapMatchClassMapResource() resource.Resource {
 }
 
 type QueuingQOSPolicyMapMatchClassMapResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *QueuingQOSPolicyMapMatchClassMapResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -77,7 +77,7 @@ func (r *QueuingQOSPolicyMapMatchClassMapResource) Configure(ctx context.Context
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

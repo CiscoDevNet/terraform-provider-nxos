@@ -25,7 +25,7 @@ func NewBGPPeerTemplateMaxPrefixResource() resource.Resource {
 }
 
 type BGPPeerTemplateMaxPrefixResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *BGPPeerTemplateMaxPrefixResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -130,7 +130,7 @@ func (r *BGPPeerTemplateMaxPrefixResource) Configure(ctx context.Context, req re
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

@@ -23,7 +23,7 @@ func NewDefaultQOSClassMapDSCPDataSource() datasource.DataSource {
 }
 
 type DefaultQOSClassMapDSCPDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *DefaultQOSClassMapDSCPDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -66,7 +66,7 @@ func (d *DefaultQOSClassMapDSCPDataSource) Configure(ctx context.Context, req da
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

@@ -24,7 +24,7 @@ func New{{camelCase .Name}}DataSource() datasource.DataSource {
 }
 
 type {{camelCase .Name}}DataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *{{camelCase .Name}}DataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -68,7 +68,7 @@ func (d *{{camelCase .Name}}DataSource) Configure(ctx context.Context, req datas
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

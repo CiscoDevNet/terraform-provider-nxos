@@ -23,7 +23,7 @@ func NewFeaturePVLANDataSource() datasource.DataSource {
 }
 
 type FeaturePVLANDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *FeaturePVLANDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -61,7 +61,7 @@ func (d *FeaturePVLANDataSource) Configure(ctx context.Context, req datasource.C
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

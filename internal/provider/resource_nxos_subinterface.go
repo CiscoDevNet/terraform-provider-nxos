@@ -25,7 +25,7 @@ func NewSubinterfaceResource() resource.Resource {
 }
 
 type SubinterfaceResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *SubinterfaceResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -156,7 +156,7 @@ func (r *SubinterfaceResource) Configure(ctx context.Context, req resource.Confi
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

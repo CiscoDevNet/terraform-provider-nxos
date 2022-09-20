@@ -25,7 +25,7 @@ func NewFeatureOSPFv3Resource() resource.Resource {
 }
 
 type FeatureOSPFv3Resource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *FeatureOSPFv3Resource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -69,7 +69,7 @@ func (r *FeatureOSPFv3Resource) Configure(ctx context.Context, req resource.Conf
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

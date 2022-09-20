@@ -23,7 +23,7 @@ func NewEthernetDataSource() datasource.DataSource {
 }
 
 type EthernetDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *EthernetDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -61,7 +61,7 @@ func (d *EthernetDataSource) Configure(ctx context.Context, req datasource.Confi
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

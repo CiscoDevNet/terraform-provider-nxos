@@ -23,7 +23,7 @@ func NewISISDataSource() datasource.DataSource {
 }
 
 type ISISDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *ISISDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -61,7 +61,7 @@ func (d *ISISDataSource) Configure(ctx context.Context, req datasource.Configure
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

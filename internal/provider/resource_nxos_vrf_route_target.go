@@ -25,7 +25,7 @@ func NewVRFRouteTargetResource() resource.Resource {
 }
 
 type VRFRouteTargetResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *VRFRouteTargetResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -110,7 +110,7 @@ func (r *VRFRouteTargetResource) Configure(ctx context.Context, req resource.Con
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

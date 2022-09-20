@@ -25,7 +25,7 @@ func NewFeaturePVLANResource() resource.Resource {
 }
 
 type FeaturePVLANResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *FeaturePVLANResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -69,7 +69,7 @@ func (r *FeaturePVLANResource) Configure(ctx context.Context, req resource.Confi
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

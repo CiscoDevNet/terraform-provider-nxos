@@ -25,7 +25,7 @@ func NewSVIInterfaceResource() resource.Resource {
 }
 
 type SVIInterfaceResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *SVIInterfaceResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -135,7 +135,7 @@ func (r *SVIInterfaceResource) Configure(ctx context.Context, req resource.Confi
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

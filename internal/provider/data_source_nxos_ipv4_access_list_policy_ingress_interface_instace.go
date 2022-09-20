@@ -23,7 +23,7 @@ func NewIPv4AccessListPolicyIngressInterfaceInstaceDataSource() datasource.DataS
 }
 
 type IPv4AccessListPolicyIngressInterfaceInstaceDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *IPv4AccessListPolicyIngressInterfaceInstaceDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -66,7 +66,7 @@ func (d *IPv4AccessListPolicyIngressInterfaceInstaceDataSource) Configure(ctx co
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

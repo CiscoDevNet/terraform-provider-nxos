@@ -23,7 +23,7 @@ func NewVRFAddressFamilyDataSource() datasource.DataSource {
 }
 
 type VRFAddressFamilyDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *VRFAddressFamilyDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -66,7 +66,7 @@ func (d *VRFAddressFamilyDataSource) Configure(ctx context.Context, req datasour
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

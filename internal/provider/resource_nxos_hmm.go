@@ -25,7 +25,7 @@ func NewHMMResource() resource.Resource {
 }
 
 type HMMResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *HMMResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -73,7 +73,7 @@ func (r *HMMResource) Configure(ctx context.Context, req resource.ConfigureReque
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

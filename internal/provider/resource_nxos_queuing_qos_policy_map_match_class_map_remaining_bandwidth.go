@@ -25,7 +25,7 @@ func NewQueuingQOSPolicyMapMatchClassMapRemainingBandwidthResource() resource.Re
 }
 
 type QueuingQOSPolicyMapMatchClassMapRemainingBandwidthResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *QueuingQOSPolicyMapMatchClassMapRemainingBandwidthResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -85,7 +85,7 @@ func (r *QueuingQOSPolicyMapMatchClassMapRemainingBandwidthResource) Configure(c
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

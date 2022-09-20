@@ -23,7 +23,7 @@ func NewSubinterfaceVRFDataSource() datasource.DataSource {
 }
 
 type SubinterfaceVRFDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *SubinterfaceVRFDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -66,7 +66,7 @@ func (d *SubinterfaceVRFDataSource) Configure(ctx context.Context, req datasourc
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

@@ -23,7 +23,7 @@ func NewFeaturePIMDataSource() datasource.DataSource {
 }
 
 type FeaturePIMDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *FeaturePIMDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -61,7 +61,7 @@ func (d *FeaturePIMDataSource) Configure(ctx context.Context, req datasource.Con
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

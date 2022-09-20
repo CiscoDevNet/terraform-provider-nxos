@@ -23,7 +23,7 @@ func NewSVIInterfaceVRFDataSource() datasource.DataSource {
 }
 
 type SVIInterfaceVRFDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *SVIInterfaceVRFDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -66,7 +66,7 @@ func (d *SVIInterfaceVRFDataSource) Configure(ctx context.Context, req datasourc
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

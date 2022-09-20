@@ -25,7 +25,7 @@ func NewRestResource() resource.Resource {
 }
 
 type RestResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *RestResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -84,6 +84,26 @@ func (r *RestResource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagno
 			},
 		},
 	}, nil
+}
+
+func (r *RestResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	// Prevent panic if the provider has not been configured.
+	if req.ProviderData == nil {
+		return
+	}
+
+	data, ok := req.ProviderData.(*NxosProviderData)
+
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected data, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+
+		return
+	}
+
+	r.data = data
 }
 
 func (r *RestResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

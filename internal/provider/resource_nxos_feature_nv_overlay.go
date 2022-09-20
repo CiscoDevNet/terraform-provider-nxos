@@ -25,7 +25,7 @@ func NewFeatureNVOverlayResource() resource.Resource {
 }
 
 type FeatureNVOverlayResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *FeatureNVOverlayResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -69,7 +69,7 @@ func (r *FeatureNVOverlayResource) Configure(ctx context.Context, req resource.C
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

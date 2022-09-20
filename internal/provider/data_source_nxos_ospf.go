@@ -23,7 +23,7 @@ func NewOSPFDataSource() datasource.DataSource {
 }
 
 type OSPFDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *OSPFDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -61,7 +61,7 @@ func (d *OSPFDataSource) Configure(ctx context.Context, req datasource.Configure
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

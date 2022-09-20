@@ -23,7 +23,7 @@ func NewVRFRouteTargetDirectionDataSource() datasource.DataSource {
 }
 
 type VRFRouteTargetDirectionDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *VRFRouteTargetDirectionDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -76,7 +76,7 @@ func (d *VRFRouteTargetDirectionDataSource) Configure(ctx context.Context, req d
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

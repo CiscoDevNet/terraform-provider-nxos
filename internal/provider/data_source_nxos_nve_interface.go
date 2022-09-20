@@ -23,7 +23,7 @@ func NewNVEInterfaceDataSource() datasource.DataSource {
 }
 
 type NVEInterfaceDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *NVEInterfaceDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -111,7 +111,7 @@ func (d *NVEInterfaceDataSource) Configure(ctx context.Context, req datasource.C
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

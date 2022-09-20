@@ -23,7 +23,7 @@ func NewFeatureOSPFv3DataSource() datasource.DataSource {
 }
 
 type FeatureOSPFv3DataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *FeatureOSPFv3DataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -61,7 +61,7 @@ func (d *FeatureOSPFv3DataSource) Configure(ctx context.Context, req datasource.
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

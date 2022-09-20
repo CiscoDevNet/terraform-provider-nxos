@@ -23,7 +23,7 @@ func NewEVPNDataSource() datasource.DataSource {
 }
 
 type EVPNDataSource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (d *EVPNDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -61,7 +61,7 @@ func (d *EVPNDataSource) Configure(ctx context.Context, req datasource.Configure
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

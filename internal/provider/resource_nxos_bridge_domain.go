@@ -25,7 +25,7 @@ func NewBridgeDomainResource() resource.Resource {
 }
 
 type BridgeDomainResource struct {
-	data NxosProviderData
+	data *NxosProviderData
 }
 
 func (r *BridgeDomainResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -84,7 +84,7 @@ func (r *BridgeDomainResource) Configure(ctx context.Context, req resource.Confi
 		return
 	}
 
-	data, ok := req.ProviderData.(NxosProviderData)
+	data, ok := req.ProviderData.(*NxosProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(

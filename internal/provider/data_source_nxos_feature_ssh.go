@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -14,9 +15,22 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type dataSourceFeatureSSHType struct{}
+// Ensure provider defined types fully satisfy framework interfaces
+var _ datasource.DataSource = &FeatureSSHDataSource{}
 
-func (t dataSourceFeatureSSHType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewFeatureSSHDataSource() datasource.DataSource {
+	return &FeatureSSHDataSource{}
+}
+
+type FeatureSSHDataSource struct {
+	data NxosProviderData
+}
+
+func (d *FeatureSSHDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_feature_ssh"
+}
+
+func (d *FeatureSSHDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read the SSH feature configuration.", "fmSsh", "Feature%20Management/fm:Ssh/").String,
@@ -41,19 +55,27 @@ func (t dataSourceFeatureSSHType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 	}, nil
 }
 
-func (t dataSourceFeatureSSHType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (d *FeatureSSHDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+	// Prevent panic if the provider has not been configured.
+	if req.ProviderData == nil {
+		return
+	}
 
-	return dataSourceFeatureSSH{
-		provider: provider,
-	}, diags
+	data, ok := req.ProviderData.(NxosProviderData)
+
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Data Source Configure Type",
+			fmt.Sprintf("Expected data, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+
+		return
+	}
+
+	d.data = data
 }
 
-type dataSourceFeatureSSH struct {
-	provider provider
-}
-
-func (d dataSourceFeatureSSH) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+func (d *FeatureSSHDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var config, state FeatureSSH
 
 	// Read config
@@ -65,7 +87,7 @@ func (d dataSourceFeatureSSH) Read(ctx context.Context, req tfsdk.ReadDataSource
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getDn()))
 
-	res, err := d.provider.client.GetDn(config.getDn(), nxos.OverrideUrl(d.provider.devices[config.Device.Value]))
+	res, err := d.data.client.GetDn(config.getDn(), nxos.OverrideUrl(d.data.devices[config.Device.Value]))
 
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

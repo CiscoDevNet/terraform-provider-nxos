@@ -7,17 +7,32 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourceNVEVNIContainerType struct{}
+// Ensure provider defined types fully satisfy framework interfaces
+var _ resource.Resource = &NVEVNIContainerResource{}
+var _ resource.ResourceWithImportState = &NVEVNIContainerResource{}
 
-func (t resourceNVEVNIContainerType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewNVEVNIContainerResource() resource.Resource {
+	return &NVEVNIContainerResource{}
+}
+
+type NVEVNIContainerResource struct {
+	data NxosProviderData
+}
+
+func (r *NVEVNIContainerResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_nve_vni_container"
+}
+
+func (r *NVEVNIContainerResource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the configuration of Container object for Virtual Network IDs (VNIs).", "nvoNws", "Network%20Virtualization/nvo:Nws/").AddParents("nve_interface").AddChildren("nve_vni").String,
@@ -33,26 +48,34 @@ func (t resourceNVEVNIContainerType) GetSchema(ctx context.Context) (tfsdk.Schem
 				Type:                types.StringType,
 				Computed:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.UseStateForUnknown(),
+					resource.UseStateForUnknown(),
 				},
 			},
 		},
 	}, nil
 }
 
-func (t resourceNVEVNIContainerType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (r *NVEVNIContainerResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	// Prevent panic if the provider has not been configured.
+	if req.ProviderData == nil {
+		return
+	}
 
-	return resourceNVEVNIContainer{
-		provider: provider,
-	}, diags
+	data, ok := req.ProviderData.(NxosProviderData)
+
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected data, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+
+		return
+	}
+
+	r.data = data
 }
 
-type resourceNVEVNIContainer struct {
-	provider provider
-}
-
-func (r resourceNVEVNIContainer) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+func (r *NVEVNIContainerResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan, state NVEVNIContainer
 
 	// Read plan
@@ -66,14 +89,14 @@ func (r resourceNVEVNIContainer) Create(ctx context.Context, req tfsdk.CreateRes
 
 	// Post object
 	body := plan.toBody()
-	_, err := r.provider.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	_, err := r.data.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 		return
 	}
 
 	// Read object
-	res, err := r.provider.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -89,7 +112,7 @@ func (r resourceNVEVNIContainer) Create(ctx context.Context, req tfsdk.CreateRes
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceNVEVNIContainer) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+func (r *NVEVNIContainerResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state NVEVNIContainer
 
 	// Read state
@@ -101,7 +124,7 @@ func (r resourceNVEVNIContainer) Read(ctx context.Context, req tfsdk.ReadResourc
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.Value))
 
-	res, err := r.provider.client.GetDn(state.Dn.Value, nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[state.Device.Value]))
+	res, err := r.data.client.GetDn(state.Dn.Value, nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[state.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -115,7 +138,7 @@ func (r resourceNVEVNIContainer) Read(ctx context.Context, req tfsdk.ReadResourc
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceNVEVNIContainer) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+func (r *NVEVNIContainerResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state NVEVNIContainer
 
 	// Read plan
@@ -128,14 +151,14 @@ func (r resourceNVEVNIContainer) Update(ctx context.Context, req tfsdk.UpdateRes
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
 	body := plan.toBody()
-	_, err := r.provider.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	_, err := r.data.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 		return
 	}
 
 	// Read object
-	res, err := r.provider.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -150,7 +173,7 @@ func (r resourceNVEVNIContainer) Update(ctx context.Context, req tfsdk.UpdateRes
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceNVEVNIContainer) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+func (r *NVEVNIContainerResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state NVEVNIContainer
 
 	// Read state
@@ -162,7 +185,7 @@ func (r resourceNVEVNIContainer) Delete(ctx context.Context, req tfsdk.DeleteRes
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Dn.Value))
 
-	res, err := r.provider.client.DeleteDn(state.Dn.Value, nxos.OverrideUrl(r.provider.devices[state.Device.Value]))
+	res, err := r.data.client.DeleteDn(state.Dn.Value, nxos.OverrideUrl(r.data.devices[state.Device.Value]))
 	if err != nil {
 		errCode := res.Get("imdata.0.error.attributes.code").Str
 		// Ignore errors of type "Cannot delete object"
@@ -177,6 +200,6 @@ func (r resourceNVEVNIContainer) Delete(ctx context.Context, req tfsdk.DeleteRes
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceNVEVNIContainer) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
-	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
+func (r *NVEVNIContainerResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

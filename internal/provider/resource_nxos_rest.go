@@ -7,17 +7,32 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourceRestType struct{}
+// Ensure provider defined types fully satisfy framework interfaces
+var _ resource.Resource = &RestResource{}
+var _ resource.ResourceWithImportState = &RestResource{}
 
-func (t resourceRestType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewRestResource() resource.Resource {
+	return &RestResource{}
+}
+
+type RestResource struct {
+	data NxosProviderData
+}
+
+func (r *RestResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_rest"
+}
+
+func (r *RestResource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "Manages NX-OS DME Objects via REST API calls. This resource can only manage a single API object. It is able to read the state and therefore reconcile configuration drift.",
@@ -33,7 +48,7 @@ func (t resourceRestType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Dia
 				Type:                types.StringType,
 				Computed:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.UseStateForUnknown(),
+					resource.UseStateForUnknown(),
 				},
 			},
 			"dn": {
@@ -41,7 +56,7 @@ func (t resourceRestType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Dia
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
+					resource.RequiresReplace(),
 				},
 			},
 			"class_name": {
@@ -49,7 +64,7 @@ func (t resourceRestType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Dia
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
+					resource.RequiresReplace(),
 				},
 			},
 			"delete": {
@@ -71,20 +86,8 @@ func (t resourceRestType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Dia
 	}, nil
 }
 
-func (t resourceRestType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
-
-	return resourceRest{
-		provider: provider,
-	}, diags
-}
-
-type resourceRest struct {
-	provider provider
-}
-
-func (r resourceRest) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
-	var plan Rest
+func (r *RestResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan RestModel
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -96,7 +99,7 @@ func (r resourceRest) Create(ctx context.Context, req tfsdk.CreateResourceReques
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.Id.Value))
 
 	body := plan.toBody(ctx)
-	_, err := r.provider.client.Post(plan.Dn.Value, body.Str, nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	_, err := r.data.client.Post(plan.Dn.Value, body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 		return
@@ -111,8 +114,8 @@ func (r resourceRest) Create(ctx context.Context, req tfsdk.CreateResourceReques
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceRest) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
-	var state Rest
+func (r *RestResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state RestModel
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -123,7 +126,7 @@ func (r resourceRest) Read(ctx context.Context, req tfsdk.ReadResourceRequest, r
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.Value))
 
-	res, err := r.provider.client.GetDn(state.Dn.Value, nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[state.Device.Value]))
+	res, err := r.data.client.GetDn(state.Dn.Value, nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[state.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -153,8 +156,8 @@ func (r resourceRest) Read(ctx context.Context, req tfsdk.ReadResourceRequest, r
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceRest) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
-	var plan Rest
+func (r *RestResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan RestModel
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -166,7 +169,7 @@ func (r resourceRest) Update(ctx context.Context, req tfsdk.UpdateResourceReques
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.Value))
 
 	body := plan.toBody(ctx)
-	_, err := r.provider.client.Post(plan.Dn.Value, body.Str, nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	_, err := r.data.client.Post(plan.Dn.Value, body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 		return
@@ -178,8 +181,8 @@ func (r resourceRest) Update(ctx context.Context, req tfsdk.UpdateResourceReques
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceRest) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
-	var state Rest
+func (r *RestResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state RestModel
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -191,7 +194,7 @@ func (r resourceRest) Delete(ctx context.Context, req tfsdk.DeleteResourceReques
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.Value))
 
 	if state.Delete.Value {
-		res, err := r.provider.client.DeleteDn(state.Dn.Value, nxos.OverrideUrl(r.provider.devices[state.Device.Value]))
+		res, err := r.data.client.DeleteDn(state.Dn.Value, nxos.OverrideUrl(r.data.devices[state.Device.Value]))
 		if err != nil {
 			errCode := res.Get("imdata.0.error.attributes.code").Str
 			// Ignore errors of type "Cannot delete object"
@@ -207,7 +210,7 @@ func (r resourceRest) Delete(ctx context.Context, req tfsdk.DeleteResourceReques
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceRest) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
+func (r *RestResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ":")
 
 	if len(idParts) != 2 || idParts[0] == "" || idParts[1] == "" {
@@ -220,9 +223,9 @@ func (r resourceRest) ImportState(ctx context.Context, req tfsdk.ImportResourceS
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Import", idParts[1]))
 
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, tftypes.NewAttributePath().WithAttributeName("dn"), idParts[1])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, tftypes.NewAttributePath().WithAttributeName("class_name"), idParts[0])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, tftypes.NewAttributePath().WithAttributeName("id"), idParts[1])...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("dn"), idParts[1])...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("class_name"), idParts[0])...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), idParts[1])...)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Import finished successfully", idParts[1]))
 }

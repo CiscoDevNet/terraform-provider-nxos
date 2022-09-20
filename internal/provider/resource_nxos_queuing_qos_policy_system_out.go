@@ -7,17 +7,32 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourceQueuingQOSPolicySystemOutType struct{}
+// Ensure provider defined types fully satisfy framework interfaces
+var _ resource.Resource = &QueuingQOSPolicySystemOutResource{}
+var _ resource.ResourceWithImportState = &QueuingQOSPolicySystemOutResource{}
 
-func (t resourceQueuingQOSPolicySystemOutType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewQueuingQOSPolicySystemOutResource() resource.Resource {
+	return &QueuingQOSPolicySystemOutResource{}
+}
+
+type QueuingQOSPolicySystemOutResource struct {
+	data NxosProviderData
+}
+
+func (r *QueuingQOSPolicySystemOutResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_queuing_qos_policy_system_out"
+}
+
+func (r *QueuingQOSPolicySystemOutResource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the queuing QoS policy system out configuration.", "ipqosSystem", "Qos/ipqos:System/").AddChildren("queuing_qos_policy_system_out_policy_map").String,
@@ -33,26 +48,34 @@ func (t resourceQueuingQOSPolicySystemOutType) GetSchema(ctx context.Context) (t
 				Type:                types.StringType,
 				Computed:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.UseStateForUnknown(),
+					resource.UseStateForUnknown(),
 				},
 			},
 		},
 	}, nil
 }
 
-func (t resourceQueuingQOSPolicySystemOutType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (r *QueuingQOSPolicySystemOutResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	// Prevent panic if the provider has not been configured.
+	if req.ProviderData == nil {
+		return
+	}
 
-	return resourceQueuingQOSPolicySystemOut{
-		provider: provider,
-	}, diags
+	data, ok := req.ProviderData.(NxosProviderData)
+
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected data, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+
+		return
+	}
+
+	r.data = data
 }
 
-type resourceQueuingQOSPolicySystemOut struct {
-	provider provider
-}
-
-func (r resourceQueuingQOSPolicySystemOut) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+func (r *QueuingQOSPolicySystemOutResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan, state QueuingQOSPolicySystemOut
 
 	// Read plan
@@ -66,14 +89,14 @@ func (r resourceQueuingQOSPolicySystemOut) Create(ctx context.Context, req tfsdk
 
 	// Post object
 	body := plan.toBody()
-	_, err := r.provider.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	_, err := r.data.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 		return
 	}
 
 	// Read object
-	res, err := r.provider.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -89,7 +112,7 @@ func (r resourceQueuingQOSPolicySystemOut) Create(ctx context.Context, req tfsdk
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceQueuingQOSPolicySystemOut) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+func (r *QueuingQOSPolicySystemOutResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state QueuingQOSPolicySystemOut
 
 	// Read state
@@ -101,7 +124,7 @@ func (r resourceQueuingQOSPolicySystemOut) Read(ctx context.Context, req tfsdk.R
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.Value))
 
-	res, err := r.provider.client.GetDn(state.Dn.Value, nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[state.Device.Value]))
+	res, err := r.data.client.GetDn(state.Dn.Value, nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[state.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -115,7 +138,7 @@ func (r resourceQueuingQOSPolicySystemOut) Read(ctx context.Context, req tfsdk.R
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceQueuingQOSPolicySystemOut) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+func (r *QueuingQOSPolicySystemOutResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state QueuingQOSPolicySystemOut
 
 	// Read plan
@@ -128,14 +151,14 @@ func (r resourceQueuingQOSPolicySystemOut) Update(ctx context.Context, req tfsdk
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
 	body := plan.toBody()
-	_, err := r.provider.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	_, err := r.data.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 		return
 	}
 
 	// Read object
-	res, err := r.provider.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -150,7 +173,7 @@ func (r resourceQueuingQOSPolicySystemOut) Update(ctx context.Context, req tfsdk
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceQueuingQOSPolicySystemOut) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+func (r *QueuingQOSPolicySystemOutResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state QueuingQOSPolicySystemOut
 
 	// Read state
@@ -162,7 +185,7 @@ func (r resourceQueuingQOSPolicySystemOut) Delete(ctx context.Context, req tfsdk
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Dn.Value))
 
-	res, err := r.provider.client.DeleteDn(state.Dn.Value, nxos.OverrideUrl(r.provider.devices[state.Device.Value]))
+	res, err := r.data.client.DeleteDn(state.Dn.Value, nxos.OverrideUrl(r.data.devices[state.Device.Value]))
 	if err != nil {
 		errCode := res.Get("imdata.0.error.attributes.code").Str
 		// Ignore errors of type "Cannot delete object"
@@ -177,6 +200,6 @@ func (r resourceQueuingQOSPolicySystemOut) Delete(ctx context.Context, req tfsdk
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceQueuingQOSPolicySystemOut) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
-	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
+func (r *QueuingQOSPolicySystemOutResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

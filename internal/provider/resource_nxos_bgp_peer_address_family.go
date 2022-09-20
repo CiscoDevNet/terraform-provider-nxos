@@ -7,17 +7,32 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourceBGPPeerAddressFamilyType struct{}
+// Ensure provider defined types fully satisfy framework interfaces
+var _ resource.Resource = &BGPPeerAddressFamilyResource{}
+var _ resource.ResourceWithImportState = &BGPPeerAddressFamilyResource{}
 
-func (t resourceBGPPeerAddressFamilyType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewBGPPeerAddressFamilyResource() resource.Resource {
+	return &BGPPeerAddressFamilyResource{}
+}
+
+type BGPPeerAddressFamilyResource struct {
+	data NxosProviderData
+}
+
+func (r *BGPPeerAddressFamilyResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_bgp_peer_address_family"
+}
+
+func (r *BGPPeerAddressFamilyResource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP peer address family configuration.", "bgpPeerAf", "Routing%20and%20Forwarding/bgp:PeerAf/").AddParents("bgp_peer").String,
@@ -33,7 +48,7 @@ func (t resourceBGPPeerAddressFamilyType) GetSchema(ctx context.Context) (tfsdk.
 				Type:                types.StringType,
 				Computed:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.UseStateForUnknown(),
+					resource.UseStateForUnknown(),
 				},
 			},
 			"asn": {
@@ -41,7 +56,7 @@ func (t resourceBGPPeerAddressFamilyType) GetSchema(ctx context.Context) (tfsdk.
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
+					resource.RequiresReplace(),
 				},
 			},
 			"vrf": {
@@ -49,7 +64,7 @@ func (t resourceBGPPeerAddressFamilyType) GetSchema(ctx context.Context) (tfsdk.
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
+					resource.RequiresReplace(),
 				},
 			},
 			"address": {
@@ -57,7 +72,7 @@ func (t resourceBGPPeerAddressFamilyType) GetSchema(ctx context.Context) (tfsdk.
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
+					resource.RequiresReplace(),
 				},
 			},
 			"address_family": {
@@ -68,7 +83,7 @@ func (t resourceBGPPeerAddressFamilyType) GetSchema(ctx context.Context) (tfsdk.
 					helpers.StringEnumValidator("ipv4-ucast", "vpnv4-ucast", "ipv6-ucast", "vpnv6-ucast", "l2vpn-evpn", "lnkstate"),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
+					resource.RequiresReplace(),
 				},
 			},
 			"control": {
@@ -105,19 +120,27 @@ func (t resourceBGPPeerAddressFamilyType) GetSchema(ctx context.Context) (tfsdk.
 	}, nil
 }
 
-func (t resourceBGPPeerAddressFamilyType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (r *BGPPeerAddressFamilyResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	// Prevent panic if the provider has not been configured.
+	if req.ProviderData == nil {
+		return
+	}
 
-	return resourceBGPPeerAddressFamily{
-		provider: provider,
-	}, diags
+	data, ok := req.ProviderData.(NxosProviderData)
+
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected data, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+
+		return
+	}
+
+	r.data = data
 }
 
-type resourceBGPPeerAddressFamily struct {
-	provider provider
-}
-
-func (r resourceBGPPeerAddressFamily) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+func (r *BGPPeerAddressFamilyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan, state BGPPeerAddressFamily
 
 	// Read plan
@@ -131,14 +154,14 @@ func (r resourceBGPPeerAddressFamily) Create(ctx context.Context, req tfsdk.Crea
 
 	// Post object
 	body := plan.toBody()
-	_, err := r.provider.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	_, err := r.data.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 		return
 	}
 
 	// Read object
-	res, err := r.provider.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -154,7 +177,7 @@ func (r resourceBGPPeerAddressFamily) Create(ctx context.Context, req tfsdk.Crea
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceBGPPeerAddressFamily) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+func (r *BGPPeerAddressFamilyResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state BGPPeerAddressFamily
 
 	// Read state
@@ -166,7 +189,7 @@ func (r resourceBGPPeerAddressFamily) Read(ctx context.Context, req tfsdk.ReadRe
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.Value))
 
-	res, err := r.provider.client.GetDn(state.Dn.Value, nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[state.Device.Value]))
+	res, err := r.data.client.GetDn(state.Dn.Value, nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[state.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -180,7 +203,7 @@ func (r resourceBGPPeerAddressFamily) Read(ctx context.Context, req tfsdk.ReadRe
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceBGPPeerAddressFamily) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+func (r *BGPPeerAddressFamilyResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state BGPPeerAddressFamily
 
 	// Read plan
@@ -193,14 +216,14 @@ func (r resourceBGPPeerAddressFamily) Update(ctx context.Context, req tfsdk.Upda
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
 	body := plan.toBody()
-	_, err := r.provider.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	_, err := r.data.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 		return
 	}
 
 	// Read object
-	res, err := r.provider.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -215,7 +238,7 @@ func (r resourceBGPPeerAddressFamily) Update(ctx context.Context, req tfsdk.Upda
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceBGPPeerAddressFamily) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+func (r *BGPPeerAddressFamilyResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state BGPPeerAddressFamily
 
 	// Read state
@@ -227,7 +250,7 @@ func (r resourceBGPPeerAddressFamily) Delete(ctx context.Context, req tfsdk.Dele
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Dn.Value))
 
-	res, err := r.provider.client.DeleteDn(state.Dn.Value, nxos.OverrideUrl(r.provider.devices[state.Device.Value]))
+	res, err := r.data.client.DeleteDn(state.Dn.Value, nxos.OverrideUrl(r.data.devices[state.Device.Value]))
 	if err != nil {
 		errCode := res.Get("imdata.0.error.attributes.code").Str
 		// Ignore errors of type "Cannot delete object"
@@ -242,6 +265,6 @@ func (r resourceBGPPeerAddressFamily) Delete(ctx context.Context, req tfsdk.Dele
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceBGPPeerAddressFamily) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
-	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
+func (r *BGPPeerAddressFamilyResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

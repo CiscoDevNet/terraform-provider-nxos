@@ -7,17 +7,32 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourceQueuingQOSPolicySystemOutPolicyMapType struct{}
+// Ensure provider defined types fully satisfy framework interfaces
+var _ resource.Resource = &QueuingQOSPolicySystemOutPolicyMapResource{}
+var _ resource.ResourceWithImportState = &QueuingQOSPolicySystemOutPolicyMapResource{}
 
-func (t resourceQueuingQOSPolicySystemOutPolicyMapType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewQueuingQOSPolicySystemOutPolicyMapResource() resource.Resource {
+	return &QueuingQOSPolicySystemOutPolicyMapResource{}
+}
+
+type QueuingQOSPolicySystemOutPolicyMapResource struct {
+	data NxosProviderData
+}
+
+func (r *QueuingQOSPolicySystemOutPolicyMapResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_queuing_qos_policy_system_out_policy_map"
+}
+
+func (r *QueuingQOSPolicySystemOutPolicyMapResource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the queuing QoS policy system out policy map configuration.", "ipqosInst", "Qos/ipqos:Inst/").AddParents("queuing_qos_policy_system_out").AddReferences("queuing_qos_policy_map").String,
@@ -33,7 +48,7 @@ func (t resourceQueuingQOSPolicySystemOutPolicyMapType) GetSchema(ctx context.Co
 				Type:                types.StringType,
 				Computed:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.UseStateForUnknown(),
+					resource.UseStateForUnknown(),
 				},
 			},
 			"policy_map_name": {
@@ -45,19 +60,27 @@ func (t resourceQueuingQOSPolicySystemOutPolicyMapType) GetSchema(ctx context.Co
 	}, nil
 }
 
-func (t resourceQueuingQOSPolicySystemOutPolicyMapType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (r *QueuingQOSPolicySystemOutPolicyMapResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	// Prevent panic if the provider has not been configured.
+	if req.ProviderData == nil {
+		return
+	}
 
-	return resourceQueuingQOSPolicySystemOutPolicyMap{
-		provider: provider,
-	}, diags
+	data, ok := req.ProviderData.(NxosProviderData)
+
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected data, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+
+		return
+	}
+
+	r.data = data
 }
 
-type resourceQueuingQOSPolicySystemOutPolicyMap struct {
-	provider provider
-}
-
-func (r resourceQueuingQOSPolicySystemOutPolicyMap) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+func (r *QueuingQOSPolicySystemOutPolicyMapResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan, state QueuingQOSPolicySystemOutPolicyMap
 
 	// Read plan
@@ -71,14 +94,14 @@ func (r resourceQueuingQOSPolicySystemOutPolicyMap) Create(ctx context.Context, 
 
 	// Post object
 	body := plan.toBody()
-	_, err := r.provider.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	_, err := r.data.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 		return
 	}
 
 	// Read object
-	res, err := r.provider.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -94,7 +117,7 @@ func (r resourceQueuingQOSPolicySystemOutPolicyMap) Create(ctx context.Context, 
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceQueuingQOSPolicySystemOutPolicyMap) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+func (r *QueuingQOSPolicySystemOutPolicyMapResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state QueuingQOSPolicySystemOutPolicyMap
 
 	// Read state
@@ -106,7 +129,7 @@ func (r resourceQueuingQOSPolicySystemOutPolicyMap) Read(ctx context.Context, re
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.Value))
 
-	res, err := r.provider.client.GetDn(state.Dn.Value, nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[state.Device.Value]))
+	res, err := r.data.client.GetDn(state.Dn.Value, nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[state.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -120,7 +143,7 @@ func (r resourceQueuingQOSPolicySystemOutPolicyMap) Read(ctx context.Context, re
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceQueuingQOSPolicySystemOutPolicyMap) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+func (r *QueuingQOSPolicySystemOutPolicyMapResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state QueuingQOSPolicySystemOutPolicyMap
 
 	// Read plan
@@ -133,14 +156,14 @@ func (r resourceQueuingQOSPolicySystemOutPolicyMap) Update(ctx context.Context, 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
 	body := plan.toBody()
-	_, err := r.provider.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	_, err := r.data.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 		return
 	}
 
 	// Read object
-	res, err := r.provider.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -155,7 +178,7 @@ func (r resourceQueuingQOSPolicySystemOutPolicyMap) Update(ctx context.Context, 
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceQueuingQOSPolicySystemOutPolicyMap) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+func (r *QueuingQOSPolicySystemOutPolicyMapResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state QueuingQOSPolicySystemOutPolicyMap
 
 	// Read state
@@ -167,7 +190,7 @@ func (r resourceQueuingQOSPolicySystemOutPolicyMap) Delete(ctx context.Context, 
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Dn.Value))
 
-	res, err := r.provider.client.DeleteDn(state.Dn.Value, nxos.OverrideUrl(r.provider.devices[state.Device.Value]))
+	res, err := r.data.client.DeleteDn(state.Dn.Value, nxos.OverrideUrl(r.data.devices[state.Device.Value]))
 	if err != nil {
 		errCode := res.Get("imdata.0.error.attributes.code").Str
 		// Ignore errors of type "Cannot delete object"
@@ -182,6 +205,6 @@ func (r resourceQueuingQOSPolicySystemOutPolicyMap) Delete(ctx context.Context, 
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceQueuingQOSPolicySystemOutPolicyMap) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
-	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
+func (r *QueuingQOSPolicySystemOutPolicyMapResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

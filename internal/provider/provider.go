@@ -4,50 +4,58 @@ package provider
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"strconv"
 
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/provider"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-// provider satisfies the tfsdk.Provider interface and usually is included
-// with all Resource and DataSource implementations.
-type provider struct {
-	client  *nxos.Client
-	devices map[string]string
+// Ensure NxosProvider satisfies various provider interfaces.
+var _ provider.Provider = &NxosProvider{}
+var _ provider.ProviderWithMetadata = &NxosProvider{}
 
-	// configured is set to true at the end of the Configure method.
-	// This can be used in Resource and DataSource implementations to verify
-	// that the provider was previously configured.
-	configured bool
-
+// NxosProvider defines the provider implementation.
+type NxosProvider struct {
 	// version is set to the provider version on release, "dev" when the
 	// provider is built and ran locally, and "test" when running acceptance
 	// testing.
 	version string
 }
 
-// providerData can be used to store data from the Terraform configuration.
-type providerData struct {
-	Username types.String         `tfsdk:"username"`
-	Password types.String         `tfsdk:"password"`
-	URL      types.String         `tfsdk:"url"`
-	Insecure types.Bool           `tfsdk:"insecure"`
-	Retries  types.Int64          `tfsdk:"retries"`
-	Devices  []providerDataDevice `tfsdk:"devices"`
+// NxosProviderData defines the data passed to resources and data sources.
+type NxosProviderData struct {
+	client  *nxos.Client
+	devices map[string]string
 }
 
-type providerDataDevice struct {
+// NxosProviderModel  describes the provider data model.
+type NxosProviderModel struct {
+	Username types.String              `tfsdk:"username"`
+	Password types.String              `tfsdk:"password"`
+	URL      types.String              `tfsdk:"url"`
+	Insecure types.Bool                `tfsdk:"insecure"`
+	Retries  types.Int64               `tfsdk:"retries"`
+	Devices  []NxosProviderModelDevice `tfsdk:"devices"`
+}
+
+type NxosProviderModelDevice struct {
 	Name types.String `tfsdk:"name"`
 	URL  types.String `tfsdk:"url"`
 }
 
-func (p *provider) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (p *NxosProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
+	resp.TypeName = "nxos"
+	resp.Version = p.version
+}
+
+func (p *NxosProvider) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		Attributes: map[string]tfsdk.Attribute{
 			"username": {
@@ -99,9 +107,9 @@ func (p *provider) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostic
 	}, nil
 }
 
-func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderRequest, resp *tfsdk.ConfigureProviderResponse) {
+func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
 	// Retrieve provider data from configuration
-	var config providerData
+	var config NxosProviderModel
 	diags := req.Config.Get(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
@@ -246,274 +254,249 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 		devices[device.Name.Value] = device.URL.Value
 	}
 
-	p.client = &c
-	p.devices = devices
-	p.configured = true
+	data := NxosProviderData{
+		client:  &c,
+		devices: devices,
+	}
+
+	resp.DataSourceData = data
+	resp.ResourceData = data
 }
 
-func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceType, diag.Diagnostics) {
-	return map[string]tfsdk.ResourceType{
-		"nxos_rest":                                                 resourceRestType{},
-		"nxos_bgp":                                                  resourceBGPType{},
-		"nxos_bgp_address_family":                                   resourceBGPAddressFamilyType{},
-		"nxos_bgp_graceful_restart":                                 resourceBGPGracefulRestartType{},
-		"nxos_bgp_instance":                                         resourceBGPInstanceType{},
-		"nxos_bgp_peer":                                             resourceBGPPeerType{},
-		"nxos_bgp_peer_address_family":                              resourceBGPPeerAddressFamilyType{},
-		"nxos_bgp_peer_template":                                    resourceBGPPeerTemplateType{},
-		"nxos_bgp_peer_template_address_family":                     resourceBGPPeerTemplateAddressFamilyType{},
-		"nxos_bgp_peer_template_max_prefix":                         resourceBGPPeerTemplateMaxPrefixType{},
-		"nxos_bgp_route_control":                                    resourceBGPRouteControlType{},
-		"nxos_bgp_vrf":                                              resourceBGPVRFType{},
-		"nxos_bridge_domain":                                        resourceBridgeDomainType{},
-		"nxos_default_qos_class_map":                                resourceDefaultQOSClassMapType{},
-		"nxos_default_qos_class_map_dscp":                           resourceDefaultQOSClassMapDSCPType{},
-		"nxos_default_qos_policy_interface_in":                      resourceDefaultQOSPolicyInterfaceInType{},
-		"nxos_default_qos_policy_interface_in_policy_map":           resourceDefaultQOSPolicyInterfaceInPolicyMapType{},
-		"nxos_default_qos_policy_map":                               resourceDefaultQOSPolicyMapType{},
-		"nxos_default_qos_policy_map_match_class_map":               resourceDefaultQOSPolicyMapMatchClassMapType{},
-		"nxos_default_qos_policy_map_match_class_map_police":        resourceDefaultQOSPolicyMapMatchClassMapPoliceType{},
-		"nxos_default_qos_policy_map_match_class_map_set_qos_group": resourceDefaultQOSPolicyMapMatchClassMapSetQOSGroupType{},
-		"nxos_dhcp_relay_address":                                   resourceDHCPRelayAddressType{},
-		"nxos_dhcp_relay_interface":                                 resourceDHCPRelayInterfaceType{},
-		"nxos_ethernet":                                             resourceEthernetType{},
-		"nxos_evpn":                                                 resourceEVPNType{},
-		"nxos_evpn_vni":                                             resourceEVPNVNIType{},
-		"nxos_evpn_vni_route_target":                                resourceEVPNVNIRouteTargetType{},
-		"nxos_evpn_vni_route_target_direction":                      resourceEVPNVNIRouteTargetDirectionType{},
-		"nxos_feature_bfd":                                          resourceFeatureBFDType{},
-		"nxos_feature_bgp":                                          resourceFeatureBGPType{},
-		"nxos_feature_dhcp":                                         resourceFeatureDHCPType{},
-		"nxos_feature_evpn":                                         resourceFeatureEVPNType{},
-		"nxos_feature_hmm":                                          resourceFeatureHMMType{},
-		"nxos_feature_hsrp":                                         resourceFeatureHSRPType{},
-		"nxos_feature_interface_vlan":                               resourceFeatureInterfaceVLANType{},
-		"nxos_feature_isis":                                         resourceFeatureISISType{},
-		"nxos_feature_lacp":                                         resourceFeatureLACPType{},
-		"nxos_feature_lldp":                                         resourceFeatureLLDPType{},
-		"nxos_feature_macsec":                                       resourceFeatureMACsecType{},
-		"nxos_feature_netflow":                                      resourceFeatureNetflowType{},
-		"nxos_feature_nv_overlay":                                   resourceFeatureNVOverlayType{},
-		"nxos_feature_ospf":                                         resourceFeatureOSPFType{},
-		"nxos_feature_ospfv3":                                       resourceFeatureOSPFv3Type{},
-		"nxos_feature_pim":                                          resourceFeaturePIMType{},
-		"nxos_feature_ptp":                                          resourceFeaturePTPType{},
-		"nxos_feature_pvlan":                                        resourceFeaturePVLANType{},
-		"nxos_feature_ssh":                                          resourceFeatureSSHType{},
-		"nxos_feature_tacacs":                                       resourceFeatureTACACSType{},
-		"nxos_feature_telnet":                                       resourceFeatureTelnetType{},
-		"nxos_feature_udld":                                         resourceFeatureUDLDType{},
-		"nxos_feature_vn_segment":                                   resourceFeatureVNSegmentType{},
-		"nxos_feature_vpc":                                          resourceFeatureVPCType{},
-		"nxos_hmm":                                                  resourceHMMType{},
-		"nxos_hmm_instance":                                         resourceHMMInstanceType{},
-		"nxos_hmm_interface":                                        resourceHMMInterfaceType{},
-		"nxos_ipv4_access_list":                                     resourceIPv4AccessListType{},
-		"nxos_ipv4_access_list_entry":                               resourceIPv4AccessListEntryType{},
-		"nxos_ipv4_access_list_policy_egress_interface":             resourceIPv4AccessListPolicyEgressInterfaceType{},
-		"nxos_ipv4_access_list_policy_egress_interface_instace":     resourceIPv4AccessListPolicyEgressInterfaceInstaceType{},
-		"nxos_ipv4_access_list_policy_ingress_interface":            resourceIPv4AccessListPolicyIngressInterfaceType{},
-		"nxos_ipv4_access_list_policy_ingress_interface_instace":    resourceIPv4AccessListPolicyIngressInterfaceInstaceType{},
-		"nxos_ipv4_interface":                                       resourceIPv4InterfaceType{},
-		"nxos_ipv4_interface_address":                               resourceIPv4InterfaceAddressType{},
-		"nxos_ipv4_vrf":                                             resourceIPv4VRFType{},
-		"nxos_isis":                                                 resourceISISType{},
-		"nxos_isis_instance":                                        resourceISISInstanceType{},
-		"nxos_isis_interface":                                       resourceISISInterfaceType{},
-		"nxos_isis_vrf":                                             resourceISISVRFType{},
-		"nxos_loopback_interface":                                   resourceLoopbackInterfaceType{},
-		"nxos_loopback_interface_vrf":                               resourceLoopbackInterfaceVRFType{},
-		"nxos_nve_interface":                                        resourceNVEInterfaceType{},
-		"nxos_nve_vni":                                              resourceNVEVNIType{},
-		"nxos_nve_vni_container":                                    resourceNVEVNIContainerType{},
-		"nxos_nve_vni_ingress_replication":                          resourceNVEVNIIngressReplicationType{},
-		"nxos_ospf":                                                 resourceOSPFType{},
-		"nxos_ospf_area":                                            resourceOSPFAreaType{},
-		"nxos_ospf_authentication":                                  resourceOSPFAuthenticationType{},
-		"nxos_ospf_instance":                                        resourceOSPFInstanceType{},
-		"nxos_ospf_interface":                                       resourceOSPFInterfaceType{},
-		"nxos_ospf_vrf":                                             resourceOSPFVRFType{},
-		"nxos_physical_interface":                                   resourcePhysicalInterfaceType{},
-		"nxos_physical_interface_vrf":                               resourcePhysicalInterfaceVRFType{},
-		"nxos_pim":                                                  resourcePIMType{},
-		"nxos_pim_anycast_rp":                                       resourcePIMAnycastRPType{},
-		"nxos_pim_anycast_rp_peer":                                  resourcePIMAnycastRPPeerType{},
-		"nxos_pim_instance":                                         resourcePIMInstanceType{},
-		"nxos_pim_interface":                                        resourcePIMInterfaceType{},
-		"nxos_pim_ssm_policy":                                       resourcePIMSSMPolicyType{},
-		"nxos_pim_ssm_range":                                        resourcePIMSSMRangeType{},
-		"nxos_pim_static_rp":                                        resourcePIMStaticRPType{},
-		"nxos_pim_static_rp_group_list":                             resourcePIMStaticRPGroupListType{},
-		"nxos_pim_static_rp_policy":                                 resourcePIMStaticRPPolicyType{},
-		"nxos_pim_vrf":                                              resourcePIMVRFType{},
-		"nxos_queuing_qos_policy_map":                               resourceQueuingQOSPolicyMapType{},
-		"nxos_queuing_qos_policy_map_match_class_map":               resourceQueuingQOSPolicyMapMatchClassMapType{},
-		"nxos_queuing_qos_policy_map_match_class_map_priority":      resourceQueuingQOSPolicyMapMatchClassMapPriorityType{},
-		"nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth": resourceQueuingQOSPolicyMapMatchClassMapRemainingBandwidthType{},
-		"nxos_queuing_qos_policy_system_out":                              resourceQueuingQOSPolicySystemOutType{},
-		"nxos_queuing_qos_policy_system_out_policy_map":                   resourceQueuingQOSPolicySystemOutPolicyMapType{},
-		"nxos_subinterface":                    resourceSubinterfaceType{},
-		"nxos_subinterface_vrf":                resourceSubinterfaceVRFType{},
-		"nxos_svi_interface":                   resourceSVIInterfaceType{},
-		"nxos_svi_interface_vrf":               resourceSVIInterfaceVRFType{},
-		"nxos_system":                          resourceSystemType{},
-		"nxos_vrf":                             resourceVRFType{},
-		"nxos_vrf_address_family":              resourceVRFAddressFamilyType{},
-		"nxos_vrf_route_target":                resourceVRFRouteTargetType{},
-		"nxos_vrf_route_target_address_family": resourceVRFRouteTargetAddressFamilyType{},
-		"nxos_vrf_route_target_direction":      resourceVRFRouteTargetDirectionType{},
-		"nxos_vrf_routing":                     resourceVRFRoutingType{},
-	}, nil
+func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource {
+	return []func() resource.Resource{
+		NewRestResource,
+		NewBGPResource,
+		NewBGPAddressFamilyResource,
+		NewBGPGracefulRestartResource,
+		NewBGPInstanceResource,
+		NewBGPPeerResource,
+		NewBGPPeerAddressFamilyResource,
+		NewBGPPeerTemplateResource,
+		NewBGPPeerTemplateAddressFamilyResource,
+		NewBGPPeerTemplateMaxPrefixResource,
+		NewBGPRouteControlResource,
+		NewBGPVRFResource,
+		NewBridgeDomainResource,
+		NewDefaultQOSClassMapResource,
+		NewDefaultQOSClassMapDSCPResource,
+		NewDefaultQOSPolicyInterfaceInResource,
+		NewDefaultQOSPolicyInterfaceInPolicyMapResource,
+		NewDefaultQOSPolicyMapResource,
+		NewDefaultQOSPolicyMapMatchClassMapResource,
+		NewDefaultQOSPolicyMapMatchClassMapPoliceResource,
+		NewDefaultQOSPolicyMapMatchClassMapSetQOSGroupResource,
+		NewDHCPRelayAddressResource,
+		NewDHCPRelayInterfaceResource,
+		NewEthernetResource,
+		NewEVPNResource,
+		NewEVPNVNIResource,
+		NewEVPNVNIRouteTargetResource,
+		NewEVPNVNIRouteTargetDirectionResource,
+		NewFeatureBFDResource,
+		NewFeatureBGPResource,
+		NewFeatureDHCPResource,
+		NewFeatureEVPNResource,
+		NewFeatureHMMResource,
+		NewFeatureHSRPResource,
+		NewFeatureInterfaceVLANResource,
+		NewFeatureISISResource,
+		NewFeatureLACPResource,
+		NewFeatureLLDPResource,
+		NewFeatureMACsecResource,
+		NewFeatureNetflowResource,
+		NewFeatureNVOverlayResource,
+		NewFeatureOSPFResource,
+		NewFeatureOSPFv3Resource,
+		NewFeaturePIMResource,
+		NewFeaturePTPResource,
+		NewFeaturePVLANResource,
+		NewFeatureSSHResource,
+		NewFeatureTACACSResource,
+		NewFeatureTelnetResource,
+		NewFeatureUDLDResource,
+		NewFeatureVNSegmentResource,
+		NewFeatureVPCResource,
+		NewHMMResource,
+		NewHMMInstanceResource,
+		NewHMMInterfaceResource,
+		NewIPv4AccessListResource,
+		NewIPv4AccessListEntryResource,
+		NewIPv4AccessListPolicyEgressInterfaceResource,
+		NewIPv4AccessListPolicyEgressInterfaceInstaceResource,
+		NewIPv4AccessListPolicyIngressInterfaceResource,
+		NewIPv4AccessListPolicyIngressInterfaceInstaceResource,
+		NewIPv4InterfaceResource,
+		NewIPv4InterfaceAddressResource,
+		NewIPv4VRFResource,
+		NewISISResource,
+		NewISISInstanceResource,
+		NewISISInterfaceResource,
+		NewISISVRFResource,
+		NewLoopbackInterfaceResource,
+		NewLoopbackInterfaceVRFResource,
+		NewNVEInterfaceResource,
+		NewNVEVNIResource,
+		NewNVEVNIContainerResource,
+		NewNVEVNIIngressReplicationResource,
+		NewOSPFResource,
+		NewOSPFAreaResource,
+		NewOSPFAuthenticationResource,
+		NewOSPFInstanceResource,
+		NewOSPFInterfaceResource,
+		NewOSPFVRFResource,
+		NewPhysicalInterfaceResource,
+		NewPhysicalInterfaceVRFResource,
+		NewPIMResource,
+		NewPIMAnycastRPResource,
+		NewPIMAnycastRPPeerResource,
+		NewPIMInstanceResource,
+		NewPIMInterfaceResource,
+		NewPIMSSMPolicyResource,
+		NewPIMSSMRangeResource,
+		NewPIMStaticRPResource,
+		NewPIMStaticRPGroupListResource,
+		NewPIMStaticRPPolicyResource,
+		NewPIMVRFResource,
+		NewQueuingQOSPolicyMapResource,
+		NewQueuingQOSPolicyMapMatchClassMapResource,
+		NewQueuingQOSPolicyMapMatchClassMapPriorityResource,
+		NewQueuingQOSPolicyMapMatchClassMapRemainingBandwidthResource,
+		NewQueuingQOSPolicySystemOutResource,
+		NewQueuingQOSPolicySystemOutPolicyMapResource,
+		NewSubinterfaceResource,
+		NewSubinterfaceVRFResource,
+		NewSVIInterfaceResource,
+		NewSVIInterfaceVRFResource,
+		NewSystemResource,
+		NewVRFResource,
+		NewVRFAddressFamilyResource,
+		NewVRFRouteTargetResource,
+		NewVRFRouteTargetAddressFamilyResource,
+		NewVRFRouteTargetDirectionResource,
+		NewVRFRoutingResource,
+	}
 }
 
-func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSourceType, diag.Diagnostics) {
-	return map[string]tfsdk.DataSourceType{
-		"nxos_rest":                                                 dataSourceRestType{},
-		"nxos_bgp":                                                  dataSourceBGPType{},
-		"nxos_bgp_address_family":                                   dataSourceBGPAddressFamilyType{},
-		"nxos_bgp_graceful_restart":                                 dataSourceBGPGracefulRestartType{},
-		"nxos_bgp_instance":                                         dataSourceBGPInstanceType{},
-		"nxos_bgp_peer":                                             dataSourceBGPPeerType{},
-		"nxos_bgp_peer_address_family":                              dataSourceBGPPeerAddressFamilyType{},
-		"nxos_bgp_peer_template":                                    dataSourceBGPPeerTemplateType{},
-		"nxos_bgp_peer_template_address_family":                     dataSourceBGPPeerTemplateAddressFamilyType{},
-		"nxos_bgp_peer_template_max_prefix":                         dataSourceBGPPeerTemplateMaxPrefixType{},
-		"nxos_bgp_route_control":                                    dataSourceBGPRouteControlType{},
-		"nxos_bgp_vrf":                                              dataSourceBGPVRFType{},
-		"nxos_bridge_domain":                                        dataSourceBridgeDomainType{},
-		"nxos_default_qos_class_map":                                dataSourceDefaultQOSClassMapType{},
-		"nxos_default_qos_class_map_dscp":                           dataSourceDefaultQOSClassMapDSCPType{},
-		"nxos_default_qos_policy_interface_in":                      dataSourceDefaultQOSPolicyInterfaceInType{},
-		"nxos_default_qos_policy_interface_in_policy_map":           dataSourceDefaultQOSPolicyInterfaceInPolicyMapType{},
-		"nxos_default_qos_policy_map":                               dataSourceDefaultQOSPolicyMapType{},
-		"nxos_default_qos_policy_map_match_class_map":               dataSourceDefaultQOSPolicyMapMatchClassMapType{},
-		"nxos_default_qos_policy_map_match_class_map_police":        dataSourceDefaultQOSPolicyMapMatchClassMapPoliceType{},
-		"nxos_default_qos_policy_map_match_class_map_set_qos_group": dataSourceDefaultQOSPolicyMapMatchClassMapSetQOSGroupType{},
-		"nxos_dhcp_relay_address":                                   dataSourceDHCPRelayAddressType{},
-		"nxos_dhcp_relay_interface":                                 dataSourceDHCPRelayInterfaceType{},
-		"nxos_ethernet":                                             dataSourceEthernetType{},
-		"nxos_evpn":                                                 dataSourceEVPNType{},
-		"nxos_evpn_vni":                                             dataSourceEVPNVNIType{},
-		"nxos_evpn_vni_route_target":                                dataSourceEVPNVNIRouteTargetType{},
-		"nxos_evpn_vni_route_target_direction":                      dataSourceEVPNVNIRouteTargetDirectionType{},
-		"nxos_feature_bfd":                                          dataSourceFeatureBFDType{},
-		"nxos_feature_bgp":                                          dataSourceFeatureBGPType{},
-		"nxos_feature_dhcp":                                         dataSourceFeatureDHCPType{},
-		"nxos_feature_evpn":                                         dataSourceFeatureEVPNType{},
-		"nxos_feature_hmm":                                          dataSourceFeatureHMMType{},
-		"nxos_feature_hsrp":                                         dataSourceFeatureHSRPType{},
-		"nxos_feature_interface_vlan":                               dataSourceFeatureInterfaceVLANType{},
-		"nxos_feature_isis":                                         dataSourceFeatureISISType{},
-		"nxos_feature_lacp":                                         dataSourceFeatureLACPType{},
-		"nxos_feature_lldp":                                         dataSourceFeatureLLDPType{},
-		"nxos_feature_macsec":                                       dataSourceFeatureMACsecType{},
-		"nxos_feature_netflow":                                      dataSourceFeatureNetflowType{},
-		"nxos_feature_nv_overlay":                                   dataSourceFeatureNVOverlayType{},
-		"nxos_feature_ospf":                                         dataSourceFeatureOSPFType{},
-		"nxos_feature_ospfv3":                                       dataSourceFeatureOSPFv3Type{},
-		"nxos_feature_pim":                                          dataSourceFeaturePIMType{},
-		"nxos_feature_ptp":                                          dataSourceFeaturePTPType{},
-		"nxos_feature_pvlan":                                        dataSourceFeaturePVLANType{},
-		"nxos_feature_ssh":                                          dataSourceFeatureSSHType{},
-		"nxos_feature_tacacs":                                       dataSourceFeatureTACACSType{},
-		"nxos_feature_telnet":                                       dataSourceFeatureTelnetType{},
-		"nxos_feature_udld":                                         dataSourceFeatureUDLDType{},
-		"nxos_feature_vn_segment":                                   dataSourceFeatureVNSegmentType{},
-		"nxos_feature_vpc":                                          dataSourceFeatureVPCType{},
-		"nxos_hmm":                                                  dataSourceHMMType{},
-		"nxos_hmm_instance":                                         dataSourceHMMInstanceType{},
-		"nxos_hmm_interface":                                        dataSourceHMMInterfaceType{},
-		"nxos_ipv4_access_list":                                     dataSourceIPv4AccessListType{},
-		"nxos_ipv4_access_list_entry":                               dataSourceIPv4AccessListEntryType{},
-		"nxos_ipv4_access_list_policy_egress_interface":             dataSourceIPv4AccessListPolicyEgressInterfaceType{},
-		"nxos_ipv4_access_list_policy_egress_interface_instace":     dataSourceIPv4AccessListPolicyEgressInterfaceInstaceType{},
-		"nxos_ipv4_access_list_policy_ingress_interface":            dataSourceIPv4AccessListPolicyIngressInterfaceType{},
-		"nxos_ipv4_access_list_policy_ingress_interface_instace":    dataSourceIPv4AccessListPolicyIngressInterfaceInstaceType{},
-		"nxos_ipv4_interface":                                       dataSourceIPv4InterfaceType{},
-		"nxos_ipv4_interface_address":                               dataSourceIPv4InterfaceAddressType{},
-		"nxos_ipv4_vrf":                                             dataSourceIPv4VRFType{},
-		"nxos_isis":                                                 dataSourceISISType{},
-		"nxos_isis_instance":                                        dataSourceISISInstanceType{},
-		"nxos_isis_interface":                                       dataSourceISISInterfaceType{},
-		"nxos_isis_vrf":                                             dataSourceISISVRFType{},
-		"nxos_loopback_interface":                                   dataSourceLoopbackInterfaceType{},
-		"nxos_loopback_interface_vrf":                               dataSourceLoopbackInterfaceVRFType{},
-		"nxos_nve_interface":                                        dataSourceNVEInterfaceType{},
-		"nxos_nve_vni":                                              dataSourceNVEVNIType{},
-		"nxos_nve_vni_container":                                    dataSourceNVEVNIContainerType{},
-		"nxos_nve_vni_ingress_replication":                          dataSourceNVEVNIIngressReplicationType{},
-		"nxos_ospf":                                                 dataSourceOSPFType{},
-		"nxos_ospf_area":                                            dataSourceOSPFAreaType{},
-		"nxos_ospf_authentication":                                  dataSourceOSPFAuthenticationType{},
-		"nxos_ospf_instance":                                        dataSourceOSPFInstanceType{},
-		"nxos_ospf_interface":                                       dataSourceOSPFInterfaceType{},
-		"nxos_ospf_vrf":                                             dataSourceOSPFVRFType{},
-		"nxos_physical_interface":                                   dataSourcePhysicalInterfaceType{},
-		"nxos_physical_interface_vrf":                               dataSourcePhysicalInterfaceVRFType{},
-		"nxos_pim":                                                  dataSourcePIMType{},
-		"nxos_pim_anycast_rp":                                       dataSourcePIMAnycastRPType{},
-		"nxos_pim_anycast_rp_peer":                                  dataSourcePIMAnycastRPPeerType{},
-		"nxos_pim_instance":                                         dataSourcePIMInstanceType{},
-		"nxos_pim_interface":                                        dataSourcePIMInterfaceType{},
-		"nxos_pim_ssm_policy":                                       dataSourcePIMSSMPolicyType{},
-		"nxos_pim_ssm_range":                                        dataSourcePIMSSMRangeType{},
-		"nxos_pim_static_rp":                                        dataSourcePIMStaticRPType{},
-		"nxos_pim_static_rp_group_list":                             dataSourcePIMStaticRPGroupListType{},
-		"nxos_pim_static_rp_policy":                                 dataSourcePIMStaticRPPolicyType{},
-		"nxos_pim_vrf":                                              dataSourcePIMVRFType{},
-		"nxos_queuing_qos_policy_map":                               dataSourceQueuingQOSPolicyMapType{},
-		"nxos_queuing_qos_policy_map_match_class_map":               dataSourceQueuingQOSPolicyMapMatchClassMapType{},
-		"nxos_queuing_qos_policy_map_match_class_map_priority":      dataSourceQueuingQOSPolicyMapMatchClassMapPriorityType{},
-		"nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth": dataSourceQueuingQOSPolicyMapMatchClassMapRemainingBandwidthType{},
-		"nxos_queuing_qos_policy_system_out":                              dataSourceQueuingQOSPolicySystemOutType{},
-		"nxos_queuing_qos_policy_system_out_policy_map":                   dataSourceQueuingQOSPolicySystemOutPolicyMapType{},
-		"nxos_subinterface":                    dataSourceSubinterfaceType{},
-		"nxos_subinterface_vrf":                dataSourceSubinterfaceVRFType{},
-		"nxos_svi_interface":                   dataSourceSVIInterfaceType{},
-		"nxos_svi_interface_vrf":               dataSourceSVIInterfaceVRFType{},
-		"nxos_system":                          dataSourceSystemType{},
-		"nxos_vrf":                             dataSourceVRFType{},
-		"nxos_vrf_address_family":              dataSourceVRFAddressFamilyType{},
-		"nxos_vrf_route_target":                dataSourceVRFRouteTargetType{},
-		"nxos_vrf_route_target_address_family": dataSourceVRFRouteTargetAddressFamilyType{},
-		"nxos_vrf_route_target_direction":      dataSourceVRFRouteTargetDirectionType{},
-		"nxos_vrf_routing":                     dataSourceVRFRoutingType{},
-	}, nil
+func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
+	return []func() datasource.DataSource{
+		NewRestDataSource,
+		NewBGPDataSource,
+		NewBGPAddressFamilyDataSource,
+		NewBGPGracefulRestartDataSource,
+		NewBGPInstanceDataSource,
+		NewBGPPeerDataSource,
+		NewBGPPeerAddressFamilyDataSource,
+		NewBGPPeerTemplateDataSource,
+		NewBGPPeerTemplateAddressFamilyDataSource,
+		NewBGPPeerTemplateMaxPrefixDataSource,
+		NewBGPRouteControlDataSource,
+		NewBGPVRFDataSource,
+		NewBridgeDomainDataSource,
+		NewDefaultQOSClassMapDataSource,
+		NewDefaultQOSClassMapDSCPDataSource,
+		NewDefaultQOSPolicyInterfaceInDataSource,
+		NewDefaultQOSPolicyInterfaceInPolicyMapDataSource,
+		NewDefaultQOSPolicyMapDataSource,
+		NewDefaultQOSPolicyMapMatchClassMapDataSource,
+		NewDefaultQOSPolicyMapMatchClassMapPoliceDataSource,
+		NewDefaultQOSPolicyMapMatchClassMapSetQOSGroupDataSource,
+		NewDHCPRelayAddressDataSource,
+		NewDHCPRelayInterfaceDataSource,
+		NewEthernetDataSource,
+		NewEVPNDataSource,
+		NewEVPNVNIDataSource,
+		NewEVPNVNIRouteTargetDataSource,
+		NewEVPNVNIRouteTargetDirectionDataSource,
+		NewFeatureBFDDataSource,
+		NewFeatureBGPDataSource,
+		NewFeatureDHCPDataSource,
+		NewFeatureEVPNDataSource,
+		NewFeatureHMMDataSource,
+		NewFeatureHSRPDataSource,
+		NewFeatureInterfaceVLANDataSource,
+		NewFeatureISISDataSource,
+		NewFeatureLACPDataSource,
+		NewFeatureLLDPDataSource,
+		NewFeatureMACsecDataSource,
+		NewFeatureNetflowDataSource,
+		NewFeatureNVOverlayDataSource,
+		NewFeatureOSPFDataSource,
+		NewFeatureOSPFv3DataSource,
+		NewFeaturePIMDataSource,
+		NewFeaturePTPDataSource,
+		NewFeaturePVLANDataSource,
+		NewFeatureSSHDataSource,
+		NewFeatureTACACSDataSource,
+		NewFeatureTelnetDataSource,
+		NewFeatureUDLDDataSource,
+		NewFeatureVNSegmentDataSource,
+		NewFeatureVPCDataSource,
+		NewHMMDataSource,
+		NewHMMInstanceDataSource,
+		NewHMMInterfaceDataSource,
+		NewIPv4AccessListDataSource,
+		NewIPv4AccessListEntryDataSource,
+		NewIPv4AccessListPolicyEgressInterfaceDataSource,
+		NewIPv4AccessListPolicyEgressInterfaceInstaceDataSource,
+		NewIPv4AccessListPolicyIngressInterfaceDataSource,
+		NewIPv4AccessListPolicyIngressInterfaceInstaceDataSource,
+		NewIPv4InterfaceDataSource,
+		NewIPv4InterfaceAddressDataSource,
+		NewIPv4VRFDataSource,
+		NewISISDataSource,
+		NewISISInstanceDataSource,
+		NewISISInterfaceDataSource,
+		NewISISVRFDataSource,
+		NewLoopbackInterfaceDataSource,
+		NewLoopbackInterfaceVRFDataSource,
+		NewNVEInterfaceDataSource,
+		NewNVEVNIDataSource,
+		NewNVEVNIContainerDataSource,
+		NewNVEVNIIngressReplicationDataSource,
+		NewOSPFDataSource,
+		NewOSPFAreaDataSource,
+		NewOSPFAuthenticationDataSource,
+		NewOSPFInstanceDataSource,
+		NewOSPFInterfaceDataSource,
+		NewOSPFVRFDataSource,
+		NewPhysicalInterfaceDataSource,
+		NewPhysicalInterfaceVRFDataSource,
+		NewPIMDataSource,
+		NewPIMAnycastRPDataSource,
+		NewPIMAnycastRPPeerDataSource,
+		NewPIMInstanceDataSource,
+		NewPIMInterfaceDataSource,
+		NewPIMSSMPolicyDataSource,
+		NewPIMSSMRangeDataSource,
+		NewPIMStaticRPDataSource,
+		NewPIMStaticRPGroupListDataSource,
+		NewPIMStaticRPPolicyDataSource,
+		NewPIMVRFDataSource,
+		NewQueuingQOSPolicyMapDataSource,
+		NewQueuingQOSPolicyMapMatchClassMapDataSource,
+		NewQueuingQOSPolicyMapMatchClassMapPriorityDataSource,
+		NewQueuingQOSPolicyMapMatchClassMapRemainingBandwidthDataSource,
+		NewQueuingQOSPolicySystemOutDataSource,
+		NewQueuingQOSPolicySystemOutPolicyMapDataSource,
+		NewSubinterfaceDataSource,
+		NewSubinterfaceVRFDataSource,
+		NewSVIInterfaceDataSource,
+		NewSVIInterfaceVRFDataSource,
+		NewSystemDataSource,
+		NewVRFDataSource,
+		NewVRFAddressFamilyDataSource,
+		NewVRFRouteTargetDataSource,
+		NewVRFRouteTargetAddressFamilyDataSource,
+		NewVRFRouteTargetDirectionDataSource,
+		NewVRFRoutingDataSource,
+	}
 }
 
-func New(version string) func() tfsdk.Provider {
-	return func() tfsdk.Provider {
-		return &provider{
+func New(version string) func() provider.Provider {
+	return func() provider.Provider {
+		return &NxosProvider{
 			version: version,
 		}
 	}
-}
-
-// convertProviderType is a helper function for NewResource and NewDataSource
-// implementations to associate the concrete provider type. Alternatively,
-// this helper can be skipped and the provider type can be directly type
-// asserted (e.g. provider: in.(*provider)), however using this can prevent
-// potential panics.
-func convertProviderType(in tfsdk.Provider) (provider, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	p, ok := in.(*provider)
-
-	if !ok {
-		diags.AddError(
-			"Unexpected Provider Instance Type",
-			fmt.Sprintf("While creating the data source or resource, an unexpected provider type (%T) was received. This is always a bug in the provider code and should be reported to the provider developers.", p),
-		)
-		return provider{}, diags
-	}
-
-	if p == nil {
-		diags.AddError(
-			"Unexpected Provider Instance Type",
-			"While creating the data source or resource, an unexpected empty provider instance was received. This is always a bug in the provider code and should be reported to the provider developers.",
-		)
-		return provider{}, diags
-	}
-
-	return *p, diags
 }

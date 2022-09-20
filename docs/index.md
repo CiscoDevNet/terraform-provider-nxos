@@ -46,7 +46,7 @@ provider "nxos" {
 <a id="nestedatt--devices"></a>
 ### Nested Schema for `devices`
 
-Optional:
+Required:
 
 - `name` (String) Device name.
 - `url` (String) URL of the Cisco NX-OS device.

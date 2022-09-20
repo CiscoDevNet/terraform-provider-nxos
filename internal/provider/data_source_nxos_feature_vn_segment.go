@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -14,9 +15,22 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type dataSourceFeatureVNSegmentType struct{}
+// Ensure provider defined types fully satisfy framework interfaces
+var _ datasource.DataSource = &FeatureVNSegmentDataSource{}
 
-func (t dataSourceFeatureVNSegmentType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewFeatureVNSegmentDataSource() datasource.DataSource {
+	return &FeatureVNSegmentDataSource{}
+}
+
+type FeatureVNSegmentDataSource struct {
+	data NxosProviderData
+}
+
+func (d *FeatureVNSegmentDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_feature_vn_segment"
+}
+
+func (d *FeatureVNSegmentDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read the VN Segment feature configuration.", "fmVnSegment", "Feature%20Management/fm:VnSegment/").String,
@@ -41,19 +55,27 @@ func (t dataSourceFeatureVNSegmentType) GetSchema(ctx context.Context) (tfsdk.Sc
 	}, nil
 }
 
-func (t dataSourceFeatureVNSegmentType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (d *FeatureVNSegmentDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+	// Prevent panic if the provider has not been configured.
+	if req.ProviderData == nil {
+		return
+	}
 
-	return dataSourceFeatureVNSegment{
-		provider: provider,
-	}, diags
+	data, ok := req.ProviderData.(NxosProviderData)
+
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Data Source Configure Type",
+			fmt.Sprintf("Expected data, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+
+		return
+	}
+
+	d.data = data
 }
 
-type dataSourceFeatureVNSegment struct {
-	provider provider
-}
-
-func (d dataSourceFeatureVNSegment) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+func (d *FeatureVNSegmentDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var config, state FeatureVNSegment
 
 	// Read config
@@ -65,7 +87,7 @@ func (d dataSourceFeatureVNSegment) Read(ctx context.Context, req tfsdk.ReadData
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getDn()))
 
-	res, err := d.provider.client.GetDn(config.getDn(), nxos.OverrideUrl(d.provider.devices[config.Device.Value]))
+	res, err := d.data.client.GetDn(config.getDn(), nxos.OverrideUrl(d.data.devices[config.Device.Value]))
 
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

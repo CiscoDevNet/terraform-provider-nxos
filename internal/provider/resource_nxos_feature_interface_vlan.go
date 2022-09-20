@@ -7,17 +7,32 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourceFeatureInterfaceVLANType struct{}
+// Ensure provider defined types fully satisfy framework interfaces
+var _ resource.Resource = &FeatureInterfaceVLANResource{}
+var _ resource.ResourceWithImportState = &FeatureInterfaceVLANResource{}
 
-func (t resourceFeatureInterfaceVLANType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewFeatureInterfaceVLANResource() resource.Resource {
+	return &FeatureInterfaceVLANResource{}
+}
+
+type FeatureInterfaceVLANResource struct {
+	data NxosProviderData
+}
+
+func (r *FeatureInterfaceVLANResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_feature_interface_vlan"
+}
+
+func (r *FeatureInterfaceVLANResource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Interface VLAN feature configuration.", "fmInterfaceVlan", "Feature%20Management/fm:InterfaceVlan/").String,
@@ -33,7 +48,7 @@ func (t resourceFeatureInterfaceVLANType) GetSchema(ctx context.Context) (tfsdk.
 				Type:                types.StringType,
 				Computed:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.UseStateForUnknown(),
+					resource.UseStateForUnknown(),
 				},
 			},
 			"admin_state": {
@@ -48,19 +63,27 @@ func (t resourceFeatureInterfaceVLANType) GetSchema(ctx context.Context) (tfsdk.
 	}, nil
 }
 
-func (t resourceFeatureInterfaceVLANType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (r *FeatureInterfaceVLANResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	// Prevent panic if the provider has not been configured.
+	if req.ProviderData == nil {
+		return
+	}
 
-	return resourceFeatureInterfaceVLAN{
-		provider: provider,
-	}, diags
+	data, ok := req.ProviderData.(NxosProviderData)
+
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected data, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+
+		return
+	}
+
+	r.data = data
 }
 
-type resourceFeatureInterfaceVLAN struct {
-	provider provider
-}
-
-func (r resourceFeatureInterfaceVLAN) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+func (r *FeatureInterfaceVLANResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan, state FeatureInterfaceVLAN
 
 	// Read plan
@@ -74,14 +97,14 @@ func (r resourceFeatureInterfaceVLAN) Create(ctx context.Context, req tfsdk.Crea
 
 	// Post object
 	body := plan.toBody()
-	_, err := r.provider.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	_, err := r.data.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 		return
 	}
 
 	// Read object
-	res, err := r.provider.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -97,7 +120,7 @@ func (r resourceFeatureInterfaceVLAN) Create(ctx context.Context, req tfsdk.Crea
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceFeatureInterfaceVLAN) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+func (r *FeatureInterfaceVLANResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state FeatureInterfaceVLAN
 
 	// Read state
@@ -109,7 +132,7 @@ func (r resourceFeatureInterfaceVLAN) Read(ctx context.Context, req tfsdk.ReadRe
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.Value))
 
-	res, err := r.provider.client.GetDn(state.Dn.Value, nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[state.Device.Value]))
+	res, err := r.data.client.GetDn(state.Dn.Value, nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[state.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -123,7 +146,7 @@ func (r resourceFeatureInterfaceVLAN) Read(ctx context.Context, req tfsdk.ReadRe
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceFeatureInterfaceVLAN) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+func (r *FeatureInterfaceVLANResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state FeatureInterfaceVLAN
 
 	// Read plan
@@ -136,14 +159,14 @@ func (r resourceFeatureInterfaceVLAN) Update(ctx context.Context, req tfsdk.Upda
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
 	body := plan.toBody()
-	_, err := r.provider.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	_, err := r.data.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 		return
 	}
 
 	// Read object
-	res, err := r.provider.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -158,7 +181,7 @@ func (r resourceFeatureInterfaceVLAN) Update(ctx context.Context, req tfsdk.Upda
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceFeatureInterfaceVLAN) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+func (r *FeatureInterfaceVLANResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state FeatureInterfaceVLAN
 
 	// Read state
@@ -175,6 +198,6 @@ func (r resourceFeatureInterfaceVLAN) Delete(ctx context.Context, req tfsdk.Dele
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceFeatureInterfaceVLAN) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
-	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
+func (r *FeatureInterfaceVLANResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

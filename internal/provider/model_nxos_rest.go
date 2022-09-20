@@ -8,7 +8,7 @@ import (
 	"github.com/netascode/go-nxos"
 )
 
-type Rest struct {
+type RestModel struct {
 	Device    types.String `tfsdk:"device"`
 	Id        types.String `tfsdk:"id"`
 	Dn        types.String `tfsdk:"dn"`
@@ -17,7 +17,7 @@ type Rest struct {
 	Content   types.Map    `tfsdk:"content"`
 }
 
-type RestDataSource struct {
+type RestDataSourceModel struct {
 	Device    types.String `tfsdk:"device"`
 	Id        types.String `tfsdk:"id"`
 	Dn        types.String `tfsdk:"dn"`
@@ -25,7 +25,7 @@ type RestDataSource struct {
 	Content   types.Map    `tfsdk:"content"`
 }
 
-func (data Rest) toBody(ctx context.Context) nxos.Body {
+func (data RestModel) toBody(ctx context.Context) nxos.Body {
 	body := nxos.Body{}
 
 	className := data.ClassName.Value

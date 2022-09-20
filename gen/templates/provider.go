@@ -5,50 +5,58 @@ package provider
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/provider"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-// provider satisfies the tfsdk.Provider interface and usually is included
-// with all Resource and DataSource implementations.
-type provider struct {
-	client *nxos.Client
-	devices map[string]string
+// Ensure NxosProvider satisfies various provider interfaces.
+var _ provider.Provider = &NxosProvider{}
+var _ provider.ProviderWithMetadata = &NxosProvider{}
 
-	// configured is set to true at the end of the Configure method.
-	// This can be used in Resource and DataSource implementations to verify
-	// that the provider was previously configured.
-	configured bool
-
+// NxosProvider defines the provider implementation.
+type NxosProvider struct {
 	// version is set to the provider version on release, "dev" when the
 	// provider is built and ran locally, and "test" when running acceptance
 	// testing.
 	version string
 }
 
-// providerData can be used to store data from the Terraform configuration.
-type providerData struct {
+// NxosProviderData defines the data passed to resources and data sources.
+type NxosProviderData struct {
+	client *nxos.Client
+	devices map[string]string
+}
+
+// NxosProviderModel  describes the provider data model.
+type NxosProviderModel struct {
 	Username types.String `tfsdk:"username"`
 	Password types.String `tfsdk:"password"`
 	URL      types.String `tfsdk:"url"`
 	Insecure types.Bool   `tfsdk:"insecure"`
 	Retries  types.Int64  `tfsdk:"retries"`
-	Devices  []providerDataDevice  `tfsdk:"devices"`
+	Devices  []NxosProviderModelDevice  `tfsdk:"devices"`
 }
 
-type providerDataDevice struct {
+type NxosProviderModelDevice struct {
 	Name types.String `tfsdk:"name"`
 	URL      types.String `tfsdk:"url"`
 }
 
-func (p *provider) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (p *NxosProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
+	resp.TypeName = "nxos"
+	resp.Version = p.version
+}
+
+func (p *NxosProvider) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		Attributes: map[string]tfsdk.Attribute{
 			"username": {
@@ -100,9 +108,9 @@ func (p *provider) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostic
 	}, nil
 }
 
-func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderRequest, resp *tfsdk.ConfigureProviderResponse) {
+func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
 	// Retrieve provider data from configuration
-	var config providerData
+	var config NxosProviderModel
 	diags := req.Config.Get(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
@@ -247,62 +255,37 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 		devices[device.Name.Value] = device.URL.Value
 	}
 
-	p.client = &c
-	p.devices = devices
-	p.configured = true
+	data := NxosProviderData{
+		client: &c,
+		devices: devices,
+	}
+
+	resp.DataSourceData = data
+	resp.ResourceData = data
 }
 
-func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceType, diag.Diagnostics) {
-	return map[string]tfsdk.ResourceType{
-		"nxos_rest":                   resourceRestType{},
+func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource {
+	return []func() resource.Resource{
+		NewRestResource,
 		{{- range .}}
-		"nxos_{{snakeCase .Name}}":     resource{{camelCase .Name}}Type{},
+		New{{camelCase .Name}}Resource,
 		{{- end}}
-	}, nil
+	}
 }
 
-func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSourceType, diag.Diagnostics) {
-	return map[string]tfsdk.DataSourceType{
-		"nxos_rest":                   dataSourceRestType{},
+func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
+	return []func() datasource.DataSource{
+		NewRestDataSource,
 		{{- range .}}
-		"nxos_{{snakeCase .Name}}":     dataSource{{camelCase .Name}}Type{},
+		New{{camelCase .Name}}DataSource,
 		{{- end}}
-	}, nil
+	}
 }
 
-func New(version string) func() tfsdk.Provider {
-	return func() tfsdk.Provider {
-		return &provider{
+func New(version string) func() provider.Provider {
+	return func() provider.Provider {
+		return &NxosProvider{
 			version: version,
 		}
 	}
-}
-
-// convertProviderType is a helper function for NewResource and NewDataSource
-// implementations to associate the concrete provider type. Alternatively,
-// this helper can be skipped and the provider type can be directly type
-// asserted (e.g. provider: in.(*provider)), however using this can prevent
-// potential panics.
-func convertProviderType(in tfsdk.Provider) (provider, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	p, ok := in.(*provider)
-
-	if !ok {
-		diags.AddError(
-			"Unexpected Provider Instance Type",
-			fmt.Sprintf("While creating the data source or resource, an unexpected provider type (%T) was received. This is always a bug in the provider code and should be reported to the provider developers.", p),
-		)
-		return provider{}, diags
-	}
-
-	if p == nil {
-		diags.AddError(
-			"Unexpected Provider Instance Type",
-			"While creating the data source or resource, an unexpected empty provider instance was received. This is always a bug in the provider code and should be reported to the provider developers.",
-		)
-		return provider{}, diags
-	}
-
-	return *p, diags
 }

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -14,9 +15,22 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type dataSourceOSPFAuthenticationType struct{}
+// Ensure provider defined types fully satisfy framework interfaces
+var _ datasource.DataSource = &OSPFAuthenticationDataSource{}
 
-func (t dataSourceOSPFAuthenticationType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewOSPFAuthenticationDataSource() datasource.DataSource {
+	return &OSPFAuthenticationDataSource{}
+}
+
+type OSPFAuthenticationDataSource struct {
+	data NxosProviderData
+}
+
+func (d *OSPFAuthenticationDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_ospf_authentication"
+}
+
+func (d *OSPFAuthenticationDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read the OSPF authentication configuration.", "ospfAuthNewP", "Routing%20and%20Forwarding/ospf:AuthNewP/").String,
@@ -86,19 +100,27 @@ func (t dataSourceOSPFAuthenticationType) GetSchema(ctx context.Context) (tfsdk.
 	}, nil
 }
 
-func (t dataSourceOSPFAuthenticationType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (d *OSPFAuthenticationDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+	// Prevent panic if the provider has not been configured.
+	if req.ProviderData == nil {
+		return
+	}
 
-	return dataSourceOSPFAuthentication{
-		provider: provider,
-	}, diags
+	data, ok := req.ProviderData.(NxosProviderData)
+
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Data Source Configure Type",
+			fmt.Sprintf("Expected data, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+
+		return
+	}
+
+	d.data = data
 }
 
-type dataSourceOSPFAuthentication struct {
-	provider provider
-}
-
-func (d dataSourceOSPFAuthentication) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+func (d *OSPFAuthenticationDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var config, state OSPFAuthentication
 
 	// Read config
@@ -110,7 +132,7 @@ func (d dataSourceOSPFAuthentication) Read(ctx context.Context, req tfsdk.ReadDa
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getDn()))
 
-	res, err := d.provider.client.GetDn(config.getDn(), nxos.OverrideUrl(d.provider.devices[config.Device.Value]))
+	res, err := d.data.client.GetDn(config.getDn(), nxos.OverrideUrl(d.data.devices[config.Device.Value]))
 
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

@@ -7,17 +7,32 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourceDefaultQOSClassMapDSCPType struct{}
+// Ensure provider defined types fully satisfy framework interfaces
+var _ resource.Resource = &DefaultQOSClassMapDSCPResource{}
+var _ resource.ResourceWithImportState = &DefaultQOSClassMapDSCPResource{}
 
-func (t resourceDefaultQOSClassMapDSCPType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewDefaultQOSClassMapDSCPResource() resource.Resource {
+	return &DefaultQOSClassMapDSCPResource{}
+}
+
+type DefaultQOSClassMapDSCPResource struct {
+	data NxosProviderData
+}
+
+func (r *DefaultQOSClassMapDSCPResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_default_qos_class_map_dscp"
+}
+
+func (r *DefaultQOSClassMapDSCPResource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the default QoS class map DSCP configuration.", "ipqosDscp", "Qos/ipqos:Dscp/").AddParents("default_qos_class_map").String,
@@ -33,7 +48,7 @@ func (t resourceDefaultQOSClassMapDSCPType) GetSchema(ctx context.Context) (tfsd
 				Type:                types.StringType,
 				Computed:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.UseStateForUnknown(),
+					resource.UseStateForUnknown(),
 				},
 			},
 			"class_map_name": {
@@ -41,7 +56,7 @@ func (t resourceDefaultQOSClassMapDSCPType) GetSchema(ctx context.Context) (tfsd
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
+					resource.RequiresReplace(),
 				},
 			},
 			"value": {
@@ -49,26 +64,34 @@ func (t resourceDefaultQOSClassMapDSCPType) GetSchema(ctx context.Context) (tfsd
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
+					resource.RequiresReplace(),
 				},
 			},
 		},
 	}, nil
 }
 
-func (t resourceDefaultQOSClassMapDSCPType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (r *DefaultQOSClassMapDSCPResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	// Prevent panic if the provider has not been configured.
+	if req.ProviderData == nil {
+		return
+	}
 
-	return resourceDefaultQOSClassMapDSCP{
-		provider: provider,
-	}, diags
+	data, ok := req.ProviderData.(NxosProviderData)
+
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected data, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+
+		return
+	}
+
+	r.data = data
 }
 
-type resourceDefaultQOSClassMapDSCP struct {
-	provider provider
-}
-
-func (r resourceDefaultQOSClassMapDSCP) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+func (r *DefaultQOSClassMapDSCPResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan, state DefaultQOSClassMapDSCP
 
 	// Read plan
@@ -82,14 +105,14 @@ func (r resourceDefaultQOSClassMapDSCP) Create(ctx context.Context, req tfsdk.Cr
 
 	// Post object
 	body := plan.toBody()
-	_, err := r.provider.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	_, err := r.data.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 		return
 	}
 
 	// Read object
-	res, err := r.provider.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -105,7 +128,7 @@ func (r resourceDefaultQOSClassMapDSCP) Create(ctx context.Context, req tfsdk.Cr
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceDefaultQOSClassMapDSCP) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+func (r *DefaultQOSClassMapDSCPResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state DefaultQOSClassMapDSCP
 
 	// Read state
@@ -117,7 +140,7 @@ func (r resourceDefaultQOSClassMapDSCP) Read(ctx context.Context, req tfsdk.Read
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.Value))
 
-	res, err := r.provider.client.GetDn(state.Dn.Value, nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[state.Device.Value]))
+	res, err := r.data.client.GetDn(state.Dn.Value, nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[state.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -131,7 +154,7 @@ func (r resourceDefaultQOSClassMapDSCP) Read(ctx context.Context, req tfsdk.Read
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceDefaultQOSClassMapDSCP) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+func (r *DefaultQOSClassMapDSCPResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state DefaultQOSClassMapDSCP
 
 	// Read plan
@@ -144,14 +167,14 @@ func (r resourceDefaultQOSClassMapDSCP) Update(ctx context.Context, req tfsdk.Up
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
 	body := plan.toBody()
-	_, err := r.provider.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	_, err := r.data.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 		return
 	}
 
 	// Read object
-	res, err := r.provider.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -166,7 +189,7 @@ func (r resourceDefaultQOSClassMapDSCP) Update(ctx context.Context, req tfsdk.Up
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceDefaultQOSClassMapDSCP) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+func (r *DefaultQOSClassMapDSCPResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state DefaultQOSClassMapDSCP
 
 	// Read state
@@ -178,7 +201,7 @@ func (r resourceDefaultQOSClassMapDSCP) Delete(ctx context.Context, req tfsdk.De
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Dn.Value))
 
-	res, err := r.provider.client.DeleteDn(state.Dn.Value, nxos.OverrideUrl(r.provider.devices[state.Device.Value]))
+	res, err := r.data.client.DeleteDn(state.Dn.Value, nxos.OverrideUrl(r.data.devices[state.Device.Value]))
 	if err != nil {
 		errCode := res.Get("imdata.0.error.attributes.code").Str
 		// Ignore errors of type "Cannot delete object"
@@ -193,6 +216,6 @@ func (r resourceDefaultQOSClassMapDSCP) Delete(ctx context.Context, req tfsdk.De
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceDefaultQOSClassMapDSCP) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
-	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
+func (r *DefaultQOSClassMapDSCPResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

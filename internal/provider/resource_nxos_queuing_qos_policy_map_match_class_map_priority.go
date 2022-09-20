@@ -7,17 +7,32 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourceQueuingQOSPolicyMapMatchClassMapPriorityType struct{}
+// Ensure provider defined types fully satisfy framework interfaces
+var _ resource.Resource = &QueuingQOSPolicyMapMatchClassMapPriorityResource{}
+var _ resource.ResourceWithImportState = &QueuingQOSPolicyMapMatchClassMapPriorityResource{}
 
-func (t resourceQueuingQOSPolicyMapMatchClassMapPriorityType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewQueuingQOSPolicyMapMatchClassMapPriorityResource() resource.Resource {
+	return &QueuingQOSPolicyMapMatchClassMapPriorityResource{}
+}
+
+type QueuingQOSPolicyMapMatchClassMapPriorityResource struct {
+	data NxosProviderData
+}
+
+func (r *QueuingQOSPolicyMapMatchClassMapPriorityResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_queuing_qos_policy_map_match_class_map_priority"
+}
+
+func (r *QueuingQOSPolicyMapMatchClassMapPriorityResource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the queuing QoS policy map match class map priority configuration.", "ipqosPriority", "Qos/ipqos:Priority/").AddParents("queuing_qos_policy_map_match_class_map").String,
@@ -33,7 +48,7 @@ func (t resourceQueuingQOSPolicyMapMatchClassMapPriorityType) GetSchema(ctx cont
 				Type:                types.StringType,
 				Computed:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.UseStateForUnknown(),
+					resource.UseStateForUnknown(),
 				},
 			},
 			"policy_map_name": {
@@ -41,7 +56,7 @@ func (t resourceQueuingQOSPolicyMapMatchClassMapPriorityType) GetSchema(ctx cont
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
+					resource.RequiresReplace(),
 				},
 			},
 			"class_map_name": {
@@ -49,7 +64,7 @@ func (t resourceQueuingQOSPolicyMapMatchClassMapPriorityType) GetSchema(ctx cont
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
+					resource.RequiresReplace(),
 				},
 			},
 			"level": {
@@ -64,19 +79,27 @@ func (t resourceQueuingQOSPolicyMapMatchClassMapPriorityType) GetSchema(ctx cont
 	}, nil
 }
 
-func (t resourceQueuingQOSPolicyMapMatchClassMapPriorityType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (r *QueuingQOSPolicyMapMatchClassMapPriorityResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	// Prevent panic if the provider has not been configured.
+	if req.ProviderData == nil {
+		return
+	}
 
-	return resourceQueuingQOSPolicyMapMatchClassMapPriority{
-		provider: provider,
-	}, diags
+	data, ok := req.ProviderData.(NxosProviderData)
+
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected data, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+
+		return
+	}
+
+	r.data = data
 }
 
-type resourceQueuingQOSPolicyMapMatchClassMapPriority struct {
-	provider provider
-}
-
-func (r resourceQueuingQOSPolicyMapMatchClassMapPriority) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+func (r *QueuingQOSPolicyMapMatchClassMapPriorityResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan, state QueuingQOSPolicyMapMatchClassMapPriority
 
 	// Read plan
@@ -90,14 +113,14 @@ func (r resourceQueuingQOSPolicyMapMatchClassMapPriority) Create(ctx context.Con
 
 	// Post object
 	body := plan.toBody()
-	_, err := r.provider.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	_, err := r.data.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 		return
 	}
 
 	// Read object
-	res, err := r.provider.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -113,7 +136,7 @@ func (r resourceQueuingQOSPolicyMapMatchClassMapPriority) Create(ctx context.Con
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceQueuingQOSPolicyMapMatchClassMapPriority) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+func (r *QueuingQOSPolicyMapMatchClassMapPriorityResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state QueuingQOSPolicyMapMatchClassMapPriority
 
 	// Read state
@@ -125,7 +148,7 @@ func (r resourceQueuingQOSPolicyMapMatchClassMapPriority) Read(ctx context.Conte
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.Value))
 
-	res, err := r.provider.client.GetDn(state.Dn.Value, nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[state.Device.Value]))
+	res, err := r.data.client.GetDn(state.Dn.Value, nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[state.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -139,7 +162,7 @@ func (r resourceQueuingQOSPolicyMapMatchClassMapPriority) Read(ctx context.Conte
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceQueuingQOSPolicyMapMatchClassMapPriority) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+func (r *QueuingQOSPolicyMapMatchClassMapPriorityResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state QueuingQOSPolicyMapMatchClassMapPriority
 
 	// Read plan
@@ -152,14 +175,14 @@ func (r resourceQueuingQOSPolicyMapMatchClassMapPriority) Update(ctx context.Con
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
 	body := plan.toBody()
-	_, err := r.provider.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	_, err := r.data.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 		return
 	}
 
 	// Read object
-	res, err := r.provider.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -174,7 +197,7 @@ func (r resourceQueuingQOSPolicyMapMatchClassMapPriority) Update(ctx context.Con
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceQueuingQOSPolicyMapMatchClassMapPriority) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+func (r *QueuingQOSPolicyMapMatchClassMapPriorityResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state QueuingQOSPolicyMapMatchClassMapPriority
 
 	// Read state
@@ -186,7 +209,7 @@ func (r resourceQueuingQOSPolicyMapMatchClassMapPriority) Delete(ctx context.Con
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Dn.Value))
 
-	res, err := r.provider.client.DeleteDn(state.Dn.Value, nxos.OverrideUrl(r.provider.devices[state.Device.Value]))
+	res, err := r.data.client.DeleteDn(state.Dn.Value, nxos.OverrideUrl(r.data.devices[state.Device.Value]))
 	if err != nil {
 		errCode := res.Get("imdata.0.error.attributes.code").Str
 		// Ignore errors of type "Cannot delete object"
@@ -201,6 +224,6 @@ func (r resourceQueuingQOSPolicyMapMatchClassMapPriority) Delete(ctx context.Con
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceQueuingQOSPolicyMapMatchClassMapPriority) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
-	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
+func (r *QueuingQOSPolicyMapMatchClassMapPriorityResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

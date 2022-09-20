@@ -7,17 +7,32 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type resourceEVPNVNIRouteTargetDirectionType struct{}
+// Ensure provider defined types fully satisfy framework interfaces
+var _ resource.Resource = &EVPNVNIRouteTargetDirectionResource{}
+var _ resource.ResourceWithImportState = &EVPNVNIRouteTargetDirectionResource{}
 
-func (t resourceEVPNVNIRouteTargetDirectionType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewEVPNVNIRouteTargetDirectionResource() resource.Resource {
+	return &EVPNVNIRouteTargetDirectionResource{}
+}
+
+type EVPNVNIRouteTargetDirectionResource struct {
+	data NxosProviderData
+}
+
+func (r *EVPNVNIRouteTargetDirectionResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_evpn_vni_route_target_direction"
+}
+
+func (r *EVPNVNIRouteTargetDirectionResource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a EVPN VNI Route Target direction.", "rtctrlRttP", "Routing%20and%20Forwarding/rtctrl:RttP/").AddParents("evpn_vni").AddChildren("evpn_vni_route_target").String,
@@ -33,7 +48,7 @@ func (t resourceEVPNVNIRouteTargetDirectionType) GetSchema(ctx context.Context) 
 				Type:                types.StringType,
 				Computed:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.UseStateForUnknown(),
+					resource.UseStateForUnknown(),
 				},
 			},
 			"encap": {
@@ -41,7 +56,7 @@ func (t resourceEVPNVNIRouteTargetDirectionType) GetSchema(ctx context.Context) 
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
+					resource.RequiresReplace(),
 				},
 			},
 			"direction": {
@@ -52,26 +67,34 @@ func (t resourceEVPNVNIRouteTargetDirectionType) GetSchema(ctx context.Context) 
 					helpers.StringEnumValidator("import", "export"),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
+					resource.RequiresReplace(),
 				},
 			},
 		},
 	}, nil
 }
 
-func (t resourceEVPNVNIRouteTargetDirectionType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (r *EVPNVNIRouteTargetDirectionResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	// Prevent panic if the provider has not been configured.
+	if req.ProviderData == nil {
+		return
+	}
 
-	return resourceEVPNVNIRouteTargetDirection{
-		provider: provider,
-	}, diags
+	data, ok := req.ProviderData.(NxosProviderData)
+
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected data, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+
+		return
+	}
+
+	r.data = data
 }
 
-type resourceEVPNVNIRouteTargetDirection struct {
-	provider provider
-}
-
-func (r resourceEVPNVNIRouteTargetDirection) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+func (r *EVPNVNIRouteTargetDirectionResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan, state EVPNVNIRouteTargetDirection
 
 	// Read plan
@@ -85,14 +108,14 @@ func (r resourceEVPNVNIRouteTargetDirection) Create(ctx context.Context, req tfs
 
 	// Post object
 	body := plan.toBody()
-	_, err := r.provider.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	_, err := r.data.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 		return
 	}
 
 	// Read object
-	res, err := r.provider.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -108,7 +131,7 @@ func (r resourceEVPNVNIRouteTargetDirection) Create(ctx context.Context, req tfs
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceEVPNVNIRouteTargetDirection) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+func (r *EVPNVNIRouteTargetDirectionResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state EVPNVNIRouteTargetDirection
 
 	// Read state
@@ -120,7 +143,7 @@ func (r resourceEVPNVNIRouteTargetDirection) Read(ctx context.Context, req tfsdk
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.Value))
 
-	res, err := r.provider.client.GetDn(state.Dn.Value, nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[state.Device.Value]))
+	res, err := r.data.client.GetDn(state.Dn.Value, nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[state.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -134,7 +157,7 @@ func (r resourceEVPNVNIRouteTargetDirection) Read(ctx context.Context, req tfsdk
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceEVPNVNIRouteTargetDirection) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+func (r *EVPNVNIRouteTargetDirectionResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state EVPNVNIRouteTargetDirection
 
 	// Read plan
@@ -147,14 +170,14 @@ func (r resourceEVPNVNIRouteTargetDirection) Update(ctx context.Context, req tfs
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
 	body := plan.toBody()
-	_, err := r.provider.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	_, err := r.data.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 		return
 	}
 
 	// Read object
-	res, err := r.provider.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.provider.devices[plan.Device.Value]))
+	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -169,7 +192,7 @@ func (r resourceEVPNVNIRouteTargetDirection) Update(ctx context.Context, req tfs
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceEVPNVNIRouteTargetDirection) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+func (r *EVPNVNIRouteTargetDirectionResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state EVPNVNIRouteTargetDirection
 
 	// Read state
@@ -181,7 +204,7 @@ func (r resourceEVPNVNIRouteTargetDirection) Delete(ctx context.Context, req tfs
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Dn.Value))
 
-	res, err := r.provider.client.DeleteDn(state.Dn.Value, nxos.OverrideUrl(r.provider.devices[state.Device.Value]))
+	res, err := r.data.client.DeleteDn(state.Dn.Value, nxos.OverrideUrl(r.data.devices[state.Device.Value]))
 	if err != nil {
 		errCode := res.Get("imdata.0.error.attributes.code").Str
 		// Ignore errors of type "Cannot delete object"
@@ -196,6 +219,6 @@ func (r resourceEVPNVNIRouteTargetDirection) Delete(ctx context.Context, req tfs
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceEVPNVNIRouteTargetDirection) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
-	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
+func (r *EVPNVNIRouteTargetDirectionResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

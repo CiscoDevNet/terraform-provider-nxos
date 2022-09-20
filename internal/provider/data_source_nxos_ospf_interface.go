@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -14,9 +15,22 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-type dataSourceOSPFInterfaceType struct{}
+// Ensure provider defined types fully satisfy framework interfaces
+var _ datasource.DataSource = &OSPFInterfaceDataSource{}
 
-func (t dataSourceOSPFInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewOSPFInterfaceDataSource() datasource.DataSource {
+	return &OSPFInterfaceDataSource{}
+}
+
+type OSPFInterfaceDataSource struct {
+	data NxosProviderData
+}
+
+func (d *OSPFInterfaceDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_ospf_interface"
+}
+
+func (d *OSPFInterfaceDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read the OSPF interface configuration.", "ospfIf", "Routing%20and%20Forwarding/ospf:If/").String,
@@ -96,19 +110,27 @@ func (t dataSourceOSPFInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schem
 	}, nil
 }
 
-func (t dataSourceOSPFInterfaceType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (d *OSPFInterfaceDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+	// Prevent panic if the provider has not been configured.
+	if req.ProviderData == nil {
+		return
+	}
 
-	return dataSourceOSPFInterface{
-		provider: provider,
-	}, diags
+	data, ok := req.ProviderData.(NxosProviderData)
+
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Data Source Configure Type",
+			fmt.Sprintf("Expected data, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+
+		return
+	}
+
+	d.data = data
 }
 
-type dataSourceOSPFInterface struct {
-	provider provider
-}
-
-func (d dataSourceOSPFInterface) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+func (d *OSPFInterfaceDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var config, state OSPFInterface
 
 	// Read config
@@ -120,7 +142,7 @@ func (d dataSourceOSPFInterface) Read(ctx context.Context, req tfsdk.ReadDataSou
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getDn()))
 
-	res, err := d.provider.client.GetDn(config.getDn(), nxos.OverrideUrl(d.provider.devices[config.Device.Value]))
+	res, err := d.data.client.GetDn(config.getDn(), nxos.OverrideUrl(d.data.devices[config.Device.Value]))
 
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

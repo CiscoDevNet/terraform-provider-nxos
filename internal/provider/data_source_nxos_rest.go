@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/attr"
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -12,9 +13,22 @@ import (
 	"github.com/netascode/go-nxos"
 )
 
-type dataSourceRestType struct{}
+// Ensure provider defined types fully satisfy framework interfaces
+var _ datasource.DataSource = &RestDataSource{}
 
-func (t dataSourceRestType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewRestDataSource() datasource.DataSource {
+	return &RestDataSource{}
+}
+
+type RestDataSource struct {
+	data NxosProviderData
+}
+
+func (d *RestDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_rest"
+}
+
+func (d *RestDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This data source can read one NX-OS DME object.",
@@ -49,20 +63,8 @@ func (t dataSourceRestType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.D
 	}, nil
 }
 
-func (t dataSourceRestType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
-
-	return dataSourceRest{
-		provider: provider,
-	}, diags
-}
-
-type dataSourceRest struct {
-	provider provider
-}
-
-func (d dataSourceRest) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
-	var config, state RestDataSource
+func (d *RestDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config, state RestDataSourceModel
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)
@@ -73,7 +75,7 @@ func (d dataSourceRest) Read(ctx context.Context, req tfsdk.ReadDataSourceReques
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.Id.Value))
 
-	res, err := d.provider.client.GetDn(config.Dn.Value, nxos.OverrideUrl(d.provider.devices[config.Device.Value]))
+	res, err := d.data.client.GetDn(config.Dn.Value, nxos.OverrideUrl(d.data.devices[config.Device.Value]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

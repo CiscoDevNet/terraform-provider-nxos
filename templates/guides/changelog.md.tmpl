@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## 0.3.21 (unreleased)
+## 0.3.22
 
 - Add nxos_spanning_tree resource and data source
 

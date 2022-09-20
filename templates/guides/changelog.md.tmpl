@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.3.21 (unreleased)
+
+- Add nxos_spanning_tree resource and data source
+
 ## 0.3.21
 
 - Fix handling named ports in nxos_ipv4_access_list_entry resource

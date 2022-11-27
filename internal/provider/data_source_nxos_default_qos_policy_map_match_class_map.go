@@ -92,6 +92,7 @@ func (d *DefaultQOSPolicyMapMatchClassMapDataSource) Read(ctx context.Context, r
 
 	state.fromBody(res)
 	state.fromPlan(config)
+	state.Dn = types.StringValue(config.getDn())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getDn()))
 

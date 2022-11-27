@@ -92,6 +92,7 @@ func (d *PhysicalInterfaceVRFDataSource) Read(ctx context.Context, req datasourc
 
 	state.fromBody(res)
 	state.fromPlan(config)
+	state.Dn = types.StringValue(config.getDn())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getDn()))
 

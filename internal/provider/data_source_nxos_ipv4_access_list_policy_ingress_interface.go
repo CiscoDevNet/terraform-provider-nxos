@@ -87,6 +87,7 @@ func (d *IPv4AccessListPolicyIngressInterfaceDataSource) Read(ctx context.Contex
 
 	state.fromBody(res)
 	state.fromPlan(config)
+	state.Dn = types.StringValue(config.getDn())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getDn()))
 

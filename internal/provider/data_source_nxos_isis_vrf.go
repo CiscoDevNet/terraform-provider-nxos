@@ -162,6 +162,7 @@ func (d *ISISVRFDataSource) Read(ctx context.Context, req datasource.ReadRequest
 
 	state.fromBody(res)
 	state.fromPlan(config)
+	state.Dn = types.StringValue(config.getDn())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getDn()))
 

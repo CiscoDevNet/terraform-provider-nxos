@@ -30,5 +30,5 @@ func (data *NVEVNIContainer) fromBody(res gjson.Result) {
 
 func (data *NVEVNIContainer) fromPlan(plan NVEVNIContainer) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
+	data.Dn = plan.Dn
 }

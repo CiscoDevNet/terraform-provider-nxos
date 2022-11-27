@@ -19,7 +19,7 @@ type PIMAnycastRP struct {
 }
 
 func (data PIMAnycastRP) getDn() string {
-	return fmt.Sprintf("sys/pim/inst/dom-[%s]/acastrpfunc", data.Name.Value)
+	return fmt.Sprintf("sys/pim/inst/dom-[%s]/acastrpfunc", data.Name.ValueString())
 }
 
 func (data PIMAnycastRP) getClassName() string {
@@ -28,18 +28,18 @@ func (data PIMAnycastRP) getClassName() string {
 
 func (data PIMAnycastRP) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("localIf", data.LocalIf.Value).
-		Set("srcIf", data.SrcIf.Value)
+		Set("localIf", data.LocalIf.ValueString()).
+		Set("srcIf", data.SrcIf.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *PIMAnycastRP) fromBody(res gjson.Result) {
-	data.LocalIf.Value = res.Get("*.attributes.localIf").String()
-	data.SrcIf.Value = res.Get("*.attributes.srcIf").String()
+	data.LocalIf = types.StringValue(res.Get("*.attributes.localIf").String())
+	data.SrcIf = types.StringValue(res.Get("*.attributes.srcIf").String())
 }
 
 func (data *PIMAnycastRP) fromPlan(plan PIMAnycastRP) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Name.Value = plan.Name.Value
+	data.Dn = plan.Dn
+	data.Name = plan.Name
 }

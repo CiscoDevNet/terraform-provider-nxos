@@ -24,15 +24,15 @@ func (data FeatureISIS) getClassName() string {
 
 func (data FeatureISIS) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("adminSt", data.AdminSt.Value)
+		Set("adminSt", data.AdminSt.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *FeatureISIS) fromBody(res gjson.Result) {
-	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
+	data.AdminSt = types.StringValue(res.Get("*.attributes.adminSt").String())
 }
 
 func (data *FeatureISIS) fromPlan(plan FeatureISIS) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
+	data.Dn = plan.Dn
 }

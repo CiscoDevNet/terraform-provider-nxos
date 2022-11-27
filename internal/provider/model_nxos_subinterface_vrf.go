@@ -18,7 +18,7 @@ type SubinterfaceVRF struct {
 }
 
 func (data SubinterfaceVRF) getDn() string {
-	return fmt.Sprintf("sys/intf/encrtd-[%s]/rtvrfMbr", data.Id.Value)
+	return fmt.Sprintf("sys/intf/encrtd-[%s]/rtvrfMbr", data.Id.ValueString())
 }
 
 func (data SubinterfaceVRF) getClassName() string {
@@ -27,16 +27,16 @@ func (data SubinterfaceVRF) getClassName() string {
 
 func (data SubinterfaceVRF) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("tDn", data.TDn.Value)
+		Set("tDn", data.TDn.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *SubinterfaceVRF) fromBody(res gjson.Result) {
-	data.TDn.Value = res.Get("*.attributes.tDn").String()
+	data.TDn = types.StringValue(res.Get("*.attributes.tDn").String())
 }
 
 func (data *SubinterfaceVRF) fromPlan(plan SubinterfaceVRF) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Id.Value = plan.Id.Value
+	data.Dn = plan.Dn
+	data.Id = plan.Id
 }

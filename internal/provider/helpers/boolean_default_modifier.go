@@ -36,11 +36,11 @@ func (m booleanDefaultModifier) Modify(ctx context.Context, req tfsdk.ModifyAttr
 		return
 	}
 
-	if !bool.Unknown {
+	if !bool.IsUnknown() {
 		return
 	}
 
-	resp.AttributePlan = types.Bool{Value: m.Default}
+	resp.AttributePlan = types.BoolValue(m.Default)
 }
 
 func BooleanDefaultModifier(defaultValue bool) booleanDefaultModifier {

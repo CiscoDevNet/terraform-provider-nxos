@@ -18,7 +18,7 @@ type IPv4AccessListPolicyIngressInterfaceInstace struct {
 }
 
 func (data IPv4AccessListPolicyIngressInterfaceInstace) getDn() string {
-	return fmt.Sprintf("sys/acl/ipv4/policy/ingress/intf-[%s]/acl", data.Interface.Value)
+	return fmt.Sprintf("sys/acl/ipv4/policy/ingress/intf-[%s]/acl", data.Interface.ValueString())
 }
 
 func (data IPv4AccessListPolicyIngressInterfaceInstace) getClassName() string {
@@ -27,16 +27,16 @@ func (data IPv4AccessListPolicyIngressInterfaceInstace) getClassName() string {
 
 func (data IPv4AccessListPolicyIngressInterfaceInstace) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("name", data.Name.Value)
+		Set("name", data.Name.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *IPv4AccessListPolicyIngressInterfaceInstace) fromBody(res gjson.Result) {
-	data.Name.Value = res.Get("*.attributes.name").String()
+	data.Name = types.StringValue(res.Get("*.attributes.name").String())
 }
 
 func (data *IPv4AccessListPolicyIngressInterfaceInstace) fromPlan(plan IPv4AccessListPolicyIngressInterfaceInstace) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Interface.Value = plan.Interface.Value
+	data.Dn = plan.Dn
+	data.Interface = plan.Interface
 }

@@ -40,7 +40,7 @@ type PhysicalInterface struct {
 }
 
 func (data PhysicalInterface) getDn() string {
-	return fmt.Sprintf("sys/intf/phys-[%s]", data.Id.Value)
+	return fmt.Sprintf("sys/intf/phys-[%s]", data.Id.ValueString())
 }
 
 func (data PhysicalInterface) getClassName() string {
@@ -49,57 +49,57 @@ func (data PhysicalInterface) getClassName() string {
 
 func (data PhysicalInterface) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("id", data.Id.Value).
-		Set("FECMode", data.FECMode.Value).
-		Set("accessVlan", data.AccessVlan.Value).
-		Set("adminSt", data.AdminSt.Value).
-		Set("autoNeg", data.AutoNeg.Value).
-		Set("bw", strconv.FormatInt(data.Bw.Value, 10)).
-		Set("delay", strconv.FormatInt(data.Delay.Value, 10)).
-		Set("descr", data.Descr.Value).
-		Set("duplex", data.Duplex.Value).
-		Set("layer", data.Layer.Value).
-		Set("linkLog", data.LinkLog.Value).
-		Set("linkDebounce", strconv.FormatInt(data.LinkDebounce.Value, 10)).
-		Set("linkDebounceLinkUp", strconv.FormatInt(data.LinkDebounceLinkUp.Value, 10)).
-		Set("medium", data.Medium.Value).
-		Set("mode", data.Mode.Value).
-		Set("mtu", strconv.FormatInt(data.Mtu.Value, 10)).
-		Set("nativeVlan", data.NativeVlan.Value).
-		Set("speed", data.Speed.Value).
-		Set("speedGroup", data.SpeedGroup.Value).
-		Set("trunkVlans", data.TrunkVlans.Value).
-		Set("uniDirectionalEthernet", data.UniDirectionalEthernet.Value).
-		Set("userCfgdFlags", data.UserCfgdFlags.Value)
+		Set("id", data.Id.ValueString()).
+		Set("FECMode", data.FECMode.ValueString()).
+		Set("accessVlan", data.AccessVlan.ValueString()).
+		Set("adminSt", data.AdminSt.ValueString()).
+		Set("autoNeg", data.AutoNeg.ValueString()).
+		Set("bw", strconv.FormatInt(data.Bw.ValueInt64(), 10)).
+		Set("delay", strconv.FormatInt(data.Delay.ValueInt64(), 10)).
+		Set("descr", data.Descr.ValueString()).
+		Set("duplex", data.Duplex.ValueString()).
+		Set("layer", data.Layer.ValueString()).
+		Set("linkLog", data.LinkLog.ValueString()).
+		Set("linkDebounce", strconv.FormatInt(data.LinkDebounce.ValueInt64(), 10)).
+		Set("linkDebounceLinkUp", strconv.FormatInt(data.LinkDebounceLinkUp.ValueInt64(), 10)).
+		Set("medium", data.Medium.ValueString()).
+		Set("mode", data.Mode.ValueString()).
+		Set("mtu", strconv.FormatInt(data.Mtu.ValueInt64(), 10)).
+		Set("nativeVlan", data.NativeVlan.ValueString()).
+		Set("speed", data.Speed.ValueString()).
+		Set("speedGroup", data.SpeedGroup.ValueString()).
+		Set("trunkVlans", data.TrunkVlans.ValueString()).
+		Set("uniDirectionalEthernet", data.UniDirectionalEthernet.ValueString()).
+		Set("userCfgdFlags", data.UserCfgdFlags.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *PhysicalInterface) fromBody(res gjson.Result) {
-	data.Id.Value = res.Get("*.attributes.id").String()
-	data.FECMode.Value = res.Get("*.attributes.FECMode").String()
-	data.AccessVlan.Value = res.Get("*.attributes.accessVlan").String()
-	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
-	data.AutoNeg.Value = res.Get("*.attributes.autoNeg").String()
-	data.Bw.Value = res.Get("*.attributes.bw").Int()
-	data.Delay.Value = res.Get("*.attributes.delay").Int()
-	data.Descr.Value = res.Get("*.attributes.descr").String()
-	data.Duplex.Value = res.Get("*.attributes.duplex").String()
-	data.Layer.Value = res.Get("*.attributes.layer").String()
-	data.LinkLog.Value = res.Get("*.attributes.linkLog").String()
-	data.LinkDebounce.Value = res.Get("*.attributes.linkDebounce").Int()
-	data.LinkDebounceLinkUp.Value = res.Get("*.attributes.linkDebounceLinkUp").Int()
-	data.Medium.Value = res.Get("*.attributes.medium").String()
-	data.Mode.Value = res.Get("*.attributes.mode").String()
-	data.Mtu.Value = res.Get("*.attributes.mtu").Int()
-	data.NativeVlan.Value = res.Get("*.attributes.nativeVlan").String()
-	data.Speed.Value = res.Get("*.attributes.speed").String()
-	data.SpeedGroup.Value = res.Get("*.attributes.speedGroup").String()
-	data.TrunkVlans.Value = res.Get("*.attributes.trunkVlans").String()
-	data.UniDirectionalEthernet.Value = res.Get("*.attributes.uniDirectionalEthernet").String()
-	data.UserCfgdFlags.Value = res.Get("*.attributes.userCfgdFlags").String()
+	data.Id = types.StringValue(res.Get("*.attributes.id").String())
+	data.FECMode = types.StringValue(res.Get("*.attributes.FECMode").String())
+	data.AccessVlan = types.StringValue(res.Get("*.attributes.accessVlan").String())
+	data.AdminSt = types.StringValue(res.Get("*.attributes.adminSt").String())
+	data.AutoNeg = types.StringValue(res.Get("*.attributes.autoNeg").String())
+	data.Bw = types.Int64Value(res.Get("*.attributes.bw").Int())
+	data.Delay = types.Int64Value(res.Get("*.attributes.delay").Int())
+	data.Descr = types.StringValue(res.Get("*.attributes.descr").String())
+	data.Duplex = types.StringValue(res.Get("*.attributes.duplex").String())
+	data.Layer = types.StringValue(res.Get("*.attributes.layer").String())
+	data.LinkLog = types.StringValue(res.Get("*.attributes.linkLog").String())
+	data.LinkDebounce = types.Int64Value(res.Get("*.attributes.linkDebounce").Int())
+	data.LinkDebounceLinkUp = types.Int64Value(res.Get("*.attributes.linkDebounceLinkUp").Int())
+	data.Medium = types.StringValue(res.Get("*.attributes.medium").String())
+	data.Mode = types.StringValue(res.Get("*.attributes.mode").String())
+	data.Mtu = types.Int64Value(res.Get("*.attributes.mtu").Int())
+	data.NativeVlan = types.StringValue(res.Get("*.attributes.nativeVlan").String())
+	data.Speed = types.StringValue(res.Get("*.attributes.speed").String())
+	data.SpeedGroup = types.StringValue(res.Get("*.attributes.speedGroup").String())
+	data.TrunkVlans = types.StringValue(res.Get("*.attributes.trunkVlans").String())
+	data.UniDirectionalEthernet = types.StringValue(res.Get("*.attributes.uniDirectionalEthernet").String())
+	data.UserCfgdFlags = types.StringValue(res.Get("*.attributes.userCfgdFlags").String())
 }
 
 func (data *PhysicalInterface) fromPlan(plan PhysicalInterface) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
+	data.Dn = plan.Dn
 }

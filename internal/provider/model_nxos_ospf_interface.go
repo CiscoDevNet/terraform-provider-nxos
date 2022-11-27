@@ -31,7 +31,7 @@ type OSPFInterface struct {
 }
 
 func (data OSPFInterface) getDn() string {
-	return fmt.Sprintf("sys/ospf/inst-[%s]/dom-[%s]/if-[%s]", data.Inst.Value, data.Name.Value, data.Id.Value)
+	return fmt.Sprintf("sys/ospf/inst-[%s]/dom-[%s]/if-[%s]", data.Inst.ValueString(), data.Name.ValueString(), data.Id.ValueString())
 }
 
 func (data OSPFInterface) getClassName() string {
@@ -40,35 +40,35 @@ func (data OSPFInterface) getClassName() string {
 
 func (data OSPFInterface) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("id", data.Id.Value).
-		Set("advertiseSecondaries", strconv.FormatBool(data.AdvertiseSecondaries.Value)).
-		Set("area", data.Area.Value).
-		Set("bfdCtrl", data.BfdCtrl.Value).
-		Set("cost", strconv.FormatInt(data.Cost.Value, 10)).
-		Set("deadIntvl", strconv.FormatInt(data.DeadIntvl.Value, 10)).
-		Set("helloIntvl", strconv.FormatInt(data.HelloIntvl.Value, 10)).
-		Set("nwT", data.NwT.Value).
-		Set("passiveCtrl", data.PassiveCtrl.Value).
-		Set("prio", strconv.FormatInt(data.Prio.Value, 10))
+		Set("id", data.Id.ValueString()).
+		Set("advertiseSecondaries", strconv.FormatBool(data.AdvertiseSecondaries.ValueBool())).
+		Set("area", data.Area.ValueString()).
+		Set("bfdCtrl", data.BfdCtrl.ValueString()).
+		Set("cost", strconv.FormatInt(data.Cost.ValueInt64(), 10)).
+		Set("deadIntvl", strconv.FormatInt(data.DeadIntvl.ValueInt64(), 10)).
+		Set("helloIntvl", strconv.FormatInt(data.HelloIntvl.ValueInt64(), 10)).
+		Set("nwT", data.NwT.ValueString()).
+		Set("passiveCtrl", data.PassiveCtrl.ValueString()).
+		Set("prio", strconv.FormatInt(data.Prio.ValueInt64(), 10))
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *OSPFInterface) fromBody(res gjson.Result) {
-	data.Id.Value = res.Get("*.attributes.id").String()
-	data.AdvertiseSecondaries.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.advertiseSecondaries").String())
-	data.Area.Value = res.Get("*.attributes.area").String()
-	data.BfdCtrl.Value = res.Get("*.attributes.bfdCtrl").String()
-	data.Cost.Value = res.Get("*.attributes.cost").Int()
-	data.DeadIntvl.Value = res.Get("*.attributes.deadIntvl").Int()
-	data.HelloIntvl.Value = res.Get("*.attributes.helloIntvl").Int()
-	data.NwT.Value = res.Get("*.attributes.nwT").String()
-	data.PassiveCtrl.Value = res.Get("*.attributes.passiveCtrl").String()
-	data.Prio.Value = res.Get("*.attributes.prio").Int()
+	data.Id = types.StringValue(res.Get("*.attributes.id").String())
+	data.AdvertiseSecondaries = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.advertiseSecondaries").String()))
+	data.Area = types.StringValue(res.Get("*.attributes.area").String())
+	data.BfdCtrl = types.StringValue(res.Get("*.attributes.bfdCtrl").String())
+	data.Cost = types.Int64Value(res.Get("*.attributes.cost").Int())
+	data.DeadIntvl = types.Int64Value(res.Get("*.attributes.deadIntvl").Int())
+	data.HelloIntvl = types.Int64Value(res.Get("*.attributes.helloIntvl").Int())
+	data.NwT = types.StringValue(res.Get("*.attributes.nwT").String())
+	data.PassiveCtrl = types.StringValue(res.Get("*.attributes.passiveCtrl").String())
+	data.Prio = types.Int64Value(res.Get("*.attributes.prio").Int())
 }
 
 func (data *OSPFInterface) fromPlan(plan OSPFInterface) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Inst.Value = plan.Inst.Value
-	data.Name.Value = plan.Name.Value
+	data.Dn = plan.Dn
+	data.Inst = plan.Inst
+	data.Name = plan.Name
 }

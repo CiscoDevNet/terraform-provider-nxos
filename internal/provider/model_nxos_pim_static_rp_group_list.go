@@ -24,7 +24,7 @@ type PIMStaticRPGroupList struct {
 }
 
 func (data PIMStaticRPGroupList) getDn() string {
-	return fmt.Sprintf("sys/pim/inst/dom-[%s]/staticrp/rp-[%s]/rpgrplist-[%s]", data.Vrf_name.Value, data.Addr.Value, data.GrpListName.Value)
+	return fmt.Sprintf("sys/pim/inst/dom-[%s]/staticrp/rp-[%s]/rpgrplist-[%s]", data.Vrf_name.ValueString(), data.Addr.ValueString(), data.GrpListName.ValueString())
 }
 
 func (data PIMStaticRPGroupList) getClassName() string {
@@ -33,21 +33,21 @@ func (data PIMStaticRPGroupList) getClassName() string {
 
 func (data PIMStaticRPGroupList) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("grpListName", data.GrpListName.Value).
-		Set("bidir", strconv.FormatBool(data.Bidir.Value)).
-		Set("override", strconv.FormatBool(data.Override.Value))
+		Set("grpListName", data.GrpListName.ValueString()).
+		Set("bidir", strconv.FormatBool(data.Bidir.ValueBool())).
+		Set("override", strconv.FormatBool(data.Override.ValueBool()))
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *PIMStaticRPGroupList) fromBody(res gjson.Result) {
-	data.GrpListName.Value = res.Get("*.attributes.grpListName").String()
-	data.Bidir.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.bidir").String())
-	data.Override.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.override").String())
+	data.GrpListName = types.StringValue(res.Get("*.attributes.grpListName").String())
+	data.Bidir = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.bidir").String()))
+	data.Override = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.override").String()))
 }
 
 func (data *PIMStaticRPGroupList) fromPlan(plan PIMStaticRPGroupList) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Vrf_name.Value = plan.Vrf_name.Value
-	data.Addr.Value = plan.Addr.Value
+	data.Dn = plan.Dn
+	data.Vrf_name = plan.Vrf_name
+	data.Addr = plan.Addr
 }

@@ -18,7 +18,7 @@ type PIMStaticRP struct {
 }
 
 func (data PIMStaticRP) getDn() string {
-	return fmt.Sprintf("sys/pim/inst/dom-[%s]/staticrp/rp-[%s]", data.Vrf_name.Value, data.Addr.Value)
+	return fmt.Sprintf("sys/pim/inst/dom-[%s]/staticrp/rp-[%s]", data.Vrf_name.ValueString(), data.Addr.ValueString())
 }
 
 func (data PIMStaticRP) getClassName() string {
@@ -27,16 +27,16 @@ func (data PIMStaticRP) getClassName() string {
 
 func (data PIMStaticRP) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("addr", data.Addr.Value)
+		Set("addr", data.Addr.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *PIMStaticRP) fromBody(res gjson.Result) {
-	data.Addr.Value = res.Get("*.attributes.addr").String()
+	data.Addr = types.StringValue(res.Get("*.attributes.addr").String())
 }
 
 func (data *PIMStaticRP) fromPlan(plan PIMStaticRP) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Vrf_name.Value = plan.Vrf_name.Value
+	data.Dn = plan.Dn
+	data.Vrf_name = plan.Vrf_name
 }

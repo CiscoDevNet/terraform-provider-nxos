@@ -35,11 +35,11 @@ func (v integerRangeValidator) Validate(ctx context.Context, req tfsdk.ValidateA
 		}
 	}
 
-	if int.Unknown || int.Null {
+	if int.IsUnknown() || int.IsNull() {
 		return
 	}
 
-	if int.Value >= v.min && int.Value <= v.max {
+	if int.ValueInt64() >= v.min && int.ValueInt64() <= v.max {
 		return
 	}
 

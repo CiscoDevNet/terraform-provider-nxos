@@ -24,7 +24,7 @@ type BGPPeer struct {
 }
 
 func (data BGPPeer) getDn() string {
-	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/peer-[%s]", data.Vrf_name.Value, data.Addr.Value)
+	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/peer-[%s]", data.Vrf_name.ValueString(), data.Addr.ValueString())
 }
 
 func (data BGPPeer) getClassName() string {
@@ -33,27 +33,27 @@ func (data BGPPeer) getClassName() string {
 
 func (data BGPPeer) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("addr", data.Addr.Value).
-		Set("asn", data.Asn.Value).
-		Set("name", data.Name.Value).
-		Set("peerImp", data.PeerImp.Value).
-		Set("peerType", data.PeerType.Value).
-		Set("srcIf", data.SrcIf.Value)
+		Set("addr", data.Addr.ValueString()).
+		Set("asn", data.Asn.ValueString()).
+		Set("name", data.Name.ValueString()).
+		Set("peerImp", data.PeerImp.ValueString()).
+		Set("peerType", data.PeerType.ValueString()).
+		Set("srcIf", data.SrcIf.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *BGPPeer) fromBody(res gjson.Result) {
-	data.Addr.Value = res.Get("*.attributes.addr").String()
-	data.Asn.Value = res.Get("*.attributes.asn").String()
-	data.Name.Value = res.Get("*.attributes.name").String()
-	data.PeerImp.Value = res.Get("*.attributes.peerImp").String()
-	data.PeerType.Value = res.Get("*.attributes.peerType").String()
-	data.SrcIf.Value = res.Get("*.attributes.srcIf").String()
+	data.Addr = types.StringValue(res.Get("*.attributes.addr").String())
+	data.Asn = types.StringValue(res.Get("*.attributes.asn").String())
+	data.Name = types.StringValue(res.Get("*.attributes.name").String())
+	data.PeerImp = types.StringValue(res.Get("*.attributes.peerImp").String())
+	data.PeerType = types.StringValue(res.Get("*.attributes.peerType").String())
+	data.SrcIf = types.StringValue(res.Get("*.attributes.srcIf").String())
 }
 
 func (data *BGPPeer) fromPlan(plan BGPPeer) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Bgp_asn.Value = plan.Bgp_asn.Value
-	data.Vrf_name.Value = plan.Vrf_name.Value
+	data.Dn = plan.Dn
+	data.Bgp_asn = plan.Bgp_asn
+	data.Vrf_name = plan.Vrf_name
 }

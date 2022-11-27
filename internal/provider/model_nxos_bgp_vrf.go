@@ -19,7 +19,7 @@ type BGPVRF struct {
 }
 
 func (data BGPVRF) getDn() string {
-	return fmt.Sprintf("sys/bgp/inst/dom-[%s]", data.Name.Value)
+	return fmt.Sprintf("sys/bgp/inst/dom-[%s]", data.Name.ValueString())
 }
 
 func (data BGPVRF) getClassName() string {
@@ -28,18 +28,18 @@ func (data BGPVRF) getClassName() string {
 
 func (data BGPVRF) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("name", data.Name.Value).
-		Set("rtrId", data.RtrId.Value)
+		Set("name", data.Name.ValueString()).
+		Set("rtrId", data.RtrId.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *BGPVRF) fromBody(res gjson.Result) {
-	data.Name.Value = res.Get("*.attributes.name").String()
-	data.RtrId.Value = res.Get("*.attributes.rtrId").String()
+	data.Name = types.StringValue(res.Get("*.attributes.name").String())
+	data.RtrId = types.StringValue(res.Get("*.attributes.rtrId").String())
 }
 
 func (data *BGPVRF) fromPlan(plan BGPVRF) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Asn.Value = plan.Asn.Value
+	data.Dn = plan.Dn
+	data.Asn = plan.Asn
 }

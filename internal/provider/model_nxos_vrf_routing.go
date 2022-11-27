@@ -18,7 +18,7 @@ type VRFRouting struct {
 }
 
 func (data VRFRouting) getDn() string {
-	return fmt.Sprintf("sys/inst-[%s]/dom-[%[1]s]", data.Vrf.Value)
+	return fmt.Sprintf("sys/inst-[%s]/dom-[%[1]s]", data.Vrf.ValueString())
 }
 
 func (data VRFRouting) getClassName() string {
@@ -27,16 +27,16 @@ func (data VRFRouting) getClassName() string {
 
 func (data VRFRouting) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("rd", data.Rd.Value)
+		Set("rd", data.Rd.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *VRFRouting) fromBody(res gjson.Result) {
-	data.Rd.Value = res.Get("*.attributes.rd").String()
+	data.Rd = types.StringValue(res.Get("*.attributes.rd").String())
 }
 
 func (data *VRFRouting) fromPlan(plan VRFRouting) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Vrf.Value = plan.Vrf.Value
+	data.Dn = plan.Dn
+	data.Vrf = plan.Vrf
 }

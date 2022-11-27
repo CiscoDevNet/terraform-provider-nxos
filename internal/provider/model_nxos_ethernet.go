@@ -26,15 +26,15 @@ func (data Ethernet) getClassName() string {
 
 func (data Ethernet) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("systemJumboMtu", strconv.FormatInt(data.SystemJumboMtu.Value, 10))
+		Set("systemJumboMtu", strconv.FormatInt(data.SystemJumboMtu.ValueInt64(), 10))
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *Ethernet) fromBody(res gjson.Result) {
-	data.SystemJumboMtu.Value = res.Get("*.attributes.systemJumboMtu").Int()
+	data.SystemJumboMtu = types.Int64Value(res.Get("*.attributes.systemJumboMtu").Int())
 }
 
 func (data *Ethernet) fromPlan(plan Ethernet) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
+	data.Dn = plan.Dn
 }

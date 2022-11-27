@@ -24,15 +24,15 @@ func (data QueuingQOSPolicySystemOutPolicyMap) getClassName() string {
 
 func (data QueuingQOSPolicySystemOutPolicyMap) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("name", data.Name.Value)
+		Set("name", data.Name.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *QueuingQOSPolicySystemOutPolicyMap) fromBody(res gjson.Result) {
-	data.Name.Value = res.Get("*.attributes.name").String()
+	data.Name = types.StringValue(res.Get("*.attributes.name").String())
 }
 
 func (data *QueuingQOSPolicySystemOutPolicyMap) fromPlan(plan QueuingQOSPolicySystemOutPolicyMap) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
+	data.Dn = plan.Dn
 }

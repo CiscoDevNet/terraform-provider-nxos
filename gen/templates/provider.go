@@ -119,7 +119,7 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 
 	// User must provide a username to the provider
 	var username string
-	if config.Username.Unknown {
+	if config.Username.IsUnknown() {
 		// Cannot connect to client with an unknown value
 		resp.Diagnostics.AddWarning(
 			"Unable to create client",
@@ -128,10 +128,10 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		return
 	}
 
-	if config.Username.Null {
+	if config.Username.IsNull() {
 		username = os.Getenv("NXOS_USERNAME")
 	} else {
-		username = config.Username.Value
+		username = config.Username.ValueString()
 	}
 
 	if username == "" {
@@ -145,7 +145,7 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 
 	// User must provide a password to the provider
 	var password string
-	if config.Password.Unknown {
+	if config.Password.IsUnknown() {
 		// Cannot connect to client with an unknown value
 		resp.Diagnostics.AddWarning(
 			"Unable to create client",
@@ -154,10 +154,10 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		return
 	}
 
-	if config.Password.Null {
+	if config.Password.IsNull() {
 		password = os.Getenv("NXOS_PASSWORD")
 	} else {
-		password = config.Password.Value
+		password = config.Password.ValueString()
 	}
 
 	if password == "" {
@@ -171,7 +171,7 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 
 	// User must provide a username to the provider
 	var url string
-	if config.URL.Unknown {
+	if config.URL.IsUnknown() {
 		// Cannot connect to client with an unknown value
 		resp.Diagnostics.AddWarning(
 			"Unable to create client",
@@ -180,13 +180,13 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		return
 	}
 
-	if config.URL.Null {
+	if config.URL.IsNull() {
 		url = os.Getenv("NXOS_URL")
 		if url == "" && len(config.Devices) > 0 {
-			url = config.Devices[0].URL.Value
+			url = config.Devices[0].URL.ValueString()
 		}
 	} else {
-		url = config.URL.Value
+		url = config.URL.ValueString()
 	}
 
 	if url == "" {
@@ -199,7 +199,7 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 	}
 
 	var insecure bool
-	if config.Insecure.Unknown {
+	if config.Insecure.IsUnknown() {
 		// Cannot connect to client with an unknown value
 		resp.Diagnostics.AddWarning(
 			"Unable to create client",
@@ -208,7 +208,7 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		return
 	}
 
-	if config.Insecure.Null {
+	if config.Insecure.IsNull() {
 		insecureStr := os.Getenv("NXOS_INSECURE")
 		if insecureStr == "" {
 			insecure = true
@@ -216,11 +216,11 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 			insecure, _ = strconv.ParseBool(insecureStr)
 		}
 	} else {
-		insecure = config.Insecure.Value
+		insecure = config.Insecure.ValueBool()
 	}
 
 	var retries int64
-	if config.Retries.Unknown {
+	if config.Retries.IsUnknown() {
 		// Cannot connect to client with an unknown value
 		resp.Diagnostics.AddWarning(
 			"Unable to create client",
@@ -229,7 +229,7 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		return
 	}
 
-	if config.Retries.Null {
+	if config.Retries.IsNull() {
 		retriesStr := os.Getenv("NXOS_RETRIES")
 		if retriesStr == "" {
 			retries = 3
@@ -237,7 +237,7 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 			retries, _ = strconv.ParseInt(retriesStr, 0, 64)
 		}
 	} else {
-		retries = config.Retries.Value
+		retries = config.Retries.ValueInt64()
 	}
 
 	// Create a new NX-OS client and set it to the provider client
@@ -252,7 +252,7 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 
 	devices := make(map[string]string)
     for _, device := range config.Devices {
-		devices[device.Name.Value] = device.URL.Value
+		devices[device.Name.ValueString()] = device.URL.ValueString()
 	}
 
 	data := NxosProviderData{

@@ -22,7 +22,7 @@ type BGPRouteControl struct {
 }
 
 func (data BGPRouteControl) getDn() string {
-	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/rtctrl", data.Name.Value)
+	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/rtctrl", data.Name.ValueString())
 }
 
 func (data BGPRouteControl) getClassName() string {
@@ -31,23 +31,23 @@ func (data BGPRouteControl) getClassName() string {
 
 func (data BGPRouteControl) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("enforceFirstAs", data.EnforceFirstAs.Value).
-		Set("fibAccelerate", data.FibAccelerate.Value).
-		Set("logNeighborChanges", data.LogNeighborChanges.Value).
-		Set("supprRt", data.SupprRt.Value)
+		Set("enforceFirstAs", data.EnforceFirstAs.ValueString()).
+		Set("fibAccelerate", data.FibAccelerate.ValueString()).
+		Set("logNeighborChanges", data.LogNeighborChanges.ValueString()).
+		Set("supprRt", data.SupprRt.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *BGPRouteControl) fromBody(res gjson.Result) {
-	data.EnforceFirstAs.Value = res.Get("*.attributes.enforceFirstAs").String()
-	data.FibAccelerate.Value = res.Get("*.attributes.fibAccelerate").String()
-	data.LogNeighborChanges.Value = res.Get("*.attributes.logNeighborChanges").String()
-	data.SupprRt.Value = res.Get("*.attributes.supprRt").String()
+	data.EnforceFirstAs = types.StringValue(res.Get("*.attributes.enforceFirstAs").String())
+	data.FibAccelerate = types.StringValue(res.Get("*.attributes.fibAccelerate").String())
+	data.LogNeighborChanges = types.StringValue(res.Get("*.attributes.logNeighborChanges").String())
+	data.SupprRt = types.StringValue(res.Get("*.attributes.supprRt").String())
 }
 
 func (data *BGPRouteControl) fromPlan(plan BGPRouteControl) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Asn.Value = plan.Asn.Value
-	data.Name.Value = plan.Name.Value
+	data.Dn = plan.Dn
+	data.Asn = plan.Asn
+	data.Name = plan.Name
 }

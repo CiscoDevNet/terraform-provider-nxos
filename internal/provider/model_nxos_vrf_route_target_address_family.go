@@ -19,7 +19,7 @@ type VRFRouteTargetAddressFamily struct {
 }
 
 func (data VRFRouteTargetAddressFamily) getDn() string {
-	return fmt.Sprintf("sys/inst-[%s]/dom-[%[1]s]/af-[%s]/ctrl-[%s]", data.Vrf.Value, data.Af_type.Value, data.Type.Value)
+	return fmt.Sprintf("sys/inst-[%s]/dom-[%[1]s]/af-[%s]/ctrl-[%s]", data.Vrf.ValueString(), data.Af_type.ValueString(), data.Type.ValueString())
 }
 
 func (data VRFRouteTargetAddressFamily) getClassName() string {
@@ -28,17 +28,17 @@ func (data VRFRouteTargetAddressFamily) getClassName() string {
 
 func (data VRFRouteTargetAddressFamily) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("type", data.Type.Value)
+		Set("type", data.Type.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *VRFRouteTargetAddressFamily) fromBody(res gjson.Result) {
-	data.Type.Value = res.Get("*.attributes.type").String()
+	data.Type = types.StringValue(res.Get("*.attributes.type").String())
 }
 
 func (data *VRFRouteTargetAddressFamily) fromPlan(plan VRFRouteTargetAddressFamily) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Vrf.Value = plan.Vrf.Value
-	data.Af_type.Value = plan.Af_type.Value
+	data.Dn = plan.Dn
+	data.Vrf = plan.Vrf
+	data.Af_type = plan.Af_type
 }

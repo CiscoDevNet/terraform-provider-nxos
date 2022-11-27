@@ -30,5 +30,5 @@ func (data *QueuingQOSPolicySystemOut) fromBody(res gjson.Result) {
 
 func (data *QueuingQOSPolicySystemOut) fromPlan(plan QueuingQOSPolicySystemOut) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
+	data.Dn = plan.Dn
 }

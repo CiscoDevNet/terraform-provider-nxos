@@ -36,11 +36,11 @@ func (m integerDefaultModifier) Modify(ctx context.Context, req tfsdk.ModifyAttr
 		return
 	}
 
-	if !i.Unknown {
+	if !i.IsUnknown() {
 		return
 	}
 
-	resp.AttributePlan = types.Int64{Value: m.Default}
+	resp.AttributePlan = types.Int64Value(m.Default)
 }
 
 func IntegerDefaultModifier(defaultValue int64) integerDefaultModifier {

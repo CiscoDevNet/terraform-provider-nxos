@@ -66,7 +66,7 @@ type IPv4AccessListEntry struct {
 }
 
 func (data IPv4AccessListEntry) getDn() string {
-	return fmt.Sprintf("sys/acl/ipv4/name-[%s]//seq-[%v]", data.Name.Value, data.SeqNum.Value)
+	return fmt.Sprintf("sys/acl/ipv4/name-[%s]//seq-[%v]", data.Name.ValueString(), data.SeqNum.ValueInt64())
 }
 
 func (data IPv4AccessListEntry) getClassName() string {
@@ -75,52 +75,52 @@ func (data IPv4AccessListEntry) getClassName() string {
 
 func (data IPv4AccessListEntry) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("seqNum", strconv.FormatInt(data.SeqNum.Value, 10)).
-		Set("ack", strconv.FormatBool(data.Ack.Value)).
-		Set("action", data.Action.Value).
-		Set("dscp", strconv.FormatInt(data.Dscp.Value, 10)).
-		Set("dstAddrGroup", data.DstAddrGroup.Value).
-		Set("dstPort1", data.DstPort1.Value).
-		Set("dstPort2", data.DstPort2.Value).
-		Set("dstPortGroup", data.DstPortGroup.Value).
-		Set("dstPortMask", data.DstPortMask.Value).
-		Set("dstPortOp", data.DstPortOp.Value).
-		Set("dstPrefix", data.DstPrefix.Value).
-		Set("dstPrefixLength", data.DstPrefixLength.Value).
-		Set("dstPrefixMask", data.DstPrefixMask.Value).
-		Set("est", strconv.FormatBool(data.Est.Value)).
-		Set("fin", strconv.FormatBool(data.Fin.Value)).
-		Set("fragment", strconv.FormatBool(data.Fragment.Value)).
-		Set("httpOption", data.HttpOption.Value).
-		Set("icmpCode", strconv.FormatInt(data.IcmpCode.Value, 10)).
-		Set("icmpType", strconv.FormatInt(data.IcmpType.Value, 10)).
-		Set("logging", strconv.FormatBool(data.Logging.Value)).
-		Set("pktLen1", data.PktLen1.Value).
-		Set("pktLen2", data.PktLen2.Value).
-		Set("pktLenOp", data.PktLenOp.Value).
-		Set("precedence", data.Precedence.Value).
-		Set("protocol", data.Protocol.Value).
-		Set("protocolMask", data.ProtocolMask.Value).
-		Set("psh", strconv.FormatBool(data.Psh.Value)).
-		Set("redirect", data.Redirect.Value).
-		Set("remark", data.Remark.Value).
-		Set("rev", strconv.FormatBool(data.Rev.Value)).
-		Set("rst", strconv.FormatBool(data.Rst.Value)).
-		Set("srcAddrGroup", data.SrcAddrGroup.Value).
-		Set("srcPort1", data.SrcPort1.Value).
-		Set("srcPort2", data.SrcPort2.Value).
-		Set("srcPortGroup", data.SrcPortGroup.Value).
-		Set("srcPortMask", data.SrcPortMask.Value).
-		Set("srcPortOp", data.SrcPortOp.Value).
-		Set("srcPrefix", data.SrcPrefix.Value).
-		Set("srcPrefixLength", data.SrcPrefixLength.Value).
-		Set("srcPrefixMask", data.SrcPrefixMask.Value).
-		Set("syn", strconv.FormatBool(data.Syn.Value)).
-		Set("timeRange", data.TimeRange.Value).
-		Set("ttl", strconv.FormatInt(data.Ttl.Value, 10)).
-		Set("urg", strconv.FormatBool(data.Urg.Value)).
-		Set("vlan", strconv.FormatInt(data.Vlan.Value, 10)).
-		Set("vni", data.Vni.Value)
+		Set("seqNum", strconv.FormatInt(data.SeqNum.ValueInt64(), 10)).
+		Set("ack", strconv.FormatBool(data.Ack.ValueBool())).
+		Set("action", data.Action.ValueString()).
+		Set("dscp", strconv.FormatInt(data.Dscp.ValueInt64(), 10)).
+		Set("dstAddrGroup", data.DstAddrGroup.ValueString()).
+		Set("dstPort1", data.DstPort1.ValueString()).
+		Set("dstPort2", data.DstPort2.ValueString()).
+		Set("dstPortGroup", data.DstPortGroup.ValueString()).
+		Set("dstPortMask", data.DstPortMask.ValueString()).
+		Set("dstPortOp", data.DstPortOp.ValueString()).
+		Set("dstPrefix", data.DstPrefix.ValueString()).
+		Set("dstPrefixLength", data.DstPrefixLength.ValueString()).
+		Set("dstPrefixMask", data.DstPrefixMask.ValueString()).
+		Set("est", strconv.FormatBool(data.Est.ValueBool())).
+		Set("fin", strconv.FormatBool(data.Fin.ValueBool())).
+		Set("fragment", strconv.FormatBool(data.Fragment.ValueBool())).
+		Set("httpOption", data.HttpOption.ValueString()).
+		Set("icmpCode", strconv.FormatInt(data.IcmpCode.ValueInt64(), 10)).
+		Set("icmpType", strconv.FormatInt(data.IcmpType.ValueInt64(), 10)).
+		Set("logging", strconv.FormatBool(data.Logging.ValueBool())).
+		Set("pktLen1", data.PktLen1.ValueString()).
+		Set("pktLen2", data.PktLen2.ValueString()).
+		Set("pktLenOp", data.PktLenOp.ValueString()).
+		Set("precedence", data.Precedence.ValueString()).
+		Set("protocol", data.Protocol.ValueString()).
+		Set("protocolMask", data.ProtocolMask.ValueString()).
+		Set("psh", strconv.FormatBool(data.Psh.ValueBool())).
+		Set("redirect", data.Redirect.ValueString()).
+		Set("remark", data.Remark.ValueString()).
+		Set("rev", strconv.FormatBool(data.Rev.ValueBool())).
+		Set("rst", strconv.FormatBool(data.Rst.ValueBool())).
+		Set("srcAddrGroup", data.SrcAddrGroup.ValueString()).
+		Set("srcPort1", data.SrcPort1.ValueString()).
+		Set("srcPort2", data.SrcPort2.ValueString()).
+		Set("srcPortGroup", data.SrcPortGroup.ValueString()).
+		Set("srcPortMask", data.SrcPortMask.ValueString()).
+		Set("srcPortOp", data.SrcPortOp.ValueString()).
+		Set("srcPrefix", data.SrcPrefix.ValueString()).
+		Set("srcPrefixLength", data.SrcPrefixLength.ValueString()).
+		Set("srcPrefixMask", data.SrcPrefixMask.ValueString()).
+		Set("syn", strconv.FormatBool(data.Syn.ValueBool())).
+		Set("timeRange", data.TimeRange.ValueString()).
+		Set("ttl", strconv.FormatInt(data.Ttl.ValueInt64(), 10)).
+		Set("urg", strconv.FormatBool(data.Urg.ValueBool())).
+		Set("vlan", strconv.FormatInt(data.Vlan.ValueInt64(), 10)).
+		Set("vni", data.Vni.ValueString())
 	if data.Dscp.IsUnknown() || data.Dscp.IsNull() {
 		attrs = attrs.Delete("dscp")
 	}
@@ -188,56 +188,56 @@ func (data IPv4AccessListEntry) toBody() nxos.Body {
 }
 
 func (data *IPv4AccessListEntry) fromBody(res gjson.Result) {
-	data.SeqNum.Value = res.Get("*.attributes.seqNum").Int()
-	data.Ack.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.ack").String())
-	data.Action.Value = res.Get("*.attributes.action").String()
-	data.Dscp.Value = res.Get("*.attributes.dscp").Int()
-	data.DstAddrGroup.Value = res.Get("*.attributes.dstAddrGroup").String()
-	data.DstPort1.Value = res.Get("*.attributes.dstPort1").String()
-	data.DstPort2.Value = res.Get("*.attributes.dstPort2").String()
-	data.DstPortGroup.Value = res.Get("*.attributes.dstPortGroup").String()
-	data.DstPortMask.Value = res.Get("*.attributes.dstPortMask").String()
-	data.DstPortOp.Value = res.Get("*.attributes.dstPortOp").String()
-	data.DstPrefix.Value = res.Get("*.attributes.dstPrefix").String()
-	data.DstPrefixLength.Value = res.Get("*.attributes.dstPrefixLength").String()
-	data.DstPrefixMask.Value = res.Get("*.attributes.dstPrefixMask").String()
-	data.Est.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.est").String())
-	data.Fin.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.fin").String())
-	data.Fragment.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.fragment").String())
-	data.HttpOption.Value = res.Get("*.attributes.httpOption").String()
-	data.IcmpCode.Value = res.Get("*.attributes.icmpCode").Int()
-	data.IcmpType.Value = res.Get("*.attributes.icmpType").Int()
-	data.Logging.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.logging").String())
-	data.PktLen1.Value = res.Get("*.attributes.pktLen1").String()
-	data.PktLen2.Value = res.Get("*.attributes.pktLen2").String()
-	data.PktLenOp.Value = res.Get("*.attributes.pktLenOp").String()
-	data.Precedence.Value = res.Get("*.attributes.precedence").String()
-	data.Protocol.Value = res.Get("*.attributes.protocol").String()
-	data.ProtocolMask.Value = res.Get("*.attributes.protocolMask").String()
-	data.Psh.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.psh").String())
-	data.Redirect.Value = res.Get("*.attributes.redirect").String()
-	data.Remark.Value = res.Get("*.attributes.remark").String()
-	data.Rev.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.rev").String())
-	data.Rst.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.rst").String())
-	data.SrcAddrGroup.Value = res.Get("*.attributes.srcAddrGroup").String()
-	data.SrcPort1.Value = res.Get("*.attributes.srcPort1").String()
-	data.SrcPort2.Value = res.Get("*.attributes.srcPort2").String()
-	data.SrcPortGroup.Value = res.Get("*.attributes.srcPortGroup").String()
-	data.SrcPortMask.Value = res.Get("*.attributes.srcPortMask").String()
-	data.SrcPortOp.Value = res.Get("*.attributes.srcPortOp").String()
-	data.SrcPrefix.Value = res.Get("*.attributes.srcPrefix").String()
-	data.SrcPrefixLength.Value = res.Get("*.attributes.srcPrefixLength").String()
-	data.SrcPrefixMask.Value = res.Get("*.attributes.srcPrefixMask").String()
-	data.Syn.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.syn").String())
-	data.TimeRange.Value = res.Get("*.attributes.timeRange").String()
-	data.Ttl.Value = res.Get("*.attributes.ttl").Int()
-	data.Urg.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.urg").String())
-	data.Vlan.Value = res.Get("*.attributes.vlan").Int()
-	data.Vni.Value = res.Get("*.attributes.vni").String()
+	data.SeqNum = types.Int64Value(res.Get("*.attributes.seqNum").Int())
+	data.Ack = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.ack").String()))
+	data.Action = types.StringValue(res.Get("*.attributes.action").String())
+	data.Dscp = types.Int64Value(res.Get("*.attributes.dscp").Int())
+	data.DstAddrGroup = types.StringValue(res.Get("*.attributes.dstAddrGroup").String())
+	data.DstPort1 = types.StringValue(res.Get("*.attributes.dstPort1").String())
+	data.DstPort2 = types.StringValue(res.Get("*.attributes.dstPort2").String())
+	data.DstPortGroup = types.StringValue(res.Get("*.attributes.dstPortGroup").String())
+	data.DstPortMask = types.StringValue(res.Get("*.attributes.dstPortMask").String())
+	data.DstPortOp = types.StringValue(res.Get("*.attributes.dstPortOp").String())
+	data.DstPrefix = types.StringValue(res.Get("*.attributes.dstPrefix").String())
+	data.DstPrefixLength = types.StringValue(res.Get("*.attributes.dstPrefixLength").String())
+	data.DstPrefixMask = types.StringValue(res.Get("*.attributes.dstPrefixMask").String())
+	data.Est = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.est").String()))
+	data.Fin = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.fin").String()))
+	data.Fragment = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.fragment").String()))
+	data.HttpOption = types.StringValue(res.Get("*.attributes.httpOption").String())
+	data.IcmpCode = types.Int64Value(res.Get("*.attributes.icmpCode").Int())
+	data.IcmpType = types.Int64Value(res.Get("*.attributes.icmpType").Int())
+	data.Logging = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.logging").String()))
+	data.PktLen1 = types.StringValue(res.Get("*.attributes.pktLen1").String())
+	data.PktLen2 = types.StringValue(res.Get("*.attributes.pktLen2").String())
+	data.PktLenOp = types.StringValue(res.Get("*.attributes.pktLenOp").String())
+	data.Precedence = types.StringValue(res.Get("*.attributes.precedence").String())
+	data.Protocol = types.StringValue(res.Get("*.attributes.protocol").String())
+	data.ProtocolMask = types.StringValue(res.Get("*.attributes.protocolMask").String())
+	data.Psh = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.psh").String()))
+	data.Redirect = types.StringValue(res.Get("*.attributes.redirect").String())
+	data.Remark = types.StringValue(res.Get("*.attributes.remark").String())
+	data.Rev = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.rev").String()))
+	data.Rst = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.rst").String()))
+	data.SrcAddrGroup = types.StringValue(res.Get("*.attributes.srcAddrGroup").String())
+	data.SrcPort1 = types.StringValue(res.Get("*.attributes.srcPort1").String())
+	data.SrcPort2 = types.StringValue(res.Get("*.attributes.srcPort2").String())
+	data.SrcPortGroup = types.StringValue(res.Get("*.attributes.srcPortGroup").String())
+	data.SrcPortMask = types.StringValue(res.Get("*.attributes.srcPortMask").String())
+	data.SrcPortOp = types.StringValue(res.Get("*.attributes.srcPortOp").String())
+	data.SrcPrefix = types.StringValue(res.Get("*.attributes.srcPrefix").String())
+	data.SrcPrefixLength = types.StringValue(res.Get("*.attributes.srcPrefixLength").String())
+	data.SrcPrefixMask = types.StringValue(res.Get("*.attributes.srcPrefixMask").String())
+	data.Syn = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.syn").String()))
+	data.TimeRange = types.StringValue(res.Get("*.attributes.timeRange").String())
+	data.Ttl = types.Int64Value(res.Get("*.attributes.ttl").Int())
+	data.Urg = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.urg").String()))
+	data.Vlan = types.Int64Value(res.Get("*.attributes.vlan").Int())
+	data.Vni = types.StringValue(res.Get("*.attributes.vni").String())
 }
 
 func (data *IPv4AccessListEntry) fromPlan(plan IPv4AccessListEntry) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Name.Value = plan.Name.Value
+	data.Dn = plan.Dn
+	data.Name = plan.Name
 }

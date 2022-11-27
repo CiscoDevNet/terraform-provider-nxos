@@ -116,19 +116,22 @@ func (r *RestResource) Create(ctx context.Context, req resource.CreateRequest, r
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.Id.ValueString()))
 
 	body := plan.toBody(ctx)
-	_, err := r.data.client.Post(plan.Dn.Value, body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
+	_, err := r.data.client.Post(plan.Dn.ValueString(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.ValueString()]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 		return
 	}
 
-	plan.Id = plan.Dn
-	plan.Content.Unknown = false
+	if plan.Content.IsUnknown() {
+		plan.Content = types.MapNull(plan.Content.ElementType(ctx))
+	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.Id.Value))
+	plan.Id = plan.Dn
+
+	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
@@ -144,9 +147,9 @@ func (r *RestResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
 
-	res, err := r.data.client.GetDn(state.Dn.Value, nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[state.Device.Value]))
+	res, err := r.data.client.GetDn(state.Dn.ValueString(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[state.Device.ValueString()]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -154,23 +157,23 @@ func (r *RestResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 
 	// Check if we received an empty response without errors -> object has been deleted
 	if !res.Exists() && err == nil {
-		state.Id.Value = ""
+		state.Id = types.StringNull()
 	} else {
-		className := state.ClassName.Value
-		state.Id.Value = state.Dn.Value
+		className := state.ClassName.ValueString()
+		state.Id = state.Dn
 
 		stateContent := state.Content
 		newContent := make(map[string]attr.Value)
 		for attr, value := range res.Get(className + ".attributes").Map() {
-			if _, ok := stateContent.Elems[attr]; ok {
-				newContent[attr] = types.String{Value: value.Str}
+			if _, ok := stateContent.Elements()[attr]; ok {
+				newContent[attr] = types.StringValue(value.Str)
 			}
 		}
 
-		state.Content.Elems = newContent
+		state.Content = types.MapValueMust(state.Content.ElementType(ctx), newContent)
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
@@ -186,16 +189,16 @@ func (r *RestResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
 	body := plan.toBody(ctx)
-	_, err := r.data.client.Post(plan.Dn.Value, body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.Value]))
+	_, err := r.data.client.Post(plan.Dn.ValueString(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.ValueString()]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
@@ -211,10 +214,10 @@ func (r *RestResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
 
-	if state.Delete.Value {
-		res, err := r.data.client.DeleteDn(state.Dn.Value, nxos.OverrideUrl(r.data.devices[state.Device.Value]))
+	if state.Delete.ValueBool() {
+		res, err := r.data.client.DeleteDn(state.Dn.ValueString(), nxos.OverrideUrl(r.data.devices[state.Device.ValueString()]))
 		if err != nil {
 			errCode := res.Get("imdata.0.error.attributes.code").Str
 			// Ignore errors of type "Cannot delete object"
@@ -225,7 +228,7 @@ func (r *RestResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 		}
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Id.ValueString()))
 
 	resp.State.RemoveResource(ctx)
 }

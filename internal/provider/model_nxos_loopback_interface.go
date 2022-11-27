@@ -19,7 +19,7 @@ type LoopbackInterface struct {
 }
 
 func (data LoopbackInterface) getDn() string {
-	return fmt.Sprintf("sys/intf/lb-[%s]", data.Id.Value)
+	return fmt.Sprintf("sys/intf/lb-[%s]", data.Id.ValueString())
 }
 
 func (data LoopbackInterface) getClassName() string {
@@ -28,19 +28,19 @@ func (data LoopbackInterface) getClassName() string {
 
 func (data LoopbackInterface) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("id", data.Id.Value).
-		Set("adminSt", data.AdminSt.Value).
-		Set("descr", data.Descr.Value)
+		Set("id", data.Id.ValueString()).
+		Set("adminSt", data.AdminSt.ValueString()).
+		Set("descr", data.Descr.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *LoopbackInterface) fromBody(res gjson.Result) {
-	data.Id.Value = res.Get("*.attributes.id").String()
-	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
-	data.Descr.Value = res.Get("*.attributes.descr").String()
+	data.Id = types.StringValue(res.Get("*.attributes.id").String())
+	data.AdminSt = types.StringValue(res.Get("*.attributes.adminSt").String())
+	data.Descr = types.StringValue(res.Get("*.attributes.descr").String())
 }
 
 func (data *LoopbackInterface) fromPlan(plan LoopbackInterface) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
+	data.Dn = plan.Dn
 }

@@ -21,7 +21,7 @@ type QueuingQOSPolicyMapMatchClassMapRemainingBandwidth struct {
 }
 
 func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) getDn() string {
-	return fmt.Sprintf("sys/ipqos/queuing/p/name-[%s]/cmap-[%s]/setRemBW", data.Policy_map_name.Value, data.Class_map_name.Value)
+	return fmt.Sprintf("sys/ipqos/queuing/p/name-[%s]/cmap-[%s]/setRemBW", data.Policy_map_name.ValueString(), data.Class_map_name.ValueString())
 }
 
 func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) getClassName() string {
@@ -30,17 +30,17 @@ func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) getClassName() st
 
 func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("val", strconv.FormatInt(data.Val.Value, 10))
+		Set("val", strconv.FormatInt(data.Val.ValueInt64(), 10))
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) fromBody(res gjson.Result) {
-	data.Val.Value = res.Get("*.attributes.val").Int()
+	data.Val = types.Int64Value(res.Get("*.attributes.val").Int())
 }
 
 func (data *QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) fromPlan(plan QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Policy_map_name.Value = plan.Policy_map_name.Value
-	data.Class_map_name.Value = plan.Class_map_name.Value
+	data.Dn = plan.Dn
+	data.Policy_map_name = plan.Policy_map_name
+	data.Class_map_name = plan.Class_map_name
 }

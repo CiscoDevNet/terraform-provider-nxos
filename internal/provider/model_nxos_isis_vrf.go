@@ -35,7 +35,7 @@ type ISISVRF struct {
 }
 
 func (data ISISVRF) getDn() string {
-	return fmt.Sprintf("sys/isis/inst-[%s]/dom-[%s]", data.Inst.Value, data.Name.Value)
+	return fmt.Sprintf("sys/isis/inst-[%s]/dom-[%s]", data.Inst.ValueString(), data.Name.ValueString())
 }
 
 func (data ISISVRF) getClassName() string {
@@ -44,44 +44,44 @@ func (data ISISVRF) getClassName() string {
 
 func (data ISISVRF) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("name", data.Name.Value).
-		Set("adminSt", data.AdminSt.Value).
-		Set("authCheckLvl1", strconv.FormatBool(data.AuthCheckLvl1.Value)).
-		Set("authCheckLvl2", strconv.FormatBool(data.AuthCheckLvl2.Value)).
-		Set("authKeyLvl1", data.AuthKeyLvl1.Value).
-		Set("authKeyLvl2", data.AuthKeyLvl2.Value).
-		Set("authTypeLvl1", data.AuthTypeLvl1.Value).
-		Set("authTypeLvl2", data.AuthTypeLvl2.Value).
-		Set("bwRef", strconv.FormatInt(data.BwRef.Value, 10)).
-		Set("bwRefUnit", data.BwRefUnit.Value).
-		Set("isType", data.IsType.Value).
-		Set("metricStyle", data.MetricStyle.Value).
-		Set("mtu", strconv.FormatInt(data.Mtu.Value, 10)).
-		Set("net", data.Net.Value).
-		Set("passiveDflt", data.PassiveDflt.Value)
+		Set("name", data.Name.ValueString()).
+		Set("adminSt", data.AdminSt.ValueString()).
+		Set("authCheckLvl1", strconv.FormatBool(data.AuthCheckLvl1.ValueBool())).
+		Set("authCheckLvl2", strconv.FormatBool(data.AuthCheckLvl2.ValueBool())).
+		Set("authKeyLvl1", data.AuthKeyLvl1.ValueString()).
+		Set("authKeyLvl2", data.AuthKeyLvl2.ValueString()).
+		Set("authTypeLvl1", data.AuthTypeLvl1.ValueString()).
+		Set("authTypeLvl2", data.AuthTypeLvl2.ValueString()).
+		Set("bwRef", strconv.FormatInt(data.BwRef.ValueInt64(), 10)).
+		Set("bwRefUnit", data.BwRefUnit.ValueString()).
+		Set("isType", data.IsType.ValueString()).
+		Set("metricStyle", data.MetricStyle.ValueString()).
+		Set("mtu", strconv.FormatInt(data.Mtu.ValueInt64(), 10)).
+		Set("net", data.Net.ValueString()).
+		Set("passiveDflt", data.PassiveDflt.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *ISISVRF) fromBody(res gjson.Result) {
-	data.Name.Value = res.Get("*.attributes.name").String()
-	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
-	data.AuthCheckLvl1.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.authCheckLvl1").String())
-	data.AuthCheckLvl2.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.authCheckLvl2").String())
-	data.AuthTypeLvl1.Value = res.Get("*.attributes.authTypeLvl1").String()
-	data.AuthTypeLvl2.Value = res.Get("*.attributes.authTypeLvl2").String()
-	data.BwRef.Value = res.Get("*.attributes.bwRef").Int()
-	data.BwRefUnit.Value = res.Get("*.attributes.bwRefUnit").String()
-	data.IsType.Value = res.Get("*.attributes.isType").String()
-	data.MetricStyle.Value = res.Get("*.attributes.metricStyle").String()
-	data.Mtu.Value = res.Get("*.attributes.mtu").Int()
-	data.Net.Value = res.Get("*.attributes.net").String()
-	data.PassiveDflt.Value = res.Get("*.attributes.passiveDflt").String()
+	data.Name = types.StringValue(res.Get("*.attributes.name").String())
+	data.AdminSt = types.StringValue(res.Get("*.attributes.adminSt").String())
+	data.AuthCheckLvl1 = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.authCheckLvl1").String()))
+	data.AuthCheckLvl2 = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.authCheckLvl2").String()))
+	data.AuthTypeLvl1 = types.StringValue(res.Get("*.attributes.authTypeLvl1").String())
+	data.AuthTypeLvl2 = types.StringValue(res.Get("*.attributes.authTypeLvl2").String())
+	data.BwRef = types.Int64Value(res.Get("*.attributes.bwRef").Int())
+	data.BwRefUnit = types.StringValue(res.Get("*.attributes.bwRefUnit").String())
+	data.IsType = types.StringValue(res.Get("*.attributes.isType").String())
+	data.MetricStyle = types.StringValue(res.Get("*.attributes.metricStyle").String())
+	data.Mtu = types.Int64Value(res.Get("*.attributes.mtu").Int())
+	data.Net = types.StringValue(res.Get("*.attributes.net").String())
+	data.PassiveDflt = types.StringValue(res.Get("*.attributes.passiveDflt").String())
 }
 
 func (data *ISISVRF) fromPlan(plan ISISVRF) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Inst.Value = plan.Inst.Value
-	data.AuthKeyLvl1.Value = plan.AuthKeyLvl1.Value
-	data.AuthKeyLvl2.Value = plan.AuthKeyLvl2.Value
+	data.Dn = plan.Dn
+	data.Inst = plan.Inst
+	data.AuthKeyLvl1 = plan.AuthKeyLvl1
+	data.AuthKeyLvl2 = plan.AuthKeyLvl2
 }

@@ -22,7 +22,7 @@ type BGPGracefulRestart struct {
 }
 
 func (data BGPGracefulRestart) getDn() string {
-	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/gr", data.Name.Value)
+	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/gr", data.Name.ValueString())
 }
 
 func (data BGPGracefulRestart) getClassName() string {
@@ -31,19 +31,19 @@ func (data BGPGracefulRestart) getClassName() string {
 
 func (data BGPGracefulRestart) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("restartIntvl", strconv.FormatInt(data.RestartIntvl.Value, 10)).
-		Set("staleIntvl", strconv.FormatInt(data.StaleIntvl.Value, 10))
+		Set("restartIntvl", strconv.FormatInt(data.RestartIntvl.ValueInt64(), 10)).
+		Set("staleIntvl", strconv.FormatInt(data.StaleIntvl.ValueInt64(), 10))
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *BGPGracefulRestart) fromBody(res gjson.Result) {
-	data.RestartIntvl.Value = res.Get("*.attributes.restartIntvl").Int()
-	data.StaleIntvl.Value = res.Get("*.attributes.staleIntvl").Int()
+	data.RestartIntvl = types.Int64Value(res.Get("*.attributes.restartIntvl").Int())
+	data.StaleIntvl = types.Int64Value(res.Get("*.attributes.staleIntvl").Int())
 }
 
 func (data *BGPGracefulRestart) fromPlan(plan BGPGracefulRestart) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Asn.Value = plan.Asn.Value
-	data.Name.Value = plan.Name.Value
+	data.Dn = plan.Dn
+	data.Asn = plan.Asn
+	data.Name = plan.Name
 }

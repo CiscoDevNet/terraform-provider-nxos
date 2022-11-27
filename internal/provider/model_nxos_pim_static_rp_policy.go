@@ -18,7 +18,7 @@ type PIMStaticRPPolicy struct {
 }
 
 func (data PIMStaticRPPolicy) getDn() string {
-	return fmt.Sprintf("sys/pim/inst/dom-[%s]/staticrp", data.Vrf_name.Value)
+	return fmt.Sprintf("sys/pim/inst/dom-[%s]/staticrp", data.Vrf_name.ValueString())
 }
 
 func (data PIMStaticRPPolicy) getClassName() string {
@@ -27,16 +27,16 @@ func (data PIMStaticRPPolicy) getClassName() string {
 
 func (data PIMStaticRPPolicy) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("name", data.Name.Value)
+		Set("name", data.Name.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *PIMStaticRPPolicy) fromBody(res gjson.Result) {
-	data.Name.Value = res.Get("*.attributes.name").String()
+	data.Name = types.StringValue(res.Get("*.attributes.name").String())
 }
 
 func (data *PIMStaticRPPolicy) fromPlan(plan PIMStaticRPPolicy) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Vrf_name.Value = plan.Vrf_name.Value
+	data.Dn = plan.Dn
+	data.Vrf_name = plan.Vrf_name
 }

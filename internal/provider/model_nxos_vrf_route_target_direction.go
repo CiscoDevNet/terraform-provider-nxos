@@ -20,7 +20,7 @@ type VRFRouteTargetDirection struct {
 }
 
 func (data VRFRouteTargetDirection) getDn() string {
-	return fmt.Sprintf("sys/inst-[%s]/dom-[%[1]s]/af-[%s]/ctrl-[%s]/rttp-[%s]", data.Vrf.Value, data.Af_type.Value, data.Rt_type.Value, data.Type.Value)
+	return fmt.Sprintf("sys/inst-[%s]/dom-[%[1]s]/af-[%s]/ctrl-[%s]/rttp-[%s]", data.Vrf.ValueString(), data.Af_type.ValueString(), data.Rt_type.ValueString(), data.Type.ValueString())
 }
 
 func (data VRFRouteTargetDirection) getClassName() string {
@@ -29,18 +29,18 @@ func (data VRFRouteTargetDirection) getClassName() string {
 
 func (data VRFRouteTargetDirection) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("type", data.Type.Value)
+		Set("type", data.Type.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *VRFRouteTargetDirection) fromBody(res gjson.Result) {
-	data.Type.Value = res.Get("*.attributes.type").String()
+	data.Type = types.StringValue(res.Get("*.attributes.type").String())
 }
 
 func (data *VRFRouteTargetDirection) fromPlan(plan VRFRouteTargetDirection) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Vrf.Value = plan.Vrf.Value
-	data.Af_type.Value = plan.Af_type.Value
-	data.Rt_type.Value = plan.Rt_type.Value
+	data.Dn = plan.Dn
+	data.Vrf = plan.Vrf
+	data.Af_type = plan.Af_type
+	data.Rt_type = plan.Rt_type
 }

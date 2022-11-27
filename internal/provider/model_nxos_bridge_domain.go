@@ -19,7 +19,7 @@ type BridgeDomain struct {
 }
 
 func (data BridgeDomain) getDn() string {
-	return fmt.Sprintf("sys/bd/bd-[%s]", data.FabEncap.Value)
+	return fmt.Sprintf("sys/bd/bd-[%s]", data.FabEncap.ValueString())
 }
 
 func (data BridgeDomain) getClassName() string {
@@ -28,19 +28,19 @@ func (data BridgeDomain) getClassName() string {
 
 func (data BridgeDomain) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("fabEncap", data.FabEncap.Value).
-		Set("accEncap", data.AccEncap.Value).
-		Set("name", data.Name.Value)
+		Set("fabEncap", data.FabEncap.ValueString()).
+		Set("accEncap", data.AccEncap.ValueString()).
+		Set("name", data.Name.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *BridgeDomain) fromBody(res gjson.Result) {
-	data.FabEncap.Value = res.Get("*.attributes.fabEncap").String()
-	data.AccEncap.Value = res.Get("*.attributes.accEncap").String()
-	data.Name.Value = res.Get("*.attributes.name").String()
+	data.FabEncap = types.StringValue(res.Get("*.attributes.fabEncap").String())
+	data.AccEncap = types.StringValue(res.Get("*.attributes.accEncap").String())
+	data.Name = types.StringValue(res.Get("*.attributes.name").String())
 }
 
 func (data *BridgeDomain) fromPlan(plan BridgeDomain) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
+	data.Dn = plan.Dn
 }

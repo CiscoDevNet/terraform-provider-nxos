@@ -19,7 +19,7 @@ type DHCPRelayAddress struct {
 }
 
 func (data DHCPRelayAddress) getDn() string {
-	return fmt.Sprintf("sys/dhcp/inst/relayif-[%s]/addr-[%s]-[%s]", data.Id.Value, data.Vrf.Value, data.Address.Value)
+	return fmt.Sprintf("sys/dhcp/inst/relayif-[%s]/addr-[%s]-[%s]", data.Id.ValueString(), data.Vrf.ValueString(), data.Address.ValueString())
 }
 
 func (data DHCPRelayAddress) getClassName() string {
@@ -28,18 +28,18 @@ func (data DHCPRelayAddress) getClassName() string {
 
 func (data DHCPRelayAddress) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("vrf", data.Vrf.Value).
-		Set("address", data.Address.Value)
+		Set("vrf", data.Vrf.ValueString()).
+		Set("address", data.Address.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *DHCPRelayAddress) fromBody(res gjson.Result) {
-	data.Vrf.Value = res.Get("*.attributes.vrf").String()
-	data.Address.Value = res.Get("*.attributes.address").String()
+	data.Vrf = types.StringValue(res.Get("*.attributes.vrf").String())
+	data.Address = types.StringValue(res.Get("*.attributes.address").String())
 }
 
 func (data *DHCPRelayAddress) fromPlan(plan DHCPRelayAddress) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Id.Value = plan.Id.Value
+	data.Dn = plan.Dn
+	data.Id = plan.Id
 }

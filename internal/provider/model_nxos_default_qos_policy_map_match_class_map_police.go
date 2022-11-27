@@ -43,7 +43,7 @@ type DefaultQOSPolicyMapMatchClassMapPolice struct {
 }
 
 func (data DefaultQOSPolicyMapMatchClassMapPolice) getDn() string {
-	return fmt.Sprintf("sys/ipqos/dflt/p/name-[%s]/cmap-[%s]/police", data.Policy_map_name.Value, data.Class_map_name.Value)
+	return fmt.Sprintf("sys/ipqos/dflt/p/name-[%s]/cmap-[%s]/police", data.Policy_map_name.ValueString(), data.Class_map_name.ValueString())
 }
 
 func (data DefaultQOSPolicyMapMatchClassMapPolice) getClassName() string {
@@ -52,61 +52,61 @@ func (data DefaultQOSPolicyMapMatchClassMapPolice) getClassName() string {
 
 func (data DefaultQOSPolicyMapMatchClassMapPolice) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("bcRate", strconv.FormatInt(data.BcRate.Value, 10)).
-		Set("bcUnit", data.BcUnit.Value).
-		Set("beRate", strconv.FormatInt(data.BeRate.Value, 10)).
-		Set("beUnit", data.BeUnit.Value).
-		Set("cirRate", strconv.FormatInt(data.CirRate.Value, 10)).
-		Set("cirUnit", data.CirUnit.Value).
-		Set("conformAction", data.ConformAction.Value).
-		Set("conformSetCosTransmit", strconv.FormatInt(data.ConformSetCosTransmit.Value, 10)).
-		Set("conformSetDscpTransmit", strconv.FormatInt(data.ConformSetDscpTransmit.Value, 10)).
-		Set("conformSetPrecTransmit", data.ConformSetPrecTransmit.Value).
-		Set("conformSetQosGrpTransmit", strconv.FormatInt(data.ConformSetQosGrpTransmit.Value, 10)).
-		Set("exceedAction", data.ExceedAction.Value).
-		Set("exceedSetCosTransmit", strconv.FormatInt(data.ExceedSetCosTransmit.Value, 10)).
-		Set("exceedSetDscpTransmit", strconv.FormatInt(data.ExceedSetDscpTransmit.Value, 10)).
-		Set("exceedSetPrecTransmit", data.ExceedSetPrecTransmit.Value).
-		Set("exceedSetQosGrpTransmit", strconv.FormatInt(data.ExceedSetQosGrpTransmit.Value, 10)).
-		Set("pirRate", strconv.FormatInt(data.PirRate.Value, 10)).
-		Set("pirUnit", data.PirUnit.Value).
-		Set("violateAction", data.ViolateAction.Value).
-		Set("violateSetCosTransmit", strconv.FormatInt(data.ViolateSetCosTransmit.Value, 10)).
-		Set("violateSetDscpTransmit", strconv.FormatInt(data.ViolateSetDscpTransmit.Value, 10)).
-		Set("violateSetPrecTransmit", data.ViolateSetPrecTransmit.Value).
-		Set("violateSetQosGrpTransmit", strconv.FormatInt(data.ViolateSetQosGrpTransmit.Value, 10))
+		Set("bcRate", strconv.FormatInt(data.BcRate.ValueInt64(), 10)).
+		Set("bcUnit", data.BcUnit.ValueString()).
+		Set("beRate", strconv.FormatInt(data.BeRate.ValueInt64(), 10)).
+		Set("beUnit", data.BeUnit.ValueString()).
+		Set("cirRate", strconv.FormatInt(data.CirRate.ValueInt64(), 10)).
+		Set("cirUnit", data.CirUnit.ValueString()).
+		Set("conformAction", data.ConformAction.ValueString()).
+		Set("conformSetCosTransmit", strconv.FormatInt(data.ConformSetCosTransmit.ValueInt64(), 10)).
+		Set("conformSetDscpTransmit", strconv.FormatInt(data.ConformSetDscpTransmit.ValueInt64(), 10)).
+		Set("conformSetPrecTransmit", data.ConformSetPrecTransmit.ValueString()).
+		Set("conformSetQosGrpTransmit", strconv.FormatInt(data.ConformSetQosGrpTransmit.ValueInt64(), 10)).
+		Set("exceedAction", data.ExceedAction.ValueString()).
+		Set("exceedSetCosTransmit", strconv.FormatInt(data.ExceedSetCosTransmit.ValueInt64(), 10)).
+		Set("exceedSetDscpTransmit", strconv.FormatInt(data.ExceedSetDscpTransmit.ValueInt64(), 10)).
+		Set("exceedSetPrecTransmit", data.ExceedSetPrecTransmit.ValueString()).
+		Set("exceedSetQosGrpTransmit", strconv.FormatInt(data.ExceedSetQosGrpTransmit.ValueInt64(), 10)).
+		Set("pirRate", strconv.FormatInt(data.PirRate.ValueInt64(), 10)).
+		Set("pirUnit", data.PirUnit.ValueString()).
+		Set("violateAction", data.ViolateAction.ValueString()).
+		Set("violateSetCosTransmit", strconv.FormatInt(data.ViolateSetCosTransmit.ValueInt64(), 10)).
+		Set("violateSetDscpTransmit", strconv.FormatInt(data.ViolateSetDscpTransmit.ValueInt64(), 10)).
+		Set("violateSetPrecTransmit", data.ViolateSetPrecTransmit.ValueString()).
+		Set("violateSetQosGrpTransmit", strconv.FormatInt(data.ViolateSetQosGrpTransmit.ValueInt64(), 10))
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *DefaultQOSPolicyMapMatchClassMapPolice) fromBody(res gjson.Result) {
-	data.BcRate.Value = res.Get("*.attributes.bcRate").Int()
-	data.BcUnit.Value = res.Get("*.attributes.bcUnit").String()
-	data.BeRate.Value = res.Get("*.attributes.beRate").Int()
-	data.BeUnit.Value = res.Get("*.attributes.beUnit").String()
-	data.CirRate.Value = res.Get("*.attributes.cirRate").Int()
-	data.CirUnit.Value = res.Get("*.attributes.cirUnit").String()
-	data.ConformAction.Value = res.Get("*.attributes.conformAction").String()
-	data.ConformSetCosTransmit.Value = res.Get("*.attributes.conformSetCosTransmit").Int()
-	data.ConformSetDscpTransmit.Value = res.Get("*.attributes.conformSetDscpTransmit").Int()
-	data.ConformSetPrecTransmit.Value = res.Get("*.attributes.conformSetPrecTransmit").String()
-	data.ConformSetQosGrpTransmit.Value = res.Get("*.attributes.conformSetQosGrpTransmit").Int()
-	data.ExceedAction.Value = res.Get("*.attributes.exceedAction").String()
-	data.ExceedSetCosTransmit.Value = res.Get("*.attributes.exceedSetCosTransmit").Int()
-	data.ExceedSetDscpTransmit.Value = res.Get("*.attributes.exceedSetDscpTransmit").Int()
-	data.ExceedSetPrecTransmit.Value = res.Get("*.attributes.exceedSetPrecTransmit").String()
-	data.ExceedSetQosGrpTransmit.Value = res.Get("*.attributes.exceedSetQosGrpTransmit").Int()
-	data.PirRate.Value = res.Get("*.attributes.pirRate").Int()
-	data.PirUnit.Value = res.Get("*.attributes.pirUnit").String()
-	data.ViolateAction.Value = res.Get("*.attributes.violateAction").String()
-	data.ViolateSetCosTransmit.Value = res.Get("*.attributes.violateSetCosTransmit").Int()
-	data.ViolateSetDscpTransmit.Value = res.Get("*.attributes.violateSetDscpTransmit").Int()
-	data.ViolateSetPrecTransmit.Value = res.Get("*.attributes.violateSetPrecTransmit").String()
-	data.ViolateSetQosGrpTransmit.Value = res.Get("*.attributes.violateSetQosGrpTransmit").Int()
+	data.BcRate = types.Int64Value(res.Get("*.attributes.bcRate").Int())
+	data.BcUnit = types.StringValue(res.Get("*.attributes.bcUnit").String())
+	data.BeRate = types.Int64Value(res.Get("*.attributes.beRate").Int())
+	data.BeUnit = types.StringValue(res.Get("*.attributes.beUnit").String())
+	data.CirRate = types.Int64Value(res.Get("*.attributes.cirRate").Int())
+	data.CirUnit = types.StringValue(res.Get("*.attributes.cirUnit").String())
+	data.ConformAction = types.StringValue(res.Get("*.attributes.conformAction").String())
+	data.ConformSetCosTransmit = types.Int64Value(res.Get("*.attributes.conformSetCosTransmit").Int())
+	data.ConformSetDscpTransmit = types.Int64Value(res.Get("*.attributes.conformSetDscpTransmit").Int())
+	data.ConformSetPrecTransmit = types.StringValue(res.Get("*.attributes.conformSetPrecTransmit").String())
+	data.ConformSetQosGrpTransmit = types.Int64Value(res.Get("*.attributes.conformSetQosGrpTransmit").Int())
+	data.ExceedAction = types.StringValue(res.Get("*.attributes.exceedAction").String())
+	data.ExceedSetCosTransmit = types.Int64Value(res.Get("*.attributes.exceedSetCosTransmit").Int())
+	data.ExceedSetDscpTransmit = types.Int64Value(res.Get("*.attributes.exceedSetDscpTransmit").Int())
+	data.ExceedSetPrecTransmit = types.StringValue(res.Get("*.attributes.exceedSetPrecTransmit").String())
+	data.ExceedSetQosGrpTransmit = types.Int64Value(res.Get("*.attributes.exceedSetQosGrpTransmit").Int())
+	data.PirRate = types.Int64Value(res.Get("*.attributes.pirRate").Int())
+	data.PirUnit = types.StringValue(res.Get("*.attributes.pirUnit").String())
+	data.ViolateAction = types.StringValue(res.Get("*.attributes.violateAction").String())
+	data.ViolateSetCosTransmit = types.Int64Value(res.Get("*.attributes.violateSetCosTransmit").Int())
+	data.ViolateSetDscpTransmit = types.Int64Value(res.Get("*.attributes.violateSetDscpTransmit").Int())
+	data.ViolateSetPrecTransmit = types.StringValue(res.Get("*.attributes.violateSetPrecTransmit").String())
+	data.ViolateSetQosGrpTransmit = types.Int64Value(res.Get("*.attributes.violateSetQosGrpTransmit").Int())
 }
 
 func (data *DefaultQOSPolicyMapMatchClassMapPolice) fromPlan(plan DefaultQOSPolicyMapMatchClassMapPolice) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Policy_map_name.Value = plan.Policy_map_name.Value
-	data.Class_map_name.Value = plan.Class_map_name.Value
+	data.Dn = plan.Dn
+	data.Policy_map_name = plan.Policy_map_name
+	data.Class_map_name = plan.Class_map_name
 }

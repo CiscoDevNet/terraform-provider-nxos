@@ -18,7 +18,7 @@ type DefaultQOSPolicyInterfaceInPolicyMap struct {
 }
 
 func (data DefaultQOSPolicyInterfaceInPolicyMap) getDn() string {
-	return fmt.Sprintf("sys/ipqos/dflt/policy/in/intf-[%s]/pmap", data.Interface_id.Value)
+	return fmt.Sprintf("sys/ipqos/dflt/policy/in/intf-[%s]/pmap", data.Interface_id.ValueString())
 }
 
 func (data DefaultQOSPolicyInterfaceInPolicyMap) getClassName() string {
@@ -27,16 +27,16 @@ func (data DefaultQOSPolicyInterfaceInPolicyMap) getClassName() string {
 
 func (data DefaultQOSPolicyInterfaceInPolicyMap) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("name", data.Name.Value)
+		Set("name", data.Name.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *DefaultQOSPolicyInterfaceInPolicyMap) fromBody(res gjson.Result) {
-	data.Name.Value = res.Get("*.attributes.name").String()
+	data.Name = types.StringValue(res.Get("*.attributes.name").String())
 }
 
 func (data *DefaultQOSPolicyInterfaceInPolicyMap) fromPlan(plan DefaultQOSPolicyInterfaceInPolicyMap) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Interface_id.Value = plan.Interface_id.Value
+	data.Dn = plan.Dn
+	data.Interface_id = plan.Interface_id
 }

@@ -15,8 +15,11 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-// Ensure provider defined types fully satisfy framework interfaces
-var _ datasource.DataSource = &QueuingQOSPolicySystemOutDataSource{}
+// Ensure the implementation satisfies the expected interfaces.
+var (
+	_ datasource.DataSource              = &QueuingQOSPolicySystemOutDataSource{}
+	_ datasource.DataSourceWithConfigure = &QueuingQOSPolicySystemOutDataSource{}
+)
 
 func NewQueuingQOSPolicySystemOutDataSource() datasource.DataSource {
 	return &QueuingQOSPolicySystemOutDataSource{}
@@ -26,7 +29,7 @@ type QueuingQOSPolicySystemOutDataSource struct {
 	data *NxosProviderData
 }
 
-func (d *QueuingQOSPolicySystemOutDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+func (d *QueuingQOSPolicySystemOutDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_queuing_qos_policy_system_out"
 }
 
@@ -50,24 +53,12 @@ func (d *QueuingQOSPolicySystemOutDataSource) GetSchema(ctx context.Context) (tf
 	}, nil
 }
 
-func (d *QueuingQOSPolicySystemOutDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
-	// Prevent panic if the provider has not been configured.
+func (d *QueuingQOSPolicySystemOutDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
 
-	data, ok := req.ProviderData.(*NxosProviderData)
-
-	if !ok {
-		resp.Diagnostics.AddError(
-			"Unexpected Data Source Configure Type",
-			fmt.Sprintf("Expected data, got: %T. Please report this issue to the provider developers.", req.ProviderData),
-		)
-
-		return
-	}
-
-	d.data = data
+	d.data = req.ProviderData.(*NxosProviderData)
 }
 
 func (d *QueuingQOSPolicySystemOutDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
@@ -82,7 +73,7 @@ func (d *QueuingQOSPolicySystemOutDataSource) Read(ctx context.Context, req data
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getDn()))
 
-	res, err := d.data.client.GetDn(config.getDn(), nxos.OverrideUrl(d.data.devices[config.Device.Value]))
+	res, err := d.data.client.GetDn(config.getDn(), nxos.OverrideUrl(d.data.devices[config.Device.ValueString()]))
 
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

@@ -18,7 +18,7 @@ type NVEVNIIngressReplication struct {
 }
 
 func (data NVEVNIIngressReplication) getDn() string {
-	return fmt.Sprintf("sys/eps/epId-[1]/nws/vni-[%v]/IngRepl", data.Vni.Value)
+	return fmt.Sprintf("sys/eps/epId-[1]/nws/vni-[%v]/IngRepl", data.Vni.ValueInt64())
 }
 
 func (data NVEVNIIngressReplication) getClassName() string {
@@ -27,16 +27,16 @@ func (data NVEVNIIngressReplication) getClassName() string {
 
 func (data NVEVNIIngressReplication) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("proto", data.Proto.Value)
+		Set("proto", data.Proto.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *NVEVNIIngressReplication) fromBody(res gjson.Result) {
-	data.Proto.Value = res.Get("*.attributes.proto").String()
+	data.Proto = types.StringValue(res.Get("*.attributes.proto").String())
 }
 
 func (data *NVEVNIIngressReplication) fromPlan(plan NVEVNIIngressReplication) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Vni.Value = plan.Vni.Value
+	data.Dn = plan.Dn
+	data.Vni = plan.Vni
 }

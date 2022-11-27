@@ -47,7 +47,7 @@ type ISISInterface struct {
 }
 
 func (data ISISInterface) getDn() string {
-	return fmt.Sprintf("sys/isis/if-[%s]", data.Id.Value)
+	return fmt.Sprintf("sys/isis/if-[%s]", data.Id.ValueString())
 }
 
 func (data ISISInterface) getClassName() string {
@@ -56,69 +56,69 @@ func (data ISISInterface) getClassName() string {
 
 func (data ISISInterface) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("id", data.Id.Value).
-		Set("authCheck", strconv.FormatBool(data.AuthCheck.Value)).
-		Set("authCheckLvl1", strconv.FormatBool(data.AuthCheckLvl1.Value)).
-		Set("authCheckLvl2", strconv.FormatBool(data.AuthCheckLvl2.Value)).
-		Set("authKey", data.AuthKey.Value).
-		Set("authKeyLvl1", data.AuthKeyLvl1.Value).
-		Set("authKeyLvl2", data.AuthKeyLvl2.Value).
-		Set("authType", data.AuthType.Value).
-		Set("authTypeLvl1", data.AuthTypeLvl1.Value).
-		Set("authTypeLvl2", data.AuthTypeLvl2.Value).
-		Set("cktT", data.CktT.Value).
-		Set("dom", data.Dom.Value).
-		Set("helloIntvl", strconv.FormatInt(data.HelloIntvl.Value, 10)).
-		Set("helloIntvlLvl1", strconv.FormatInt(data.HelloIntvlLvl1.Value, 10)).
-		Set("helloIntvlLvl2", strconv.FormatInt(data.HelloIntvlLvl2.Value, 10)).
-		Set("helloMult", strconv.FormatInt(data.HelloMult.Value, 10)).
-		Set("helloMultLvl1", strconv.FormatInt(data.HelloMultLvl1.Value, 10)).
-		Set("helloMultLvl2", strconv.FormatInt(data.HelloMultLvl2.Value, 10)).
-		Set("helloPad", data.HelloPad.Value).
-		Set("metricLvl1", strconv.FormatInt(data.MetricLvl1.Value, 10)).
-		Set("metricLvl2", strconv.FormatInt(data.MetricLvl2.Value, 10)).
-		Set("mtuCheck", strconv.FormatBool(data.MtuCheck.Value)).
-		Set("mtuCheckLvl1", strconv.FormatBool(data.MtuCheckLvl1.Value)).
-		Set("mtuCheckLvl2", strconv.FormatBool(data.MtuCheckLvl2.Value)).
-		Set("networkTypeP2P", data.NetworkTypeP2P.Value).
-		Set("passive", data.Passive.Value).
-		Set("priorityLvl1", strconv.FormatInt(data.PriorityLvl1.Value, 10)).
-		Set("priorityLvl2", strconv.FormatInt(data.PriorityLvl2.Value, 10))
+		Set("id", data.Id.ValueString()).
+		Set("authCheck", strconv.FormatBool(data.AuthCheck.ValueBool())).
+		Set("authCheckLvl1", strconv.FormatBool(data.AuthCheckLvl1.ValueBool())).
+		Set("authCheckLvl2", strconv.FormatBool(data.AuthCheckLvl2.ValueBool())).
+		Set("authKey", data.AuthKey.ValueString()).
+		Set("authKeyLvl1", data.AuthKeyLvl1.ValueString()).
+		Set("authKeyLvl2", data.AuthKeyLvl2.ValueString()).
+		Set("authType", data.AuthType.ValueString()).
+		Set("authTypeLvl1", data.AuthTypeLvl1.ValueString()).
+		Set("authTypeLvl2", data.AuthTypeLvl2.ValueString()).
+		Set("cktT", data.CktT.ValueString()).
+		Set("dom", data.Dom.ValueString()).
+		Set("helloIntvl", strconv.FormatInt(data.HelloIntvl.ValueInt64(), 10)).
+		Set("helloIntvlLvl1", strconv.FormatInt(data.HelloIntvlLvl1.ValueInt64(), 10)).
+		Set("helloIntvlLvl2", strconv.FormatInt(data.HelloIntvlLvl2.ValueInt64(), 10)).
+		Set("helloMult", strconv.FormatInt(data.HelloMult.ValueInt64(), 10)).
+		Set("helloMultLvl1", strconv.FormatInt(data.HelloMultLvl1.ValueInt64(), 10)).
+		Set("helloMultLvl2", strconv.FormatInt(data.HelloMultLvl2.ValueInt64(), 10)).
+		Set("helloPad", data.HelloPad.ValueString()).
+		Set("metricLvl1", strconv.FormatInt(data.MetricLvl1.ValueInt64(), 10)).
+		Set("metricLvl2", strconv.FormatInt(data.MetricLvl2.ValueInt64(), 10)).
+		Set("mtuCheck", strconv.FormatBool(data.MtuCheck.ValueBool())).
+		Set("mtuCheckLvl1", strconv.FormatBool(data.MtuCheckLvl1.ValueBool())).
+		Set("mtuCheckLvl2", strconv.FormatBool(data.MtuCheckLvl2.ValueBool())).
+		Set("networkTypeP2P", data.NetworkTypeP2P.ValueString()).
+		Set("passive", data.Passive.ValueString()).
+		Set("priorityLvl1", strconv.FormatInt(data.PriorityLvl1.ValueInt64(), 10)).
+		Set("priorityLvl2", strconv.FormatInt(data.PriorityLvl2.ValueInt64(), 10))
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *ISISInterface) fromBody(res gjson.Result) {
-	data.Id.Value = res.Get("*.attributes.id").String()
-	data.AuthCheck.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.authCheck").String())
-	data.AuthCheckLvl1.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.authCheckLvl1").String())
-	data.AuthCheckLvl2.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.authCheckLvl2").String())
-	data.AuthType.Value = res.Get("*.attributes.authType").String()
-	data.AuthTypeLvl1.Value = res.Get("*.attributes.authTypeLvl1").String()
-	data.AuthTypeLvl2.Value = res.Get("*.attributes.authTypeLvl2").String()
-	data.CktT.Value = res.Get("*.attributes.cktT").String()
-	data.Dom.Value = res.Get("*.attributes.dom").String()
-	data.HelloIntvl.Value = res.Get("*.attributes.helloIntvl").Int()
-	data.HelloIntvlLvl1.Value = res.Get("*.attributes.helloIntvlLvl1").Int()
-	data.HelloIntvlLvl2.Value = res.Get("*.attributes.helloIntvlLvl2").Int()
-	data.HelloMult.Value = res.Get("*.attributes.helloMult").Int()
-	data.HelloMultLvl1.Value = res.Get("*.attributes.helloMultLvl1").Int()
-	data.HelloMultLvl2.Value = res.Get("*.attributes.helloMultLvl2").Int()
-	data.HelloPad.Value = res.Get("*.attributes.helloPad").String()
-	data.MetricLvl1.Value = res.Get("*.attributes.metricLvl1").Int()
-	data.MetricLvl2.Value = res.Get("*.attributes.metricLvl2").Int()
-	data.MtuCheck.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.mtuCheck").String())
-	data.MtuCheckLvl1.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.mtuCheckLvl1").String())
-	data.MtuCheckLvl2.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.mtuCheckLvl2").String())
-	data.NetworkTypeP2P.Value = res.Get("*.attributes.networkTypeP2P").String()
-	data.Passive.Value = res.Get("*.attributes.passive").String()
-	data.PriorityLvl1.Value = res.Get("*.attributes.priorityLvl1").Int()
-	data.PriorityLvl2.Value = res.Get("*.attributes.priorityLvl2").Int()
+	data.Id = types.StringValue(res.Get("*.attributes.id").String())
+	data.AuthCheck = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.authCheck").String()))
+	data.AuthCheckLvl1 = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.authCheckLvl1").String()))
+	data.AuthCheckLvl2 = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.authCheckLvl2").String()))
+	data.AuthType = types.StringValue(res.Get("*.attributes.authType").String())
+	data.AuthTypeLvl1 = types.StringValue(res.Get("*.attributes.authTypeLvl1").String())
+	data.AuthTypeLvl2 = types.StringValue(res.Get("*.attributes.authTypeLvl2").String())
+	data.CktT = types.StringValue(res.Get("*.attributes.cktT").String())
+	data.Dom = types.StringValue(res.Get("*.attributes.dom").String())
+	data.HelloIntvl = types.Int64Value(res.Get("*.attributes.helloIntvl").Int())
+	data.HelloIntvlLvl1 = types.Int64Value(res.Get("*.attributes.helloIntvlLvl1").Int())
+	data.HelloIntvlLvl2 = types.Int64Value(res.Get("*.attributes.helloIntvlLvl2").Int())
+	data.HelloMult = types.Int64Value(res.Get("*.attributes.helloMult").Int())
+	data.HelloMultLvl1 = types.Int64Value(res.Get("*.attributes.helloMultLvl1").Int())
+	data.HelloMultLvl2 = types.Int64Value(res.Get("*.attributes.helloMultLvl2").Int())
+	data.HelloPad = types.StringValue(res.Get("*.attributes.helloPad").String())
+	data.MetricLvl1 = types.Int64Value(res.Get("*.attributes.metricLvl1").Int())
+	data.MetricLvl2 = types.Int64Value(res.Get("*.attributes.metricLvl2").Int())
+	data.MtuCheck = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.mtuCheck").String()))
+	data.MtuCheckLvl1 = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.mtuCheckLvl1").String()))
+	data.MtuCheckLvl2 = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.mtuCheckLvl2").String()))
+	data.NetworkTypeP2P = types.StringValue(res.Get("*.attributes.networkTypeP2P").String())
+	data.Passive = types.StringValue(res.Get("*.attributes.passive").String())
+	data.PriorityLvl1 = types.Int64Value(res.Get("*.attributes.priorityLvl1").Int())
+	data.PriorityLvl2 = types.Int64Value(res.Get("*.attributes.priorityLvl2").Int())
 }
 
 func (data *ISISInterface) fromPlan(plan ISISInterface) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.AuthKey.Value = plan.AuthKey.Value
-	data.AuthKeyLvl1.Value = plan.AuthKeyLvl1.Value
-	data.AuthKeyLvl2.Value = plan.AuthKeyLvl2.Value
+	data.Dn = plan.Dn
+	data.AuthKey = plan.AuthKey
+	data.AuthKeyLvl1 = plan.AuthKeyLvl1
+	data.AuthKeyLvl2 = plan.AuthKeyLvl2
 }

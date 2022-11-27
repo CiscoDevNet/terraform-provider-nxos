@@ -22,7 +22,7 @@ type PIMVRF struct {
 }
 
 func (data PIMVRF) getDn() string {
-	return fmt.Sprintf("sys/pim/inst/dom-[%s]", data.Name.Value)
+	return fmt.Sprintf("sys/pim/inst/dom-[%s]", data.Name.ValueString())
 }
 
 func (data PIMVRF) getClassName() string {
@@ -31,19 +31,19 @@ func (data PIMVRF) getClassName() string {
 
 func (data PIMVRF) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("name", data.Name.Value).
-		Set("adminSt", data.AdminSt.Value).
-		Set("bfd", strconv.FormatBool(data.Bfd.Value))
+		Set("name", data.Name.ValueString()).
+		Set("adminSt", data.AdminSt.ValueString()).
+		Set("bfd", strconv.FormatBool(data.Bfd.ValueBool()))
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *PIMVRF) fromBody(res gjson.Result) {
-	data.Name.Value = res.Get("*.attributes.name").String()
-	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
-	data.Bfd.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.bfd").String())
+	data.Name = types.StringValue(res.Get("*.attributes.name").String())
+	data.AdminSt = types.StringValue(res.Get("*.attributes.adminSt").String())
+	data.Bfd = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.bfd").String()))
 }
 
 func (data *PIMVRF) fromPlan(plan PIMVRF) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
+	data.Dn = plan.Dn
 }

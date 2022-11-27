@@ -24,7 +24,7 @@ type OSPFArea struct {
 }
 
 func (data OSPFArea) getDn() string {
-	return fmt.Sprintf("sys/ospf/inst-[%s]/dom-[%s]/area-[%s]", data.Inst.Value, data.Name.Value, data.Id.Value)
+	return fmt.Sprintf("sys/ospf/inst-[%s]/dom-[%s]/area-[%s]", data.Inst.ValueString(), data.Name.ValueString(), data.Id.ValueString())
 }
 
 func (data OSPFArea) getClassName() string {
@@ -33,23 +33,23 @@ func (data OSPFArea) getClassName() string {
 
 func (data OSPFArea) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("id", data.Id.Value).
-		Set("authType", data.AuthType.Value).
-		Set("cost", strconv.FormatInt(data.Cost.Value, 10)).
-		Set("type", data.Type.Value)
+		Set("id", data.Id.ValueString()).
+		Set("authType", data.AuthType.ValueString()).
+		Set("cost", strconv.FormatInt(data.Cost.ValueInt64(), 10)).
+		Set("type", data.Type.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *OSPFArea) fromBody(res gjson.Result) {
-	data.Id.Value = res.Get("*.attributes.id").String()
-	data.AuthType.Value = res.Get("*.attributes.authType").String()
-	data.Cost.Value = res.Get("*.attributes.cost").Int()
-	data.Type.Value = res.Get("*.attributes.type").String()
+	data.Id = types.StringValue(res.Get("*.attributes.id").String())
+	data.AuthType = types.StringValue(res.Get("*.attributes.authType").String())
+	data.Cost = types.Int64Value(res.Get("*.attributes.cost").Int())
+	data.Type = types.StringValue(res.Get("*.attributes.type").String())
 }
 
 func (data *OSPFArea) fromPlan(plan OSPFArea) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Inst.Value = plan.Inst.Value
-	data.Name.Value = plan.Name.Value
+	data.Dn = plan.Dn
+	data.Inst = plan.Inst
+	data.Name = plan.Name
 }

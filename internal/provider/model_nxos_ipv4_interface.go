@@ -22,7 +22,7 @@ type IPv4Interface struct {
 }
 
 func (data IPv4Interface) getDn() string {
-	return fmt.Sprintf("sys/ipv4/inst/dom-[%s]/if-[%s]", data.Dom.Value, data.Id.Value)
+	return fmt.Sprintf("sys/ipv4/inst/dom-[%s]/if-[%s]", data.Dom.ValueString(), data.Id.ValueString())
 }
 
 func (data IPv4Interface) getClassName() string {
@@ -31,24 +31,24 @@ func (data IPv4Interface) getClassName() string {
 
 func (data IPv4Interface) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("id", data.Id.Value).
-		Set("dropGlean", data.DropGlean.Value).
-		Set("forward", data.Forward.Value).
-		Set("unnumbered", data.Unnumbered.Value).
-		Set("urpf", data.Urpf.Value)
+		Set("id", data.Id.ValueString()).
+		Set("dropGlean", data.DropGlean.ValueString()).
+		Set("forward", data.Forward.ValueString()).
+		Set("unnumbered", data.Unnumbered.ValueString()).
+		Set("urpf", data.Urpf.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *IPv4Interface) fromBody(res gjson.Result) {
-	data.Id.Value = res.Get("*.attributes.id").String()
-	data.DropGlean.Value = res.Get("*.attributes.dropGlean").String()
-	data.Forward.Value = res.Get("*.attributes.forward").String()
-	data.Unnumbered.Value = res.Get("*.attributes.unnumbered").String()
-	data.Urpf.Value = res.Get("*.attributes.urpf").String()
+	data.Id = types.StringValue(res.Get("*.attributes.id").String())
+	data.DropGlean = types.StringValue(res.Get("*.attributes.dropGlean").String())
+	data.Forward = types.StringValue(res.Get("*.attributes.forward").String())
+	data.Unnumbered = types.StringValue(res.Get("*.attributes.unnumbered").String())
+	data.Urpf = types.StringValue(res.Get("*.attributes.urpf").String())
 }
 
 func (data *IPv4Interface) fromPlan(plan IPv4Interface) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Dom.Value = plan.Dom.Value
+	data.Dn = plan.Dn
+	data.Dom = plan.Dom
 }

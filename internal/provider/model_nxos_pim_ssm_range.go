@@ -27,7 +27,7 @@ type PIMSSMRange struct {
 }
 
 func (data PIMSSMRange) getDn() string {
-	return fmt.Sprintf("sys/pim/inst/dom-[%s]/ssm/range", data.Vrf_name.Value)
+	return fmt.Sprintf("sys/pim/inst/dom-[%s]/ssm/range", data.Vrf_name.ValueString())
 }
 
 func (data PIMSSMRange) getClassName() string {
@@ -36,28 +36,28 @@ func (data PIMSSMRange) getClassName() string {
 
 func (data PIMSSMRange) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("grpList", data.GrpList.Value).
-		Set("grpList1", data.GrpList1.Value).
-		Set("grpList2", data.GrpList2.Value).
-		Set("grpList3", data.GrpList3.Value).
-		Set("pfxList", data.PfxList.Value).
-		Set("rtMap", data.RtMap.Value).
-		Set("ssmNone", strconv.FormatBool(data.SsmNone.Value))
+		Set("grpList", data.GrpList.ValueString()).
+		Set("grpList1", data.GrpList1.ValueString()).
+		Set("grpList2", data.GrpList2.ValueString()).
+		Set("grpList3", data.GrpList3.ValueString()).
+		Set("pfxList", data.PfxList.ValueString()).
+		Set("rtMap", data.RtMap.ValueString()).
+		Set("ssmNone", strconv.FormatBool(data.SsmNone.ValueBool()))
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *PIMSSMRange) fromBody(res gjson.Result) {
-	data.GrpList.Value = res.Get("*.attributes.grpList").String()
-	data.GrpList1.Value = res.Get("*.attributes.grpList1").String()
-	data.GrpList2.Value = res.Get("*.attributes.grpList2").String()
-	data.GrpList3.Value = res.Get("*.attributes.grpList3").String()
-	data.PfxList.Value = res.Get("*.attributes.pfxList").String()
-	data.RtMap.Value = res.Get("*.attributes.rtMap").String()
-	data.SsmNone.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.ssmNone").String())
+	data.GrpList = types.StringValue(res.Get("*.attributes.grpList").String())
+	data.GrpList1 = types.StringValue(res.Get("*.attributes.grpList1").String())
+	data.GrpList2 = types.StringValue(res.Get("*.attributes.grpList2").String())
+	data.GrpList3 = types.StringValue(res.Get("*.attributes.grpList3").String())
+	data.PfxList = types.StringValue(res.Get("*.attributes.pfxList").String())
+	data.RtMap = types.StringValue(res.Get("*.attributes.rtMap").String())
+	data.SsmNone = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.ssmNone").String()))
 }
 
 func (data *PIMSSMRange) fromPlan(plan PIMSSMRange) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Vrf_name.Value = plan.Vrf_name.Value
+	data.Dn = plan.Dn
+	data.Vrf_name = plan.Vrf_name
 }

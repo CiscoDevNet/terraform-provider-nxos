@@ -17,7 +17,7 @@ type IPv4VRF struct {
 }
 
 func (data IPv4VRF) getDn() string {
-	return fmt.Sprintf("sys/ipv4/inst/dom-[%s]", data.Name.Value)
+	return fmt.Sprintf("sys/ipv4/inst/dom-[%s]", data.Name.ValueString())
 }
 
 func (data IPv4VRF) getClassName() string {
@@ -26,15 +26,15 @@ func (data IPv4VRF) getClassName() string {
 
 func (data IPv4VRF) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("name", data.Name.Value)
+		Set("name", data.Name.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *IPv4VRF) fromBody(res gjson.Result) {
-	data.Name.Value = res.Get("*.attributes.name").String()
+	data.Name = types.StringValue(res.Get("*.attributes.name").String())
 }
 
 func (data *IPv4VRF) fromPlan(plan IPv4VRF) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
+	data.Dn = plan.Dn
 }

@@ -18,7 +18,7 @@ type VRFAddressFamily struct {
 }
 
 func (data VRFAddressFamily) getDn() string {
-	return fmt.Sprintf("sys/inst-[%s]/dom-[%[1]s]/af-[%s]", data.Vrf.Value, data.Type.Value)
+	return fmt.Sprintf("sys/inst-[%s]/dom-[%[1]s]/af-[%s]", data.Vrf.ValueString(), data.Type.ValueString())
 }
 
 func (data VRFAddressFamily) getClassName() string {
@@ -27,16 +27,16 @@ func (data VRFAddressFamily) getClassName() string {
 
 func (data VRFAddressFamily) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("type", data.Type.Value)
+		Set("type", data.Type.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *VRFAddressFamily) fromBody(res gjson.Result) {
-	data.Type.Value = res.Get("*.attributes.type").String()
+	data.Type = types.StringValue(res.Get("*.attributes.type").String())
 }
 
 func (data *VRFAddressFamily) fromPlan(plan VRFAddressFamily) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Vrf.Value = plan.Vrf.Value
+	data.Dn = plan.Dn
+	data.Vrf = plan.Vrf
 }

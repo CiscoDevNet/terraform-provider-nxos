@@ -18,7 +18,7 @@ type DefaultQOSClassMapDSCP struct {
 }
 
 func (data DefaultQOSClassMapDSCP) getDn() string {
-	return fmt.Sprintf("sys/ipqos/dflt/c/name-[%s]/dscp-[%v]", data.Class_map_name.Value, data.Val.Value)
+	return fmt.Sprintf("sys/ipqos/dflt/c/name-[%s]/dscp-[%v]", data.Class_map_name.ValueString(), data.Val.ValueString())
 }
 
 func (data DefaultQOSClassMapDSCP) getClassName() string {
@@ -27,16 +27,16 @@ func (data DefaultQOSClassMapDSCP) getClassName() string {
 
 func (data DefaultQOSClassMapDSCP) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("val", data.Val.Value)
+		Set("val", data.Val.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *DefaultQOSClassMapDSCP) fromBody(res gjson.Result) {
-	data.Val.Value = res.Get("*.attributes.val").String()
+	data.Val = types.StringValue(res.Get("*.attributes.val").String())
 }
 
 func (data *DefaultQOSClassMapDSCP) fromPlan(plan DefaultQOSClassMapDSCP) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Class_map_name.Value = plan.Class_map_name.Value
+	data.Dn = plan.Dn
+	data.Class_map_name = plan.Class_map_name
 }

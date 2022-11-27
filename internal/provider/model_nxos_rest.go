@@ -28,7 +28,7 @@ type RestDataSourceModel struct {
 func (data RestModel) toBody(ctx context.Context) nxos.Body {
 	body := nxos.Body{}
 
-	className := data.ClassName.Value
+	className := data.ClassName.ValueString()
 
 	var content map[string]string
 	data.Content.ElementsAs(ctx, &content, false)

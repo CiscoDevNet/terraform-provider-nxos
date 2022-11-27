@@ -22,7 +22,7 @@ type BGPPeerTemplate struct {
 }
 
 func (data BGPPeerTemplate) getDn() string {
-	return fmt.Sprintf("sys/bgp/inst/dom-[default]/peercont-[%s]", data.Name.Value)
+	return fmt.Sprintf("sys/bgp/inst/dom-[default]/peercont-[%s]", data.Name.ValueString())
 }
 
 func (data BGPPeerTemplate) getClassName() string {
@@ -31,24 +31,24 @@ func (data BGPPeerTemplate) getClassName() string {
 
 func (data BGPPeerTemplate) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("name", data.Name.Value).
-		Set("asn", data.Asn.Value).
-		Set("desc", data.Desc.Value).
-		Set("peerType", data.PeerType.Value).
-		Set("srcIf", data.SrcIf.Value)
+		Set("name", data.Name.ValueString()).
+		Set("asn", data.Asn.ValueString()).
+		Set("desc", data.Desc.ValueString()).
+		Set("peerType", data.PeerType.ValueString()).
+		Set("srcIf", data.SrcIf.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *BGPPeerTemplate) fromBody(res gjson.Result) {
-	data.Name.Value = res.Get("*.attributes.name").String()
-	data.Asn.Value = res.Get("*.attributes.asn").String()
-	data.Desc.Value = res.Get("*.attributes.desc").String()
-	data.PeerType.Value = res.Get("*.attributes.peerType").String()
-	data.SrcIf.Value = res.Get("*.attributes.srcIf").String()
+	data.Name = types.StringValue(res.Get("*.attributes.name").String())
+	data.Asn = types.StringValue(res.Get("*.attributes.asn").String())
+	data.Desc = types.StringValue(res.Get("*.attributes.desc").String())
+	data.PeerType = types.StringValue(res.Get("*.attributes.peerType").String())
+	data.SrcIf = types.StringValue(res.Get("*.attributes.srcIf").String())
 }
 
 func (data *BGPPeerTemplate) fromPlan(plan BGPPeerTemplate) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Bgp_asn.Value = plan.Bgp_asn.Value
+	data.Dn = plan.Dn
+	data.Bgp_asn = plan.Bgp_asn
 }

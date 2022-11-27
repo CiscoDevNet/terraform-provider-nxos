@@ -20,7 +20,7 @@ type IPv4InterfaceAddress struct {
 }
 
 func (data IPv4InterfaceAddress) getDn() string {
-	return fmt.Sprintf("sys/ipv4/inst/dom-[%s]/if-[%s]/addr-[%s]", data.Dom.Value, data.Id.Value, data.Addr.Value)
+	return fmt.Sprintf("sys/ipv4/inst/dom-[%s]/if-[%s]/addr-[%s]", data.Dom.ValueString(), data.Id.ValueString(), data.Addr.ValueString())
 }
 
 func (data IPv4InterfaceAddress) getClassName() string {
@@ -29,19 +29,19 @@ func (data IPv4InterfaceAddress) getClassName() string {
 
 func (data IPv4InterfaceAddress) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("addr", data.Addr.Value).
-		Set("type", data.Type.Value)
+		Set("addr", data.Addr.ValueString()).
+		Set("type", data.Type.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *IPv4InterfaceAddress) fromBody(res gjson.Result) {
-	data.Addr.Value = res.Get("*.attributes.addr").String()
-	data.Type.Value = res.Get("*.attributes.type").String()
+	data.Addr = types.StringValue(res.Get("*.attributes.addr").String())
+	data.Type = types.StringValue(res.Get("*.attributes.type").String())
 }
 
 func (data *IPv4InterfaceAddress) fromPlan(plan IPv4InterfaceAddress) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Dom.Value = plan.Dom.Value
-	data.Id.Value = plan.Id.Value
+	data.Dn = plan.Dn
+	data.Dom = plan.Dom
+	data.Id = plan.Id
 }

@@ -23,7 +23,7 @@ type BGPAddressFamily struct {
 }
 
 func (data BGPAddressFamily) getDn() string {
-	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/af-[%s]", data.Name.Value, data.Type.Value)
+	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/af-[%s]", data.Name.ValueString(), data.Type.ValueString())
 }
 
 func (data BGPAddressFamily) getClassName() string {
@@ -32,21 +32,21 @@ func (data BGPAddressFamily) getClassName() string {
 
 func (data BGPAddressFamily) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("type", data.Type.Value).
-		Set("critNhTimeout", strconv.FormatInt(data.CritNhTimeout.Value, 10)).
-		Set("nonCritNhTimeout", strconv.FormatInt(data.NonCritNhTimeout.Value, 10))
+		Set("type", data.Type.ValueString()).
+		Set("critNhTimeout", strconv.FormatInt(data.CritNhTimeout.ValueInt64(), 10)).
+		Set("nonCritNhTimeout", strconv.FormatInt(data.NonCritNhTimeout.ValueInt64(), 10))
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *BGPAddressFamily) fromBody(res gjson.Result) {
-	data.Type.Value = res.Get("*.attributes.type").String()
-	data.CritNhTimeout.Value = res.Get("*.attributes.critNhTimeout").Int()
-	data.NonCritNhTimeout.Value = res.Get("*.attributes.nonCritNhTimeout").Int()
+	data.Type = types.StringValue(res.Get("*.attributes.type").String())
+	data.CritNhTimeout = types.Int64Value(res.Get("*.attributes.critNhTimeout").Int())
+	data.NonCritNhTimeout = types.Int64Value(res.Get("*.attributes.nonCritNhTimeout").Int())
 }
 
 func (data *BGPAddressFamily) fromPlan(plan BGPAddressFamily) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Asn.Value = plan.Asn.Value
-	data.Name.Value = plan.Name.Value
+	data.Dn = plan.Dn
+	data.Asn = plan.Asn
+	data.Name = plan.Name
 }

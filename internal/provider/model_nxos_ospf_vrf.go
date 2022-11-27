@@ -25,7 +25,7 @@ type OSPFVRF struct {
 }
 
 func (data OSPFVRF) getDn() string {
-	return fmt.Sprintf("sys/ospf/inst-[%s]/dom-[%s]", data.Inst.Value, data.Name.Value)
+	return fmt.Sprintf("sys/ospf/inst-[%s]/dom-[%s]", data.Inst.ValueString(), data.Name.ValueString())
 }
 
 func (data OSPFVRF) getClassName() string {
@@ -34,26 +34,26 @@ func (data OSPFVRF) getClassName() string {
 
 func (data OSPFVRF) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("name", data.Name.Value).
-		Set("adminSt", data.AdminSt.Value).
-		Set("bwRef", strconv.FormatInt(data.BwRef.Value, 10)).
-		Set("bwRefUnit", data.BwRefUnit.Value).
-		Set("dist", strconv.FormatInt(data.Dist.Value, 10)).
-		Set("rtrId", data.RtrId.Value)
+		Set("name", data.Name.ValueString()).
+		Set("adminSt", data.AdminSt.ValueString()).
+		Set("bwRef", strconv.FormatInt(data.BwRef.ValueInt64(), 10)).
+		Set("bwRefUnit", data.BwRefUnit.ValueString()).
+		Set("dist", strconv.FormatInt(data.Dist.ValueInt64(), 10)).
+		Set("rtrId", data.RtrId.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *OSPFVRF) fromBody(res gjson.Result) {
-	data.Name.Value = res.Get("*.attributes.name").String()
-	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
-	data.BwRef.Value = res.Get("*.attributes.bwRef").Int()
-	data.BwRefUnit.Value = res.Get("*.attributes.bwRefUnit").String()
-	data.Dist.Value = res.Get("*.attributes.dist").Int()
-	data.RtrId.Value = res.Get("*.attributes.rtrId").String()
+	data.Name = types.StringValue(res.Get("*.attributes.name").String())
+	data.AdminSt = types.StringValue(res.Get("*.attributes.adminSt").String())
+	data.BwRef = types.Int64Value(res.Get("*.attributes.bwRef").Int())
+	data.BwRefUnit = types.StringValue(res.Get("*.attributes.bwRefUnit").String())
+	data.Dist = types.Int64Value(res.Get("*.attributes.dist").Int())
+	data.RtrId = types.StringValue(res.Get("*.attributes.rtrId").String())
 }
 
 func (data *OSPFVRF) fromPlan(plan OSPFVRF) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Inst.Value = plan.Inst.Value
+	data.Dn = plan.Dn
+	data.Inst = plan.Inst
 }

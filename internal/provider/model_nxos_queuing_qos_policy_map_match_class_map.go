@@ -18,7 +18,7 @@ type QueuingQOSPolicyMapMatchClassMap struct {
 }
 
 func (data QueuingQOSPolicyMapMatchClassMap) getDn() string {
-	return fmt.Sprintf("sys/ipqos/queuing/p/name-[%s]/cmap-[%s]", data.Policy_map_name.Value, data.Name.Value)
+	return fmt.Sprintf("sys/ipqos/queuing/p/name-[%s]/cmap-[%s]", data.Policy_map_name.ValueString(), data.Name.ValueString())
 }
 
 func (data QueuingQOSPolicyMapMatchClassMap) getClassName() string {
@@ -27,16 +27,16 @@ func (data QueuingQOSPolicyMapMatchClassMap) getClassName() string {
 
 func (data QueuingQOSPolicyMapMatchClassMap) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("name", data.Name.Value)
+		Set("name", data.Name.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *QueuingQOSPolicyMapMatchClassMap) fromBody(res gjson.Result) {
-	data.Name.Value = res.Get("*.attributes.name").String()
+	data.Name = types.StringValue(res.Get("*.attributes.name").String())
 }
 
 func (data *QueuingQOSPolicyMapMatchClassMap) fromPlan(plan QueuingQOSPolicyMapMatchClassMap) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Policy_map_name.Value = plan.Policy_map_name.Value
+	data.Dn = plan.Dn
+	data.Policy_map_name = plan.Policy_map_name
 }

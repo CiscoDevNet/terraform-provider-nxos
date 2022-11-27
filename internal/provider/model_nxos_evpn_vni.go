@@ -18,7 +18,7 @@ type EVPNVNI struct {
 }
 
 func (data EVPNVNI) getDn() string {
-	return fmt.Sprintf("sys/evpn/bdevi-[%s]", data.Encap.Value)
+	return fmt.Sprintf("sys/evpn/bdevi-[%s]", data.Encap.ValueString())
 }
 
 func (data EVPNVNI) getClassName() string {
@@ -27,17 +27,17 @@ func (data EVPNVNI) getClassName() string {
 
 func (data EVPNVNI) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("encap", data.Encap.Value).
-		Set("rd", data.Rd.Value)
+		Set("encap", data.Encap.ValueString()).
+		Set("rd", data.Rd.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *EVPNVNI) fromBody(res gjson.Result) {
-	data.Encap.Value = res.Get("*.attributes.encap").String()
-	data.Rd.Value = res.Get("*.attributes.rd").String()
+	data.Encap = types.StringValue(res.Get("*.attributes.encap").String())
+	data.Rd = types.StringValue(res.Get("*.attributes.rd").String())
 }
 
 func (data *EVPNVNI) fromPlan(plan EVPNVNI) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
+	data.Dn = plan.Dn
 }

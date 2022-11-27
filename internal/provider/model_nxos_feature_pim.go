@@ -24,15 +24,15 @@ func (data FeaturePIM) getClassName() string {
 
 func (data FeaturePIM) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("adminSt", data.AdminSt.Value)
+		Set("adminSt", data.AdminSt.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *FeaturePIM) fromBody(res gjson.Result) {
-	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
+	data.AdminSt = types.StringValue(res.Get("*.attributes.adminSt").String())
 }
 
 func (data *FeaturePIM) fromPlan(plan FeaturePIM) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
+	data.Dn = plan.Dn
 }

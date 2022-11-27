@@ -25,7 +25,7 @@ type BGPPeerTemplateMaxPrefix struct {
 }
 
 func (data BGPPeerTemplateMaxPrefix) getDn() string {
-	return fmt.Sprintf("sys/bgp/inst/dom-[default]/peercont-[%s]/af-[%s]/maxpfxp", data.Name.Value, data.Type.Value)
+	return fmt.Sprintf("sys/bgp/inst/dom-[default]/peercont-[%s]/af-[%s]/maxpfxp", data.Name.ValueString(), data.Type.ValueString())
 }
 
 func (data BGPPeerTemplateMaxPrefix) getClassName() string {
@@ -34,24 +34,24 @@ func (data BGPPeerTemplateMaxPrefix) getClassName() string {
 
 func (data BGPPeerTemplateMaxPrefix) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("action", data.Action.Value).
-		Set("maxPfx", strconv.FormatInt(data.MaxPfx.Value, 10)).
-		Set("restartTime", strconv.FormatInt(data.RestartTime.Value, 10)).
-		Set("thresh", strconv.FormatInt(data.Thresh.Value, 10))
+		Set("action", data.Action.ValueString()).
+		Set("maxPfx", strconv.FormatInt(data.MaxPfx.ValueInt64(), 10)).
+		Set("restartTime", strconv.FormatInt(data.RestartTime.ValueInt64(), 10)).
+		Set("thresh", strconv.FormatInt(data.Thresh.ValueInt64(), 10))
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *BGPPeerTemplateMaxPrefix) fromBody(res gjson.Result) {
-	data.Action.Value = res.Get("*.attributes.action").String()
-	data.MaxPfx.Value = res.Get("*.attributes.maxPfx").Int()
-	data.RestartTime.Value = res.Get("*.attributes.restartTime").Int()
-	data.Thresh.Value = res.Get("*.attributes.thresh").Int()
+	data.Action = types.StringValue(res.Get("*.attributes.action").String())
+	data.MaxPfx = types.Int64Value(res.Get("*.attributes.maxPfx").Int())
+	data.RestartTime = types.Int64Value(res.Get("*.attributes.restartTime").Int())
+	data.Thresh = types.Int64Value(res.Get("*.attributes.thresh").Int())
 }
 
 func (data *BGPPeerTemplateMaxPrefix) fromPlan(plan BGPPeerTemplateMaxPrefix) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Asn.Value = plan.Asn.Value
-	data.Name.Value = plan.Name.Value
-	data.Type.Value = plan.Type.Value
+	data.Dn = plan.Dn
+	data.Asn = plan.Asn
+	data.Name = plan.Name
+	data.Type = plan.Type
 }

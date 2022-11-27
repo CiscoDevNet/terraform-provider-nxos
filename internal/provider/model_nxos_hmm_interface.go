@@ -19,7 +19,7 @@ type HMMInterface struct {
 }
 
 func (data HMMInterface) getDn() string {
-	return fmt.Sprintf("sys/hmm/fwdinst/if-[%s]", data.Id.Value)
+	return fmt.Sprintf("sys/hmm/fwdinst/if-[%s]", data.Id.ValueString())
 }
 
 func (data HMMInterface) getClassName() string {
@@ -28,19 +28,19 @@ func (data HMMInterface) getClassName() string {
 
 func (data HMMInterface) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("id", data.Id.Value).
-		Set("adminSt", data.AdminSt.Value).
-		Set("mode", data.Mode.Value)
+		Set("id", data.Id.ValueString()).
+		Set("adminSt", data.AdminSt.ValueString()).
+		Set("mode", data.Mode.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *HMMInterface) fromBody(res gjson.Result) {
-	data.Id.Value = res.Get("*.attributes.id").String()
-	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
-	data.Mode.Value = res.Get("*.attributes.mode").String()
+	data.Id = types.StringValue(res.Get("*.attributes.id").String())
+	data.AdminSt = types.StringValue(res.Get("*.attributes.adminSt").String())
+	data.Mode = types.StringValue(res.Get("*.attributes.mode").String())
 }
 
 func (data *HMMInterface) fromPlan(plan HMMInterface) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
+	data.Dn = plan.Dn
 }

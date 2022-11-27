@@ -37,35 +37,35 @@ func (data NVEInterface) getClassName() string {
 
 func (data NVEInterface) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("adminSt", data.AdminSt.Value).
-		Set("advertiseVmac", strconv.FormatBool(data.AdvertiseVmac.Value)).
-		Set("holdDownTime", strconv.FormatInt(data.HoldDownTime.Value, 10)).
-		Set("hostReach", data.HostReach.Value).
-		Set("ingressReplProtoBGP", strconv.FormatBool(data.IngressReplProtoBGP.Value)).
-		Set("mcastGroupL2", data.McastGroupL2.Value).
-		Set("mcastGroupL3", data.McastGroupL3.Value).
-		Set("multisiteBordergwInterface", data.MultisiteBordergwInterface.Value).
-		Set("sourceInterface", data.SourceInterface.Value).
-		Set("suppressARP", strconv.FormatBool(data.SuppressARP.Value)).
-		Set("suppressMacRoute", strconv.FormatBool(data.SuppressMacRoute.Value))
+		Set("adminSt", data.AdminSt.ValueString()).
+		Set("advertiseVmac", strconv.FormatBool(data.AdvertiseVmac.ValueBool())).
+		Set("holdDownTime", strconv.FormatInt(data.HoldDownTime.ValueInt64(), 10)).
+		Set("hostReach", data.HostReach.ValueString()).
+		Set("ingressReplProtoBGP", strconv.FormatBool(data.IngressReplProtoBGP.ValueBool())).
+		Set("mcastGroupL2", data.McastGroupL2.ValueString()).
+		Set("mcastGroupL3", data.McastGroupL3.ValueString()).
+		Set("multisiteBordergwInterface", data.MultisiteBordergwInterface.ValueString()).
+		Set("sourceInterface", data.SourceInterface.ValueString()).
+		Set("suppressARP", strconv.FormatBool(data.SuppressARP.ValueBool())).
+		Set("suppressMacRoute", strconv.FormatBool(data.SuppressMacRoute.ValueBool()))
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *NVEInterface) fromBody(res gjson.Result) {
-	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
-	data.AdvertiseVmac.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.advertiseVmac").String())
-	data.HoldDownTime.Value = res.Get("*.attributes.holdDownTime").Int()
-	data.HostReach.Value = res.Get("*.attributes.hostReach").String()
-	data.IngressReplProtoBGP.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.ingressReplProtoBGP").String())
-	data.McastGroupL2.Value = res.Get("*.attributes.mcastGroupL2").String()
-	data.McastGroupL3.Value = res.Get("*.attributes.mcastGroupL3").String()
-	data.MultisiteBordergwInterface.Value = res.Get("*.attributes.multisiteBordergwInterface").String()
-	data.SourceInterface.Value = res.Get("*.attributes.sourceInterface").String()
-	data.SuppressARP.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.suppressARP").String())
-	data.SuppressMacRoute.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.suppressMacRoute").String())
+	data.AdminSt = types.StringValue(res.Get("*.attributes.adminSt").String())
+	data.AdvertiseVmac = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.advertiseVmac").String()))
+	data.HoldDownTime = types.Int64Value(res.Get("*.attributes.holdDownTime").Int())
+	data.HostReach = types.StringValue(res.Get("*.attributes.hostReach").String())
+	data.IngressReplProtoBGP = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.ingressReplProtoBGP").String()))
+	data.McastGroupL2 = types.StringValue(res.Get("*.attributes.mcastGroupL2").String())
+	data.McastGroupL3 = types.StringValue(res.Get("*.attributes.mcastGroupL3").String())
+	data.MultisiteBordergwInterface = types.StringValue(res.Get("*.attributes.multisiteBordergwInterface").String())
+	data.SourceInterface = types.StringValue(res.Get("*.attributes.sourceInterface").String())
+	data.SuppressARP = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.suppressARP").String()))
+	data.SuppressMacRoute = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.suppressMacRoute").String()))
 }
 
 func (data *NVEInterface) fromPlan(plan NVEInterface) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
+	data.Dn = plan.Dn
 }

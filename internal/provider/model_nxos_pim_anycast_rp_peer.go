@@ -19,7 +19,7 @@ type PIMAnycastRPPeer struct {
 }
 
 func (data PIMAnycastRPPeer) getDn() string {
-	return fmt.Sprintf("sys/pim/inst/dom-[%s]/acastrpfunc/peer-[%s]-peer-[%s]", data.Name.Value, data.Addr.Value, data.RpSetAddr.Value)
+	return fmt.Sprintf("sys/pim/inst/dom-[%s]/acastrpfunc/peer-[%s]-peer-[%s]", data.Name.ValueString(), data.Addr.ValueString(), data.RpSetAddr.ValueString())
 }
 
 func (data PIMAnycastRPPeer) getClassName() string {
@@ -28,18 +28,18 @@ func (data PIMAnycastRPPeer) getClassName() string {
 
 func (data PIMAnycastRPPeer) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("addr", data.Addr.Value).
-		Set("rpSetAddr", data.RpSetAddr.Value)
+		Set("addr", data.Addr.ValueString()).
+		Set("rpSetAddr", data.RpSetAddr.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *PIMAnycastRPPeer) fromBody(res gjson.Result) {
-	data.Addr.Value = res.Get("*.attributes.addr").String()
-	data.RpSetAddr.Value = res.Get("*.attributes.rpSetAddr").String()
+	data.Addr = types.StringValue(res.Get("*.attributes.addr").String())
+	data.RpSetAddr = types.StringValue(res.Get("*.attributes.rpSetAddr").String())
 }
 
 func (data *PIMAnycastRPPeer) fromPlan(plan PIMAnycastRPPeer) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Name.Value = plan.Name.Value
+	data.Dn = plan.Dn
+	data.Name = plan.Name
 }

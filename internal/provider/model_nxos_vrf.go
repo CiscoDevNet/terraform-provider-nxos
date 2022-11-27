@@ -19,7 +19,7 @@ type VRF struct {
 }
 
 func (data VRF) getDn() string {
-	return fmt.Sprintf("sys/inst-[%s]", data.Name.Value)
+	return fmt.Sprintf("sys/inst-[%s]", data.Name.ValueString())
 }
 
 func (data VRF) getClassName() string {
@@ -28,19 +28,19 @@ func (data VRF) getClassName() string {
 
 func (data VRF) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("name", data.Name.Value).
-		Set("descr", data.Descr.Value).
-		Set("encap", data.Encap.Value)
+		Set("name", data.Name.ValueString()).
+		Set("descr", data.Descr.ValueString()).
+		Set("encap", data.Encap.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *VRF) fromBody(res gjson.Result) {
-	data.Name.Value = res.Get("*.attributes.name").String()
-	data.Descr.Value = res.Get("*.attributes.descr").String()
-	data.Encap.Value = res.Get("*.attributes.encap").String()
+	data.Name = types.StringValue(res.Get("*.attributes.name").String())
+	data.Descr = types.StringValue(res.Get("*.attributes.descr").String())
+	data.Encap = types.StringValue(res.Get("*.attributes.encap").String())
 }
 
 func (data *VRF) fromPlan(plan VRF) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
+	data.Dn = plan.Dn
 }

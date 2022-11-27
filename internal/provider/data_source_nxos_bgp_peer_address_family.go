@@ -15,8 +15,11 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-// Ensure provider defined types fully satisfy framework interfaces
-var _ datasource.DataSource = &BGPPeerAddressFamilyDataSource{}
+// Ensure the implementation satisfies the expected interfaces.
+var (
+	_ datasource.DataSource              = &BGPPeerAddressFamilyDataSource{}
+	_ datasource.DataSourceWithConfigure = &BGPPeerAddressFamilyDataSource{}
+)
 
 func NewBGPPeerAddressFamilyDataSource() datasource.DataSource {
 	return &BGPPeerAddressFamilyDataSource{}
@@ -26,7 +29,7 @@ type BGPPeerAddressFamilyDataSource struct {
 	data *NxosProviderData
 }
 
-func (d *BGPPeerAddressFamilyDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+func (d *BGPPeerAddressFamilyDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_bgp_peer_address_family"
 }
 
@@ -85,24 +88,12 @@ func (d *BGPPeerAddressFamilyDataSource) GetSchema(ctx context.Context) (tfsdk.S
 	}, nil
 }
 
-func (d *BGPPeerAddressFamilyDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
-	// Prevent panic if the provider has not been configured.
+func (d *BGPPeerAddressFamilyDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
 
-	data, ok := req.ProviderData.(*NxosProviderData)
-
-	if !ok {
-		resp.Diagnostics.AddError(
-			"Unexpected Data Source Configure Type",
-			fmt.Sprintf("Expected data, got: %T. Please report this issue to the provider developers.", req.ProviderData),
-		)
-
-		return
-	}
-
-	d.data = data
+	d.data = req.ProviderData.(*NxosProviderData)
 }
 
 func (d *BGPPeerAddressFamilyDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
@@ -117,7 +108,7 @@ func (d *BGPPeerAddressFamilyDataSource) Read(ctx context.Context, req datasourc
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getDn()))
 
-	res, err := d.data.client.GetDn(config.getDn(), nxos.OverrideUrl(d.data.devices[config.Device.Value]))
+	res, err := d.data.client.GetDn(config.getDn(), nxos.OverrideUrl(d.data.devices[config.Device.ValueString()]))
 
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

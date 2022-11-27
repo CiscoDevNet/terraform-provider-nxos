@@ -15,8 +15,11 @@ import (
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
-// Ensure provider defined types fully satisfy framework interfaces
-var _ datasource.DataSource = &FeaturePTPDataSource{}
+// Ensure the implementation satisfies the expected interfaces.
+var (
+	_ datasource.DataSource              = &FeaturePTPDataSource{}
+	_ datasource.DataSourceWithConfigure = &FeaturePTPDataSource{}
+)
 
 func NewFeaturePTPDataSource() datasource.DataSource {
 	return &FeaturePTPDataSource{}
@@ -26,7 +29,7 @@ type FeaturePTPDataSource struct {
 	data *NxosProviderData
 }
 
-func (d *FeaturePTPDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+func (d *FeaturePTPDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_feature_ptp"
 }
 
@@ -55,24 +58,12 @@ func (d *FeaturePTPDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, dia
 	}, nil
 }
 
-func (d *FeaturePTPDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
-	// Prevent panic if the provider has not been configured.
+func (d *FeaturePTPDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
 
-	data, ok := req.ProviderData.(*NxosProviderData)
-
-	if !ok {
-		resp.Diagnostics.AddError(
-			"Unexpected Data Source Configure Type",
-			fmt.Sprintf("Expected data, got: %T. Please report this issue to the provider developers.", req.ProviderData),
-		)
-
-		return
-	}
-
-	d.data = data
+	d.data = req.ProviderData.(*NxosProviderData)
 }
 
 func (d *FeaturePTPDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
@@ -87,7 +78,7 @@ func (d *FeaturePTPDataSource) Read(ctx context.Context, req datasource.ReadRequ
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getDn()))
 
-	res, err := d.data.client.GetDn(config.getDn(), nxos.OverrideUrl(d.data.devices[config.Device.Value]))
+	res, err := d.data.client.GetDn(config.getDn(), nxos.OverrideUrl(d.data.devices[config.Device.ValueString()]))
 
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

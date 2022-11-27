@@ -18,7 +18,7 @@ type DefaultQOSPolicyMap struct {
 }
 
 func (data DefaultQOSPolicyMap) getDn() string {
-	return fmt.Sprintf("sys/ipqos/dflt/p/name-[%s]", data.Name.Value)
+	return fmt.Sprintf("sys/ipqos/dflt/p/name-[%s]", data.Name.ValueString())
 }
 
 func (data DefaultQOSPolicyMap) getClassName() string {
@@ -27,17 +27,17 @@ func (data DefaultQOSPolicyMap) getClassName() string {
 
 func (data DefaultQOSPolicyMap) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("name", data.Name.Value).
-		Set("matchType", data.MatchType.Value)
+		Set("name", data.Name.ValueString()).
+		Set("matchType", data.MatchType.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *DefaultQOSPolicyMap) fromBody(res gjson.Result) {
-	data.Name.Value = res.Get("*.attributes.name").String()
-	data.MatchType.Value = res.Get("*.attributes.matchType").String()
+	data.Name = types.StringValue(res.Get("*.attributes.name").String())
+	data.MatchType = types.StringValue(res.Get("*.attributes.matchType").String())
 }
 
 func (data *DefaultQOSPolicyMap) fromPlan(plan DefaultQOSPolicyMap) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
+	data.Dn = plan.Dn
 }

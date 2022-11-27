@@ -17,7 +17,7 @@ type DHCPRelayInterface struct {
 }
 
 func (data DHCPRelayInterface) getDn() string {
-	return fmt.Sprintf("sys/dhcp/inst/relayif-[%s]", data.Id.Value)
+	return fmt.Sprintf("sys/dhcp/inst/relayif-[%s]", data.Id.ValueString())
 }
 
 func (data DHCPRelayInterface) getClassName() string {
@@ -26,15 +26,15 @@ func (data DHCPRelayInterface) getClassName() string {
 
 func (data DHCPRelayInterface) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("id", data.Id.Value)
+		Set("id", data.Id.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *DHCPRelayInterface) fromBody(res gjson.Result) {
-	data.Id.Value = res.Get("*.attributes.id").String()
+	data.Id = types.StringValue(res.Get("*.attributes.id").String())
 }
 
 func (data *DHCPRelayInterface) fromPlan(plan DHCPRelayInterface) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
+	data.Dn = plan.Dn
 }

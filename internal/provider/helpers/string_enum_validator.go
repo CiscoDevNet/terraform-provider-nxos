@@ -35,12 +35,12 @@ func (v stringEnumValidator) Validate(ctx context.Context, req tfsdk.ValidateAtt
 		}
 	}
 
-	if str.Unknown || str.Null {
+	if str.IsUnknown() || str.IsNull() {
 		return
 	}
 
 	for _, val := range v.values {
-		if val == str.Value {
+		if val == str.ValueString() {
 			return
 		}
 	}

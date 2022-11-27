@@ -31,7 +31,7 @@ type {{camelCase .Name}} struct {
 
 func (data {{camelCase .Name}}) getDn() string {
 {{- if hasId .Attributes}}
-	return fmt.Sprintf("{{.Dn}}"{{range .Attributes}}{{if eq .Id true}}, data.{{toTitle .NxosName}}.Value{{end}}{{end}})
+	return fmt.Sprintf("{{.Dn}}"{{range .Attributes}}{{if eq .Id true}}, data.{{toTitle .NxosName}}.Value{{.Type}}(){{end}}{{end}})
 {{- else}}
 	return "{{.Dn}}"
 {{- end}}
@@ -50,11 +50,11 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 	{{- range $index, $item := .Attributes}}
 	{{- if ne .ReferenceOnly true}}
 		{{- if eq .Type "Int64"}}
-		Set("{{.NxosName}}", strconv.FormatInt(data.{{toTitle .NxosName}}.Value, 10))
+		Set("{{.NxosName}}", strconv.FormatInt(data.{{toTitle .NxosName}}.ValueInt64(), 10))
 		{{- else if eq .Type "Bool"}}
-		Set("{{.NxosName}}", strconv.FormatBool(data.{{toTitle .NxosName}}.Value))
+		Set("{{.NxosName}}", strconv.FormatBool(data.{{toTitle .NxosName}}.ValueBool()))
 		{{- else if eq .Type "String"}}
-		Set("{{.NxosName}}", data.{{toTitle .NxosName}}.Value)
+		Set("{{.NxosName}}", data.{{toTitle .NxosName}}.ValueString())
 		{{- end}}
 		{{- if not (isLast $index $lenAttr)}}.{{- end}}
 	{{- end}}
@@ -77,11 +77,11 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 	{{- range .Attributes}}
 	{{- if and (ne .ReferenceOnly true) (ne .WriteOnly true)}}
 	{{- if eq .Type "Int64"}}
-	data.{{toTitle .NxosName}}.Value = res.Get("*.attributes.{{.NxosName}}").Int()
+	data.{{toTitle .NxosName}} = types.Int64Value(res.Get("*.attributes.{{.NxosName}}").Int())
 	{{- else if eq .Type "Bool"}}
-	data.{{toTitle .NxosName}}.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.{{.NxosName}}").String())
+	data.{{toTitle .NxosName}} = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.{{.NxosName}}").String()))
 	{{- else if eq .Type "String"}}
-	data.{{toTitle .NxosName}}.Value = res.Get("*.attributes.{{.NxosName}}").String()
+	data.{{toTitle .NxosName}} = types.StringValue(res.Get("*.attributes.{{.NxosName}}").String())
 	{{- end}}
 	{{- end}}
 	{{- end}}
@@ -89,10 +89,10 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 
 func (data *{{camelCase .Name}}) fromPlan(plan {{camelCase .Name}}) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
+	data.Dn = plan.Dn
 	{{- range .Attributes}}
 	{{- if or (eq .ReferenceOnly true) (eq .WriteOnly true)}}
-	data.{{toTitle .NxosName}}.Value = plan.{{toTitle .NxosName}}.Value
+	data.{{toTitle .NxosName}} = plan.{{toTitle .NxosName}}
 	{{- end}}
 	{{- end}}
 }

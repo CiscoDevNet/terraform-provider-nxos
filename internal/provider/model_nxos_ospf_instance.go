@@ -18,7 +18,7 @@ type OSPFInstance struct {
 }
 
 func (data OSPFInstance) getDn() string {
-	return fmt.Sprintf("sys/ospf/inst-[%s]", data.Name.Value)
+	return fmt.Sprintf("sys/ospf/inst-[%s]", data.Name.ValueString())
 }
 
 func (data OSPFInstance) getClassName() string {
@@ -27,17 +27,17 @@ func (data OSPFInstance) getClassName() string {
 
 func (data OSPFInstance) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("adminSt", data.AdminSt.Value).
-		Set("name", data.Name.Value)
+		Set("adminSt", data.AdminSt.ValueString()).
+		Set("name", data.Name.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *OSPFInstance) fromBody(res gjson.Result) {
-	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
-	data.Name.Value = res.Get("*.attributes.name").String()
+	data.AdminSt = types.StringValue(res.Get("*.attributes.adminSt").String())
+	data.Name = types.StringValue(res.Get("*.attributes.name").String())
 }
 
 func (data *OSPFInstance) fromPlan(plan OSPFInstance) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
+	data.Dn = plan.Dn
 }

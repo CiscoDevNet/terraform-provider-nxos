@@ -19,7 +19,7 @@ type EVPNVNIRouteTarget struct {
 }
 
 func (data EVPNVNIRouteTarget) getDn() string {
-	return fmt.Sprintf("sys/evpn/bdevi-[%s]/rttp-[%s]/ent-[%s]", data.Encap.Value, data.Type.Value, data.Rtt.Value)
+	return fmt.Sprintf("sys/evpn/bdevi-[%s]/rttp-[%s]/ent-[%s]", data.Encap.ValueString(), data.Type.ValueString(), data.Rtt.ValueString())
 }
 
 func (data EVPNVNIRouteTarget) getClassName() string {
@@ -28,17 +28,17 @@ func (data EVPNVNIRouteTarget) getClassName() string {
 
 func (data EVPNVNIRouteTarget) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("rtt", data.Rtt.Value)
+		Set("rtt", data.Rtt.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *EVPNVNIRouteTarget) fromBody(res gjson.Result) {
-	data.Rtt.Value = res.Get("*.attributes.rtt").String()
+	data.Rtt = types.StringValue(res.Get("*.attributes.rtt").String())
 }
 
 func (data *EVPNVNIRouteTarget) fromPlan(plan EVPNVNIRouteTarget) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Encap.Value = plan.Encap.Value
-	data.Type.Value = plan.Type.Value
+	data.Dn = plan.Dn
+	data.Encap = plan.Encap
+	data.Type = plan.Type
 }

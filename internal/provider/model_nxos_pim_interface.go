@@ -26,7 +26,7 @@ type PIMInterface struct {
 }
 
 func (data PIMInterface) getDn() string {
-	return fmt.Sprintf("sys/pim/inst/dom-[%s]/if-[%s]", data.Name.Value, data.Id.Value)
+	return fmt.Sprintf("sys/pim/inst/dom-[%s]/if-[%s]", data.Name.ValueString(), data.Id.ValueString())
 }
 
 func (data PIMInterface) getClassName() string {
@@ -35,26 +35,26 @@ func (data PIMInterface) getClassName() string {
 
 func (data PIMInterface) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("id", data.Id.Value).
-		Set("adminSt", data.AdminSt.Value).
-		Set("bfdInst", data.BfdInst.Value).
-		Set("drPrio", strconv.FormatInt(data.DrPrio.Value, 10)).
-		Set("passive", strconv.FormatBool(data.Passive.Value)).
-		Set("pimSparseMode", strconv.FormatBool(data.PimSparseMode.Value))
+		Set("id", data.Id.ValueString()).
+		Set("adminSt", data.AdminSt.ValueString()).
+		Set("bfdInst", data.BfdInst.ValueString()).
+		Set("drPrio", strconv.FormatInt(data.DrPrio.ValueInt64(), 10)).
+		Set("passive", strconv.FormatBool(data.Passive.ValueBool())).
+		Set("pimSparseMode", strconv.FormatBool(data.PimSparseMode.ValueBool()))
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *PIMInterface) fromBody(res gjson.Result) {
-	data.Id.Value = res.Get("*.attributes.id").String()
-	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
-	data.BfdInst.Value = res.Get("*.attributes.bfdInst").String()
-	data.DrPrio.Value = res.Get("*.attributes.drPrio").Int()
-	data.Passive.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.passive").String())
-	data.PimSparseMode.Value = helpers.ParseNxosBoolean(res.Get("*.attributes.pimSparseMode").String())
+	data.Id = types.StringValue(res.Get("*.attributes.id").String())
+	data.AdminSt = types.StringValue(res.Get("*.attributes.adminSt").String())
+	data.BfdInst = types.StringValue(res.Get("*.attributes.bfdInst").String())
+	data.DrPrio = types.Int64Value(res.Get("*.attributes.drPrio").Int())
+	data.Passive = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.passive").String()))
+	data.PimSparseMode = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.pimSparseMode").String()))
 }
 
 func (data *PIMInterface) fromPlan(plan PIMInterface) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
-	data.Name.Value = plan.Name.Value
+	data.Dn = plan.Dn
+	data.Name = plan.Name
 }

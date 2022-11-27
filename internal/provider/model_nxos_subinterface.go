@@ -27,7 +27,7 @@ type Subinterface struct {
 }
 
 func (data Subinterface) getDn() string {
-	return fmt.Sprintf("sys/intf/encrtd-[%s]", data.Id.Value)
+	return fmt.Sprintf("sys/intf/encrtd-[%s]", data.Id.ValueString())
 }
 
 func (data Subinterface) getClassName() string {
@@ -36,31 +36,31 @@ func (data Subinterface) getClassName() string {
 
 func (data Subinterface) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("id", data.Id.Value).
-		Set("adminSt", data.AdminSt.Value).
-		Set("bw", strconv.FormatInt(data.Bw.Value, 10)).
-		Set("delay", strconv.FormatInt(data.Delay.Value, 10)).
-		Set("descr", data.Descr.Value).
-		Set("encap", data.Encap.Value).
-		Set("linkLog", data.LinkLog.Value).
-		Set("mediumType", data.MediumType.Value).
-		Set("mtu", strconv.FormatInt(data.Mtu.Value, 10))
+		Set("id", data.Id.ValueString()).
+		Set("adminSt", data.AdminSt.ValueString()).
+		Set("bw", strconv.FormatInt(data.Bw.ValueInt64(), 10)).
+		Set("delay", strconv.FormatInt(data.Delay.ValueInt64(), 10)).
+		Set("descr", data.Descr.ValueString()).
+		Set("encap", data.Encap.ValueString()).
+		Set("linkLog", data.LinkLog.ValueString()).
+		Set("mediumType", data.MediumType.ValueString()).
+		Set("mtu", strconv.FormatInt(data.Mtu.ValueInt64(), 10))
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *Subinterface) fromBody(res gjson.Result) {
-	data.Id.Value = res.Get("*.attributes.id").String()
-	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
-	data.Bw.Value = res.Get("*.attributes.bw").Int()
-	data.Delay.Value = res.Get("*.attributes.delay").Int()
-	data.Descr.Value = res.Get("*.attributes.descr").String()
-	data.Encap.Value = res.Get("*.attributes.encap").String()
-	data.LinkLog.Value = res.Get("*.attributes.linkLog").String()
-	data.MediumType.Value = res.Get("*.attributes.mediumType").String()
-	data.Mtu.Value = res.Get("*.attributes.mtu").Int()
+	data.Id = types.StringValue(res.Get("*.attributes.id").String())
+	data.AdminSt = types.StringValue(res.Get("*.attributes.adminSt").String())
+	data.Bw = types.Int64Value(res.Get("*.attributes.bw").Int())
+	data.Delay = types.Int64Value(res.Get("*.attributes.delay").Int())
+	data.Descr = types.StringValue(res.Get("*.attributes.descr").String())
+	data.Encap = types.StringValue(res.Get("*.attributes.encap").String())
+	data.LinkLog = types.StringValue(res.Get("*.attributes.linkLog").String())
+	data.MediumType = types.StringValue(res.Get("*.attributes.mediumType").String())
+	data.Mtu = types.Int64Value(res.Get("*.attributes.mtu").Int())
 }
 
 func (data *Subinterface) fromPlan(plan Subinterface) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
+	data.Dn = plan.Dn
 }

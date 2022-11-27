@@ -18,7 +18,7 @@ type ISISInstance struct {
 }
 
 func (data ISISInstance) getDn() string {
-	return fmt.Sprintf("sys/isis/inst-[%s]", data.Name.Value)
+	return fmt.Sprintf("sys/isis/inst-[%s]", data.Name.ValueString())
 }
 
 func (data ISISInstance) getClassName() string {
@@ -27,17 +27,17 @@ func (data ISISInstance) getClassName() string {
 
 func (data ISISInstance) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("name", data.Name.Value).
-		Set("adminSt", data.AdminSt.Value)
+		Set("name", data.Name.ValueString()).
+		Set("adminSt", data.AdminSt.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *ISISInstance) fromBody(res gjson.Result) {
-	data.Name.Value = res.Get("*.attributes.name").String()
-	data.AdminSt.Value = res.Get("*.attributes.adminSt").String()
+	data.Name = types.StringValue(res.Get("*.attributes.name").String())
+	data.AdminSt = types.StringValue(res.Get("*.attributes.adminSt").String())
 }
 
 func (data *ISISInstance) fromPlan(plan ISISInstance) {
 	data.Device = plan.Device
-	data.Dn.Value = plan.Dn.Value
+	data.Dn = plan.Dn
 }

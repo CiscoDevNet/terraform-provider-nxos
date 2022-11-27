@@ -13,8 +13,11 @@ import (
 	"github.com/netascode/go-nxos"
 )
 
-// Ensure provider defined types fully satisfy framework interfaces
-var _ datasource.DataSource = &RestDataSource{}
+// Ensure the implementation satisfies the expected interfaces.
+var (
+	_ datasource.DataSource              = &RestDataSource{}
+	_ datasource.DataSourceWithConfigure = &RestDataSource{}
+)
 
 func NewRestDataSource() datasource.DataSource {
 	return &RestDataSource{}
@@ -24,7 +27,7 @@ type RestDataSource struct {
 	data *NxosProviderData
 }
 
-func (d *RestDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+func (d *RestDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_rest"
 }
 
@@ -63,24 +66,12 @@ func (d *RestDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diag
 	}, nil
 }
 
-func (d *RestDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
-	// Prevent panic if the provider has not been configured.
+func (d *RestDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
 
-	data, ok := req.ProviderData.(*NxosProviderData)
-
-	if !ok {
-		resp.Diagnostics.AddError(
-			"Unexpected Data Source Configure Type",
-			fmt.Sprintf("Expected data, got: %T. Please report this issue to the provider developers.", req.ProviderData),
-		)
-
-		return
-	}
-
-	d.data = data
+	d.data = req.ProviderData.(*NxosProviderData)
 }
 
 func (d *RestDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
@@ -93,9 +84,9 @@ func (d *RestDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.Id.ValueString()))
 
-	res, err := d.data.client.GetDn(config.Dn.Value, nxos.OverrideUrl(d.data.devices[config.Device.Value]))
+	res, err := d.data.client.GetDn(config.Dn.ValueString(), nxos.OverrideUrl(d.data.devices[config.Device.ValueString()]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -103,7 +94,7 @@ func (d *RestDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 
 	// Check if we received an empty response without errors -> object has been deleted
 	if !res.Exists() && err == nil {
-		state.Id.Value = ""
+		state.Id = types.StringNull()
 	} else {
 		// Set class_name
 		var className string
@@ -111,24 +102,23 @@ func (d *RestDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 			className = class
 		}
 
-		state.ClassName.Value = className
-		state.Dn.Value = config.Dn.Value
+		state.ClassName = types.StringValue(className)
+		state.Dn = config.Dn
 		state.Device = config.Device
 
 		// Set content
 		content := make(map[string]attr.Value)
 
 		for attr, value := range res.Get(className + ".attributes").Map() {
-			content[attr] = types.String{Value: value.String()}
+			content[attr] = types.StringValue(value.String())
 		}
-		state.Content.Elems = content
-		state.Content.ElemType = types.StringType
+		state.Content = types.MapValueMust(types.StringType, content)
 
 		// Set id
-		state.Id.Value = state.Dn.Value
+		state.Id = state.Dn
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)

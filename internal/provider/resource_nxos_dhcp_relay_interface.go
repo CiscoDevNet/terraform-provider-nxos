@@ -69,18 +69,7 @@ func (r *DHCPRelayInterfaceResource) Configure(ctx context.Context, req resource
 		return
 	}
 
-	data, ok := req.ProviderData.(*NxosProviderData)
-
-	if !ok {
-		resp.Diagnostics.AddError(
-			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected data, got: %T. Please report this issue to the provider developers.", req.ProviderData),
-		)
-
-		return
-	}
-
-	r.data = data
+	r.data = req.ProviderData.(*NxosProviderData)
 }
 
 func (r *DHCPRelayInterfaceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

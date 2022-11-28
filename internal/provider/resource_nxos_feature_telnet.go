@@ -69,18 +69,7 @@ func (r *FeatureTelnetResource) Configure(ctx context.Context, req resource.Conf
 		return
 	}
 
-	data, ok := req.ProviderData.(*NxosProviderData)
-
-	if !ok {
-		resp.Diagnostics.AddError(
-			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected data, got: %T. Please report this issue to the provider developers.", req.ProviderData),
-		)
-
-		return
-	}
-
-	r.data = data
+	r.data = req.ProviderData.(*NxosProviderData)
 }
 
 func (r *FeatureTelnetResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

@@ -36,7 +36,7 @@ type NxosProviderData struct {
 	devices map[string]string
 }
 
-// NxosProviderModel  describes the provider data model.
+// NxosProviderModel describes the provider data model.
 type NxosProviderModel struct {
 	Username types.String `tfsdk:"username"`
 	Password types.String `tfsdk:"password"`

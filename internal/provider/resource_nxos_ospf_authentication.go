@@ -6,10 +6,14 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -32,111 +36,99 @@ func (r *OSPFAuthenticationResource) Metadata(ctx context.Context, req resource.
 	resp.TypeName = req.ProviderTypeName + "_ospf_authentication"
 }
 
-func (r *OSPFAuthenticationResource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (r *OSPFAuthenticationResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the OSPF authentication configuration.", "ospfAuthNewP", "Routing%20and%20Forwarding/ospf:AuthNewP/").AddParents("ospf_interface").String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					resource.UseStateForUnknown(),
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"instance_name": {
+			"instance_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("OSPF instance name.").String,
-				Type:                types.StringType,
 				Required:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					resource.RequiresReplace(),
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"vrf_name": {
+			"vrf_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
-				Type:                types.StringType,
 				Required:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					resource.RequiresReplace(),
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"interface_id": {
+			"interface_id": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
-				Type:                types.StringType,
 				Required:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					resource.RequiresReplace(),
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"key": {
+			"key": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Key used for authentication.").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 			},
-			"key_id": {
+			"key_id": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Key ID used for authentication.").AddIntegerRangeDescription(0, 255).AddDefaultValueDescription("0").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(0, 255),
+				Validators: []validator.Int64{
+					int64validator.Between(0, 255),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(0),
 				},
 			},
-			"key_secure_mode": {
+			"key_secure_mode": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Encrypted authentication key or plain text key.").AddDefaultValueDescription("false").String,
-				Type:                types.BoolType,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Bool{
 					helpers.BooleanDefaultModifier(false),
 				},
 			},
-			"keychain": {
+			"keychain": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Authentication keychain.").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 			},
-			"md5_key": {
+			"md5_key": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Key used for md5 authentication.").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 			},
-			"md5_key_secure_mode": {
+			"md5_key_secure_mode": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Encrypted authentication md5 key or plain text key.").AddDefaultValueDescription("false").String,
-				Type:                types.BoolType,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Bool{
 					helpers.BooleanDefaultModifier(false),
 				},
 			},
-			"type": {
+			"type": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Authentication type.").AddStringEnumDescription("none", "simple", "md5", "unspecified").AddDefaultValueDescription("unspecified").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("none", "simple", "md5", "unspecified"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("none", "simple", "md5", "unspecified"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("unspecified"),
 				},
 			},
 		},
-	}, nil
+	}
 }
 
 func (r *OSPFAuthenticationResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {

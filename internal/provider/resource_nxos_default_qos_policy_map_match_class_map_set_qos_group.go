@@ -6,10 +6,13 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -32,55 +35,50 @@ func (r *DefaultQOSPolicyMapMatchClassMapSetQOSGroupResource) Metadata(ctx conte
 	resp.TypeName = req.ProviderTypeName + "_default_qos_policy_map_match_class_map_set_qos_group"
 }
 
-func (r *DefaultQOSPolicyMapMatchClassMapSetQOSGroupResource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (r *DefaultQOSPolicyMapMatchClassMapSetQOSGroupResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the default QoS policy map match class map set QoS group configuration.", "ipqosSetQoSGrp", "Qos/ipqos:SetQoSGrp/").AddParents("default_qos_policy_map_match_class_map").String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					resource.UseStateForUnknown(),
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"policy_map_name": {
+			"policy_map_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Policy map name.").String,
-				Type:                types.StringType,
 				Required:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					resource.RequiresReplace(),
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"class_map_name": {
+			"class_map_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Class map name.").String,
-				Type:                types.StringType,
 				Required:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					resource.RequiresReplace(),
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"qos_group_id": {
+			"qos_group_id": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("QoS group ID.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(0, 7),
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(0),
 				},
 			},
 		},
-	}, nil
+	}
 }
 
 func (r *DefaultQOSPolicyMapMatchClassMapSetQOSGroupResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {

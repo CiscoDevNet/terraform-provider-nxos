@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -33,54 +32,46 @@ func (d *IPv4InterfaceDataSource) Metadata(_ context.Context, req datasource.Met
 	resp.TypeName = req.ProviderTypeName + "_ipv4_interface"
 }
 
-func (d *IPv4InterfaceDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *IPv4InterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read an IPv4 interface.", "ipv4If", "Layer%203/ipv4:If/").String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"vrf": {
+			"vrf": schema.StringAttribute{
 				MarkdownDescription: "VRF name.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"interface_id": {
+			"interface_id": schema.StringAttribute{
 				MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"drop_glean": {
+			"drop_glean": schema.StringAttribute{
 				MarkdownDescription: "ip drop-glean enabled/disabled.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"forward": {
+			"forward": schema.StringAttribute{
 				MarkdownDescription: "ip forward enabled/disabled.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"unnumbered": {
+			"unnumbered": schema.StringAttribute{
 				MarkdownDescription: "IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"urpf": {
+			"urpf": schema.StringAttribute{
 				MarkdownDescription: "URPF (unicast Reverse Path Forwarding).",
-				Type:                types.StringType,
 				Computed:            true,
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *IPv4InterfaceDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

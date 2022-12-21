@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -33,104 +32,86 @@ func (d *ISISVRFDataSource) Metadata(_ context.Context, req datasource.MetadataR
 	resp.TypeName = req.ProviderTypeName + "_isis_vrf"
 }
 
-func (d *ISISVRFDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *ISISVRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read the IS-IS VRF configuration.", "isisDom", "Routing%20and%20Forwarding/isis:Dom/").String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"instance_name": {
+			"instance_name": schema.StringAttribute{
 				MarkdownDescription: "IS-IS instance name.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"name": {
+			"name": schema.StringAttribute{
 				MarkdownDescription: "VRF name.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"admin_state": {
+			"admin_state": schema.StringAttribute{
 				MarkdownDescription: "Administrative state.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"authentication_check_l1": {
+			"authentication_check_l1": schema.BoolAttribute{
 				MarkdownDescription: "Authentication Check for ISIS on Level-1.",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"authentication_check_l2": {
+			"authentication_check_l2": schema.BoolAttribute{
 				MarkdownDescription: "Authentication Check for ISIS on Level-2.",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"authentication_key_l1": {
+			"authentication_key_l1": schema.StringAttribute{
 				MarkdownDescription: "Authentication Key for IS-IS on Level-1.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"authentication_key_l2": {
+			"authentication_key_l2": schema.StringAttribute{
 				MarkdownDescription: "Authentication Key for IS-IS on Level-2.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"authentication_type_l1": {
+			"authentication_type_l1": schema.StringAttribute{
 				MarkdownDescription: "IS-IS Authentication-Type for Level-1.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"authentication_type_l2": {
+			"authentication_type_l2": schema.StringAttribute{
 				MarkdownDescription: "IS-IS Authentication-Type for Level-2.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"bandwidth_reference": {
+			"bandwidth_reference": schema.Int64Attribute{
 				MarkdownDescription: "The IS-IS domain bandwidth reference. This sets the default reference bandwidth used for calculating the IS-IS cost metric.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"banwidth_reference_unit": {
+			"banwidth_reference_unit": schema.StringAttribute{
 				MarkdownDescription: "Bandwidth reference unit.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"is_type": {
+			"is_type": schema.StringAttribute{
 				MarkdownDescription: "IS-IS domain type.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"metric_type": {
+			"metric_type": schema.StringAttribute{
 				MarkdownDescription: "IS-IS metric type.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"mtu": {
+			"mtu": schema.Int64Attribute{
 				MarkdownDescription: "The configuration of link-state packet (LSP) maximum transmission units (MTU) is supported. You can enable up to 4352 bytes.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"net": {
+			"net": schema.StringAttribute{
 				MarkdownDescription: "Holds IS-IS domain NET (address) value.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"passive_default": {
+			"passive_default": schema.StringAttribute{
 				MarkdownDescription: "IS-IS Domain passive-interface default level.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *ISISVRFDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

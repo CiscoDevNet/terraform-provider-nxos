@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -33,49 +32,42 @@ func (d *NVEVNIDataSource) Metadata(_ context.Context, req datasource.MetadataRe
 	resp.TypeName = req.ProviderTypeName + "_nve_vni"
 }
 
-func (d *NVEVNIDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *NVEVNIDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read the configuration of Virtual Network ID (VNI).", "nvoNw", "Network%20Virtualization/nvo:Nw/").String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"vni": {
+			"vni": schema.Int64Attribute{
 				MarkdownDescription: "Virtual Network ID.",
-				Type:                types.Int64Type,
 				Required:            true,
 			},
-			"associate_vrf": {
+			"associate_vrf": schema.BoolAttribute{
 				MarkdownDescription: "Configures VNI as L3 VNI.",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"multicast_group": {
+			"multicast_group": schema.StringAttribute{
 				MarkdownDescription: "Configures multicast group address for VNI.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"multisite_ingress_replication": {
+			"multisite_ingress_replication": schema.StringAttribute{
 				MarkdownDescription: "Enable or disable Multisite Ingress Replication for VNI(s).",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"suppress_arp": {
+			"suppress_arp": schema.StringAttribute{
 				MarkdownDescription: "Enable or disable ARP suppression for VNI(s).",
-				Type:                types.StringType,
 				Computed:            true,
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *NVEVNIDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

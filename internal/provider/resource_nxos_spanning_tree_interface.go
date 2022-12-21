@@ -6,10 +6,14 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -32,143 +36,131 @@ func (r *SpanningTreeInterfaceResource) Metadata(ctx context.Context, req resour
 	resp.TypeName = req.ProviderTypeName + "_spanning_tree_interface"
 }
 
-func (r *SpanningTreeInterfaceResource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (r *SpanningTreeInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Spanning Tree interface configuration.", "stpIf", "Discovery%20Protocols/stp:If/").String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					resource.UseStateForUnknown(),
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"interface_id": {
+			"interface_id": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
-				Type:                types.StringType,
 				Required:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					resource.RequiresReplace(),
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"admin_state": {
+			"admin_state": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("enabled", "disabled"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("enabled"),
 				},
 			},
-			"bpdu_filter": {
+			"bpdu_filter": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("BPDU filter mode.").AddStringEnumDescription("default", "enable", "disable").AddDefaultValueDescription("default").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("default", "enable", "disable"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("default", "enable", "disable"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("default"),
 				},
 			},
-			"bpdu_guard": {
+			"bpdu_guard": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("BPDU guard mode.").AddStringEnumDescription("default", "enable", "disable").AddDefaultValueDescription("default").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("default", "enable", "disable"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("default", "enable", "disable"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("default"),
 				},
 			},
-			"cost": {
+			"cost": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Port path cost.").AddIntegerRangeDescription(0, 200000000).AddDefaultValueDescription("0").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(0, 200000000),
+				Validators: []validator.Int64{
+					int64validator.Between(0, 200000000),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(0),
 				},
 			},
-			"ctrl": {
+			"ctrl": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Interface controls.").AddStringEnumDescription("unspecified", "bpdu-guard", "bpdu-filter").AddDefaultValueDescription("unspecified").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("unspecified", "bpdu-guard", "bpdu-filter"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("unspecified", "bpdu-guard", "bpdu-filter"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("unspecified"),
 				},
 			},
-			"guard": {
+			"guard": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Guard mode.").AddStringEnumDescription("default", "root", "loop", "none").AddDefaultValueDescription("default").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("default", "root", "loop", "none"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("default", "root", "loop", "none"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("default"),
 				},
 			},
-			"link_type": {
+			"link_type": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Link type.").AddStringEnumDescription("auto", "p2p", "shared").AddDefaultValueDescription("auto").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("auto", "p2p", "shared"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("auto", "p2p", "shared"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("auto"),
 				},
 			},
-			"mode": {
+			"mode": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Port mode.").AddStringEnumDescription("default", "edge", "network", "normal", "trunk").AddDefaultValueDescription("default").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("default", "edge", "network", "normal", "trunk"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("default", "edge", "network", "normal", "trunk"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("default"),
 				},
 			},
-			"priority": {
+			"priority": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Port priority.").AddIntegerRangeDescription(0, 224).AddDefaultValueDescription("128").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(0, 224),
+				Validators: []validator.Int64{
+					int64validator.Between(0, 224),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(128),
 				},
 			},
 		},
-	}, nil
+	}
 }
 
 func (r *SpanningTreeInterfaceResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {

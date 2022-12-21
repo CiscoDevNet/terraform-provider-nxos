@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -33,39 +32,34 @@ func (d *QueuingQOSPolicyMapMatchClassMapRemainingBandwidthDataSource) Metadata(
 	resp.TypeName = req.ProviderTypeName + "_queuing_qos_policy_map_match_class_map_remaining_bandwidth"
 }
 
-func (d *QueuingQOSPolicyMapMatchClassMapRemainingBandwidthDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *QueuingQOSPolicyMapMatchClassMapRemainingBandwidthDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read the queuing QoS policy map match class map remaining bandwidth configuration.", "ipqosSetRemBW", "Qos/ipqos:SetRemBW/").String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"policy_map_name": {
+			"policy_map_name": schema.StringAttribute{
 				MarkdownDescription: "Policy map name.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"class_map_name": {
+			"class_map_name": schema.StringAttribute{
 				MarkdownDescription: "Class map name.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"value": {
+			"value": schema.Int64Attribute{
 				MarkdownDescription: "Remaining bandwidth percent.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *QueuingQOSPolicyMapMatchClassMapRemainingBandwidthDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

@@ -6,10 +6,14 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -32,135 +36,122 @@ func (r *NVEInterfaceResource) Metadata(ctx context.Context, req resource.Metada
 	resp.TypeName = req.ProviderTypeName + "_nve_interface"
 }
 
-func (r *NVEInterfaceResource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (r *NVEInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the NVE interface configuration.", "nvoEp", "Network%20Virtualization/nvo:Ep/").AddChildren("nve_vni_container").String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					resource.UseStateForUnknown(),
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"admin_state": {
+			"admin_state": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("enabled", "disabled"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("disabled"),
 				},
 			},
-			"advertise_virtual_mac": {
+			"advertise_virtual_mac": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable or disable Virtual MAC Advertisement in VPC mode.").AddDefaultValueDescription("false").String,
-				Type:                types.BoolType,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Bool{
 					helpers.BooleanDefaultModifier(false),
 				},
 			},
-			"hold_down_time": {
+			"hold_down_time": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Hold Down Time.").AddIntegerRangeDescription(1, 1500).AddDefaultValueDescription("180").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(1, 1500),
+				Validators: []validator.Int64{
+					int64validator.Between(1, 1500),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(180),
 				},
 			},
-			"host_reachability_protocol": {
+			"host_reachability_protocol": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Host Reachability Protocol.").AddStringEnumDescription("Flood-and-learn", "bgp", "controller", "openflow", "openflowIR").AddDefaultValueDescription("Flood-and-learn").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("Flood-and-learn", "bgp", "controller", "openflow", "openflowIR"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("Flood-and-learn", "bgp", "controller", "openflow", "openflowIR"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("Flood-and-learn"),
 				},
 			},
-			"ingress_replication_protocol_bgp": {
+			"ingress_replication_protocol_bgp": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("VxLAN Ingress Replication Protocol BGP.").AddDefaultValueDescription("false").String,
-				Type:                types.BoolType,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Bool{
 					helpers.BooleanDefaultModifier(false),
 				},
 			},
-			"multicast_group_l2": {
+			"multicast_group_l2": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Base multicast group address for L2.").AddDefaultValueDescription("0.0.0.0").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("0.0.0.0"),
 				},
 			},
-			"multicast_group_l3": {
+			"multicast_group_l3": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Base multicast group address for L3.").AddDefaultValueDescription("0.0.0.0").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("0.0.0.0"),
 				},
 			},
-			"multisite_source_interface": {
+			"multisite_source_interface": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Interface representing the Multisite Border Gateway. Must match first field in the output of `show int brief`.").AddDefaultValueDescription("unspecified").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("unspecified"),
 				},
 			},
-			"source_interface": {
+			"source_interface": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Source Interface associated with the NVE. Must match first field in the output of `show int brief`.").AddDefaultValueDescription("unspecified").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("unspecified"),
 				},
 			},
-			"suppress_arp": {
+			"suppress_arp": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Suppress ARP.").AddDefaultValueDescription("false").String,
-				Type:                types.BoolType,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Bool{
 					helpers.BooleanDefaultModifier(false),
 				},
 			},
-			"suppress_mac_route": {
+			"suppress_mac_route": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Suppress MAC Route.").AddDefaultValueDescription("false").String,
-				Type:                types.BoolType,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Bool{
 					helpers.BooleanDefaultModifier(false),
 				},
 			},
 		},
-	}, nil
+	}
 }
 
 func (r *NVEInterfaceResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {

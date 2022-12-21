@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -28,19 +28,12 @@ func (m booleanDefaultModifier) MarkdownDescription(ctx context.Context) string 
 }
 
 // Modify runs the logic of the plan modifier.
-func (m booleanDefaultModifier) Modify(ctx context.Context, req tfsdk.ModifyAttributePlanRequest, resp *tfsdk.ModifyAttributePlanResponse) {
-	var bool types.Bool
-	diags := tfsdk.ValueAs(ctx, req.AttributePlan, &bool)
-	resp.Diagnostics.Append(diags...)
-	if diags.HasError() {
+func (m booleanDefaultModifier) PlanModifyBool(ctx context.Context, req planmodifier.BoolRequest, resp *planmodifier.BoolResponse) {
+	if !req.PlanValue.IsUnknown() {
 		return
 	}
 
-	if !bool.IsUnknown() {
-		return
-	}
-
-	resp.AttributePlan = types.BoolValue(m.Default)
+	resp.PlanValue = types.BoolValue(m.Default)
 }
 
 func BooleanDefaultModifier(defaultValue bool) booleanDefaultModifier {

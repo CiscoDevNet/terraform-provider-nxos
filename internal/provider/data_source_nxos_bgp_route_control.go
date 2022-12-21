@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -33,54 +32,46 @@ func (d *BGPRouteControlDataSource) Metadata(_ context.Context, req datasource.M
 	resp.TypeName = req.ProviderTypeName + "_bgp_route_control"
 }
 
-func (d *BGPRouteControlDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *BGPRouteControlDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read the BGP Route Control configuration.", "bgpRtCtrl", "Routing%20and%20Forwarding/bgp:RtCtrl/").String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"asn": {
+			"asn": schema.StringAttribute{
 				MarkdownDescription: "Autonomous system number.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"vrf": {
+			"vrf": schema.StringAttribute{
 				MarkdownDescription: "VRF name.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"enforce_first_as": {
+			"enforce_first_as": schema.StringAttribute{
 				MarkdownDescription: "Enforce First AS For Ebgp. Can be configured only for VRF default.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"fib_accelerate": {
+			"fib_accelerate": schema.StringAttribute{
 				MarkdownDescription: "Accelerate the hardware updates for IP/IPv6 adjacencies for neighbor. Can be configured only for VRF default.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"log_neighbor_changes": {
+			"log_neighbor_changes": schema.StringAttribute{
 				MarkdownDescription: "Log Neighbor Changes.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"suppress_routes": {
+			"suppress_routes": schema.StringAttribute{
 				MarkdownDescription: "Suppress Routes: Advertise only routes that are programmed in hardware to peers. Can be configured only for VRF default.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *BGPRouteControlDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

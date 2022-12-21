@@ -4,21 +4,13 @@
 package provider
 
 import (
-	{{- if hasId .Attributes }}
 	"fmt"
-	{{- end}}
-	{{ $strconv := false }}{{ range .Attributes}}{{ if or (and (eq .Type "Int64") (ne .ReferenceOnly true)) (eq .Type "Bool")}}{{ $strconv = true }}{{ end}}{{- end}}
-	{{- if $strconv }}
 	"strconv"
-	{{- end}}
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
-	{{- $helpers := false }}{{ range .Attributes}}{{ if eq .Type "Bool"}}{{ $helpers = true }}{{ end}}{{- end}}
-	{{- if $helpers }}
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
-	{{- end}}
 )
 
 type {{camelCase .Name}} struct {

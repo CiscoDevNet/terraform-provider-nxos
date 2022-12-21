@@ -6,10 +6,14 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -32,318 +36,291 @@ func (r *DefaultQOSPolicyMapMatchClassMapPoliceResource) Metadata(ctx context.Co
 	resp.TypeName = req.ProviderTypeName + "_default_qos_policy_map_match_class_map_police"
 }
 
-func (r *DefaultQOSPolicyMapMatchClassMapPoliceResource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (r *DefaultQOSPolicyMapMatchClassMapPoliceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the default QoS policy map match class map police configuration.", "ipqosPolice", "Qos/ipqos:Police/").AddParents("default_qos_policy_map_match_class_map").String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					resource.UseStateForUnknown(),
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"policy_map_name": {
+			"policy_map_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Policy map name.").String,
-				Type:                types.StringType,
 				Required:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					resource.RequiresReplace(),
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"class_map_name": {
+			"class_map_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Class map name.").String,
-				Type:                types.StringType,
 				Required:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					resource.RequiresReplace(),
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"bc_rate": {
+			"bc_rate": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("CIR burst rate.").AddIntegerRangeDescription(0, 536870912).AddDefaultValueDescription("200").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(0, 536870912),
+				Validators: []validator.Int64{
+					int64validator.Between(0, 536870912),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(200),
 				},
 			},
-			"bc_unit": {
+			"bc_unit": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("CIR burst rate unit.").AddStringEnumDescription("unspecified", "bytes", "kbytes", "mbytes", "ms", "us", "packets").AddDefaultValueDescription("ms").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("unspecified", "bytes", "kbytes", "mbytes", "ms", "us", "packets"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("unspecified", "bytes", "kbytes", "mbytes", "ms", "us", "packets"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("ms"),
 				},
 			},
-			"be_rate": {
+			"be_rate": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("PIR burst rate.").AddIntegerRangeDescription(0, 536870912).AddDefaultValueDescription("0").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(0, 536870912),
+				Validators: []validator.Int64{
+					int64validator.Between(0, 536870912),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(0),
 				},
 			},
-			"be_unit": {
+			"be_unit": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("PIR burst rate unit.").AddStringEnumDescription("unspecified", "bytes", "kbytes", "mbytes", "ms", "us", "packets").AddDefaultValueDescription("unspecified").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("unspecified", "bytes", "kbytes", "mbytes", "ms", "us", "packets"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("unspecified", "bytes", "kbytes", "mbytes", "ms", "us", "packets"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("unspecified"),
 				},
 			},
-			"cir_rate": {
+			"cir_rate": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("CIR rate.").AddIntegerRangeDescription(0, 100000000000).AddDefaultValueDescription("0").String,
-				Type:                types.Int64Type,
 				Required:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(0, 100000000000),
+				Validators: []validator.Int64{
+					int64validator.Between(0, 100000000000),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(0),
 				},
 			},
-			"cir_unit": {
+			"cir_unit": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("CIR rate unit.").AddStringEnumDescription("unspecified", "bps", "kbps", "mbps", "gbps", "pps", "pct").AddDefaultValueDescription("bps").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("unspecified", "bps", "kbps", "mbps", "gbps", "pps", "pct"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("unspecified", "bps", "kbps", "mbps", "gbps", "pps", "pct"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("bps"),
 				},
 			},
-			"conform_action": {
+			"conform_action": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Conform action.").AddStringEnumDescription("unspecified", "transmit", "drop", "set-cos-transmit", "set-dscp-transmit", "set-prec-transmit", "set-qos-transmit").AddDefaultValueDescription("transmit").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("unspecified", "transmit", "drop", "set-cos-transmit", "set-dscp-transmit", "set-prec-transmit", "set-qos-transmit"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("unspecified", "transmit", "drop", "set-cos-transmit", "set-dscp-transmit", "set-prec-transmit", "set-qos-transmit"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("transmit"),
 				},
 			},
-			"conform_set_cos": {
+			"conform_set_cos": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set CoS for conforming traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(0, 7),
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(0),
 				},
 			},
-			"conform_set_dscp": {
+			"conform_set_dscp": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set DSCP for conforming traffic.").AddIntegerRangeDescription(0, 63).AddDefaultValueDescription("0").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(0, 63),
+				Validators: []validator.Int64{
+					int64validator.Between(0, 63),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(0),
 				},
 			},
-			"conform_set_precedence": {
+			"conform_set_precedence": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set precedence for conforming traffic.").AddStringEnumDescription("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network").AddDefaultValueDescription("routine").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("routine"),
 				},
 			},
-			"conform_set_qos_group": {
+			"conform_set_qos_group": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set qos-group for conforming traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(0, 7),
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(0),
 				},
 			},
-			"exceed_action": {
+			"exceed_action": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Exceed action.").AddStringEnumDescription("unspecified", "transmit", "drop", "set-cos-transmit", "set-dscp-transmit", "set-prec-transmit", "set-qos-transmit").AddDefaultValueDescription("unspecified").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("unspecified", "transmit", "drop", "set-cos-transmit", "set-dscp-transmit", "set-prec-transmit", "set-qos-transmit"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("unspecified", "transmit", "drop", "set-cos-transmit", "set-dscp-transmit", "set-prec-transmit", "set-qos-transmit"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("unspecified"),
 				},
 			},
-			"exceed_set_cos": {
+			"exceed_set_cos": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set CoS for exceeding traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(0, 7),
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(0),
 				},
 			},
-			"exceed_set_dscp": {
+			"exceed_set_dscp": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set DSCP for exceeding traffic.").AddIntegerRangeDescription(0, 63).AddDefaultValueDescription("0").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(0, 63),
+				Validators: []validator.Int64{
+					int64validator.Between(0, 63),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(0),
 				},
 			},
-			"exceed_set_precedence": {
+			"exceed_set_precedence": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set precedence for exceeding traffic.").AddStringEnumDescription("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network").AddDefaultValueDescription("routine").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("routine"),
 				},
 			},
-			"exceed_set_qos_group": {
+			"exceed_set_qos_group": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set qos-group for exceeding traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(0, 7),
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(0),
 				},
 			},
-			"pir_rate": {
+			"pir_rate": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("PIR rate.").AddIntegerRangeDescription(0, 100000000000).AddDefaultValueDescription("0").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(0, 100000000000),
+				Validators: []validator.Int64{
+					int64validator.Between(0, 100000000000),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(0),
 				},
 			},
-			"pir_unit": {
+			"pir_unit": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("PIR rate unit.").AddStringEnumDescription("unspecified", "bps", "kbps", "mbps", "gbps", "pps", "pct").AddDefaultValueDescription("unspecified").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("unspecified", "bps", "kbps", "mbps", "gbps", "pps", "pct"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("unspecified", "bps", "kbps", "mbps", "gbps", "pps", "pct"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("unspecified"),
 				},
 			},
-			"violate_action": {
+			"violate_action": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Violate action.").AddStringEnumDescription("unspecified", "transmit", "drop", "set-cos-transmit", "set-dscp-transmit", "set-prec-transmit", "set-qos-transmit").AddDefaultValueDescription("drop").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("unspecified", "transmit", "drop", "set-cos-transmit", "set-dscp-transmit", "set-prec-transmit", "set-qos-transmit"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("unspecified", "transmit", "drop", "set-cos-transmit", "set-dscp-transmit", "set-prec-transmit", "set-qos-transmit"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("drop"),
 				},
 			},
-			"violate_set_cos": {
+			"violate_set_cos": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set CoS for violating traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(0, 7),
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(0),
 				},
 			},
-			"violate_set_dscp": {
+			"violate_set_dscp": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set DSCP for violating traffic.").AddIntegerRangeDescription(0, 63).AddDefaultValueDescription("0").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(0, 63),
+				Validators: []validator.Int64{
+					int64validator.Between(0, 63),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(0),
 				},
 			},
-			"violate_set_precedence": {
+			"violate_set_precedence": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set precedence for violating traffic.").AddStringEnumDescription("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network").AddDefaultValueDescription("routine").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("routine"),
 				},
 			},
-			"violate_set_qos_group": {
+			"violate_set_qos_group": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set qos-group for violating traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(0, 7),
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(0),
 				},
 			},
 		},
-	}, nil
+	}
 }
 
 func (r *DefaultQOSPolicyMapMatchClassMapPoliceResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {

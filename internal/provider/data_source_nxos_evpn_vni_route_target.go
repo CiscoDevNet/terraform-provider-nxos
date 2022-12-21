@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -33,39 +32,34 @@ func (d *EVPNVNIRouteTargetDataSource) Metadata(_ context.Context, req datasourc
 	resp.TypeName = req.ProviderTypeName + "_evpn_vni_route_target"
 }
 
-func (d *EVPNVNIRouteTargetDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *EVPNVNIRouteTargetDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read a EVPN VNI Route Target Entry.", "rtctrlRttEntry", "Routing%20and%20Forwarding/rtctrl:RttEntry/").String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"encap": {
+			"encap": schema.StringAttribute{
 				MarkdownDescription: "Encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"direction": {
+			"direction": schema.StringAttribute{
 				MarkdownDescription: "Route Target direction.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"route_target": {
+			"route_target": schema.StringAttribute{
 				MarkdownDescription: "Route Target in NX-OS DME format.",
-				Type:                types.StringType,
 				Required:            true,
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *EVPNVNIRouteTargetDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

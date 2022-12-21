@@ -7,14 +7,20 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
@@ -33,8 +39,8 @@ func (r *{{camelCase .Name}}Resource) Metadata(ctx context.Context, req resource
 	resp.TypeName = req.ProviderTypeName + "_{{snakeCase .Name}}"
 }
 
-func (r *{{camelCase .Name}}Resource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("{{.ResDescription}}", "{{.ClassName}}", "{{.DocPath}}")
 			{{- if len .Parents -}}
@@ -48,22 +54,20 @@ func (r *{{camelCase .Name}}Resource) GetSchema(ctx context.Context) (tfsdk.Sche
 			{{- end -}}
 			.String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					resource.UseStateForUnknown(),
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			{{- range  .Attributes}}
-			"{{.TfName}}": {
+			"{{.TfName}}": schema.{{.Type}}Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
 					{{- if len .EnumValues -}}
 					.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
@@ -75,7 +79,6 @@ func (r *{{camelCase .Name}}Resource) GetSchema(ctx context.Context) (tfsdk.Sche
 					.AddDefaultValueDescription("{{.DefaultValue}}")
 					{{- end -}}
 					.String,
-				Type:                types.{{.Type}}Type,
 				{{- if or (eq .Id true) (eq .ReferenceOnly true) (eq .Mandatory true)}}
 				Required:            true,
 				{{- else}}
@@ -83,18 +86,18 @@ func (r *{{camelCase .Name}}Resource) GetSchema(ctx context.Context) (tfsdk.Sche
 				Computed:            true,
 				{{- end}}
 				{{- if and (len .EnumValues) (not .AllowNonEnumValues) }}
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator({{range .EnumValues}}"{{.}}", {{end}}),
+				Validators: []validator.String{
+					stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
 				},
 				{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator({{.MinInt}}, {{.MaxInt}}),
+				Validators: []validator.Int64{
+					int64validator.Between({{.MinInt}}, {{.MaxInt}}),
 				},
 				{{- end}}
 				{{- if or (len .DefaultValue) (eq .Id true) (eq .ReferenceOnly true) (eq .RequiresReplace true)}}
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.{{.Type}}{
 					{{- if or (eq .Id true) (eq .ReferenceOnly true) (eq .RequiresReplace true)}}
-					resource.RequiresReplace(),
+					{{snakeCase .Type}}planmodifier.RequiresReplace(),
 					{{- else if eq .Type "Int64"}}
 					helpers.IntegerDefaultModifier({{.DefaultValue}}),
 					{{- else if eq .Type "Bool"}}
@@ -107,7 +110,7 @@ func (r *{{camelCase .Name}}Resource) GetSchema(ctx context.Context) (tfsdk.Sche
 			},
 			{{- end}}
 		},
-	}, nil
+	}
 }
 
 func (r *{{camelCase .Name}}Resource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {

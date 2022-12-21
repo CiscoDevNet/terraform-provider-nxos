@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -33,149 +32,122 @@ func (d *DefaultQOSPolicyMapMatchClassMapPoliceDataSource) Metadata(_ context.Co
 	resp.TypeName = req.ProviderTypeName + "_default_qos_policy_map_match_class_map_police"
 }
 
-func (d *DefaultQOSPolicyMapMatchClassMapPoliceDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *DefaultQOSPolicyMapMatchClassMapPoliceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read the default QoS policy map match class map police configuration.", "ipqosPolice", "Qos/ipqos:Police/").String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"policy_map_name": {
+			"policy_map_name": schema.StringAttribute{
 				MarkdownDescription: "Policy map name.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"class_map_name": {
+			"class_map_name": schema.StringAttribute{
 				MarkdownDescription: "Class map name.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"bc_rate": {
+			"bc_rate": schema.Int64Attribute{
 				MarkdownDescription: "CIR burst rate.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"bc_unit": {
+			"bc_unit": schema.StringAttribute{
 				MarkdownDescription: "CIR burst rate unit.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"be_rate": {
+			"be_rate": schema.Int64Attribute{
 				MarkdownDescription: "PIR burst rate.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"be_unit": {
+			"be_unit": schema.StringAttribute{
 				MarkdownDescription: "PIR burst rate unit.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"cir_rate": {
+			"cir_rate": schema.Int64Attribute{
 				MarkdownDescription: "CIR rate.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"cir_unit": {
+			"cir_unit": schema.StringAttribute{
 				MarkdownDescription: "CIR rate unit.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"conform_action": {
+			"conform_action": schema.StringAttribute{
 				MarkdownDescription: "Conform action.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"conform_set_cos": {
+			"conform_set_cos": schema.Int64Attribute{
 				MarkdownDescription: "Set CoS for conforming traffic.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"conform_set_dscp": {
+			"conform_set_dscp": schema.Int64Attribute{
 				MarkdownDescription: "Set DSCP for conforming traffic.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"conform_set_precedence": {
+			"conform_set_precedence": schema.StringAttribute{
 				MarkdownDescription: "Set precedence for conforming traffic.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"conform_set_qos_group": {
+			"conform_set_qos_group": schema.Int64Attribute{
 				MarkdownDescription: "Set qos-group for conforming traffic.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"exceed_action": {
+			"exceed_action": schema.StringAttribute{
 				MarkdownDescription: "Exceed action.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"exceed_set_cos": {
+			"exceed_set_cos": schema.Int64Attribute{
 				MarkdownDescription: "Set CoS for exceeding traffic.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"exceed_set_dscp": {
+			"exceed_set_dscp": schema.Int64Attribute{
 				MarkdownDescription: "Set DSCP for exceeding traffic.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"exceed_set_precedence": {
+			"exceed_set_precedence": schema.StringAttribute{
 				MarkdownDescription: "Set precedence for exceeding traffic.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"exceed_set_qos_group": {
+			"exceed_set_qos_group": schema.Int64Attribute{
 				MarkdownDescription: "Set qos-group for exceeding traffic.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"pir_rate": {
+			"pir_rate": schema.Int64Attribute{
 				MarkdownDescription: "PIR rate.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"pir_unit": {
+			"pir_unit": schema.StringAttribute{
 				MarkdownDescription: "PIR rate unit.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"violate_action": {
+			"violate_action": schema.StringAttribute{
 				MarkdownDescription: "Violate action.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"violate_set_cos": {
+			"violate_set_cos": schema.Int64Attribute{
 				MarkdownDescription: "Set CoS for violating traffic.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"violate_set_dscp": {
+			"violate_set_dscp": schema.Int64Attribute{
 				MarkdownDescription: "Set DSCP for violating traffic.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"violate_set_precedence": {
+			"violate_set_precedence": schema.StringAttribute{
 				MarkdownDescription: "Set precedence for violating traffic.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"violate_set_qos_group": {
+			"violate_set_qos_group": schema.Int64Attribute{
 				MarkdownDescription: "Set qos-group for violating traffic.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *DefaultQOSPolicyMapMatchClassMapPoliceDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

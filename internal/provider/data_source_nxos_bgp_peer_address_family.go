@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -33,59 +32,50 @@ func (d *BGPPeerAddressFamilyDataSource) Metadata(_ context.Context, req datasou
 	resp.TypeName = req.ProviderTypeName + "_bgp_peer_address_family"
 }
 
-func (d *BGPPeerAddressFamilyDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *BGPPeerAddressFamilyDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read the BGP peer address family configuration.", "bgpPeerAf", "Routing%20and%20Forwarding/bgp:PeerAf/").String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"asn": {
+			"asn": schema.StringAttribute{
 				MarkdownDescription: "Autonomous system number.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"vrf": {
+			"vrf": schema.StringAttribute{
 				MarkdownDescription: "VRF name.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"address": {
+			"address": schema.StringAttribute{
 				MarkdownDescription: "Peer address.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"address_family": {
+			"address_family": schema.StringAttribute{
 				MarkdownDescription: "Address Family.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"control": {
+			"control": schema.StringAttribute{
 				MarkdownDescription: "Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:\n  - Single value. Example: `nh-self`\n  - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"send_community_extended": {
+			"send_community_extended": schema.StringAttribute{
 				MarkdownDescription: "Send-community extended.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"send_community_standard": {
+			"send_community_standard": schema.StringAttribute{
 				MarkdownDescription: "Send-community standard.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *BGPPeerAddressFamilyDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

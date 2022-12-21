@@ -6,7 +6,6 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
-	"go/format"
 	"io/ioutil"
 	"log"
 	"os"
@@ -232,17 +231,7 @@ func renderTemplate(templatePath, outputPath string, config interface{}) {
 	if err != nil {
 		log.Fatalf("Error executing template: %v", err)
 	}
-
-	if strings.HasSuffix(templatePath, ".go") {
-		// format go code
-		fOutput, err := format.Source(output.Bytes())
-		if err != nil {
-			log.Fatalf("Error formatting go in %s: %v", templatePath, err)
-		}
-		f.Write(fOutput)
-	} else {
-		f.Write(output.Bytes())
-	}
+	f.Write(output.Bytes())
 }
 
 func main() {

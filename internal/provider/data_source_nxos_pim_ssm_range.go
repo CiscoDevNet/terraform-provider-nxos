@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -33,64 +32,54 @@ func (d *PIMSSMRangeDataSource) Metadata(_ context.Context, req datasource.Metad
 	resp.TypeName = req.ProviderTypeName + "_pim_ssm_range"
 }
 
-func (d *PIMSSMRangeDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *PIMSSMRangeDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read the PIM SSM range configuration.", "pimSSMRangeP", "Layer%203/pim:SSMRangeP/").String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"vrf_name": {
+			"vrf_name": schema.StringAttribute{
 				MarkdownDescription: "VRF name.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"group_list_1": {
+			"group_list_1": schema.StringAttribute{
 				MarkdownDescription: "Group list 1.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"group_list_2": {
+			"group_list_2": schema.StringAttribute{
 				MarkdownDescription: "Group list 2.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"group_list_3": {
+			"group_list_3": schema.StringAttribute{
 				MarkdownDescription: "Group list 3.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"group_list_4": {
+			"group_list_4": schema.StringAttribute{
 				MarkdownDescription: "Group list 4.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"prefix_list": {
+			"prefix_list": schema.StringAttribute{
 				MarkdownDescription: "Prefix list name.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"route_map": {
+			"route_map": schema.StringAttribute{
 				MarkdownDescription: "Route map name.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"ssm_none": {
+			"ssm_none": schema.BoolAttribute{
 				MarkdownDescription: "Exclude standard SSM range (232.0.0.0/8).",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *PIMSSMRangeDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

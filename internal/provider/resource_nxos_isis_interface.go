@@ -6,10 +6,14 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -32,317 +36,287 @@ func (r *ISISInterfaceResource) Metadata(ctx context.Context, req resource.Metad
 	resp.TypeName = req.ProviderTypeName + "_isis_interface"
 }
 
-func (r *ISISInterfaceResource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (r *ISISInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IS-IS interface configuration.", "isisInternalIf", "Routing%20and%20Forwarding/isis:InternalIf/").AddParents("isis").String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					resource.UseStateForUnknown(),
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"interface_id": {
+			"interface_id": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
-				Type:                types.StringType,
 				Required:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
-					resource.RequiresReplace(),
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"authentication_check": {
+			"authentication_check": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Authentication Check for ISIS without specific level.").AddDefaultValueDescription("true").String,
-				Type:                types.BoolType,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Bool{
 					helpers.BooleanDefaultModifier(true),
 				},
 			},
-			"authentication_check_l1": {
+			"authentication_check_l1": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Authentication Check for ISIS on Level-1.").AddDefaultValueDescription("true").String,
-				Type:                types.BoolType,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Bool{
 					helpers.BooleanDefaultModifier(true),
 				},
 			},
-			"authentication_check_l2": {
+			"authentication_check_l2": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Authentication Check for ISIS on Level-2.").AddDefaultValueDescription("true").String,
-				Type:                types.BoolType,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Bool{
 					helpers.BooleanDefaultModifier(true),
 				},
 			},
-			"authentication_key": {
+			"authentication_key": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Authentication Key for IS-IS without specific level.").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 			},
-			"authentication_key_l1": {
+			"authentication_key_l1": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Authentication Key for IS-IS on Level-1.").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 			},
-			"authentication_key_l2": {
+			"authentication_key_l2": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Authentication Key for IS-IS on Level-2.").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 			},
-			"authentication_type": {
+			"authentication_type": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type without specific level.").AddStringEnumDescription("clear", "md5", "unknown").AddDefaultValueDescription("unknown").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("clear", "md5", "unknown"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("clear", "md5", "unknown"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("unknown"),
 				},
 			},
-			"authentication_type_l1": {
+			"authentication_type_l1": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type for Level-1.").AddStringEnumDescription("clear", "md5", "unknown").AddDefaultValueDescription("unknown").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("clear", "md5", "unknown"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("clear", "md5", "unknown"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("unknown"),
 				},
 			},
-			"authentication_type_l2": {
+			"authentication_type_l2": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type for Level-2.").AddStringEnumDescription("clear", "md5", "unknown").AddDefaultValueDescription("unknown").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("clear", "md5", "unknown"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("clear", "md5", "unknown"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("unknown"),
 				},
 			},
-			"circuit_type": {
+			"circuit_type": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Circuit type.").AddStringEnumDescription("l1", "l2", "l12").AddDefaultValueDescription("l12").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("l1", "l2", "l12"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("l1", "l2", "l12"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("l12"),
 				},
 			},
-			"vrf": {
+			"vrf": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("VRF.").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
 			},
-			"hello_interval": {
+			"hello_interval": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Hello interval.").AddIntegerRangeDescription(1, 65535).AddDefaultValueDescription("10").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(1, 65535),
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(10),
 				},
 			},
-			"hello_interval_l1": {
+			"hello_interval_l1": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Hello interval Level-1.").AddIntegerRangeDescription(1, 65535).AddDefaultValueDescription("10").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(1, 65535),
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(10),
 				},
 			},
-			"hello_interval_l2": {
+			"hello_interval_l2": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Hello interval Level-2.").AddIntegerRangeDescription(1, 65535).AddDefaultValueDescription("10").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(1, 65535),
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(10),
 				},
 			},
-			"hello_multiplier": {
+			"hello_multiplier": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Hello multiplier.").AddIntegerRangeDescription(3, 1000).AddDefaultValueDescription("3").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(3, 1000),
+				Validators: []validator.Int64{
+					int64validator.Between(3, 1000),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(3),
 				},
 			},
-			"hello_multiplier_l1": {
+			"hello_multiplier_l1": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Hello multiplier Level-1.").AddIntegerRangeDescription(3, 1000).AddDefaultValueDescription("3").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(3, 1000),
+				Validators: []validator.Int64{
+					int64validator.Between(3, 1000),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(3),
 				},
 			},
-			"hello_multiplier_l2": {
+			"hello_multiplier_l2": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Hello multiplier Level-2.").AddIntegerRangeDescription(3, 1000).AddDefaultValueDescription("3").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(3, 1000),
+				Validators: []validator.Int64{
+					int64validator.Between(3, 1000),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(3),
 				},
 			},
-			"hello_padding": {
+			"hello_padding": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Hello padding.").AddStringEnumDescription("always", "transient", "never").AddDefaultValueDescription("always").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("always", "transient", "never"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("always", "transient", "never"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("always"),
 				},
 			},
-			"metric_l1": {
+			"metric_l1": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Interface metric Level-1.").AddIntegerRangeDescription(0, 16777216).AddDefaultValueDescription("16777216").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(0, 16777216),
+				Validators: []validator.Int64{
+					int64validator.Between(0, 16777216),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(16777216),
 				},
 			},
-			"metric_l2": {
+			"metric_l2": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Interface metric Level-2.").AddIntegerRangeDescription(0, 16777216).AddDefaultValueDescription("16777216").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(0, 16777216),
+				Validators: []validator.Int64{
+					int64validator.Between(0, 16777216),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(16777216),
 				},
 			},
-			"mtu_check": {
+			"mtu_check": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("MTU Check for IS-IS without specific level.").AddDefaultValueDescription("false").String,
-				Type:                types.BoolType,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Bool{
 					helpers.BooleanDefaultModifier(false),
 				},
 			},
-			"mtu_check_l1": {
+			"mtu_check_l1": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("MTU Check for IS-IS on Level-1.").AddDefaultValueDescription("false").String,
-				Type:                types.BoolType,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Bool{
 					helpers.BooleanDefaultModifier(false),
 				},
 			},
-			"mtu_check_l2": {
+			"mtu_check_l2": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("MTU Check for IS-IS on Level-2.").AddDefaultValueDescription("false").String,
-				Type:                types.BoolType,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Bool{
 					helpers.BooleanDefaultModifier(false),
 				},
 			},
-			"network_type_p2p": {
+			"network_type_p2p": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enabling Point-to-Point Network Type on IS-IS Interface.").AddStringEnumDescription("off", "on", "useAllISMac").AddDefaultValueDescription("off").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("off", "on", "useAllISMac"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("off", "on", "useAllISMac"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("off"),
 				},
 			},
-			"passive": {
+			"passive": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Passive Interface Info.").AddStringEnumDescription("l1", "l2", "l12", "noL1", "noL2", "noL12", "inheritDef").AddDefaultValueDescription("inheritDef").String,
-				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.StringEnumValidator("l1", "l2", "l12", "noL1", "noL2", "noL12", "inheritDef"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("l1", "l2", "l12", "noL1", "noL2", "noL12", "inheritDef"),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("inheritDef"),
 				},
 			},
-			"priority_l1": {
+			"priority_l1": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Circuit priority.").AddIntegerRangeDescription(0, 127).AddDefaultValueDescription("64").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(0, 127),
+				Validators: []validator.Int64{
+					int64validator.Between(0, 127),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(64),
 				},
 			},
-			"priority_l2": {
+			"priority_l2": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Circuit priority.").AddIntegerRangeDescription(0, 127).AddDefaultValueDescription("64").String,
-				Type:                types.Int64Type,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.AttributeValidator{
-					helpers.IntegerRangeValidator(0, 127),
+				Validators: []validator.Int64{
+					int64validator.Between(0, 127),
 				},
-				PlanModifiers: tfsdk.AttributePlanModifiers{
+				PlanModifiers: []planmodifier.Int64{
 					helpers.IntegerDefaultModifier(64),
 				},
 			},
 		},
-	}, nil
+	}
 }
 
 func (r *ISISInterfaceResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {

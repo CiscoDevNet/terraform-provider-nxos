@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -33,134 +32,110 @@ func (d *PhysicalInterfaceDataSource) Metadata(_ context.Context, req datasource
 	resp.TypeName = req.ProviderTypeName + "_physical_interface"
 }
 
-func (d *PhysicalInterfaceDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *PhysicalInterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read the configuration of a physical interface.", "l1PhysIf", "System/l1:PhysIf/").String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"interface_id": {
+			"interface_id": schema.StringAttribute{
 				MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"fec_mode": {
+			"fec_mode": schema.StringAttribute{
 				MarkdownDescription: "FEC mode.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"access_vlan": {
+			"access_vlan": schema.StringAttribute{
 				MarkdownDescription: "Access VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"admin_state": {
+			"admin_state": schema.StringAttribute{
 				MarkdownDescription: "Administrative port state.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"auto_negotiation": {
+			"auto_negotiation": schema.StringAttribute{
 				MarkdownDescription: "Administrative port auto-negotiation.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"bandwidth": {
+			"bandwidth": schema.Int64Attribute{
 				MarkdownDescription: "The bandwidth parameter for a routed interface, port channel, or subinterface.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"delay": {
+			"delay": schema.Int64Attribute{
 				MarkdownDescription: "The administrative port delay time.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"description": {
+			"description": schema.StringAttribute{
 				MarkdownDescription: "Interface description.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"duplex": {
+			"duplex": schema.StringAttribute{
 				MarkdownDescription: "Duplex.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"layer": {
+			"layer": schema.StringAttribute{
 				MarkdownDescription: "Administrative port layer.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"link_logging": {
+			"link_logging": schema.StringAttribute{
 				MarkdownDescription: "Administrative link logging.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"link_debounce_down": {
+			"link_debounce_down": schema.Int64Attribute{
 				MarkdownDescription: "Administrative port link debounce interval.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"link_debounce_up": {
+			"link_debounce_up": schema.Int64Attribute{
 				MarkdownDescription: "Link Debounce Interval - LinkUp Event.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"medium": {
+			"medium": schema.StringAttribute{
 				MarkdownDescription: "The administrative port medium type.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"mode": {
+			"mode": schema.StringAttribute{
 				MarkdownDescription: "Administrative port mode.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"mtu": {
+			"mtu": schema.Int64Attribute{
 				MarkdownDescription: "Administrative port MTU.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"native_vlan": {
+			"native_vlan": schema.StringAttribute{
 				MarkdownDescription: "Native VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"speed": {
+			"speed": schema.StringAttribute{
 				MarkdownDescription: "Administrative port speed.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"speed_group": {
+			"speed_group": schema.StringAttribute{
 				MarkdownDescription: "Speed group.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"trunk_vlans": {
+			"trunk_vlans": schema.StringAttribute{
 				MarkdownDescription: "List of trunk VLANs.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"uni_directional_ethernet": {
+			"uni_directional_ethernet": schema.StringAttribute{
 				MarkdownDescription: "UDE (Uni-Directional Ethernet).",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"user_configured_flags": {
+			"user_configured_flags": schema.StringAttribute{
 				MarkdownDescription: "Port User Config Flags.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *PhysicalInterfaceDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

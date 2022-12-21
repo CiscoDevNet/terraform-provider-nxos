@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -33,79 +32,66 @@ func (d *NVEInterfaceDataSource) Metadata(_ context.Context, req datasource.Meta
 	resp.TypeName = req.ProviderTypeName + "_nve_interface"
 }
 
-func (d *NVEInterfaceDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *NVEInterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read the NVE interface configuration.", "nvoEp", "Network%20Virtualization/nvo:Ep/").String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"admin_state": {
+			"admin_state": schema.StringAttribute{
 				MarkdownDescription: "Administrative state.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"advertise_virtual_mac": {
+			"advertise_virtual_mac": schema.BoolAttribute{
 				MarkdownDescription: "Enable or disable Virtual MAC Advertisement in VPC mode.",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"hold_down_time": {
+			"hold_down_time": schema.Int64Attribute{
 				MarkdownDescription: "Hold Down Time.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"host_reachability_protocol": {
+			"host_reachability_protocol": schema.StringAttribute{
 				MarkdownDescription: "Host Reachability Protocol.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"ingress_replication_protocol_bgp": {
+			"ingress_replication_protocol_bgp": schema.BoolAttribute{
 				MarkdownDescription: "VxLAN Ingress Replication Protocol BGP.",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"multicast_group_l2": {
+			"multicast_group_l2": schema.StringAttribute{
 				MarkdownDescription: "Base multicast group address for L2.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"multicast_group_l3": {
+			"multicast_group_l3": schema.StringAttribute{
 				MarkdownDescription: "Base multicast group address for L3.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"multisite_source_interface": {
+			"multisite_source_interface": schema.StringAttribute{
 				MarkdownDescription: "Interface representing the Multisite Border Gateway. Must match first field in the output of `show int brief`.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"source_interface": {
+			"source_interface": schema.StringAttribute{
 				MarkdownDescription: "Source Interface associated with the NVE. Must match first field in the output of `show int brief`.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"suppress_arp": {
+			"suppress_arp": schema.BoolAttribute{
 				MarkdownDescription: "Suppress ARP.",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"suppress_mac_route": {
+			"suppress_mac_route": schema.BoolAttribute{
 				MarkdownDescription: "Suppress MAC Route.",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *NVEInterfaceDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

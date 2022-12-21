@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -33,39 +32,34 @@ func (d *DefaultQOSPolicyMapMatchClassMapSetQOSGroupDataSource) Metadata(_ conte
 	resp.TypeName = req.ProviderTypeName + "_default_qos_policy_map_match_class_map_set_qos_group"
 }
 
-func (d *DefaultQOSPolicyMapMatchClassMapSetQOSGroupDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *DefaultQOSPolicyMapMatchClassMapSetQOSGroupDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read the default QoS policy map match class map set QoS group configuration.", "ipqosSetQoSGrp", "Qos/ipqos:SetQoSGrp/").String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"policy_map_name": {
+			"policy_map_name": schema.StringAttribute{
 				MarkdownDescription: "Policy map name.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"class_map_name": {
+			"class_map_name": schema.StringAttribute{
 				MarkdownDescription: "Class map name.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"qos_group_id": {
+			"qos_group_id": schema.Int64Attribute{
 				MarkdownDescription: "QoS group ID.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *DefaultQOSPolicyMapMatchClassMapSetQOSGroupDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

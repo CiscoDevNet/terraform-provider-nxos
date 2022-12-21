@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -33,49 +32,42 @@ func (d *PIMStaticRPGroupListDataSource) Metadata(_ context.Context, req datasou
 	resp.TypeName = req.ProviderTypeName + "_pim_static_rp_group_list"
 }
 
-func (d *PIMStaticRPGroupListDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *PIMStaticRPGroupListDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read the PIM Static RP group list configuration.", "pimRPGrpList", "Layer%203/pim:RPGrpList/").String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"vrf_name": {
+			"vrf_name": schema.StringAttribute{
 				MarkdownDescription: "VRF name.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"rp_address": {
+			"rp_address": schema.StringAttribute{
 				MarkdownDescription: "RP address.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"address": {
+			"address": schema.StringAttribute{
 				MarkdownDescription: "Group list address information.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"bidir": {
+			"bidir": schema.BoolAttribute{
 				MarkdownDescription: "Flag to treat Group Ranges as BiDir.",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"override": {
+			"override": schema.BoolAttribute{
 				MarkdownDescription: "Flag to override RP preference to use Static over Dynamic RP.",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *PIMStaticRPGroupListDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

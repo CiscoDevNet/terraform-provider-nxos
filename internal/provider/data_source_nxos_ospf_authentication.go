@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -33,74 +32,62 @@ func (d *OSPFAuthenticationDataSource) Metadata(_ context.Context, req datasourc
 	resp.TypeName = req.ProviderTypeName + "_ospf_authentication"
 }
 
-func (d *OSPFAuthenticationDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *OSPFAuthenticationDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read the OSPF authentication configuration.", "ospfAuthNewP", "Routing%20and%20Forwarding/ospf:AuthNewP/").String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"instance_name": {
+			"instance_name": schema.StringAttribute{
 				MarkdownDescription: "OSPF instance name.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"vrf_name": {
+			"vrf_name": schema.StringAttribute{
 				MarkdownDescription: "VRF name.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"interface_id": {
+			"interface_id": schema.StringAttribute{
 				MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"key": {
+			"key": schema.StringAttribute{
 				MarkdownDescription: "Key used for authentication.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"key_id": {
+			"key_id": schema.Int64Attribute{
 				MarkdownDescription: "Key ID used for authentication.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"key_secure_mode": {
+			"key_secure_mode": schema.BoolAttribute{
 				MarkdownDescription: "Encrypted authentication key or plain text key.",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"keychain": {
+			"keychain": schema.StringAttribute{
 				MarkdownDescription: "Authentication keychain.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"md5_key": {
+			"md5_key": schema.StringAttribute{
 				MarkdownDescription: "Key used for md5 authentication.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"md5_key_secure_mode": {
+			"md5_key_secure_mode": schema.BoolAttribute{
 				MarkdownDescription: "Encrypted authentication md5 key or plain text key.",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"type": {
+			"type": schema.StringAttribute{
 				MarkdownDescription: "Authentication type.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *OSPFAuthenticationDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

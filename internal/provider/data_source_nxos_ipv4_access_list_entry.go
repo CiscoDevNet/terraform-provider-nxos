@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -33,259 +32,210 @@ func (d *IPv4AccessListEntryDataSource) Metadata(_ context.Context, req datasour
 	resp.TypeName = req.ProviderTypeName + "_ipv4_access_list_entry"
 }
 
-func (d *IPv4AccessListEntryDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *IPv4AccessListEntryDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read IPv4 Access List Entries.", "ipv4aclACE", "Security%20and%20Policing/ipv4acl:ACE/").String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"name": {
+			"name": schema.StringAttribute{
 				MarkdownDescription: "Access list name.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"sequence_number": {
+			"sequence_number": schema.Int64Attribute{
 				MarkdownDescription: "Sequence number.",
-				Type:                types.Int64Type,
 				Required:            true,
 			},
-			"ack": {
+			"ack": schema.BoolAttribute{
 				MarkdownDescription: "Match TCP ACK flag.",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"action": {
+			"action": schema.StringAttribute{
 				MarkdownDescription: "Action.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"dscp": {
+			"dscp": schema.Int64Attribute{
 				MarkdownDescription: "Match DSCP.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"destination_address_group": {
+			"destination_address_group": schema.StringAttribute{
 				MarkdownDescription: "Destination address group.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"destination_port_1": {
+			"destination_port_1": schema.StringAttribute{
 				MarkdownDescription: "First destination port number or name.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"destination_port_2": {
+			"destination_port_2": schema.StringAttribute{
 				MarkdownDescription: "Second destination port number or name.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"destination_port_group": {
+			"destination_port_group": schema.StringAttribute{
 				MarkdownDescription: "Destination port group.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"destination_port_mask": {
+			"destination_port_mask": schema.StringAttribute{
 				MarkdownDescription: "Destination port mask number or name.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"destination_port_operator": {
+			"destination_port_operator": schema.StringAttribute{
 				MarkdownDescription: "Destination port operator.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"destination_prefix": {
+			"destination_prefix": schema.StringAttribute{
 				MarkdownDescription: "Destination prefix.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"destination_prefix_length": {
+			"destination_prefix_length": schema.StringAttribute{
 				MarkdownDescription: "Destination prefix length.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"destination_prefix_mask": {
+			"destination_prefix_mask": schema.StringAttribute{
 				MarkdownDescription: "Destination prefix mask.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"est": {
+			"est": schema.BoolAttribute{
 				MarkdownDescription: "Match TCP EST flag.",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"fin": {
+			"fin": schema.BoolAttribute{
 				MarkdownDescription: "Match TCP FIN flag.",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"fragment": {
+			"fragment": schema.BoolAttribute{
 				MarkdownDescription: "Match non-initial fragment.",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"http_option_type": {
+			"http_option_type": schema.StringAttribute{
 				MarkdownDescription: "HTTP option method.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"icmp_code": {
+			"icmp_code": schema.Int64Attribute{
 				MarkdownDescription: "ICMP code.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"icmp_type": {
+			"icmp_type": schema.Int64Attribute{
 				MarkdownDescription: "ICMP type.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"logging": {
+			"logging": schema.BoolAttribute{
 				MarkdownDescription: "Log matches against ACL entry.",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"packet_length_1": {
+			"packet_length_1": schema.StringAttribute{
 				MarkdownDescription: "First packet length. Either `invalid` or a number between 19 and 9210.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"packet_length_2": {
+			"packet_length_2": schema.StringAttribute{
 				MarkdownDescription: "Second packet length. Either `invalid` or a number between 19 and 9210.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"packet_length_operator": {
+			"packet_length_operator": schema.StringAttribute{
 				MarkdownDescription: "Packet length operator.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"precedence": {
+			"precedence": schema.StringAttribute{
 				MarkdownDescription: "Precedence. Either `unspecified` or a number between 0 and 7.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"protocol": {
+			"protocol": schema.StringAttribute{
 				MarkdownDescription: "Protocol name or number.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"protocol_mask": {
+			"protocol_mask": schema.StringAttribute{
 				MarkdownDescription: "Protocol mask name or number.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"psh": {
+			"psh": schema.BoolAttribute{
 				MarkdownDescription: "Match TCP PSH flag.",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"redirect": {
+			"redirect": schema.StringAttribute{
 				MarkdownDescription: "Redirect action.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"remark": {
+			"remark": schema.StringAttribute{
 				MarkdownDescription: "ACL comment.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"rev": {
+			"rev": schema.BoolAttribute{
 				MarkdownDescription: "Match TCP REV flag.",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"rst": {
+			"rst": schema.BoolAttribute{
 				MarkdownDescription: "Match TCP RST flag.",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"source_address_group": {
+			"source_address_group": schema.StringAttribute{
 				MarkdownDescription: "Source address group.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"source_port_1": {
+			"source_port_1": schema.StringAttribute{
 				MarkdownDescription: "First source port name or number.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"source_port_2": {
+			"source_port_2": schema.StringAttribute{
 				MarkdownDescription: "Second source port name or number.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"source_port_group": {
+			"source_port_group": schema.StringAttribute{
 				MarkdownDescription: "Source port group.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"source_port_mask": {
+			"source_port_mask": schema.StringAttribute{
 				MarkdownDescription: "Source port mask name or number.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"source_port_operator": {
+			"source_port_operator": schema.StringAttribute{
 				MarkdownDescription: "Source port operator.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"source_prefix": {
+			"source_prefix": schema.StringAttribute{
 				MarkdownDescription: "Source prefix.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"source_prefix_length": {
+			"source_prefix_length": schema.StringAttribute{
 				MarkdownDescription: "Source prefix length.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"source_prefix_mask": {
+			"source_prefix_mask": schema.StringAttribute{
 				MarkdownDescription: "Source prefix mask.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"syn": {
+			"syn": schema.BoolAttribute{
 				MarkdownDescription: "Match TCP SYN flag.",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"time_range": {
+			"time_range": schema.StringAttribute{
 				MarkdownDescription: "Time range name.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"ttl": {
+			"ttl": schema.Int64Attribute{
 				MarkdownDescription: "TTL.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"urg": {
+			"urg": schema.BoolAttribute{
 				MarkdownDescription: "Match TCP URG flag.",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"vlan": {
+			"vlan": schema.Int64Attribute{
 				MarkdownDescription: "VLAN ID.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"vni": {
+			"vni": schema.StringAttribute{
 				MarkdownDescription: "NVE VNI ID. Either `invalid` or a number between 0 and 16777216.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *IPv4AccessListEntryDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

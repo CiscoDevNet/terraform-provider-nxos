@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -28,19 +28,12 @@ func (m integerDefaultModifier) MarkdownDescription(ctx context.Context) string 
 }
 
 // Modify runs the logic of the plan modifier.
-func (m integerDefaultModifier) Modify(ctx context.Context, req tfsdk.ModifyAttributePlanRequest, resp *tfsdk.ModifyAttributePlanResponse) {
-	var i types.Int64
-	diags := tfsdk.ValueAs(ctx, req.AttributePlan, &i)
-	resp.Diagnostics.Append(diags...)
-	if diags.HasError() {
+func (m integerDefaultModifier) PlanModifyInt64(ctx context.Context, req planmodifier.Int64Request, resp *planmodifier.Int64Response) {
+	if !req.PlanValue.IsUnknown() {
 		return
 	}
 
-	if !i.IsUnknown() {
-		return
-	}
-
-	resp.AttributePlan = types.Int64Value(m.Default)
+	resp.PlanValue = types.Int64Value(m.Default)
 }
 
 func IntegerDefaultModifier(defaultValue int64) integerDefaultModifier {

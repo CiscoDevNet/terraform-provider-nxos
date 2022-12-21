@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -33,59 +32,50 @@ func (d *BGPPeerTemplateMaxPrefixDataSource) Metadata(_ context.Context, req dat
 	resp.TypeName = req.ProviderTypeName + "_bgp_peer_template_max_prefix"
 }
 
-func (d *BGPPeerTemplateMaxPrefixDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *BGPPeerTemplateMaxPrefixDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read the BGP peer template Maximum Prefix Policy configuration.", "bgpMaxPfxP", "Routing%20and%20Forwarding/bgp:MaxPfxP/").String,
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The distinguished name of the object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"asn": {
+			"asn": schema.StringAttribute{
 				MarkdownDescription: "Autonomous system number.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"template_name": {
+			"template_name": schema.StringAttribute{
 				MarkdownDescription: "Peer template name.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"address_family": {
+			"address_family": schema.StringAttribute{
 				MarkdownDescription: "Address Family.",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"action": {
+			"action": schema.StringAttribute{
 				MarkdownDescription: "Action to do when limit is exceeded.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"maximum_prefix": {
+			"maximum_prefix": schema.Int64Attribute{
 				MarkdownDescription: "Maximum number of prefixes allowed from the peer.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"restart_time": {
+			"restart_time": schema.Int64Attribute{
 				MarkdownDescription: "The period of time in minutes before restarting the peer when the prefix limit is reached.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"threshold": {
+			"threshold": schema.Int64Attribute{
 				MarkdownDescription: "The period of time in minutes before restarting the peer when the prefix limit is reached.",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *BGPPeerTemplateMaxPrefixDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

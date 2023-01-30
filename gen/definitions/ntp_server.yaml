@@ -1,0 +1,54 @@
+---
+name: NTP Server
+class_name: datetimeNtpProvider
+dn: sys/time/prov-[%s]
+ds_description: This data source can read an ntp server or peer.
+res_description: This resource can manage an ntp server or peer.
+doc_path: System/datetime:NtpProvider/
+doc_category: System
+attributes:
+  - nxos_name: name
+    tf_name: name
+    type: String
+    id: true
+    mandatory: true
+    description: 'NTP server.'
+    example: 1.2.3.4
+  - nxos_name: vrf
+    tf_name: vrf
+    type: String
+    description: 'Identifies the VRF for the NTP providers.'
+    default_value: default
+    example: management
+  - nxos_name: provT
+    tf_name: type
+    type: String
+    mandatory: true
+    description: 'NTP provider type. Possible values are `server` or `peer`.'
+    example: server
+    enum_values:
+      - server
+      - peer
+  - nxos_name: keyId
+    tf_name: key_id
+    type: Int64
+    description: 'NTP provider key ID. Possible range is from `1` to `65535`.'
+    min_int: 1
+    max_int: 65535
+    example: 10
+  - nxos_name: minPoll
+    tf_name: min_poll
+    type: Int64
+    description: 'NTP minimum interval default in seconds. Possible range is from `4` to `16`.'
+    default_value: 4
+    min_int: 4
+    max_int: 16
+    example: 4
+  - nxos_name: maxPoll
+    tf_name: max_poll
+    type: Int64
+    description: 'NTP maximum interval default in seconds. Possible range is from `4` to `16`.'
+    default_value: 6
+    min_int: 4
+    max_int: 16
+    example: 6

@@ -61,9 +61,11 @@ resource "nxos_bgp_peer" "example" {
 
 - `description` (String) Peer description.
 - `device` (String) A device name from the provider configuration.
-- `hold_time` (Number) BGP Hold Timer in seconds. Valid values are 3-3600, and must be greater than the keep alive timer
+- `hold_time` (Number) BGP Hold Timer in seconds. The value ust be greater than the keep alive timer
+  - Range: `3`-`3600`
   - Default value: `180`
-- `keep_alive` (Number) BGP Keep Alive Timer in seconds. Valid values are 0-3600.
+- `keep_alive` (Number) BGP Keep Alive Timer in seconds
+  - Range: `0`-`3600`
   - Default value: `60`
 - `peer_template` (String) Peer template name.
 - `peer_type` (String) Neighbor Fabric Type.

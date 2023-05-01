@@ -42,6 +42,7 @@ attributes:
     type: String
     description: 'Peer description.'
     example: 'My description'
+    omit_empty_value: true
   - nxos_name: peerImp
     tf_name: peer_template
     type: String
@@ -66,15 +67,21 @@ attributes:
   - nxos_name: holdIntvl
     tf_name: hold_time
     type: Int64
-    description: 'BGP Hold Timer in seconds. Valid values are 3-3600, and must be greater than the keep alive timer'
+    description: 'BGP Hold Timer in seconds. The value ust be greater than the keep alive timer'
     default_value: 180
     example: 5
+    omit_empty_value: true
+    min_int: 3
+    max_int: 3600
   - nxos_name: kaIntvl
     tf_name: keep_alive
     type: Int64
-    description: 'BGP Keep Alive Timer in seconds. Valid values are 0-3600.'
+    description: 'BGP Keep Alive Timer in seconds'
     default_value: 60
     example: 15
+    omit_empty_value: true
+    min_int: 0
+    max_int: 3600
 test_prerequisites:
   - dn: sys/fm/bgp
     class_name: fmBgp

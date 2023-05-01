@@ -4,6 +4,7 @@ package provider
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -11,16 +12,18 @@ import (
 )
 
 type BGPPeer struct {
-	Device   types.String `tfsdk:"device"`
-	Dn       types.String `tfsdk:"id"`
-	Bgp_asn  types.String `tfsdk:"asn"`
-	Vrf_name types.String `tfsdk:"vrf"`
-	Addr     types.String `tfsdk:"address"`
-	Asn      types.String `tfsdk:"remote_asn"`
-	Name     types.String `tfsdk:"description"`
-	PeerImp  types.String `tfsdk:"peer_template"`
-	PeerType types.String `tfsdk:"peer_type"`
-	SrcIf    types.String `tfsdk:"source_interface"`
+	Device    types.String `tfsdk:"device"`
+	Dn        types.String `tfsdk:"id"`
+	Bgp_asn   types.String `tfsdk:"asn"`
+	Vrf_name  types.String `tfsdk:"vrf"`
+	Addr      types.String `tfsdk:"address"`
+	Asn       types.String `tfsdk:"remote_asn"`
+	Name      types.String `tfsdk:"description"`
+	PeerImp   types.String `tfsdk:"peer_template"`
+	PeerType  types.String `tfsdk:"peer_type"`
+	SrcIf     types.String `tfsdk:"source_interface"`
+	HoldIntvl types.Int64  `tfsdk:"hold_time"`
+	KaIntvl   types.Int64  `tfsdk:"keep_alive"`
 }
 
 func (data BGPPeer) getDn() string {
@@ -38,7 +41,9 @@ func (data BGPPeer) toBody() nxos.Body {
 		Set("name", data.Name.ValueString()).
 		Set("peerImp", data.PeerImp.ValueString()).
 		Set("peerType", data.PeerType.ValueString()).
-		Set("srcIf", data.SrcIf.ValueString())
+		Set("srcIf", data.SrcIf.ValueString()).
+		Set("holdIntvl", strconv.FormatInt(data.HoldIntvl.ValueInt64(), 10)).
+		Set("kaIntvl", strconv.FormatInt(data.KaIntvl.ValueInt64(), 10))
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
@@ -49,6 +54,8 @@ func (data *BGPPeer) fromBody(res gjson.Result) {
 	data.PeerImp = types.StringValue(res.Get("*.attributes.peerImp").String())
 	data.PeerType = types.StringValue(res.Get("*.attributes.peerType").String())
 	data.SrcIf = types.StringValue(res.Get("*.attributes.srcIf").String())
+	data.HoldIntvl = types.Int64Value(res.Get("*.attributes.holdIntvl").Int())
+	data.KaIntvl = types.Int64Value(res.Get("*.attributes.kaIntvl").Int())
 }
 
 func (data *BGPPeer) fromPlan(plan BGPPeer) {

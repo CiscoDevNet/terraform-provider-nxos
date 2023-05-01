@@ -63,6 +63,18 @@ attributes:
     description: 'Source Interface. Must match first field in the output of `show intf brief`.'
     default_value: 'unspecified'
     example: 'lo0'
+  - nxos_name: holdIntvl
+    tf_name: hold_time
+    type: Int64
+    description: 'BGP Hold Timer in seconds. Valid values are 3-3600, and must be greater than the keep alive timer'
+    default_value: 180
+    example: 5
+  - nxos_name: kaIntvl
+    tf_name: keep_alive
+    type: Int64
+    description: 'BGP Keep Alive Timer in seconds. Valid values are 0-3600.'
+    default_value: 60
+    example: 15
 test_prerequisites:
   - dn: sys/fm/bgp
     class_name: fmBgp

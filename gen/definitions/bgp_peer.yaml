@@ -67,19 +67,17 @@ attributes:
   - nxos_name: holdIntvl
     tf_name: hold_time
     type: Int64
-    description: 'BGP Hold Timer in seconds. The value ust be greater than the keep alive timer'
+    description: 'BGP Hold Timer in seconds. The value must be greater than the keepalive timer'
     default_value: 180
     example: 5
-    omit_empty_value: true
     min_int: 3
     max_int: 3600
   - nxos_name: kaIntvl
-    tf_name: keep_alive
+    tf_name: keepalive
     type: Int64
     description: 'BGP Keep Alive Timer in seconds'
     default_value: 60
     example: 15
-    omit_empty_value: true
     min_int: 0
     max_int: 3600
 test_prerequisites:

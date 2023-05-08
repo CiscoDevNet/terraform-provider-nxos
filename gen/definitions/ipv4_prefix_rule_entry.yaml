@@ -1,0 +1,63 @@
+---
+name: IPv4 Prefix Rule Entry
+class_name: rtpfxEntry
+dn: sys/rpm/pfxlistv4-[%s]/ent-[%v]
+ds_description: This data source can read a IPv4 Prefix List entry configuration.
+res_description: This resource can manage a IPv4 Prefix List entry configuration.
+doc_path: Routing%20and%20Forwarding/rtpfx:Entry/
+doc_category: Routing
+attributes:
+  - nxos_name: pfxlistv4
+    tf_name: rule_name
+    type: String
+    description: 'IPv4 Prefix Rule name.'
+    example: RULE1
+    id: true
+    reference_only: true
+  - nxos_name: action
+    tf_name: action
+    type: String
+    description: 'IPv4 Prefix Rule Entry action.'
+    enum_values:
+      - deny
+      - permit
+    default_value: permit
+    example: permit
+  - nxos_name: order
+    tf_name: order
+    type: Int64
+    id: true
+    description: 'IPv4 Prefix Rule Entry order.'
+    min_int: 0
+    max_int: 4294967294
+    example: 10
+  - nxos_name: criteria
+    tf_name: criteria
+    type: String
+    description: 'IPv4 Prefix Rule Entry criteria.'
+    enum_values:
+      - exact
+      - inexact
+    default_value: exact
+    example: exact
+  - nxos_name: pfx
+    tf_name: prefix
+    type: String
+    description: 'IPv4 Prefix Rule Entry prefix.'
+    example: 192.168.1.0/24
+  - nxos_name: fromPfxLen
+    tf_name: from_range
+    type: Int64
+    description: 'IPv4 Prefix Rule Entry start range.'
+    min_int: 0
+    max_int: 128
+    default_value: 0
+    example: 0
+  - nxos_name: toPfxLen
+    tf_name: to_range
+    type: Int64
+    description: 'IPv4 Prefix Rule Entry end range.'
+    min_int: 0
+    max_int: 128
+    default_value: 0
+    example: 24

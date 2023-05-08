@@ -6,6 +6,8 @@ ds_description: This data source can read a IPv4 Prefix List entry configuration
 res_description: This resource can manage a IPv4 Prefix List entry configuration.
 doc_path: Routing%20and%20Forwarding/rtpfx:Entry/
 doc_category: Routing
+parents:
+  - IPv4 Prefix Rule
 attributes:
   - nxos_name: pfxlistv4
     tf_name: rule_name
@@ -14,6 +16,14 @@ attributes:
     example: RULE1
     id: true
     reference_only: true
+  - nxos_name: order
+    tf_name: order
+    type: Int64
+    id: true
+    description: 'IPv4 Prefix Rule Entry order.'
+    min_int: 0
+    max_int: 4294967294
+    example: 10
   - nxos_name: action
     tf_name: action
     type: String
@@ -23,14 +33,6 @@ attributes:
       - permit
     default_value: permit
     example: permit
-  - nxos_name: order
-    tf_name: order
-    type: Int64
-    id: true
-    description: 'IPv4 Prefix Rule Entry order.'
-    min_int: 0
-    max_int: 4294967294
-    example: 10
   - nxos_name: criteria
     tf_name: criteria
     type: String

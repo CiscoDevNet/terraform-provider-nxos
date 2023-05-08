@@ -1,0 +1,11 @@
+---
+name: Route Map
+class_name: rpmEntity
+dn: sys/rpm
+ds_description: This data source can read the Route-Map configuration.
+res_description: This resource can manage the Route-Map configuration.
+doc_path: Routing%20and%20Forwarding/rpm:Entity/
+doc_category: Routing
+no_delete: true
+children:
+  - Route Map Entry

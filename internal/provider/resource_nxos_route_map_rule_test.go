@@ -14,7 +14,7 @@ func TestAccNxosRouteMapRule(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosRouteMapRulePrerequisitesConfig + testAccNxosRouteMapRuleConfig_all(),
+				Config: testAccNxosRouteMapRuleConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_route_map_rule.test", "name", "RULE1"),
 				),
@@ -28,22 +28,10 @@ func TestAccNxosRouteMapRule(t *testing.T) {
 	})
 }
 
-const testAccNxosRouteMapRulePrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
-  dn = "sys/rpm"
-  class_name = "rpmEntity"
-  content = {
-  }
-  depends_on = [nxos_rest.PreReq0, ]
-}
-
-`
-
 func testAccNxosRouteMapRuleConfig_minimum() string {
 	return `
 	resource "nxos_route_map_rule" "test" {
 		name = "RULE1"
-  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }
@@ -52,7 +40,6 @@ func testAccNxosRouteMapRuleConfig_all() string {
 	return `
 	resource "nxos_route_map_rule" "test" {
 		name = "RULE1"
-  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }

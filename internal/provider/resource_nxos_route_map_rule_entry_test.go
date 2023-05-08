@@ -17,8 +17,8 @@ func TestAccNxosRouteMapRuleEntry(t *testing.T) {
 				Config: testAccNxosRouteMapRuleEntryPrerequisitesConfig + testAccNxosRouteMapRuleEntryConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_route_map_rule_entry.test", "rule_name", "RULE1"),
-					resource.TestCheckResourceAttr("nxos_route_map_rule_entry.test", "action", "permit"),
 					resource.TestCheckResourceAttr("nxos_route_map_rule_entry.test", "order", "10"),
+					resource.TestCheckResourceAttr("nxos_route_map_rule_entry.test", "action", "permit"),
 				),
 			},
 			{
@@ -32,20 +32,12 @@ func TestAccNxosRouteMapRuleEntry(t *testing.T) {
 
 const testAccNxosRouteMapRuleEntryPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
-  dn = "sys/rpm"
-  class_name = "rpmEntity"
-  content = {
-  }
-  depends_on = [nxos_rest.PreReq0, ]
-}
-
-resource "nxos_rest" "PreReq1" {
   dn = "sys/rpm/rtmap-[RULE1]"
   class_name = "rtmapRule"
   content = {
       name = "RULE1"
   }
-  depends_on = [nxos_rest.PreReq1, ]
+  depends_on = [nxos_rest.PreReq0, ]
 }
 
 `
@@ -55,7 +47,7 @@ func testAccNxosRouteMapRuleEntryConfig_minimum() string {
 	resource "nxos_route_map_rule_entry" "test" {
 		rule_name = "RULE1"
 		order = 10
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
+  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }
@@ -64,9 +56,9 @@ func testAccNxosRouteMapRuleEntryConfig_all() string {
 	return `
 	resource "nxos_route_map_rule_entry" "test" {
 		rule_name = "RULE1"
-		action = "permit"
 		order = 10
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
+		action = "permit"
+  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }

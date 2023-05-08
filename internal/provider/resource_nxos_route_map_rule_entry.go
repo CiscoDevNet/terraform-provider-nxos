@@ -40,7 +40,7 @@ func (r *RouteMapRuleEntryResource) Metadata(ctx context.Context, req resource.M
 func (r *RouteMapRuleEntryResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a Route-Map Rule Entry configuration.", "rtmapEntry", "Routing%20and%20Forwarding/rtmap:Entry/").AddChildren("route_map_match_ip_prefix").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a Route-Map Rule Entry configuration.", "rtmapEntry", "Routing%20and%20Forwarding/rtmap:Entry/").AddParents("route_map_rule").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -61,6 +61,16 @@ func (r *RouteMapRuleEntryResource) Schema(ctx context.Context, req resource.Sch
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
+			"order": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route-Map Rule Entry order.").AddIntegerRangeDescription(0, 65535).String,
+				Required:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 65535),
+				},
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.RequiresReplace(),
+				},
+			},
 			"action": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Route-Map Rule Entry action.").AddStringEnumDescription("deny", "permit").AddDefaultValueDescription("permit").String,
 				Optional:            true,
@@ -70,16 +80,6 @@ func (r *RouteMapRuleEntryResource) Schema(ctx context.Context, req resource.Sch
 				},
 				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("permit"),
-				},
-			},
-			"order": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Route-Map Rule Entry order.").AddIntegerRangeDescription(0, 65535).String,
-				Required:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(0, 65535),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					int64planmodifier.RequiresReplace(),
 				},
 			},
 		},

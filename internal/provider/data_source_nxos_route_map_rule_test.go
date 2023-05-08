@@ -14,7 +14,7 @@ func TestAccDataSourceNxosRouteMapRule(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosRouteMapRulePrerequisitesConfig + testAccDataSourceNxosRouteMapRuleConfig,
+				Config: testAccDataSourceNxosRouteMapRuleConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_route_map_rule.test", "name", "RULE1"),
 				),
@@ -23,22 +23,10 @@ func TestAccDataSourceNxosRouteMapRule(t *testing.T) {
 	})
 }
 
-const testAccDataSourceNxosRouteMapRulePrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
-  dn = "sys/rpm"
-  class_name = "rpmEntity"
-  content = {
-  }
-  depends_on = [nxos_rest.PreReq0, ]
-}
-
-`
-
 const testAccDataSourceNxosRouteMapRuleConfig = `
 
 resource "nxos_route_map_rule" "test" {
   name = "RULE1"
-  depends_on = [nxos_rest.PreReq0, ]
 }
 
 data "nxos_route_map_rule" "test" {

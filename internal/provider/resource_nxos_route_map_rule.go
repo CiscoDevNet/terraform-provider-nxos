@@ -36,7 +36,7 @@ func (r *RouteMapRuleResource) Metadata(ctx context.Context, req resource.Metada
 func (r *RouteMapRuleResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a Route-Map Rule configuration.", "rtmapRule", "Routing%20and%20Forwarding/rtmap:Rule/").AddChildren("route_map_entry").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a Route-Map Rule configuration.", "rtmapRule", "Routing%20and%20Forwarding/rtmap:Rule/").AddChildren("route_map_rule_entry").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

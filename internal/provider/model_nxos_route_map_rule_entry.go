@@ -15,8 +15,8 @@ type RouteMapRuleEntry struct {
 	Device types.String `tfsdk:"device"`
 	Dn     types.String `tfsdk:"id"`
 	Rtmap  types.String `tfsdk:"rule_name"`
-	Action types.String `tfsdk:"action"`
 	Order  types.Int64  `tfsdk:"order"`
+	Action types.String `tfsdk:"action"`
 }
 
 func (data RouteMapRuleEntry) getDn() string {
@@ -29,14 +29,14 @@ func (data RouteMapRuleEntry) getClassName() string {
 
 func (data RouteMapRuleEntry) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("action", data.Action.ValueString()).
-		Set("order", strconv.FormatInt(data.Order.ValueInt64(), 10))
+		Set("order", strconv.FormatInt(data.Order.ValueInt64(), 10)).
+		Set("action", data.Action.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
 func (data *RouteMapRuleEntry) fromBody(res gjson.Result) {
-	data.Action = types.StringValue(res.Get("*.attributes.action").String())
 	data.Order = types.Int64Value(res.Get("*.attributes.order").Int())
+	data.Action = types.StringValue(res.Get("*.attributes.action").String())
 }
 
 func (data *RouteMapRuleEntry) fromPlan(plan RouteMapRuleEntry) {

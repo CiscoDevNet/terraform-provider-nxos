@@ -50,13 +50,13 @@ func (d *RouteMapRuleEntryDataSource) Schema(ctx context.Context, req datasource
 				MarkdownDescription: "Route Map rule name.",
 				Required:            true,
 			},
-			"action": schema.StringAttribute{
-				MarkdownDescription: "Route-Map Rule Entry action.",
-				Computed:            true,
-			},
 			"order": schema.Int64Attribute{
 				MarkdownDescription: "Route-Map Rule Entry order.",
 				Required:            true,
+			},
+			"action": schema.StringAttribute{
+				MarkdownDescription: "Route-Map Rule Entry action.",
+				Computed:            true,
 			},
 		},
 	}

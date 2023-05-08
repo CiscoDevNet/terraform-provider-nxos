@@ -40,7 +40,7 @@ func (r *IPv4PrefixRuleEntryResource) Metadata(ctx context.Context, req resource
 func (r *IPv4PrefixRuleEntryResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a IPv4 Prefix List entry configuration.", "rtpfxEntry", "Routing%20and%20Forwarding/rtpfx:Entry/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a IPv4 Prefix List entry configuration.", "rtpfxEntry", "Routing%20and%20Forwarding/rtpfx:Entry/").AddParents("ipv4_prefix_rule").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -61,6 +61,16 @@ func (r *IPv4PrefixRuleEntryResource) Schema(ctx context.Context, req resource.S
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
+			"order": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix Rule Entry order.").AddIntegerRangeDescription(0, 4294967294).String,
+				Required:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967294),
+				},
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.RequiresReplace(),
+				},
+			},
 			"action": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix Rule Entry action.").AddStringEnumDescription("deny", "permit").AddDefaultValueDescription("permit").String,
 				Optional:            true,
@@ -70,16 +80,6 @@ func (r *IPv4PrefixRuleEntryResource) Schema(ctx context.Context, req resource.S
 				},
 				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("permit"),
-				},
-			},
-			"order": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix Rule Entry order.").AddIntegerRangeDescription(0, 4294967294).String,
-				Required:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(0, 4294967294),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					int64planmodifier.RequiresReplace(),
 				},
 			},
 			"criteria": schema.StringAttribute{

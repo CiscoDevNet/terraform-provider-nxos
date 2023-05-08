@@ -15,8 +15,8 @@ type IPv4PrefixRuleEntry struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
 	Pfxlistv4  types.String `tfsdk:"rule_name"`
-	Action     types.String `tfsdk:"action"`
 	Order      types.Int64  `tfsdk:"order"`
+	Action     types.String `tfsdk:"action"`
 	Criteria   types.String `tfsdk:"criteria"`
 	Pfx        types.String `tfsdk:"prefix"`
 	FromPfxLen types.Int64  `tfsdk:"from_range"`
@@ -33,8 +33,8 @@ func (data IPv4PrefixRuleEntry) getClassName() string {
 
 func (data IPv4PrefixRuleEntry) toBody() nxos.Body {
 	attrs := nxos.Body{}.
-		Set("action", data.Action.ValueString()).
 		Set("order", strconv.FormatInt(data.Order.ValueInt64(), 10)).
+		Set("action", data.Action.ValueString()).
 		Set("criteria", data.Criteria.ValueString()).
 		Set("pfx", data.Pfx.ValueString()).
 		Set("fromPfxLen", strconv.FormatInt(data.FromPfxLen.ValueInt64(), 10)).
@@ -43,8 +43,8 @@ func (data IPv4PrefixRuleEntry) toBody() nxos.Body {
 }
 
 func (data *IPv4PrefixRuleEntry) fromBody(res gjson.Result) {
-	data.Action = types.StringValue(res.Get("*.attributes.action").String())
 	data.Order = types.Int64Value(res.Get("*.attributes.order").Int())
+	data.Action = types.StringValue(res.Get("*.attributes.action").String())
 	data.Criteria = types.StringValue(res.Get("*.attributes.criteria").String())
 	data.Pfx = types.StringValue(res.Get("*.attributes.pfx").String())
 	data.FromPfxLen = types.Int64Value(res.Get("*.attributes.fromPfxLen").Int())

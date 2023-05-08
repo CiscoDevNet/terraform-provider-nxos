@@ -5,6 +5,8 @@ subcategory: "Routing"
 description: |-
   This resource can manage a IPv4 Prefix List entry configuration.
   API Documentation: rtpfxEntry https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtpfx:Entry/
+  Parent resources
+  nxosipv4prefix_rule https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_prefix_rule
 ---
 
 # nxos_ipv4_prefix_rule_entry (Resource)
@@ -13,13 +15,17 @@ This resource can manage a IPv4 Prefix List entry configuration.
 
 - API Documentation: [rtpfxEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtpfx:Entry/)
 
+### Parent resources
+
+- [nxos_ipv4_prefix_rule](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_prefix_rule)
+
 ## Example Usage
 
 ```terraform
 resource "nxos_ipv4_prefix_rule_entry" "example" {
   rule_name  = "RULE1"
-  action     = "permit"
   order      = 10
+  action     = "permit"
   criteria   = "exact"
   prefix     = "192.168.1.0/24"
   from_range = 0

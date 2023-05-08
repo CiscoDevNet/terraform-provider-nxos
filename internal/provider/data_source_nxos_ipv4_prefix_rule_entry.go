@@ -50,13 +50,13 @@ func (d *IPv4PrefixRuleEntryDataSource) Schema(ctx context.Context, req datasour
 				MarkdownDescription: "IPv4 Prefix Rule name.",
 				Required:            true,
 			},
-			"action": schema.StringAttribute{
-				MarkdownDescription: "IPv4 Prefix Rule Entry action.",
-				Computed:            true,
-			},
 			"order": schema.Int64Attribute{
 				MarkdownDescription: "IPv4 Prefix Rule Entry order.",
 				Required:            true,
+			},
+			"action": schema.StringAttribute{
+				MarkdownDescription: "IPv4 Prefix Rule Entry action.",
+				Computed:            true,
 			},
 			"criteria": schema.StringAttribute{
 				MarkdownDescription: "IPv4 Prefix Rule Entry criteria.",

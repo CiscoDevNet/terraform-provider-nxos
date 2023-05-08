@@ -17,8 +17,8 @@ func TestAccNxosIPv4PrefixRuleEntry(t *testing.T) {
 				Config: testAccNxosIPv4PrefixRuleEntryConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ipv4_prefix_rule_entry.test", "rule_name", "RULE1"),
-					resource.TestCheckResourceAttr("nxos_ipv4_prefix_rule_entry.test", "action", "permit"),
 					resource.TestCheckResourceAttr("nxos_ipv4_prefix_rule_entry.test", "order", "10"),
+					resource.TestCheckResourceAttr("nxos_ipv4_prefix_rule_entry.test", "action", "permit"),
 					resource.TestCheckResourceAttr("nxos_ipv4_prefix_rule_entry.test", "criteria", "exact"),
 					resource.TestCheckResourceAttr("nxos_ipv4_prefix_rule_entry.test", "prefix", "192.168.1.0/24"),
 					resource.TestCheckResourceAttr("nxos_ipv4_prefix_rule_entry.test", "from_range", "0"),
@@ -47,8 +47,8 @@ func testAccNxosIPv4PrefixRuleEntryConfig_all() string {
 	return `
 	resource "nxos_ipv4_prefix_rule_entry" "test" {
 		rule_name = "RULE1"
-		action = "permit"
 		order = 10
+		action = "permit"
 		criteria = "exact"
 		prefix = "192.168.1.0/24"
 		from_range = 0

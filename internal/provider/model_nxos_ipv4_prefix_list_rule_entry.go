@@ -11,7 +11,7 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-type IPv4PrefixRuleEntry struct {
+type IPv4PrefixListRuleEntry struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
 	Pfxlistv4  types.String `tfsdk:"rule_name"`
@@ -23,15 +23,15 @@ type IPv4PrefixRuleEntry struct {
 	ToPfxLen   types.Int64  `tfsdk:"to_range"`
 }
 
-func (data IPv4PrefixRuleEntry) getDn() string {
+func (data IPv4PrefixListRuleEntry) getDn() string {
 	return fmt.Sprintf("sys/rpm/pfxlistv4-[%s]/ent-[%v]", data.Pfxlistv4.ValueString(), data.Order.ValueInt64())
 }
 
-func (data IPv4PrefixRuleEntry) getClassName() string {
+func (data IPv4PrefixListRuleEntry) getClassName() string {
 	return "rtpfxEntry"
 }
 
-func (data IPv4PrefixRuleEntry) toBody() nxos.Body {
+func (data IPv4PrefixListRuleEntry) toBody() nxos.Body {
 	attrs := nxos.Body{}.
 		Set("order", strconv.FormatInt(data.Order.ValueInt64(), 10)).
 		Set("action", data.Action.ValueString()).
@@ -42,7 +42,7 @@ func (data IPv4PrefixRuleEntry) toBody() nxos.Body {
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
-func (data *IPv4PrefixRuleEntry) fromBody(res gjson.Result) {
+func (data *IPv4PrefixListRuleEntry) fromBody(res gjson.Result) {
 	data.Order = types.Int64Value(res.Get("*.attributes.order").Int())
 	data.Action = types.StringValue(res.Get("*.attributes.action").String())
 	data.Criteria = types.StringValue(res.Get("*.attributes.criteria").String())
@@ -51,7 +51,7 @@ func (data *IPv4PrefixRuleEntry) fromBody(res gjson.Result) {
 	data.ToPfxLen = types.Int64Value(res.Get("*.attributes.toPfxLen").Int())
 }
 
-func (data *IPv4PrefixRuleEntry) fromPlan(plan IPv4PrefixRuleEntry) {
+func (data *IPv4PrefixListRuleEntry) fromPlan(plan IPv4PrefixListRuleEntry) {
 	data.Device = plan.Device
 	data.Dn = plan.Dn
 	data.Pfxlistv4 = plan.Pfxlistv4

@@ -10,31 +10,31 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-type IPv4PrefixRule struct {
+type IPv4PrefixListRule struct {
 	Device types.String `tfsdk:"device"`
 	Dn     types.String `tfsdk:"id"`
 	Name   types.String `tfsdk:"name"`
 }
 
-func (data IPv4PrefixRule) getDn() string {
+func (data IPv4PrefixListRule) getDn() string {
 	return fmt.Sprintf("sys/rpm/pfxlistv4-[%s]", data.Name.ValueString())
 }
 
-func (data IPv4PrefixRule) getClassName() string {
+func (data IPv4PrefixListRule) getClassName() string {
 	return "rtpfxRuleV4"
 }
 
-func (data IPv4PrefixRule) toBody() nxos.Body {
+func (data IPv4PrefixListRule) toBody() nxos.Body {
 	attrs := nxos.Body{}.
 		Set("name", data.Name.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
-func (data *IPv4PrefixRule) fromBody(res gjson.Result) {
+func (data *IPv4PrefixListRule) fromBody(res gjson.Result) {
 	data.Name = types.StringValue(res.Get("*.attributes.name").String())
 }
 
-func (data *IPv4PrefixRule) fromPlan(plan IPv4PrefixRule) {
+func (data *IPv4PrefixListRule) fromPlan(plan IPv4PrefixListRule) {
 	data.Device = plan.Device
 	data.Dn = plan.Dn
 }

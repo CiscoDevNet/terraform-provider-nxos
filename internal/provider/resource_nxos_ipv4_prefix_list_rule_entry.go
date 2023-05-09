@@ -6,11 +6,15 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -18,25 +22,25 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &IPv4PrefixRuleResource{}
-var _ resource.ResourceWithImportState = &IPv4PrefixRuleResource{}
+var _ resource.Resource = &IPv4PrefixListRuleEntryResource{}
+var _ resource.ResourceWithImportState = &IPv4PrefixListRuleEntryResource{}
 
-func NewIPv4PrefixRuleResource() resource.Resource {
-	return &IPv4PrefixRuleResource{}
+func NewIPv4PrefixListRuleEntryResource() resource.Resource {
+	return &IPv4PrefixListRuleEntryResource{}
 }
 
-type IPv4PrefixRuleResource struct {
+type IPv4PrefixListRuleEntryResource struct {
 	data *NxosProviderData
 }
 
-func (r *IPv4PrefixRuleResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_ipv4_prefix_rule"
+func (r *IPv4PrefixListRuleEntryResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_ipv4_prefix_list_rule_entry"
 }
 
-func (r *IPv4PrefixRuleResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *IPv4PrefixListRuleEntryResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage an IPv4 Prefix List configuration.", "rtpfxRuleV4", "Routing%20and%20Forwarding/rtpfx:RuleV4/").AddChildren("ipv4_prefix_rule_entry").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage an IPv4 Prefix List entry configuration.", "rtpfxEntry", "Routing%20and%20Forwarding/rtpfx:Entry/").AddParents("ipv4_prefix_list_rule").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -50,18 +54,77 @@ func (r *IPv4PrefixRuleResource) Schema(ctx context.Context, req resource.Schema
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix Rule name.").String,
+			"rule_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix List Rule name.").String,
 				Required:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
+				},
+			},
+			"order": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix List Rule Entry order.").AddIntegerRangeDescription(0, 4294967294).String,
+				Required:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967294),
+				},
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.RequiresReplace(),
+				},
+			},
+			"action": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix List Rule Entry action.").AddStringEnumDescription("deny", "permit").AddDefaultValueDescription("permit").String,
+				Optional:            true,
+				Computed:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("deny", "permit"),
+				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("permit"),
+				},
+			},
+			"criteria": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix List Rule Entry criteria.").AddStringEnumDescription("exact", "inexact").AddDefaultValueDescription("exact").String,
+				Optional:            true,
+				Computed:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("exact", "inexact"),
+				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("exact"),
+				},
+			},
+			"prefix": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix List Rule Entry prefix.").String,
+				Optional:            true,
+				Computed:            true,
+			},
+			"from_range": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix List Rule Entry start range.").AddIntegerRangeDescription(0, 128).AddDefaultValueDescription("0").String,
+				Optional:            true,
+				Computed:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 128),
+				},
+				PlanModifiers: []planmodifier.Int64{
+					helpers.IntegerDefaultModifier(0),
+				},
+			},
+			"to_range": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix List Rule Entry end range.").AddIntegerRangeDescription(0, 128).AddDefaultValueDescription("0").String,
+				Optional:            true,
+				Computed:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 128),
+				},
+				PlanModifiers: []planmodifier.Int64{
+					helpers.IntegerDefaultModifier(0),
 				},
 			},
 		},
 	}
 }
 
-func (r *IPv4PrefixRuleResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *IPv4PrefixListRuleEntryResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -70,8 +133,8 @@ func (r *IPv4PrefixRuleResource) Configure(ctx context.Context, req resource.Con
 	r.data = req.ProviderData.(*NxosProviderData)
 }
 
-func (r *IPv4PrefixRuleResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan, state IPv4PrefixRule
+func (r *IPv4PrefixListRuleEntryResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan, state IPv4PrefixListRuleEntry
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -107,8 +170,8 @@ func (r *IPv4PrefixRuleResource) Create(ctx context.Context, req resource.Create
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *IPv4PrefixRuleResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state IPv4PrefixRule
+func (r *IPv4PrefixListRuleEntryResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state IPv4PrefixListRuleEntry
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -133,8 +196,8 @@ func (r *IPv4PrefixRuleResource) Read(ctx context.Context, req resource.ReadRequ
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *IPv4PrefixRuleResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state IPv4PrefixRule
+func (r *IPv4PrefixListRuleEntryResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state IPv4PrefixListRuleEntry
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -168,8 +231,8 @@ func (r *IPv4PrefixRuleResource) Update(ctx context.Context, req resource.Update
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *IPv4PrefixRuleResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state IPv4PrefixRule
+func (r *IPv4PrefixListRuleEntryResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state IPv4PrefixListRuleEntry
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -195,6 +258,6 @@ func (r *IPv4PrefixRuleResource) Delete(ctx context.Context, req resource.Delete
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *IPv4PrefixRuleResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *IPv4PrefixListRuleEntryResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

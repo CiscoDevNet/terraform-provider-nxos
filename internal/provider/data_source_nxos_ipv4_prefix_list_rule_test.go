@@ -8,29 +8,29 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccDataSourceNxosIPv4PrefixRule(t *testing.T) {
+func TestAccDataSourceNxosIPv4PrefixListRule(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosIPv4PrefixRuleConfig,
+				Config: testAccDataSourceNxosIPv4PrefixListRuleConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_ipv4_prefix_rule.test", "name", "RULE1"),
+					resource.TestCheckResourceAttr("data.nxos_ipv4_prefix_list_rule.test", "name", "RULE1"),
 				),
 			},
 		},
 	})
 }
 
-const testAccDataSourceNxosIPv4PrefixRuleConfig = `
+const testAccDataSourceNxosIPv4PrefixListRuleConfig = `
 
-resource "nxos_ipv4_prefix_rule" "test" {
+resource "nxos_ipv4_prefix_list_rule" "test" {
   name = "RULE1"
 }
 
-data "nxos_ipv4_prefix_rule" "test" {
+data "nxos_ipv4_prefix_list_rule" "test" {
   name = "RULE1"
-  depends_on = [nxos_ipv4_prefix_rule.test]
+  depends_on = [nxos_ipv4_prefix_list_rule.test]
 }
 `

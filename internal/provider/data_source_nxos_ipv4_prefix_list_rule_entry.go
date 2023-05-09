@@ -16,23 +16,23 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &IPv4PrefixRuleEntryDataSource{}
-	_ datasource.DataSourceWithConfigure = &IPv4PrefixRuleEntryDataSource{}
+	_ datasource.DataSource              = &IPv4PrefixListRuleEntryDataSource{}
+	_ datasource.DataSourceWithConfigure = &IPv4PrefixListRuleEntryDataSource{}
 )
 
-func NewIPv4PrefixRuleEntryDataSource() datasource.DataSource {
-	return &IPv4PrefixRuleEntryDataSource{}
+func NewIPv4PrefixListRuleEntryDataSource() datasource.DataSource {
+	return &IPv4PrefixListRuleEntryDataSource{}
 }
 
-type IPv4PrefixRuleEntryDataSource struct {
+type IPv4PrefixListRuleEntryDataSource struct {
 	data *NxosProviderData
 }
 
-func (d *IPv4PrefixRuleEntryDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_ipv4_prefix_rule_entry"
+func (d *IPv4PrefixListRuleEntryDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_ipv4_prefix_list_rule_entry"
 }
 
-func (d *IPv4PrefixRuleEntryDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *IPv4PrefixListRuleEntryDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read an IPv4 Prefix List entry configuration.", "rtpfxEntry", "Routing%20and%20Forwarding/rtpfx:Entry/").String,
@@ -47,38 +47,38 @@ func (d *IPv4PrefixRuleEntryDataSource) Schema(ctx context.Context, req datasour
 				Computed:            true,
 			},
 			"rule_name": schema.StringAttribute{
-				MarkdownDescription: "IPv4 Prefix Rule name.",
+				MarkdownDescription: "IPv4 Prefix List Rule name.",
 				Required:            true,
 			},
 			"order": schema.Int64Attribute{
-				MarkdownDescription: "IPv4 Prefix Rule Entry order.",
+				MarkdownDescription: "IPv4 Prefix List Rule Entry order.",
 				Required:            true,
 			},
 			"action": schema.StringAttribute{
-				MarkdownDescription: "IPv4 Prefix Rule Entry action.",
+				MarkdownDescription: "IPv4 Prefix List Rule Entry action.",
 				Computed:            true,
 			},
 			"criteria": schema.StringAttribute{
-				MarkdownDescription: "IPv4 Prefix Rule Entry criteria.",
+				MarkdownDescription: "IPv4 Prefix List Rule Entry criteria.",
 				Computed:            true,
 			},
 			"prefix": schema.StringAttribute{
-				MarkdownDescription: "IPv4 Prefix Rule Entry prefix.",
+				MarkdownDescription: "IPv4 Prefix List Rule Entry prefix.",
 				Computed:            true,
 			},
 			"from_range": schema.Int64Attribute{
-				MarkdownDescription: "IPv4 Prefix Rule Entry start range.",
+				MarkdownDescription: "IPv4 Prefix List Rule Entry start range.",
 				Computed:            true,
 			},
 			"to_range": schema.Int64Attribute{
-				MarkdownDescription: "IPv4 Prefix Rule Entry end range.",
+				MarkdownDescription: "IPv4 Prefix List Rule Entry end range.",
 				Computed:            true,
 			},
 		},
 	}
 }
 
-func (d *IPv4PrefixRuleEntryDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *IPv4PrefixListRuleEntryDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -86,8 +86,8 @@ func (d *IPv4PrefixRuleEntryDataSource) Configure(_ context.Context, req datasou
 	d.data = req.ProviderData.(*NxosProviderData)
 }
 
-func (d *IPv4PrefixRuleEntryDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config, state IPv4PrefixRuleEntry
+func (d *IPv4PrefixListRuleEntryDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config, state IPv4PrefixListRuleEntry
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

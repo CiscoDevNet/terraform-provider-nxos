@@ -8,19 +8,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccNxosIPv4PrefixRule(t *testing.T) {
+func TestAccNxosIPv4PrefixListRule(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosIPv4PrefixRuleConfig_all(),
+				Config: testAccNxosIPv4PrefixListRuleConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ipv4_prefix_rule.test", "name", "RULE1"),
+					resource.TestCheckResourceAttr("nxos_ipv4_prefix_list_rule.test", "name", "RULE1"),
 				),
 			},
 			{
-				ResourceName:  "nxos_ipv4_prefix_rule.test",
+				ResourceName:  "nxos_ipv4_prefix_list_rule.test",
 				ImportState:   true,
 				ImportStateId: "sys/rpm/pfxlistv4-[RULE1]",
 			},
@@ -28,17 +28,17 @@ func TestAccNxosIPv4PrefixRule(t *testing.T) {
 	})
 }
 
-func testAccNxosIPv4PrefixRuleConfig_minimum() string {
+func testAccNxosIPv4PrefixListRuleConfig_minimum() string {
 	return `
-	resource "nxos_ipv4_prefix_rule" "test" {
+	resource "nxos_ipv4_prefix_list_rule" "test" {
 		name = "RULE1"
 	}
 	`
 }
 
-func testAccNxosIPv4PrefixRuleConfig_all() string {
+func testAccNxosIPv4PrefixListRuleConfig_all() string {
 	return `
-	resource "nxos_ipv4_prefix_rule" "test" {
+	resource "nxos_ipv4_prefix_list_rule" "test" {
 		name = "RULE1"
 	}
 	`

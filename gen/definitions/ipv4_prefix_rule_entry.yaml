@@ -2,8 +2,8 @@
 name: IPv4 Prefix Rule Entry
 class_name: rtpfxEntry
 dn: sys/rpm/pfxlistv4-[%s]/ent-[%v]
-ds_description: This data source can read a IPv4 Prefix List entry configuration.
-res_description: This resource can manage a IPv4 Prefix List entry configuration.
+ds_description: This data source can read an IPv4 Prefix List entry configuration.
+res_description: This resource can manage an IPv4 Prefix List entry configuration.
 doc_path: Routing%20and%20Forwarding/rtpfx:Entry/
 doc_category: Routing
 parents:

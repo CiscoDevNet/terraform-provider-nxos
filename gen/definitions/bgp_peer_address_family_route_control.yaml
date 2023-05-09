@@ -94,8 +94,6 @@ test_prerequisites:
   - dn: sys/bgp/inst/dom-[default]/peer-[192.168.0.1]/af-[ipv4-ucast]
     class_name: bgpPeerAf
     attributes:
-      - name: addr
-        value: '192.168.0.1'
       - name: asn
         value: '65001'
       - name: address_family

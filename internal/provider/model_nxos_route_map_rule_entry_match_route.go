@@ -4,19 +4,17 @@ package provider
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
-	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
 type RouteMapRuleEntryMatchRoute struct {
 	Device types.String `tfsdk:"device"`
-	Dn types.String `tfsdk:"id"`
-	Rtmap types.String `tfsdk:"rule_name"`
-	Order types.Int64 `tfsdk:"order"`
+	Dn     types.String `tfsdk:"id"`
+	Rtmap  types.String `tfsdk:"rule_name"`
+	Order  types.Int64  `tfsdk:"order"`
 }
 
 func (data RouteMapRuleEntryMatchRoute) getDn() string {
@@ -28,8 +26,7 @@ func (data RouteMapRuleEntryMatchRoute) getClassName() string {
 }
 
 func (data RouteMapRuleEntryMatchRoute) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	return nxos.Body{Str: `{"` + data.getClassName() + `":{"attributes":{}}}`}
 }
 
 func (data *RouteMapRuleEntryMatchRoute) fromBody(res gjson.Result) {

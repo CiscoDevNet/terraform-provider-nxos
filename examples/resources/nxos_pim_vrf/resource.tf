@@ -1,5 +1,5 @@
 resource "nxos_pim_vrf" "example" {
-  name = "default"
+  name        = "default"
   admin_state = "enabled"
-  bfd = true
+  bfd         = true
 }

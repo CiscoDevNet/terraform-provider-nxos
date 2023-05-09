@@ -1,4 +1,4 @@
 resource "nxos_default_qos_class_map" "example" {
-  name = "Voice"
+  name       = "Voice"
   match_type = "match-any"
 }

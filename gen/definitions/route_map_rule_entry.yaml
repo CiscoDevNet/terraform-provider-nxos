@@ -39,4 +39,3 @@ test_prerequisites:
     attributes:
       - name: name
         value: RULE1
-    dependencies: [0]

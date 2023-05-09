@@ -1,0 +1,17 @@
+---
+name: Route Map Rule
+class_name: rtmapRule
+dn: sys/rpm/rtmap-[%s]
+ds_description: This data source can read a Route-Map Rule configuration.
+res_description: This resource can manage a Route-Map Rule configuration.
+doc_path: Routing%20and%20Forwarding/rtmap:Rule/
+doc_category: Routing
+children:
+  - Route Map Rule Entry
+attributes:
+  - nxos_name: name
+    tf_name: name
+    type: String
+    description: 'Route-Map Rule name.'
+    id: true
+    example: RULE1

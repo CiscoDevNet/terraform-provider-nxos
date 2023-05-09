@@ -8,7 +8,7 @@ doc_path: Routing%20and%20Forwarding/bgp:PeerAf/
 doc_category: BGP
 parents:
   - BGP Peer
-childrens:
+children:
   - BGP Peer Address Family Route Control
   - BGP Peer Address Family Prefix List Control
 attributes:

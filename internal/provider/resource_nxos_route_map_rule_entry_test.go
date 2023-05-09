@@ -37,7 +37,6 @@ resource "nxos_rest" "PreReq0" {
   content = {
       name = "RULE1"
   }
-  depends_on = [nxos_rest.PreReq0, ]
 }
 
 `

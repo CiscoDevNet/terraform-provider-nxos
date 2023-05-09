@@ -19,7 +19,7 @@ type RouteMapRuleEntryMatchRoutePrefixList struct {
 }
 
 func (data RouteMapRuleEntryMatchRoutePrefixList) getDn() string {
-	return fmt.Sprintf("sys/rpm/rtmap-[%s]/ent-[%v]/mrtdst/rtrtDstAtt-[%s]", data.Rtmap.ValueString(), data.Order.ValueInt64(), data.TDn.ValueString())
+	return fmt.Sprintf("sys/rpm/rtmap-[%s]/ent-[%v]/mrtdst/rsrtDstAtt-[%s]", data.Rtmap.ValueString(), data.Order.ValueInt64(), data.TDn.ValueString())
 }
 
 func (data RouteMapRuleEntryMatchRoutePrefixList) getClassName() string {

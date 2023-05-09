@@ -1,7 +1,7 @@
 ---
 name: Route Map Rule Entry Match Route Prefix List
 class_name: rtmapRsRtDstAtt
-dn: sys/rpm/rtmap-[%s]/ent-[%v]/mrtdst/rtrtDstAtt-[%s]
+dn: sys/rpm/rtmap-[%s]/ent-[%v]/mrtdst/rsrtDstAtt-[%s]
 ds_description: This data source can read a Match Route Prefix List in Route-Map Rule Entry configuration.
 res_description: This resource can manage a Match Route Prefix List in  Route-Map Rule Entry configuration.
 doc_path: Routing%20and%20Forwarding/rtmap:RsRtDstAtt/

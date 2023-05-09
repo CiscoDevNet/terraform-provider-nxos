@@ -1,0 +1,73 @@
+---
+name: Route Map Rule Entry Set Regular Community
+class_name: rtmapSetRegComm
+dn: sys/rpm/rtmap-[%s]/ent-[%v]/sregcomm
+ds_description: This data source can read a Set Community configuration in a Route-Map Rule Entry.
+res_description: This resource can manage a Set Community configuration in a Route-Map Rule Entry.
+doc_path: Routing%20and%20Forwarding/rtmap:SetRegComm/
+doc_category: Routing
+parents:
+  - Route Map Rule Entry
+children:
+  - Route Map Rule Entry Set Regular Community Item
+attributes:
+  - nxos_name: rtmap
+    tf_name: rule_name
+    type: String
+    id: true
+    reference_only: true
+    description: 'Route Map rule name.'
+    example: RULE1
+  - nxos_name: order
+    tf_name: order
+    type: Int64
+    description: 'Route-Map Rule Entry order.'
+    min_int: 0
+    max_int: 65535
+    example: 10
+    id: true
+    reference_only: true
+  - nxos_name: additive
+    tf_name: additive
+    type: String
+    description: 'Option to add to an existing community.'
+    enum_values:
+      - enabled
+      - disabled
+    default_value: disabled
+    example: disabled
+  - nxos_name: noCommAttr
+    tf_name: no_community
+    type: String
+    description: 'Option to have no community attribute.'
+    enum_values:
+      - enabled
+      - disabled
+    default_value: disabled
+    example: disabled
+  - nxos_name: setCriteria
+    tf_name: set_criteria
+    type: String
+    description: 'Operation on the current community.'
+    enum_values:
+      - none
+      - append
+      - replace
+      - igp
+      - pre-bestpath
+    default_value: none
+    example: none
+test_prerequisites:
+  - dn: sys/rpm/rtmap-[RULE1]
+    class_name: rtmapRule
+    attributes:
+      - name: name
+        value: RULE1
+  - dn: sys/rpm/rtmap-[RULE1]/ent-[0]
+    class_name: rtmapEntry
+    attributes:
+      - name: name
+        value: RULE1
+      - name: order
+        value: 0
+    dependencies: [0]

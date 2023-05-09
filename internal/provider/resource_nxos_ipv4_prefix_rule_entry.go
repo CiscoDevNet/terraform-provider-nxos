@@ -40,7 +40,7 @@ func (r *IPv4PrefixRuleEntryResource) Metadata(ctx context.Context, req resource
 func (r *IPv4PrefixRuleEntryResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a IPv4 Prefix List entry configuration.", "rtpfxEntry", "Routing%20and%20Forwarding/rtpfx:Entry/").AddParents("ipv4_prefix_rule").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage an IPv4 Prefix List entry configuration.", "rtpfxEntry", "Routing%20and%20Forwarding/rtpfx:Entry/").AddParents("ipv4_prefix_rule").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

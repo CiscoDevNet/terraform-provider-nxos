@@ -185,6 +185,17 @@ func IsLast(index int, len int) bool {
 	return index+1 == len
 }
 
+// Templating helper function to count non-reference attributes
+func LenNoRef(attributes []YamlConfigAttribute) int {
+	count := 0
+	for _, attr := range attributes {
+		if !attr.ReferenceOnly {
+			count += 1
+		}
+	}
+	return count
+}
+
 // Map of templating functions
 var functions = template.FuncMap{
 	"toTitle":      ToTitle,
@@ -194,6 +205,7 @@ var functions = template.FuncMap{
 	"getExampleDn": GetExampleDn,
 	"isLast":       IsLast,
 	"sprintf":      fmt.Sprintf,
+	"lenNoRef":     LenNoRef,
 }
 
 func renderTemplate(templatePath, outputPath string, config interface{}) {

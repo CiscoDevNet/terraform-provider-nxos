@@ -34,8 +34,8 @@ func (data {{camelCase .Name}}) getClassName() string {
 }
 
 func (data {{camelCase .Name}}) toBody() nxos.Body {
-	{{- $lenAttr := len .Attributes}}
-	{{- if ge $lenAttr 1 }}
+	{{- $lenAttrNoRef := lenNoRef .Attributes}}
+	{{- if ge $lenAttrNoRef 1 }}
 	attrs := nxos.Body{}.
 	{{- end}}
 	{{- $lenAttr := len .Attributes}}
@@ -58,7 +58,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 	}
 	{{- end}}
 	{{- end}}
-	{{- if ge $lenAttr 1 }}
+	{{- if ge $lenAttrNoRef 1 }}
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 	{{- else}}
 	return nxos.Body{Str: `{"` + data.getClassName() + `":{"attributes":{}}}`}

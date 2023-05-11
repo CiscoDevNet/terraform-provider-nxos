@@ -75,7 +75,7 @@ attributes:
   - nxos_name: kaIntvl
     tf_name: keepalive
     type: Int64
-    description: 'BGP Keep Alive Timer in seconds'
+    description: 'BGP Keepalive Timer in seconds'
     default_value: 60
     example: 15
     min_int: 0

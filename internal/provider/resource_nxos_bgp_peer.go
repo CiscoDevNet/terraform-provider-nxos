@@ -120,7 +120,7 @@ func (r *BGPPeerResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 			},
 			"keepalive": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("BGP Keep Alive Timer in seconds").AddIntegerRangeDescription(0, 3600).AddDefaultValueDescription("60").String,
+				MarkdownDescription: helpers.NewAttributeDescription("BGP Keepalive Timer in seconds").AddIntegerRangeDescription(0, 3600).AddDefaultValueDescription("60").String,
 				Optional:            true,
 				Computed:            true,
 				Validators: []validator.Int64{

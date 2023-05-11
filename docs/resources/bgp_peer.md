@@ -64,7 +64,7 @@ resource "nxos_bgp_peer" "example" {
 - `hold_time` (Number) BGP Hold Timer in seconds. The value must be greater than the keepalive timer
   - Range: `3`-`3600`
   - Default value: `180`
-- `keepalive` (Number) BGP Keep Alive Timer in seconds
+- `keepalive` (Number) BGP Keepalive Timer in seconds
   - Range: `0`-`3600`
   - Default value: `60`
 - `peer_template` (String) Peer template name.

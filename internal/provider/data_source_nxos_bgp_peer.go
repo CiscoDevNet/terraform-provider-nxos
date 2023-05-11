@@ -78,6 +78,14 @@ func (d *BGPPeerDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "Source Interface. Must match first field in the output of `show intf brief`.",
 				Computed:            true,
 			},
+			"hold_time": schema.Int64Attribute{
+				MarkdownDescription: "BGP Hold Timer in seconds. The value must be greater than the keepalive timer",
+				Computed:            true,
+			},
+			"keepalive": schema.Int64Attribute{
+				MarkdownDescription: "BGP Keepalive Timer in seconds",
+				Computed:            true,
+			},
 		},
 	}
 }

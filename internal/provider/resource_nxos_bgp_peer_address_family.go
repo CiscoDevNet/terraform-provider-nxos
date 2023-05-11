@@ -38,7 +38,7 @@ func (r *BGPPeerAddressFamilyResource) Metadata(ctx context.Context, req resourc
 func (r *BGPPeerAddressFamilyResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP peer address family configuration.", "bgpPeerAf", "Routing%20and%20Forwarding/bgp:PeerAf/").AddParents("bgp_peer").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP peer address family configuration.", "bgpPeerAf", "Routing%20and%20Forwarding/bgp:PeerAf/").AddParents("bgp_peer").AddChildren("bgp_peer_address_family_route_control", "bgp_peer_address_family_prefix_list_control").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

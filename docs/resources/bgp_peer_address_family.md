@@ -7,6 +7,8 @@ description: |-
   API Documentation: bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:PeerAf/
   Parent resources
   nxosbgppeer https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer
+  Child resources
+  nxosbgppeeraddressfamilyroutecontrol https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer_address_family_route_controlnxosbgppeeraddressfamilyprefixlist_control https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer_address_family_prefix_list_control
 ---
 
 # nxos_bgp_peer_address_family (Resource)
@@ -18,6 +20,11 @@ This resource can manage the BGP peer address family configuration.
 ### Parent resources
 
 - [nxos_bgp_peer](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer)
+
+### Child resources
+
+- [nxos_bgp_peer_address_family_route_control](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer_address_family_route_control)
+- [nxos_bgp_peer_address_family_prefix_list_control](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_peer_address_family_prefix_list_control)
 
 ## Example Usage
 

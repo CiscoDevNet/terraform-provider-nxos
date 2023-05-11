@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -105,6 +106,28 @@ func (r *BGPPeerResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("unspecified"),
+				},
+			},
+			"hold_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("BGP Hold Timer in seconds. The value must be greater than the keepalive timer").AddIntegerRangeDescription(3, 3600).AddDefaultValueDescription("180").String,
+				Optional:            true,
+				Computed:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(3, 3600),
+				},
+				PlanModifiers: []planmodifier.Int64{
+					helpers.IntegerDefaultModifier(180),
+				},
+			},
+			"keepalive": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("BGP Keepalive Timer in seconds").AddIntegerRangeDescription(0, 3600).AddDefaultValueDescription("60").String,
+				Optional:            true,
+				Computed:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 3600),
+				},
+				PlanModifiers: []planmodifier.Int64{
+					helpers.IntegerDefaultModifier(60),
 				},
 			},
 		},

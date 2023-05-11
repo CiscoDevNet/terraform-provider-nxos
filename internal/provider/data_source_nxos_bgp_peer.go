@@ -79,10 +79,10 @@ func (d *BGPPeerDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				Computed:            true,
 			},
 			"hold_time": schema.Int64Attribute{
-				MarkdownDescription: "BGP Hold Timer in seconds. The value ust be greater than the keep alive timer",
+				MarkdownDescription: "BGP Hold Timer in seconds. The value must be greater than the keepalive timer",
 				Computed:            true,
 			},
-			"keep_alive": schema.Int64Attribute{
+			"keepalive": schema.Int64Attribute{
 				MarkdownDescription: "BGP Keep Alive Timer in seconds",
 				Computed:            true,
 			},

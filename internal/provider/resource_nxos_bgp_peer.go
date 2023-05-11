@@ -109,7 +109,7 @@ func (r *BGPPeerResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 			},
 			"hold_time": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("BGP Hold Timer in seconds. The value ust be greater than the keep alive timer").AddIntegerRangeDescription(3, 3600).AddDefaultValueDescription("180").String,
+				MarkdownDescription: helpers.NewAttributeDescription("BGP Hold Timer in seconds. The value must be greater than the keepalive timer").AddIntegerRangeDescription(3, 3600).AddDefaultValueDescription("180").String,
 				Optional:            true,
 				Computed:            true,
 				Validators: []validator.Int64{
@@ -119,7 +119,7 @@ func (r *BGPPeerResource) Schema(ctx context.Context, req resource.SchemaRequest
 					helpers.IntegerDefaultModifier(180),
 				},
 			},
-			"keep_alive": schema.Int64Attribute{
+			"keepalive": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("BGP Keep Alive Timer in seconds").AddIntegerRangeDescription(0, 3600).AddDefaultValueDescription("60").String,
 				Optional:            true,
 				Computed:            true,

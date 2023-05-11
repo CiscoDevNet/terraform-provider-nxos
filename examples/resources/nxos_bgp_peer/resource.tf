@@ -8,5 +8,5 @@ resource "nxos_bgp_peer" "example" {
   peer_type        = "fabric-internal"
   source_interface = "lo0"
   hold_time        = 5
-  keep_alive       = 15
+  keepalive        = 15
 }

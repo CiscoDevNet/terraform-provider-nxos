@@ -39,9 +39,9 @@ data "nxos_bgp_peer" "example" {
 ### Read-Only
 
 - `description` (String) Peer description.
-- `hold_time` (Number) BGP Hold Timer in seconds. The value ust be greater than the keep alive timer
+- `hold_time` (Number) BGP Hold Timer in seconds. The value must be greater than the keepalive timer
 - `id` (String) The distinguished name of the object.
-- `keep_alive` (Number) BGP Keep Alive Timer in seconds
+- `keepalive` (Number) BGP Keep Alive Timer in seconds
 - `peer_template` (String) Peer template name.
 - `peer_type` (String) Neighbor Fabric Type.
 - `remote_asn` (String) Peer autonomous system number.

@@ -23,7 +23,7 @@ type BGPPeer struct {
 	PeerType  types.String `tfsdk:"peer_type"`
 	SrcIf     types.String `tfsdk:"source_interface"`
 	HoldIntvl types.Int64  `tfsdk:"hold_time"`
-	KaIntvl   types.Int64  `tfsdk:"keep_alive"`
+	KaIntvl   types.Int64  `tfsdk:"keepalive"`
 }
 
 func (data BGPPeer) getDn() string {
@@ -46,12 +46,6 @@ func (data BGPPeer) toBody() nxos.Body {
 		Set("kaIntvl", strconv.FormatInt(data.KaIntvl.ValueInt64(), 10))
 	if data.Name.IsUnknown() || data.Name.IsNull() {
 		attrs = attrs.Delete("name")
-	}
-	if data.HoldIntvl.IsUnknown() || data.HoldIntvl.IsNull() {
-		attrs = attrs.Delete("holdIntvl")
-	}
-	if data.KaIntvl.IsUnknown() || data.KaIntvl.IsNull() {
-		attrs = attrs.Delete("kaIntvl")
 	}
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }

@@ -20,25 +20,25 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &BGPPeerAddressFamilyResource{}
-var _ resource.ResourceWithImportState = &BGPPeerAddressFamilyResource{}
+var _ resource.Resource = &BGPPeerAddressFamilyPrefixListControlResource{}
+var _ resource.ResourceWithImportState = &BGPPeerAddressFamilyPrefixListControlResource{}
 
-func NewBGPPeerAddressFamilyResource() resource.Resource {
-	return &BGPPeerAddressFamilyResource{}
+func NewBGPPeerAddressFamilyPrefixListControlResource() resource.Resource {
+	return &BGPPeerAddressFamilyPrefixListControlResource{}
 }
 
-type BGPPeerAddressFamilyResource struct {
+type BGPPeerAddressFamilyPrefixListControlResource struct {
 	data *NxosProviderData
 }
 
-func (r *BGPPeerAddressFamilyResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_bgp_peer_address_family"
+func (r *BGPPeerAddressFamilyPrefixListControlResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_bgp_peer_address_family_prefix_list_control"
 }
 
-func (r *BGPPeerAddressFamilyResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *BGPPeerAddressFamilyPrefixListControlResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP peer address family configuration.", "bgpPeerAf", "Routing%20and%20Forwarding/bgp:PeerAf/").AddParents("bgp_peer").AddChildren("bgp_peer_address_family_route_control", "bgp_peer_address_family_prefix_list_control").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP peer address family prefix list control configuration.", "bgpPfxCtrlP", "Routing%20and%20Forwarding/bgp:PfxCtrlP/").AddParents("bgp_peer_address_family").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -83,38 +83,26 @@ func (r *BGPPeerAddressFamilyResource) Schema(ctx context.Context, req resource.
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"control": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:\n  - Single value. Example: `nh-self`\n  - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.").String,
-				Optional:            true,
-				Computed:            true,
-			},
-			"send_community_extended": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Send-community extended.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
-				Optional:            true,
-				Computed:            true,
+			"direction": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route Control direction.").AddStringEnumDescription("in", "out").AddDefaultValueDescription("in").String,
+				Required:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("enabled", "disabled"),
+					stringvalidator.OneOf("in", "out"),
 				},
 				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disabled"),
+					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"send_community_standard": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Send-community standard.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+			"list": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route Control Prefix-List name.").String,
 				Optional:            true,
 				Computed:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("enabled", "disabled"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disabled"),
-				},
 			},
 		},
 	}
 }
 
-func (r *BGPPeerAddressFamilyResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *BGPPeerAddressFamilyPrefixListControlResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -123,8 +111,8 @@ func (r *BGPPeerAddressFamilyResource) Configure(ctx context.Context, req resour
 	r.data = req.ProviderData.(*NxosProviderData)
 }
 
-func (r *BGPPeerAddressFamilyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan, state BGPPeerAddressFamily
+func (r *BGPPeerAddressFamilyPrefixListControlResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan, state BGPPeerAddressFamilyPrefixListControl
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -160,8 +148,8 @@ func (r *BGPPeerAddressFamilyResource) Create(ctx context.Context, req resource.
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *BGPPeerAddressFamilyResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state BGPPeerAddressFamily
+func (r *BGPPeerAddressFamilyPrefixListControlResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state BGPPeerAddressFamilyPrefixListControl
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -186,8 +174,8 @@ func (r *BGPPeerAddressFamilyResource) Read(ctx context.Context, req resource.Re
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *BGPPeerAddressFamilyResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state BGPPeerAddressFamily
+func (r *BGPPeerAddressFamilyPrefixListControlResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state BGPPeerAddressFamilyPrefixListControl
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -221,8 +209,8 @@ func (r *BGPPeerAddressFamilyResource) Update(ctx context.Context, req resource.
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *BGPPeerAddressFamilyResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state BGPPeerAddressFamily
+func (r *BGPPeerAddressFamilyPrefixListControlResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state BGPPeerAddressFamilyPrefixListControl
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -248,6 +236,6 @@ func (r *BGPPeerAddressFamilyResource) Delete(ctx context.Context, req resource.
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *BGPPeerAddressFamilyResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *BGPPeerAddressFamilyPrefixListControlResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

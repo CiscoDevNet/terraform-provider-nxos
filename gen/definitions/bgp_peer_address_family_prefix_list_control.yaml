@@ -1,16 +1,13 @@
 ---
-name: BGP Peer Address Family
-class_name: bgpPeerAf
-dn: sys/bgp/inst/dom-[%s]/peer-[%s]/af-[%s]
-ds_description: This data source can read the BGP peer address family configuration.
-res_description: This resource can manage the BGP peer address family configuration.
-doc_path: Routing%20and%20Forwarding/bgp:PeerAf/
+name: BGP Peer Address Family Prefix List Control
+class_name: bgpPfxCtrlP
+dn: sys/bgp/inst/dom-[%s]/peer-[%s]/af-[%s]/pfxctrl-[%s]
+ds_description: This data source can read the BGP peer address family prefix list control configuration.
+res_description: This resource can manage the BGP peer address family prefix list control configuration.
+doc_path: Routing%20and%20Forwarding/bgp:PfxCtrlP/
 doc_category: BGP
 parents:
-  - BGP Peer
-children:
-  - BGP Peer Address Family Route Control
-  - BGP Peer Address Family Prefix List Control
+  - BGP Peer Address Family
 attributes:
   - nxos_name: asn
     tf_name: asn
@@ -36,6 +33,7 @@ attributes:
     tf_name: address_family
     type: String
     id: true
+    reference_only: true
     description: 'Address Family.'
     enum_values:
       - ipv4-ucast
@@ -46,29 +44,21 @@ attributes:
       - lnkstate
     default_value: 'ipv4-ucast'
     example: 'ipv4-ucast'
-  - nxos_name: ctrl
-    tf_name: control
+  - nxos_name: direction
+    tf_name: direction
     type: String
-    description: 'Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:\n  - Single value. Example: `nh-self`\n  - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.'
-    example: 'nh-self,rr-client'
-  - nxos_name: sendComExt
-    tf_name: send_community_extended
-    type: String
-    description: 'Send-community extended.'
+    id: true
+    description: 'Route Control direction.'
     enum_values:
-      - enabled
-      - disabled
-    default_value: disabled
-    example: enabled
-  - nxos_name: sendComStd
-    tf_name: send_community_standard
+      - in
+      - out
+    default_value: in
+    example: in
+  - nxos_name: list
+    tf_name: list
     type: String
-    description: 'Send-community standard.'
-    enum_values:
-      - enabled
-      - disabled
-    default_value: disabled
-    example: enabled
+    description: 'Route Control Prefix-List name.'
+    example: PREFIX_LIST1
 test_prerequisites:
   - dn: sys/fm/bgp
     class_name: fmBgp
@@ -101,3 +91,11 @@ test_prerequisites:
       - name: asn
         value: '65001'
     dependencies: [3]
+  - dn: sys/bgp/inst/dom-[default]/peer-[192.168.0.1]/af-[ipv4-ucast]
+    class_name: bgpPeerAf
+    attributes:
+      - name: asn
+        value: '65001'
+      - name: address_family
+        value: ipv4-ucast
+    dependencies: [4]

@@ -44,9 +44,6 @@ func (data BGPPeer) toBody() nxos.Body {
 		Set("srcIf", data.SrcIf.ValueString()).
 		Set("holdIntvl", strconv.FormatInt(data.HoldIntvl.ValueInt64(), 10)).
 		Set("kaIntvl", strconv.FormatInt(data.KaIntvl.ValueInt64(), 10))
-	if data.Name.IsUnknown() || data.Name.IsNull() {
-		attrs = attrs.Delete("name")
-	}
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 

@@ -42,7 +42,6 @@ attributes:
     type: String
     description: 'Peer description.'
     example: 'My description'
-    omit_empty_value: true
   - nxos_name: peerImp
     tf_name: peer_template
     type: String

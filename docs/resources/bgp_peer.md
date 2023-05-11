@@ -43,6 +43,8 @@ resource "nxos_bgp_peer" "example" {
   peer_template    = "SPINE-PEERS"
   peer_type        = "fabric-internal"
   source_interface = "lo0"
+  hold_time        = 5
+  keepalive        = 15
 }
 ```
 
@@ -59,6 +61,12 @@ resource "nxos_bgp_peer" "example" {
 
 - `description` (String) Peer description.
 - `device` (String) A device name from the provider configuration.
+- `hold_time` (Number) BGP Hold Timer in seconds. The value must be greater than the keepalive timer
+  - Range: `3`-`3600`
+  - Default value: `180`
+- `keepalive` (Number) BGP Keepalive Timer in seconds
+  - Range: `0`-`3600`
+  - Default value: `60`
 - `peer_template` (String) Peer template name.
 - `peer_type` (String) Neighbor Fabric Type.
   - Choices: `fabric-internal`, `fabric-external`, `fabric-border-leaf`

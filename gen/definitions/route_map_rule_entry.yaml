@@ -8,6 +8,8 @@ doc_path: Routing%20and%20Forwarding/rtmap:Entry/
 doc_category: Routing
 parents:
   - Route Map Rule
+children:
+  - Route Map Rule Entry Set Regular Community
 attributes:
   - nxos_name: rtmap
     tf_name: rule_name

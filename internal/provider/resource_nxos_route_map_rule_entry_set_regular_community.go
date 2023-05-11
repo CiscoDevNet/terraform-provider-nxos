@@ -22,25 +22,25 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &RouteMapRuleEntryResource{}
-var _ resource.ResourceWithImportState = &RouteMapRuleEntryResource{}
+var _ resource.Resource = &RouteMapRuleEntrySetRegularCommunityResource{}
+var _ resource.ResourceWithImportState = &RouteMapRuleEntrySetRegularCommunityResource{}
 
-func NewRouteMapRuleEntryResource() resource.Resource {
-	return &RouteMapRuleEntryResource{}
+func NewRouteMapRuleEntrySetRegularCommunityResource() resource.Resource {
+	return &RouteMapRuleEntrySetRegularCommunityResource{}
 }
 
-type RouteMapRuleEntryResource struct {
+type RouteMapRuleEntrySetRegularCommunityResource struct {
 	data *NxosProviderData
 }
 
-func (r *RouteMapRuleEntryResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_route_map_rule_entry"
+func (r *RouteMapRuleEntrySetRegularCommunityResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_route_map_rule_entry_set_regular_community"
 }
 
-func (r *RouteMapRuleEntryResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *RouteMapRuleEntrySetRegularCommunityResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a Route-Map Rule Entry configuration.", "rtmapEntry", "Routing%20and%20Forwarding/rtmap:Entry/").AddParents("route_map_rule").AddChildren("route_map_rule_entry_set_regular_community").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a Set Community configuration in a Route-Map Rule Entry.", "rtmapSetRegComm", "Routing%20and%20Forwarding/rtmap:SetRegComm/").AddParents("route_map_rule_entry").AddChildren("route_map_rule_entry_set_regular_community_item").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -71,22 +71,44 @@ func (r *RouteMapRuleEntryResource) Schema(ctx context.Context, req resource.Sch
 					int64planmodifier.RequiresReplace(),
 				},
 			},
-			"action": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Route-Map Rule Entry action.").AddStringEnumDescription("deny", "permit").AddDefaultValueDescription("permit").String,
+			"additive": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Option to add to an existing community.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
 				Optional:            true,
 				Computed:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("deny", "permit"),
+					stringvalidator.OneOf("enabled", "disabled"),
 				},
 				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("permit"),
+					helpers.StringDefaultModifier("disabled"),
+				},
+			},
+			"no_community": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Option to have no community attribute.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+				Optional:            true,
+				Computed:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("disabled"),
+				},
+			},
+			"set_criteria": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Operation on the current community.").AddStringEnumDescription("none", "append", "replace", "igp", "pre-bestpath").AddDefaultValueDescription("none").String,
+				Optional:            true,
+				Computed:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("none", "append", "replace", "igp", "pre-bestpath"),
+				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("none"),
 				},
 			},
 		},
 	}
 }
 
-func (r *RouteMapRuleEntryResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *RouteMapRuleEntrySetRegularCommunityResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -95,8 +117,8 @@ func (r *RouteMapRuleEntryResource) Configure(ctx context.Context, req resource.
 	r.data = req.ProviderData.(*NxosProviderData)
 }
 
-func (r *RouteMapRuleEntryResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan, state RouteMapRuleEntry
+func (r *RouteMapRuleEntrySetRegularCommunityResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan, state RouteMapRuleEntrySetRegularCommunity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -132,8 +154,8 @@ func (r *RouteMapRuleEntryResource) Create(ctx context.Context, req resource.Cre
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *RouteMapRuleEntryResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state RouteMapRuleEntry
+func (r *RouteMapRuleEntrySetRegularCommunityResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state RouteMapRuleEntrySetRegularCommunity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -158,8 +180,8 @@ func (r *RouteMapRuleEntryResource) Read(ctx context.Context, req resource.ReadR
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *RouteMapRuleEntryResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state RouteMapRuleEntry
+func (r *RouteMapRuleEntrySetRegularCommunityResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state RouteMapRuleEntrySetRegularCommunity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -193,8 +215,8 @@ func (r *RouteMapRuleEntryResource) Update(ctx context.Context, req resource.Upd
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *RouteMapRuleEntryResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state RouteMapRuleEntry
+func (r *RouteMapRuleEntrySetRegularCommunityResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state RouteMapRuleEntrySetRegularCommunity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -220,6 +242,6 @@ func (r *RouteMapRuleEntryResource) Delete(ctx context.Context, req resource.Del
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *RouteMapRuleEntryResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *RouteMapRuleEntrySetRegularCommunityResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

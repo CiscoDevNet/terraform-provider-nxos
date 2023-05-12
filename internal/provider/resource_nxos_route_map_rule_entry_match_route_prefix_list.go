@@ -7,7 +7,6 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -22,25 +21,25 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &RouteMapRuleEntryResource{}
-var _ resource.ResourceWithImportState = &RouteMapRuleEntryResource{}
+var _ resource.Resource = &RouteMapRuleEntryMatchRoutePrefixListResource{}
+var _ resource.ResourceWithImportState = &RouteMapRuleEntryMatchRoutePrefixListResource{}
 
-func NewRouteMapRuleEntryResource() resource.Resource {
-	return &RouteMapRuleEntryResource{}
+func NewRouteMapRuleEntryMatchRoutePrefixListResource() resource.Resource {
+	return &RouteMapRuleEntryMatchRoutePrefixListResource{}
 }
 
-type RouteMapRuleEntryResource struct {
+type RouteMapRuleEntryMatchRoutePrefixListResource struct {
 	data *NxosProviderData
 }
 
-func (r *RouteMapRuleEntryResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_route_map_rule_entry"
+func (r *RouteMapRuleEntryMatchRoutePrefixListResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_route_map_rule_entry_match_route_prefix_list"
 }
 
-func (r *RouteMapRuleEntryResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *RouteMapRuleEntryMatchRoutePrefixListResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a Route-Map Rule Entry configuration.", "rtmapEntry", "Routing%20and%20Forwarding/rtmap:Entry/").AddParents("route_map_rule").AddChildren("route_map_rule_entry_match_route", "route_map_rule_entry_set_regular_community").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a Match Route Prefix List in  Route-Map Rule Entry configuration.", "rtmapRsRtDstAtt", "Routing%20and%20Forwarding/rtmap:RsRtDstAtt/").AddParents("route_map_rule_entry_match_route").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -71,22 +70,18 @@ func (r *RouteMapRuleEntryResource) Schema(ctx context.Context, req resource.Sch
 					int64planmodifier.RequiresReplace(),
 				},
 			},
-			"action": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Route-Map Rule Entry action.").AddStringEnumDescription("deny", "permit").AddDefaultValueDescription("permit").String,
-				Optional:            true,
-				Computed:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("deny", "permit"),
-				},
+			"prefix_list_dn": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DN of Prefix List. For example: `sys/rpm/pfxlistv4-[LIST1]`").String,
+				Required:            true,
 				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("permit"),
+					stringplanmodifier.RequiresReplace(),
 				},
 			},
 		},
 	}
 }
 
-func (r *RouteMapRuleEntryResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *RouteMapRuleEntryMatchRoutePrefixListResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -95,8 +90,8 @@ func (r *RouteMapRuleEntryResource) Configure(ctx context.Context, req resource.
 	r.data = req.ProviderData.(*NxosProviderData)
 }
 
-func (r *RouteMapRuleEntryResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan, state RouteMapRuleEntry
+func (r *RouteMapRuleEntryMatchRoutePrefixListResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan, state RouteMapRuleEntryMatchRoutePrefixList
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -132,8 +127,8 @@ func (r *RouteMapRuleEntryResource) Create(ctx context.Context, req resource.Cre
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *RouteMapRuleEntryResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state RouteMapRuleEntry
+func (r *RouteMapRuleEntryMatchRoutePrefixListResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state RouteMapRuleEntryMatchRoutePrefixList
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -158,8 +153,8 @@ func (r *RouteMapRuleEntryResource) Read(ctx context.Context, req resource.ReadR
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *RouteMapRuleEntryResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state RouteMapRuleEntry
+func (r *RouteMapRuleEntryMatchRoutePrefixListResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state RouteMapRuleEntryMatchRoutePrefixList
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -193,8 +188,8 @@ func (r *RouteMapRuleEntryResource) Update(ctx context.Context, req resource.Upd
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *RouteMapRuleEntryResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state RouteMapRuleEntry
+func (r *RouteMapRuleEntryMatchRoutePrefixListResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state RouteMapRuleEntryMatchRoutePrefixList
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -220,6 +215,6 @@ func (r *RouteMapRuleEntryResource) Delete(ctx context.Context, req resource.Del
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *RouteMapRuleEntryResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *RouteMapRuleEntryMatchRoutePrefixListResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

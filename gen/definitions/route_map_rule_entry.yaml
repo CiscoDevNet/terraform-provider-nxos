@@ -9,6 +9,7 @@ doc_category: Routing
 parents:
   - Route Map Rule
 children:
+  - Route Map Rule Entry Match Route
   - Route Map Rule Entry Set Regular Community
 attributes:
   - nxos_name: rtmap

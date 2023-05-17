@@ -13,28 +13,28 @@ attributes:
     tf_name: asn
     type: String
     reference_only: true
-    description: 'Autonomous system number.'
-    example: '65001'
+    description: "Autonomous system number."
+    example: "65001"
   - nxos_name: vrf_name
     tf_name: vrf
     type: String
     id: true
     reference_only: true
-    description: 'VRF name.'
+    description: "VRF name."
     example: default
   - nxos_name: addr
     tf_name: address
     type: String
     id: true
     reference_only: true
-    description: 'Peer address.'
-    example: '192.168.0.1'
+    description: "Peer address."
+    example: "192.168.0.1"
   - nxos_name: type
     tf_name: address_family
     type: String
     id: true
     reference_only: true
-    description: 'Address Family.'
+    description: "Address Family."
     enum_values:
       - ipv4-ucast
       - vpnv4-ucast
@@ -42,13 +42,13 @@ attributes:
       - vpnv6-ucast
       - l2vpn-evpn
       - lnkstate
-    default_value: 'ipv4-ucast'
-    example: 'ipv4-ucast'
+    default_value: "ipv4-ucast"
+    example: "ipv4-ucast"
   - nxos_name: direction
     tf_name: direction
     type: String
     id: true
-    description: 'Route Control direction.'
+    description: "Route Control direction."
     enum_values:
       - in
       - out
@@ -57,7 +57,7 @@ attributes:
   - nxos_name: list
     tf_name: list
     type: String
-    description: 'Route Control Prefix-List name.'
+    description: "Route Control Prefix-List name."
     example: PREFIX_LIST1
 test_prerequisites:
   - dn: sys/fm/bgp
@@ -75,7 +75,7 @@ test_prerequisites:
       - name: adminSt
         value: enabled
       - name: asn
-        value: '65001'
+        value: "65001"
     dependencies: [1]
   - dn: sys/bgp/inst/dom-[default]
     class_name: bgpDom
@@ -87,15 +87,13 @@ test_prerequisites:
     class_name: bgpPeer
     attributes:
       - name: addr
-        value: '192.168.0.1'
+        value: "192.168.0.1"
       - name: asn
-        value: '65001'
+        value: "65001"
     dependencies: [3]
   - dn: sys/bgp/inst/dom-[default]/peer-[192.168.0.1]/af-[ipv4-ucast]
     class_name: bgpPeerAf
     attributes:
-      - name: asn
-        value: '65001'
-      - name: address_family
+      - name: type
         value: ipv4-ucast
     dependencies: [4]

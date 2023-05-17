@@ -75,8 +75,7 @@ resource "nxos_rest" "PreReq5" {
   dn = "sys/bgp/inst/dom-[default]/peer-[192.168.0.1]/af-[ipv4-ucast]"
   class_name = "bgpPeerAf"
   content = {
-      asn = "65001"
-      address_family = "ipv4-ucast"
+      type = "ipv4-ucast"
   }
   depends_on = [nxos_rest.PreReq4, ]
 }

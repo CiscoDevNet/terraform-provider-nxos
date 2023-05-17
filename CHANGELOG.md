@@ -1,4 +1,4 @@
-## 0.3.23 (unreleased)
+## 0.3.23
 
 - Add `nxos_ntp_server` resource and data source
 - Add `nxos_route_map_rule` resource and data source

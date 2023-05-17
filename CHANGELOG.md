@@ -6,6 +6,12 @@
 - Add `nxos_ipv4_prefix_list_rule` resource and data source
 - Add `nxos_ipv4_prefix_list_rule_entry` resource and data source
 - Add `hold_time` and `keepalive` attributes to `nxos_bgp_peer` resource
+- Add `nxos_bgp_peer_address_family_prefix_list_control` resource and data source
+- Add `nxos_bgp_peer_address_family_route_control` resource and data source
+- Add `nxos_route_map_rule_entry_set_regular_community` resource and data source
+- Add `nxos_route_map_rule_entry_set_regular_community_item` resource and data source
+- Add `nxos_route_map_rule_entry_match_route` resource and data source
+- Add `nxos_route_map_rule_entry_match_route_prefix_list` resource and data source
 
 ## 0.3.22
 

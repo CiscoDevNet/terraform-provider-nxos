@@ -39,10 +39,10 @@ resource "nxos_rest" "PreReq0" {
 }
 
 resource "nxos_rest" "PreReq1" {
-  dn = "sys/rpm/rtmap-[RULE1]/ent-[0]"
+  dn = "sys/rpm/rtmap-[RULE1]/ent-[10]"
   class_name = "rtmapEntry"
   content = {
-      order = "0"
+      order = "10"
   }
   depends_on = [nxos_rest.PreReq0, ]
 }

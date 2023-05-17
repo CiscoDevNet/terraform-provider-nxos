@@ -10,32 +10,32 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-type IPv4AccessListPolicyIngressInterfaceInstace struct {
+type IPv4AccessListPolicyEgressInterfaceInstance struct {
 	Device    types.String `tfsdk:"device"`
 	Dn        types.String `tfsdk:"id"`
 	Interface types.String `tfsdk:"interface_id"`
 	Name      types.String `tfsdk:"name"`
 }
 
-func (data IPv4AccessListPolicyIngressInterfaceInstace) getDn() string {
-	return fmt.Sprintf("sys/acl/ipv4/policy/ingress/intf-[%s]/acl", data.Interface.ValueString())
+func (data IPv4AccessListPolicyEgressInterfaceInstance) getDn() string {
+	return fmt.Sprintf("sys/acl/ipv4/policy/egress/intf-[%s]/acl", data.Interface.ValueString())
 }
 
-func (data IPv4AccessListPolicyIngressInterfaceInstace) getClassName() string {
+func (data IPv4AccessListPolicyEgressInterfaceInstance) getClassName() string {
 	return "aclInst"
 }
 
-func (data IPv4AccessListPolicyIngressInterfaceInstace) toBody() nxos.Body {
+func (data IPv4AccessListPolicyEgressInterfaceInstance) toBody() nxos.Body {
 	attrs := nxos.Body{}.
 		Set("name", data.Name.ValueString())
 	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
 }
 
-func (data *IPv4AccessListPolicyIngressInterfaceInstace) fromBody(res gjson.Result) {
+func (data *IPv4AccessListPolicyEgressInterfaceInstance) fromBody(res gjson.Result) {
 	data.Name = types.StringValue(res.Get("*.attributes.name").String())
 }
 
-func (data *IPv4AccessListPolicyIngressInterfaceInstace) fromPlan(plan IPv4AccessListPolicyIngressInterfaceInstace) {
+func (data *IPv4AccessListPolicyEgressInterfaceInstance) fromPlan(plan IPv4AccessListPolicyEgressInterfaceInstance) {
 	data.Device = plan.Device
 	data.Dn = plan.Dn
 	data.Interface = plan.Interface

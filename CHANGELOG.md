@@ -12,6 +12,8 @@
 - Add `nxos_route_map_rule_entry_set_regular_community_item` resource and data source
 - Add `nxos_route_map_rule_entry_match_route` resource and data source
 - Add `nxos_route_map_rule_entry_match_route_prefix_list` resource and data source
+- BREAKING CHANGE: Rename `nxos_ipv4_access_list_policy_egress_interface_instace` resource and data source to `nxos_ipv4_access_list_policy_egress_interface_instance`
+- BREAKING CHANGE: Rename `nxos_ipv4_access_list_policy_ingress_interface_instace` resource and data source to `nxos_ipv4_access_list_policy_ingress_interface_instance`
 
 ## 0.3.22
 

@@ -18,25 +18,25 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &IPv4AccessListPolicyIngressInterfaceInstaceResource{}
-var _ resource.ResourceWithImportState = &IPv4AccessListPolicyIngressInterfaceInstaceResource{}
+var _ resource.Resource = &IPv4AccessListPolicyEgressInterfaceInstanceResource{}
+var _ resource.ResourceWithImportState = &IPv4AccessListPolicyEgressInterfaceInstanceResource{}
 
-func NewIPv4AccessListPolicyIngressInterfaceInstaceResource() resource.Resource {
-	return &IPv4AccessListPolicyIngressInterfaceInstaceResource{}
+func NewIPv4AccessListPolicyEgressInterfaceInstanceResource() resource.Resource {
+	return &IPv4AccessListPolicyEgressInterfaceInstanceResource{}
 }
 
-type IPv4AccessListPolicyIngressInterfaceInstaceResource struct {
+type IPv4AccessListPolicyEgressInterfaceInstanceResource struct {
 	data *NxosProviderData
 }
 
-func (r *IPv4AccessListPolicyIngressInterfaceInstaceResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_ipv4_access_list_policy_ingress_interface_instace"
+func (r *IPv4AccessListPolicyEgressInterfaceInstanceResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_ipv4_access_list_policy_egress_interface_instance"
 }
 
-func (r *IPv4AccessListPolicyIngressInterfaceInstaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *IPv4AccessListPolicyEgressInterfaceInstanceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage an IPv4 Access List Policy Ingress Interface Instance.", "aclInst", "Security%20and%20Policing/acl:Inst/").AddParents("ipv4_access_list_policy_ingress_interface").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage an IPv4 Access List Policy Egress Interface Instance.", "aclInst", "Security%20and%20Policing/acl:Inst/").AddParents("ipv4_access_list_policy_egress_interface").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -66,7 +66,7 @@ func (r *IPv4AccessListPolicyIngressInterfaceInstaceResource) Schema(ctx context
 	}
 }
 
-func (r *IPv4AccessListPolicyIngressInterfaceInstaceResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *IPv4AccessListPolicyEgressInterfaceInstanceResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -75,8 +75,8 @@ func (r *IPv4AccessListPolicyIngressInterfaceInstaceResource) Configure(ctx cont
 	r.data = req.ProviderData.(*NxosProviderData)
 }
 
-func (r *IPv4AccessListPolicyIngressInterfaceInstaceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan, state IPv4AccessListPolicyIngressInterfaceInstace
+func (r *IPv4AccessListPolicyEgressInterfaceInstanceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan, state IPv4AccessListPolicyEgressInterfaceInstance
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -112,8 +112,8 @@ func (r *IPv4AccessListPolicyIngressInterfaceInstaceResource) Create(ctx context
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *IPv4AccessListPolicyIngressInterfaceInstaceResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state IPv4AccessListPolicyIngressInterfaceInstace
+func (r *IPv4AccessListPolicyEgressInterfaceInstanceResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state IPv4AccessListPolicyEgressInterfaceInstance
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -138,8 +138,8 @@ func (r *IPv4AccessListPolicyIngressInterfaceInstaceResource) Read(ctx context.C
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *IPv4AccessListPolicyIngressInterfaceInstaceResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state IPv4AccessListPolicyIngressInterfaceInstace
+func (r *IPv4AccessListPolicyEgressInterfaceInstanceResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state IPv4AccessListPolicyEgressInterfaceInstance
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -173,8 +173,8 @@ func (r *IPv4AccessListPolicyIngressInterfaceInstaceResource) Update(ctx context
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *IPv4AccessListPolicyIngressInterfaceInstaceResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state IPv4AccessListPolicyIngressInterfaceInstace
+func (r *IPv4AccessListPolicyEgressInterfaceInstanceResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state IPv4AccessListPolicyEgressInterfaceInstance
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -200,6 +200,6 @@ func (r *IPv4AccessListPolicyIngressInterfaceInstaceResource) Delete(ctx context
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *IPv4AccessListPolicyIngressInterfaceInstaceResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *IPv4AccessListPolicyEgressInterfaceInstanceResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

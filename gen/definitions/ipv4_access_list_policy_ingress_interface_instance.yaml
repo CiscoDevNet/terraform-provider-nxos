@@ -1,5 +1,5 @@
 ---
-name: IPv4 Access List Policy Ingress Interface Instace
+name: IPv4 Access List Policy Ingress Interface Instance
 class_name: aclInst
 dn: sys/acl/ipv4/policy/ingress/intf-[%s]/acl
 ds_description: This data source can read an IPv4 Access List Policy Ingress Interface Instance.
@@ -14,12 +14,12 @@ attributes:
     type: String
     id: true
     reference_only: true
-    description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+    description: "Must match first field in the output of `show intf brief`. Example: `eth1/1`."
     example: eth1/10
   - nxos_name: name
     tf_name: name
     type: String
-    description: 'Access list name.'
+    description: "Access list name."
     example: ACL1
 test_prerequisites:
   - dn: sys/acl/ipv4/policy/ingress/intf-[eth1/10]

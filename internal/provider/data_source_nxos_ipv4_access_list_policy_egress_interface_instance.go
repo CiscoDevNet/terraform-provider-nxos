@@ -16,23 +16,23 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &IPv4AccessListPolicyEgressInterfaceInstaceDataSource{}
-	_ datasource.DataSourceWithConfigure = &IPv4AccessListPolicyEgressInterfaceInstaceDataSource{}
+	_ datasource.DataSource              = &IPv4AccessListPolicyEgressInterfaceInstanceDataSource{}
+	_ datasource.DataSourceWithConfigure = &IPv4AccessListPolicyEgressInterfaceInstanceDataSource{}
 )
 
-func NewIPv4AccessListPolicyEgressInterfaceInstaceDataSource() datasource.DataSource {
-	return &IPv4AccessListPolicyEgressInterfaceInstaceDataSource{}
+func NewIPv4AccessListPolicyEgressInterfaceInstanceDataSource() datasource.DataSource {
+	return &IPv4AccessListPolicyEgressInterfaceInstanceDataSource{}
 }
 
-type IPv4AccessListPolicyEgressInterfaceInstaceDataSource struct {
+type IPv4AccessListPolicyEgressInterfaceInstanceDataSource struct {
 	data *NxosProviderData
 }
 
-func (d *IPv4AccessListPolicyEgressInterfaceInstaceDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_ipv4_access_list_policy_egress_interface_instace"
+func (d *IPv4AccessListPolicyEgressInterfaceInstanceDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_ipv4_access_list_policy_egress_interface_instance"
 }
 
-func (d *IPv4AccessListPolicyEgressInterfaceInstaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *IPv4AccessListPolicyEgressInterfaceInstanceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read an IPv4 Access List Policy Egress Interface Instance.", "aclInst", "Security%20and%20Policing/acl:Inst/").String,
@@ -58,7 +58,7 @@ func (d *IPv4AccessListPolicyEgressInterfaceInstaceDataSource) Schema(ctx contex
 	}
 }
 
-func (d *IPv4AccessListPolicyEgressInterfaceInstaceDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *IPv4AccessListPolicyEgressInterfaceInstanceDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -66,8 +66,8 @@ func (d *IPv4AccessListPolicyEgressInterfaceInstaceDataSource) Configure(_ conte
 	d.data = req.ProviderData.(*NxosProviderData)
 }
 
-func (d *IPv4AccessListPolicyEgressInterfaceInstaceDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config, state IPv4AccessListPolicyEgressInterfaceInstace
+func (d *IPv4AccessListPolicyEgressInterfaceInstanceDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config, state IPv4AccessListPolicyEgressInterfaceInstance
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

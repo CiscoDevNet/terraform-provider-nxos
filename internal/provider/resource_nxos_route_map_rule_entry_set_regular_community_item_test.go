@@ -40,21 +40,18 @@ resource "nxos_rest" "PreReq0" {
 }
 
 resource "nxos_rest" "PreReq1" {
-  dn = "sys/rpm/rtmap-[RULE1]/ent-[0]"
+  dn = "sys/rpm/rtmap-[RULE1]/ent-[10]"
   class_name = "rtmapEntry"
   content = {
-      name = "RULE1"
-      order = "0"
+      order = "10"
   }
   depends_on = [nxos_rest.PreReq0, ]
 }
 
 resource "nxos_rest" "PreReq2" {
-  dn = "sys/rpm/rtmap-[RULE1]/ent-[0]/sregcomm"
+  dn = "sys/rpm/rtmap-[RULE1]/ent-[10]/sregcomm"
   class_name = "rtmapSetRegComm"
   content = {
-      name = "RULE1"
-      order = "0"
   }
   depends_on = [nxos_rest.PreReq1, ]
 }

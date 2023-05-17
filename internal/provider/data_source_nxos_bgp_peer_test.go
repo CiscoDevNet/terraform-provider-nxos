@@ -22,7 +22,7 @@ func TestAccDataSourceNxosBGPPeer(t *testing.T) {
 					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "peer_template", "SPINE-PEERS"),
 					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "peer_type", "fabric-internal"),
 					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "source_interface", "lo0"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "hold_time", "5"),
+					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "hold_time", "45"),
 					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "keepalive", "15"),
 				),
 			},
@@ -80,7 +80,7 @@ resource "nxos_bgp_peer" "test" {
   peer_template = "SPINE-PEERS"
   peer_type = "fabric-internal"
   source_interface = "lo0"
-  hold_time = 5
+  hold_time = 45
   keepalive = 15
   depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 }

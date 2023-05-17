@@ -17,64 +17,64 @@ attributes:
     tf_name: asn
     type: String
     reference_only: true
-    description: 'Autonomous system number.'
-    example: '65001'
+    description: "Autonomous system number."
+    example: "65001"
   - nxos_name: vrf_name
     tf_name: vrf
     type: String
     id: true
     reference_only: true
-    description: 'VRF name.'
+    description: "VRF name."
     example: default
   - nxos_name: addr
     tf_name: address
     type: String
     id: true
-    description: 'Peer address.'
-    example: '192.168.0.1'
+    description: "Peer address."
+    example: "192.168.0.1"
   - nxos_name: asn
     tf_name: remote_asn
     type: String
-    description: 'Peer autonomous system number.'
-    example: '65002'
+    description: "Peer autonomous system number."
+    example: "65002"
   - nxos_name: name
     tf_name: description
     type: String
-    description: 'Peer description.'
-    example: 'My description'
+    description: "Peer description."
+    example: "My description"
   - nxos_name: peerImp
     tf_name: peer_template
     type: String
-    description: 'Peer template name.'
-    example: 'SPINE-PEERS'
+    description: "Peer template name."
+    example: "SPINE-PEERS"
   - nxos_name: peerType
     tf_name: peer_type
     type: String
-    description: 'Neighbor Fabric Type.'
+    description: "Neighbor Fabric Type."
     enum_values:
       - fabric-internal
       - fabric-external
       - fabric-border-leaf
-    default_value: 'fabric-internal'
-    example: 'fabric-internal'
+    default_value: "fabric-internal"
+    example: "fabric-internal"
   - nxos_name: srcIf
     tf_name: source_interface
     type: String
-    description: 'Source Interface. Must match first field in the output of `show intf brief`.'
-    default_value: 'unspecified'
-    example: 'lo0'
+    description: "Source Interface. Must match first field in the output of `show intf brief`."
+    default_value: "unspecified"
+    example: "lo0"
   - nxos_name: holdIntvl
     tf_name: hold_time
     type: Int64
-    description: 'BGP Hold Timer in seconds. The value must be greater than the keepalive timer'
+    description: "BGP Hold Timer in seconds. The value must be greater than the keepalive timer"
     default_value: 180
-    example: 5
+    example: 45
     min_int: 3
     max_int: 3600
   - nxos_name: kaIntvl
     tf_name: keepalive
     type: Int64
-    description: 'BGP Keepalive Timer in seconds'
+    description: "BGP Keepalive Timer in seconds"
     default_value: 60
     example: 15
     min_int: 0
@@ -95,7 +95,7 @@ test_prerequisites:
       - name: adminSt
         value: enabled
       - name: asn
-        value: '65001'
+        value: "65001"
     dependencies: [1]
   - dn: sys/bgp/inst/dom-[default]
     class_name: bgpDom

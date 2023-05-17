@@ -7,6 +7,6 @@ resource "nxos_bgp_peer" "example" {
   peer_template    = "SPINE-PEERS"
   peer_type        = "fabric-internal"
   source_interface = "lo0"
-  hold_time        = 5
+  hold_time        = 45
   keepalive        = 15
 }

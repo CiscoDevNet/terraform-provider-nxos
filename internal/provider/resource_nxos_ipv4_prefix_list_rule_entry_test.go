@@ -14,15 +14,15 @@ func TestAccNxosIPv4PrefixListRuleEntry(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosIPv4PrefixListRuleEntryConfig_all(),
+				Config: testAccNxosIPv4PrefixListRuleEntryPrerequisitesConfig + testAccNxosIPv4PrefixListRuleEntryConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ipv4_prefix_list_rule_entry.test", "rule_name", "RULE1"),
 					resource.TestCheckResourceAttr("nxos_ipv4_prefix_list_rule_entry.test", "order", "10"),
 					resource.TestCheckResourceAttr("nxos_ipv4_prefix_list_rule_entry.test", "action", "permit"),
-					resource.TestCheckResourceAttr("nxos_ipv4_prefix_list_rule_entry.test", "criteria", "exact"),
+					resource.TestCheckResourceAttr("nxos_ipv4_prefix_list_rule_entry.test", "criteria", "inexact"),
 					resource.TestCheckResourceAttr("nxos_ipv4_prefix_list_rule_entry.test", "prefix", "192.168.1.0/24"),
-					resource.TestCheckResourceAttr("nxos_ipv4_prefix_list_rule_entry.test", "from_range", "0"),
-					resource.TestCheckResourceAttr("nxos_ipv4_prefix_list_rule_entry.test", "to_range", "24"),
+					resource.TestCheckResourceAttr("nxos_ipv4_prefix_list_rule_entry.test", "from_range", "26"),
+					resource.TestCheckResourceAttr("nxos_ipv4_prefix_list_rule_entry.test", "to_range", "32"),
 				),
 			},
 			{
@@ -34,11 +34,23 @@ func TestAccNxosIPv4PrefixListRuleEntry(t *testing.T) {
 	})
 }
 
+const testAccNxosIPv4PrefixListRuleEntryPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/rpm/pfxlistv4-[RULE1]"
+  class_name = "rtpfxRuleV4"
+  content = {
+      name = "RULE1"
+  }
+}
+
+`
+
 func testAccNxosIPv4PrefixListRuleEntryConfig_minimum() string {
 	return `
 	resource "nxos_ipv4_prefix_list_rule_entry" "test" {
 		rule_name = "RULE1"
 		order = 10
+  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }
@@ -49,10 +61,11 @@ func testAccNxosIPv4PrefixListRuleEntryConfig_all() string {
 		rule_name = "RULE1"
 		order = 10
 		action = "permit"
-		criteria = "exact"
+		criteria = "inexact"
 		prefix = "192.168.1.0/24"
-		from_range = 0
-		to_range = 24
+		from_range = 26
+		to_range = 32
+  		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }

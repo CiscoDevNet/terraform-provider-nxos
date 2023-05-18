@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -73,7 +72,6 @@ func (r *RestResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 			"content": schema.MapAttribute{
 				MarkdownDescription: "Map of key-value pairs that need to be passed to the Model object as parameters.",
 				Optional:            true,
-				Computed:            true,
 				ElementType:         types.StringType,
 			},
 		},
@@ -110,17 +108,13 @@ func (r *RestResource) Create(ctx context.Context, req resource.CreateRequest, r
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.Id.ValueString()))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.Dn.ValueString()))
 
 	body := plan.toBody(ctx)
 	_, err := r.data.client.Post(plan.Dn.ValueString(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.ValueString()]))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 		return
-	}
-
-	if plan.Content.IsUnknown() {
-		plan.Content = types.MapNull(plan.Content.ElementType(ctx))
 	}
 
 	plan.Id = plan.Dn
@@ -149,23 +143,7 @@ func (r *RestResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		return
 	}
 
-	// Check if we received an empty response without errors -> object has been deleted
-	if !res.Exists() && err == nil {
-		state.Id = types.StringNull()
-	} else {
-		className := state.ClassName.ValueString()
-		state.Id = state.Dn
-
-		stateContent := state.Content
-		newContent := make(map[string]attr.Value)
-		for attr, value := range res.Get(className + ".attributes").Map() {
-			if _, ok := stateContent.Elements()[attr]; ok {
-				newContent[attr] = types.StringValue(value.Str)
-			}
-		}
-
-		state.Content = types.MapValueMust(state.Content.ElementType(ctx), newContent)
-	}
+	state.fromBody(ctx, res)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 

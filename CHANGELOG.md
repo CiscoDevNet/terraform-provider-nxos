@@ -1,3 +1,7 @@
+## 0.3.24 (unreleased)
+
+- Add option to manage child objects with `nxos_rest` resource
+
 ## 0.3.23
 
 - Add `nxos_ntp_server` resource and data source

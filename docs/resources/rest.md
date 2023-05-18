@@ -3,12 +3,12 @@
 page_title: "nxos_rest Resource - terraform-provider-nxos"
 subcategory: "General"
 description: |-
-  Manages NX-OS DME Objects via REST API calls. This resource can only manage a single API object. It is able to read the state and therefore reconcile configuration drift.
+  Manages NX-OS DME Objects via REST API calls. This resource can manage a single API object and its children. It is able to read the state and therefore reconcile configuration drift.
 ---
 
 # nxos_rest (Resource)
 
-Manages NX-OS DME Objects via REST API calls. This resource can only manage a single API object. It is able to read the state and therefore reconcile configuration drift.
+Manages NX-OS DME Objects via REST API calls. This resource can manage a single API object and its children. It is able to read the state and therefore reconcile configuration drift.
 
 ## Example Usage
 
@@ -20,6 +20,23 @@ resource "nxos_rest" "l1PhysIf" {
     id   = "eth1/1"
     mode = "trunk"
   }
+}
+
+resource "nxos_rest" "ipqosCMapInst" {
+  dn         = "sys/ipqos/dflt/c/name-[CM1]"
+  class_name = "ipqosCMapInst"
+  content = {
+    name = "CM1"
+  }
+  children = [
+    {
+      rn         = "dscp-ef"
+      class_name = "ipqosDscp"
+      content = {
+        val = "ef"
+      }
+    }
+  ]
 }
 ```
 
@@ -33,6 +50,7 @@ resource "nxos_rest" "l1PhysIf" {
 
 ### Optional
 
+- `children` (Attributes List) List of children. (see [below for nested schema](#nestedatt--children))
 - `content` (Map of String) Map of key-value pairs that need to be passed to the Model object as parameters.
 - `delete` (Boolean) Delete object during destroy operation. Default value is `true`.
 - `device` (String) A device name from the provider configuration.
@@ -40,6 +58,18 @@ resource "nxos_rest" "l1PhysIf" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--children"></a>
+### Nested Schema for `children`
+
+Required:
+
+- `class_name` (String) Class name of the child object.
+- `rn` (String) The relative name of the child object.
+
+Optional:
+
+- `content` (Map of String) Map of key-value pairs which represents the attributes of the child object.
 
 ## Import
 

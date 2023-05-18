@@ -20,6 +20,14 @@ func TestAccNxosRest(t *testing.T) {
 				),
 			},
 			{
+				Config: testAccNxosRestConfig_child(),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("nxos_rest.ipqosCMapInst", "class_name", "ipqosCMapInst"),
+					resource.TestCheckResourceAttr("nxos_rest.ipqosCMapInst", "id", "sys/ipqos/dflt/c/name-[CM1]"),
+					resource.TestCheckResourceAttr("nxos_rest.ipqosCMapInst", "children.0.content.val", "ef"),
+				),
+			},
+			{
 				Config: testAccNxosRestConfig_interface("Create description"),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_rest.l1PhysIf", "class_name", "l1PhysIf"),
@@ -62,4 +70,25 @@ func testAccNxosRestConfig_interface(description string) string {
 		}
 	}
 	`, description)
+}
+
+func testAccNxosRestConfig_child() string {
+	return `
+	resource "nxos_rest" "ipqosCMapInst" {
+		dn = "sys/ipqos/dflt/c/name-[CM1]"
+		class_name = "ipqosCMapInst"
+		content = {
+			name = "CM1"
+		}
+		children = [
+            {
+                rn = "dscp-ef"
+                class_name = "ipqosDscp"
+				content = {
+					val = "ef"
+				}
+			}
+		]
+	}
+	`
 }

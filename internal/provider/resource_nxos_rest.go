@@ -35,7 +35,7 @@ func (r *RestResource) Metadata(ctx context.Context, req resource.MetadataReques
 func (r *RestResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "Manages NX-OS DME Objects via REST API calls. This resource can only manage a single API object. It is able to read the state and therefore reconcile configuration drift.",
+		MarkdownDescription: "Manages NX-OS DME Objects via REST API calls. This resource can manage a single API object and its children. It is able to read the state and therefore reconcile configuration drift.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -73,6 +73,27 @@ func (r *RestResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				MarkdownDescription: "Map of key-value pairs that need to be passed to the Model object as parameters.",
 				Optional:            true,
 				ElementType:         types.StringType,
+			},
+			"children": schema.ListNestedAttribute{
+				MarkdownDescription: "List of children.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"rn": schema.StringAttribute{
+							MarkdownDescription: "The relative name of the child object.",
+							Required:            true,
+						},
+						"class_name": schema.StringAttribute{
+							MarkdownDescription: "Class name of the child object.",
+							Required:            true,
+						},
+						"content": schema.MapAttribute{
+							MarkdownDescription: "Map of key-value pairs which represents the attributes of the child object.",
+							Optional:            true,
+							ElementType:         types.StringType,
+						},
+					},
+				},
 			},
 		},
 	}
@@ -137,7 +158,12 @@ func (r *RestResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
 
-	res, err := r.data.client.GetDn(state.Dn.ValueString(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[state.Device.ValueString()]))
+	queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+	queries = append(queries, nxos.OverrideUrl(r.data.devices[state.Device.ValueString()]))
+	if len(state.Children) > 0 {
+		queries = append(queries, nxos.Query("rsp-subtree", "children"))
+	}
+	res, err := r.data.client.GetDn(state.Dn.ValueString(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

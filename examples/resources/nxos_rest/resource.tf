@@ -6,3 +6,20 @@ resource "nxos_rest" "l1PhysIf" {
     mode = "trunk"
   }
 }
+
+resource "nxos_rest" "ipqosCMapInst" {
+  dn         = "sys/ipqos/dflt/c/name-[CM1]"
+  class_name = "ipqosCMapInst"
+  content = {
+    name = "CM1"
+  }
+  children = [
+    {
+      rn         = "dscp-ef"
+      class_name = "ipqosDscp"
+      content = {
+        val = "ef"
+      }
+    }
+  ]
+}

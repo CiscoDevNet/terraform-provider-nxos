@@ -4,18 +4,25 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type RestModel struct {
-	Device    types.String `tfsdk:"device"`
-	Id        types.String `tfsdk:"id"`
-	Dn        types.String `tfsdk:"dn"`
+	Device    types.String     `tfsdk:"device"`
+	Id        types.String     `tfsdk:"id"`
+	Dn        types.String     `tfsdk:"dn"`
+	ClassName types.String     `tfsdk:"class_name"`
+	Delete    types.Bool       `tfsdk:"delete"`
+	Content   types.Map        `tfsdk:"content"`
+	Children  []RestModelChild `tfsdk:"children"`
+}
+
+type RestModelChild struct {
+	Rn        types.String `tfsdk:"rn"`
 	ClassName types.String `tfsdk:"class_name"`
-	Delete    types.Bool   `tfsdk:"delete"`
 	Content   types.Map    `tfsdk:"content"`
 }
 
@@ -37,7 +44,17 @@ func (data RestModel) toBody(ctx context.Context) nxos.Body {
 
 	body.Str = fmt.Sprintf("{\"%s\":{\"attributes\":{}}}", className)
 	for attr, value := range content {
-		body = body.Set(fmt.Sprintf("%s.attributes.%s", className, attr), value)
+		body = body.Set(className+".attributes."+attr, value)
+	}
+
+	for _, child := range data.Children {
+		var childContent map[string]string
+		child.Content.ElementsAs(ctx, &childContent, false)
+		attrs := ""
+		for attr, value := range childContent {
+			attrs, _ = sjson.Set(attrs, attr, value)
+		}
+		body = body.SetRaw(className+".children.-1."+child.ClassName.ValueString()+".attributes", attrs)
 	}
 
 	return body
@@ -49,16 +66,41 @@ func (data *RestModel) fromBody(ctx context.Context, res gjson.Result) {
 		return
 	}
 
-	stateContent := data.Content
-	newContent := make(map[string]attr.Value)
-	for attr, value := range res.Get(data.ClassName.ValueString() + ".attributes").Map() {
-		if _, ok := stateContent.Elements()[attr]; ok {
-			newContent[attr] = types.StringValue(value.Str)
-		}
+	content := data.Content.Elements()
+	for attr := range content {
+		value := res.Get(data.ClassName.ValueString() + ".attributes." + attr)
+		content[attr] = types.StringValue(value.String())
 	}
-	if len(newContent) > 0 {
-		data.Content = types.MapValueMust(data.Content.ElementType(ctx), newContent)
+
+	if len(content) > 0 {
+		data.Content = types.MapValueMust(types.StringType, content)
 	} else {
-		data.Content = types.MapNull(data.Content.ElementType(ctx))
+		data.Content = types.MapNull(types.StringType)
+	}
+
+	for c := range data.Children {
+		var r gjson.Result
+		res.Get(data.ClassName.ValueString() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get(data.Children[c].ClassName.ValueString() + ".attributes.rn").String()
+				if key == data.Children[c].Rn.ValueString() {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+
+		childContent := data.Children[c].Content.Elements()
+		for attr := range childContent {
+			value := r.Get(data.Children[c].ClassName.ValueString() + ".attributes." + attr)
+			childContent[attr] = types.StringValue(value.String())
+		}
+
+		if len(content) > 0 {
+			data.Children[c].Content = types.MapValueMust(types.StringType, childContent)
+		} else {
+			data.Children[c].Content = types.MapNull(types.StringType)
+		}
 	}
 }

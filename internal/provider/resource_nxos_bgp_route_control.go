@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -70,44 +71,36 @@ func (r *BGPRouteControlResource) Schema(ctx context.Context, req resource.Schem
 				MarkdownDescription: helpers.NewAttributeDescription("Enforce First AS For Ebgp. Can be configured only for VRF default.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("enabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("enabled"),
 				},
 			},
 			"fib_accelerate": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Accelerate the hardware updates for IP/IPv6 adjacencies for neighbor. Can be configured only for VRF default.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("disabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disabled"),
 				},
 			},
 			"log_neighbor_changes": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Log Neighbor Changes.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("disabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disabled"),
 				},
 			},
 			"suppress_routes": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Suppress Routes: Advertise only routes that are programmed in hardware to peers. Can be configured only for VRF default.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("enabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("enabled"),
 				},
 			},
 		},

@@ -9,7 +9,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -61,33 +63,25 @@ func (r *PIMSSMRangeResource) Schema(ctx context.Context, req resource.SchemaReq
 				MarkdownDescription: helpers.NewAttributeDescription("Group list 1.").AddDefaultValueDescription("0.0.0.0").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("0.0.0.0"),
-				},
+				Default:             stringdefault.StaticString("0.0.0.0"),
 			},
 			"group_list_2": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Group list 2.").AddDefaultValueDescription("0.0.0.0").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("0.0.0.0"),
-				},
+				Default:             stringdefault.StaticString("0.0.0.0"),
 			},
 			"group_list_3": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Group list 3.").AddDefaultValueDescription("0.0.0.0").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("0.0.0.0"),
-				},
+				Default:             stringdefault.StaticString("0.0.0.0"),
 			},
 			"group_list_4": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Group list 4.").AddDefaultValueDescription("0.0.0.0").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("0.0.0.0"),
-				},
+				Default:             stringdefault.StaticString("0.0.0.0"),
 			},
 			"prefix_list": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Prefix list name.").String,
@@ -103,9 +97,7 @@ func (r *PIMSSMRangeResource) Schema(ctx context.Context, req resource.SchemaReq
 				MarkdownDescription: helpers.NewAttributeDescription("Exclude standard SSM range (232.0.0.0/8).").AddDefaultValueDescription("false").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Bool{
-					helpers.BooleanDefaultModifier(false),
-				},
+				Default:             booldefault.StaticBool(false),
 			},
 		},
 	}

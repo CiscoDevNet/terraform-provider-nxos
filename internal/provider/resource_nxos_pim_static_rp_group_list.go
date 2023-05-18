@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -75,17 +76,13 @@ func (r *PIMStaticRPGroupListResource) Schema(ctx context.Context, req resource.
 				MarkdownDescription: helpers.NewAttributeDescription("Flag to treat Group Ranges as BiDir.").AddDefaultValueDescription("false").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Bool{
-					helpers.BooleanDefaultModifier(false),
-				},
+				Default:             booldefault.StaticBool(false),
 			},
 			"override": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Flag to override RP preference to use Static over Dynamic RP.").AddDefaultValueDescription("false").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Bool{
-					helpers.BooleanDefaultModifier(false),
-				},
+				Default:             booldefault.StaticBool(false),
 			},
 		},
 	}

@@ -11,7 +11,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -64,25 +67,19 @@ func (r *ISISInterfaceResource) Schema(ctx context.Context, req resource.SchemaR
 				MarkdownDescription: helpers.NewAttributeDescription("Authentication Check for ISIS without specific level.").AddDefaultValueDescription("true").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Bool{
-					helpers.BooleanDefaultModifier(true),
-				},
+				Default:             booldefault.StaticBool(true),
 			},
 			"authentication_check_l1": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Authentication Check for ISIS on Level-1.").AddDefaultValueDescription("true").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Bool{
-					helpers.BooleanDefaultModifier(true),
-				},
+				Default:             booldefault.StaticBool(true),
 			},
 			"authentication_check_l2": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Authentication Check for ISIS on Level-2.").AddDefaultValueDescription("true").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Bool{
-					helpers.BooleanDefaultModifier(true),
-				},
+				Default:             booldefault.StaticBool(true),
 			},
 			"authentication_key": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Authentication Key for IS-IS without specific level.").String,
@@ -103,44 +100,36 @@ func (r *ISISInterfaceResource) Schema(ctx context.Context, req resource.SchemaR
 				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type without specific level.").AddStringEnumDescription("clear", "md5", "unknown").AddDefaultValueDescription("unknown").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("unknown"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("clear", "md5", "unknown"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unknown"),
 				},
 			},
 			"authentication_type_l1": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type for Level-1.").AddStringEnumDescription("clear", "md5", "unknown").AddDefaultValueDescription("unknown").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("unknown"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("clear", "md5", "unknown"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unknown"),
 				},
 			},
 			"authentication_type_l2": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type for Level-2.").AddStringEnumDescription("clear", "md5", "unknown").AddDefaultValueDescription("unknown").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("unknown"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("clear", "md5", "unknown"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unknown"),
 				},
 			},
 			"circuit_type": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Circuit type.").AddStringEnumDescription("l1", "l2", "l12").AddDefaultValueDescription("l12").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("l12"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("l1", "l2", "l12"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("l12"),
 				},
 			},
 			"vrf": schema.StringAttribute{
@@ -152,167 +141,135 @@ func (r *ISISInterfaceResource) Schema(ctx context.Context, req resource.SchemaR
 				MarkdownDescription: helpers.NewAttributeDescription("Hello interval.").AddIntegerRangeDescription(1, 65535).AddDefaultValueDescription("10").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(10),
 				Validators: []validator.Int64{
 					int64validator.Between(1, 65535),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(10),
 				},
 			},
 			"hello_interval_l1": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Hello interval Level-1.").AddIntegerRangeDescription(1, 65535).AddDefaultValueDescription("10").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(10),
 				Validators: []validator.Int64{
 					int64validator.Between(1, 65535),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(10),
 				},
 			},
 			"hello_interval_l2": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Hello interval Level-2.").AddIntegerRangeDescription(1, 65535).AddDefaultValueDescription("10").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(10),
 				Validators: []validator.Int64{
 					int64validator.Between(1, 65535),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(10),
 				},
 			},
 			"hello_multiplier": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Hello multiplier.").AddIntegerRangeDescription(3, 1000).AddDefaultValueDescription("3").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(3),
 				Validators: []validator.Int64{
 					int64validator.Between(3, 1000),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(3),
 				},
 			},
 			"hello_multiplier_l1": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Hello multiplier Level-1.").AddIntegerRangeDescription(3, 1000).AddDefaultValueDescription("3").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(3),
 				Validators: []validator.Int64{
 					int64validator.Between(3, 1000),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(3),
 				},
 			},
 			"hello_multiplier_l2": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Hello multiplier Level-2.").AddIntegerRangeDescription(3, 1000).AddDefaultValueDescription("3").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(3),
 				Validators: []validator.Int64{
 					int64validator.Between(3, 1000),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(3),
 				},
 			},
 			"hello_padding": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Hello padding.").AddStringEnumDescription("always", "transient", "never").AddDefaultValueDescription("always").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("always"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("always", "transient", "never"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("always"),
 				},
 			},
 			"metric_l1": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Interface metric Level-1.").AddIntegerRangeDescription(0, 16777216).AddDefaultValueDescription("16777216").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(16777216),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 16777216),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(16777216),
 				},
 			},
 			"metric_l2": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Interface metric Level-2.").AddIntegerRangeDescription(0, 16777216).AddDefaultValueDescription("16777216").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(16777216),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 16777216),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(16777216),
 				},
 			},
 			"mtu_check": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("MTU Check for IS-IS without specific level.").AddDefaultValueDescription("false").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Bool{
-					helpers.BooleanDefaultModifier(false),
-				},
+				Default:             booldefault.StaticBool(false),
 			},
 			"mtu_check_l1": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("MTU Check for IS-IS on Level-1.").AddDefaultValueDescription("false").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Bool{
-					helpers.BooleanDefaultModifier(false),
-				},
+				Default:             booldefault.StaticBool(false),
 			},
 			"mtu_check_l2": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("MTU Check for IS-IS on Level-2.").AddDefaultValueDescription("false").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Bool{
-					helpers.BooleanDefaultModifier(false),
-				},
+				Default:             booldefault.StaticBool(false),
 			},
 			"network_type_p2p": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enabling Point-to-Point Network Type on IS-IS Interface.").AddStringEnumDescription("off", "on", "useAllISMac").AddDefaultValueDescription("off").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("off"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("off", "on", "useAllISMac"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("off"),
 				},
 			},
 			"passive": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Passive Interface Info.").AddStringEnumDescription("l1", "l2", "l12", "noL1", "noL2", "noL12", "inheritDef").AddDefaultValueDescription("inheritDef").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("inheritDef"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("l1", "l2", "l12", "noL1", "noL2", "noL12", "inheritDef"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("inheritDef"),
 				},
 			},
 			"priority_l1": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Circuit priority.").AddIntegerRangeDescription(0, 127).AddDefaultValueDescription("64").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(64),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 127),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(64),
 				},
 			},
 			"priority_l2": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Circuit priority.").AddIntegerRangeDescription(0, 127).AddDefaultValueDescription("64").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(64),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 127),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(64),
 				},
 			},
 		},

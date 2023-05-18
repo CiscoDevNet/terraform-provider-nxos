@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -63,22 +64,18 @@ func (r *HMMInterfaceResource) Schema(ctx context.Context, req resource.SchemaRe
 				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("enabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("enabled"),
 				},
 			},
 			"mode": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("HMM Fabric Forwarding mode information for the interface.").AddStringEnumDescription("standard", "anycastGW", "proxyGW").AddDefaultValueDescription("standard").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("standard"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("standard", "anycastGW", "proxyGW"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("standard"),
 				},
 			},
 		},

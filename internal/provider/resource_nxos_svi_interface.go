@@ -11,7 +11,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -64,33 +66,27 @@ func (r *SVIInterfaceResource) Schema(ctx context.Context, req resource.SchemaRe
 				MarkdownDescription: helpers.NewAttributeDescription("Administrative port state.").AddStringEnumDescription("up", "down").AddDefaultValueDescription("up").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("up"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("up", "down"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("up"),
 				},
 			},
 			"bandwidth": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specifies the administrative port bandwidth.").AddIntegerRangeDescription(1, 400000000).AddDefaultValueDescription("1000000").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(1000000),
 				Validators: []validator.Int64{
 					int64validator.Between(1, 400000000),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(1000000),
 				},
 			},
 			"delay": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specifies the administrative port delay.").AddIntegerRangeDescription(1, 16777215).AddDefaultValueDescription("1").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(1),
 				Validators: []validator.Int64{
 					int64validator.Between(1, 16777215),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(1),
 				},
 			},
 			"description": schema.StringAttribute{
@@ -102,22 +98,18 @@ func (r *SVIInterfaceResource) Schema(ctx context.Context, req resource.SchemaRe
 				MarkdownDescription: helpers.NewAttributeDescription("The administrative port medium type.").AddStringEnumDescription("bcast", "p2p").AddDefaultValueDescription("bcast").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("bcast"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("bcast", "p2p"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("bcast"),
 				},
 			},
 			"mtu": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Administrative port MTU.").AddIntegerRangeDescription(576, 9216).AddDefaultValueDescription("1500").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(1500),
 				Validators: []validator.Int64{
 					int64validator.Between(576, 9216),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(1500),
 				},
 			},
 		},

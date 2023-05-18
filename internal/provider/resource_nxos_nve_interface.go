@@ -11,7 +11,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -57,98 +60,76 @@ func (r *NVEInterfaceResource) Schema(ctx context.Context, req resource.SchemaRe
 				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("disabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disabled"),
 				},
 			},
 			"advertise_virtual_mac": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable or disable Virtual MAC Advertisement in VPC mode.").AddDefaultValueDescription("false").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Bool{
-					helpers.BooleanDefaultModifier(false),
-				},
+				Default:             booldefault.StaticBool(false),
 			},
 			"hold_down_time": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Hold Down Time.").AddIntegerRangeDescription(1, 1500).AddDefaultValueDescription("180").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(180),
 				Validators: []validator.Int64{
 					int64validator.Between(1, 1500),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(180),
 				},
 			},
 			"host_reachability_protocol": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Host Reachability Protocol.").AddStringEnumDescription("Flood-and-learn", "bgp", "controller", "openflow", "openflowIR").AddDefaultValueDescription("Flood-and-learn").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("Flood-and-learn"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("Flood-and-learn", "bgp", "controller", "openflow", "openflowIR"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("Flood-and-learn"),
 				},
 			},
 			"ingress_replication_protocol_bgp": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("VxLAN Ingress Replication Protocol BGP.").AddDefaultValueDescription("false").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Bool{
-					helpers.BooleanDefaultModifier(false),
-				},
+				Default:             booldefault.StaticBool(false),
 			},
 			"multicast_group_l2": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Base multicast group address for L2.").AddDefaultValueDescription("0.0.0.0").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("0.0.0.0"),
-				},
+				Default:             stringdefault.StaticString("0.0.0.0"),
 			},
 			"multicast_group_l3": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Base multicast group address for L3.").AddDefaultValueDescription("0.0.0.0").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("0.0.0.0"),
-				},
+				Default:             stringdefault.StaticString("0.0.0.0"),
 			},
 			"multisite_source_interface": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Interface representing the Multisite Border Gateway. Must match first field in the output of `show int brief`.").AddDefaultValueDescription("unspecified").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unspecified"),
-				},
+				Default:             stringdefault.StaticString("unspecified"),
 			},
 			"source_interface": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Source Interface associated with the NVE. Must match first field in the output of `show int brief`.").AddDefaultValueDescription("unspecified").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unspecified"),
-				},
+				Default:             stringdefault.StaticString("unspecified"),
 			},
 			"suppress_arp": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Suppress ARP.").AddDefaultValueDescription("false").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Bool{
-					helpers.BooleanDefaultModifier(false),
-				},
+				Default:             booldefault.StaticBool(false),
 			},
 			"suppress_mac_route": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Suppress MAC Route.").AddDefaultValueDescription("false").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Bool{
-					helpers.BooleanDefaultModifier(false),
-				},
+				Default:             booldefault.StaticBool(false),
 			},
 		},
 	}

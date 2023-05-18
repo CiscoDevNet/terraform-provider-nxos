@@ -11,9 +11,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -69,6 +71,7 @@ func (r *NVEVNIResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				MarkdownDescription: helpers.NewAttributeDescription("Configures VNI as L3 VNI.").AddDefaultValueDescription("false").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             booldefault.StaticBool(false),
 				PlanModifiers: []planmodifier.Bool{
 					boolplanmodifier.RequiresReplace(),
 				},
@@ -77,30 +80,24 @@ func (r *NVEVNIResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				MarkdownDescription: helpers.NewAttributeDescription("Configures multicast group address for VNI.").AddDefaultValueDescription("0.0.0.0").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("0.0.0.0"),
-				},
+				Default:             stringdefault.StaticString("0.0.0.0"),
 			},
 			"multisite_ingress_replication": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable or disable Multisite Ingress Replication for VNI(s).").AddStringEnumDescription("enable", "disable", "enableOptimized").AddDefaultValueDescription("disable").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("disable"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enable", "disable", "enableOptimized"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disable"),
 				},
 			},
 			"suppress_arp": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable or disable ARP suppression for VNI(s).").AddStringEnumDescription("enabled", "disabled", "off").AddDefaultValueDescription("off").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("off"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled", "off"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("off"),
 				},
 			},
 		},

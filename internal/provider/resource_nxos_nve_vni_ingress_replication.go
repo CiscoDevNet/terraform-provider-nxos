@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -68,11 +69,9 @@ func (r *NVEVNIIngressReplicationResource) Schema(ctx context.Context, req resou
 				MarkdownDescription: helpers.NewAttributeDescription("Configure VxLAN Ingress Replication mode.").AddStringEnumDescription("bgp", "unknown", "static").AddDefaultValueDescription("unknown").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("unknown"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("bgp", "unknown", "static"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unknown"),
 				},
 			},
 		},

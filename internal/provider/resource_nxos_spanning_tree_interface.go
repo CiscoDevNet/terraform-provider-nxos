@@ -11,7 +11,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -64,99 +66,81 @@ func (r *SpanningTreeInterfaceResource) Schema(ctx context.Context, req resource
 				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("enabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("enabled"),
 				},
 			},
 			"bpdu_filter": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("BPDU filter mode.").AddStringEnumDescription("default", "enable", "disable").AddDefaultValueDescription("default").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("default"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("default", "enable", "disable"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("default"),
 				},
 			},
 			"bpdu_guard": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("BPDU guard mode.").AddStringEnumDescription("default", "enable", "disable").AddDefaultValueDescription("default").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("default"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("default", "enable", "disable"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("default"),
 				},
 			},
 			"cost": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Port path cost.").AddIntegerRangeDescription(0, 200000000).AddDefaultValueDescription("0").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 200000000),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(0),
 				},
 			},
 			"ctrl": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Interface controls.").AddStringEnumDescription("unspecified", "bpdu-guard", "bpdu-filter").AddDefaultValueDescription("unspecified").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("unspecified"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("unspecified", "bpdu-guard", "bpdu-filter"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unspecified"),
 				},
 			},
 			"guard": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Guard mode.").AddStringEnumDescription("default", "root", "loop", "none").AddDefaultValueDescription("default").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("default"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("default", "root", "loop", "none"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("default"),
 				},
 			},
 			"link_type": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Link type.").AddStringEnumDescription("auto", "p2p", "shared").AddDefaultValueDescription("auto").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("auto"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("auto", "p2p", "shared"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("auto"),
 				},
 			},
 			"mode": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Port mode.").AddStringEnumDescription("default", "edge", "network", "normal", "trunk").AddDefaultValueDescription("default").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("default"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("default", "edge", "network", "normal", "trunk"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("default"),
 				},
 			},
 			"priority": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Port priority.").AddIntegerRangeDescription(0, 224).AddDefaultValueDescription("128").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(128),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 224),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(128),
 				},
 			},
 		},

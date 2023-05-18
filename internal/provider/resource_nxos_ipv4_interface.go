@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -70,41 +71,33 @@ func (r *IPv4InterfaceResource) Schema(ctx context.Context, req resource.SchemaR
 				MarkdownDescription: helpers.NewAttributeDescription("ip drop-glean enabled/disabled.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("disabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disabled"),
 				},
 			},
 			"forward": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("ip forward enabled/disabled.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("disabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disabled"),
 				},
 			},
 			"unnumbered": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.").AddDefaultValueDescription("unspecified").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unspecified"),
-				},
+				Default:             stringdefault.StaticString("unspecified"),
 			},
 			"urpf": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("URPF (unicast Reverse Path Forwarding).").AddStringEnumDescription("disabled", "strict", "loose", "loose-allow-default", "strict-allow-vni-hosts").AddDefaultValueDescription("disabled").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("disabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("disabled", "strict", "loose", "loose-allow-default", "strict-allow-vni-hosts"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disabled"),
 				},
 			},
 		},

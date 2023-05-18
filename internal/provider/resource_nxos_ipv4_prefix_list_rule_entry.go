@@ -11,8 +11,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -75,22 +77,18 @@ func (r *IPv4PrefixListRuleEntryResource) Schema(ctx context.Context, req resour
 				MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix List Rule Entry action.").AddStringEnumDescription("deny", "permit").AddDefaultValueDescription("permit").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("permit"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("deny", "permit"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("permit"),
 				},
 			},
 			"criteria": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix List Rule Entry criteria.").AddStringEnumDescription("exact", "inexact").AddDefaultValueDescription("exact").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("exact"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("exact", "inexact"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("exact"),
 				},
 			},
 			"prefix": schema.StringAttribute{
@@ -102,22 +100,18 @@ func (r *IPv4PrefixListRuleEntryResource) Schema(ctx context.Context, req resour
 				MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix List Rule Entry start range.").AddIntegerRangeDescription(0, 128).AddDefaultValueDescription("0").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 128),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(0),
 				},
 			},
 			"to_range": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix List Rule Entry end range.").AddIntegerRangeDescription(0, 128).AddDefaultValueDescription("0").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 128),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(0),
 				},
 			},
 		},

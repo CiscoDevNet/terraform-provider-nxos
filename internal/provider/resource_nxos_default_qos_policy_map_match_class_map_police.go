@@ -11,7 +11,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -71,44 +73,36 @@ func (r *DefaultQOSPolicyMapMatchClassMapPoliceResource) Schema(ctx context.Cont
 				MarkdownDescription: helpers.NewAttributeDescription("CIR burst rate.").AddIntegerRangeDescription(0, 536870912).AddDefaultValueDescription("200").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(200),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 536870912),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(200),
 				},
 			},
 			"bc_unit": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("CIR burst rate unit.").AddStringEnumDescription("unspecified", "bytes", "kbytes", "mbytes", "ms", "us", "packets").AddDefaultValueDescription("ms").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("ms"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("unspecified", "bytes", "kbytes", "mbytes", "ms", "us", "packets"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("ms"),
 				},
 			},
 			"be_rate": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("PIR burst rate.").AddIntegerRangeDescription(0, 536870912).AddDefaultValueDescription("0").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 536870912),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(0),
 				},
 			},
 			"be_unit": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("PIR burst rate unit.").AddStringEnumDescription("unspecified", "bytes", "kbytes", "mbytes", "ms", "us", "packets").AddDefaultValueDescription("unspecified").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("unspecified"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("unspecified", "bytes", "kbytes", "mbytes", "ms", "us", "packets"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unspecified"),
 				},
 			},
 			"cir_rate": schema.Int64Attribute{
@@ -117,206 +111,167 @@ func (r *DefaultQOSPolicyMapMatchClassMapPoliceResource) Schema(ctx context.Cont
 				Validators: []validator.Int64{
 					int64validator.Between(0, 100000000000),
 				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(0),
-				},
 			},
 			"cir_unit": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("CIR rate unit.").AddStringEnumDescription("unspecified", "bps", "kbps", "mbps", "gbps", "pps", "pct").AddDefaultValueDescription("bps").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("bps"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("unspecified", "bps", "kbps", "mbps", "gbps", "pps", "pct"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("bps"),
 				},
 			},
 			"conform_action": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Conform action.").AddStringEnumDescription("unspecified", "transmit", "drop", "set-cos-transmit", "set-dscp-transmit", "set-prec-transmit", "set-qos-transmit").AddDefaultValueDescription("transmit").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("transmit"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("unspecified", "transmit", "drop", "set-cos-transmit", "set-dscp-transmit", "set-prec-transmit", "set-qos-transmit"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("transmit"),
 				},
 			},
 			"conform_set_cos": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set CoS for conforming traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 7),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(0),
 				},
 			},
 			"conform_set_dscp": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set DSCP for conforming traffic.").AddIntegerRangeDescription(0, 63).AddDefaultValueDescription("0").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 63),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(0),
 				},
 			},
 			"conform_set_precedence": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set precedence for conforming traffic.").AddStringEnumDescription("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network").AddDefaultValueDescription("routine").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("routine"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("routine"),
 				},
 			},
 			"conform_set_qos_group": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set qos-group for conforming traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 7),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(0),
 				},
 			},
 			"exceed_action": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Exceed action.").AddStringEnumDescription("unspecified", "transmit", "drop", "set-cos-transmit", "set-dscp-transmit", "set-prec-transmit", "set-qos-transmit").AddDefaultValueDescription("unspecified").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("unspecified"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("unspecified", "transmit", "drop", "set-cos-transmit", "set-dscp-transmit", "set-prec-transmit", "set-qos-transmit"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unspecified"),
 				},
 			},
 			"exceed_set_cos": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set CoS for exceeding traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 7),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(0),
 				},
 			},
 			"exceed_set_dscp": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set DSCP for exceeding traffic.").AddIntegerRangeDescription(0, 63).AddDefaultValueDescription("0").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 63),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(0),
 				},
 			},
 			"exceed_set_precedence": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set precedence for exceeding traffic.").AddStringEnumDescription("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network").AddDefaultValueDescription("routine").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("routine"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("routine"),
 				},
 			},
 			"exceed_set_qos_group": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set qos-group for exceeding traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 7),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(0),
 				},
 			},
 			"pir_rate": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("PIR rate.").AddIntegerRangeDescription(0, 100000000000).AddDefaultValueDescription("0").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 100000000000),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(0),
 				},
 			},
 			"pir_unit": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("PIR rate unit.").AddStringEnumDescription("unspecified", "bps", "kbps", "mbps", "gbps", "pps", "pct").AddDefaultValueDescription("unspecified").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("unspecified"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("unspecified", "bps", "kbps", "mbps", "gbps", "pps", "pct"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unspecified"),
 				},
 			},
 			"violate_action": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Violate action.").AddStringEnumDescription("unspecified", "transmit", "drop", "set-cos-transmit", "set-dscp-transmit", "set-prec-transmit", "set-qos-transmit").AddDefaultValueDescription("drop").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("drop"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("unspecified", "transmit", "drop", "set-cos-transmit", "set-dscp-transmit", "set-prec-transmit", "set-qos-transmit"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("drop"),
 				},
 			},
 			"violate_set_cos": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set CoS for violating traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 7),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(0),
 				},
 			},
 			"violate_set_dscp": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set DSCP for violating traffic.").AddIntegerRangeDescription(0, 63).AddDefaultValueDescription("0").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 63),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(0),
 				},
 			},
 			"violate_set_precedence": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set precedence for violating traffic.").AddStringEnumDescription("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network").AddDefaultValueDescription("routine").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("routine"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("routine", "priority", "immediate", "flash", "flash-override", "critical", "internet", "network"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("routine"),
 				},
 			},
 			"violate_set_qos_group": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set qos-group for violating traffic.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 7),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(0),
 				},
 			},
 		},

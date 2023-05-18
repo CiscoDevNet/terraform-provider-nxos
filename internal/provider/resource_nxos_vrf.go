@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -66,9 +67,7 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				MarkdownDescription: helpers.NewAttributeDescription("Encap for this Context, supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.").AddDefaultValueDescription("unknown").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unknown"),
-				},
+				Default:             stringdefault.StaticString("unknown"),
 			},
 		},
 	}

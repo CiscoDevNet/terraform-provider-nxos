@@ -11,7 +11,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -83,20 +86,16 @@ func (r *OSPFAuthenticationResource) Schema(ctx context.Context, req resource.Sc
 				MarkdownDescription: helpers.NewAttributeDescription("Key ID used for authentication.").AddIntegerRangeDescription(0, 255).AddDefaultValueDescription("0").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 255),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(0),
 				},
 			},
 			"key_secure_mode": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Encrypted authentication key or plain text key.").AddDefaultValueDescription("false").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Bool{
-					helpers.BooleanDefaultModifier(false),
-				},
+				Default:             booldefault.StaticBool(false),
 			},
 			"keychain": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Authentication keychain.").String,
@@ -112,19 +111,15 @@ func (r *OSPFAuthenticationResource) Schema(ctx context.Context, req resource.Sc
 				MarkdownDescription: helpers.NewAttributeDescription("Encrypted authentication md5 key or plain text key.").AddDefaultValueDescription("false").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Bool{
-					helpers.BooleanDefaultModifier(false),
-				},
+				Default:             booldefault.StaticBool(false),
 			},
 			"type": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Authentication type.").AddStringEnumDescription("none", "simple", "md5", "unspecified").AddDefaultValueDescription("unspecified").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("unspecified"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("none", "simple", "md5", "unspecified"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unspecified"),
 				},
 			},
 		},

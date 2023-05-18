@@ -14,6 +14,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -79,11 +82,20 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 					.AddDefaultValueDescription("{{.DefaultValue}}")
 					{{- end -}}
 					.String,
-				{{- if or (eq .Id true) (eq .ReferenceOnly true) (eq .Mandatory true)}}
+				{{- if or .Id .ReferenceOnly .Mandatory}}
 				Required:            true,
 				{{- else}}
 				Optional:            true,
 				Computed:            true,
+				{{- end}}
+				{{- if and (len .DefaultValue) (not .Id) (not .ReferenceOnly) (not .Mandatory)}}
+				{{- if eq .Type "Int64"}}
+				Default: int64default.StaticInt64({{.DefaultValue}}),
+				{{- else if eq .Type "Bool"}}
+				Default: booldefault.StaticBool({{.DefaultValue}}),
+				{{- else if eq .Type "String"}}
+				Default: stringdefault.StaticString("{{.DefaultValue}}"),
+				{{- end}}
 				{{- end}}
 				{{- if and (len .EnumValues) (not .AllowNonEnumValues) }}
 				Validators: []validator.String{
@@ -94,17 +106,9 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 					int64validator.Between({{.MinInt}}, {{.MaxInt}}),
 				},
 				{{- end}}
-				{{- if or (len .DefaultValue) (eq .Id true) (eq .ReferenceOnly true) (eq .RequiresReplace true)}}
+				{{- if or .Id .ReferenceOnly .RequiresReplace}}
 				PlanModifiers: []planmodifier.{{.Type}}{
-					{{- if or (eq .Id true) (eq .ReferenceOnly true) (eq .RequiresReplace true)}}
 					{{snakeCase .Type}}planmodifier.RequiresReplace(),
-					{{- else if eq .Type "Int64"}}
-					helpers.IntegerDefaultModifier({{.DefaultValue}}),
-					{{- else if eq .Type "Bool"}}
-					helpers.BooleanDefaultModifier({{.DefaultValue}}),
-					{{- else if eq .Type "String"}}
-					helpers.StringDefaultModifier("{{.DefaultValue}}"),
-					{{- end}}
 				},
 				{{- end}}
 			},

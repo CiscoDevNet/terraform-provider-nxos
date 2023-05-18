@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -75,33 +76,27 @@ func (r *RouteMapRuleEntrySetRegularCommunityResource) Schema(ctx context.Contex
 				MarkdownDescription: helpers.NewAttributeDescription("Option to add to an existing community.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("disabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disabled"),
 				},
 			},
 			"no_community": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Option to have no community attribute.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("disabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disabled"),
 				},
 			},
 			"set_criteria": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Operation on the current community.").AddStringEnumDescription("none", "append", "replace", "igp", "pre-bestpath").AddDefaultValueDescription("none").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("none"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("none", "append", "replace", "igp", "pre-bestpath"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("none"),
 				},
 			},
 		},

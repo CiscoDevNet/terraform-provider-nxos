@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -70,22 +71,18 @@ func (r *BGPGracefulRestartResource) Schema(ctx context.Context, req resource.Sc
 				MarkdownDescription: helpers.NewAttributeDescription("The graceful restart interval.").AddIntegerRangeDescription(1, 3600).AddDefaultValueDescription("120").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(120),
 				Validators: []validator.Int64{
 					int64validator.Between(1, 3600),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(120),
 				},
 			},
 			"stale_interval": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The stale interval for routes advertised by the BGP peer.").AddIntegerRangeDescription(1, 3600).AddDefaultValueDescription("300").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(300),
 				Validators: []validator.Int64{
 					int64validator.Between(1, 3600),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(300),
 				},
 			},
 		},

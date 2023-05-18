@@ -11,7 +11,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -81,11 +83,9 @@ func (r *BGPPeerTemplateMaxPrefixResource) Schema(ctx context.Context, req resou
 				MarkdownDescription: helpers.NewAttributeDescription("Action to do when limit is exceeded.").AddStringEnumDescription("log", "shut", "restart").AddDefaultValueDescription("shut").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("shut"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("log", "shut", "restart"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("shut"),
 				},
 			},
 			"maximum_prefix": schema.Int64Attribute{
@@ -100,19 +100,15 @@ func (r *BGPPeerTemplateMaxPrefixResource) Schema(ctx context.Context, req resou
 				MarkdownDescription: helpers.NewAttributeDescription("The period of time in minutes before restarting the peer when the prefix limit is reached.").AddDefaultValueDescription("0").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(0),
-				},
+				Default:             int64default.StaticInt64(0),
 			},
 			"threshold": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The period of time in minutes before restarting the peer when the prefix limit is reached.").AddIntegerRangeDescription(0, 100).AddDefaultValueDescription("0").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 100),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(0),
 				},
 			},
 		},

@@ -9,12 +9,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
-	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
@@ -68,9 +68,7 @@ func (r *RestResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				MarkdownDescription: "Delete object during destroy operation. Default value is `true`.",
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Bool{
-					helpers.BooleanDefaultModifier(true),
-				},
+				Default:             booldefault.StaticBool(true),
 			},
 			"content": schema.MapAttribute{
 				MarkdownDescription: "Map of key-value pairs that need to be passed to the Model object as parameters.",

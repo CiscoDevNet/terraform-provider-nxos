@@ -11,7 +11,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -71,53 +73,43 @@ func (r *OSPFVRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("enabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("enabled"),
 				},
 			},
 			"bandwidth_reference": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Bandwidth reference value.").AddIntegerRangeDescription(0, 4294967295).AddDefaultValueDescription("40000").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(40000),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(40000),
 				},
 			},
 			"banwidth_reference_unit": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Bandwidth reference unit.").AddStringEnumDescription("mbps", "gbps").AddDefaultValueDescription("mbps").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("mbps"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("mbps", "gbps"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("mbps"),
 				},
 			},
 			"distance": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Administrative distance preference.").AddIntegerRangeDescription(1, 255).AddDefaultValueDescription("110").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(110),
 				Validators: []validator.Int64{
 					int64validator.Between(1, 255),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(110),
 				},
 			},
 			"router_id": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Router ID.").AddDefaultValueDescription("0.0.0.0").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("0.0.0.0"),
-				},
+				Default:             stringdefault.StaticString("0.0.0.0"),
 			},
 		},
 	}

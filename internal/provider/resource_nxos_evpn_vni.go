@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -61,9 +62,7 @@ func (r *EVPNVNIResource) Schema(ctx context.Context, req resource.SchemaRequest
 				MarkdownDescription: helpers.NewAttributeDescription("Route Distinguisher value in NX-OS DME format.").AddDefaultValueDescription("unknown:unknown:0:0").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unknown:unknown:0:0"),
-				},
+				Default:             stringdefault.StaticString("unknown:unknown:0:0"),
 			},
 		},
 	}

@@ -11,8 +11,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -77,11 +80,9 @@ func (r *IPv4AccessListEntryResource) Schema(ctx context.Context, req resource.S
 				MarkdownDescription: helpers.NewAttributeDescription("Action.").AddStringEnumDescription("invalid", "permit", "deny").AddDefaultValueDescription("invalid").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("invalid"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("invalid", "permit", "deny"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("invalid"),
 				},
 			},
 			"dscp": schema.Int64Attribute{
@@ -121,11 +122,9 @@ func (r *IPv4AccessListEntryResource) Schema(ctx context.Context, req resource.S
 				MarkdownDescription: helpers.NewAttributeDescription("Destination port operator.").AddStringEnumDescription("none", "lt", "gt", "eq", "neq", "range").AddDefaultValueDescription("none").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("none"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("none", "lt", "gt", "eq", "neq", "range"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("none"),
 				},
 			},
 			"destination_prefix": schema.StringAttribute{
@@ -162,77 +161,61 @@ func (r *IPv4AccessListEntryResource) Schema(ctx context.Context, req resource.S
 				MarkdownDescription: helpers.NewAttributeDescription("HTTP option method.").AddStringEnumDescription("invalid", "get", "put", "head", "post", "delete", "trace", "connect").AddDefaultValueDescription("invalid").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("invalid"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("invalid", "get", "put", "head", "post", "delete", "trace", "connect"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("invalid"),
 				},
 			},
 			"icmp_code": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("ICMP code.").AddIntegerRangeDescription(0, 256).AddDefaultValueDescription("256").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(256),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 256),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(256),
 				},
 			},
 			"icmp_type": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("ICMP type.").AddIntegerRangeDescription(0, 256).AddDefaultValueDescription("256").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(256),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 256),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(256),
 				},
 			},
 			"logging": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Log matches against ACL entry.").AddDefaultValueDescription("false").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Bool{
-					helpers.BooleanDefaultModifier(false),
-				},
+				Default:             booldefault.StaticBool(false),
 			},
 			"packet_length_1": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("First packet length. Either `invalid` or a number between 19 and 9210.").AddDefaultValueDescription("invalid").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("invalid"),
-				},
+				Default:             stringdefault.StaticString("invalid"),
 			},
 			"packet_length_2": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Second packet length. Either `invalid` or a number between 19 and 9210.").AddDefaultValueDescription("invalid").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("invalid"),
-				},
+				Default:             stringdefault.StaticString("invalid"),
 			},
 			"packet_length_operator": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Packet length operator.").AddStringEnumDescription("none", "lt", "gt", "eq", "neq", "range").AddDefaultValueDescription("none").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("none"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("none", "lt", "gt", "eq", "neq", "range"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("none"),
 				},
 			},
 			"precedence": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Precedence. Either `unspecified` or a number between 0 and 7.").AddDefaultValueDescription("unspecified").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unspecified"),
-				},
+				Default:             stringdefault.StaticString("unspecified"),
 			},
 			"protocol": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Protocol name or number.").AddStringEnumDescription("ip", "icmp", "igmp", "tcp", "udp", "gre", "esp", "ahp", "eigrp", "ospf", "nos", "pim", "pcp", "udf").String,
@@ -298,11 +281,9 @@ func (r *IPv4AccessListEntryResource) Schema(ctx context.Context, req resource.S
 				MarkdownDescription: helpers.NewAttributeDescription("Source port operator.").AddStringEnumDescription("none", "lt", "gt", "eq", "neq", "range").AddDefaultValueDescription("none").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("none"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("none", "lt", "gt", "eq", "neq", "range"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("none"),
 				},
 			},
 			"source_prefix": schema.StringAttribute{
@@ -347,20 +328,16 @@ func (r *IPv4AccessListEntryResource) Schema(ctx context.Context, req resource.S
 				MarkdownDescription: helpers.NewAttributeDescription("VLAN ID.").AddIntegerRangeDescription(0, 4095).AddDefaultValueDescription("4095").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(4095),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4095),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(4095),
 				},
 			},
 			"vni": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("NVE VNI ID. Either `invalid` or a number between 0 and 16777216.").AddDefaultValueDescription("invalid").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("invalid"),
-				},
+				Default:             stringdefault.StaticString("invalid"),
 			},
 		},
 	}

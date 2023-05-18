@@ -11,7 +11,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -71,28 +74,22 @@ func (r *ISISVRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("enabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("enabled"),
 				},
 			},
 			"authentication_check_l1": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Authentication Check for ISIS on Level-1.").AddDefaultValueDescription("true").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Bool{
-					helpers.BooleanDefaultModifier(true),
-				},
+				Default:             booldefault.StaticBool(true),
 			},
 			"authentication_check_l2": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Authentication Check for ISIS on Level-2.").AddDefaultValueDescription("true").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Bool{
-					helpers.BooleanDefaultModifier(true),
-				},
+				Default:             booldefault.StaticBool(true),
 			},
 			"authentication_key_l1": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Authentication Key for IS-IS on Level-1.").String,
@@ -108,77 +105,63 @@ func (r *ISISVRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type for Level-1.").AddStringEnumDescription("clear", "md5", "unknown").AddDefaultValueDescription("unknown").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("unknown"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("clear", "md5", "unknown"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unknown"),
 				},
 			},
 			"authentication_type_l2": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type for Level-2.").AddStringEnumDescription("clear", "md5", "unknown").AddDefaultValueDescription("unknown").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("unknown"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("clear", "md5", "unknown"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unknown"),
 				},
 			},
 			"bandwidth_reference": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The IS-IS domain bandwidth reference. This sets the default reference bandwidth used for calculating the IS-IS cost metric.").AddIntegerRangeDescription(0, 4294967295).AddDefaultValueDescription("40000").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(40000),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(40000),
 				},
 			},
 			"banwidth_reference_unit": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Bandwidth reference unit.").AddStringEnumDescription("mbps", "gbps").AddDefaultValueDescription("mbps").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("mbps"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("mbps", "gbps"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("mbps"),
 				},
 			},
 			"is_type": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IS-IS domain type.").AddStringEnumDescription("l1", "l2", "l12").AddDefaultValueDescription("l12").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("l12"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("l1", "l2", "l12"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("l12"),
 				},
 			},
 			"metric_type": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IS-IS metric type.").AddStringEnumDescription("narrow", "wide", "transition").AddDefaultValueDescription("wide").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("wide"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("narrow", "wide", "transition"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("wide"),
 				},
 			},
 			"mtu": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The configuration of link-state packet (LSP) maximum transmission units (MTU) is supported. You can enable up to 4352 bytes.").AddIntegerRangeDescription(256, 4352).AddDefaultValueDescription("1492").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(1492),
 				Validators: []validator.Int64{
 					int64validator.Between(256, 4352),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(1492),
 				},
 			},
 			"net": schema.StringAttribute{
@@ -190,11 +173,9 @@ func (r *ISISVRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Domain passive-interface default level.").AddStringEnumDescription("l1", "l2", "l12", "unknown").AddDefaultValueDescription("unknown").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("unknown"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("l1", "l2", "l12", "unknown"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unknown"),
 				},
 			},
 		},

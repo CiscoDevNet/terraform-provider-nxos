@@ -11,7 +11,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -64,9 +66,7 @@ func (r *NTPServerResource) Schema(ctx context.Context, req resource.SchemaReque
 				MarkdownDescription: helpers.NewAttributeDescription("Identifies the VRF for the NTP providers.").AddDefaultValueDescription("default").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("default"),
-				},
+				Default:             stringdefault.StaticString("default"),
 			},
 			"type": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("NTP provider type. Possible values are `server` or `peer`.").AddStringEnumDescription("server", "peer").String,
@@ -87,22 +87,18 @@ func (r *NTPServerResource) Schema(ctx context.Context, req resource.SchemaReque
 				MarkdownDescription: helpers.NewAttributeDescription("NTP minimum interval default in seconds. Possible range is from `4` to `16`.").AddIntegerRangeDescription(4, 16).AddDefaultValueDescription("4").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(4),
 				Validators: []validator.Int64{
 					int64validator.Between(4, 16),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(4),
 				},
 			},
 			"max_poll": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("NTP maximum interval default in seconds. Possible range is from `4` to `16`.").AddIntegerRangeDescription(4, 16).AddDefaultValueDescription("6").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(6),
 				Validators: []validator.Int64{
 					int64validator.Between(4, 16),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(6),
 				},
 			},
 		},

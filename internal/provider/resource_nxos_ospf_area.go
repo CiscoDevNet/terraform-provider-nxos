@@ -11,7 +11,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -78,33 +80,27 @@ func (r *OSPFAreaResource) Schema(ctx context.Context, req resource.SchemaReques
 				MarkdownDescription: helpers.NewAttributeDescription("Authentication type.").AddStringEnumDescription("none", "simple", "md5", "unspecified").AddDefaultValueDescription("unspecified").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("unspecified"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("none", "simple", "md5", "unspecified"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unspecified"),
 				},
 			},
 			"cost": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Area cost, specifies cost for default summary LSAs. Used with nssa/stub area types.").AddIntegerRangeDescription(0, 16777215).AddDefaultValueDescription("1").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(1),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 16777215),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(1),
 				},
 			},
 			"type": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Area type.").AddStringEnumDescription("regular", "stub", "nssa").AddDefaultValueDescription("regular").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("regular"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("regular", "stub", "nssa"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("regular"),
 				},
 			},
 		},

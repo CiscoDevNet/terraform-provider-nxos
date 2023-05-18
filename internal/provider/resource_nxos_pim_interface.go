@@ -11,7 +11,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -71,50 +74,40 @@ func (r *PIMInterfaceResource) Schema(ctx context.Context, req resource.SchemaRe
 				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("enabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("enabled"),
 				},
 			},
 			"bfd": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("BFD.").AddStringEnumDescription("none", "enabled", "disabled").AddDefaultValueDescription("none").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("none"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("none", "enabled", "disabled"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("none"),
 				},
 			},
 			"dr_priority": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Designated Router priority level.").AddIntegerRangeDescription(1, 4294967295).AddDefaultValueDescription("1").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(1),
 				Validators: []validator.Int64{
 					int64validator.Between(1, 4294967295),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(1),
 				},
 			},
 			"passive": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Passive interface.").AddDefaultValueDescription("false").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Bool{
-					helpers.BooleanDefaultModifier(false),
-				},
+				Default:             booldefault.StaticBool(false),
 			},
 			"sparse_mode": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Sparse mode.").AddDefaultValueDescription("false").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Bool{
-					helpers.BooleanDefaultModifier(false),
-				},
+				Default:             booldefault.StaticBool(false),
 			},
 		},
 	}

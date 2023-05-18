@@ -11,7 +11,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -78,93 +81,75 @@ func (r *OSPFInterfaceResource) Schema(ctx context.Context, req resource.SchemaR
 				MarkdownDescription: helpers.NewAttributeDescription("Advertise secondary IP addresses.").AddDefaultValueDescription("true").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.Bool{
-					helpers.BooleanDefaultModifier(true),
-				},
+				Default:             booldefault.StaticBool(true),
 			},
 			"area": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Area identifier to which a network or interface belongs in IPv4 address format.").AddDefaultValueDescription("0.0.0.0").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("0.0.0.0"),
-				},
+				Default:             stringdefault.StaticString("0.0.0.0"),
 			},
 			"bfd": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Bidirectional Forwarding Detection (BFD).").AddStringEnumDescription("unspecified", "enabled", "disabled").AddDefaultValueDescription("unspecified").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("unspecified"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("unspecified", "enabled", "disabled"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unspecified"),
 				},
 			},
 			"cost": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specifies the cost of interface.").AddIntegerRangeDescription(0, 65535).AddDefaultValueDescription("0").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 65535),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(0),
 				},
 			},
 			"dead_interval": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Dead interval, interval after which router declares that neighbor as down.").AddIntegerRangeDescription(0, 65535).AddDefaultValueDescription("0").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 65535),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(0),
 				},
 			},
 			"hello_interval": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Hello interval, interval between hello packets that OSPF sends on the interface.").AddIntegerRangeDescription(0, 65535).AddDefaultValueDescription("10").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(10),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 65535),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(10),
 				},
 			},
 			"network_type": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Network type.").AddStringEnumDescription("unspecified", "p2p", "bcast").AddDefaultValueDescription("unspecified").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("unspecified"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("unspecified", "p2p", "bcast"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unspecified"),
 				},
 			},
 			"passive": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Passive interface control. Interface can be configured as passive or non-passive.").AddStringEnumDescription("unspecified", "enabled", "disabled").AddDefaultValueDescription("unspecified").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("unspecified"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("unspecified", "enabled", "disabled"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unspecified"),
 				},
 			},
 			"priority": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Priority, used in determining the designated router on this network.").AddIntegerRangeDescription(0, 255).AddDefaultValueDescription("1").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(1),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 255),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(1),
 				},
 			},
 		},

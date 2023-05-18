@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -81,22 +82,18 @@ func (r *BGPAddressFamilyResource) Schema(ctx context.Context, req resource.Sche
 				MarkdownDescription: helpers.NewAttributeDescription("The next-hop address tracking delay timer for critical next-hop reachability routes.").AddIntegerRangeDescription(1, 4294967295).AddDefaultValueDescription("3000").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(3000),
 				Validators: []validator.Int64{
 					int64validator.Between(1, 4294967295),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(3000),
 				},
 			},
 			"non_critical_nexthop_timeout": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The next-hop address tracking delay timer for non-critical next-hop reachability routes.").AddIntegerRangeDescription(1, 4294967295).AddDefaultValueDescription("10000").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(10000),
 				Validators: []validator.Int64{
 					int64validator.Between(1, 4294967295),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(10000),
 				},
 			},
 		},

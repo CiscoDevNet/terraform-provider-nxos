@@ -11,7 +11,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -64,33 +66,27 @@ func (r *SubinterfaceResource) Schema(ctx context.Context, req resource.SchemaRe
 				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("up", "down").AddDefaultValueDescription("up").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("up"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("up", "down"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("up"),
 				},
 			},
 			"bandwidth": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specifies the administrative port bandwidth.").AddIntegerRangeDescription(0, 3200000000).AddDefaultValueDescription("0").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 3200000000),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(0),
 				},
 			},
 			"delay": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specifies the administrative port delay.").AddIntegerRangeDescription(1, 16777215).AddDefaultValueDescription("1").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(1),
 				Validators: []validator.Int64{
 					int64validator.Between(1, 16777215),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(1),
 				},
 			},
 			"description": schema.StringAttribute{
@@ -102,41 +98,33 @@ func (r *SubinterfaceResource) Schema(ctx context.Context, req resource.SchemaRe
 				MarkdownDescription: helpers.NewAttributeDescription("Subinterface encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").AddDefaultValueDescription("unknown").String,
 				Optional:            true,
 				Computed:            true,
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("unknown"),
-				},
+				Default:             stringdefault.StaticString("unknown"),
 			},
 			"link_logging": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Administrative link logging.").AddStringEnumDescription("default", "enable", "disable").AddDefaultValueDescription("default").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("default"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("default", "enable", "disable"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("default"),
 				},
 			},
 			"medium": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The administrative port medium type.").AddStringEnumDescription("broadcast", "p2p").AddDefaultValueDescription("broadcast").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             stringdefault.StaticString("broadcast"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("broadcast", "p2p"),
-				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("broadcast"),
 				},
 			},
 			"mtu": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Administrative port MTU.").AddIntegerRangeDescription(576, 9216).AddDefaultValueDescription("1500").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(1500),
 				Validators: []validator.Int64{
 					int64validator.Between(576, 9216),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					helpers.IntegerDefaultModifier(1500),
 				},
 			},
 		},

@@ -44,8 +44,6 @@ resource "nxos_rest" "PreReq0" {
 resource "nxos_rest" "PreReq1" {
   dn = "sys/bgp"
   class_name = "bgpEntity"
-  content = {
-  }
   depends_on = [nxos_rest.PreReq0, ]
 }
 

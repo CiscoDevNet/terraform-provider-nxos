@@ -110,7 +110,7 @@ func (r *BGPAddressFamilyResource) Configure(ctx context.Context, req resource.C
 }
 
 func (r *BGPAddressFamilyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan, state BGPAddressFamily
+	var plan BGPAddressFamily
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -129,20 +129,11 @@ func (r *BGPAddressFamilyResource) Create(ctx context.Context, req resource.Crea
 		return
 	}
 
-	// Read object
-	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.ValueString()]))
-	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
-		return
-	}
-
-	state.fromBody(res)
-	state.fromPlan(plan)
-	state.Dn = types.StringValue(plan.getDn())
+	plan.Dn = types.StringValue(plan.getDn())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
 
@@ -158,13 +149,15 @@ func (r *BGPAddressFamilyResource) Read(ctx context.Context, req resource.ReadRe
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
-	res, err := r.data.client.GetDn(state.Dn.ValueString(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[state.Device.ValueString()]))
+	queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+	queries = append(queries, nxos.OverrideUrl(r.data.devices[state.Device.ValueString()]))
+	res, err := r.data.client.GetDn(state.Dn.ValueString(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
 	}
 
-	state.fromBody(res)
+	state.fromBody(res, false)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 
@@ -173,7 +166,7 @@ func (r *BGPAddressFamilyResource) Read(ctx context.Context, req resource.ReadRe
 }
 
 func (r *BGPAddressFamilyResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state BGPAddressFamily
+	var plan BGPAddressFamily
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -191,19 +184,9 @@ func (r *BGPAddressFamilyResource) Update(ctx context.Context, req resource.Upda
 		return
 	}
 
-	// Read object
-	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.ValueString()]))
-	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
-		return
-	}
-
-	state.fromBody(res)
-	state.fromPlan(plan)
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
 

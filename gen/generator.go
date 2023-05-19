@@ -78,19 +78,20 @@ var templates = []t{
 }
 
 type YamlConfig struct {
-	Name              string                `yaml:"name"`
-	ClassName         string                `yaml:"class_name"`
-	Dn                string                `yaml:"dn"`
-	NoDelete          bool                  `yaml:"no_delete"`
-	ExcludeTest       bool                  `yaml:"exclude_test"`
-	DsDescription     string                `yaml:"ds_description"`
-	ResDescription    string                `yaml:"res_description"`
-	DocPath           string                `yaml:"doc_path"`
-	Parents           []string              `yaml:"parents"`
-	Children          []string              `yaml:"children"`
-	References        []string              `yaml:"references"`
-	Attributes        []YamlConfigAttribute `yaml:"attributes"`
-	TestPrerequisites []YamlTest            `yaml:"test_prerequisites"`
+	Name              string                 `yaml:"name"`
+	ClassName         string                 `yaml:"class_name"`
+	Dn                string                 `yaml:"dn"`
+	NoDelete          bool                   `yaml:"no_delete"`
+	ExcludeTest       bool                   `yaml:"exclude_test"`
+	DsDescription     string                 `yaml:"ds_description"`
+	ResDescription    string                 `yaml:"res_description"`
+	DocPath           string                 `yaml:"doc_path"`
+	Parents           []string               `yaml:"parents"`
+	Children          []string               `yaml:"children"`
+	References        []string               `yaml:"references"`
+	Attributes        []YamlConfigAttribute  `yaml:"attributes"`
+	ChildClasses      []YamlConfigChildClass `yaml:"child_classes"`
+	TestPrerequisites []YamlTest             `yaml:"test_prerequisites"`
 }
 
 type YamlConfigAttribute struct {
@@ -113,6 +114,15 @@ type YamlConfigAttribute struct {
 	RequiresReplace    bool     `yaml:"requires_replace"`
 }
 
+type YamlConfigChildClass struct {
+	ClassName   string                `yaml:"class_name"`
+	Rn          string                `yaml:"rn"`
+	Type        string                `yaml:"type"`
+	TfName      string                `yaml:"tf_name"`
+	Description string                `yaml:"description"`
+	Attributes  []YamlConfigAttribute `yaml:"attributes"`
+}
+
 type YamlTest struct {
 	Dn           string              `yaml:"dn"`
 	ClassName    string              `yaml:"class_name"`
@@ -127,11 +137,16 @@ type YamlTestAttribute struct {
 	Reference string `yaml:"reference"`
 }
 
-// Templating helper function to convert first character in string to uppercase
-func ToTitle(s string) string {
-	if len(s) > 0 {
-		return strings.ToUpper(string(s[0])) + string(s[1:])
+// Templating helper function to convert TF name to GO name
+func ToGoName(s string) string {
+	var g []string
+
+	p := strings.Split(s, "_")
+
+	for _, value := range p {
+		g = append(g, strings.Title(value))
 	}
+	s = strings.Join(g, "")
 	return s
 }
 
@@ -198,7 +213,7 @@ func LenNoRef(attributes []YamlConfigAttribute) int {
 
 // Map of templating functions
 var functions = template.FuncMap{
-	"toTitle":      ToTitle,
+	"toGoName":     ToGoName,
 	"camelCase":    CamelCase,
 	"snakeCase":    SnakeCase,
 	"hasId":        HasId,

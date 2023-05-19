@@ -6,12 +6,20 @@ ds_description: This data source can read an IPv4 Access List Policy Ingress Int
 res_description: This resource can manage an IPv4 Access List Policy Ingress Interface.
 doc_path: Security%20and%20Policing/acl:If/
 doc_category: IPv4
-children:
-  - IPv4 Access List Policy Ingress Interface Instance
 attributes:
   - nxos_name: name
     tf_name: interface_id
     type: String
     id: true
-    description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+    description: "Must match first field in the output of `show intf brief`. Example: `eth1/1`."
     example: eth1/10
+child_classes:
+  - class_name: aclInst
+    rn: acl
+    type: single
+    attributes:
+      - nxos_name: name
+        tf_name: access_list_name
+        type: String
+        description: "Access list name."
+        example: ACL1

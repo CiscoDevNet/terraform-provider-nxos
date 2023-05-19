@@ -34,6 +34,7 @@ data "nxos_ipv4_access_list_policy_ingress_interface" "example" {
 
 ### Read-Only
 
+- `access_list_name` (String) Access list name.
 - `id` (String) The distinguished name of the object.
 
 

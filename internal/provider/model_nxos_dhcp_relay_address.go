@@ -8,18 +8,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type DHCPRelayAddress struct {
-	Device  types.String `tfsdk:"device"`
-	Dn      types.String `tfsdk:"id"`
-	Id      types.String `tfsdk:"interface_id"`
-	Vrf     types.String `tfsdk:"vrf"`
-	Address types.String `tfsdk:"address"`
+	Device      types.String `tfsdk:"device"`
+	Dn          types.String `tfsdk:"id"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+	Vrf         types.String `tfsdk:"vrf"`
+	Address     types.String `tfsdk:"address"`
 }
 
 func (data DHCPRelayAddress) getDn() string {
-	return fmt.Sprintf("sys/dhcp/inst/relayif-[%s]/addr-[%s]-[%s]", data.Id.ValueString(), data.Vrf.ValueString(), data.Address.ValueString())
+	return fmt.Sprintf("sys/dhcp/inst/relayif-[%s]/addr-[%s]-[%s]", data.InterfaceId.ValueString(), data.Vrf.ValueString(), data.Address.ValueString())
 }
 
 func (data DHCPRelayAddress) getClassName() string {
@@ -27,19 +28,27 @@ func (data DHCPRelayAddress) getClassName() string {
 }
 
 func (data DHCPRelayAddress) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("vrf", data.Vrf.ValueString()).
-		Set("address", data.Address.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Vrf.IsUnknown() && !data.Vrf.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"vrf", data.Vrf.ValueString())
+	}
+	if (!data.Address.IsUnknown() && !data.Address.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"address", data.Address.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *DHCPRelayAddress) fromBody(res gjson.Result) {
-	data.Vrf = types.StringValue(res.Get("*.attributes.vrf").String())
-	data.Address = types.StringValue(res.Get("*.attributes.address").String())
-}
-
-func (data *DHCPRelayAddress) fromPlan(plan DHCPRelayAddress) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Id = plan.Id
+func (data *DHCPRelayAddress) fromBody(res gjson.Result, all bool) {
+	if !data.Vrf.IsNull() || all {
+		data.Vrf = types.StringValue(res.Get(data.getClassName() + ".attributes.vrf").String())
+	} else {
+		data.Vrf = types.StringNull()
+	}
+	if !data.Address.IsNull() || all {
+		data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.address").String())
+	} else {
+		data.Address = types.StringNull()
+	}
 }

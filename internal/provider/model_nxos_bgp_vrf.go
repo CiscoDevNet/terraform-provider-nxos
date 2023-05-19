@@ -8,14 +8,15 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type BGPVRF struct {
-	Device types.String `tfsdk:"device"`
-	Dn     types.String `tfsdk:"id"`
-	Asn    types.String `tfsdk:"asn"`
-	Name   types.String `tfsdk:"name"`
-	RtrId  types.String `tfsdk:"router_id"`
+	Device   types.String `tfsdk:"device"`
+	Dn       types.String `tfsdk:"id"`
+	Asn      types.String `tfsdk:"asn"`
+	Name     types.String `tfsdk:"name"`
+	RouterId types.String `tfsdk:"router_id"`
 }
 
 func (data BGPVRF) getDn() string {
@@ -27,19 +28,27 @@ func (data BGPVRF) getClassName() string {
 }
 
 func (data BGPVRF) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("name", data.Name.ValueString()).
-		Set("rtrId", data.RtrId.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
+	}
+	if (!data.RouterId.IsUnknown() && !data.RouterId.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rtrId", data.RouterId.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *BGPVRF) fromBody(res gjson.Result) {
-	data.Name = types.StringValue(res.Get("*.attributes.name").String())
-	data.RtrId = types.StringValue(res.Get("*.attributes.rtrId").String())
-}
-
-func (data *BGPVRF) fromPlan(plan BGPVRF) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Asn = plan.Asn
+func (data *BGPVRF) fromBody(res gjson.Result, all bool) {
+	if !data.Name.IsNull() || all {
+		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	} else {
+		data.Name = types.StringNull()
+	}
+	if !data.RouterId.IsNull() || all {
+		data.RouterId = types.StringValue(res.Get(data.getClassName() + ".attributes.rtrId").String())
+	} else {
+		data.RouterId = types.StringNull()
+	}
 }

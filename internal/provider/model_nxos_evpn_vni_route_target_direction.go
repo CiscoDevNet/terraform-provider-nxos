@@ -8,17 +8,18 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type EVPNVNIRouteTargetDirection struct {
-	Device types.String `tfsdk:"device"`
-	Dn     types.String `tfsdk:"id"`
-	Encap  types.String `tfsdk:"encap"`
-	Type   types.String `tfsdk:"direction"`
+	Device    types.String `tfsdk:"device"`
+	Dn        types.String `tfsdk:"id"`
+	Encap     types.String `tfsdk:"encap"`
+	Direction types.String `tfsdk:"direction"`
 }
 
 func (data EVPNVNIRouteTargetDirection) getDn() string {
-	return fmt.Sprintf("sys/evpn/bdevi-[%s]/rttp-[%s]", data.Encap.ValueString(), data.Type.ValueString())
+	return fmt.Sprintf("sys/evpn/bdevi-[%s]/rttp-[%s]", data.Encap.ValueString(), data.Direction.ValueString())
 }
 
 func (data EVPNVNIRouteTargetDirection) getClassName() string {
@@ -26,17 +27,19 @@ func (data EVPNVNIRouteTargetDirection) getClassName() string {
 }
 
 func (data EVPNVNIRouteTargetDirection) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("type", data.Type.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Direction.IsUnknown() && !data.Direction.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.Direction.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *EVPNVNIRouteTargetDirection) fromBody(res gjson.Result) {
-	data.Type = types.StringValue(res.Get("*.attributes.type").String())
-}
-
-func (data *EVPNVNIRouteTargetDirection) fromPlan(plan EVPNVNIRouteTargetDirection) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Encap = plan.Encap
+func (data *EVPNVNIRouteTargetDirection) fromBody(res gjson.Result, all bool) {
+	if !data.Direction.IsNull() || all {
+		data.Direction = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
+	} else {
+		data.Direction = types.StringNull()
+	}
 }

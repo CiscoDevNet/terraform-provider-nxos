@@ -8,16 +8,17 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type DHCPRelayInterface struct {
-	Device types.String `tfsdk:"device"`
-	Dn     types.String `tfsdk:"id"`
-	Id     types.String `tfsdk:"interface_id"`
+	Device      types.String `tfsdk:"device"`
+	Dn          types.String `tfsdk:"id"`
+	InterfaceId types.String `tfsdk:"interface_id"`
 }
 
 func (data DHCPRelayInterface) getDn() string {
-	return fmt.Sprintf("sys/dhcp/inst/relayif-[%s]", data.Id.ValueString())
+	return fmt.Sprintf("sys/dhcp/inst/relayif-[%s]", data.InterfaceId.ValueString())
 }
 
 func (data DHCPRelayInterface) getClassName() string {
@@ -25,16 +26,19 @@ func (data DHCPRelayInterface) getClassName() string {
 }
 
 func (data DHCPRelayInterface) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("id", data.Id.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.InterfaceId.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *DHCPRelayInterface) fromBody(res gjson.Result) {
-	data.Id = types.StringValue(res.Get("*.attributes.id").String())
-}
-
-func (data *DHCPRelayInterface) fromPlan(plan DHCPRelayInterface) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
+func (data *DHCPRelayInterface) fromBody(res gjson.Result, all bool) {
+	if !data.InterfaceId.IsNull() || all {
+		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
+	} else {
+		data.InterfaceId = types.StringNull()
+	}
 }

@@ -68,8 +68,6 @@ resource "nxos_rest" "PreReq0" {
 resource "nxos_rest" "PreReq1" {
   dn = "sys/isis"
   class_name = "isisEntity"
-  content = {
-  }
   depends_on = [nxos_rest.PreReq0, ]
 }
 

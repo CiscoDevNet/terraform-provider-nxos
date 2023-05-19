@@ -8,20 +8,21 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type VRFRouteTarget struct {
-	Device  types.String `tfsdk:"device"`
-	Dn      types.String `tfsdk:"id"`
-	Vrf     types.String `tfsdk:"vrf"`
-	Af_type types.String `tfsdk:"address_family"`
-	Rt_type types.String `tfsdk:"route_target_address_family"`
-	Type    types.String `tfsdk:"direction"`
-	Rtt     types.String `tfsdk:"route_target"`
+	Device                   types.String `tfsdk:"device"`
+	Dn                       types.String `tfsdk:"id"`
+	Vrf                      types.String `tfsdk:"vrf"`
+	AddressFamily            types.String `tfsdk:"address_family"`
+	RouteTargetAddressFamily types.String `tfsdk:"route_target_address_family"`
+	Direction                types.String `tfsdk:"direction"`
+	RouteTarget              types.String `tfsdk:"route_target"`
 }
 
 func (data VRFRouteTarget) getDn() string {
-	return fmt.Sprintf("sys/inst-[%s]/dom-[%[1]s]/af-[%s]/ctrl-[%s]/rttp-[%s]/ent-[%s]", data.Vrf.ValueString(), data.Af_type.ValueString(), data.Rt_type.ValueString(), data.Type.ValueString(), data.Rtt.ValueString())
+	return fmt.Sprintf("sys/inst-[%s]/dom-[%[1]s]/af-[%s]/ctrl-[%s]/rttp-[%s]/ent-[%s]", data.Vrf.ValueString(), data.AddressFamily.ValueString(), data.RouteTargetAddressFamily.ValueString(), data.Direction.ValueString(), data.RouteTarget.ValueString())
 }
 
 func (data VRFRouteTarget) getClassName() string {
@@ -29,20 +30,19 @@ func (data VRFRouteTarget) getClassName() string {
 }
 
 func (data VRFRouteTarget) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("rtt", data.Rtt.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.RouteTarget.IsUnknown() && !data.RouteTarget.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rtt", data.RouteTarget.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *VRFRouteTarget) fromBody(res gjson.Result) {
-	data.Rtt = types.StringValue(res.Get("*.attributes.rtt").String())
-}
-
-func (data *VRFRouteTarget) fromPlan(plan VRFRouteTarget) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Vrf = plan.Vrf
-	data.Af_type = plan.Af_type
-	data.Rt_type = plan.Rt_type
-	data.Type = plan.Type
+func (data *VRFRouteTarget) fromBody(res gjson.Result, all bool) {
+	if !data.RouteTarget.IsNull() || all {
+		data.RouteTarget = types.StringValue(res.Get(data.getClassName() + ".attributes.rtt").String())
+	} else {
+		data.RouteTarget = types.StringNull()
+	}
 }

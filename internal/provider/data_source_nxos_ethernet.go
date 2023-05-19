@@ -63,7 +63,7 @@ func (d *EthernetDataSource) Configure(_ context.Context, req datasource.Configu
 }
 
 func (d *EthernetDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config, state Ethernet
+	var config Ethernet
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)
@@ -74,19 +74,18 @@ func (d *EthernetDataSource) Read(ctx context.Context, req datasource.ReadReques
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getDn()))
 
-	res, err := d.data.client.GetDn(config.getDn(), nxos.OverrideUrl(d.data.devices[config.Device.ValueString()]))
-
+	queries := []func(*nxos.Req){nxos.OverrideUrl(d.data.devices[config.Device.ValueString()])}
+	res, err := d.data.client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
 	}
 
-	state.fromBody(res)
-	state.fromPlan(config)
-	state.Dn = types.StringValue(config.getDn())
+	config.fromBody(res, true)
+	config.Dn = types.StringValue(config.getDn())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getDn()))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 }

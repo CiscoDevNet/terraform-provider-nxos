@@ -10,62 +10,63 @@ import (
 	"github.com/netascode/go-nxos"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type IPv4AccessListEntry struct {
-	Device          types.String `tfsdk:"device"`
-	Dn              types.String `tfsdk:"id"`
-	Name            types.String `tfsdk:"name"`
-	SeqNum          types.Int64  `tfsdk:"sequence_number"`
-	Ack             types.Bool   `tfsdk:"ack"`
-	Action          types.String `tfsdk:"action"`
-	Dscp            types.Int64  `tfsdk:"dscp"`
-	DstAddrGroup    types.String `tfsdk:"destination_address_group"`
-	DstPort1        types.String `tfsdk:"destination_port_1"`
-	DstPort2        types.String `tfsdk:"destination_port_2"`
-	DstPortGroup    types.String `tfsdk:"destination_port_group"`
-	DstPortMask     types.String `tfsdk:"destination_port_mask"`
-	DstPortOp       types.String `tfsdk:"destination_port_operator"`
-	DstPrefix       types.String `tfsdk:"destination_prefix"`
-	DstPrefixLength types.String `tfsdk:"destination_prefix_length"`
-	DstPrefixMask   types.String `tfsdk:"destination_prefix_mask"`
-	Est             types.Bool   `tfsdk:"est"`
-	Fin             types.Bool   `tfsdk:"fin"`
-	Fragment        types.Bool   `tfsdk:"fragment"`
-	HttpOption      types.String `tfsdk:"http_option_type"`
-	IcmpCode        types.Int64  `tfsdk:"icmp_code"`
-	IcmpType        types.Int64  `tfsdk:"icmp_type"`
-	Logging         types.Bool   `tfsdk:"logging"`
-	PktLen1         types.String `tfsdk:"packet_length_1"`
-	PktLen2         types.String `tfsdk:"packet_length_2"`
-	PktLenOp        types.String `tfsdk:"packet_length_operator"`
-	Precedence      types.String `tfsdk:"precedence"`
-	Protocol        types.String `tfsdk:"protocol"`
-	ProtocolMask    types.String `tfsdk:"protocol_mask"`
-	Psh             types.Bool   `tfsdk:"psh"`
-	Redirect        types.String `tfsdk:"redirect"`
-	Remark          types.String `tfsdk:"remark"`
-	Rev             types.Bool   `tfsdk:"rev"`
-	Rst             types.Bool   `tfsdk:"rst"`
-	SrcAddrGroup    types.String `tfsdk:"source_address_group"`
-	SrcPort1        types.String `tfsdk:"source_port_1"`
-	SrcPort2        types.String `tfsdk:"source_port_2"`
-	SrcPortGroup    types.String `tfsdk:"source_port_group"`
-	SrcPortMask     types.String `tfsdk:"source_port_mask"`
-	SrcPortOp       types.String `tfsdk:"source_port_operator"`
-	SrcPrefix       types.String `tfsdk:"source_prefix"`
-	SrcPrefixLength types.String `tfsdk:"source_prefix_length"`
-	SrcPrefixMask   types.String `tfsdk:"source_prefix_mask"`
-	Syn             types.Bool   `tfsdk:"syn"`
-	TimeRange       types.String `tfsdk:"time_range"`
-	Ttl             types.Int64  `tfsdk:"ttl"`
-	Urg             types.Bool   `tfsdk:"urg"`
-	Vlan            types.Int64  `tfsdk:"vlan"`
-	Vni             types.String `tfsdk:"vni"`
+	Device                  types.String `tfsdk:"device"`
+	Dn                      types.String `tfsdk:"id"`
+	Name                    types.String `tfsdk:"name"`
+	SequenceNumber          types.Int64  `tfsdk:"sequence_number"`
+	Ack                     types.Bool   `tfsdk:"ack"`
+	Action                  types.String `tfsdk:"action"`
+	Dscp                    types.Int64  `tfsdk:"dscp"`
+	DestinationAddressGroup types.String `tfsdk:"destination_address_group"`
+	DestinationPort1        types.String `tfsdk:"destination_port_1"`
+	DestinationPort2        types.String `tfsdk:"destination_port_2"`
+	DestinationPortGroup    types.String `tfsdk:"destination_port_group"`
+	DestinationPortMask     types.String `tfsdk:"destination_port_mask"`
+	DestinationPortOperator types.String `tfsdk:"destination_port_operator"`
+	DestinationPrefix       types.String `tfsdk:"destination_prefix"`
+	DestinationPrefixLength types.String `tfsdk:"destination_prefix_length"`
+	DestinationPrefixMask   types.String `tfsdk:"destination_prefix_mask"`
+	Est                     types.Bool   `tfsdk:"est"`
+	Fin                     types.Bool   `tfsdk:"fin"`
+	Fragment                types.Bool   `tfsdk:"fragment"`
+	HttpOptionType          types.String `tfsdk:"http_option_type"`
+	IcmpCode                types.Int64  `tfsdk:"icmp_code"`
+	IcmpType                types.Int64  `tfsdk:"icmp_type"`
+	Logging                 types.Bool   `tfsdk:"logging"`
+	PacketLength1           types.String `tfsdk:"packet_length_1"`
+	PacketLength2           types.String `tfsdk:"packet_length_2"`
+	PacketLengthOperator    types.String `tfsdk:"packet_length_operator"`
+	Precedence              types.String `tfsdk:"precedence"`
+	Protocol                types.String `tfsdk:"protocol"`
+	ProtocolMask            types.String `tfsdk:"protocol_mask"`
+	Psh                     types.Bool   `tfsdk:"psh"`
+	Redirect                types.String `tfsdk:"redirect"`
+	Remark                  types.String `tfsdk:"remark"`
+	Rev                     types.Bool   `tfsdk:"rev"`
+	Rst                     types.Bool   `tfsdk:"rst"`
+	SourceAddressGroup      types.String `tfsdk:"source_address_group"`
+	SourcePort1             types.String `tfsdk:"source_port_1"`
+	SourcePort2             types.String `tfsdk:"source_port_2"`
+	SourcePortGroup         types.String `tfsdk:"source_port_group"`
+	SourcePortMask          types.String `tfsdk:"source_port_mask"`
+	SourcePortOperator      types.String `tfsdk:"source_port_operator"`
+	SourcePrefix            types.String `tfsdk:"source_prefix"`
+	SourcePrefixLength      types.String `tfsdk:"source_prefix_length"`
+	SourcePrefixMask        types.String `tfsdk:"source_prefix_mask"`
+	Syn                     types.Bool   `tfsdk:"syn"`
+	TimeRange               types.String `tfsdk:"time_range"`
+	Ttl                     types.Int64  `tfsdk:"ttl"`
+	Urg                     types.Bool   `tfsdk:"urg"`
+	Vlan                    types.Int64  `tfsdk:"vlan"`
+	Vni                     types.String `tfsdk:"vni"`
 }
 
 func (data IPv4AccessListEntry) getDn() string {
-	return fmt.Sprintf("sys/acl/ipv4/name-[%s]//seq-[%v]", data.Name.ValueString(), data.SeqNum.ValueInt64())
+	return fmt.Sprintf("sys/acl/ipv4/name-[%s]/seq-[%v]", data.Name.ValueString(), data.SequenceNumber.ValueInt64())
 }
 
 func (data IPv4AccessListEntry) getClassName() string {
@@ -73,170 +74,379 @@ func (data IPv4AccessListEntry) getClassName() string {
 }
 
 func (data IPv4AccessListEntry) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("seqNum", strconv.FormatInt(data.SeqNum.ValueInt64(), 10)).
-		Set("ack", strconv.FormatBool(data.Ack.ValueBool())).
-		Set("action", data.Action.ValueString()).
-		Set("dscp", strconv.FormatInt(data.Dscp.ValueInt64(), 10)).
-		Set("dstAddrGroup", data.DstAddrGroup.ValueString()).
-		Set("dstPort1", data.DstPort1.ValueString()).
-		Set("dstPort2", data.DstPort2.ValueString()).
-		Set("dstPortGroup", data.DstPortGroup.ValueString()).
-		Set("dstPortMask", data.DstPortMask.ValueString()).
-		Set("dstPortOp", data.DstPortOp.ValueString()).
-		Set("dstPrefix", data.DstPrefix.ValueString()).
-		Set("dstPrefixLength", data.DstPrefixLength.ValueString()).
-		Set("dstPrefixMask", data.DstPrefixMask.ValueString()).
-		Set("est", strconv.FormatBool(data.Est.ValueBool())).
-		Set("fin", strconv.FormatBool(data.Fin.ValueBool())).
-		Set("fragment", strconv.FormatBool(data.Fragment.ValueBool())).
-		Set("httpOption", data.HttpOption.ValueString()).
-		Set("icmpCode", strconv.FormatInt(data.IcmpCode.ValueInt64(), 10)).
-		Set("icmpType", strconv.FormatInt(data.IcmpType.ValueInt64(), 10)).
-		Set("logging", strconv.FormatBool(data.Logging.ValueBool())).
-		Set("pktLen1", data.PktLen1.ValueString()).
-		Set("pktLen2", data.PktLen2.ValueString()).
-		Set("pktLenOp", data.PktLenOp.ValueString()).
-		Set("precedence", data.Precedence.ValueString()).
-		Set("protocol", data.Protocol.ValueString()).
-		Set("protocolMask", data.ProtocolMask.ValueString()).
-		Set("psh", strconv.FormatBool(data.Psh.ValueBool())).
-		Set("redirect", data.Redirect.ValueString()).
-		Set("remark", data.Remark.ValueString()).
-		Set("rev", strconv.FormatBool(data.Rev.ValueBool())).
-		Set("rst", strconv.FormatBool(data.Rst.ValueBool())).
-		Set("srcAddrGroup", data.SrcAddrGroup.ValueString()).
-		Set("srcPort1", data.SrcPort1.ValueString()).
-		Set("srcPort2", data.SrcPort2.ValueString()).
-		Set("srcPortGroup", data.SrcPortGroup.ValueString()).
-		Set("srcPortMask", data.SrcPortMask.ValueString()).
-		Set("srcPortOp", data.SrcPortOp.ValueString()).
-		Set("srcPrefix", data.SrcPrefix.ValueString()).
-		Set("srcPrefixLength", data.SrcPrefixLength.ValueString()).
-		Set("srcPrefixMask", data.SrcPrefixMask.ValueString()).
-		Set("syn", strconv.FormatBool(data.Syn.ValueBool())).
-		Set("timeRange", data.TimeRange.ValueString()).
-		Set("ttl", strconv.FormatInt(data.Ttl.ValueInt64(), 10)).
-		Set("urg", strconv.FormatBool(data.Urg.ValueBool())).
-		Set("vlan", strconv.FormatInt(data.Vlan.ValueInt64(), 10)).
-		Set("vni", data.Vni.ValueString())
-	if data.Dscp.IsUnknown() || data.Dscp.IsNull() {
-		attrs = attrs.Delete("dscp")
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.SequenceNumber.IsUnknown() && !data.SequenceNumber.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"seqNum", strconv.FormatInt(data.SequenceNumber.ValueInt64(), 10))
 	}
-	if data.DstAddrGroup.IsUnknown() || data.DstAddrGroup.IsNull() {
-		attrs = attrs.Delete("dstAddrGroup")
+	if (!data.Ack.IsUnknown() && !data.Ack.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ack", strconv.FormatBool(data.Ack.ValueBool()))
 	}
-	if data.DstPort1.IsUnknown() || data.DstPort1.IsNull() {
-		attrs = attrs.Delete("dstPort1")
+	if (!data.Action.IsUnknown() && !data.Action.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"action", data.Action.ValueString())
 	}
-	if data.DstPort2.IsUnknown() || data.DstPort2.IsNull() {
-		attrs = attrs.Delete("dstPort2")
+	if (!data.Dscp.IsUnknown() && !data.Dscp.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dscp", strconv.FormatInt(data.Dscp.ValueInt64(), 10))
 	}
-	if data.DstPortGroup.IsUnknown() || data.DstPortGroup.IsNull() {
-		attrs = attrs.Delete("dstPortGroup")
+	if (!data.DestinationAddressGroup.IsUnknown() && !data.DestinationAddressGroup.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dstAddrGroup", data.DestinationAddressGroup.ValueString())
 	}
-	if data.DstPortMask.IsUnknown() || data.DstPortMask.IsNull() {
-		attrs = attrs.Delete("dstPortMask")
+	if (!data.DestinationPort1.IsUnknown() && !data.DestinationPort1.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dstPort1", data.DestinationPort1.ValueString())
 	}
-	if data.DstPrefix.IsUnknown() || data.DstPrefix.IsNull() {
-		attrs = attrs.Delete("dstPrefix")
+	if (!data.DestinationPort2.IsUnknown() && !data.DestinationPort2.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dstPort2", data.DestinationPort2.ValueString())
 	}
-	if data.DstPrefixLength.IsUnknown() || data.DstPrefixLength.IsNull() {
-		attrs = attrs.Delete("dstPrefixLength")
+	if (!data.DestinationPortGroup.IsUnknown() && !data.DestinationPortGroup.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dstPortGroup", data.DestinationPortGroup.ValueString())
 	}
-	if data.DstPrefixMask.IsUnknown() || data.DstPrefixMask.IsNull() {
-		attrs = attrs.Delete("dstPrefixMask")
+	if (!data.DestinationPortMask.IsUnknown() && !data.DestinationPortMask.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dstPortMask", data.DestinationPortMask.ValueString())
 	}
-	if data.Protocol.IsUnknown() || data.Protocol.IsNull() {
-		attrs = attrs.Delete("protocol")
+	if (!data.DestinationPortOperator.IsUnknown() && !data.DestinationPortOperator.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dstPortOp", data.DestinationPortOperator.ValueString())
 	}
-	if data.ProtocolMask.IsUnknown() || data.ProtocolMask.IsNull() {
-		attrs = attrs.Delete("protocolMask")
+	if (!data.DestinationPrefix.IsUnknown() && !data.DestinationPrefix.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dstPrefix", data.DestinationPrefix.ValueString())
 	}
-	if data.Remark.IsUnknown() || data.Remark.IsNull() {
-		attrs = attrs.Delete("remark")
+	if (!data.DestinationPrefixLength.IsUnknown() && !data.DestinationPrefixLength.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dstPrefixLength", data.DestinationPrefixLength.ValueString())
 	}
-	if data.SrcAddrGroup.IsUnknown() || data.SrcAddrGroup.IsNull() {
-		attrs = attrs.Delete("srcAddrGroup")
+	if (!data.DestinationPrefixMask.IsUnknown() && !data.DestinationPrefixMask.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dstPrefixMask", data.DestinationPrefixMask.ValueString())
 	}
-	if data.SrcPort1.IsUnknown() || data.SrcPort1.IsNull() {
-		attrs = attrs.Delete("srcPort1")
+	if (!data.Est.IsUnknown() && !data.Est.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"est", strconv.FormatBool(data.Est.ValueBool()))
 	}
-	if data.SrcPort2.IsUnknown() || data.SrcPort2.IsNull() {
-		attrs = attrs.Delete("srcPort2")
+	if (!data.Fin.IsUnknown() && !data.Fin.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"fin", strconv.FormatBool(data.Fin.ValueBool()))
 	}
-	if data.SrcPortGroup.IsUnknown() || data.SrcPortGroup.IsNull() {
-		attrs = attrs.Delete("srcPortGroup")
+	if (!data.Fragment.IsUnknown() && !data.Fragment.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"fragment", strconv.FormatBool(data.Fragment.ValueBool()))
 	}
-	if data.SrcPortMask.IsUnknown() || data.SrcPortMask.IsNull() {
-		attrs = attrs.Delete("srcPortMask")
+	if (!data.HttpOptionType.IsUnknown() && !data.HttpOptionType.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"httpOption", data.HttpOptionType.ValueString())
 	}
-	if data.SrcPrefix.IsUnknown() || data.SrcPrefix.IsNull() {
-		attrs = attrs.Delete("srcPrefix")
+	if (!data.IcmpCode.IsUnknown() && !data.IcmpCode.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"icmpCode", strconv.FormatInt(data.IcmpCode.ValueInt64(), 10))
 	}
-	if data.SrcPrefixLength.IsUnknown() || data.SrcPrefixLength.IsNull() {
-		attrs = attrs.Delete("srcPrefixLength")
+	if (!data.IcmpType.IsUnknown() && !data.IcmpType.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"icmpType", strconv.FormatInt(data.IcmpType.ValueInt64(), 10))
 	}
-	if data.SrcPrefixMask.IsUnknown() || data.SrcPrefixMask.IsNull() {
-		attrs = attrs.Delete("srcPrefixMask")
+	if (!data.Logging.IsUnknown() && !data.Logging.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"logging", strconv.FormatBool(data.Logging.ValueBool()))
 	}
-	if data.TimeRange.IsUnknown() || data.TimeRange.IsNull() {
-		attrs = attrs.Delete("timeRange")
+	if (!data.PacketLength1.IsUnknown() && !data.PacketLength1.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pktLen1", data.PacketLength1.ValueString())
 	}
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	if (!data.PacketLength2.IsUnknown() && !data.PacketLength2.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pktLen2", data.PacketLength2.ValueString())
+	}
+	if (!data.PacketLengthOperator.IsUnknown() && !data.PacketLengthOperator.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pktLenOp", data.PacketLengthOperator.ValueString())
+	}
+	if (!data.Precedence.IsUnknown() && !data.Precedence.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"precedence", data.Precedence.ValueString())
+	}
+	if (!data.Protocol.IsUnknown() && !data.Protocol.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"protocol", data.Protocol.ValueString())
+	}
+	if (!data.ProtocolMask.IsUnknown() && !data.ProtocolMask.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"protocolMask", data.ProtocolMask.ValueString())
+	}
+	if (!data.Psh.IsUnknown() && !data.Psh.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"psh", strconv.FormatBool(data.Psh.ValueBool()))
+	}
+	if (!data.Redirect.IsUnknown() && !data.Redirect.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"redirect", data.Redirect.ValueString())
+	}
+	if (!data.Remark.IsUnknown() && !data.Remark.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"remark", data.Remark.ValueString())
+	}
+	if (!data.Rev.IsUnknown() && !data.Rev.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rev", strconv.FormatBool(data.Rev.ValueBool()))
+	}
+	if (!data.Rst.IsUnknown() && !data.Rst.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rst", strconv.FormatBool(data.Rst.ValueBool()))
+	}
+	if (!data.SourceAddressGroup.IsUnknown() && !data.SourceAddressGroup.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"srcAddrGroup", data.SourceAddressGroup.ValueString())
+	}
+	if (!data.SourcePort1.IsUnknown() && !data.SourcePort1.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"srcPort1", data.SourcePort1.ValueString())
+	}
+	if (!data.SourcePort2.IsUnknown() && !data.SourcePort2.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"srcPort2", data.SourcePort2.ValueString())
+	}
+	if (!data.SourcePortGroup.IsUnknown() && !data.SourcePortGroup.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"srcPortGroup", data.SourcePortGroup.ValueString())
+	}
+	if (!data.SourcePortMask.IsUnknown() && !data.SourcePortMask.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"srcPortMask", data.SourcePortMask.ValueString())
+	}
+	if (!data.SourcePortOperator.IsUnknown() && !data.SourcePortOperator.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"srcPortOp", data.SourcePortOperator.ValueString())
+	}
+	if (!data.SourcePrefix.IsUnknown() && !data.SourcePrefix.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"srcPrefix", data.SourcePrefix.ValueString())
+	}
+	if (!data.SourcePrefixLength.IsUnknown() && !data.SourcePrefixLength.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"srcPrefixLength", data.SourcePrefixLength.ValueString())
+	}
+	if (!data.SourcePrefixMask.IsUnknown() && !data.SourcePrefixMask.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"srcPrefixMask", data.SourcePrefixMask.ValueString())
+	}
+	if (!data.Syn.IsUnknown() && !data.Syn.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"syn", strconv.FormatBool(data.Syn.ValueBool()))
+	}
+	if (!data.TimeRange.IsUnknown() && !data.TimeRange.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"timeRange", data.TimeRange.ValueString())
+	}
+	if (!data.Ttl.IsUnknown() && !data.Ttl.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ttl", strconv.FormatInt(data.Ttl.ValueInt64(), 10))
+	}
+	if (!data.Urg.IsUnknown() && !data.Urg.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"urg", strconv.FormatBool(data.Urg.ValueBool()))
+	}
+	if (!data.Vlan.IsUnknown() && !data.Vlan.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"vlan", strconv.FormatInt(data.Vlan.ValueInt64(), 10))
+	}
+	if (!data.Vni.IsUnknown() && !data.Vni.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"vni", data.Vni.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *IPv4AccessListEntry) fromBody(res gjson.Result) {
-	data.SeqNum = types.Int64Value(res.Get("*.attributes.seqNum").Int())
-	data.Ack = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.ack").String()))
-	data.Action = types.StringValue(res.Get("*.attributes.action").String())
-	data.Dscp = types.Int64Value(res.Get("*.attributes.dscp").Int())
-	data.DstAddrGroup = types.StringValue(res.Get("*.attributes.dstAddrGroup").String())
-	data.DstPort1 = types.StringValue(res.Get("*.attributes.dstPort1").String())
-	data.DstPort2 = types.StringValue(res.Get("*.attributes.dstPort2").String())
-	data.DstPortGroup = types.StringValue(res.Get("*.attributes.dstPortGroup").String())
-	data.DstPortMask = types.StringValue(res.Get("*.attributes.dstPortMask").String())
-	data.DstPortOp = types.StringValue(res.Get("*.attributes.dstPortOp").String())
-	data.DstPrefix = types.StringValue(res.Get("*.attributes.dstPrefix").String())
-	data.DstPrefixLength = types.StringValue(res.Get("*.attributes.dstPrefixLength").String())
-	data.DstPrefixMask = types.StringValue(res.Get("*.attributes.dstPrefixMask").String())
-	data.Est = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.est").String()))
-	data.Fin = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.fin").String()))
-	data.Fragment = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.fragment").String()))
-	data.HttpOption = types.StringValue(res.Get("*.attributes.httpOption").String())
-	data.IcmpCode = types.Int64Value(res.Get("*.attributes.icmpCode").Int())
-	data.IcmpType = types.Int64Value(res.Get("*.attributes.icmpType").Int())
-	data.Logging = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.logging").String()))
-	data.PktLen1 = types.StringValue(res.Get("*.attributes.pktLen1").String())
-	data.PktLen2 = types.StringValue(res.Get("*.attributes.pktLen2").String())
-	data.PktLenOp = types.StringValue(res.Get("*.attributes.pktLenOp").String())
-	data.Precedence = types.StringValue(res.Get("*.attributes.precedence").String())
-	data.Protocol = types.StringValue(res.Get("*.attributes.protocol").String())
-	data.ProtocolMask = types.StringValue(res.Get("*.attributes.protocolMask").String())
-	data.Psh = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.psh").String()))
-	data.Redirect = types.StringValue(res.Get("*.attributes.redirect").String())
-	data.Remark = types.StringValue(res.Get("*.attributes.remark").String())
-	data.Rev = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.rev").String()))
-	data.Rst = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.rst").String()))
-	data.SrcAddrGroup = types.StringValue(res.Get("*.attributes.srcAddrGroup").String())
-	data.SrcPort1 = types.StringValue(res.Get("*.attributes.srcPort1").String())
-	data.SrcPort2 = types.StringValue(res.Get("*.attributes.srcPort2").String())
-	data.SrcPortGroup = types.StringValue(res.Get("*.attributes.srcPortGroup").String())
-	data.SrcPortMask = types.StringValue(res.Get("*.attributes.srcPortMask").String())
-	data.SrcPortOp = types.StringValue(res.Get("*.attributes.srcPortOp").String())
-	data.SrcPrefix = types.StringValue(res.Get("*.attributes.srcPrefix").String())
-	data.SrcPrefixLength = types.StringValue(res.Get("*.attributes.srcPrefixLength").String())
-	data.SrcPrefixMask = types.StringValue(res.Get("*.attributes.srcPrefixMask").String())
-	data.Syn = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.syn").String()))
-	data.TimeRange = types.StringValue(res.Get("*.attributes.timeRange").String())
-	data.Ttl = types.Int64Value(res.Get("*.attributes.ttl").Int())
-	data.Urg = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.urg").String()))
-	data.Vlan = types.Int64Value(res.Get("*.attributes.vlan").Int())
-	data.Vni = types.StringValue(res.Get("*.attributes.vni").String())
-}
-
-func (data *IPv4AccessListEntry) fromPlan(plan IPv4AccessListEntry) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Name = plan.Name
+func (data *IPv4AccessListEntry) fromBody(res gjson.Result, all bool) {
+	if !data.SequenceNumber.IsNull() || all {
+		data.SequenceNumber = types.Int64Value(res.Get(data.getClassName() + ".attributes.seqNum").Int())
+	} else {
+		data.SequenceNumber = types.Int64Null()
+	}
+	if !data.Ack.IsNull() || all {
+		data.Ack = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.ack").String()))
+	} else {
+		data.Ack = types.BoolNull()
+	}
+	if !data.Action.IsNull() || all {
+		data.Action = types.StringValue(res.Get(data.getClassName() + ".attributes.action").String())
+	} else {
+		data.Action = types.StringNull()
+	}
+	if !data.Dscp.IsNull() || all {
+		data.Dscp = types.Int64Value(res.Get(data.getClassName() + ".attributes.dscp").Int())
+	} else {
+		data.Dscp = types.Int64Null()
+	}
+	if !data.DestinationAddressGroup.IsNull() || all {
+		data.DestinationAddressGroup = types.StringValue(res.Get(data.getClassName() + ".attributes.dstAddrGroup").String())
+	} else {
+		data.DestinationAddressGroup = types.StringNull()
+	}
+	if !data.DestinationPort1.IsNull() || all {
+		data.DestinationPort1 = types.StringValue(res.Get(data.getClassName() + ".attributes.dstPort1").String())
+	} else {
+		data.DestinationPort1 = types.StringNull()
+	}
+	if !data.DestinationPort2.IsNull() || all {
+		data.DestinationPort2 = types.StringValue(res.Get(data.getClassName() + ".attributes.dstPort2").String())
+	} else {
+		data.DestinationPort2 = types.StringNull()
+	}
+	if !data.DestinationPortGroup.IsNull() || all {
+		data.DestinationPortGroup = types.StringValue(res.Get(data.getClassName() + ".attributes.dstPortGroup").String())
+	} else {
+		data.DestinationPortGroup = types.StringNull()
+	}
+	if !data.DestinationPortMask.IsNull() || all {
+		data.DestinationPortMask = types.StringValue(res.Get(data.getClassName() + ".attributes.dstPortMask").String())
+	} else {
+		data.DestinationPortMask = types.StringNull()
+	}
+	if !data.DestinationPortOperator.IsNull() || all {
+		data.DestinationPortOperator = types.StringValue(res.Get(data.getClassName() + ".attributes.dstPortOp").String())
+	} else {
+		data.DestinationPortOperator = types.StringNull()
+	}
+	if !data.DestinationPrefix.IsNull() || all {
+		data.DestinationPrefix = types.StringValue(res.Get(data.getClassName() + ".attributes.dstPrefix").String())
+	} else {
+		data.DestinationPrefix = types.StringNull()
+	}
+	if !data.DestinationPrefixLength.IsNull() || all {
+		data.DestinationPrefixLength = types.StringValue(res.Get(data.getClassName() + ".attributes.dstPrefixLength").String())
+	} else {
+		data.DestinationPrefixLength = types.StringNull()
+	}
+	if !data.DestinationPrefixMask.IsNull() || all {
+		data.DestinationPrefixMask = types.StringValue(res.Get(data.getClassName() + ".attributes.dstPrefixMask").String())
+	} else {
+		data.DestinationPrefixMask = types.StringNull()
+	}
+	if !data.Est.IsNull() || all {
+		data.Est = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.est").String()))
+	} else {
+		data.Est = types.BoolNull()
+	}
+	if !data.Fin.IsNull() || all {
+		data.Fin = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.fin").String()))
+	} else {
+		data.Fin = types.BoolNull()
+	}
+	if !data.Fragment.IsNull() || all {
+		data.Fragment = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.fragment").String()))
+	} else {
+		data.Fragment = types.BoolNull()
+	}
+	if !data.HttpOptionType.IsNull() || all {
+		data.HttpOptionType = types.StringValue(res.Get(data.getClassName() + ".attributes.httpOption").String())
+	} else {
+		data.HttpOptionType = types.StringNull()
+	}
+	if !data.IcmpCode.IsNull() || all {
+		data.IcmpCode = types.Int64Value(res.Get(data.getClassName() + ".attributes.icmpCode").Int())
+	} else {
+		data.IcmpCode = types.Int64Null()
+	}
+	if !data.IcmpType.IsNull() || all {
+		data.IcmpType = types.Int64Value(res.Get(data.getClassName() + ".attributes.icmpType").Int())
+	} else {
+		data.IcmpType = types.Int64Null()
+	}
+	if !data.Logging.IsNull() || all {
+		data.Logging = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.logging").String()))
+	} else {
+		data.Logging = types.BoolNull()
+	}
+	if !data.PacketLength1.IsNull() || all {
+		data.PacketLength1 = types.StringValue(res.Get(data.getClassName() + ".attributes.pktLen1").String())
+	} else {
+		data.PacketLength1 = types.StringNull()
+	}
+	if !data.PacketLength2.IsNull() || all {
+		data.PacketLength2 = types.StringValue(res.Get(data.getClassName() + ".attributes.pktLen2").String())
+	} else {
+		data.PacketLength2 = types.StringNull()
+	}
+	if !data.PacketLengthOperator.IsNull() || all {
+		data.PacketLengthOperator = types.StringValue(res.Get(data.getClassName() + ".attributes.pktLenOp").String())
+	} else {
+		data.PacketLengthOperator = types.StringNull()
+	}
+	if !data.Precedence.IsNull() || all {
+		data.Precedence = types.StringValue(res.Get(data.getClassName() + ".attributes.precedence").String())
+	} else {
+		data.Precedence = types.StringNull()
+	}
+	if !data.Protocol.IsNull() || all {
+		data.Protocol = types.StringValue(res.Get(data.getClassName() + ".attributes.protocol").String())
+	} else {
+		data.Protocol = types.StringNull()
+	}
+	if !data.ProtocolMask.IsNull() || all {
+		data.ProtocolMask = types.StringValue(res.Get(data.getClassName() + ".attributes.protocolMask").String())
+	} else {
+		data.ProtocolMask = types.StringNull()
+	}
+	if !data.Psh.IsNull() || all {
+		data.Psh = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.psh").String()))
+	} else {
+		data.Psh = types.BoolNull()
+	}
+	if !data.Redirect.IsNull() || all {
+		data.Redirect = types.StringValue(res.Get(data.getClassName() + ".attributes.redirect").String())
+	} else {
+		data.Redirect = types.StringNull()
+	}
+	if !data.Remark.IsNull() || all {
+		data.Remark = types.StringValue(res.Get(data.getClassName() + ".attributes.remark").String())
+	} else {
+		data.Remark = types.StringNull()
+	}
+	if !data.Rev.IsNull() || all {
+		data.Rev = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.rev").String()))
+	} else {
+		data.Rev = types.BoolNull()
+	}
+	if !data.Rst.IsNull() || all {
+		data.Rst = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.rst").String()))
+	} else {
+		data.Rst = types.BoolNull()
+	}
+	if !data.SourceAddressGroup.IsNull() || all {
+		data.SourceAddressGroup = types.StringValue(res.Get(data.getClassName() + ".attributes.srcAddrGroup").String())
+	} else {
+		data.SourceAddressGroup = types.StringNull()
+	}
+	if !data.SourcePort1.IsNull() || all {
+		data.SourcePort1 = types.StringValue(res.Get(data.getClassName() + ".attributes.srcPort1").String())
+	} else {
+		data.SourcePort1 = types.StringNull()
+	}
+	if !data.SourcePort2.IsNull() || all {
+		data.SourcePort2 = types.StringValue(res.Get(data.getClassName() + ".attributes.srcPort2").String())
+	} else {
+		data.SourcePort2 = types.StringNull()
+	}
+	if !data.SourcePortGroup.IsNull() || all {
+		data.SourcePortGroup = types.StringValue(res.Get(data.getClassName() + ".attributes.srcPortGroup").String())
+	} else {
+		data.SourcePortGroup = types.StringNull()
+	}
+	if !data.SourcePortMask.IsNull() || all {
+		data.SourcePortMask = types.StringValue(res.Get(data.getClassName() + ".attributes.srcPortMask").String())
+	} else {
+		data.SourcePortMask = types.StringNull()
+	}
+	if !data.SourcePortOperator.IsNull() || all {
+		data.SourcePortOperator = types.StringValue(res.Get(data.getClassName() + ".attributes.srcPortOp").String())
+	} else {
+		data.SourcePortOperator = types.StringNull()
+	}
+	if !data.SourcePrefix.IsNull() || all {
+		data.SourcePrefix = types.StringValue(res.Get(data.getClassName() + ".attributes.srcPrefix").String())
+	} else {
+		data.SourcePrefix = types.StringNull()
+	}
+	if !data.SourcePrefixLength.IsNull() || all {
+		data.SourcePrefixLength = types.StringValue(res.Get(data.getClassName() + ".attributes.srcPrefixLength").String())
+	} else {
+		data.SourcePrefixLength = types.StringNull()
+	}
+	if !data.SourcePrefixMask.IsNull() || all {
+		data.SourcePrefixMask = types.StringValue(res.Get(data.getClassName() + ".attributes.srcPrefixMask").String())
+	} else {
+		data.SourcePrefixMask = types.StringNull()
+	}
+	if !data.Syn.IsNull() || all {
+		data.Syn = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.syn").String()))
+	} else {
+		data.Syn = types.BoolNull()
+	}
+	if !data.TimeRange.IsNull() || all {
+		data.TimeRange = types.StringValue(res.Get(data.getClassName() + ".attributes.timeRange").String())
+	} else {
+		data.TimeRange = types.StringNull()
+	}
+	if !data.Ttl.IsNull() || all {
+		data.Ttl = types.Int64Value(res.Get(data.getClassName() + ".attributes.ttl").Int())
+	} else {
+		data.Ttl = types.Int64Null()
+	}
+	if !data.Urg.IsNull() || all {
+		data.Urg = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.urg").String()))
+	} else {
+		data.Urg = types.BoolNull()
+	}
+	if !data.Vlan.IsNull() || all {
+		data.Vlan = types.Int64Value(res.Get(data.getClassName() + ".attributes.vlan").Int())
+	} else {
+		data.Vlan = types.Int64Null()
+	}
+	if !data.Vni.IsNull() || all {
+		data.Vni = types.StringValue(res.Get(data.getClassName() + ".attributes.vni").String())
+	} else {
+		data.Vni = types.StringNull()
+	}
 }

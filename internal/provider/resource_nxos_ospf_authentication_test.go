@@ -50,8 +50,6 @@ resource "nxos_rest" "PreReq0" {
 resource "nxos_rest" "PreReq1" {
   dn = "sys/ospf"
   class_name = "ospfEntity"
-  content = {
-  }
   depends_on = [nxos_rest.PreReq0, ]
 }
 

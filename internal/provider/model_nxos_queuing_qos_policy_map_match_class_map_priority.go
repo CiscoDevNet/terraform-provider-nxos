@@ -9,18 +9,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type QueuingQOSPolicyMapMatchClassMapPriority struct {
-	Device          types.String `tfsdk:"device"`
-	Dn              types.String `tfsdk:"id"`
-	Policy_map_name types.String `tfsdk:"policy_map_name"`
-	Class_map_name  types.String `tfsdk:"class_map_name"`
-	Level           types.Int64  `tfsdk:"level"`
+	Device        types.String `tfsdk:"device"`
+	Dn            types.String `tfsdk:"id"`
+	PolicyMapName types.String `tfsdk:"policy_map_name"`
+	ClassMapName  types.String `tfsdk:"class_map_name"`
+	Level         types.Int64  `tfsdk:"level"`
 }
 
 func (data QueuingQOSPolicyMapMatchClassMapPriority) getDn() string {
-	return fmt.Sprintf("sys/ipqos/queuing/p/name-[%s]/cmap-[%s]/prio", data.Policy_map_name.ValueString(), data.Class_map_name.ValueString())
+	return fmt.Sprintf("sys/ipqos/queuing/p/name-[%s]/cmap-[%s]/prio", data.PolicyMapName.ValueString(), data.ClassMapName.ValueString())
 }
 
 func (data QueuingQOSPolicyMapMatchClassMapPriority) getClassName() string {
@@ -28,18 +29,19 @@ func (data QueuingQOSPolicyMapMatchClassMapPriority) getClassName() string {
 }
 
 func (data QueuingQOSPolicyMapMatchClassMapPriority) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("level", strconv.FormatInt(data.Level.ValueInt64(), 10))
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Level.IsUnknown() && !data.Level.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"level", strconv.FormatInt(data.Level.ValueInt64(), 10))
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *QueuingQOSPolicyMapMatchClassMapPriority) fromBody(res gjson.Result) {
-	data.Level = types.Int64Value(res.Get("*.attributes.level").Int())
-}
-
-func (data *QueuingQOSPolicyMapMatchClassMapPriority) fromPlan(plan QueuingQOSPolicyMapMatchClassMapPriority) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Policy_map_name = plan.Policy_map_name
-	data.Class_map_name = plan.Class_map_name
+func (data *QueuingQOSPolicyMapMatchClassMapPriority) fromBody(res gjson.Result, all bool) {
+	if !data.Level.IsNull() || all {
+		data.Level = types.Int64Value(res.Get(data.getClassName() + ".attributes.level").Int())
+	} else {
+		data.Level = types.Int64Null()
+	}
 }

@@ -44,8 +44,6 @@ resource "nxos_rest" "PreReq1" {
 resource "nxos_rest" "PreReq2" {
   dn = "sys/rpm/rtmap-[RULE1]/ent-[10]/sregcomm"
   class_name = "rtmapSetRegComm"
-  content = {
-  }
   depends_on = [nxos_rest.PreReq1, ]
 }
 

@@ -9,18 +9,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type QueuingQOSPolicyMapMatchClassMapRemainingBandwidth struct {
-	Device          types.String `tfsdk:"device"`
-	Dn              types.String `tfsdk:"id"`
-	Policy_map_name types.String `tfsdk:"policy_map_name"`
-	Class_map_name  types.String `tfsdk:"class_map_name"`
-	Val             types.Int64  `tfsdk:"value"`
+	Device        types.String `tfsdk:"device"`
+	Dn            types.String `tfsdk:"id"`
+	PolicyMapName types.String `tfsdk:"policy_map_name"`
+	ClassMapName  types.String `tfsdk:"class_map_name"`
+	Value         types.Int64  `tfsdk:"value"`
 }
 
 func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) getDn() string {
-	return fmt.Sprintf("sys/ipqos/queuing/p/name-[%s]/cmap-[%s]/setRemBW", data.Policy_map_name.ValueString(), data.Class_map_name.ValueString())
+	return fmt.Sprintf("sys/ipqos/queuing/p/name-[%s]/cmap-[%s]/setRemBW", data.PolicyMapName.ValueString(), data.ClassMapName.ValueString())
 }
 
 func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) getClassName() string {
@@ -28,18 +29,19 @@ func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) getClassName() st
 }
 
 func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("val", strconv.FormatInt(data.Val.ValueInt64(), 10))
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Value.IsUnknown() && !data.Value.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"val", strconv.FormatInt(data.Value.ValueInt64(), 10))
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) fromBody(res gjson.Result) {
-	data.Val = types.Int64Value(res.Get("*.attributes.val").Int())
-}
-
-func (data *QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) fromPlan(plan QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Policy_map_name = plan.Policy_map_name
-	data.Class_map_name = plan.Class_map_name
+func (data *QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) fromBody(res gjson.Result, all bool) {
+	if !data.Value.IsNull() || all {
+		data.Value = types.Int64Value(res.Get(data.getClassName() + ".attributes.val").Int())
+	} else {
+		data.Value = types.Int64Null()
+	}
 }

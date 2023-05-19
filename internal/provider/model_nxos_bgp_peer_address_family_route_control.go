@@ -8,21 +8,22 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type BGPPeerAddressFamilyRouteControl struct {
-	Device    types.String `tfsdk:"device"`
-	Dn        types.String `tfsdk:"id"`
-	Asn       types.String `tfsdk:"asn"`
-	Vrf_name  types.String `tfsdk:"vrf"`
-	Addr      types.String `tfsdk:"address"`
-	Type      types.String `tfsdk:"address_family"`
-	Direction types.String `tfsdk:"direction"`
-	RtMap     types.String `tfsdk:"route_map_name"`
+	Device        types.String `tfsdk:"device"`
+	Dn            types.String `tfsdk:"id"`
+	Asn           types.String `tfsdk:"asn"`
+	Vrf           types.String `tfsdk:"vrf"`
+	Address       types.String `tfsdk:"address"`
+	AddressFamily types.String `tfsdk:"address_family"`
+	Direction     types.String `tfsdk:"direction"`
+	RouteMapName  types.String `tfsdk:"route_map_name"`
 }
 
 func (data BGPPeerAddressFamilyRouteControl) getDn() string {
-	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/peer-[%s]/af-[%s]/rtctrl-[%s]", data.Vrf_name.ValueString(), data.Addr.ValueString(), data.Type.ValueString(), data.Direction.ValueString())
+	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/peer-[%s]/af-[%s]/rtctrl-[%s]", data.Vrf.ValueString(), data.Address.ValueString(), data.AddressFamily.ValueString(), data.Direction.ValueString())
 }
 
 func (data BGPPeerAddressFamilyRouteControl) getClassName() string {
@@ -30,22 +31,27 @@ func (data BGPPeerAddressFamilyRouteControl) getClassName() string {
 }
 
 func (data BGPPeerAddressFamilyRouteControl) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("direction", data.Direction.ValueString()).
-		Set("rtMap", data.RtMap.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Direction.IsUnknown() && !data.Direction.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"direction", data.Direction.ValueString())
+	}
+	if (!data.RouteMapName.IsUnknown() && !data.RouteMapName.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rtMap", data.RouteMapName.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *BGPPeerAddressFamilyRouteControl) fromBody(res gjson.Result) {
-	data.Direction = types.StringValue(res.Get("*.attributes.direction").String())
-	data.RtMap = types.StringValue(res.Get("*.attributes.rtMap").String())
-}
-
-func (data *BGPPeerAddressFamilyRouteControl) fromPlan(plan BGPPeerAddressFamilyRouteControl) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Asn = plan.Asn
-	data.Vrf_name = plan.Vrf_name
-	data.Addr = plan.Addr
-	data.Type = plan.Type
+func (data *BGPPeerAddressFamilyRouteControl) fromBody(res gjson.Result, all bool) {
+	if !data.Direction.IsNull() || all {
+		data.Direction = types.StringValue(res.Get(data.getClassName() + ".attributes.direction").String())
+	} else {
+		data.Direction = types.StringNull()
+	}
+	if !data.RouteMapName.IsNull() || all {
+		data.RouteMapName = types.StringValue(res.Get(data.getClassName() + ".attributes.rtMap").String())
+	} else {
+		data.RouteMapName = types.StringNull()
+	}
 }

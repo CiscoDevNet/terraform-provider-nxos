@@ -9,20 +9,21 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type BGPAddressFamily struct {
-	Device           types.String `tfsdk:"device"`
-	Dn               types.String `tfsdk:"id"`
-	Asn              types.String `tfsdk:"asn"`
-	Name             types.String `tfsdk:"vrf"`
-	Type             types.String `tfsdk:"address_family"`
-	CritNhTimeout    types.Int64  `tfsdk:"critical_nexthop_timeout"`
-	NonCritNhTimeout types.Int64  `tfsdk:"non_critical_nexthop_timeout"`
+	Device                    types.String `tfsdk:"device"`
+	Dn                        types.String `tfsdk:"id"`
+	Asn                       types.String `tfsdk:"asn"`
+	Vrf                       types.String `tfsdk:"vrf"`
+	AddressFamily             types.String `tfsdk:"address_family"`
+	CriticalNexthopTimeout    types.Int64  `tfsdk:"critical_nexthop_timeout"`
+	NonCriticalNexthopTimeout types.Int64  `tfsdk:"non_critical_nexthop_timeout"`
 }
 
 func (data BGPAddressFamily) getDn() string {
-	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/af-[%s]", data.Name.ValueString(), data.Type.ValueString())
+	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/af-[%s]", data.Vrf.ValueString(), data.AddressFamily.ValueString())
 }
 
 func (data BGPAddressFamily) getClassName() string {
@@ -30,22 +31,35 @@ func (data BGPAddressFamily) getClassName() string {
 }
 
 func (data BGPAddressFamily) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("type", data.Type.ValueString()).
-		Set("critNhTimeout", strconv.FormatInt(data.CritNhTimeout.ValueInt64(), 10)).
-		Set("nonCritNhTimeout", strconv.FormatInt(data.NonCritNhTimeout.ValueInt64(), 10))
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.AddressFamily.IsUnknown() && !data.AddressFamily.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.AddressFamily.ValueString())
+	}
+	if (!data.CriticalNexthopTimeout.IsUnknown() && !data.CriticalNexthopTimeout.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"critNhTimeout", strconv.FormatInt(data.CriticalNexthopTimeout.ValueInt64(), 10))
+	}
+	if (!data.NonCriticalNexthopTimeout.IsUnknown() && !data.NonCriticalNexthopTimeout.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"nonCritNhTimeout", strconv.FormatInt(data.NonCriticalNexthopTimeout.ValueInt64(), 10))
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *BGPAddressFamily) fromBody(res gjson.Result) {
-	data.Type = types.StringValue(res.Get("*.attributes.type").String())
-	data.CritNhTimeout = types.Int64Value(res.Get("*.attributes.critNhTimeout").Int())
-	data.NonCritNhTimeout = types.Int64Value(res.Get("*.attributes.nonCritNhTimeout").Int())
-}
-
-func (data *BGPAddressFamily) fromPlan(plan BGPAddressFamily) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Asn = plan.Asn
-	data.Name = plan.Name
+func (data *BGPAddressFamily) fromBody(res gjson.Result, all bool) {
+	if !data.AddressFamily.IsNull() || all {
+		data.AddressFamily = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
+	} else {
+		data.AddressFamily = types.StringNull()
+	}
+	if !data.CriticalNexthopTimeout.IsNull() || all {
+		data.CriticalNexthopTimeout = types.Int64Value(res.Get(data.getClassName() + ".attributes.critNhTimeout").Int())
+	} else {
+		data.CriticalNexthopTimeout = types.Int64Null()
+	}
+	if !data.NonCriticalNexthopTimeout.IsNull() || all {
+		data.NonCriticalNexthopTimeout = types.Int64Value(res.Get(data.getClassName() + ".attributes.nonCritNhTimeout").Int())
+	} else {
+		data.NonCriticalNexthopTimeout = types.Int64Null()
+	}
 }

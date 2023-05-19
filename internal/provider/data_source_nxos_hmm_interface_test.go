@@ -64,8 +64,6 @@ resource "nxos_rest" "PreReq3" {
 resource "nxos_rest" "PreReq4" {
   dn = "sys/hmm"
   class_name = "hmmEntity"
-  content = {
-  }
   depends_on = [nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 }
 

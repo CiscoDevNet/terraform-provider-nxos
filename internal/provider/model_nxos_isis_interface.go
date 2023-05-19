@@ -10,43 +10,44 @@ import (
 	"github.com/netascode/go-nxos"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type ISISInterface struct {
-	Device         types.String `tfsdk:"device"`
-	Dn             types.String `tfsdk:"id"`
-	Id             types.String `tfsdk:"interface_id"`
-	AuthCheck      types.Bool   `tfsdk:"authentication_check"`
-	AuthCheckLvl1  types.Bool   `tfsdk:"authentication_check_l1"`
-	AuthCheckLvl2  types.Bool   `tfsdk:"authentication_check_l2"`
-	AuthKey        types.String `tfsdk:"authentication_key"`
-	AuthKeyLvl1    types.String `tfsdk:"authentication_key_l1"`
-	AuthKeyLvl2    types.String `tfsdk:"authentication_key_l2"`
-	AuthType       types.String `tfsdk:"authentication_type"`
-	AuthTypeLvl1   types.String `tfsdk:"authentication_type_l1"`
-	AuthTypeLvl2   types.String `tfsdk:"authentication_type_l2"`
-	CktT           types.String `tfsdk:"circuit_type"`
-	Dom            types.String `tfsdk:"vrf"`
-	HelloIntvl     types.Int64  `tfsdk:"hello_interval"`
-	HelloIntvlLvl1 types.Int64  `tfsdk:"hello_interval_l1"`
-	HelloIntvlLvl2 types.Int64  `tfsdk:"hello_interval_l2"`
-	HelloMult      types.Int64  `tfsdk:"hello_multiplier"`
-	HelloMultLvl1  types.Int64  `tfsdk:"hello_multiplier_l1"`
-	HelloMultLvl2  types.Int64  `tfsdk:"hello_multiplier_l2"`
-	HelloPad       types.String `tfsdk:"hello_padding"`
-	MetricLvl1     types.Int64  `tfsdk:"metric_l1"`
-	MetricLvl2     types.Int64  `tfsdk:"metric_l2"`
-	MtuCheck       types.Bool   `tfsdk:"mtu_check"`
-	MtuCheckLvl1   types.Bool   `tfsdk:"mtu_check_l1"`
-	MtuCheckLvl2   types.Bool   `tfsdk:"mtu_check_l2"`
-	NetworkTypeP2P types.String `tfsdk:"network_type_p2p"`
-	Passive        types.String `tfsdk:"passive"`
-	PriorityLvl1   types.Int64  `tfsdk:"priority_l1"`
-	PriorityLvl2   types.Int64  `tfsdk:"priority_l2"`
+	Device                types.String `tfsdk:"device"`
+	Dn                    types.String `tfsdk:"id"`
+	InterfaceId           types.String `tfsdk:"interface_id"`
+	AuthenticationCheck   types.Bool   `tfsdk:"authentication_check"`
+	AuthenticationCheckL1 types.Bool   `tfsdk:"authentication_check_l1"`
+	AuthenticationCheckL2 types.Bool   `tfsdk:"authentication_check_l2"`
+	AuthenticationKey     types.String `tfsdk:"authentication_key"`
+	AuthenticationKeyL1   types.String `tfsdk:"authentication_key_l1"`
+	AuthenticationKeyL2   types.String `tfsdk:"authentication_key_l2"`
+	AuthenticationType    types.String `tfsdk:"authentication_type"`
+	AuthenticationTypeL1  types.String `tfsdk:"authentication_type_l1"`
+	AuthenticationTypeL2  types.String `tfsdk:"authentication_type_l2"`
+	CircuitType           types.String `tfsdk:"circuit_type"`
+	Vrf                   types.String `tfsdk:"vrf"`
+	HelloInterval         types.Int64  `tfsdk:"hello_interval"`
+	HelloIntervalL1       types.Int64  `tfsdk:"hello_interval_l1"`
+	HelloIntervalL2       types.Int64  `tfsdk:"hello_interval_l2"`
+	HelloMultiplier       types.Int64  `tfsdk:"hello_multiplier"`
+	HelloMultiplierL1     types.Int64  `tfsdk:"hello_multiplier_l1"`
+	HelloMultiplierL2     types.Int64  `tfsdk:"hello_multiplier_l2"`
+	HelloPadding          types.String `tfsdk:"hello_padding"`
+	MetricL1              types.Int64  `tfsdk:"metric_l1"`
+	MetricL2              types.Int64  `tfsdk:"metric_l2"`
+	MtuCheck              types.Bool   `tfsdk:"mtu_check"`
+	MtuCheckL1            types.Bool   `tfsdk:"mtu_check_l1"`
+	MtuCheckL2            types.Bool   `tfsdk:"mtu_check_l2"`
+	NetworkTypeP2p        types.String `tfsdk:"network_type_p2p"`
+	Passive               types.String `tfsdk:"passive"`
+	PriorityL1            types.Int64  `tfsdk:"priority_l1"`
+	PriorityL2            types.Int64  `tfsdk:"priority_l2"`
 }
 
 func (data ISISInterface) getDn() string {
-	return fmt.Sprintf("sys/isis/if-[%s]", data.Id.ValueString())
+	return fmt.Sprintf("sys/isis/if-[%s]", data.InterfaceId.ValueString())
 }
 
 func (data ISISInterface) getClassName() string {
@@ -54,70 +55,220 @@ func (data ISISInterface) getClassName() string {
 }
 
 func (data ISISInterface) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("id", data.Id.ValueString()).
-		Set("authCheck", strconv.FormatBool(data.AuthCheck.ValueBool())).
-		Set("authCheckLvl1", strconv.FormatBool(data.AuthCheckLvl1.ValueBool())).
-		Set("authCheckLvl2", strconv.FormatBool(data.AuthCheckLvl2.ValueBool())).
-		Set("authKey", data.AuthKey.ValueString()).
-		Set("authKeyLvl1", data.AuthKeyLvl1.ValueString()).
-		Set("authKeyLvl2", data.AuthKeyLvl2.ValueString()).
-		Set("authType", data.AuthType.ValueString()).
-		Set("authTypeLvl1", data.AuthTypeLvl1.ValueString()).
-		Set("authTypeLvl2", data.AuthTypeLvl2.ValueString()).
-		Set("cktT", data.CktT.ValueString()).
-		Set("dom", data.Dom.ValueString()).
-		Set("helloIntvl", strconv.FormatInt(data.HelloIntvl.ValueInt64(), 10)).
-		Set("helloIntvlLvl1", strconv.FormatInt(data.HelloIntvlLvl1.ValueInt64(), 10)).
-		Set("helloIntvlLvl2", strconv.FormatInt(data.HelloIntvlLvl2.ValueInt64(), 10)).
-		Set("helloMult", strconv.FormatInt(data.HelloMult.ValueInt64(), 10)).
-		Set("helloMultLvl1", strconv.FormatInt(data.HelloMultLvl1.ValueInt64(), 10)).
-		Set("helloMultLvl2", strconv.FormatInt(data.HelloMultLvl2.ValueInt64(), 10)).
-		Set("helloPad", data.HelloPad.ValueString()).
-		Set("metricLvl1", strconv.FormatInt(data.MetricLvl1.ValueInt64(), 10)).
-		Set("metricLvl2", strconv.FormatInt(data.MetricLvl2.ValueInt64(), 10)).
-		Set("mtuCheck", strconv.FormatBool(data.MtuCheck.ValueBool())).
-		Set("mtuCheckLvl1", strconv.FormatBool(data.MtuCheckLvl1.ValueBool())).
-		Set("mtuCheckLvl2", strconv.FormatBool(data.MtuCheckLvl2.ValueBool())).
-		Set("networkTypeP2P", data.NetworkTypeP2P.ValueString()).
-		Set("passive", data.Passive.ValueString()).
-		Set("priorityLvl1", strconv.FormatInt(data.PriorityLvl1.ValueInt64(), 10)).
-		Set("priorityLvl2", strconv.FormatInt(data.PriorityLvl2.ValueInt64(), 10))
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.InterfaceId.ValueString())
+	}
+	if (!data.AuthenticationCheck.IsUnknown() && !data.AuthenticationCheck.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authCheck", strconv.FormatBool(data.AuthenticationCheck.ValueBool()))
+	}
+	if (!data.AuthenticationCheckL1.IsUnknown() && !data.AuthenticationCheckL1.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authCheckLvl1", strconv.FormatBool(data.AuthenticationCheckL1.ValueBool()))
+	}
+	if (!data.AuthenticationCheckL2.IsUnknown() && !data.AuthenticationCheckL2.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authCheckLvl2", strconv.FormatBool(data.AuthenticationCheckL2.ValueBool()))
+	}
+	if (!data.AuthenticationKey.IsUnknown() && !data.AuthenticationKey.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authKey", data.AuthenticationKey.ValueString())
+	}
+	if (!data.AuthenticationKeyL1.IsUnknown() && !data.AuthenticationKeyL1.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authKeyLvl1", data.AuthenticationKeyL1.ValueString())
+	}
+	if (!data.AuthenticationKeyL2.IsUnknown() && !data.AuthenticationKeyL2.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authKeyLvl2", data.AuthenticationKeyL2.ValueString())
+	}
+	if (!data.AuthenticationType.IsUnknown() && !data.AuthenticationType.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authType", data.AuthenticationType.ValueString())
+	}
+	if (!data.AuthenticationTypeL1.IsUnknown() && !data.AuthenticationTypeL1.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authTypeLvl1", data.AuthenticationTypeL1.ValueString())
+	}
+	if (!data.AuthenticationTypeL2.IsUnknown() && !data.AuthenticationTypeL2.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authTypeLvl2", data.AuthenticationTypeL2.ValueString())
+	}
+	if (!data.CircuitType.IsUnknown() && !data.CircuitType.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"cktT", data.CircuitType.ValueString())
+	}
+	if (!data.Vrf.IsUnknown() && !data.Vrf.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dom", data.Vrf.ValueString())
+	}
+	if (!data.HelloInterval.IsUnknown() && !data.HelloInterval.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"helloIntvl", strconv.FormatInt(data.HelloInterval.ValueInt64(), 10))
+	}
+	if (!data.HelloIntervalL1.IsUnknown() && !data.HelloIntervalL1.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"helloIntvlLvl1", strconv.FormatInt(data.HelloIntervalL1.ValueInt64(), 10))
+	}
+	if (!data.HelloIntervalL2.IsUnknown() && !data.HelloIntervalL2.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"helloIntvlLvl2", strconv.FormatInt(data.HelloIntervalL2.ValueInt64(), 10))
+	}
+	if (!data.HelloMultiplier.IsUnknown() && !data.HelloMultiplier.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"helloMult", strconv.FormatInt(data.HelloMultiplier.ValueInt64(), 10))
+	}
+	if (!data.HelloMultiplierL1.IsUnknown() && !data.HelloMultiplierL1.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"helloMultLvl1", strconv.FormatInt(data.HelloMultiplierL1.ValueInt64(), 10))
+	}
+	if (!data.HelloMultiplierL2.IsUnknown() && !data.HelloMultiplierL2.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"helloMultLvl2", strconv.FormatInt(data.HelloMultiplierL2.ValueInt64(), 10))
+	}
+	if (!data.HelloPadding.IsUnknown() && !data.HelloPadding.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"helloPad", data.HelloPadding.ValueString())
+	}
+	if (!data.MetricL1.IsUnknown() && !data.MetricL1.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"metricLvl1", strconv.FormatInt(data.MetricL1.ValueInt64(), 10))
+	}
+	if (!data.MetricL2.IsUnknown() && !data.MetricL2.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"metricLvl2", strconv.FormatInt(data.MetricL2.ValueInt64(), 10))
+	}
+	if (!data.MtuCheck.IsUnknown() && !data.MtuCheck.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mtuCheck", strconv.FormatBool(data.MtuCheck.ValueBool()))
+	}
+	if (!data.MtuCheckL1.IsUnknown() && !data.MtuCheckL1.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mtuCheckLvl1", strconv.FormatBool(data.MtuCheckL1.ValueBool()))
+	}
+	if (!data.MtuCheckL2.IsUnknown() && !data.MtuCheckL2.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mtuCheckLvl2", strconv.FormatBool(data.MtuCheckL2.ValueBool()))
+	}
+	if (!data.NetworkTypeP2p.IsUnknown() && !data.NetworkTypeP2p.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"networkTypeP2P", data.NetworkTypeP2p.ValueString())
+	}
+	if (!data.Passive.IsUnknown() && !data.Passive.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"passive", data.Passive.ValueString())
+	}
+	if (!data.PriorityL1.IsUnknown() && !data.PriorityL1.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"priorityLvl1", strconv.FormatInt(data.PriorityL1.ValueInt64(), 10))
+	}
+	if (!data.PriorityL2.IsUnknown() && !data.PriorityL2.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"priorityLvl2", strconv.FormatInt(data.PriorityL2.ValueInt64(), 10))
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *ISISInterface) fromBody(res gjson.Result) {
-	data.Id = types.StringValue(res.Get("*.attributes.id").String())
-	data.AuthCheck = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.authCheck").String()))
-	data.AuthCheckLvl1 = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.authCheckLvl1").String()))
-	data.AuthCheckLvl2 = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.authCheckLvl2").String()))
-	data.AuthType = types.StringValue(res.Get("*.attributes.authType").String())
-	data.AuthTypeLvl1 = types.StringValue(res.Get("*.attributes.authTypeLvl1").String())
-	data.AuthTypeLvl2 = types.StringValue(res.Get("*.attributes.authTypeLvl2").String())
-	data.CktT = types.StringValue(res.Get("*.attributes.cktT").String())
-	data.Dom = types.StringValue(res.Get("*.attributes.dom").String())
-	data.HelloIntvl = types.Int64Value(res.Get("*.attributes.helloIntvl").Int())
-	data.HelloIntvlLvl1 = types.Int64Value(res.Get("*.attributes.helloIntvlLvl1").Int())
-	data.HelloIntvlLvl2 = types.Int64Value(res.Get("*.attributes.helloIntvlLvl2").Int())
-	data.HelloMult = types.Int64Value(res.Get("*.attributes.helloMult").Int())
-	data.HelloMultLvl1 = types.Int64Value(res.Get("*.attributes.helloMultLvl1").Int())
-	data.HelloMultLvl2 = types.Int64Value(res.Get("*.attributes.helloMultLvl2").Int())
-	data.HelloPad = types.StringValue(res.Get("*.attributes.helloPad").String())
-	data.MetricLvl1 = types.Int64Value(res.Get("*.attributes.metricLvl1").Int())
-	data.MetricLvl2 = types.Int64Value(res.Get("*.attributes.metricLvl2").Int())
-	data.MtuCheck = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.mtuCheck").String()))
-	data.MtuCheckLvl1 = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.mtuCheckLvl1").String()))
-	data.MtuCheckLvl2 = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.mtuCheckLvl2").String()))
-	data.NetworkTypeP2P = types.StringValue(res.Get("*.attributes.networkTypeP2P").String())
-	data.Passive = types.StringValue(res.Get("*.attributes.passive").String())
-	data.PriorityLvl1 = types.Int64Value(res.Get("*.attributes.priorityLvl1").Int())
-	data.PriorityLvl2 = types.Int64Value(res.Get("*.attributes.priorityLvl2").Int())
-}
-
-func (data *ISISInterface) fromPlan(plan ISISInterface) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.AuthKey = plan.AuthKey
-	data.AuthKeyLvl1 = plan.AuthKeyLvl1
-	data.AuthKeyLvl2 = plan.AuthKeyLvl2
+func (data *ISISInterface) fromBody(res gjson.Result, all bool) {
+	if !data.InterfaceId.IsNull() || all {
+		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
+	} else {
+		data.InterfaceId = types.StringNull()
+	}
+	if !data.AuthenticationCheck.IsNull() || all {
+		data.AuthenticationCheck = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.authCheck").String()))
+	} else {
+		data.AuthenticationCheck = types.BoolNull()
+	}
+	if !data.AuthenticationCheckL1.IsNull() || all {
+		data.AuthenticationCheckL1 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.authCheckLvl1").String()))
+	} else {
+		data.AuthenticationCheckL1 = types.BoolNull()
+	}
+	if !data.AuthenticationCheckL2.IsNull() || all {
+		data.AuthenticationCheckL2 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.authCheckLvl2").String()))
+	} else {
+		data.AuthenticationCheckL2 = types.BoolNull()
+	}
+	if !data.AuthenticationType.IsNull() || all {
+		data.AuthenticationType = types.StringValue(res.Get(data.getClassName() + ".attributes.authType").String())
+	} else {
+		data.AuthenticationType = types.StringNull()
+	}
+	if !data.AuthenticationTypeL1.IsNull() || all {
+		data.AuthenticationTypeL1 = types.StringValue(res.Get(data.getClassName() + ".attributes.authTypeLvl1").String())
+	} else {
+		data.AuthenticationTypeL1 = types.StringNull()
+	}
+	if !data.AuthenticationTypeL2.IsNull() || all {
+		data.AuthenticationTypeL2 = types.StringValue(res.Get(data.getClassName() + ".attributes.authTypeLvl2").String())
+	} else {
+		data.AuthenticationTypeL2 = types.StringNull()
+	}
+	if !data.CircuitType.IsNull() || all {
+		data.CircuitType = types.StringValue(res.Get(data.getClassName() + ".attributes.cktT").String())
+	} else {
+		data.CircuitType = types.StringNull()
+	}
+	if !data.Vrf.IsNull() || all {
+		data.Vrf = types.StringValue(res.Get(data.getClassName() + ".attributes.dom").String())
+	} else {
+		data.Vrf = types.StringNull()
+	}
+	if !data.HelloInterval.IsNull() || all {
+		data.HelloInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.helloIntvl").Int())
+	} else {
+		data.HelloInterval = types.Int64Null()
+	}
+	if !data.HelloIntervalL1.IsNull() || all {
+		data.HelloIntervalL1 = types.Int64Value(res.Get(data.getClassName() + ".attributes.helloIntvlLvl1").Int())
+	} else {
+		data.HelloIntervalL1 = types.Int64Null()
+	}
+	if !data.HelloIntervalL2.IsNull() || all {
+		data.HelloIntervalL2 = types.Int64Value(res.Get(data.getClassName() + ".attributes.helloIntvlLvl2").Int())
+	} else {
+		data.HelloIntervalL2 = types.Int64Null()
+	}
+	if !data.HelloMultiplier.IsNull() || all {
+		data.HelloMultiplier = types.Int64Value(res.Get(data.getClassName() + ".attributes.helloMult").Int())
+	} else {
+		data.HelloMultiplier = types.Int64Null()
+	}
+	if !data.HelloMultiplierL1.IsNull() || all {
+		data.HelloMultiplierL1 = types.Int64Value(res.Get(data.getClassName() + ".attributes.helloMultLvl1").Int())
+	} else {
+		data.HelloMultiplierL1 = types.Int64Null()
+	}
+	if !data.HelloMultiplierL2.IsNull() || all {
+		data.HelloMultiplierL2 = types.Int64Value(res.Get(data.getClassName() + ".attributes.helloMultLvl2").Int())
+	} else {
+		data.HelloMultiplierL2 = types.Int64Null()
+	}
+	if !data.HelloPadding.IsNull() || all {
+		data.HelloPadding = types.StringValue(res.Get(data.getClassName() + ".attributes.helloPad").String())
+	} else {
+		data.HelloPadding = types.StringNull()
+	}
+	if !data.MetricL1.IsNull() || all {
+		data.MetricL1 = types.Int64Value(res.Get(data.getClassName() + ".attributes.metricLvl1").Int())
+	} else {
+		data.MetricL1 = types.Int64Null()
+	}
+	if !data.MetricL2.IsNull() || all {
+		data.MetricL2 = types.Int64Value(res.Get(data.getClassName() + ".attributes.metricLvl2").Int())
+	} else {
+		data.MetricL2 = types.Int64Null()
+	}
+	if !data.MtuCheck.IsNull() || all {
+		data.MtuCheck = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.mtuCheck").String()))
+	} else {
+		data.MtuCheck = types.BoolNull()
+	}
+	if !data.MtuCheckL1.IsNull() || all {
+		data.MtuCheckL1 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.mtuCheckLvl1").String()))
+	} else {
+		data.MtuCheckL1 = types.BoolNull()
+	}
+	if !data.MtuCheckL2.IsNull() || all {
+		data.MtuCheckL2 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.mtuCheckLvl2").String()))
+	} else {
+		data.MtuCheckL2 = types.BoolNull()
+	}
+	if !data.NetworkTypeP2p.IsNull() || all {
+		data.NetworkTypeP2p = types.StringValue(res.Get(data.getClassName() + ".attributes.networkTypeP2P").String())
+	} else {
+		data.NetworkTypeP2p = types.StringNull()
+	}
+	if !data.Passive.IsNull() || all {
+		data.Passive = types.StringValue(res.Get(data.getClassName() + ".attributes.passive").String())
+	} else {
+		data.Passive = types.StringNull()
+	}
+	if !data.PriorityL1.IsNull() || all {
+		data.PriorityL1 = types.Int64Value(res.Get(data.getClassName() + ".attributes.priorityLvl1").Int())
+	} else {
+		data.PriorityL1 = types.Int64Null()
+	}
+	if !data.PriorityL2.IsNull() || all {
+		data.PriorityL2 = types.Int64Value(res.Get(data.getClassName() + ".attributes.priorityLvl2").Int())
+	} else {
+		data.PriorityL2 = types.Int64Null()
+	}
 }

@@ -10,25 +10,26 @@ import (
 	"github.com/netascode/go-nxos"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type OSPFAuthentication struct {
 	Device           types.String `tfsdk:"device"`
 	Dn               types.String `tfsdk:"id"`
-	Inst             types.String `tfsdk:"instance_name"`
-	Name             types.String `tfsdk:"vrf_name"`
-	Id               types.String `tfsdk:"interface_id"`
+	InstanceName     types.String `tfsdk:"instance_name"`
+	VrfName          types.String `tfsdk:"vrf_name"`
+	InterfaceId      types.String `tfsdk:"interface_id"`
 	Key              types.String `tfsdk:"key"`
 	KeyId            types.Int64  `tfsdk:"key_id"`
 	KeySecureMode    types.Bool   `tfsdk:"key_secure_mode"`
 	Keychain         types.String `tfsdk:"keychain"`
-	Md5key           types.String `tfsdk:"md5_key"`
-	Md5keySecureMode types.Bool   `tfsdk:"md5_key_secure_mode"`
+	Md5Key           types.String `tfsdk:"md5_key"`
+	Md5KeySecureMode types.Bool   `tfsdk:"md5_key_secure_mode"`
 	Type             types.String `tfsdk:"type"`
 }
 
 func (data OSPFAuthentication) getDn() string {
-	return fmt.Sprintf("sys/ospf/inst-[%s]/dom-[%s]/if-[%s]/authnew", data.Inst.ValueString(), data.Name.ValueString(), data.Id.ValueString())
+	return fmt.Sprintf("sys/ospf/inst-[%s]/dom-[%s]/if-[%s]/authnew", data.InstanceName.ValueString(), data.VrfName.ValueString(), data.InterfaceId.ValueString())
 }
 
 func (data OSPFAuthentication) getClassName() string {
@@ -36,31 +37,57 @@ func (data OSPFAuthentication) getClassName() string {
 }
 
 func (data OSPFAuthentication) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("key", data.Key.ValueString()).
-		Set("keyId", strconv.FormatInt(data.KeyId.ValueInt64(), 10)).
-		Set("keySecureMode", strconv.FormatBool(data.KeySecureMode.ValueBool())).
-		Set("keychain", data.Keychain.ValueString()).
-		Set("md5key", data.Md5key.ValueString()).
-		Set("md5keySecureMode", strconv.FormatBool(data.Md5keySecureMode.ValueBool())).
-		Set("type", data.Type.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Key.IsUnknown() && !data.Key.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"key", data.Key.ValueString())
+	}
+	if (!data.KeyId.IsUnknown() && !data.KeyId.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"keyId", strconv.FormatInt(data.KeyId.ValueInt64(), 10))
+	}
+	if (!data.KeySecureMode.IsUnknown() && !data.KeySecureMode.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"keySecureMode", strconv.FormatBool(data.KeySecureMode.ValueBool()))
+	}
+	if (!data.Keychain.IsUnknown() && !data.Keychain.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"keychain", data.Keychain.ValueString())
+	}
+	if (!data.Md5Key.IsUnknown() && !data.Md5Key.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"md5key", data.Md5Key.ValueString())
+	}
+	if (!data.Md5KeySecureMode.IsUnknown() && !data.Md5KeySecureMode.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"md5keySecureMode", strconv.FormatBool(data.Md5KeySecureMode.ValueBool()))
+	}
+	if (!data.Type.IsUnknown() && !data.Type.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.Type.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *OSPFAuthentication) fromBody(res gjson.Result) {
-	data.KeyId = types.Int64Value(res.Get("*.attributes.keyId").Int())
-	data.KeySecureMode = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.keySecureMode").String()))
-	data.Keychain = types.StringValue(res.Get("*.attributes.keychain").String())
-	data.Md5keySecureMode = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.md5keySecureMode").String()))
-	data.Type = types.StringValue(res.Get("*.attributes.type").String())
-}
-
-func (data *OSPFAuthentication) fromPlan(plan OSPFAuthentication) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Inst = plan.Inst
-	data.Name = plan.Name
-	data.Id = plan.Id
-	data.Key = plan.Key
-	data.Md5key = plan.Md5key
+func (data *OSPFAuthentication) fromBody(res gjson.Result, all bool) {
+	if !data.KeyId.IsNull() || all {
+		data.KeyId = types.Int64Value(res.Get(data.getClassName() + ".attributes.keyId").Int())
+	} else {
+		data.KeyId = types.Int64Null()
+	}
+	if !data.KeySecureMode.IsNull() || all {
+		data.KeySecureMode = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.keySecureMode").String()))
+	} else {
+		data.KeySecureMode = types.BoolNull()
+	}
+	if !data.Keychain.IsNull() || all {
+		data.Keychain = types.StringValue(res.Get(data.getClassName() + ".attributes.keychain").String())
+	} else {
+		data.Keychain = types.StringNull()
+	}
+	if !data.Md5KeySecureMode.IsNull() || all {
+		data.Md5KeySecureMode = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.md5keySecureMode").String()))
+	} else {
+		data.Md5KeySecureMode = types.BoolNull()
+	}
+	if !data.Type.IsNull() || all {
+		data.Type = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
+	} else {
+		data.Type = types.StringNull()
+	}
 }

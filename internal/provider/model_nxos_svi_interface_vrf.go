@@ -8,17 +8,18 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type SVIInterfaceVRF struct {
-	Device types.String `tfsdk:"device"`
-	Dn     types.String `tfsdk:"id"`
-	Id     types.String `tfsdk:"interface_id"`
-	TDn    types.String `tfsdk:"vrf_dn"`
+	Device      types.String `tfsdk:"device"`
+	Dn          types.String `tfsdk:"id"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+	VrfDn       types.String `tfsdk:"vrf_dn"`
 }
 
 func (data SVIInterfaceVRF) getDn() string {
-	return fmt.Sprintf("sys/intf/svi-[%s]/rtvrfMbr", data.Id.ValueString())
+	return fmt.Sprintf("sys/intf/svi-[%s]/rtvrfMbr", data.InterfaceId.ValueString())
 }
 
 func (data SVIInterfaceVRF) getClassName() string {
@@ -26,17 +27,19 @@ func (data SVIInterfaceVRF) getClassName() string {
 }
 
 func (data SVIInterfaceVRF) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("tDn", data.TDn.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.VrfDn.IsUnknown() && !data.VrfDn.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"tDn", data.VrfDn.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *SVIInterfaceVRF) fromBody(res gjson.Result) {
-	data.TDn = types.StringValue(res.Get("*.attributes.tDn").String())
-}
-
-func (data *SVIInterfaceVRF) fromPlan(plan SVIInterfaceVRF) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Id = plan.Id
+func (data *SVIInterfaceVRF) fromBody(res gjson.Result, all bool) {
+	if !data.VrfDn.IsNull() || all {
+		data.VrfDn = types.StringValue(res.Get(data.getClassName() + ".attributes.tDn").String())
+	} else {
+		data.VrfDn = types.StringNull()
+	}
 }

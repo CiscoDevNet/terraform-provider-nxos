@@ -56,8 +56,6 @@ resource "nxos_rest" "PreReq2" {
 resource "nxos_rest" "PreReq3" {
   dn = "sys/eps/epId-[1]/nws"
   class_name = "nvoNws"
-  content = {
-  }
   depends_on = [nxos_rest.PreReq2, ]
 }
 

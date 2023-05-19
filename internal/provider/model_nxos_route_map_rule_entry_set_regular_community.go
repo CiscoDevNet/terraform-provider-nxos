@@ -8,20 +8,21 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type RouteMapRuleEntrySetRegularCommunity struct {
 	Device      types.String `tfsdk:"device"`
 	Dn          types.String `tfsdk:"id"`
-	Rtmap       types.String `tfsdk:"rule_name"`
+	RuleName    types.String `tfsdk:"rule_name"`
 	Order       types.Int64  `tfsdk:"order"`
 	Additive    types.String `tfsdk:"additive"`
-	NoCommAttr  types.String `tfsdk:"no_community"`
+	NoCommunity types.String `tfsdk:"no_community"`
 	SetCriteria types.String `tfsdk:"set_criteria"`
 }
 
 func (data RouteMapRuleEntrySetRegularCommunity) getDn() string {
-	return fmt.Sprintf("sys/rpm/rtmap-[%s]/ent-[%v]/sregcomm", data.Rtmap.ValueString(), data.Order.ValueInt64())
+	return fmt.Sprintf("sys/rpm/rtmap-[%s]/ent-[%v]/sregcomm", data.RuleName.ValueString(), data.Order.ValueInt64())
 }
 
 func (data RouteMapRuleEntrySetRegularCommunity) getClassName() string {
@@ -29,22 +30,35 @@ func (data RouteMapRuleEntrySetRegularCommunity) getClassName() string {
 }
 
 func (data RouteMapRuleEntrySetRegularCommunity) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("additive", data.Additive.ValueString()).
-		Set("noCommAttr", data.NoCommAttr.ValueString()).
-		Set("setCriteria", data.SetCriteria.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Additive.IsUnknown() && !data.Additive.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"additive", data.Additive.ValueString())
+	}
+	if (!data.NoCommunity.IsUnknown() && !data.NoCommunity.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"noCommAttr", data.NoCommunity.ValueString())
+	}
+	if (!data.SetCriteria.IsUnknown() && !data.SetCriteria.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"setCriteria", data.SetCriteria.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *RouteMapRuleEntrySetRegularCommunity) fromBody(res gjson.Result) {
-	data.Additive = types.StringValue(res.Get("*.attributes.additive").String())
-	data.NoCommAttr = types.StringValue(res.Get("*.attributes.noCommAttr").String())
-	data.SetCriteria = types.StringValue(res.Get("*.attributes.setCriteria").String())
-}
-
-func (data *RouteMapRuleEntrySetRegularCommunity) fromPlan(plan RouteMapRuleEntrySetRegularCommunity) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Rtmap = plan.Rtmap
-	data.Order = plan.Order
+func (data *RouteMapRuleEntrySetRegularCommunity) fromBody(res gjson.Result, all bool) {
+	if !data.Additive.IsNull() || all {
+		data.Additive = types.StringValue(res.Get(data.getClassName() + ".attributes.additive").String())
+	} else {
+		data.Additive = types.StringNull()
+	}
+	if !data.NoCommunity.IsNull() || all {
+		data.NoCommunity = types.StringValue(res.Get(data.getClassName() + ".attributes.noCommAttr").String())
+	} else {
+		data.NoCommunity = types.StringNull()
+	}
+	if !data.SetCriteria.IsNull() || all {
+		data.SetCriteria = types.StringValue(res.Get(data.getClassName() + ".attributes.setCriteria").String())
+	} else {
+		data.SetCriteria = types.StringNull()
+	}
 }

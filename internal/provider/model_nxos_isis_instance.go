@@ -8,13 +8,14 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type ISISInstance struct {
-	Device  types.String `tfsdk:"device"`
-	Dn      types.String `tfsdk:"id"`
-	Name    types.String `tfsdk:"name"`
-	AdminSt types.String `tfsdk:"admin_state"`
+	Device     types.String `tfsdk:"device"`
+	Dn         types.String `tfsdk:"id"`
+	Name       types.String `tfsdk:"name"`
+	AdminState types.String `tfsdk:"admin_state"`
 }
 
 func (data ISISInstance) getDn() string {
@@ -26,18 +27,27 @@ func (data ISISInstance) getClassName() string {
 }
 
 func (data ISISInstance) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("name", data.Name.ValueString()).
-		Set("adminSt", data.AdminSt.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
+	}
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *ISISInstance) fromBody(res gjson.Result) {
-	data.Name = types.StringValue(res.Get("*.attributes.name").String())
-	data.AdminSt = types.StringValue(res.Get("*.attributes.adminSt").String())
-}
-
-func (data *ISISInstance) fromPlan(plan ISISInstance) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
+func (data *ISISInstance) fromBody(res gjson.Result, all bool) {
+	if !data.Name.IsNull() || all {
+		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	} else {
+		data.Name = types.StringNull()
+	}
+	if !data.AdminState.IsNull() || all {
+		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	} else {
+		data.AdminState = types.StringNull()
+	}
 }

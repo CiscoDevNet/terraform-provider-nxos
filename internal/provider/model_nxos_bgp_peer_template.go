@@ -8,21 +8,22 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type BGPPeerTemplate struct {
-	Device   types.String `tfsdk:"device"`
-	Dn       types.String `tfsdk:"id"`
-	Bgp_asn  types.String `tfsdk:"asn"`
-	Name     types.String `tfsdk:"template_name"`
-	Asn      types.String `tfsdk:"remote_asn"`
-	Desc     types.String `tfsdk:"description"`
-	PeerType types.String `tfsdk:"peer_type"`
-	SrcIf    types.String `tfsdk:"source_interface"`
+	Device          types.String `tfsdk:"device"`
+	Dn              types.String `tfsdk:"id"`
+	Asn             types.String `tfsdk:"asn"`
+	TemplateName    types.String `tfsdk:"template_name"`
+	RemoteAsn       types.String `tfsdk:"remote_asn"`
+	Description     types.String `tfsdk:"description"`
+	PeerType        types.String `tfsdk:"peer_type"`
+	SourceInterface types.String `tfsdk:"source_interface"`
 }
 
 func (data BGPPeerTemplate) getDn() string {
-	return fmt.Sprintf("sys/bgp/inst/dom-[default]/peercont-[%s]", data.Name.ValueString())
+	return fmt.Sprintf("sys/bgp/inst/dom-[default]/peercont-[%s]", data.TemplateName.ValueString())
 }
 
 func (data BGPPeerTemplate) getClassName() string {
@@ -30,25 +31,51 @@ func (data BGPPeerTemplate) getClassName() string {
 }
 
 func (data BGPPeerTemplate) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("name", data.Name.ValueString()).
-		Set("asn", data.Asn.ValueString()).
-		Set("desc", data.Desc.ValueString()).
-		Set("peerType", data.PeerType.ValueString()).
-		Set("srcIf", data.SrcIf.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.TemplateName.IsUnknown() && !data.TemplateName.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.TemplateName.ValueString())
+	}
+	if (!data.RemoteAsn.IsUnknown() && !data.RemoteAsn.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"asn", data.RemoteAsn.ValueString())
+	}
+	if (!data.Description.IsUnknown() && !data.Description.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"desc", data.Description.ValueString())
+	}
+	if (!data.PeerType.IsUnknown() && !data.PeerType.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"peerType", data.PeerType.ValueString())
+	}
+	if (!data.SourceInterface.IsUnknown() && !data.SourceInterface.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"srcIf", data.SourceInterface.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *BGPPeerTemplate) fromBody(res gjson.Result) {
-	data.Name = types.StringValue(res.Get("*.attributes.name").String())
-	data.Asn = types.StringValue(res.Get("*.attributes.asn").String())
-	data.Desc = types.StringValue(res.Get("*.attributes.desc").String())
-	data.PeerType = types.StringValue(res.Get("*.attributes.peerType").String())
-	data.SrcIf = types.StringValue(res.Get("*.attributes.srcIf").String())
-}
-
-func (data *BGPPeerTemplate) fromPlan(plan BGPPeerTemplate) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Bgp_asn = plan.Bgp_asn
+func (data *BGPPeerTemplate) fromBody(res gjson.Result, all bool) {
+	if !data.TemplateName.IsNull() || all {
+		data.TemplateName = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	} else {
+		data.TemplateName = types.StringNull()
+	}
+	if !data.RemoteAsn.IsNull() || all {
+		data.RemoteAsn = types.StringValue(res.Get(data.getClassName() + ".attributes.asn").String())
+	} else {
+		data.RemoteAsn = types.StringNull()
+	}
+	if !data.Description.IsNull() || all {
+		data.Description = types.StringValue(res.Get(data.getClassName() + ".attributes.desc").String())
+	} else {
+		data.Description = types.StringNull()
+	}
+	if !data.PeerType.IsNull() || all {
+		data.PeerType = types.StringValue(res.Get(data.getClassName() + ".attributes.peerType").String())
+	} else {
+		data.PeerType = types.StringNull()
+	}
+	if !data.SourceInterface.IsNull() || all {
+		data.SourceInterface = types.StringValue(res.Get(data.getClassName() + ".attributes.srcIf").String())
+	} else {
+		data.SourceInterface = types.StringNull()
+	}
 }

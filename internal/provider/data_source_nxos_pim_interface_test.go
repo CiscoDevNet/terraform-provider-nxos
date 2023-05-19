@@ -41,16 +41,12 @@ resource "nxos_rest" "PreReq0" {
 resource "nxos_rest" "PreReq1" {
   dn = "sys/pim"
   class_name = "pimEntity"
-  content = {
-  }
   depends_on = [nxos_rest.PreReq0, ]
 }
 
 resource "nxos_rest" "PreReq2" {
   dn = "sys/pim/inst"
   class_name = "pimInst"
-  content = {
-  }
   depends_on = [nxos_rest.PreReq1, ]
 }
 

@@ -8,16 +8,18 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type IPv4AccessListPolicyEgressInterface struct {
-	Device types.String `tfsdk:"device"`
-	Dn     types.String `tfsdk:"id"`
-	Name   types.String `tfsdk:"interface_id"`
+	Device         types.String `tfsdk:"device"`
+	Dn             types.String `tfsdk:"id"`
+	InterfaceId    types.String `tfsdk:"interface_id"`
+	AccessListName types.String `tfsdk:"access_list_name"`
 }
 
 func (data IPv4AccessListPolicyEgressInterface) getDn() string {
-	return fmt.Sprintf("sys/acl/ipv4/policy/egress/intf-[%s]", data.Name.ValueString())
+	return fmt.Sprintf("sys/acl/ipv4/policy/egress/intf-[%s]", data.InterfaceId.ValueString())
 }
 
 func (data IPv4AccessListPolicyEgressInterface) getClassName() string {
@@ -25,16 +27,41 @@ func (data IPv4AccessListPolicyEgressInterface) getClassName() string {
 }
 
 func (data IPv4AccessListPolicyEgressInterface) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("name", data.Name.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.InterfaceId.ValueString())
+	}
+	var attrs string
+	attrs = ""
+	if (!data.AccessListName.IsUnknown() && !data.AccessListName.IsNull()) || true {
+		attrs, _ = sjson.Set(attrs, "name", data.AccessListName.ValueString())
+	}
+	body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.aclInst.attributes", attrs)
+
+	return nxos.Body{body}
 }
 
-func (data *IPv4AccessListPolicyEgressInterface) fromBody(res gjson.Result) {
-	data.Name = types.StringValue(res.Get("*.attributes.name").String())
-}
-
-func (data *IPv4AccessListPolicyEgressInterface) fromPlan(plan IPv4AccessListPolicyEgressInterface) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
+func (data *IPv4AccessListPolicyEgressInterface) fromBody(res gjson.Result, all bool) {
+	if !data.InterfaceId.IsNull() || all {
+		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	} else {
+		data.InterfaceId = types.StringNull()
+	}
+	var r gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("aclInst.attributes.rn").String()
+			if key == "acl" {
+				r = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.AccessListName.IsNull() || all {
+		data.AccessListName = types.StringValue(r.Get("aclInst.attributes.name").String())
+	} else {
+		data.AccessListName = types.StringNull()
+	}
 }

@@ -8,18 +8,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type HMMInterface struct {
-	Device  types.String `tfsdk:"device"`
-	Dn      types.String `tfsdk:"id"`
-	Id      types.String `tfsdk:"interface_id"`
-	AdminSt types.String `tfsdk:"admin_state"`
-	Mode    types.String `tfsdk:"mode"`
+	Device      types.String `tfsdk:"device"`
+	Dn          types.String `tfsdk:"id"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+	AdminState  types.String `tfsdk:"admin_state"`
+	Mode        types.String `tfsdk:"mode"`
 }
 
 func (data HMMInterface) getDn() string {
-	return fmt.Sprintf("sys/hmm/fwdinst/if-[%s]", data.Id.ValueString())
+	return fmt.Sprintf("sys/hmm/fwdinst/if-[%s]", data.InterfaceId.ValueString())
 }
 
 func (data HMMInterface) getClassName() string {
@@ -27,20 +28,35 @@ func (data HMMInterface) getClassName() string {
 }
 
 func (data HMMInterface) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("id", data.Id.ValueString()).
-		Set("adminSt", data.AdminSt.ValueString()).
-		Set("mode", data.Mode.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.InterfaceId.ValueString())
+	}
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
+	}
+	if (!data.Mode.IsUnknown() && !data.Mode.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mode", data.Mode.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *HMMInterface) fromBody(res gjson.Result) {
-	data.Id = types.StringValue(res.Get("*.attributes.id").String())
-	data.AdminSt = types.StringValue(res.Get("*.attributes.adminSt").String())
-	data.Mode = types.StringValue(res.Get("*.attributes.mode").String())
-}
-
-func (data *HMMInterface) fromPlan(plan HMMInterface) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
+func (data *HMMInterface) fromBody(res gjson.Result, all bool) {
+	if !data.InterfaceId.IsNull() || all {
+		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
+	} else {
+		data.InterfaceId = types.StringNull()
+	}
+	if !data.AdminState.IsNull() || all {
+		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	} else {
+		data.AdminState = types.StringNull()
+	}
+	if !data.Mode.IsNull() || all {
+		data.Mode = types.StringValue(res.Get(data.getClassName() + ".attributes.mode").String())
+	} else {
+		data.Mode = types.StringNull()
+	}
 }

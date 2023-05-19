@@ -8,18 +8,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type VRFRouteTargetAddressFamily struct {
-	Device  types.String `tfsdk:"device"`
-	Dn      types.String `tfsdk:"id"`
-	Vrf     types.String `tfsdk:"vrf"`
-	Af_type types.String `tfsdk:"address_family"`
-	Type    types.String `tfsdk:"route_target_address_family"`
+	Device                   types.String `tfsdk:"device"`
+	Dn                       types.String `tfsdk:"id"`
+	Vrf                      types.String `tfsdk:"vrf"`
+	AddressFamily            types.String `tfsdk:"address_family"`
+	RouteTargetAddressFamily types.String `tfsdk:"route_target_address_family"`
 }
 
 func (data VRFRouteTargetAddressFamily) getDn() string {
-	return fmt.Sprintf("sys/inst-[%s]/dom-[%[1]s]/af-[%s]/ctrl-[%s]", data.Vrf.ValueString(), data.Af_type.ValueString(), data.Type.ValueString())
+	return fmt.Sprintf("sys/inst-[%s]/dom-[%[1]s]/af-[%s]/ctrl-[%s]", data.Vrf.ValueString(), data.AddressFamily.ValueString(), data.RouteTargetAddressFamily.ValueString())
 }
 
 func (data VRFRouteTargetAddressFamily) getClassName() string {
@@ -27,18 +28,19 @@ func (data VRFRouteTargetAddressFamily) getClassName() string {
 }
 
 func (data VRFRouteTargetAddressFamily) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("type", data.Type.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.RouteTargetAddressFamily.IsUnknown() && !data.RouteTargetAddressFamily.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.RouteTargetAddressFamily.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *VRFRouteTargetAddressFamily) fromBody(res gjson.Result) {
-	data.Type = types.StringValue(res.Get("*.attributes.type").String())
-}
-
-func (data *VRFRouteTargetAddressFamily) fromPlan(plan VRFRouteTargetAddressFamily) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Vrf = plan.Vrf
-	data.Af_type = plan.Af_type
+func (data *VRFRouteTargetAddressFamily) fromBody(res gjson.Result, all bool) {
+	if !data.RouteTargetAddressFamily.IsNull() || all {
+		data.RouteTargetAddressFamily = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
+	} else {
+		data.RouteTargetAddressFamily = types.StringNull()
+	}
 }

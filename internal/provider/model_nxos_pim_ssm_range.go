@@ -10,23 +10,24 @@ import (
 	"github.com/netascode/go-nxos"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type PIMSSMRange struct {
-	Device   types.String `tfsdk:"device"`
-	Dn       types.String `tfsdk:"id"`
-	Vrf_name types.String `tfsdk:"vrf_name"`
-	GrpList  types.String `tfsdk:"group_list_1"`
-	GrpList1 types.String `tfsdk:"group_list_2"`
-	GrpList2 types.String `tfsdk:"group_list_3"`
-	GrpList3 types.String `tfsdk:"group_list_4"`
-	PfxList  types.String `tfsdk:"prefix_list"`
-	RtMap    types.String `tfsdk:"route_map"`
-	SsmNone  types.Bool   `tfsdk:"ssm_none"`
+	Device     types.String `tfsdk:"device"`
+	Dn         types.String `tfsdk:"id"`
+	VrfName    types.String `tfsdk:"vrf_name"`
+	GroupList1 types.String `tfsdk:"group_list_1"`
+	GroupList2 types.String `tfsdk:"group_list_2"`
+	GroupList3 types.String `tfsdk:"group_list_3"`
+	GroupList4 types.String `tfsdk:"group_list_4"`
+	PrefixList types.String `tfsdk:"prefix_list"`
+	RouteMap   types.String `tfsdk:"route_map"`
+	SsmNone    types.Bool   `tfsdk:"ssm_none"`
 }
 
 func (data PIMSSMRange) getDn() string {
-	return fmt.Sprintf("sys/pim/inst/dom-[%s]/ssm/range", data.Vrf_name.ValueString())
+	return fmt.Sprintf("sys/pim/inst/dom-[%s]/ssm/range", data.VrfName.ValueString())
 }
 
 func (data PIMSSMRange) getClassName() string {
@@ -34,29 +35,67 @@ func (data PIMSSMRange) getClassName() string {
 }
 
 func (data PIMSSMRange) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("grpList", data.GrpList.ValueString()).
-		Set("grpList1", data.GrpList1.ValueString()).
-		Set("grpList2", data.GrpList2.ValueString()).
-		Set("grpList3", data.GrpList3.ValueString()).
-		Set("pfxList", data.PfxList.ValueString()).
-		Set("rtMap", data.RtMap.ValueString()).
-		Set("ssmNone", strconv.FormatBool(data.SsmNone.ValueBool()))
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.GroupList1.IsUnknown() && !data.GroupList1.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"grpList", data.GroupList1.ValueString())
+	}
+	if (!data.GroupList2.IsUnknown() && !data.GroupList2.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"grpList1", data.GroupList2.ValueString())
+	}
+	if (!data.GroupList3.IsUnknown() && !data.GroupList3.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"grpList2", data.GroupList3.ValueString())
+	}
+	if (!data.GroupList4.IsUnknown() && !data.GroupList4.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"grpList3", data.GroupList4.ValueString())
+	}
+	if (!data.PrefixList.IsUnknown() && !data.PrefixList.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pfxList", data.PrefixList.ValueString())
+	}
+	if (!data.RouteMap.IsUnknown() && !data.RouteMap.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rtMap", data.RouteMap.ValueString())
+	}
+	if (!data.SsmNone.IsUnknown() && !data.SsmNone.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ssmNone", strconv.FormatBool(data.SsmNone.ValueBool()))
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *PIMSSMRange) fromBody(res gjson.Result) {
-	data.GrpList = types.StringValue(res.Get("*.attributes.grpList").String())
-	data.GrpList1 = types.StringValue(res.Get("*.attributes.grpList1").String())
-	data.GrpList2 = types.StringValue(res.Get("*.attributes.grpList2").String())
-	data.GrpList3 = types.StringValue(res.Get("*.attributes.grpList3").String())
-	data.PfxList = types.StringValue(res.Get("*.attributes.pfxList").String())
-	data.RtMap = types.StringValue(res.Get("*.attributes.rtMap").String())
-	data.SsmNone = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.ssmNone").String()))
-}
-
-func (data *PIMSSMRange) fromPlan(plan PIMSSMRange) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Vrf_name = plan.Vrf_name
+func (data *PIMSSMRange) fromBody(res gjson.Result, all bool) {
+	if !data.GroupList1.IsNull() || all {
+		data.GroupList1 = types.StringValue(res.Get(data.getClassName() + ".attributes.grpList").String())
+	} else {
+		data.GroupList1 = types.StringNull()
+	}
+	if !data.GroupList2.IsNull() || all {
+		data.GroupList2 = types.StringValue(res.Get(data.getClassName() + ".attributes.grpList1").String())
+	} else {
+		data.GroupList2 = types.StringNull()
+	}
+	if !data.GroupList3.IsNull() || all {
+		data.GroupList3 = types.StringValue(res.Get(data.getClassName() + ".attributes.grpList2").String())
+	} else {
+		data.GroupList3 = types.StringNull()
+	}
+	if !data.GroupList4.IsNull() || all {
+		data.GroupList4 = types.StringValue(res.Get(data.getClassName() + ".attributes.grpList3").String())
+	} else {
+		data.GroupList4 = types.StringNull()
+	}
+	if !data.PrefixList.IsNull() || all {
+		data.PrefixList = types.StringValue(res.Get(data.getClassName() + ".attributes.pfxList").String())
+	} else {
+		data.PrefixList = types.StringNull()
+	}
+	if !data.RouteMap.IsNull() || all {
+		data.RouteMap = types.StringValue(res.Get(data.getClassName() + ".attributes.rtMap").String())
+	} else {
+		data.RouteMap = types.StringNull()
+	}
+	if !data.SsmNone.IsNull() || all {
+		data.SsmNone = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.ssmNone").String()))
+	} else {
+		data.SsmNone = types.BoolNull()
+	}
 }

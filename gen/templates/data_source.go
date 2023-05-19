@@ -57,6 +57,39 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 				{{- end}}
 			},
 			{{- end}}
+			{{- range .ChildClasses}}
+			{{- if eq .Type "single"}}
+			{{- range .Attributes}}
+			"{{.TfName}}": schema.{{.Type}}Attribute{
+				MarkdownDescription: "{{.Description}}",
+				{{- if or (eq .Id true) (eq .ReferenceOnly true)}}
+				Required:            true,
+				{{- else}}
+				Computed:            true,
+				{{- end}}
+			},
+			{{- end}}
+			{{- else if eq .Type "list"}}
+			"{{.TfName}}": schema.ListNestedAttribute{
+				MarkdownDescription: "{{.Description}}",
+				{{- if or (eq .Id true) (eq .Reference true)}}
+				Required:            true,
+				{{- else}}
+				Computed:            true,
+				{{- end}}
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						{{- range  .Attributes}}
+						"{{.TfName}}": schema.{{.Type}}Attribute{
+							MarkdownDescription: "{{.Description}}",
+							Computed:            true,
+						},
+						{{- end}}
+					},
+				},
+			},
+			{{- end}}
+			{{- end}}
 		},
 	}
 }
@@ -70,7 +103,7 @@ func (d *{{camelCase .Name}}DataSource) Configure(_ context.Context, req datasou
 }
 
 func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config, state {{camelCase .Name}}
+	var config {{camelCase .Name}}
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)
@@ -81,19 +114,21 @@ func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getDn()))
 
-	res, err := d.data.client.GetDn(config.getDn(), nxos.OverrideUrl(d.data.devices[config.Device.ValueString()]))
-
+	queries := []func(*nxos.Req){nxos.OverrideUrl(d.data.devices[config.Device.ValueString()])}
+	{{- if .ChildClasses}}
+	queries = append(queries, nxos.Query("rsp-subtree", "children"))
+	{{- end}}
+	res, err := d.data.client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
 	}
 
-	state.fromBody(res)
-	state.fromPlan(config)
-	state.Dn = types.StringValue(config.getDn())
+	config.fromBody(res, true)
+	config.Dn = types.StringValue(config.getDn())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getDn()))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 }

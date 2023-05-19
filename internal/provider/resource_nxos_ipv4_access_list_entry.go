@@ -74,7 +74,6 @@ func (r *IPv4AccessListEntryResource) Schema(ctx context.Context, req resource.S
 			"ack": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Match TCP ACK flag.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"action": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Action.").AddStringEnumDescription("invalid", "permit", "deny").AddDefaultValueDescription("invalid").String,
@@ -88,7 +87,6 @@ func (r *IPv4AccessListEntryResource) Schema(ctx context.Context, req resource.S
 			"dscp": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Match DSCP.").AddIntegerRangeDescription(0, 63).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 63),
 				},
@@ -96,27 +94,22 @@ func (r *IPv4AccessListEntryResource) Schema(ctx context.Context, req resource.S
 			"destination_address_group": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Destination address group.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"destination_port_1": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("First destination port number or name.").AddStringEnumDescription("echo", "discard", "daytime", "chargen", "ftp-data", "ftp", "telnet", "smtp", "time", "nameserver", "whois", "tacacs", "domain", "bootps", "bootpc", "tftp", "gopher", "finger", "www", "hostname", "pop2", "pop3", "sunrpc", "ident", "nntp", "ntp", "netbios-ns", "netbios-dgm", "netbios-ss", "snmp", "snmptrap", "xdmcp", "bgp", "irc", "dnsix", "mobile-ip", "pim-auto-rp", "isakmp", "biff", "exec", "who", "login", "syslog", "cmd", "lpd", "talk", "rip", "uucp", "klogin", "kshell", "drip", "non500-isakmp").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"destination_port_2": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Second destination port number or name.").AddStringEnumDescription("echo", "discard", "daytime", "chargen", "ftp-data", "ftp", "telnet", "smtp", "time", "nameserver", "whois", "tacacs", "domain", "bootps", "bootpc", "tftp", "gopher", "finger", "www", "hostname", "pop2", "pop3", "sunrpc", "ident", "nntp", "ntp", "netbios-ns", "netbios-dgm", "netbios-ss", "snmp", "snmptrap", "xdmcp", "bgp", "irc", "dnsix", "mobile-ip", "pim-auto-rp", "isakmp", "biff", "exec", "who", "login", "syslog", "cmd", "lpd", "talk", "rip", "uucp", "klogin", "kshell", "drip", "non500-isakmp").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"destination_port_group": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Destination port group.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"destination_port_mask": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Destination port mask number or name.").AddStringEnumDescription("echo", "discard", "daytime", "chargen", "ftp-data", "ftp", "telnet", "smtp", "time", "nameserver", "whois", "tacacs", "domain", "bootps", "bootpc", "tftp", "gopher", "finger", "www", "hostname", "pop2", "pop3", "sunrpc", "ident", "nntp", "ntp", "netbios-ns", "netbios-dgm", "netbios-ss", "snmp", "snmptrap", "xdmcp", "bgp", "irc", "dnsix", "mobile-ip", "pim-auto-rp", "isakmp", "biff", "exec", "who", "login", "syslog", "cmd", "lpd", "talk", "rip", "uucp", "klogin", "kshell", "drip", "non500-isakmp").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"destination_port_operator": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Destination port operator.").AddStringEnumDescription("none", "lt", "gt", "eq", "neq", "range").AddDefaultValueDescription("none").String,
@@ -130,32 +123,26 @@ func (r *IPv4AccessListEntryResource) Schema(ctx context.Context, req resource.S
 			"destination_prefix": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Destination prefix.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"destination_prefix_length": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Destination prefix length.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"destination_prefix_mask": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Destination prefix mask.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"est": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Match TCP EST flag.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"fin": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Match TCP FIN flag.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"fragment": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Match non-initial fragment.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"http_option_type": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("HTTP option method.").AddStringEnumDescription("invalid", "get", "put", "head", "post", "delete", "trace", "connect").AddDefaultValueDescription("invalid").String,
@@ -220,62 +207,50 @@ func (r *IPv4AccessListEntryResource) Schema(ctx context.Context, req resource.S
 			"protocol": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Protocol name or number.").AddStringEnumDescription("ip", "icmp", "igmp", "tcp", "udp", "gre", "esp", "ahp", "eigrp", "ospf", "nos", "pim", "pcp", "udf").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"protocol_mask": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Protocol mask name or number.").AddStringEnumDescription("ip", "icmp", "igmp", "tcp", "udp", "gre", "esp", "ahp", "eigrp", "ospf", "nos", "pim", "pcp", "udf").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"psh": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Match TCP PSH flag.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"redirect": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Redirect action.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"remark": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("ACL comment.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"rev": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Match TCP REV flag.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"rst": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Match TCP RST flag.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"source_address_group": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Source address group.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"source_port_1": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("First source port name or number.").AddStringEnumDescription("echo", "discard", "daytime", "chargen", "ftp-data", "ftp", "telnet", "smtp", "time", "nameserver", "whois", "tacacs", "domain", "bootps", "bootpc", "tftp", "gopher", "finger", "www", "hostname", "pop2", "pop3", "sunrpc", "ident", "nntp", "ntp", "netbios-ns", "netbios-dgm", "netbios-ss", "snmp", "snmptrap", "xdmcp", "bgp", "irc", "dnsix", "mobile-ip", "pim-auto-rp", "isakmp", "biff", "exec", "who", "login", "syslog", "cmd", "lpd", "talk", "rip", "uucp", "klogin", "kshell", "drip", "non500-isakmp").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"source_port_2": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Second source port name or number.").AddStringEnumDescription("echo", "discard", "daytime", "chargen", "ftp-data", "ftp", "telnet", "smtp", "time", "nameserver", "whois", "tacacs", "domain", "bootps", "bootpc", "tftp", "gopher", "finger", "www", "hostname", "pop2", "pop3", "sunrpc", "ident", "nntp", "ntp", "netbios-ns", "netbios-dgm", "netbios-ss", "snmp", "snmptrap", "xdmcp", "bgp", "irc", "dnsix", "mobile-ip", "pim-auto-rp", "isakmp", "biff", "exec", "who", "login", "syslog", "cmd", "lpd", "talk", "rip", "uucp", "klogin", "kshell", "drip", "non500-isakmp").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"source_port_group": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Source port group.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"source_port_mask": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Source port mask name or number.").AddStringEnumDescription("echo", "discard", "daytime", "chargen", "ftp-data", "ftp", "telnet", "smtp", "time", "nameserver", "whois", "tacacs", "domain", "bootps", "bootpc", "tftp", "gopher", "finger", "www", "hostname", "pop2", "pop3", "sunrpc", "ident", "nntp", "ntp", "netbios-ns", "netbios-dgm", "netbios-ss", "snmp", "snmptrap", "xdmcp", "bgp", "irc", "dnsix", "mobile-ip", "pim-auto-rp", "isakmp", "biff", "exec", "who", "login", "syslog", "cmd", "lpd", "talk", "rip", "uucp", "klogin", "kshell", "drip", "non500-isakmp").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"source_port_operator": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Source port operator.").AddStringEnumDescription("none", "lt", "gt", "eq", "neq", "range").AddDefaultValueDescription("none").String,
@@ -289,32 +264,28 @@ func (r *IPv4AccessListEntryResource) Schema(ctx context.Context, req resource.S
 			"source_prefix": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Source prefix.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"source_prefix_length": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Source prefix length.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"source_prefix_mask": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Source prefix mask.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"syn": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Match TCP SYN flag.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"time_range": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Time range name.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"ttl": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("TTL.").AddIntegerRangeDescription(0, 255).String,
+				MarkdownDescription: helpers.NewAttributeDescription("TTL.").AddIntegerRangeDescription(0, 255).AddDefaultValueDescription("0").String,
 				Optional:            true,
 				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 255),
 				},
@@ -322,7 +293,6 @@ func (r *IPv4AccessListEntryResource) Schema(ctx context.Context, req resource.S
 			"urg": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Match TCP URG flag.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"vlan": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("VLAN ID.").AddIntegerRangeDescription(0, 4095).AddDefaultValueDescription("4095").String,
@@ -353,7 +323,7 @@ func (r *IPv4AccessListEntryResource) Configure(ctx context.Context, req resourc
 }
 
 func (r *IPv4AccessListEntryResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan, state IPv4AccessListEntry
+	var plan IPv4AccessListEntry
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -372,20 +342,11 @@ func (r *IPv4AccessListEntryResource) Create(ctx context.Context, req resource.C
 		return
 	}
 
-	// Read object
-	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.ValueString()]))
-	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
-		return
-	}
-
-	state.fromBody(res)
-	state.fromPlan(plan)
-	state.Dn = types.StringValue(plan.getDn())
+	plan.Dn = types.StringValue(plan.getDn())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
 
@@ -401,13 +362,15 @@ func (r *IPv4AccessListEntryResource) Read(ctx context.Context, req resource.Rea
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
-	res, err := r.data.client.GetDn(state.Dn.ValueString(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[state.Device.ValueString()]))
+	queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+	queries = append(queries, nxos.OverrideUrl(r.data.devices[state.Device.ValueString()]))
+	res, err := r.data.client.GetDn(state.Dn.ValueString(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
 	}
 
-	state.fromBody(res)
+	state.fromBody(res, false)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 
@@ -416,7 +379,7 @@ func (r *IPv4AccessListEntryResource) Read(ctx context.Context, req resource.Rea
 }
 
 func (r *IPv4AccessListEntryResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state IPv4AccessListEntry
+	var plan IPv4AccessListEntry
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -434,19 +397,9 @@ func (r *IPv4AccessListEntryResource) Update(ctx context.Context, req resource.U
 		return
 	}
 
-	// Read object
-	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.ValueString()]))
-	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
-		return
-	}
-
-	state.fromBody(res)
-	state.fromPlan(plan)
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
 

@@ -8,17 +8,18 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type RouteMapRuleEntryMatchRoute struct {
-	Device types.String `tfsdk:"device"`
-	Dn     types.String `tfsdk:"id"`
-	Rtmap  types.String `tfsdk:"rule_name"`
-	Order  types.Int64  `tfsdk:"order"`
+	Device   types.String `tfsdk:"device"`
+	Dn       types.String `tfsdk:"id"`
+	RuleName types.String `tfsdk:"rule_name"`
+	Order    types.Int64  `tfsdk:"order"`
 }
 
 func (data RouteMapRuleEntryMatchRoute) getDn() string {
-	return fmt.Sprintf("sys/rpm/rtmap-[%s]/ent-[%v]/mrtdst", data.Rtmap.ValueString(), data.Order.ValueInt64())
+	return fmt.Sprintf("sys/rpm/rtmap-[%s]/ent-[%v]/mrtdst", data.RuleName.ValueString(), data.Order.ValueInt64())
 }
 
 func (data RouteMapRuleEntryMatchRoute) getClassName() string {
@@ -26,15 +27,11 @@ func (data RouteMapRuleEntryMatchRoute) getClassName() string {
 }
 
 func (data RouteMapRuleEntryMatchRoute) toBody() nxos.Body {
-	return nxos.Body{Str: `{"` + data.getClassName() + `":{"attributes":{}}}`}
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+
+	return nxos.Body{body}
 }
 
-func (data *RouteMapRuleEntryMatchRoute) fromBody(res gjson.Result) {
-}
-
-func (data *RouteMapRuleEntryMatchRoute) fromPlan(plan RouteMapRuleEntryMatchRoute) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Rtmap = plan.Rtmap
-	data.Order = plan.Order
+func (data *RouteMapRuleEntryMatchRoute) fromBody(res gjson.Result, all bool) {
 }

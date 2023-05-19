@@ -8,17 +8,18 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type IPv4AccessListPolicyEgressInterfaceInstance struct {
-	Device    types.String `tfsdk:"device"`
-	Dn        types.String `tfsdk:"id"`
-	Interface types.String `tfsdk:"interface_id"`
-	Name      types.String `tfsdk:"name"`
+	Device      types.String `tfsdk:"device"`
+	Dn          types.String `tfsdk:"id"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+	Name        types.String `tfsdk:"name"`
 }
 
 func (data IPv4AccessListPolicyEgressInterfaceInstance) getDn() string {
-	return fmt.Sprintf("sys/acl/ipv4/policy/egress/intf-[%s]/acl", data.Interface.ValueString())
+	return fmt.Sprintf("sys/acl/ipv4/policy/egress/intf-[%s]/acl", data.InterfaceId.ValueString())
 }
 
 func (data IPv4AccessListPolicyEgressInterfaceInstance) getClassName() string {
@@ -26,17 +27,15 @@ func (data IPv4AccessListPolicyEgressInterfaceInstance) getClassName() string {
 }
 
 func (data IPv4AccessListPolicyEgressInterfaceInstance) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("name", data.Name.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
 func (data *IPv4AccessListPolicyEgressInterfaceInstance) fromBody(res gjson.Result) {
-	data.Name = types.StringValue(res.Get("*.attributes.name").String())
-}
-
-func (data *IPv4AccessListPolicyEgressInterfaceInstance) fromPlan(plan IPv4AccessListPolicyEgressInterfaceInstance) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Interface = plan.Interface
+	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 }

@@ -17,6 +17,7 @@ func TestAccDataSourceNxosIPv4AccessListPolicyIngressInterface(t *testing.T) {
 				Config: testAccDataSourceNxosIPv4AccessListPolicyIngressInterfaceConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_ipv4_access_list_policy_ingress_interface.test", "interface_id", "eth1/10"),
+					resource.TestCheckResourceAttr("data.nxos_ipv4_access_list_policy_ingress_interface.test", "access_list_name", "ACL1"),
 				),
 			},
 		},
@@ -27,6 +28,7 @@ const testAccDataSourceNxosIPv4AccessListPolicyIngressInterfaceConfig = `
 
 resource "nxos_ipv4_access_list_policy_ingress_interface" "test" {
   interface_id = "eth1/10"
+  access_list_name = "ACL1"
 }
 
 data "nxos_ipv4_access_list_policy_ingress_interface" "test" {

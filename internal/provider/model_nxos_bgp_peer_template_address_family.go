@@ -8,21 +8,22 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type BGPPeerTemplateAddressFamily struct {
-	Device     types.String `tfsdk:"device"`
-	Dn         types.String `tfsdk:"id"`
-	Asn        types.String `tfsdk:"asn"`
-	Name       types.String `tfsdk:"template_name"`
-	Type       types.String `tfsdk:"address_family"`
-	Ctrl       types.String `tfsdk:"control"`
-	SendComExt types.String `tfsdk:"send_community_extended"`
-	SendComStd types.String `tfsdk:"send_community_standard"`
+	Device                types.String `tfsdk:"device"`
+	Dn                    types.String `tfsdk:"id"`
+	Asn                   types.String `tfsdk:"asn"`
+	TemplateName          types.String `tfsdk:"template_name"`
+	AddressFamily         types.String `tfsdk:"address_family"`
+	Control               types.String `tfsdk:"control"`
+	SendCommunityExtended types.String `tfsdk:"send_community_extended"`
+	SendCommunityStandard types.String `tfsdk:"send_community_standard"`
 }
 
 func (data BGPPeerTemplateAddressFamily) getDn() string {
-	return fmt.Sprintf("sys/bgp/inst/dom-[default]/peercont-[%s]/af-[%s]", data.Name.ValueString(), data.Type.ValueString())
+	return fmt.Sprintf("sys/bgp/inst/dom-[default]/peercont-[%s]/af-[%s]", data.TemplateName.ValueString(), data.AddressFamily.ValueString())
 }
 
 func (data BGPPeerTemplateAddressFamily) getClassName() string {
@@ -30,24 +31,43 @@ func (data BGPPeerTemplateAddressFamily) getClassName() string {
 }
 
 func (data BGPPeerTemplateAddressFamily) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("type", data.Type.ValueString()).
-		Set("ctrl", data.Ctrl.ValueString()).
-		Set("sendComExt", data.SendComExt.ValueString()).
-		Set("sendComStd", data.SendComStd.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.AddressFamily.IsUnknown() && !data.AddressFamily.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.AddressFamily.ValueString())
+	}
+	if (!data.Control.IsUnknown() && !data.Control.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ctrl", data.Control.ValueString())
+	}
+	if (!data.SendCommunityExtended.IsUnknown() && !data.SendCommunityExtended.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"sendComExt", data.SendCommunityExtended.ValueString())
+	}
+	if (!data.SendCommunityStandard.IsUnknown() && !data.SendCommunityStandard.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"sendComStd", data.SendCommunityStandard.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *BGPPeerTemplateAddressFamily) fromBody(res gjson.Result) {
-	data.Type = types.StringValue(res.Get("*.attributes.type").String())
-	data.Ctrl = types.StringValue(res.Get("*.attributes.ctrl").String())
-	data.SendComExt = types.StringValue(res.Get("*.attributes.sendComExt").String())
-	data.SendComStd = types.StringValue(res.Get("*.attributes.sendComStd").String())
-}
-
-func (data *BGPPeerTemplateAddressFamily) fromPlan(plan BGPPeerTemplateAddressFamily) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Asn = plan.Asn
-	data.Name = plan.Name
+func (data *BGPPeerTemplateAddressFamily) fromBody(res gjson.Result, all bool) {
+	if !data.AddressFamily.IsNull() || all {
+		data.AddressFamily = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
+	} else {
+		data.AddressFamily = types.StringNull()
+	}
+	if !data.Control.IsNull() || all {
+		data.Control = types.StringValue(res.Get(data.getClassName() + ".attributes.ctrl").String())
+	} else {
+		data.Control = types.StringNull()
+	}
+	if !data.SendCommunityExtended.IsNull() || all {
+		data.SendCommunityExtended = types.StringValue(res.Get(data.getClassName() + ".attributes.sendComExt").String())
+	} else {
+		data.SendCommunityExtended = types.StringNull()
+	}
+	if !data.SendCommunityStandard.IsNull() || all {
+		data.SendCommunityStandard = types.StringValue(res.Get(data.getClassName() + ".attributes.sendComStd").String())
+	} else {
+		data.SendCommunityStandard = types.StringNull()
+	}
 }

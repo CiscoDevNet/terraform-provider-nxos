@@ -10,14 +10,15 @@ import (
 	"github.com/netascode/go-nxos"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type PIMVRF struct {
-	Device  types.String `tfsdk:"device"`
-	Dn      types.String `tfsdk:"id"`
-	Name    types.String `tfsdk:"name"`
-	AdminSt types.String `tfsdk:"admin_state"`
-	Bfd     types.Bool   `tfsdk:"bfd"`
+	Device     types.String `tfsdk:"device"`
+	Dn         types.String `tfsdk:"id"`
+	Name       types.String `tfsdk:"name"`
+	AdminState types.String `tfsdk:"admin_state"`
+	Bfd        types.Bool   `tfsdk:"bfd"`
 }
 
 func (data PIMVRF) getDn() string {
@@ -29,20 +30,35 @@ func (data PIMVRF) getClassName() string {
 }
 
 func (data PIMVRF) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("name", data.Name.ValueString()).
-		Set("adminSt", data.AdminSt.ValueString()).
-		Set("bfd", strconv.FormatBool(data.Bfd.ValueBool()))
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
+	}
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
+	}
+	if (!data.Bfd.IsUnknown() && !data.Bfd.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bfd", strconv.FormatBool(data.Bfd.ValueBool()))
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *PIMVRF) fromBody(res gjson.Result) {
-	data.Name = types.StringValue(res.Get("*.attributes.name").String())
-	data.AdminSt = types.StringValue(res.Get("*.attributes.adminSt").String())
-	data.Bfd = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.bfd").String()))
-}
-
-func (data *PIMVRF) fromPlan(plan PIMVRF) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
+func (data *PIMVRF) fromBody(res gjson.Result, all bool) {
+	if !data.Name.IsNull() || all {
+		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	} else {
+		data.Name = types.StringNull()
+	}
+	if !data.AdminState.IsNull() || all {
+		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	} else {
+		data.AdminState = types.StringNull()
+	}
+	if !data.Bfd.IsNull() || all {
+		data.Bfd = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.bfd").String()))
+	} else {
+		data.Bfd = types.BoolNull()
+	}
 }

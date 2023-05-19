@@ -8,19 +8,20 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type IPv4InterfaceAddress struct {
-	Device types.String `tfsdk:"device"`
-	Dn     types.String `tfsdk:"id"`
-	Dom    types.String `tfsdk:"vrf"`
-	Id     types.String `tfsdk:"interface_id"`
-	Addr   types.String `tfsdk:"address"`
-	Type   types.String `tfsdk:"type"`
+	Device      types.String `tfsdk:"device"`
+	Dn          types.String `tfsdk:"id"`
+	Vrf         types.String `tfsdk:"vrf"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+	Address     types.String `tfsdk:"address"`
+	Type        types.String `tfsdk:"type"`
 }
 
 func (data IPv4InterfaceAddress) getDn() string {
-	return fmt.Sprintf("sys/ipv4/inst/dom-[%s]/if-[%s]/addr-[%s]", data.Dom.ValueString(), data.Id.ValueString(), data.Addr.ValueString())
+	return fmt.Sprintf("sys/ipv4/inst/dom-[%s]/if-[%s]/addr-[%s]", data.Vrf.ValueString(), data.InterfaceId.ValueString(), data.Address.ValueString())
 }
 
 func (data IPv4InterfaceAddress) getClassName() string {
@@ -28,20 +29,27 @@ func (data IPv4InterfaceAddress) getClassName() string {
 }
 
 func (data IPv4InterfaceAddress) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("addr", data.Addr.ValueString()).
-		Set("type", data.Type.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Address.IsUnknown() && !data.Address.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"addr", data.Address.ValueString())
+	}
+	if (!data.Type.IsUnknown() && !data.Type.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.Type.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *IPv4InterfaceAddress) fromBody(res gjson.Result) {
-	data.Addr = types.StringValue(res.Get("*.attributes.addr").String())
-	data.Type = types.StringValue(res.Get("*.attributes.type").String())
-}
-
-func (data *IPv4InterfaceAddress) fromPlan(plan IPv4InterfaceAddress) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Dom = plan.Dom
-	data.Id = plan.Id
+func (data *IPv4InterfaceAddress) fromBody(res gjson.Result, all bool) {
+	if !data.Address.IsNull() || all {
+		data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.addr").String())
+	} else {
+		data.Address = types.StringNull()
+	}
+	if !data.Type.IsNull() || all {
+		data.Type = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
+	} else {
+		data.Type = types.StringNull()
+	}
 }

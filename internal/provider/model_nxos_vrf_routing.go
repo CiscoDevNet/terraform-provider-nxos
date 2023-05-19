@@ -8,13 +8,14 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type VRFRouting struct {
-	Device types.String `tfsdk:"device"`
-	Dn     types.String `tfsdk:"id"`
-	Vrf    types.String `tfsdk:"vrf"`
-	Rd     types.String `tfsdk:"route_distinguisher"`
+	Device             types.String `tfsdk:"device"`
+	Dn                 types.String `tfsdk:"id"`
+	Vrf                types.String `tfsdk:"vrf"`
+	RouteDistinguisher types.String `tfsdk:"route_distinguisher"`
 }
 
 func (data VRFRouting) getDn() string {
@@ -26,17 +27,19 @@ func (data VRFRouting) getClassName() string {
 }
 
 func (data VRFRouting) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("rd", data.Rd.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.RouteDistinguisher.IsUnknown() && !data.RouteDistinguisher.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rd", data.RouteDistinguisher.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *VRFRouting) fromBody(res gjson.Result) {
-	data.Rd = types.StringValue(res.Get("*.attributes.rd").String())
-}
-
-func (data *VRFRouting) fromPlan(plan VRFRouting) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Vrf = plan.Vrf
+func (data *VRFRouting) fromBody(res gjson.Result, all bool) {
+	if !data.RouteDistinguisher.IsNull() || all {
+		data.RouteDistinguisher = types.StringValue(res.Get(data.getClassName() + ".attributes.rd").String())
+	} else {
+		data.RouteDistinguisher = types.StringNull()
+	}
 }

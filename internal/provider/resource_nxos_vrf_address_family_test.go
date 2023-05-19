@@ -49,8 +49,6 @@ resource "nxos_rest" "PreReq1" {
 resource "nxos_rest" "PreReq2" {
   dn = "sys/inst-[VRF1]/dom-[VRF1]"
   class_name = "rtctrlDom"
-  content = {
-  }
   depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 }
 

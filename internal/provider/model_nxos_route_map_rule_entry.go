@@ -9,18 +9,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type RouteMapRuleEntry struct {
-	Device types.String `tfsdk:"device"`
-	Dn     types.String `tfsdk:"id"`
-	Rtmap  types.String `tfsdk:"rule_name"`
-	Order  types.Int64  `tfsdk:"order"`
-	Action types.String `tfsdk:"action"`
+	Device   types.String `tfsdk:"device"`
+	Dn       types.String `tfsdk:"id"`
+	RuleName types.String `tfsdk:"rule_name"`
+	Order    types.Int64  `tfsdk:"order"`
+	Action   types.String `tfsdk:"action"`
 }
 
 func (data RouteMapRuleEntry) getDn() string {
-	return fmt.Sprintf("sys/rpm/rtmap-[%s]/ent-[%v]", data.Rtmap.ValueString(), data.Order.ValueInt64())
+	return fmt.Sprintf("sys/rpm/rtmap-[%s]/ent-[%v]", data.RuleName.ValueString(), data.Order.ValueInt64())
 }
 
 func (data RouteMapRuleEntry) getClassName() string {
@@ -28,19 +29,27 @@ func (data RouteMapRuleEntry) getClassName() string {
 }
 
 func (data RouteMapRuleEntry) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("order", strconv.FormatInt(data.Order.ValueInt64(), 10)).
-		Set("action", data.Action.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Order.IsUnknown() && !data.Order.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"order", strconv.FormatInt(data.Order.ValueInt64(), 10))
+	}
+	if (!data.Action.IsUnknown() && !data.Action.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"action", data.Action.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *RouteMapRuleEntry) fromBody(res gjson.Result) {
-	data.Order = types.Int64Value(res.Get("*.attributes.order").Int())
-	data.Action = types.StringValue(res.Get("*.attributes.action").String())
-}
-
-func (data *RouteMapRuleEntry) fromPlan(plan RouteMapRuleEntry) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Rtmap = plan.Rtmap
+func (data *RouteMapRuleEntry) fromBody(res gjson.Result, all bool) {
+	if !data.Order.IsNull() || all {
+		data.Order = types.Int64Value(res.Get(data.getClassName() + ".attributes.order").Int())
+	} else {
+		data.Order = types.Int64Null()
+	}
+	if !data.Action.IsNull() || all {
+		data.Action = types.StringValue(res.Get(data.getClassName() + ".attributes.action").String())
+	} else {
+		data.Action = types.StringNull()
+	}
 }

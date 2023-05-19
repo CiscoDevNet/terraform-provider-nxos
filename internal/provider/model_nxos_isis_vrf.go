@@ -10,31 +10,32 @@ import (
 	"github.com/netascode/go-nxos"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type ISISVRF struct {
-	Device        types.String `tfsdk:"device"`
-	Dn            types.String `tfsdk:"id"`
-	Inst          types.String `tfsdk:"instance_name"`
-	Name          types.String `tfsdk:"name"`
-	AdminSt       types.String `tfsdk:"admin_state"`
-	AuthCheckLvl1 types.Bool   `tfsdk:"authentication_check_l1"`
-	AuthCheckLvl2 types.Bool   `tfsdk:"authentication_check_l2"`
-	AuthKeyLvl1   types.String `tfsdk:"authentication_key_l1"`
-	AuthKeyLvl2   types.String `tfsdk:"authentication_key_l2"`
-	AuthTypeLvl1  types.String `tfsdk:"authentication_type_l1"`
-	AuthTypeLvl2  types.String `tfsdk:"authentication_type_l2"`
-	BwRef         types.Int64  `tfsdk:"bandwidth_reference"`
-	BwRefUnit     types.String `tfsdk:"banwidth_reference_unit"`
-	IsType        types.String `tfsdk:"is_type"`
-	MetricStyle   types.String `tfsdk:"metric_type"`
-	Mtu           types.Int64  `tfsdk:"mtu"`
-	Net           types.String `tfsdk:"net"`
-	PassiveDflt   types.String `tfsdk:"passive_default"`
+	Device                types.String `tfsdk:"device"`
+	Dn                    types.String `tfsdk:"id"`
+	InstanceName          types.String `tfsdk:"instance_name"`
+	Name                  types.String `tfsdk:"name"`
+	AdminState            types.String `tfsdk:"admin_state"`
+	AuthenticationCheckL1 types.Bool   `tfsdk:"authentication_check_l1"`
+	AuthenticationCheckL2 types.Bool   `tfsdk:"authentication_check_l2"`
+	AuthenticationKeyL1   types.String `tfsdk:"authentication_key_l1"`
+	AuthenticationKeyL2   types.String `tfsdk:"authentication_key_l2"`
+	AuthenticationTypeL1  types.String `tfsdk:"authentication_type_l1"`
+	AuthenticationTypeL2  types.String `tfsdk:"authentication_type_l2"`
+	BandwidthReference    types.Int64  `tfsdk:"bandwidth_reference"`
+	BanwidthReferenceUnit types.String `tfsdk:"banwidth_reference_unit"`
+	IsType                types.String `tfsdk:"is_type"`
+	MetricType            types.String `tfsdk:"metric_type"`
+	Mtu                   types.Int64  `tfsdk:"mtu"`
+	Net                   types.String `tfsdk:"net"`
+	PassiveDefault        types.String `tfsdk:"passive_default"`
 }
 
 func (data ISISVRF) getDn() string {
-	return fmt.Sprintf("sys/isis/inst-[%s]/dom-[%s]", data.Inst.ValueString(), data.Name.ValueString())
+	return fmt.Sprintf("sys/isis/inst-[%s]/dom-[%s]", data.InstanceName.ValueString(), data.Name.ValueString())
 }
 
 func (data ISISVRF) getClassName() string {
@@ -42,45 +43,121 @@ func (data ISISVRF) getClassName() string {
 }
 
 func (data ISISVRF) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("name", data.Name.ValueString()).
-		Set("adminSt", data.AdminSt.ValueString()).
-		Set("authCheckLvl1", strconv.FormatBool(data.AuthCheckLvl1.ValueBool())).
-		Set("authCheckLvl2", strconv.FormatBool(data.AuthCheckLvl2.ValueBool())).
-		Set("authKeyLvl1", data.AuthKeyLvl1.ValueString()).
-		Set("authKeyLvl2", data.AuthKeyLvl2.ValueString()).
-		Set("authTypeLvl1", data.AuthTypeLvl1.ValueString()).
-		Set("authTypeLvl2", data.AuthTypeLvl2.ValueString()).
-		Set("bwRef", strconv.FormatInt(data.BwRef.ValueInt64(), 10)).
-		Set("bwRefUnit", data.BwRefUnit.ValueString()).
-		Set("isType", data.IsType.ValueString()).
-		Set("metricStyle", data.MetricStyle.ValueString()).
-		Set("mtu", strconv.FormatInt(data.Mtu.ValueInt64(), 10)).
-		Set("net", data.Net.ValueString()).
-		Set("passiveDflt", data.PassiveDflt.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
+	}
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
+	}
+	if (!data.AuthenticationCheckL1.IsUnknown() && !data.AuthenticationCheckL1.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authCheckLvl1", strconv.FormatBool(data.AuthenticationCheckL1.ValueBool()))
+	}
+	if (!data.AuthenticationCheckL2.IsUnknown() && !data.AuthenticationCheckL2.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authCheckLvl2", strconv.FormatBool(data.AuthenticationCheckL2.ValueBool()))
+	}
+	if (!data.AuthenticationKeyL1.IsUnknown() && !data.AuthenticationKeyL1.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authKeyLvl1", data.AuthenticationKeyL1.ValueString())
+	}
+	if (!data.AuthenticationKeyL2.IsUnknown() && !data.AuthenticationKeyL2.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authKeyLvl2", data.AuthenticationKeyL2.ValueString())
+	}
+	if (!data.AuthenticationTypeL1.IsUnknown() && !data.AuthenticationTypeL1.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authTypeLvl1", data.AuthenticationTypeL1.ValueString())
+	}
+	if (!data.AuthenticationTypeL2.IsUnknown() && !data.AuthenticationTypeL2.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authTypeLvl2", data.AuthenticationTypeL2.ValueString())
+	}
+	if (!data.BandwidthReference.IsUnknown() && !data.BandwidthReference.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bwRef", strconv.FormatInt(data.BandwidthReference.ValueInt64(), 10))
+	}
+	if (!data.BanwidthReferenceUnit.IsUnknown() && !data.BanwidthReferenceUnit.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bwRefUnit", data.BanwidthReferenceUnit.ValueString())
+	}
+	if (!data.IsType.IsUnknown() && !data.IsType.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"isType", data.IsType.ValueString())
+	}
+	if (!data.MetricType.IsUnknown() && !data.MetricType.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"metricStyle", data.MetricType.ValueString())
+	}
+	if (!data.Mtu.IsUnknown() && !data.Mtu.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mtu", strconv.FormatInt(data.Mtu.ValueInt64(), 10))
+	}
+	if (!data.Net.IsUnknown() && !data.Net.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"net", data.Net.ValueString())
+	}
+	if (!data.PassiveDefault.IsUnknown() && !data.PassiveDefault.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"passiveDflt", data.PassiveDefault.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *ISISVRF) fromBody(res gjson.Result) {
-	data.Name = types.StringValue(res.Get("*.attributes.name").String())
-	data.AdminSt = types.StringValue(res.Get("*.attributes.adminSt").String())
-	data.AuthCheckLvl1 = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.authCheckLvl1").String()))
-	data.AuthCheckLvl2 = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.authCheckLvl2").String()))
-	data.AuthTypeLvl1 = types.StringValue(res.Get("*.attributes.authTypeLvl1").String())
-	data.AuthTypeLvl2 = types.StringValue(res.Get("*.attributes.authTypeLvl2").String())
-	data.BwRef = types.Int64Value(res.Get("*.attributes.bwRef").Int())
-	data.BwRefUnit = types.StringValue(res.Get("*.attributes.bwRefUnit").String())
-	data.IsType = types.StringValue(res.Get("*.attributes.isType").String())
-	data.MetricStyle = types.StringValue(res.Get("*.attributes.metricStyle").String())
-	data.Mtu = types.Int64Value(res.Get("*.attributes.mtu").Int())
-	data.Net = types.StringValue(res.Get("*.attributes.net").String())
-	data.PassiveDflt = types.StringValue(res.Get("*.attributes.passiveDflt").String())
-}
-
-func (data *ISISVRF) fromPlan(plan ISISVRF) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Inst = plan.Inst
-	data.AuthKeyLvl1 = plan.AuthKeyLvl1
-	data.AuthKeyLvl2 = plan.AuthKeyLvl2
+func (data *ISISVRF) fromBody(res gjson.Result, all bool) {
+	if !data.Name.IsNull() || all {
+		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	} else {
+		data.Name = types.StringNull()
+	}
+	if !data.AdminState.IsNull() || all {
+		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	} else {
+		data.AdminState = types.StringNull()
+	}
+	if !data.AuthenticationCheckL1.IsNull() || all {
+		data.AuthenticationCheckL1 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.authCheckLvl1").String()))
+	} else {
+		data.AuthenticationCheckL1 = types.BoolNull()
+	}
+	if !data.AuthenticationCheckL2.IsNull() || all {
+		data.AuthenticationCheckL2 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.authCheckLvl2").String()))
+	} else {
+		data.AuthenticationCheckL2 = types.BoolNull()
+	}
+	if !data.AuthenticationTypeL1.IsNull() || all {
+		data.AuthenticationTypeL1 = types.StringValue(res.Get(data.getClassName() + ".attributes.authTypeLvl1").String())
+	} else {
+		data.AuthenticationTypeL1 = types.StringNull()
+	}
+	if !data.AuthenticationTypeL2.IsNull() || all {
+		data.AuthenticationTypeL2 = types.StringValue(res.Get(data.getClassName() + ".attributes.authTypeLvl2").String())
+	} else {
+		data.AuthenticationTypeL2 = types.StringNull()
+	}
+	if !data.BandwidthReference.IsNull() || all {
+		data.BandwidthReference = types.Int64Value(res.Get(data.getClassName() + ".attributes.bwRef").Int())
+	} else {
+		data.BandwidthReference = types.Int64Null()
+	}
+	if !data.BanwidthReferenceUnit.IsNull() || all {
+		data.BanwidthReferenceUnit = types.StringValue(res.Get(data.getClassName() + ".attributes.bwRefUnit").String())
+	} else {
+		data.BanwidthReferenceUnit = types.StringNull()
+	}
+	if !data.IsType.IsNull() || all {
+		data.IsType = types.StringValue(res.Get(data.getClassName() + ".attributes.isType").String())
+	} else {
+		data.IsType = types.StringNull()
+	}
+	if !data.MetricType.IsNull() || all {
+		data.MetricType = types.StringValue(res.Get(data.getClassName() + ".attributes.metricStyle").String())
+	} else {
+		data.MetricType = types.StringNull()
+	}
+	if !data.Mtu.IsNull() || all {
+		data.Mtu = types.Int64Value(res.Get(data.getClassName() + ".attributes.mtu").Int())
+	} else {
+		data.Mtu = types.Int64Null()
+	}
+	if !data.Net.IsNull() || all {
+		data.Net = types.StringValue(res.Get(data.getClassName() + ".attributes.net").String())
+	} else {
+		data.Net = types.StringNull()
+	}
+	if !data.PassiveDefault.IsNull() || all {
+		data.PassiveDefault = types.StringValue(res.Get(data.getClassName() + ".attributes.passiveDflt").String())
+	} else {
+		data.PassiveDefault = types.StringNull()
+	}
 }

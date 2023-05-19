@@ -6,12 +6,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type QueuingQOSPolicySystemOutPolicyMap struct {
-	Device types.String `tfsdk:"device"`
-	Dn     types.String `tfsdk:"id"`
-	Name   types.String `tfsdk:"policy_map_name"`
+	Device        types.String `tfsdk:"device"`
+	Dn            types.String `tfsdk:"id"`
+	PolicyMapName types.String `tfsdk:"policy_map_name"`
 }
 
 func (data QueuingQOSPolicySystemOutPolicyMap) getDn() string {
@@ -23,16 +24,19 @@ func (data QueuingQOSPolicySystemOutPolicyMap) getClassName() string {
 }
 
 func (data QueuingQOSPolicySystemOutPolicyMap) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("name", data.Name.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.PolicyMapName.IsUnknown() && !data.PolicyMapName.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.PolicyMapName.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *QueuingQOSPolicySystemOutPolicyMap) fromBody(res gjson.Result) {
-	data.Name = types.StringValue(res.Get("*.attributes.name").String())
-}
-
-func (data *QueuingQOSPolicySystemOutPolicyMap) fromPlan(plan QueuingQOSPolicySystemOutPolicyMap) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
+func (data *QueuingQOSPolicySystemOutPolicyMap) fromBody(res gjson.Result, all bool) {
+	if !data.PolicyMapName.IsNull() || all {
+		data.PolicyMapName = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	} else {
+		data.PolicyMapName = types.StringNull()
+	}
 }

@@ -8,21 +8,22 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type BGPPeerAddressFamilyPrefixListControl struct {
-	Device    types.String `tfsdk:"device"`
-	Dn        types.String `tfsdk:"id"`
-	Asn       types.String `tfsdk:"asn"`
-	Vrf_name  types.String `tfsdk:"vrf"`
-	Addr      types.String `tfsdk:"address"`
-	Type      types.String `tfsdk:"address_family"`
-	Direction types.String `tfsdk:"direction"`
-	List      types.String `tfsdk:"list"`
+	Device        types.String `tfsdk:"device"`
+	Dn            types.String `tfsdk:"id"`
+	Asn           types.String `tfsdk:"asn"`
+	Vrf           types.String `tfsdk:"vrf"`
+	Address       types.String `tfsdk:"address"`
+	AddressFamily types.String `tfsdk:"address_family"`
+	Direction     types.String `tfsdk:"direction"`
+	List          types.String `tfsdk:"list"`
 }
 
 func (data BGPPeerAddressFamilyPrefixListControl) getDn() string {
-	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/peer-[%s]/af-[%s]/pfxctrl-[%s]", data.Vrf_name.ValueString(), data.Addr.ValueString(), data.Type.ValueString(), data.Direction.ValueString())
+	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/peer-[%s]/af-[%s]/pfxctrl-[%s]", data.Vrf.ValueString(), data.Address.ValueString(), data.AddressFamily.ValueString(), data.Direction.ValueString())
 }
 
 func (data BGPPeerAddressFamilyPrefixListControl) getClassName() string {
@@ -30,22 +31,27 @@ func (data BGPPeerAddressFamilyPrefixListControl) getClassName() string {
 }
 
 func (data BGPPeerAddressFamilyPrefixListControl) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("direction", data.Direction.ValueString()).
-		Set("list", data.List.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Direction.IsUnknown() && !data.Direction.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"direction", data.Direction.ValueString())
+	}
+	if (!data.List.IsUnknown() && !data.List.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"list", data.List.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *BGPPeerAddressFamilyPrefixListControl) fromBody(res gjson.Result) {
-	data.Direction = types.StringValue(res.Get("*.attributes.direction").String())
-	data.List = types.StringValue(res.Get("*.attributes.list").String())
-}
-
-func (data *BGPPeerAddressFamilyPrefixListControl) fromPlan(plan BGPPeerAddressFamilyPrefixListControl) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Asn = plan.Asn
-	data.Vrf_name = plan.Vrf_name
-	data.Addr = plan.Addr
-	data.Type = plan.Type
+func (data *BGPPeerAddressFamilyPrefixListControl) fromBody(res gjson.Result, all bool) {
+	if !data.Direction.IsNull() || all {
+		data.Direction = types.StringValue(res.Get(data.getClassName() + ".attributes.direction").String())
+	} else {
+		data.Direction = types.StringNull()
+	}
+	if !data.List.IsNull() || all {
+		data.List = types.StringValue(res.Get(data.getClassName() + ".attributes.list").String())
+	} else {
+		data.List = types.StringNull()
+	}
 }

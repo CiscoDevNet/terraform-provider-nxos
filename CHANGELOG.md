@@ -1,6 +1,10 @@
-## 0.3.24 (unreleased)
+## 0.4.0 (unreleased)
 
 - Add option to manage child objects with `nxos_rest` resource
+- Add `access_list_name` attribute to `nxos_ipv4_access_list_policy_ingress_interface` resource and data source
+- BREAKING CHANGE: Remove `nxos_ipv4_access_list_policy_ingress_interface_instance` resource and data source
+- Add `access_list_name` attribute to `nxos_ipv4_access_list_policy_egress_interface` resource and data source
+- BREAKING CHANGE: Remove  `nxos_ipv4_access_list_policy_egress_interface_instance` resource and data source
 
 ## 0.3.23
 

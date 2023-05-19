@@ -9,24 +9,25 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type Subinterface struct {
-	Device     types.String `tfsdk:"device"`
-	Dn         types.String `tfsdk:"id"`
-	Id         types.String `tfsdk:"interface_id"`
-	AdminSt    types.String `tfsdk:"admin_state"`
-	Bw         types.Int64  `tfsdk:"bandwidth"`
-	Delay      types.Int64  `tfsdk:"delay"`
-	Descr      types.String `tfsdk:"description"`
-	Encap      types.String `tfsdk:"encap"`
-	LinkLog    types.String `tfsdk:"link_logging"`
-	MediumType types.String `tfsdk:"medium"`
-	Mtu        types.Int64  `tfsdk:"mtu"`
+	Device      types.String `tfsdk:"device"`
+	Dn          types.String `tfsdk:"id"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+	AdminState  types.String `tfsdk:"admin_state"`
+	Bandwidth   types.Int64  `tfsdk:"bandwidth"`
+	Delay       types.Int64  `tfsdk:"delay"`
+	Description types.String `tfsdk:"description"`
+	Encap       types.String `tfsdk:"encap"`
+	LinkLogging types.String `tfsdk:"link_logging"`
+	Medium      types.String `tfsdk:"medium"`
+	Mtu         types.Int64  `tfsdk:"mtu"`
 }
 
 func (data Subinterface) getDn() string {
-	return fmt.Sprintf("sys/intf/encrtd-[%s]", data.Id.ValueString())
+	return fmt.Sprintf("sys/intf/encrtd-[%s]", data.InterfaceId.ValueString())
 }
 
 func (data Subinterface) getClassName() string {
@@ -34,32 +35,83 @@ func (data Subinterface) getClassName() string {
 }
 
 func (data Subinterface) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("id", data.Id.ValueString()).
-		Set("adminSt", data.AdminSt.ValueString()).
-		Set("bw", strconv.FormatInt(data.Bw.ValueInt64(), 10)).
-		Set("delay", strconv.FormatInt(data.Delay.ValueInt64(), 10)).
-		Set("descr", data.Descr.ValueString()).
-		Set("encap", data.Encap.ValueString()).
-		Set("linkLog", data.LinkLog.ValueString()).
-		Set("mediumType", data.MediumType.ValueString()).
-		Set("mtu", strconv.FormatInt(data.Mtu.ValueInt64(), 10))
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.InterfaceId.ValueString())
+	}
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
+	}
+	if (!data.Bandwidth.IsUnknown() && !data.Bandwidth.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bw", strconv.FormatInt(data.Bandwidth.ValueInt64(), 10))
+	}
+	if (!data.Delay.IsUnknown() && !data.Delay.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"delay", strconv.FormatInt(data.Delay.ValueInt64(), 10))
+	}
+	if (!data.Description.IsUnknown() && !data.Description.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"descr", data.Description.ValueString())
+	}
+	if (!data.Encap.IsUnknown() && !data.Encap.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"encap", data.Encap.ValueString())
+	}
+	if (!data.LinkLogging.IsUnknown() && !data.LinkLogging.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkLog", data.LinkLogging.ValueString())
+	}
+	if (!data.Medium.IsUnknown() && !data.Medium.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mediumType", data.Medium.ValueString())
+	}
+	if (!data.Mtu.IsUnknown() && !data.Mtu.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mtu", strconv.FormatInt(data.Mtu.ValueInt64(), 10))
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *Subinterface) fromBody(res gjson.Result) {
-	data.Id = types.StringValue(res.Get("*.attributes.id").String())
-	data.AdminSt = types.StringValue(res.Get("*.attributes.adminSt").String())
-	data.Bw = types.Int64Value(res.Get("*.attributes.bw").Int())
-	data.Delay = types.Int64Value(res.Get("*.attributes.delay").Int())
-	data.Descr = types.StringValue(res.Get("*.attributes.descr").String())
-	data.Encap = types.StringValue(res.Get("*.attributes.encap").String())
-	data.LinkLog = types.StringValue(res.Get("*.attributes.linkLog").String())
-	data.MediumType = types.StringValue(res.Get("*.attributes.mediumType").String())
-	data.Mtu = types.Int64Value(res.Get("*.attributes.mtu").Int())
-}
-
-func (data *Subinterface) fromPlan(plan Subinterface) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
+func (data *Subinterface) fromBody(res gjson.Result, all bool) {
+	if !data.InterfaceId.IsNull() || all {
+		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
+	} else {
+		data.InterfaceId = types.StringNull()
+	}
+	if !data.AdminState.IsNull() || all {
+		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	} else {
+		data.AdminState = types.StringNull()
+	}
+	if !data.Bandwidth.IsNull() || all {
+		data.Bandwidth = types.Int64Value(res.Get(data.getClassName() + ".attributes.bw").Int())
+	} else {
+		data.Bandwidth = types.Int64Null()
+	}
+	if !data.Delay.IsNull() || all {
+		data.Delay = types.Int64Value(res.Get(data.getClassName() + ".attributes.delay").Int())
+	} else {
+		data.Delay = types.Int64Null()
+	}
+	if !data.Description.IsNull() || all {
+		data.Description = types.StringValue(res.Get(data.getClassName() + ".attributes.descr").String())
+	} else {
+		data.Description = types.StringNull()
+	}
+	if !data.Encap.IsNull() || all {
+		data.Encap = types.StringValue(res.Get(data.getClassName() + ".attributes.encap").String())
+	} else {
+		data.Encap = types.StringNull()
+	}
+	if !data.LinkLogging.IsNull() || all {
+		data.LinkLogging = types.StringValue(res.Get(data.getClassName() + ".attributes.linkLog").String())
+	} else {
+		data.LinkLogging = types.StringNull()
+	}
+	if !data.Medium.IsNull() || all {
+		data.Medium = types.StringValue(res.Get(data.getClassName() + ".attributes.mediumType").String())
+	} else {
+		data.Medium = types.StringNull()
+	}
+	if !data.Mtu.IsNull() || all {
+		data.Mtu = types.Int64Value(res.Get(data.getClassName() + ".attributes.mtu").Int())
+	} else {
+		data.Mtu = types.Int64Null()
+	}
 }

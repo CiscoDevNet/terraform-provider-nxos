@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type NTPServer struct {
@@ -16,7 +17,7 @@ type NTPServer struct {
 	Dn      types.String `tfsdk:"id"`
 	Name    types.String `tfsdk:"name"`
 	Vrf     types.String `tfsdk:"vrf"`
-	ProvT   types.String `tfsdk:"type"`
+	Type    types.String `tfsdk:"type"`
 	KeyId   types.Int64  `tfsdk:"key_id"`
 	MinPoll types.Int64  `tfsdk:"min_poll"`
 	MaxPoll types.Int64  `tfsdk:"max_poll"`
@@ -31,26 +32,59 @@ func (data NTPServer) getClassName() string {
 }
 
 func (data NTPServer) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("name", data.Name.ValueString()).
-		Set("vrf", data.Vrf.ValueString()).
-		Set("provT", data.ProvT.ValueString()).
-		Set("keyId", strconv.FormatInt(data.KeyId.ValueInt64(), 10)).
-		Set("minPoll", strconv.FormatInt(data.MinPoll.ValueInt64(), 10)).
-		Set("maxPoll", strconv.FormatInt(data.MaxPoll.ValueInt64(), 10))
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
+	}
+	if (!data.Vrf.IsUnknown() && !data.Vrf.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"vrf", data.Vrf.ValueString())
+	}
+	if (!data.Type.IsUnknown() && !data.Type.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"provT", data.Type.ValueString())
+	}
+	if (!data.KeyId.IsUnknown() && !data.KeyId.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"keyId", strconv.FormatInt(data.KeyId.ValueInt64(), 10))
+	}
+	if (!data.MinPoll.IsUnknown() && !data.MinPoll.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"minPoll", strconv.FormatInt(data.MinPoll.ValueInt64(), 10))
+	}
+	if (!data.MaxPoll.IsUnknown() && !data.MaxPoll.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxPoll", strconv.FormatInt(data.MaxPoll.ValueInt64(), 10))
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *NTPServer) fromBody(res gjson.Result) {
-	data.Name = types.StringValue(res.Get("*.attributes.name").String())
-	data.Vrf = types.StringValue(res.Get("*.attributes.vrf").String())
-	data.ProvT = types.StringValue(res.Get("*.attributes.provT").String())
-	data.KeyId = types.Int64Value(res.Get("*.attributes.keyId").Int())
-	data.MinPoll = types.Int64Value(res.Get("*.attributes.minPoll").Int())
-	data.MaxPoll = types.Int64Value(res.Get("*.attributes.maxPoll").Int())
-}
-
-func (data *NTPServer) fromPlan(plan NTPServer) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
+func (data *NTPServer) fromBody(res gjson.Result, all bool) {
+	if !data.Name.IsNull() || all {
+		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	} else {
+		data.Name = types.StringNull()
+	}
+	if !data.Vrf.IsNull() || all {
+		data.Vrf = types.StringValue(res.Get(data.getClassName() + ".attributes.vrf").String())
+	} else {
+		data.Vrf = types.StringNull()
+	}
+	if !data.Type.IsNull() || all {
+		data.Type = types.StringValue(res.Get(data.getClassName() + ".attributes.provT").String())
+	} else {
+		data.Type = types.StringNull()
+	}
+	if !data.KeyId.IsNull() || all {
+		data.KeyId = types.Int64Value(res.Get(data.getClassName() + ".attributes.keyId").Int())
+	} else {
+		data.KeyId = types.Int64Null()
+	}
+	if !data.MinPoll.IsNull() || all {
+		data.MinPoll = types.Int64Value(res.Get(data.getClassName() + ".attributes.minPoll").Int())
+	} else {
+		data.MinPoll = types.Int64Null()
+	}
+	if !data.MaxPoll.IsNull() || all {
+		data.MaxPoll = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxPoll").Int())
+	} else {
+		data.MaxPoll = types.Int64Null()
+	}
 }

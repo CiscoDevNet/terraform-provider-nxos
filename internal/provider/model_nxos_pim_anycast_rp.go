@@ -8,18 +8,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type PIMAnycastRP struct {
-	Device  types.String `tfsdk:"device"`
-	Dn      types.String `tfsdk:"id"`
-	Name    types.String `tfsdk:"vrf_name"`
-	LocalIf types.String `tfsdk:"local_interface"`
-	SrcIf   types.String `tfsdk:"source_interface"`
+	Device          types.String `tfsdk:"device"`
+	Dn              types.String `tfsdk:"id"`
+	VrfName         types.String `tfsdk:"vrf_name"`
+	LocalInterface  types.String `tfsdk:"local_interface"`
+	SourceInterface types.String `tfsdk:"source_interface"`
 }
 
 func (data PIMAnycastRP) getDn() string {
-	return fmt.Sprintf("sys/pim/inst/dom-[%s]/acastrpfunc", data.Name.ValueString())
+	return fmt.Sprintf("sys/pim/inst/dom-[%s]/acastrpfunc", data.VrfName.ValueString())
 }
 
 func (data PIMAnycastRP) getClassName() string {
@@ -27,19 +28,27 @@ func (data PIMAnycastRP) getClassName() string {
 }
 
 func (data PIMAnycastRP) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("localIf", data.LocalIf.ValueString()).
-		Set("srcIf", data.SrcIf.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.LocalInterface.IsUnknown() && !data.LocalInterface.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"localIf", data.LocalInterface.ValueString())
+	}
+	if (!data.SourceInterface.IsUnknown() && !data.SourceInterface.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"srcIf", data.SourceInterface.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *PIMAnycastRP) fromBody(res gjson.Result) {
-	data.LocalIf = types.StringValue(res.Get("*.attributes.localIf").String())
-	data.SrcIf = types.StringValue(res.Get("*.attributes.srcIf").String())
-}
-
-func (data *PIMAnycastRP) fromPlan(plan PIMAnycastRP) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Name = plan.Name
+func (data *PIMAnycastRP) fromBody(res gjson.Result, all bool) {
+	if !data.LocalInterface.IsNull() || all {
+		data.LocalInterface = types.StringValue(res.Get(data.getClassName() + ".attributes.localIf").String())
+	} else {
+		data.LocalInterface = types.StringNull()
+	}
+	if !data.SourceInterface.IsNull() || all {
+		data.SourceInterface = types.StringValue(res.Get(data.getClassName() + ".attributes.srcIf").String())
+	} else {
+		data.SourceInterface = types.StringNull()
+	}
 }

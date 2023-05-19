@@ -8,18 +8,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type RouteMapRuleEntryMatchRoutePrefixList struct {
-	Device types.String `tfsdk:"device"`
-	Dn     types.String `tfsdk:"id"`
-	Rtmap  types.String `tfsdk:"rule_name"`
-	Order  types.Int64  `tfsdk:"order"`
-	TDn    types.String `tfsdk:"prefix_list_dn"`
+	Device       types.String `tfsdk:"device"`
+	Dn           types.String `tfsdk:"id"`
+	RuleName     types.String `tfsdk:"rule_name"`
+	Order        types.Int64  `tfsdk:"order"`
+	PrefixListDn types.String `tfsdk:"prefix_list_dn"`
 }
 
 func (data RouteMapRuleEntryMatchRoutePrefixList) getDn() string {
-	return fmt.Sprintf("sys/rpm/rtmap-[%s]/ent-[%v]/mrtdst/rsrtDstAtt-[%s]", data.Rtmap.ValueString(), data.Order.ValueInt64(), data.TDn.ValueString())
+	return fmt.Sprintf("sys/rpm/rtmap-[%s]/ent-[%v]/mrtdst/rsrtDstAtt-[%s]", data.RuleName.ValueString(), data.Order.ValueInt64(), data.PrefixListDn.ValueString())
 }
 
 func (data RouteMapRuleEntryMatchRoutePrefixList) getClassName() string {
@@ -27,18 +28,19 @@ func (data RouteMapRuleEntryMatchRoutePrefixList) getClassName() string {
 }
 
 func (data RouteMapRuleEntryMatchRoutePrefixList) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("tDn", data.TDn.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.PrefixListDn.IsUnknown() && !data.PrefixListDn.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"tDn", data.PrefixListDn.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *RouteMapRuleEntryMatchRoutePrefixList) fromBody(res gjson.Result) {
-	data.TDn = types.StringValue(res.Get("*.attributes.tDn").String())
-}
-
-func (data *RouteMapRuleEntryMatchRoutePrefixList) fromPlan(plan RouteMapRuleEntryMatchRoutePrefixList) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Rtmap = plan.Rtmap
-	data.Order = plan.Order
+func (data *RouteMapRuleEntryMatchRoutePrefixList) fromBody(res gjson.Result, all bool) {
+	if !data.PrefixListDn.IsNull() || all {
+		data.PrefixListDn = types.StringValue(res.Get(data.getClassName() + ".attributes.tDn").String())
+	} else {
+		data.PrefixListDn = types.StringNull()
+	}
 }

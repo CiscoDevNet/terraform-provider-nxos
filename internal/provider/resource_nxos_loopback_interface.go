@@ -72,7 +72,6 @@ func (r *LoopbackInterfaceResource) Schema(ctx context.Context, req resource.Sch
 			"description": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Interface description.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 		},
 	}
@@ -88,7 +87,7 @@ func (r *LoopbackInterfaceResource) Configure(ctx context.Context, req resource.
 }
 
 func (r *LoopbackInterfaceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan, state LoopbackInterface
+	var plan LoopbackInterface
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -107,20 +106,11 @@ func (r *LoopbackInterfaceResource) Create(ctx context.Context, req resource.Cre
 		return
 	}
 
-	// Read object
-	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.ValueString()]))
-	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
-		return
-	}
-
-	state.fromBody(res)
-	state.fromPlan(plan)
-	state.Dn = types.StringValue(plan.getDn())
+	plan.Dn = types.StringValue(plan.getDn())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
 
@@ -136,13 +126,15 @@ func (r *LoopbackInterfaceResource) Read(ctx context.Context, req resource.ReadR
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
-	res, err := r.data.client.GetDn(state.Dn.ValueString(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[state.Device.ValueString()]))
+	queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+	queries = append(queries, nxos.OverrideUrl(r.data.devices[state.Device.ValueString()]))
+	res, err := r.data.client.GetDn(state.Dn.ValueString(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
 	}
 
-	state.fromBody(res)
+	state.fromBody(res, false)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 
@@ -151,7 +143,7 @@ func (r *LoopbackInterfaceResource) Read(ctx context.Context, req resource.ReadR
 }
 
 func (r *LoopbackInterfaceResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state LoopbackInterface
+	var plan LoopbackInterface
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -169,19 +161,9 @@ func (r *LoopbackInterfaceResource) Update(ctx context.Context, req resource.Upd
 		return
 	}
 
-	// Read object
-	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.ValueString()]))
-	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
-		return
-	}
-
-	state.fromBody(res)
-	state.fromPlan(plan)
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
 

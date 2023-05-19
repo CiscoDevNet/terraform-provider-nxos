@@ -94,12 +94,10 @@ func (r *ISISVRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 			"authentication_key_l1": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Authentication Key for IS-IS on Level-1.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"authentication_key_l2": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Authentication Key for IS-IS on Level-2.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"authentication_type_l1": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type for Level-1.").AddStringEnumDescription("clear", "md5", "unknown").AddDefaultValueDescription("unknown").String,
@@ -167,7 +165,6 @@ func (r *ISISVRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 			"net": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Holds IS-IS domain NET (address) value.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"passive_default": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IS-IS Domain passive-interface default level.").AddStringEnumDescription("l1", "l2", "l12", "unknown").AddDefaultValueDescription("unknown").String,
@@ -192,7 +189,7 @@ func (r *ISISVRFResource) Configure(ctx context.Context, req resource.ConfigureR
 }
 
 func (r *ISISVRFResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan, state ISISVRF
+	var plan ISISVRF
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -211,20 +208,11 @@ func (r *ISISVRFResource) Create(ctx context.Context, req resource.CreateRequest
 		return
 	}
 
-	// Read object
-	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.ValueString()]))
-	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
-		return
-	}
-
-	state.fromBody(res)
-	state.fromPlan(plan)
-	state.Dn = types.StringValue(plan.getDn())
+	plan.Dn = types.StringValue(plan.getDn())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
 
@@ -240,13 +228,15 @@ func (r *ISISVRFResource) Read(ctx context.Context, req resource.ReadRequest, re
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
-	res, err := r.data.client.GetDn(state.Dn.ValueString(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[state.Device.ValueString()]))
+	queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+	queries = append(queries, nxos.OverrideUrl(r.data.devices[state.Device.ValueString()]))
+	res, err := r.data.client.GetDn(state.Dn.ValueString(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
 	}
 
-	state.fromBody(res)
+	state.fromBody(res, false)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 
@@ -255,7 +245,7 @@ func (r *ISISVRFResource) Read(ctx context.Context, req resource.ReadRequest, re
 }
 
 func (r *ISISVRFResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state ISISVRF
+	var plan ISISVRF
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -273,19 +263,9 @@ func (r *ISISVRFResource) Update(ctx context.Context, req resource.UpdateRequest
 		return
 	}
 
-	// Read object
-	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.ValueString()]))
-	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
-		return
-	}
-
-	state.fromBody(res)
-	state.fromPlan(plan)
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
 

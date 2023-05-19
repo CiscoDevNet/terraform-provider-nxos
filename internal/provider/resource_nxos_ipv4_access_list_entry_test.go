@@ -49,7 +49,7 @@ func TestAccNxosIPv4AccessListEntry(t *testing.T) {
 			{
 				ResourceName:  "nxos_ipv4_access_list_entry.test",
 				ImportState:   true,
-				ImportStateId: "sys/acl/ipv4/name-[ACL1]//seq-[10]",
+				ImportStateId: "sys/acl/ipv4/name-[ACL1]/seq-[10]",
 			},
 		},
 	})

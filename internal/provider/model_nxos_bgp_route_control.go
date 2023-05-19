@@ -8,21 +8,22 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type BGPRouteControl struct {
 	Device             types.String `tfsdk:"device"`
 	Dn                 types.String `tfsdk:"id"`
 	Asn                types.String `tfsdk:"asn"`
-	Name               types.String `tfsdk:"vrf"`
+	Vrf                types.String `tfsdk:"vrf"`
 	EnforceFirstAs     types.String `tfsdk:"enforce_first_as"`
 	FibAccelerate      types.String `tfsdk:"fib_accelerate"`
 	LogNeighborChanges types.String `tfsdk:"log_neighbor_changes"`
-	SupprRt            types.String `tfsdk:"suppress_routes"`
+	SuppressRoutes     types.String `tfsdk:"suppress_routes"`
 }
 
 func (data BGPRouteControl) getDn() string {
-	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/rtctrl", data.Name.ValueString())
+	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/rtctrl", data.Vrf.ValueString())
 }
 
 func (data BGPRouteControl) getClassName() string {
@@ -30,24 +31,43 @@ func (data BGPRouteControl) getClassName() string {
 }
 
 func (data BGPRouteControl) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("enforceFirstAs", data.EnforceFirstAs.ValueString()).
-		Set("fibAccelerate", data.FibAccelerate.ValueString()).
-		Set("logNeighborChanges", data.LogNeighborChanges.ValueString()).
-		Set("supprRt", data.SupprRt.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.EnforceFirstAs.IsUnknown() && !data.EnforceFirstAs.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"enforceFirstAs", data.EnforceFirstAs.ValueString())
+	}
+	if (!data.FibAccelerate.IsUnknown() && !data.FibAccelerate.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"fibAccelerate", data.FibAccelerate.ValueString())
+	}
+	if (!data.LogNeighborChanges.IsUnknown() && !data.LogNeighborChanges.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"logNeighborChanges", data.LogNeighborChanges.ValueString())
+	}
+	if (!data.SuppressRoutes.IsUnknown() && !data.SuppressRoutes.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"supprRt", data.SuppressRoutes.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *BGPRouteControl) fromBody(res gjson.Result) {
-	data.EnforceFirstAs = types.StringValue(res.Get("*.attributes.enforceFirstAs").String())
-	data.FibAccelerate = types.StringValue(res.Get("*.attributes.fibAccelerate").String())
-	data.LogNeighborChanges = types.StringValue(res.Get("*.attributes.logNeighborChanges").String())
-	data.SupprRt = types.StringValue(res.Get("*.attributes.supprRt").String())
-}
-
-func (data *BGPRouteControl) fromPlan(plan BGPRouteControl) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Asn = plan.Asn
-	data.Name = plan.Name
+func (data *BGPRouteControl) fromBody(res gjson.Result, all bool) {
+	if !data.EnforceFirstAs.IsNull() || all {
+		data.EnforceFirstAs = types.StringValue(res.Get(data.getClassName() + ".attributes.enforceFirstAs").String())
+	} else {
+		data.EnforceFirstAs = types.StringNull()
+	}
+	if !data.FibAccelerate.IsNull() || all {
+		data.FibAccelerate = types.StringValue(res.Get(data.getClassName() + ".attributes.fibAccelerate").String())
+	} else {
+		data.FibAccelerate = types.StringNull()
+	}
+	if !data.LogNeighborChanges.IsNull() || all {
+		data.LogNeighborChanges = types.StringValue(res.Get(data.getClassName() + ".attributes.logNeighborChanges").String())
+	} else {
+		data.LogNeighborChanges = types.StringNull()
+	}
+	if !data.SuppressRoutes.IsNull() || all {
+		data.SuppressRoutes = types.StringValue(res.Get(data.getClassName() + ".attributes.supprRt").String())
+	} else {
+		data.SuppressRoutes = types.StringNull()
+	}
 }

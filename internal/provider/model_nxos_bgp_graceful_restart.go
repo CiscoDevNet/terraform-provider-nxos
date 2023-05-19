@@ -9,19 +9,20 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type BGPGracefulRestart struct {
-	Device       types.String `tfsdk:"device"`
-	Dn           types.String `tfsdk:"id"`
-	Asn          types.String `tfsdk:"asn"`
-	Name         types.String `tfsdk:"vrf"`
-	RestartIntvl types.Int64  `tfsdk:"restart_interval"`
-	StaleIntvl   types.Int64  `tfsdk:"stale_interval"`
+	Device          types.String `tfsdk:"device"`
+	Dn              types.String `tfsdk:"id"`
+	Asn             types.String `tfsdk:"asn"`
+	Vrf             types.String `tfsdk:"vrf"`
+	RestartInterval types.Int64  `tfsdk:"restart_interval"`
+	StaleInterval   types.Int64  `tfsdk:"stale_interval"`
 }
 
 func (data BGPGracefulRestart) getDn() string {
-	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/gr", data.Name.ValueString())
+	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/gr", data.Vrf.ValueString())
 }
 
 func (data BGPGracefulRestart) getClassName() string {
@@ -29,20 +30,27 @@ func (data BGPGracefulRestart) getClassName() string {
 }
 
 func (data BGPGracefulRestart) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("restartIntvl", strconv.FormatInt(data.RestartIntvl.ValueInt64(), 10)).
-		Set("staleIntvl", strconv.FormatInt(data.StaleIntvl.ValueInt64(), 10))
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.RestartInterval.IsUnknown() && !data.RestartInterval.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"restartIntvl", strconv.FormatInt(data.RestartInterval.ValueInt64(), 10))
+	}
+	if (!data.StaleInterval.IsUnknown() && !data.StaleInterval.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"staleIntvl", strconv.FormatInt(data.StaleInterval.ValueInt64(), 10))
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *BGPGracefulRestart) fromBody(res gjson.Result) {
-	data.RestartIntvl = types.Int64Value(res.Get("*.attributes.restartIntvl").Int())
-	data.StaleIntvl = types.Int64Value(res.Get("*.attributes.staleIntvl").Int())
-}
-
-func (data *BGPGracefulRestart) fromPlan(plan BGPGracefulRestart) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Asn = plan.Asn
-	data.Name = plan.Name
+func (data *BGPGracefulRestart) fromBody(res gjson.Result, all bool) {
+	if !data.RestartInterval.IsNull() || all {
+		data.RestartInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.restartIntvl").Int())
+	} else {
+		data.RestartInterval = types.Int64Null()
+	}
+	if !data.StaleInterval.IsNull() || all {
+		data.StaleInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.staleIntvl").Int())
+	} else {
+		data.StaleInterval = types.Int64Null()
+	}
 }

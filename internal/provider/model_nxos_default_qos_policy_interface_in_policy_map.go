@@ -8,17 +8,18 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type DefaultQOSPolicyInterfaceInPolicyMap struct {
-	Device       types.String `tfsdk:"device"`
-	Dn           types.String `tfsdk:"id"`
-	Interface_id types.String `tfsdk:"interface_id"`
-	Name         types.String `tfsdk:"policy_map_name"`
+	Device        types.String `tfsdk:"device"`
+	Dn            types.String `tfsdk:"id"`
+	InterfaceId   types.String `tfsdk:"interface_id"`
+	PolicyMapName types.String `tfsdk:"policy_map_name"`
 }
 
 func (data DefaultQOSPolicyInterfaceInPolicyMap) getDn() string {
-	return fmt.Sprintf("sys/ipqos/dflt/policy/in/intf-[%s]/pmap", data.Interface_id.ValueString())
+	return fmt.Sprintf("sys/ipqos/dflt/policy/in/intf-[%s]/pmap", data.InterfaceId.ValueString())
 }
 
 func (data DefaultQOSPolicyInterfaceInPolicyMap) getClassName() string {
@@ -26,17 +27,19 @@ func (data DefaultQOSPolicyInterfaceInPolicyMap) getClassName() string {
 }
 
 func (data DefaultQOSPolicyInterfaceInPolicyMap) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("name", data.Name.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.PolicyMapName.IsUnknown() && !data.PolicyMapName.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.PolicyMapName.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *DefaultQOSPolicyInterfaceInPolicyMap) fromBody(res gjson.Result) {
-	data.Name = types.StringValue(res.Get("*.attributes.name").String())
-}
-
-func (data *DefaultQOSPolicyInterfaceInPolicyMap) fromPlan(plan DefaultQOSPolicyInterfaceInPolicyMap) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Interface_id = plan.Interface_id
+func (data *DefaultQOSPolicyInterfaceInPolicyMap) fromBody(res gjson.Result, all bool) {
+	if !data.PolicyMapName.IsNull() || all {
+		data.PolicyMapName = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	} else {
+		data.PolicyMapName = types.StringNull()
+	}
 }

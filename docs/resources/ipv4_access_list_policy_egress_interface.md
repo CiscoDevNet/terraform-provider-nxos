@@ -5,8 +5,6 @@ subcategory: "IPv4"
 description: |-
   This resource can manage an IPv4 Access List Policy Egress Interface.
   API Documentation: aclIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/acl:If/
-  Child resources
-  nxosipv4accesslistpolicyegressinterface_instance https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_access_list_policy_egress_interface_instance
 ---
 
 # nxos_ipv4_access_list_policy_egress_interface (Resource)
@@ -15,15 +13,12 @@ This resource can manage an IPv4 Access List Policy Egress Interface.
 
 - API Documentation: [aclIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/acl:If/)
 
-### Child resources
-
-- [nxos_ipv4_access_list_policy_egress_interface_instance](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_access_list_policy_egress_interface_instance)
-
 ## Example Usage
 
 ```terraform
 resource "nxos_ipv4_access_list_policy_egress_interface" "example" {
-  interface_id = "eth1/10"
+  interface_id     = "eth1/10"
+  access_list_name = "ACL1"
 }
 ```
 
@@ -36,6 +31,7 @@ resource "nxos_ipv4_access_list_policy_egress_interface" "example" {
 
 ### Optional
 
+- `access_list_name` (String) Access list name.
 - `device` (String) A device name from the provider configuration.
 
 ### Read-Only

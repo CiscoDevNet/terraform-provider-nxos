@@ -42,16 +42,12 @@ resource "nxos_rest" "PreReq0" {
 resource "nxos_rest" "PreReq1" {
   dn = "sys/pim"
   class_name = "pimEntity"
-  content = {
-  }
   depends_on = [nxos_rest.PreReq0, ]
 }
 
 resource "nxos_rest" "PreReq2" {
   dn = "sys/pim/inst"
   class_name = "pimInst"
-  content = {
-  }
   depends_on = [nxos_rest.PreReq1, ]
 }
 
@@ -67,8 +63,6 @@ resource "nxos_rest" "PreReq3" {
 resource "nxos_rest" "PreReq4" {
   dn = "sys/pim/inst/dom-[default]/staticrp"
   class_name = "pimStaticRPP"
-  content = {
-  }
   depends_on = [nxos_rest.PreReq3, ]
 }
 

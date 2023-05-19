@@ -6,6 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type NVEVNIContainer struct {
@@ -22,13 +23,11 @@ func (data NVEVNIContainer) getClassName() string {
 }
 
 func (data NVEVNIContainer) toBody() nxos.Body {
-	return nxos.Body{Str: `{"` + data.getClassName() + `":{"attributes":{}}}`}
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+
+	return nxos.Body{body}
 }
 
-func (data *NVEVNIContainer) fromBody(res gjson.Result) {
-}
-
-func (data *NVEVNIContainer) fromPlan(plan NVEVNIContainer) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
+func (data *NVEVNIContainer) fromBody(res gjson.Result, all bool) {
 }

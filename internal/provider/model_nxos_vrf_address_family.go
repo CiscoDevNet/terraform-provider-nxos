@@ -8,17 +8,18 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type VRFAddressFamily struct {
-	Device types.String `tfsdk:"device"`
-	Dn     types.String `tfsdk:"id"`
-	Vrf    types.String `tfsdk:"vrf"`
-	Type   types.String `tfsdk:"address_family"`
+	Device        types.String `tfsdk:"device"`
+	Dn            types.String `tfsdk:"id"`
+	Vrf           types.String `tfsdk:"vrf"`
+	AddressFamily types.String `tfsdk:"address_family"`
 }
 
 func (data VRFAddressFamily) getDn() string {
-	return fmt.Sprintf("sys/inst-[%s]/dom-[%[1]s]/af-[%s]", data.Vrf.ValueString(), data.Type.ValueString())
+	return fmt.Sprintf("sys/inst-[%s]/dom-[%[1]s]/af-[%s]", data.Vrf.ValueString(), data.AddressFamily.ValueString())
 }
 
 func (data VRFAddressFamily) getClassName() string {
@@ -26,17 +27,19 @@ func (data VRFAddressFamily) getClassName() string {
 }
 
 func (data VRFAddressFamily) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("type", data.Type.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.AddressFamily.IsUnknown() && !data.AddressFamily.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.AddressFamily.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *VRFAddressFamily) fromBody(res gjson.Result) {
-	data.Type = types.StringValue(res.Get("*.attributes.type").String())
-}
-
-func (data *VRFAddressFamily) fromPlan(plan VRFAddressFamily) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Vrf = plan.Vrf
+func (data *VRFAddressFamily) fromBody(res gjson.Result, all bool) {
+	if !data.AddressFamily.IsNull() || all {
+		data.AddressFamily = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
+	} else {
+		data.AddressFamily = types.StringNull()
+	}
 }

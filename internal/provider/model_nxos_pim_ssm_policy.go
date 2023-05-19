@@ -8,17 +8,18 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type PIMSSMPolicy struct {
-	Device   types.String `tfsdk:"device"`
-	Dn       types.String `tfsdk:"id"`
-	Vrf_name types.String `tfsdk:"vrf_name"`
-	Name     types.String `tfsdk:"name"`
+	Device  types.String `tfsdk:"device"`
+	Dn      types.String `tfsdk:"id"`
+	VrfName types.String `tfsdk:"vrf_name"`
+	Name    types.String `tfsdk:"name"`
 }
 
 func (data PIMSSMPolicy) getDn() string {
-	return fmt.Sprintf("sys/pim/inst/dom-[%s]/ssm", data.Vrf_name.ValueString())
+	return fmt.Sprintf("sys/pim/inst/dom-[%s]/ssm", data.VrfName.ValueString())
 }
 
 func (data PIMSSMPolicy) getClassName() string {
@@ -26,17 +27,19 @@ func (data PIMSSMPolicy) getClassName() string {
 }
 
 func (data PIMSSMPolicy) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("name", data.Name.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *PIMSSMPolicy) fromBody(res gjson.Result) {
-	data.Name = types.StringValue(res.Get("*.attributes.name").String())
-}
-
-func (data *PIMSSMPolicy) fromPlan(plan PIMSSMPolicy) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Vrf_name = plan.Vrf_name
+func (data *PIMSSMPolicy) fromBody(res gjson.Result, all bool) {
+	if !data.Name.IsNull() || all {
+		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	} else {
+		data.Name = types.StringNull()
+	}
 }

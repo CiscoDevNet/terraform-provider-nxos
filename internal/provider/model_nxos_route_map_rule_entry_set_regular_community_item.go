@@ -8,18 +8,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type RouteMapRuleEntrySetRegularCommunityItem struct {
 	Device    types.String `tfsdk:"device"`
 	Dn        types.String `tfsdk:"id"`
-	Rtmap     types.String `tfsdk:"rule_name"`
+	RuleName  types.String `tfsdk:"rule_name"`
 	Order     types.Int64  `tfsdk:"order"`
 	Community types.String `tfsdk:"community"`
 }
 
 func (data RouteMapRuleEntrySetRegularCommunityItem) getDn() string {
-	return fmt.Sprintf("sys/rpm/rtmap-[%s]/ent-[%v]/sregcomm/item-[%s]", data.Rtmap.ValueString(), data.Order.ValueInt64(), data.Community.ValueString())
+	return fmt.Sprintf("sys/rpm/rtmap-[%s]/ent-[%v]/sregcomm/item-[%s]", data.RuleName.ValueString(), data.Order.ValueInt64(), data.Community.ValueString())
 }
 
 func (data RouteMapRuleEntrySetRegularCommunityItem) getClassName() string {
@@ -27,18 +28,19 @@ func (data RouteMapRuleEntrySetRegularCommunityItem) getClassName() string {
 }
 
 func (data RouteMapRuleEntrySetRegularCommunityItem) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("community", data.Community.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Community.IsUnknown() && !data.Community.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"community", data.Community.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *RouteMapRuleEntrySetRegularCommunityItem) fromBody(res gjson.Result) {
-	data.Community = types.StringValue(res.Get("*.attributes.community").String())
-}
-
-func (data *RouteMapRuleEntrySetRegularCommunityItem) fromPlan(plan RouteMapRuleEntrySetRegularCommunityItem) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Rtmap = plan.Rtmap
-	data.Order = plan.Order
+func (data *RouteMapRuleEntrySetRegularCommunityItem) fromBody(res gjson.Result, all bool) {
+	if !data.Community.IsNull() || all {
+		data.Community = types.StringValue(res.Get(data.getClassName() + ".attributes.community").String())
+	} else {
+		data.Community = types.StringNull()
+	}
 }

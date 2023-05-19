@@ -9,18 +9,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type DefaultQOSPolicyMapMatchClassMapSetQOSGroup struct {
-	Device          types.String `tfsdk:"device"`
-	Dn              types.String `tfsdk:"id"`
-	Policy_map_name types.String `tfsdk:"policy_map_name"`
-	Class_map_name  types.String `tfsdk:"class_map_name"`
-	Id              types.Int64  `tfsdk:"qos_group_id"`
+	Device        types.String `tfsdk:"device"`
+	Dn            types.String `tfsdk:"id"`
+	PolicyMapName types.String `tfsdk:"policy_map_name"`
+	ClassMapName  types.String `tfsdk:"class_map_name"`
+	QosGroupId    types.Int64  `tfsdk:"qos_group_id"`
 }
 
 func (data DefaultQOSPolicyMapMatchClassMapSetQOSGroup) getDn() string {
-	return fmt.Sprintf("sys/ipqos/dflt/p/name-[%s]/cmap-[%s]/setGrp", data.Policy_map_name.ValueString(), data.Class_map_name.ValueString())
+	return fmt.Sprintf("sys/ipqos/dflt/p/name-[%s]/cmap-[%s]/setGrp", data.PolicyMapName.ValueString(), data.ClassMapName.ValueString())
 }
 
 func (data DefaultQOSPolicyMapMatchClassMapSetQOSGroup) getClassName() string {
@@ -28,18 +29,19 @@ func (data DefaultQOSPolicyMapMatchClassMapSetQOSGroup) getClassName() string {
 }
 
 func (data DefaultQOSPolicyMapMatchClassMapSetQOSGroup) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("id", strconv.FormatInt(data.Id.ValueInt64(), 10))
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.QosGroupId.IsUnknown() && !data.QosGroupId.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", strconv.FormatInt(data.QosGroupId.ValueInt64(), 10))
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *DefaultQOSPolicyMapMatchClassMapSetQOSGroup) fromBody(res gjson.Result) {
-	data.Id = types.Int64Value(res.Get("*.attributes.id").Int())
-}
-
-func (data *DefaultQOSPolicyMapMatchClassMapSetQOSGroup) fromPlan(plan DefaultQOSPolicyMapMatchClassMapSetQOSGroup) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Policy_map_name = plan.Policy_map_name
-	data.Class_map_name = plan.Class_map_name
+func (data *DefaultQOSPolicyMapMatchClassMapSetQOSGroup) fromBody(res gjson.Result, all bool) {
+	if !data.QosGroupId.IsNull() || all {
+		data.QosGroupId = types.Int64Value(res.Get(data.getClassName() + ".attributes.id").Int())
+	} else {
+		data.QosGroupId = types.Int64Null()
+	}
 }

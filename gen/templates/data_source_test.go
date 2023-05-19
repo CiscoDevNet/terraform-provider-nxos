@@ -24,6 +24,22 @@ func TestAccDataSourceNxos{{camelCase .Name}}(t *testing.T) {
 					resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"),
 					{{- end}}
 					{{- end}}
+					{{- range .ChildClasses}}
+					{{- $list := (toGoName .TfName)}}
+					{{- if eq .Type "single"}}
+					{{- range .Attributes}}
+					{{- if not .ExcludeTest}}
+					resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"),
+					{{- end}}
+					{{- end}}
+					{{- else if eq .Type "list"}}
+					{{- range .Attributes}}
+					{{- if not .ExcludeTest}}
+					resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{$list}}.0.{{.TfName}}", "{{.Example}}"),
+					{{- end}}
+					{{- end}}
+					{{- end}}
+					{{- end}}
 				),
 			},
 		},
@@ -39,11 +55,13 @@ resource "nxos_rest" "PreReq{{$index}}" {
   {{- if .NoDelete}}
   delete = false
   {{- end}}
+  {{- if .Attributes}}
   content = {
-    {{- range  .Attributes}}
+    {{- range .Attributes}}
       {{.Name}} = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}
     {{- end}}
   }
+  {{- end}}
   {{- if .Dependencies}}
   depends_on = [{{range .Dependencies}}nxos_rest.PreReq{{.}}, {{end}}]
   {{- end}}
@@ -56,8 +74,25 @@ const testAccDataSourceNxos{{camelCase .Name}}Config = `
 
 resource "nxos_{{snakeCase $name}}" "test" {
 {{- range  .Attributes}}
-{{- if ne .ExcludeTest true}}
+{{- if not .ExcludeTest}}
   {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+{{- end}}
+{{- end}}
+{{- range .ChildClasses}}
+{{- if eq .Type "single"}}
+{{- range .Attributes}}
+{{- if not .ExcludeTest}}
+  {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+{{- end}}
+{{- end}}
+{{- else if eq .Type "list"}}
+  {{.TfName}} = [{
+	{{- range .Attributes}}
+	{{- if not .ExcludeTest}}
+    {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+	{{- end}}
+	{{- end}}
+  }]
 {{- end}}
 {{- end}}
 {{- if .TestPrerequisites}}

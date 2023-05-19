@@ -8,18 +8,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type BridgeDomain struct {
-	Device   types.String `tfsdk:"device"`
-	Dn       types.String `tfsdk:"id"`
-	FabEncap types.String `tfsdk:"fabric_encap"`
-	AccEncap types.String `tfsdk:"access_encap"`
-	Name     types.String `tfsdk:"name"`
+	Device      types.String `tfsdk:"device"`
+	Dn          types.String `tfsdk:"id"`
+	FabricEncap types.String `tfsdk:"fabric_encap"`
+	AccessEncap types.String `tfsdk:"access_encap"`
+	Name        types.String `tfsdk:"name"`
 }
 
 func (data BridgeDomain) getDn() string {
-	return fmt.Sprintf("sys/bd/bd-[%s]", data.FabEncap.ValueString())
+	return fmt.Sprintf("sys/bd/bd-[%s]", data.FabricEncap.ValueString())
 }
 
 func (data BridgeDomain) getClassName() string {
@@ -27,20 +28,35 @@ func (data BridgeDomain) getClassName() string {
 }
 
 func (data BridgeDomain) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("fabEncap", data.FabEncap.ValueString()).
-		Set("accEncap", data.AccEncap.ValueString()).
-		Set("name", data.Name.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.FabricEncap.IsUnknown() && !data.FabricEncap.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"fabEncap", data.FabricEncap.ValueString())
+	}
+	if (!data.AccessEncap.IsUnknown() && !data.AccessEncap.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"accEncap", data.AccessEncap.ValueString())
+	}
+	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *BridgeDomain) fromBody(res gjson.Result) {
-	data.FabEncap = types.StringValue(res.Get("*.attributes.fabEncap").String())
-	data.AccEncap = types.StringValue(res.Get("*.attributes.accEncap").String())
-	data.Name = types.StringValue(res.Get("*.attributes.name").String())
-}
-
-func (data *BridgeDomain) fromPlan(plan BridgeDomain) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
+func (data *BridgeDomain) fromBody(res gjson.Result, all bool) {
+	if !data.FabricEncap.IsNull() || all {
+		data.FabricEncap = types.StringValue(res.Get(data.getClassName() + ".attributes.fabEncap").String())
+	} else {
+		data.FabricEncap = types.StringNull()
+	}
+	if !data.AccessEncap.IsNull() || all {
+		data.AccessEncap = types.StringValue(res.Get(data.getClassName() + ".attributes.accEncap").String())
+	} else {
+		data.AccessEncap = types.StringNull()
+	}
+	if !data.Name.IsNull() || all {
+		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	} else {
+		data.Name = types.StringNull()
+	}
 }

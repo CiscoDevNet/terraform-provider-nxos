@@ -8,17 +8,18 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type PIMStaticRP struct {
-	Device   types.String `tfsdk:"device"`
-	Dn       types.String `tfsdk:"id"`
-	Vrf_name types.String `tfsdk:"vrf_name"`
-	Addr     types.String `tfsdk:"address"`
+	Device  types.String `tfsdk:"device"`
+	Dn      types.String `tfsdk:"id"`
+	VrfName types.String `tfsdk:"vrf_name"`
+	Address types.String `tfsdk:"address"`
 }
 
 func (data PIMStaticRP) getDn() string {
-	return fmt.Sprintf("sys/pim/inst/dom-[%s]/staticrp/rp-[%s]", data.Vrf_name.ValueString(), data.Addr.ValueString())
+	return fmt.Sprintf("sys/pim/inst/dom-[%s]/staticrp/rp-[%s]", data.VrfName.ValueString(), data.Address.ValueString())
 }
 
 func (data PIMStaticRP) getClassName() string {
@@ -26,17 +27,19 @@ func (data PIMStaticRP) getClassName() string {
 }
 
 func (data PIMStaticRP) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("addr", data.Addr.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Address.IsUnknown() && !data.Address.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"addr", data.Address.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *PIMStaticRP) fromBody(res gjson.Result) {
-	data.Addr = types.StringValue(res.Get("*.attributes.addr").String())
-}
-
-func (data *PIMStaticRP) fromPlan(plan PIMStaticRP) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Vrf_name = plan.Vrf_name
+func (data *PIMStaticRP) fromBody(res gjson.Result, all bool) {
+	if !data.Address.IsNull() || all {
+		data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.addr").String())
+	} else {
+		data.Address = types.StringNull()
+	}
 }

@@ -27,8 +27,6 @@ const testAccDataSourceNxosQueuingQOSPolicySystemOutPolicyMapPrerequisitesConfig
 resource "nxos_rest" "PreReq0" {
   dn = "sys/ipqos/queuing/policy/out/sys"
   class_name = "ipqosSystem"
-  content = {
-  }
 }
 
 resource "nxos_rest" "PreReq1" {

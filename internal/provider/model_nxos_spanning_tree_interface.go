@@ -9,25 +9,26 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type SpanningTreeInterface struct {
-	Device     types.String `tfsdk:"device"`
-	Dn         types.String `tfsdk:"id"`
-	Id         types.String `tfsdk:"interface_id"`
-	AdminSt    types.String `tfsdk:"admin_state"`
-	Bpdufilter types.String `tfsdk:"bpdu_filter"`
-	Bpduguard  types.String `tfsdk:"bpdu_guard"`
-	Cost       types.Int64  `tfsdk:"cost"`
-	Ctrl       types.String `tfsdk:"ctrl"`
-	Guard      types.String `tfsdk:"guard"`
-	LinkType   types.String `tfsdk:"link_type"`
-	Mode       types.String `tfsdk:"mode"`
-	Priority   types.Int64  `tfsdk:"priority"`
+	Device      types.String `tfsdk:"device"`
+	Dn          types.String `tfsdk:"id"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+	AdminState  types.String `tfsdk:"admin_state"`
+	BpduFilter  types.String `tfsdk:"bpdu_filter"`
+	BpduGuard   types.String `tfsdk:"bpdu_guard"`
+	Cost        types.Int64  `tfsdk:"cost"`
+	Ctrl        types.String `tfsdk:"ctrl"`
+	Guard       types.String `tfsdk:"guard"`
+	LinkType    types.String `tfsdk:"link_type"`
+	Mode        types.String `tfsdk:"mode"`
+	Priority    types.Int64  `tfsdk:"priority"`
 }
 
 func (data SpanningTreeInterface) getDn() string {
-	return fmt.Sprintf("sys/stp/inst/if-[%s]", data.Id.ValueString())
+	return fmt.Sprintf("sys/stp/inst/if-[%s]", data.InterfaceId.ValueString())
 }
 
 func (data SpanningTreeInterface) getClassName() string {
@@ -35,34 +36,91 @@ func (data SpanningTreeInterface) getClassName() string {
 }
 
 func (data SpanningTreeInterface) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("id", data.Id.ValueString()).
-		Set("adminSt", data.AdminSt.ValueString()).
-		Set("bpdufilter", data.Bpdufilter.ValueString()).
-		Set("bpduguard", data.Bpduguard.ValueString()).
-		Set("cost", strconv.FormatInt(data.Cost.ValueInt64(), 10)).
-		Set("ctrl", data.Ctrl.ValueString()).
-		Set("guard", data.Guard.ValueString()).
-		Set("linkType", data.LinkType.ValueString()).
-		Set("mode", data.Mode.ValueString()).
-		Set("priority", strconv.FormatInt(data.Priority.ValueInt64(), 10))
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.InterfaceId.ValueString())
+	}
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
+	}
+	if (!data.BpduFilter.IsUnknown() && !data.BpduFilter.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bpdufilter", data.BpduFilter.ValueString())
+	}
+	if (!data.BpduGuard.IsUnknown() && !data.BpduGuard.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bpduguard", data.BpduGuard.ValueString())
+	}
+	if (!data.Cost.IsUnknown() && !data.Cost.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"cost", strconv.FormatInt(data.Cost.ValueInt64(), 10))
+	}
+	if (!data.Ctrl.IsUnknown() && !data.Ctrl.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ctrl", data.Ctrl.ValueString())
+	}
+	if (!data.Guard.IsUnknown() && !data.Guard.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"guard", data.Guard.ValueString())
+	}
+	if (!data.LinkType.IsUnknown() && !data.LinkType.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkType", data.LinkType.ValueString())
+	}
+	if (!data.Mode.IsUnknown() && !data.Mode.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mode", data.Mode.ValueString())
+	}
+	if (!data.Priority.IsUnknown() && !data.Priority.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"priority", strconv.FormatInt(data.Priority.ValueInt64(), 10))
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *SpanningTreeInterface) fromBody(res gjson.Result) {
-	data.Id = types.StringValue(res.Get("*.attributes.id").String())
-	data.AdminSt = types.StringValue(res.Get("*.attributes.adminSt").String())
-	data.Bpdufilter = types.StringValue(res.Get("*.attributes.bpdufilter").String())
-	data.Bpduguard = types.StringValue(res.Get("*.attributes.bpduguard").String())
-	data.Cost = types.Int64Value(res.Get("*.attributes.cost").Int())
-	data.Ctrl = types.StringValue(res.Get("*.attributes.ctrl").String())
-	data.Guard = types.StringValue(res.Get("*.attributes.guard").String())
-	data.LinkType = types.StringValue(res.Get("*.attributes.linkType").String())
-	data.Mode = types.StringValue(res.Get("*.attributes.mode").String())
-	data.Priority = types.Int64Value(res.Get("*.attributes.priority").Int())
-}
-
-func (data *SpanningTreeInterface) fromPlan(plan SpanningTreeInterface) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
+func (data *SpanningTreeInterface) fromBody(res gjson.Result, all bool) {
+	if !data.InterfaceId.IsNull() || all {
+		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
+	} else {
+		data.InterfaceId = types.StringNull()
+	}
+	if !data.AdminState.IsNull() || all {
+		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	} else {
+		data.AdminState = types.StringNull()
+	}
+	if !data.BpduFilter.IsNull() || all {
+		data.BpduFilter = types.StringValue(res.Get(data.getClassName() + ".attributes.bpdufilter").String())
+	} else {
+		data.BpduFilter = types.StringNull()
+	}
+	if !data.BpduGuard.IsNull() || all {
+		data.BpduGuard = types.StringValue(res.Get(data.getClassName() + ".attributes.bpduguard").String())
+	} else {
+		data.BpduGuard = types.StringNull()
+	}
+	if !data.Cost.IsNull() || all {
+		data.Cost = types.Int64Value(res.Get(data.getClassName() + ".attributes.cost").Int())
+	} else {
+		data.Cost = types.Int64Null()
+	}
+	if !data.Ctrl.IsNull() || all {
+		data.Ctrl = types.StringValue(res.Get(data.getClassName() + ".attributes.ctrl").String())
+	} else {
+		data.Ctrl = types.StringNull()
+	}
+	if !data.Guard.IsNull() || all {
+		data.Guard = types.StringValue(res.Get(data.getClassName() + ".attributes.guard").String())
+	} else {
+		data.Guard = types.StringNull()
+	}
+	if !data.LinkType.IsNull() || all {
+		data.LinkType = types.StringValue(res.Get(data.getClassName() + ".attributes.linkType").String())
+	} else {
+		data.LinkType = types.StringNull()
+	}
+	if !data.Mode.IsNull() || all {
+		data.Mode = types.StringValue(res.Get(data.getClassName() + ".attributes.mode").String())
+	} else {
+		data.Mode = types.StringNull()
+	}
+	if !data.Priority.IsNull() || all {
+		data.Priority = types.Int64Value(res.Get(data.getClassName() + ".attributes.priority").Int())
+	} else {
+		data.Priority = types.Int64Null()
+	}
 }

@@ -8,17 +8,18 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type DefaultQOSClassMapDSCP struct {
-	Device         types.String `tfsdk:"device"`
-	Dn             types.String `tfsdk:"id"`
-	Class_map_name types.String `tfsdk:"class_map_name"`
-	Val            types.String `tfsdk:"value"`
+	Device       types.String `tfsdk:"device"`
+	Dn           types.String `tfsdk:"id"`
+	ClassMapName types.String `tfsdk:"class_map_name"`
+	Value        types.String `tfsdk:"value"`
 }
 
 func (data DefaultQOSClassMapDSCP) getDn() string {
-	return fmt.Sprintf("sys/ipqos/dflt/c/name-[%s]/dscp-[%v]", data.Class_map_name.ValueString(), data.Val.ValueString())
+	return fmt.Sprintf("sys/ipqos/dflt/c/name-[%s]/dscp-[%v]", data.ClassMapName.ValueString(), data.Value.ValueString())
 }
 
 func (data DefaultQOSClassMapDSCP) getClassName() string {
@@ -26,17 +27,19 @@ func (data DefaultQOSClassMapDSCP) getClassName() string {
 }
 
 func (data DefaultQOSClassMapDSCP) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("val", data.Val.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Value.IsUnknown() && !data.Value.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"val", data.Value.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *DefaultQOSClassMapDSCP) fromBody(res gjson.Result) {
-	data.Val = types.StringValue(res.Get("*.attributes.val").String())
-}
-
-func (data *DefaultQOSClassMapDSCP) fromPlan(plan DefaultQOSClassMapDSCP) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Class_map_name = plan.Class_map_name
+func (data *DefaultQOSClassMapDSCP) fromBody(res gjson.Result, all bool) {
+	if !data.Value.IsNull() || all {
+		data.Value = types.StringValue(res.Get(data.getClassName() + ".attributes.val").String())
+	} else {
+		data.Value = types.StringNull()
+	}
 }

@@ -9,22 +9,23 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type BGPPeerTemplateMaxPrefix struct {
-	Device      types.String `tfsdk:"device"`
-	Dn          types.String `tfsdk:"id"`
-	Asn         types.String `tfsdk:"asn"`
-	Name        types.String `tfsdk:"template_name"`
-	Type        types.String `tfsdk:"address_family"`
-	Action      types.String `tfsdk:"action"`
-	MaxPfx      types.Int64  `tfsdk:"maximum_prefix"`
-	RestartTime types.Int64  `tfsdk:"restart_time"`
-	Thresh      types.Int64  `tfsdk:"threshold"`
+	Device        types.String `tfsdk:"device"`
+	Dn            types.String `tfsdk:"id"`
+	Asn           types.String `tfsdk:"asn"`
+	TemplateName  types.String `tfsdk:"template_name"`
+	AddressFamily types.String `tfsdk:"address_family"`
+	Action        types.String `tfsdk:"action"`
+	MaximumPrefix types.Int64  `tfsdk:"maximum_prefix"`
+	RestartTime   types.Int64  `tfsdk:"restart_time"`
+	Threshold     types.Int64  `tfsdk:"threshold"`
 }
 
 func (data BGPPeerTemplateMaxPrefix) getDn() string {
-	return fmt.Sprintf("sys/bgp/inst/dom-[default]/peercont-[%s]/af-[%s]/maxpfxp", data.Name.ValueString(), data.Type.ValueString())
+	return fmt.Sprintf("sys/bgp/inst/dom-[default]/peercont-[%s]/af-[%s]/maxpfxp", data.TemplateName.ValueString(), data.AddressFamily.ValueString())
 }
 
 func (data BGPPeerTemplateMaxPrefix) getClassName() string {
@@ -32,25 +33,43 @@ func (data BGPPeerTemplateMaxPrefix) getClassName() string {
 }
 
 func (data BGPPeerTemplateMaxPrefix) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("action", data.Action.ValueString()).
-		Set("maxPfx", strconv.FormatInt(data.MaxPfx.ValueInt64(), 10)).
-		Set("restartTime", strconv.FormatInt(data.RestartTime.ValueInt64(), 10)).
-		Set("thresh", strconv.FormatInt(data.Thresh.ValueInt64(), 10))
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Action.IsUnknown() && !data.Action.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"action", data.Action.ValueString())
+	}
+	if (!data.MaximumPrefix.IsUnknown() && !data.MaximumPrefix.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxPfx", strconv.FormatInt(data.MaximumPrefix.ValueInt64(), 10))
+	}
+	if (!data.RestartTime.IsUnknown() && !data.RestartTime.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"restartTime", strconv.FormatInt(data.RestartTime.ValueInt64(), 10))
+	}
+	if (!data.Threshold.IsUnknown() && !data.Threshold.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"thresh", strconv.FormatInt(data.Threshold.ValueInt64(), 10))
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *BGPPeerTemplateMaxPrefix) fromBody(res gjson.Result) {
-	data.Action = types.StringValue(res.Get("*.attributes.action").String())
-	data.MaxPfx = types.Int64Value(res.Get("*.attributes.maxPfx").Int())
-	data.RestartTime = types.Int64Value(res.Get("*.attributes.restartTime").Int())
-	data.Thresh = types.Int64Value(res.Get("*.attributes.thresh").Int())
-}
-
-func (data *BGPPeerTemplateMaxPrefix) fromPlan(plan BGPPeerTemplateMaxPrefix) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Asn = plan.Asn
-	data.Name = plan.Name
-	data.Type = plan.Type
+func (data *BGPPeerTemplateMaxPrefix) fromBody(res gjson.Result, all bool) {
+	if !data.Action.IsNull() || all {
+		data.Action = types.StringValue(res.Get(data.getClassName() + ".attributes.action").String())
+	} else {
+		data.Action = types.StringNull()
+	}
+	if !data.MaximumPrefix.IsNull() || all {
+		data.MaximumPrefix = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxPfx").Int())
+	} else {
+		data.MaximumPrefix = types.Int64Null()
+	}
+	if !data.RestartTime.IsNull() || all {
+		data.RestartTime = types.Int64Value(res.Get(data.getClassName() + ".attributes.restartTime").Int())
+	} else {
+		data.RestartTime = types.Int64Null()
+	}
+	if !data.Threshold.IsNull() || all {
+		data.Threshold = types.Int64Value(res.Get(data.getClassName() + ".attributes.thresh").Int())
+	} else {
+		data.Threshold = types.Int64Null()
+	}
 }

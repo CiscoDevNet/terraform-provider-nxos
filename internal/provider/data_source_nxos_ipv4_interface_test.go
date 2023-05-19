@@ -31,8 +31,6 @@ const testAccDataSourceNxosIPv4InterfacePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/ipv4/inst/dom-[default]"
   class_name = "ipv4Dom"
-  content = {
-  }
 }
 
 `

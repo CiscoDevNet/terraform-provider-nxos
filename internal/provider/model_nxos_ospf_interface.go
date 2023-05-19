@@ -10,27 +10,28 @@ import (
 	"github.com/netascode/go-nxos"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type OSPFInterface struct {
 	Device               types.String `tfsdk:"device"`
 	Dn                   types.String `tfsdk:"id"`
-	Inst                 types.String `tfsdk:"instance_name"`
-	Name                 types.String `tfsdk:"vrf_name"`
-	Id                   types.String `tfsdk:"interface_id"`
+	InstanceName         types.String `tfsdk:"instance_name"`
+	VrfName              types.String `tfsdk:"vrf_name"`
+	InterfaceId          types.String `tfsdk:"interface_id"`
 	AdvertiseSecondaries types.Bool   `tfsdk:"advertise_secondaries"`
 	Area                 types.String `tfsdk:"area"`
-	BfdCtrl              types.String `tfsdk:"bfd"`
+	Bfd                  types.String `tfsdk:"bfd"`
 	Cost                 types.Int64  `tfsdk:"cost"`
-	DeadIntvl            types.Int64  `tfsdk:"dead_interval"`
-	HelloIntvl           types.Int64  `tfsdk:"hello_interval"`
-	NwT                  types.String `tfsdk:"network_type"`
-	PassiveCtrl          types.String `tfsdk:"passive"`
-	Prio                 types.Int64  `tfsdk:"priority"`
+	DeadInterval         types.Int64  `tfsdk:"dead_interval"`
+	HelloInterval        types.Int64  `tfsdk:"hello_interval"`
+	NetworkType          types.String `tfsdk:"network_type"`
+	Passive              types.String `tfsdk:"passive"`
+	Priority             types.Int64  `tfsdk:"priority"`
 }
 
 func (data OSPFInterface) getDn() string {
-	return fmt.Sprintf("sys/ospf/inst-[%s]/dom-[%s]/if-[%s]", data.Inst.ValueString(), data.Name.ValueString(), data.Id.ValueString())
+	return fmt.Sprintf("sys/ospf/inst-[%s]/dom-[%s]/if-[%s]", data.InstanceName.ValueString(), data.VrfName.ValueString(), data.InterfaceId.ValueString())
 }
 
 func (data OSPFInterface) getClassName() string {
@@ -38,36 +39,91 @@ func (data OSPFInterface) getClassName() string {
 }
 
 func (data OSPFInterface) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("id", data.Id.ValueString()).
-		Set("advertiseSecondaries", strconv.FormatBool(data.AdvertiseSecondaries.ValueBool())).
-		Set("area", data.Area.ValueString()).
-		Set("bfdCtrl", data.BfdCtrl.ValueString()).
-		Set("cost", strconv.FormatInt(data.Cost.ValueInt64(), 10)).
-		Set("deadIntvl", strconv.FormatInt(data.DeadIntvl.ValueInt64(), 10)).
-		Set("helloIntvl", strconv.FormatInt(data.HelloIntvl.ValueInt64(), 10)).
-		Set("nwT", data.NwT.ValueString()).
-		Set("passiveCtrl", data.PassiveCtrl.ValueString()).
-		Set("prio", strconv.FormatInt(data.Prio.ValueInt64(), 10))
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.InterfaceId.ValueString())
+	}
+	if (!data.AdvertiseSecondaries.IsUnknown() && !data.AdvertiseSecondaries.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"advertiseSecondaries", strconv.FormatBool(data.AdvertiseSecondaries.ValueBool()))
+	}
+	if (!data.Area.IsUnknown() && !data.Area.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"area", data.Area.ValueString())
+	}
+	if (!data.Bfd.IsUnknown() && !data.Bfd.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bfdCtrl", data.Bfd.ValueString())
+	}
+	if (!data.Cost.IsUnknown() && !data.Cost.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"cost", strconv.FormatInt(data.Cost.ValueInt64(), 10))
+	}
+	if (!data.DeadInterval.IsUnknown() && !data.DeadInterval.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"deadIntvl", strconv.FormatInt(data.DeadInterval.ValueInt64(), 10))
+	}
+	if (!data.HelloInterval.IsUnknown() && !data.HelloInterval.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"helloIntvl", strconv.FormatInt(data.HelloInterval.ValueInt64(), 10))
+	}
+	if (!data.NetworkType.IsUnknown() && !data.NetworkType.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"nwT", data.NetworkType.ValueString())
+	}
+	if (!data.Passive.IsUnknown() && !data.Passive.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"passiveCtrl", data.Passive.ValueString())
+	}
+	if (!data.Priority.IsUnknown() && !data.Priority.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"prio", strconv.FormatInt(data.Priority.ValueInt64(), 10))
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *OSPFInterface) fromBody(res gjson.Result) {
-	data.Id = types.StringValue(res.Get("*.attributes.id").String())
-	data.AdvertiseSecondaries = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.advertiseSecondaries").String()))
-	data.Area = types.StringValue(res.Get("*.attributes.area").String())
-	data.BfdCtrl = types.StringValue(res.Get("*.attributes.bfdCtrl").String())
-	data.Cost = types.Int64Value(res.Get("*.attributes.cost").Int())
-	data.DeadIntvl = types.Int64Value(res.Get("*.attributes.deadIntvl").Int())
-	data.HelloIntvl = types.Int64Value(res.Get("*.attributes.helloIntvl").Int())
-	data.NwT = types.StringValue(res.Get("*.attributes.nwT").String())
-	data.PassiveCtrl = types.StringValue(res.Get("*.attributes.passiveCtrl").String())
-	data.Prio = types.Int64Value(res.Get("*.attributes.prio").Int())
-}
-
-func (data *OSPFInterface) fromPlan(plan OSPFInterface) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Inst = plan.Inst
-	data.Name = plan.Name
+func (data *OSPFInterface) fromBody(res gjson.Result, all bool) {
+	if !data.InterfaceId.IsNull() || all {
+		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
+	} else {
+		data.InterfaceId = types.StringNull()
+	}
+	if !data.AdvertiseSecondaries.IsNull() || all {
+		data.AdvertiseSecondaries = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.advertiseSecondaries").String()))
+	} else {
+		data.AdvertiseSecondaries = types.BoolNull()
+	}
+	if !data.Area.IsNull() || all {
+		data.Area = types.StringValue(res.Get(data.getClassName() + ".attributes.area").String())
+	} else {
+		data.Area = types.StringNull()
+	}
+	if !data.Bfd.IsNull() || all {
+		data.Bfd = types.StringValue(res.Get(data.getClassName() + ".attributes.bfdCtrl").String())
+	} else {
+		data.Bfd = types.StringNull()
+	}
+	if !data.Cost.IsNull() || all {
+		data.Cost = types.Int64Value(res.Get(data.getClassName() + ".attributes.cost").Int())
+	} else {
+		data.Cost = types.Int64Null()
+	}
+	if !data.DeadInterval.IsNull() || all {
+		data.DeadInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.deadIntvl").Int())
+	} else {
+		data.DeadInterval = types.Int64Null()
+	}
+	if !data.HelloInterval.IsNull() || all {
+		data.HelloInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.helloIntvl").Int())
+	} else {
+		data.HelloInterval = types.Int64Null()
+	}
+	if !data.NetworkType.IsNull() || all {
+		data.NetworkType = types.StringValue(res.Get(data.getClassName() + ".attributes.nwT").String())
+	} else {
+		data.NetworkType = types.StringNull()
+	}
+	if !data.Passive.IsNull() || all {
+		data.Passive = types.StringValue(res.Get(data.getClassName() + ".attributes.passiveCtrl").String())
+	} else {
+		data.Passive = types.StringNull()
+	}
+	if !data.Priority.IsNull() || all {
+		data.Priority = types.Int64Value(res.Get(data.getClassName() + ".attributes.prio").Int())
+	} else {
+		data.Priority = types.Int64Null()
+	}
 }

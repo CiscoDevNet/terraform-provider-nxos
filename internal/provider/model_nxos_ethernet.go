@@ -8,12 +8,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type Ethernet struct {
-	Device         types.String `tfsdk:"device"`
-	Dn             types.String `tfsdk:"id"`
-	SystemJumboMtu types.Int64  `tfsdk:"mtu"`
+	Device types.String `tfsdk:"device"`
+	Dn     types.String `tfsdk:"id"`
+	Mtu    types.Int64  `tfsdk:"mtu"`
 }
 
 func (data Ethernet) getDn() string {
@@ -25,16 +26,19 @@ func (data Ethernet) getClassName() string {
 }
 
 func (data Ethernet) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("systemJumboMtu", strconv.FormatInt(data.SystemJumboMtu.ValueInt64(), 10))
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Mtu.IsUnknown() && !data.Mtu.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"systemJumboMtu", strconv.FormatInt(data.Mtu.ValueInt64(), 10))
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *Ethernet) fromBody(res gjson.Result) {
-	data.SystemJumboMtu = types.Int64Value(res.Get("*.attributes.systemJumboMtu").Int())
-}
-
-func (data *Ethernet) fromPlan(plan Ethernet) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
+func (data *Ethernet) fromBody(res gjson.Result, all bool) {
+	if !data.Mtu.IsNull() || all {
+		data.Mtu = types.Int64Value(res.Get(data.getClassName() + ".attributes.systemJumboMtu").Int())
+	} else {
+		data.Mtu = types.Int64Null()
+	}
 }

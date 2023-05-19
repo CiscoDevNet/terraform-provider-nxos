@@ -9,14 +9,15 @@ import (
 	"github.com/netascode/go-nxos"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type BGPInstance struct {
-	Device      types.String `tfsdk:"device"`
-	Dn          types.String `tfsdk:"id"`
-	AdminSt     types.String `tfsdk:"admin_state"`
-	Asn         types.String `tfsdk:"asn"`
-	EnhancedErr types.Bool   `tfsdk:"enhanced_error_handling"`
+	Device                types.String `tfsdk:"device"`
+	Dn                    types.String `tfsdk:"id"`
+	AdminState            types.String `tfsdk:"admin_state"`
+	Asn                   types.String `tfsdk:"asn"`
+	EnhancedErrorHandling types.Bool   `tfsdk:"enhanced_error_handling"`
 }
 
 func (data BGPInstance) getDn() string {
@@ -28,20 +29,35 @@ func (data BGPInstance) getClassName() string {
 }
 
 func (data BGPInstance) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("adminSt", data.AdminSt.ValueString()).
-		Set("asn", data.Asn.ValueString()).
-		Set("enhancedErr", strconv.FormatBool(data.EnhancedErr.ValueBool()))
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
+	}
+	if (!data.Asn.IsUnknown() && !data.Asn.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"asn", data.Asn.ValueString())
+	}
+	if (!data.EnhancedErrorHandling.IsUnknown() && !data.EnhancedErrorHandling.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"enhancedErr", strconv.FormatBool(data.EnhancedErrorHandling.ValueBool()))
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *BGPInstance) fromBody(res gjson.Result) {
-	data.AdminSt = types.StringValue(res.Get("*.attributes.adminSt").String())
-	data.Asn = types.StringValue(res.Get("*.attributes.asn").String())
-	data.EnhancedErr = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.enhancedErr").String()))
-}
-
-func (data *BGPInstance) fromPlan(plan BGPInstance) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
+func (data *BGPInstance) fromBody(res gjson.Result, all bool) {
+	if !data.AdminState.IsNull() || all {
+		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	} else {
+		data.AdminState = types.StringNull()
+	}
+	if !data.Asn.IsNull() || all {
+		data.Asn = types.StringValue(res.Get(data.getClassName() + ".attributes.asn").String())
+	} else {
+		data.Asn = types.StringNull()
+	}
+	if !data.EnhancedErrorHandling.IsNull() || all {
+		data.EnhancedErrorHandling = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.enhancedErr").String()))
+	} else {
+		data.EnhancedErrorHandling = types.BoolNull()
+	}
 }

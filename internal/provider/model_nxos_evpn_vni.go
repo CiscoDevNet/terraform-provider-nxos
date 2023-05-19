@@ -8,13 +8,14 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type EVPNVNI struct {
-	Device types.String `tfsdk:"device"`
-	Dn     types.String `tfsdk:"id"`
-	Encap  types.String `tfsdk:"encap"`
-	Rd     types.String `tfsdk:"route_distinguisher"`
+	Device             types.String `tfsdk:"device"`
+	Dn                 types.String `tfsdk:"id"`
+	Encap              types.String `tfsdk:"encap"`
+	RouteDistinguisher types.String `tfsdk:"route_distinguisher"`
 }
 
 func (data EVPNVNI) getDn() string {
@@ -26,18 +27,27 @@ func (data EVPNVNI) getClassName() string {
 }
 
 func (data EVPNVNI) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("encap", data.Encap.ValueString()).
-		Set("rd", data.Rd.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Encap.IsUnknown() && !data.Encap.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"encap", data.Encap.ValueString())
+	}
+	if (!data.RouteDistinguisher.IsUnknown() && !data.RouteDistinguisher.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rd", data.RouteDistinguisher.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *EVPNVNI) fromBody(res gjson.Result) {
-	data.Encap = types.StringValue(res.Get("*.attributes.encap").String())
-	data.Rd = types.StringValue(res.Get("*.attributes.rd").String())
-}
-
-func (data *EVPNVNI) fromPlan(plan EVPNVNI) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
+func (data *EVPNVNI) fromBody(res gjson.Result, all bool) {
+	if !data.Encap.IsNull() || all {
+		data.Encap = types.StringValue(res.Get(data.getClassName() + ".attributes.encap").String())
+	} else {
+		data.Encap = types.StringNull()
+	}
+	if !data.RouteDistinguisher.IsNull() || all {
+		data.RouteDistinguisher = types.StringValue(res.Get(data.getClassName() + ".attributes.rd").String())
+	} else {
+		data.RouteDistinguisher = types.StringNull()
+	}
 }

@@ -86,7 +86,9 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				Required:            true,
 				{{- else}}
 				Optional:            true,
+				{{- if len .DefaultValue}}
 				Computed:            true,
+				{{- end}}
 				{{- end}}
 				{{- if and (len .DefaultValue) (not .Id) (not .ReferenceOnly) (not .Mandatory)}}
 				{{- if eq .Type "Int64"}}
@@ -113,6 +115,115 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				{{- end}}
 			},
 			{{- end}}
+			{{- range .ChildClasses}}
+			{{- if eq .Type "single"}}
+			{{- range  .Attributes}}
+			"{{.TfName}}": schema.{{.Type}}Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
+					{{- if len .EnumValues -}}
+					.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
+					{{- end -}}
+					{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}
+					.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
+					{{- end -}}
+					{{- if len .DefaultValue -}}
+					.AddDefaultValueDescription("{{.DefaultValue}}")
+					{{- end -}}
+					.String,
+				{{- if or .Id .ReferenceOnly .Mandatory}}
+				Required:            true,
+				{{- else}}
+				Optional:            true,
+				{{- if len .DefaultValue}}
+				Computed:            true,
+				{{- end}}
+				{{- end}}
+				{{- if and (len .DefaultValue) (not .Id) (not .ReferenceOnly) (not .Mandatory)}}
+				{{- if eq .Type "Int64"}}
+				Default: int64default.StaticInt64({{.DefaultValue}}),
+				{{- else if eq .Type "Bool"}}
+				Default: booldefault.StaticBool({{.DefaultValue}}),
+				{{- else if eq .Type "String"}}
+				Default: stringdefault.StaticString("{{.DefaultValue}}"),
+				{{- end}}
+				{{- end}}
+				{{- if and (len .EnumValues) (not .AllowNonEnumValues) }}
+				Validators: []validator.String{
+					stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
+				},
+				{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
+				Validators: []validator.Int64{
+					int64validator.Between({{.MinInt}}, {{.MaxInt}}),
+				},
+				{{- end}}
+				{{- if or .Id .ReferenceOnly .RequiresReplace}}
+				PlanModifiers: []planmodifier.{{.Type}}{
+					{{snakeCase .Type}}planmodifier.RequiresReplace(),
+				},
+				{{- end}}
+			},
+			{{- end}}
+			{{- else if eq .Type "list"}}
+			"{{.TfName}}": schema.ListNestedAttribute{
+				MarkdownDescription: "{{.Description}}",
+				{{- if or (eq .Id true) (eq .Reference true)}}
+				Required:            true,
+				{{- else}}
+				Optional:            true,
+				{{- end}}
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						{{- range  .Attributes}}
+						"{{.TfName}}": schema.{{.Type}}Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
+								{{- if len .EnumValues -}}
+								.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
+								{{- end -}}
+								{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}
+								.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
+								{{- end -}}
+								{{- if len .DefaultValue -}}
+								.AddDefaultValueDescription("{{.DefaultValue}}")
+								{{- end -}}
+								.String,
+							{{- if or .Id .ReferenceOnly .Mandatory}}
+							Required:            true,
+							{{- else}}
+							Optional:            true,
+							{{- if len .DefaultValue}}
+							Computed:            true,
+							{{- end}}
+							{{- end}}
+							{{- if and (len .DefaultValue) (not .Id) (not .ReferenceOnly) (not .Mandatory)}}
+							{{- if eq .Type "Int64"}}
+							Default: int64default.StaticInt64({{.DefaultValue}}),
+							{{- else if eq .Type "Bool"}}
+							Default: booldefault.StaticBool({{.DefaultValue}}),
+							{{- else if eq .Type "String"}}
+							Default: stringdefault.StaticString("{{.DefaultValue}}"),
+							{{- end}}
+							{{- end}}
+							{{- if and (len .EnumValues) (not .AllowNonEnumValues) }}
+							Validators: []validator.String{
+								stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
+							},
+							{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
+							Validators: []validator.Int64{
+								int64validator.Between({{.MinInt}}, {{.MaxInt}}),
+							},
+							{{- end}}
+							{{- if or .Id .ReferenceOnly .RequiresReplace}}
+							PlanModifiers: []planmodifier.{{.Type}}{
+								{{snakeCase .Type}}planmodifier.RequiresReplace(),
+							},
+							{{- end}}
+						},
+						{{- end}}
+					},
+				},
+			},
+			{{- end}}
+			{{- end}}
 		},
 	}
 }
@@ -127,7 +238,7 @@ func (r *{{camelCase .Name}}Resource) Configure(ctx context.Context, req resourc
 }
 
 func (r *{{camelCase .Name}}Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan, state {{camelCase .Name}}
+	var plan {{camelCase .Name}}
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -146,20 +257,11 @@ func (r *{{camelCase .Name}}Resource) Create(ctx context.Context, req resource.C
 		return
 	}
 
-	// Read object
-	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.ValueString()]))
-	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
-		return
-	}
-
-	state.fromBody(res)
-	state.fromPlan(plan)
-	state.Dn = types.StringValue(plan.getDn())
+	plan.Dn = types.StringValue(plan.getDn())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
 
@@ -175,13 +277,18 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
-	res, err := r.data.client.GetDn(state.Dn.ValueString(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[state.Device.ValueString()]))
+	queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+	queries = append(queries, nxos.OverrideUrl(r.data.devices[state.Device.ValueString()]))
+	{{- if .ChildClasses}}
+	queries = append(queries, nxos.Query("rsp-subtree", "children"))
+	{{- end}}
+	res, err := r.data.client.GetDn(state.Dn.ValueString(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
 	}
 
-	state.fromBody(res)
+	state.fromBody(res, false)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 
@@ -190,7 +297,7 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 }
 
 func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state {{camelCase .Name}}
+	var plan {{camelCase .Name}}
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -208,19 +315,9 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 		return
 	}
 
-	// Read object
-	res, err := r.data.client.GetDn(plan.getDn(), nxos.Query("rsp-prop-include", "config-only"), nxos.OverrideUrl(r.data.devices[plan.Device.ValueString()]))
-	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
-		return
-	}
-
-	state.fromBody(res)
-	state.fromPlan(plan)
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
 

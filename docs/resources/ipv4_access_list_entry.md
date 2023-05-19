@@ -154,6 +154,7 @@ resource "nxos_ipv4_access_list_entry" "example" {
 - `time_range` (String) Time range name.
 - `ttl` (Number) TTL.
   - Range: `0`-`255`
+  - Default value: `0`
 - `urg` (Boolean) Match TCP URG flag.
 - `vlan` (Number) VLAN ID.
   - Range: `0`-`4095`
@@ -170,5 +171,5 @@ resource "nxos_ipv4_access_list_entry" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import nxos_ipv4_access_list_entry.example "sys/acl/ipv4/name-[ACL1]//seq-[10]"
+terraform import nxos_ipv4_access_list_entry.example "sys/acl/ipv4/name-[ACL1]/seq-[10]"
 ```

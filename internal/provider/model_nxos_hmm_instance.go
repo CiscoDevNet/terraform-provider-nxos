@@ -6,13 +6,14 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type HMMInstance struct {
-	Device  types.String `tfsdk:"device"`
-	Dn      types.String `tfsdk:"id"`
-	AdminSt types.String `tfsdk:"admin_state"`
-	Amac    types.String `tfsdk:"anycast_mac"`
+	Device     types.String `tfsdk:"device"`
+	Dn         types.String `tfsdk:"id"`
+	AdminState types.String `tfsdk:"admin_state"`
+	AnycastMac types.String `tfsdk:"anycast_mac"`
 }
 
 func (data HMMInstance) getDn() string {
@@ -24,18 +25,27 @@ func (data HMMInstance) getClassName() string {
 }
 
 func (data HMMInstance) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("adminSt", data.AdminSt.ValueString()).
-		Set("amac", data.Amac.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
+	}
+	if (!data.AnycastMac.IsUnknown() && !data.AnycastMac.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"amac", data.AnycastMac.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *HMMInstance) fromBody(res gjson.Result) {
-	data.AdminSt = types.StringValue(res.Get("*.attributes.adminSt").String())
-	data.Amac = types.StringValue(res.Get("*.attributes.amac").String())
-}
-
-func (data *HMMInstance) fromPlan(plan HMMInstance) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
+func (data *HMMInstance) fromBody(res gjson.Result, all bool) {
+	if !data.AdminState.IsNull() || all {
+		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	} else {
+		data.AdminState = types.StringNull()
+	}
+	if !data.AnycastMac.IsNull() || all {
+		data.AnycastMac = types.StringValue(res.Get(data.getClassName() + ".attributes.amac").String())
+	} else {
+		data.AnycastMac = types.StringNull()
+	}
 }

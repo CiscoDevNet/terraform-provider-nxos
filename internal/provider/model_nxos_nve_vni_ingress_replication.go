@@ -8,13 +8,14 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type NVEVNIIngressReplication struct {
-	Device types.String `tfsdk:"device"`
-	Dn     types.String `tfsdk:"id"`
-	Vni    types.Int64  `tfsdk:"vni"`
-	Proto  types.String `tfsdk:"protocol"`
+	Device   types.String `tfsdk:"device"`
+	Dn       types.String `tfsdk:"id"`
+	Vni      types.Int64  `tfsdk:"vni"`
+	Protocol types.String `tfsdk:"protocol"`
 }
 
 func (data NVEVNIIngressReplication) getDn() string {
@@ -26,17 +27,19 @@ func (data NVEVNIIngressReplication) getClassName() string {
 }
 
 func (data NVEVNIIngressReplication) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("proto", data.Proto.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Protocol.IsUnknown() && !data.Protocol.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"proto", data.Protocol.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *NVEVNIIngressReplication) fromBody(res gjson.Result) {
-	data.Proto = types.StringValue(res.Get("*.attributes.proto").String())
-}
-
-func (data *NVEVNIIngressReplication) fromPlan(plan NVEVNIIngressReplication) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Vni = plan.Vni
+func (data *NVEVNIIngressReplication) fromBody(res gjson.Result, all bool) {
+	if !data.Protocol.IsNull() || all {
+		data.Protocol = types.StringValue(res.Get(data.getClassName() + ".attributes.proto").String())
+	} else {
+		data.Protocol = types.StringNull()
+	}
 }

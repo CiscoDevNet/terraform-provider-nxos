@@ -9,22 +9,23 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type OSPFVRF struct {
-	Device    types.String `tfsdk:"device"`
-	Dn        types.String `tfsdk:"id"`
-	Inst      types.String `tfsdk:"instance_name"`
-	Name      types.String `tfsdk:"name"`
-	AdminSt   types.String `tfsdk:"admin_state"`
-	BwRef     types.Int64  `tfsdk:"bandwidth_reference"`
-	BwRefUnit types.String `tfsdk:"banwidth_reference_unit"`
-	Dist      types.Int64  `tfsdk:"distance"`
-	RtrId     types.String `tfsdk:"router_id"`
+	Device                types.String `tfsdk:"device"`
+	Dn                    types.String `tfsdk:"id"`
+	InstanceName          types.String `tfsdk:"instance_name"`
+	Name                  types.String `tfsdk:"name"`
+	AdminState            types.String `tfsdk:"admin_state"`
+	BandwidthReference    types.Int64  `tfsdk:"bandwidth_reference"`
+	BanwidthReferenceUnit types.String `tfsdk:"banwidth_reference_unit"`
+	Distance              types.Int64  `tfsdk:"distance"`
+	RouterId              types.String `tfsdk:"router_id"`
 }
 
 func (data OSPFVRF) getDn() string {
-	return fmt.Sprintf("sys/ospf/inst-[%s]/dom-[%s]", data.Inst.ValueString(), data.Name.ValueString())
+	return fmt.Sprintf("sys/ospf/inst-[%s]/dom-[%s]", data.InstanceName.ValueString(), data.Name.ValueString())
 }
 
 func (data OSPFVRF) getClassName() string {
@@ -32,27 +33,59 @@ func (data OSPFVRF) getClassName() string {
 }
 
 func (data OSPFVRF) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("name", data.Name.ValueString()).
-		Set("adminSt", data.AdminSt.ValueString()).
-		Set("bwRef", strconv.FormatInt(data.BwRef.ValueInt64(), 10)).
-		Set("bwRefUnit", data.BwRefUnit.ValueString()).
-		Set("dist", strconv.FormatInt(data.Dist.ValueInt64(), 10)).
-		Set("rtrId", data.RtrId.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
+	}
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
+	}
+	if (!data.BandwidthReference.IsUnknown() && !data.BandwidthReference.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bwRef", strconv.FormatInt(data.BandwidthReference.ValueInt64(), 10))
+	}
+	if (!data.BanwidthReferenceUnit.IsUnknown() && !data.BanwidthReferenceUnit.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bwRefUnit", data.BanwidthReferenceUnit.ValueString())
+	}
+	if (!data.Distance.IsUnknown() && !data.Distance.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dist", strconv.FormatInt(data.Distance.ValueInt64(), 10))
+	}
+	if (!data.RouterId.IsUnknown() && !data.RouterId.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rtrId", data.RouterId.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *OSPFVRF) fromBody(res gjson.Result) {
-	data.Name = types.StringValue(res.Get("*.attributes.name").String())
-	data.AdminSt = types.StringValue(res.Get("*.attributes.adminSt").String())
-	data.BwRef = types.Int64Value(res.Get("*.attributes.bwRef").Int())
-	data.BwRefUnit = types.StringValue(res.Get("*.attributes.bwRefUnit").String())
-	data.Dist = types.Int64Value(res.Get("*.attributes.dist").Int())
-	data.RtrId = types.StringValue(res.Get("*.attributes.rtrId").String())
-}
-
-func (data *OSPFVRF) fromPlan(plan OSPFVRF) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Inst = plan.Inst
+func (data *OSPFVRF) fromBody(res gjson.Result, all bool) {
+	if !data.Name.IsNull() || all {
+		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	} else {
+		data.Name = types.StringNull()
+	}
+	if !data.AdminState.IsNull() || all {
+		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	} else {
+		data.AdminState = types.StringNull()
+	}
+	if !data.BandwidthReference.IsNull() || all {
+		data.BandwidthReference = types.Int64Value(res.Get(data.getClassName() + ".attributes.bwRef").Int())
+	} else {
+		data.BandwidthReference = types.Int64Null()
+	}
+	if !data.BanwidthReferenceUnit.IsNull() || all {
+		data.BanwidthReferenceUnit = types.StringValue(res.Get(data.getClassName() + ".attributes.bwRefUnit").String())
+	} else {
+		data.BanwidthReferenceUnit = types.StringNull()
+	}
+	if !data.Distance.IsNull() || all {
+		data.Distance = types.Int64Value(res.Get(data.getClassName() + ".attributes.dist").Int())
+	} else {
+		data.Distance = types.Int64Null()
+	}
+	if !data.RouterId.IsNull() || all {
+		data.RouterId = types.StringValue(res.Get(data.getClassName() + ".attributes.rtrId").String())
+	} else {
+		data.RouterId = types.StringNull()
+	}
 }

@@ -8,18 +8,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type EVPNVNIRouteTarget struct {
-	Device types.String `tfsdk:"device"`
-	Dn     types.String `tfsdk:"id"`
-	Encap  types.String `tfsdk:"encap"`
-	Type   types.String `tfsdk:"direction"`
-	Rtt    types.String `tfsdk:"route_target"`
+	Device      types.String `tfsdk:"device"`
+	Dn          types.String `tfsdk:"id"`
+	Encap       types.String `tfsdk:"encap"`
+	Direction   types.String `tfsdk:"direction"`
+	RouteTarget types.String `tfsdk:"route_target"`
 }
 
 func (data EVPNVNIRouteTarget) getDn() string {
-	return fmt.Sprintf("sys/evpn/bdevi-[%s]/rttp-[%s]/ent-[%s]", data.Encap.ValueString(), data.Type.ValueString(), data.Rtt.ValueString())
+	return fmt.Sprintf("sys/evpn/bdevi-[%s]/rttp-[%s]/ent-[%s]", data.Encap.ValueString(), data.Direction.ValueString(), data.RouteTarget.ValueString())
 }
 
 func (data EVPNVNIRouteTarget) getClassName() string {
@@ -27,18 +28,19 @@ func (data EVPNVNIRouteTarget) getClassName() string {
 }
 
 func (data EVPNVNIRouteTarget) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("rtt", data.Rtt.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.RouteTarget.IsUnknown() && !data.RouteTarget.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rtt", data.RouteTarget.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *EVPNVNIRouteTarget) fromBody(res gjson.Result) {
-	data.Rtt = types.StringValue(res.Get("*.attributes.rtt").String())
-}
-
-func (data *EVPNVNIRouteTarget) fromPlan(plan EVPNVNIRouteTarget) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
-	data.Encap = plan.Encap
-	data.Type = plan.Type
+func (data *EVPNVNIRouteTarget) fromBody(res gjson.Result, all bool) {
+	if !data.RouteTarget.IsNull() || all {
+		data.RouteTarget = types.StringValue(res.Get(data.getClassName() + ".attributes.rtt").String())
+	} else {
+		data.RouteTarget = types.StringNull()
+	}
 }

@@ -10,16 +10,17 @@ import (
 	"github.com/netascode/go-nxos"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type NVEVNI struct {
-	Device           types.String `tfsdk:"device"`
-	Dn               types.String `tfsdk:"id"`
-	Vni              types.Int64  `tfsdk:"vni"`
-	AssociateVrfFlag types.Bool   `tfsdk:"associate_vrf"`
-	McastGroup       types.String `tfsdk:"multicast_group"`
-	MultisiteIngRepl types.String `tfsdk:"multisite_ingress_replication"`
-	SuppressARP      types.String `tfsdk:"suppress_arp"`
+	Device                      types.String `tfsdk:"device"`
+	Dn                          types.String `tfsdk:"id"`
+	Vni                         types.Int64  `tfsdk:"vni"`
+	AssociateVrf                types.Bool   `tfsdk:"associate_vrf"`
+	MulticastGroup              types.String `tfsdk:"multicast_group"`
+	MultisiteIngressReplication types.String `tfsdk:"multisite_ingress_replication"`
+	SuppressArp                 types.String `tfsdk:"suppress_arp"`
 }
 
 func (data NVEVNI) getDn() string {
@@ -31,24 +32,51 @@ func (data NVEVNI) getClassName() string {
 }
 
 func (data NVEVNI) toBody() nxos.Body {
-	attrs := nxos.Body{}.
-		Set("vni", strconv.FormatInt(data.Vni.ValueInt64(), 10)).
-		Set("associateVrfFlag", strconv.FormatBool(data.AssociateVrfFlag.ValueBool())).
-		Set("mcastGroup", data.McastGroup.ValueString()).
-		Set("multisiteIngRepl", data.MultisiteIngRepl.ValueString()).
-		Set("suppressARP", data.SuppressARP.ValueString())
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.Vni.IsUnknown() && !data.Vni.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"vni", strconv.FormatInt(data.Vni.ValueInt64(), 10))
+	}
+	if (!data.AssociateVrf.IsUnknown() && !data.AssociateVrf.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"associateVrfFlag", strconv.FormatBool(data.AssociateVrf.ValueBool()))
+	}
+	if (!data.MulticastGroup.IsUnknown() && !data.MulticastGroup.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mcastGroup", data.MulticastGroup.ValueString())
+	}
+	if (!data.MultisiteIngressReplication.IsUnknown() && !data.MultisiteIngressReplication.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"multisiteIngRepl", data.MultisiteIngressReplication.ValueString())
+	}
+	if (!data.SuppressArp.IsUnknown() && !data.SuppressArp.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"suppressARP", data.SuppressArp.ValueString())
+	}
+
+	return nxos.Body{body}
 }
 
-func (data *NVEVNI) fromBody(res gjson.Result) {
-	data.Vni = types.Int64Value(res.Get("*.attributes.vni").Int())
-	data.AssociateVrfFlag = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.associateVrfFlag").String()))
-	data.McastGroup = types.StringValue(res.Get("*.attributes.mcastGroup").String())
-	data.MultisiteIngRepl = types.StringValue(res.Get("*.attributes.multisiteIngRepl").String())
-	data.SuppressARP = types.StringValue(res.Get("*.attributes.suppressARP").String())
-}
-
-func (data *NVEVNI) fromPlan(plan NVEVNI) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
+func (data *NVEVNI) fromBody(res gjson.Result, all bool) {
+	if !data.Vni.IsNull() || all {
+		data.Vni = types.Int64Value(res.Get(data.getClassName() + ".attributes.vni").Int())
+	} else {
+		data.Vni = types.Int64Null()
+	}
+	if !data.AssociateVrf.IsNull() || all {
+		data.AssociateVrf = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.associateVrfFlag").String()))
+	} else {
+		data.AssociateVrf = types.BoolNull()
+	}
+	if !data.MulticastGroup.IsNull() || all {
+		data.MulticastGroup = types.StringValue(res.Get(data.getClassName() + ".attributes.mcastGroup").String())
+	} else {
+		data.MulticastGroup = types.StringNull()
+	}
+	if !data.MultisiteIngressReplication.IsNull() || all {
+		data.MultisiteIngressReplication = types.StringValue(res.Get(data.getClassName() + ".attributes.multisiteIngRepl").String())
+	} else {
+		data.MultisiteIngressReplication = types.StringNull()
+	}
+	if !data.SuppressArp.IsNull() || all {
+		data.SuppressArp = types.StringValue(res.Get(data.getClassName() + ".attributes.suppressARP").String())
+	} else {
+		data.SuppressArp = types.StringNull()
+	}
 }

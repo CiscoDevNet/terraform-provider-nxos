@@ -44,8 +44,6 @@ resource "nxos_rest" "PreReq0" {
 resource "nxos_rest" "PreReq1" {
   dn = "sys/ipv4/inst/dom-[default]"
   class_name = "ipv4Dom"
-  content = {
-  }
 }
 
 resource "nxos_rest" "PreReq2" {

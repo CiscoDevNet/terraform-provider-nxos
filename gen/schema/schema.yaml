@@ -12,6 +12,7 @@ parents: list(str(), required=False)
 children: list(str(), required=False)
 references: list(str(), required=False)
 attributes: list(include('attribute'), required=False)
+child_classes: list(include('child_classes'), required=False)
 test_prerequisites: list(include('test_prerequisite'), required=False)
 ---
 attribute:
@@ -32,6 +33,14 @@ attribute:
   default_value: any(str(), int(), bool(), required=False)
   exclude_test: bool(required=False)
   requires_replace: bool(required=False)
+
+child_classes:
+  class_name: str()
+  rn: str()
+  type: enum('single', 'list', required=False)
+  tf_name: str(required=False)
+  description: str(required=False)
+  attributes: list(include('attribute'), required=False)
 
 test_prerequisite:
   dn: str()

@@ -10,20 +10,41 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
+{{- $name := camelCase .Name}}
 type {{camelCase .Name}} struct {
 	Device types.String `tfsdk:"device"`
 	Dn types.String `tfsdk:"id"`
 {{- range .Attributes}}
-	{{toTitle .NxosName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
+	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
+{{- end}}
+{{- range .ChildClasses}}
+{{- if eq .Type "single"}}
+{{- range .Attributes}}
+    {{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
+{{- end}}
+{{- else if eq .Type "list"}}
+	{{toGoName .TfName}} []{{$name}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
+{{- end}}
 {{- end}}
 }
 
+{{- range .ChildClasses}}
+{{- if eq .Type "list"}}
+type {{$name}}{{toGoName .TfName}} struct {
+{{- range .Attributes}}
+	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
+{{- end}}
+}
+{{- end}}
+{{- end}}
+
 func (data {{camelCase .Name}}) getDn() string {
 {{- if hasId .Attributes}}
-	return fmt.Sprintf("{{.Dn}}"{{range .Attributes}}{{if eq .Id true}}, data.{{toTitle .NxosName}}.Value{{.Type}}(){{end}}{{end}})
+	return fmt.Sprintf("{{.Dn}}"{{range .Attributes}}{{if .Id}}, data.{{toGoName .TfName}}.Value{{.Type}}(){{end}}{{end}})
 {{- else}}
 	return "{{.Dn}}"
 {{- end}}
@@ -34,57 +55,140 @@ func (data {{camelCase .Name}}) getClassName() string {
 }
 
 func (data {{camelCase .Name}}) toBody() nxos.Body {
-	{{- $lenAttrNoRef := lenNoRef .Attributes}}
-	{{- if ge $lenAttrNoRef 1 }}
-	attrs := nxos.Body{}.
-	{{- end}}
-	{{- $lenAttr := len .Attributes}}
-	{{- range $index, $item := .Attributes}}
-	{{- if ne .ReferenceOnly true}}
-		{{- if eq .Type "Int64"}}
-		Set("{{.NxosName}}", strconv.FormatInt(data.{{toTitle .NxosName}}.ValueInt64(), 10))
-		{{- else if eq .Type "Bool"}}
-		Set("{{.NxosName}}", strconv.FormatBool(data.{{toTitle .NxosName}}.ValueBool()))
-		{{- else if eq .Type "String"}}
-		Set("{{.NxosName}}", data.{{toTitle .NxosName}}.ValueString())
-		{{- end}}
-		{{- if not (isLast $index $lenAttr)}}.{{- end}}
-	{{- end}}
-	{{- end}}
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	{{- range .Attributes}}
-	{{- if eq .OmitEmptyValue true}}
-	if data.{{toTitle .NxosName}}.IsUnknown() || data.{{toTitle .NxosName}}.IsNull() {
-		attrs = attrs.Delete("{{.NxosName}}")
+	{{- if not .ReferenceOnly}}
+	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
+		{{- if eq .Type "Int64"}}
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
+		{{- else if eq .Type "Bool"}}
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", strconv.FormatBool(data.{{toGoName .TfName}}.ValueBool()))
+		{{- else if eq .Type "String"}}
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", data.{{toGoName .TfName}}.ValueString())
+		{{- end}}
 	}
 	{{- end}}
 	{{- end}}
-	{{- if ge $lenAttrNoRef 1 }}
-	return nxos.Body{}.SetRaw(data.getClassName()+".attributes", attrs.Str)
-	{{- else}}
-	return nxos.Body{Str: `{"` + data.getClassName() + `":{"attributes":{}}}`}
+
+	{{- if .ChildClasses}}
+	var attrs string
 	{{- end}}
+	{{- range .ChildClasses}}
+	{{- $childClassName := .ClassName }}
+	{{- if eq .Type "single"}}
+	attrs = ""
+	{{- range .Attributes}}
+	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
+		{{- if eq .Type "Int64"}}
+		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
+		{{- else if eq .Type "Bool"}}
+		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatBool(data.{{toGoName .TfName}}.ValueBool()))
+		{{- else if eq .Type "String"}}
+		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", data.{{toGoName .TfName}}.ValueString())
+		{{- end}}
+	}
+	{{- end}}
+	body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.attributes", attrs)
+	{{- else if eq .Type "list"}}
+	for _, child := range data.{{toGoName .TfName}} {
+		attrs = ""
+		{{- range .Attributes}}
+		if (!child.{{toGoName .TfName}}.IsUnknown() && !child.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
+			{{- if eq .Type "Int64"}}
+			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(child.{{toGoName .TfName}}.ValueInt64(), 10))
+			{{- else if eq .Type "Bool"}}
+			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatBool(child.{{toGoName .TfName}}.ValueBool()))
+			{{- else if eq .Type "String"}}
+			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", child.{{toGoName .TfName}}.ValueString())
+			{{- end}}
+		}
+		{{- end}}
+		body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.attributes", attrs)
+	}
+	{{- end}}
+	{{- end}}
+
+	return nxos.Body{body}
 }
 
-func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
+func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 	{{- range .Attributes}}
-	{{- if and (ne .ReferenceOnly true) (ne .WriteOnly true)}}
-	{{- if eq .Type "Int64"}}
-	data.{{toTitle .NxosName}} = types.Int64Value(res.Get("*.attributes.{{.NxosName}}").Int())
-	{{- else if eq .Type "Bool"}}
-	data.{{toTitle .NxosName}} = types.BoolValue(helpers.ParseNxosBoolean(res.Get("*.attributes.{{.NxosName}}").String()))
-	{{- else if eq .Type "String"}}
-	data.{{toTitle .NxosName}} = types.StringValue(res.Get("*.attributes.{{.NxosName}}").String())
+	{{- if and (not .ReferenceOnly) (not .WriteOnly)}}
+	if !data.{{toGoName .TfName}}.IsNull() || all {
+		{{- if eq .Type "Int64"}}
+		data.{{toGoName .TfName}} = types.Int64Value(res.Get(data.getClassName()+".attributes.{{.NxosName}}").Int())
+		{{- else if eq .Type "Bool"}}
+		data.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName()+".attributes.{{.NxosName}}").String()))
+		{{- else if eq .Type "String"}}
+		data.{{toGoName .TfName}} = types.StringValue(res.Get(data.getClassName()+".attributes.{{.NxosName}}").String())
+		{{- end}}
+	} else {
+		data.{{toGoName .TfName}} = types.{{.Type}}Null()
+	}
 	{{- end}}
 	{{- end}}
-	{{- end}}
-}
 
-func (data *{{camelCase .Name}}) fromPlan(plan {{camelCase .Name}}) {
-	data.Device = plan.Device
-	data.Dn = plan.Dn
+	{{- range .ChildClasses}}
+	{{- $childClassName := .ClassName }}
+	{{- $childRn := .Rn }}
+	{{- $list := (toGoName .TfName)}}
+	{{- if eq .Type "single"}}
+	var r gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("{{$childClassName}}.attributes.rn").String()
+			if key == "{{$childRn}}" {
+				r = v
+				return false
+			}
+			return true
+		},
+	)
 	{{- range .Attributes}}
-	{{- if or (eq .ReferenceOnly true) (eq .WriteOnly true)}}
-	data.{{toTitle .NxosName}} = plan.{{toTitle .NxosName}}
+	{{- if and (not .ReferenceOnly) (not .WriteOnly)}}
+	if !data.{{toGoName .TfName}}.IsNull() || all {
+		{{- if eq .Type "Int64"}}
+		data.{{toGoName .TfName}} = types.Int64Value(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
+		{{- else if eq .Type "Bool"}}
+		data.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
+		{{- else if eq .Type "String"}}
+		data.{{toGoName .TfName}} = types.StringValue(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
+		{{- end}}
+	} else {
+		data.{{toGoName .TfName}} = types.{{.Type}}Null()
+	}
+	{{- end}}
+	{{- end}}
+	{{- else if eq .Type "list"}}
+	for c := range data.{{toGoName .TfName}} {
+		var r gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("{{$childClassName}}.attributes.rn").String()
+				if key == "{{$childRn}}" {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		{{- range .Attributes}}
+		{{- if and (not .ReferenceOnly) (not .WriteOnly)}}
+		if !data.{{$list}}[c].{{toGoName .TfName}}.IsNull() || all {
+			{{- if eq .Type "Int64"}}
+			data.{{$list}}[c].{{toGoName .TfName}} = types.Int64Value(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
+			{{- else if eq .Type "Bool"}}
+			data.{{$list}}[c].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
+			{{- else if eq .Type "String"}}
+			data.{{$list}}[c].{{toGoName .TfName}} = types.StringValue(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
+			{{- end}}
+		} else {
+			data.{{$list}}[c].{{toGoName .TfName}} = types.{{.Type}}Null()
+		}
+		{{- end}}
+		{{- end}}
+	}
 	{{- end}}
 	{{- end}}
 }

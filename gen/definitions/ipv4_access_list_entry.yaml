@@ -1,7 +1,7 @@
 ---
 name: IPv4 Access List Entry
 class_name: ipv4aclACE
-dn: sys/acl/ipv4/name-[%s]//seq-[%v]
+dn: sys/acl/ipv4/name-[%s]/seq-[%v]
 ds_description: This data source can read IPv4 Access List Entries.
 res_description: This resource can manage IPv4 Access List Entries.
 doc_path: Security%20and%20Policing/ipv4acl:ACE/
@@ -14,23 +14,23 @@ attributes:
     type: String
     id: true
     reference_only: true
-    description: 'Access list name.'
-    example: 'ACL1'
+    description: "Access list name."
+    example: "ACL1"
   - nxos_name: seqNum
     tf_name: sequence_number
     type: Int64
     id: true
-    description: 'Sequence number.'
-    example: '10'
+    description: "Sequence number."
+    example: "10"
   - nxos_name: ack
     tf_name: ack
     type: Bool
-    description: 'Match TCP ACK flag.'
+    description: "Match TCP ACK flag."
     example: false
   - nxos_name: action
     tf_name: action
     type: String
-    description: 'Action.'
+    description: "Action."
     enum_values:
       - invalid
       - permit
@@ -43,12 +43,12 @@ attributes:
     min_int: 0
     max_int: 63
     omit_empty_value: true
-    description: 'Match DSCP.'
+    description: "Match DSCP."
     example: 0
   - nxos_name: dstAddrGroup
     tf_name: destination_address_group
     type: String
-    description: 'Destination address group.'
+    description: "Destination address group."
     exclude_test: true
     omit_empty_value: true
     example: AG1
@@ -110,7 +110,7 @@ attributes:
       - non500-isakmp
     allow_non_enum_values: true
     omit_empty_value: true
-    description: 'First destination port number or name.'
+    description: "First destination port number or name."
     example: 443
   - nxos_name: dstPort2
     tf_name: destination_port_2
@@ -170,12 +170,12 @@ attributes:
       - non500-isakmp
     allow_non_enum_values: true
     omit_empty_value: true
-    description: 'Second destination port number or name.'
+    description: "Second destination port number or name."
     example: 0
   - nxos_name: dstPortGroup
     tf_name: destination_port_group
     type: String
-    description: 'Destination port group.'
+    description: "Destination port group."
     exclude_test: true
     omit_empty_value: true
     example: PG1
@@ -237,13 +237,13 @@ attributes:
       - non500-isakmp
     allow_non_enum_values: true
     omit_empty_value: true
-    description: 'Destination port mask number or name.'
+    description: "Destination port mask number or name."
     exclude_test: true
     example: 0
   - nxos_name: dstPortOp
     tf_name: destination_port_operator
     type: String
-    description: 'Destination port operator.'
+    description: "Destination port operator."
     enum_values:
       - none
       - lt
@@ -257,40 +257,40 @@ attributes:
     tf_name: destination_prefix
     type: String
     omit_empty_value: true
-    description: 'Destination prefix.'
+    description: "Destination prefix."
     example: 10.1.1.0
   - nxos_name: dstPrefixLength
     tf_name: destination_prefix_length
     type: String
     omit_empty_value: true
-    description: 'Destination prefix length.'
+    description: "Destination prefix length."
     example: 24
   - nxos_name: dstPrefixMask
     tf_name: destination_prefix_mask
     type: String
-    description: 'Destination prefix mask.'
+    description: "Destination prefix mask."
     exclude_test: true
     omit_empty_value: true
     example: 255.255.255.0
   - nxos_name: est
     tf_name: est
     type: Bool
-    description: 'Match TCP EST flag.'
+    description: "Match TCP EST flag."
     example: false
   - nxos_name: fin
     tf_name: fin
     type: Bool
-    description: 'Match TCP FIN flag.'
+    description: "Match TCP FIN flag."
     example: false
   - nxos_name: fragment
     tf_name: fragment
     type: Bool
-    description: 'Match non-initial fragment.'
+    description: "Match non-initial fragment."
     example: false
   - nxos_name: httpOption
     tf_name: http_option_type
     type: String
-    description: 'HTTP option method.'
+    description: "HTTP option method."
     enum_values:
       - invalid
       - get
@@ -307,7 +307,7 @@ attributes:
     type: Int64
     min_int: 0
     max_int: 256
-    description: 'ICMP code.'
+    description: "ICMP code."
     default_value: 256
     example: 0
   - nxos_name: icmpType
@@ -315,33 +315,33 @@ attributes:
     type: Int64
     min_int: 0
     max_int: 256
-    description: 'ICMP type.'
+    description: "ICMP type."
     default_value: 256
     example: 0
   - nxos_name: logging
     tf_name: logging
     type: Bool
-    description: 'Log matches against ACL entry.'
+    description: "Log matches against ACL entry."
     default_value: false
     example: true
   - nxos_name: pktLen1
     tf_name: packet_length_1
     type: String
-    description: 'First packet length. Either `invalid` or a number between 19 and 9210.'
+    description: "First packet length. Either `invalid` or a number between 19 and 9210."
     exclude_test: true
     default_value: invalid
     example: 19
   - nxos_name: pktLen2
     tf_name: packet_length_2
     type: String
-    description: 'Second packet length. Either `invalid` or a number between 19 and 9210.'
+    description: "Second packet length. Either `invalid` or a number between 19 and 9210."
     exclude_test: true
     default_value: invalid
     example: 9210
   - nxos_name: pktLenOp
     tf_name: packet_length_operator
     type: String
-    description: 'Packet length operator.'
+    description: "Packet length operator."
     enum_values:
       - none
       - lt
@@ -355,10 +355,10 @@ attributes:
   - nxos_name: precedence
     tf_name: precedence
     type: String
-    description: 'Precedence. Either `unspecified` or a number between 0 and 7.'
+    description: "Precedence. Either `unspecified` or a number between 0 and 7."
     default_value: unspecified
     exclude_test: true
-    example: '0'
+    example: "0"
   - nxos_name: protocol
     tf_name: protocol
     type: String
@@ -379,7 +379,7 @@ attributes:
       - udf
     allow_non_enum_values: true
     omit_empty_value: true
-    description: 'Protocol name or number.'
+    description: "Protocol name or number."
     example: tcp
   - nxos_name: protocolMask
     tf_name: protocol_mask
@@ -401,41 +401,41 @@ attributes:
       - udf
     allow_non_enum_values: true
     omit_empty_value: true
-    description: 'Protocol mask name or number.'
+    description: "Protocol mask name or number."
     exclude_test: true
     example: tcp
   - nxos_name: psh
     tf_name: psh
     type: Bool
-    description: 'Match TCP PSH flag.'
+    description: "Match TCP PSH flag."
     example: false
   - nxos_name: redirect
     tf_name: redirect
     type: String
-    description: 'Redirect action.'
+    description: "Redirect action."
     exclude_test: true
     example: RD
   - nxos_name: remark
     tf_name: remark
     type: String
-    description: 'ACL comment.'
+    description: "ACL comment."
     exclude_test: true
     omit_empty_value: true
     example: Line1
   - nxos_name: rev
     tf_name: rev
     type: Bool
-    description: 'Match TCP REV flag.'
+    description: "Match TCP REV flag."
     example: false
   - nxos_name: rst
     tf_name: rst
     type: Bool
-    description: 'Match TCP RST flag.'
+    description: "Match TCP RST flag."
     example: false
   - nxos_name: srcAddrGroup
     tf_name: source_address_group
     type: String
-    description: 'Source address group.'
+    description: "Source address group."
     exclude_test: true
     omit_empty_value: true
     example: AG2
@@ -497,7 +497,7 @@ attributes:
       - non500-isakmp
     allow_non_enum_values: true
     omit_empty_value: true
-    description: 'First source port name or number.'
+    description: "First source port name or number."
     example: 443
   - nxos_name: srcPort2
     tf_name: source_port_2
@@ -557,12 +557,12 @@ attributes:
       - non500-isakmp
     allow_non_enum_values: true
     omit_empty_value: true
-    description: 'Second source port name or number.'
+    description: "Second source port name or number."
     example: 0
   - nxos_name: srcPortGroup
     tf_name: source_port_group
     type: String
-    description: 'Source port group.'
+    description: "Source port group."
     exclude_test: true
     omit_empty_value: true
     example: PG2
@@ -624,13 +624,13 @@ attributes:
       - non500-isakmp
     allow_non_enum_values: true
     omit_empty_value: true
-    description: 'Source port mask name or number.'
+    description: "Source port mask name or number."
     exclude_test: true
     example: 0
   - nxos_name: srcPortOp
     tf_name: source_port_operator
     type: String
-    description: 'Source port operator.'
+    description: "Source port operator."
     enum_values:
       - none
       - lt
@@ -644,30 +644,30 @@ attributes:
     tf_name: source_prefix
     type: String
     omit_empty_value: true
-    description: 'Source prefix.'
+    description: "Source prefix."
     example: 20.1.0.0
   - nxos_name: srcPrefixLength
     tf_name: source_prefix_length
     type: String
     omit_empty_value: true
-    description: 'Source prefix length.'
+    description: "Source prefix length."
     example: 16
   - nxos_name: srcPrefixMask
     tf_name: source_prefix_mask
     type: String
-    description: 'Source prefix mask.'
+    description: "Source prefix mask."
     exclude_test: true
     omit_empty_value: true
     example: 255.255.0.0
   - nxos_name: syn
     tf_name: syn
     type: Bool
-    description: 'Match TCP SYN flag.'
+    description: "Match TCP SYN flag."
     example: false
   - nxos_name: timeRange
     tf_name: time_range
     type: String
-    description: 'Time range name.'
+    description: "Time range name."
     exclude_test: true
     omit_empty_value: true
     example: TR1
@@ -676,27 +676,28 @@ attributes:
     type: Int64
     min_int: 0
     max_int: 255
-    description: 'TTL.'
+    description: "TTL."
     exclude_test: true
+    default_value: 0
     example: 0
   - nxos_name: urg
     tf_name: urg
     type: Bool
-    description: 'Match TCP URG flag.'
+    description: "Match TCP URG flag."
     example: false
   - nxos_name: vlan
     tf_name: vlan
     type: Int64
     min_int: 0
     max_int: 4095
-    description: 'VLAN ID.'
+    description: "VLAN ID."
     default_value: 4095
     exclude_test: true
     example: 4095
   - nxos_name: vni
     tf_name: vni
     type: String
-    description: 'NVE VNI ID. Either `invalid` or a number between 0 and 16777216.'
+    description: "NVE VNI ID. Either `invalid` or a number between 0 and 16777216."
     exclude_test: true
     default_value: invalid
     example: invalid

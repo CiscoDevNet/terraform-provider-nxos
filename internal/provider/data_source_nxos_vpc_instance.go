@@ -35,7 +35,7 @@ func (d *VPCInstanceDataSource) Metadata(_ context.Context, req datasource.Metad
 func (d *VPCInstanceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the vPC instance configuration.", "vpcInst", "System/vPC:Inst/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the vPC instance configuration.", "vpcInst", "System/vpc:Inst/").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

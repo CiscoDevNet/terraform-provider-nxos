@@ -39,7 +39,7 @@ func (r *VPCInstanceResource) Metadata(ctx context.Context, req resource.Metadat
 func (r *VPCInstanceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the vPC instance configuration.", "vpcInst", "System/vPC:Inst/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the vPC instance configuration.", "vpcInst", "System/vpc:Inst/").AddChildren("vpc_domain").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

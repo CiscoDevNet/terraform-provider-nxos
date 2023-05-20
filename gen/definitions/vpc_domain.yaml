@@ -1,0 +1,188 @@
+---
+name: vPC Domain
+class_name: vpcDom
+dn: sys/vpc/inst/dom
+ds_description: This data source can read the vPC domain configuration.
+res_description: This resource can manage the vPC domain configuration.
+doc_path: System/vpc:Dom/
+doc_category: vPC
+parents:
+  - vPC Instance
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: "vPC suspend locally."
+    enum_values:
+      - enabled
+      - disabled
+    default_value: enabled
+    example: enabled
+  - nxos_name: id
+    tf_name: domain_id
+    type: Int64
+    mandatory: true
+    description: "Domain id."
+    min_int: 1
+    max_int: 1000
+    example: 100
+  - nxos_name: autoRecovery
+    tf_name: auto_recovery
+    type: String
+    description: "Auto Recovery."
+    enum_values:
+      - enabled
+      - disabled
+    default_value: disabled
+    example: enabled
+  - nxos_name: autoRecoveryIntvl
+    tf_name: auto_recovery_interval
+    type: Int64
+    description: "Auto Recovery interval."
+    min_int: 60
+    max_int: 3600
+    default_value: 240
+    example: 480
+  - nxos_name: delayRestoreOrphanPort
+    tf_name: delay_restore_orphan_port
+    type: Int64
+    description: "Delay restore for orphan ports."
+    min_int: 0
+    max_int: 300
+    default_value: 0
+    example: 10
+  - nxos_name: delayRestoreSVI
+    tf_name: delay_restore_svi
+    type: Int64
+    description: "Delay restore for SVI."
+    min_int: 1
+    max_int: 3600
+    default_value: 10
+    example: 20
+  - nxos_name: delayRestoreVPC
+    tf_name: delay_restore_vpc
+    type: Int64
+    description: "Delay restore for vPC links."
+    min_int: 1
+    max_int: 3600
+    default_value: 30
+    example: 60
+  - nxos_name: dscp
+    tf_name: dscp
+    type: Int64
+    description: "DSCP."
+    min_int: 0
+    max_int: 63
+    default_value: 0
+    example: 0
+  - nxos_name: fastConvergence
+    tf_name: fast_convergence
+    type: String
+    description: "Fast Convergence."
+    enum_values:
+      - enabled
+      - disabled
+    default_value: disabled
+    example: enabled
+  - nxos_name: grcflCnstncyChck
+    tf_name: graceful_consistency_check
+    type: String
+    description: "Graceful Type-1 Consistency Check."
+    enum_values:
+      - enabled
+      - disabled
+    default_value: enabled
+    example: disabled
+  - nxos_name: l3PeerRouter
+    tf_name: l3_peer_router
+    type: String
+    description: "L3 Peer Router."
+    enum_values:
+      - enabled
+      - disabled
+    default_value: disabled
+    example: enabled
+  - nxos_name: l3PeerRouterSyslog
+    tf_name: l3_peer_router_syslog
+    type: String
+    description: "L3 Peer Router Syslog."
+    enum_values:
+      - enabled
+      - disabled
+    default_value: disabled
+    example: enabled
+  - nxos_name: l3PeerRouterSyslogInterval
+    tf_name: l3_peer_router_syslog_interval
+    type: Int64
+    description: "L3 Peer Router Syslog Interval."
+    min_int: 1
+    max_int: 3600
+    default_value: 3600
+    example: 3000
+  - nxos_name: peerGw
+    tf_name: peer_gateway
+    type: String
+    description: "Peer Gateway."
+    enum_values:
+      - enabled
+      - disabled
+    default_value: disabled
+    example: enabled
+  - nxos_name: peerIp
+    tf_name: peer_ip
+    type: String
+    description: "vPC peer IP address."
+    example: 1.2.3.4
+  - nxos_name: peerSwitch
+    tf_name: peer_switch
+    type: String
+    description: "vPC pair switches."
+    enum_values:
+      - enabled
+      - disabled
+    default_value: disabled
+    example: enabled
+  - nxos_name: rolePrio
+    tf_name: role_priority
+    type: Int64
+    description: "Role priority."
+    min_int: 1
+    max_int: 65535
+    default_value: 32667
+    example: 100
+  - nxos_name: sysMac
+    tf_name: sys_mac
+    type: String
+    description: "System MAC."
+    example: 01:01:01:01:01:01
+  - nxos_name: sysPrio
+    tf_name: system_priority
+    type: Int64
+    description: "System priority."
+    min_int: 1
+    max_int: 65535
+    default_value: 32667
+    example: 100
+  - nxos_name: track
+    tf_name: track
+    type: Int64
+    description: "Tracking object to suspend vPC if object goes down."
+    min_int: 0
+    max_int: 500
+    default_value: 0
+    example: 10
+  - nxos_name: virtualIp
+    tf_name: virtual_ip
+    type: String
+    description: "vPC virtual IP address (vIP)."
+    example: 1.1.1.1
+test_prerequisites:
+  - dn: sys/fm/vpc
+    class_name: fmVpc
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/vpc/inst
+    class_name: vpcInst
+    dependencies: [0]

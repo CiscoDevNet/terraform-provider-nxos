@@ -5,6 +5,7 @@
 - BREAKING CHANGE: Remove `nxos_ipv4_access_list_policy_ingress_interface_instance` resource and data source
 - Add `access_list_name` attribute to `nxos_ipv4_access_list_policy_egress_interface` resource and data source
 - BREAKING CHANGE: Remove  `nxos_ipv4_access_list_policy_egress_interface_instance` resource and data source
+- Add `nxos_vpc_instance` resource and data source
 
 ## 0.3.23
 

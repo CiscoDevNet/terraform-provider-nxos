@@ -6,11 +6,13 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -18,25 +20,25 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &IPv4VRFResource{}
-var _ resource.ResourceWithImportState = &IPv4VRFResource{}
+var _ resource.Resource = &IPv4StaticRouteResource{}
+var _ resource.ResourceWithImportState = &IPv4StaticRouteResource{}
 
-func NewIPv4VRFResource() resource.Resource {
-	return &IPv4VRFResource{}
+func NewIPv4StaticRouteResource() resource.Resource {
+	return &IPv4StaticRouteResource{}
 }
 
-type IPv4VRFResource struct {
+type IPv4StaticRouteResource struct {
 	data *NxosProviderData
 }
 
-func (r *IPv4VRFResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_ipv4_vrf"
+func (r *IPv4StaticRouteResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_ipv4_static_route"
 }
 
-func (r *IPv4VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *IPv4StaticRouteResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IPv4 VRF information.", "ipv4Dom", "Layer%203/ipv4:Dom/").AddChildren("ipv4_interface", "ipv4_static_route").AddReferences("vrf").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage an IPv4 static route.", "ipv4Route", "Layer%203/ipv4:Route/").AddParents("ipv4_vrf").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -50,18 +52,79 @@ func (r *IPv4VRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"name": schema.StringAttribute{
+			"vrf_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Required:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
+			"prefix": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prefix.").String,
+				Required:            true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
+			"next_hops": schema.ListNestedAttribute{
+				MarkdownDescription: "List of next hops.",
+				Required:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_id": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Nexthop address.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"vrf_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Nexthop VRF.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
+							Optional:            true,
+						},
+						"object": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Object to be tracked.").AddIntegerRangeDescription(0, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+						"preference": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route preference.").AddIntegerRangeDescription(0, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+						"tag": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Tag value.").AddIntegerRangeDescription(0, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }
 
-func (r *IPv4VRFResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *IPv4StaticRouteResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -70,8 +133,8 @@ func (r *IPv4VRFResource) Configure(ctx context.Context, req resource.ConfigureR
 	r.data = req.ProviderData.(*NxosProviderData)
 }
 
-func (r *IPv4VRFResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan IPv4VRF
+func (r *IPv4StaticRouteResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan IPv4StaticRoute
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -98,8 +161,8 @@ func (r *IPv4VRFResource) Create(ctx context.Context, req resource.CreateRequest
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *IPv4VRFResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state IPv4VRF
+func (r *IPv4StaticRouteResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state IPv4StaticRoute
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -112,6 +175,7 @@ func (r *IPv4VRFResource) Read(ctx context.Context, req resource.ReadRequest, re
 
 	queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
 	queries = append(queries, nxos.OverrideUrl(r.data.devices[state.Device.ValueString()]))
+	queries = append(queries, nxos.Query("rsp-subtree", "children"))
 	res, err := r.data.client.GetDn(state.Dn.ValueString(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -126,8 +190,8 @@ func (r *IPv4VRFResource) Read(ctx context.Context, req resource.ReadRequest, re
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *IPv4VRFResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan IPv4VRF
+func (r *IPv4StaticRouteResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan IPv4StaticRoute
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -151,8 +215,8 @@ func (r *IPv4VRFResource) Update(ctx context.Context, req resource.UpdateRequest
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *IPv4VRFResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state IPv4VRF
+func (r *IPv4StaticRouteResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state IPv4StaticRoute
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -178,6 +242,6 @@ func (r *IPv4VRFResource) Delete(ctx context.Context, req resource.DeleteRequest
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *IPv4VRFResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *IPv4StaticRouteResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

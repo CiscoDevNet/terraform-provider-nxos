@@ -8,6 +8,7 @@ doc_path: Layer%203/ipv4:Dom/
 doc_category: IPv4
 children:
   - IPv4 Interface
+  - IPv4 Static Route
 references:
   - VRF
 attributes:
@@ -15,5 +16,5 @@ attributes:
     tf_name: name
     type: String
     id: true
-    description: 'VRF name.'
-    example: 'VRF1'
+    description: "VRF name."
+    example: "VRF1"

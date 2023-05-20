@@ -50,6 +50,18 @@ func (data {{camelCase .Name}}) getDn() string {
 {{- end}}
 }
 
+{{- range .ChildClasses}}
+{{- if eq .Type "list"}}
+func (data {{$name}}{{toGoName .TfName}}) getRn() string {
+	{{- if hasId .Attributes}}
+		return fmt.Sprintf("{{.Rn}}"{{range .Attributes}}{{if .Id}}, data.{{toGoName .TfName}}.Value{{.Type}}(){{end}}{{end}})
+	{{- else}}
+		return "{{.Rn}}"
+	{{- end}}
+	}
+{{- end}}
+{{- end}}
+
 func (data {{camelCase .Name}}) getClassName() string {
 	return "{{.ClassName}}"
 }
@@ -161,33 +173,61 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 	{{- end}}
 	{{- end}}
 	{{- else if eq .Type "list"}}
-	for c := range data.{{toGoName .TfName}} {
-		var r gjson.Result
+	if all {
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("{{$childClassName}}.attributes.rn").String()
-				if key == "{{$childRn}}" {
-					r = v
-					return false
-				}
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "{{$childClassName}}" {
+							var child {{$name}}{{toGoName .TfName}}
+							{{- range .Attributes}}
+							{{- if and (not .ReferenceOnly) (not .WriteOnly)}}
+							{{- if eq .Type "Int64"}}
+							child.{{toGoName .TfName}} = types.Int64Value(value.Get("attributes.{{.NxosName}}").Int())
+							{{- else if eq .Type "Bool"}}
+							child.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.{{.NxosName}}").String()))
+							{{- else if eq .Type "String"}}
+							child.{{toGoName .TfName}} = types.StringValue(value.Get("attributes.{{.NxosName}}").String())
+							{{- end}}
+							{{- end}}
+							{{- end}}
+							data.{{$list}} = append(data.{{$list}}, child)
+						}
+						return true
+					},
+				)
 				return true
 			},
 		)
-		{{- range .Attributes}}
-		{{- if and (not .ReferenceOnly) (not .WriteOnly)}}
-		if !data.{{$list}}[c].{{toGoName .TfName}}.IsNull() || all {
-			{{- if eq .Type "Int64"}}
-			data.{{$list}}[c].{{toGoName .TfName}} = types.Int64Value(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
-			{{- else if eq .Type "Bool"}}
-			data.{{$list}}[c].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
-			{{- else if eq .Type "String"}}
-			data.{{$list}}[c].{{toGoName .TfName}} = types.StringValue(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
+	} else {
+		for c := range data.{{toGoName .TfName}} {
+			var r gjson.Result
+			res.Get(data.getClassName() + ".children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("{{$childClassName}}.attributes.rn").String()
+					if key == data.{{$list}}[c].getRn() {
+						r = v
+						return false
+					}
+					return true
+				},
+			)
+			{{- range .Attributes}}
+			{{- if and (not .ReferenceOnly) (not .WriteOnly)}}
+			if !data.{{$list}}[c].{{toGoName .TfName}}.IsNull() || all {
+				{{- if eq .Type "Int64"}}
+				data.{{$list}}[c].{{toGoName .TfName}} = types.Int64Value(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
+				{{- else if eq .Type "Bool"}}
+				data.{{$list}}[c].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
+				{{- else if eq .Type "String"}}
+				data.{{$list}}[c].{{toGoName .TfName}} = types.StringValue(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
+				{{- end}}
+			} else {
+				data.{{$list}}[c].{{toGoName .TfName}} = types.{{.Type}}Null()
+			}
 			{{- end}}
-		} else {
-			data.{{$list}}[c].{{toGoName .TfName}} = types.{{.Type}}Null()
+			{{- end}}
 		}
-		{{- end}}
-		{{- end}}
 	}
 	{{- end}}
 	{{- end}}

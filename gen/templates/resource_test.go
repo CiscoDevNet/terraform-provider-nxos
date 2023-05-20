@@ -25,7 +25,7 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 					{{- end}}
 					{{- end}}
 					{{- range .ChildClasses}}
-					{{- $list := (toGoName .TfName)}}
+					{{- $list := .TfName}}
 					{{- if eq .Type "single"}}
 					{{- range .Attributes}}
 					{{- if not .ExcludeTest}}

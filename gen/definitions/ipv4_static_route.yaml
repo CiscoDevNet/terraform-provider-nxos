@@ -1,0 +1,78 @@
+---
+name: IPv4 Static Route
+class_name: ipv4Route
+dn: sys/ipv4/inst/dom-[%s]/rt-[%s]
+ds_description: This data source can read an IPv4 static route.
+res_description: This resource can manage an IPv4 static route.
+doc_path: Layer%203/ipv4:Route/
+doc_category: IPv4
+parents:
+  - IPv4 VRF
+attributes:
+  - nxos_name: name
+    tf_name: vrf_name
+    type: String
+    id: true
+    reference_only: true
+    description: "VRF name."
+    example: default
+  - nxos_name: prefix
+    tf_name: prefix
+    type: String
+    id: true
+    description: "Prefix."
+    example: "1.1.1.0/24"
+child_classes:
+  - tf_name: next_hops
+    class_name: ipv4Nexthop
+    rn: nh-[%s]-addr-[%s]-vrf-[%s]
+    description: List of next hops.
+    type: list
+    attributes:
+      - nxos_name: nhIf
+        tf_name: interface_id
+        type: String
+        id: true
+        description: "Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`."
+        example: unspecified
+      - nxos_name: nhAddr
+        tf_name: address
+        type: String
+        id: true
+        description: "Nexthop address."
+        example: 1.2.3.4
+      - nxos_name: nhVrf
+        tf_name: vrf_name
+        type: String
+        id: true
+        description: "Nexthop VRF."
+        example: default
+      - nxos_name: descr
+        tf_name: description
+        type: String
+        description: "Description."
+        example: My Description
+      - nxos_name: object
+        tf_name: object
+        type: Int64
+        description: "Object to be tracked."
+        min_int: 0
+        max_int: 4294967295
+        example: 10
+      - nxos_name: pref
+        tf_name: preference
+        type: Int64
+        description: "Route preference."
+        min_int: 0
+        max_int: 255
+        example: 123
+      - nxos_name: tag
+        tf_name: tag
+        type: Int64
+        description: "Tag value."
+        min_int: 0
+        max_int: 4294967295
+        example: 10
+test_prerequisites:
+  - dn: sys/ipv4/inst/dom-[default]
+    class_name: ipv4Dom

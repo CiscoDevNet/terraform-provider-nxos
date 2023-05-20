@@ -41,7 +41,7 @@ func (r *PortChannelInterfaceResource) Metadata(ctx context.Context, req resourc
 func (r *PortChannelInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a port-channel interface.", "pcAggrIf", "Interfaces/pc:AggrIf/").AddChildren("port_channel_interface_vrf").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a port-channel interface.", "pcAggrIf", "Interfaces/pc:AggrIf/").AddChildren("port_channel_interface_vrf", "port_channel_interface_member").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

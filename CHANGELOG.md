@@ -11,6 +11,7 @@
 - Add `nxos_port_channel_interface` resource and data source
 - Add `nxos_port_channel_interface_vrf` resource and data source
 - BREAKING CHANGE: Remove `ctrl` attribute of `nxos_spanning_tree_interface` resource and data source
+- Add `nxos_port_channel_interface_member` resource and data source
 
 ## 0.3.23
 

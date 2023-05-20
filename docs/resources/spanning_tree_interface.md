@@ -22,7 +22,6 @@ resource "nxos_spanning_tree_interface" "example" {
   bpdu_filter  = "enable"
   bpdu_guard   = "enable"
   cost         = 100
-  ctrl         = "bpdu-guard"
   guard        = "root"
   link_type    = "p2p"
   mode         = "edge"
@@ -51,9 +50,6 @@ resource "nxos_spanning_tree_interface" "example" {
 - `cost` (Number) Port path cost.
   - Range: `0`-`200000000`
   - Default value: `0`
-- `ctrl` (String) Interface controls.
-  - Choices: `unspecified`, `bpdu-guard`, `bpdu-filter`
-  - Default value: `unspecified`
 - `device` (String) A device name from the provider configuration.
 - `guard` (String) Guard mode.
   - Choices: `default`, `root`, `loop`, `none`

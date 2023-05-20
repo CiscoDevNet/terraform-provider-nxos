@@ -20,7 +20,6 @@ type SpanningTreeInterface struct {
 	BpduFilter  types.String `tfsdk:"bpdu_filter"`
 	BpduGuard   types.String `tfsdk:"bpdu_guard"`
 	Cost        types.Int64  `tfsdk:"cost"`
-	Ctrl        types.String `tfsdk:"ctrl"`
 	Guard       types.String `tfsdk:"guard"`
 	LinkType    types.String `tfsdk:"link_type"`
 	Mode        types.String `tfsdk:"mode"`
@@ -52,9 +51,6 @@ func (data SpanningTreeInterface) toBody() nxos.Body {
 	}
 	if (!data.Cost.IsUnknown() && !data.Cost.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"cost", strconv.FormatInt(data.Cost.ValueInt64(), 10))
-	}
-	if (!data.Ctrl.IsUnknown() && !data.Ctrl.IsNull()) || true {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ctrl", data.Ctrl.ValueString())
 	}
 	if (!data.Guard.IsUnknown() && !data.Guard.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"guard", data.Guard.ValueString())
@@ -97,11 +93,6 @@ func (data *SpanningTreeInterface) fromBody(res gjson.Result, all bool) {
 		data.Cost = types.Int64Value(res.Get(data.getClassName() + ".attributes.cost").Int())
 	} else {
 		data.Cost = types.Int64Null()
-	}
-	if !data.Ctrl.IsNull() || all {
-		data.Ctrl = types.StringValue(res.Get(data.getClassName() + ".attributes.ctrl").String())
-	} else {
-		data.Ctrl = types.StringNull()
 	}
 	if !data.Guard.IsNull() || all {
 		data.Guard = types.StringValue(res.Get(data.getClassName() + ".attributes.guard").String())

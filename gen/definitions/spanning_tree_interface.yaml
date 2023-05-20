@@ -11,7 +11,7 @@ attributes:
     tf_name: interface_id
     type: String
     id: true
-    description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+    description: "Must match first field in the output of `show intf brief`. Example: `eth1/1`."
     example: eth1/9
   - nxos_name: adminSt
     tf_name: admin_state
@@ -20,7 +20,7 @@ attributes:
       - enabled
       - disabled
     default_value: enabled
-    description: 'The administrative state of the object or policy.'
+    description: "The administrative state of the object or policy."
     example: enabled
   - nxos_name: bpdufilter
     tf_name: bpdu_filter
@@ -30,7 +30,7 @@ attributes:
       - enable
       - disable
     default_value: default
-    description: 'BPDU filter mode.'
+    description: "BPDU filter mode."
     example: enable
   - nxos_name: bpduguard
     tf_name: bpdu_guard
@@ -40,7 +40,7 @@ attributes:
       - enable
       - disable
     default_value: default
-    description: 'BPDU guard mode.'
+    description: "BPDU guard mode."
     example: enable
   - nxos_name: cost
     tf_name: cost
@@ -48,18 +48,8 @@ attributes:
     min_int: 0
     max_int: 200000000
     default_value: 0
-    description: 'Port path cost.'
+    description: "Port path cost."
     example: 100
-  - nxos_name: ctrl
-    tf_name: ctrl
-    type: String
-    enum_values:
-      - unspecified
-      - bpdu-guard
-      - bpdu-filter
-    default_value: unspecified
-    description: 'Interface controls.'
-    example: bpdu-guard
   - nxos_name: guard
     tf_name: guard
     type: String
@@ -69,7 +59,7 @@ attributes:
       - loop
       - none
     default_value: default
-    description: 'Guard mode.'
+    description: "Guard mode."
     example: root
   - nxos_name: linkType
     tf_name: link_type
@@ -79,7 +69,7 @@ attributes:
       - p2p
       - shared
     default_value: auto
-    description: 'Link type.'
+    description: "Link type."
     example: p2p
   - nxos_name: mode
     tf_name: mode
@@ -91,7 +81,7 @@ attributes:
       - normal
       - trunk
     default_value: default
-    description: 'Port mode.'
+    description: "Port mode."
     example: edge
   - nxos_name: priority
     tf_name: priority
@@ -99,5 +89,5 @@ attributes:
     min_int: 0
     max_int: 224
     default_value: 128
-    description: 'Port priority.'
+    description: "Port priority."
     example: 200

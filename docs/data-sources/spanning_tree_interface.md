@@ -38,7 +38,6 @@ data "nxos_spanning_tree_interface" "example" {
 - `bpdu_filter` (String) BPDU filter mode.
 - `bpdu_guard` (String) BPDU guard mode.
 - `cost` (Number) Port path cost.
-- `ctrl` (String) Interface controls.
 - `guard` (String) Guard mode.
 - `id` (String) The distinguished name of the object.
 - `link_type` (String) Link type.

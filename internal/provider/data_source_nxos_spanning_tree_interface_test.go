@@ -21,7 +21,6 @@ func TestAccDataSourceNxosSpanningTreeInterface(t *testing.T) {
 					resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "bpdu_filter", "enable"),
 					resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "bpdu_guard", "enable"),
 					resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "cost", "100"),
-					resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "ctrl", "bpdu-guard"),
 					resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "guard", "root"),
 					resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "link_type", "p2p"),
 					resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "mode", "edge"),
@@ -40,7 +39,6 @@ resource "nxos_spanning_tree_interface" "test" {
   bpdu_filter = "enable"
   bpdu_guard = "enable"
   cost = 100
-  ctrl = "bpdu-guard"
   guard = "root"
   link_type = "p2p"
   mode = "edge"

@@ -98,15 +98,6 @@ func (r *SpanningTreeInterfaceResource) Schema(ctx context.Context, req resource
 					int64validator.Between(0, 200000000),
 				},
 			},
-			"ctrl": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Interface controls.").AddStringEnumDescription("unspecified", "bpdu-guard", "bpdu-filter").AddDefaultValueDescription("unspecified").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("unspecified"),
-				Validators: []validator.String{
-					stringvalidator.OneOf("unspecified", "bpdu-guard", "bpdu-filter"),
-				},
-			},
 			"guard": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Guard mode.").AddStringEnumDescription("default", "root", "loop", "none").AddDefaultValueDescription("default").String,
 				Optional:            true,

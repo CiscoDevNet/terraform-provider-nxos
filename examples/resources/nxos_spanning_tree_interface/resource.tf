@@ -4,7 +4,6 @@ resource "nxos_spanning_tree_interface" "example" {
   bpdu_filter  = "enable"
   bpdu_guard   = "enable"
   cost         = 100
-  ctrl         = "bpdu-guard"
   guard        = "root"
   link_type    = "p2p"
   mode         = "edge"

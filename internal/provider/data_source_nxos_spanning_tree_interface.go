@@ -66,10 +66,6 @@ func (d *SpanningTreeInterfaceDataSource) Schema(ctx context.Context, req dataso
 				MarkdownDescription: "Port path cost.",
 				Computed:            true,
 			},
-			"ctrl": schema.StringAttribute{
-				MarkdownDescription: "Interface controls.",
-				Computed:            true,
-			},
 			"guard": schema.StringAttribute{
 				MarkdownDescription: "Guard mode.",
 				Computed:            true,

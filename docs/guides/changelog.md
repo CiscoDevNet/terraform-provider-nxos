@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## 0.4.0 (unreleased)
+## 0.4.0
 
 - Add option to manage child objects with `nxos_rest` resource
 - Add `access_list_name` attribute to `nxos_ipv4_access_list_policy_ingress_interface` resource and data source

@@ -5,6 +5,8 @@ subcategory: "Interface"
 description: |-
   This resource can manage a port-channel interface.
   API Documentation: pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Interfaces/pc:AggrIf/
+  Child resources
+  nxosportchannelinterfacevrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/port_channel_interface_vrf
 ---
 
 # nxos_port_channel_interface (Resource)
@@ -12,6 +14,10 @@ description: |-
 This resource can manage a port-channel interface.
 
 - API Documentation: [pcAggrIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Interfaces/pc:AggrIf/)
+
+### Child resources
+
+- [nxos_port_channel_interface_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/port_channel_interface_vrf)
 
 ## Example Usage
 

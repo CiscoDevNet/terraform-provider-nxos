@@ -9,6 +9,7 @@
 - Add `nxos_vpc_domain` resource and data source
 - Add `nxos_vpc_interface` resource and data source
 - Add `nxos_port_channel_interface` resource and data source
+- Add `nxos_port_channel_interface_vrf` resource and data source
 
 ## 0.3.23
 

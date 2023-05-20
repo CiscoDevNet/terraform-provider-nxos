@@ -1,0 +1,34 @@
+---
+name: Port Channel Interface VRF
+class_name: nwRtVrfMbr
+dn: sys/intf/aggr-[%s]/rtvrfMbr
+ds_description: This data source can read a port-channel interface VRF association.
+res_description: This resource can manage a port-channel interface VRF association.
+doc_path: Routing%20and%20Forwarding/nw:RtVrfMbr/
+doc_category: Interface
+parents:
+  - Port Channel Interface
+references:
+  - VRF
+attributes:
+  - nxos_name: id
+    tf_name: interface_id
+    type: String
+    id: true
+    reference_only: true
+    description: "Must match first field in the output of `show intf brief`. Example: `po1`."
+    example: po1
+  - nxos_name: tDn
+    tf_name: vrf_dn
+    type: String
+    mandatory: true
+    description: "DN of VRF. For example: `sys/inst-VRF1`."
+    example: sys/inst-default
+test_prerequisites:
+  - dn: sys/intf/aggr-[po1]
+    class_name: pcAggrIf
+    attributes:
+      - name: id
+        value: po1
+      - name: layer
+        value: Layer3

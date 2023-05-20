@@ -6,6 +6,8 @@ ds_description: This data source can read the configuration of a port-channel in
 res_description: This resource can manage a port-channel interface.
 doc_path: Interfaces/pc:AggrIf/
 doc_category: Interface
+children:
+  - Port Channel Interface VRF
 attributes:
   - nxos_name: id
     tf_name: interface_id

@@ -8,6 +8,8 @@ doc_path: System/vpc:Dom/
 doc_category: vPC
 parents:
   - vPC Instance
+children:
+  - vPC Interface
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state

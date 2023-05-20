@@ -7,6 +7,8 @@ description: |-
   API Documentation: vpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/vpc:Dom/
   Parent resources
   nxosvpcinstance https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vpc_instance
+  Child resources
+  nxosvpcinterface https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vpc_interface
 ---
 
 # nxos_vpc_domain (Resource)
@@ -18,6 +20,10 @@ This resource can manage the vPC domain configuration.
 ### Parent resources
 
 - [nxos_vpc_instance](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vpc_instance)
+
+### Child resources
+
+- [nxos_vpc_interface](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vpc_interface)
 
 ## Example Usage
 

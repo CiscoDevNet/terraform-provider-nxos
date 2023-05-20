@@ -1,0 +1,52 @@
+---
+name: vPC Interface
+class_name: vpcIf
+dn: sys/vpc/inst/dom/if-[%v]
+ds_description: This data source can read the vPC interface configuration.
+res_description: This resource can manage the vPC interface configuration.
+doc_path: System/vpc:If/
+doc_category: vPC
+parents:
+  - vPC Domain
+references:
+  - Port Channel Interface
+attributes:
+  - nxos_name: id
+    tf_name: vpc_interface_id
+    type: Int64
+    id: true
+    description: "The vPC interface identifier."
+    min_int: 1
+    max_int: 16384
+    example: 1
+child_classes:
+  - class_name: vpcRsVpcConf
+    rn: rsvpcConf
+    type: single
+    attributes:
+      - nxos_name: tDn
+        tf_name: port_channel_interface_dn
+        type: String
+        description: "Port-channel interface DN."
+        example: sys/intf/aggr-[po1]
+test_prerequisites:
+  - dn: sys/fm/vpc
+    class_name: fmVpc
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/vpc/inst
+    class_name: vpcInst
+    dependencies: [0]
+  - dn: sys/vpc/inst/dom
+    class_name: vpcDom
+    attributes:
+      - name: id
+        value: 100
+    dependencies: [1]
+  - dn: sys/intf/aggr-[po1]
+    class_name: pcAggrIf
+    attributes:
+      - name: id
+        value: po1

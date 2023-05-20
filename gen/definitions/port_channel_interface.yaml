@@ -1,0 +1,202 @@
+---
+name: Port Channel Interface
+class_name: pcAggrIf
+dn: sys/intf/aggr-[%s]
+ds_description: This data source can read the configuration of a port-channel interface.
+res_description: This resource can manage a port-channel interface.
+doc_path: Interfaces/pc:AggrIf/
+doc_category: Interface
+attributes:
+  - nxos_name: id
+    tf_name: interface_id
+    type: String
+    id: true
+    description: "Must match first field in the output of `show intf brief`. Example: `po1`."
+    example: po1
+  - nxos_name: pcMode
+    tf_name: port_channel_mode
+    type: String
+    description: "The aggregated interface protocol channel mode."
+    enum_values:
+      - "on"
+      - static
+      - active
+      - passive
+      - mac-pin
+    default_value: "on"
+    example: active
+  - nxos_name: minLinks
+    tf_name: minimum_links
+    type: Int64
+    description: "Minimum links."
+    min_int: 1
+    max_int: 32
+    default_value: 1
+    example: 2
+  - nxos_name: maxLinks
+    tf_name: maximum_links
+    type: Int64
+    description: "Maximum links."
+    min_int: 1
+    max_int: 32
+    default_value: 32
+    example: 10
+  - nxos_name: suspIndividual
+    tf_name: suspend_individual
+    type: String
+    description: "Suspend Individual Port."
+    enum_values:
+      - enable
+      - disable
+    default_value: enable
+    example: disable
+  - nxos_name: accessVlan
+    tf_name: access_vlan
+    type: String
+    description: "Access VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`."
+    default_value: vlan-1
+    example: unknown
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: "Administrative port state."
+    enum_values:
+      - up
+      - down
+    default_value: up
+    example: up
+  - nxos_name: autoNeg
+    tf_name: auto_negotiation
+    type: String
+    description: "Administrative port auto-negotiation."
+    enum_values:
+      - "on"
+      - "off"
+      - 25G
+    default_value: "on"
+    example: "on"
+  - nxos_name: bw
+    tf_name: bandwidth
+    type: Int64
+    description: "The bandwidth parameter for a routed interface, port channel, or subinterface."
+    min_int: 0
+    max_int: 3200000000
+    default_value: 0
+    example: 1000
+  - nxos_name: delay
+    tf_name: delay
+    type: Int64
+    description: "The administrative port delay time."
+    min_int: 1
+    max_int: 16777215
+    default_value: 1
+    example: 10
+  - nxos_name: descr
+    tf_name: description
+    type: String
+    description: "Interface description."
+    example: My Description
+  - nxos_name: duplex
+    tf_name: duplex
+    type: String
+    description: "Duplex."
+    enum_values:
+      - auto
+      - full
+      - half
+    default_value: auto
+    example: auto
+  - nxos_name: layer
+    tf_name: layer
+    type: String
+    description: "Administrative port layer."
+    enum_values:
+      - Layer2
+      - Layer3
+    default_value: Layer2
+    example: Layer3
+  - nxos_name: linkLog
+    tf_name: link_logging
+    type: String
+    description: "Administrative link logging."
+    enum_values:
+      - default
+      - enable
+      - disable
+    default_value: default
+    example: enable
+  - nxos_name: medium
+    tf_name: medium
+    type: String
+    description: "The administrative port medium type."
+    enum_values:
+      - broadcast
+      - p2p
+    default_value: broadcast
+    example: broadcast
+  - nxos_name: mode
+    tf_name: mode
+    type: String
+    description: "Administrative port mode."
+    enum_values:
+      - access
+      - trunk
+      - fex-fabric
+      - dot1q-tunnel
+      - promiscuous
+      - host
+      - trunk_secondary
+      - trunk_promiscuous
+      - vntag
+    default_value: access
+    example: access
+  - nxos_name: mtu
+    tf_name: mtu
+    type: Int64
+    description: "Administrative port MTU."
+    min_int: 576
+    max_int: 9216
+    default_value: 1500
+    example: 1500
+  - nxos_name: nativeVlan
+    tf_name: native_vlan
+    type: String
+    description: "Native VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`."
+    default_value: vlan-1
+    example: unknown
+  - nxos_name: speed
+    tf_name: speed
+    type: String
+    description: "Administrative port speed."
+    enum_values:
+      - unknown
+      - 100M
+      - 1G
+      - 10G
+      - 40G
+      - auto
+      - auto 100M
+      - auto 100M 1G
+      - 100G
+      - 25G
+      - 10M
+      - 50G
+      - 200G
+      - 400G
+      - 2.5G
+      - 5G
+      - auto 2.5G 5G 10G
+      - auto 100M 1G 2.5G 5G
+    default_value: auto
+    example: auto
+  - nxos_name: trunkVlans
+    tf_name: trunk_vlans
+    type: String
+    description: "List of trunk VLANs."
+    default_value: 1-4094
+    example: 1-4094
+  - nxos_name: userCfgdFlags
+    tf_name: user_configured_flags
+    type: String
+    description: "Port User Config Flags."
+    example: "admin_layer,admin_mtu,admin_state"

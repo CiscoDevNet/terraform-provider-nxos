@@ -1,4 +1,4 @@
-## 0.4.1 (unreleased)
+## 0.4.1
 
 - Fix issue with idempotency when multiple devices are used
 

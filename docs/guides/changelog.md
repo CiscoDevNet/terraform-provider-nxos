@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.4.1
+
+- Fix issue with idempotency when multiple devices are used
+
 ## 0.4.0
 
 - Add option to manage child objects with `nxos_rest` resource

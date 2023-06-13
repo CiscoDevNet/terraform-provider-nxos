@@ -37,5 +37,3 @@ data "nxos_pim_static_rp" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-
-

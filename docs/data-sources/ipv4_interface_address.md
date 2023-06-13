@@ -40,5 +40,3 @@ data "nxos_ipv4_interface_address" "example" {
 
 - `id` (String) The distinguished name of the object.
 - `type` (String) Address type.
-
-

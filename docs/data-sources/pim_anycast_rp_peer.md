@@ -39,5 +39,3 @@ data "nxos_pim_anycast_rp_peer" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-
-

@@ -40,5 +40,3 @@ data "nxos_route_map_rule_entry_set_regular_community" "example" {
 - `id` (String) The distinguished name of the object.
 - `no_community` (String) Option to have no community attribute.
 - `set_criteria` (String) Operation on the current community.
-
-

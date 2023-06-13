@@ -42,5 +42,3 @@ data "nxos_ospf_vrf" "example" {
 - `distance` (Number) Administrative distance preference.
 - `id` (String) The distinguished name of the object.
 - `router_id` (String) Router ID.
-
-

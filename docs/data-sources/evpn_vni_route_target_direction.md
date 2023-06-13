@@ -37,5 +37,3 @@ data "nxos_evpn_vni_route_target_direction" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-
-

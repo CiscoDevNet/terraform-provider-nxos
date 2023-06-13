@@ -33,5 +33,3 @@ data "nxos_bgp_instance" "example" {
 - `asn` (String) Autonomous system number.
 - `enhanced_error_handling` (Boolean) Enable BGP Enhanced Error Handling.
 - `id` (String) The distinguished name of the object.
-
-

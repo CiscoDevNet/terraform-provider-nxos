@@ -60,5 +60,3 @@ data "nxos_default_qos_policy_map_match_class_map_police" "example" {
 - `violate_set_dscp` (Number) Set DSCP for violating traffic.
 - `violate_set_precedence` (String) Set precedence for violating traffic.
 - `violate_set_qos_group` (Number) Set qos-group for violating traffic.
-
-

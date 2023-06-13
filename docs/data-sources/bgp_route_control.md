@@ -41,5 +41,3 @@ data "nxos_bgp_route_control" "example" {
 - `id` (String) The distinguished name of the object.
 - `log_neighbor_changes` (String) Log Neighbor Changes.
 - `suppress_routes` (String) Suppress Routes: Advertise only routes that are programmed in hardware to peers. Can be configured only for VRF default.
-
-

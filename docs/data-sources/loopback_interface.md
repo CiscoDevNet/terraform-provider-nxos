@@ -37,5 +37,3 @@ data "nxos_loopback_interface" "example" {
 - `admin_state` (String) Administrative state.
 - `description` (String) Interface description.
 - `id` (String) The distinguished name of the object.
-
-

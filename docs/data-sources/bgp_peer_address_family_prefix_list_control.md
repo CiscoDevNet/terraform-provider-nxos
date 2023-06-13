@@ -44,5 +44,3 @@ data "nxos_bgp_peer_address_family_prefix_list_control" "example" {
 
 - `id` (String) The distinguished name of the object.
 - `list` (String) Route Control Prefix-List name.
-
-

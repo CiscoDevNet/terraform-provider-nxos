@@ -42,5 +42,3 @@ data "nxos_ipv4_prefix_list_rule_entry" "example" {
 - `id` (String) The distinguished name of the object.
 - `prefix` (String) IPv4 Prefix List Rule Entry prefix.
 - `to_range` (Number) IPv4 Prefix List Rule Entry end range.
-
-

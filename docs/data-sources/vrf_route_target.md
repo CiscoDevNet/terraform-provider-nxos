@@ -43,5 +43,3 @@ data "nxos_vrf_route_target" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-
-

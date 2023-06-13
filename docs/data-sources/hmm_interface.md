@@ -37,5 +37,3 @@ data "nxos_hmm_interface" "example" {
 - `admin_state` (String) Administrative state.
 - `id` (String) The distinguished name of the object.
 - `mode` (String) HMM Fabric Forwarding mode information for the interface.
-
-

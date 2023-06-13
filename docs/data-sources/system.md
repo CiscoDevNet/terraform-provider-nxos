@@ -31,5 +31,3 @@ data "nxos_system" "example" {
 
 - `id` (String) The distinguished name of the object.
 - `name` (String) The system name (hostname).
-
-

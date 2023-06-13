@@ -42,5 +42,3 @@ data "nxos_pim_interface" "example" {
 - `id` (String) The distinguished name of the object.
 - `passive` (Boolean) Passive interface.
 - `sparse_mode` (Boolean) Sparse mode.
-
-

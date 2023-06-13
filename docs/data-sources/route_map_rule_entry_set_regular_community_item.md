@@ -39,5 +39,3 @@ data "nxos_route_map_rule_entry_set_regular_community_item" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-
-

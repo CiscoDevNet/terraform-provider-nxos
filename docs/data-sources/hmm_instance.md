@@ -32,5 +32,3 @@ data "nxos_hmm_instance" "example" {
 - `admin_state` (String) Administrative state.
 - `anycast_mac` (String) Anycast Gateway MAC address.
 - `id` (String) The distinguished name of the object.
-
-

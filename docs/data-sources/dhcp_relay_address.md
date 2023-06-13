@@ -39,5 +39,3 @@ data "nxos_dhcp_relay_address" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-
-

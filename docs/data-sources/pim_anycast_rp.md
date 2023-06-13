@@ -37,5 +37,3 @@ data "nxos_pim_anycast_rp" "example" {
 - `id` (String) The distinguished name of the object.
 - `local_interface` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `source_interface` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
-
-

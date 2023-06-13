@@ -41,5 +41,3 @@ data "nxos_nve_interface" "example" {
 - `source_interface` (String) Source Interface associated with the NVE. Must match first field in the output of `show int brief`.
 - `suppress_arp` (Boolean) Suppress ARP.
 - `suppress_mac_route` (Boolean) Suppress MAC Route.
-
-

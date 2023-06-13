@@ -35,5 +35,3 @@ data "nxos_ipv4_access_list" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-
-

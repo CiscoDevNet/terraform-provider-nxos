@@ -38,5 +38,3 @@ data "nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth" "example"
 
 - `id` (String) The distinguished name of the object.
 - `value` (Number) Remaining bandwidth percent.
-
-

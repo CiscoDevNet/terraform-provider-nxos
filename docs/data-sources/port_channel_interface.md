@@ -55,5 +55,3 @@ data "nxos_port_channel_interface" "example" {
 - `suspend_individual` (String) Suspend Individual Port.
 - `trunk_vlans` (String) List of trunk VLANs.
 - `user_configured_flags` (String) Port User Config Flags.
-
-

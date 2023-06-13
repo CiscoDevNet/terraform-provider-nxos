@@ -51,5 +51,3 @@ data "nxos_vpc_domain" "example" {
 - `system_priority` (Number) System priority.
 - `track` (Number) Tracking object to suspend vPC if object goes down.
 - `virtual_ip` (String) vPC virtual IP address (vIP).
-
-

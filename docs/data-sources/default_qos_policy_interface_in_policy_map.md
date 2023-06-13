@@ -36,5 +36,3 @@ data "nxos_default_qos_policy_interface_in_policy_map" "example" {
 
 - `id` (String) The distinguished name of the object.
 - `policy_map_name` (String) Policy map name.
-
-

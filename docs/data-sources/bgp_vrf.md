@@ -38,5 +38,3 @@ data "nxos_bgp_vrf" "example" {
 
 - `id` (String) The distinguished name of the object.
 - `router_id` (String) Router ID.
-
-

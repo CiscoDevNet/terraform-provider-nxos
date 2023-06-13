@@ -44,5 +44,3 @@ data "nxos_bgp_peer_template_address_family" "example" {
 - `id` (String) The distinguished name of the object.
 - `send_community_extended` (String) Send-community extended.
 - `send_community_standard` (String) Send-community standard.
-
-

@@ -42,5 +42,3 @@ data "nxos_ospf_area" "example" {
 - `cost` (Number) Area cost, specifies cost for default summary LSAs. Used with nssa/stub area types.
 - `id` (String) The distinguished name of the object.
 - `type` (String) Area type.
-
-

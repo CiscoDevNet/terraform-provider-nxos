@@ -31,5 +31,3 @@ data "nxos_queuing_qos_policy_system_out_policy_map" "example" {
 
 - `id` (String) The distinguished name of the object.
 - `policy_map_name` (String) Policy map name.
-
-

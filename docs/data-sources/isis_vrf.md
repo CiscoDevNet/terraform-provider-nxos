@@ -51,5 +51,3 @@ data "nxos_isis_vrf" "example" {
 - `mtu` (Number) The configuration of link-state packet (LSP) maximum transmission units (MTU) is supported. You can enable up to 4352 bytes.
 - `net` (String) Holds IS-IS domain NET (address) value.
 - `passive_default` (String) IS-IS Domain passive-interface default level.
-
-

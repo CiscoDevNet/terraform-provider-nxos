@@ -46,5 +46,3 @@ data "nxos_ospf_authentication" "example" {
 - `md5_key` (String) Key used for md5 authentication.
 - `md5_key_secure_mode` (Boolean) Encrypted authentication md5 key or plain text key.
 - `type` (String) Authentication type.
-
-

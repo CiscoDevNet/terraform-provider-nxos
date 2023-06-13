@@ -41,5 +41,3 @@ data "nxos_svi_interface" "example" {
 - `id` (String) The distinguished name of the object.
 - `medium` (String) The administrative port medium type.
 - `mtu` (Number) Administrative port MTU.
-
-

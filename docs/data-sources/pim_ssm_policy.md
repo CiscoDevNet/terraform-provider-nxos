@@ -36,5 +36,3 @@ data "nxos_pim_ssm_policy" "example" {
 
 - `id` (String) The distinguished name of the object.
 - `name` (String) Policy name.
-
-

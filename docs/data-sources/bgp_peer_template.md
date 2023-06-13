@@ -41,5 +41,3 @@ data "nxos_bgp_peer_template" "example" {
 - `peer_type` (String) Neighbor Fabric Type.
 - `remote_asn` (String) Peer template autonomous system number.
 - `source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`.
-
-

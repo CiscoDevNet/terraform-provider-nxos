@@ -36,5 +36,3 @@ data "nxos_isis_instance" "example" {
 
 - `admin_state` (String) Administrative state.
 - `id` (String) The distinguished name of the object.
-
-

@@ -56,5 +56,3 @@ data "nxos_physical_interface" "example" {
 - `trunk_vlans` (String) List of trunk VLANs.
 - `uni_directional_ethernet` (String) UDE (Uni-Directional Ethernet).
 - `user_configured_flags` (String) Port User Config Flags.
-
-

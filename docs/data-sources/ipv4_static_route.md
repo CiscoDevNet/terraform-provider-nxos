@@ -51,5 +51,3 @@ Read-Only:
 - `preference` (Number) Route preference.
 - `tag` (Number) Tag value.
 - `vrf_name` (String) Nexthop VRF.
-
-

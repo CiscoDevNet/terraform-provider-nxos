@@ -37,5 +37,3 @@ data "nxos_port_channel_interface_member" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-
-

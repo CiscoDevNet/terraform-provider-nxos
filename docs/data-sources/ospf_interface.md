@@ -48,5 +48,3 @@ data "nxos_ospf_interface" "example" {
 - `network_type` (String) Network type.
 - `passive` (String) Passive interface control. Interface can be configured as passive or non-passive.
 - `priority` (Number) Priority, used in determining the designated router on this network.
-
-

@@ -37,5 +37,3 @@ data "nxos_pim_vrf" "example" {
 - `admin_state` (String) Administrative state.
 - `bfd` (Boolean) BFD.
 - `id` (String) The distinguished name of the object.
-
-

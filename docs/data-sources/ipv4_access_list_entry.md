@@ -82,5 +82,3 @@ data "nxos_ipv4_access_list_entry" "example" {
 - `urg` (Boolean) Match TCP URG flag.
 - `vlan` (Number) VLAN ID.
 - `vni` (String) NVE VNI ID. Either `invalid` or a number between 0 and 16777216.
-
-

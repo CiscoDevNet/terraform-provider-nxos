@@ -38,5 +38,3 @@ data "nxos_route_map_rule_entry" "example" {
 
 - `action` (String) Route-Map Rule Entry action.
 - `id` (String) The distinguished name of the object.
-
-

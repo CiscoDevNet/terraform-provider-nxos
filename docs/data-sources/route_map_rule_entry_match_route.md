@@ -37,5 +37,3 @@ data "nxos_route_map_rule_entry_match_route" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-
-

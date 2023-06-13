@@ -31,5 +31,3 @@ data "nxos_bgp" "example" {
 
 - `admin_state` (String) Administrative state.
 - `id` (String) The distinguished name of the object.
-
-

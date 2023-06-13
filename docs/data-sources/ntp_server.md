@@ -40,5 +40,3 @@ data "nxos_ntp_server" "example" {
 - `min_poll` (Number) NTP minimum interval default in seconds. Possible range is from `4` to `16`.
 - `type` (String) NTP provider type. Possible values are `server` or `peer`.
 - `vrf` (String) Identifies the VRF for the NTP providers.
-
-

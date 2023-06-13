@@ -37,5 +37,3 @@ data "nxos_default_qos_class_map_dscp" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-
-

@@ -38,5 +38,3 @@ data "nxos_queuing_qos_policy_map_match_class_map_priority" "example" {
 
 - `id` (String) The distinguished name of the object.
 - `level` (Number) Priority level.
-
-

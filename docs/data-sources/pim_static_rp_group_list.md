@@ -41,5 +41,3 @@ data "nxos_pim_static_rp_group_list" "example" {
 - `bidir` (Boolean) Flag to treat Group Ranges as BiDir.
 - `id` (String) The distinguished name of the object.
 - `override` (Boolean) Flag to override RP preference to use Static over Dynamic RP.
-
-

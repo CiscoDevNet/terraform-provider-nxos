@@ -38,5 +38,3 @@ data "nxos_default_qos_policy_map_match_class_map_set_qos_group" "example" {
 
 - `id` (String) The distinguished name of the object.
 - `qos_group_id` (Number) QoS group ID.
-
-

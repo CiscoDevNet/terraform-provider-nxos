@@ -43,5 +43,3 @@ data "nxos_spanning_tree_interface" "example" {
 - `link_type` (String) Link type.
 - `mode` (String) Port mode.
 - `priority` (Number) Port priority.
-
-

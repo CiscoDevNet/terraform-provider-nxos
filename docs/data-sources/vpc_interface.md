@@ -36,5 +36,3 @@ data "nxos_vpc_interface" "example" {
 
 - `id` (String) The distinguished name of the object.
 - `port_channel_interface_dn` (String) Port-channel interface DN.
-
-

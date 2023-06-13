@@ -43,5 +43,3 @@ data "nxos_bgp_peer_template_max_prefix" "example" {
 - `maximum_prefix` (Number) Maximum number of prefixes allowed from the peer.
 - `restart_time` (Number) The period of time in minutes before restarting the peer when the prefix limit is reached.
 - `threshold` (Number) The period of time in minutes before restarting the peer when the prefix limit is reached.
-
-

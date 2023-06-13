@@ -30,5 +30,3 @@ data "nxos_nve_vni_container" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-
-

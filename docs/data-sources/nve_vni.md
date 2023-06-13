@@ -39,5 +39,3 @@ data "nxos_nve_vni" "example" {
 - `multicast_group` (String) Configures multicast group address for VNI.
 - `multisite_ingress_replication` (String) Enable or disable Multisite Ingress Replication for VNI(s).
 - `suppress_arp` (String) Enable or disable ARP suppression for VNI(s).
-
-

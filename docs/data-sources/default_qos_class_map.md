@@ -36,5 +36,3 @@ data "nxos_default_qos_class_map" "example" {
 
 - `id` (String) The distinguished name of the object.
 - `match_type` (String) Match type.
-
-

@@ -43,5 +43,3 @@ data "nxos_subinterface" "example" {
 - `link_logging` (String) Administrative link logging.
 - `medium` (String) The administrative port medium type.
 - `mtu` (Number) Administrative port MTU.
-
-

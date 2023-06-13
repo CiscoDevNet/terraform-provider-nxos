@@ -31,5 +31,3 @@ data "nxos_ethernet" "example" {
 
 - `id` (String) The distinguished name of the object.
 - `mtu` (Number) System jumbo MTU.
-
-

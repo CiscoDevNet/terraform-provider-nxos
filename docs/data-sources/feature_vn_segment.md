@@ -31,5 +31,3 @@ data "nxos_feature_vn_segment" "example" {
 
 - `admin_state` (String) Administrative state.
 - `id` (String) The distinguished name of the object.
-
-

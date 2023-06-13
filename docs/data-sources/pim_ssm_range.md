@@ -42,5 +42,3 @@ data "nxos_pim_ssm_range" "example" {
 - `prefix_list` (String) Prefix list name.
 - `route_map` (String) Route map name.
 - `ssm_none` (Boolean) Exclude standard SSM range (232.0.0.0/8).
-
-

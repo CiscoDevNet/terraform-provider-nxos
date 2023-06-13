@@ -44,5 +44,3 @@ data "nxos_bgp_peer_address_family_route_control" "example" {
 
 - `id` (String) The distinguished name of the object.
 - `route_map_name` (String) Route Control Route-Map name.
-
-

@@ -36,5 +36,3 @@ data "nxos_svi_interface_vrf" "example" {
 
 - `id` (String) The distinguished name of the object.
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.
-
-

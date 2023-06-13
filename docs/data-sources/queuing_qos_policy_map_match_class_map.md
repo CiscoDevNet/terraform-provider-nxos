@@ -37,5 +37,3 @@ data "nxos_queuing_qos_policy_map_match_class_map" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-
-

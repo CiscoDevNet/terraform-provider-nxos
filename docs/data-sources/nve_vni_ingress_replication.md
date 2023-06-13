@@ -36,5 +36,3 @@ data "nxos_nve_vni_ingress_replication" "example" {
 
 - `id` (String) The distinguished name of the object.
 - `protocol` (String) Configure VxLAN Ingress Replication mode.
-
-

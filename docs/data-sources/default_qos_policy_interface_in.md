@@ -35,5 +35,3 @@ data "nxos_default_qos_policy_interface_in" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-
-

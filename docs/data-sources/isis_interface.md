@@ -62,5 +62,3 @@ data "nxos_isis_interface" "example" {
 - `priority_l1` (Number) Circuit priority.
 - `priority_l2` (Number) Circuit priority.
 - `vrf` (String) VRF.
-
-

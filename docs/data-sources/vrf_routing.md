@@ -36,5 +36,3 @@ data "nxos_vrf_routing" "example" {
 
 - `id` (String) The distinguished name of the object.
 - `route_distinguisher` (String) Route Distinguisher value in NX-OS DME format.
-
-

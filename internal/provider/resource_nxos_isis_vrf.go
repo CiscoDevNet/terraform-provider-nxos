@@ -32,7 +32,7 @@ func NewISISVRFResource() resource.Resource {
 }
 
 type ISISVRFResource struct {
-	data *NxosProviderData
+	clients map[string]*nxos.Client
 }
 
 func (r *ISISVRFResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -185,7 +185,7 @@ func (r *ISISVRFResource) Configure(ctx context.Context, req resource.ConfigureR
 		return
 	}
 
-	r.data = req.ProviderData.(*NxosProviderData)
+	r.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
 func (r *ISISVRFResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -202,7 +202,7 @@ func (r *ISISVRFResource) Create(ctx context.Context, req resource.CreateRequest
 
 	// Post object
 	body := plan.toBody()
-	_, err := r.data.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.ValueString()]))
+	_, err := r.clients[plan.Device.ValueString()].Post(plan.getDn(), body.Str)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 		return
@@ -229,8 +229,7 @@ func (r *ISISVRFResource) Read(ctx context.Context, req resource.ReadRequest, re
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
 	queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
-	queries = append(queries, nxos.OverrideUrl(r.data.devices[state.Device.ValueString()]))
-	res, err := r.data.client.GetDn(state.Dn.ValueString(), queries...)
+	res, err := r.clients[state.Device.ValueString()].GetDn(state.Dn.ValueString(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -257,7 +256,7 @@ func (r *ISISVRFResource) Update(ctx context.Context, req resource.UpdateRequest
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
 	body := plan.toBody()
-	_, err := r.data.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.ValueString()]))
+	_, err := r.clients[plan.Device.ValueString()].Post(plan.getDn(), body.Str)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 		return
@@ -281,7 +280,7 @@ func (r *ISISVRFResource) Delete(ctx context.Context, req resource.DeleteRequest
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Dn.ValueString()))
 
-	res, err := r.data.client.DeleteDn(state.Dn.ValueString(), nxos.OverrideUrl(r.data.devices[state.Device.ValueString()]))
+	res, err := r.clients[state.Device.ValueString()].DeleteDn(state.Dn.ValueString())
 	if err != nil {
 		errCode := res.Get("imdata.0.error.attributes.code").Str
 		// Ignore errors of type "Cannot delete object"

@@ -25,7 +25,7 @@ func NewSystemDataSource() datasource.DataSource {
 }
 
 type SystemDataSource struct {
-	data *NxosProviderData
+	clients map[string]*nxos.Client
 }
 
 func (d *SystemDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -59,7 +59,7 @@ func (d *SystemDataSource) Configure(_ context.Context, req datasource.Configure
 		return
 	}
 
-	d.data = req.ProviderData.(*NxosProviderData)
+	d.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
 func (d *SystemDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
@@ -74,8 +74,8 @@ func (d *SystemDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getDn()))
 
-	queries := []func(*nxos.Req){nxos.OverrideUrl(d.data.devices[config.Device.ValueString()])}
-	res, err := d.data.client.GetDn(config.getDn(), queries...)
+	queries := []func(*nxos.Req){}
+	res, err := d.clients[config.Device.ValueString()].GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

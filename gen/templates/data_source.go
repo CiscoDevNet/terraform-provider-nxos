@@ -26,7 +26,7 @@ func New{{camelCase .Name}}DataSource() datasource.DataSource {
 }
 
 type {{camelCase .Name}}DataSource struct {
-	data *NxosProviderData
+	clients map[string]*nxos.Client
 }
 
 func (d *{{camelCase .Name}}DataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -95,7 +95,7 @@ func (d *{{camelCase .Name}}DataSource) Configure(_ context.Context, req datasou
 		return
 	}
 
-	d.data = req.ProviderData.(*NxosProviderData)
+	d.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
 func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
@@ -110,11 +110,11 @@ func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getDn()))
 
-	queries := []func(*nxos.Req){nxos.OverrideUrl(d.data.devices[config.Device.ValueString()])}
+	queries := []func(*nxos.Req){}
 	{{- if .ChildClasses}}
 	queries = append(queries, nxos.Query("rsp-subtree", "children"))
 	{{- end}}
-	res, err := d.data.client.GetDn(config.getDn(), queries...)
+	res, err := d.clients[config.Device.ValueString()].GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

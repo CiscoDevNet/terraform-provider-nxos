@@ -25,12 +25,6 @@ type NxosProvider struct {
 	version string
 }
 
-// NxosProviderData defines the data passed to resources and data sources.
-type NxosProviderData struct {
-	client  *nxos.Client
-	devices map[string]string
-}
-
 // NxosProviderModel describes the provider data model.
 type NxosProviderModel struct {
 	Username types.String              `tfsdk:"username"`
@@ -230,7 +224,7 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		retries = config.Retries.ValueInt64()
 	}
 
-	// Create a new NX-OS client and set it to the provider client
+	clients := make(map[string]*nxos.Client)
 	c, err := nxos.NewClient(url, username, password, insecure, nxos.MaxRetries(int(retries)))
 	if err != nil {
 		resp.Diagnostics.AddError(
@@ -239,19 +233,22 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		)
 		return
 	}
+	clients[""] = &c
 
-	devices := make(map[string]string)
 	for _, device := range config.Devices {
-		devices[device.Name.ValueString()] = device.URL.ValueString()
+		c, err := nxos.NewClient(device.URL.ValueString(), username, password, insecure, nxos.MaxRetries(int(retries)))
+		if err != nil {
+			resp.Diagnostics.AddError(
+				"Unable to create client",
+				"Unable to create nxos client:\n\n"+err.Error(),
+			)
+			return
+		}
+		clients[device.Name.ValueString()] = &c
 	}
 
-	data := NxosProviderData{
-		client:  &c,
-		devices: devices,
-	}
-
-	resp.DataSourceData = &data
-	resp.ResourceData = &data
+	resp.DataSourceData = clients
+	resp.ResourceData = clients
 }
 
 func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource {

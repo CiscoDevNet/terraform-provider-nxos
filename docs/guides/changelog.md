@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.4.2 (unreleased)
+
+- Fix issue with device authentication
+
 ## 0.4.1
 
 - Fix issue with idempotency when multiple devices are used

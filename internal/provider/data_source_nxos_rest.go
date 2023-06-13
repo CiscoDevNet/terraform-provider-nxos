@@ -23,7 +23,7 @@ func NewRestDataSource() datasource.DataSource {
 }
 
 type RestDataSource struct {
-	data *NxosProviderData
+	clients map[string]*nxos.Client
 }
 
 func (d *RestDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -66,7 +66,7 @@ func (d *RestDataSource) Configure(_ context.Context, req datasource.ConfigureRe
 		return
 	}
 
-	d.data = req.ProviderData.(*NxosProviderData)
+	d.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
 func (d *RestDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
@@ -81,7 +81,7 @@ func (d *RestDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.Id.ValueString()))
 
-	res, err := d.data.client.GetDn(config.Dn.ValueString(), nxos.OverrideUrl(d.data.devices[config.Device.ValueString()]))
+	res, err := d.clients[config.Device.ValueString()].GetDn(config.Dn.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

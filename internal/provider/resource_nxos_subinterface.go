@@ -31,7 +31,7 @@ func NewSubinterfaceResource() resource.Resource {
 }
 
 type SubinterfaceResource struct {
-	data *NxosProviderData
+	clients map[string]*nxos.Client
 }
 
 func (r *SubinterfaceResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -136,7 +136,7 @@ func (r *SubinterfaceResource) Configure(ctx context.Context, req resource.Confi
 		return
 	}
 
-	r.data = req.ProviderData.(*NxosProviderData)
+	r.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
 func (r *SubinterfaceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -153,7 +153,7 @@ func (r *SubinterfaceResource) Create(ctx context.Context, req resource.CreateRe
 
 	// Post object
 	body := plan.toBody()
-	_, err := r.data.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.ValueString()]))
+	_, err := r.clients[plan.Device.ValueString()].Post(plan.getDn(), body.Str)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 		return
@@ -180,8 +180,7 @@ func (r *SubinterfaceResource) Read(ctx context.Context, req resource.ReadReques
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
 	queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
-	queries = append(queries, nxos.OverrideUrl(r.data.devices[state.Device.ValueString()]))
-	res, err := r.data.client.GetDn(state.Dn.ValueString(), queries...)
+	res, err := r.clients[state.Device.ValueString()].GetDn(state.Dn.ValueString(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -208,7 +207,7 @@ func (r *SubinterfaceResource) Update(ctx context.Context, req resource.UpdateRe
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
 	body := plan.toBody()
-	_, err := r.data.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.ValueString()]))
+	_, err := r.clients[plan.Device.ValueString()].Post(plan.getDn(), body.Str)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 		return
@@ -232,7 +231,7 @@ func (r *SubinterfaceResource) Delete(ctx context.Context, req resource.DeleteRe
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Dn.ValueString()))
 
-	res, err := r.data.client.DeleteDn(state.Dn.ValueString(), nxos.OverrideUrl(r.data.devices[state.Device.ValueString()]))
+	res, err := r.clients[state.Device.ValueString()].DeleteDn(state.Dn.ValueString())
 	if err != nil {
 		errCode := res.Get("imdata.0.error.attributes.code").Str
 		// Ignore errors of type "Cannot delete object"

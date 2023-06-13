@@ -26,7 +26,7 @@ func NewSystemResource() resource.Resource {
 }
 
 type SystemResource struct {
-	data *NxosProviderData
+	clients map[string]*nxos.Client
 }
 
 func (r *SystemResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -64,7 +64,7 @@ func (r *SystemResource) Configure(ctx context.Context, req resource.ConfigureRe
 		return
 	}
 
-	r.data = req.ProviderData.(*NxosProviderData)
+	r.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
 func (r *SystemResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -81,7 +81,7 @@ func (r *SystemResource) Create(ctx context.Context, req resource.CreateRequest,
 
 	// Post object
 	body := plan.toBody()
-	_, err := r.data.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.ValueString()]))
+	_, err := r.clients[plan.Device.ValueString()].Post(plan.getDn(), body.Str)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 		return
@@ -108,8 +108,7 @@ func (r *SystemResource) Read(ctx context.Context, req resource.ReadRequest, res
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
 	queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
-	queries = append(queries, nxos.OverrideUrl(r.data.devices[state.Device.ValueString()]))
-	res, err := r.data.client.GetDn(state.Dn.ValueString(), queries...)
+	res, err := r.clients[state.Device.ValueString()].GetDn(state.Dn.ValueString(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -136,7 +135,7 @@ func (r *SystemResource) Update(ctx context.Context, req resource.UpdateRequest,
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
 	body := plan.toBody()
-	_, err := r.data.client.Post(plan.getDn(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.ValueString()]))
+	_, err := r.clients[plan.Device.ValueString()].Post(plan.getDn(), body.Str)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 		return

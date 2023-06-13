@@ -25,7 +25,7 @@ func NewDefaultQOSPolicyMapMatchClassMapDataSource() datasource.DataSource {
 }
 
 type DefaultQOSPolicyMapMatchClassMapDataSource struct {
-	data *NxosProviderData
+	clients map[string]*nxos.Client
 }
 
 func (d *DefaultQOSPolicyMapMatchClassMapDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -63,7 +63,7 @@ func (d *DefaultQOSPolicyMapMatchClassMapDataSource) Configure(_ context.Context
 		return
 	}
 
-	d.data = req.ProviderData.(*NxosProviderData)
+	d.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
 func (d *DefaultQOSPolicyMapMatchClassMapDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
@@ -78,8 +78,8 @@ func (d *DefaultQOSPolicyMapMatchClassMapDataSource) Read(ctx context.Context, r
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getDn()))
 
-	queries := []func(*nxos.Req){nxos.OverrideUrl(d.data.devices[config.Device.ValueString()])}
-	res, err := d.data.client.GetDn(config.getDn(), queries...)
+	queries := []func(*nxos.Req){}
+	res, err := d.clients[config.Device.ValueString()].GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

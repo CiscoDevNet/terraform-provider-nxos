@@ -25,7 +25,7 @@ func NewHMMDataSource() datasource.DataSource {
 }
 
 type HMMDataSource struct {
-	data *NxosProviderData
+	clients map[string]*nxos.Client
 }
 
 func (d *HMMDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -59,7 +59,7 @@ func (d *HMMDataSource) Configure(_ context.Context, req datasource.ConfigureReq
 		return
 	}
 
-	d.data = req.ProviderData.(*NxosProviderData)
+	d.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
 func (d *HMMDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
@@ -74,8 +74,8 @@ func (d *HMMDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getDn()))
 
-	queries := []func(*nxos.Req){nxos.OverrideUrl(d.data.devices[config.Device.ValueString()])}
-	res, err := d.data.client.GetDn(config.getDn(), queries...)
+	queries := []func(*nxos.Req){}
+	res, err := d.clients[config.Device.ValueString()].GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

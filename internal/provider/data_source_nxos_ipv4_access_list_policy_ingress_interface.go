@@ -25,7 +25,7 @@ func NewIPv4AccessListPolicyIngressInterfaceDataSource() datasource.DataSource {
 }
 
 type IPv4AccessListPolicyIngressInterfaceDataSource struct {
-	data *NxosProviderData
+	clients map[string]*nxos.Client
 }
 
 func (d *IPv4AccessListPolicyIngressInterfaceDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -63,7 +63,7 @@ func (d *IPv4AccessListPolicyIngressInterfaceDataSource) Configure(_ context.Con
 		return
 	}
 
-	d.data = req.ProviderData.(*NxosProviderData)
+	d.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
 func (d *IPv4AccessListPolicyIngressInterfaceDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
@@ -78,9 +78,9 @@ func (d *IPv4AccessListPolicyIngressInterfaceDataSource) Read(ctx context.Contex
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getDn()))
 
-	queries := []func(*nxos.Req){nxos.OverrideUrl(d.data.devices[config.Device.ValueString()])}
+	queries := []func(*nxos.Req){}
 	queries = append(queries, nxos.Query("rsp-subtree", "children"))
-	res, err := d.data.client.GetDn(config.getDn(), queries...)
+	res, err := d.clients[config.Device.ValueString()].GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

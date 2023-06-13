@@ -25,7 +25,7 @@ func NewRestResource() resource.Resource {
 }
 
 type RestResource struct {
-	data *NxosProviderData
+	clients map[string]*nxos.Client
 }
 
 func (r *RestResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -105,18 +105,7 @@ func (r *RestResource) Configure(ctx context.Context, req resource.ConfigureRequ
 		return
 	}
 
-	data, ok := req.ProviderData.(*NxosProviderData)
-
-	if !ok {
-		resp.Diagnostics.AddError(
-			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected data, got: %T. Please report this issue to the provider developers.", req.ProviderData),
-		)
-
-		return
-	}
-
-	r.data = data
+	r.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
 func (r *RestResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -132,7 +121,7 @@ func (r *RestResource) Create(ctx context.Context, req resource.CreateRequest, r
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.Dn.ValueString()))
 
 	body := plan.toBody(ctx)
-	_, err := r.data.client.Post(plan.Dn.ValueString(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.ValueString()]))
+	_, err := r.clients[plan.Device.ValueString()].Post(plan.Dn.ValueString(), body.Str)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 		return
@@ -159,11 +148,10 @@ func (r *RestResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
 
 	queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
-	queries = append(queries, nxos.OverrideUrl(r.data.devices[state.Device.ValueString()]))
 	if len(state.Children) > 0 {
 		queries = append(queries, nxos.Query("rsp-subtree", "children"))
 	}
-	res, err := r.data.client.GetDn(state.Dn.ValueString(), queries...)
+	res, err := r.clients[state.Device.ValueString()].GetDn(state.Dn.ValueString(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -190,7 +178,7 @@ func (r *RestResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
 	body := plan.toBody(ctx)
-	_, err := r.data.client.Post(plan.Dn.ValueString(), body.Str, nxos.OverrideUrl(r.data.devices[plan.Device.ValueString()]))
+	_, err := r.clients[plan.Device.ValueString()].Post(plan.Dn.ValueString(), body.Str)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 		return
@@ -215,7 +203,7 @@ func (r *RestResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
 
 	if state.Delete.ValueBool() {
-		res, err := r.data.client.DeleteDn(state.Dn.ValueString(), nxos.OverrideUrl(r.data.devices[state.Device.ValueString()]))
+		res, err := r.clients[state.Device.ValueString()].DeleteDn(state.Dn.ValueString())
 		if err != nil {
 			errCode := res.Get("imdata.0.error.attributes.code").Str
 			// Ignore errors of type "Cannot delete object"

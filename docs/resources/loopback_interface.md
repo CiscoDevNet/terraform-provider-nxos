@@ -6,7 +6,7 @@ description: |-
   This resource can manage a loopback interface.
   API Documentation: l3LbRtdIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:LbRtdIf/
   Child resources
-  nxosloopbackinterface_vrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/loopback_interface_vrf
+  nxosloopbackinterface_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/loopback_interface_vrf
 ---
 
 # nxos_loopback_interface (Resource)
@@ -17,7 +17,7 @@ This resource can manage a loopback interface.
 
 ### Child resources
 
-- [nxos_loopback_interface_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/loopback_interface_vrf)
+- [nxos_loopback_interface_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/loopback_interface_vrf)
 
 ## Example Usage
 

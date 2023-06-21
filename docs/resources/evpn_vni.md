@@ -6,9 +6,9 @@ description: |-
   This resource can manage a EVPN VNI Route Distinguisher.
   API Documentation: rtctrlBDEvi https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:BDEvi/
   Parent resources
-  nxos_evpn https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/evpn
+  nxos_evpn https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/evpn
   Child resources
-  nxosevpnvniroutetarget_direction https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/evpn_vni_route_target_direction
+  nxosevpnvniroutetarget_direction https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/evpn_vni_route_target_direction
 ---
 
 # nxos_evpn_vni (Resource)
@@ -19,11 +19,11 @@ This resource can manage a EVPN VNI Route Distinguisher.
 
 ### Parent resources
 
-- [nxos_evpn](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/evpn)
+- [nxos_evpn](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/evpn)
 
 ### Child resources
 
-- [nxos_evpn_vni_route_target_direction](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/evpn_vni_route_target_direction)
+- [nxos_evpn_vni_route_target_direction](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/evpn_vni_route_target_direction)
 
 ## Example Usage
 

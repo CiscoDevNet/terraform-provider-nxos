@@ -6,7 +6,7 @@ description: |-
   This resource can manage the global BGP configuration.
   API Documentation: bgpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:Entity/
   Child resources
-  nxosbgpinstance https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_instance
+  nxosbgpinstance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_instance
 ---
 
 # nxos_bgp (Resource)
@@ -17,7 +17,7 @@ This resource can manage the global BGP configuration.
 
 ### Child resources
 
-- [nxos_bgp_instance](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_instance)
+- [nxos_bgp_instance](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_instance)
 
 ## Example Usage
 

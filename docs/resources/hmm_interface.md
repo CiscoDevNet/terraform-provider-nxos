@@ -6,7 +6,7 @@ description: |-
   This resource can manage the HMM Fabric Forwarding mode information related to an Interface.
   API Documentation: hmmFwdIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Host%20Mobility/hmm:FwdIf/
   Parent resources
-  nxoshmminstance https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/hmm_instance
+  nxoshmminstance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/hmm_instance
 ---
 
 # nxos_hmm_interface (Resource)
@@ -17,7 +17,7 @@ This resource can manage the HMM Fabric Forwarding mode information related to a
 
 ### Parent resources
 
-- [nxos_hmm_instance](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/hmm_instance)
+- [nxos_hmm_instance](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/hmm_instance)
 
 ## Example Usage
 

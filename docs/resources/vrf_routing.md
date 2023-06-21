@@ -6,9 +6,9 @@ description: |-
   This resource can manage a VRF Route Distinguisher and VRF VNI.
   API Documentation: rtctrlDom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:Dom/
   Parent resources
-  nxos_vrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf
+  nxos_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf
   Child resources
-  nxosvrfaddress_family https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf_address_family
+  nxosvrfaddress_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf_address_family
 ---
 
 # nxos_vrf_routing (Resource)
@@ -19,11 +19,11 @@ This resource can manage a VRF Route Distinguisher and VRF VNI.
 
 ### Parent resources
 
-- [nxos_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf)
+- [nxos_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf)
 
 ### Child resources
 
-- [nxos_vrf_address_family](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf_address_family)
+- [nxos_vrf_address_family](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf_address_family)
 
 ## Example Usage
 

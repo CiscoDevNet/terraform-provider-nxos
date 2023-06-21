@@ -6,7 +6,7 @@ description: |-
   This resource can manage the default QoS policy map match class map police configuration.
   API Documentation: ipqosPolice https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Police/
   Parent resources
-  nxosdefaultqospolicymapmatchclass_map https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/default_qos_policy_map_match_class_map
+  nxosdefaultqospolicymapmatchclass_map https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/default_qos_policy_map_match_class_map
 ---
 
 # nxos_default_qos_policy_map_match_class_map_police (Resource)
@@ -17,7 +17,7 @@ This resource can manage the default QoS policy map match class map police confi
 
 ### Parent resources
 
-- [nxos_default_qos_policy_map_match_class_map](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/default_qos_policy_map_match_class_map)
+- [nxos_default_qos_policy_map_match_class_map](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/default_qos_policy_map_match_class_map)
 
 ## Example Usage
 

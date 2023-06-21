@@ -6,7 +6,7 @@ description: |-
   This resource can manage the IS-IS interface configuration.
   API Documentation: isisInternalIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/isis:InternalIf/
   Parent resources
-  nxos_isis https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/isis
+  nxos_isis https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/isis
 ---
 
 # nxos_isis_interface (Resource)
@@ -17,7 +17,7 @@ This resource can manage the IS-IS interface configuration.
 
 ### Parent resources
 
-- [nxos_isis](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/isis)
+- [nxos_isis](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/isis)
 
 ## Example Usage
 

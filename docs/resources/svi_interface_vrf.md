@@ -6,9 +6,9 @@ description: |-
   This resource can manage an SVI interface VRF association.
   API Documentation: nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
   Parent resources
-  nxossviinterface https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/svi_interface
+  nxossviinterface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/svi_interface
   Referenced resources
-  nxos_vrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf
+  nxos_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf
 ---
 
 # nxos_svi_interface_vrf (Resource)
@@ -19,11 +19,11 @@ This resource can manage an SVI interface VRF association.
 
 ### Parent resources
 
-- [nxos_svi_interface](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/svi_interface)
+- [nxos_svi_interface](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/svi_interface)
 
 ### Referenced resources
 
-- [nxos_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf)
+- [nxos_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf)
 
 ## Example Usage
 

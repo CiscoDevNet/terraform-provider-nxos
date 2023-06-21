@@ -6,9 +6,9 @@ description: |-
   This resource can manage the queuing QoS policy system out policy map configuration.
   API Documentation: ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Inst/
   Parent resources
-  nxosqueuingqospolicysystem_out https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/queuing_qos_policy_system_out
+  nxosqueuingqospolicysystem_out https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/queuing_qos_policy_system_out
   Referenced resources
-  nxosqueuingqospolicymap https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/queuing_qos_policy_map
+  nxosqueuingqospolicymap https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/queuing_qos_policy_map
 ---
 
 # nxos_queuing_qos_policy_system_out_policy_map (Resource)
@@ -19,11 +19,11 @@ This resource can manage the queuing QoS policy system out policy map configurat
 
 ### Parent resources
 
-- [nxos_queuing_qos_policy_system_out](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/queuing_qos_policy_system_out)
+- [nxos_queuing_qos_policy_system_out](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/queuing_qos_policy_system_out)
 
 ### Referenced resources
 
-- [nxos_queuing_qos_policy_map](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/queuing_qos_policy_map)
+- [nxos_queuing_qos_policy_map](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/queuing_qos_policy_map)
 
 ## Example Usage
 

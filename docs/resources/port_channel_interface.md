@@ -6,7 +6,7 @@ description: |-
   This resource can manage a port-channel interface.
   API Documentation: pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Interfaces/pc:AggrIf/
   Child resources
-  nxosportchannelinterfacevrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/port_channel_interface_vrfnxosportchannelinterfacemember https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/port_channel_interface_member
+  nxosportchannelinterfacevrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/port_channel_interface_vrfnxosportchannelinterfacemember https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/port_channel_interface_member
 ---
 
 # nxos_port_channel_interface (Resource)
@@ -17,8 +17,8 @@ This resource can manage a port-channel interface.
 
 ### Child resources
 
-- [nxos_port_channel_interface_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/port_channel_interface_vrf)
-- [nxos_port_channel_interface_member](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/port_channel_interface_member)
+- [nxos_port_channel_interface_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/port_channel_interface_vrf)
+- [nxos_port_channel_interface_member](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/port_channel_interface_member)
 
 ## Example Usage
 

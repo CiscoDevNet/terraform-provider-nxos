@@ -6,7 +6,7 @@ description: |-
   This resource can manage the PIM interface configuration.
   API Documentation: pimIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:If/
   Parent resources
-  nxospimvrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_vrf
+  nxospimvrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_vrf
 ---
 
 # nxos_pim_interface (Resource)
@@ -17,7 +17,7 @@ This resource can manage the PIM interface configuration.
 
 ### Parent resources
 
-- [nxos_pim_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_vrf)
+- [nxos_pim_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_vrf)
 
 ## Example Usage
 

@@ -5,9 +5,9 @@ package provider
 import (
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
-	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )

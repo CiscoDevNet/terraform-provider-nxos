@@ -6,7 +6,7 @@ description: |-
   This resource can manage a VRF Route Target Entry.
   API Documentation: rtctrlRttEntry https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/
   Parent resources
-  nxosvrfroutetargetdirection https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf_route_target_direction
+  nxosvrfroutetargetdirection https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf_route_target_direction
 ---
 
 # nxos_vrf_route_target (Resource)
@@ -17,7 +17,7 @@ This resource can manage a VRF Route Target Entry.
 
 ### Parent resources
 
-- [nxos_vrf_route_target_direction](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf_route_target_direction)
+- [nxos_vrf_route_target_direction](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf_route_target_direction)
 
 ## Example Usage
 

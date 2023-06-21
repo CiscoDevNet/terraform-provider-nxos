@@ -4,8 +4,8 @@ import (
 	"context"
 	"log"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider"
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
-	"github.com/netascode/terraform-provider-nxos/internal/provider"
 )
 
 // Run "go generate" to format example terraform files and generate the docs for the registry/website
@@ -38,7 +38,7 @@ var (
 
 func main() {
 	opts := providerserver.ServeOpts{
-		Address: "registry.terraform.io/netascode/nxos",
+		Address: "registry.terraform.io/CiscoDevNet/nxos",
 	}
 
 	err := providerserver.Serve(context.Background(), provider.New(version), opts)

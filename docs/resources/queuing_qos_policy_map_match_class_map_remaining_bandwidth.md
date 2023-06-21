@@ -6,7 +6,7 @@ description: |-
   This resource can manage the queuing QoS policy map match class map remaining bandwidth configuration.
   API Documentation: ipqosSetRemBW https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:SetRemBW/
   Parent resources
-  nxosqueuingqospolicymapmatchclass_map https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/queuing_qos_policy_map_match_class_map
+  nxosqueuingqospolicymapmatchclass_map https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/queuing_qos_policy_map_match_class_map
 ---
 
 # nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth (Resource)
@@ -17,7 +17,7 @@ This resource can manage the queuing QoS policy map match class map remaining ba
 
 ### Parent resources
 
-- [nxos_queuing_qos_policy_map_match_class_map](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/queuing_qos_policy_map_match_class_map)
+- [nxos_queuing_qos_policy_map_match_class_map](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/queuing_qos_policy_map_match_class_map)
 
 ## Example Usage
 

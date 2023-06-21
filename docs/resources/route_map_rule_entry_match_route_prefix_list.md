@@ -6,7 +6,7 @@ description: |-
   This resource can manage a Match Route Prefix List in  Route-Map Rule Entry configuration.
   API Documentation: rtmapRsRtDstAtt https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtmap:RsRtDstAtt/
   Parent resources
-  nxosroutemapruleentrymatchroute https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/route_map_rule_entry_match_route
+  nxosroutemapruleentrymatchroute https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/route_map_rule_entry_match_route
 ---
 
 # nxos_route_map_rule_entry_match_route_prefix_list (Resource)
@@ -17,7 +17,7 @@ This resource can manage a Match Route Prefix List in  Route-Map Rule Entry conf
 
 ### Parent resources
 
-- [nxos_route_map_rule_entry_match_route](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/route_map_rule_entry_match_route)
+- [nxos_route_map_rule_entry_match_route](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/route_map_rule_entry_match_route)
 
 ## Example Usage
 

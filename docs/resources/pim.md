@@ -6,7 +6,7 @@ description: |-
   This resource can manage the global PIM configuration.
   API Documentation: pimEntity https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:Entity/
   Child resources
-  nxospiminstance https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_instance
+  nxospiminstance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_instance
 ---
 
 # nxos_pim (Resource)
@@ -17,7 +17,7 @@ This resource can manage the global PIM configuration.
 
 ### Child resources
 
-- [nxos_pim_instance](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_instance)
+- [nxos_pim_instance](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_instance)
 
 ## Example Usage
 

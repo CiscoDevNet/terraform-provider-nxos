@@ -6,9 +6,9 @@ description: |-
   This resource can manage the OSPF instance configuration.
   API Documentation: ospfInst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:Inst/
   Parent resources
-  nxos_ospf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ospf
+  nxos_ospf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf
   Child resources
-  nxosospfvrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ospf_vrf
+  nxosospfvrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_vrf
 ---
 
 # nxos_ospf_instance (Resource)
@@ -19,11 +19,11 @@ This resource can manage the OSPF instance configuration.
 
 ### Parent resources
 
-- [nxos_ospf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ospf)
+- [nxos_ospf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf)
 
 ### Child resources
 
-- [nxos_ospf_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ospf_vrf)
+- [nxos_ospf_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_vrf)
 
 ## Example Usage
 

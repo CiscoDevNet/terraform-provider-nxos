@@ -6,9 +6,9 @@ description: |-
   This resource can manage the HMM Fabric Forwarding Instance configuration.
   API Documentation: hmmFwdInst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Host%20Mobility/hmm:FwdInst/
   Parent resources
-  nxos_hmm https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/hmm
+  nxos_hmm https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/hmm
   Child resources
-  nxoshmminterface https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/hmm_interface
+  nxoshmminterface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/hmm_interface
 ---
 
 # nxos_hmm_instance (Resource)
@@ -19,11 +19,11 @@ This resource can manage the HMM Fabric Forwarding Instance configuration.
 
 ### Parent resources
 
-- [nxos_hmm](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/hmm)
+- [nxos_hmm](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/hmm)
 
 ### Child resources
 
-- [nxos_hmm_interface](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/hmm_interface)
+- [nxos_hmm_interface](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/hmm_interface)
 
 ## Example Usage
 

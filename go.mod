@@ -1,4 +1,4 @@
-module github.com/netascode/terraform-provider-nxos
+module github.com/CiscoDevNet/terraform-provider-nxos
 
 go 1.18
 

@@ -6,9 +6,9 @@ description: |-
   This resource can manage the queuing QoS policy map match class map configuration.
   API Documentation: ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:MatchCMap/
   Parent resources
-  nxosqueuingqospolicymap https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/queuing_qos_policy_map
+  nxosqueuingqospolicymap https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/queuing_qos_policy_map
   Child resources
-  nxosqueuingqospolicymapmatchclassmappriority https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/queuing_qos_policy_map_match_class_map_prioritynxosqueuingqospolicymapmatchclassmapremaining_bandwidth https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/queuing_qos_policy_map_match_class_map_remaining_bandwidth
+  nxosqueuingqospolicymapmatchclassmappriority https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/queuing_qos_policy_map_match_class_map_prioritynxosqueuingqospolicymapmatchclassmapremaining_bandwidth https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/queuing_qos_policy_map_match_class_map_remaining_bandwidth
 ---
 
 # nxos_queuing_qos_policy_map_match_class_map (Resource)
@@ -19,12 +19,12 @@ This resource can manage the queuing QoS policy map match class map configuratio
 
 ### Parent resources
 
-- [nxos_queuing_qos_policy_map](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/queuing_qos_policy_map)
+- [nxos_queuing_qos_policy_map](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/queuing_qos_policy_map)
 
 ### Child resources
 
-- [nxos_queuing_qos_policy_map_match_class_map_priority](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/queuing_qos_policy_map_match_class_map_priority)
-- [nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/queuing_qos_policy_map_match_class_map_remaining_bandwidth)
+- [nxos_queuing_qos_policy_map_match_class_map_priority](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/queuing_qos_policy_map_match_class_map_priority)
+- [nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/queuing_qos_policy_map_match_class_map_remaining_bandwidth)
 
 ## Example Usage
 

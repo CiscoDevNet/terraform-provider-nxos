@@ -6,9 +6,9 @@ description: |-
   This resource can manage the vPC interface configuration.
   API Documentation: vpcIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/vpc:If/
   Parent resources
-  nxosvpcdomain https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vpc_domain
+  nxosvpcdomain https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vpc_domain
   Referenced resources
-  nxosportchannel_interface https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/port_channel_interface
+  nxosportchannel_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/port_channel_interface
 ---
 
 # nxos_vpc_interface (Resource)
@@ -19,11 +19,11 @@ This resource can manage the vPC interface configuration.
 
 ### Parent resources
 
-- [nxos_vpc_domain](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vpc_domain)
+- [nxos_vpc_domain](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vpc_domain)
 
 ### Referenced resources
 
-- [nxos_port_channel_interface](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/port_channel_interface)
+- [nxos_port_channel_interface](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/port_channel_interface)
 
 ## Example Usage
 

@@ -6,9 +6,9 @@ description: |-
   This resource can manage the IPv4 VRF information.
   API Documentation: ipv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:Dom/
   Child resources
-  nxosipv4interface https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_interfacenxosipv4static_route https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_static_route
+  nxosipv4interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv4_interfacenxosipv4static_route https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv4_static_route
   Referenced resources
-  nxos_vrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf
+  nxos_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf
 ---
 
 # nxos_ipv4_vrf (Resource)
@@ -19,12 +19,12 @@ This resource can manage the IPv4 VRF information.
 
 ### Child resources
 
-- [nxos_ipv4_interface](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_interface)
-- [nxos_ipv4_static_route](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_static_route)
+- [nxos_ipv4_interface](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv4_interface)
+- [nxos_ipv4_static_route](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv4_static_route)
 
 ### Referenced resources
 
-- [nxos_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/vrf)
+- [nxos_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf)
 
 ## Example Usage
 

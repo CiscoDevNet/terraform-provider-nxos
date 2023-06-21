@@ -6,9 +6,9 @@ description: |-
   This resource can manage the BGP instance configuration.
   API Documentation: bgpInst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:Inst/
   Parent resources
-  nxos_bgp https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp
+  nxos_bgp https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp
   Child resources
-  nxosbgpvrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_vrf
+  nxosbgpvrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_vrf
 ---
 
 # nxos_bgp_instance (Resource)
@@ -19,11 +19,11 @@ This resource can manage the BGP instance configuration.
 
 ### Parent resources
 
-- [nxos_bgp](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp)
+- [nxos_bgp](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp)
 
 ### Child resources
 
-- [nxos_bgp_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_vrf)
+- [nxos_bgp_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_vrf)
 
 ## Example Usage
 

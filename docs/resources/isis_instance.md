@@ -6,9 +6,9 @@ description: |-
   This resource can manage the IS-IS instance configuration.
   API Documentation: isisInst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/isis:Inst/
   Parent resources
-  nxos_isis https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/isis
+  nxos_isis https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/isis
   Child resources
-  nxosisisvrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/isis_vrf
+  nxosisisvrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/isis_vrf
 ---
 
 # nxos_isis_instance (Resource)
@@ -19,11 +19,11 @@ This resource can manage the IS-IS instance configuration.
 
 ### Parent resources
 
-- [nxos_isis](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/isis)
+- [nxos_isis](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/isis)
 
 ### Child resources
 
-- [nxos_isis_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/isis_vrf)
+- [nxos_isis_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/isis_vrf)
 
 ## Example Usage
 

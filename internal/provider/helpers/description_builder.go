@@ -44,7 +44,7 @@ func NewResourceDescription(description, className, docPath string) *ResourceDes
 func (d *ResourceDescription) AddParents(values ...string) *ResourceDescription {
 	d.String += "\n### Parent resources\n\n"
 	for _, value := range values {
-		d.String += fmt.Sprintf("- [nxos_%s](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/%s)\n", value, value)
+		d.String += fmt.Sprintf("- [nxos_%s](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/%s)\n", value, value)
 	}
 	return d
 }
@@ -52,7 +52,7 @@ func (d *ResourceDescription) AddParents(values ...string) *ResourceDescription 
 func (d *ResourceDescription) AddChildren(values ...string) *ResourceDescription {
 	d.String += "\n### Child resources\n\n"
 	for _, value := range values {
-		d.String += fmt.Sprintf("- [nxos_%s](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/%s)\n", value, value)
+		d.String += fmt.Sprintf("- [nxos_%s](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/%s)\n", value, value)
 	}
 	return d
 }
@@ -60,7 +60,7 @@ func (d *ResourceDescription) AddChildren(values ...string) *ResourceDescription
 func (d *ResourceDescription) AddReferences(values ...string) *ResourceDescription {
 	d.String += "\n### Referenced resources\n\n"
 	for _, value := range values {
-		d.String += fmt.Sprintf("- [nxos_%s](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/%s)\n", value, value)
+		d.String += fmt.Sprintf("- [nxos_%s](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/%s)\n", value, value)
 	}
 	return d
 }

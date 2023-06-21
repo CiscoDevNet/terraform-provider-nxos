@@ -11,7 +11,7 @@ import (
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
-	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 )
 
 {{- $name := camelCase .Name}}

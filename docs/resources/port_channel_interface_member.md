@@ -6,9 +6,9 @@ description: |-
   This resource can manage a port-channel interface member.
   API Documentation: pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Interfaces/pc:RsMbrIfs/
   Parent resources
-  nxosportchannel_interface https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/port_channel_interface
+  nxosportchannel_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/port_channel_interface
   Referenced resources
-  nxosphysicalinterface https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/physical_interface
+  nxosphysicalinterface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/physical_interface
 ---
 
 # nxos_port_channel_interface_member (Resource)
@@ -19,11 +19,11 @@ This resource can manage a port-channel interface member.
 
 ### Parent resources
 
-- [nxos_port_channel_interface](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/port_channel_interface)
+- [nxos_port_channel_interface](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/port_channel_interface)
 
 ### Referenced resources
 
-- [nxos_physical_interface](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/physical_interface)
+- [nxos_physical_interface](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/physical_interface)
 
 ## Example Usage
 

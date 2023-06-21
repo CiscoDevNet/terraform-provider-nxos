@@ -6,9 +6,9 @@ description: |-
   This resource can manage an IPv4 interface.
   API Documentation: ipv4If https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:If/
   Parent resources
-  nxosipv4vrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_vrf
+  nxosipv4vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv4_vrf
   Child resources
-  nxosipv4interface_address https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_interface_address
+  nxosipv4interface_address https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv4_interface_address
 ---
 
 # nxos_ipv4_interface (Resource)
@@ -19,11 +19,11 @@ This resource can manage an IPv4 interface.
 
 ### Parent resources
 
-- [nxos_ipv4_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_vrf)
+- [nxos_ipv4_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv4_vrf)
 
 ### Child resources
 
-- [nxos_ipv4_interface_address](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_interface_address)
+- [nxos_ipv4_interface_address](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv4_interface_address)
 
 ## Example Usage
 

@@ -6,7 +6,7 @@ description: |-
   This resource can manage the BGP domain (VRF) graceful restart configuration.
   API Documentation: bgpGr https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:Gr/
   Parent resources
-  nxosbgpvrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_vrf
+  nxosbgpvrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_vrf
 ---
 
 # nxos_bgp_graceful_restart (Resource)
@@ -17,7 +17,7 @@ This resource can manage the BGP domain (VRF) graceful restart configuration.
 
 ### Parent resources
 
-- [nxos_bgp_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/bgp_vrf)
+- [nxos_bgp_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_vrf)
 
 ## Example Usage
 

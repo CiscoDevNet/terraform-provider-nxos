@@ -6,9 +6,9 @@ description: |-
   This resource can manage a Route-Map Rule Entry configuration.
   API Documentation: rtmapEntry https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtmap:Entry/
   Parent resources
-  nxosroutemap_rule https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/route_map_rule
+  nxosroutemap_rule https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/route_map_rule
   Child resources
-  nxosroutemapruleentrymatchroute https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/route_map_rule_entry_match_routenxosroutemapruleentrysetregular_community https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/route_map_rule_entry_set_regular_community
+  nxosroutemapruleentrymatchroute https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/route_map_rule_entry_match_routenxosroutemapruleentrysetregular_community https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/route_map_rule_entry_set_regular_community
 ---
 
 # nxos_route_map_rule_entry (Resource)
@@ -19,12 +19,12 @@ This resource can manage a Route-Map Rule Entry configuration.
 
 ### Parent resources
 
-- [nxos_route_map_rule](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/route_map_rule)
+- [nxos_route_map_rule](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/route_map_rule)
 
 ### Child resources
 
-- [nxos_route_map_rule_entry_match_route](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/route_map_rule_entry_match_route)
-- [nxos_route_map_rule_entry_set_regular_community](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/route_map_rule_entry_set_regular_community)
+- [nxos_route_map_rule_entry_match_route](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/route_map_rule_entry_match_route)
+- [nxos_route_map_rule_entry_set_regular_community](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/route_map_rule_entry_set_regular_community)
 
 ## Example Usage
 

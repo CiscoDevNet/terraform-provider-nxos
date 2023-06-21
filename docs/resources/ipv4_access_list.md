@@ -6,7 +6,7 @@ description: |-
   This resource can manage IPv4 Access Lists.
   API Documentation: ipv4aclACL https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/ipv4acl:ACL/
   Child resources
-  nxosipv4accesslistentry https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_access_list_entry
+  nxosipv4accesslistentry https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv4_access_list_entry
 ---
 
 # nxos_ipv4_access_list (Resource)
@@ -17,7 +17,7 @@ This resource can manage IPv4 Access Lists.
 
 ### Child resources
 
-- [nxos_ipv4_access_list_entry](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_access_list_entry)
+- [nxos_ipv4_access_list_entry](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv4_access_list_entry)
 
 ## Example Usage
 

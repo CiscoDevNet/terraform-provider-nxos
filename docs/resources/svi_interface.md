@@ -6,7 +6,7 @@ description: |-
   This resource can manage an SVI interface.
   API Documentation: sviIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Interfaces/svi:If/
   Child resources
-  nxossviinterface_vrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/svi_interface_vrf
+  nxossviinterface_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/svi_interface_vrf
 ---
 
 # nxos_svi_interface (Resource)
@@ -17,7 +17,7 @@ This resource can manage an SVI interface.
 
 ### Child resources
 
-- [nxos_svi_interface_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/svi_interface_vrf)
+- [nxos_svi_interface_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/svi_interface_vrf)
 
 ## Example Usage
 

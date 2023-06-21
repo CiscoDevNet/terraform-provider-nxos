@@ -6,7 +6,7 @@ description: |-
   This resource can manage the default QoS policy interface in configuration.
   API Documentation: ipqosIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:If/
   Child resources
-  nxosdefaultqospolicyinterfaceinpolicy_map https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/default_qos_policy_interface_in_policy_map
+  nxosdefaultqospolicyinterfaceinpolicy_map https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/default_qos_policy_interface_in_policy_map
 ---
 
 # nxos_default_qos_policy_interface_in (Resource)
@@ -17,7 +17,7 @@ This resource can manage the default QoS policy interface in configuration.
 
 ### Child resources
 
-- [nxos_default_qos_policy_interface_in_policy_map](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/default_qos_policy_interface_in_policy_map)
+- [nxos_default_qos_policy_interface_in_policy_map](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/default_qos_policy_interface_in_policy_map)
 
 ## Example Usage
 

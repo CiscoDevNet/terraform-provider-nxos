@@ -6,7 +6,7 @@ description: |-
   This resource can manage an IPv4 static route.
   API Documentation: ipv4Route https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:Route/
   Parent resources
-  nxosipv4vrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_vrf
+  nxosipv4vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv4_vrf
 ---
 
 # nxos_ipv4_static_route (Resource)
@@ -17,7 +17,7 @@ This resource can manage an IPv4 static route.
 
 ### Parent resources
 
-- [nxos_ipv4_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/ipv4_vrf)
+- [nxos_ipv4_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv4_vrf)
 
 ## Example Usage
 

@@ -6,12 +6,12 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
-	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
 // Ensure the implementation satisfies the expected interfaces.

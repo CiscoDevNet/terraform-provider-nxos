@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -21,7 +22,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
-	"github.com/netascode/terraform-provider-nxos/internal/provider/helpers"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces

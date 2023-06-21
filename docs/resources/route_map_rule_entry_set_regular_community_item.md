@@ -6,7 +6,7 @@ description: |-
   This resource can manage a Set Community item in a Route-Map Rule Entry.
   API Documentation: rtregcomItem https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtregcom:Item/
   Parent resources
-  nxosroutemapruleentrysetregular_community https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/route_map_rule_entry_set_regular_community
+  nxosroutemapruleentrysetregular_community https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/route_map_rule_entry_set_regular_community
 ---
 
 # nxos_route_map_rule_entry_set_regular_community_item (Resource)
@@ -17,7 +17,7 @@ This resource can manage a Set Community item in a Route-Map Rule Entry.
 
 ### Parent resources
 
-- [nxos_route_map_rule_entry_set_regular_community](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/route_map_rule_entry_set_regular_community)
+- [nxos_route_map_rule_entry_set_regular_community](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/route_map_rule_entry_set_regular_community)
 
 ## Example Usage
 

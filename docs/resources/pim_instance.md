@@ -6,9 +6,9 @@ description: |-
   This resource can manage the PIM instance configuration.
   API Documentation: pimInst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:Inst/
   Parent resources
-  nxos_pim https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim
+  nxos_pim https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim
   Child resources
-  nxospimvrf https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_vrf
+  nxospimvrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_vrf
 ---
 
 # nxos_pim_instance (Resource)
@@ -19,11 +19,11 @@ This resource can manage the PIM instance configuration.
 
 ### Parent resources
 
-- [nxos_pim](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim)
+- [nxos_pim](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim)
 
 ### Child resources
 
-- [nxos_pim_vrf](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/pim_vrf)
+- [nxos_pim_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_vrf)
 
 ## Example Usage
 

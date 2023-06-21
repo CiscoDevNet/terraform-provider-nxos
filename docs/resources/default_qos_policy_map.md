@@ -6,7 +6,7 @@ description: |-
   This resource can manage the default QoS policy map configuration.
   API Documentation: ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:PMapInst/
   Child resources
-  nxosdefaultqospolicymapmatchclass_map https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/default_qos_policy_map_match_class_map
+  nxosdefaultqospolicymapmatchclass_map https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/default_qos_policy_map_match_class_map
 ---
 
 # nxos_default_qos_policy_map (Resource)
@@ -17,7 +17,7 @@ This resource can manage the default QoS policy map configuration.
 
 ### Child resources
 
-- [nxos_default_qos_policy_map_match_class_map](https://registry.terraform.io/providers/netascode/nxos/latest/docs/resources/default_qos_policy_map_match_class_map)
+- [nxos_default_qos_policy_map_match_class_map](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/default_qos_policy_map_match_class_map)
 
 ## Example Usage
 

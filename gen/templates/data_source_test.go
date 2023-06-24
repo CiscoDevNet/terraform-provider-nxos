@@ -20,7 +20,7 @@ func TestAccDataSourceNxos{{camelCase .Name}}(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					{{- $name := .Name }}
 					{{- range  .Attributes}}
-					{{- if and (ne .ReferenceOnly true) (ne .WriteOnly true) (ne .ExcludeTest true)}}
+					{{- if and (not .ReferenceOnly) (not .WriteOnly) (not .ExcludeTest)}}
 					resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"),
 					{{- end}}
 					{{- end}}
@@ -102,7 +102,7 @@ resource "nxos_{{snakeCase $name}}" "test" {
 
 data "nxos_{{snakeCase .Name}}" "test" {
 {{- range  .Attributes}}
-{{- if or (eq .Id true) (eq .ReferenceOnly true)}}
+{{- if or .Id .ReferenceOnly}}
   {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
 {{- end}}
 {{- end}}

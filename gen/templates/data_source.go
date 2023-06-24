@@ -50,7 +50,7 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 			{{- range .Attributes}}
 			"{{.TfName}}": schema.{{.Type}}Attribute{
 				MarkdownDescription: "{{.Description}}",
-				{{- if or (eq .Id true) (eq .ReferenceOnly true)}}
+				{{- if or .Id .ReferenceOnly}}
 				Required:            true,
 				{{- else}}
 				Computed:            true,
@@ -62,7 +62,7 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 			{{- range .Attributes}}
 			"{{.TfName}}": schema.{{.Type}}Attribute{
 				MarkdownDescription: "{{.Description}}",
-				{{- if or (eq .Id true) (eq .ReferenceOnly true)}}
+				{{- if or .Id .ReferenceOnly}}
 				Required:            true,
 				{{- else}}
 				Computed:            true,

@@ -1,3 +1,7 @@
+## 0.5.0 (unreleased)
+
+- Migrate to `CiscoDevNet` registry namespace
+
 ## 0.4.2
 
 - Fix issue with device authentication

@@ -21,7 +21,7 @@ func TestAccDataSourceNxosPortChannelInterface(t *testing.T) {
 					resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "minimum_links", "2"),
 					resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "maximum_links", "10"),
 					resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "suspend_individual", "disable"),
-					resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "access_vlan", "vlan-2"),
+					resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "access_vlan", "vlan-1"),
 					resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "admin_state", "up"),
 					resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "auto_negotiation", "on"),
 					resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "bandwidth", "1000"),
@@ -51,7 +51,7 @@ resource "nxos_port_channel_interface" "test" {
   minimum_links = 2
   maximum_links = 10
   suspend_individual = "disable"
-  access_vlan = "vlan-2"
+  access_vlan = "vlan-1"
   admin_state = "up"
   auto_negotiation = "on"
   bandwidth = 1000

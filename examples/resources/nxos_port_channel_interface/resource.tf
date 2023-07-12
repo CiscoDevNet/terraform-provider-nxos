@@ -4,7 +4,7 @@ resource "nxos_port_channel_interface" "example" {
   minimum_links         = 2
   maximum_links         = 10
   suspend_individual    = "disable"
-  access_vlan           = "vlan-2"
+  access_vlan           = "vlan-1"
   admin_state           = "up"
   auto_negotiation      = "on"
   bandwidth             = 1000

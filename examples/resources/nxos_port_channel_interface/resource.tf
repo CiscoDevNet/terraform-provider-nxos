@@ -7,7 +7,7 @@ resource "nxos_port_channel_interface" "example" {
   access_vlan           = "vlan-1"
   admin_state           = "up"
   auto_negotiation      = "on"
-  bandwidth             = 1000
+  bandwidth             = 0
   delay                 = 10
   description           = "My Description"
   duplex                = "auto"

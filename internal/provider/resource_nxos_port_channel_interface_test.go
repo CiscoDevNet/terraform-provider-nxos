@@ -24,7 +24,7 @@ func TestAccNxosPortChannelInterface(t *testing.T) {
 					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "access_vlan", "vlan-1"),
 					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "admin_state", "up"),
 					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "auto_negotiation", "on"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "bandwidth", "1000"),
+					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "bandwidth", "0"),
 					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "delay", "10"),
 					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "description", "My Description"),
 					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "duplex", "auto"),
@@ -67,7 +67,7 @@ func testAccNxosPortChannelInterfaceConfig_all() string {
 		access_vlan = "vlan-1"
 		admin_state = "up"
 		auto_negotiation = "on"
-		bandwidth = 1000
+		bandwidth = 0
 		delay = 10
 		description = "My Description"
 		duplex = "auto"

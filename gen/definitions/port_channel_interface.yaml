@@ -85,7 +85,7 @@ attributes:
     min_int: 0
     max_int: 3200000000
     default_value: 0
-    example: 1000
+    example: 0
   - nxos_name: delay
     tf_name: delay
     type: Int64

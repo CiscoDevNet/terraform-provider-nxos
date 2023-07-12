@@ -21,14 +21,14 @@ func TestAccNxosPortChannelInterface(t *testing.T) {
 					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "minimum_links", "2"),
 					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "maximum_links", "10"),
 					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "suspend_individual", "disable"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "access_vlan", "unknown"),
+					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "access_vlan", "vlan-2"),
 					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "admin_state", "up"),
 					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "auto_negotiation", "on"),
 					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "bandwidth", "1000"),
 					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "delay", "10"),
 					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "description", "My Description"),
 					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "duplex", "auto"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "layer", "Layer3"),
+					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "layer", "Layer2"),
 					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "link_logging", "enable"),
 					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "medium", "broadcast"),
 					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "mode", "access"),
@@ -64,14 +64,14 @@ func testAccNxosPortChannelInterfaceConfig_all() string {
 		minimum_links = 2
 		maximum_links = 10
 		suspend_individual = "disable"
-		access_vlan = "unknown"
+		access_vlan = "vlan-2"
 		admin_state = "up"
 		auto_negotiation = "on"
 		bandwidth = 1000
 		delay = 10
 		description = "My Description"
 		duplex = "auto"
-		layer = "Layer3"
+		layer = "Layer2"
 		link_logging = "enable"
 		medium = "broadcast"
 		mode = "access"

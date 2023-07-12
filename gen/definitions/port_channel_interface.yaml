@@ -58,7 +58,7 @@ attributes:
     type: String
     description: "Access VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`."
     default_value: vlan-1
-    example: unknown
+    example: vlan-2
   - nxos_name: adminSt
     tf_name: admin_state
     type: String
@@ -117,7 +117,7 @@ attributes:
       - Layer2
       - Layer3
     default_value: Layer2
-    example: Layer3
+    example: Layer2
   - nxos_name: linkLog
     tf_name: link_logging
     type: String

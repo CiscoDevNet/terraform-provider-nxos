@@ -8,7 +8,7 @@ resource "nxos_port_channel_interface" "example" {
   admin_state           = "up"
   auto_negotiation      = "on"
   bandwidth             = 0
-  delay                 = 10
+  delay                 = 1
   description           = "My Description"
   duplex                = "auto"
   layer                 = "Layer2"

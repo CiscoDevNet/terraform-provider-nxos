@@ -93,7 +93,7 @@ attributes:
     min_int: 1
     max_int: 16777215
     default_value: 1
-    example: 10
+    example: 1
   - nxos_name: descr
     tf_name: description
     type: String

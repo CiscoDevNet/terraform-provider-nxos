@@ -20,12 +20,16 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceNxosPortChannelInterface(t *testing.T) {
+	if os.Getenv("PORT_CHANNEL_INTERFACE") == "" {
+		t.Skip("skipping test, set environment variable PORT_CHANNEL_INTERFACE")
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,

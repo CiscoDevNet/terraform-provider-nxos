@@ -2,6 +2,7 @@
 name: Port Channel Interface
 class_name: pcAggrIf
 dn: sys/intf/aggr-[%s]
+test_tags: [PORT_CHANNEL_INTERFACE]
 ds_description: This data source can read the configuration of a port-channel interface.
 res_description: This resource can manage a port-channel interface.
 doc_path: Interfaces/pc:AggrIf/

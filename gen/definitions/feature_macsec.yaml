@@ -3,7 +3,7 @@ name: Feature MACsec
 class_name: fmMacsec
 dn: sys/fm/macsec
 no_delete: true
-exclude_test: true
+test_tags: [MACSEC]
 ds_description: This data source can read the MACsec feature configuration.
 res_description: This resource can manage the MACsec feature configuration.
 doc_path: Feature%20Management/fm:Macsec/
@@ -13,7 +13,7 @@ attributes:
     tf_name: admin_state
     type: String
     mandatory: true
-    description: 'Administrative state.'
+    description: "Administrative state."
     enum_values:
       - enabled
       - disabled

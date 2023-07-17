@@ -14,7 +14,7 @@ attributes:
   - nxos_name: adminSt
     tf_name: admin_state
     type: String
-    description: 'Administrative state.'
+    description: "Administrative state."
     enum_values:
       - enabled
       - disabled
@@ -23,9 +23,9 @@ attributes:
   - nxos_name: amac
     tf_name: anycast_mac
     type: String
-    description: 'Anycast Gateway MAC address.'
+    description: "Anycast Gateway MAC address."
     default_value: enabled
-    example: '20:20:00:00:10:10'
+    example: "20:20:00:00:10:10"
 test_prerequisites:
   - dn: sys/fm/hmm
     class_name: fmHmm
@@ -35,6 +35,7 @@ test_prerequisites:
         value: enabled
   - dn: sys/fm/evpn
     class_name: fmEvpn
+    no_delete: true
     attributes:
       - name: adminSt
         value: enabled

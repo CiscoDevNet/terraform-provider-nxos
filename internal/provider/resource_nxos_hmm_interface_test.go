@@ -78,6 +78,7 @@ resource "nxos_rest" "PreReq2" {
 resource "nxos_rest" "PreReq3" {
   dn = "sys/fm/evpn"
   class_name = "fmEvpn"
+  delete = false
   content = {
       adminSt = "enabled"
   }

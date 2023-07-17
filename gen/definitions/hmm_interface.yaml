@@ -13,12 +13,12 @@ attributes:
     tf_name: interface_id
     type: String
     id: true
-    description: 'Must match first field in the output of `show intf brief`. Example: `vlan10`.'
+    description: "Must match first field in the output of `show intf brief`. Example: `vlan10`."
     example: vlan10
   - nxos_name: adminSt
     tf_name: admin_state
     type: String
-    description: 'Administrative state.'
+    description: "Administrative state."
     enum_values:
       - enabled
       - disabled
@@ -27,7 +27,7 @@ attributes:
   - nxos_name: mode
     tf_name: mode
     type: String
-    description: 'HMM Fabric Forwarding mode information for the interface.'
+    description: "HMM Fabric Forwarding mode information for the interface."
     enum_values:
       - standard
       - anycastGW
@@ -55,6 +55,7 @@ test_prerequisites:
         value: enabled
   - dn: sys/fm/evpn
     class_name: fmEvpn
+    no_delete: true
     attributes:
       - name: adminSt
         value: enabled
@@ -67,5 +68,5 @@ test_prerequisites:
       - name: adminSt
         value: enabled
       - name: amac
-        value: '20:20:00:00:10:10'
+        value: "20:20:00:00:10:10"
     dependencies: [1, 4]

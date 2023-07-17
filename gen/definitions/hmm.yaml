@@ -12,7 +12,7 @@ attributes:
   - nxos_name: adminSt
     tf_name: admin_state
     type: String
-    description: 'Administrative state.'
+    description: "Administrative state."
     enum_values:
       - enabled
       - disabled
@@ -27,6 +27,7 @@ test_prerequisites:
         value: enabled
   - dn: sys/fm/evpn
     class_name: fmEvpn
+    no_delete: true
     attributes:
       - name: adminSt
         value: enabled

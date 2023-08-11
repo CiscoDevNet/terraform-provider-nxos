@@ -55,7 +55,7 @@ func (r *BGPAdvertisedPrefixResource) Metadata(ctx context.Context, req resource
 func (r *BGPAdvertisedPrefixResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP (VRF) advertise prefix configuration.", "bgpAdvPrefix", "Routing%20and%20Forwarding/bgp:AdvPrefix/").AddParents("bgp_address_family").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP (VRF) advertised prefix configuration.", "bgpAdvPrefix", "Routing%20and%20Forwarding/bgp:AdvPrefix/").AddParents("bgp_address_family").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -94,14 +94,14 @@ func (r *BGPAdvertisedPrefixResource) Schema(ctx context.Context, req resource.S
 				},
 			},
 			"prefix": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The next-hop address tracking delay timer for critical next-hop reachability routes.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("IP address of the network or prefix to advertise.").String,
 				Required:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
 			"route_map": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Route map to modify attributese.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Route map to modify attributes.").String,
 				Optional:            true,
 			},
 		},

@@ -57,7 +57,7 @@ func (r *BGPAddressFamilyResource) Metadata(ctx context.Context, req resource.Me
 func (r *BGPAddressFamilyResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP (VRF) address family configuration.", "bgpDomAf", "Routing%20and%20Forwarding/bgp:DomAf/").AddParents("bgp_vrf").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP (VRF) address family configuration.", "bgpDomAf", "Routing%20and%20Forwarding/bgp:DomAf/").AddParents("bgp_vrf").AddChildren("bgp_advertised_prefix").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

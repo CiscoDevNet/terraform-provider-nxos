@@ -2,8 +2,8 @@
 name: BGP Advertised Prefix
 class_name: bgpAdvPrefix
 dn: sys/bgp/inst/dom-[%s]/af-[%s]/prefix-[%s]
-ds_description: This data source can read the BGP (VRF) advertise prefix configuration.
-res_description: This resource can manage the BGP (VRF) advertise prefix configuration.
+ds_description: This data source can read the BGP (VRF) advertised prefix configuration.
+res_description: This resource can manage the BGP (VRF) advertised prefix configuration.
 doc_path: Routing%20and%20Forwarding/bgp:AdvPrefix/
 doc_category: BGP
 parents:
@@ -50,12 +50,12 @@ attributes:
     tf_name: prefix
     type: String
     id: true
-    description: 'The next-hop address tracking delay timer for critical next-hop reachability routes.'
+    description: 'IP address of the network or prefix to advertise.'
     example: '192.168.1.0/24'
   - nxos_name: rtMap
     tf_name: route_map
     type: String
-    description: 'Route map to modify attributese.'
+    description: 'Route map to modify attributes.'
     default_value: ''
     example: rt-map
 test_prerequisites:

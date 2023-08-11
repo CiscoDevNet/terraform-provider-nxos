@@ -3,13 +3,13 @@
 page_title: "nxos_bgp_advertised_prefix Data Source - terraform-provider-nxos"
 subcategory: "BGP"
 description: |-
-  This data source can read the BGP (VRF) advertise prefix configuration.
+  This data source can read the BGP (VRF) advertised prefix configuration.
   API Documentation: bgpAdvPrefix https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:AdvPrefix/
 ---
 
 # nxos_bgp_advertised_prefix (Data Source)
 
-This data source can read the BGP (VRF) advertise prefix configuration.
+This data source can read the BGP (VRF) advertised prefix configuration.
 
 - API Documentation: [bgpAdvPrefix](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:AdvPrefix/)
 
@@ -31,7 +31,7 @@ data "nxos_bgp_advertised_prefix" "example" {
 
 - `address_family` (String) Address Family.
 - `asn` (String) Autonomous system number.
-- `prefix` (String) The next-hop address tracking delay timer for critical next-hop reachability routes.
+- `prefix` (String) IP address of the network or prefix to advertise.
 - `vrf` (String) VRF name.
 
 ### Optional
@@ -41,4 +41,4 @@ data "nxos_bgp_advertised_prefix" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-- `route_map` (String) Route map to modify attributese.
+- `route_map` (String) Route map to modify attributes.

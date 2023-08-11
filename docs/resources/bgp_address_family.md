@@ -7,6 +7,8 @@ description: |-
   API Documentation: bgpDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:DomAf/
   Parent resources
   nxosbgpvrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_vrf
+  Child resources
+  nxosbgpadvertised_prefix https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_advertised_prefix
 ---
 
 # nxos_bgp_address_family (Resource)
@@ -18,6 +20,10 @@ This resource can manage the BGP (VRF) address family configuration.
 ### Parent resources
 
 - [nxos_bgp_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_vrf)
+
+### Child resources
+
+- [nxos_bgp_advertised_prefix](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_advertised_prefix)
 
 ## Example Usage
 

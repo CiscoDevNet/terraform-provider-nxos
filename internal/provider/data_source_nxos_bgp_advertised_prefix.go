@@ -52,7 +52,7 @@ func (d *BGPAdvertisedPrefixDataSource) Metadata(_ context.Context, req datasour
 func (d *BGPAdvertisedPrefixDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the BGP (VRF) advertise prefix configuration.", "bgpAdvPrefix", "Routing%20and%20Forwarding/bgp:AdvPrefix/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the BGP (VRF) advertised prefix configuration.", "bgpAdvPrefix", "Routing%20and%20Forwarding/bgp:AdvPrefix/").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -76,11 +76,11 @@ func (d *BGPAdvertisedPrefixDataSource) Schema(ctx context.Context, req datasour
 				Required:            true,
 			},
 			"prefix": schema.StringAttribute{
-				MarkdownDescription: "The next-hop address tracking delay timer for critical next-hop reachability routes.",
+				MarkdownDescription: "IP address of the network or prefix to advertise.",
 				Required:            true,
 			},
 			"route_map": schema.StringAttribute{
-				MarkdownDescription: "Route map to modify attributese.",
+				MarkdownDescription: "Route map to modify attributes.",
 				Computed:            true,
 			},
 		},

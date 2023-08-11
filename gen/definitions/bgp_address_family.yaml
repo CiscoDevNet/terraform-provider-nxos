@@ -8,6 +8,8 @@ doc_path: Routing%20and%20Forwarding/bgp:DomAf/
 doc_category: BGP
 parents:
   - BGP VRF
+children:
+  - BGP Advertised Prefix
 attributes:
   - nxos_name: asn
     tf_name: asn

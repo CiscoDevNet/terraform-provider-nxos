@@ -3,7 +3,7 @@
 page_title: "nxos_bgp_advertised_prefix Resource - terraform-provider-nxos"
 subcategory: "BGP"
 description: |-
-  This resource can manage the BGP (VRF) advertise prefix configuration.
+  This resource can manage the BGP (VRF) advertised prefix configuration.
   API Documentation: bgpAdvPrefix https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:AdvPrefix/
   Parent resources
   nxosbgpaddress_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_address_family
@@ -11,7 +11,7 @@ description: |-
 
 # nxos_bgp_advertised_prefix (Resource)
 
-This resource can manage the BGP (VRF) advertise prefix configuration.
+This resource can manage the BGP (VRF) advertised prefix configuration.
 
 - API Documentation: [bgpAdvPrefix](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:AdvPrefix/)
 
@@ -40,13 +40,13 @@ resource "nxos_bgp_advertised_prefix" "example" {
   - Choices: `ipv4-ucast`, `ipv4-mcast`, `vpnv4-ucast`, `ipv6-ucast`, `ipv6-mcast`, `vpnv6-ucast`, `vpnv6-mcast`, `l2vpn-evpn`, `ipv4-lucast`, `ipv6-lucast`, `lnkstate`, `ipv4-mvpn`, `ipv6-mvpn`, `l2vpn-vpls`, `ipv4-mdt`
   - Default value: `ipv4-ucast`
 - `asn` (String) Autonomous system number.
-- `prefix` (String) The next-hop address tracking delay timer for critical next-hop reachability routes.
+- `prefix` (String) IP address of the network or prefix to advertise.
 - `vrf` (String) VRF name.
 
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
-- `route_map` (String) Route map to modify attributese.
+- `route_map` (String) Route map to modify attributes.
 
 ### Read-Only
 

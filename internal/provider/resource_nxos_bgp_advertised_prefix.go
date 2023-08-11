@@ -24,12 +24,10 @@ import (
 	"fmt"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -39,25 +37,25 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &BGPAddressFamilyResource{}
-var _ resource.ResourceWithImportState = &BGPAddressFamilyResource{}
+var _ resource.Resource = &BGPAdvertisedPrefixResource{}
+var _ resource.ResourceWithImportState = &BGPAdvertisedPrefixResource{}
 
-func NewBGPAddressFamilyResource() resource.Resource {
-	return &BGPAddressFamilyResource{}
+func NewBGPAdvertisedPrefixResource() resource.Resource {
+	return &BGPAdvertisedPrefixResource{}
 }
 
-type BGPAddressFamilyResource struct {
+type BGPAdvertisedPrefixResource struct {
 	clients map[string]*nxos.Client
 }
 
-func (r *BGPAddressFamilyResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_bgp_address_family"
+func (r *BGPAdvertisedPrefixResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_bgp_advertised_prefix"
 }
 
-func (r *BGPAddressFamilyResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *BGPAdvertisedPrefixResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP (VRF) address family configuration.", "bgpDomAf", "Routing%20and%20Forwarding/bgp:DomAf/").AddParents("bgp_vrf").AddChildren("bgp_advertised_prefix").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP (VRF) advertised prefix configuration.", "bgpAdvPrefix", "Routing%20and%20Forwarding/bgp:AdvPrefix/").AddParents("bgp_address_family").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -95,29 +93,22 @@ func (r *BGPAddressFamilyResource) Schema(ctx context.Context, req resource.Sche
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"critical_nexthop_timeout": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The next-hop address tracking delay timer for critical next-hop reachability routes.").AddIntegerRangeDescription(1, 4294967295).AddDefaultValueDescription("3000").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(3000),
-				Validators: []validator.Int64{
-					int64validator.Between(1, 4294967295),
+			"prefix": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IP address of the network or prefix to advertise.").String,
+				Required:            true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"non_critical_nexthop_timeout": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The next-hop address tracking delay timer for non-critical next-hop reachability routes.").AddIntegerRangeDescription(1, 4294967295).AddDefaultValueDescription("10000").String,
+			"route_map": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route map to modify attributes.").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(10000),
-				Validators: []validator.Int64{
-					int64validator.Between(1, 4294967295),
-				},
 			},
 		},
 	}
 }
 
-func (r *BGPAddressFamilyResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *BGPAdvertisedPrefixResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -126,8 +117,8 @@ func (r *BGPAddressFamilyResource) Configure(ctx context.Context, req resource.C
 	r.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
-func (r *BGPAddressFamilyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan BGPAddressFamily
+func (r *BGPAdvertisedPrefixResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan BGPAdvertisedPrefix
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -154,8 +145,8 @@ func (r *BGPAddressFamilyResource) Create(ctx context.Context, req resource.Crea
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *BGPAddressFamilyResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state BGPAddressFamily
+func (r *BGPAdvertisedPrefixResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state BGPAdvertisedPrefix
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -181,8 +172,8 @@ func (r *BGPAddressFamilyResource) Read(ctx context.Context, req resource.ReadRe
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *BGPAddressFamilyResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan BGPAddressFamily
+func (r *BGPAdvertisedPrefixResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan BGPAdvertisedPrefix
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -206,8 +197,8 @@ func (r *BGPAddressFamilyResource) Update(ctx context.Context, req resource.Upda
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *BGPAddressFamilyResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state BGPAddressFamily
+func (r *BGPAdvertisedPrefixResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state BGPAdvertisedPrefix
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -233,6 +224,6 @@ func (r *BGPAddressFamilyResource) Delete(ctx context.Context, req resource.Dele
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *BGPAddressFamilyResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *BGPAdvertisedPrefixResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

@@ -1,15 +1,13 @@
 ---
-name: BGP Address Family
-class_name: bgpDomAf
-dn: sys/bgp/inst/dom-[%s]/af-[%s]
-ds_description: This data source can read the BGP (VRF) address family configuration.
-res_description: This resource can manage the BGP (VRF) address family configuration.
-doc_path: Routing%20and%20Forwarding/bgp:DomAf/
+name: BGP Advertised Prefix
+class_name: bgpAdvPrefix
+dn: sys/bgp/inst/dom-[%s]/af-[%s]/prefix-[%s]
+ds_description: This data source can read the BGP (VRF) advertised prefix configuration.
+res_description: This resource can manage the BGP (VRF) advertised prefix configuration.
+doc_path: Routing%20and%20Forwarding/bgp:AdvPrefix/
 doc_category: BGP
 parents:
-  - BGP VRF
-children:
-  - BGP Advertised Prefix
+  - BGP Address Family
 attributes:
   - nxos_name: asn
     tf_name: asn
@@ -28,6 +26,7 @@ attributes:
     tf_name: address_family
     type: String
     id: true
+    reference_only: true
     description: 'Address Family.'
     enum_values:
       - ipv4-ucast
@@ -47,22 +46,18 @@ attributes:
       - ipv4-mdt
     default_value: 'ipv4-ucast'
     example: 'ipv4-ucast'
-  - nxos_name: critNhTimeout
-    tf_name: critical_nexthop_timeout
-    type: Int64
-    description: 'The next-hop address tracking delay timer for critical next-hop reachability routes.'
-    min_int: 1
-    max_int: 4294967295
-    default_value: 3000
-    example: 1800
-  - nxos_name: nonCritNhTimeout
-    tf_name: non_critical_nexthop_timeout
-    type: Int64
-    description: 'The next-hop address tracking delay timer for non-critical next-hop reachability routes.'
-    min_int: 1
-    max_int: 4294967295
-    default_value: 10000
-    example: 1800
+  - nxos_name: addr
+    tf_name: prefix
+    type: String
+    id: true
+    description: 'IP address of the network or prefix to advertise.'
+    example: '192.168.1.0/24'
+  - nxos_name: rtMap
+    tf_name: route_map
+    type: String
+    description: 'Route map to modify attributes.'
+    default_value: ''
+    example: rt-map
 test_prerequisites:
   - dn: sys/fm/bgp
     class_name: fmBgp
@@ -86,4 +81,12 @@ test_prerequisites:
     attributes:
       - name: name
         value: default
+    dependencies: [2]
+  - dn: sys/bgp/inst/dom-[default]/af-[ipv4-ucast]
+    class_name: bgpDomAf
+    attributes:
+      - name: name
+        value: default
+      - name: type
+        value: ipv4cast
     dependencies: [2]

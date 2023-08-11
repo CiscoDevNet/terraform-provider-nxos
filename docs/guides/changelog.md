@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.5.1 (unreleased)
+
+- Add `nxos_bgp_advertised_prefix` resource and data source 
+
 ## 0.5.0
 
 - Migrate to `CiscoDevNet` registry namespace

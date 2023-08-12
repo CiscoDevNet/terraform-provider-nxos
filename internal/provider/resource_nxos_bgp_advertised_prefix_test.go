@@ -88,10 +88,9 @@ resource "nxos_rest" "PreReq4" {
   dn = "sys/bgp/inst/dom-[default]/af-[ipv4-ucast]"
   class_name = "bgpDomAf"
   content = {
-      name = "default"
-      type = "ipv4cast"
+      type = "ipv4-ucast"
   }
-  depends_on = [nxos_rest.PreReq2, ]
+  depends_on = [nxos_rest.PreReq3, ]
 }
 
 `

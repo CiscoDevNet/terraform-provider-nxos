@@ -13,21 +13,21 @@ attributes:
     tf_name: asn
     type: String
     reference_only: true
-    description: 'Autonomous system number.'
-    example: '65001'
+    description: "Autonomous system number."
+    example: "65001"
   - nxos_name: name
     tf_name: vrf
     type: String
     id: true
     reference_only: true
-    description: 'VRF name.'
+    description: "VRF name."
     example: default
   - nxos_name: type
     tf_name: address_family
     type: String
     id: true
     reference_only: true
-    description: 'Address Family.'
+    description: "Address Family."
     enum_values:
       - ipv4-ucast
       - ipv4-mcast
@@ -44,19 +44,19 @@ attributes:
       - ipv6-mvpn
       - l2vpn-vpls
       - ipv4-mdt
-    default_value: 'ipv4-ucast'
-    example: 'ipv4-ucast'
+    default_value: "ipv4-ucast"
+    example: "ipv4-ucast"
   - nxos_name: addr
     tf_name: prefix
     type: String
     id: true
-    description: 'IP address of the network or prefix to advertise.'
-    example: '192.168.1.0/24'
+    description: "IP address of the network or prefix to advertise."
+    example: "192.168.1.0/24"
   - nxos_name: rtMap
     tf_name: route_map
     type: String
-    description: 'Route map to modify attributes.'
-    default_value: ''
+    description: "Route map to modify attributes."
+    default_value: ""
     example: rt-map
 test_prerequisites:
   - dn: sys/fm/bgp
@@ -74,7 +74,7 @@ test_prerequisites:
       - name: adminSt
         value: enabled
       - name: asn
-        value: '65001'
+        value: "65001"
     dependencies: [1]
   - dn: sys/bgp/inst/dom-[default]
     class_name: bgpDom
@@ -85,8 +85,6 @@ test_prerequisites:
   - dn: sys/bgp/inst/dom-[default]/af-[ipv4-ucast]
     class_name: bgpDomAf
     attributes:
-      - name: name
-        value: default
       - name: type
-        value: ipv4cast
-    dependencies: [2]
+        value: ipv4-ucast
+    dependencies: [3]

@@ -7,9 +7,9 @@ description: |-
 
 # Changelog
 
-## 0.5.1 (unreleased)
+## 0.5.1
 
-- Add `nxos_bgp_advertised_prefix` resource and data source 
+- Add `nxos_bgp_advertised_prefix` resource and data source
 
 ## 0.5.0
 

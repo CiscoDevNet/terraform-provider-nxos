@@ -1,6 +1,7 @@
 ## 0.5.2 (unreleased)
 
 - Add `nxos_vpc_keepalive` resource and data source
+- Add `nxos_vpc_peerlink` resource and data source
 
 ## 0.5.1
 

@@ -33,6 +33,7 @@ test_prerequisites:
     dependencies: [2]
   - dn: sys/fm/lacp
     class_name: fmLacp
+    no_delete: true
     attributes:
       - adminSt: enabled
   - dn: sys/intf/aggr-[123]

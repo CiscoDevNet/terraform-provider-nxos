@@ -8,6 +8,8 @@ doc_path: System/vpc:Keepalive/
 doc_category: vPC
 parents:
   - vPC Domain
+children:
+  - vPC Peerlink
 attributes:
   - nxos_name: destIp
     tf_name: destination_ip

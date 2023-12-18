@@ -55,7 +55,7 @@ func (r *VPCKeepaliveResource) Metadata(ctx context.Context, req resource.Metada
 func (r *VPCKeepaliveResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the vPC keepalive configuration.", "vpcKeepalive", "System/vpc:Keepalive/").AddParents("vpc_domain").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the vPC keepalive configuration.", "vpcKeepalive", "System/vpc:Keepalive/").AddParents("vpc_domain").AddChildren("vpc_peerlink").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

@@ -7,6 +7,8 @@ description: |-
   API Documentation: vpcKeepalive https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/vpc:Keepalive/
   Parent resources
   nxosvpcdomain https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vpc_domain
+  Child resources
+  nxosvpcpeerlink https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vpc_peerlink
 ---
 
 # nxos_vpc_keepalive (Resource)
@@ -18,6 +20,10 @@ This resource can manage the vPC keepalive configuration.
 ### Parent resources
 
 - [nxos_vpc_domain](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vpc_domain)
+
+### Child resources
+
+- [nxos_vpc_peerlink](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vpc_peerlink)
 
 ## Example Usage
 

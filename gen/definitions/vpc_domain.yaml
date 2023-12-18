@@ -10,6 +10,7 @@ parents:
   - vPC Instance
 children:
   - vPC Interface
+  - vPC Keepalive
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state

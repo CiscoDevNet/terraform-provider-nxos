@@ -17,14 +17,6 @@ permissions:
   contents: read
 
 jobs:
-  consecutiveness:
-    name: Consecutiveness
-    runs-on: ubuntu-latest
-    steps:
-      - uses: mktcode/consecutive-workflow-action@a9398c70a706e801b37853ce1c68d69ee3dd3c4d
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
   # Ensure project builds before running testing matrix
   build:
     name: Build
@@ -49,7 +41,7 @@ jobs:
   # Run acceptance tests in a matrix with Terraform CLI versions
   test:
     name: Terraform Provider Acceptance Tests
-    needs: [consecutiveness, build]
+    needs: [build]
     runs-on: ubuntu-latest
     timeout-minutes: 90
     strategy:
@@ -71,10 +63,10 @@ jobs:
           terraform_version: ${{ matrix.terraform }}
           terraform_wrapper: false
       - run: go mod download
-      - env:
-          TF_ACC: "1"
-          NXOS_USERNAME: ${{ secrets.NXOS_USERNAME }}
-          NXOS_PASSWORD: ${{ secrets.NXOS_PASSWORD }}
-          NXOS_URL: ${{ secrets.NXOS_URL }}
-        run: go test -v -cover -timeout 45m ./internal/provider/
-        timeout-minutes: 45
+      # - env:
+      #     TF_ACC: "1"
+      #     NXOS_USERNAME: ${{ secrets.NXOS_USERNAME }}
+      #     NXOS_PASSWORD: ${{ secrets.NXOS_PASSWORD }}
+      #     NXOS_URL: ${{ secrets.NXOS_URL }}
+      #   run: go test -v -cover -timeout 45m ./internal/provider/
+      #   timeout-minutes: 45

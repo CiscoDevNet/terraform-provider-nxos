@@ -45,7 +45,7 @@ attributes:
     description: 'Bandwidth reference value.'
     example: 400000
   - nxos_name: bwRefUnit
-    tf_name: banwidth_reference_unit
+    tf_name: bandwidth_reference_unit
     type: String
     description: 'Bandwidth reference unit.'
     enum_values:

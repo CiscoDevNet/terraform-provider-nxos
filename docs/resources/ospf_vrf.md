@@ -36,13 +36,13 @@ This resource can manage the OSPF VRF configuration.
 
 ```terraform
 resource "nxos_ospf_vrf" "example" {
-  instance_name           = "OSPF1"
-  name                    = "VRF1"
-  admin_state             = "enabled"
-  bandwidth_reference     = 400000
-  banwidth_reference_unit = "mbps"
-  distance                = 110
-  router_id               = "34.56.78.90"
+  instance_name            = "OSPF1"
+  name                     = "VRF1"
+  admin_state              = "enabled"
+  bandwidth_reference      = 400000
+  bandwidth_reference_unit = "mbps"
+  distance                 = 110
+  router_id                = "34.56.78.90"
 }
 ```
 
@@ -62,7 +62,7 @@ resource "nxos_ospf_vrf" "example" {
 - `bandwidth_reference` (Number) Bandwidth reference value.
   - Range: `0`-`4294967295`
   - Default value: `40000`
-- `banwidth_reference_unit` (String) Bandwidth reference unit.
+- `bandwidth_reference_unit` (String) Bandwidth reference unit.
   - Choices: `mbps`, `gbps`
   - Default value: `mbps`
 - `device` (String) A device name from the provider configuration.

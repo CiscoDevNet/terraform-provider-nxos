@@ -79,7 +79,7 @@ func (d *OSPFVRFDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "Bandwidth reference value.",
 				Computed:            true,
 			},
-			"banwidth_reference_unit": schema.StringAttribute{
+			"bandwidth_reference_unit": schema.StringAttribute{
 				MarkdownDescription: "Bandwidth reference unit.",
 				Computed:            true,
 			},

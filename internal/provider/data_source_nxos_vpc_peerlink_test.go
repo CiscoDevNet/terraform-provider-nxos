@@ -71,6 +71,7 @@ resource "nxos_rest" "PreReq3" {
 resource "nxos_rest" "PreReq4" {
   dn = "sys/fm/lacp"
   class_name = "fmLacp"
+  delete = false
   content = {
        = ""
   }

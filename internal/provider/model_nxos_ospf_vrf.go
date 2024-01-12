@@ -30,15 +30,15 @@ import (
 )
 
 type OSPFVRF struct {
-	Device                types.String `tfsdk:"device"`
-	Dn                    types.String `tfsdk:"id"`
-	InstanceName          types.String `tfsdk:"instance_name"`
-	Name                  types.String `tfsdk:"name"`
-	AdminState            types.String `tfsdk:"admin_state"`
-	BandwidthReference    types.Int64  `tfsdk:"bandwidth_reference"`
-	BanwidthReferenceUnit types.String `tfsdk:"banwidth_reference_unit"`
-	Distance              types.Int64  `tfsdk:"distance"`
-	RouterId              types.String `tfsdk:"router_id"`
+	Device                 types.String `tfsdk:"device"`
+	Dn                     types.String `tfsdk:"id"`
+	InstanceName           types.String `tfsdk:"instance_name"`
+	Name                   types.String `tfsdk:"name"`
+	AdminState             types.String `tfsdk:"admin_state"`
+	BandwidthReference     types.Int64  `tfsdk:"bandwidth_reference"`
+	BandwidthReferenceUnit types.String `tfsdk:"bandwidth_reference_unit"`
+	Distance               types.Int64  `tfsdk:"distance"`
+	RouterId               types.String `tfsdk:"router_id"`
 }
 
 func (data OSPFVRF) getDn() string {
@@ -61,8 +61,8 @@ func (data OSPFVRF) toBody() nxos.Body {
 	if (!data.BandwidthReference.IsUnknown() && !data.BandwidthReference.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bwRef", strconv.FormatInt(data.BandwidthReference.ValueInt64(), 10))
 	}
-	if (!data.BanwidthReferenceUnit.IsUnknown() && !data.BanwidthReferenceUnit.IsNull()) || true {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bwRefUnit", data.BanwidthReferenceUnit.ValueString())
+	if (!data.BandwidthReferenceUnit.IsUnknown() && !data.BandwidthReferenceUnit.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bwRefUnit", data.BandwidthReferenceUnit.ValueString())
 	}
 	if (!data.Distance.IsUnknown() && !data.Distance.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dist", strconv.FormatInt(data.Distance.ValueInt64(), 10))
@@ -90,10 +90,10 @@ func (data *OSPFVRF) fromBody(res gjson.Result, all bool) {
 	} else {
 		data.BandwidthReference = types.Int64Null()
 	}
-	if !data.BanwidthReferenceUnit.IsNull() || all {
-		data.BanwidthReferenceUnit = types.StringValue(res.Get(data.getClassName() + ".attributes.bwRefUnit").String())
+	if !data.BandwidthReferenceUnit.IsNull() || all {
+		data.BandwidthReferenceUnit = types.StringValue(res.Get(data.getClassName() + ".attributes.bwRefUnit").String())
 	} else {
-		data.BanwidthReferenceUnit = types.StringNull()
+		data.BandwidthReferenceUnit = types.StringNull()
 	}
 	if !data.Distance.IsNull() || all {
 		data.Distance = types.Int64Value(res.Get(data.getClassName() + ".attributes.dist").Int())

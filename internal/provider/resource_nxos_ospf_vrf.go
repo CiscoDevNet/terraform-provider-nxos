@@ -104,7 +104,7 @@ func (r *OSPFVRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"banwidth_reference_unit": schema.StringAttribute{
+			"bandwidth_reference_unit": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Bandwidth reference unit.").AddStringEnumDescription("mbps", "gbps").AddDefaultValueDescription("mbps").String,
 				Optional:            true,
 				Computed:            true,

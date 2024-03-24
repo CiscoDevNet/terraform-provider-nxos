@@ -28,16 +28,24 @@ test_prerequisites:
   - dn: sys/vpc/inst/dom
     class_name: vpcDom
     dependencies: [1]
+    attributes:
+      - name: id
+        value: 100
   - dn: sys/vpc/inst/dom/keepalive
     class_name: vpcKeepalive
     dependencies: [2]
+    attributes:
+      - name: destIp
+        value: "192.168.1.1"
+      - name: srcIp
+        value: "192.168.1.2"
   - dn: sys/fm/lacp
     class_name: fmLacp
     no_delete: true
     attributes:
       - name: adminSt
         value: enabled
-  - dn: sys/intf/aggr-[123]
+  - dn: sys/intf/aggr-[po1]
     class_name: pcAggrIf
     dependencies: [4]
     attributes:

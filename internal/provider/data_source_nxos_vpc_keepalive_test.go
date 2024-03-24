@@ -71,6 +71,9 @@ resource "nxos_rest" "PreReq1" {
 resource "nxos_rest" "PreReq2" {
   dn = "sys/vpc/inst/dom"
   class_name = "vpcDom"
+  content = {
+      id = "100"
+  }
   depends_on = [nxos_rest.PreReq1, ]
 }
 

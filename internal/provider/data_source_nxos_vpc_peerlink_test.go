@@ -59,12 +59,19 @@ resource "nxos_rest" "PreReq1" {
 resource "nxos_rest" "PreReq2" {
   dn = "sys/vpc/inst/dom"
   class_name = "vpcDom"
+  content = {
+      id = "100"
+  }
   depends_on = [nxos_rest.PreReq1, ]
 }
 
 resource "nxos_rest" "PreReq3" {
   dn = "sys/vpc/inst/dom/keepalive"
   class_name = "vpcKeepalive"
+  content = {
+      destIp = "192.168.1.1"
+      srcIp = "192.168.1.2"
+  }
   depends_on = [nxos_rest.PreReq2, ]
 }
 
@@ -78,7 +85,7 @@ resource "nxos_rest" "PreReq4" {
 }
 
 resource "nxos_rest" "PreReq5" {
-  dn = "sys/intf/aggr-[123]"
+  dn = "sys/intf/aggr-[po1]"
   class_name = "pcAggrIf"
   content = {
       id = "po1"

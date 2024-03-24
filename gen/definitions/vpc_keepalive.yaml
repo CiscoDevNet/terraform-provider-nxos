@@ -121,3 +121,6 @@ test_prerequisites:
   - dn: sys/vpc/inst/dom
     class_name: vpcDom
     dependencies: [1]
+    attributes:
+      - name: id
+        value: 100

@@ -1,6 +1,8 @@
 module github.com/CiscoDevNet/terraform-provider-nxos
 
-go 1.18
+go 1.21
+
+toolchain go1.21.6
 
 require (
 	github.com/hashicorp/terraform-plugin-docs v0.18.0

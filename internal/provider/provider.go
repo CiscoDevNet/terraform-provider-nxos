@@ -271,6 +271,7 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewRestResource,
+		NewSaveConfigResource,
 		NewBGPResource,
 		NewBGPAddressFamilyResource,
 		NewBGPAdvertisedPrefixResource,

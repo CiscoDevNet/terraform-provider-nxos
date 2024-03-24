@@ -4,6 +4,7 @@
 - Add `nxos_vpc_peerlink` resource and data source
 - Fix `bandwidth_reference_unit` of `nxos_ospf_vrf` resource and data source
 - Add `force` attribute to `nxos_port_channel_interface_member` resource and data source
+- Add `nxos_save_config` resource
 
 ## 0.5.1
 

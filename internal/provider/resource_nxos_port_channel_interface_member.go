@@ -81,6 +81,10 @@ func (r *PortChannelInterfaceMemberResource) Schema(ctx context.Context, req res
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
+			"force": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Channel group force").String,
+				Optional:            true,
+			},
 		},
 	}
 }

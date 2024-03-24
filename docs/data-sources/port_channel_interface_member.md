@@ -36,4 +36,5 @@ data "nxos_port_channel_interface_member" "example" {
 
 ### Read-Only
 
+- `force` (Boolean) Channel group force
 - `id` (String) The distinguished name of the object.

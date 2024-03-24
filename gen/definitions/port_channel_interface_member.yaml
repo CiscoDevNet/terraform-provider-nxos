@@ -24,6 +24,11 @@ attributes:
     id: true
     description: "DN of interface. For example: `sys/intf/phys-[eth1/1]`."
     example: sys/intf/phys-[eth1/11]
+  - nxos_name: isMbrForce
+    tf_name: force
+    type: Bool
+    description: Channel group force
+    example: false
 test_prerequisites:
   - dn: sys/intf/aggr-[po1]
     class_name: pcAggrIf

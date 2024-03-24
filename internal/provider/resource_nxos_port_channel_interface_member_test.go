@@ -35,6 +35,7 @@ func TestAccNxosPortChannelInterfaceMember(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_port_channel_interface_member.test", "interface_id", "po1"),
 					resource.TestCheckResourceAttr("nxos_port_channel_interface_member.test", "interface_dn", "sys/intf/phys-[eth1/11]"),
+					resource.TestCheckResourceAttr("nxos_port_channel_interface_member.test", "force", "false"),
 				),
 			},
 			{
@@ -72,6 +73,7 @@ func testAccNxosPortChannelInterfaceMemberConfig_all() string {
 	resource "nxos_port_channel_interface_member" "test" {
 		interface_id = "po1"
 		interface_dn = "sys/intf/phys-[eth1/11]"
+		force = false
   		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`

@@ -34,6 +34,7 @@ func TestAccDataSourceNxosPortChannelInterfaceMember(t *testing.T) {
 				Config: testAccDataSourceNxosPortChannelInterfaceMemberPrerequisitesConfig + testAccDataSourceNxosPortChannelInterfaceMemberConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_port_channel_interface_member.test", "interface_dn", "sys/intf/phys-[eth1/11]"),
+					resource.TestCheckResourceAttr("data.nxos_port_channel_interface_member.test", "force", "false"),
 				),
 			},
 		},
@@ -56,6 +57,7 @@ const testAccDataSourceNxosPortChannelInterfaceMemberConfig = `
 resource "nxos_port_channel_interface_member" "test" {
   interface_id = "po1"
   interface_dn = "sys/intf/phys-[eth1/11]"
+  force = false
   depends_on = [nxos_rest.PreReq0, ]
 }
 

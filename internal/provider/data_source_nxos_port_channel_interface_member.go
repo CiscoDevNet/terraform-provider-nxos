@@ -71,6 +71,10 @@ func (d *PortChannelInterfaceMemberDataSource) Schema(ctx context.Context, req d
 				MarkdownDescription: "DN of interface. For example: `sys/intf/phys-[eth1/1]`.",
 				Required:            true,
 			},
+			"force": schema.BoolAttribute{
+				MarkdownDescription: "Channel group force",
+				Computed:            true,
+			},
 		},
 	}
 }

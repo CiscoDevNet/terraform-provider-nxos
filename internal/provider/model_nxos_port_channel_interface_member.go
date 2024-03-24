@@ -21,7 +21,9 @@ package provider
 
 import (
 	"fmt"
+	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -33,6 +35,7 @@ type PortChannelInterfaceMember struct {
 	Dn          types.String `tfsdk:"id"`
 	InterfaceId types.String `tfsdk:"interface_id"`
 	InterfaceDn types.String `tfsdk:"interface_dn"`
+	Force       types.Bool   `tfsdk:"force"`
 }
 
 func (data PortChannelInterfaceMember) getDn() string {
@@ -49,6 +52,9 @@ func (data PortChannelInterfaceMember) toBody() nxos.Body {
 	if (!data.InterfaceDn.IsUnknown() && !data.InterfaceDn.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"tDn", data.InterfaceDn.ValueString())
 	}
+	if (!data.Force.IsUnknown() && !data.Force.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"isMbrForce", strconv.FormatBool(data.Force.ValueBool()))
+	}
 
 	return nxos.Body{body}
 }
@@ -58,5 +64,10 @@ func (data *PortChannelInterfaceMember) fromBody(res gjson.Result, all bool) {
 		data.InterfaceDn = types.StringValue(res.Get(data.getClassName() + ".attributes.tDn").String())
 	} else {
 		data.InterfaceDn = types.StringNull()
+	}
+	if !data.Force.IsNull() || all {
+		data.Force = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.isMbrForce").String()))
+	} else {
+		data.Force = types.BoolNull()
 	}
 }

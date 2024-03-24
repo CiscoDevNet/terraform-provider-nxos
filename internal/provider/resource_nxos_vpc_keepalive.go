@@ -28,6 +28,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -74,29 +75,37 @@ func (r *VPCKeepaliveResource) Schema(ctx context.Context, req resource.SchemaRe
 				Required:            true,
 			},
 			"flush_timeout": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive flush timeout.").AddIntegerRangeDescription(3, 10).String,
+				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive flush timeout.").AddIntegerRangeDescription(3, 10).AddDefaultValueDescription("3").String,
 				Optional:            true,
+				Computed:            true,
+				Default:             int64default.StaticInt64(3),
 				Validators: []validator.Int64{
 					int64validator.Between(3, 10),
 				},
 			},
 			"interval": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive interval.").AddIntegerRangeDescription(400, 10000).String,
+				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive interval.").AddIntegerRangeDescription(400, 10000).AddDefaultValueDescription("1000").String,
 				Optional:            true,
+				Computed:            true,
+				Default:             int64default.StaticInt64(1000),
 				Validators: []validator.Int64{
 					int64validator.Between(400, 10000),
 				},
 			},
 			"precedence_type": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive precedence type. `0` - network, `1` - internet, `2` - critical, `3` flash-override, `4` - flash, `5` - immediate, `6` - prioriy, `7` - routine.").AddIntegerRangeDescription(0, 7).String,
+				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive precedence type. `0` - network, `1` - internet, `2` - critical, `3` flash-override, `4` - flash, `5` - immediate, `6` - prioriy, `7` - routine.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
 				Optional:            true,
+				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 7),
 				},
 			},
 			"precedence_value": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive precedence value.").AddIntegerRangeDescription(0, 7).String,
+				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive precedence value.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("6").String,
 				Optional:            true,
+				Computed:            true,
+				Default:             int64default.StaticInt64(6),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 7),
 				},
@@ -106,36 +115,46 @@ func (r *VPCKeepaliveResource) Schema(ctx context.Context, req resource.SchemaRe
 				Required:            true,
 			},
 			"timeout": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive timeout.").AddIntegerRangeDescription(3, 20).String,
+				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive timeout.").AddIntegerRangeDescription(3, 20).AddDefaultValueDescription("5").String,
 				Optional:            true,
+				Computed:            true,
+				Default:             int64default.StaticInt64(5),
 				Validators: []validator.Int64{
 					int64validator.Between(3, 20),
 				},
 			},
 			"type_of_service_byte": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive type of service (ToS) byte.").AddIntegerRangeDescription(0, 255).String,
+				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive type of service (ToS) byte.").AddIntegerRangeDescription(0, 255).AddDefaultValueDescription("0").String,
 				Optional:            true,
+				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 255),
 				},
 			},
 			"type_of_service_configuration_type": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive type of service (ToS) configuration type. `0` - noCfg, `1` - tos-byte, `2` - tos-value, `3` - tos-type, `4` -  precedence-type, `5` - precedence-value.").AddIntegerRangeDescription(0, 5).String,
+				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive type of service (ToS) configuration type. `0` - noCfg, `1` - tos-byte, `2` - tos-value, `3` - tos-type, `4` -  precedence-type, `5` - precedence-value.").AddIntegerRangeDescription(0, 5).AddDefaultValueDescription("0").String,
 				Optional:            true,
+				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 5),
 				},
 			},
 			"type_of_service_type": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive type of service (ToS) type. `0` - min-delay, `1` - max-throughput, `2` - max-reliability, `3` - min-monetary-cost, `4` -  normal.").AddIntegerRangeDescription(0, 4).String,
+				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive type of service (ToS) type. `0` - min-delay, `1` - max-throughput, `2` - max-reliability, `3` - min-monetary-cost, `4` -  normal.").AddIntegerRangeDescription(0, 4).AddDefaultValueDescription("4").String,
 				Optional:            true,
+				Computed:            true,
+				Default:             int64default.StaticInt64(4),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4),
 				},
 			},
 			"type_of_service_value": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive type of service (ToS) value.").AddIntegerRangeDescription(0, 15).String,
+				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive type of service (ToS) value.").AddIntegerRangeDescription(0, 15).AddDefaultValueDescription("0").String,
 				Optional:            true,
+				Computed:            true,
+				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 15),
 				},

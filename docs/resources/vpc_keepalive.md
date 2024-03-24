@@ -58,22 +58,31 @@ resource "nxos_vpc_keepalive" "example" {
 - `device` (String) A device name from the provider configuration.
 - `flush_timeout` (Number) vPC Keepalive flush timeout.
   - Range: `3`-`10`
+  - Default value: `3`
 - `interval` (Number) vPC Keepalive interval.
   - Range: `400`-`10000`
+  - Default value: `1000`
 - `precedence_type` (Number) vPC Keepalive precedence type. `0` - network, `1` - internet, `2` - critical, `3` flash-override, `4` - flash, `5` - immediate, `6` - prioriy, `7` - routine.
   - Range: `0`-`7`
+  - Default value: `0`
 - `precedence_value` (Number) vPC Keepalive precedence value.
   - Range: `0`-`7`
+  - Default value: `6`
 - `timeout` (Number) vPC Keepalive timeout.
   - Range: `3`-`20`
+  - Default value: `5`
 - `type_of_service_byte` (Number) vPC Keepalive type of service (ToS) byte.
   - Range: `0`-`255`
+  - Default value: `0`
 - `type_of_service_configuration_type` (Number) vPC Keepalive type of service (ToS) configuration type. `0` - noCfg, `1` - tos-byte, `2` - tos-value, `3` - tos-type, `4` -  precedence-type, `5` - precedence-value.
   - Range: `0`-`5`
+  - Default value: `0`
 - `type_of_service_type` (Number) vPC Keepalive type of service (ToS) type. `0` - min-delay, `1` - max-throughput, `2` - max-reliability, `3` - min-monetary-cost, `4` -  normal.
   - Range: `0`-`4`
+  - Default value: `4`
 - `type_of_service_value` (Number) vPC Keepalive type of service (ToS) value.
   - Range: `0`-`15`
+  - Default value: `0`
 - `udp_port` (Number) vPC Keepalive UDP port.
   - Range: `1`-`65535`
 - `vrf` (String) vPC Keepalive VRF.

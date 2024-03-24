@@ -35,9 +35,11 @@ test_prerequisites:
     class_name: fmLacp
     no_delete: true
     attributes:
-      - adminSt: enabled
+      - name: adminSt
+        value: enabled
   - dn: sys/intf/aggr-[123]
     class_name: pcAggrIf
     dependencies: [4]
     attributes:
-      - id: po1
+      - name: id
+        value: po1

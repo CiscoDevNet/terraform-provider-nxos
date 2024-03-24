@@ -73,7 +73,7 @@ resource "nxos_rest" "PreReq4" {
   class_name = "fmLacp"
   delete = false
   content = {
-       = ""
+      adminSt = "enabled"
   }
 }
 
@@ -81,7 +81,7 @@ resource "nxos_rest" "PreReq5" {
   dn = "sys/intf/aggr-[123]"
   class_name = "pcAggrIf"
   content = {
-       = ""
+      id = "po1"
   }
   depends_on = [nxos_rest.PreReq4, ]
 }

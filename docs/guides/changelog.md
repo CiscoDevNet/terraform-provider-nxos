@@ -11,6 +11,7 @@ description: |-
 
 - Add `nxos_vpc_keepalive` resource and data source
 - Add `nxos_vpc_peerlink` resource and data source
+- Fix `bandwidth_reference_unit` of `nxos_ospf_vrf` resource and data source
 
 ## 0.5.1
 

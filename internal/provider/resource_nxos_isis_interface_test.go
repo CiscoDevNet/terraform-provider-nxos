@@ -52,6 +52,7 @@ func TestAccNxosISISInterface(t *testing.T) {
 					resource.TestCheckResourceAttr("nxos_isis_interface.test", "hello_multiplier_l1", "4"),
 					resource.TestCheckResourceAttr("nxos_isis_interface.test", "hello_multiplier_l2", "4"),
 					resource.TestCheckResourceAttr("nxos_isis_interface.test", "hello_padding", "never"),
+					resource.TestCheckResourceAttr("nxos_isis_interface.test", "instance_name", "ISIS1"),
 					resource.TestCheckResourceAttr("nxos_isis_interface.test", "metric_l1", "1000"),
 					resource.TestCheckResourceAttr("nxos_isis_interface.test", "metric_l2", "1000"),
 					resource.TestCheckResourceAttr("nxos_isis_interface.test", "mtu_check", "true"),
@@ -61,6 +62,7 @@ func TestAccNxosISISInterface(t *testing.T) {
 					resource.TestCheckResourceAttr("nxos_isis_interface.test", "passive", "l1"),
 					resource.TestCheckResourceAttr("nxos_isis_interface.test", "priority_l1", "80"),
 					resource.TestCheckResourceAttr("nxos_isis_interface.test", "priority_l2", "80"),
+					resource.TestCheckResourceAttr("nxos_isis_interface.test", "enable_ipv4", "true"),
 				),
 			},
 			{
@@ -121,6 +123,7 @@ func testAccNxosISISInterfaceConfig_all() string {
 		hello_multiplier_l1 = 4
 		hello_multiplier_l2 = 4
 		hello_padding = "never"
+		instance_name = "ISIS1"
 		metric_l1 = 1000
 		metric_l2 = 1000
 		mtu_check = true
@@ -130,6 +133,7 @@ func testAccNxosISISInterfaceConfig_all() string {
 		passive = "l1"
 		priority_l1 = 80
 		priority_l2 = 80
+		enable_ipv4 = true
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`

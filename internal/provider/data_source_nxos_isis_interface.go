@@ -139,6 +139,10 @@ func (d *ISISInterfaceDataSource) Schema(ctx context.Context, req datasource.Sch
 				MarkdownDescription: "Hello padding.",
 				Computed:            true,
 			},
+			"instance_name": schema.StringAttribute{
+				MarkdownDescription: "Instance to which the interface belongs to.",
+				Computed:            true,
+			},
 			"metric_l1": schema.Int64Attribute{
 				MarkdownDescription: "Interface metric Level-1.",
 				Computed:            true,
@@ -173,6 +177,10 @@ func (d *ISISInterfaceDataSource) Schema(ctx context.Context, req datasource.Sch
 			},
 			"priority_l2": schema.Int64Attribute{
 				MarkdownDescription: "Circuit priority.",
+				Computed:            true,
+			},
+			"enable_ipv4": schema.BoolAttribute{
+				MarkdownDescription: "Enabling ISIS router tag on Interface's IPV4 family.",
 				Computed:            true,
 			},
 		},

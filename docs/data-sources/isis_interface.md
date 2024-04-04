@@ -44,6 +44,7 @@ data "nxos_isis_interface" "example" {
 - `authentication_type_l1` (String) IS-IS Authentication-Type for Level-1.
 - `authentication_type_l2` (String) IS-IS Authentication-Type for Level-2.
 - `circuit_type` (String) Circuit type.
+- `enable_ipv4` (Boolean) Enabling ISIS router tag on Interface's IPV4 family.
 - `hello_interval` (Number) Hello interval.
 - `hello_interval_l1` (Number) Hello interval Level-1.
 - `hello_interval_l2` (Number) Hello interval Level-2.
@@ -52,6 +53,7 @@ data "nxos_isis_interface" "example" {
 - `hello_multiplier_l2` (Number) Hello multiplier Level-2.
 - `hello_padding` (String) Hello padding.
 - `id` (String) The distinguished name of the object.
+- `instance_name` (String) Instance to which the interface belongs to.
 - `metric_l1` (Number) Interface metric Level-1.
 - `metric_l2` (Number) Interface metric Level-2.
 - `mtu_check` (Boolean) MTU Check for IS-IS without specific level.

@@ -52,6 +52,7 @@ type ISISInterface struct {
 	HelloMultiplierL1     types.Int64  `tfsdk:"hello_multiplier_l1"`
 	HelloMultiplierL2     types.Int64  `tfsdk:"hello_multiplier_l2"`
 	HelloPadding          types.String `tfsdk:"hello_padding"`
+	InstanceName          types.String `tfsdk:"instance_name"`
 	MetricL1              types.Int64  `tfsdk:"metric_l1"`
 	MetricL2              types.Int64  `tfsdk:"metric_l2"`
 	MtuCheck              types.Bool   `tfsdk:"mtu_check"`
@@ -61,6 +62,7 @@ type ISISInterface struct {
 	Passive               types.String `tfsdk:"passive"`
 	PriorityL1            types.Int64  `tfsdk:"priority_l1"`
 	PriorityL2            types.Int64  `tfsdk:"priority_l2"`
+	EnableIpv4            types.Bool   `tfsdk:"enable_ipv4"`
 }
 
 func (data ISISInterface) getDn() string {
@@ -131,6 +133,9 @@ func (data ISISInterface) toBody() nxos.Body {
 	if (!data.HelloPadding.IsUnknown() && !data.HelloPadding.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"helloPad", data.HelloPadding.ValueString())
 	}
+	if (!data.InstanceName.IsUnknown() && !data.InstanceName.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"instance", data.InstanceName.ValueString())
+	}
 	if (!data.MetricL1.IsUnknown() && !data.MetricL1.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"metricLvl1", strconv.FormatInt(data.MetricL1.ValueInt64(), 10))
 	}
@@ -157,6 +162,9 @@ func (data ISISInterface) toBody() nxos.Body {
 	}
 	if (!data.PriorityL2.IsUnknown() && !data.PriorityL2.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"priorityLvl2", strconv.FormatInt(data.PriorityL2.ValueInt64(), 10))
+	}
+	if (!data.EnableIpv4.IsUnknown() && !data.EnableIpv4.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"v4enable", strconv.FormatBool(data.EnableIpv4.ValueBool()))
 	}
 
 	return nxos.Body{body}
@@ -243,6 +251,11 @@ func (data *ISISInterface) fromBody(res gjson.Result, all bool) {
 	} else {
 		data.HelloPadding = types.StringNull()
 	}
+	if !data.InstanceName.IsNull() || all {
+		data.InstanceName = types.StringValue(res.Get(data.getClassName() + ".attributes.instance").String())
+	} else {
+		data.InstanceName = types.StringNull()
+	}
 	if !data.MetricL1.IsNull() || all {
 		data.MetricL1 = types.Int64Value(res.Get(data.getClassName() + ".attributes.metricLvl1").Int())
 	} else {
@@ -287,5 +300,10 @@ func (data *ISISInterface) fromBody(res gjson.Result, all bool) {
 		data.PriorityL2 = types.Int64Value(res.Get(data.getClassName() + ".attributes.priorityLvl2").Int())
 	} else {
 		data.PriorityL2 = types.Int64Null()
+	}
+	if !data.EnableIpv4.IsNull() || all {
+		data.EnableIpv4 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.v4enable").String()))
+	} else {
+		data.EnableIpv4 = types.BoolNull()
 	}
 }

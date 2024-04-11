@@ -10,6 +10,7 @@ parents:
   - BGP VRF
 children:
   - BGP Advertised Prefix
+  - BGP Route Redistribution
 attributes:
   - nxos_name: asn
     tf_name: asn

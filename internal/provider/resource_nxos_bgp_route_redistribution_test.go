@@ -40,7 +40,7 @@ func TestAccNxosBGPRouteRedistribution(t *testing.T) {
 					resource.TestCheckResourceAttr("nxos_bgp_route_redistribution.test", "protocol_instance", "OSPF1"),
 					resource.TestCheckResourceAttr("nxos_bgp_route_redistribution.test", "route_map", "route_map_ospf_1"),
 					resource.TestCheckResourceAttr("nxos_bgp_route_redistribution.test", "scope", "inter"),
-					resource.TestCheckResourceAttr("nxos_bgp_route_redistribution.test", "srv6_prefix_type", ""),
+					resource.TestCheckResourceAttr("nxos_bgp_route_redistribution.test", "srv6_prefix_type", "unspecified"),
 				),
 			},
 			{
@@ -121,7 +121,7 @@ func testAccNxosBGPRouteRedistributionConfig_all() string {
 		protocol_instance = "OSPF1"
 		route_map = "route_map_ospf_1"
 		scope = "inter"
-		srv6_prefix_type = ""
+		srv6_prefix_type = "unspecified"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
 	}
 	`

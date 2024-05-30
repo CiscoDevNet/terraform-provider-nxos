@@ -2,7 +2,6 @@
 name: Feature Interface VLAN
 class_name: fmInterfaceVlan
 dn: sys/fm/ifvlan
-no_delete: true
 ds_description: This data source can read the Interface VLAN feature configuration.
 res_description: This resource can manage the Interface VLAN feature configuration.
 doc_path: Feature%20Management/fm:InterfaceVlan/
@@ -17,3 +16,4 @@ attributes:
       - enabled
       - disabled
     example: enabled
+    delete_value: disabled

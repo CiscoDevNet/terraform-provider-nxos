@@ -2,7 +2,6 @@
 name: Feature VN Segment
 class_name: fmVnSegment
 dn: sys/fm/vnsegment
-no_delete: true
 ds_description: This data source can read the VN Segment feature configuration.
 res_description: This resource can manage the VN Segment feature configuration.
 doc_path: Feature%20Management/fm:VnSegment/
@@ -17,3 +16,4 @@ attributes:
       - enabled
       - disabled
     example: enabled
+    delete_value: disabled

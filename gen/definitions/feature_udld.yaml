@@ -2,7 +2,6 @@
 name: Feature UDLD
 class_name: fmUdld
 dn: sys/fm/udld
-no_delete: true
 ds_description: This data source can read the UDLD feature configuration.
 res_description: This resource can manage the UDLD feature configuration.
 doc_path: Feature%20Management/fm:Udld/
@@ -17,3 +16,4 @@ attributes:
       - enabled
       - disabled
     example: enabled
+    delete_value: disabled

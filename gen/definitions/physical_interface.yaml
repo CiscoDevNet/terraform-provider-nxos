@@ -29,12 +29,14 @@ attributes:
       - kp-fec
     default_value: auto
     example: auto
+    delete_value: auto
   - nxos_name: accessVlan
     tf_name: access_vlan
     type: String
     description: 'Access VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
     default_value: vlan-1
     example: unknown
+    delete_value: vlan-1
   - nxos_name: adminSt
     tf_name: admin_state
     type: String
@@ -44,6 +46,7 @@ attributes:
       - down
     default_value: up
     example: up
+    delete_value: up
   - nxos_name: autoNeg
     tf_name: auto_negotiation
     type: String
@@ -54,6 +57,7 @@ attributes:
       - 25G
     default_value: 'on'
     example: 'on'
+    delete_value: 'on'
   - nxos_name: bw
     tf_name: bandwidth
     type: Int64
@@ -62,6 +66,7 @@ attributes:
     max_int: 3200000000
     default_value: 0
     example: 1000
+    delete_value: 0
   - nxos_name: delay
     tf_name: delay
     type: Int64
@@ -70,11 +75,13 @@ attributes:
     max_int: 16777215
     default_value: 1
     example: 10
+    delete_value: 1
   - nxos_name: descr
     tf_name: description
     type: String
     description: 'Interface description.'
     example: My Description
+    delete_value: '_EMPTY_STRING_'
   - nxos_name: duplex
     tf_name: duplex
     type: String
@@ -85,6 +92,7 @@ attributes:
       - half
     default_value: auto
     example: auto
+    delete_value: auto
   - nxos_name: layer
     tf_name: layer
     type: String
@@ -94,6 +102,7 @@ attributes:
       - Layer3
     default_value: Layer2
     example: Layer3
+    delete_value: Layer2
   - nxos_name: linkLog
     tf_name: link_logging
     type: String
@@ -104,6 +113,7 @@ attributes:
       - disable
     default_value: default
     example: enable
+    delete_value: default
   - nxos_name: linkDebounce
     tf_name: link_debounce_down
     type: Int64
@@ -112,6 +122,7 @@ attributes:
     max_int: 20000
     default_value: 100
     example: 200
+    delete_value: 100
   - nxos_name: linkDebounceLinkUp
     tf_name: link_debounce_up
     type: Int64
@@ -120,6 +131,7 @@ attributes:
     max_int: 20000
     default_value: 0
     example: 0
+    delete_value: 0
   - nxos_name: medium
     tf_name: medium
     type: String
@@ -129,6 +141,7 @@ attributes:
       - p2p
     default_value: broadcast
     example: broadcast
+    delete_value: broadcast
   - nxos_name: mode
     tf_name: mode
     type: String
@@ -145,6 +158,7 @@ attributes:
       - vntag
     default_value: access
     example: access
+    delete_value: access
   - nxos_name: mtu
     tf_name: mtu
     type: Int64
@@ -153,12 +167,14 @@ attributes:
     max_int: 9216
     default_value: 1500
     example: 1500
+    delete_value: 1500
   - nxos_name: nativeVlan
     tf_name: native_vlan
     type: String
     description: 'Native VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
     default_value: vlan-1
     example: unknown
+    delete_value: vlan-1
   - nxos_name: speed
     tf_name: speed
     type: String
@@ -184,6 +200,7 @@ attributes:
       - auto 100M 1G 2.5G 5G
     default_value: auto
     example: auto
+    delete_value: auto
   - nxos_name: speedGroup
     tf_name: speed_group
     type: String
@@ -197,12 +214,14 @@ attributes:
       - '25000'
     default_value: auto
     example: auto
+    delete_value: auto
   - nxos_name: trunkVlans
     tf_name: trunk_vlans
     type: String
     description: 'List of trunk VLANs.'
     default_value: 1-4094
     example: 1-4094
+    delete_value: 1-4094
   - nxos_name: uniDirectionalEthernet
     tf_name: uni_directional_ethernet
     type: String
@@ -213,8 +232,10 @@ attributes:
       - receive-only
     default_value: disable
     example: disable
+    delete_value: disable
   - nxos_name: userCfgdFlags
     tf_name: user_configured_flags
     type: String
     description: 'Port User Config Flags.'
     example: 'admin_layer,admin_mtu,admin_state'
+    delete_value: none

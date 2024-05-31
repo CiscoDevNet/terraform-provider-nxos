@@ -81,7 +81,7 @@ attributes:
     type: String
     description: 'Interface description.'
     example: My Description
-    delete_value: '_EMPTY_STRING_'
+    delete_value: DME_UNSET_PROPERTY_MARKER
   - nxos_name: duplex
     tf_name: duplex
     type: String

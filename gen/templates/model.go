@@ -253,6 +253,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 	body := ""
 	{{- range .Attributes}}
+	{{- if not .ReferenceOnly}}
 	{{- if .DeleteValue}}
 
 		{{- if eq .Type "Int64"}}
@@ -260,8 +261,14 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 		{{- else if eq .Type "Bool"}}
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
 		{{- else if eq .Type "String"}}
+		// Using placeholder for empty string, as the "if .DeleteValue" statement above can not differentiate between empty string and nil value.
+		{{- if eq .DeleteValue "_EMPTY_STRING_"}}
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", "")
+		{{- else}}
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
 		{{- end}}
+		{{- end}}
+	{{- end}}
 	{{- end}}
 	{{- end}}
 

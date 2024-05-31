@@ -127,7 +127,7 @@ type YamlConfigAttribute struct {
 	MinInt             int      `yaml:"min_int"`
 	MaxInt             int      `yaml:"max_int"`
 	DefaultValue       string   `yaml:"default_value"`
-	DeleteValue        string   `yaml:"delete_value,omitempty"`
+	DeleteValue        string   `yaml:"delete_value"`
 	ExcludeTest        bool     `yaml:"exclude_test"`
 	RequiresReplace    bool     `yaml:"requires_replace"`
 }

@@ -116,3 +116,9 @@ func (data *PIMSSMRange) fromBody(res gjson.Result, all bool) {
 		data.SsmNone = types.BoolNull()
 	}
 }
+
+func (data PIMSSMRange) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

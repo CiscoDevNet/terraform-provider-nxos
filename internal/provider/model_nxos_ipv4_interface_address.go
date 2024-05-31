@@ -70,3 +70,9 @@ func (data *IPv4InterfaceAddress) fromBody(res gjson.Result, all bool) {
 		data.Type = types.StringNull()
 	}
 }
+
+func (data IPv4InterfaceAddress) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

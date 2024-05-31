@@ -77,3 +77,9 @@ func (data *BridgeDomain) fromBody(res gjson.Result, all bool) {
 		data.Name = types.StringNull()
 	}
 }
+
+func (data BridgeDomain) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

@@ -107,3 +107,9 @@ func (data *PIMInterface) fromBody(res gjson.Result, all bool) {
 		data.SparseMode = types.BoolNull()
 	}
 }
+
+func (data PIMInterface) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

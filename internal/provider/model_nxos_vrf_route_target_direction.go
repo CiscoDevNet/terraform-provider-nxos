@@ -62,3 +62,9 @@ func (data *VRFRouteTargetDirection) fromBody(res gjson.Result, all bool) {
 		data.Direction = types.StringNull()
 	}
 }
+
+func (data VRFRouteTargetDirection) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

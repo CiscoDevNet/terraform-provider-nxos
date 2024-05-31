@@ -106,3 +106,9 @@ func (data *OSPFVRF) fromBody(res gjson.Result, all bool) {
 		data.RouterId = types.StringNull()
 	}
 }
+
+func (data OSPFVRF) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

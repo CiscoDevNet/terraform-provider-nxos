@@ -79,3 +79,9 @@ func (data *PIMVRF) fromBody(res gjson.Result, all bool) {
 		data.Bfd = types.BoolNull()
 	}
 }
+
+func (data PIMVRF) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

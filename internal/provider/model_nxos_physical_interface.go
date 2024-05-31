@@ -249,3 +249,30 @@ func (data *PhysicalInterface) fromBody(res gjson.Result, all bool) {
 		data.UserConfiguredFlags = types.StringNull()
 	}
 }
+
+func (data PhysicalInterface) toDeleteBody() nxos.Body {
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"FECMode", "auto")
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"accessVlan", "vlan-1")
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "up")
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"autoNeg", "on")
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bw", strconv.FormatInt(0, 10))
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"delay", strconv.FormatInt(1, 10))
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"duplex", "auto")
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"layer", "Layer2")
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkLog", "default")
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkDebounce", strconv.FormatInt(100, 10))
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkDebounceLinkUp", strconv.FormatInt(0, 10))
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"medium", "broadcast")
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mode", "access")
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mtu", strconv.FormatInt(1500, 10))
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"nativeVlan", "vlan-1")
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"speed", "auto")
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"speedGroup", "auto")
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"trunkVlans", "1-4094")
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"uniDirectionalEthernet", "disable")
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"userCfgdFlags", "none")
+
+	return nxos.Body{body}
+}

@@ -178,3 +178,9 @@ func (data *ISISVRF) fromBody(res gjson.Result, all bool) {
 		data.PassiveDefault = types.StringNull()
 	}
 }
+
+func (data ISISVRF) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

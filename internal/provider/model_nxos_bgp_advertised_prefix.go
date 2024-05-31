@@ -71,3 +71,9 @@ func (data *BGPAdvertisedPrefix) fromBody(res gjson.Result, all bool) {
 		data.RouteMap = types.StringNull()
 	}
 }
+
+func (data BGPAdvertisedPrefix) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

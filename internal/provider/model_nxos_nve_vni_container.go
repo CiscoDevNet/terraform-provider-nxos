@@ -48,3 +48,9 @@ func (data NVEVNIContainer) toBody() nxos.Body {
 
 func (data *NVEVNIContainer) fromBody(res gjson.Result, all bool) {
 }
+
+func (data NVEVNIContainer) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

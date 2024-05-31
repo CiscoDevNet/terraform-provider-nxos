@@ -72,3 +72,9 @@ func (data *BGPPeerAddressFamilyRouteControl) fromBody(res gjson.Result, all boo
 		data.RouteMapName = types.StringNull()
 	}
 }
+
+func (data BGPPeerAddressFamilyRouteControl) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

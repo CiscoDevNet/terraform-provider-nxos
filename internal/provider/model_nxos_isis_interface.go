@@ -289,3 +289,9 @@ func (data *ISISInterface) fromBody(res gjson.Result, all bool) {
 		data.PriorityL2 = types.Int64Null()
 	}
 }
+
+func (data ISISInterface) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

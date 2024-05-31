@@ -181,6 +181,26 @@ func (r *FeatureTelnetResource) Delete(ctx context.Context, req resource.DeleteR
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Dn.ValueString()))
 
+	body := state.toDeleteBody()
+
+	if len(body.Str) > 0 {
+		_, err := r.clients[state.Device.ValueString()].Post(state.getDn(), body.Str)
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
+			return
+		}
+	} else {
+		res, err := r.clients[state.Device.ValueString()].DeleteDn(state.Dn.ValueString())
+		if err != nil {
+			errCode := res.Get("imdata.0.error.attributes.code").Str
+			// Ignore errors of type "Cannot delete object"
+			if errCode != "1" && errCode != "107" {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
+				return
+			}
+		}
+	}
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Dn.ValueString()))
 
 	resp.State.RemoveResource(ctx)

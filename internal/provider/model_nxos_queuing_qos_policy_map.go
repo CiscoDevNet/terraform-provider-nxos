@@ -68,3 +68,9 @@ func (data *QueuingQOSPolicyMap) fromBody(res gjson.Result, all bool) {
 		data.MatchType = types.StringNull()
 	}
 }
+
+func (data QueuingQOSPolicyMap) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

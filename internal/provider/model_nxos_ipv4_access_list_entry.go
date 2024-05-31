@@ -467,3 +467,9 @@ func (data *IPv4AccessListEntry) fromBody(res gjson.Result, all bool) {
 		data.Vni = types.StringNull()
 	}
 }
+
+func (data IPv4AccessListEntry) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

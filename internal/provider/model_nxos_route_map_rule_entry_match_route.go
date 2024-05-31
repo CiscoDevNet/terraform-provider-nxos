@@ -52,3 +52,9 @@ func (data RouteMapRuleEntryMatchRoute) toBody() nxos.Body {
 
 func (data *RouteMapRuleEntryMatchRoute) fromBody(res gjson.Result, all bool) {
 }
+
+func (data RouteMapRuleEntryMatchRoute) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

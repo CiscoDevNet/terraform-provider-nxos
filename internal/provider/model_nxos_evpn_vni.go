@@ -68,3 +68,9 @@ func (data *EVPNVNI) fromBody(res gjson.Result, all bool) {
 		data.RouteDistinguisher = types.StringNull()
 	}
 }
+
+func (data EVPNVNI) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

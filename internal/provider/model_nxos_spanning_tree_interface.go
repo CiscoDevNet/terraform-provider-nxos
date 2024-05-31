@@ -132,3 +132,9 @@ func (data *SpanningTreeInterface) fromBody(res gjson.Result, all bool) {
 		data.Priority = types.Int64Null()
 	}
 }
+
+func (data SpanningTreeInterface) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

@@ -71,3 +71,9 @@ func (data *PortChannelInterfaceMember) fromBody(res gjson.Result, all bool) {
 		data.Force = types.BoolNull()
 	}
 }
+
+func (data PortChannelInterfaceMember) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

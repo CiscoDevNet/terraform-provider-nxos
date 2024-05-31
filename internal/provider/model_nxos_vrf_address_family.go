@@ -60,3 +60,9 @@ func (data *VRFAddressFamily) fromBody(res gjson.Result, all bool) {
 		data.AddressFamily = types.StringNull()
 	}
 }
+
+func (data VRFAddressFamily) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

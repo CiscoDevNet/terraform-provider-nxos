@@ -69,3 +69,9 @@ func (data *PIMAnycastRP) fromBody(res gjson.Result, all bool) {
 		data.SourceInterface = types.StringNull()
 	}
 }
+
+func (data PIMAnycastRP) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

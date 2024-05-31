@@ -61,3 +61,9 @@ func (data *RouteMapRuleEntrySetRegularCommunityItem) fromBody(res gjson.Result,
 		data.Community = types.StringNull()
 	}
 }
+
+func (data RouteMapRuleEntrySetRegularCommunityItem) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

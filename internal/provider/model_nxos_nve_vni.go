@@ -97,3 +97,9 @@ func (data *NVEVNI) fromBody(res gjson.Result, all bool) {
 		data.SuppressArp = types.StringNull()
 	}
 }
+
+func (data NVEVNI) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

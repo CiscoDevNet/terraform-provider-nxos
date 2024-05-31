@@ -260,3 +260,9 @@ func (data *DefaultQOSPolicyMapMatchClassMapPolice) fromBody(res gjson.Result, a
 		data.ViolateSetQosGroup = types.Int64Null()
 	}
 }
+
+func (data DefaultQOSPolicyMapMatchClassMapPolice) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

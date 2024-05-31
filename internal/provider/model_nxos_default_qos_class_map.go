@@ -68,3 +68,9 @@ func (data *DefaultQOSClassMap) fromBody(res gjson.Result, all bool) {
 		data.MatchType = types.StringNull()
 	}
 }
+
+func (data DefaultQOSClassMap) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

@@ -72,3 +72,9 @@ func (data *BGPPeerAddressFamilyPrefixListControl) fromBody(res gjson.Result, al
 		data.List = types.StringNull()
 	}
 }
+
+func (data BGPPeerAddressFamilyPrefixListControl) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

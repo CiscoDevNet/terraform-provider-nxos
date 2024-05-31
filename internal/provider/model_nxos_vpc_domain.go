@@ -239,3 +239,9 @@ func (data *VPCDomain) fromBody(res gjson.Result, all bool) {
 		data.VirtualIp = types.StringNull()
 	}
 }
+
+func (data VPCDomain) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

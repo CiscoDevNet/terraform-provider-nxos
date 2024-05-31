@@ -88,3 +88,9 @@ func (data *BGPPeerTemplateAddressFamily) fromBody(res gjson.Result, all bool) {
 		data.SendCommunityStandard = types.StringNull()
 	}
 }
+
+func (data BGPPeerTemplateAddressFamily) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

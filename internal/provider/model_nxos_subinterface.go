@@ -132,3 +132,9 @@ func (data *Subinterface) fromBody(res gjson.Result, all bool) {
 		data.Mtu = types.Int64Null()
 	}
 }
+
+func (data Subinterface) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

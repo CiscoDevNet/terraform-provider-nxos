@@ -125,3 +125,9 @@ func (data *BGPPeer) fromBody(res gjson.Result, all bool) {
 		data.Keepalive = types.Int64Null()
 	}
 }
+
+func (data BGPPeer) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

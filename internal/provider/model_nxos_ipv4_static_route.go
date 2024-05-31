@@ -172,3 +172,9 @@ func (data *IPv4StaticRoute) fromBody(res gjson.Result, all bool) {
 		}
 	}
 }
+
+func (data IPv4StaticRoute) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

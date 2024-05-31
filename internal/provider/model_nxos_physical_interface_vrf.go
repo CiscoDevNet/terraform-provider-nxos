@@ -60,3 +60,9 @@ func (data *PhysicalInterfaceVRF) fromBody(res gjson.Result, all bool) {
 		data.VrfDn = types.StringNull()
 	}
 }
+
+func (data PhysicalInterfaceVRF) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

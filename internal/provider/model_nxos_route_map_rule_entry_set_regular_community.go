@@ -79,3 +79,9 @@ func (data *RouteMapRuleEntrySetRegularCommunity) fromBody(res gjson.Result, all
 		data.SetCriteria = types.StringNull()
 	}
 }
+
+func (data RouteMapRuleEntrySetRegularCommunity) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

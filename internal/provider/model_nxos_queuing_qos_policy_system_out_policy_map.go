@@ -57,3 +57,9 @@ func (data *QueuingQOSPolicySystemOutPolicyMap) fromBody(res gjson.Result, all b
 		data.PolicyMapName = types.StringNull()
 	}
 }
+
+func (data QueuingQOSPolicySystemOutPolicyMap) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

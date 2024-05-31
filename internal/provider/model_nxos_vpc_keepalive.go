@@ -167,3 +167,9 @@ func (data *VPCKeepalive) fromBody(res gjson.Result, all bool) {
 		data.Vrf = types.StringNull()
 	}
 }
+
+func (data VPCKeepalive) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

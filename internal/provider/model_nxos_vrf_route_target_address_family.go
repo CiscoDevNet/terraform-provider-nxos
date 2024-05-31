@@ -61,3 +61,9 @@ func (data *VRFRouteTargetAddressFamily) fromBody(res gjson.Result, all bool) {
 		data.RouteTargetAddressFamily = types.StringNull()
 	}
 }
+
+func (data VRFRouteTargetAddressFamily) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

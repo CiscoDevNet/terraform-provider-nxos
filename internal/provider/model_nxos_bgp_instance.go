@@ -78,3 +78,9 @@ func (data *BGPInstance) fromBody(res gjson.Result, all bool) {
 		data.EnhancedErrorHandling = types.BoolNull()
 	}
 }
+
+func (data BGPInstance) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

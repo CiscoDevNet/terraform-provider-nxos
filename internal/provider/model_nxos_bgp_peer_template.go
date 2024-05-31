@@ -96,3 +96,9 @@ func (data *BGPPeerTemplate) fromBody(res gjson.Result, all bool) {
 		data.SourceInterface = types.StringNull()
 	}
 }
+
+func (data BGPPeerTemplate) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

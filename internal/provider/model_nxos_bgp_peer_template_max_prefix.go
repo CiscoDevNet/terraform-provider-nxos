@@ -90,3 +90,9 @@ func (data *BGPPeerTemplateMaxPrefix) fromBody(res gjson.Result, all bool) {
 		data.Threshold = types.Int64Null()
 	}
 }
+
+func (data BGPPeerTemplateMaxPrefix) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

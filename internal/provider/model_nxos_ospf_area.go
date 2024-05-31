@@ -89,3 +89,9 @@ func (data *OSPFArea) fromBody(res gjson.Result, all bool) {
 		data.Type = types.StringNull()
 	}
 }
+
+func (data OSPFArea) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

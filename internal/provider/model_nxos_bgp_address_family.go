@@ -80,3 +80,9 @@ func (data *BGPAddressFamily) fromBody(res gjson.Result, all bool) {
 		data.NonCriticalNexthopTimeout = types.Int64Null()
 	}
 }
+
+func (data BGPAddressFamily) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

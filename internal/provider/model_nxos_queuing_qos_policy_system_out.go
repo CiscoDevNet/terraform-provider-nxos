@@ -48,3 +48,9 @@ func (data QueuingQOSPolicySystemOut) toBody() nxos.Body {
 
 func (data *QueuingQOSPolicySystemOut) fromBody(res gjson.Result, all bool) {
 }
+
+func (data QueuingQOSPolicySystemOut) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

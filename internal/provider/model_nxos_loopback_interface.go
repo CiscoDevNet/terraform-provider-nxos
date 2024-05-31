@@ -77,3 +77,9 @@ func (data *LoopbackInterface) fromBody(res gjson.Result, all bool) {
 		data.Description = types.StringNull()
 	}
 }
+
+func (data LoopbackInterface) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

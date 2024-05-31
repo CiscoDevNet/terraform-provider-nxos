@@ -83,3 +83,9 @@ func (data *VPCInterface) fromBody(res gjson.Result, all bool) {
 		data.PortChannelInterfaceDn = types.StringNull()
 	}
 }
+
+func (data VPCInterface) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

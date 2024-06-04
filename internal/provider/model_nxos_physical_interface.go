@@ -254,7 +254,7 @@ func (data PhysicalInterface) toDeleteBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"FECMode", "auto")
 	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"accessVlan", "vlan-1")
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "up")
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
 	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"autoNeg", "on")
 	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bw", strconv.FormatInt(0, 10))
 	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"delay", strconv.FormatInt(1, 10))

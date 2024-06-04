@@ -46,7 +46,7 @@ attributes:
       - down
     default_value: up
     example: up
-    delete_value: up
+    delete_value: DME_UNSET_PROPERTY_MARKER
   - nxos_name: autoNeg
     tf_name: auto_negotiation
     type: String

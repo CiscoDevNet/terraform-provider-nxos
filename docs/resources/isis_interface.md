@@ -42,6 +42,7 @@ resource "nxos_isis_interface" "example" {
   hello_multiplier_l1     = 4
   hello_multiplier_l2     = 4
   hello_padding           = "never"
+  instance_name           = "ISIS1"
   metric_l1               = 1000
   metric_l2               = 1000
   mtu_check               = true
@@ -51,6 +52,7 @@ resource "nxos_isis_interface" "example" {
   passive                 = "l1"
   priority_l1             = 80
   priority_l2             = 80
+  enable_ipv4             = true
 }
 ```
 
@@ -85,6 +87,8 @@ resource "nxos_isis_interface" "example" {
   - Choices: `l1`, `l2`, `l12`
   - Default value: `l12`
 - `device` (String) A device name from the provider configuration.
+- `enable_ipv4` (Boolean) Enabling ISIS router tag on Interface's IPV4 family.
+  - Default value: `false`
 - `hello_interval` (Number) Hello interval.
   - Range: `1`-`65535`
   - Default value: `10`
@@ -106,6 +110,7 @@ resource "nxos_isis_interface" "example" {
 - `hello_padding` (String) Hello padding.
   - Choices: `always`, `transient`, `never`
   - Default value: `always`
+- `instance_name` (String) Instance to which the interface belongs to.
 - `metric_l1` (Number) Interface metric Level-1.
   - Range: `0`-`16777216`
   - Default value: `16777216`

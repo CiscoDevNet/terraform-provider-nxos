@@ -213,6 +213,10 @@ func (r *ISISInterfaceResource) Schema(ctx context.Context, req resource.SchemaR
 					stringvalidator.OneOf("always", "transient", "never"),
 				},
 			},
+			"instance_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Instance to which the interface belongs to.").String,
+				Optional:            true,
+			},
 			"metric_l1": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Interface metric Level-1.").AddIntegerRangeDescription(0, 16777216).AddDefaultValueDescription("16777216").String,
 				Optional:            true,
@@ -284,6 +288,12 @@ func (r *ISISInterfaceResource) Schema(ctx context.Context, req resource.SchemaR
 				Validators: []validator.Int64{
 					int64validator.Between(0, 127),
 				},
+			},
+			"enable_ipv4": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enabling ISIS router tag on Interface's IPV4 family.").AddDefaultValueDescription("false").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             booldefault.StaticBool(false),
 			},
 		},
 	}

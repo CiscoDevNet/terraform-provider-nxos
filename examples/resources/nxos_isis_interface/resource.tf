@@ -18,6 +18,7 @@ resource "nxos_isis_interface" "example" {
   hello_multiplier_l1     = 4
   hello_multiplier_l2     = 4
   hello_padding           = "never"
+  instance_name           = "ISIS1"
   metric_l1               = 1000
   metric_l2               = 1000
   mtu_check               = true
@@ -27,4 +28,5 @@ resource "nxos_isis_interface" "example" {
   passive                 = "l1"
   priority_l1             = 80
   priority_l2             = 80
+  enable_ipv4             = true
 }

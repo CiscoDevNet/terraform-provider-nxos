@@ -154,6 +154,12 @@ attributes:
       - never
     default_value: always
     example: never
+  - nxos_name: instance
+    tf_name: instance_name
+    type: String
+    description: 'Instance to which the interface belongs to.'
+    omit_empty_value: true
+    example: ISIS1
   - nxos_name: metricLvl1
     tf_name: metric_l1
     type: Int64
@@ -228,6 +234,12 @@ attributes:
     default_value: 64
     description: 'Circuit priority.'
     example: 80
+  - nxos_name: v4enable
+    tf_name: enable_ipv4
+    type: Bool
+    default_value: false
+    description: "Enabling ISIS router tag on Interface's IPV4 family."
+    example: true
 test_prerequisites:
   - dn: sys/fm/isis
     class_name: fmIsis

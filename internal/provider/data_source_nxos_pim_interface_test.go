@@ -47,6 +47,15 @@ func TestAccDataSourceNxosPIMInterface(t *testing.T) {
 
 const testAccDataSourceNxosPIMInterfacePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
+  dn = "sys/intf/phys-[eth1/10]"
+  class_name = "l1PhysIf"
+  content = {
+      id = "eth1/10"
+      layer = "Layer3"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
   dn = "sys/fm/pim"
   class_name = "fmPim"
   delete = false
@@ -55,19 +64,19 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
-resource "nxos_rest" "PreReq1" {
+resource "nxos_rest" "PreReq2" {
   dn = "sys/pim"
   class_name = "pimEntity"
   depends_on = [nxos_rest.PreReq0, ]
 }
 
-resource "nxos_rest" "PreReq2" {
+resource "nxos_rest" "PreReq3" {
   dn = "sys/pim/inst"
   class_name = "pimInst"
   depends_on = [nxos_rest.PreReq1, ]
 }
 
-resource "nxos_rest" "PreReq3" {
+resource "nxos_rest" "PreReq4" {
   dn = "sys/pim/inst/dom-[default]"
   class_name = "pimDom"
   content = {
@@ -88,7 +97,7 @@ resource "nxos_pim_interface" "test" {
   dr_priority = 10
   passive = false
   sparse_mode = true
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
 }
 
 data "nxos_pim_interface" "test" {

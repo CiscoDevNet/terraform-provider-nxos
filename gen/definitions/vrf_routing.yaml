@@ -25,6 +25,12 @@ attributes:
     default_value: 'unknown:unknown:0:0'
     example: 'rd:unknown:0:0'
 test_prerequisites:
+  - dn: sys/fm/bgp
+    class_name: fmBgp
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
   - dn: sys/inst-[VRF1]
     class_name: l3Inst
     attributes:

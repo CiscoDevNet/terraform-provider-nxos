@@ -46,6 +46,7 @@ resource "nxos_rest" "PreReq0" {
   class_name = "l1PhysIf"
   content = {
       id = "eth1/10"
+      layer = "Layer3"
   }
 }
 

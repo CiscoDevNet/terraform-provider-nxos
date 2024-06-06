@@ -42,6 +42,15 @@ func TestAccDataSourceNxosVRFRouting(t *testing.T) {
 
 const testAccDataSourceNxosVRFRoutingPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/bgp"
+  class_name = "fmBgp"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
   dn = "sys/inst-[VRF1]"
   class_name = "l3Inst"
   content = {
@@ -49,7 +58,7 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
-resource "nxos_rest" "PreReq1" {
+resource "nxos_rest" "PreReq2" {
   dn = "sys/ipv4/inst/dom-[VRF1]"
   class_name = "ipv4Dom"
   content = {
@@ -64,7 +73,7 @@ const testAccDataSourceNxosVRFRoutingConfig = `
 resource "nxos_vrf_routing" "test" {
   vrf = "VRF1"
   route_distinguisher = "rd:unknown:0:0"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 }
 
 data "nxos_vrf_routing" "test" {

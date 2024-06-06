@@ -30,3 +30,5 @@ test_prerequisites:
     attributes:
       - name: id
         value: eth1/10
+      - name: layer
+        value: Layer3

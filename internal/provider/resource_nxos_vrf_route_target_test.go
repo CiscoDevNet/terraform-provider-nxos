@@ -51,6 +51,15 @@ func TestAccNxosVRFRouteTarget(t *testing.T) {
 
 const testAccNxosVRFRouteTargetPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/bgp"
+  class_name = "fmBgp"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
   dn = "sys/inst-[VRF1]"
   class_name = "l3Inst"
   content = {
@@ -58,7 +67,7 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
-resource "nxos_rest" "PreReq1" {
+resource "nxos_rest" "PreReq2" {
   dn = "sys/ipv4/inst/dom-[VRF1]"
   class_name = "ipv4Dom"
   content = {
@@ -66,13 +75,13 @@ resource "nxos_rest" "PreReq1" {
   }
 }
 
-resource "nxos_rest" "PreReq2" {
+resource "nxos_rest" "PreReq3" {
   dn = "sys/inst-[VRF1]/dom-[VRF1]"
   class_name = "rtctrlDom"
   depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 }
 
-resource "nxos_rest" "PreReq3" {
+resource "nxos_rest" "PreReq4" {
   dn = "sys/inst-[VRF1]/dom-[VRF1]/af-[ipv4-ucast]"
   class_name = "rtctrlDomAf"
   content = {
@@ -81,7 +90,7 @@ resource "nxos_rest" "PreReq3" {
   depends_on = [nxos_rest.PreReq2, ]
 }
 
-resource "nxos_rest" "PreReq4" {
+resource "nxos_rest" "PreReq5" {
   dn = "sys/inst-[VRF1]/dom-[VRF1]/af-[ipv4-ucast]/ctrl-[ipv4-ucast]"
   class_name = "rtctrlAfCtrl"
   content = {
@@ -90,7 +99,7 @@ resource "nxos_rest" "PreReq4" {
   depends_on = [nxos_rest.PreReq3, ]
 }
 
-resource "nxos_rest" "PreReq5" {
+resource "nxos_rest" "PreReq6" {
   dn = "sys/inst-[VRF1]/dom-[VRF1]/af-[ipv4-ucast]/ctrl-[ipv4-ucast]/rttp-[import]"
   class_name = "rtctrlRttP"
   content = {
@@ -109,7 +118,7 @@ func testAccNxosVRFRouteTargetConfig_minimum() string {
 		route_target_address_family = "ipv4-ucast"
 		direction = "import"
 		route_target = "route-target:as2-nn2:2:2"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, ]
 	}
 	`
 }
@@ -122,7 +131,7 @@ func testAccNxosVRFRouteTargetConfig_all() string {
 		route_target_address_family = "ipv4-ucast"
 		direction = "import"
 		route_target = "route-target:as2-nn2:2:2"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, ]
 	}
 	`
 }

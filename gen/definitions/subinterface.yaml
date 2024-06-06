@@ -78,3 +78,11 @@ attributes:
     max_int: 9216
     default_value: 1500
     example: 1500
+test_prerequisites:
+  - dn: sys/intf/phys-[eth1/10]
+    class_name: l1PhysIf
+    attributes:
+      - name: id
+        value: eth1/10
+      - name: layer
+        value: Layer3

@@ -31,7 +31,7 @@ func TestAccDataSourceNxosSubinterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosSubinterfaceConfig,
+				Config: testAccDataSourceNxosSubinterfacePrerequisitesConfig + testAccDataSourceNxosSubinterfaceConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_subinterface.test", "interface_id", "eth1/10.124"),
 					resource.TestCheckResourceAttr("data.nxos_subinterface.test", "admin_state", "down"),
@@ -48,6 +48,18 @@ func TestAccDataSourceNxosSubinterface(t *testing.T) {
 	})
 }
 
+const testAccDataSourceNxosSubinterfacePrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/intf/phys-[eth1/10]"
+  class_name = "l1PhysIf"
+  content = {
+      id = "eth1/10"
+      layer = "Layer3"
+  }
+}
+
+`
+
 const testAccDataSourceNxosSubinterfaceConfig = `
 
 resource "nxos_subinterface" "test" {
@@ -60,6 +72,7 @@ resource "nxos_subinterface" "test" {
   link_logging = "enable"
   medium = "broadcast"
   mtu = 1500
+  depends_on = [nxos_rest.PreReq0, ]
 }
 
 data "nxos_subinterface" "test" {

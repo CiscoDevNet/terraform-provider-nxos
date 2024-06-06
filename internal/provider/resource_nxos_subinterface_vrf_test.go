@@ -48,6 +48,15 @@ func TestAccNxosSubinterfaceVRF(t *testing.T) {
 
 const testAccNxosSubinterfaceVRFPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
+  dn = "sys/intf/phys-[eth1/10]"
+  class_name = "l1PhysIf"
+  content = {
+      id = "eth1/10"
+      layer = "Layer3"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
   dn = "sys/intf/encrtd-[eth1/10.124]"
   class_name = "l3EncRtdIf"
   content = {
@@ -62,7 +71,7 @@ func testAccNxosSubinterfaceVRFConfig_minimum() string {
 	resource "nxos_subinterface_vrf" "test" {
 		interface_id = "eth1/10.124"
 		vrf_dn = "sys/inst-VRF123"
-  		depends_on = [nxos_rest.PreReq0, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`
 }
@@ -72,7 +81,7 @@ func testAccNxosSubinterfaceVRFConfig_all() string {
 	resource "nxos_subinterface_vrf" "test" {
 		interface_id = "eth1/10.124"
 		vrf_dn = "sys/inst-VRF123"
-  		depends_on = [nxos_rest.PreReq0, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 	}
 	`
 }

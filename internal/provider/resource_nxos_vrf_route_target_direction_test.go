@@ -50,6 +50,15 @@ func TestAccNxosVRFRouteTargetDirection(t *testing.T) {
 
 const testAccNxosVRFRouteTargetDirectionPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/bgp"
+  class_name = "fmBgp"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
   dn = "sys/inst-[VRF1]"
   class_name = "l3Inst"
   content = {
@@ -57,7 +66,7 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
-resource "nxos_rest" "PreReq1" {
+resource "nxos_rest" "PreReq2" {
   dn = "sys/ipv4/inst/dom-[VRF1]"
   class_name = "ipv4Dom"
   content = {
@@ -65,13 +74,13 @@ resource "nxos_rest" "PreReq1" {
   }
 }
 
-resource "nxos_rest" "PreReq2" {
+resource "nxos_rest" "PreReq3" {
   dn = "sys/inst-[VRF1]/dom-[VRF1]"
   class_name = "rtctrlDom"
   depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 }
 
-resource "nxos_rest" "PreReq3" {
+resource "nxos_rest" "PreReq4" {
   dn = "sys/inst-[VRF1]/dom-[VRF1]/af-[ipv4-ucast]"
   class_name = "rtctrlDomAf"
   content = {
@@ -80,7 +89,7 @@ resource "nxos_rest" "PreReq3" {
   depends_on = [nxos_rest.PreReq2, ]
 }
 
-resource "nxos_rest" "PreReq4" {
+resource "nxos_rest" "PreReq5" {
   dn = "sys/inst-[VRF1]/dom-[VRF1]/af-[ipv4-ucast]/ctrl-[ipv4-ucast]"
   class_name = "rtctrlAfCtrl"
   content = {
@@ -98,7 +107,7 @@ func testAccNxosVRFRouteTargetDirectionConfig_minimum() string {
 		address_family = "ipv4-ucast"
 		route_target_address_family = "ipv4-ucast"
 		direction = "import"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]
 	}
 	`
 }
@@ -110,7 +119,7 @@ func testAccNxosVRFRouteTargetDirectionConfig_all() string {
 		address_family = "ipv4-ucast"
 		route_target_address_family = "ipv4-ucast"
 		direction = "import"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]
 	}
 	`
 }

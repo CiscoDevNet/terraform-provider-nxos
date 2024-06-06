@@ -25,6 +25,13 @@ attributes:
     description: 'DN of VRF. For example: `sys/inst-VRF1`.'
     example: sys/inst-VRF123
 test_prerequisites:
+  - dn: sys/intf/phys-[eth1/10]
+    class_name: l1PhysIf
+    attributes:
+      - name: id
+        value: eth1/10
+      - name: layer
+        value: Layer3
   - dn: sys/intf/encrtd-[eth1/10.124]
     class_name: l3EncRtdIf
     attributes:

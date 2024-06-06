@@ -54,6 +54,12 @@ attributes:
     description: 'Route Target in NX-OS DME format.'
     example: route-target:as2-nn2:2:2
 test_prerequisites:
+  - dn: sys/fm/bgp
+    class_name: fmBgp
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
   - dn: sys/inst-[VRF1]
     class_name: l3Inst
     attributes:

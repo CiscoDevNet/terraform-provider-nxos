@@ -57,3 +57,9 @@ func (data *VPCInstance) fromBody(res gjson.Result, all bool) {
 		data.AdminState = types.StringNull()
 	}
 }
+
+func (data VPCInstance) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

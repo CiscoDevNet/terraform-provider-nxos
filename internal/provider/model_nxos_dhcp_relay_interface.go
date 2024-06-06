@@ -59,3 +59,9 @@ func (data *DHCPRelayInterface) fromBody(res gjson.Result, all bool) {
 		data.InterfaceId = types.StringNull()
 	}
 }
+
+func (data DHCPRelayInterface) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

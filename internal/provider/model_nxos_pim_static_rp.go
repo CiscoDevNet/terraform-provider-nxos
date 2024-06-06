@@ -60,3 +60,9 @@ func (data *PIMStaticRP) fromBody(res gjson.Result, all bool) {
 		data.Address = types.StringNull()
 	}
 }
+
+func (data PIMStaticRP) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

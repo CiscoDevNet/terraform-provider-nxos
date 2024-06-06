@@ -60,3 +60,9 @@ func (data *SubinterfaceVRF) fromBody(res gjson.Result, all bool) {
 		data.VrfDn = types.StringNull()
 	}
 }
+
+func (data SubinterfaceVRF) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

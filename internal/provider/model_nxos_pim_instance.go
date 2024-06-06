@@ -57,3 +57,9 @@ func (data *PIMInstance) fromBody(res gjson.Result, all bool) {
 		data.AdminState = types.StringNull()
 	}
 }
+
+func (data PIMInstance) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

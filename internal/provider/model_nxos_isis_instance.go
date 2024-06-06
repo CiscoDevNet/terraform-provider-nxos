@@ -68,3 +68,9 @@ func (data *ISISInstance) fromBody(res gjson.Result, all bool) {
 		data.AdminState = types.StringNull()
 	}
 }
+
+func (data ISISInstance) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

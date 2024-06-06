@@ -57,3 +57,9 @@ func (data *HMM) fromBody(res gjson.Result, all bool) {
 		data.AdminState = types.StringNull()
 	}
 }
+
+func (data HMM) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

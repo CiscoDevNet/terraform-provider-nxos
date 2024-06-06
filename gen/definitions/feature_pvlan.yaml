@@ -2,7 +2,6 @@
 name: Feature PVLAN
 class_name: fmPvlan
 dn: sys/fm/pvlan
-no_delete: true
 ds_description: This data source can read the PVLAN feature configuration.
 res_description: This resource can manage the PVLAN feature configuration.
 doc_path: Feature%20Management/fm:Pvlan/
@@ -17,3 +16,4 @@ attributes:
       - enabled
       - disabled
     example: enabled
+    delete_value: disabled

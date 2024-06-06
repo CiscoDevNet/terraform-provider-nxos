@@ -57,3 +57,9 @@ func (data *PIM) fromBody(res gjson.Result, all bool) {
 		data.AdminState = types.StringNull()
 	}
 }
+
+func (data PIM) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

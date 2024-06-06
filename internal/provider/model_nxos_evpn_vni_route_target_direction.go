@@ -60,3 +60,9 @@ func (data *EVPNVNIRouteTargetDirection) fromBody(res gjson.Result, all bool) {
 		data.Direction = types.StringNull()
 	}
 }
+
+func (data EVPNVNIRouteTargetDirection) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

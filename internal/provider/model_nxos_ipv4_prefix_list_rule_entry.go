@@ -106,3 +106,9 @@ func (data *IPv4PrefixListRuleEntry) fromBody(res gjson.Result, all bool) {
 		data.ToRange = types.Int64Null()
 	}
 }
+
+func (data IPv4PrefixListRuleEntry) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

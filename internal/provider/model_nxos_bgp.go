@@ -57,3 +57,9 @@ func (data *BGP) fromBody(res gjson.Result, all bool) {
 		data.AdminState = types.StringNull()
 	}
 }
+
+func (data BGP) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

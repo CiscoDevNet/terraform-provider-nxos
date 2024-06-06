@@ -60,3 +60,9 @@ func (data *DefaultQOSClassMapDSCP) fromBody(res gjson.Result, all bool) {
 		data.Value = types.StringNull()
 	}
 }
+
+func (data DefaultQOSClassMapDSCP) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

@@ -57,3 +57,10 @@ func (data *FeatureOSPF) fromBody(res gjson.Result, all bool) {
 		data.AdminState = types.StringNull()
 	}
 }
+
+func (data FeatureOSPF) toDeleteBody() nxos.Body {
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "disabled")
+
+	return nxos.Body{body}
+}

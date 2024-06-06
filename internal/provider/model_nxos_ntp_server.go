@@ -105,3 +105,9 @@ func (data *NTPServer) fromBody(res gjson.Result, all bool) {
 		data.MaxPoll = types.Int64Null()
 	}
 }
+
+func (data NTPServer) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

@@ -31,6 +31,7 @@ attribute:
   min_int: int(required=False)
   max_int: int(required=False)
   default_value: any(str(), int(), bool(), required=False)
+  delete_value: any(str(), int(), bool(), required=False)
   exclude_test: bool(required=False)
   requires_replace: bool(required=False)
 

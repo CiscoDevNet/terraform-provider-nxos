@@ -60,3 +60,9 @@ func (data *VRFRouting) fromBody(res gjson.Result, all bool) {
 		data.RouteDistinguisher = types.StringNull()
 	}
 }
+
+func (data VRFRouting) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

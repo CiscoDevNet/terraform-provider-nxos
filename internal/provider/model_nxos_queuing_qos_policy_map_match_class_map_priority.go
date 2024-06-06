@@ -62,3 +62,9 @@ func (data *QueuingQOSPolicyMapMatchClassMapPriority) fromBody(res gjson.Result,
 		data.Level = types.Int64Null()
 	}
 }
+
+func (data QueuingQOSPolicyMapMatchClassMapPriority) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

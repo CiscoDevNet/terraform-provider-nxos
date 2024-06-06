@@ -249,3 +249,23 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 	{{- end}}
 	{{- end}}
 }
+
+func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
+	body := ""
+	{{- range .Attributes}}
+	{{- if not .ReferenceOnly}}
+	{{- if .DeleteValue}}
+
+		{{- if eq .Type "Int64"}}
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
+		{{- else if eq .Type "Bool"}}
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
+		{{- else if eq .Type "String"}}
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
+		{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+
+	return nxos.Body{body}
+}

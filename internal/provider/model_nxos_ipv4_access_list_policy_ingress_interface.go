@@ -82,3 +82,9 @@ func (data *IPv4AccessListPolicyIngressInterface) fromBody(res gjson.Result, all
 		data.AccessListName = types.StringNull()
 	}
 }
+
+func (data IPv4AccessListPolicyIngressInterface) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

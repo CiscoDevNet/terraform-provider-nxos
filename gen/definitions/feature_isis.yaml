@@ -2,7 +2,6 @@
 name: Feature ISIS
 class_name: fmIsis
 dn: sys/fm/isis
-no_delete: true
 ds_description: This data source can read the ISIS feature configuration.
 res_description: This resource can manage the ISIS feature configuration.
 doc_path: Feature%20Management/fm:Isis/
@@ -17,3 +16,4 @@ attributes:
       - enabled
       - disabled
     example: enabled
+    delete_value: disabled

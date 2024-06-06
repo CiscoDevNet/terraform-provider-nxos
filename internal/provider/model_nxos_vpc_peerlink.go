@@ -57,3 +57,9 @@ func (data *VPCPeerlink) fromBody(res gjson.Result, all bool) {
 		data.PortChannelId = types.StringNull()
 	}
 }
+
+func (data VPCPeerlink) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

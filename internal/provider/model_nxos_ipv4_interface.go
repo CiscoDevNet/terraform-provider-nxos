@@ -96,3 +96,9 @@ func (data *IPv4Interface) fromBody(res gjson.Result, all bool) {
 		data.Urpf = types.StringNull()
 	}
 }
+
+func (data IPv4Interface) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

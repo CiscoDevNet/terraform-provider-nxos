@@ -59,3 +59,9 @@ func (data *RouteMapRule) fromBody(res gjson.Result, all bool) {
 		data.Name = types.StringNull()
 	}
 }
+
+func (data RouteMapRule) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

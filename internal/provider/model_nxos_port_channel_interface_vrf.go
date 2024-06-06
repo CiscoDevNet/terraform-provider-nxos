@@ -60,3 +60,9 @@ func (data *PortChannelInterfaceVRF) fromBody(res gjson.Result, all bool) {
 		data.VrfDn = types.StringNull()
 	}
 }
+
+func (data PortChannelInterfaceVRF) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

@@ -59,3 +59,9 @@ func (data *Ethernet) fromBody(res gjson.Result, all bool) {
 		data.Mtu = types.Int64Null()
 	}
 }
+
+func (data Ethernet) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

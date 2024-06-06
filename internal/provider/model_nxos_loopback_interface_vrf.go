@@ -60,3 +60,9 @@ func (data *LoopbackInterfaceVRF) fromBody(res gjson.Result, all bool) {
 		data.VrfDn = types.StringNull()
 	}
 }
+
+func (data LoopbackInterfaceVRF) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

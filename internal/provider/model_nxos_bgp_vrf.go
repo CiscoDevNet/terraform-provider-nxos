@@ -69,3 +69,9 @@ func (data *BGPVRF) fromBody(res gjson.Result, all bool) {
 		data.RouterId = types.StringNull()
 	}
 }
+
+func (data BGPVRF) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

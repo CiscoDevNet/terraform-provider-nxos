@@ -62,3 +62,9 @@ func (data *QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) fromBody(res gjs
 		data.Value = types.Int64Null()
 	}
 }
+
+func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

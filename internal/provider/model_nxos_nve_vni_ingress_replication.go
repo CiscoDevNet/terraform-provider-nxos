@@ -60,3 +60,9 @@ func (data *NVEVNIIngressReplication) fromBody(res gjson.Result, all bool) {
 		data.Protocol = types.StringNull()
 	}
 }
+
+func (data NVEVNIIngressReplication) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

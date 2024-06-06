@@ -69,3 +69,9 @@ func (data *PIMAnycastRPPeer) fromBody(res gjson.Result, all bool) {
 		data.RpSetAddress = types.StringNull()
 	}
 }
+
+func (data PIMAnycastRPPeer) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

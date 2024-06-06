@@ -61,3 +61,9 @@ func (data *RouteMapRuleEntryMatchRoutePrefixList) fromBody(res gjson.Result, al
 		data.PrefixListDn = types.StringNull()
 	}
 }
+
+func (data RouteMapRuleEntryMatchRoutePrefixList) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

@@ -66,3 +66,9 @@ func (data *HMMInstance) fromBody(res gjson.Result, all bool) {
 		data.AnycastMac = types.StringNull()
 	}
 }
+
+func (data HMMInstance) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

@@ -307,3 +307,9 @@ func (data *ISISInterface) fromBody(res gjson.Result, all bool) {
 		data.EnableIpv4 = types.BoolNull()
 	}
 }
+
+func (data ISISInterface) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

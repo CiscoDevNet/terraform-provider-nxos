@@ -71,3 +71,9 @@ func (data *BGPGracefulRestart) fromBody(res gjson.Result, all bool) {
 		data.StaleInterval = types.Int64Null()
 	}
 }
+
+func (data BGPGracefulRestart) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

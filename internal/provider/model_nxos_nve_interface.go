@@ -150,3 +150,9 @@ func (data *NVEInterface) fromBody(res gjson.Result, all bool) {
 		data.SuppressMacRoute = types.BoolNull()
 	}
 }
+
+func (data NVEInterface) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

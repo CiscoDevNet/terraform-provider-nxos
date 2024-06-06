@@ -114,3 +114,9 @@ func (data *SVIInterface) fromBody(res gjson.Result, all bool) {
 		data.Mtu = types.Int64Null()
 	}
 }
+
+func (data SVIInterface) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

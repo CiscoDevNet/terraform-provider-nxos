@@ -60,3 +60,9 @@ func (data *DefaultQOSPolicyMapMatchClassMap) fromBody(res gjson.Result, all boo
 		data.Name = types.StringNull()
 	}
 }
+
+func (data DefaultQOSPolicyMapMatchClassMap) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

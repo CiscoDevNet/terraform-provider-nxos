@@ -62,3 +62,9 @@ func (data *DefaultQOSPolicyMapMatchClassMapSetQOSGroup) fromBody(res gjson.Resu
 		data.QosGroupId = types.Int64Null()
 	}
 }
+
+func (data DefaultQOSPolicyMapMatchClassMapSetQOSGroup) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

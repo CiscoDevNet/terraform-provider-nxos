@@ -81,3 +81,9 @@ func (data *PIMStaticRPGroupList) fromBody(res gjson.Result, all bool) {
 		data.Override = types.BoolNull()
 	}
 }
+
+func (data PIMStaticRPGroupList) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

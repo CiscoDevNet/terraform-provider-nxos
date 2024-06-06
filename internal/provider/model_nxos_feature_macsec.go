@@ -57,3 +57,10 @@ func (data *FeatureMACsec) fromBody(res gjson.Result, all bool) {
 		data.AdminState = types.StringNull()
 	}
 }
+
+func (data FeatureMACsec) toDeleteBody() nxos.Body {
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "disabled")
+
+	return nxos.Body{body}
+}

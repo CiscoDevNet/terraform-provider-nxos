@@ -144,3 +144,9 @@ func (data *OSPFInterface) fromBody(res gjson.Result, all bool) {
 		data.Priority = types.Int64Null()
 	}
 }
+
+func (data OSPFInterface) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

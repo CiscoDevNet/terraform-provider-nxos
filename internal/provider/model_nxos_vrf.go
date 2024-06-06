@@ -77,3 +77,9 @@ func (data *VRF) fromBody(res gjson.Result, all bool) {
 		data.Encap = types.StringNull()
 	}
 }
+
+func (data VRF) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

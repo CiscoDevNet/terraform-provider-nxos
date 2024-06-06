@@ -108,3 +108,9 @@ func (data *OSPFAuthentication) fromBody(res gjson.Result, all bool) {
 		data.Type = types.StringNull()
 	}
 }
+
+func (data OSPFAuthentication) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

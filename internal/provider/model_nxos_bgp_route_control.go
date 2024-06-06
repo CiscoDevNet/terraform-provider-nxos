@@ -88,3 +88,9 @@ func (data *BGPRouteControl) fromBody(res gjson.Result, all bool) {
 		data.SuppressRoutes = types.StringNull()
 	}
 }
+
+func (data BGPRouteControl) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

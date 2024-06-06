@@ -60,3 +60,9 @@ func (data *QueuingQOSPolicyMapMatchClassMap) fromBody(res gjson.Result, all boo
 		data.Name = types.StringNull()
 	}
 }
+
+func (data QueuingQOSPolicyMapMatchClassMap) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

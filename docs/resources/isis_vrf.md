@@ -6,7 +6,7 @@ description: |-
   This resource can manage the IS-IS VRF configuration.
   API Documentation: isisDom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/isis:Dom/
   Parent resources
-  nxosisisinstance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/isis_instance
+  nxos_isis_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/isis_instance
   Referenced resources
   nxos_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf
 ---

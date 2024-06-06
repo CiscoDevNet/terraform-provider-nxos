@@ -6,9 +6,9 @@ description: |-
   This resource can manage the BGP domain (VRF) configuration.
   API Documentation: bgpDom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:Dom/
   Parent resources
-  nxosbgpinstance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_instance
+  nxos_bgp_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_instance
   Child resources
-  nxosbgpaddress_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_address_familynxosbgpgraceful_restart https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_graceful_restartnxosbgppeer https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_peernxosbgppeer_template https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_peer_templatenxosbgproute_control https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_route_control
+  nxos_bgp_address_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_address_familynxos_bgp_graceful_restart https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_graceful_restartnxos_bgp_peer https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_peernxos_bgp_peer_template https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_peer_templatenxos_bgp_route_control https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_route_control
   Referenced resources
   nxos_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf
 ---

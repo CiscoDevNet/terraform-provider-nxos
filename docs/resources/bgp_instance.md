@@ -8,7 +8,7 @@ description: |-
   Parent resources
   nxos_bgp https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp
   Child resources
-  nxosbgpvrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_vrf
+  nxos_bgp_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_vrf
 ---
 
 # nxos_bgp_instance (Resource)

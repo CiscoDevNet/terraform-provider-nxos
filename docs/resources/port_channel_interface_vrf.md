@@ -6,7 +6,7 @@ description: |-
   This resource can manage a port-channel interface VRF association.
   API Documentation: nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
   Parent resources
-  nxosportchannel_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/port_channel_interface
+  nxos_port_channel_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/port_channel_interface
   Referenced resources
   nxos_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf
 ---

@@ -6,11 +6,11 @@ description: |-
   This resource can manage the BGP peer configuration.
   API Documentation: bgpPeer https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:Peer/
   Parent resources
-  nxosbgpvrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_vrf
+  nxos_bgp_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_vrf
   Child resources
-  nxosbgppeeraddressfamily https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_peer_address_family
+  nxos_bgp_peer_address_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_peer_address_family
   Referenced resources
-  nxosbgppeer_template https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_peer_template
+  nxos_bgp_peer_template https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_peer_template
 ---
 
 # nxos_bgp_peer (Resource)

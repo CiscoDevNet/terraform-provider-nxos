@@ -6,9 +6,9 @@ description: |-
   This resource can manage the vPC domain configuration.
   API Documentation: vpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/vpc:Dom/
   Parent resources
-  nxosvpcinstance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vpc_instance
+  nxos_vpc_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vpc_instance
   Child resources
-  nxosvpcinterface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vpc_interfacenxosvpckeepalive https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vpc_keepalive
+  nxos_vpc_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vpc_interfacenxos_vpc_keepalive https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vpc_keepalive
 ---
 
 # nxos_vpc_domain (Resource)

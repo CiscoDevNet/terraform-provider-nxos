@@ -8,7 +8,7 @@ description: |-
   Parent resources
   nxos_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf
   Child resources
-  nxosvrfaddress_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf_address_family
+  nxos_vrf_address_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf_address_family
 ---
 
 # nxos_vrf_routing (Resource)

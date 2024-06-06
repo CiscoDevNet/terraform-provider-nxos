@@ -6,9 +6,9 @@ description: |-
   This resource can manage a VRF Address Family.
   API Documentation: rtctrlDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:DomAf/
   Parent resources
-  nxosvrfrouting https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf_routing
+  nxos_vrf_routing https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf_routing
   Child resources
-  nxosvrfroutetargetaddress_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf_route_target_address_family
+  nxos_vrf_route_target_address_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf_route_target_address_family
 ---
 
 # nxos_vrf_address_family (Resource)

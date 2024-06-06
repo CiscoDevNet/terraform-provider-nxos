@@ -6,9 +6,9 @@ description: |-
   This resource can manage a EVPN VNI Route Target direction.
   API Documentation: rtctrlRttP https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:RttP/
   Parent resources
-  nxosevpnvni https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/evpn_vni
+  nxos_evpn_vni https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/evpn_vni
   Child resources
-  nxosevpnvniroutetarget https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/evpn_vni_route_target
+  nxos_evpn_vni_route_target https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/evpn_vni_route_target
 ---
 
 # nxos_evpn_vni_route_target_direction (Resource)

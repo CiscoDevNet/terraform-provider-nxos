@@ -6,7 +6,7 @@ description: |-
   This resource can manage the Host Mobility Manager (HMM) Entity configuration.
   API Documentation: hmmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Host%20Mobility/hmm:Entity/
   Child resources
-  nxoshmminstance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/hmm_instance
+  nxos_hmm_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/hmm_instance
 ---
 
 # nxos_hmm (Resource)

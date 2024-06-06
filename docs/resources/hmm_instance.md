@@ -8,7 +8,7 @@ description: |-
   Parent resources
   nxos_hmm https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/hmm
   Child resources
-  nxoshmminterface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/hmm_interface
+  nxos_hmm_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/hmm_interface
 ---
 
 # nxos_hmm_instance (Resource)

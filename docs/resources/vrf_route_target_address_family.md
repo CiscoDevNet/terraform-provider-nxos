@@ -6,9 +6,9 @@ description: |-
   This resource can manage a VRF Route Target Address Family.
   API Documentation: rtctrlAfCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:AfCtrl/
   Parent resources
-  nxosvrfaddress_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf_address_family
+  nxos_vrf_address_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf_address_family
   Child resources
-  nxosvrfroutetargetdirection https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf_route_target_direction
+  nxos_vrf_route_target_direction https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf_route_target_direction
 ---
 
 # nxos_vrf_route_target_address_family (Resource)

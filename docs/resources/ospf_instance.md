@@ -8,7 +8,7 @@ description: |-
   Parent resources
   nxos_ospf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf
   Child resources
-  nxosospfvrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_vrf
+  nxos_ospf_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_vrf
 ---
 
 # nxos_ospf_instance (Resource)

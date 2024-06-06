@@ -6,9 +6,9 @@ description: |-
   This resource can manage the PIM VRF configuration.
   API Documentation: pimDom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:Dom/
   Parent resources
-  nxospiminstance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_instance
+  nxos_pim_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_instance
   Child resources
-  nxospiminterface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_interfacenxospimssm_policy https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_ssm_policynxospimstaticrppolicy https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_static_rp_policynxospimanycast_rp https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_anycast_rp
+  nxos_pim_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_interfacenxos_pim_ssm_policy https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_ssm_policynxos_pim_static_rp_policy https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_static_rp_policynxos_pim_anycast_rp https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_anycast_rp
   Referenced resources
   nxos_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf
 ---

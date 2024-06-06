@@ -6,9 +6,9 @@ description: |-
   This resource can manage the OSPF VRF configuration.
   API Documentation: ospfDom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:Dom/
   Parent resources
-  nxosospfinstance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_instance
+  nxos_ospf_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_instance
   Child resources
-  nxosospfinterface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_interfacenxosospfarea https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_area
+  nxos_ospf_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_interfacenxos_ospf_area https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_area
   Referenced resources
   nxos_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf
 ---

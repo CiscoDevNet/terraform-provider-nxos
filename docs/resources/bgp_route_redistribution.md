@@ -6,7 +6,7 @@ description: |-
   This resource can manage the BGP (VRF) route redistribution configuration.
   API Documentation: bgpInterLeakP https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:InterLeakP/
   Parent resources
-  nxosbgpaddress_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_address_family
+  nxos_bgp_address_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_address_family
 ---
 
 # nxos_bgp_route_redistribution (Resource)

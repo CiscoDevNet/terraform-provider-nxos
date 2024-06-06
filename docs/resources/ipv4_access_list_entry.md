@@ -6,7 +6,7 @@ description: |-
   This resource can manage IPv4 Access List Entries.
   API Documentation: ipv4aclACE https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/ipv4acl:ACE/
   Parent resources
-  nxosipv4access_list https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv4_access_list
+  nxos_ipv4_access_list https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv4_access_list
 ---
 
 # nxos_ipv4_access_list_entry (Resource)

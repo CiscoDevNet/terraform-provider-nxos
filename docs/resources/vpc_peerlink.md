@@ -6,7 +6,7 @@ description: |-
   This resource can manage the vPC peerlink configuration.
   API Documentation: vpcPeerLink https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/vpc:PeerLink/
   Parent resources
-  nxosvpckeepalive https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vpc_keepalive
+  nxos_vpc_keepalive https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vpc_keepalive
 ---
 
 # nxos_vpc_peerlink (Resource)

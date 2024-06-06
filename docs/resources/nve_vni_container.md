@@ -6,9 +6,9 @@ description: |-
   This resource can manage the configuration of Container object for Virtual Network IDs (VNIs).
   API Documentation: nvoNws https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Network%20Virtualization/nvo:Nws/
   Parent resources
-  nxosnveinterface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/nve_interface
+  nxos_nve_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/nve_interface
   Child resources
-  nxosnvevni https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/nve_vni
+  nxos_nve_vni https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/nve_vni
 ---
 
 # nxos_nve_vni_container (Resource)

@@ -8,7 +8,7 @@ description: |-
   Parent resources
   nxos_evpn https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/evpn
   Child resources
-  nxosevpnvniroutetarget_direction https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/evpn_vni_route_target_direction
+  nxos_evpn_vni_route_target_direction https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/evpn_vni_route_target_direction
 ---
 
 # nxos_evpn_vni (Resource)

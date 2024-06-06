@@ -6,9 +6,9 @@ description: |-
   This resource can manage the BGP peer template configuration.
   API Documentation: bgpPeerCont https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:PeerCont/
   Parent resources
-  nxosbgpvrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_vrf
+  nxos_bgp_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_vrf
   Child resources
-  nxosbgppeertemplateaddress_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_peer_template_address_family
+  nxos_bgp_peer_template_address_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_peer_template_address_family
 ---
 
 # nxos_bgp_peer_template (Resource)

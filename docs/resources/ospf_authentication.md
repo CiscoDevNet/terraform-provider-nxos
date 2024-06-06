@@ -6,7 +6,7 @@ description: |-
   This resource can manage the OSPF authentication configuration.
   API Documentation: ospfAuthNewP https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:AuthNewP/
   Parent resources
-  nxosospfinterface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_interface
+  nxos_ospf_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_interface
 ---
 
 # nxos_ospf_authentication (Resource)

@@ -8,7 +8,7 @@ description: |-
   Parent resources
   nxos_isis https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/isis
   Child resources
-  nxosisisvrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/isis_vrf
+  nxos_isis_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/isis_vrf
 ---
 
 # nxos_isis_instance (Resource)

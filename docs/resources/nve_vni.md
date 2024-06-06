@@ -6,9 +6,9 @@ description: |-
   This resource can manage the configuration of Virtual Network ID (VNI).
   API Documentation: nvoNw https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Network%20Virtualization/nvo:Nw/
   Parent resources
-  nxosnvevni_container https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/nve_vni_container
+  nxos_nve_vni_container https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/nve_vni_container
   Child resources
-  nxosnvevniingressreplication https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/nve_vni_ingress_replication
+  nxos_nve_vni_ingress_replication https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/nve_vni_ingress_replication
 ---
 
 # nxos_nve_vni (Resource)

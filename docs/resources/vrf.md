@@ -6,7 +6,7 @@ description: |-
   This resource can manage a VRF.
   API Documentation: l3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:Inst/
   Child resources
-  nxosvrfrouting https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf_routing
+  nxos_vrf_routing https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf_routing
 ---
 
 # nxos_vrf (Resource)

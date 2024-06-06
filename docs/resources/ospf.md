@@ -6,7 +6,7 @@ description: |-
   This resource can manage the global OSPF configuration.
   API Documentation: ospfEntity https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:Entity/
   Child resources
-  nxosospfinstance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_instance
+  nxos_ospf_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_instance
 ---
 
 # nxos_ospf (Resource)

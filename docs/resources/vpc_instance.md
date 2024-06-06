@@ -6,7 +6,7 @@ description: |-
   This resource can manage the vPC instance configuration.
   API Documentation: vpcInst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/vpc:Inst/
   Child resources
-  nxosvpcdomain https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vpc_domain
+  nxos_vpc_domain https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vpc_domain
 ---
 
 # nxos_vpc_instance (Resource)

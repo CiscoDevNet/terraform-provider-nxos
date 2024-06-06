@@ -6,7 +6,7 @@ description: |-
   This resource can manage the OSPF Area configuration.
   API Documentation: ospfArea https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:Area/
   Parent resources
-  nxosospfvrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_vrf
+  nxos_ospf_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_vrf
 ---
 
 # nxos_ospf_area (Resource)

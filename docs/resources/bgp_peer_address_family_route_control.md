@@ -6,7 +6,7 @@ description: |-
   This resource can manage the BGP peer address family route control configuration.
   API Documentation: bgpRtCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/
   Parent resources
-  nxosbgppeeraddressfamily https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_peer_address_family
+  nxos_bgp_peer_address_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_peer_address_family
 ---
 
 # nxos_bgp_peer_address_family_route_control (Resource)

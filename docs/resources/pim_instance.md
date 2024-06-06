@@ -8,7 +8,7 @@ description: |-
   Parent resources
   nxos_pim https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim
   Child resources
-  nxospimvrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_vrf
+  nxos_pim_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_vrf
 ---
 
 # nxos_pim_instance (Resource)

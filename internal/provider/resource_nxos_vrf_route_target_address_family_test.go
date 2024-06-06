@@ -76,7 +76,7 @@ resource "nxos_rest" "PreReq2" {
 resource "nxos_rest" "PreReq3" {
   dn = "sys/inst-[VRF1]/dom-[VRF1]"
   class_name = "rtctrlDom"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
+  depends_on = [nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 }
 
 resource "nxos_rest" "PreReq4" {
@@ -85,7 +85,7 @@ resource "nxos_rest" "PreReq4" {
   content = {
       type = "ipv4-ucast"
   }
-  depends_on = [nxos_rest.PreReq2, ]
+  depends_on = [nxos_rest.PreReq3, ]
 }
 
 `

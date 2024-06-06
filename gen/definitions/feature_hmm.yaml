@@ -17,3 +17,11 @@ attributes:
       - disabled
     example: enabled
     delete_value: disabled
+test_prerequisites:
+    # fix test issue where feature is not immediately enabled
+  - dn: sys/fm/hmm
+    class_name: fmHmm
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled

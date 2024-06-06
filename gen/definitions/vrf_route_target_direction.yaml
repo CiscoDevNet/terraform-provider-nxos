@@ -67,16 +67,16 @@ test_prerequisites:
         value: VRF1
   - dn: sys/inst-[VRF1]/dom-[VRF1]
     class_name: rtctrlDom
-    dependencies: [0, 1]
+    dependencies: [1, 2]
   - dn: sys/inst-[VRF1]/dom-[VRF1]/af-[ipv4-ucast]
     class_name: rtctrlDomAf
     attributes:
       - name: type
         value: ipv4-ucast
-    dependencies: [2]
+    dependencies: [3]
   - dn: sys/inst-[VRF1]/dom-[VRF1]/af-[ipv4-ucast]/ctrl-[ipv4-ucast]
     class_name: rtctrlAfCtrl
     attributes:
       - name: type
         value: ipv4-ucast
-    dependencies: [3]
+    dependencies: [4]

@@ -31,7 +31,7 @@ func TestAccDataSourceNxosFeatureHMM(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosFeatureHMMConfig,
+				Config: testAccDataSourceNxosFeatureHMMPrerequisitesConfig + testAccDataSourceNxosFeatureHMMConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_feature_hmm.test", "admin_state", "enabled"),
 				),
@@ -40,10 +40,23 @@ func TestAccDataSourceNxosFeatureHMM(t *testing.T) {
 	})
 }
 
+const testAccDataSourceNxosFeatureHMMPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/hmm"
+  class_name = "fmHmm"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+`
+
 const testAccDataSourceNxosFeatureHMMConfig = `
 
 resource "nxos_feature_hmm" "test" {
   admin_state = "enabled"
+  depends_on = [nxos_rest.PreReq0, ]
 }
 
 data "nxos_feature_hmm" "test" {

@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.5.3 (unreleased)
+
+- Add `enable_ipv4` and `instance_name` attributes to `nxos_isis_interface` resource and data source
+
 ## 0.5.2
 
 - Add `nxos_vpc_keepalive` resource and data source

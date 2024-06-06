@@ -8,7 +8,7 @@ description: |-
   Parent resources
   nxosbgpvrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_vrf
   Child resources
-  nxosbgpadvertised_prefix https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_advertised_prefix
+  nxosbgpadvertised_prefix https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_advertised_prefixnxosbgproute_redistribution https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_route_redistribution
 ---
 
 # nxos_bgp_address_family (Resource)
@@ -24,6 +24,7 @@ This resource can manage the BGP (VRF) address family configuration.
 ### Child resources
 
 - [nxos_bgp_advertised_prefix](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_advertised_prefix)
+- [nxos_bgp_route_redistribution](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_route_redistribution)
 
 ## Example Usage
 

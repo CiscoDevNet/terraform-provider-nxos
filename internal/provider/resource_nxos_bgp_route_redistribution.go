@@ -24,13 +24,12 @@ import (
 	"fmt"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -39,25 +38,25 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &BGPAddressFamilyResource{}
-var _ resource.ResourceWithImportState = &BGPAddressFamilyResource{}
+var _ resource.Resource = &BGPRouteRedistributionResource{}
+var _ resource.ResourceWithImportState = &BGPRouteRedistributionResource{}
 
-func NewBGPAddressFamilyResource() resource.Resource {
-	return &BGPAddressFamilyResource{}
+func NewBGPRouteRedistributionResource() resource.Resource {
+	return &BGPRouteRedistributionResource{}
 }
 
-type BGPAddressFamilyResource struct {
+type BGPRouteRedistributionResource struct {
 	clients map[string]*nxos.Client
 }
 
-func (r *BGPAddressFamilyResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_bgp_address_family"
+func (r *BGPRouteRedistributionResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_bgp_route_redistribution"
 }
 
-func (r *BGPAddressFamilyResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *BGPRouteRedistributionResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP (VRF) address family configuration.", "bgpDomAf", "Routing%20and%20Forwarding/bgp:DomAf/").AddParents("bgp_vrf").AddChildren("bgp_advertised_prefix", "bgp_route_redistribution").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP (VRF) route redistribution configuration.", "bgpInterLeakP", "Routing%20and%20Forwarding/bgp:InterLeakP/").AddParents("bgp_address_family").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -95,29 +94,50 @@ func (r *BGPAddressFamilyResource) Schema(ctx context.Context, req resource.Sche
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"critical_nexthop_timeout": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The next-hop address tracking delay timer for critical next-hop reachability routes.").AddIntegerRangeDescription(1, 4294967295).AddDefaultValueDescription("3000").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(3000),
-				Validators: []validator.Int64{
-					int64validator.Between(1, 4294967295),
+			"protocol": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The list of protocols to match.").AddStringEnumDescription("unspecified", "static", "direct", "bgp", "isis", "ospf", "ospfv3", "eigrp", "host", "rip", "amt", "lisp", "hmm", "am", "srv6").AddDefaultValueDescription("unspecified").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("unspecified", "static", "direct", "bgp", "isis", "ospf", "ospfv3", "eigrp", "host", "rip", "amt", "lisp", "hmm", "am", "srv6"),
+				},
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"non_critical_nexthop_timeout": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The next-hop address tracking delay timer for non-critical next-hop reachability routes.").AddIntegerRangeDescription(1, 4294967295).AddDefaultValueDescription("10000").String,
+			"protocol_instance": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The inter protocol route leak policy instance (Use `none` for `static` and `direct` protocols).").AddDefaultValueDescription("none").String,
+				Required:            true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
+			"route_map": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The name of the default route leak policy route map. This route map name is used to control distribution.").String,
+				Optional:            true,
+			},
+			"scope": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The domain applicable to the capability.").AddStringEnumDescription("intra", "inter", "defrt").AddDefaultValueDescription("inter").String,
 				Optional:            true,
 				Computed:            true,
-				Default:             int64default.StaticInt64(10000),
-				Validators: []validator.Int64{
-					int64validator.Between(1, 4294967295),
+				Default:             stringdefault.StaticString("inter"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("intra", "inter", "defrt"),
+				},
+			},
+			"srv6_prefix_type": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SRv6 Prefix Type; Valid only when proto is srv6.").AddStringEnumDescription("unspecified", "locator").AddDefaultValueDescription("unspecified").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("unspecified"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("unspecified", "locator"),
 				},
 			},
 		},
 	}
 }
 
-func (r *BGPAddressFamilyResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *BGPRouteRedistributionResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -126,8 +146,8 @@ func (r *BGPAddressFamilyResource) Configure(ctx context.Context, req resource.C
 	r.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
-func (r *BGPAddressFamilyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan BGPAddressFamily
+func (r *BGPRouteRedistributionResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan BGPRouteRedistribution
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -154,8 +174,8 @@ func (r *BGPAddressFamilyResource) Create(ctx context.Context, req resource.Crea
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *BGPAddressFamilyResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state BGPAddressFamily
+func (r *BGPRouteRedistributionResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state BGPRouteRedistribution
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -181,8 +201,8 @@ func (r *BGPAddressFamilyResource) Read(ctx context.Context, req resource.ReadRe
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *BGPAddressFamilyResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan BGPAddressFamily
+func (r *BGPRouteRedistributionResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan BGPRouteRedistribution
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -206,8 +226,8 @@ func (r *BGPAddressFamilyResource) Update(ctx context.Context, req resource.Upda
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *BGPAddressFamilyResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state BGPAddressFamily
+func (r *BGPRouteRedistributionResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state BGPRouteRedistribution
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -233,6 +253,6 @@ func (r *BGPAddressFamilyResource) Delete(ctx context.Context, req resource.Dele
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *BGPAddressFamilyResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *BGPRouteRedistributionResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

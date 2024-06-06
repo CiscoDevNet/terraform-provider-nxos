@@ -70,12 +70,12 @@ func (data {{camelCase .Name}}) getDn() string {
 {{- range .ChildClasses}}
 {{- if eq .Type "list"}}
 func (data {{$name}}{{toGoName .TfName}}) getRn() string {
-	{{- if hasId .Attributes}}
-		return fmt.Sprintf("{{.Rn}}"{{range .Attributes}}{{if .Id}}, data.{{toGoName .TfName}}.Value{{.Type}}(){{end}}{{end}})
-	{{- else}}
-		return "{{.Rn}}"
-	{{- end}}
-	}
+{{- if hasId .Attributes}}
+	return fmt.Sprintf("{{.Rn}}"{{range .Attributes}}{{if .Id}}, data.{{toGoName .TfName}}.Value{{.Type}}(){{end}}{{end}})
+{{- else}}
+	return "{{.Rn}}"
+{{- end}}
+}
 {{- end}}
 {{- end}}
 
@@ -252,17 +252,15 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 
 func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 	body := ""
-	{{- range .Attributes}}
-	{{- if not .ReferenceOnly}}
-	{{- if .DeleteValue}}
 
-		{{- if eq .Type "Int64"}}
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
-		{{- else if eq .Type "Bool"}}
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
-		{{- else if eq .Type "String"}}
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
-		{{- end}}
+	{{- range .Attributes}}
+	{{- if and (not .ReferenceOnly) (.DeleteValue)}}
+	{{- if eq .Type "Int64"}}
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
+	{{- else if eq .Type "Bool"}}
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
+	{{- else if eq .Type "String"}}
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
 	{{- end}}
 	{{- end}}
 	{{- end}}

@@ -98,3 +98,9 @@ func (data *BGPRouteRedistribution) fromBody(res gjson.Result, all bool) {
 		data.Srv6PrefixType = types.StringNull()
 	}
 }
+
+func (data BGPRouteRedistribution) toDeleteBody() nxos.Body {
+	body := ""
+
+	return nxos.Body{body}
+}

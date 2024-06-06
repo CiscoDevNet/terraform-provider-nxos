@@ -289,7 +289,7 @@ func (r *VPCKeepaliveResource) Delete(ctx context.Context, req resource.DeleteRe
 			errCode := res.Get("imdata.0.error.attributes.code").Str
 			// Ignore errors of type "Cannot delete object"
 			if errCode != "1" && errCode != "107" {
-				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
 				return
 			}
 		}

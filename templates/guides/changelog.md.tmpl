@@ -11,6 +11,7 @@ description: |-
 
 - Add `enable_ipv4` and `instance_name` attributes to `nxos_isis_interface` resource and data source
 - Add `nxos_bgp_route_redistribution` resource and data source
+- Add capability to reset object to default values when destroying resource, e.g. `nxos_physical_interface`
 
 ## 0.5.2
 

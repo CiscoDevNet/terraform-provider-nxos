@@ -103,6 +103,22 @@ func (d *BGPPeerDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "BGP Keepalive Timer in seconds",
 				Computed:            true,
 			},
+			"ebgp_multihop_ttl": schema.Int64Attribute{
+				MarkdownDescription: "eBGP Multihop TTL",
+				Computed:            true,
+			},
+			"peer_control": schema.StringAttribute{
+				MarkdownDescription: "Peer Controls.",
+				Computed:            true,
+			},
+			"password_type": schema.StringAttribute{
+				MarkdownDescription: "Password Encryption Type.",
+				Computed:            true,
+			},
+			"password": schema.StringAttribute{
+				MarkdownDescription: "Password.",
+				Computed:            true,
+			},
 		},
 	}
 }

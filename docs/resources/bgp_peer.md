@@ -35,16 +35,20 @@ This resource can manage the BGP peer configuration.
 
 ```terraform
 resource "nxos_bgp_peer" "example" {
-  asn              = "65001"
-  vrf              = "default"
-  address          = "192.168.0.1"
-  remote_asn       = "65002"
-  description      = "My description"
-  peer_template    = "SPINE-PEERS"
-  peer_type        = "fabric-internal"
-  source_interface = "lo0"
-  hold_time        = 45
-  keepalive        = 15
+  asn               = "65001"
+  vrf               = "default"
+  address           = "192.168.0.1"
+  remote_asn        = "65002"
+  description       = "My description"
+  peer_template     = "SPINE-PEERS"
+  peer_type         = "fabric-internal"
+  source_interface  = "lo0"
+  hold_time         = 45
+  keepalive         = 15
+  ebgp_multihop_ttl = 5
+  peer_control      = "bfd"
+  password_type     = "LINE"
+  password          = "secret_password"
 }
 ```
 
@@ -61,12 +65,20 @@ resource "nxos_bgp_peer" "example" {
 
 - `description` (String) Peer description.
 - `device` (String) A device name from the provider configuration.
+- `ebgp_multihop_ttl` (Number) eBGP Multihop TTL
+  - Range: `2`-`255`
 - `hold_time` (Number) BGP Hold Timer in seconds. The value must be greater than the keepalive timer
   - Range: `3`-`3600`
   - Default value: `180`
 - `keepalive` (Number) BGP Keepalive Timer in seconds
   - Range: `0`-`3600`
   - Default value: `60`
+- `password` (String) Password.
+- `password_type` (String) Password Encryption Type.
+  - Choices: `0`, `3`, `LINE`, `7`
+  - Default value: `LINE`
+- `peer_control` (String) Peer Controls.
+  - Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`
 - `peer_template` (String) Peer template name.
 - `peer_type` (String) Neighbor Fabric Type.
   - Choices: `fabric-internal`, `fabric-external`, `fabric-border-leaf`

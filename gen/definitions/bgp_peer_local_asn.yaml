@@ -1,0 +1,78 @@
+---
+name: BGP Peer Local ASN
+class_name: bgpLocalAsn
+dn: sys/bgp/inst/dom-[%s]/peer-[%s]/localasn
+ds_description: This data source can read the BGP peer local asn configuration.
+res_description: This resource can manage the BGP peer local asn configuration.
+doc_path: Routing%20and%20Forwarding/bgp:localasn/
+doc_category: BGP
+parents:
+  - BGP Peer
+attributes:
+  - nxos_name: asnPropagate
+    tf_name: asn_propagation
+    type: String
+    description: 'ASN Propagation.'
+    default_value: none
+    enum_values:
+      - none
+      - no-prepend
+      - replace-as
+      - dual-as
+    example: prepend
+  - nxos_name: localAsn
+    tf_name: local_asn
+    type: String
+    description: "Local Autonomous system number."
+    mandatory: true
+    example: "65001"
+  - nxos_name: vrf_name
+    tf_name: vrf
+    type: String
+    id: true
+    reference_only: true
+    description: "VRF name."
+    example: default
+  - nxos_name: addr
+    tf_name: address
+    type: String
+    id: true
+    reference_only: true
+    description: "Peer address."
+    example: "192.168.0.1"
+test_prerequisites:
+  - dn: sys/fm/bgp
+    class_name: fmBgp
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/bgp
+    class_name: bgpEntity
+    dependencies: [0]
+  - dn: sys/bgp/inst
+    class_name: bgpInst
+    attributes:
+      - name: adminSt
+        value: enabled
+      - name: asn
+        value: "65001"
+    dependencies: [1]
+  - dn: sys/bgp/inst/dom-[default]
+    class_name: bgpDom
+    attributes:
+      - name: name
+        value: default
+    dependencies: [2]
+  - dn: sys/bgp/inst/dom-[default]/peer-[192.168.0.1]
+    class_name: bgpPeer
+    attributes:
+      - name: bgp_asn
+        value: "65001"
+      - name: vrf_name
+        value: default
+      - name: addr
+        value: "192.168.0.1"
+      - name: asn
+        value: "65002"
+    dependencies: [3]

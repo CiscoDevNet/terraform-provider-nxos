@@ -8,7 +8,7 @@ description: |-
   Parent resources
   nxos_bgp_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_vrf
   Child resources
-  nxos_bgp_peer_address_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_peer_address_family
+  nxos_bgp_peer_address_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_peer_address_familynxos_bgp_peer_local_asn https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_peer_local_asn
   Referenced resources
   nxos_bgp_peer_template https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_peer_template
 ---
@@ -26,6 +26,7 @@ This resource can manage the BGP peer configuration.
 ### Child resources
 
 - [nxos_bgp_peer_address_family](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_peer_address_family)
+- [nxos_bgp_peer_local_asn](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_peer_local_asn)
 
 ### Referenced resources
 

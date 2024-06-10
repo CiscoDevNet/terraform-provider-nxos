@@ -10,6 +10,7 @@ parents:
   - BGP VRF
 children:
   - BGP Peer Address Family
+  - BGP Peer Local ASN
 references:
   - BGP Peer Template
 attributes:

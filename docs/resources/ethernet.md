@@ -17,7 +17,8 @@ This resource can manage global ethernet settings.
 
 ```terraform
 resource "nxos_ethernet" "example" {
-  mtu = 9216
+  mtu                  = 9216
+  default_admin_status = "up"
 }
 ```
 
@@ -26,6 +27,9 @@ resource "nxos_ethernet" "example" {
 
 ### Optional
 
+- `default_admin_status` (String) Default admin status
+  - Choices: `up`, `down`
+  - Default value: `up`
 - `device` (String) A device name from the provider configuration.
 - `mtu` (Number) System jumbo MTU.
   - Range: `576`-`9216`

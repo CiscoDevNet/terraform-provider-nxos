@@ -29,5 +29,6 @@ data "nxos_ethernet" "example" {
 
 ### Read-Only
 
+- `default_admin_status` (String) Default admin status
 - `id` (String) The distinguished name of the object.
 - `mtu` (Number) System jumbo MTU.

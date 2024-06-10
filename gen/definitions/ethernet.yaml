@@ -15,3 +15,14 @@ attributes:
     max_int: 9216
     default_value: 9216
     example: 9216
+    delete_value: 9216
+  - nxos_name: systemDefaultAdminSt
+    tf_name: default_admin_status
+    type: String
+    description: "Default admin status"
+    enum_values:
+      - up
+      - down
+    default_value: up
+    example: up
+    delete_value: "DME_UNSET_PROPERTY_MARKER"

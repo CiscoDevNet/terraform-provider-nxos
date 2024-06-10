@@ -29,9 +29,10 @@ import (
 )
 
 type Ethernet struct {
-	Device types.String `tfsdk:"device"`
-	Dn     types.String `tfsdk:"id"`
-	Mtu    types.Int64  `tfsdk:"mtu"`
+	Device             types.String `tfsdk:"device"`
+	Dn                 types.String `tfsdk:"id"`
+	Mtu                types.Int64  `tfsdk:"mtu"`
+	DefaultAdminStatus types.String `tfsdk:"default_admin_status"`
 }
 
 func (data Ethernet) getDn() string {
@@ -48,6 +49,9 @@ func (data Ethernet) toBody() nxos.Body {
 	if (!data.Mtu.IsUnknown() && !data.Mtu.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"systemJumboMtu", strconv.FormatInt(data.Mtu.ValueInt64(), 10))
 	}
+	if (!data.DefaultAdminStatus.IsUnknown() && !data.DefaultAdminStatus.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"systemDefaultAdminSt", data.DefaultAdminStatus.ValueString())
+	}
 
 	return nxos.Body{body}
 }
@@ -58,10 +62,17 @@ func (data *Ethernet) fromBody(res gjson.Result, all bool) {
 	} else {
 		data.Mtu = types.Int64Null()
 	}
+	if !data.DefaultAdminStatus.IsNull() || all {
+		data.DefaultAdminStatus = types.StringValue(res.Get(data.getClassName() + ".attributes.systemDefaultAdminSt").String())
+	} else {
+		data.DefaultAdminStatus = types.StringNull()
+	}
 }
 
 func (data Ethernet) toDeleteBody() nxos.Body {
 	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"systemJumboMtu", strconv.FormatInt(9216, 10))
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"systemDefaultAdminSt", "DME_UNSET_PROPERTY_MARKER")
 
 	return nxos.Body{body}
 }

@@ -34,6 +34,7 @@ func TestAccDataSourceNxosEthernet(t *testing.T) {
 				Config: testAccDataSourceNxosEthernetConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_ethernet.test", "mtu", "9216"),
+					resource.TestCheckResourceAttr("data.nxos_ethernet.test", "default_admin_status", "up"),
 				),
 			},
 		},
@@ -44,6 +45,7 @@ const testAccDataSourceNxosEthernetConfig = `
 
 resource "nxos_ethernet" "test" {
   mtu = 9216
+  default_admin_status = "up"
 }
 
 data "nxos_ethernet" "test" {

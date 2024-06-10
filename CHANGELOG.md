@@ -3,6 +3,10 @@
 - Add `enable_ipv4` and `instance_name` attributes to `nxos_isis_interface` resource and data source
 - Add `nxos_bgp_route_redistribution` resource and data source
 - Add capability to reset object to default values when destroying resource, e.g. `nxos_physical_interface`
+- Add `ebgp_multihop_ttl`, `peer_control`, `password_type` and `password` attributes to `nxos_bgp_peer` resource and data source
+- Add `nxos_bgp_peer_local_asn` resource and data source
+- Add `default_admin_status` attribute to `nxos_ethernet` resource and data source
+- Add `control` attribute to `nxos_ospf_vrf` resource and data source
 
 ## 0.5.2
 

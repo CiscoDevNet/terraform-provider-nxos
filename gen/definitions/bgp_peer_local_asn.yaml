@@ -19,7 +19,7 @@ attributes:
       - no-prepend
       - replace-as
       - dual-as
-    example: prepend
+    example: no-prepend
   - nxos_name: localAsn
     tf_name: local_asn
     type: String
@@ -67,10 +67,6 @@ test_prerequisites:
   - dn: sys/bgp/inst/dom-[default]/peer-[192.168.0.1]
     class_name: bgpPeer
     attributes:
-      - name: bgp_asn
-        value: "65001"
-      - name: vrf_name
-        value: default
       - name: addr
         value: "192.168.0.1"
       - name: asn

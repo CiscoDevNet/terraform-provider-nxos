@@ -89,7 +89,7 @@ func (data BGPPeer) toBody() nxos.Body {
 	if (!data.PeerControl.IsUnknown() && !data.PeerControl.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ctrl", data.PeerControl.ValueString())
 	}
-	if (!data.PasswordType.IsUnknown() && !data.PasswordType.IsNull()) || true {
+	if (!data.PasswordType.IsUnknown() && !data.PasswordType.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"passwdType", data.PasswordType.ValueString())
 	}
 	if (!data.Password.IsUnknown() && !data.Password.IsNull()) || true {

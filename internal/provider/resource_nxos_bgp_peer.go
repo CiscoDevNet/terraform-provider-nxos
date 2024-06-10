@@ -153,10 +153,8 @@ func (r *BGPPeerResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 			},
 			"password_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Password Encryption Type.").AddStringEnumDescription("0", "3", "LINE", "7").AddDefaultValueDescription("LINE").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Password Encryption Type.").AddStringEnumDescription("0", "3", "LINE", "7").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("LINE"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("0", "3", "LINE", "7"),
 				},

@@ -108,7 +108,8 @@ attributes:
       - LINE
       - "7"
     example: LINE
-    default_value: LINE
+    exclude_test: true
+    omit_empty_value: true
   - nxos_name: password
     tf_name: password
     description: "Password."

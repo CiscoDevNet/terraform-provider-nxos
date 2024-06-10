@@ -77,7 +77,6 @@ resource "nxos_bgp_peer" "example" {
 - `password` (String) Password.
 - `password_type` (String) Password Encryption Type.
   - Choices: `0`, `3`, `LINE`, `7`
-  - Default value: `LINE`
 - `peer_control` (String) Peer Controls.
   - Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`
 - `peer_template` (String) Peer template name.

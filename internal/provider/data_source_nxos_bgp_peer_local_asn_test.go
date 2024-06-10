@@ -33,7 +33,7 @@ func TestAccDataSourceNxosBGPPeerLocalASN(t *testing.T) {
 			{
 				Config: testAccDataSourceNxosBGPPeerLocalASNPrerequisitesConfig + testAccDataSourceNxosBGPPeerLocalASNConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer_local_asn.test", "asn_propagation", "prepend"),
+					resource.TestCheckResourceAttr("data.nxos_bgp_peer_local_asn.test", "asn_propagation", "no-prepend"),
 					resource.TestCheckResourceAttr("data.nxos_bgp_peer_local_asn.test", "local_asn", "65001"),
 				),
 			},
@@ -80,8 +80,6 @@ resource "nxos_rest" "PreReq4" {
   dn = "sys/bgp/inst/dom-[default]/peer-[192.168.0.1]"
   class_name = "bgpPeer"
   content = {
-      bgp_asn = "65001"
-      vrf_name = "default"
       addr = "192.168.0.1"
       asn = "65002"
   }
@@ -93,7 +91,7 @@ resource "nxos_rest" "PreReq4" {
 const testAccDataSourceNxosBGPPeerLocalASNConfig = `
 
 resource "nxos_bgp_peer_local_asn" "test" {
-  asn_propagation = "prepend"
+  asn_propagation = "no-prepend"
   local_asn = "65001"
   vrf = "default"
   address = "192.168.0.1"

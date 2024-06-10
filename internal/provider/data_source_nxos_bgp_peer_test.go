@@ -43,7 +43,6 @@ func TestAccDataSourceNxosBGPPeer(t *testing.T) {
 					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "keepalive", "15"),
 					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "ebgp_multihop_ttl", "5"),
 					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "peer_control", "bfd"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "password_type", "LINE"),
 				),
 			},
 		},
@@ -102,7 +101,6 @@ resource "nxos_bgp_peer" "test" {
   keepalive = 15
   ebgp_multihop_ttl = 5
   peer_control = "bfd"
-  password_type = "LINE"
   password = "secret_password"
   depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 }

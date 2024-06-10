@@ -91,6 +91,10 @@ func (d *OSPFVRFDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "Router ID.",
 				Computed:            true,
 			},
+			"control": schema.StringAttribute{
+				MarkdownDescription: "Controls.",
+				Computed:            true,
+			},
 		},
 	}
 }

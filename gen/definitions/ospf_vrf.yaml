@@ -67,6 +67,18 @@ attributes:
     description: 'Router ID.'
     default_value: 0.0.0.0
     example: 34.56.78.90
+  - nxos_name: ctrl
+    tf_name: control
+    type: String
+    description: "Controls."
+    enum_values:
+      - unspecified
+      - bfd
+      - name-lookup
+      - default-passive
+      - segrt
+    default_value: unspecified
+    example: bfd
 test_prerequisites:
   - dn: sys/fm/ospf
     class_name: fmOspf

@@ -6,4 +6,5 @@ resource "nxos_ospf_vrf" "example" {
   bandwidth_reference_unit = "mbps"
   distance                 = 110
   router_id                = "34.56.78.90"
+  control                  = "bfd"
 }

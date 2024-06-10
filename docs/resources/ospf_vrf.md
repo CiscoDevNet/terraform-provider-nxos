@@ -43,6 +43,7 @@ resource "nxos_ospf_vrf" "example" {
   bandwidth_reference_unit = "mbps"
   distance                 = 110
   router_id                = "34.56.78.90"
+  control                  = "bfd"
 }
 ```
 
@@ -65,6 +66,9 @@ resource "nxos_ospf_vrf" "example" {
 - `bandwidth_reference_unit` (String) Bandwidth reference unit.
   - Choices: `mbps`, `gbps`
   - Default value: `mbps`
+- `control` (String) Controls.
+  - Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`
+  - Default value: `unspecified`
 - `device` (String) A device name from the provider configuration.
 - `distance` (Number) Administrative distance preference.
   - Range: `1`-`255`

@@ -39,6 +39,7 @@ data "nxos_ospf_vrf" "example" {
 - `admin_state` (String) Administrative state.
 - `bandwidth_reference` (Number) Bandwidth reference value.
 - `bandwidth_reference_unit` (String) Bandwidth reference unit.
+- `control` (String) Controls.
 - `distance` (Number) Administrative distance preference.
 - `id` (String) The distinguished name of the object.
 - `router_id` (String) Router ID.

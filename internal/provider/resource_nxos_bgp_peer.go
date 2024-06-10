@@ -58,7 +58,7 @@ func (r *BGPPeerResource) Metadata(ctx context.Context, req resource.MetadataReq
 func (r *BGPPeerResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP peer configuration.", "bgpPeer", "Routing%20and%20Forwarding/bgp:Peer/").AddParents("bgp_vrf").AddChildren("bgp_peer_address_family").AddReferences("bgp_peer_template").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP peer configuration.", "bgpPeer", "Routing%20and%20Forwarding/bgp:Peer/").AddParents("bgp_vrf").AddChildren("bgp_peer_address_family", "bgp_peer_local_asn").AddReferences("bgp_peer_template").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -137,6 +137,33 @@ func (r *BGPPeerResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Validators: []validator.Int64{
 					int64validator.Between(0, 3600),
 				},
+			},
+			"ebgp_multihop_ttl": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("eBGP Multihop TTL").AddIntegerRangeDescription(2, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(2, 255),
+				},
+			},
+			"peer_control": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Peer Controls.").AddStringEnumDescription("bfd", "dis-conn-check", "cap-neg-off", "no-dyn-cap").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("bfd", "dis-conn-check", "cap-neg-off", "no-dyn-cap"),
+				},
+			},
+			"password_type": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Password Encryption Type.").AddStringEnumDescription("0", "3", "LINE", "7").AddDefaultValueDescription("LINE").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("LINE"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("0", "3", "LINE", "7"),
+				},
+			},
+			"password": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Password.").String,
+				Optional:            true,
 			},
 		},
 	}

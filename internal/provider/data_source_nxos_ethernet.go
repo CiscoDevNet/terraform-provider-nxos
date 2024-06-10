@@ -67,6 +67,10 @@ func (d *EthernetDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				MarkdownDescription: "System jumbo MTU.",
 				Computed:            true,
 			},
+			"default_admin_status": schema.StringAttribute{
+				MarkdownDescription: "Default admin status",
+				Computed:            true,
+			},
 		},
 	}
 }

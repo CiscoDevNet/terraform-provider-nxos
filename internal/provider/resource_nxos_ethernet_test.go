@@ -34,6 +34,7 @@ func TestAccNxosEthernet(t *testing.T) {
 				Config: testAccNxosEthernetConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ethernet.test", "mtu", "9216"),
+					resource.TestCheckResourceAttr("nxos_ethernet.test", "default_admin_status", "up"),
 				),
 			},
 			{
@@ -56,6 +57,7 @@ func testAccNxosEthernetConfig_all() string {
 	return `
 	resource "nxos_ethernet" "test" {
 		mtu = 9216
+		default_admin_status = "up"
 	}
 	`
 }

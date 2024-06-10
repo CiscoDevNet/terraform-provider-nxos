@@ -39,6 +39,7 @@ type OSPFVRF struct {
 	BandwidthReferenceUnit types.String `tfsdk:"bandwidth_reference_unit"`
 	Distance               types.Int64  `tfsdk:"distance"`
 	RouterId               types.String `tfsdk:"router_id"`
+	Control                types.String `tfsdk:"control"`
 }
 
 func (data OSPFVRF) getDn() string {
@@ -69,6 +70,9 @@ func (data OSPFVRF) toBody() nxos.Body {
 	}
 	if (!data.RouterId.IsUnknown() && !data.RouterId.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rtrId", data.RouterId.ValueString())
+	}
+	if (!data.Control.IsUnknown() && !data.Control.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ctrl", data.Control.ValueString())
 	}
 
 	return nxos.Body{body}
@@ -104,6 +108,11 @@ func (data *OSPFVRF) fromBody(res gjson.Result, all bool) {
 		data.RouterId = types.StringValue(res.Get(data.getClassName() + ".attributes.rtrId").String())
 	} else {
 		data.RouterId = types.StringNull()
+	}
+	if !data.Control.IsNull() || all {
+		data.Control = types.StringValue(res.Get(data.getClassName() + ".attributes.ctrl").String())
+	} else {
+		data.Control = types.StringNull()
 	}
 }
 

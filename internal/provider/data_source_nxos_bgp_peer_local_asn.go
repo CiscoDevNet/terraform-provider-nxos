@@ -33,26 +33,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &OSPFVRFDataSource{}
-	_ datasource.DataSourceWithConfigure = &OSPFVRFDataSource{}
+	_ datasource.DataSource              = &BGPPeerLocalASNDataSource{}
+	_ datasource.DataSourceWithConfigure = &BGPPeerLocalASNDataSource{}
 )
 
-func NewOSPFVRFDataSource() datasource.DataSource {
-	return &OSPFVRFDataSource{}
+func NewBGPPeerLocalASNDataSource() datasource.DataSource {
+	return &BGPPeerLocalASNDataSource{}
 }
 
-type OSPFVRFDataSource struct {
+type BGPPeerLocalASNDataSource struct {
 	clients map[string]*nxos.Client
 }
 
-func (d *OSPFVRFDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_ospf_vrf"
+func (d *BGPPeerLocalASNDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_bgp_peer_local_asn"
 }
 
-func (d *OSPFVRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *BGPPeerLocalASNDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the OSPF VRF configuration.", "ospfDom", "Routing%20and%20Forwarding/ospf:Dom/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the BGP peer local asn configuration.", "bgpLocalAsn", "Routing%20and%20Forwarding/bgp:localasn/").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -63,43 +63,27 @@ func (d *OSPFVRFDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
-			"instance_name": schema.StringAttribute{
-				MarkdownDescription: "OSPF instance name.",
-				Required:            true,
+			"asn_propagation": schema.StringAttribute{
+				MarkdownDescription: "ASN Propagation.",
+				Computed:            true,
 			},
-			"name": schema.StringAttribute{
+			"local_asn": schema.StringAttribute{
+				MarkdownDescription: "Local Autonomous system number.",
+				Computed:            true,
+			},
+			"vrf": schema.StringAttribute{
 				MarkdownDescription: "VRF name.",
 				Required:            true,
 			},
-			"admin_state": schema.StringAttribute{
-				MarkdownDescription: "Administrative state.",
-				Computed:            true,
-			},
-			"bandwidth_reference": schema.Int64Attribute{
-				MarkdownDescription: "Bandwidth reference value.",
-				Computed:            true,
-			},
-			"bandwidth_reference_unit": schema.StringAttribute{
-				MarkdownDescription: "Bandwidth reference unit.",
-				Computed:            true,
-			},
-			"distance": schema.Int64Attribute{
-				MarkdownDescription: "Administrative distance preference.",
-				Computed:            true,
-			},
-			"router_id": schema.StringAttribute{
-				MarkdownDescription: "Router ID.",
-				Computed:            true,
-			},
-			"control": schema.StringAttribute{
-				MarkdownDescription: "Controls.",
-				Computed:            true,
+			"address": schema.StringAttribute{
+				MarkdownDescription: "Peer address.",
+				Required:            true,
 			},
 		},
 	}
 }
 
-func (d *OSPFVRFDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *BGPPeerLocalASNDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -107,8 +91,8 @@ func (d *OSPFVRFDataSource) Configure(_ context.Context, req datasource.Configur
 	d.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
-func (d *OSPFVRFDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config OSPFVRF
+func (d *BGPPeerLocalASNDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config BGPPeerLocalASN
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

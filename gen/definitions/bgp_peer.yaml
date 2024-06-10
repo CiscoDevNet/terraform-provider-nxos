@@ -10,6 +10,7 @@ parents:
   - BGP VRF
 children:
   - BGP Peer Address Family
+  - BGP Peer Local ASN
 references:
   - BGP Peer Template
 attributes:
@@ -79,6 +80,41 @@ attributes:
     example: 15
     min_int: 0
     max_int: 3600
+  - nxos_name: ttl
+    tf_name: ebgp_multihop_ttl
+    type: Int64
+    description: "eBGP Multihop TTL"
+    example: 5
+    min_int: 2
+    max_int: 255
+    omit_empty_value: true
+  - nxos_name: ctrl
+    tf_name: peer_control
+    type: String
+    description: "Peer Controls."
+    enum_values:
+      - bfd
+      - dis-conn-check
+      - cap-neg-off
+      - no-dyn-cap
+    example: bfd
+  - nxos_name: passwdType
+    tf_name: password_type
+    type: String
+    description: "Password Encryption Type."
+    enum_values:
+      - "0"
+      - "3"
+      - LINE
+      - "7"
+    example: LINE
+    default_value: LINE
+  - nxos_name: password
+    tf_name: password
+    description: "Password."
+    type: String
+    example: secret_password
+    write_only: true
 test_prerequisites:
   - dn: sys/fm/bgp
     class_name: fmBgp

@@ -25,32 +25,23 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccDataSourceNxosBGPPeer(t *testing.T) {
+func TestAccDataSourceNxosBGPPeerLocalASN(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosBGPPeerPrerequisitesConfig + testAccDataSourceNxosBGPPeerConfig,
+				Config: testAccDataSourceNxosBGPPeerLocalASNPrerequisitesConfig + testAccDataSourceNxosBGPPeerLocalASNConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "address", "192.168.0.1"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "remote_asn", "65002"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "description", "My description"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "peer_template", "SPINE-PEERS"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "peer_type", "fabric-internal"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "source_interface", "lo0"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "hold_time", "45"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "keepalive", "15"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "ebgp_multihop_ttl", "5"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "peer_control", "bfd"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "password_type", "LINE"),
+					resource.TestCheckResourceAttr("data.nxos_bgp_peer_local_asn.test", "asn_propagation", "prepend"),
+					resource.TestCheckResourceAttr("data.nxos_bgp_peer_local_asn.test", "local_asn", "65001"),
 				),
 			},
 		},
 	})
 }
 
-const testAccDataSourceNxosBGPPeerPrerequisitesConfig = `
+const testAccDataSourceNxosBGPPeerLocalASNPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/bgp"
   class_name = "fmBgp"
@@ -85,32 +76,33 @@ resource "nxos_rest" "PreReq3" {
   depends_on = [nxos_rest.PreReq2, ]
 }
 
-`
-
-const testAccDataSourceNxosBGPPeerConfig = `
-
-resource "nxos_bgp_peer" "test" {
-  asn = "65001"
-  vrf = "default"
-  address = "192.168.0.1"
-  remote_asn = "65002"
-  description = "My description"
-  peer_template = "SPINE-PEERS"
-  peer_type = "fabric-internal"
-  source_interface = "lo0"
-  hold_time = 45
-  keepalive = 15
-  ebgp_multihop_ttl = 5
-  peer_control = "bfd"
-  password_type = "LINE"
-  password = "secret_password"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
+resource "nxos_rest" "PreReq4" {
+  dn = "sys/bgp/inst/dom-[default]/peer-[192.168.0.1]"
+  class_name = "bgpPeer"
+  content = {
+      bgp_asn = "65001"
+      vrf_name = "default"
+      addr = "192.168.0.1"
+      asn = "65002"
+  }
+  depends_on = [nxos_rest.PreReq3, ]
 }
 
-data "nxos_bgp_peer" "test" {
-  asn = "65001"
+`
+
+const testAccDataSourceNxosBGPPeerLocalASNConfig = `
+
+resource "nxos_bgp_peer_local_asn" "test" {
+  asn_propagation = "prepend"
+  local_asn = "65001"
   vrf = "default"
   address = "192.168.0.1"
-  depends_on = [nxos_bgp_peer.test]
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
+}
+
+data "nxos_bgp_peer_local_asn" "test" {
+  vrf = "default"
+  address = "192.168.0.1"
+  depends_on = [nxos_bgp_peer_local_asn.test]
 }
 `

@@ -39,6 +39,7 @@ func TestAccDataSourceNxosOSPFVRF(t *testing.T) {
 					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "bandwidth_reference_unit", "mbps"),
 					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "distance", "110"),
 					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "router_id", "34.56.78.90"),
+					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "control", "bfd"),
 				),
 			},
 		},
@@ -82,6 +83,7 @@ resource "nxos_ospf_vrf" "test" {
   bandwidth_reference_unit = "mbps"
   distance = 110
   router_id = "34.56.78.90"
+  control = "bfd"
   depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
 }
 

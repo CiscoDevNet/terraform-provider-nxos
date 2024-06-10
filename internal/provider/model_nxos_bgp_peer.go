@@ -42,6 +42,10 @@ type BGPPeer struct {
 	SourceInterface types.String `tfsdk:"source_interface"`
 	HoldTime        types.Int64  `tfsdk:"hold_time"`
 	Keepalive       types.Int64  `tfsdk:"keepalive"`
+	EbgpMultihopTtl types.Int64  `tfsdk:"ebgp_multihop_ttl"`
+	PeerControl     types.String `tfsdk:"peer_control"`
+	PasswordType    types.String `tfsdk:"password_type"`
+	Password        types.String `tfsdk:"password"`
 }
 
 func (data BGPPeer) getDn() string {
@@ -78,6 +82,18 @@ func (data BGPPeer) toBody() nxos.Body {
 	}
 	if (!data.Keepalive.IsUnknown() && !data.Keepalive.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"kaIntvl", strconv.FormatInt(data.Keepalive.ValueInt64(), 10))
+	}
+	if (!data.EbgpMultihopTtl.IsUnknown() && !data.EbgpMultihopTtl.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ttl", strconv.FormatInt(data.EbgpMultihopTtl.ValueInt64(), 10))
+	}
+	if (!data.PeerControl.IsUnknown() && !data.PeerControl.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ctrl", data.PeerControl.ValueString())
+	}
+	if (!data.PasswordType.IsUnknown() && !data.PasswordType.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"passwdType", data.PasswordType.ValueString())
+	}
+	if (!data.Password.IsUnknown() && !data.Password.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"password", data.Password.ValueString())
 	}
 
 	return nxos.Body{body}
@@ -123,6 +139,21 @@ func (data *BGPPeer) fromBody(res gjson.Result, all bool) {
 		data.Keepalive = types.Int64Value(res.Get(data.getClassName() + ".attributes.kaIntvl").Int())
 	} else {
 		data.Keepalive = types.Int64Null()
+	}
+	if !data.EbgpMultihopTtl.IsNull() || all {
+		data.EbgpMultihopTtl = types.Int64Value(res.Get(data.getClassName() + ".attributes.ttl").Int())
+	} else {
+		data.EbgpMultihopTtl = types.Int64Null()
+	}
+	if !data.PeerControl.IsNull() || all {
+		data.PeerControl = types.StringValue(res.Get(data.getClassName() + ".attributes.ctrl").String())
+	} else {
+		data.PeerControl = types.StringNull()
+	}
+	if !data.PasswordType.IsNull() || all {
+		data.PasswordType = types.StringValue(res.Get(data.getClassName() + ".attributes.passwdType").String())
+	} else {
+		data.PasswordType = types.StringNull()
 	}
 }
 

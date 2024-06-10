@@ -24,12 +24,10 @@ import (
 	"fmt"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -40,25 +38,25 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &OSPFVRFResource{}
-var _ resource.ResourceWithImportState = &OSPFVRFResource{}
+var _ resource.Resource = &BGPPeerLocalASNResource{}
+var _ resource.ResourceWithImportState = &BGPPeerLocalASNResource{}
 
-func NewOSPFVRFResource() resource.Resource {
-	return &OSPFVRFResource{}
+func NewBGPPeerLocalASNResource() resource.Resource {
+	return &BGPPeerLocalASNResource{}
 }
 
-type OSPFVRFResource struct {
+type BGPPeerLocalASNResource struct {
 	clients map[string]*nxos.Client
 }
 
-func (r *OSPFVRFResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_ospf_vrf"
+func (r *BGPPeerLocalASNResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_bgp_peer_local_asn"
 }
 
-func (r *OSPFVRFResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *BGPPeerLocalASNResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the OSPF VRF configuration.", "ospfDom", "Routing%20and%20Forwarding/ospf:Dom/").AddParents("ospf_instance").AddChildren("ospf_interface", "ospf_area").AddReferences("vrf").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP peer local asn configuration.", "bgpLocalAsn", "Routing%20and%20Forwarding/bgp:localasn/").AddParents("bgp_peer").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -72,76 +70,38 @@ func (r *OSPFVRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"instance_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("OSPF instance name.").String,
-				Required:            true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
+			"asn_propagation": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ASN Propagation.").AddStringEnumDescription("none", "no-prepend", "replace-as", "dual-as").AddDefaultValueDescription("none").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("none"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("none", "no-prepend", "replace-as", "dual-as"),
 				},
 			},
-			"name": schema.StringAttribute{
+			"local_asn": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Local Autonomous system number.").String,
+				Required:            true,
+			},
+			"vrf": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Required:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"admin_state": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("enabled"),
-				Validators: []validator.String{
-					stringvalidator.OneOf("enabled", "disabled"),
-				},
-			},
-			"bandwidth_reference": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Bandwidth reference value.").AddIntegerRangeDescription(0, 4294967295).AddDefaultValueDescription("40000").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(40000),
-				Validators: []validator.Int64{
-					int64validator.Between(0, 4294967295),
-				},
-			},
-			"bandwidth_reference_unit": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Bandwidth reference unit.").AddStringEnumDescription("mbps", "gbps").AddDefaultValueDescription("mbps").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("mbps"),
-				Validators: []validator.String{
-					stringvalidator.OneOf("mbps", "gbps"),
-				},
-			},
-			"distance": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Administrative distance preference.").AddIntegerRangeDescription(1, 255).AddDefaultValueDescription("110").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(110),
-				Validators: []validator.Int64{
-					int64validator.Between(1, 255),
-				},
-			},
-			"router_id": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Router ID.").AddDefaultValueDescription("0.0.0.0").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("0.0.0.0"),
-			},
-			"control": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Controls.").AddStringEnumDescription("unspecified", "bfd", "name-lookup", "default-passive", "segrt").AddDefaultValueDescription("unspecified").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("unspecified"),
-				Validators: []validator.String{
-					stringvalidator.OneOf("unspecified", "bfd", "name-lookup", "default-passive", "segrt"),
+			"address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Peer address.").String,
+				Required:            true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
 				},
 			},
 		},
 	}
 }
 
-func (r *OSPFVRFResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *BGPPeerLocalASNResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -150,8 +110,8 @@ func (r *OSPFVRFResource) Configure(ctx context.Context, req resource.ConfigureR
 	r.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
-func (r *OSPFVRFResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan OSPFVRF
+func (r *BGPPeerLocalASNResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan BGPPeerLocalASN
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -178,8 +138,8 @@ func (r *OSPFVRFResource) Create(ctx context.Context, req resource.CreateRequest
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *OSPFVRFResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state OSPFVRF
+func (r *BGPPeerLocalASNResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state BGPPeerLocalASN
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -205,8 +165,8 @@ func (r *OSPFVRFResource) Read(ctx context.Context, req resource.ReadRequest, re
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *OSPFVRFResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan OSPFVRF
+func (r *BGPPeerLocalASNResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan BGPPeerLocalASN
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -230,8 +190,8 @@ func (r *OSPFVRFResource) Update(ctx context.Context, req resource.UpdateRequest
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *OSPFVRFResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state OSPFVRF
+func (r *BGPPeerLocalASNResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state BGPPeerLocalASN
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -267,6 +227,6 @@ func (r *OSPFVRFResource) Delete(ctx context.Context, req resource.DeleteRequest
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *OSPFVRFResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *BGPPeerLocalASNResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

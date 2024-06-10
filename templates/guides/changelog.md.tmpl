@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## 0.5.3 (unreleased)
+## 0.5.3
 
 - Add `enable_ipv4` and `instance_name` attributes to `nxos_isis_interface` resource and data source
 - Add `nxos_bgp_route_redistribution` resource and data source

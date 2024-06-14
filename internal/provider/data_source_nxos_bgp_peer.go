@@ -108,7 +108,7 @@ func (d *BGPPeerDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				Computed:            true,
 			},
 			"peer_control": schema.StringAttribute{
-				MarkdownDescription: "Peer Controls.",
+				MarkdownDescription: "Peer Controls. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.",
 				Computed:            true,
 			},
 			"password_type": schema.StringAttribute{

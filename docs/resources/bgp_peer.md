@@ -47,7 +47,7 @@ resource "nxos_bgp_peer" "example" {
   hold_time         = 45
   keepalive         = 15
   ebgp_multihop_ttl = 5
-  peer_control      = "bfd"
+  peer_control      = "bfd,dis-conn-check"
   password_type     = "LINE"
   password          = "secret_password"
 }
@@ -77,8 +77,9 @@ resource "nxos_bgp_peer" "example" {
 - `password` (String) Password.
 - `password_type` (String) Password Encryption Type.
   - Choices: `0`, `3`, `LINE`, `7`
-- `peer_control` (String) Peer Controls.
-  - Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`
+- `peer_control` (String) Peer Controls. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:
+  - Single value. Example: `bfd`
+  - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.
 - `peer_template` (String) Peer template name.
 - `peer_type` (String) Neighbor Fabric Type.
   - Choices: `fabric-internal`, `fabric-external`, `fabric-border-leaf`

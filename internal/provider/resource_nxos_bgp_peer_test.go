@@ -44,7 +44,7 @@ func TestAccNxosBGPPeer(t *testing.T) {
 					resource.TestCheckResourceAttr("nxos_bgp_peer.test", "hold_time", "45"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer.test", "keepalive", "15"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer.test", "ebgp_multihop_ttl", "5"),
-					resource.TestCheckResourceAttr("nxos_bgp_peer.test", "peer_control", "bfd"),
+					resource.TestCheckResourceAttr("nxos_bgp_peer.test", "peer_control", "bfd,dis-conn-check"),
 					resource.TestCheckResourceAttr("nxos_bgp_peer.test", "password", "secret_password"),
 				),
 			},
@@ -119,7 +119,7 @@ func testAccNxosBGPPeerConfig_all() string {
 		hold_time = 45
 		keepalive = 15
 		ebgp_multihop_ttl = 5
-		peer_control = "bfd"
+		peer_control = "bfd,dis-conn-check"
 		password = "secret_password"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 	}

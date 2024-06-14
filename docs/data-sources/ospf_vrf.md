@@ -39,7 +39,9 @@ data "nxos_ospf_vrf" "example" {
 - `admin_state` (String) Administrative state.
 - `bandwidth_reference` (Number) Bandwidth reference value.
 - `bandwidth_reference_unit` (String) Bandwidth reference unit.
-- `control` (String) Controls.
+- `control` (String) Controls. Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`. Can be an empty string. Allowed formats:
+  - Single value. Example: `bfd`
+  - Multiple values (comma-separated). Example: `bfd,default-passive`. In this case values must be in alphabetical order.
 - `distance` (Number) Administrative distance preference.
 - `id` (String) The distinguished name of the object.
 - `router_id` (String) Router ID.

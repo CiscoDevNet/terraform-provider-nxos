@@ -129,13 +129,10 @@ func (r *OSPFVRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Default:             stringdefault.StaticString("0.0.0.0"),
 			},
 			"control": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Controls.").AddStringEnumDescription("unspecified", "bfd", "name-lookup", "default-passive", "segrt").AddDefaultValueDescription("unspecified").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Controls. Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,default-passive`. In this case values must be in alphabetical order.").AddDefaultValueDescription("unspecified").String,
 				Optional:            true,
 				Computed:            true,
 				Default:             stringdefault.StaticString("unspecified"),
-				Validators: []validator.String{
-					stringvalidator.OneOf("unspecified", "bfd", "name-lookup", "default-passive", "segrt"),
-				},
 			},
 		},
 	}

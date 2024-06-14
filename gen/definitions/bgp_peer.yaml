@@ -91,13 +91,8 @@ attributes:
   - nxos_name: ctrl
     tf_name: peer_control
     type: String
-    description: "Peer Controls."
-    enum_values:
-      - bfd
-      - dis-conn-check
-      - cap-neg-off
-      - no-dyn-cap
-    example: bfd
+    description: 'Peer Controls. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.'
+    example: 'bfd,dis-conn-check'
   - nxos_name: passwdType
     tf_name: password_type
     type: String

@@ -45,7 +45,9 @@ data "nxos_bgp_peer" "example" {
 - `keepalive` (Number) BGP Keepalive Timer in seconds
 - `password` (String) Password.
 - `password_type` (String) Password Encryption Type.
-- `peer_control` (String) Peer Controls.
+- `peer_control` (String) Peer Controls. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:
+  - Single value. Example: `bfd`
+  - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.
 - `peer_template` (String) Peer template name.
 - `peer_type` (String) Neighbor Fabric Type.
 - `remote_asn` (String) Peer autonomous system number.

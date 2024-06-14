@@ -118,9 +118,16 @@ test_prerequisites:
     attributes:
       - name: adminSt
         value: enabled
+  - dn: sys/fm/bfd
+    class_name: fmBfd
+    dependencies: [0]
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
   - dn: sys/bgp
     class_name: bgpEntity
-    dependencies: [0]
+    dependencies: [1]
   - dn: sys/bgp/inst
     class_name: bgpInst
     attributes:
@@ -128,10 +135,10 @@ test_prerequisites:
         value: enabled
       - name: asn
         value: "65001"
-    dependencies: [1]
+    dependencies: [2]
   - dn: sys/bgp/inst/dom-[default]
     class_name: bgpDom
     attributes:
       - name: name
         value: default
-    dependencies: [2]
+    dependencies: [3]

@@ -72,7 +72,7 @@ attributes:
     type: String
     description: 'Controls. Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,default-passive`. In this case values must be in alphabetical order.'
     default_value: unspecified
-    example: 'bfd,default'
+    example: 'bfd,default-passive'
 test_prerequisites:
   - dn: sys/fm/ospf
     class_name: fmOspf
@@ -80,12 +80,19 @@ test_prerequisites:
     attributes:
       - name: adminSt
         value: enabled
+  - dn: sys/fm/bfd
+    class_name: fmBfd
+    dependencies: [0]
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
   - dn: sys/ospf
     class_name: ospfEntity
-    dependencies: [0]
+    dependencies: [1]
   - dn: sys/ospf/inst-[OSPF1]
     class_name: ospfInst
     attributes:
       - name: name
         value: OSPF1
-    dependencies: [1]
+    dependencies: [2]

@@ -146,11 +146,8 @@ func (r *BGPPeerResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 			},
 			"peer_control": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Peer Controls.").AddStringEnumDescription("bfd", "dis-conn-check", "cap-neg-off", "no-dyn-cap").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Peer Controls. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.").String,
 				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("bfd", "dis-conn-check", "cap-neg-off", "no-dyn-cap"),
-				},
 			},
 			"password_type": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Password Encryption Type.").AddStringEnumDescription("0", "3", "LINE", "7").String,

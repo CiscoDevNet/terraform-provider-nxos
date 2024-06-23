@@ -10,7 +10,7 @@ resource "nxos_bgp_peer" "example" {
   hold_time         = 45
   keepalive         = 15
   ebgp_multihop_ttl = 5
-  peer_control      = "bfd"
+  peer_control      = "bfd,dis-conn-check"
   password_type     = "LINE"
   password          = "secret_password"
 }

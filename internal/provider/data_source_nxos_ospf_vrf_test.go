@@ -39,7 +39,7 @@ func TestAccDataSourceNxosOSPFVRF(t *testing.T) {
 					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "bandwidth_reference_unit", "mbps"),
 					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "distance", "110"),
 					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "router_id", "34.56.78.90"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "control", "bfd"),
+					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "control", "bfd,default-passive"),
 				),
 			},
 		},
@@ -57,18 +57,28 @@ resource "nxos_rest" "PreReq0" {
 }
 
 resource "nxos_rest" "PreReq1" {
-  dn = "sys/ospf"
-  class_name = "ospfEntity"
+  dn = "sys/fm/bfd"
+  class_name = "fmBfd"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
   depends_on = [nxos_rest.PreReq0, ]
 }
 
 resource "nxos_rest" "PreReq2" {
+  dn = "sys/ospf"
+  class_name = "ospfEntity"
+  depends_on = [nxos_rest.PreReq1, ]
+}
+
+resource "nxos_rest" "PreReq3" {
   dn = "sys/ospf/inst-[OSPF1]"
   class_name = "ospfInst"
   content = {
       name = "OSPF1"
   }
-  depends_on = [nxos_rest.PreReq1, ]
+  depends_on = [nxos_rest.PreReq2, ]
 }
 
 `
@@ -83,8 +93,8 @@ resource "nxos_ospf_vrf" "test" {
   bandwidth_reference_unit = "mbps"
   distance = 110
   router_id = "34.56.78.90"
-  control = "bfd"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
+  control = "bfd,default-passive"
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 }
 
 data "nxos_ospf_vrf" "test" {

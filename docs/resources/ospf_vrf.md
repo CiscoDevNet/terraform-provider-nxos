@@ -68,7 +68,6 @@ resource "nxos_ospf_vrf" "example" {
   - Default value: `mbps`
 - `control` (String) Controls.
   - Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`
-  - Default value: `unspecified`
 - `device` (String) A device name from the provider configuration.
 - `distance` (Number) Administrative distance preference.
   - Range: `1`-`255`

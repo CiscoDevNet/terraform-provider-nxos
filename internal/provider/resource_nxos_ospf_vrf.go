@@ -129,10 +129,8 @@ func (r *OSPFVRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Default:             stringdefault.StaticString("0.0.0.0"),
 			},
 			"control": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Controls.").AddStringEnumDescription("unspecified", "bfd", "name-lookup", "default-passive", "segrt").AddDefaultValueDescription("unspecified").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Controls.").AddStringEnumDescription("unspecified", "bfd", "name-lookup", "default-passive", "segrt").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("unspecified"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("unspecified", "bfd", "name-lookup", "default-passive", "segrt"),
 				},

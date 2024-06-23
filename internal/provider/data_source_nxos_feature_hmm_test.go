@@ -20,12 +20,16 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceNxosFeatureHMM(t *testing.T) {
+	if os.Getenv("FEATURE_HMM") == "" {
+		t.Skip("skipping test, set environment variable FEATURE_HMM")
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,

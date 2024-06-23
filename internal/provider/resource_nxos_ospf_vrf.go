@@ -132,7 +132,6 @@ func (r *OSPFVRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 				MarkdownDescription: helpers.NewAttributeDescription("Controls. Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,default-passive`. In this case values must be in alphabetical order.").AddDefaultValueDescription("unspecified").String,
 				Optional:            true,
 				Computed:            true,
-				Default:             stringdefault.StaticString("unspecified"),
 			},
 		},
 	}

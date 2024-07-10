@@ -1,4 +1,4 @@
-## 0.5.4 (unreleased)
+## 0.5.4
 
 - Remove `control` default value of `nxos_ospf_vrf` resource
 - Fix `peer_control` attribute of `nxos_bgp_peer` resource

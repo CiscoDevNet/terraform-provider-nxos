@@ -1,3 +1,9 @@
+## 0.5.4 (unreleased)
+
+- Remove `control` default value of `nxos_ospf_vrf` resource
+- Fix `peer_control` attribute of `nxos_bgp_peer` resource
+- Fix `control` attribute of `nxos_ospf_vrf` resource
+
 ## 0.5.3
 
 - Add `enable_ipv4` and `instance_name` attributes to `nxos_isis_interface` resource and data source

@@ -44,9 +44,12 @@ func (data EVPNVNIRouteTarget) getClassName() string {
 	return "rtctrlRttEntry"
 }
 
-func (data EVPNVNIRouteTarget) toBody() nxos.Body {
+func (data EVPNVNIRouteTarget) toBody(update bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if update {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
+	}
 	if (!data.RouteTarget.IsUnknown() && !data.RouteTarget.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rtt", data.RouteTarget.ValueString())
 	}

@@ -44,9 +44,12 @@ func (data PIMAnycastRPPeer) getClassName() string {
 	return "pimAcastRPPeer"
 }
 
-func (data PIMAnycastRPPeer) toBody() nxos.Body {
+func (data PIMAnycastRPPeer) toBody(update bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if update {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
+	}
 	if (!data.Address.IsUnknown() && !data.Address.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"addr", data.Address.ValueString())
 	}

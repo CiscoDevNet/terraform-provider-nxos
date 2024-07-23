@@ -8,6 +8,7 @@ doc_path: Security%20and%20Policing/ipv4acl:ACE/
 doc_category: IPv4
 parents:
   - IPv4 Access List
+strict_update: true
 attributes:
   - nxos_name: name
     tf_name: name

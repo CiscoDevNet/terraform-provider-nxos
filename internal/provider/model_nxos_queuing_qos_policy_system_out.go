@@ -39,9 +39,12 @@ func (data QueuingQOSPolicySystemOut) getClassName() string {
 	return "ipqosSystem"
 }
 
-func (data QueuingQOSPolicySystemOut) toBody() nxos.Body {
+func (data QueuingQOSPolicySystemOut) toBody(update bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if update {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
+	}
 
 	return nxos.Body{body}
 }

@@ -46,9 +46,12 @@ func (data BGPGracefulRestart) getClassName() string {
 	return "bgpGr"
 }
 
-func (data BGPGracefulRestart) toBody() nxos.Body {
+func (data BGPGracefulRestart) toBody(update bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if update {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
+	}
 	if (!data.RestartInterval.IsUnknown() && !data.RestartInterval.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"restartIntvl", strconv.FormatInt(data.RestartInterval.ValueInt64(), 10))
 	}

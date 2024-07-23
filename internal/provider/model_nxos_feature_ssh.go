@@ -40,9 +40,12 @@ func (data FeatureSSH) getClassName() string {
 	return "fmSsh"
 }
 
-func (data FeatureSSH) toBody() nxos.Body {
+func (data FeatureSSH) toBody(update bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if update {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
+	}
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}

@@ -90,9 +90,12 @@ func (data IPv4AccessListEntry) getClassName() string {
 	return "ipv4aclACE"
 }
 
-func (data IPv4AccessListEntry) toBody() nxos.Body {
+func (data IPv4AccessListEntry) toBody(update bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if update {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
+	}
 	if (!data.SequenceNumber.IsUnknown() && !data.SequenceNumber.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"seqNum", strconv.FormatInt(data.SequenceNumber.ValueInt64(), 10))
 	}

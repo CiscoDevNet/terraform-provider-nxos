@@ -46,9 +46,12 @@ func (data RouteMapRuleEntrySetRegularCommunity) getClassName() string {
 	return "rtmapSetRegComm"
 }
 
-func (data RouteMapRuleEntrySetRegularCommunity) toBody() nxos.Body {
+func (data RouteMapRuleEntrySetRegularCommunity) toBody(update bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if update {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
+	}
 	if (!data.Additive.IsUnknown() && !data.Additive.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"additive", data.Additive.ValueString())
 	}

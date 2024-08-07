@@ -99,6 +99,7 @@ type YamlConfig struct {
 	ClassName         string                 `yaml:"class_name"`
 	Dn                string                 `yaml:"dn"`
 	NoDelete          bool                   `yaml:"no_delete"`
+	StrictUpdate      bool                   `yaml:"strict_update"`
 	TestTags          []string               `yaml:"test_tags"`
 	DsDescription     string                 `yaml:"ds_description"`
 	ResDescription    string                 `yaml:"res_description"`

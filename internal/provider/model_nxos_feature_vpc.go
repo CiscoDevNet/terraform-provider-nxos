@@ -40,9 +40,12 @@ func (data FeatureVPC) getClassName() string {
 	return "fmVpc"
 }
 
-func (data FeatureVPC) toBody() nxos.Body {
+func (data FeatureVPC) toBody(update bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if update {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
+	}
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}

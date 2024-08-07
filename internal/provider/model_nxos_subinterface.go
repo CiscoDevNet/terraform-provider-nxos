@@ -51,9 +51,12 @@ func (data Subinterface) getClassName() string {
 	return "l3EncRtdIf"
 }
 
-func (data Subinterface) toBody() nxos.Body {
+func (data Subinterface) toBody(update bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if update {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
+	}
 	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.InterfaceId.ValueString())
 	}

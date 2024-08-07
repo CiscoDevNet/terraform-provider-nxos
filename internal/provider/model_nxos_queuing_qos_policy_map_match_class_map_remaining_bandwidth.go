@@ -45,9 +45,12 @@ func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) getClassName() st
 	return "ipqosSetRemBW"
 }
 
-func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) toBody() nxos.Body {
+func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) toBody(update bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if update {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
+	}
 	if (!data.Value.IsUnknown() && !data.Value.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"val", strconv.FormatInt(data.Value.ValueInt64(), 10))
 	}

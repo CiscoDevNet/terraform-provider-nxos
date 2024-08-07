@@ -40,9 +40,12 @@ func (data FeatureInterfaceVLAN) getClassName() string {
 	return "fmInterfaceVlan"
 }
 
-func (data FeatureInterfaceVLAN) toBody() nxos.Body {
+func (data FeatureInterfaceVLAN) toBody(update bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if update {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
+	}
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}

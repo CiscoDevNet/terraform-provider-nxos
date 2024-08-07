@@ -45,9 +45,12 @@ func (data BGPPeerLocalASN) getClassName() string {
 	return "bgpLocalAsn"
 }
 
-func (data BGPPeerLocalASN) toBody() nxos.Body {
+func (data BGPPeerLocalASN) toBody(update bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if update {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
+	}
 	if (!data.AsnPropagation.IsUnknown() && !data.AsnPropagation.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"asnPropagate", data.AsnPropagation.ValueString())
 	}

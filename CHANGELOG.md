@@ -1,4 +1,4 @@
-## 0.5.5 (unreleased)
+## 0.5.5
 
 - Fix importing of resources
 

@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.5.5 (unreleased)
+
+- Fix importing of resources
+
 ## 0.5.4
 
 - Remove `control` default value of `nxos_ospf_vrf` resource

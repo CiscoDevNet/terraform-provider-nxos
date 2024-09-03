@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.5.6 (unreleased)
+
+- Fix value range of `ebgp_multihop_ttl` attribute of `nxos_bgp_peer` resource
+
 ## 0.5.5
 
 - Fix importing of resources

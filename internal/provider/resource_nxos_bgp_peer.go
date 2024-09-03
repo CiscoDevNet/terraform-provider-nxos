@@ -139,10 +139,10 @@ func (r *BGPPeerResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 			},
 			"ebgp_multihop_ttl": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("eBGP Multihop TTL").AddIntegerRangeDescription(2, 255).String,
+				MarkdownDescription: helpers.NewAttributeDescription("eBGP Multihop TTL").AddIntegerRangeDescription(0, 255).String,
 				Optional:            true,
 				Validators: []validator.Int64{
-					int64validator.Between(2, 255),
+					int64validator.Between(0, 255),
 				},
 			},
 			"peer_control": schema.StringAttribute{

@@ -85,7 +85,7 @@ attributes:
     type: Int64
     description: "eBGP Multihop TTL"
     example: 5
-    min_int: 2
+    min_int: 0
     max_int: 255
     omit_empty_value: true
   - nxos_name: ctrl

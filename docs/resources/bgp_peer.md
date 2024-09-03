@@ -67,7 +67,7 @@ resource "nxos_bgp_peer" "example" {
 - `description` (String) Peer description.
 - `device` (String) A device name from the provider configuration.
 - `ebgp_multihop_ttl` (Number) eBGP Multihop TTL
-  - Range: `2`-`255`
+  - Range: `0`-`255`
 - `hold_time` (Number) BGP Hold Timer in seconds. The value must be greater than the keepalive timer
   - Range: `3`-`3600`
   - Default value: `180`

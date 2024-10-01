@@ -40,10 +40,10 @@ func (data FeatureLACP) getClassName() string {
 	return "fmLacp"
 }
 
-func (data FeatureLACP) toBody(update bool) nxos.Body {
+func (data FeatureLACP) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if update {
+	if statusReplace {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
 	}
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {

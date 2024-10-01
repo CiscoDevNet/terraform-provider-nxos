@@ -45,10 +45,10 @@ func (data IPv4InterfaceAddress) getClassName() string {
 	return "ipv4Addr"
 }
 
-func (data IPv4InterfaceAddress) toBody(update bool) nxos.Body {
+func (data IPv4InterfaceAddress) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if update {
+	if statusReplace {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
 	}
 	if (!data.Address.IsUnknown() && !data.Address.IsNull()) || true {

@@ -42,10 +42,10 @@ func (data RouteMapRule) getClassName() string {
 	return "rtmapRule"
 }
 
-func (data RouteMapRule) toBody(update bool) nxos.Body {
+func (data RouteMapRule) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if update {
+	if statusReplace {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
 	}
 	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {

@@ -45,10 +45,10 @@ func (data DefaultQOSPolicyMapMatchClassMapSetQOSGroup) getClassName() string {
 	return "ipqosSetQoSGrp"
 }
 
-func (data DefaultQOSPolicyMapMatchClassMapSetQOSGroup) toBody(update bool) nxos.Body {
+func (data DefaultQOSPolicyMapMatchClassMapSetQOSGroup) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if update {
+	if statusReplace {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
 	}
 	if (!data.QosGroupId.IsUnknown() && !data.QosGroupId.IsNull()) || true {

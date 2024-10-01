@@ -43,10 +43,10 @@ func (data PIMStaticRP) getClassName() string {
 	return "pimStaticRP"
 }
 
-func (data PIMStaticRP) toBody(update bool) nxos.Body {
+func (data PIMStaticRP) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if update {
+	if statusReplace {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
 	}
 	if (!data.Address.IsUnknown() && !data.Address.IsNull()) || true {

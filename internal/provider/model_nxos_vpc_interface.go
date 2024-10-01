@@ -44,10 +44,10 @@ func (data VPCInterface) getClassName() string {
 	return "vpcIf"
 }
 
-func (data VPCInterface) toBody(update bool) nxos.Body {
+func (data VPCInterface) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if update {
+	if statusReplace {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
 	}
 	if (!data.VpcInterfaceId.IsUnknown() && !data.VpcInterfaceId.IsNull()) || true {

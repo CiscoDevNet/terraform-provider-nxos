@@ -39,10 +39,10 @@ func (data NVEVNIContainer) getClassName() string {
 	return "nvoNws"
 }
 
-func (data NVEVNIContainer) toBody(update bool) nxos.Body {
+func (data NVEVNIContainer) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if update {
+	if statusReplace {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
 	}
 

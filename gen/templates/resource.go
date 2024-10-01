@@ -320,7 +320,7 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
-{{ if .StrictUpdate}}
+{{ if .StatusReplace}}
 	body := plan.toBody(true)
 {{ else}}
 	body := plan.toBody(false)

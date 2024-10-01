@@ -43,10 +43,10 @@ func (data SubinterfaceVRF) getClassName() string {
 	return "nwRtVrfMbr"
 }
 
-func (data SubinterfaceVRF) toBody(update bool) nxos.Body {
+func (data SubinterfaceVRF) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if update {
+	if statusReplace {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
 	}
 	if (!data.VrfDn.IsUnknown() && !data.VrfDn.IsNull()) || true {

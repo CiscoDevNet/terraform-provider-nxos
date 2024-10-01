@@ -49,10 +49,10 @@ func (data IPv4PrefixListRuleEntry) getClassName() string {
 	return "rtpfxEntry"
 }
 
-func (data IPv4PrefixListRuleEntry) toBody(update bool) nxos.Body {
+func (data IPv4PrefixListRuleEntry) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if update {
+	if statusReplace {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
 	}
 	if (!data.Order.IsUnknown() && !data.Order.IsNull()) || true {

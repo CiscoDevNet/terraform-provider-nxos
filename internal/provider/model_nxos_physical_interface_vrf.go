@@ -43,10 +43,10 @@ func (data PhysicalInterfaceVRF) getClassName() string {
 	return "nwRtVrfMbr"
 }
 
-func (data PhysicalInterfaceVRF) toBody(update bool) nxos.Body {
+func (data PhysicalInterfaceVRF) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if update {
+	if statusReplace {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
 	}
 	if (!data.VrfDn.IsUnknown() && !data.VrfDn.IsNull()) || true {

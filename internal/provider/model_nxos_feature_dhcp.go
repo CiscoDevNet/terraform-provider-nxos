@@ -40,10 +40,10 @@ func (data FeatureDHCP) getClassName() string {
 	return "fmDhcp"
 }
 
-func (data FeatureDHCP) toBody(update bool) nxos.Body {
+func (data FeatureDHCP) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if update {
+	if statusReplace {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
 	}
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {

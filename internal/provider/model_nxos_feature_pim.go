@@ -40,10 +40,10 @@ func (data FeaturePIM) getClassName() string {
 	return "fmPim"
 }
 
-func (data FeaturePIM) toBody(update bool) nxos.Body {
+func (data FeaturePIM) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if update {
+	if statusReplace {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
 	}
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {

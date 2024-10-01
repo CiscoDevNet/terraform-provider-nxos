@@ -55,10 +55,10 @@ func (data OSPFInterface) getClassName() string {
 	return "ospfIf"
 }
 
-func (data OSPFInterface) toBody(update bool) nxos.Body {
+func (data OSPFInterface) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if update {
+	if statusReplace {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
 	}
 	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {

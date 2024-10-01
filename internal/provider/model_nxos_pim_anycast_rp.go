@@ -44,10 +44,10 @@ func (data PIMAnycastRP) getClassName() string {
 	return "pimAcastRPFuncP"
 }
 
-func (data PIMAnycastRP) toBody(update bool) nxos.Body {
+func (data PIMAnycastRP) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if update {
+	if statusReplace {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
 	}
 	if (!data.LocalInterface.IsUnknown() && !data.LocalInterface.IsNull()) || true {

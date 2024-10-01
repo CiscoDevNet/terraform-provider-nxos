@@ -46,10 +46,10 @@ func (data BGPAdvertisedPrefix) getClassName() string {
 	return "bgpAdvPrefix"
 }
 
-func (data BGPAdvertisedPrefix) toBody(update bool) nxos.Body {
+func (data BGPAdvertisedPrefix) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if update {
+	if statusReplace {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
 	}
 	if (!data.Prefix.IsUnknown() && !data.Prefix.IsNull()) || true {

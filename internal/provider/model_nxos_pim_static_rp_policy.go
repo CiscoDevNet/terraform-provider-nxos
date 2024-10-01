@@ -43,10 +43,10 @@ func (data PIMStaticRPPolicy) getClassName() string {
 	return "pimStaticRPP"
 }
 
-func (data PIMStaticRPPolicy) toBody(update bool) nxos.Body {
+func (data PIMStaticRPPolicy) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if update {
+	if statusReplace {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
 	}
 	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {

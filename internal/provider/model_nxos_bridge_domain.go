@@ -44,10 +44,10 @@ func (data BridgeDomain) getClassName() string {
 	return "l2BD"
 }
 
-func (data BridgeDomain) toBody(update bool) nxos.Body {
+func (data BridgeDomain) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if update {
+	if statusReplace {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
 	}
 	if (!data.FabricEncap.IsUnknown() && !data.FabricEncap.IsNull()) || true {

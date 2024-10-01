@@ -45,10 +45,10 @@ func (data VRFRouteTargetDirection) getClassName() string {
 	return "rtctrlRttP"
 }
 
-func (data VRFRouteTargetDirection) toBody(update bool) nxos.Body {
+func (data VRFRouteTargetDirection) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if update {
+	if statusReplace {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
 	}
 	if (!data.Direction.IsUnknown() && !data.Direction.IsNull()) || true {

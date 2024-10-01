@@ -266,7 +266,7 @@ func (r *PortChannelInterfaceResource) Create(ctx context.Context, req resource.
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getDn()))
 
 	// Post object
-	body := plan.toBody()
+	body := plan.toBody(false)
 	_, err := r.clients[plan.Device.ValueString()].Post(plan.getDn(), body.Str)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
@@ -328,7 +328,8 @@ func (r *PortChannelInterfaceResource) Update(ctx context.Context, req resource.
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
-	body := plan.toBody()
+	body := plan.toBody(false)
+
 	_, err := r.clients[plan.Device.ValueString()].Post(plan.getDn(), body.Str)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))

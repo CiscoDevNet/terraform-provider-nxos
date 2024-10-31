@@ -40,9 +40,12 @@ func (data FeatureBFD) getClassName() string {
 	return "fmBfd"
 }
 
-func (data FeatureBFD) toBody() nxos.Body {
+func (data FeatureBFD) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if statusReplace {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
+	}
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}

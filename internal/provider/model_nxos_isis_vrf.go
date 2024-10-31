@@ -59,9 +59,12 @@ func (data ISISVRF) getClassName() string {
 	return "isisDom"
 }
 
-func (data ISISVRF) toBody() nxos.Body {
+func (data ISISVRF) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if statusReplace {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
+	}
 	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}

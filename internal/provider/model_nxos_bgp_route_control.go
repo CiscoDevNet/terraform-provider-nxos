@@ -47,9 +47,12 @@ func (data BGPRouteControl) getClassName() string {
 	return "bgpRtCtrl"
 }
 
-func (data BGPRouteControl) toBody() nxos.Body {
+func (data BGPRouteControl) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if statusReplace {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
+	}
 	if (!data.EnforceFirstAs.IsUnknown() && !data.EnforceFirstAs.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"enforceFirstAs", data.EnforceFirstAs.ValueString())
 	}

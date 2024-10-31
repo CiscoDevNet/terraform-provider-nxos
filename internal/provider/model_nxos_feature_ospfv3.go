@@ -40,9 +40,12 @@ func (data FeatureOSPFv3) getClassName() string {
 	return "fmOspfv3"
 }
 
-func (data FeatureOSPFv3) toBody() nxos.Body {
+func (data FeatureOSPFv3) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if statusReplace {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
+	}
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}

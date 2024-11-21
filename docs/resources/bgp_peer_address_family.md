@@ -47,7 +47,7 @@ resource "nxos_bgp_peer_address_family" "example" {
 
 - `address` (String) Peer address.
 - `address_family` (String) Address Family.
-  - Choices: `ipv4-ucast`, `vpnv4-ucast`, `ipv6-ucast`, `vpnv6-ucast`, `l2vpn-evpn`, `lnkstate`
+  - Choices: `ipv4-ucast`, `ipv4-mvpn`, `vpnv4-ucast`, `ipv6-ucast`, `vpnv6-ucast`, `l2vpn-evpn`, `lnkstate`
   - Default value: `ipv4-ucast`
 - `asn` (String) Autonomous system number.
 - `vrf` (String) VRF name.

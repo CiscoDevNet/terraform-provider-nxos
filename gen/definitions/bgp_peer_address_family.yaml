@@ -16,45 +16,46 @@ attributes:
     tf_name: asn
     type: String
     reference_only: true
-    description: 'Autonomous system number.'
-    example: '65001'
+    description: "Autonomous system number."
+    example: "65001"
   - nxos_name: vrf_name
     tf_name: vrf
     type: String
     id: true
     reference_only: true
-    description: 'VRF name.'
+    description: "VRF name."
     example: default
   - nxos_name: addr
     tf_name: address
     type: String
     id: true
     reference_only: true
-    description: 'Peer address.'
-    example: '192.168.0.1'
+    description: "Peer address."
+    example: "192.168.0.1"
   - nxos_name: type
     tf_name: address_family
     type: String
     id: true
-    description: 'Address Family.'
+    description: "Address Family."
     enum_values:
       - ipv4-ucast
+      - ipv4-mvpn
       - vpnv4-ucast
       - ipv6-ucast
       - vpnv6-ucast
       - l2vpn-evpn
       - lnkstate
-    default_value: 'ipv4-ucast'
-    example: 'ipv4-ucast'
+    default_value: "ipv4-ucast"
+    example: "ipv4-ucast"
   - nxos_name: ctrl
     tf_name: control
     type: String
     description: 'Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:\n  - Single value. Example: `nh-self`\n  - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.'
-    example: 'nh-self,rr-client'
+    example: "nh-self,rr-client"
   - nxos_name: sendComExt
     tf_name: send_community_extended
     type: String
-    description: 'Send-community extended.'
+    description: "Send-community extended."
     enum_values:
       - enabled
       - disabled
@@ -63,7 +64,7 @@ attributes:
   - nxos_name: sendComStd
     tf_name: send_community_standard
     type: String
-    description: 'Send-community standard.'
+    description: "Send-community standard."
     enum_values:
       - enabled
       - disabled
@@ -85,7 +86,7 @@ test_prerequisites:
       - name: adminSt
         value: enabled
       - name: asn
-        value: '65001'
+        value: "65001"
     dependencies: [1]
   - dn: sys/bgp/inst/dom-[default]
     class_name: bgpDom
@@ -97,7 +98,7 @@ test_prerequisites:
     class_name: bgpPeer
     attributes:
       - name: addr
-        value: '192.168.0.1'
+        value: "192.168.0.1"
       - name: asn
-        value: '65001'
+        value: "65001"
     dependencies: [3]

@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -38,25 +37,25 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &BGPPeerAddressFamilyResource{}
-var _ resource.ResourceWithImportState = &BGPPeerAddressFamilyResource{}
+var _ resource.Resource = &FeatureNgMvpnResource{}
+var _ resource.ResourceWithImportState = &FeatureNgMvpnResource{}
 
-func NewBGPPeerAddressFamilyResource() resource.Resource {
-	return &BGPPeerAddressFamilyResource{}
+func NewFeatureNgMvpnResource() resource.Resource {
+	return &FeatureNgMvpnResource{}
 }
 
-type BGPPeerAddressFamilyResource struct {
+type FeatureNgMvpnResource struct {
 	clients map[string]*nxos.Client
 }
 
-func (r *BGPPeerAddressFamilyResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_bgp_peer_address_family"
+func (r *FeatureNgMvpnResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_feature_ngmvpn"
 }
 
-func (r *BGPPeerAddressFamilyResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *FeatureNgMvpnResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP peer address family configuration.", "bgpPeerAf", "Routing%20and%20Forwarding/bgp:PeerAf/").AddParents("bgp_peer").AddChildren("bgp_peer_address_family_route_control", "bgp_peer_address_family_prefix_list_control").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Next Generation Multicast VPN Feature.", "fmNgmvpn", "Feature%20Management/fm:NgMvpn/").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -70,55 +69,9 @@ func (r *BGPPeerAddressFamilyResource) Schema(ctx context.Context, req resource.
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"asn": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Autonomous system number.").String,
+			"admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").String,
 				Required:            true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
-				},
-			},
-			"vrf": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
-				Required:            true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
-				},
-			},
-			"address": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Peer address.").String,
-				Required:            true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
-				},
-			},
-			"address_family": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Address Family.").AddStringEnumDescription("ipv4-ucast", "ipv4-mvpn", "vpnv4-ucast", "ipv6-ucast", "vpnv6-ucast", "l2vpn-evpn", "lnkstate").AddDefaultValueDescription("ipv4-ucast").String,
-				Required:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("ipv4-ucast", "ipv4-mvpn", "vpnv4-ucast", "ipv6-ucast", "vpnv6-ucast", "l2vpn-evpn", "lnkstate"),
-				},
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
-				},
-			},
-			"control": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:\n  - Single value. Example: `nh-self`\n  - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.").String,
-				Optional:            true,
-			},
-			"send_community_extended": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Send-community extended.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("disabled"),
-				Validators: []validator.String{
-					stringvalidator.OneOf("enabled", "disabled"),
-				},
-			},
-			"send_community_standard": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Send-community standard.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("disabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
@@ -127,7 +80,7 @@ func (r *BGPPeerAddressFamilyResource) Schema(ctx context.Context, req resource.
 	}
 }
 
-func (r *BGPPeerAddressFamilyResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *FeatureNgMvpnResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -136,8 +89,8 @@ func (r *BGPPeerAddressFamilyResource) Configure(ctx context.Context, req resour
 	r.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
-func (r *BGPPeerAddressFamilyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan BGPPeerAddressFamily
+func (r *FeatureNgMvpnResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan FeatureNgMvpn
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -166,8 +119,8 @@ func (r *BGPPeerAddressFamilyResource) Create(ctx context.Context, req resource.
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
-func (r *BGPPeerAddressFamilyResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state BGPPeerAddressFamily
+func (r *FeatureNgMvpnResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state FeatureNgMvpn
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -199,8 +152,8 @@ func (r *BGPPeerAddressFamilyResource) Read(ctx context.Context, req resource.Re
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
-func (r *BGPPeerAddressFamilyResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan BGPPeerAddressFamily
+func (r *FeatureNgMvpnResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan FeatureNgMvpn
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -224,8 +177,8 @@ func (r *BGPPeerAddressFamilyResource) Update(ctx context.Context, req resource.
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *BGPPeerAddressFamilyResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state BGPPeerAddressFamily
+func (r *FeatureNgMvpnResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state FeatureNgMvpn
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -261,7 +214,7 @@ func (r *BGPPeerAddressFamilyResource) Delete(ctx context.Context, req resource.
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *BGPPeerAddressFamilyResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *FeatureNgMvpnResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

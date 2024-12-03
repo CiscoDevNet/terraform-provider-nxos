@@ -33,23 +33,23 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &FeatureNgMvpnDataSource{}
-	_ datasource.DataSourceWithConfigure = &FeatureNgMvpnDataSource{}
+	_ datasource.DataSource              = &FeatureNgMVPNDataSource{}
+	_ datasource.DataSourceWithConfigure = &FeatureNgMVPNDataSource{}
 )
 
-func NewFeatureNgMvpnDataSource() datasource.DataSource {
-	return &FeatureNgMvpnDataSource{}
+func NewFeatureNgMVPNDataSource() datasource.DataSource {
+	return &FeatureNgMVPNDataSource{}
 }
 
-type FeatureNgMvpnDataSource struct {
+type FeatureNgMVPNDataSource struct {
 	clients map[string]*nxos.Client
 }
 
-func (d *FeatureNgMvpnDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+func (d *FeatureNgMVPNDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_feature_ngmvpn"
 }
 
-func (d *FeatureNgMvpnDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *FeatureNgMVPNDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read the Next Generation Multicast VPN Feature.", "fmNgmvpn", "Feature%20Management/fm:NgMvpn/").String,
@@ -71,7 +71,7 @@ func (d *FeatureNgMvpnDataSource) Schema(ctx context.Context, req datasource.Sch
 	}
 }
 
-func (d *FeatureNgMvpnDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *FeatureNgMVPNDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -79,8 +79,8 @@ func (d *FeatureNgMvpnDataSource) Configure(_ context.Context, req datasource.Co
 	d.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
-func (d *FeatureNgMvpnDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config FeatureNgMvpn
+func (d *FeatureNgMVPNDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config FeatureNgMVPN
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

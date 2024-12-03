@@ -25,13 +25,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccNxosFeatureNgMvpn(t *testing.T) {
+func TestAccNxosFeatureNgMVPN(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosFeatureNgMvpnConfig_all(),
+				Config: testAccNxosFeatureNgMVPNConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_feature_ngmvpn.test", "admin_state", "enabled"),
 				),
@@ -45,7 +45,7 @@ func TestAccNxosFeatureNgMvpn(t *testing.T) {
 	})
 }
 
-func testAccNxosFeatureNgMvpnConfig_minimum() string {
+func testAccNxosFeatureNgMVPNConfig_minimum() string {
 	return `
 	resource "nxos_feature_ngmvpn" "test" {
 		admin_state = "enabled"
@@ -53,7 +53,7 @@ func testAccNxosFeatureNgMvpnConfig_minimum() string {
 	`
 }
 
-func testAccNxosFeatureNgMvpnConfig_all() string {
+func testAccNxosFeatureNgMVPNConfig_all() string {
 	return `
 	resource "nxos_feature_ngmvpn" "test" {
 		admin_state = "enabled"

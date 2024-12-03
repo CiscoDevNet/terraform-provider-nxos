@@ -26,21 +26,21 @@ import (
 	"github.com/tidwall/sjson"
 )
 
-type FeatureNgMvpn struct {
+type FeatureNgMVPN struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
 	AdminState types.String `tfsdk:"admin_state"`
 }
 
-func (data FeatureNgMvpn) getDn() string {
+func (data FeatureNgMVPN) getDn() string {
 	return "sys/fm/ngmvpn"
 }
 
-func (data FeatureNgMvpn) getClassName() string {
+func (data FeatureNgMVPN) getClassName() string {
 	return "fmNgmvpn"
 }
 
-func (data FeatureNgMvpn) toBody() nxos.Body {
+func (data FeatureNgMVPN) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
@@ -50,7 +50,7 @@ func (data FeatureNgMvpn) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *FeatureNgMvpn) fromBody(res gjson.Result, all bool) {
+func (data *FeatureNgMVPN) fromBody(res gjson.Result, all bool) {
 	if !data.AdminState.IsNull() || all {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
@@ -58,7 +58,7 @@ func (data *FeatureNgMvpn) fromBody(res gjson.Result, all bool) {
 	}
 }
 
-func (data FeatureNgMvpn) toDeleteBody() nxos.Body {
+func (data FeatureNgMVPN) toDeleteBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "disabled")
 

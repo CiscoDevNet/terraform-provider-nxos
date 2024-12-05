@@ -51,9 +51,12 @@ func (data PIMSSMRange) getClassName() string {
 	return "pimSSMRangeP"
 }
 
-func (data PIMSSMRange) toBody() nxos.Body {
+func (data PIMSSMRange) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if statusReplace {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
+	}
 	if (!data.GroupList1.IsUnknown() && !data.GroupList1.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"grpList", data.GroupList1.ValueString())
 	}

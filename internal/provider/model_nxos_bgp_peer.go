@@ -56,9 +56,12 @@ func (data BGPPeer) getClassName() string {
 	return "bgpPeer"
 }
 
-func (data BGPPeer) toBody() nxos.Body {
+func (data BGPPeer) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if statusReplace {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
+	}
 	if (!data.Address.IsUnknown() && !data.Address.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"addr", data.Address.ValueString())
 	}

@@ -92,10 +92,10 @@ func (r *BGPPeerAddressFamilyResource) Schema(ctx context.Context, req resource.
 				},
 			},
 			"address_family": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Address Family.").AddStringEnumDescription("ipv4-ucast", "vpnv4-ucast", "ipv6-ucast", "vpnv6-ucast", "l2vpn-evpn", "lnkstate").AddDefaultValueDescription("ipv4-ucast").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Address Family.").AddStringEnumDescription("ipv4-ucast", "ipv4-mvpn", "vpnv4-ucast", "ipv6-ucast", "vpnv6-ucast", "l2vpn-evpn", "lnkstate").AddDefaultValueDescription("ipv4-ucast").String,
 				Required:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("ipv4-ucast", "vpnv4-ucast", "ipv6-ucast", "vpnv6-ucast", "l2vpn-evpn", "lnkstate"),
+					stringvalidator.OneOf("ipv4-ucast", "ipv4-mvpn", "vpnv4-ucast", "ipv6-ucast", "vpnv6-ucast", "l2vpn-evpn", "lnkstate"),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),

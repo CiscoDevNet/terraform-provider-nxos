@@ -37,6 +37,7 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
+<<<<<<< HEAD
 var _ resource.Resource = &FeatureNgMvpnResource{}
 var _ resource.ResourceWithImportState = &FeatureNgMvpnResource{}
 
@@ -53,6 +54,24 @@ func (r *FeatureNgMvpnResource) Metadata(ctx context.Context, req resource.Metad
 }
 
 func (r *FeatureNgMvpnResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+=======
+var _ resource.Resource = &FeatureNgMVPNResource{}
+var _ resource.ResourceWithImportState = &FeatureNgMVPNResource{}
+
+func NewFeatureNgMVPNResource() resource.Resource {
+	return &FeatureNgMVPNResource{}
+}
+
+type FeatureNgMVPNResource struct {
+	clients map[string]*nxos.Client
+}
+
+func (r *FeatureNgMVPNResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_feature_ngmvpn"
+}
+
+func (r *FeatureNgMVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+>>>>>>> main
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Next Generation Multicast VPN Feature.", "fmNgmvpn", "Feature%20Management/fm:NgMvpn/").String,
@@ -80,7 +99,11 @@ func (r *FeatureNgMvpnResource) Schema(ctx context.Context, req resource.SchemaR
 	}
 }
 
+<<<<<<< HEAD
 func (r *FeatureNgMvpnResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+=======
+func (r *FeatureNgMVPNResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+>>>>>>> main
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -89,8 +112,13 @@ func (r *FeatureNgMvpnResource) Configure(ctx context.Context, req resource.Conf
 	r.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
+<<<<<<< HEAD
 func (r *FeatureNgMvpnResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan FeatureNgMvpn
+=======
+func (r *FeatureNgMVPNResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan FeatureNgMVPN
+>>>>>>> main
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -119,8 +147,13 @@ func (r *FeatureNgMvpnResource) Create(ctx context.Context, req resource.CreateR
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
+<<<<<<< HEAD
 func (r *FeatureNgMvpnResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state FeatureNgMvpn
+=======
+func (r *FeatureNgMVPNResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state FeatureNgMVPN
+>>>>>>> main
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -152,8 +185,13 @@ func (r *FeatureNgMvpnResource) Read(ctx context.Context, req resource.ReadReque
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
+<<<<<<< HEAD
 func (r *FeatureNgMvpnResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan FeatureNgMvpn
+=======
+func (r *FeatureNgMVPNResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan FeatureNgMVPN
+>>>>>>> main
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -177,8 +215,13 @@ func (r *FeatureNgMvpnResource) Update(ctx context.Context, req resource.UpdateR
 	resp.Diagnostics.Append(diags...)
 }
 
+<<<<<<< HEAD
 func (r *FeatureNgMvpnResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state FeatureNgMvpn
+=======
+func (r *FeatureNgMVPNResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state FeatureNgMVPN
+>>>>>>> main
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -214,7 +257,11 @@ func (r *FeatureNgMvpnResource) Delete(ctx context.Context, req resource.DeleteR
 	resp.State.RemoveResource(ctx)
 }
 
+<<<<<<< HEAD
 func (r *FeatureNgMvpnResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+=======
+func (r *FeatureNgMVPNResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+>>>>>>> main
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

@@ -42,9 +42,12 @@ func (data DefaultQOSPolicyInterfaceIn) getClassName() string {
 	return "ipqosIf"
 }
 
-func (data DefaultQOSPolicyInterfaceIn) toBody() nxos.Body {
+func (data DefaultQOSPolicyInterfaceIn) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if statusReplace {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
+	}
 	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.InterfaceId.ValueString())
 	}

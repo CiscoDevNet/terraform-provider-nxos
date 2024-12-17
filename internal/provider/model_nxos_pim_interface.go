@@ -50,9 +50,12 @@ func (data PIMInterface) getClassName() string {
 	return "pimIf"
 }
 
-func (data PIMInterface) toBody() nxos.Body {
+func (data PIMInterface) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if statusReplace {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
+	}
 	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.InterfaceId.ValueString())
 	}

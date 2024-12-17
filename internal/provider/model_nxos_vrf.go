@@ -44,9 +44,12 @@ func (data VRF) getClassName() string {
 	return "l3Inst"
 }
 
-func (data VRF) toBody() nxos.Body {
+func (data VRF) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if statusReplace {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
+	}
 	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}

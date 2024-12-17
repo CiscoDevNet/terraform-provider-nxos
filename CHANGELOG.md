@@ -1,4 +1,4 @@
-## 0.5.6 (unreleased)
+## 0.5.6
 
 - Fix value range of `ebgp_multihop_ttl` attribute of `nxos_bgp_peer` resource
 - Add `nxos_feature_ngmvpn` resource and data source

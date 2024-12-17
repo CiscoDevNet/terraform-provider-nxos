@@ -1,6 +1,8 @@
 ## 0.5.6 (unreleased)
 
 - Fix value range of `ebgp_multihop_ttl` attribute of `nxos_bgp_peer` resource
+- Add `nxos_feature_ngmvpn` resource and data source
+- Fix issue when updating `nxos_ipv4_access_list_entry` resource, [link](https://github.com/CiscoDevNet/terraform-provider-nxos/issues/204)
 
 ## 0.5.5
 

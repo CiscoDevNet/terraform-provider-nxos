@@ -37,6 +37,21 @@ type BGPAddressFamily struct {
 	AddressFamily             types.String `tfsdk:"address_family"`
 	CriticalNexthopTimeout    types.Int64  `tfsdk:"critical_nexthop_timeout"`
 	NonCriticalNexthopTimeout types.Int64  `tfsdk:"non_critical_nexthop_timeout"`
+	AdvL2vpnEvpn              types.String `tfsdk:"adv_l2vpn_evpn"`
+	AdvPhyipForType5Routes    types.String `tfsdk:"adv_phyip_for_type5_routes"`
+	MaxEcmpPaths              types.Int64  `tfsdk:"max_ecmp_paths"`
+	MaxExtEcmpPaths           types.Int64  `tfsdk:"max_ext_ecmp_paths"`
+	MaxExtIntEcmpPaths        types.Int64  `tfsdk:"max_ext_int_ecmp_paths"`
+	MaxEqcostEcmpPaths        types.Int64  `tfsdk:"max_eqcost_ecmp_paths"`
+	MaxMixcostEcmpPaths       types.Int64  `tfsdk:"max_mixcost_ecmp_paths"`
+	DefInfOriginate           types.String `tfsdk:"def_inf_originate"`
+	NextHopRouteMapName       types.String `tfsdk:"next_hop_route_map_name"`
+	PrefixPriority            types.String `tfsdk:"prefix_priority"`
+	RetainRtAll               types.String `tfsdk:"retain_rt_all"`
+	AdvOnlyActRoutes          types.String `tfsdk:"adv_only_act_routes"`
+	RouteMapName              types.String `tfsdk:"route_map_name"`
+	VniEthtag                 types.String `tfsdk:"vni_ethtag"`
+	WaitIgpConv               types.String `tfsdk:"wait_igp_conv"`
 }
 
 func (data BGPAddressFamily) getDn() string {
@@ -62,6 +77,51 @@ func (data BGPAddressFamily) toBody(statusReplace bool) nxos.Body {
 	if (!data.NonCriticalNexthopTimeout.IsUnknown() && !data.NonCriticalNexthopTimeout.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"nonCritNhTimeout", strconv.FormatInt(data.NonCriticalNexthopTimeout.ValueInt64(), 10))
 	}
+	if (!data.AdvL2vpnEvpn.IsUnknown() && !data.AdvL2vpnEvpn.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"advertL2vpnEvpn", data.AdvL2vpnEvpn.ValueString())
+	}
+	if (!data.AdvPhyipForType5Routes.IsUnknown() && !data.AdvPhyipForType5Routes.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"advPip", data.AdvPhyipForType5Routes.ValueString())
+	}
+	if (!data.MaxEcmpPaths.IsUnknown() && !data.MaxEcmpPaths.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxEcmp", strconv.FormatInt(data.MaxEcmpPaths.ValueInt64(), 10))
+	}
+	if (!data.MaxExtEcmpPaths.IsUnknown() && !data.MaxExtEcmpPaths.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxExtEcmp", strconv.FormatInt(data.MaxExtEcmpPaths.ValueInt64(), 10))
+	}
+	if (!data.MaxExtIntEcmpPaths.IsUnknown() && !data.MaxExtIntEcmpPaths.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxExtIntEcmp", strconv.FormatInt(data.MaxExtIntEcmpPaths.ValueInt64(), 10))
+	}
+	if (!data.MaxEqcostEcmpPaths.IsUnknown() && !data.MaxEqcostEcmpPaths.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxLclEcmp", strconv.FormatInt(data.MaxEqcostEcmpPaths.ValueInt64(), 10))
+	}
+	if (!data.MaxMixcostEcmpPaths.IsUnknown() && !data.MaxMixcostEcmpPaths.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxMxdEcmp", strconv.FormatInt(data.MaxMixcostEcmpPaths.ValueInt64(), 10))
+	}
+	if (!data.DefInfOriginate.IsUnknown() && !data.DefInfOriginate.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"defInfOriginate", data.DefInfOriginate.ValueString())
+	}
+	if (!data.NextHopRouteMapName.IsUnknown() && !data.NextHopRouteMapName.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"nhRtMap", data.NextHopRouteMapName.ValueString())
+	}
+	if (!data.PrefixPriority.IsUnknown() && !data.PrefixPriority.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"prfxPriority", data.PrefixPriority.ValueString())
+	}
+	if (!data.RetainRtAll.IsUnknown() && !data.RetainRtAll.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"retainRttAll", data.RetainRtAll.ValueString())
+	}
+	if (!data.AdvOnlyActRoutes.IsUnknown() && !data.AdvOnlyActRoutes.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"supprInactive", data.AdvOnlyActRoutes.ValueString())
+	}
+	if (!data.RouteMapName.IsUnknown() && !data.RouteMapName.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"tblMap", data.RouteMapName.ValueString())
+	}
+	if (!data.VniEthtag.IsUnknown() && !data.VniEthtag.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"vniEthTag", data.VniEthtag.ValueString())
+	}
+	if (!data.WaitIgpConv.IsUnknown() && !data.WaitIgpConv.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"waitIgpConv", data.WaitIgpConv.ValueString())
+	}
 
 	return nxos.Body{body}
 }
@@ -81,6 +141,81 @@ func (data *BGPAddressFamily) fromBody(res gjson.Result, all bool) {
 		data.NonCriticalNexthopTimeout = types.Int64Value(res.Get(data.getClassName() + ".attributes.nonCritNhTimeout").Int())
 	} else {
 		data.NonCriticalNexthopTimeout = types.Int64Null()
+	}
+	if !data.AdvL2vpnEvpn.IsNull() || all {
+		data.AdvL2vpnEvpn = types.StringValue(res.Get(data.getClassName() + ".attributes.advertL2vpnEvpn").String())
+	} else {
+		data.AdvL2vpnEvpn = types.StringNull()
+	}
+	if !data.AdvPhyipForType5Routes.IsNull() || all {
+		data.AdvPhyipForType5Routes = types.StringValue(res.Get(data.getClassName() + ".attributes.advPip").String())
+	} else {
+		data.AdvPhyipForType5Routes = types.StringNull()
+	}
+	if !data.MaxEcmpPaths.IsNull() || all {
+		data.MaxEcmpPaths = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxEcmp").Int())
+	} else {
+		data.MaxEcmpPaths = types.Int64Null()
+	}
+	if !data.MaxExtEcmpPaths.IsNull() || all {
+		data.MaxExtEcmpPaths = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxExtEcmp").Int())
+	} else {
+		data.MaxExtEcmpPaths = types.Int64Null()
+	}
+	if !data.MaxExtIntEcmpPaths.IsNull() || all {
+		data.MaxExtIntEcmpPaths = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxExtIntEcmp").Int())
+	} else {
+		data.MaxExtIntEcmpPaths = types.Int64Null()
+	}
+	if !data.MaxEqcostEcmpPaths.IsNull() || all {
+		data.MaxEqcostEcmpPaths = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxLclEcmp").Int())
+	} else {
+		data.MaxEqcostEcmpPaths = types.Int64Null()
+	}
+	if !data.MaxMixcostEcmpPaths.IsNull() || all {
+		data.MaxMixcostEcmpPaths = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxMxdEcmp").Int())
+	} else {
+		data.MaxMixcostEcmpPaths = types.Int64Null()
+	}
+	if !data.DefInfOriginate.IsNull() || all {
+		data.DefInfOriginate = types.StringValue(res.Get(data.getClassName() + ".attributes.defInfOriginate").String())
+	} else {
+		data.DefInfOriginate = types.StringNull()
+	}
+	if !data.NextHopRouteMapName.IsNull() || all {
+		data.NextHopRouteMapName = types.StringValue(res.Get(data.getClassName() + ".attributes.nhRtMap").String())
+	} else {
+		data.NextHopRouteMapName = types.StringNull()
+	}
+	if !data.PrefixPriority.IsNull() || all {
+		data.PrefixPriority = types.StringValue(res.Get(data.getClassName() + ".attributes.prfxPriority").String())
+	} else {
+		data.PrefixPriority = types.StringNull()
+	}
+	if !data.RetainRtAll.IsNull() || all {
+		data.RetainRtAll = types.StringValue(res.Get(data.getClassName() + ".attributes.retainRttAll").String())
+	} else {
+		data.RetainRtAll = types.StringNull()
+	}
+	if !data.AdvOnlyActRoutes.IsNull() || all {
+		data.AdvOnlyActRoutes = types.StringValue(res.Get(data.getClassName() + ".attributes.supprInactive").String())
+	} else {
+		data.AdvOnlyActRoutes = types.StringNull()
+	}
+	if !data.RouteMapName.IsNull() || all {
+		data.RouteMapName = types.StringValue(res.Get(data.getClassName() + ".attributes.tblMap").String())
+	} else {
+		data.RouteMapName = types.StringNull()
+	}
+	if !data.VniEthtag.IsNull() || all {
+		data.VniEthtag = types.StringValue(res.Get(data.getClassName() + ".attributes.vniEthTag").String())
+	} else {
+		data.VniEthtag = types.StringNull()
+	}
+	if !data.WaitIgpConv.IsNull() || all {
+		data.WaitIgpConv = types.StringValue(res.Get(data.getClassName() + ".attributes.waitIgpConv").String())
+	} else {
+		data.WaitIgpConv = types.StringNull()
 	}
 }
 

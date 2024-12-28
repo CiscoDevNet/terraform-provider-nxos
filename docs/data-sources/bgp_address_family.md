@@ -38,6 +38,21 @@ data "nxos_bgp_address_family" "example" {
 
 ### Read-Only
 
+- `adv_l2vpn_evpn` (String) Enable or disable the advertisement of L2VPN EVPN routes.
+- `adv_only_act_routes` (String) Advertise only active routes to peers
+- `adv_phyip_for_type5_routes` (String) Advertise physical IP for type-5 routes
 - `critical_nexthop_timeout` (Number) The next-hop address tracking delay timer for critical next-hop reachability routes.
+- `def_inf_originate` (String) Enable or disable the default-information originate.
 - `id` (String) The distinguished name of the object.
+- `max_ecmp_paths` (Number) Maximum number of ECMP paths.
+- `max_eqcost_ecmp_paths` (Number) Maximum number of equal-cost multipath for local paths ECMP paths.
+- `max_ext_ecmp_paths` (Number) Maximum number of external ECMP paths.
+- `max_ext_int_ecmp_paths` (Number) Maximum number of external/internal ECMP paths.
+- `max_mixcost_ecmp_paths` (Number) Maximum mixed equal-cost multipath for local and remote ECMP paths.
+- `next_hop_route_map_name` (String) Next hope route map name
 - `non_critical_nexthop_timeout` (Number) The next-hop address tracking delay timer for non-critical next-hop reachability routes.
+- `prefix_priority` (String) Enable prefix priority for AF
+- `retain_rt_all` (String) Retain Route Target All
+- `route_map_name` (String) Route Map name
+- `vni_ethtag` (String) Allow VNI in Ethernet Tag field in EVPN route
+- `wait_igp_conv` (String) Delay initial bestpath until redistributed IGPs have converged

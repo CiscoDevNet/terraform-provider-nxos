@@ -36,6 +36,21 @@ func TestAccDataSourceNxosBGPAddressFamily(t *testing.T) {
 					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "address_family", "ipv4-ucast"),
 					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "critical_nexthop_timeout", "1800"),
 					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "non_critical_nexthop_timeout", "1800"),
+					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "adv_l2vpn_evpn", "disabled"),
+					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "adv_phyip_for_type5_routes", "disabled"),
+					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "max_ecmp_paths", "2"),
+					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "max_ext_ecmp_paths", "1"),
+					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "max_ext_int_ecmp_paths", "1"),
+					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "max_eqcost_ecmp_paths", "1"),
+					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "max_mixcost_ecmp_paths", "1"),
+					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "def_inf_originate", "disabled"),
+					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "next_hop_route_map_name", "ROUTEMAP1"),
+					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "prefix_priority", "none"),
+					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "retain_rt_all", "disabled"),
+					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "adv_only_act_routes", "disabled"),
+					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "route_map_name", "ROUTE_MAP1"),
+					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "vni_ethtag", "disabled"),
+					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "wait_igp_conv", "disabled"),
 				),
 			},
 		},
@@ -87,6 +102,21 @@ resource "nxos_bgp_address_family" "test" {
   address_family = "ipv4-ucast"
   critical_nexthop_timeout = 1800
   non_critical_nexthop_timeout = 1800
+  adv_l2vpn_evpn = "disabled"
+  adv_phyip_for_type5_routes = "disabled"
+  max_ecmp_paths = 2
+  max_ext_ecmp_paths = 1
+  max_ext_int_ecmp_paths = 1
+  max_eqcost_ecmp_paths = 1
+  max_mixcost_ecmp_paths = 1
+  def_inf_originate = "disabled"
+  next_hop_route_map_name = "ROUTEMAP1"
+  prefix_priority = "none"
+  retain_rt_all = "disabled"
+  adv_only_act_routes = "disabled"
+  route_map_name = "ROUTE_MAP1"
+  vni_ethtag = "disabled"
+  wait_igp_conv = "disabled"
   depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 }
 

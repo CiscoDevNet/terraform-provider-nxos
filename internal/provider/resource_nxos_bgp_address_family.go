@@ -31,6 +31,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -111,6 +112,131 @@ func (r *BGPAddressFamilyResource) Schema(ctx context.Context, req resource.Sche
 				Default:             int64default.StaticInt64(10000),
 				Validators: []validator.Int64{
 					int64validator.Between(1, 4294967295),
+				},
+			},
+			"adv_l2vpn_evpn": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable or disable the advertisement of L2VPN EVPN routes.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("disabled"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"adv_phyip_for_type5_routes": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise physical IP for type-5 routes").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("disabled"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"max_ecmp_paths": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum number of ECMP paths.").AddIntegerRangeDescription(1, 128).AddDefaultValueDescription("1").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             int64default.StaticInt64(1),
+				Validators: []validator.Int64{
+					int64validator.Between(1, 128),
+				},
+			},
+			"max_ext_ecmp_paths": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum number of external ECMP paths.").AddIntegerRangeDescription(1, 128).AddDefaultValueDescription("1").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             int64default.StaticInt64(1),
+				Validators: []validator.Int64{
+					int64validator.Between(1, 128),
+				},
+			},
+			"max_ext_int_ecmp_paths": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum number of external/internal ECMP paths.").AddIntegerRangeDescription(1, 128).AddDefaultValueDescription("1").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             int64default.StaticInt64(1),
+				Validators: []validator.Int64{
+					int64validator.Between(1, 128),
+				},
+			},
+			"max_eqcost_ecmp_paths": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum number of equal-cost multipath for local paths ECMP paths.").AddIntegerRangeDescription(1, 128).AddDefaultValueDescription("1").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             int64default.StaticInt64(1),
+				Validators: []validator.Int64{
+					int64validator.Between(1, 128),
+				},
+			},
+			"max_mixcost_ecmp_paths": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum mixed equal-cost multipath for local and remote ECMP paths.").AddIntegerRangeDescription(1, 128).AddDefaultValueDescription("1").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             int64default.StaticInt64(1),
+				Validators: []validator.Int64{
+					int64validator.Between(1, 128),
+				},
+			},
+			"def_inf_originate": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable or disable the default-information originate.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("disabled"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"next_hop_route_map_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Next hope route map name").String,
+				Optional:            true,
+			},
+			"prefix_priority": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable prefix priority for AF").AddStringEnumDescription("none", "high").AddDefaultValueDescription("none").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("none"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("none", "high"),
+				},
+			},
+			"retain_rt_all": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Retain Route Target All").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("disabled"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"adv_only_act_routes": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise only active routes to peers").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("disabled"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"route_map_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route Map name").String,
+				Optional:            true,
+			},
+			"vni_ethtag": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow VNI in Ethernet Tag field in EVPN route").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("disabled"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"wait_igp_conv": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Delay initial bestpath until redistributed IGPs have converged").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("disabled"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
 		},

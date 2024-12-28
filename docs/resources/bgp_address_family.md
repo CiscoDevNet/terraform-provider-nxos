@@ -35,6 +35,21 @@ resource "nxos_bgp_address_family" "example" {
   address_family               = "ipv4-ucast"
   critical_nexthop_timeout     = 1800
   non_critical_nexthop_timeout = 1800
+  adv_l2vpn_evpn               = "disabled"
+  adv_phyip_for_type5_routes   = "disabled"
+  max_ecmp_paths               = 2
+  max_ext_ecmp_paths           = 1
+  max_ext_int_ecmp_paths       = 1
+  max_eqcost_ecmp_paths        = 1
+  max_mixcost_ecmp_paths       = 1
+  def_inf_originate            = "disabled"
+  next_hop_route_map_name      = "ROUTEMAP1"
+  prefix_priority              = "none"
+  retain_rt_all                = "disabled"
+  adv_only_act_routes          = "disabled"
+  route_map_name               = "ROUTE_MAP1"
+  vni_ethtag                   = "disabled"
+  wait_igp_conv                = "disabled"
 }
 ```
 
@@ -51,13 +66,54 @@ resource "nxos_bgp_address_family" "example" {
 
 ### Optional
 
+- `adv_l2vpn_evpn` (String) Enable or disable the advertisement of L2VPN EVPN routes.
+  - Choices: `enabled`, `disabled`
+  - Default value: `disabled`
+- `adv_only_act_routes` (String) Advertise only active routes to peers
+  - Choices: `enabled`, `disabled`
+  - Default value: `disabled`
+- `adv_phyip_for_type5_routes` (String) Advertise physical IP for type-5 routes
+  - Choices: `enabled`, `disabled`
+  - Default value: `disabled`
 - `critical_nexthop_timeout` (Number) The next-hop address tracking delay timer for critical next-hop reachability routes.
   - Range: `1`-`4294967295`
   - Default value: `3000`
+- `def_inf_originate` (String) Enable or disable the default-information originate.
+  - Choices: `enabled`, `disabled`
+  - Default value: `disabled`
 - `device` (String) A device name from the provider configuration.
+- `max_ecmp_paths` (Number) Maximum number of ECMP paths.
+  - Range: `1`-`128`
+  - Default value: `1`
+- `max_eqcost_ecmp_paths` (Number) Maximum number of equal-cost multipath for local paths ECMP paths.
+  - Range: `1`-`128`
+  - Default value: `1`
+- `max_ext_ecmp_paths` (Number) Maximum number of external ECMP paths.
+  - Range: `1`-`128`
+  - Default value: `1`
+- `max_ext_int_ecmp_paths` (Number) Maximum number of external/internal ECMP paths.
+  - Range: `1`-`128`
+  - Default value: `1`
+- `max_mixcost_ecmp_paths` (Number) Maximum mixed equal-cost multipath for local and remote ECMP paths.
+  - Range: `1`-`128`
+  - Default value: `1`
+- `next_hop_route_map_name` (String) Next hope route map name
 - `non_critical_nexthop_timeout` (Number) The next-hop address tracking delay timer for non-critical next-hop reachability routes.
   - Range: `1`-`4294967295`
   - Default value: `10000`
+- `prefix_priority` (String) Enable prefix priority for AF
+  - Choices: `none`, `high`
+  - Default value: `none`
+- `retain_rt_all` (String) Retain Route Target All
+  - Choices: `enabled`, `disabled`
+  - Default value: `disabled`
+- `route_map_name` (String) Route Map name
+- `vni_ethtag` (String) Allow VNI in Ethernet Tag field in EVPN route
+  - Choices: `enabled`, `disabled`
+  - Default value: `disabled`
+- `wait_igp_conv` (String) Delay initial bestpath until redistributed IGPs have converged
+  - Choices: `enabled`, `disabled`
+  - Default value: `disabled`
 
 ### Read-Only
 

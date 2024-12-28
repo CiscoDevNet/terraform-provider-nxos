@@ -16,20 +16,20 @@ attributes:
     tf_name: asn
     type: String
     reference_only: true
-    description: 'Autonomous system number.'
-    example: '65001'
+    description: "Autonomous system number."
+    example: "65001"
   - nxos_name: name
     tf_name: vrf
     type: String
     id: true
     reference_only: true
-    description: 'VRF name.'
+    description: "VRF name."
     example: default
   - nxos_name: type
     tf_name: address_family
     type: String
     id: true
-    description: 'Address Family.'
+    description: "Address Family."
     enum_values:
       - ipv4-ucast
       - ipv4-mcast
@@ -46,12 +46,12 @@ attributes:
       - ipv6-mvpn
       - l2vpn-vpls
       - ipv4-mdt
-    default_value: 'ipv4-ucast'
-    example: 'ipv4-ucast'
+    default_value: "ipv4-ucast"
+    example: "ipv4-ucast"
   - nxos_name: critNhTimeout
     tf_name: critical_nexthop_timeout
     type: Int64
-    description: 'The next-hop address tracking delay timer for critical next-hop reachability routes.'
+    description: "The next-hop address tracking delay timer for critical next-hop reachability routes."
     min_int: 1
     max_int: 4294967295
     default_value: 3000
@@ -59,11 +59,135 @@ attributes:
   - nxos_name: nonCritNhTimeout
     tf_name: non_critical_nexthop_timeout
     type: Int64
-    description: 'The next-hop address tracking delay timer for non-critical next-hop reachability routes.'
+    description: "The next-hop address tracking delay timer for non-critical next-hop reachability routes."
     min_int: 1
     max_int: 4294967295
     default_value: 10000
     example: 1800
+  - nxos_name: advertL2vpnEvpn
+    tf_name: adv_l2vpn_evpn
+    type: String
+    description: "Enable or disable the advertisement of L2VPN EVPN routes."
+    enum_values:
+      - enabled
+      - disabled
+    default_value: disabled
+    example: disabled
+  - nxos_name: advPip
+    tf_name: adv_phyip_for_type5_routes
+    type: String
+    description: "Advertise physical IP for type-5 routes"
+    enum_values:
+      - enabled
+      - disabled
+    default_value: disabled
+    example: disabled
+  - nxos_name: maxEcmp
+    tf_name: max_ecmp_paths
+    type: Int64
+    description: "Maximum number of ECMP paths."
+    min_int: 1
+    max_int: 128
+    default_value: 1
+    example: 2
+  - nxos_name: maxExtEcmp
+    tf_name: max_ext_ecmp_paths
+    type: Int64
+    description: "Maximum number of external ECMP paths."
+    min_int: 1
+    max_int: 128
+    default_value: 1
+    example: 1
+  - nxos_name: maxExtIntEcmp
+    tf_name: max_ext_int_ecmp_paths
+    type: Int64
+    description: "Maximum number of external/internal ECMP paths."
+    min_int: 1
+    max_int: 128
+    default_value: 1
+    example: 1
+  - nxos_name: maxLclEcmp
+    tf_name: max_eqcost_ecmp_paths
+    type: Int64
+    description: "Maximum number of equal-cost multipath for local paths ECMP paths."
+    min_int: 1
+    max_int: 128
+    default_value: 1
+    example: 1
+  - nxos_name: maxMxdEcmp
+    tf_name: max_mixcost_ecmp_paths
+    type: Int64
+    description: "Maximum mixed equal-cost multipath for local and remote ECMP paths."
+    min_int: 1
+    max_int: 128
+    default_value: 1
+    example: 1
+  - nxos_name: defInfOriginate
+    tf_name: def_inf_originate
+    type: String
+    description: "Enable or disable the default-information originate."
+    enum_values:
+      - enabled
+      - disabled
+    default_value: disabled
+    example: disabled
+  - nxos_name: nhRtMap
+    tf_name: next_hop_route_map_name
+    type: String
+    description: "Next hope route map name"
+    example: ROUTEMAP1
+    default_value: ""
+  - nxos_name: prfxPriority
+    tf_name: prefix_priority
+    type: String
+    description: "Enable prefix priority for AF"
+    enum_values:
+      - none
+      - high
+    default_value: none
+    example: none
+  - nxos_name: retainRttAll
+    tf_name: retain_rt_all
+    type: String
+    description: "Retain Route Target All"
+    enum_values:
+      - enabled
+      - disabled
+    default_value: disabled
+    example: disabled
+  - nxos_name: supprInactive
+    tf_name: adv_only_act_routes
+    type: String
+    description: "Advertise only active routes to peers"
+    enum_values:
+      - enabled
+      - disabled
+    default_value: disabled
+    example: disabled
+  - nxos_name: tblMap
+    tf_name: route_map_name
+    type: String
+    description: "Route Map name"
+    example: ROUTE_MAP1
+    default_value: ""
+  - nxos_name: vniEthTag
+    tf_name: vni_ethtag
+    type: String
+    description: "Allow VNI in Ethernet Tag field in EVPN route"
+    enum_values:
+      - enabled
+      - disabled
+    default_value: disabled
+    example: disabled
+  - nxos_name: waitIgpConv
+    tf_name: wait_igp_conv
+    type: String
+    description: "Delay initial bestpath until redistributed IGPs have converged"
+    enum_values:
+      - enabled
+      - disabled
+    default_value: disabled
+    example: disabled
 test_prerequisites:
   - dn: sys/fm/bgp
     class_name: fmBgp
@@ -80,7 +204,7 @@ test_prerequisites:
       - name: adminSt
         value: enabled
       - name: asn
-        value: '65001'
+        value: "65001"
     dependencies: [1]
   - dn: sys/bgp/inst/dom-[default]
     class_name: bgpDom

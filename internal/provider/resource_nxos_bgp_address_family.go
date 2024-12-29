@@ -96,23 +96,17 @@ func (r *BGPAddressFamilyResource) Schema(ctx context.Context, req resource.Sche
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"critical_nexthop_timeout": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The next-hop address tracking delay timer for critical next-hop reachability routes.").AddIntegerRangeDescription(1, 4294967295).AddDefaultValueDescription("3000").String,
+			"critical_nexthop_timeout": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The next-hop address tracking delay timer for critical next-hop reachability routes.").AddDefaultValueDescription("crit").String,
 				Optional:            true,
 				Computed:            true,
-				Default:             int64default.StaticInt64(3000),
-				Validators: []validator.Int64{
-					int64validator.Between(1, 4294967295),
-				},
+				Default:             stringdefault.StaticString("crit"),
 			},
-			"non_critical_nexthop_timeout": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The next-hop address tracking delay timer for non-critical next-hop reachability routes.").AddIntegerRangeDescription(1, 4294967295).AddDefaultValueDescription("10000").String,
+			"non_critical_nexthop_timeout": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The next-hop address tracking delay timer for non-critical next-hop reachability routes.").AddDefaultValueDescription("noncrit").String,
 				Optional:            true,
 				Computed:            true,
-				Default:             int64default.StaticInt64(10000),
-				Validators: []validator.Int64{
-					int64validator.Between(1, 4294967295),
-				},
+				Default:             stringdefault.StaticString("noncrit"),
 			},
 			"adv_l2vpn_evpn": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable or disable the advertisement of L2VPN EVPN routes.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,

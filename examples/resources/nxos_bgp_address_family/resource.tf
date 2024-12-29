@@ -2,8 +2,8 @@ resource "nxos_bgp_address_family" "example" {
   asn                          = "65001"
   vrf                          = "default"
   address_family               = "ipv4-ucast"
-  critical_nexthop_timeout     = 1800
-  non_critical_nexthop_timeout = 1800
+  critical_nexthop_timeout     = "2500"
+  non_critical_nexthop_timeout = "8000"
   adv_l2vpn_evpn               = "disabled"
   adv_phyip_for_type5_routes   = "disabled"
   max_ecmp_paths               = 2

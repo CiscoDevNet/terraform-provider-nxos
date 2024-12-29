@@ -33,8 +33,8 @@ resource "nxos_bgp_address_family" "example" {
   asn                          = "65001"
   vrf                          = "default"
   address_family               = "ipv4-ucast"
-  critical_nexthop_timeout     = 1800
-  non_critical_nexthop_timeout = 1800
+  critical_nexthop_timeout     = "2500"
+  non_critical_nexthop_timeout = "8000"
   adv_l2vpn_evpn               = "disabled"
   adv_phyip_for_type5_routes   = "disabled"
   max_ecmp_paths               = 2
@@ -75,9 +75,8 @@ resource "nxos_bgp_address_family" "example" {
 - `adv_phyip_for_type5_routes` (String) Advertise physical IP for type-5 routes
   - Choices: `enabled`, `disabled`
   - Default value: `disabled`
-- `critical_nexthop_timeout` (Number) The next-hop address tracking delay timer for critical next-hop reachability routes.
-  - Range: `1`-`4294967295`
-  - Default value: `3000`
+- `critical_nexthop_timeout` (String) The next-hop address tracking delay timer for critical next-hop reachability routes.
+  - Default value: `crit`
 - `def_inf_originate` (String) Enable or disable the default-information originate.
   - Choices: `enabled`, `disabled`
   - Default value: `disabled`
@@ -98,9 +97,8 @@ resource "nxos_bgp_address_family" "example" {
   - Range: `1`-`128`
   - Default value: `1`
 - `next_hop_route_map_name` (String) Next hope route map name
-- `non_critical_nexthop_timeout` (Number) The next-hop address tracking delay timer for non-critical next-hop reachability routes.
-  - Range: `1`-`4294967295`
-  - Default value: `10000`
+- `non_critical_nexthop_timeout` (String) The next-hop address tracking delay timer for non-critical next-hop reachability routes.
+  - Default value: `noncrit`
 - `prefix_priority` (String) Enable prefix priority for AF
   - Choices: `none`, `high`
   - Default value: `none`

@@ -35,8 +35,8 @@ type BGPAddressFamily struct {
 	Asn                       types.String `tfsdk:"asn"`
 	Vrf                       types.String `tfsdk:"vrf"`
 	AddressFamily             types.String `tfsdk:"address_family"`
-	CriticalNexthopTimeout    types.Int64  `tfsdk:"critical_nexthop_timeout"`
-	NonCriticalNexthopTimeout types.Int64  `tfsdk:"non_critical_nexthop_timeout"`
+	CriticalNexthopTimeout    types.String `tfsdk:"critical_nexthop_timeout"`
+	NonCriticalNexthopTimeout types.String `tfsdk:"non_critical_nexthop_timeout"`
 	AdvL2vpnEvpn              types.String `tfsdk:"adv_l2vpn_evpn"`
 	AdvPhyipForType5Routes    types.String `tfsdk:"adv_phyip_for_type5_routes"`
 	MaxEcmpPaths              types.Int64  `tfsdk:"max_ecmp_paths"`
@@ -72,10 +72,10 @@ func (data BGPAddressFamily) toBody(statusReplace bool) nxos.Body {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.AddressFamily.ValueString())
 	}
 	if (!data.CriticalNexthopTimeout.IsUnknown() && !data.CriticalNexthopTimeout.IsNull()) || true {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"critNhTimeout", strconv.FormatInt(data.CriticalNexthopTimeout.ValueInt64(), 10))
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"critNhTimeout", data.CriticalNexthopTimeout.ValueString())
 	}
 	if (!data.NonCriticalNexthopTimeout.IsUnknown() && !data.NonCriticalNexthopTimeout.IsNull()) || true {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"nonCritNhTimeout", strconv.FormatInt(data.NonCriticalNexthopTimeout.ValueInt64(), 10))
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"nonCritNhTimeout", data.NonCriticalNexthopTimeout.ValueString())
 	}
 	if (!data.AdvL2vpnEvpn.IsUnknown() && !data.AdvL2vpnEvpn.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"advertL2vpnEvpn", data.AdvL2vpnEvpn.ValueString())
@@ -133,14 +133,14 @@ func (data *BGPAddressFamily) fromBody(res gjson.Result, all bool) {
 		data.AddressFamily = types.StringNull()
 	}
 	if !data.CriticalNexthopTimeout.IsNull() || all {
-		data.CriticalNexthopTimeout = types.Int64Value(res.Get(data.getClassName() + ".attributes.critNhTimeout").Int())
+		data.CriticalNexthopTimeout = types.StringValue(res.Get(data.getClassName() + ".attributes.critNhTimeout").String())
 	} else {
-		data.CriticalNexthopTimeout = types.Int64Null()
+		data.CriticalNexthopTimeout = types.StringNull()
 	}
 	if !data.NonCriticalNexthopTimeout.IsNull() || all {
-		data.NonCriticalNexthopTimeout = types.Int64Value(res.Get(data.getClassName() + ".attributes.nonCritNhTimeout").Int())
+		data.NonCriticalNexthopTimeout = types.StringValue(res.Get(data.getClassName() + ".attributes.nonCritNhTimeout").String())
 	} else {
-		data.NonCriticalNexthopTimeout = types.Int64Null()
+		data.NonCriticalNexthopTimeout = types.StringNull()
 	}
 	if !data.AdvL2vpnEvpn.IsNull() || all {
 		data.AdvL2vpnEvpn = types.StringValue(res.Get(data.getClassName() + ".attributes.advertL2vpnEvpn").String())

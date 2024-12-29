@@ -36,8 +36,8 @@ func TestAccNxosBGPAddressFamily(t *testing.T) {
 					resource.TestCheckResourceAttr("nxos_bgp_address_family.test", "asn", "65001"),
 					resource.TestCheckResourceAttr("nxos_bgp_address_family.test", "vrf", "default"),
 					resource.TestCheckResourceAttr("nxos_bgp_address_family.test", "address_family", "ipv4-ucast"),
-					resource.TestCheckResourceAttr("nxos_bgp_address_family.test", "critical_nexthop_timeout", "1800"),
-					resource.TestCheckResourceAttr("nxos_bgp_address_family.test", "non_critical_nexthop_timeout", "1800"),
+					resource.TestCheckResourceAttr("nxos_bgp_address_family.test", "critical_nexthop_timeout", "2500"),
+					resource.TestCheckResourceAttr("nxos_bgp_address_family.test", "non_critical_nexthop_timeout", "8000"),
 					resource.TestCheckResourceAttr("nxos_bgp_address_family.test", "adv_l2vpn_evpn", "disabled"),
 					resource.TestCheckResourceAttr("nxos_bgp_address_family.test", "adv_phyip_for_type5_routes", "disabled"),
 					resource.TestCheckResourceAttr("nxos_bgp_address_family.test", "max_ecmp_paths", "2"),
@@ -118,8 +118,8 @@ func testAccNxosBGPAddressFamilyConfig_all() string {
 		asn = "65001"
 		vrf = "default"
 		address_family = "ipv4-ucast"
-		critical_nexthop_timeout = 1800
-		non_critical_nexthop_timeout = 1800
+		critical_nexthop_timeout = "2500"
+		non_critical_nexthop_timeout = "8000"
 		adv_l2vpn_evpn = "disabled"
 		adv_phyip_for_type5_routes = "disabled"
 		max_ecmp_paths = 2

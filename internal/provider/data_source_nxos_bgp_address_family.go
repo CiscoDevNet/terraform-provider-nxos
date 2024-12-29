@@ -75,11 +75,11 @@ func (d *BGPAddressFamilyDataSource) Schema(ctx context.Context, req datasource.
 				MarkdownDescription: "Address Family.",
 				Required:            true,
 			},
-			"critical_nexthop_timeout": schema.Int64Attribute{
+			"critical_nexthop_timeout": schema.StringAttribute{
 				MarkdownDescription: "The next-hop address tracking delay timer for critical next-hop reachability routes.",
 				Computed:            true,
 			},
-			"non_critical_nexthop_timeout": schema.Int64Attribute{
+			"non_critical_nexthop_timeout": schema.StringAttribute{
 				MarkdownDescription: "The next-hop address tracking delay timer for non-critical next-hop reachability routes.",
 				Computed:            true,
 			},

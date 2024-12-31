@@ -52,16 +52,12 @@ attributes:
     tf_name: critical_nexthop_timeout
     type: String
     description: "The next-hop address tracking delay timer for critical next-hop reachability routes."
-    # min_int: 1
-    # max_int: 4294967295
     default_value: "crit"
     example: 2500
   - nxos_name: nonCritNhTimeout
     tf_name: non_critical_nexthop_timeout
     type: String
     description: "The next-hop address tracking delay timer for non-critical next-hop reachability routes."
-    # min_int: 1
-    # max_int: 4294967295
     default_value: "noncrit"
     example: 8000
   - nxos_name: advertL2vpnEvpn

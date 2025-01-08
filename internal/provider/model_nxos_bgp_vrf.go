@@ -53,7 +53,7 @@ func (data BGPVRF) toBody(statusReplace bool) nxos.Body {
 	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}
-	if (!data.RouterId.IsUnknown() && !data.RouterId.IsNull()) || true {
+	if (!data.RouterId.IsUnknown() && !data.RouterId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rtrId", data.RouterId.ValueString())
 	}
 

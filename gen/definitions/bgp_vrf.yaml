@@ -34,6 +34,7 @@ attributes:
     type: String
     description: 'Router ID.'
     example: '1.1.1.1'
+    omit_empty_value: true
 test_prerequisites:
   - dn: sys/fm/bgp
     class_name: fmBgp

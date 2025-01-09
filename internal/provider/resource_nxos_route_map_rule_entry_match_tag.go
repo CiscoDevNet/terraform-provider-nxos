@@ -56,7 +56,7 @@ func (r *RouteMapRuleEntryMatchTagResource) Metadata(ctx context.Context, req re
 func (r *RouteMapRuleEntryMatchTagResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a Match Tag in  Route-Map Rule Entry configuration.", "rtmapMatchRtTag", "Routing%20and%20Forwarding/rtmap:MatchRtTag/").AddParents("route_map_rule_entry").AddChildren("route_map_rule_entry_match_tag").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a Match Tag in Route-Map Rule Entry configuration.", "rtmapMatchRtTag", "Routing%20and%20Forwarding/rtmap:MatchRtTag/").AddParents("route_map_rule_entry").AddChildren("route_map_rule_entry_match_tag").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

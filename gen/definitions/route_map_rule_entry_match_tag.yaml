@@ -3,7 +3,7 @@ name: Route Map Rule Entry Match Tag
 class_name: rtmapMatchRtTag
 dn: sys/rpm/rtmap-[%s]/ent-[%v]/mrttag-[%v]
 ds_description: This data source can read a Match Tag in Route-Map Rule Entry configuration.
-res_description: This resource can manage a Match Tag in  Route-Map Rule Entry configuration.
+res_description: This resource can manage a Match Tag in Route-Map Rule Entry configuration.
 doc_path: Routing%20and%20Forwarding/rtmap:MatchRtTag/
 doc_category: Routing
 parents:

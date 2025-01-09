@@ -61,7 +61,7 @@ attributes:
     default_value: "noncrit"
     example: 8000
   - nxos_name: advertL2vpnEvpn
-    tf_name: adv_l2vpn_evpn
+    tf_name: advertise_l2vpn_evpn
     type: String
     description: "Enable or disable the advertisement of L2VPN EVPN routes."
     enum_values:
@@ -70,7 +70,7 @@ attributes:
     default_value: disabled
     example: disabled
   - nxos_name: advPip
-    tf_name: adv_phyip_for_type5_routes
+    tf_name: advertise_physical_ip_for_type5_routes
     type: String
     description: "Advertise physical IP for type-5 routes"
     enum_values:
@@ -87,7 +87,7 @@ attributes:
     default_value: 1
     example: 2
   - nxos_name: maxExtEcmp
-    tf_name: max_ext_ecmp_paths
+    tf_name: max_external_ecmp_paths
     type: Int64
     description: "Maximum number of external ECMP paths."
     min_int: 1
@@ -95,7 +95,7 @@ attributes:
     default_value: 1
     example: 1
   - nxos_name: maxExtIntEcmp
-    tf_name: max_ext_int_ecmp_paths
+    tf_name: max_external_internal_ecmp_paths
     type: Int64
     description: "Maximum number of external/internal ECMP paths."
     min_int: 1
@@ -103,7 +103,7 @@ attributes:
     default_value: 1
     example: 1
   - nxos_name: maxLclEcmp
-    tf_name: max_eqcost_ecmp_paths
+    tf_name: max_local_ecmp_paths
     type: Int64
     description: "Maximum number of equal-cost multipath for local paths ECMP paths."
     min_int: 1
@@ -111,7 +111,7 @@ attributes:
     default_value: 1
     example: 1
   - nxos_name: maxMxdEcmp
-    tf_name: max_mixcost_ecmp_paths
+    tf_name: max_mixed_ecmp_paths
     type: Int64
     description: "Maximum mixed equal-cost multipath for local and remote ECMP paths."
     min_int: 1
@@ -119,7 +119,7 @@ attributes:
     default_value: 1
     example: 1
   - nxos_name: defInfOriginate
-    tf_name: def_inf_originate
+    tf_name: default_information_originate
     type: String
     description: "Enable or disable the default-information originate."
     enum_values:
@@ -152,7 +152,7 @@ attributes:
     default_value: disabled
     example: disabled
   - nxos_name: supprInactive
-    tf_name: adv_only_act_routes
+    tf_name: advertise_only_active_routes
     type: String
     description: "Advertise only active routes to peers"
     enum_values:
@@ -161,13 +161,13 @@ attributes:
     default_value: disabled
     example: disabled
   - nxos_name: tblMap
-    tf_name: route_map_name
+    tf_name: table_map_route_map_name
     type: String
     description: "Route Map name"
     example: ROUTE_MAP1
     default_value: ""
   - nxos_name: vniEthTag
-    tf_name: vni_ethtag
+    tf_name: vni_ethernet_tag
     type: String
     description: "Allow VNI in Ethernet Tag field in EVPN route"
     enum_values:
@@ -176,7 +176,7 @@ attributes:
     default_value: disabled
     example: disabled
   - nxos_name: waitIgpConv
-    tf_name: wait_igp_conv
+    tf_name: wait_igp_converged
     type: String
     description: "Delay initial bestpath until redistributed IGPs have converged"
     enum_values:

@@ -83,11 +83,11 @@ func (d *BGPAddressFamilyDataSource) Schema(ctx context.Context, req datasource.
 				MarkdownDescription: "The next-hop address tracking delay timer for non-critical next-hop reachability routes.",
 				Computed:            true,
 			},
-			"adv_l2vpn_evpn": schema.StringAttribute{
+			"advertise_l2vpn_evpn": schema.StringAttribute{
 				MarkdownDescription: "Enable or disable the advertisement of L2VPN EVPN routes.",
 				Computed:            true,
 			},
-			"adv_phyip_for_type5_routes": schema.StringAttribute{
+			"advertise_physical_ip_for_type5_routes": schema.StringAttribute{
 				MarkdownDescription: "Advertise physical IP for type-5 routes",
 				Computed:            true,
 			},
@@ -95,23 +95,23 @@ func (d *BGPAddressFamilyDataSource) Schema(ctx context.Context, req datasource.
 				MarkdownDescription: "Maximum number of ECMP paths.",
 				Computed:            true,
 			},
-			"max_ext_ecmp_paths": schema.Int64Attribute{
+			"max_external_ecmp_paths": schema.Int64Attribute{
 				MarkdownDescription: "Maximum number of external ECMP paths.",
 				Computed:            true,
 			},
-			"max_ext_int_ecmp_paths": schema.Int64Attribute{
+			"max_external_internal_ecmp_paths": schema.Int64Attribute{
 				MarkdownDescription: "Maximum number of external/internal ECMP paths.",
 				Computed:            true,
 			},
-			"max_eqcost_ecmp_paths": schema.Int64Attribute{
+			"max_local_ecmp_paths": schema.Int64Attribute{
 				MarkdownDescription: "Maximum number of equal-cost multipath for local paths ECMP paths.",
 				Computed:            true,
 			},
-			"max_mixcost_ecmp_paths": schema.Int64Attribute{
+			"max_mixed_ecmp_paths": schema.Int64Attribute{
 				MarkdownDescription: "Maximum mixed equal-cost multipath for local and remote ECMP paths.",
 				Computed:            true,
 			},
-			"def_inf_originate": schema.StringAttribute{
+			"default_information_originate": schema.StringAttribute{
 				MarkdownDescription: "Enable or disable the default-information originate.",
 				Computed:            true,
 			},
@@ -127,19 +127,19 @@ func (d *BGPAddressFamilyDataSource) Schema(ctx context.Context, req datasource.
 				MarkdownDescription: "Retain Route Target All",
 				Computed:            true,
 			},
-			"adv_only_act_routes": schema.StringAttribute{
+			"advertise_only_active_routes": schema.StringAttribute{
 				MarkdownDescription: "Advertise only active routes to peers",
 				Computed:            true,
 			},
-			"route_map_name": schema.StringAttribute{
+			"table_map_route_map_name": schema.StringAttribute{
 				MarkdownDescription: "Route Map name",
 				Computed:            true,
 			},
-			"vni_ethtag": schema.StringAttribute{
+			"vni_ethernet_tag": schema.StringAttribute{
 				MarkdownDescription: "Allow VNI in Ethernet Tag field in EVPN route",
 				Computed:            true,
 			},
-			"wait_igp_conv": schema.StringAttribute{
+			"wait_igp_converged": schema.StringAttribute{
 				MarkdownDescription: "Delay initial bestpath until redistributed IGPs have converged",
 				Computed:            true,
 			},

@@ -108,7 +108,7 @@ func (r *BGPAddressFamilyResource) Schema(ctx context.Context, req resource.Sche
 				Computed:            true,
 				Default:             stringdefault.StaticString("noncrit"),
 			},
-			"adv_l2vpn_evpn": schema.StringAttribute{
+			"advertise_l2vpn_evpn": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable or disable the advertisement of L2VPN EVPN routes.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
 				Optional:            true,
 				Computed:            true,
@@ -117,7 +117,7 @@ func (r *BGPAddressFamilyResource) Schema(ctx context.Context, req resource.Sche
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"adv_phyip_for_type5_routes": schema.StringAttribute{
+			"advertise_physical_ip_for_type5_routes": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Advertise physical IP for type-5 routes").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
 				Optional:            true,
 				Computed:            true,
@@ -135,7 +135,7 @@ func (r *BGPAddressFamilyResource) Schema(ctx context.Context, req resource.Sche
 					int64validator.Between(1, 128),
 				},
 			},
-			"max_ext_ecmp_paths": schema.Int64Attribute{
+			"max_external_ecmp_paths": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Maximum number of external ECMP paths.").AddIntegerRangeDescription(1, 128).AddDefaultValueDescription("1").String,
 				Optional:            true,
 				Computed:            true,
@@ -144,7 +144,7 @@ func (r *BGPAddressFamilyResource) Schema(ctx context.Context, req resource.Sche
 					int64validator.Between(1, 128),
 				},
 			},
-			"max_ext_int_ecmp_paths": schema.Int64Attribute{
+			"max_external_internal_ecmp_paths": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Maximum number of external/internal ECMP paths.").AddIntegerRangeDescription(1, 128).AddDefaultValueDescription("1").String,
 				Optional:            true,
 				Computed:            true,
@@ -153,7 +153,7 @@ func (r *BGPAddressFamilyResource) Schema(ctx context.Context, req resource.Sche
 					int64validator.Between(1, 128),
 				},
 			},
-			"max_eqcost_ecmp_paths": schema.Int64Attribute{
+			"max_local_ecmp_paths": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Maximum number of equal-cost multipath for local paths ECMP paths.").AddIntegerRangeDescription(1, 128).AddDefaultValueDescription("1").String,
 				Optional:            true,
 				Computed:            true,
@@ -162,7 +162,7 @@ func (r *BGPAddressFamilyResource) Schema(ctx context.Context, req resource.Sche
 					int64validator.Between(1, 128),
 				},
 			},
-			"max_mixcost_ecmp_paths": schema.Int64Attribute{
+			"max_mixed_ecmp_paths": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Maximum mixed equal-cost multipath for local and remote ECMP paths.").AddIntegerRangeDescription(1, 128).AddDefaultValueDescription("1").String,
 				Optional:            true,
 				Computed:            true,
@@ -171,7 +171,7 @@ func (r *BGPAddressFamilyResource) Schema(ctx context.Context, req resource.Sche
 					int64validator.Between(1, 128),
 				},
 			},
-			"def_inf_originate": schema.StringAttribute{
+			"default_information_originate": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable or disable the default-information originate.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
 				Optional:            true,
 				Computed:            true,
@@ -202,7 +202,7 @@ func (r *BGPAddressFamilyResource) Schema(ctx context.Context, req resource.Sche
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"adv_only_act_routes": schema.StringAttribute{
+			"advertise_only_active_routes": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Advertise only active routes to peers").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
 				Optional:            true,
 				Computed:            true,
@@ -211,11 +211,11 @@ func (r *BGPAddressFamilyResource) Schema(ctx context.Context, req resource.Sche
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"route_map_name": schema.StringAttribute{
+			"table_map_route_map_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Route Map name").String,
 				Optional:            true,
 			},
-			"vni_ethtag": schema.StringAttribute{
+			"vni_ethernet_tag": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Allow VNI in Ethernet Tag field in EVPN route").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
 				Optional:            true,
 				Computed:            true,
@@ -224,7 +224,7 @@ func (r *BGPAddressFamilyResource) Schema(ctx context.Context, req resource.Sche
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"wait_igp_conv": schema.StringAttribute{
+			"wait_igp_converged": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Delay initial bestpath until redistributed IGPs have converged").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
 				Optional:            true,
 				Computed:            true,

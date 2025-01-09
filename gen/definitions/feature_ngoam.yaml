@@ -2,8 +2,8 @@
 name: Feature NGOAM
 class_name: fmNgoam
 dn: sys/fm/ngoam
-ds_description: This data source can read the VXLAN VXLAN operations, administration, and maintenance feature.
-res_description: This resource can manage the VXLAN VXLAN operations, administration, and maintenance feature.
+ds_description: This data source can read the VXLAN operations, administration, and maintenance feature.
+res_description: This resource can manage the VXLAN operations, administration, and maintenance feature.
 doc_path: Feature%20Management/fm:Ngoam/
 doc_category: Feature
 attributes:

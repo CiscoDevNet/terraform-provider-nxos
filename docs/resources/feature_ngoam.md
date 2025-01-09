@@ -3,13 +3,13 @@
 page_title: "nxos_feature_ngoam Resource - terraform-provider-nxos"
 subcategory: "Feature"
 description: |-
-  This resource can manage the VXLAN VXLAN operations, administration, and maintenance feature.
+  This resource can manage the VXLAN operations, administration, and maintenance feature.
   API Documentation: fmNgoam https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Ngoam/
 ---
 
 # nxos_feature_ngoam (Resource)
 
-This resource can manage the VXLAN VXLAN operations, administration, and maintenance feature.
+This resource can manage the VXLAN operations, administration, and maintenance feature.
 
 - API Documentation: [fmNgoam](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Ngoam/)
 

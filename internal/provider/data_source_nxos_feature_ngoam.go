@@ -52,7 +52,7 @@ func (d *FeatureNGOAMDataSource) Metadata(_ context.Context, req datasource.Meta
 func (d *FeatureNGOAMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the VXLAN VXLAN operations, administration, and maintenance feature.", "fmNgoam", "Feature%20Management/fm:Ngoam/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the VXLAN operations, administration, and maintenance feature.", "fmNgoam", "Feature%20Management/fm:Ngoam/").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

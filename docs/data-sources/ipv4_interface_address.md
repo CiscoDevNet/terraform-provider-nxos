@@ -39,4 +39,5 @@ data "nxos_ipv4_interface_address" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+- `tag` (Number) Route Tag
 - `type` (String) Address type.

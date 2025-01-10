@@ -27,6 +27,7 @@ resource "nxos_ipv4_interface_address" "example" {
   interface_id = "eth1/10"
   address      = "24.63.46.49/30"
   type         = "primary"
+  tag          = 1234
 }
 ```
 
@@ -42,6 +43,8 @@ resource "nxos_ipv4_interface_address" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
+- `tag` (Number) Route Tag
+  - Default value: `0`
 - `type` (String) Address type.
   - Choices: `primary`, `secondary`
   - Default value: `primary`

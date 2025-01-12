@@ -75,12 +75,72 @@ func (d *BGPAddressFamilyDataSource) Schema(ctx context.Context, req datasource.
 				MarkdownDescription: "Address Family.",
 				Required:            true,
 			},
-			"critical_nexthop_timeout": schema.Int64Attribute{
+			"critical_nexthop_timeout": schema.StringAttribute{
 				MarkdownDescription: "The next-hop address tracking delay timer for critical next-hop reachability routes.",
 				Computed:            true,
 			},
-			"non_critical_nexthop_timeout": schema.Int64Attribute{
+			"non_critical_nexthop_timeout": schema.StringAttribute{
 				MarkdownDescription: "The next-hop address tracking delay timer for non-critical next-hop reachability routes.",
+				Computed:            true,
+			},
+			"advertise_l2vpn_evpn": schema.StringAttribute{
+				MarkdownDescription: "Enable or disable the advertisement of L2VPN EVPN routes.",
+				Computed:            true,
+			},
+			"advertise_physical_ip_for_type5_routes": schema.StringAttribute{
+				MarkdownDescription: "Advertise physical IP for type-5 routes",
+				Computed:            true,
+			},
+			"max_ecmp_paths": schema.Int64Attribute{
+				MarkdownDescription: "Maximum number of ECMP paths.",
+				Computed:            true,
+			},
+			"max_external_ecmp_paths": schema.Int64Attribute{
+				MarkdownDescription: "Maximum number of external ECMP paths.",
+				Computed:            true,
+			},
+			"max_external_internal_ecmp_paths": schema.Int64Attribute{
+				MarkdownDescription: "Maximum number of external/internal ECMP paths.",
+				Computed:            true,
+			},
+			"max_local_ecmp_paths": schema.Int64Attribute{
+				MarkdownDescription: "Maximum number of equal-cost multipath for local paths ECMP paths.",
+				Computed:            true,
+			},
+			"max_mixed_ecmp_paths": schema.Int64Attribute{
+				MarkdownDescription: "Maximum mixed equal-cost multipath for local and remote ECMP paths.",
+				Computed:            true,
+			},
+			"default_information_originate": schema.StringAttribute{
+				MarkdownDescription: "Enable or disable the default-information originate.",
+				Computed:            true,
+			},
+			"next_hop_route_map_name": schema.StringAttribute{
+				MarkdownDescription: "Next hope route map name",
+				Computed:            true,
+			},
+			"prefix_priority": schema.StringAttribute{
+				MarkdownDescription: "Enable prefix priority for AF",
+				Computed:            true,
+			},
+			"retain_rt_all": schema.StringAttribute{
+				MarkdownDescription: "Retain Route Target All",
+				Computed:            true,
+			},
+			"advertise_only_active_routes": schema.StringAttribute{
+				MarkdownDescription: "Advertise only active routes to peers",
+				Computed:            true,
+			},
+			"table_map_route_map_name": schema.StringAttribute{
+				MarkdownDescription: "Route Map name",
+				Computed:            true,
+			},
+			"vni_ethernet_tag": schema.StringAttribute{
+				MarkdownDescription: "Allow VNI in Ethernet Tag field in EVPN route",
+				Computed:            true,
+			},
+			"wait_igp_converged": schema.StringAttribute{
+				MarkdownDescription: "Delay initial bestpath until redistributed IGPs have converged",
 				Computed:            true,
 			},
 		},

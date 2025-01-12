@@ -38,6 +38,21 @@ data "nxos_bgp_address_family" "example" {
 
 ### Read-Only
 
-- `critical_nexthop_timeout` (Number) The next-hop address tracking delay timer for critical next-hop reachability routes.
+- `advertise_l2vpn_evpn` (String) Enable or disable the advertisement of L2VPN EVPN routes.
+- `advertise_only_active_routes` (String) Advertise only active routes to peers
+- `advertise_physical_ip_for_type5_routes` (String) Advertise physical IP for type-5 routes
+- `critical_nexthop_timeout` (String) The next-hop address tracking delay timer for critical next-hop reachability routes.
+- `default_information_originate` (String) Enable or disable the default-information originate.
 - `id` (String) The distinguished name of the object.
-- `non_critical_nexthop_timeout` (Number) The next-hop address tracking delay timer for non-critical next-hop reachability routes.
+- `max_ecmp_paths` (Number) Maximum number of ECMP paths.
+- `max_external_ecmp_paths` (Number) Maximum number of external ECMP paths.
+- `max_external_internal_ecmp_paths` (Number) Maximum number of external/internal ECMP paths.
+- `max_local_ecmp_paths` (Number) Maximum number of equal-cost multipath for local paths ECMP paths.
+- `max_mixed_ecmp_paths` (Number) Maximum mixed equal-cost multipath for local and remote ECMP paths.
+- `next_hop_route_map_name` (String) Next hope route map name
+- `non_critical_nexthop_timeout` (String) The next-hop address tracking delay timer for non-critical next-hop reachability routes.
+- `prefix_priority` (String) Enable prefix priority for AF
+- `retain_rt_all` (String) Retain Route Target All
+- `table_map_route_map_name` (String) Route Map name
+- `vni_ethernet_tag` (String) Allow VNI in Ethernet Tag field in EVPN route
+- `wait_igp_converged` (String) Delay initial bestpath until redistributed IGPs have converged

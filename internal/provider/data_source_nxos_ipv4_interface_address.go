@@ -79,6 +79,10 @@ func (d *IPv4InterfaceAddressDataSource) Schema(ctx context.Context, req datasou
 				MarkdownDescription: "Address type.",
 				Computed:            true,
 			},
+			"tag": schema.Int64Attribute{
+				MarkdownDescription: "Route Tag",
+				Computed:            true,
+			},
 		},
 	}
 }

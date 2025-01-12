@@ -21,6 +21,7 @@ package provider
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -35,6 +36,7 @@ type IPv4InterfaceAddress struct {
 	InterfaceId types.String `tfsdk:"interface_id"`
 	Address     types.String `tfsdk:"address"`
 	Type        types.String `tfsdk:"type"`
+	Tag         types.Int64  `tfsdk:"tag"`
 }
 
 func (data IPv4InterfaceAddress) getDn() string {
@@ -57,6 +59,9 @@ func (data IPv4InterfaceAddress) toBody(statusReplace bool) nxos.Body {
 	if (!data.Type.IsUnknown() && !data.Type.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.Type.ValueString())
 	}
+	if (!data.Tag.IsUnknown() && !data.Tag.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"tag", strconv.FormatInt(data.Tag.ValueInt64(), 10))
+	}
 
 	return nxos.Body{body}
 }
@@ -71,6 +76,11 @@ func (data *IPv4InterfaceAddress) fromBody(res gjson.Result, all bool) {
 		data.Type = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
 	} else {
 		data.Type = types.StringNull()
+	}
+	if !data.Tag.IsNull() || all {
+		data.Tag = types.Int64Value(res.Get(data.getClassName() + ".attributes.tag").Int())
+	} else {
+		data.Tag = types.Int64Null()
 	}
 }
 

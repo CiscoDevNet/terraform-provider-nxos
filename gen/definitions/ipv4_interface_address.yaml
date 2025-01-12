@@ -38,6 +38,12 @@ attributes:
       - secondary
     default_value: 'primary'
     example: 'primary'
+  - nxos_name: tag
+    tf_name: tag
+    type: Int64
+    description: 'Route Tag'
+    default_value: 0
+    example: 1234
 test_prerequisites:
   - dn: sys/intf/phys-[eth1/10]
     class_name: l1PhysIf

@@ -1,0 +1,66 @@
+---
+name: ICMPV4 Interface
+class_name: icmpv4If
+dn: sys/icmpv4/inst/dom-[%s]/if-[%s]
+ds_description: This data source can read the global ICMP Instance configuration.
+res_description: This resource can manage the global ICMP Instance configuration.
+doc_path: Routing%20and%20Forwarding/icmpv4:If/
+doc_category: ICMP
+parents:
+  - ICMPV4 VRF
+attributes:
+  - nxos_name: name
+    tf_name: vrf_name
+    type: String
+    id: true
+    reference_only: true
+    description: 'VRF name.'
+    example: VRF1
+  - nxos_name: id
+    tf_name: interface_id
+    type: String
+    id: true
+    description: 'Must match first field in the output of `show intf brief`. Example: `vlan100`.'
+    example: vlan10
+  - nxos_name: ctrl
+    tf_name: control
+    type: String
+    enum_values:
+      - port-unreachable
+      - unreachable
+    default_value: unreachable
+    example: port-unreachable
+    description: 'ICMP interface control.'
+test_prerequisites:
+  - dn: sys/fm/ifvlan
+    class_name: fmInterfaceVlan
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/intf/svi-[vlan10]
+    class_name: sviIf
+    attributes:
+      - name: id
+        value: vlan10
+    dependencies: [0]
+  - dn: sys/icmpv4
+    class_name: icmpv4Entity
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+    dependencies: [1]
+  - dn: sys/icmpv4/inst
+    class_name: icmpv4Inst
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+    dependencies: [2]
+  - dn: sys/icmpv4/inst/dom-[VRF1]
+    class_name: icmpv4Dom
+    attributes:
+      - name: name
+        value: VRF1
+    dependencies: [3]

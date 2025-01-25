@@ -7,6 +7,15 @@ description: |-
 
 # Changelog
 
+## 0.5.7 (unreleased)
+
+- Allow empty router ID in `nxos_gbp_vrf` resource, [link](https://github.com/CiscoDevNet/terraform-provider-nxos/issues/290)
+- Add more attributes to `nxos_bgp_address_family` resource and data source
+- Add `nxos_route_map_rule_entry_match_tag` resource and data source
+- Add `nxos_feature_ngoam` resource and data source
+- Add `tag` attribute to `nxos_ipv4_interface_address` resource and data source
+- Add `nxos_icmpv4`, `nxos_icmpv4_instance`, `nxos_icmpv4_vrf` and `nxos_icmpv4_interface` resources and data sources
+
 ## 0.5.6
 
 - Fix value range of `ebgp_multihop_ttl` attribute of `nxos_bgp_peer` resource

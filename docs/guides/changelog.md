@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## 0.5.7 (unreleased)
+## 0.5.7
 
 - Allow empty router ID in `nxos_gbp_vrf` resource, [link](https://github.com/CiscoDevNet/terraform-provider-nxos/issues/290)
 - Add more attributes to `nxos_bgp_address_family` resource and data source

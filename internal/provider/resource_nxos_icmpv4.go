@@ -38,22 +38,22 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &ICMPV4Resource{}
-var _ resource.ResourceWithImportState = &ICMPV4Resource{}
+var _ resource.Resource = &ICMPv4Resource{}
+var _ resource.ResourceWithImportState = &ICMPv4Resource{}
 
-func NewICMPV4Resource() resource.Resource {
-	return &ICMPV4Resource{}
+func NewICMPv4Resource() resource.Resource {
+	return &ICMPv4Resource{}
 }
 
-type ICMPV4Resource struct {
+type ICMPv4Resource struct {
 	clients map[string]*nxos.Client
 }
 
-func (r *ICMPV4Resource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+func (r *ICMPv4Resource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_icmpv4"
 }
 
-func (r *ICMPV4Resource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *ICMPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the global ICMP configuration.", "icmpv4Entity", "Routing%20and%20Forwarding/icmpv4:Entity/").AddChildren("icmpv4_instance").String,
@@ -83,7 +83,7 @@ func (r *ICMPV4Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 	}
 }
 
-func (r *ICMPV4Resource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *ICMPv4Resource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -92,8 +92,8 @@ func (r *ICMPV4Resource) Configure(ctx context.Context, req resource.ConfigureRe
 	r.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
-func (r *ICMPV4Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan ICMPV4
+func (r *ICMPv4Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan ICMPv4
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -122,8 +122,8 @@ func (r *ICMPV4Resource) Create(ctx context.Context, req resource.CreateRequest,
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
-func (r *ICMPV4Resource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state ICMPV4
+func (r *ICMPv4Resource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state ICMPv4
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -155,8 +155,8 @@ func (r *ICMPV4Resource) Read(ctx context.Context, req resource.ReadRequest, res
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
-func (r *ICMPV4Resource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan ICMPV4
+func (r *ICMPv4Resource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan ICMPv4
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -181,8 +181,8 @@ func (r *ICMPV4Resource) Update(ctx context.Context, req resource.UpdateRequest,
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *ICMPV4Resource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state ICMPV4
+func (r *ICMPv4Resource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state ICMPv4
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -218,7 +218,7 @@ func (r *ICMPV4Resource) Delete(ctx context.Context, req resource.DeleteRequest,
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *ICMPV4Resource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *ICMPv4Resource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

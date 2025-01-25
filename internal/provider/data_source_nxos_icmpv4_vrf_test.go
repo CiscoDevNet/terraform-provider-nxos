@@ -25,13 +25,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccDataSourceNxosICMPV4VRF(t *testing.T) {
+func TestAccDataSourceNxosICMPv4VRF(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosICMPV4VRFPrerequisitesConfig + testAccDataSourceNxosICMPV4VRFConfig,
+				Config: testAccDataSourceNxosICMPv4VRFPrerequisitesConfig + testAccDataSourceNxosICMPv4VRFConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_icmpv4_vrf.test", "vrf_name", "VRF1"),
 				),
@@ -40,7 +40,7 @@ func TestAccDataSourceNxosICMPV4VRF(t *testing.T) {
 	})
 }
 
-const testAccDataSourceNxosICMPV4VRFPrerequisitesConfig = `
+const testAccDataSourceNxosICMPv4VRFPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/icmpv4"
   class_name = "icmpv4Entity"
@@ -62,7 +62,7 @@ resource "nxos_rest" "PreReq1" {
 
 `
 
-const testAccDataSourceNxosICMPV4VRFConfig = `
+const testAccDataSourceNxosICMPv4VRFConfig = `
 
 resource "nxos_icmpv4_vrf" "test" {
   vrf_name = "VRF1"

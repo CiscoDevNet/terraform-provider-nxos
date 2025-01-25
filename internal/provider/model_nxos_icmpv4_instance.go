@@ -26,21 +26,21 @@ import (
 	"github.com/tidwall/sjson"
 )
 
-type ICMPV4Instance struct {
+type ICMPv4Instance struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
 	AdminState types.String `tfsdk:"admin_state"`
 }
 
-func (data ICMPV4Instance) getDn() string {
+func (data ICMPv4Instance) getDn() string {
 	return "sys/icmpv4/inst"
 }
 
-func (data ICMPV4Instance) getClassName() string {
+func (data ICMPv4Instance) getClassName() string {
 	return "icmpv4Inst"
 }
 
-func (data ICMPV4Instance) toBody(statusReplace bool) nxos.Body {
+func (data ICMPv4Instance) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if statusReplace {
@@ -53,7 +53,7 @@ func (data ICMPV4Instance) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *ICMPV4Instance) fromBody(res gjson.Result, all bool) {
+func (data *ICMPv4Instance) fromBody(res gjson.Result, all bool) {
 	if !data.AdminState.IsNull() || all {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
@@ -61,7 +61,7 @@ func (data *ICMPV4Instance) fromBody(res gjson.Result, all bool) {
 	}
 }
 
-func (data ICMPV4Instance) toDeleteBody() nxos.Body {
+func (data ICMPv4Instance) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}

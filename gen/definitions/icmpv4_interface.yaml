@@ -1,5 +1,5 @@
 ---
-name: ICMPV4 Interface
+name: ICMPv4 Interface
 class_name: icmpv4If
 dn: sys/icmpv4/inst/dom-[%s]/if-[%s]
 ds_description: This data source can read the global ICMP Instance configuration.
@@ -7,7 +7,7 @@ res_description: This resource can manage the global ICMP Instance configuration
 doc_path: Routing%20and%20Forwarding/icmpv4:If/
 doc_category: ICMP
 parents:
-  - ICMPV4 VRF
+  - ICMPv4 VRF
 attributes:
   - nxos_name: name
     tf_name: vrf_name

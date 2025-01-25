@@ -25,13 +25,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccDataSourceNxosICMPV4Interface(t *testing.T) {
+func TestAccDataSourceNxosICMPv4Interface(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosICMPV4InterfacePrerequisitesConfig + testAccDataSourceNxosICMPV4InterfaceConfig,
+				Config: testAccDataSourceNxosICMPv4InterfacePrerequisitesConfig + testAccDataSourceNxosICMPv4InterfaceConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_icmpv4_interface.test", "interface_id", "vlan10"),
 					resource.TestCheckResourceAttr("data.nxos_icmpv4_interface.test", "control", "port-unreachable"),
@@ -41,7 +41,7 @@ func TestAccDataSourceNxosICMPV4Interface(t *testing.T) {
 	})
 }
 
-const testAccDataSourceNxosICMPV4InterfacePrerequisitesConfig = `
+const testAccDataSourceNxosICMPv4InterfacePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/ifvlan"
   class_name = "fmInterfaceVlan"
@@ -91,7 +91,7 @@ resource "nxos_rest" "PreReq4" {
 
 `
 
-const testAccDataSourceNxosICMPV4InterfaceConfig = `
+const testAccDataSourceNxosICMPv4InterfaceConfig = `
 
 resource "nxos_icmpv4_interface" "test" {
   vrf_name = "VRF1"

@@ -33,23 +33,23 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &ICMPV4InstanceDataSource{}
-	_ datasource.DataSourceWithConfigure = &ICMPV4InstanceDataSource{}
+	_ datasource.DataSource              = &ICMPv4InstanceDataSource{}
+	_ datasource.DataSourceWithConfigure = &ICMPv4InstanceDataSource{}
 )
 
-func NewICMPV4InstanceDataSource() datasource.DataSource {
-	return &ICMPV4InstanceDataSource{}
+func NewICMPv4InstanceDataSource() datasource.DataSource {
+	return &ICMPv4InstanceDataSource{}
 }
 
-type ICMPV4InstanceDataSource struct {
+type ICMPv4InstanceDataSource struct {
 	clients map[string]*nxos.Client
 }
 
-func (d *ICMPV4InstanceDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+func (d *ICMPv4InstanceDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_icmpv4_instance"
 }
 
-func (d *ICMPV4InstanceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *ICMPv4InstanceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read the global ICMP Instance configuration.", "icmpv4Inst", "Routing%20and%20Forwarding/icmpv4:Instance/").String,
@@ -71,7 +71,7 @@ func (d *ICMPV4InstanceDataSource) Schema(ctx context.Context, req datasource.Sc
 	}
 }
 
-func (d *ICMPV4InstanceDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *ICMPv4InstanceDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -79,8 +79,8 @@ func (d *ICMPV4InstanceDataSource) Configure(_ context.Context, req datasource.C
 	d.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
-func (d *ICMPV4InstanceDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config ICMPV4Instance
+func (d *ICMPv4InstanceDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config ICMPv4Instance
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

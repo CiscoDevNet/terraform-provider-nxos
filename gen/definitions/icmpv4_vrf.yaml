@@ -1,5 +1,5 @@
 ---
-name: ICMPV4 VRF
+name: ICMPv4 VRF
 class_name: icmpv4Dom
 dn: sys/icmpv4/inst/dom-[%s]
 ds_description: This data source can read the global ICMP Domain configuration.
@@ -7,9 +7,9 @@ res_description: This resource can manage the global ICMP Domain configuration.
 doc_path: Routing%20and%20Forwarding/icmpv4:Dom/
 doc_category: ICMP
 parents:
-  - ICMPV4 Instance
+  - ICMPv4 Instance
 children:
-  - ICMPV4 Interface
+  - ICMPv4 Interface
 attributes:
   - nxos_name: name
     tf_name: vrf_name

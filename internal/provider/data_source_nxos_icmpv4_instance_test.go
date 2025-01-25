@@ -25,13 +25,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccDataSourceNxosICMPV4Instance(t *testing.T) {
+func TestAccDataSourceNxosICMPv4Instance(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosICMPV4InstancePrerequisitesConfig + testAccDataSourceNxosICMPV4InstanceConfig,
+				Config: testAccDataSourceNxosICMPv4InstancePrerequisitesConfig + testAccDataSourceNxosICMPv4InstanceConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_icmpv4_instance.test", "admin_state", "enabled"),
 				),
@@ -40,7 +40,7 @@ func TestAccDataSourceNxosICMPV4Instance(t *testing.T) {
 	})
 }
 
-const testAccDataSourceNxosICMPV4InstancePrerequisitesConfig = `
+const testAccDataSourceNxosICMPv4InstancePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/icmpv4"
   class_name = "icmpv4Entity"
@@ -52,7 +52,7 @@ resource "nxos_rest" "PreReq0" {
 
 `
 
-const testAccDataSourceNxosICMPV4InstanceConfig = `
+const testAccDataSourceNxosICMPv4InstanceConfig = `
 
 resource "nxos_icmpv4_instance" "test" {
   admin_state = "enabled"

@@ -28,21 +28,21 @@ import (
 	"github.com/tidwall/sjson"
 )
 
-type ICMPV4VRF struct {
+type ICMPv4VRF struct {
 	Device  types.String `tfsdk:"device"`
 	Dn      types.String `tfsdk:"id"`
 	VrfName types.String `tfsdk:"vrf_name"`
 }
 
-func (data ICMPV4VRF) getDn() string {
+func (data ICMPv4VRF) getDn() string {
 	return fmt.Sprintf("sys/icmpv4/inst/dom-[%s]", data.VrfName.ValueString())
 }
 
-func (data ICMPV4VRF) getClassName() string {
+func (data ICMPv4VRF) getClassName() string {
 	return "icmpv4Dom"
 }
 
-func (data ICMPV4VRF) toBody(statusReplace bool) nxos.Body {
+func (data ICMPv4VRF) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if statusReplace {
@@ -55,7 +55,7 @@ func (data ICMPV4VRF) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *ICMPV4VRF) fromBody(res gjson.Result, all bool) {
+func (data *ICMPv4VRF) fromBody(res gjson.Result, all bool) {
 	if !data.VrfName.IsNull() || all {
 		data.VrfName = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
@@ -63,7 +63,7 @@ func (data *ICMPV4VRF) fromBody(res gjson.Result, all bool) {
 	}
 }
 
-func (data ICMPV4VRF) toDeleteBody() nxos.Body {
+func (data ICMPv4VRF) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}

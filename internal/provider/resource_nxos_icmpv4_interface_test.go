@@ -25,13 +25,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccNxosICMPV4Interface(t *testing.T) {
+func TestAccNxosICMPv4Interface(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosICMPV4InterfacePrerequisitesConfig + testAccNxosICMPV4InterfaceConfig_all(),
+				Config: testAccNxosICMPv4InterfacePrerequisitesConfig + testAccNxosICMPv4InterfaceConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_icmpv4_interface.test", "vrf_name", "VRF1"),
 					resource.TestCheckResourceAttr("nxos_icmpv4_interface.test", "interface_id", "vlan10"),
@@ -47,7 +47,7 @@ func TestAccNxosICMPV4Interface(t *testing.T) {
 	})
 }
 
-const testAccNxosICMPV4InterfacePrerequisitesConfig = `
+const testAccNxosICMPv4InterfacePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/ifvlan"
   class_name = "fmInterfaceVlan"
@@ -97,7 +97,7 @@ resource "nxos_rest" "PreReq4" {
 
 `
 
-func testAccNxosICMPV4InterfaceConfig_minimum() string {
+func testAccNxosICMPv4InterfaceConfig_minimum() string {
 	return `
 	resource "nxos_icmpv4_interface" "test" {
 		vrf_name = "VRF1"
@@ -107,7 +107,7 @@ func testAccNxosICMPV4InterfaceConfig_minimum() string {
 	`
 }
 
-func testAccNxosICMPV4InterfaceConfig_all() string {
+func testAccNxosICMPv4InterfaceConfig_all() string {
 	return `
 	resource "nxos_icmpv4_interface" "test" {
 		vrf_name = "VRF1"

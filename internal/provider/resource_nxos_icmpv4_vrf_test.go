@@ -25,13 +25,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccNxosICMPV4VRF(t *testing.T) {
+func TestAccNxosICMPv4VRF(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosICMPV4VRFPrerequisitesConfig + testAccNxosICMPV4VRFConfig_all(),
+				Config: testAccNxosICMPv4VRFPrerequisitesConfig + testAccNxosICMPv4VRFConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_icmpv4_vrf.test", "vrf_name", "VRF1"),
 				),
@@ -45,7 +45,7 @@ func TestAccNxosICMPV4VRF(t *testing.T) {
 	})
 }
 
-const testAccNxosICMPV4VRFPrerequisitesConfig = `
+const testAccNxosICMPv4VRFPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/icmpv4"
   class_name = "icmpv4Entity"
@@ -67,7 +67,7 @@ resource "nxos_rest" "PreReq1" {
 
 `
 
-func testAccNxosICMPV4VRFConfig_minimum() string {
+func testAccNxosICMPv4VRFConfig_minimum() string {
 	return `
 	resource "nxos_icmpv4_vrf" "test" {
 		vrf_name = "VRF1"
@@ -76,7 +76,7 @@ func testAccNxosICMPV4VRFConfig_minimum() string {
 	`
 }
 
-func testAccNxosICMPV4VRFConfig_all() string {
+func testAccNxosICMPv4VRFConfig_all() string {
 	return `
 	resource "nxos_icmpv4_vrf" "test" {
 		vrf_name = "VRF1"

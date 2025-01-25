@@ -38,22 +38,22 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &ICMPV4InstanceResource{}
-var _ resource.ResourceWithImportState = &ICMPV4InstanceResource{}
+var _ resource.Resource = &ICMPv4InstanceResource{}
+var _ resource.ResourceWithImportState = &ICMPv4InstanceResource{}
 
-func NewICMPV4InstanceResource() resource.Resource {
-	return &ICMPV4InstanceResource{}
+func NewICMPv4InstanceResource() resource.Resource {
+	return &ICMPv4InstanceResource{}
 }
 
-type ICMPV4InstanceResource struct {
+type ICMPv4InstanceResource struct {
 	clients map[string]*nxos.Client
 }
 
-func (r *ICMPV4InstanceResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+func (r *ICMPv4InstanceResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_icmpv4_instance"
 }
 
-func (r *ICMPV4InstanceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *ICMPv4InstanceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the global ICMP Instance configuration.", "icmpv4Inst", "Routing%20and%20Forwarding/icmpv4:Instance/").AddParents("icmpv4").AddChildren("icmpv4_domain").String,
@@ -83,7 +83,7 @@ func (r *ICMPV4InstanceResource) Schema(ctx context.Context, req resource.Schema
 	}
 }
 
-func (r *ICMPV4InstanceResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *ICMPv4InstanceResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -92,8 +92,8 @@ func (r *ICMPV4InstanceResource) Configure(ctx context.Context, req resource.Con
 	r.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
-func (r *ICMPV4InstanceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan ICMPV4Instance
+func (r *ICMPv4InstanceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan ICMPv4Instance
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -122,8 +122,8 @@ func (r *ICMPV4InstanceResource) Create(ctx context.Context, req resource.Create
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
-func (r *ICMPV4InstanceResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state ICMPV4Instance
+func (r *ICMPv4InstanceResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state ICMPv4Instance
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -155,8 +155,8 @@ func (r *ICMPV4InstanceResource) Read(ctx context.Context, req resource.ReadRequ
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
-func (r *ICMPV4InstanceResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan ICMPV4Instance
+func (r *ICMPv4InstanceResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan ICMPv4Instance
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -181,8 +181,8 @@ func (r *ICMPV4InstanceResource) Update(ctx context.Context, req resource.Update
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *ICMPV4InstanceResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state ICMPV4Instance
+func (r *ICMPv4InstanceResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state ICMPv4Instance
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -218,7 +218,7 @@ func (r *ICMPV4InstanceResource) Delete(ctx context.Context, req resource.Delete
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *ICMPV4InstanceResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *ICMPv4InstanceResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

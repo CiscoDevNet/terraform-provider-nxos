@@ -33,23 +33,23 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &ICMPV4VRFDataSource{}
-	_ datasource.DataSourceWithConfigure = &ICMPV4VRFDataSource{}
+	_ datasource.DataSource              = &ICMPv4VRFDataSource{}
+	_ datasource.DataSourceWithConfigure = &ICMPv4VRFDataSource{}
 )
 
-func NewICMPV4VRFDataSource() datasource.DataSource {
-	return &ICMPV4VRFDataSource{}
+func NewICMPv4VRFDataSource() datasource.DataSource {
+	return &ICMPv4VRFDataSource{}
 }
 
-type ICMPV4VRFDataSource struct {
+type ICMPv4VRFDataSource struct {
 	clients map[string]*nxos.Client
 }
 
-func (d *ICMPV4VRFDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+func (d *ICMPv4VRFDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_icmpv4_vrf"
 }
 
-func (d *ICMPV4VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *ICMPv4VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This data source can read the global ICMP Domain configuration.", "icmpv4Dom", "Routing%20and%20Forwarding/icmpv4:Dom/").String,
@@ -71,7 +71,7 @@ func (d *ICMPV4VRFDataSource) Schema(ctx context.Context, req datasource.SchemaR
 	}
 }
 
-func (d *ICMPV4VRFDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *ICMPv4VRFDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -79,8 +79,8 @@ func (d *ICMPV4VRFDataSource) Configure(_ context.Context, req datasource.Config
 	d.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
-func (d *ICMPV4VRFDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config ICMPV4VRF
+func (d *ICMPv4VRFDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config ICMPv4VRF
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

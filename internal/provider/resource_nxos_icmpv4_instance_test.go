@@ -25,13 +25,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccNxosICMPV4Instance(t *testing.T) {
+func TestAccNxosICMPv4Instance(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosICMPV4InstancePrerequisitesConfig + testAccNxosICMPV4InstanceConfig_all(),
+				Config: testAccNxosICMPv4InstancePrerequisitesConfig + testAccNxosICMPv4InstanceConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_icmpv4_instance.test", "admin_state", "enabled"),
 				),
@@ -45,7 +45,7 @@ func TestAccNxosICMPV4Instance(t *testing.T) {
 	})
 }
 
-const testAccNxosICMPV4InstancePrerequisitesConfig = `
+const testAccNxosICMPv4InstancePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/icmpv4"
   class_name = "icmpv4Entity"
@@ -57,7 +57,7 @@ resource "nxos_rest" "PreReq0" {
 
 `
 
-func testAccNxosICMPV4InstanceConfig_minimum() string {
+func testAccNxosICMPv4InstanceConfig_minimum() string {
 	return `
 	resource "nxos_icmpv4_instance" "test" {
   		depends_on = [nxos_rest.PreReq0, ]
@@ -65,7 +65,7 @@ func testAccNxosICMPV4InstanceConfig_minimum() string {
 	`
 }
 
-func testAccNxosICMPV4InstanceConfig_all() string {
+func testAccNxosICMPv4InstanceConfig_all() string {
 	return `
 	resource "nxos_icmpv4_instance" "test" {
 		admin_state = "enabled"

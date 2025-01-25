@@ -28,7 +28,7 @@ import (
 	"github.com/tidwall/sjson"
 )
 
-type ICMPV4Interface struct {
+type ICMPv4Interface struct {
 	Device      types.String `tfsdk:"device"`
 	Dn          types.String `tfsdk:"id"`
 	VrfName     types.String `tfsdk:"vrf_name"`
@@ -36,15 +36,15 @@ type ICMPV4Interface struct {
 	Control     types.String `tfsdk:"control"`
 }
 
-func (data ICMPV4Interface) getDn() string {
+func (data ICMPv4Interface) getDn() string {
 	return fmt.Sprintf("sys/icmpv4/inst/dom-[%s]/if-[%s]", data.VrfName.ValueString(), data.InterfaceId.ValueString())
 }
 
-func (data ICMPV4Interface) getClassName() string {
+func (data ICMPv4Interface) getClassName() string {
 	return "icmpv4If"
 }
 
-func (data ICMPV4Interface) toBody(statusReplace bool) nxos.Body {
+func (data ICMPv4Interface) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if statusReplace {
@@ -60,7 +60,7 @@ func (data ICMPV4Interface) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *ICMPV4Interface) fromBody(res gjson.Result, all bool) {
+func (data *ICMPv4Interface) fromBody(res gjson.Result, all bool) {
 	if !data.InterfaceId.IsNull() || all {
 		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	} else {
@@ -73,7 +73,7 @@ func (data *ICMPV4Interface) fromBody(res gjson.Result, all bool) {
 	}
 }
 
-func (data ICMPV4Interface) toDeleteBody() nxos.Body {
+func (data ICMPv4Interface) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}

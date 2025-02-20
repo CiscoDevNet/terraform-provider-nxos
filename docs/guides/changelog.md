@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.5.8 (unreleased)
+
+- Check if a device referenced in a resource or data source exists in the provider configuration
+
 ## 0.5.7
 
 - Allow empty router ID in `nxos_gbp_vrf` resource, [link](https://github.com/CiscoDevNet/terraform-provider-nxos/issues/290)

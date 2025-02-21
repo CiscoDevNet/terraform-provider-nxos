@@ -98,7 +98,13 @@ func (d *RestDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.Id.ValueString()))
 
-	res, err := d.clients[config.Device.ValueString()].GetDn(config.Dn.ValueString())
+	client, ok := d.clients[config.Device.ValueString()]
+	if !ok {
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
+		return
+	}
+
+	res, err := client.GetDn(config.Dn.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

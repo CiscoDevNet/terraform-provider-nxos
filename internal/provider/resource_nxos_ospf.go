@@ -104,9 +104,15 @@ func (r *OSPFResource) Create(ctx context.Context, req resource.CreateRequest, r
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getDn()))
 
+	client, ok := r.clients[plan.Device.ValueString()]
+	if !ok {
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", plan.Device.ValueString()))
+		return
+	}
+
 	// Post object
 	body := plan.toBody(false)
-	_, err := r.clients[plan.Device.ValueString()].Post(plan.getDn(), body.Str)
+	_, err := client.Post(plan.getDn(), body.Str)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 		return
@@ -134,8 +140,14 @@ func (r *OSPFResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
+	client, ok := r.clients[state.Device.ValueString()]
+	if !ok {
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", state.Device.ValueString()))
+		return
+	}
+
 	queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
-	res, err := r.clients[state.Device.ValueString()].GetDn(state.Dn.ValueString(), queries...)
+	res, err := client.GetDn(state.Dn.ValueString(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return
@@ -167,9 +179,15 @@ func (r *OSPFResource) Update(ctx context.Context, req resource.UpdateRequest, r
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
+	client, ok := r.clients[plan.Device.ValueString()]
+	if !ok {
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", plan.Device.ValueString()))
+		return
+	}
+
 	body := plan.toBody(false)
 
-	_, err := r.clients[plan.Device.ValueString()].Post(plan.getDn(), body.Str)
+	_, err := client.Post(plan.getDn(), body.Str)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 		return
@@ -193,16 +211,22 @@ func (r *OSPFResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Dn.ValueString()))
 
+	client, ok := r.clients[state.Device.ValueString()]
+	if !ok {
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", state.Device.ValueString()))
+		return
+	}
+
 	body := state.toDeleteBody()
 
 	if len(body.Str) > 0 {
-		_, err := r.clients[state.Device.ValueString()].Post(state.getDn(), body.Str)
+		_, err := client.Post(state.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
 		}
 	} else {
-		res, err := r.clients[state.Device.ValueString()].DeleteDn(state.Dn.ValueString())
+		res, err := client.DeleteDn(state.Dn.ValueString())
 		if err != nil {
 			errCode := res.Get("imdata.0.error.attributes.code").Str
 			// Ignore errors of type "Cannot delete object"

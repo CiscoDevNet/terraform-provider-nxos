@@ -145,7 +145,7 @@ func (data Subinterface) toDeleteBody() nxos.Body {
 }
 
 func (data *Subinterface) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/intf/encrtd-[%s]", "%[1]s", "")
+	reString := strings.ReplaceAll("sys/intf/encrtd-[%s]", "%[1]s", ".+")
 	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")

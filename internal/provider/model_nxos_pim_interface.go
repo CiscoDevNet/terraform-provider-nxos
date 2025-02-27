@@ -120,7 +120,7 @@ func (data PIMInterface) toDeleteBody() nxos.Body {
 }
 
 func (data *PIMInterface) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/pim/inst/dom-[%s]/if-[%s]", "%[1]s", "")
+	reString := strings.ReplaceAll("sys/pim/inst/dom-[%s]/if-[%s]", "%[1]s", ".+")
 	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")

@@ -73,7 +73,7 @@ func (data PhysicalInterfaceVRF) toDeleteBody() nxos.Body {
 }
 
 func (data *PhysicalInterfaceVRF) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/intf/phys-[%s]/rtvrfMbr", "%[1]s", "")
+	reString := strings.ReplaceAll("sys/intf/phys-[%s]/rtvrfMbr", "%[1]s", ".+")
 	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")

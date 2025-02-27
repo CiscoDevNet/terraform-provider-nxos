@@ -90,7 +90,7 @@ func (data VRF) toDeleteBody() nxos.Body {
 }
 
 func (data *VRF) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/inst-[%s]", "%[1]s", "")
+	reString := strings.ReplaceAll("sys/inst-[%s]", "%[1]s", ".+")
 	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")

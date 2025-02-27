@@ -480,7 +480,7 @@ func (data IPv4AccessListEntry) toDeleteBody() nxos.Body {
 }
 
 func (data *IPv4AccessListEntry) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/acl/ipv4/name-[%s]/seq-[%v]", "%[1]s", "")
+	reString := strings.ReplaceAll("sys/acl/ipv4/name-[%s]/seq-[%v]", "%[1]s", ".+")
 	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")

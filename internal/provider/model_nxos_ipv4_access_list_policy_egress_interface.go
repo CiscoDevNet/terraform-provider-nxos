@@ -95,7 +95,7 @@ func (data IPv4AccessListPolicyEgressInterface) toDeleteBody() nxos.Body {
 }
 
 func (data *IPv4AccessListPolicyEgressInterface) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/acl/ipv4/policy/egress/intf-[%s]", "%[1]s", "")
+	reString := strings.ReplaceAll("sys/acl/ipv4/policy/egress/intf-[%s]", "%[1]s", ".+")
 	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")

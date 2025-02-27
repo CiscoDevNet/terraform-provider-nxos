@@ -103,7 +103,7 @@ func (data BGPPeerTemplateMaxPrefix) toDeleteBody() nxos.Body {
 }
 
 func (data *BGPPeerTemplateMaxPrefix) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/bgp/inst/dom-[default]/peercont-[%s]/af-[%s]/maxpfxp", "%[1]s", "")
+	reString := strings.ReplaceAll("sys/bgp/inst/dom-[default]/peercont-[%s]/af-[%s]/maxpfxp", "%[1]s", ".+")
 	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")

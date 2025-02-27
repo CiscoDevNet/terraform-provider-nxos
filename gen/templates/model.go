@@ -273,7 +273,7 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 
 {{if hasId .Attributes}}
 func (data *{{camelCase .Name}}) getIdsFromDn() {
-	reString := strings.ReplaceAll("{{.Dn}}", "%[1]s", ".*")
+	reString := strings.ReplaceAll("{{.Dn}}", "%[1]s", ".+")
 	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")

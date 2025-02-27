@@ -81,7 +81,7 @@ func (data ISISInstance) toDeleteBody() nxos.Body {
 }
 
 func (data *ISISInstance) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/isis/inst-[%s]", "%[1]s", "")
+	reString := strings.ReplaceAll("sys/isis/inst-[%s]", "%[1]s", ".+")
 	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")

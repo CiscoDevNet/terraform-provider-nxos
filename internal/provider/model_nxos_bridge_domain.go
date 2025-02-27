@@ -90,7 +90,7 @@ func (data BridgeDomain) toDeleteBody() nxos.Body {
 }
 
 func (data *BridgeDomain) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/bd/bd-[%s]", "%[1]s", "")
+	reString := strings.ReplaceAll("sys/bd/bd-[%s]", "%[1]s", ".+")
 	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")

@@ -84,7 +84,7 @@ func (data BGPAdvertisedPrefix) toDeleteBody() nxos.Body {
 }
 
 func (data *BGPAdvertisedPrefix) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/bgp/inst/dom-[%s]/af-[%s]/prefix-[%s]", "%[1]s", "")
+	reString := strings.ReplaceAll("sys/bgp/inst/dom-[%s]/af-[%s]/prefix-[%s]", "%[1]s", ".+")
 	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")

@@ -73,7 +73,7 @@ func (data DefaultQOSClassMapDSCP) toDeleteBody() nxos.Body {
 }
 
 func (data *DefaultQOSClassMapDSCP) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/ipqos/dflt/c/name-[%s]/dscp-[%v]", "%[1]s", "")
+	reString := strings.ReplaceAll("sys/ipqos/dflt/c/name-[%s]/dscp-[%v]", "%[1]s", ".+")
 	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")

@@ -120,7 +120,7 @@ func (data ISISAddressFamily) toDeleteBody() nxos.Body {
 }
 
 func (data *ISISAddressFamily) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/isis/inst-[%s]/dom-[%s]/af-[%s]", "%[1]s", "")
+	reString := strings.ReplaceAll("sys/isis/inst-[%s]/dom-[%s]/af-[%s]", "%[1]s", ".+")
 	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")

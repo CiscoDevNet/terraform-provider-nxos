@@ -29,7 +29,7 @@ import (
 	"github.com/tidwall/sjson"
 )
 
-type ISISVRFOverload struct {
+type ISISOverload struct {
 	Device       types.String `tfsdk:"device"`
 	Dn           types.String `tfsdk:"id"`
 	InstanceName types.String `tfsdk:"instance_name"`
@@ -37,15 +37,15 @@ type ISISVRFOverload struct {
 	StartupTime  types.Int64  `tfsdk:"startup_time"`
 }
 
-func (data ISISVRFOverload) getDn() string {
+func (data ISISOverload) getDn() string {
 	return fmt.Sprintf("sys/isis/inst-[%s]/dom-[%s]/overload", data.InstanceName.ValueString(), data.Vrf.ValueString())
 }
 
-func (data ISISVRFOverload) getClassName() string {
+func (data ISISOverload) getClassName() string {
 	return "isisOverload"
 }
 
-func (data ISISVRFOverload) toBody(statusReplace bool) nxos.Body {
+func (data ISISOverload) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if statusReplace {
@@ -58,7 +58,7 @@ func (data ISISVRFOverload) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *ISISVRFOverload) fromBody(res gjson.Result, all bool) {
+func (data *ISISOverload) fromBody(res gjson.Result, all bool) {
 	if !data.StartupTime.IsNull() || all {
 		data.StartupTime = types.Int64Value(res.Get(data.getClassName() + ".attributes.startupTime").Int())
 	} else {
@@ -66,7 +66,7 @@ func (data *ISISVRFOverload) fromBody(res gjson.Result, all bool) {
 	}
 }
 
-func (data ISISVRFOverload) toDeleteBody() nxos.Body {
+func (data ISISOverload) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}

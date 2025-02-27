@@ -25,22 +25,22 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccDataSourceNxosISISVRFOverload(t *testing.T) {
+func TestAccDataSourceNxosISISOverload(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosISISVRFOverloadPrerequisitesConfig + testAccDataSourceNxosISISVRFOverloadConfig,
+				Config: testAccDataSourceNxosISISOverloadPrerequisitesConfig + testAccDataSourceNxosISISOverloadConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_isis_vrf_overload.test", "startup_time", "60"),
+					resource.TestCheckResourceAttr("data.nxos_isis_overload.test", "startup_time", "60"),
 				),
 			},
 		},
 	})
 }
 
-const testAccDataSourceNxosISISVRFOverloadPrerequisitesConfig = `
+const testAccDataSourceNxosISISOverloadPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/isis"
   class_name = "fmIsis"
@@ -76,18 +76,18 @@ resource "nxos_rest" "PreReq3" {
 
 `
 
-const testAccDataSourceNxosISISVRFOverloadConfig = `
+const testAccDataSourceNxosISISOverloadConfig = `
 
-resource "nxos_isis_vrf_overload" "test" {
+resource "nxos_isis_overload" "test" {
   instance_name = "ISIS1"
   vrf = "default"
   startup_time = 60
   depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 }
 
-data "nxos_isis_vrf_overload" "test" {
+data "nxos_isis_overload" "test" {
   instance_name = "ISIS1"
   vrf = "default"
-  depends_on = [nxos_isis_vrf_overload.test]
+  depends_on = [nxos_isis_overload.test]
 }
 `

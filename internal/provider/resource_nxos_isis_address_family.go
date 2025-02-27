@@ -38,22 +38,22 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &ISISVRFAddressFamilyResource{}
-var _ resource.ResourceWithImportState = &ISISVRFAddressFamilyResource{}
+var _ resource.Resource = &ISISAddressFamilyResource{}
+var _ resource.ResourceWithImportState = &ISISAddressFamilyResource{}
 
-func NewISISVRFAddressFamilyResource() resource.Resource {
-	return &ISISVRFAddressFamilyResource{}
+func NewISISAddressFamilyResource() resource.Resource {
+	return &ISISAddressFamilyResource{}
 }
 
-type ISISVRFAddressFamilyResource struct {
+type ISISAddressFamilyResource struct {
 	clients map[string]*nxos.Client
 }
 
-func (r *ISISVRFAddressFamilyResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_isis_vrf_address_family"
+func (r *ISISAddressFamilyResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_isis_address_family"
 }
 
-func (r *ISISVRFAddressFamilyResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *ISISAddressFamilyResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IS-IS VRF Address Family configuration.", "isisDomAf", "Routing%20and%20Forwarding/isis:DomAf/").AddParents("isis_vrf").AddReferences("vrf").String,
@@ -122,7 +122,7 @@ func (r *ISISVRFAddressFamilyResource) Schema(ctx context.Context, req resource.
 	}
 }
 
-func (r *ISISVRFAddressFamilyResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *ISISAddressFamilyResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -131,8 +131,8 @@ func (r *ISISVRFAddressFamilyResource) Configure(ctx context.Context, req resour
 	r.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
-func (r *ISISVRFAddressFamilyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan ISISVRFAddressFamily
+func (r *ISISAddressFamilyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan ISISAddressFamily
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -167,8 +167,8 @@ func (r *ISISVRFAddressFamilyResource) Create(ctx context.Context, req resource.
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
-func (r *ISISVRFAddressFamilyResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state ISISVRFAddressFamily
+func (r *ISISAddressFamilyResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state ISISAddressFamily
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -206,8 +206,8 @@ func (r *ISISVRFAddressFamilyResource) Read(ctx context.Context, req resource.Re
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
-func (r *ISISVRFAddressFamilyResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan ISISVRFAddressFamily
+func (r *ISISAddressFamilyResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan ISISAddressFamily
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -238,8 +238,8 @@ func (r *ISISVRFAddressFamilyResource) Update(ctx context.Context, req resource.
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *ISISVRFAddressFamilyResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state ISISVRFAddressFamily
+func (r *ISISAddressFamilyResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state ISISAddressFamily
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -281,7 +281,7 @@ func (r *ISISVRFAddressFamilyResource) Delete(ctx context.Context, req resource.
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *ISISVRFAddressFamilyResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *ISISAddressFamilyResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

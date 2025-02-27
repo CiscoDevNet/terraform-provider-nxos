@@ -38,22 +38,22 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &ISISVRFOverloadResource{}
-var _ resource.ResourceWithImportState = &ISISVRFOverloadResource{}
+var _ resource.Resource = &ISISOverloadResource{}
+var _ resource.ResourceWithImportState = &ISISOverloadResource{}
 
-func NewISISVRFOverloadResource() resource.Resource {
-	return &ISISVRFOverloadResource{}
+func NewISISOverloadResource() resource.Resource {
+	return &ISISOverloadResource{}
 }
 
-type ISISVRFOverloadResource struct {
+type ISISOverloadResource struct {
 	clients map[string]*nxos.Client
 }
 
-func (r *ISISVRFOverloadResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_isis_vrf_overload"
+func (r *ISISOverloadResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_isis_overload"
 }
 
-func (r *ISISVRFOverloadResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *ISISOverloadResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IS-IS VRF overload configuration.", "isisOverload", "Routing%20and%20Forwarding/isis:Overload/").AddParents("isis_vrf").AddReferences("vrf").String,
@@ -97,7 +97,7 @@ func (r *ISISVRFOverloadResource) Schema(ctx context.Context, req resource.Schem
 	}
 }
 
-func (r *ISISVRFOverloadResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *ISISOverloadResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -106,8 +106,8 @@ func (r *ISISVRFOverloadResource) Configure(ctx context.Context, req resource.Co
 	r.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
-func (r *ISISVRFOverloadResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan ISISVRFOverload
+func (r *ISISOverloadResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan ISISOverload
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -142,8 +142,8 @@ func (r *ISISVRFOverloadResource) Create(ctx context.Context, req resource.Creat
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
-func (r *ISISVRFOverloadResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state ISISVRFOverload
+func (r *ISISOverloadResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state ISISOverload
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -181,8 +181,8 @@ func (r *ISISVRFOverloadResource) Read(ctx context.Context, req resource.ReadReq
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
-func (r *ISISVRFOverloadResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan ISISVRFOverload
+func (r *ISISOverloadResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan ISISOverload
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -213,8 +213,8 @@ func (r *ISISVRFOverloadResource) Update(ctx context.Context, req resource.Updat
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *ISISVRFOverloadResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state ISISVRFOverload
+func (r *ISISOverloadResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state ISISOverload
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -256,7 +256,7 @@ func (r *ISISVRFOverloadResource) Delete(ctx context.Context, req resource.Delet
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *ISISVRFOverloadResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *ISISOverloadResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

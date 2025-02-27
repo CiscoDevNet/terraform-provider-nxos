@@ -1,5 +1,5 @@
 ---
-name: ISIS VRF Address Family
+name: ISIS Address Family
 class_name: isisDomAf
 dn: sys/isis/inst-[%s]/dom-[%s]/af-[%s]
 ds_description: This data source can read the IS-IS VRF Address Family configuration.

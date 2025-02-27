@@ -1,5 +1,5 @@
 ---
-name: ISIS VRF Overload
+name: ISIS Overload
 class_name: isisOverload
 dn: sys/isis/inst-[%s]/dom-[%s]/overload
 ds_description: This data source can read the IS-IS VRF overload configuration.

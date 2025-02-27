@@ -30,7 +30,7 @@ import (
 	"github.com/tidwall/sjson"
 )
 
-type ISISVRFAddressFamily struct {
+type ISISAddressFamily struct {
 	Device                   types.String `tfsdk:"device"`
 	Dn                       types.String `tfsdk:"id"`
 	InstanceName             types.String `tfsdk:"instance_name"`
@@ -42,15 +42,15 @@ type ISISVRFAddressFamily struct {
 	PrefixAdvertisePassiveL2 types.Bool   `tfsdk:"prefix_advertise_passive_l2"`
 }
 
-func (data ISISVRFAddressFamily) getDn() string {
+func (data ISISAddressFamily) getDn() string {
 	return fmt.Sprintf("sys/isis/inst-[%s]/dom-[%s]/af-[%s]", data.InstanceName.ValueString(), data.Vrf.ValueString(), data.AddressFamily.ValueString())
 }
 
-func (data ISISVRFAddressFamily) getClassName() string {
+func (data ISISAddressFamily) getClassName() string {
 	return "isisDomAf"
 }
 
-func (data ISISVRFAddressFamily) toBody(statusReplace bool) nxos.Body {
+func (data ISISAddressFamily) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if statusReplace {
@@ -78,7 +78,7 @@ func (data ISISVRFAddressFamily) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *ISISVRFAddressFamily) fromBody(res gjson.Result, all bool) {
+func (data *ISISAddressFamily) fromBody(res gjson.Result, all bool) {
 	if !data.Vrf.IsNull() || all {
 		data.Vrf = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
@@ -111,7 +111,7 @@ func (data *ISISVRFAddressFamily) fromBody(res gjson.Result, all bool) {
 	}
 }
 
-func (data ISISVRFAddressFamily) toDeleteBody() nxos.Body {
+func (data ISISAddressFamily) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}

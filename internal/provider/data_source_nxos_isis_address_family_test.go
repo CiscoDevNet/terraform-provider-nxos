@@ -25,29 +25,27 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccNxosISISVRFOverload(t *testing.T) {
+func TestAccDataSourceNxosISISAddressFamily(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosISISVRFOverloadPrerequisitesConfig + testAccNxosISISVRFOverloadConfig_all(),
+				Config: testAccDataSourceNxosISISAddressFamilyPrerequisitesConfig + testAccDataSourceNxosISISAddressFamilyConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_isis_vrf_overload.test", "instance_name", "ISIS1"),
-					resource.TestCheckResourceAttr("nxos_isis_vrf_overload.test", "vrf", "default"),
-					resource.TestCheckResourceAttr("nxos_isis_vrf_overload.test", "startup_time", "60"),
+					resource.TestCheckResourceAttr("data.nxos_isis_address_family.test", "vrf", "default"),
+					resource.TestCheckResourceAttr("data.nxos_isis_address_family.test", "address_family", "v4"),
+					resource.TestCheckResourceAttr("data.nxos_isis_address_family.test", "segment_routing_mpls", "true"),
+					resource.TestCheckResourceAttr("data.nxos_isis_address_family.test", "enable_bfd", "false"),
+					resource.TestCheckResourceAttr("data.nxos_isis_address_family.test", "prefix_advertise_passive_l1", "true"),
+					resource.TestCheckResourceAttr("data.nxos_isis_address_family.test", "prefix_advertise_passive_l2", "true"),
 				),
-			},
-			{
-				ResourceName:  "nxos_isis_vrf_overload.test",
-				ImportState:   true,
-				ImportStateId: "sys/isis/inst-[ISIS1]/dom-[default]/overload",
 			},
 		},
 	})
 }
 
-const testAccNxosISISVRFOverloadPrerequisitesConfig = `
+const testAccDataSourceNxosISISAddressFamilyPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/isis"
   class_name = "fmIsis"
@@ -83,23 +81,23 @@ resource "nxos_rest" "PreReq3" {
 
 `
 
-func testAccNxosISISVRFOverloadConfig_minimum() string {
-	return `
-	resource "nxos_isis_vrf_overload" "test" {
-		instance_name = "ISIS1"
-		vrf = "default"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+const testAccDataSourceNxosISISAddressFamilyConfig = `
+
+resource "nxos_isis_address_family" "test" {
+  instance_name = "ISIS1"
+  vrf = "default"
+  address_family = "v4"
+  segment_routing_mpls = true
+  enable_bfd = false
+  prefix_advertise_passive_l1 = true
+  prefix_advertise_passive_l2 = true
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 }
 
-func testAccNxosISISVRFOverloadConfig_all() string {
-	return `
-	resource "nxos_isis_vrf_overload" "test" {
-		instance_name = "ISIS1"
-		vrf = "default"
-		startup_time = 60
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+data "nxos_isis_address_family" "test" {
+  instance_name = "ISIS1"
+  vrf = "default"
+  address_family = "v4"
+  depends_on = [nxos_isis_address_family.test]
 }
+`

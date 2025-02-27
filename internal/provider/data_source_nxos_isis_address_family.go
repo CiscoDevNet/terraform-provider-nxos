@@ -33,26 +33,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &ISISVRFOverloadDataSource{}
-	_ datasource.DataSourceWithConfigure = &ISISVRFOverloadDataSource{}
+	_ datasource.DataSource              = &ISISAddressFamilyDataSource{}
+	_ datasource.DataSourceWithConfigure = &ISISAddressFamilyDataSource{}
 )
 
-func NewISISVRFOverloadDataSource() datasource.DataSource {
-	return &ISISVRFOverloadDataSource{}
+func NewISISAddressFamilyDataSource() datasource.DataSource {
+	return &ISISAddressFamilyDataSource{}
 }
 
-type ISISVRFOverloadDataSource struct {
+type ISISAddressFamilyDataSource struct {
 	clients map[string]*nxos.Client
 }
 
-func (d *ISISVRFOverloadDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_isis_vrf_overload"
+func (d *ISISAddressFamilyDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_isis_address_family"
 }
 
-func (d *ISISVRFOverloadDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *ISISAddressFamilyDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the IS-IS VRF overload configuration.", "isisOverload", "Routing%20and%20Forwarding/isis:Overload/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the IS-IS VRF Address Family configuration.", "isisDomAf", "Routing%20and%20Forwarding/isis:DomAf/").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -71,15 +71,31 @@ func (d *ISISVRFOverloadDataSource) Schema(ctx context.Context, req datasource.S
 				MarkdownDescription: "VRF name.",
 				Required:            true,
 			},
-			"startup_time": schema.Int64Attribute{
-				MarkdownDescription: "The overload startup time. The overload state begins when the switch boots up and ends at the time specified as the overload startup time.",
+			"address_family": schema.StringAttribute{
+				MarkdownDescription: "Address family type.",
+				Required:            true,
+			},
+			"segment_routing_mpls": schema.BoolAttribute{
+				MarkdownDescription: "Segment routing for MPLS	",
+				Computed:            true,
+			},
+			"enable_bfd": schema.BoolAttribute{
+				MarkdownDescription: "Enabling BFD on all ISIS domain interfaces.",
+				Computed:            true,
+			},
+			"prefix_advertise_passive_l1": schema.BoolAttribute{
+				MarkdownDescription: "Prefix advertise passive only for level-1",
+				Computed:            true,
+			},
+			"prefix_advertise_passive_l2": schema.BoolAttribute{
+				MarkdownDescription: "Prefix advertise passive only level-2",
 				Computed:            true,
 			},
 		},
 	}
 }
 
-func (d *ISISVRFOverloadDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *ISISAddressFamilyDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -87,8 +103,8 @@ func (d *ISISVRFOverloadDataSource) Configure(_ context.Context, req datasource.
 	d.clients = req.ProviderData.(map[string]*nxos.Client)
 }
 
-func (d *ISISVRFOverloadDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config ISISVRFOverload
+func (d *ISISAddressFamilyDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config ISISAddressFamily
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

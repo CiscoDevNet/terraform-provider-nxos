@@ -25,25 +25,25 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccNxosISISVRFAddressFamily(t *testing.T) {
+func TestAccNxosISISAddressFamily(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosISISVRFAddressFamilyPrerequisitesConfig + testAccNxosISISVRFAddressFamilyConfig_all(),
+				Config: testAccNxosISISAddressFamilyPrerequisitesConfig + testAccNxosISISAddressFamilyConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_isis_vrf_address_family.test", "instance_name", "ISIS1"),
-					resource.TestCheckResourceAttr("nxos_isis_vrf_address_family.test", "vrf", "default"),
-					resource.TestCheckResourceAttr("nxos_isis_vrf_address_family.test", "address_family", "v4"),
-					resource.TestCheckResourceAttr("nxos_isis_vrf_address_family.test", "segment_routing_mpls", "true"),
-					resource.TestCheckResourceAttr("nxos_isis_vrf_address_family.test", "enable_bfd", "false"),
-					resource.TestCheckResourceAttr("nxos_isis_vrf_address_family.test", "prefix_advertise_passive_l1", "true"),
-					resource.TestCheckResourceAttr("nxos_isis_vrf_address_family.test", "prefix_advertise_passive_l2", "true"),
+					resource.TestCheckResourceAttr("nxos_isis_address_family.test", "instance_name", "ISIS1"),
+					resource.TestCheckResourceAttr("nxos_isis_address_family.test", "vrf", "default"),
+					resource.TestCheckResourceAttr("nxos_isis_address_family.test", "address_family", "v4"),
+					resource.TestCheckResourceAttr("nxos_isis_address_family.test", "segment_routing_mpls", "true"),
+					resource.TestCheckResourceAttr("nxos_isis_address_family.test", "enable_bfd", "false"),
+					resource.TestCheckResourceAttr("nxos_isis_address_family.test", "prefix_advertise_passive_l1", "true"),
+					resource.TestCheckResourceAttr("nxos_isis_address_family.test", "prefix_advertise_passive_l2", "true"),
 				),
 			},
 			{
-				ResourceName:  "nxos_isis_vrf_address_family.test",
+				ResourceName:  "nxos_isis_address_family.test",
 				ImportState:   true,
 				ImportStateId: "sys/isis/inst-[ISIS1]/dom-[default]/af-[v4]",
 			},
@@ -51,7 +51,7 @@ func TestAccNxosISISVRFAddressFamily(t *testing.T) {
 	})
 }
 
-const testAccNxosISISVRFAddressFamilyPrerequisitesConfig = `
+const testAccNxosISISAddressFamilyPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/isis"
   class_name = "fmIsis"
@@ -87,9 +87,9 @@ resource "nxos_rest" "PreReq3" {
 
 `
 
-func testAccNxosISISVRFAddressFamilyConfig_minimum() string {
+func testAccNxosISISAddressFamilyConfig_minimum() string {
 	return `
-	resource "nxos_isis_vrf_address_family" "test" {
+	resource "nxos_isis_address_family" "test" {
 		instance_name = "ISIS1"
 		vrf = "default"
 		address_family = "v4"
@@ -98,9 +98,9 @@ func testAccNxosISISVRFAddressFamilyConfig_minimum() string {
 	`
 }
 
-func testAccNxosISISVRFAddressFamilyConfig_all() string {
+func testAccNxosISISAddressFamilyConfig_all() string {
 	return `
-	resource "nxos_isis_vrf_address_family" "test" {
+	resource "nxos_isis_address_family" "test" {
 		instance_name = "ISIS1"
 		vrf = "default"
 		address_family = "v4"

@@ -2,8 +2,8 @@
 name: ISIS Overload
 class_name: isisOverload
 dn: sys/isis/inst-[%s]/dom-[%s]/overload
-ds_description: This data source can read the IS-IS VRF overload configuration.
-res_description: This resource can manage the IS-IS VRF overload configuration.
+ds_description: This data source can read the IS-IS overload configuration.
+res_description: This resource can manage the IS-IS overload configuration.
 doc_path: Routing%20and%20Forwarding/isis:Overload/
 doc_category: ISIS
 parents:

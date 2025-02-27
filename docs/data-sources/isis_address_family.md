@@ -3,13 +3,13 @@
 page_title: "nxos_isis_address_family Data Source - terraform-provider-nxos"
 subcategory: "ISIS"
 description: |-
-  This data source can read the IS-IS VRF Address Family configuration.
+  This data source can read the IS-IS Address Family configuration.
   API Documentation: isisDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/isis:DomAf/
 ---
 
 # nxos_isis_address_family (Data Source)
 
-This data source can read the IS-IS VRF Address Family configuration.
+This data source can read the IS-IS Address Family configuration.
 
 - API Documentation: [isisDomAf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/isis:DomAf/)
 

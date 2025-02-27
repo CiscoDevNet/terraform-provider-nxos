@@ -2,8 +2,8 @@
 name: ISIS Address Family
 class_name: isisDomAf
 dn: sys/isis/inst-[%s]/dom-[%s]/af-[%s]
-ds_description: This data source can read the IS-IS VRF Address Family configuration.
-res_description: This resource can manage the IS-IS VRF Address Family configuration.
+ds_description: This data source can read the IS-IS Address Family configuration.
+res_description: This resource can manage the IS-IS Address Family configuration.
 doc_path: Routing%20and%20Forwarding/isis:DomAf/
 doc_category: ISIS
 parents:

@@ -59,7 +59,7 @@ func (r *ISISVRFResource) Metadata(ctx context.Context, req resource.MetadataReq
 func (r *ISISVRFResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IS-IS VRF configuration.", "isisDom", "Routing%20and%20Forwarding/isis:Dom/").AddParents("isis_instance").AddReferences("vrf").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IS-IS VRF configuration.", "isisDom", "Routing%20and%20Forwarding/isis:Dom/").AddParents("isis_instance").AddChildren("isis_address_family", "isis_overload").AddReferences("vrf").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

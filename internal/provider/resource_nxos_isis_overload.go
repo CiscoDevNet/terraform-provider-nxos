@@ -56,7 +56,7 @@ func (r *ISISOverloadResource) Metadata(ctx context.Context, req resource.Metada
 func (r *ISISOverloadResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IS-IS VRF overload configuration.", "isisOverload", "Routing%20and%20Forwarding/isis:Overload/").AddParents("isis_vrf").AddReferences("vrf").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IS-IS overload configuration.", "isisOverload", "Routing%20and%20Forwarding/isis:Overload/").AddParents("isis_vrf").AddReferences("vrf").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

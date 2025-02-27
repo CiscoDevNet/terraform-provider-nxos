@@ -52,7 +52,7 @@ func (d *ISISOverloadDataSource) Metadata(_ context.Context, req datasource.Meta
 func (d *ISISOverloadDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the IS-IS VRF overload configuration.", "isisOverload", "Routing%20and%20Forwarding/isis:Overload/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the IS-IS overload configuration.", "isisOverload", "Routing%20and%20Forwarding/isis:Overload/").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

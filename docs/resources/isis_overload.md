@@ -3,7 +3,7 @@
 page_title: "nxos_isis_overload Resource - terraform-provider-nxos"
 subcategory: "ISIS"
 description: |-
-  This resource can manage the IS-IS VRF overload configuration.
+  This resource can manage the IS-IS overload configuration.
   API Documentation: isisOverload https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/isis:Overload/
   Parent resources
   nxos_isis_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/isis_vrf
@@ -13,7 +13,7 @@ description: |-
 
 # nxos_isis_overload (Resource)
 
-This resource can manage the IS-IS VRF overload configuration.
+This resource can manage the IS-IS overload configuration.
 
 - API Documentation: [isisOverload](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/isis:Overload/)
 

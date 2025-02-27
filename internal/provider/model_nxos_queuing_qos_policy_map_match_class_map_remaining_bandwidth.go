@@ -75,8 +75,7 @@ func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) toDeleteBody() nx
 }
 
 func (data *QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) getIdsFromDn() {
-	reString := "sys/ipqos/queuing/p/name-[%s]/cmap-[%s]/setRemBW"
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/ipqos/queuing/p/name-[%s]/cmap-[%s]/setRemBW", "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

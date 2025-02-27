@@ -73,8 +73,7 @@ func (data VRFRouting) toDeleteBody() nxos.Body {
 }
 
 func (data *VRFRouting) getIdsFromDn() {
-	reString := "sys/inst-[%s]/dom-[%[1]s]"
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/inst-[%s]/dom-[%[1]s]", "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

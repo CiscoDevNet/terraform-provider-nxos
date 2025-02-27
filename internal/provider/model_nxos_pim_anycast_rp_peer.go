@@ -82,8 +82,7 @@ func (data PIMAnycastRPPeer) toDeleteBody() nxos.Body {
 }
 
 func (data *PIMAnycastRPPeer) getIdsFromDn() {
-	reString := "sys/pim/inst/dom-[%s]/acastrpfunc/peer-[%s]-peer-[%s]"
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/pim/inst/dom-[%s]/acastrpfunc/peer-[%s]-peer-[%s]", "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

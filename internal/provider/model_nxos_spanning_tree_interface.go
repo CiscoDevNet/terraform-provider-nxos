@@ -145,8 +145,7 @@ func (data SpanningTreeInterface) toDeleteBody() nxos.Body {
 }
 
 func (data *SpanningTreeInterface) getIdsFromDn() {
-	reString := "sys/stp/inst/if-[%s]"
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/stp/inst/if-[%s]", "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

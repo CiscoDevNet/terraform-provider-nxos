@@ -93,8 +93,7 @@ func (data IPv4InterfaceAddress) toDeleteBody() nxos.Body {
 }
 
 func (data *IPv4InterfaceAddress) getIdsFromDn() {
-	reString := "sys/ipv4/inst/dom-[%s]/if-[%s]/addr-[%s]"
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/ipv4/inst/dom-[%s]/if-[%s]/addr-[%s]", "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

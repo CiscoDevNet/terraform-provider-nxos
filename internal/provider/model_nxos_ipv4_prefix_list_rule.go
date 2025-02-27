@@ -72,8 +72,7 @@ func (data IPv4PrefixListRule) toDeleteBody() nxos.Body {
 }
 
 func (data *IPv4PrefixListRule) getIdsFromDn() {
-	reString := "sys/rpm/pfxlistv4-[%s]"
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/rpm/pfxlistv4-[%s]", "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

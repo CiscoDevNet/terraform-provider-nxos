@@ -72,8 +72,7 @@ func (data ICMPv4VRF) toDeleteBody() nxos.Body {
 }
 
 func (data *ICMPv4VRF) getIdsFromDn() {
-	reString := "sys/icmpv4/inst/dom-[%s]"
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/icmpv4/inst/dom-[%s]", "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

@@ -84,8 +84,7 @@ func (data BGPGracefulRestart) toDeleteBody() nxos.Body {
 }
 
 func (data *BGPGracefulRestart) getIdsFromDn() {
-	reString := "sys/bgp/inst/dom-[%s]/gr"
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/bgp/inst/dom-[%s]/gr", "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

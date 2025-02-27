@@ -111,8 +111,7 @@ func (data BGPRouteRedistribution) toDeleteBody() nxos.Body {
 }
 
 func (data *BGPRouteRedistribution) getIdsFromDn() {
-	reString := "sys/bgp/inst/dom-[%s]/af-[%s]/interleak-[%s]-interleak-[%s]"
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/bgp/inst/dom-[%s]/af-[%s]/interleak-[%s]-interleak-[%s]", "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

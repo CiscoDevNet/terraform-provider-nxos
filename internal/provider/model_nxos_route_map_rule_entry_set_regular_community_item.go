@@ -76,8 +76,7 @@ func (data RouteMapRuleEntrySetRegularCommunityItem) toDeleteBody() nxos.Body {
 }
 
 func (data *RouteMapRuleEntrySetRegularCommunityItem) getIdsFromDn() {
-	reString := "sys/rpm/rtmap-[%s]/ent-[%v]/sregcomm/item-[%s]"
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/rpm/rtmap-[%s]/ent-[%v]/sregcomm/item-[%s]", "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

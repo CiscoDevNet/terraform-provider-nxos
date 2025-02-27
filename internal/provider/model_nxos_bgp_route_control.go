@@ -101,8 +101,7 @@ func (data BGPRouteControl) toDeleteBody() nxos.Body {
 }
 
 func (data *BGPRouteControl) getIdsFromDn() {
-	reString := "sys/bgp/inst/dom-[%s]/rtctrl"
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/bgp/inst/dom-[%s]/rtctrl", "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

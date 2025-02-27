@@ -118,8 +118,7 @@ func (data NTPServer) toDeleteBody() nxos.Body {
 }
 
 func (data *NTPServer) getIdsFromDn() {
-	reString := "sys/time/prov-[%s]"
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/time/prov-[%s]", "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

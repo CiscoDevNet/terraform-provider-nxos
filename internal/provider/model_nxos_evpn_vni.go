@@ -81,8 +81,7 @@ func (data EVPNVNI) toDeleteBody() nxos.Body {
 }
 
 func (data *EVPNVNI) getIdsFromDn() {
-	reString := "sys/evpn/bdevi-[%s]"
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/evpn/bdevi-[%s]", "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

@@ -83,8 +83,7 @@ func (data BGPPeerLocalASN) toDeleteBody() nxos.Body {
 }
 
 func (data *BGPPeerLocalASN) getIdsFromDn() {
-	reString := "sys/bgp/inst/dom-[%s]/peer-[%s]/localasn"
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/bgp/inst/dom-[%s]/peer-[%s]/localasn", "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

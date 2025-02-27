@@ -273,8 +273,7 @@ func (data DefaultQOSPolicyMapMatchClassMapPolice) toDeleteBody() nxos.Body {
 }
 
 func (data *DefaultQOSPolicyMapMatchClassMapPolice) getIdsFromDn() {
-	reString := "sys/ipqos/dflt/p/name-[%s]/cmap-[%s]/police"
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/ipqos/dflt/p/name-[%s]/cmap-[%s]/police", "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

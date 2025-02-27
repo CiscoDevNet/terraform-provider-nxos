@@ -157,8 +157,7 @@ func (data OSPFInterface) toDeleteBody() nxos.Body {
 }
 
 func (data *OSPFInterface) getIdsFromDn() {
-	reString := "sys/ospf/inst-[%s]/dom-[%s]/if-[%s]"
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/ospf/inst-[%s]/dom-[%s]/if-[%s]", "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

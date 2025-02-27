@@ -97,8 +97,7 @@ func (data VPCInterface) toDeleteBody() nxos.Body {
 }
 
 func (data *VPCInterface) getIdsFromDn() {
-	reString := "sys/vpc/inst/dom/if-[%v]"
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/vpc/inst/dom/if-[%v]", "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

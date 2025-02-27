@@ -228,8 +228,7 @@ func (data BGPAddressFamily) toDeleteBody() nxos.Body {
 }
 
 func (data *BGPAddressFamily) getIdsFromDn() {
-	reString := "sys/bgp/inst/dom-[%s]/af-[%s]"
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/bgp/inst/dom-[%s]/af-[%s]", "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

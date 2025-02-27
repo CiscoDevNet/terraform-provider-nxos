@@ -129,8 +129,7 @@ func (data PIMSSMRange) toDeleteBody() nxos.Body {
 }
 
 func (data *PIMSSMRange) getIdsFromDn() {
-	reString := "sys/pim/inst/dom-[%s]/ssm/range"
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/pim/inst/dom-[%s]/ssm/range", "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

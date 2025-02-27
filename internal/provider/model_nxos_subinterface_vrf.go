@@ -73,8 +73,7 @@ func (data SubinterfaceVRF) toDeleteBody() nxos.Body {
 }
 
 func (data *SubinterfaceVRF) getIdsFromDn() {
-	reString := "sys/intf/encrtd-[%s]/rtvrfMbr"
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/intf/encrtd-[%s]/rtvrfMbr", "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

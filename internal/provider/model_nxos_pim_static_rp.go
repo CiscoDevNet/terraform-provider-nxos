@@ -73,8 +73,7 @@ func (data PIMStaticRP) toDeleteBody() nxos.Body {
 }
 
 func (data *PIMStaticRP) getIdsFromDn() {
-	reString := "sys/pim/inst/dom-[%s]/staticrp/rp-[%s]"
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/pim/inst/dom-[%s]/staticrp/rp-[%s]", "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

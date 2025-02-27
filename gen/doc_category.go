@@ -22,6 +22,7 @@ package main
 import (
 	"io/ioutil"
 	"log"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -38,6 +39,11 @@ type YamlConfig struct {
 }
 
 var docPaths = []string{"./docs/data-sources/", "./docs/resources/"}
+
+var extraDocs = map[string]string{
+	"rest":        "General",
+	"save_config": "General",
+}
 
 func SnakeCase(s string) string {
 	var g []string
@@ -56,7 +62,7 @@ func main() {
 
 	// Load configs
 	for i, filename := range items {
-		yamlFile, err := ioutil.ReadFile(filepath.Join(definitionsPath, filename.Name()))
+		yamlFile, err := os.ReadFile(filepath.Join(definitionsPath, filename.Name()))
 		if err != nil {
 			log.Fatalf("Error reading file: %v", err)
 		}
@@ -72,7 +78,7 @@ func main() {
 	for i := range configs {
 		for _, path := range docPaths {
 			filename := path + SnakeCase(configs[i].Name) + ".md"
-			content, err := ioutil.ReadFile(filename)
+			content, err := os.ReadFile(filename)
 			if err != nil {
 				log.Fatalf("Error opening documentation: %v", err)
 			}
@@ -84,17 +90,17 @@ func main() {
 		}
 	}
 
-	// update nxos_rest resource and data source
-	for _, path := range docPaths {
-		filename := path + "rest.md"
-		content, err := ioutil.ReadFile(filename)
-		if err != nil {
-			log.Fatalf("Error opening documentation: %v", err)
+	// Update extra doc categories
+	for doc, cat := range extraDocs {
+		for _, path := range docPaths {
+			filename := path + doc + ".md"
+			content, err := os.ReadFile(filename)
+			if err == nil {
+				s := string(content)
+				s = strings.ReplaceAll(s, `subcategory: ""`, `subcategory: "`+cat+`"`)
+
+				os.WriteFile(filename, []byte(s), 0644)
+			}
 		}
-
-		s := string(content)
-		s = strings.ReplaceAll(s, `subcategory: ""`, `subcategory: "General"`)
-
-		ioutil.WriteFile(filename, []byte(s), 0644)
 	}
 }

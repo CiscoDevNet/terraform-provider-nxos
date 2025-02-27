@@ -2,6 +2,8 @@
 
 - Check if a device referenced in a resource or data source exists in the provider configuration
 - When importing a resource, also populate attributes referencing parent resources
+- Add `nxos_isis_address_family` resource and data source
+- Add `nxos_isis_overload` resource and data source
 
 ## 0.5.7
 

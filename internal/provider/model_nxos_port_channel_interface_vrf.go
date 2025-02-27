@@ -21,6 +21,8 @@ package provider
 
 import (
 	"fmt"
+	"regexp"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -71,7 +73,12 @@ func (data PortChannelInterfaceVRF) toDeleteBody() nxos.Body {
 }
 
 func (data *PortChannelInterfaceVRF) getIdsFromDn() {
-	var InterfaceId string
-	fmt.Sscanf(data.Dn.ValueString(), "sys/intf/aggr-[%s]/rtvrfMbr", &InterfaceId)
-	data.InterfaceId = types.StringValue(InterfaceId)
+	reString := "sys/intf/aggr-[%s]/rtvrfMbr"
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+	data.InterfaceId = types.StringValue(matches[1])
 }

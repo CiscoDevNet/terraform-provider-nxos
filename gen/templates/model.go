@@ -273,15 +273,15 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 
 {{if hasId .Attributes}}
 func (data *{{camelCase .Name}}) getIdsFromDn() {
-{{- range .Attributes}}
+	reString := strings.ReplaceAll("{{.Dn}}", "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+{{- range $index, $value := .Attributes}}
 {{- if .Id}}
-	var {{toGoName .TfName}} {{if eq .Type "Int64"}}int64{{else}}string{{end}}
-{{- end}}
-{{- end}}
-	fmt.Sscanf(data.Dn.ValueString(), "{{.Dn}}"{{range .Attributes}}{{if .Id}}, &{{toGoName .TfName}}{{end}}{{end}})
-{{- range .Attributes}}
-{{- if .Id}}
-	data.{{toGoName .TfName}} = types.{{.Type}}Value({{toGoName .TfName}})
+	data.{{toGoName .TfName}} = types.{{.Type}}Value({{if eq .Type "Int64"}}helpers.Must(strconv.ParseInt(matches[{{add $index 1}}], 10, 0)){{else}}matches[{{add $index 1}}]{{end}})
 {{- end}}
 {{- end}}
 }

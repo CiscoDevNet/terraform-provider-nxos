@@ -21,8 +21,11 @@ package provider
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -94,7 +97,12 @@ func (data VPCInterface) toDeleteBody() nxos.Body {
 }
 
 func (data *VPCInterface) getIdsFromDn() {
-	var VpcInterfaceId int64
-	fmt.Sscanf(data.Dn.ValueString(), "sys/vpc/inst/dom/if-[%v]", &VpcInterfaceId)
-	data.VpcInterfaceId = types.Int64Value(VpcInterfaceId)
+	reString := "sys/vpc/inst/dom/if-[%v]"
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+	data.VpcInterfaceId = types.Int64Value(helpers.Must(strconv.ParseInt(matches[1], 10, 0)))
 }

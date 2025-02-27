@@ -21,6 +21,8 @@ package provider
 
 import (
 	"fmt"
+	"regexp"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -80,11 +82,14 @@ func (data DHCPRelayAddress) toDeleteBody() nxos.Body {
 }
 
 func (data *DHCPRelayAddress) getIdsFromDn() {
-	var InterfaceId string
-	var Vrf string
-	var Address string
-	fmt.Sscanf(data.Dn.ValueString(), "sys/dhcp/inst/relayif-[%s]/addr-[%s]-[%s]", &InterfaceId, &Vrf, &Address)
-	data.InterfaceId = types.StringValue(InterfaceId)
-	data.Vrf = types.StringValue(Vrf)
-	data.Address = types.StringValue(Address)
+	reString := "sys/dhcp/inst/relayif-[%s]/addr-[%s]-[%s]"
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+	data.InterfaceId = types.StringValue(matches[1])
+	data.Vrf = types.StringValue(matches[2])
+	data.Address = types.StringValue(matches[3])
 }

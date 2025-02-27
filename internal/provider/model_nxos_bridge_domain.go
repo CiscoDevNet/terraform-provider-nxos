@@ -21,6 +21,8 @@ package provider
 
 import (
 	"fmt"
+	"regexp"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -88,7 +90,12 @@ func (data BridgeDomain) toDeleteBody() nxos.Body {
 }
 
 func (data *BridgeDomain) getIdsFromDn() {
-	var FabricEncap string
-	fmt.Sscanf(data.Dn.ValueString(), "sys/bd/bd-[%s]", &FabricEncap)
-	data.FabricEncap = types.StringValue(FabricEncap)
+	reString := "sys/bd/bd-[%s]"
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+	data.FabricEncap = types.StringValue(matches[1])
 }

@@ -21,7 +21,9 @@ package provider
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -92,11 +94,14 @@ func (data PIMStaticRPGroupList) toDeleteBody() nxos.Body {
 }
 
 func (data *PIMStaticRPGroupList) getIdsFromDn() {
-	var VrfName string
-	var RpAddress string
-	var Address string
-	fmt.Sscanf(data.Dn.ValueString(), "sys/pim/inst/dom-[%s]/staticrp/rp-[%s]/rpgrplist-[%s]", &VrfName, &RpAddress, &Address)
-	data.VrfName = types.StringValue(VrfName)
-	data.RpAddress = types.StringValue(RpAddress)
-	data.Address = types.StringValue(Address)
+	reString := "sys/pim/inst/dom-[%s]/staticrp/rp-[%s]/rpgrplist-[%s]"
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+	data.VrfName = types.StringValue(matches[1])
+	data.RpAddress = types.StringValue(matches[2])
+	data.Address = types.StringValue(matches[3])
 }

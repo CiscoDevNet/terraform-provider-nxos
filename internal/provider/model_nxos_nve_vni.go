@@ -21,7 +21,9 @@ package provider
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -108,7 +110,12 @@ func (data NVEVNI) toDeleteBody() nxos.Body {
 }
 
 func (data *NVEVNI) getIdsFromDn() {
-	var Vni int64
-	fmt.Sscanf(data.Dn.ValueString(), "sys/eps/epId-[1]/nws/vni-[%v]", &Vni)
-	data.Vni = types.Int64Value(Vni)
+	reString := "sys/eps/epId-[1]/nws/vni-[%v]"
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+	data.Vni = types.Int64Value(helpers.Must(strconv.ParseInt(matches[1], 10, 0)))
 }

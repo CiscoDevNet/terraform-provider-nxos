@@ -21,7 +21,9 @@ package provider
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -318,7 +320,12 @@ func (data ISISInterface) toDeleteBody() nxos.Body {
 }
 
 func (data *ISISInterface) getIdsFromDn() {
-	var InterfaceId string
-	fmt.Sscanf(data.Dn.ValueString(), "sys/isis/if-[%s]", &InterfaceId)
-	data.InterfaceId = types.StringValue(InterfaceId)
+	reString := "sys/isis/if-[%s]"
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+	data.InterfaceId = types.StringValue(matches[1])
 }

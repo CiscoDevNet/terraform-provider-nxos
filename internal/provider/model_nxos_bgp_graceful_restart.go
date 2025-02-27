@@ -21,7 +21,9 @@ package provider
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -82,7 +84,12 @@ func (data BGPGracefulRestart) toDeleteBody() nxos.Body {
 }
 
 func (data *BGPGracefulRestart) getIdsFromDn() {
-	var Vrf string
-	fmt.Sscanf(data.Dn.ValueString(), "sys/bgp/inst/dom-[%s]/gr", &Vrf)
-	data.Vrf = types.StringValue(Vrf)
+	reString := "sys/bgp/inst/dom-[%s]/gr"
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+	data.Vrf = types.StringValue(matches[2])
 }

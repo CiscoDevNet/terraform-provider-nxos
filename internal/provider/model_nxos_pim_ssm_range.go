@@ -21,7 +21,9 @@ package provider
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -127,7 +129,12 @@ func (data PIMSSMRange) toDeleteBody() nxos.Body {
 }
 
 func (data *PIMSSMRange) getIdsFromDn() {
-	var VrfName string
-	fmt.Sscanf(data.Dn.ValueString(), "sys/pim/inst/dom-[%s]/ssm/range", &VrfName)
-	data.VrfName = types.StringValue(VrfName)
+	reString := "sys/pim/inst/dom-[%s]/ssm/range"
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+	data.VrfName = types.StringValue(matches[1])
 }

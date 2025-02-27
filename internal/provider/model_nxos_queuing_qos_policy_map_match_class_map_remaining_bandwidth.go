@@ -21,7 +21,9 @@ package provider
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -73,9 +75,13 @@ func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) toDeleteBody() nx
 }
 
 func (data *QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) getIdsFromDn() {
-	var PolicyMapName string
-	var ClassMapName string
-	fmt.Sscanf(data.Dn.ValueString(), "sys/ipqos/queuing/p/name-[%s]/cmap-[%s]/setRemBW", &PolicyMapName, &ClassMapName)
-	data.PolicyMapName = types.StringValue(PolicyMapName)
-	data.ClassMapName = types.StringValue(ClassMapName)
+	reString := "sys/ipqos/queuing/p/name-[%s]/cmap-[%s]/setRemBW"
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+	data.PolicyMapName = types.StringValue(matches[1])
+	data.ClassMapName = types.StringValue(matches[2])
 }

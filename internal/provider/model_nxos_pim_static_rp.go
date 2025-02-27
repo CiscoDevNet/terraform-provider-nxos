@@ -21,6 +21,8 @@ package provider
 
 import (
 	"fmt"
+	"regexp"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -71,9 +73,13 @@ func (data PIMStaticRP) toDeleteBody() nxos.Body {
 }
 
 func (data *PIMStaticRP) getIdsFromDn() {
-	var VrfName string
-	var Address string
-	fmt.Sscanf(data.Dn.ValueString(), "sys/pim/inst/dom-[%s]/staticrp/rp-[%s]", &VrfName, &Address)
-	data.VrfName = types.StringValue(VrfName)
-	data.Address = types.StringValue(Address)
+	reString := "sys/pim/inst/dom-[%s]/staticrp/rp-[%s]"
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+	data.VrfName = types.StringValue(matches[1])
+	data.Address = types.StringValue(matches[2])
 }

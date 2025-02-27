@@ -21,7 +21,9 @@ package provider
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -100,11 +102,14 @@ func (data OSPFArea) toDeleteBody() nxos.Body {
 }
 
 func (data *OSPFArea) getIdsFromDn() {
-	var InstanceName string
-	var VrfName string
-	var AreaId string
-	fmt.Sscanf(data.Dn.ValueString(), "sys/ospf/inst-[%s]/dom-[%s]/area-[%s]", &InstanceName, &VrfName, &AreaId)
-	data.InstanceName = types.StringValue(InstanceName)
-	data.VrfName = types.StringValue(VrfName)
-	data.AreaId = types.StringValue(AreaId)
+	reString := "sys/ospf/inst-[%s]/dom-[%s]/area-[%s]"
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+	data.InstanceName = types.StringValue(matches[1])
+	data.VrfName = types.StringValue(matches[2])
+	data.AreaId = types.StringValue(matches[3])
 }

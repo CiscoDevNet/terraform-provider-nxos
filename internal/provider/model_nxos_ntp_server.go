@@ -21,7 +21,9 @@ package provider
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -116,7 +118,12 @@ func (data NTPServer) toDeleteBody() nxos.Body {
 }
 
 func (data *NTPServer) getIdsFromDn() {
-	var Name string
-	fmt.Sscanf(data.Dn.ValueString(), "sys/time/prov-[%s]", &Name)
-	data.Name = types.StringValue(Name)
+	reString := "sys/time/prov-[%s]"
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+	data.Name = types.StringValue(matches[1])
 }

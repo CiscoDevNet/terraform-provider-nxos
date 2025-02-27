@@ -21,6 +21,8 @@ package provider
 
 import (
 	"fmt"
+	"regexp"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -70,7 +72,12 @@ func (data ICMPv4VRF) toDeleteBody() nxos.Body {
 }
 
 func (data *ICMPv4VRF) getIdsFromDn() {
-	var VrfName string
-	fmt.Sscanf(data.Dn.ValueString(), "sys/icmpv4/inst/dom-[%s]", &VrfName)
-	data.VrfName = types.StringValue(VrfName)
+	reString := "sys/icmpv4/inst/dom-[%s]"
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+	data.VrfName = types.StringValue(matches[1])
 }

@@ -21,6 +21,8 @@ package provider
 
 import (
 	"fmt"
+	"regexp"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -81,9 +83,13 @@ func (data BGPPeerLocalASN) toDeleteBody() nxos.Body {
 }
 
 func (data *BGPPeerLocalASN) getIdsFromDn() {
-	var Vrf string
-	var Address string
-	fmt.Sscanf(data.Dn.ValueString(), "sys/bgp/inst/dom-[%s]/peer-[%s]/localasn", &Vrf, &Address)
-	data.Vrf = types.StringValue(Vrf)
-	data.Address = types.StringValue(Address)
+	reString := "sys/bgp/inst/dom-[%s]/peer-[%s]/localasn"
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+	data.Vrf = types.StringValue(matches[3])
+	data.Address = types.StringValue(matches[4])
 }

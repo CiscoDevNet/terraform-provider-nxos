@@ -234,6 +234,6 @@ func (data *BGPAddressFamily) getIdsFromDn() {
 	reString = strings.ReplaceAll(reString, "]", "\\]")
 	re := regexp.MustCompile(reString)
 	matches := re.FindStringSubmatch(data.Dn.ValueString())
-	data.Vrf = types.StringValue(matches[2])
-	data.AddressFamily = types.StringValue(matches[3])
+	data.Vrf = types.StringValue(matches[1])
+	data.AddressFamily = types.StringValue(matches[2])
 }

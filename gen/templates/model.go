@@ -279,9 +279,11 @@ func (data *{{camelCase .Name}}) getIdsFromDn() {
 	reString = strings.ReplaceAll(reString, "]", "\\]")
 	re := regexp.MustCompile(reString)
 	matches := re.FindStringSubmatch(data.Dn.ValueString())
-{{- range $index, $value := .Attributes}}
+{{- $count := 1}}
+{{- range .Attributes}}
 {{- if .Id}}
-	data.{{toGoName .TfName}} = types.{{.Type}}Value({{if eq .Type "Int64"}}helpers.Must(strconv.ParseInt(matches[{{add $index 1}}], 10, 0)){{else}}matches[{{add $index 1}}]{{end}})
+	data.{{toGoName .TfName}} = types.{{.Type}}Value({{if eq .Type "Int64"}}helpers.Must(strconv.ParseInt(matches[{{$count}}], 10, 0)){{else}}matches[{{$count}}]{{end}})
+{{- $count = (add $count 1)}}
 {{- end}}
 {{- end}}
 }

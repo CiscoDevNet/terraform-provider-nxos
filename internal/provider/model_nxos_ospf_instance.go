@@ -87,5 +87,5 @@ func (data *OSPFInstance) getIdsFromDn() {
 	reString = strings.ReplaceAll(reString, "]", "\\]")
 	re := regexp.MustCompile(reString)
 	matches := re.FindStringSubmatch(data.Dn.ValueString())
-	data.Name = types.StringValue(matches[2])
+	data.Name = types.StringValue(matches[1])
 }

@@ -115,5 +115,5 @@ func (data *BGPPeerTemplate) getIdsFromDn() {
 	reString = strings.ReplaceAll(reString, "]", "\\]")
 	re := regexp.MustCompile(reString)
 	matches := re.FindStringSubmatch(data.Dn.ValueString())
-	data.TemplateName = types.StringValue(matches[2])
+	data.TemplateName = types.StringValue(matches[1])
 }

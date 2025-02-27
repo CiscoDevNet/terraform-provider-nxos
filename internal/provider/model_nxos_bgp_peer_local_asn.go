@@ -89,6 +89,6 @@ func (data *BGPPeerLocalASN) getIdsFromDn() {
 	reString = strings.ReplaceAll(reString, "]", "\\]")
 	re := regexp.MustCompile(reString)
 	matches := re.FindStringSubmatch(data.Dn.ValueString())
-	data.Vrf = types.StringValue(matches[3])
-	data.Address = types.StringValue(matches[4])
+	data.Vrf = types.StringValue(matches[1])
+	data.Address = types.StringValue(matches[2])
 }

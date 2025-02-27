@@ -91,8 +91,8 @@ func (data *BGPPeerAddressFamilyRouteControl) getIdsFromDn() {
 	reString = strings.ReplaceAll(reString, "]", "\\]")
 	re := regexp.MustCompile(reString)
 	matches := re.FindStringSubmatch(data.Dn.ValueString())
-	data.Vrf = types.StringValue(matches[2])
-	data.Address = types.StringValue(matches[3])
-	data.AddressFamily = types.StringValue(matches[4])
-	data.Direction = types.StringValue(matches[5])
+	data.Vrf = types.StringValue(matches[1])
+	data.Address = types.StringValue(matches[2])
+	data.AddressFamily = types.StringValue(matches[3])
+	data.Direction = types.StringValue(matches[4])
 }

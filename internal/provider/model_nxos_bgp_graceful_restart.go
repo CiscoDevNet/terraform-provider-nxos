@@ -90,5 +90,5 @@ func (data *BGPGracefulRestart) getIdsFromDn() {
 	reString = strings.ReplaceAll(reString, "]", "\\]")
 	re := regexp.MustCompile(reString)
 	matches := re.FindStringSubmatch(data.Dn.ValueString())
-	data.Vrf = types.StringValue(matches[2])
+	data.Vrf = types.StringValue(matches[1])
 }

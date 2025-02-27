@@ -21,7 +21,9 @@ package provider
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -70,4 +72,15 @@ func (data ISISOverload) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
+}
+
+func (data *ISISOverload) getIdsFromDn() {
+	reString := strings.ReplaceAll("sys/isis/inst-[%s]/dom-[%s]/overload", "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+	data.InstanceName = types.StringValue(matches[1])
+	data.Vrf = types.StringValue(matches[2])
 }

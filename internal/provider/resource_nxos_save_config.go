@@ -28,7 +28,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
-	"github.com/tidwall/sjson"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
@@ -91,16 +90,9 @@ func (r *SaveConfigResource) Create(ctx context.Context, req resource.CreateRequ
 
 	tflog.Debug(ctx, "Beginning to save config")
 
-	// Post object
-	dn := "sys/action"
-	body, _ := sjson.Set("", "actionLSubj.attributes.dn", "sys/action/lsubj-[sys]")
-	body, _ = sjson.Set(body, "actionLSubj.children.0.topSystemCopyRSLTask.attributes.adminSt", "start")
-	body, _ = sjson.Set(body, "actionLSubj.children.0.topSystemCopyRSLTask.attributes.dn", "sys/action/lsubj-[sys]/topSystemCopyRSLTask")
-	body, _ = sjson.Set(body, "actionLSubj.children.0.topSystemCopyRSLTask.attributes.freq", "one-shot")
-
-	_, err := r.clients[device.ValueString()].Post(dn, body)
+	_, err := r.clients[device.ValueString()].JsonRpc("copy run start")
 	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to save config, got error: %s", err))
 		return
 	}
 
@@ -133,16 +125,9 @@ func (r *SaveConfigResource) Update(ctx context.Context, req resource.UpdateRequ
 
 	tflog.Debug(ctx, "Beginning to save config")
 
-	// Post object
-	dn := "sys/action"
-	body, _ := sjson.Set("", "actionLSubj.attributes.dn", "sys/action/lsubj-[sys]")
-	body, _ = sjson.Set(body, "actionLSubj.children.0.topSystemCopyRSLTask.attributes.adminSt", "start")
-	body, _ = sjson.Set(body, "actionLSubj.children.0.topSystemCopyRSLTask.attributes.dn", "sys/action/lsubj-[sys]/topSystemCopyRSLTask")
-	body, _ = sjson.Set(body, "actionLSubj.children.0.topSystemCopyRSLTask.attributes.freq", "one-shot")
-
-	_, err := r.clients[device.ValueString()].Post(dn, body)
+	_, err := r.clients[device.ValueString()].JsonRpc("copy run start")
 	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to save config, got error: %s", err))
 		return
 	}
 

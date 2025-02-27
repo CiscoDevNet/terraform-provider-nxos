@@ -13,6 +13,7 @@ description: |-
 - When importing a resource, also populate attributes referencing parent resources
 - Add `nxos_isis_address_family` resource and data source
 - Add `nxos_isis_overload` resource and data source
+- Use JSON-RPC API to save config, [link](https://github.com/CiscoDevNet/terraform-provider-nxos/issues/298)
 
 ## 0.5.7
 

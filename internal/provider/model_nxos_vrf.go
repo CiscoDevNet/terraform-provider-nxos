@@ -86,3 +86,9 @@ func (data VRF) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *VRF) getIdsFromDn() {
+	var Name string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/inst-[%s]", &Name)
+	data.Name = types.StringValue(Name)
+}

@@ -68,3 +68,9 @@ func (data IPv4PrefixListRule) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *IPv4PrefixListRule) getIdsFromDn() {
+	var Name string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/rpm/pfxlistv4-[%s]", &Name)
+	data.Name = types.StringValue(Name)
+}

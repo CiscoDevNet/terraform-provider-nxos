@@ -69,3 +69,11 @@ func (data DefaultQOSClassMapDSCP) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *DefaultQOSClassMapDSCP) getIdsFromDn() {
+	var ClassMapName string
+	var Value string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/ipqos/dflt/c/name-[%s]/dscp-[%v]", &ClassMapName, &Value)
+	data.ClassMapName = types.StringValue(ClassMapName)
+	data.Value = types.StringValue(Value)
+}

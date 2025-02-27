@@ -80,3 +80,11 @@ func (data PortChannelInterfaceMember) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *PortChannelInterfaceMember) getIdsFromDn() {
+	var InterfaceId string
+	var InterfaceDn string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/intf/aggr-[%s]/rsmbrIfs-[%s]", &InterfaceId, &InterfaceDn)
+	data.InterfaceId = types.StringValue(InterfaceId)
+	data.InterfaceDn = types.StringValue(InterfaceDn)
+}

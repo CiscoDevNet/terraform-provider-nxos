@@ -177,6 +177,9 @@ func (r *RouteMapRuleEntryResource) Read(ctx context.Context, req resource.ReadR
 		return
 	}
 	state.fromBody(res, imp)
+	if imp {
+		state.getIdsFromDn()
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 

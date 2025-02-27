@@ -77,3 +77,9 @@ func (data DefaultQOSClassMap) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *DefaultQOSClassMap) getIdsFromDn() {
+	var Name string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/ipqos/dflt/c/name-[%s]", &Name)
+	data.Name = types.StringValue(Name)
+}

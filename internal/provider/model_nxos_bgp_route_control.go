@@ -97,3 +97,9 @@ func (data BGPRouteControl) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *BGPRouteControl) getIdsFromDn() {
+	var Vrf string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/bgp/inst/dom-[%s]/rtctrl", &Vrf)
+	data.Vrf = types.StringValue(Vrf)
+}

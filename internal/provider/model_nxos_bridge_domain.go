@@ -86,3 +86,9 @@ func (data BridgeDomain) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *BridgeDomain) getIdsFromDn() {
+	var FabricEncap string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/bd/bd-[%s]", &FabricEncap)
+	data.FabricEncap = types.StringValue(FabricEncap)
+}

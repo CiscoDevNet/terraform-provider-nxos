@@ -68,3 +68,9 @@ func (data IPv4AccessList) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *IPv4AccessList) getIdsFromDn() {
+	var Name string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/acl/ipv4/name-[%s]", &Name)
+	data.Name = types.StringValue(Name)
+}

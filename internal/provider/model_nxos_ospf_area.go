@@ -98,3 +98,13 @@ func (data OSPFArea) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *OSPFArea) getIdsFromDn() {
+	var InstanceName string
+	var VrfName string
+	var AreaId string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/ospf/inst-[%s]/dom-[%s]/area-[%s]", &InstanceName, &VrfName, &AreaId)
+	data.InstanceName = types.StringValue(InstanceName)
+	data.VrfName = types.StringValue(VrfName)
+	data.AreaId = types.StringValue(AreaId)
+}

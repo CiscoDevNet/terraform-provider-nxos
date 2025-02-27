@@ -78,3 +78,11 @@ func (data ICMPv4Interface) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *ICMPv4Interface) getIdsFromDn() {
+	var VrfName string
+	var InterfaceId string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/icmpv4/inst/dom-[%s]/if-[%s]", &VrfName, &InterfaceId)
+	data.VrfName = types.StringValue(VrfName)
+	data.InterfaceId = types.StringValue(InterfaceId)
+}

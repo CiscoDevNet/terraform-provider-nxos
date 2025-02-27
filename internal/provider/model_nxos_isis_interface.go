@@ -316,3 +316,9 @@ func (data ISISInterface) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *ISISInterface) getIdsFromDn() {
+	var InterfaceId string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/isis/if-[%s]", &InterfaceId)
+	data.InterfaceId = types.StringValue(InterfaceId)
+}

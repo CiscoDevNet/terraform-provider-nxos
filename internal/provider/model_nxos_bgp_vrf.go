@@ -78,3 +78,9 @@ func (data BGPVRF) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *BGPVRF) getIdsFromDn() {
+	var Name string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/bgp/inst/dom-[%s]", &Name)
+	data.Name = types.StringValue(Name)
+}

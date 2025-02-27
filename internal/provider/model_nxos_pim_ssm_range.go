@@ -125,3 +125,9 @@ func (data PIMSSMRange) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *PIMSSMRange) getIdsFromDn() {
+	var VrfName string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/pim/inst/dom-[%s]/ssm/range", &VrfName)
+	data.VrfName = types.StringValue(VrfName)
+}

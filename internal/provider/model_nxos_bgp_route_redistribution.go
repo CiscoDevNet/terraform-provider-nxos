@@ -107,3 +107,15 @@ func (data BGPRouteRedistribution) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *BGPRouteRedistribution) getIdsFromDn() {
+	var Vrf string
+	var AddressFamily string
+	var Protocol string
+	var ProtocolInstance string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/bgp/inst/dom-[%s]/af-[%s]/interleak-[%s]-interleak-[%s]", &Vrf, &AddressFamily, &Protocol, &ProtocolInstance)
+	data.Vrf = types.StringValue(Vrf)
+	data.AddressFamily = types.StringValue(AddressFamily)
+	data.Protocol = types.StringValue(Protocol)
+	data.ProtocolInstance = types.StringValue(ProtocolInstance)
+}

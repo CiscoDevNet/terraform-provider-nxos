@@ -77,3 +77,9 @@ func (data ISISInstance) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *ISISInstance) getIdsFromDn() {
+	var Name string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/isis/inst-[%s]", &Name)
+	data.Name = types.StringValue(Name)
+}

@@ -141,3 +141,9 @@ func (data SpanningTreeInterface) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *SpanningTreeInterface) getIdsFromDn() {
+	var InterfaceId string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/stp/inst/if-[%s]", &InterfaceId)
+	data.InterfaceId = types.StringValue(InterfaceId)
+}

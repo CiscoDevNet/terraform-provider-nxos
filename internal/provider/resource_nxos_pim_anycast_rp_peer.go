@@ -167,6 +167,9 @@ func (r *PIMAnycastRPPeerResource) Read(ctx context.Context, req resource.ReadRe
 		return
 	}
 	state.fromBody(res, imp)
+	if imp {
+		state.getIdsFromDn()
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 

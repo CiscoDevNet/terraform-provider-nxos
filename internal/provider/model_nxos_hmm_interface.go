@@ -86,3 +86,9 @@ func (data HMMInterface) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *HMMInterface) getIdsFromDn() {
+	var InterfaceId string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/hmm/fwdinst/if-[%s]", &InterfaceId)
+	data.InterfaceId = types.StringValue(InterfaceId)
+}

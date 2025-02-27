@@ -70,3 +70,13 @@ func (data EVPNVNIRouteTarget) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *EVPNVNIRouteTarget) getIdsFromDn() {
+	var Encap string
+	var Direction string
+	var RouteTarget string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/evpn/bdevi-[%s]/rttp-[%s]/ent-[%s]", &Encap, &Direction, &RouteTarget)
+	data.Encap = types.StringValue(Encap)
+	data.Direction = types.StringValue(Direction)
+	data.RouteTarget = types.StringValue(RouteTarget)
+}

@@ -117,3 +117,13 @@ func (data OSPFAuthentication) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *OSPFAuthentication) getIdsFromDn() {
+	var InstanceName string
+	var VrfName string
+	var InterfaceId string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/ospf/inst-[%s]/dom-[%s]/if-[%s]/authnew", &InstanceName, &VrfName, &InterfaceId)
+	data.InstanceName = types.StringValue(InstanceName)
+	data.VrfName = types.StringValue(VrfName)
+	data.InterfaceId = types.StringValue(InterfaceId)
+}

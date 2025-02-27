@@ -77,3 +77,9 @@ func (data EVPNVNI) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *EVPNVNI) getIdsFromDn() {
+	var Encap string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/evpn/bdevi-[%s]", &Encap)
+	data.Encap = types.StringValue(Encap)
+}

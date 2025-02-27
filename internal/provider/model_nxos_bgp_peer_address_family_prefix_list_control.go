@@ -81,3 +81,15 @@ func (data BGPPeerAddressFamilyPrefixListControl) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *BGPPeerAddressFamilyPrefixListControl) getIdsFromDn() {
+	var Vrf string
+	var Address string
+	var AddressFamily string
+	var Direction string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/bgp/inst/dom-[%s]/peer-[%s]/af-[%s]/pfxctrl-[%s]", &Vrf, &Address, &AddressFamily, &Direction)
+	data.Vrf = types.StringValue(Vrf)
+	data.Address = types.StringValue(Address)
+	data.AddressFamily = types.StringValue(AddressFamily)
+	data.Direction = types.StringValue(Direction)
+}

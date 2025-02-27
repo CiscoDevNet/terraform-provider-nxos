@@ -77,3 +77,9 @@ func (data QueuingQOSPolicyMap) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *QueuingQOSPolicyMap) getIdsFromDn() {
+	var Name string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/ipqos/queuing/p/name-[%s]", &Name)
+	data.Name = types.StringValue(Name)
+}

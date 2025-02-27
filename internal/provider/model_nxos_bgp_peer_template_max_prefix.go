@@ -99,3 +99,11 @@ func (data BGPPeerTemplateMaxPrefix) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *BGPPeerTemplateMaxPrefix) getIdsFromDn() {
+	var TemplateName string
+	var AddressFamily string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/bgp/inst/dom-[default]/peercont-[%s]/af-[%s]/maxpfxp", &TemplateName, &AddressFamily)
+	data.TemplateName = types.StringValue(TemplateName)
+	data.AddressFamily = types.StringValue(AddressFamily)
+}

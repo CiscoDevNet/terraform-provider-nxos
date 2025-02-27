@@ -78,3 +78,9 @@ func (data PIMAnycastRP) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *PIMAnycastRP) getIdsFromDn() {
+	var VrfName string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/pim/inst/dom-[%s]/acastrpfunc", &VrfName)
+	data.VrfName = types.StringValue(VrfName)
+}

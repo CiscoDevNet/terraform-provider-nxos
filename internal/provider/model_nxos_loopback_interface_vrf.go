@@ -69,3 +69,9 @@ func (data LoopbackInterfaceVRF) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *LoopbackInterfaceVRF) getIdsFromDn() {
+	var InterfaceId string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/intf/lb-[%s]/rtvrfMbr", &InterfaceId)
+	data.InterfaceId = types.StringValue(InterfaceId)
+}

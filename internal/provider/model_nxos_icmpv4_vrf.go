@@ -68,3 +68,9 @@ func (data ICMPv4VRF) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *ICMPv4VRF) getIdsFromDn() {
+	var VrfName string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/icmpv4/inst/dom-[%s]", &VrfName)
+	data.VrfName = types.StringValue(VrfName)
+}

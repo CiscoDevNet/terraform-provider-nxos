@@ -69,3 +69,9 @@ func (data PIMSSMPolicy) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *PIMSSMPolicy) getIdsFromDn() {
+	var VrfName string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/pim/inst/dom-[%s]/ssm", &VrfName)
+	data.VrfName = types.StringValue(VrfName)
+}

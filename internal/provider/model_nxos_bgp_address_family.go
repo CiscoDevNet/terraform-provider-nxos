@@ -224,3 +224,11 @@ func (data BGPAddressFamily) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *BGPAddressFamily) getIdsFromDn() {
+	var Vrf string
+	var AddressFamily string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/bgp/inst/dom-[%s]/af-[%s]", &Vrf, &AddressFamily)
+	data.Vrf = types.StringValue(Vrf)
+	data.AddressFamily = types.StringValue(AddressFamily)
+}

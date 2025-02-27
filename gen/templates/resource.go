@@ -319,6 +319,11 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 		return
 	}
 	state.fromBody(res, imp)
+	{{- if hasId .Attributes}}
+	if imp {
+		state.getIdsFromDn()
+	}
+	{{- end}}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 

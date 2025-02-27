@@ -36,6 +36,7 @@ type IPv4StaticRoute struct {
 	Prefix   types.String              `tfsdk:"prefix"`
 	NextHops []IPv4StaticRouteNextHops `tfsdk:"next_hops"`
 }
+
 type IPv4StaticRouteNextHops struct {
 	InterfaceId types.String `tfsdk:"interface_id"`
 	Address     types.String `tfsdk:"address"`
@@ -49,6 +50,7 @@ type IPv4StaticRouteNextHops struct {
 func (data IPv4StaticRoute) getDn() string {
 	return fmt.Sprintf("sys/ipv4/inst/dom-[%s]/rt-[%s]", data.VrfName.ValueString(), data.Prefix.ValueString())
 }
+
 func (data IPv4StaticRouteNextHops) getRn() string {
 	return fmt.Sprintf("nh-[%s]-addr-[%s]-vrf-[%s]", data.InterfaceId.ValueString(), data.Address.ValueString(), data.VrfName.ValueString())
 }
@@ -180,4 +182,12 @@ func (data IPv4StaticRoute) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
+}
+
+func (data *IPv4StaticRoute) getIdsFromDn() {
+	var VrfName string
+	var Prefix string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/ipv4/inst/dom-[%s]/rt-[%s]", &VrfName, &Prefix)
+	data.VrfName = types.StringValue(VrfName)
+	data.Prefix = types.StringValue(Prefix)
 }

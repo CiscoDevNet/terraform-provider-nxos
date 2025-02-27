@@ -70,3 +70,13 @@ func (data VRFRouteTargetAddressFamily) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *VRFRouteTargetAddressFamily) getIdsFromDn() {
+	var Vrf string
+	var AddressFamily string
+	var RouteTargetAddressFamily string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/inst-[%s]/dom-[%[1]s]/af-[%s]/ctrl-[%s]", &Vrf, &AddressFamily, &RouteTargetAddressFamily)
+	data.Vrf = types.StringValue(Vrf)
+	data.AddressFamily = types.StringValue(AddressFamily)
+	data.RouteTargetAddressFamily = types.StringValue(RouteTargetAddressFamily)
+}

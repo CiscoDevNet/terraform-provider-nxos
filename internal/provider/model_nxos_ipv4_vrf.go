@@ -68,3 +68,9 @@ func (data IPv4VRF) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *IPv4VRF) getIdsFromDn() {
+	var Name string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/ipv4/inst/dom-[%s]", &Name)
+	data.Name = types.StringValue(Name)
+}

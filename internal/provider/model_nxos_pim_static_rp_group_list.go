@@ -90,3 +90,13 @@ func (data PIMStaticRPGroupList) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *PIMStaticRPGroupList) getIdsFromDn() {
+	var VrfName string
+	var RpAddress string
+	var Address string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/pim/inst/dom-[%s]/staticrp/rp-[%s]/rpgrplist-[%s]", &VrfName, &RpAddress, &Address)
+	data.VrfName = types.StringValue(VrfName)
+	data.RpAddress = types.StringValue(RpAddress)
+	data.Address = types.StringValue(Address)
+}

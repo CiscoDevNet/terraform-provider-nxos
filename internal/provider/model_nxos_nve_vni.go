@@ -106,3 +106,9 @@ func (data NVEVNI) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *NVEVNI) getIdsFromDn() {
+	var Vni int64
+	fmt.Sscanf(data.Dn.ValueString(), "sys/eps/epId-[1]/nws/vni-[%v]", &Vni)
+	data.Vni = types.Int64Value(Vni)
+}

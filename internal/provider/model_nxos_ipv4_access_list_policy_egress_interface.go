@@ -91,3 +91,9 @@ func (data IPv4AccessListPolicyEgressInterface) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *IPv4AccessListPolicyEgressInterface) getIdsFromDn() {
+	var InterfaceId string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/acl/ipv4/policy/egress/intf-[%s]", &InterfaceId)
+	data.InterfaceId = types.StringValue(InterfaceId)
+}

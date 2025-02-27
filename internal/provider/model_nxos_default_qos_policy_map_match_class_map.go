@@ -69,3 +69,11 @@ func (data DefaultQOSPolicyMapMatchClassMap) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *DefaultQOSPolicyMapMatchClassMap) getIdsFromDn() {
+	var PolicyMapName string
+	var Name string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/ipqos/dflt/p/name-[%s]/cmap-[%s]", &PolicyMapName, &Name)
+	data.PolicyMapName = types.StringValue(PolicyMapName)
+	data.Name = types.StringValue(Name)
+}

@@ -141,3 +141,9 @@ func (data Subinterface) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *Subinterface) getIdsFromDn() {
+	var InterfaceId string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/intf/encrtd-[%s]", &InterfaceId)
+	data.InterfaceId = types.StringValue(InterfaceId)
+}

@@ -89,3 +89,13 @@ func (data IPv4InterfaceAddress) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *IPv4InterfaceAddress) getIdsFromDn() {
+	var Vrf string
+	var InterfaceId string
+	var Address string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/ipv4/inst/dom-[%s]/if-[%s]/addr-[%s]", &Vrf, &InterfaceId, &Address)
+	data.Vrf = types.StringValue(Vrf)
+	data.InterfaceId = types.StringValue(InterfaceId)
+	data.Address = types.StringValue(Address)
+}

@@ -114,3 +114,9 @@ func (data NTPServer) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *NTPServer) getIdsFromDn() {
+	var Name string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/time/prov-[%s]", &Name)
+	data.Name = types.StringValue(Name)
+}

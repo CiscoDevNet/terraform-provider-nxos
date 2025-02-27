@@ -69,3 +69,9 @@ func (data PortChannelInterfaceVRF) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *PortChannelInterfaceVRF) getIdsFromDn() {
+	var InterfaceId string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/intf/aggr-[%s]/rtvrfMbr", &InterfaceId)
+	data.InterfaceId = types.StringValue(InterfaceId)
+}

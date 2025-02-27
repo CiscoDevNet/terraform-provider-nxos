@@ -80,3 +80,9 @@ func (data BGPGracefulRestart) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *BGPGracefulRestart) getIdsFromDn() {
+	var Vrf string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/bgp/inst/dom-[%s]/gr", &Vrf)
+	data.Vrf = types.StringValue(Vrf)
+}

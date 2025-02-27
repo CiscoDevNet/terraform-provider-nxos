@@ -165,3 +165,11 @@ func (data BGPPeer) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *BGPPeer) getIdsFromDn() {
+	var Vrf string
+	var Address string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/bgp/inst/dom-[%s]/peer-[%s]", &Vrf, &Address)
+	data.Vrf = types.StringValue(Vrf)
+	data.Address = types.StringValue(Address)
+}

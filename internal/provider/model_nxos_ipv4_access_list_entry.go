@@ -476,3 +476,11 @@ func (data IPv4AccessListEntry) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *IPv4AccessListEntry) getIdsFromDn() {
+	var Name string
+	var SequenceNumber int64
+	fmt.Sscanf(data.Dn.ValueString(), "sys/acl/ipv4/name-[%s]/seq-[%v]", &Name, &SequenceNumber)
+	data.Name = types.StringValue(Name)
+	data.SequenceNumber = types.Int64Value(SequenceNumber)
+}

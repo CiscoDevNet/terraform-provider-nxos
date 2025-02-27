@@ -92,3 +92,9 @@ func (data VPCInterface) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *VPCInterface) getIdsFromDn() {
+	var VpcInterfaceId int64
+	fmt.Sscanf(data.Dn.ValueString(), "sys/vpc/inst/dom/if-[%v]", &VpcInterfaceId)
+	data.VpcInterfaceId = types.Int64Value(VpcInterfaceId)
+}

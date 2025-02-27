@@ -279,3 +279,9 @@ func (data PhysicalInterface) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *PhysicalInterface) getIdsFromDn() {
+	var InterfaceId string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/intf/phys-[%s]", &InterfaceId)
+	data.InterfaceId = types.StringValue(InterfaceId)
+}

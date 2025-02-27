@@ -69,3 +69,9 @@ func (data PhysicalInterfaceVRF) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *PhysicalInterfaceVRF) getIdsFromDn() {
+	var InterfaceId string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/intf/phys-[%s]/rtvrfMbr", &InterfaceId)
+	data.InterfaceId = types.StringValue(InterfaceId)
+}

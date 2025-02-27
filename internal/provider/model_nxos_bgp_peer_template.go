@@ -105,3 +105,9 @@ func (data BGPPeerTemplate) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *BGPPeerTemplate) getIdsFromDn() {
+	var TemplateName string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/bgp/inst/dom-[default]/peercont-[%s]", &TemplateName)
+	data.TemplateName = types.StringValue(TemplateName)
+}

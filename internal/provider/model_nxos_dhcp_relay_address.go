@@ -78,3 +78,13 @@ func (data DHCPRelayAddress) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *DHCPRelayAddress) getIdsFromDn() {
+	var InterfaceId string
+	var Vrf string
+	var Address string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/dhcp/inst/relayif-[%s]/addr-[%s]-[%s]", &InterfaceId, &Vrf, &Address)
+	data.InterfaceId = types.StringValue(InterfaceId)
+	data.Vrf = types.StringValue(Vrf)
+	data.Address = types.StringValue(Address)
+}

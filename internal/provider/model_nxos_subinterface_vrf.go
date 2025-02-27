@@ -69,3 +69,9 @@ func (data SubinterfaceVRF) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *SubinterfaceVRF) getIdsFromDn() {
+	var InterfaceId string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/intf/encrtd-[%s]/rtvrfMbr", &InterfaceId)
+	data.InterfaceId = types.StringValue(InterfaceId)
+}

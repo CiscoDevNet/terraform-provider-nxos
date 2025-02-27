@@ -69,3 +69,9 @@ func (data PIMStaticRPPolicy) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *PIMStaticRPPolicy) getIdsFromDn() {
+	var VrfName string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/pim/inst/dom-[%s]/staticrp", &VrfName)
+	data.VrfName = types.StringValue(VrfName)
+}

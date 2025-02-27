@@ -172,6 +172,9 @@ func (r *PIMVRFResource) Read(ctx context.Context, req resource.ReadRequest, res
 		return
 	}
 	state.fromBody(res, imp)
+	if imp {
+		state.getIdsFromDn()
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 

@@ -78,3 +78,13 @@ func (data PIMAnycastRPPeer) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *PIMAnycastRPPeer) getIdsFromDn() {
+	var VrfName string
+	var Address string
+	var RpSetAddress string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/pim/inst/dom-[%s]/acastrpfunc/peer-[%s]-peer-[%s]", &VrfName, &Address, &RpSetAddress)
+	data.VrfName = types.StringValue(VrfName)
+	data.Address = types.StringValue(Address)
+	data.RpSetAddress = types.StringValue(RpSetAddress)
+}

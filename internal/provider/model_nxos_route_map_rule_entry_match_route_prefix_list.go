@@ -70,3 +70,13 @@ func (data RouteMapRuleEntryMatchRoutePrefixList) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *RouteMapRuleEntryMatchRoutePrefixList) getIdsFromDn() {
+	var RuleName string
+	var Order int64
+	var PrefixListDn string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/rpm/rtmap-[%s]/ent-[%v]/mrtdst/rsrtDstAtt-[%s]", &RuleName, &Order, &PrefixListDn)
+	data.RuleName = types.StringValue(RuleName)
+	data.Order = types.Int64Value(Order)
+	data.PrefixListDn = types.StringValue(PrefixListDn)
+}

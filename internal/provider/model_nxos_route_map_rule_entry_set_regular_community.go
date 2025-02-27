@@ -88,3 +88,11 @@ func (data RouteMapRuleEntrySetRegularCommunity) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *RouteMapRuleEntrySetRegularCommunity) getIdsFromDn() {
+	var RuleName string
+	var Order int64
+	fmt.Sscanf(data.Dn.ValueString(), "sys/rpm/rtmap-[%s]/ent-[%v]/sregcomm", &RuleName, &Order)
+	data.RuleName = types.StringValue(RuleName)
+	data.Order = types.Int64Value(Order)
+}

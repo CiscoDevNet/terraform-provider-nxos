@@ -116,3 +116,11 @@ func (data PIMInterface) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *PIMInterface) getIdsFromDn() {
+	var VrfName string
+	var InterfaceId string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/pim/inst/dom-[%s]/if-[%s]", &VrfName, &InterfaceId)
+	data.VrfName = types.StringValue(VrfName)
+	data.InterfaceId = types.StringValue(InterfaceId)
+}

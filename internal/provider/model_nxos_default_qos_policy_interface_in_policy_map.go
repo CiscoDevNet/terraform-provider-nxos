@@ -69,3 +69,9 @@ func (data DefaultQOSPolicyInterfaceInPolicyMap) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data *DefaultQOSPolicyInterfaceInPolicyMap) getIdsFromDn() {
+	var InterfaceId string
+	fmt.Sscanf(data.Dn.ValueString(), "sys/ipqos/dflt/policy/in/intf-[%s]/pmap", &InterfaceId)
+	data.InterfaceId = types.StringValue(InterfaceId)
+}

@@ -21,6 +21,8 @@ package provider
 
 import (
 	"fmt"
+	"regexp"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -85,4 +87,14 @@ func (data LoopbackInterface) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
+}
+
+func (data *LoopbackInterface) getIdsFromDn() {
+	reString := strings.ReplaceAll("sys/intf/lb-[%s]", "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+	data.InterfaceId = types.StringValue(matches[1])
 }

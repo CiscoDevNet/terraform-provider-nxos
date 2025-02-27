@@ -230,6 +230,11 @@ func LenNoRef(attributes []YamlConfigAttribute) int {
 	return count
 }
 
+// Templating helper function to support arithmetic addition
+func Add(a, b int) int {
+	return a + b
+}
+
 // Map of templating functions
 var functions = template.FuncMap{
 	"toGoName":     ToGoName,
@@ -240,6 +245,7 @@ var functions = template.FuncMap{
 	"isLast":       IsLast,
 	"sprintf":      fmt.Sprintf,
 	"lenNoRef":     LenNoRef,
+	"add":          Add,
 }
 
 func renderTemplate(templatePath, outputPath string, config interface{}) {

@@ -49,15 +49,15 @@ type {{camelCase .Name}} struct {
 {{- end}}
 }
 
-{{- range .ChildClasses}}
-{{- if eq .Type "list"}}
+{{range .ChildClasses}}
+{{if eq .Type "list"}}
 type {{$name}}{{toGoName .TfName}} struct {
 {{- range .Attributes}}
 	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
 {{- end}}
 }
-{{- end}}
-{{- end}}
+{{end}}
+{{end}}
 
 func (data {{camelCase .Name}}) getDn() string {
 {{- if hasId .Attributes}}
@@ -67,8 +67,8 @@ func (data {{camelCase .Name}}) getDn() string {
 {{- end}}
 }
 
-{{- range .ChildClasses}}
-{{- if eq .Type "list"}}
+{{range .ChildClasses}}
+{{if eq .Type "list"}}
 func (data {{$name}}{{toGoName .TfName}}) getRn() string {
 {{- if hasId .Attributes}}
 	return fmt.Sprintf("{{.Rn}}"{{range .Attributes}}{{if .Id}}, data.{{toGoName .TfName}}.Value{{.Type}}(){{end}}{{end}})
@@ -76,8 +76,8 @@ func (data {{$name}}{{toGoName .TfName}}) getRn() string {
 	return "{{.Rn}}"
 {{- end}}
 }
-{{- end}}
-{{- end}}
+{{end}}
+{{end}}
 
 func (data {{camelCase .Name}}) getClassName() string {
 	return "{{.ClassName}}"
@@ -270,3 +270,19 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+{{if hasId .Attributes}}
+func (data *{{camelCase .Name}}) getIdsFromDn() {
+	reString := strings.ReplaceAll("{{.Dn}}", "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+{{- range $index, $value := .Attributes}}
+{{- if .Id}}
+	data.{{toGoName .TfName}} = types.{{.Type}}Value({{if eq .Type "Int64"}}helpers.Must(strconv.ParseInt(matches[{{add $index 1}}], 10, 0)){{else}}matches[{{add $index 1}}]{{end}})
+{{- end}}
+{{- end}}
+}
+{{end}}

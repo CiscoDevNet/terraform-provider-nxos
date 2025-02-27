@@ -21,7 +21,9 @@ package provider
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -36,6 +38,7 @@ type IPv4StaticRoute struct {
 	Prefix   types.String              `tfsdk:"prefix"`
 	NextHops []IPv4StaticRouteNextHops `tfsdk:"next_hops"`
 }
+
 type IPv4StaticRouteNextHops struct {
 	InterfaceId types.String `tfsdk:"interface_id"`
 	Address     types.String `tfsdk:"address"`
@@ -49,6 +52,7 @@ type IPv4StaticRouteNextHops struct {
 func (data IPv4StaticRoute) getDn() string {
 	return fmt.Sprintf("sys/ipv4/inst/dom-[%s]/rt-[%s]", data.VrfName.ValueString(), data.Prefix.ValueString())
 }
+
 func (data IPv4StaticRouteNextHops) getRn() string {
 	return fmt.Sprintf("nh-[%s]-addr-[%s]-vrf-[%s]", data.InterfaceId.ValueString(), data.Address.ValueString(), data.VrfName.ValueString())
 }
@@ -180,4 +184,15 @@ func (data IPv4StaticRoute) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
+}
+
+func (data *IPv4StaticRoute) getIdsFromDn() {
+	reString := strings.ReplaceAll("sys/ipv4/inst/dom-[%s]/rt-[%s]", "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+	data.VrfName = types.StringValue(matches[1])
+	data.Prefix = types.StringValue(matches[2])
 }

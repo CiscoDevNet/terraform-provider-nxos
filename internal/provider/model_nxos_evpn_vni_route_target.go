@@ -21,6 +21,8 @@ package provider
 
 import (
 	"fmt"
+	"regexp"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -69,4 +71,16 @@ func (data EVPNVNIRouteTarget) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
+}
+
+func (data *EVPNVNIRouteTarget) getIdsFromDn() {
+	reString := strings.ReplaceAll("sys/evpn/bdevi-[%s]/rttp-[%s]/ent-[%s]", "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+	data.Encap = types.StringValue(matches[1])
+	data.Direction = types.StringValue(matches[2])
+	data.RouteTarget = types.StringValue(matches[3])
 }

@@ -21,7 +21,11 @@ package provider
 
 import (
 	"fmt"
+	"regexp"
+	"strconv"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -69,4 +73,16 @@ func (data RouteMapRuleEntrySetRegularCommunityItem) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
+}
+
+func (data *RouteMapRuleEntrySetRegularCommunityItem) getIdsFromDn() {
+	reString := strings.ReplaceAll("sys/rpm/rtmap-[%s]/ent-[%v]/sregcomm/item-[%s]", "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+	data.RuleName = types.StringValue(matches[1])
+	data.Order = types.Int64Value(helpers.Must(strconv.ParseInt(matches[2], 10, 0)))
+	data.Community = types.StringValue(matches[3])
 }

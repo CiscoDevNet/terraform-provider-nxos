@@ -21,7 +21,9 @@ package provider
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -278,4 +280,14 @@ func (data PhysicalInterface) toDeleteBody() nxos.Body {
 	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"userCfgdFlags", "none")
 
 	return nxos.Body{body}
+}
+
+func (data *PhysicalInterface) getIdsFromDn() {
+	reString := strings.ReplaceAll("sys/intf/phys-[%s]", "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+	data.InterfaceId = types.StringValue(matches[1])
 }

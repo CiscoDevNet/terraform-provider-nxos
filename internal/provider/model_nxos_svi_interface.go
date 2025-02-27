@@ -127,7 +127,8 @@ func (data SVIInterface) toDeleteBody() nxos.Body {
 }
 
 func (data *SVIInterface) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/intf/svi-[%s]", "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/intf/svi-[%s]", "%[1]s", "")
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

@@ -75,7 +75,8 @@ func (data NVEVNIIngressReplication) toDeleteBody() nxos.Body {
 }
 
 func (data *NVEVNIIngressReplication) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/eps/epId-[1]/nws/vni-[%v]/IngRepl", "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/eps/epId-[1]/nws/vni-[%v]/IngRepl", "%[1]s", "")
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

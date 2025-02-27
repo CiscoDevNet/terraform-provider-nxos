@@ -82,7 +82,8 @@ func (data BGPVRF) toDeleteBody() nxos.Body {
 }
 
 func (data *BGPVRF) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/bgp/inst/dom-[%s]", "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/bgp/inst/dom-[%s]", "%[1]s", "")
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

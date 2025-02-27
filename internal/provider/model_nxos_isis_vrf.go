@@ -191,7 +191,8 @@ func (data ISISVRF) toDeleteBody() nxos.Body {
 }
 
 func (data *ISISVRF) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/isis/inst-[%s]/dom-[%s]", "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/isis/inst-[%s]/dom-[%s]", "%[1]s", "")
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

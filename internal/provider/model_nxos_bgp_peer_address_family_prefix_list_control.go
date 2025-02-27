@@ -85,7 +85,8 @@ func (data BGPPeerAddressFamilyPrefixListControl) toDeleteBody() nxos.Body {
 }
 
 func (data *BGPPeerAddressFamilyPrefixListControl) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/bgp/inst/dom-[%s]/peer-[%s]/af-[%s]/pfxctrl-[%s]", "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/bgp/inst/dom-[%s]/peer-[%s]/af-[%s]/pfxctrl-[%s]", "%[1]s", "")
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

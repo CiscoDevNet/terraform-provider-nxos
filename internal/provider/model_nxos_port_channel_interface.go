@@ -253,7 +253,8 @@ func (data PortChannelInterface) toDeleteBody() nxos.Body {
 }
 
 func (data *PortChannelInterface) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/intf/aggr-[%s]", "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/intf/aggr-[%s]", "%[1]s", "")
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

@@ -73,7 +73,8 @@ func (data LoopbackInterfaceVRF) toDeleteBody() nxos.Body {
 }
 
 func (data *LoopbackInterfaceVRF) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/intf/lb-[%s]/rtvrfMbr", "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/intf/lb-[%s]/rtvrfMbr", "%[1]s", "")
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

@@ -101,7 +101,8 @@ func (data BGPPeerTemplateAddressFamily) toDeleteBody() nxos.Body {
 }
 
 func (data *BGPPeerTemplateAddressFamily) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/bgp/inst/dom-[default]/peercont-[%s]/af-[%s]", "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/bgp/inst/dom-[default]/peercont-[%s]/af-[%s]", "%[1]s", "")
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

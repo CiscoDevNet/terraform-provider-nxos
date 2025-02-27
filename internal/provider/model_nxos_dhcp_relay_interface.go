@@ -72,7 +72,8 @@ func (data DHCPRelayInterface) toDeleteBody() nxos.Body {
 }
 
 func (data *DHCPRelayInterface) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/dhcp/inst/relayif-[%s]", "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/dhcp/inst/relayif-[%s]", "%[1]s", "")
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

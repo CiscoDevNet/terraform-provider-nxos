@@ -92,7 +92,8 @@ func (data PIMVRF) toDeleteBody() nxos.Body {
 }
 
 func (data *PIMVRF) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/pim/inst/dom-[%s]", "%s", "(.+)")
+	reString := strings.ReplaceAll("sys/pim/inst/dom-[%s]", "%[1]s", "")
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")
 	reString = strings.ReplaceAll(reString, "[", "\\[")
 	reString = strings.ReplaceAll(reString, "]", "\\]")

@@ -4,4 +4,5 @@ resource "nxos_bgp_advertised_prefix" "example" {
   address_family = "ipv4-ucast"
   prefix         = "192.168.1.0/24"
   route_map      = "rt-map"
+  evpn           = "enabled"
 }

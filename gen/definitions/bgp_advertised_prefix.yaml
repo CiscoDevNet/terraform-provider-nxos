@@ -66,7 +66,7 @@ attributes:
       - enabled
       - disabled
     example: enabled
-    delete_value: disabled
+    default_value: disabled
 test_prerequisites:
   - dn: sys/fm/bgp
     class_name: fmBgp

@@ -49,6 +49,7 @@ resource "nxos_bgp_advertised_prefix" "example" {
 - `device` (String) A device name from the provider configuration.
 - `evpn` (String) Evpn to advertise route towards evpn side
   - Choices: `enabled`, `disabled`
+  - Default value: `disabled`
 - `route_map` (String) Route map to modify attributes.
 
 ### Read-Only

@@ -88,7 +88,6 @@ func (data *BGPAdvertisedPrefix) fromBody(res gjson.Result, all bool) {
 
 func (data BGPAdvertisedPrefix) toDeleteBody() nxos.Body {
 	body := ""
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"evpn", "disabled")
 
 	return nxos.Body{body}
 }

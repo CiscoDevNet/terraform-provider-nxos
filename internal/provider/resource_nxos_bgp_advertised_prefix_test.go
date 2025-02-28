@@ -38,6 +38,7 @@ func TestAccNxosBGPAdvertisedPrefix(t *testing.T) {
 					resource.TestCheckResourceAttr("nxos_bgp_advertised_prefix.test", "address_family", "ipv4-ucast"),
 					resource.TestCheckResourceAttr("nxos_bgp_advertised_prefix.test", "prefix", "192.168.1.0/24"),
 					resource.TestCheckResourceAttr("nxos_bgp_advertised_prefix.test", "route_map", "rt-map"),
+					resource.TestCheckResourceAttr("nxos_bgp_advertised_prefix.test", "evpn", "enabled"),
 				),
 			},
 			{
@@ -115,6 +116,7 @@ func testAccNxosBGPAdvertisedPrefixConfig_all() string {
 		address_family = "ipv4-ucast"
 		prefix = "192.168.1.0/24"
 		route_map = "rt-map"
+		evpn = "enabled"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
 	}
 	`

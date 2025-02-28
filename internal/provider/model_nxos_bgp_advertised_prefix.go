@@ -38,6 +38,7 @@ type BGPAdvertisedPrefix struct {
 	AddressFamily types.String `tfsdk:"address_family"`
 	Prefix        types.String `tfsdk:"prefix"`
 	RouteMap      types.String `tfsdk:"route_map"`
+	Evpn          types.String `tfsdk:"evpn"`
 }
 
 func (data BGPAdvertisedPrefix) getDn() string {
@@ -60,6 +61,9 @@ func (data BGPAdvertisedPrefix) toBody(statusReplace bool) nxos.Body {
 	if (!data.RouteMap.IsUnknown() && !data.RouteMap.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rtMap", data.RouteMap.ValueString())
 	}
+	if (!data.Evpn.IsUnknown() && !data.Evpn.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"evpn", data.Evpn.ValueString())
+	}
 
 	return nxos.Body{body}
 }
@@ -75,10 +79,16 @@ func (data *BGPAdvertisedPrefix) fromBody(res gjson.Result, all bool) {
 	} else {
 		data.RouteMap = types.StringNull()
 	}
+	if !data.Evpn.IsNull() || all {
+		data.Evpn = types.StringValue(res.Get(data.getClassName() + ".attributes.evpn").String())
+	} else {
+		data.Evpn = types.StringNull()
+	}
 }
 
 func (data BGPAdvertisedPrefix) toDeleteBody() nxos.Body {
 	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"evpn", "disabled")
 
 	return nxos.Body{body}
 }

@@ -104,6 +104,13 @@ func (r *BGPAdvertisedPrefixResource) Schema(ctx context.Context, req resource.S
 				MarkdownDescription: helpers.NewAttributeDescription("Route map to modify attributes.").String,
 				Optional:            true,
 			},
+			"evpn": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Evpn to advertise route towards evpn side").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
 		},
 	}
 }

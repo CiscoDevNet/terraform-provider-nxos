@@ -28,6 +28,7 @@ resource "nxos_bgp_advertised_prefix" "example" {
   address_family = "ipv4-ucast"
   prefix         = "192.168.1.0/24"
   route_map      = "rt-map"
+  evpn           = "enabled"
 }
 ```
 
@@ -46,6 +47,8 @@ resource "nxos_bgp_advertised_prefix" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
+- `evpn` (String) Evpn to advertise route towards evpn side
+  - Choices: `enabled`, `disabled`
 - `route_map` (String) Route map to modify attributes.
 
 ### Read-Only

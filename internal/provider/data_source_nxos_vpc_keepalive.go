@@ -42,7 +42,7 @@ func NewVPCKeepaliveDataSource() datasource.DataSource {
 }
 
 type VPCKeepaliveDataSource struct {
-	clients map[string]*nxos.Client
+	data *NxosProviderData
 }
 
 func (d *VPCKeepaliveDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -124,7 +124,7 @@ func (d *VPCKeepaliveDataSource) Configure(_ context.Context, req datasource.Con
 		return
 	}
 
-	d.clients = req.ProviderData.(map[string]*nxos.Client)
+	d.data = req.ProviderData.(*NxosProviderData)
 }
 
 func (d *VPCKeepaliveDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
@@ -139,14 +139,14 @@ func (d *VPCKeepaliveDataSource) Read(ctx context.Context, req datasource.ReadRe
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getDn()))
 
-	client, ok := d.clients[config.Device.ValueString()]
+	device, ok := d.data.Devices[config.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
 
 	queries := []func(*nxos.Req){}
-	res, err := client.GetDn(config.getDn(), queries...)
+	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

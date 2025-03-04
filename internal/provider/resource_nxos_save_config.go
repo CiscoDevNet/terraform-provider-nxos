@@ -27,7 +27,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/netascode/go-nxos"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
@@ -38,7 +37,7 @@ func NewSaveConfigResource() resource.Resource {
 }
 
 type SaveConfigResource struct {
-	clients map[string]*nxos.Client
+	data *NxosProviderData
 }
 
 func (r *SaveConfigResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -70,7 +69,7 @@ func (r *SaveConfigResource) Configure(_ context.Context, req resource.Configure
 		return
 	}
 
-	r.clients = req.ProviderData.(map[string]*nxos.Client)
+	r.data = req.ProviderData.(*NxosProviderData)
 }
 
 func (r *SaveConfigResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -90,10 +89,18 @@ func (r *SaveConfigResource) Create(ctx context.Context, req resource.CreateRequ
 
 	tflog.Debug(ctx, "Beginning to save config")
 
-	_, err := r.clients[device.ValueString()].JsonRpc("copy run start")
-	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to save config, got error: %s", err))
+	d, ok := r.data.Devices[device.ValueString()]
+	if !ok {
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", device.ValueString()))
 		return
+	}
+
+	if d.Managed {
+		_, err := d.Client.JsonRpc("copy run start")
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to save config, got error: %s", err))
+			return
+		}
 	}
 
 	tflog.Debug(ctx, "Save config finished successfully")
@@ -125,10 +132,18 @@ func (r *SaveConfigResource) Update(ctx context.Context, req resource.UpdateRequ
 
 	tflog.Debug(ctx, "Beginning to save config")
 
-	_, err := r.clients[device.ValueString()].JsonRpc("copy run start")
-	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to save config, got error: %s", err))
+	d, ok := r.data.Devices[device.ValueString()]
+	if !ok {
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", device.ValueString()))
 		return
+	}
+
+	if d.Managed {
+		_, err := d.Client.JsonRpc("copy run start")
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to save config, got error: %s", err))
+			return
+		}
 	}
 
 	tflog.Debug(ctx, "Save config finished successfully")

@@ -53,8 +53,19 @@ type NxosProviderModel struct {
 }
 
 type NxosProviderModelDevice struct {
-	Name types.String `tfsdk:"name"`
-	URL  types.String `tfsdk:"url"`
+	Name    types.String `tfsdk:"name"`
+	URL     types.String `tfsdk:"url"`
+	Managed types.Bool   `tfsdk:"managed"`
+}
+
+// NxosProviderData describes the data maintained by the provider.
+type NxosProviderData struct {
+	Devices map[string]*NxosProviderDataDevice
+}
+
+type NxosProviderDataDevice struct {
+	Client  *nxos.Client
+	Managed bool
 }
 
 func (p *NxosProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
@@ -101,6 +112,10 @@ func (p *NxosProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 						"url": schema.StringAttribute{
 							MarkdownDescription: "URL of the Cisco NX-OS device.",
 							Required:            true,
+						},
+						"managed": schema.BoolAttribute{
+							MarkdownDescription: "Enable or disable device management. This can be used to temporarily skip a device due to maintainance for example. Defaults to `true`.",
+							Optional:            true,
 						},
 					},
 				},
@@ -241,7 +256,9 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		retries = config.Retries.ValueInt64()
 	}
 
-	clients := make(map[string]*nxos.Client)
+	data := NxosProviderData{}
+	data.Devices = make(map[string]*NxosProviderDataDevice)
+
 	c, err := nxos.NewClient(url, username, password, insecure, nxos.MaxRetries(int(retries)))
 	if err != nil {
 		resp.Diagnostics.AddError(
@@ -250,9 +267,15 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		)
 		return
 	}
-	clients[""] = &c
+	data.Devices[""] = &NxosProviderDataDevice{Client: &c, Managed: true}
 
 	for _, device := range config.Devices {
+		var managed bool
+		if device.Managed.IsUnknown() || device.Managed.IsNull() {
+			managed = true
+		} else {
+			managed = device.Managed.ValueBool()
+		}
 		c, err := nxos.NewClient(device.URL.ValueString(), username, password, insecure, nxos.MaxRetries(int(retries)))
 		if err != nil {
 			resp.Diagnostics.AddError(
@@ -261,11 +284,11 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 			)
 			return
 		}
-		clients[device.Name.ValueString()] = &c
+		data.Devices[device.Name.ValueString()] = &NxosProviderDataDevice{Client: &c, Managed: managed}
 	}
 
-	resp.DataSourceData = clients
-	resp.ResourceData = clients
+	resp.DataSourceData = &data
+	resp.ResourceData = &data
 }
 
 func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource {

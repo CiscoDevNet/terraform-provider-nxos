@@ -43,7 +43,7 @@ func NewPIMSSMPolicyResource() resource.Resource {
 }
 
 type PIMSSMPolicyResource struct {
-	clients map[string]*nxos.Client
+	data *NxosProviderData
 }
 
 func (r *PIMSSMPolicyResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -88,7 +88,7 @@ func (r *PIMSSMPolicyResource) Configure(ctx context.Context, req resource.Confi
 		return
 	}
 
-	r.clients = req.ProviderData.(map[string]*nxos.Client)
+	r.data = req.ProviderData.(*NxosProviderData)
 }
 
 func (r *PIMSSMPolicyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -103,18 +103,20 @@ func (r *PIMSSMPolicyResource) Create(ctx context.Context, req resource.CreateRe
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getDn()))
 
-	client, ok := r.clients[plan.Device.ValueString()]
+	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", plan.Device.ValueString()))
 		return
 	}
 
 	// Post object
-	body := plan.toBody(false)
-	_, err := client.Post(plan.getDn(), body.Str)
-	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
-		return
+	if device.Managed {
+		body := plan.toBody(false)
+		_, err := device.Client.Post(plan.getDn(), body.Str)
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
+			return
+		}
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
@@ -139,26 +141,28 @@ func (r *PIMSSMPolicyResource) Read(ctx context.Context, req resource.ReadReques
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
-	client, ok := r.clients[state.Device.ValueString()]
+	device, ok := r.data.Devices[state.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", state.Device.ValueString()))
 		return
 	}
 
-	queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
-	res, err := client.GetDn(state.Dn.ValueString(), queries...)
-	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
-		return
-	}
+	if device.Managed {
+		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
+			return
+		}
 
-	imp, diags := helpers.IsFlagImporting(ctx, req)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
-	}
-	state.fromBody(res, imp)
-	if imp {
-		state.getIdsFromDn()
+		imp, diags := helpers.IsFlagImporting(ctx, req)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromBody(res, imp)
+		if imp {
+			state.getIdsFromDn()
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
@@ -181,18 +185,21 @@ func (r *PIMSSMPolicyResource) Update(ctx context.Context, req resource.UpdateRe
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
-	client, ok := r.clients[plan.Device.ValueString()]
+	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", plan.Device.ValueString()))
 		return
 	}
 
-	body := plan.toBody(false)
+	if device.Managed {
 
-	_, err := client.Post(plan.getDn(), body.Str)
-	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
-		return
+		body := plan.toBody(false)
+
+		_, err := device.Client.Post(plan.getDn(), body.Str)
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
@@ -213,28 +220,30 @@ func (r *PIMSSMPolicyResource) Delete(ctx context.Context, req resource.DeleteRe
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Dn.ValueString()))
 
-	client, ok := r.clients[state.Device.ValueString()]
+	device, ok := r.data.Devices[state.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", state.Device.ValueString()))
 		return
 	}
 
-	body := state.toDeleteBody()
+	if device.Managed {
+		body := state.toDeleteBody()
 
-	if len(body.Str) > 0 {
-		_, err := client.Post(state.getDn(), body.Str)
-		if err != nil {
-			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
-			return
-		}
-	} else {
-		res, err := client.DeleteDn(state.Dn.ValueString())
-		if err != nil {
-			errCode := res.Get("imdata.0.error.attributes.code").Str
-			// Ignore errors of type "Cannot delete object"
-			if errCode != "1" && errCode != "107" {
-				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+		if len(body.Str) > 0 {
+			_, err := device.Client.Post(state.getDn(), body.Str)
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 				return
+			}
+		} else {
+			res, err := device.Client.DeleteDn(state.Dn.ValueString())
+			if err != nil {
+				errCode := res.Get("imdata.0.error.attributes.code").Str
+				// Ignore errors of type "Cannot delete object"
+				if errCode != "1" && errCode != "107" {
+					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+					return
+				}
 			}
 		}
 	}

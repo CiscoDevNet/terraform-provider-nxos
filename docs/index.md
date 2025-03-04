@@ -50,3 +50,7 @@ Required:
 
 - `name` (String) Device name.
 - `url` (String) URL of the Cisco NX-OS device.
+
+Optional:
+
+- `managed` (Boolean) Enable or disable device management. This can be used to temporarily skip a device due to maintainance for example. Defaults to `true`.

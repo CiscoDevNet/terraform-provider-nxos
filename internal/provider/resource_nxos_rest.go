@@ -42,7 +42,7 @@ func NewRestResource() resource.Resource {
 }
 
 type RestResource struct {
-	clients map[string]*nxos.Client
+	data *NxosProviderData
 }
 
 func (r *RestResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -122,7 +122,7 @@ func (r *RestResource) Configure(ctx context.Context, req resource.ConfigureRequ
 		return
 	}
 
-	r.clients = req.ProviderData.(map[string]*nxos.Client)
+	r.data = req.ProviderData.(*NxosProviderData)
 }
 
 func (r *RestResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -137,17 +137,19 @@ func (r *RestResource) Create(ctx context.Context, req resource.CreateRequest, r
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.Dn.ValueString()))
 
-	client, ok := r.clients[plan.Device.ValueString()]
+	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", plan.Device.ValueString()))
 		return
 	}
 
-	body := plan.toBody(ctx)
-	_, err := client.Post(plan.Dn.ValueString(), body.Str)
-	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
-		return
+	if device.Managed {
+		body := plan.toBody(ctx)
+		_, err := device.Client.Post(plan.Dn.ValueString(), body.Str)
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
+			return
+		}
 	}
 
 	plan.Id = plan.Dn
@@ -170,23 +172,25 @@ func (r *RestResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
 
-	client, ok := r.clients[state.Device.ValueString()]
+	device, ok := r.data.Devices[state.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", state.Device.ValueString()))
 		return
 	}
 
-	queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
-	if len(state.Children) > 0 {
-		queries = append(queries, nxos.Query("rsp-subtree", "children"))
-	}
-	res, err := client.GetDn(state.Dn.ValueString(), queries...)
-	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
-		return
-	}
+	if device.Managed {
+		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		if len(state.Children) > 0 {
+			queries = append(queries, nxos.Query("rsp-subtree", "children"))
+		}
+		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
+			return
+		}
 
-	state.fromBody(ctx, res)
+		state.fromBody(ctx, res)
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
@@ -206,17 +210,19 @@ func (r *RestResource) Update(ctx context.Context, req resource.UpdateRequest, r
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
-	client, ok := r.clients[plan.Device.ValueString()]
+	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", plan.Device.ValueString()))
 		return
 	}
 
-	body := plan.toBody(ctx)
-	_, err := client.Post(plan.Dn.ValueString(), body.Str)
-	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
-		return
+	if device.Managed {
+		body := plan.toBody(ctx)
+		_, err := device.Client.Post(plan.Dn.ValueString(), body.Str)
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
@@ -237,20 +243,22 @@ func (r *RestResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
 
-	client, ok := r.clients[state.Device.ValueString()]
+	device, ok := r.data.Devices[state.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", state.Device.ValueString()))
 		return
 	}
 
-	if state.Delete.ValueBool() {
-		res, err := client.DeleteDn(state.Dn.ValueString())
-		if err != nil {
-			errCode := res.Get("imdata.0.error.attributes.code").Str
-			// Ignore errors of type "Cannot delete object"
-			if errCode != "1" && errCode != "107" {
-				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
-				return
+	if device.Managed {
+		if state.Delete.ValueBool() {
+			res, err := device.Client.DeleteDn(state.Dn.ValueString())
+			if err != nil {
+				errCode := res.Get("imdata.0.error.attributes.code").Str
+				// Ignore errors of type "Cannot delete object"
+				if errCode != "1" && errCode != "107" {
+					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+					return
+				}
 			}
 		}
 	}

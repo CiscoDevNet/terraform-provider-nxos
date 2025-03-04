@@ -43,7 +43,7 @@ func NewSystemResource() resource.Resource {
 }
 
 type SystemResource struct {
-	clients map[string]*nxos.Client
+	data *NxosProviderData
 }
 
 func (r *SystemResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -81,7 +81,7 @@ func (r *SystemResource) Configure(ctx context.Context, req resource.ConfigureRe
 		return
 	}
 
-	r.clients = req.ProviderData.(map[string]*nxos.Client)
+	r.data = req.ProviderData.(*NxosProviderData)
 }
 
 func (r *SystemResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -96,18 +96,20 @@ func (r *SystemResource) Create(ctx context.Context, req resource.CreateRequest,
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getDn()))
 
-	client, ok := r.clients[plan.Device.ValueString()]
+	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", plan.Device.ValueString()))
 		return
 	}
 
 	// Post object
-	body := plan.toBody(false)
-	_, err := client.Post(plan.getDn(), body.Str)
-	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
-		return
+	if device.Managed {
+		body := plan.toBody(false)
+		_, err := device.Client.Post(plan.getDn(), body.Str)
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
+			return
+		}
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
@@ -132,24 +134,26 @@ func (r *SystemResource) Read(ctx context.Context, req resource.ReadRequest, res
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
-	client, ok := r.clients[state.Device.ValueString()]
+	device, ok := r.data.Devices[state.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", state.Device.ValueString()))
 		return
 	}
 
-	queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
-	res, err := client.GetDn(state.Dn.ValueString(), queries...)
-	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
-		return
-	}
+	if device.Managed {
+		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
+			return
+		}
 
-	imp, diags := helpers.IsFlagImporting(ctx, req)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+		imp, diags := helpers.IsFlagImporting(ctx, req)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromBody(res, imp)
 	}
-	state.fromBody(res, imp)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 
@@ -171,18 +175,21 @@ func (r *SystemResource) Update(ctx context.Context, req resource.UpdateRequest,
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
-	client, ok := r.clients[plan.Device.ValueString()]
+	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", plan.Device.ValueString()))
 		return
 	}
 
-	body := plan.toBody(false)
+	if device.Managed {
 
-	_, err := client.Post(plan.getDn(), body.Str)
-	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
-		return
+		body := plan.toBody(false)
+
+		_, err := device.Client.Post(plan.getDn(), body.Str)
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))

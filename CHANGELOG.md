@@ -1,3 +1,7 @@
+## 0.5.9 (unreleased)
+
+- Add `managed` flag to provider device configuration to allow temporarily skipping a device due to maintainance
+
 ## 0.5.8
 
 - Check if a device referenced in a resource or data source exists in the provider configuration

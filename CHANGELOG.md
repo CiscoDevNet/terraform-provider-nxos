@@ -1,6 +1,7 @@
 ## 0.5.9 (unreleased)
 
 - Add `managed` flag to provider device configuration to allow temporarily skipping a device due to maintainance
+- Add `evpn` attribute to `nxos_bgp_advertised_prefix` resource and data source
 
 ## 0.5.8
 

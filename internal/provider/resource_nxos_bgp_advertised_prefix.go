@@ -106,7 +106,7 @@ func (r *BGPAdvertisedPrefixResource) Schema(ctx context.Context, req resource.S
 				Optional:            true,
 			},
 			"evpn": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Evpn to advertise route towards evpn side").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise route towards evpn side.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
 				Optional:            true,
 				Computed:            true,
 				Default:             stringdefault.StaticString("disabled"),

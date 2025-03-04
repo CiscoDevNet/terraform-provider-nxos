@@ -84,7 +84,7 @@ func (d *BGPAdvertisedPrefixDataSource) Schema(ctx context.Context, req datasour
 				Computed:            true,
 			},
 			"evpn": schema.StringAttribute{
-				MarkdownDescription: "Evpn to advertise route towards evpn side",
+				MarkdownDescription: "Advertise route towards evpn side.",
 				Computed:            true,
 			},
 		},

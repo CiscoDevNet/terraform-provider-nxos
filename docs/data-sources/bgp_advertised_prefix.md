@@ -40,6 +40,6 @@ data "nxos_bgp_advertised_prefix" "example" {
 
 ### Read-Only
 
-- `evpn` (String) Evpn to advertise route towards evpn side
+- `evpn` (String) Advertise route towards evpn side.
 - `id` (String) The distinguished name of the object.
 - `route_map` (String) Route map to modify attributes.

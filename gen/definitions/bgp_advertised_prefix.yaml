@@ -58,6 +58,15 @@ attributes:
     description: "Route map to modify attributes."
     default_value: ""
     example: rt-map
+  - nxos_name: evpn
+    tf_name: evpn
+    type: String
+    description: 'Evpn to advertise route towards evpn side'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+    default_value: disabled
 test_prerequisites:
   - dn: sys/fm/bgp
     class_name: fmBgp

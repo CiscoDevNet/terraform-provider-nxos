@@ -1,0 +1,38 @@
+---
+name: OSPFv3 Instance
+class_name: ospfv3Inst
+dn: sys/ospfv3/inst-[%s]
+ds_description: This data source can read the OSPFv3 instance configuration.
+res_description: This resource can manage the OSPFv3 instance configuration.
+doc_path: Routing%20and%20Forwarding/ospfv3:Inst/
+doc_category: OSPFv3
+parents:
+  - OSPFv3
+children:
+  - OSPFv3 VRF
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'Administrative state.'
+    enum_values:
+      - enabled
+      - disabled
+    default_value: enabled
+    example: enabled
+  - nxos_name: name
+    tf_name: name
+    type: String
+    id: true
+    description: 'OSPF instance name.'
+    example: 'OSPFv3'
+test_prerequisites:
+  - dn: sys/fm/ospfv3
+    class_name: fmOspfv3
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/ospfv3
+    class_name: ospfv3Entity
+    dependencies: [0]

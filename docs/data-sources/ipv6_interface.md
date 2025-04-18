@@ -3,13 +3,13 @@
 page_title: "nxos_ipv6_interface Data Source - terraform-provider-nxos"
 subcategory: "IPv6"
 description: |-
-  This data source can read an IPv4 interface.
+  This data source can read an IPv6 interface.
   API Documentation: ipv6If https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv6:If/
 ---
 
 # nxos_ipv6_interface (Data Source)
 
-This data source can read an IPv4 interface.
+This data source can read an IPv6 interface.
 
 - API Documentation: [ipv6If](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv6:If/)
 

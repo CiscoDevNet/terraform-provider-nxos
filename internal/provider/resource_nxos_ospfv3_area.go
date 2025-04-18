@@ -57,7 +57,7 @@ func (r *OSPFv3AreaResource) Metadata(ctx context.Context, req resource.Metadata
 func (r *OSPFv3AreaResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the OSPFv3 Area configuration.", "ospfv3Area", "Routing%20and%20Forwarding/ospfv3:Area/").AddParents("ospfv3_vrf").AddChildren("ospfv3_area_address_family").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the OSPFv3 Area configuration.", "ospfv3Area", "Routing%20and%20Forwarding/ospfv3:Area/").AddParents("ospfv3_vrf").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -86,7 +86,7 @@ func (r *OSPFv3AreaResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"area_id": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Area identifier to which a network or interface belongs in IPv4 address format.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Area identifier to which a network or interface belongs in IPv4 address format.").AddDefaultValueDescription("0.0.0.0").String,
 				Required:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
@@ -104,7 +104,7 @@ func (r *OSPFv3AreaResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Computed:            true,
 				Default:             booldefault.StaticBool(true),
 			},
-			"supress_foward_address": schema.BoolAttribute{
+			"suppress_forward_address": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Originate summary LSA into other areas").AddDefaultValueDescription("false").String,
 				Optional:            true,
 				Computed:            true,

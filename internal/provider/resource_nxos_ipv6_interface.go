@@ -56,7 +56,7 @@ func (r *IPv6InterfaceResource) Metadata(ctx context.Context, req resource.Metad
 func (r *IPv6InterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage an IPv4 interface.", "ipv6If", "Layer%203/ipv6:If/").AddParents("ipv6_vrf").AddChildren("ipv6_interface_address").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage an IPv6 interface.", "ipv6If", "Layer%203/ipv6:If/").AddParents("ipv6_vrf").AddChildren("ipv6_interface_address").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

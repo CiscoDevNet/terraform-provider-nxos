@@ -8,7 +8,7 @@ description: |-
   Parent resources
   nxos_ospfv3_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospfv3_instance
   Child resources
-  nxos_ospfv3_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospfv3_interfacenxos_ospfv3_area https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospfv3_area
+  nxos_ospfv3_area https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospfv3_areanxos_ospfv3_vrf_address_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospfv3_vrf_address_family
   Referenced resources
   nxos_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf
 ---
@@ -25,8 +25,8 @@ This resource can manage the OSPFv3 VRF configuration.
 
 ### Child resources
 
-- [nxos_ospfv3_interface](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospfv3_interface)
 - [nxos_ospfv3_area](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospfv3_area)
+- [nxos_ospfv3_vrf_address_family](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospfv3_vrf_address_family)
 
 ### Referenced resources
 
@@ -36,7 +36,7 @@ This resource can manage the OSPFv3 VRF configuration.
 
 ```terraform
 resource "nxos_ospfv3_vrf" "example" {
-  instance_name            = "OSPFv3"
+  instance_name            = "nac-ospfv3"
   name                     = "VRF1"
   admin_state              = "enabled"
   bandwidth_reference      = 400000
@@ -80,5 +80,5 @@ resource "nxos_ospfv3_vrf" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import nxos_ospfv3_vrf.example "sys/ospfv3/inst-[OSPFv3]/dom-[VRF1]"
+terraform import nxos_ospfv3_vrf.example "sys/ospfv3/inst-[nac-ospfv3]/dom-[VRF1]"
 ```

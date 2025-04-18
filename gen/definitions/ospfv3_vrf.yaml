@@ -9,8 +9,8 @@ doc_category: OSPFv3
 parents:
   - OSPFv3 Instance
 children:
-  - OSPFv3 Interface
   - OSPFv3 Area
+  - OSPFv3 VRF Address Family
 references:
   - VRF
 attributes:
@@ -20,7 +20,7 @@ attributes:
     id: true
     reference_only: true
     description: 'OSPFv3 instance name.'
-    example: OSPFv3
+    example: nac-ospfv3
   - nxos_name: name
     tf_name: name
     type: String
@@ -82,9 +82,9 @@ test_prerequisites:
   - dn: sys/ospfv3
     class_name: ospfv3Entity
     dependencies: [1]
-  - dn: sys/ospfv3/inst-[OSPFv3]
+  - dn: sys/ospfv3/inst-[nac-ospfv3]
     class_name: ospfv3Inst
     attributes:
       - name: name
-        value: OSPFv3
+        value: nac-ospfv3
     dependencies: [2]

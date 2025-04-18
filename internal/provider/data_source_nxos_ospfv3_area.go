@@ -83,7 +83,7 @@ func (d *OSPFv3AreaDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Originate summary LSA into other areas",
 				Computed:            true,
 			},
-			"supress_foward_address": schema.BoolAttribute{
+			"suppress_forward_address": schema.BoolAttribute{
 				MarkdownDescription: "Originate summary LSA into other areas",
 				Computed:            true,
 			},

@@ -72,10 +72,10 @@ resource "nxos_rest" "PreReq2" {
 }
 
 resource "nxos_rest" "PreReq3" {
-  dn = "sys/ospfv3/inst-[OSPFv3]"
+  dn = "sys/ospfv3/inst-[nac-ospfv3]"
   class_name = "ospfv3Inst"
   content = {
-      name = "OSPFv3"
+      name = "nac-ospfv3"
   }
   depends_on = [nxos_rest.PreReq2, ]
 }
@@ -85,7 +85,7 @@ resource "nxos_rest" "PreReq3" {
 const testAccDataSourceNxosOSPFv3VRFConfig = `
 
 resource "nxos_ospfv3_vrf" "test" {
-  instance_name = "OSPFv3"
+  instance_name = "nac-ospfv3"
   name = "VRF1"
   admin_state = "enabled"
   bandwidth_reference = 400000
@@ -96,7 +96,7 @@ resource "nxos_ospfv3_vrf" "test" {
 }
 
 data "nxos_ospfv3_vrf" "test" {
-  instance_name = "OSPFv3"
+  instance_name = "nac-ospfv3"
   name = "VRF1"
   depends_on = [nxos_ospfv3_vrf.test]
 }

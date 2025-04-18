@@ -17,7 +17,7 @@ This data source can read the OSPFv3 Area configuration.
 
 ```terraform
 data "nxos_ospfv3_area" "example" {
-  instance_name = "OSPFv3"
+  instance_name = "nac-ospfv3"
   vrf_name      = "VRF1"
   area_id       = "0.0.0.10"
 }
@@ -41,5 +41,5 @@ data "nxos_ospfv3_area" "example" {
 - `id` (String) The distinguished name of the object.
 - `redistribute` (Boolean) Send redistributed LSAs into NSSA area
 - `summary` (Boolean) Originate summary LSA into other areas
-- `supress_foward_address` (Boolean) Originate summary LSA into other areas
+- `suppress_forward_address` (Boolean) Originate summary LSA into other areas
 - `type` (String) Configure area type as NSSA or stub

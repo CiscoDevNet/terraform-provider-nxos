@@ -33,15 +33,15 @@ import (
 )
 
 type OSPFv3Area struct {
-	Device               types.String `tfsdk:"device"`
-	Dn                   types.String `tfsdk:"id"`
-	InstanceName         types.String `tfsdk:"instance_name"`
-	VrfName              types.String `tfsdk:"vrf_name"`
-	AreaId               types.String `tfsdk:"area_id"`
-	Redistribute         types.Bool   `tfsdk:"redistribute"`
-	Summary              types.Bool   `tfsdk:"summary"`
-	SupressFowardAddress types.Bool   `tfsdk:"supress_foward_address"`
-	Type                 types.String `tfsdk:"type"`
+	Device                 types.String `tfsdk:"device"`
+	Dn                     types.String `tfsdk:"id"`
+	InstanceName           types.String `tfsdk:"instance_name"`
+	VrfName                types.String `tfsdk:"vrf_name"`
+	AreaId                 types.String `tfsdk:"area_id"`
+	Redistribute           types.Bool   `tfsdk:"redistribute"`
+	Summary                types.Bool   `tfsdk:"summary"`
+	SuppressForwardAddress types.Bool   `tfsdk:"suppress_forward_address"`
+	Type                   types.String `tfsdk:"type"`
 }
 
 func (data OSPFv3Area) getDn() string {
@@ -67,8 +67,8 @@ func (data OSPFv3Area) toBody(statusReplace bool) nxos.Body {
 	if (!data.Summary.IsUnknown() && !data.Summary.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"summary", strconv.FormatBool(data.Summary.ValueBool()))
 	}
-	if (!data.SupressFowardAddress.IsUnknown() && !data.SupressFowardAddress.IsNull()) || true {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"supressFa", strconv.FormatBool(data.SupressFowardAddress.ValueBool()))
+	if (!data.SuppressForwardAddress.IsUnknown() && !data.SuppressForwardAddress.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"supressFa", strconv.FormatBool(data.SuppressForwardAddress.ValueBool()))
 	}
 	if (!data.Type.IsUnknown() && !data.Type.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.Type.ValueString())
@@ -93,10 +93,10 @@ func (data *OSPFv3Area) fromBody(res gjson.Result, all bool) {
 	} else {
 		data.Summary = types.BoolNull()
 	}
-	if !data.SupressFowardAddress.IsNull() || all {
-		data.SupressFowardAddress = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.supressFa").String()))
+	if !data.SuppressForwardAddress.IsNull() || all {
+		data.SuppressForwardAddress = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.supressFa").String()))
 	} else {
-		data.SupressFowardAddress = types.BoolNull()
+		data.SuppressForwardAddress = types.BoolNull()
 	}
 	if !data.Type.IsNull() || all {
 		data.Type = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())

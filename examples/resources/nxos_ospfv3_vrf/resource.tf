@@ -1,5 +1,5 @@
 resource "nxos_ospfv3_vrf" "example" {
-  instance_name            = "OSPFv3"
+  instance_name            = "nac-ospfv3"
   name                     = "VRF1"
   admin_state              = "enabled"
   bandwidth_reference      = 400000

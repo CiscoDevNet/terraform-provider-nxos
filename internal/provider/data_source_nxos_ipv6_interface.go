@@ -52,7 +52,7 @@ func (d *IPv6InterfaceDataSource) Metadata(_ context.Context, req datasource.Met
 func (d *IPv6InterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read an IPv4 interface.", "ipv6If", "Layer%203/ipv6:If/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read an IPv6 interface.", "ipv6If", "Layer%203/ipv6:If/").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

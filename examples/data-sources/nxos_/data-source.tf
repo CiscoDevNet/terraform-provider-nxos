@@ -1,0 +1,2 @@
+data "nxos_" "example" {
+}

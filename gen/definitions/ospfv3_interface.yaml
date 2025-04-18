@@ -8,8 +8,6 @@ doc_path: Routing%20and%20Forwarding/ospfv3:If/
 doc_category: OSPFv3
 parents:
   - OSPFv3 VRF
-children:
-  - OSPFv3 Authentication
 attributes:
   - nxos_name: id
     tf_name: interface_id
@@ -107,7 +105,7 @@ test_prerequisites:
   - dn: sys/ospfv3
     class_name: ospfv3Entity
     dependencies: [1]
-  - dn: sys/intf/phys-[eth1/10]
+  - dn: sys/intf/phys-[eth1/4]
     class_name: l1PhysIf
     attributes:
       - name: layer

@@ -7,8 +7,6 @@ description: |-
   API Documentation: ospfv3Area https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospfv3:Area/
   Parent resources
   nxos_ospfv3_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospfv3_vrf
-  Child resources
-  nxos_ospfv3_area_address_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospfv3_area_address_family
 ---
 
 # nxos_ospfv3_area (Resource)
@@ -21,21 +19,17 @@ This resource can manage the OSPFv3 Area configuration.
 
 - [nxos_ospfv3_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospfv3_vrf)
 
-### Child resources
-
-- [nxos_ospfv3_area_address_family](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospfv3_area_address_family)
-
 ## Example Usage
 
 ```terraform
 resource "nxos_ospfv3_area" "example" {
-  instance_name          = "OSPFv3"
-  vrf_name               = "VRF1"
-  area_id                = "0.0.0.10"
-  redistribute           = false
-  summary                = false
-  supress_foward_address = false
-  type                   = "regular"
+  instance_name            = "nac-ospfv3"
+  vrf_name                 = "VRF1"
+  area_id                  = "0.0.0.10"
+  redistribute             = false
+  summary                  = false
+  suppress_forward_address = false
+  type                     = "regular"
 }
 ```
 
@@ -45,6 +39,7 @@ resource "nxos_ospfv3_area" "example" {
 ### Required
 
 - `area_id` (String) Area identifier to which a network or interface belongs in IPv4 address format.
+  - Default value: `0.0.0.0`
 - `instance_name` (String) OSPFv3 instance name.
 - `vrf_name` (String) VRF name
 
@@ -55,7 +50,7 @@ resource "nxos_ospfv3_area" "example" {
   - Default value: `true`
 - `summary` (Boolean) Originate summary LSA into other areas
   - Default value: `true`
-- `supress_foward_address` (Boolean) Originate summary LSA into other areas
+- `suppress_forward_address` (Boolean) Originate summary LSA into other areas
   - Default value: `false`
 - `type` (String) Configure area type as NSSA or stub
   - Choices: `regular`, `stub`, `nssa`
@@ -70,5 +65,5 @@ resource "nxos_ospfv3_area" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import nxos_ospfv3_area.example "sys/ospfv3/inst-[OSPFv3]/dom-[VRF1]/area-[0.0.0.10]"
+terraform import nxos_ospfv3_area.example "sys/ospfv3/inst-[nac-ospfv3]/dom-[VRF1]/area-[0.0.0.10]"
 ```

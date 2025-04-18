@@ -29,7 +29,7 @@ This resource can manage the OSPFv3 IPv6 unicast address-family configuration.
 
 ```terraform
 resource "nxos_ospfv3_vrf_address_family" "example" {
-  instance_name           = "OSPFv3"
+  instance_name           = "nac-ospfv3"
   vrf_name                = "VRF1"
   address_family_type     = "ipv6-ucast"
   administrative_distance = "10"
@@ -69,5 +69,5 @@ resource "nxos_ospfv3_vrf_address_family" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import nxos_ospfv3_vrf_address_family.example "sys/ospfv3/inst-[OSPFv3]/dom-[VRF1]/af-[ipv6-ucast]"
+terraform import nxos_ospfv3_vrf_address_family.example "sys/ospfv3/inst-[nac-ospfv3]/dom-[VRF1]/af-[ipv6-ucast]"
 ```

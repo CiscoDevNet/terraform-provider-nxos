@@ -7,8 +7,6 @@ description: |-
   API Documentation: ospfv3If https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospfv3:If/
   Parent resources
   nxos_ospfv3_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospfv3_vrf
-  Child resources
-  nxos_ospfv3_authentication https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospfv3_authentication
 ---
 
 # nxos_ospfv3_interface (Resource)
@@ -20,10 +18,6 @@ This resource can manage the OSPFv3 interface configuration.
 ### Parent resources
 
 - [nxos_ospfv3_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospfv3_vrf)
-
-### Child resources
-
-- [nxos_ospfv3_authentication](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospfv3_authentication)
 
 ## Example Usage
 

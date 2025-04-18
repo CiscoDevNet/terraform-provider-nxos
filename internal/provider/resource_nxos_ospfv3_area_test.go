@@ -33,19 +33,19 @@ func TestAccNxosOSPFv3Area(t *testing.T) {
 			{
 				Config: testAccNxosOSPFv3AreaPrerequisitesConfig + testAccNxosOSPFv3AreaConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "instance_name", "OSPFv3"),
+					resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "instance_name", "nac-ospfv3"),
 					resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "vrf_name", "VRF1"),
 					resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "area_id", "0.0.0.10"),
 					resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "redistribute", "false"),
 					resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "summary", "false"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "supress_foward_address", "false"),
+					resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "suppress_forward_address", "false"),
 					resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "type", "regular"),
 				),
 			},
 			{
 				ResourceName:  "nxos_ospfv3_area.test",
 				ImportState:   true,
-				ImportStateId: "sys/ospfv3/inst-[OSPFv3]/dom-[VRF1]/area-[0.0.0.10]",
+				ImportStateId: "sys/ospfv3/inst-[nac-ospfv3]/dom-[VRF1]/area-[0.0.0.10]",
 			},
 		},
 	})
@@ -68,16 +68,16 @@ resource "nxos_rest" "PreReq1" {
 }
 
 resource "nxos_rest" "PreReq2" {
-  dn = "sys/ospfv3/inst-[OSPFv3]"
+  dn = "sys/ospfv3/inst-[nac-ospfv3]"
   class_name = "ospfv3Inst"
   content = {
-      name = "OSPFv3"
+      name = "nac-ospfv3"
   }
   depends_on = [nxos_rest.PreReq1, ]
 }
 
 resource "nxos_rest" "PreReq3" {
-  dn = "sys/ospfv3/inst-[OSPFv3]/dom-[VRF1]"
+  dn = "sys/ospfv3/inst-[nac-ospfv3]/dom-[VRF1]"
   class_name = "ospfv3Dom"
   content = {
       name = "VRF1"
@@ -90,7 +90,7 @@ resource "nxos_rest" "PreReq3" {
 func testAccNxosOSPFv3AreaConfig_minimum() string {
 	return `
 	resource "nxos_ospfv3_area" "test" {
-		instance_name = "OSPFv3"
+		instance_name = "nac-ospfv3"
 		vrf_name = "VRF1"
 		area_id = "0.0.0.10"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
@@ -101,12 +101,12 @@ func testAccNxosOSPFv3AreaConfig_minimum() string {
 func testAccNxosOSPFv3AreaConfig_all() string {
 	return `
 	resource "nxos_ospfv3_area" "test" {
-		instance_name = "OSPFv3"
+		instance_name = "nac-ospfv3"
 		vrf_name = "VRF1"
 		area_id = "0.0.0.10"
 		redistribute = false
 		summary = false
-		supress_foward_address = false
+		suppress_forward_address = false
 		type = "regular"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 	}

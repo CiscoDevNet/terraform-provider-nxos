@@ -33,7 +33,7 @@ func TestAccNxosOSPFv3VRF(t *testing.T) {
 			{
 				Config: testAccNxosOSPFv3VRFPrerequisitesConfig + testAccNxosOSPFv3VRFConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ospfv3_vrf.test", "instance_name", "OSPFv3"),
+					resource.TestCheckResourceAttr("nxos_ospfv3_vrf.test", "instance_name", "nac-ospfv3"),
 					resource.TestCheckResourceAttr("nxos_ospfv3_vrf.test", "name", "VRF1"),
 					resource.TestCheckResourceAttr("nxos_ospfv3_vrf.test", "admin_state", "enabled"),
 					resource.TestCheckResourceAttr("nxos_ospfv3_vrf.test", "bandwidth_reference", "400000"),
@@ -45,7 +45,7 @@ func TestAccNxosOSPFv3VRF(t *testing.T) {
 			{
 				ResourceName:  "nxos_ospfv3_vrf.test",
 				ImportState:   true,
-				ImportStateId: "sys/ospfv3/inst-[OSPFv3]/dom-[VRF1]",
+				ImportStateId: "sys/ospfv3/inst-[nac-ospfv3]/dom-[VRF1]",
 			},
 		},
 	})
@@ -78,10 +78,10 @@ resource "nxos_rest" "PreReq2" {
 }
 
 resource "nxos_rest" "PreReq3" {
-  dn = "sys/ospfv3/inst-[OSPFv3]"
+  dn = "sys/ospfv3/inst-[nac-ospfv3]"
   class_name = "ospfv3Inst"
   content = {
-      name = "OSPFv3"
+      name = "nac-ospfv3"
   }
   depends_on = [nxos_rest.PreReq2, ]
 }
@@ -91,7 +91,7 @@ resource "nxos_rest" "PreReq3" {
 func testAccNxosOSPFv3VRFConfig_minimum() string {
 	return `
 	resource "nxos_ospfv3_vrf" "test" {
-		instance_name = "OSPFv3"
+		instance_name = "nac-ospfv3"
 		name = "VRF1"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 	}
@@ -101,7 +101,7 @@ func testAccNxosOSPFv3VRFConfig_minimum() string {
 func testAccNxosOSPFv3VRFConfig_all() string {
 	return `
 	resource "nxos_ospfv3_vrf" "test" {
-		instance_name = "OSPFv3"
+		instance_name = "nac-ospfv3"
 		name = "VRF1"
 		admin_state = "enabled"
 		bandwidth_reference = 400000

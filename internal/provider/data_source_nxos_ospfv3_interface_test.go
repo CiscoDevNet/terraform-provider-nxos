@@ -75,7 +75,7 @@ resource "nxos_rest" "PreReq2" {
 }
 
 resource "nxos_rest" "PreReq3" {
-  dn = "sys/intf/phys-[eth1/10]"
+  dn = "sys/intf/phys-[eth1/4]"
   class_name = "l1PhysIf"
   content = {
       layer = "Layer3"

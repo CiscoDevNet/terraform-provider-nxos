@@ -17,7 +17,7 @@ attributes:
     id: true
     reference_only: true
     description: 'OSPFv3 instance name'
-    example: OSPFv3
+    example: nac-ospfv3
   - nxos_name: name
     tf_name: vrf_name
     type: String
@@ -64,13 +64,13 @@ test_prerequisites:
   - dn: sys/ospfv3
     class_name: ospfv3Entity
     dependencies: [0]
-  - dn: sys/ospfv3/inst-[OSPFv3]
+  - dn: sys/ospfv3/inst-[nac-ospfv3]
     class_name: ospfv3Inst
     attributes:
       - name: name
-        value: OSPFv3
+        value: nac-ospfv3
     dependencies: [1]
-  - dn: sys/ospfv3/inst-[OSPFv3]/dom-[VRF1]
+  - dn: sys/ospfv3/inst-[nac-ospfv3]/dom-[VRF1]
     class_name: ospfv3Dom
     attributes:
       - name: name

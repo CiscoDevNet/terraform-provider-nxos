@@ -59,7 +59,7 @@ func (r *OSPFv3VRFResource) Metadata(ctx context.Context, req resource.MetadataR
 func (r *OSPFv3VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the OSPFv3 VRF configuration.", "ospfv3Dom", "Routing%20and%20Forwarding/ospfv3:Dom/").AddParents("ospfv3_instance").AddChildren("ospfv3_interface", "ospfv3_area").AddReferences("vrf").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the OSPFv3 VRF configuration.", "ospfv3Dom", "Routing%20and%20Forwarding/ospfv3:Dom/").AddParents("ospfv3_instance").AddChildren("ospfv3_area", "ospfv3_vrf_address_family").AddReferences("vrf").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

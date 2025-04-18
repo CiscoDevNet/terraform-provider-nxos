@@ -60,16 +60,16 @@ resource "nxos_rest" "PreReq1" {
 }
 
 resource "nxos_rest" "PreReq2" {
-  dn = "sys/ospfv3/inst-[OSPFv3]"
+  dn = "sys/ospfv3/inst-[nac-ospfv3]"
   class_name = "ospfv3Inst"
   content = {
-      name = "OSPFv3"
+      name = "nac-ospfv3"
   }
   depends_on = [nxos_rest.PreReq1, ]
 }
 
 resource "nxos_rest" "PreReq3" {
-  dn = "sys/ospfv3/inst-[OSPFv3]/dom-[VRF1]"
+  dn = "sys/ospfv3/inst-[nac-ospfv3]/dom-[VRF1]"
   class_name = "ospfv3Dom"
   content = {
       name = "VRF1"
@@ -82,7 +82,7 @@ resource "nxos_rest" "PreReq3" {
 const testAccDataSourceNxosOSPFv3VRFAddressFamilyConfig = `
 
 resource "nxos_ospfv3_vrf_address_family" "test" {
-  instance_name = "OSPFv3"
+  instance_name = "nac-ospfv3"
   vrf_name = "VRF1"
   address_family_type = "ipv6-ucast"
   administrative_distance = "10"
@@ -92,7 +92,7 @@ resource "nxos_ospfv3_vrf_address_family" "test" {
 }
 
 data "nxos_ospfv3_vrf_address_family" "test" {
-  instance_name = "OSPFv3"
+  instance_name = "nac-ospfv3"
   vrf_name = "VRF1"
   address_family_type = "ipv6-ucast"
   depends_on = [nxos_ospfv3_vrf_address_family.test]

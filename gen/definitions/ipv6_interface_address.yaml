@@ -2,8 +2,8 @@
 name: IPv6 Interface Address
 class_name: ipv6Addr
 dn: sys/ipv6/inst/dom-[%s]/if-[%s]/addr-[%s]
-ds_description: This data source can read an IPv4 interface address.
-res_description: This resource can manage an IPv4 interface address.
+ds_description: This data source can read an IPv6 interface address.
+res_description: This resource can manage an IPv6 interface address.
 doc_path: Layer%203/ipv6:Addr/
 doc_category: IPv6
 parents:

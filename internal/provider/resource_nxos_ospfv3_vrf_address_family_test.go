@@ -33,7 +33,7 @@ func TestAccNxosOSPFv3VRFAddressFamily(t *testing.T) {
 			{
 				Config: testAccNxosOSPFv3VRFAddressFamilyPrerequisitesConfig + testAccNxosOSPFv3VRFAddressFamilyConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ospfv3_vrf_address_family.test", "instance_name", "OSPFv3"),
+					resource.TestCheckResourceAttr("nxos_ospfv3_vrf_address_family.test", "instance_name", "nac-ospfv3"),
 					resource.TestCheckResourceAttr("nxos_ospfv3_vrf_address_family.test", "vrf_name", "VRF1"),
 					resource.TestCheckResourceAttr("nxos_ospfv3_vrf_address_family.test", "address_family_type", "ipv6-ucast"),
 					resource.TestCheckResourceAttr("nxos_ospfv3_vrf_address_family.test", "administrative_distance", "10"),
@@ -44,7 +44,7 @@ func TestAccNxosOSPFv3VRFAddressFamily(t *testing.T) {
 			{
 				ResourceName:  "nxos_ospfv3_vrf_address_family.test",
 				ImportState:   true,
-				ImportStateId: "sys/ospfv3/inst-[OSPFv3]/dom-[VRF1]/af-[ipv6-ucast]",
+				ImportStateId: "sys/ospfv3/inst-[nac-ospfv3]/dom-[VRF1]/af-[ipv6-ucast]",
 			},
 		},
 	})
@@ -67,16 +67,16 @@ resource "nxos_rest" "PreReq1" {
 }
 
 resource "nxos_rest" "PreReq2" {
-  dn = "sys/ospfv3/inst-[OSPFv3]"
+  dn = "sys/ospfv3/inst-[nac-ospfv3]"
   class_name = "ospfv3Inst"
   content = {
-      name = "OSPFv3"
+      name = "nac-ospfv3"
   }
   depends_on = [nxos_rest.PreReq1, ]
 }
 
 resource "nxos_rest" "PreReq3" {
-  dn = "sys/ospfv3/inst-[OSPFv3]/dom-[VRF1]"
+  dn = "sys/ospfv3/inst-[nac-ospfv3]/dom-[VRF1]"
   class_name = "ospfv3Dom"
   content = {
       name = "VRF1"
@@ -89,7 +89,7 @@ resource "nxos_rest" "PreReq3" {
 func testAccNxosOSPFv3VRFAddressFamilyConfig_minimum() string {
 	return `
 	resource "nxos_ospfv3_vrf_address_family" "test" {
-		instance_name = "OSPFv3"
+		instance_name = "nac-ospfv3"
 		vrf_name = "VRF1"
 		address_family_type = "ipv6-ucast"
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
@@ -100,7 +100,7 @@ func testAccNxosOSPFv3VRFAddressFamilyConfig_minimum() string {
 func testAccNxosOSPFv3VRFAddressFamilyConfig_all() string {
 	return `
 	resource "nxos_ospfv3_vrf_address_family" "test" {
-		instance_name = "OSPFv3"
+		instance_name = "nac-ospfv3"
 		vrf_name = "VRF1"
 		address_family_type = "ipv6-ucast"
 		administrative_distance = "10"

@@ -2,8 +2,8 @@
 name: IPv6 Interface
 class_name: ipv6If
 dn: sys/ipv6/inst/dom-[%s]/if-[%s]
-ds_description: This data source can read an IPv4 interface.
-res_description: This resource can manage an IPv4 interface.
+ds_description: This data source can read an IPv6 interface.
+res_description: This resource can manage an IPv6 interface.
 doc_path: Layer%203/ipv6:If/
 doc_category: IPv6
 parents:

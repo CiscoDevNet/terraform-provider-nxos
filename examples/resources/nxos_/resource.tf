@@ -1,2 +1,0 @@
-resource "nxos_" "example" {
-}

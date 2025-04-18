@@ -1,2 +1,0 @@
-data "nxos_" "example" {
-}

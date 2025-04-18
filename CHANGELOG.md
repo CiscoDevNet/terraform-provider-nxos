@@ -1,3 +1,16 @@
+## 0.5.10 (unrelease)
+
+- Add `nxos_ipv6_interface` resource and data source
+- Add `nxos_ipv6_interface_address` resource and data source
+- Add `nxos_ipv6_static_route` resource and data source
+- Add `nxos_ipv6_vrf` resource and data source
+- Add `nxos_ospfv3` resource and data source
+- Add `nxos_ospfv3_area` resource and data source
+- Add `nxos_ospfv3_instance` resource and data source
+- Add `nxos_ospfv3_interface` resource and data source
+- Add `nxos_ospfv3_vrf` resource and data source
+- Add `nxos_ospfv3_vrf_address_family` resource and data source
+
 ## 0.5.9
 
 - Add `managed` flag to provider device configuration to allow temporarily skipping a device due to maintenance

@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## 0.5.10 (unrelease)
+## 0.5.10
 
 - Add `nxos_ipv6_interface` resource and data source
 - Add `nxos_ipv6_interface_address` resource and data source

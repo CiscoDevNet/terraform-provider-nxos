@@ -10,6 +10,7 @@
 - Add `nxos_ospfv3_interface` resource and data source
 - Add `nxos_ospfv3_vrf` resource and data source
 - Add `nxos_ospfv3_vrf_address_family` resource and data source
+- Honor proxy settings (`HTTP_PROXY`, `HTTPS_PROXY`, `NO_PROXY` environment variables)
 
 ## 0.5.9
 

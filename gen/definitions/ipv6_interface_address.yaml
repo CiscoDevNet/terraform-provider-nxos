@@ -1,0 +1,62 @@
+---
+name: IPv6 Interface Address
+class_name: ipv6Addr
+dn: sys/ipv6/inst/dom-[%s]/if-[%s]/addr-[%s]
+ds_description: This data source can read an IPv6 interface address.
+res_description: This resource can manage an IPv6 interface address.
+doc_path: Layer%203/ipv6:Addr/
+doc_category: IPv6
+parents:
+  - IPv6 Interface
+attributes:
+  - nxos_name: dom
+    tf_name: vrf
+    type: String
+    id: true
+    reference_only: true
+    description: 'VRF name.'
+    example: 'default'
+  - nxos_name: id
+    tf_name: interface_id
+    type: String
+    id: true
+    reference_only: true
+    description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+    example: eth1/10
+  - nxos_name: addr
+    tf_name: address
+    type: String
+    id: true
+    description: 'IPv6 address.'
+    example: '2001:db8:3333:4444:5555:6666:7777:8888'
+  - nxos_name: type
+    tf_name: type
+    type: String
+    description: 'Address type.'
+    enum_values:
+      - primary
+      - secondary
+    default_value: 'primary'
+    example: 'primary'
+  - nxos_name: tag
+    tf_name: tag
+    type: Int64
+    description: 'Route Tag'
+    default_value: 0
+    example: 1234
+test_prerequisites:
+  - dn: sys/intf/phys-[eth1/10]
+    class_name: l1PhysIf
+    attributes:
+      - name: id
+        value: eth1/10
+      - name: layer
+        value: Layer3
+  - dn: sys/ipv6/inst/dom-[default]
+    class_name: ipv6Dom
+  - dn: sys/ipv6/inst/dom-[default]/if-[eth1/10]
+    class_name: ipv6If
+    attributes:
+      - name: id
+        value: eth1/10
+    dependencies: [0, 1]

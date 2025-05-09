@@ -86,6 +86,15 @@ func (r *OSPFVRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
+			"log_adjacency_changes": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Log level for adjacency changes.").AddStringEnumDescription("none", "brief", "detail").AddDefaultValueDescription("none").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("none"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("none", "brief", "detail"),
+				},
+			},
 			"admin_state": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
 				Optional:            true,
@@ -131,6 +140,31 @@ func (r *OSPFVRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 			"control": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Controls. Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,default-passive`. In this case values must be in alphabetical order.").String,
 				Optional:            true,
+			},
+			"max_metric_control": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:\n  - Single value. Example: `stub`\n  - Multiple values (comma-separated). Example: `stub,summary-lsa`. In this case values must be in alphabetical order.").String,
+				Optional:            true,
+			},
+			"max_metric_external_lsa": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum metric value for external LSAs.").AddIntegerRangeDescription(1, 16777215).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 16777215),
+				},
+			},
+			"max_metric_summary_lsa": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum metric value for summary LSAs.").AddIntegerRangeDescription(1, 16777215).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 16777215),
+				},
+			},
+			"max_metric_startup_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Time (in secs) for which max metric should be advertised at startup.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
 			},
 		},
 	}
@@ -203,6 +237,7 @@ func (r *OSPFVRFResource) Read(ctx context.Context, req resource.ReadRequest, re
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		queries = append(queries, nxos.Query("rsp-subtree", "children"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

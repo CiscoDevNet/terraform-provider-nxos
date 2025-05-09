@@ -36,14 +36,19 @@ This resource can manage the OSPF VRF configuration.
 
 ```terraform
 resource "nxos_ospf_vrf" "example" {
-  instance_name            = "OSPF1"
-  name                     = "VRF1"
-  admin_state              = "enabled"
-  bandwidth_reference      = 400000
-  bandwidth_reference_unit = "mbps"
-  distance                 = 110
-  router_id                = "34.56.78.90"
-  control                  = "bfd,default-passive"
+  instance_name               = "OSPF1"
+  name                        = "VRF1"
+  log_adjacency_changes       = ""
+  admin_state                 = "enabled"
+  bandwidth_reference         = 400000
+  bandwidth_reference_unit    = "mbps"
+  distance                    = 110
+  router_id                   = "34.56.78.90"
+  control                     = "bfd,default-passive"
+  max_metric_control          = "stub,summary-lsa"
+  max_metric_external_lsa     = 600
+  max_metric_summary_lsa      = 600
+  max_metric_startup_interval = 300
 }
 ```
 
@@ -73,6 +78,18 @@ resource "nxos_ospf_vrf" "example" {
 - `distance` (Number) Administrative distance preference.
   - Range: `1`-`255`
   - Default value: `110`
+- `log_adjacency_changes` (String) Log level for adjacency changes.
+  - Choices: `none`, `brief`, `detail`
+  - Default value: `none`
+- `max_metric_control` (String) Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:
+  - Single value. Example: `stub`
+  - Multiple values (comma-separated). Example: `stub,summary-lsa`. In this case values must be in alphabetical order.
+- `max_metric_external_lsa` (Number) Maximum metric value for external LSAs.
+  - Range: `1`-`16777215`
+- `max_metric_startup_interval` (Number) Time (in secs) for which max metric should be advertised at startup.
+  - Range: `0`-`4294967295`
+- `max_metric_summary_lsa` (Number) Maximum metric value for summary LSAs.
+  - Range: `1`-`16777215`
 - `router_id` (String) Router ID.
   - Default value: `0.0.0.0`
 

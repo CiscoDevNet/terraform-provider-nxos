@@ -32,16 +32,21 @@ import (
 )
 
 type OSPFVRF struct {
-	Device                 types.String `tfsdk:"device"`
-	Dn                     types.String `tfsdk:"id"`
-	InstanceName           types.String `tfsdk:"instance_name"`
-	Name                   types.String `tfsdk:"name"`
-	AdminState             types.String `tfsdk:"admin_state"`
-	BandwidthReference     types.Int64  `tfsdk:"bandwidth_reference"`
-	BandwidthReferenceUnit types.String `tfsdk:"bandwidth_reference_unit"`
-	Distance               types.Int64  `tfsdk:"distance"`
-	RouterId               types.String `tfsdk:"router_id"`
-	Control                types.String `tfsdk:"control"`
+	Device                   types.String `tfsdk:"device"`
+	Dn                       types.String `tfsdk:"id"`
+	InstanceName             types.String `tfsdk:"instance_name"`
+	Name                     types.String `tfsdk:"name"`
+	LogAdjacencyChanges      types.String `tfsdk:"log_adjacency_changes"`
+	AdminState               types.String `tfsdk:"admin_state"`
+	BandwidthReference       types.Int64  `tfsdk:"bandwidth_reference"`
+	BandwidthReferenceUnit   types.String `tfsdk:"bandwidth_reference_unit"`
+	Distance                 types.Int64  `tfsdk:"distance"`
+	RouterId                 types.String `tfsdk:"router_id"`
+	Control                  types.String `tfsdk:"control"`
+	MaxMetricControl         types.String `tfsdk:"max_metric_control"`
+	MaxMetricExternalLsa     types.Int64  `tfsdk:"max_metric_external_lsa"`
+	MaxMetricSummaryLsa      types.Int64  `tfsdk:"max_metric_summary_lsa"`
+	MaxMetricStartupInterval types.Int64  `tfsdk:"max_metric_startup_interval"`
 }
 
 func (data OSPFVRF) getDn() string {
@@ -61,6 +66,9 @@ func (data OSPFVRF) toBody(statusReplace bool) nxos.Body {
 	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}
+	if (!data.LogAdjacencyChanges.IsUnknown() && !data.LogAdjacencyChanges.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adjChangeLogLevel", data.LogAdjacencyChanges.ValueString())
+	}
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
@@ -79,6 +87,21 @@ func (data OSPFVRF) toBody(statusReplace bool) nxos.Body {
 	if (!data.Control.IsUnknown() && !data.Control.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ctrl", data.Control.ValueString())
 	}
+	var attrs string
+	attrs = ""
+	if (!data.MaxMetricControl.IsUnknown() && !data.MaxMetricControl.IsNull()) || true {
+		attrs, _ = sjson.Set(attrs, "ctrl", data.MaxMetricControl.ValueString())
+	}
+	if (!data.MaxMetricExternalLsa.IsUnknown() && !data.MaxMetricExternalLsa.IsNull()) || true {
+		attrs, _ = sjson.Set(attrs, "maxMetricExtLsa", strconv.FormatInt(data.MaxMetricExternalLsa.ValueInt64(), 10))
+	}
+	if (!data.MaxMetricSummaryLsa.IsUnknown() && !data.MaxMetricSummaryLsa.IsNull()) || true {
+		attrs, _ = sjson.Set(attrs, "maxMetricSummLsa", strconv.FormatInt(data.MaxMetricSummaryLsa.ValueInt64(), 10))
+	}
+	if (!data.MaxMetricStartupInterval.IsUnknown() && !data.MaxMetricStartupInterval.IsNull()) || true {
+		attrs, _ = sjson.Set(attrs, "startupIntvl", strconv.FormatInt(data.MaxMetricStartupInterval.ValueInt64(), 10))
+	}
+	body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.ospfMaxMetricLsaP.attributes", attrs)
 
 	return nxos.Body{body}
 }
@@ -88,6 +111,11 @@ func (data *OSPFVRF) fromBody(res gjson.Result, all bool) {
 		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
 		data.Name = types.StringNull()
+	}
+	if !data.LogAdjacencyChanges.IsNull() || all {
+		data.LogAdjacencyChanges = types.StringValue(res.Get(data.getClassName() + ".attributes.adjChangeLogLevel").String())
+	} else {
+		data.LogAdjacencyChanges = types.StringNull()
 	}
 	if !data.AdminState.IsNull() || all {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
@@ -118,6 +146,37 @@ func (data *OSPFVRF) fromBody(res gjson.Result, all bool) {
 		data.Control = types.StringValue(res.Get(data.getClassName() + ".attributes.ctrl").String())
 	} else {
 		data.Control = types.StringNull()
+	}
+	var r gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("ospfMaxMetricLsaP.attributes.rn").String()
+			if key == "maxmetriclsap" {
+				r = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.MaxMetricControl.IsNull() || all {
+		data.MaxMetricControl = types.StringValue(r.Get("ospfMaxMetricLsaP.attributes.ctrl").String())
+	} else {
+		data.MaxMetricControl = types.StringNull()
+	}
+	if !data.MaxMetricExternalLsa.IsNull() || all {
+		data.MaxMetricExternalLsa = types.Int64Value(r.Get("ospfMaxMetricLsaP.attributes.maxMetricExtLsa").Int())
+	} else {
+		data.MaxMetricExternalLsa = types.Int64Null()
+	}
+	if !data.MaxMetricSummaryLsa.IsNull() || all {
+		data.MaxMetricSummaryLsa = types.Int64Value(r.Get("ospfMaxMetricLsaP.attributes.maxMetricSummLsa").Int())
+	} else {
+		data.MaxMetricSummaryLsa = types.Int64Null()
+	}
+	if !data.MaxMetricStartupInterval.IsNull() || all {
+		data.MaxMetricStartupInterval = types.Int64Value(r.Get("ospfMaxMetricLsaP.attributes.startupIntvl").Int())
+	} else {
+		data.MaxMetricStartupInterval = types.Int64Null()
 	}
 }
 

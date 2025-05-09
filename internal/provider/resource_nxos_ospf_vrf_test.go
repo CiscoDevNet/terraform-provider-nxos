@@ -35,12 +35,17 @@ func TestAccNxosOSPFVRF(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "instance_name", "OSPF1"),
 					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "name", "VRF1"),
+					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "log_adjacency_changes", ""),
 					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "admin_state", "enabled"),
 					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "bandwidth_reference", "400000"),
 					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "bandwidth_reference_unit", "mbps"),
 					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "distance", "110"),
 					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "router_id", "34.56.78.90"),
 					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "control", "bfd,default-passive"),
+					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "max_metric_control", "stub,summary-lsa"),
+					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "max_metric_external_lsa", "600"),
+					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "max_metric_summary_lsa", "600"),
+					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "max_metric_startup_interval", "300"),
 				),
 			},
 			{
@@ -104,12 +109,17 @@ func testAccNxosOSPFVRFConfig_all() string {
 	resource "nxos_ospf_vrf" "test" {
 		instance_name = "OSPF1"
 		name = "VRF1"
+		log_adjacency_changes = ""
 		admin_state = "enabled"
 		bandwidth_reference = 400000
 		bandwidth_reference_unit = "mbps"
 		distance = 110
 		router_id = "34.56.78.90"
 		control = "bfd,default-passive"
+		max_metric_control = "stub,summary-lsa"
+		max_metric_external_lsa = 600
+		max_metric_summary_lsa = 600
+		max_metric_startup_interval = 300
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
 	}
 	`

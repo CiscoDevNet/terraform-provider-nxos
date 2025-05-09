@@ -25,12 +25,9 @@ attributes:
   - nxos_name: ctrl
     tf_name: control
     type: String
-    enum_values:
-      - port-unreachable
-      - unreachable
+    description: 'ICMP interface control. Choices: `redirect`, `unreachable`, `port-unreachable`. Can be an empty string. Allowed formats:\n  - Single value. Example: `unreachable`\n  - Multiple values (comma-separated). Example: `redirect,unreachable`. In this case values must be in alphabetical order.'
     default_value: unreachable
     example: port-unreachable
-    description: 'ICMP interface control.'
 test_prerequisites:
   - dn: sys/fm/ifvlan
     class_name: fmInterfaceVlan

@@ -24,14 +24,12 @@ import (
 	"fmt"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -85,13 +83,10 @@ func (r *ICMPv4InterfaceResource) Schema(ctx context.Context, req resource.Schem
 				},
 			},
 			"control": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("ICMP interface control.").AddStringEnumDescription("port-unreachable", "unreachable").AddDefaultValueDescription("unreachable").String,
+				MarkdownDescription: helpers.NewAttributeDescription("ICMP interface control. Choices: `redirect`, `unreachable`, `port-unreachable`. Can be an empty string. Allowed formats:\n  - Single value. Example: `unreachable`\n  - Multiple values (comma-separated). Example: `redirect,unreachable`. In this case values must be in alphabetical order.").AddDefaultValueDescription("unreachable").String,
 				Optional:            true,
 				Computed:            true,
 				Default:             stringdefault.StaticString("unreachable"),
-				Validators: []validator.String{
-					stringvalidator.OneOf("port-unreachable", "unreachable"),
-				},
 			},
 		},
 	}

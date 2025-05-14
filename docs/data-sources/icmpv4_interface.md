@@ -36,5 +36,7 @@ data "nxos_icmpv4_interface" "example" {
 
 ### Read-Only
 
-- `control` (String) ICMP interface control.
+- `control` (String) ICMP interface control. Choices: `redirect`, `unreachable`, `port-unreachable`. Can be an empty string. Allowed formats:
+  - Single value. Example: `unreachable`
+  - Multiple values (comma-separated). Example: `redirect,unreachable`. In this case values must be in alphabetical order.
 - `id` (String) The distinguished name of the object.

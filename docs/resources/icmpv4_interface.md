@@ -39,8 +39,9 @@ resource "nxos_icmpv4_interface" "example" {
 
 ### Optional
 
-- `control` (String) ICMP interface control.
-  - Choices: `port-unreachable`, `unreachable`
+- `control` (String) ICMP interface control. Choices: `redirect`, `unreachable`, `port-unreachable`. Can be an empty string. Allowed formats:
+  - Single value. Example: `unreachable`
+  - Multiple values (comma-separated). Example: `redirect,unreachable`. In this case values must be in alphabetical order.
   - Default value: `unreachable`
 - `device` (String) A device name from the provider configuration.
 

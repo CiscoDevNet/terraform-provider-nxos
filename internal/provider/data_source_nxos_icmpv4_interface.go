@@ -72,7 +72,7 @@ func (d *ICMPv4InterfaceDataSource) Schema(ctx context.Context, req datasource.S
 				Required:            true,
 			},
 			"control": schema.StringAttribute{
-				MarkdownDescription: "ICMP interface control.",
+				MarkdownDescription: "ICMP interface control. Choices: `redirect`, `unreachable`, `port-unreachable`. Can be an empty string. Allowed formats:\n  - Single value. Example: `unreachable`\n  - Multiple values (comma-separated). Example: `redirect,unreachable`. In this case values must be in alphabetical order.",
 				Computed:            true,
 			},
 		},

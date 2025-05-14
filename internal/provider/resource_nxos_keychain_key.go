@@ -54,7 +54,7 @@ func (r *Keychain_keyResource) Metadata(ctx context.Context, req resource.Metada
 func (r *Keychain_keyResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the keychain configuration.", "kcmgrKey", "Security%20and%Policing/kcmgr:ClassicKeychain/").AddChildren("keychain_key").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the key configuration.", "kcmgrKey", "Security%20and%Policing/kcmgr:kcmgrKey/").AddChildren("keychain_key").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

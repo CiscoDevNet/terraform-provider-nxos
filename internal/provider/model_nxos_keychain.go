@@ -49,6 +49,9 @@ func (data Keychain) toBody(statusReplace bool) nxos.Body {
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
+	var attrs string
+	attrs = "{}"
+	body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.kcmgrKeychains.attributes", attrs)
 
 	return nxos.Body{body}
 }

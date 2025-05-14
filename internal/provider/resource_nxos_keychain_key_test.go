@@ -66,7 +66,7 @@ resource "nxos_rest" "PreReq2" {
   dn = "sys/kcmgr/keychains/classickeychain-[KEYCHAIN1]"
   class_name = "kcmgrClassicKeychain"
   content = {
-      name = "KEYCHAIN1"
+      keychainName = "KEYCHAIN1"
   }
   depends_on = [nxos_rest.PreReq1, ]
 }

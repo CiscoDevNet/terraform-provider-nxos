@@ -52,7 +52,7 @@ func (d *Keychain_keyDataSource) Metadata(_ context.Context, req datasource.Meta
 func (d *Keychain_keyDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the keychain configuration.", "kcmgrKey", "Security%20and%Policing/kcmgr:ClassicKeychain/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the key configuration.", "kcmgrKey", "Security%20and%Policing/kcmgr:kcmgrKey/").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

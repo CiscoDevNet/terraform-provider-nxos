@@ -2,9 +2,9 @@
 name: keychain_key
 class_name: kcmgrKey
 dn: sys/kcmgr/keychains/classickeychain-[%s]/classickeyid-[%v]
-ds_description: This data source can read the keychain configuration.
-res_description: This resource can manage the keychain configuration.
-doc_path: Security%20and%Policing/kcmgr:ClassicKeychain/
+ds_description: This data source can read the key configuration.
+res_description: This resource can manage the key configuration.
+doc_path: Security%20and%Policing/kcmgr:kcmgrKey/
 doc_category: Keychain
 children:
   - Keychain Key
@@ -40,6 +40,6 @@ test_prerequisites:
   - dn: sys/kcmgr/keychains/classickeychain-[KEYCHAIN1]
     class_name: kcmgrClassicKeychain
     attributes:
-      - name: name
+      - name: keychainName
         value: KEYCHAIN1
     dependencies: [1]

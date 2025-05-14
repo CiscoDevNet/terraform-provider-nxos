@@ -38,14 +38,14 @@ This resource can manage the OSPF VRF configuration.
 resource "nxos_ospf_vrf" "example" {
   instance_name               = "OSPF1"
   name                        = "VRF1"
-  log_adjacency_changes       = ""
+  log_adjacency_changes       = "brief"
   admin_state                 = "enabled"
   bandwidth_reference         = 400000
   bandwidth_reference_unit    = "mbps"
   distance                    = 110
   router_id                   = "34.56.78.90"
   control                     = "bfd,default-passive"
-  max_metric_control          = "stub,summary-lsa"
+  max_metric_control          = "external-lsa,startup,stub,summary-lsa"
   max_metric_external_lsa     = 600
   max_metric_summary_lsa      = 600
   max_metric_startup_interval = 300

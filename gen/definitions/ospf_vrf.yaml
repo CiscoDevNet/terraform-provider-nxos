@@ -36,6 +36,7 @@ attributes:
       - brief
       - detail
     default_value: none
+    example: brief
   - nxos_name: adminSt
     tf_name: admin_state
     type: String
@@ -90,7 +91,7 @@ child_classes:
         tf_name: max_metric_control
         type: String
         description: 'Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:\n  - Single value. Example: `stub`\n  - Multiple values (comma-separated). Example: `stub,summary-lsa`. In this case values must be in alphabetical order.'
-        example: 'stub,summary-lsa'
+        example: 'external-lsa,startup,stub,summary-lsa'
       - nxos_name: maxMetricExtLsa
         tf_name: max_metric_external_lsa
         type: Int64

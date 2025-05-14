@@ -7,7 +7,7 @@ res_description: This resource can manage the keychain configuration.
 doc_path: Security%20and%Policing/kcmgr:Entity/
 doc_category: Keychain
 children:
-  - Keychain Key
+  - Keychain Classic
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state
@@ -18,3 +18,7 @@ attributes:
       - disabled
     default_value: enabled
     example: enabled
+child_classes:
+  - class_name: kcmgrKeychains
+    rn: keychains
+    type: single

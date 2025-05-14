@@ -6,7 +6,7 @@ description: |-
   This resource can manage the keychain configuration.
   API Documentation: kcmgrEntity https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%Policing/kcmgr:Entity/
   Child resources
-  nxos_keychain_key https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/keychain_key
+  nxos_keychain_classic https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/keychain_classic
 ---
 
 # nxos_keychain (Resource)
@@ -17,7 +17,7 @@ This resource can manage the keychain configuration.
 
 ### Child resources
 
-- [nxos_keychain_key](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/keychain_key)
+- [nxos_keychain_classic](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/keychain_classic)
 
 ## Example Usage
 

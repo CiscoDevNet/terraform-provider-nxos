@@ -113,11 +113,7 @@ func (data {{camelCase .Name}}) toBody(statusReplace bool) nxos.Body {
 	{{- range .ChildClasses}}
 	{{- $childClassName := .ClassName }}
 	{{- if eq .Type "single"}}
-//	{{- if len .Attributes}}
-//	attrs = ""
-//	{{- else}}
 	attrs = "{}"
-//	{{- end}}
 	{{- range .Attributes}}
 	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
 		{{- if eq .Type "Int64"}}

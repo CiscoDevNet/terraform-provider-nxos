@@ -35,6 +35,7 @@ func TestAccNxosOSPFVRF(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "instance_name", "OSPF1"),
 					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "name", "VRF1"),
+					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "log_adjacency_changes", "brief"),
 					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "admin_state", "enabled"),
 					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "bandwidth_reference", "400000"),
 					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "bandwidth_reference_unit", "mbps"),
@@ -104,6 +105,7 @@ func testAccNxosOSPFVRFConfig_all() string {
 	resource "nxos_ospf_vrf" "test" {
 		instance_name = "OSPF1"
 		name = "VRF1"
+		log_adjacency_changes = "brief"
 		admin_state = "enabled"
 		bandwidth_reference = 400000
 		bandwidth_reference_unit = "mbps"

@@ -8,7 +8,7 @@ description: |-
   Parent resources
   nxos_ospf_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_instance
   Child resources
-  nxos_ospf_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_interfacenxos_ospf_area https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_area
+  nxos_ospf_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_interfacenxos_ospf_area https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_areanxos_ospf_keychain https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_keychain
   Referenced resources
   nxos_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf
 ---
@@ -27,6 +27,7 @@ This resource can manage the OSPF VRF configuration.
 
 - [nxos_ospf_interface](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_interface)
 - [nxos_ospf_area](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_area)
+- [nxos_ospf_keychain](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_keychain)
 
 ### Referenced resources
 
@@ -38,6 +39,7 @@ This resource can manage the OSPF VRF configuration.
 resource "nxos_ospf_vrf" "example" {
   instance_name            = "OSPF1"
   name                     = "VRF1"
+  log_adjacency_changes    = "brief"
   admin_state              = "enabled"
   bandwidth_reference      = 400000
   bandwidth_reference_unit = "mbps"
@@ -73,6 +75,9 @@ resource "nxos_ospf_vrf" "example" {
 - `distance` (Number) Administrative distance preference.
   - Range: `1`-`255`
   - Default value: `110`
+- `log_adjacency_changes` (String) Log level for adjacency changes.
+  - Choices: `none`, `brief`, `detail`
+  - Default value: `none`
 - `router_id` (String) Router ID.
   - Default value: `0.0.0.0`
 

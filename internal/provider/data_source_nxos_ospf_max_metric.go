@@ -52,7 +52,7 @@ func (d *OSPFMaxMetricDataSource) Metadata(_ context.Context, req datasource.Met
 func (d *OSPFMaxMetricDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the OSPF VRF configuration.", "ospfMaxMetricLsaP", "Routing%20and%20Forwarding/ospf:maxmetriclsap/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the OSPF Max Metric Link State Advertisement configuration.", "ospfMaxMetricLsaP", "Routing%20and%20Forwarding/ospf:maxmetriclsap/").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

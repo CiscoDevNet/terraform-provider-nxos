@@ -2,8 +2,8 @@
 name: OSPF Max Metric
 class_name: ospfMaxMetricLsaP
 dn: sys/ospf/inst-[%s]/dom-[%s]/maxmetriclsap
-ds_description: This data source can read the OSPF VRF configuration.
-res_description: This resource can manage the OSPF VRF configuration.
+ds_description: This data source can read the OSPF Max Metric Link State Advertisement configuration.
+res_description: This resource can manage the OSPF Max Metric Link State Advertisement configuration.
 doc_path: Routing%20and%20Forwarding/ospf:maxmetriclsap/
 doc_category: OSPF
 parents:

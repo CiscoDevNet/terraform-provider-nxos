@@ -33,26 +33,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &KeychainKeyDataSource{}
-	_ datasource.DataSourceWithConfigure = &KeychainKeyDataSource{}
+	_ datasource.DataSource              = &KeychainManagerDataSource{}
+	_ datasource.DataSourceWithConfigure = &KeychainManagerDataSource{}
 )
 
-func NewKeychainKeyDataSource() datasource.DataSource {
-	return &KeychainKeyDataSource{}
+func NewKeychainManagerDataSource() datasource.DataSource {
+	return &KeychainManagerDataSource{}
 }
 
-type KeychainKeyDataSource struct {
+type KeychainManagerDataSource struct {
 	data *NxosProviderData
 }
 
-func (d *KeychainKeyDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_keychain_key"
+func (d *KeychainManagerDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_keychain_manager"
 }
 
-func (d *KeychainKeyDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *KeychainManagerDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the key configuration.", "kcmgrKey", "Security%20and%20Policing/kcmgr:kcmgrKey/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the keychain configuration.", "kcmgrEntity", "Security%20and%20Policing/kcmgr:Entity/").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -63,23 +63,15 @@ func (d *KeychainKeyDataSource) Schema(ctx context.Context, req datasource.Schem
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
-			"keychain": schema.StringAttribute{
-				MarkdownDescription: "Keychain name.",
-				Required:            true,
-			},
-			"key_id": schema.Int64Attribute{
-				MarkdownDescription: "keyId of classic key chain.",
-				Required:            true,
-			},
-			"key_string": schema.StringAttribute{
-				MarkdownDescription: "Key-string.",
+			"admin_state": schema.StringAttribute{
+				MarkdownDescription: "Administrative state.",
 				Computed:            true,
 			},
 		},
 	}
 }
 
-func (d *KeychainKeyDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *KeychainManagerDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -87,8 +79,8 @@ func (d *KeychainKeyDataSource) Configure(_ context.Context, req datasource.Conf
 	d.data = req.ProviderData.(*NxosProviderData)
 }
 
-func (d *KeychainKeyDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config KeychainKey
+func (d *KeychainManagerDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config KeychainManager
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)
@@ -106,6 +98,7 @@ func (d *KeychainKeyDataSource) Read(ctx context.Context, req datasource.ReadReq
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "children"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

@@ -25,13 +25,10 @@ import (
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -40,25 +37,25 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &OSPFVRFResource{}
-var _ resource.ResourceWithImportState = &OSPFVRFResource{}
+var _ resource.Resource = &OSPFMaxMetricResource{}
+var _ resource.ResourceWithImportState = &OSPFMaxMetricResource{}
 
-func NewOSPFVRFResource() resource.Resource {
-	return &OSPFVRFResource{}
+func NewOSPFMaxMetricResource() resource.Resource {
+	return &OSPFMaxMetricResource{}
 }
 
-type OSPFVRFResource struct {
+type OSPFMaxMetricResource struct {
 	data *NxosProviderData
 }
 
-func (r *OSPFVRFResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_ospf_vrf"
+func (r *OSPFMaxMetricResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_ospf_max_metric"
 }
 
-func (r *OSPFVRFResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *OSPFMaxMetricResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the OSPF VRF configuration.", "ospfDom", "Routing%20and%20Forwarding/ospf:Dom/").AddParents("ospf_instance").AddChildren("ospf_interface", "ospf_area", "ospf_keychain").AddReferences("vrf").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the OSPF VRF configuration.", "ospfMaxMetricLsaP", "Routing%20and%20Forwarding/ospf:maxmetriclsap/").AddParents("ospf_vrf").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -79,73 +76,43 @@ func (r *OSPFVRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"name": schema.StringAttribute{
+			"vrf_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Required:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"log_adjacency_changes": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Log level for adjacency changes.").AddStringEnumDescription("none", "brief", "detail").AddDefaultValueDescription("none").String,
+			"max_metric_control": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:\n  - Single value. Example: `stub`\n  - Multiple values (comma-separated). Example: `stub,summary-lsa`. In this case values must be in alphabetical order.").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("none"),
-				Validators: []validator.String{
-					stringvalidator.OneOf("none", "brief", "detail"),
+			},
+			"max_metric_external_lsa": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum metric value for external LSAs.").AddIntegerRangeDescription(1, 16777215).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 16777215),
 				},
 			},
-			"admin_state": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+			"max_metric_summary_lsa": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum metric value for summary LSAs.").AddIntegerRangeDescription(1, 16777215).String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("enabled"),
-				Validators: []validator.String{
-					stringvalidator.OneOf("enabled", "disabled"),
+				Validators: []validator.Int64{
+					int64validator.Between(1, 16777215),
 				},
 			},
-			"bandwidth_reference": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Bandwidth reference value.").AddIntegerRangeDescription(0, 4294967295).AddDefaultValueDescription("40000").String,
+			"max_metric_startup_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Time (in secs) for which max metric should be advertised at startup.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(40000),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
-			},
-			"bandwidth_reference_unit": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Bandwidth reference unit.").AddStringEnumDescription("mbps", "gbps").AddDefaultValueDescription("mbps").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("mbps"),
-				Validators: []validator.String{
-					stringvalidator.OneOf("mbps", "gbps"),
-				},
-			},
-			"distance": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Administrative distance preference.").AddIntegerRangeDescription(1, 255).AddDefaultValueDescription("110").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(110),
-				Validators: []validator.Int64{
-					int64validator.Between(1, 255),
-				},
-			},
-			"router_id": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Router ID.").AddDefaultValueDescription("0.0.0.0").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("0.0.0.0"),
-			},
-			"control": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Controls. Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,default-passive`. In this case values must be in alphabetical order.").String,
-				Optional:            true,
 			},
 		},
 	}
 }
 
-func (r *OSPFVRFResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *OSPFMaxMetricResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -154,8 +121,8 @@ func (r *OSPFVRFResource) Configure(ctx context.Context, req resource.ConfigureR
 	r.data = req.ProviderData.(*NxosProviderData)
 }
 
-func (r *OSPFVRFResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan OSPFVRF
+func (r *OSPFMaxMetricResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan OSPFMaxMetric
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -192,8 +159,8 @@ func (r *OSPFVRFResource) Create(ctx context.Context, req resource.CreateRequest
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
-func (r *OSPFVRFResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state OSPFVRF
+func (r *OSPFMaxMetricResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state OSPFMaxMetric
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -236,8 +203,8 @@ func (r *OSPFVRFResource) Read(ctx context.Context, req resource.ReadRequest, re
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
-func (r *OSPFVRFResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan OSPFVRF
+func (r *OSPFMaxMetricResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan OSPFMaxMetric
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -271,8 +238,8 @@ func (r *OSPFVRFResource) Update(ctx context.Context, req resource.UpdateRequest
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *OSPFVRFResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state OSPFVRF
+func (r *OSPFMaxMetricResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state OSPFMaxMetric
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -316,7 +283,7 @@ func (r *OSPFVRFResource) Delete(ctx context.Context, req resource.DeleteRequest
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *OSPFVRFResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *OSPFMaxMetricResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

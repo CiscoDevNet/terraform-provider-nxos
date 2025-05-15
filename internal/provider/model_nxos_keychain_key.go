@@ -32,7 +32,7 @@ import (
 	"github.com/tidwall/sjson"
 )
 
-type Keychain_key struct {
+type KeychainKey struct {
 	Device    types.String `tfsdk:"device"`
 	Dn        types.String `tfsdk:"id"`
 	Keychain  types.String `tfsdk:"keychain"`
@@ -40,15 +40,15 @@ type Keychain_key struct {
 	KeyString types.String `tfsdk:"key_string"`
 }
 
-func (data Keychain_key) getDn() string {
+func (data KeychainKey) getDn() string {
 	return fmt.Sprintf("sys/kcmgr/keychains/classickeychain-[%s]/classickeyid-[%v]", data.Keychain.ValueString(), data.KeyId.ValueInt64())
 }
 
-func (data Keychain_key) getClassName() string {
+func (data KeychainKey) getClassName() string {
 	return "kcmgrKey"
 }
 
-func (data Keychain_key) toBody(statusReplace bool) nxos.Body {
+func (data KeychainKey) toBody(statusReplace bool) nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	if statusReplace {
@@ -64,7 +64,7 @@ func (data Keychain_key) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *Keychain_key) fromBody(res gjson.Result, all bool) {
+func (data *KeychainKey) fromBody(res gjson.Result, all bool) {
 	if !data.KeyId.IsNull() || all {
 		data.KeyId = types.Int64Value(res.Get(data.getClassName() + ".attributes.keyId").Int())
 	} else {
@@ -72,13 +72,13 @@ func (data *Keychain_key) fromBody(res gjson.Result, all bool) {
 	}
 }
 
-func (data Keychain_key) toDeleteBody() nxos.Body {
+func (data KeychainKey) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
-func (data *Keychain_key) getIdsFromDn() {
+func (data *KeychainKey) getIdsFromDn() {
 	reString := strings.ReplaceAll("sys/kcmgr/keychains/classickeychain-[%s]/classickeyid-[%v]", "%[1]s", ".+")
 	reString = strings.ReplaceAll(reString, "%s", "(.+)")
 	reString = strings.ReplaceAll(reString, "%v", "(.+)")

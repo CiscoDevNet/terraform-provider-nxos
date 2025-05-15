@@ -31,9 +31,10 @@ import (
 )
 
 type IPv4AccessListPolicyIngressInterface struct {
-	Device         types.String `tfsdk:"device"`
-	Dn             types.String `tfsdk:"id"`
-	InterfaceId    types.String `tfsdk:"interface_id"`
+	Device      types.String `tfsdk:"device"`
+	Dn          types.String `tfsdk:"id"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+	//
 	AccessListName types.String `tfsdk:"access_list_name"`
 }
 
@@ -55,7 +56,9 @@ func (data IPv4AccessListPolicyIngressInterface) toBody(statusReplace bool) nxos
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.InterfaceId.ValueString())
 	}
 	var attrs string
-	attrs = ""
+	//
+	//	attrs = ""
+	//
 	if (!data.AccessListName.IsUnknown() && !data.AccessListName.IsNull()) || true {
 		attrs, _ = sjson.Set(attrs, "name", data.AccessListName.ValueString())
 	}

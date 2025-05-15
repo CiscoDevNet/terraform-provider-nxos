@@ -11,6 +11,7 @@ parents:
 children:
   - OSPF Interface
   - OSPF Area
+  - OSPF Keychain
 references:
   - VRF
 attributes:
@@ -82,37 +83,6 @@ attributes:
     type: String
     description: 'Controls. Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,default-passive`. In this case values must be in alphabetical order.'
     example: 'bfd,default-passive'
-child_classes:
-  - class_name: ospfMaxMetricLsaP
-    rn: maxmetriclsap
-    type: single
-    attributes:
-      - nxos_name: ctrl
-        tf_name: max_metric_control
-        type: String
-        description: 'Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:\n  - Single value. Example: `stub`\n  - Multiple values (comma-separated). Example: `stub,summary-lsa`. In this case values must be in alphabetical order.'
-        example: 'external-lsa,startup,stub,summary-lsa'
-      - nxos_name: maxMetricExtLsa
-        tf_name: max_metric_external_lsa
-        type: Int64
-        min_int: 1
-        max_int: 16777215
-        description: 'Maximum metric value for external LSAs.'
-        example: 600
-      - nxos_name: maxMetricSummLsa
-        tf_name: max_metric_summary_lsa
-        type: Int64
-        min_int: 1
-        max_int: 16777215
-        description: 'Maximum metric value for summary LSAs.'
-        example: 600
-      - nxos_name: startupIntvl
-        tf_name: max_metric_startup_interval
-        type: Int64
-        min_int: 0
-        max_int: 4294967295
-        description: 'Time (in secs) for which max metric should be advertised at startup.'
-        example: 300
 test_prerequisites:
   - dn: sys/fm/ospf
     class_name: fmOspf

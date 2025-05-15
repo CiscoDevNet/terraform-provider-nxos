@@ -36,25 +36,25 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &Keychain_keyResource{}
-var _ resource.ResourceWithImportState = &Keychain_keyResource{}
+var _ resource.Resource = &KeychainKeyResource{}
+var _ resource.ResourceWithImportState = &KeychainKeyResource{}
 
-func NewKeychain_keyResource() resource.Resource {
-	return &Keychain_keyResource{}
+func NewKeychainKeyResource() resource.Resource {
+	return &KeychainKeyResource{}
 }
 
-type Keychain_keyResource struct {
+type KeychainKeyResource struct {
 	data *NxosProviderData
 }
 
-func (r *Keychain_keyResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+func (r *KeychainKeyResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_keychain_key"
 }
 
-func (r *Keychain_keyResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *KeychainKeyResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the key configuration.", "kcmgrKey", "Security%20and%Policing/kcmgr:kcmgrKey/").AddChildren("keychain_key").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the key configuration.", "kcmgrKey", "Security%20and%20Policing/kcmgr:kcmgrKey/").AddParents("keychain").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -90,7 +90,7 @@ func (r *Keychain_keyResource) Schema(ctx context.Context, req resource.SchemaRe
 	}
 }
 
-func (r *Keychain_keyResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *KeychainKeyResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -99,8 +99,8 @@ func (r *Keychain_keyResource) Configure(ctx context.Context, req resource.Confi
 	r.data = req.ProviderData.(*NxosProviderData)
 }
 
-func (r *Keychain_keyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan Keychain_key
+func (r *KeychainKeyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan KeychainKey
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -137,8 +137,8 @@ func (r *Keychain_keyResource) Create(ctx context.Context, req resource.CreateRe
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
-func (r *Keychain_keyResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state Keychain_key
+func (r *KeychainKeyResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state KeychainKey
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -181,8 +181,8 @@ func (r *Keychain_keyResource) Read(ctx context.Context, req resource.ReadReques
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
-func (r *Keychain_keyResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan Keychain_key
+func (r *KeychainKeyResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan KeychainKey
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -216,8 +216,8 @@ func (r *Keychain_keyResource) Update(ctx context.Context, req resource.UpdateRe
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *Keychain_keyResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state Keychain_key
+func (r *KeychainKeyResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state KeychainKey
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -261,7 +261,7 @@ func (r *Keychain_keyResource) Delete(ctx context.Context, req resource.DeleteRe
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *Keychain_keyResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *KeychainKeyResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

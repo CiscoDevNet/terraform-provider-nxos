@@ -33,9 +33,10 @@ import (
 )
 
 type VPCInterface struct {
-	Device                 types.String `tfsdk:"device"`
-	Dn                     types.String `tfsdk:"id"`
-	VpcInterfaceId         types.Int64  `tfsdk:"vpc_interface_id"`
+	Device         types.String `tfsdk:"device"`
+	Dn             types.String `tfsdk:"id"`
+	VpcInterfaceId types.Int64  `tfsdk:"vpc_interface_id"`
+	//
 	PortChannelInterfaceDn types.String `tfsdk:"port_channel_interface_dn"`
 }
 
@@ -57,7 +58,9 @@ func (data VPCInterface) toBody(statusReplace bool) nxos.Body {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", strconv.FormatInt(data.VpcInterfaceId.ValueInt64(), 10))
 	}
 	var attrs string
-	attrs = ""
+	//
+	//	attrs = ""
+	//
 	if (!data.PortChannelInterfaceDn.IsUnknown() && !data.PortChannelInterfaceDn.IsNull()) || true {
 		attrs, _ = sjson.Set(attrs, "tDn", data.PortChannelInterfaceDn.ValueString())
 	}

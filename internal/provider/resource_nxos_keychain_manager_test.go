@@ -25,58 +25,37 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccNxosKeychain(t *testing.T) {
+func TestAccNxosKeychainManager(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosKeychainPrerequisitesConfig + testAccNxosKeychainConfig_all(),
+				Config: testAccNxosKeychainManagerConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_keychain.test", "name", "Keychain1"),
+					resource.TestCheckResourceAttr("nxos_keychain_manager.test", "admin_state", "enabled"),
 				),
 			},
 			{
-				ResourceName:  "nxos_keychain.test",
+				ResourceName:  "nxos_keychain_manager.test",
 				ImportState:   true,
-				ImportStateId: "sys/kcmgr/keychains/classickeychain-[Keychain1]",
+				ImportStateId: "sys/kcmgr",
 			},
 		},
 	})
 }
 
-const testAccNxosKeychainPrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
-  dn = "sys/kcmgr"
-  class_name = "kcmgrEntity"
-  content = {
-      adminSt = "enabled"
-  }
-}
-
-resource "nxos_rest" "PreReq1" {
-  dn = "sys/kcmgr/keychains"
-  class_name = "kcmgrKeychains"
-  delete = false
-  depends_on = [nxos_rest.PreReq0, ]
-}
-
-`
-
-func testAccNxosKeychainConfig_minimum() string {
+func testAccNxosKeychainManagerConfig_minimum() string {
 	return `
-	resource "nxos_keychain" "test" {
-		name = "Keychain1"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
+	resource "nxos_keychain_manager" "test" {
 	}
 	`
 }
 
-func testAccNxosKeychainConfig_all() string {
+func testAccNxosKeychainManagerConfig_all() string {
 	return `
-	resource "nxos_keychain" "test" {
-		name = "Keychain1"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
+	resource "nxos_keychain_manager" "test" {
+		admin_state = "enabled"
 	}
 	`
 }

@@ -99,22 +99,6 @@ func (d *OSPFVRFDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "Controls. Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,default-passive`. In this case values must be in alphabetical order.",
 				Computed:            true,
 			},
-			"max_metric_control": schema.StringAttribute{
-				MarkdownDescription: "Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:\n  - Single value. Example: `stub`\n  - Multiple values (comma-separated). Example: `stub,summary-lsa`. In this case values must be in alphabetical order.",
-				Computed:            true,
-			},
-			"max_metric_external_lsa": schema.Int64Attribute{
-				MarkdownDescription: "Maximum metric value for external LSAs.",
-				Computed:            true,
-			},
-			"max_metric_summary_lsa": schema.Int64Attribute{
-				MarkdownDescription: "Maximum metric value for summary LSAs.",
-				Computed:            true,
-			},
-			"max_metric_startup_interval": schema.Int64Attribute{
-				MarkdownDescription: "Time (in secs) for which max metric should be advertised at startup.",
-				Computed:            true,
-			},
 		},
 	}
 }
@@ -146,7 +130,6 @@ func (d *OSPFVRFDataSource) Read(ctx context.Context, req datasource.ReadRequest
 	}
 
 	queries := []func(*nxos.Req){}
-	queries = append(queries, nxos.Query("rsp-subtree", "children"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

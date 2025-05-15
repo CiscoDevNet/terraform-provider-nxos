@@ -40,11 +40,11 @@ type {{camelCase .Name}} struct {
 {{- end}}
 {{- range .ChildClasses}}
 {{- if eq .Type "single"}}
-{{- if len .Attributes -}}
+//{{- if len .Attributes -}}
 {{- range .Attributes}}
     {{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
 {{- end}}
-{{- end}}
+//{{- end}}
 {{- else if eq .Type "list"}}
 	{{toGoName .TfName}} []{{$name}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
 {{- end}}
@@ -113,11 +113,11 @@ func (data {{camelCase .Name}}) toBody(statusReplace bool) nxos.Body {
 	{{- range .ChildClasses}}
 	{{- $childClassName := .ClassName }}
 	{{- if eq .Type "single"}}
-	{{- if len .Attributes}}
-	attrs = ""
-	{{- else}}
+//	{{- if len .Attributes}}
+//	attrs = ""
+//	{{- else}}
 	attrs = "{}"
-	{{- end}}
+//	{{- end}}
 	{{- range .Attributes}}
 	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
 		{{- if eq .Type "Int64"}}
@@ -132,11 +132,7 @@ func (data {{camelCase .Name}}) toBody(statusReplace bool) nxos.Body {
 	body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.attributes", attrs)
 	{{- else if eq .Type "list"}}
 	for _, child := range data.{{toGoName .TfName}} {
-		{{- if len .Attributes}}
-		attrs = ""
-		{{- else}}
 		attrs = "{}"
-		{{- end}}
 		{{- range .Attributes}}
 		if (!child.{{toGoName .TfName}}.IsUnknown() && !child.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
 			{{- if eq .Type "Int64"}}

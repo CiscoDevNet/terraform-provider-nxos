@@ -1,13 +1,13 @@
 ---
-name: keychain_key
+name: Keychain Key
 class_name: kcmgrKey
 dn: sys/kcmgr/keychains/classickeychain-[%s]/classickeyid-[%v]
 ds_description: This data source can read the key configuration.
 res_description: This resource can manage the key configuration.
-doc_path: Security%20and%Policing/kcmgr:kcmgrKey/
+doc_path: Security%20and%20Policing/kcmgr:kcmgrKey/
 doc_category: Keychain
-children:
-  - Keychain Key
+parents:
+  - Keychain
 attributes:
   - nxos_name: keychain
     tf_name: keychain

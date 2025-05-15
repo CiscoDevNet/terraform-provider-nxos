@@ -25,35 +25,32 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccNxosOSPFVRF(t *testing.T) {
+func TestAccNxosOSPFMaxMetric(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosOSPFVRFPrerequisitesConfig + testAccNxosOSPFVRFConfig_all(),
+				Config: testAccNxosOSPFMaxMetricPrerequisitesConfig + testAccNxosOSPFMaxMetricConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "instance_name", "OSPF1"),
-					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "name", "VRF1"),
-					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "log_adjacency_changes", "brief"),
-					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "admin_state", "enabled"),
-					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "bandwidth_reference", "400000"),
-					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "bandwidth_reference_unit", "mbps"),
-					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "distance", "110"),
-					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "router_id", "34.56.78.90"),
-					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "control", "bfd,default-passive"),
+					resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "instance_name", "OSPF1"),
+					resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "vrf_name", "VRF1"),
+					resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "max_metric_control", "external-lsa,startup,stub,summary-lsa"),
+					resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "max_metric_external_lsa", "600"),
+					resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "max_metric_summary_lsa", "600"),
+					resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "max_metric_startup_interval", "300"),
 				),
 			},
 			{
-				ResourceName:  "nxos_ospf_vrf.test",
+				ResourceName:  "nxos_ospf_max_metric.test",
 				ImportState:   true,
-				ImportStateId: "sys/ospf/inst-[OSPF1]/dom-[VRF1]",
+				ImportStateId: "sys/ospf/inst-[OSPF1]/dom-[VRF1]/maxmetriclsap",
 			},
 		},
 	})
 }
 
-const testAccNxosOSPFVRFPrerequisitesConfig = `
+const testAccNxosOSPFMaxMetricPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/ospf"
   class_name = "fmOspf"
@@ -88,31 +85,37 @@ resource "nxos_rest" "PreReq3" {
   depends_on = [nxos_rest.PreReq2, ]
 }
 
+resource "nxos_rest" "PreReq4" {
+  dn = "sys/ospf/inst-[OSPF1]/dom-[VRF1]"
+  class_name = "ospfDom"
+  content = {
+      name = "VRF1"
+  }
+  depends_on = [nxos_rest.PreReq3, ]
+}
+
 `
 
-func testAccNxosOSPFVRFConfig_minimum() string {
+func testAccNxosOSPFMaxMetricConfig_minimum() string {
 	return `
-	resource "nxos_ospf_vrf" "test" {
+	resource "nxos_ospf_max_metric" "test" {
 		instance_name = "OSPF1"
-		name = "VRF1"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
+		vrf_name = "VRF1"
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
 	}
 	`
 }
 
-func testAccNxosOSPFVRFConfig_all() string {
+func testAccNxosOSPFMaxMetricConfig_all() string {
 	return `
-	resource "nxos_ospf_vrf" "test" {
+	resource "nxos_ospf_max_metric" "test" {
 		instance_name = "OSPF1"
-		name = "VRF1"
-		log_adjacency_changes = "brief"
-		admin_state = "enabled"
-		bandwidth_reference = 400000
-		bandwidth_reference_unit = "mbps"
-		distance = 110
-		router_id = "34.56.78.90"
-		control = "bfd,default-passive"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
+		vrf_name = "VRF1"
+		max_metric_control = "external-lsa,startup,stub,summary-lsa"
+		max_metric_external_lsa = 600
+		max_metric_summary_lsa = 600
+		max_metric_startup_interval = 300
+  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
 	}
 	`
 }

@@ -24,36 +24,39 @@ import (
 	"fmt"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &Keychain_classicResource{}
-var _ resource.ResourceWithImportState = &Keychain_classicResource{}
+var _ resource.Resource = &KeychainManagerResource{}
+var _ resource.ResourceWithImportState = &KeychainManagerResource{}
 
-func NewKeychain_classicResource() resource.Resource {
-	return &Keychain_classicResource{}
+func NewKeychainManagerResource() resource.Resource {
+	return &KeychainManagerResource{}
 }
 
-type Keychain_classicResource struct {
+type KeychainManagerResource struct {
 	data *NxosProviderData
 }
 
-func (r *Keychain_classicResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_keychain_classic"
+func (r *KeychainManagerResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_keychain_manager"
 }
 
-func (r *Keychain_classicResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *KeychainManagerResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the keychain configuration.", "kcmgrClassicKeychain", "Security%20and%Policing/kcmgr:ClassicKeychain/").AddChildren("keychain_key").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the keychain configuration.", "kcmgrEntity", "Security%20and%20Policing/kcmgr:Entity/").AddChildren("keychain").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -67,18 +70,20 @@ func (r *Keychain_classicResource) Schema(ctx context.Context, req resource.Sche
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Keychain name of classic keychain.").String,
-				Required:            true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
+			"admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("enabled"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
 		},
 	}
 }
 
-func (r *Keychain_classicResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *KeychainManagerResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -87,8 +92,8 @@ func (r *Keychain_classicResource) Configure(ctx context.Context, req resource.C
 	r.data = req.ProviderData.(*NxosProviderData)
 }
 
-func (r *Keychain_classicResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan Keychain_classic
+func (r *KeychainManagerResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan KeychainManager
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -125,8 +130,8 @@ func (r *Keychain_classicResource) Create(ctx context.Context, req resource.Crea
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
-func (r *Keychain_classicResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state Keychain_classic
+func (r *KeychainManagerResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state KeychainManager
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -145,6 +150,7 @@ func (r *Keychain_classicResource) Read(ctx context.Context, req resource.ReadRe
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		queries = append(queries, nxos.Query("rsp-subtree", "children"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -156,9 +162,6 @@ func (r *Keychain_classicResource) Read(ctx context.Context, req resource.ReadRe
 			return
 		}
 		state.fromBody(res, imp)
-		if imp {
-			state.getIdsFromDn()
-		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
@@ -169,8 +172,8 @@ func (r *Keychain_classicResource) Read(ctx context.Context, req resource.ReadRe
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
-func (r *Keychain_classicResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan Keychain_classic
+func (r *KeychainManagerResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan KeychainManager
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -204,8 +207,8 @@ func (r *Keychain_classicResource) Update(ctx context.Context, req resource.Upda
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *Keychain_classicResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state Keychain_classic
+func (r *KeychainManagerResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state KeychainManager
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -249,7 +252,7 @@ func (r *Keychain_classicResource) Delete(ctx context.Context, req resource.Dele
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *Keychain_classicResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *KeychainManagerResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

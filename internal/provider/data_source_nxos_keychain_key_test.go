@@ -25,13 +25,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccDataSourceNxosKeychain_key(t *testing.T) {
+func TestAccDataSourceNxosKeychainKey(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosKeychain_keyPrerequisitesConfig + testAccDataSourceNxosKeychain_keyConfig,
+				Config: testAccDataSourceNxosKeychainKeyPrerequisitesConfig + testAccDataSourceNxosKeychainKeyConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_keychain_key.test", "key_id", "1"),
 				),
@@ -40,7 +40,7 @@ func TestAccDataSourceNxosKeychain_key(t *testing.T) {
 	})
 }
 
-const testAccDataSourceNxosKeychain_keyPrerequisitesConfig = `
+const testAccDataSourceNxosKeychainKeyPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/kcmgr"
   class_name = "kcmgrEntity"
@@ -66,7 +66,7 @@ resource "nxos_rest" "PreReq2" {
 
 `
 
-const testAccDataSourceNxosKeychain_keyConfig = `
+const testAccDataSourceNxosKeychainKeyConfig = `
 
 resource "nxos_keychain_key" "test" {
   keychain = "KEYCHAIN1"

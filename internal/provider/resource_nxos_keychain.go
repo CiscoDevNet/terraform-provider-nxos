@@ -24,14 +24,11 @@ import (
 	"fmt"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -56,7 +53,7 @@ func (r *KeychainResource) Metadata(ctx context.Context, req resource.MetadataRe
 func (r *KeychainResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the keychain configuration.", "kcmgrEntity", "Security%20and%Policing/kcmgr:Entity/").AddChildren("keychain_classic").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the keychain configuration.", "kcmgrClassicKeychain", "Security%20and%20Policing/kcmgr:ClassicKeychain/").AddParents("keychain_manager").AddChildren("keychain_key").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -70,13 +67,11 @@ func (r *KeychainResource) Schema(ctx context.Context, req resource.SchemaReques
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"admin_state": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("enabled"),
-				Validators: []validator.String{
-					stringvalidator.OneOf("enabled", "disabled"),
+			"name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Keychain name of classic keychain.").String,
+				Required:            true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
 				},
 			},
 		},
@@ -150,7 +145,6 @@ func (r *KeychainResource) Read(ctx context.Context, req resource.ReadRequest, r
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
-		queries = append(queries, nxos.Query("rsp-subtree", "children"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -162,6 +156,9 @@ func (r *KeychainResource) Read(ctx context.Context, req resource.ReadRequest, r
 			return
 		}
 		state.fromBody(res, imp)
+		if imp {
+			state.getIdsFromDn()
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

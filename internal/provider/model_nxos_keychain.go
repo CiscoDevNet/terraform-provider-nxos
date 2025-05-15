@@ -20,6 +20,10 @@
 package provider
 
 import (
+	"fmt"
+	"regexp"
+	"strings"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -27,17 +31,17 @@ import (
 )
 
 type Keychain struct {
-	Device     types.String `tfsdk:"device"`
-	Dn         types.String `tfsdk:"id"`
-	AdminState types.String `tfsdk:"admin_state"`
+	Device types.String `tfsdk:"device"`
+	Dn     types.String `tfsdk:"id"`
+	Name   types.String `tfsdk:"name"`
 }
 
 func (data Keychain) getDn() string {
-	return "sys/kcmgr"
+	return fmt.Sprintf("sys/kcmgr/keychains/classickeychain-[%s]", data.Name.ValueString())
 }
 
 func (data Keychain) getClassName() string {
-	return "kcmgrEntity"
+	return "kcmgrClassicKeychain"
 }
 
 func (data Keychain) toBody(statusReplace bool) nxos.Body {
@@ -46,21 +50,18 @@ func (data Keychain) toBody(statusReplace bool) nxos.Body {
 	if statusReplace {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
 	}
-	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
+	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"keychainName", data.Name.ValueString())
 	}
-	var attrs string
-	attrs = "{}"
-	body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.kcmgrKeychains.attributes", attrs)
 
 	return nxos.Body{body}
 }
 
 func (data *Keychain) fromBody(res gjson.Result, all bool) {
-	if !data.AdminState.IsNull() || all {
-		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	if !data.Name.IsNull() || all {
+		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.keychainName").String())
 	} else {
-		data.AdminState = types.StringNull()
+		data.Name = types.StringNull()
 	}
 }
 
@@ -68,4 +69,15 @@ func (data Keychain) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
+}
+
+func (data *Keychain) getIdsFromDn() {
+	reString := strings.ReplaceAll("sys/kcmgr/keychains/classickeychain-[%s]", "%[1]s", ".+")
+	reString = strings.ReplaceAll(reString, "%s", "(.+)")
+	reString = strings.ReplaceAll(reString, "%v", "(.+)")
+	reString = strings.ReplaceAll(reString, "[", "\\[")
+	reString = strings.ReplaceAll(reString, "]", "\\]")
+	re := regexp.MustCompile(reString)
+	matches := re.FindStringSubmatch(data.Dn.ValueString())
+	data.Name = types.StringValue(matches[1])
 }

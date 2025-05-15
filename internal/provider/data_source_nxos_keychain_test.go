@@ -31,22 +31,42 @@ func TestAccDataSourceNxosKeychain(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosKeychainConfig,
+				Config: testAccDataSourceNxosKeychainPrerequisitesConfig + testAccDataSourceNxosKeychainConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_keychain.test", "admin_state", "enabled"),
+					resource.TestCheckResourceAttr("data.nxos_keychain.test", "name", "Keychain1"),
 				),
 			},
 		},
 	})
 }
 
+const testAccDataSourceNxosKeychainPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/kcmgr"
+  class_name = "kcmgrEntity"
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/kcmgr/keychains"
+  class_name = "kcmgrKeychains"
+  delete = false
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+`
+
 const testAccDataSourceNxosKeychainConfig = `
 
 resource "nxos_keychain" "test" {
-  admin_state = "enabled"
+  name = "Keychain1"
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 }
 
 data "nxos_keychain" "test" {
+  name = "Keychain1"
   depends_on = [nxos_keychain.test]
 }
 `

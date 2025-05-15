@@ -8,7 +8,7 @@ description: |-
   Parent resources
   nxos_ospf_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_instance
   Child resources
-  nxos_ospf_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_interfacenxos_ospf_area https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_area
+  nxos_ospf_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_interfacenxos_ospf_area https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_areanxos_ospf_keychain https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_keychain
   Referenced resources
   nxos_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf
 ---
@@ -27,6 +27,7 @@ This resource can manage the OSPF VRF configuration.
 
 - [nxos_ospf_interface](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_interface)
 - [nxos_ospf_area](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_area)
+- [nxos_ospf_keychain](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_keychain)
 
 ### Referenced resources
 
@@ -36,19 +37,15 @@ This resource can manage the OSPF VRF configuration.
 
 ```terraform
 resource "nxos_ospf_vrf" "example" {
-  instance_name               = "OSPF1"
-  name                        = "VRF1"
-  log_adjacency_changes       = "brief"
-  admin_state                 = "enabled"
-  bandwidth_reference         = 400000
-  bandwidth_reference_unit    = "mbps"
-  distance                    = 110
-  router_id                   = "34.56.78.90"
-  control                     = "bfd,default-passive"
-  max_metric_control          = "external-lsa,startup,stub,summary-lsa"
-  max_metric_external_lsa     = 600
-  max_metric_summary_lsa      = 600
-  max_metric_startup_interval = 300
+  instance_name            = "OSPF1"
+  name                     = "VRF1"
+  log_adjacency_changes    = "brief"
+  admin_state              = "enabled"
+  bandwidth_reference      = 400000
+  bandwidth_reference_unit = "mbps"
+  distance                 = 110
+  router_id                = "34.56.78.90"
+  control                  = "bfd,default-passive"
 }
 ```
 
@@ -81,15 +78,6 @@ resource "nxos_ospf_vrf" "example" {
 - `log_adjacency_changes` (String) Log level for adjacency changes.
   - Choices: `none`, `brief`, `detail`
   - Default value: `none`
-- `max_metric_control` (String) Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:
-  - Single value. Example: `stub`
-  - Multiple values (comma-separated). Example: `stub,summary-lsa`. In this case values must be in alphabetical order.
-- `max_metric_external_lsa` (Number) Maximum metric value for external LSAs.
-  - Range: `1`-`16777215`
-- `max_metric_startup_interval` (Number) Time (in secs) for which max metric should be advertised at startup.
-  - Range: `0`-`4294967295`
-- `max_metric_summary_lsa` (Number) Maximum metric value for summary LSAs.
-  - Range: `1`-`16777215`
 - `router_id` (String) Router ID.
   - Default value: `0.0.0.0`
 

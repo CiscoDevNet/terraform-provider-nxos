@@ -33,26 +33,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &Keychain_classicDataSource{}
-	_ datasource.DataSourceWithConfigure = &Keychain_classicDataSource{}
+	_ datasource.DataSource              = &OSPFMaxMetricDataSource{}
+	_ datasource.DataSourceWithConfigure = &OSPFMaxMetricDataSource{}
 )
 
-func NewKeychain_classicDataSource() datasource.DataSource {
-	return &Keychain_classicDataSource{}
+func NewOSPFMaxMetricDataSource() datasource.DataSource {
+	return &OSPFMaxMetricDataSource{}
 }
 
-type Keychain_classicDataSource struct {
+type OSPFMaxMetricDataSource struct {
 	data *NxosProviderData
 }
 
-func (d *Keychain_classicDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_keychain_classic"
+func (d *OSPFMaxMetricDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_ospf_max_metric"
 }
 
-func (d *Keychain_classicDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *OSPFMaxMetricDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the keychain configuration.", "kcmgrClassicKeychain", "Security%20and%Policing/kcmgr:ClassicKeychain/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the OSPF VRF configuration.", "ospfMaxMetricLsaP", "Routing%20and%20Forwarding/ospf:maxmetriclsap/").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -63,15 +63,35 @@ func (d *Keychain_classicDataSource) Schema(ctx context.Context, req datasource.
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
-			"name": schema.StringAttribute{
-				MarkdownDescription: "Keychain name of classic keychain.",
+			"instance_name": schema.StringAttribute{
+				MarkdownDescription: "OSPF instance name.",
 				Required:            true,
+			},
+			"vrf_name": schema.StringAttribute{
+				MarkdownDescription: "VRF name.",
+				Required:            true,
+			},
+			"max_metric_control": schema.StringAttribute{
+				MarkdownDescription: "Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:\n  - Single value. Example: `stub`\n  - Multiple values (comma-separated). Example: `stub,summary-lsa`. In this case values must be in alphabetical order.",
+				Computed:            true,
+			},
+			"max_metric_external_lsa": schema.Int64Attribute{
+				MarkdownDescription: "Maximum metric value for external LSAs.",
+				Computed:            true,
+			},
+			"max_metric_summary_lsa": schema.Int64Attribute{
+				MarkdownDescription: "Maximum metric value for summary LSAs.",
+				Computed:            true,
+			},
+			"max_metric_startup_interval": schema.Int64Attribute{
+				MarkdownDescription: "Time (in secs) for which max metric should be advertised at startup.",
+				Computed:            true,
 			},
 		},
 	}
 }
 
-func (d *Keychain_classicDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *OSPFMaxMetricDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -79,8 +99,8 @@ func (d *Keychain_classicDataSource) Configure(_ context.Context, req datasource
 	d.data = req.ProviderData.(*NxosProviderData)
 }
 
-func (d *Keychain_classicDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config Keychain_classic
+func (d *OSPFMaxMetricDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config OSPFMaxMetric
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

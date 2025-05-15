@@ -25,29 +25,25 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccDataSourceNxosOSPFVRF(t *testing.T) {
+func TestAccDataSourceNxosOSPFMaxMetric(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosOSPFVRFPrerequisitesConfig + testAccDataSourceNxosOSPFVRFConfig,
+				Config: testAccDataSourceNxosOSPFMaxMetricPrerequisitesConfig + testAccDataSourceNxosOSPFMaxMetricConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "name", "VRF1"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "log_adjacency_changes", "brief"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "admin_state", "enabled"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "bandwidth_reference", "400000"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "bandwidth_reference_unit", "mbps"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "distance", "110"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "router_id", "34.56.78.90"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "control", "bfd,default-passive"),
+					resource.TestCheckResourceAttr("data.nxos_ospf_max_metric.test", "max_metric_control", "external-lsa,startup,stub,summary-lsa"),
+					resource.TestCheckResourceAttr("data.nxos_ospf_max_metric.test", "max_metric_external_lsa", "600"),
+					resource.TestCheckResourceAttr("data.nxos_ospf_max_metric.test", "max_metric_summary_lsa", "600"),
+					resource.TestCheckResourceAttr("data.nxos_ospf_max_metric.test", "max_metric_startup_interval", "300"),
 				),
 			},
 		},
 	})
 }
 
-const testAccDataSourceNxosOSPFVRFPrerequisitesConfig = `
+const testAccDataSourceNxosOSPFMaxMetricPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/ospf"
   class_name = "fmOspf"
@@ -82,26 +78,32 @@ resource "nxos_rest" "PreReq3" {
   depends_on = [nxos_rest.PreReq2, ]
 }
 
-`
-
-const testAccDataSourceNxosOSPFVRFConfig = `
-
-resource "nxos_ospf_vrf" "test" {
-  instance_name = "OSPF1"
-  name = "VRF1"
-  log_adjacency_changes = "brief"
-  admin_state = "enabled"
-  bandwidth_reference = 400000
-  bandwidth_reference_unit = "mbps"
-  distance = 110
-  router_id = "34.56.78.90"
-  control = "bfd,default-passive"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
+resource "nxos_rest" "PreReq4" {
+  dn = "sys/ospf/inst-[OSPF1]/dom-[VRF1]"
+  class_name = "ospfDom"
+  content = {
+      name = "VRF1"
+  }
+  depends_on = [nxos_rest.PreReq3, ]
 }
 
-data "nxos_ospf_vrf" "test" {
+`
+
+const testAccDataSourceNxosOSPFMaxMetricConfig = `
+
+resource "nxos_ospf_max_metric" "test" {
   instance_name = "OSPF1"
-  name = "VRF1"
-  depends_on = [nxos_ospf_vrf.test]
+  vrf_name = "VRF1"
+  max_metric_control = "external-lsa,startup,stub,summary-lsa"
+  max_metric_external_lsa = 600
+  max_metric_summary_lsa = 600
+  max_metric_startup_interval = 300
+  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
+}
+
+data "nxos_ospf_max_metric" "test" {
+  instance_name = "OSPF1"
+  vrf_name = "VRF1"
+  depends_on = [nxos_ospf_max_metric.test]
 }
 `

@@ -71,6 +71,10 @@ func (d *OSPFVRFDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "VRF name.",
 				Required:            true,
 			},
+			"log_adjacency_changes": schema.StringAttribute{
+				MarkdownDescription: "Log level for adjacency changes.",
+				Computed:            true,
+			},
 			"admin_state": schema.StringAttribute{
 				MarkdownDescription: "Administrative state.",
 				Computed:            true,

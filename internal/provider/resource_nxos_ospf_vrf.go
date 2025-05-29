@@ -58,7 +58,7 @@ func (r *OSPFVRFResource) Metadata(ctx context.Context, req resource.MetadataReq
 func (r *OSPFVRFResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the OSPF VRF configuration.", "ospfDom", "Routing%20and%20Forwarding/ospf:Dom/").AddParents("ospf_instance").AddChildren("ospf_interface", "ospf_area").AddReferences("vrf").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the OSPF VRF configuration.", "ospfDom", "Routing%20and%20Forwarding/ospf:Dom/").AddParents("ospf_instance").AddChildren("ospf_interface", "ospf_area", "ospf_keychain", "ospf_max_metric").AddReferences("vrf").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -84,6 +84,15 @@ func (r *OSPFVRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Required:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
+				},
+			},
+			"log_adjacency_changes": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Log level for adjacency changes.").AddStringEnumDescription("none", "brief", "detail").AddDefaultValueDescription("none").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("none"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("none", "brief", "detail"),
 				},
 			},
 			"admin_state": schema.StringAttribute{

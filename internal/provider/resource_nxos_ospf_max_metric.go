@@ -83,25 +83,25 @@ func (r *OSPFMaxMetricResource) Schema(ctx context.Context, req resource.SchemaR
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"max_metric_control": schema.StringAttribute{
+			"control": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:\n  - Single value. Example: `stub`\n  - Multiple values (comma-separated). Example: `stub,summary-lsa`. In this case values must be in alphabetical order.").String,
 				Optional:            true,
 			},
-			"max_metric_external_lsa": schema.Int64Attribute{
+			"external_lsa": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Maximum metric value for external LSAs.").AddIntegerRangeDescription(1, 16777215).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 16777215),
 				},
 			},
-			"max_metric_summary_lsa": schema.Int64Attribute{
+			"summary_lsa": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Maximum metric value for summary LSAs.").AddIntegerRangeDescription(1, 16777215).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 16777215),
 				},
 			},
-			"max_metric_startup_interval": schema.Int64Attribute{
+			"startup_interval": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Time (in secs) for which max metric should be advertised at startup.").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
 				Validators: []validator.Int64{

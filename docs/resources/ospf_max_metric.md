@@ -23,12 +23,12 @@ This resource can manage the OSPF Max Metric Link State Advertisement configurat
 
 ```terraform
 resource "nxos_ospf_max_metric" "example" {
-  instance_name               = "OSPF1"
-  vrf_name                    = "VRF1"
-  max_metric_control          = "external-lsa,startup,stub,summary-lsa"
-  max_metric_external_lsa     = 600
-  max_metric_summary_lsa      = 600
-  max_metric_startup_interval = 300
+  instance_name    = "OSPF1"
+  vrf_name         = "VRF1"
+  control          = "external-lsa,startup,stub,summary-lsa"
+  external_lsa     = 600
+  summary_lsa      = 600
+  startup_interval = 300
 }
 ```
 
@@ -42,15 +42,15 @@ resource "nxos_ospf_max_metric" "example" {
 
 ### Optional
 
-- `device` (String) A device name from the provider configuration.
-- `max_metric_control` (String) Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:
+- `control` (String) Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:
   - Single value. Example: `stub`
   - Multiple values (comma-separated). Example: `stub,summary-lsa`. In this case values must be in alphabetical order.
-- `max_metric_external_lsa` (Number) Maximum metric value for external LSAs.
+- `device` (String) A device name from the provider configuration.
+- `external_lsa` (Number) Maximum metric value for external LSAs.
   - Range: `1`-`16777215`
-- `max_metric_startup_interval` (Number) Time (in secs) for which max metric should be advertised at startup.
+- `startup_interval` (Number) Time (in secs) for which max metric should be advertised at startup.
   - Range: `0`-`4294967295`
-- `max_metric_summary_lsa` (Number) Maximum metric value for summary LSAs.
+- `summary_lsa` (Number) Maximum metric value for summary LSAs.
   - Range: `1`-`16777215`
 
 ### Read-Only

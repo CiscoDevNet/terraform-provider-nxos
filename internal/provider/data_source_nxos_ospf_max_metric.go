@@ -71,19 +71,19 @@ func (d *OSPFMaxMetricDataSource) Schema(ctx context.Context, req datasource.Sch
 				MarkdownDescription: "VRF name.",
 				Required:            true,
 			},
-			"max_metric_control": schema.StringAttribute{
+			"control": schema.StringAttribute{
 				MarkdownDescription: "Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:\n  - Single value. Example: `stub`\n  - Multiple values (comma-separated). Example: `stub,summary-lsa`. In this case values must be in alphabetical order.",
 				Computed:            true,
 			},
-			"max_metric_external_lsa": schema.Int64Attribute{
+			"external_lsa": schema.Int64Attribute{
 				MarkdownDescription: "Maximum metric value for external LSAs.",
 				Computed:            true,
 			},
-			"max_metric_summary_lsa": schema.Int64Attribute{
+			"summary_lsa": schema.Int64Attribute{
 				MarkdownDescription: "Maximum metric value for summary LSAs.",
 				Computed:            true,
 			},
-			"max_metric_startup_interval": schema.Int64Attribute{
+			"startup_interval": schema.Int64Attribute{
 				MarkdownDescription: "Time (in secs) for which max metric should be advertised at startup.",
 				Computed:            true,
 			},

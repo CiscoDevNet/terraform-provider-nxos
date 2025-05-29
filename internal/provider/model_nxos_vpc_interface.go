@@ -33,10 +33,9 @@ import (
 )
 
 type VPCInterface struct {
-	Device         types.String `tfsdk:"device"`
-	Dn             types.String `tfsdk:"id"`
-	VpcInterfaceId types.Int64  `tfsdk:"vpc_interface_id"`
-	//
+	Device                 types.String `tfsdk:"device"`
+	Dn                     types.String `tfsdk:"id"`
+	VpcInterfaceId         types.Int64  `tfsdk:"vpc_interface_id"`
 	PortChannelInterfaceDn types.String `tfsdk:"port_channel_interface_dn"`
 }
 

@@ -24,26 +24,26 @@ attributes:
     description: 'VRF name.'
     example: VRF1
   - nxos_name: ctrl
-    tf_name: max_metric_control
+    tf_name: control
     type: String
     description: 'Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:\n  - Single value. Example: `stub`\n  - Multiple values (comma-separated). Example: `stub,summary-lsa`. In this case values must be in alphabetical order.'
     example: 'external-lsa,startup,stub,summary-lsa'
   - nxos_name: maxMetricExtLsa
-    tf_name: max_metric_external_lsa
+    tf_name: external_lsa
     type: Int64
     min_int: 1
     max_int: 16777215
     description: 'Maximum metric value for external LSAs.'
     example: 600
   - nxos_name: maxMetricSummLsa
-    tf_name: max_metric_summary_lsa
+    tf_name: summary_lsa
     type: Int64
     min_int: 1
     max_int: 16777215
     description: 'Maximum metric value for summary LSAs.'
     example: 600
   - nxos_name: startupIntvl
-    tf_name: max_metric_startup_interval
+    tf_name: startup_interval
     type: Int64
     min_int: 0
     max_int: 4294967295

@@ -36,10 +36,10 @@ data "nxos_ospf_max_metric" "example" {
 
 ### Read-Only
 
-- `id` (String) The distinguished name of the object.
-- `max_metric_control` (String) Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:
+- `control` (String) Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:
   - Single value. Example: `stub`
   - Multiple values (comma-separated). Example: `stub,summary-lsa`. In this case values must be in alphabetical order.
-- `max_metric_external_lsa` (Number) Maximum metric value for external LSAs.
-- `max_metric_startup_interval` (Number) Time (in secs) for which max metric should be advertised at startup.
-- `max_metric_summary_lsa` (Number) Maximum metric value for summary LSAs.
+- `external_lsa` (Number) Maximum metric value for external LSAs.
+- `id` (String) The distinguished name of the object.
+- `startup_interval` (Number) Time (in secs) for which max metric should be advertised at startup.
+- `summary_lsa` (Number) Maximum metric value for summary LSAs.

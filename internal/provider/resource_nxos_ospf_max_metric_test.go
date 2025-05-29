@@ -35,10 +35,10 @@ func TestAccNxosOSPFMaxMetric(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "instance_name", "OSPF1"),
 					resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "vrf_name", "VRF1"),
-					resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "max_metric_control", "external-lsa,startup,stub,summary-lsa"),
-					resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "max_metric_external_lsa", "600"),
-					resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "max_metric_summary_lsa", "600"),
-					resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "max_metric_startup_interval", "300"),
+					resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "control", "external-lsa,startup,stub,summary-lsa"),
+					resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "external_lsa", "600"),
+					resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "summary_lsa", "600"),
+					resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "startup_interval", "300"),
 				),
 			},
 			{
@@ -111,10 +111,10 @@ func testAccNxosOSPFMaxMetricConfig_all() string {
 	resource "nxos_ospf_max_metric" "test" {
 		instance_name = "OSPF1"
 		vrf_name = "VRF1"
-		max_metric_control = "external-lsa,startup,stub,summary-lsa"
-		max_metric_external_lsa = 600
-		max_metric_summary_lsa = 600
-		max_metric_startup_interval = 300
+		control = "external-lsa,startup,stub,summary-lsa"
+		external_lsa = 600
+		summary_lsa = 600
+		startup_interval = 300
   		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
 	}
 	`

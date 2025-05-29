@@ -40,11 +40,9 @@ type {{camelCase .Name}} struct {
 {{- end}}
 {{- range .ChildClasses}}
 {{- if eq .Type "single"}}
-//{{- if len .Attributes -}}
 {{- range .Attributes}}
     {{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
 {{- end}}
-//{{- end}}
 {{- else if eq .Type "list"}}
 	{{toGoName .TfName}} []{{$name}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
 {{- end}}
@@ -54,10 +52,8 @@ type {{camelCase .Name}} struct {
 {{range .ChildClasses}}
 {{if eq .Type "list"}}
 type {{$name}}{{toGoName .TfName}} struct {
-{{- if len .Attributes -}}
 {{- range .Attributes}}
 	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
-{{- end}}
 {{- end}}
 }
 {{end}}

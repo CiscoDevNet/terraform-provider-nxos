@@ -31,10 +31,9 @@ import (
 )
 
 type IPv4AccessListPolicyIngressInterface struct {
-	Device      types.String `tfsdk:"device"`
-	Dn          types.String `tfsdk:"id"`
-	InterfaceId types.String `tfsdk:"interface_id"`
-	//
+	Device         types.String `tfsdk:"device"`
+	Dn             types.String `tfsdk:"id"`
+	InterfaceId    types.String `tfsdk:"interface_id"`
 	AccessListName types.String `tfsdk:"access_list_name"`
 }
 

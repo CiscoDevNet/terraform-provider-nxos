@@ -52,7 +52,6 @@ resource "nxos_rest" "PreReq0" {
 resource "nxos_rest" "PreReq1" {
   dn = "sys/kcmgr/keychains"
   class_name = "kcmgrKeychains"
-  delete = false
   depends_on = [nxos_rest.PreReq0, ]
 }
 

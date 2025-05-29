@@ -8,7 +8,7 @@ description: |-
   Parent resources
   nxos_ospf_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_instance
   Child resources
-  nxos_ospf_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_interfacenxos_ospf_area https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_areanxos_ospf_keychain https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_keychain
+  nxos_ospf_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_interfacenxos_ospf_area https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_areanxos_ospf_keychain https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_keychainnxos_ospf_max_metric https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_max_metric
   Referenced resources
   nxos_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf
 ---
@@ -28,6 +28,7 @@ This resource can manage the OSPF VRF configuration.
 - [nxos_ospf_interface](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_interface)
 - [nxos_ospf_area](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_area)
 - [nxos_ospf_keychain](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_keychain)
+- [nxos_ospf_max_metric](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_max_metric)
 
 ### Referenced resources
 

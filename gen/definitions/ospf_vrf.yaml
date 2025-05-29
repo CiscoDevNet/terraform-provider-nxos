@@ -12,6 +12,7 @@ children:
   - OSPF Interface
   - OSPF Area
   - OSPF Keychain
+  - OSPF Max Metric
 references:
   - VRF
 attributes:

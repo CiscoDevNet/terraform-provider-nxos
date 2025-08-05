@@ -54,6 +54,8 @@ resource "nxos_default_qos_policy_interface_in_policy_map" "example" {
 
 Import is supported using the following syntax:
 
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
 terraform import nxos_default_qos_policy_interface_in_policy_map.example "sys/ipqos/dflt/policy/in/intf-[eth1/10]/pmap"
 ```

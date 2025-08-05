@@ -67,6 +67,8 @@ resource "nxos_ipv4_prefix_list_rule_entry" "example" {
 
 Import is supported using the following syntax:
 
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
 terraform import nxos_ipv4_prefix_list_rule_entry.example "sys/rpm/pfxlistv4-[RULE1]/ent-[10]"
 ```

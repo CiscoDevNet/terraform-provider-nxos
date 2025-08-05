@@ -52,6 +52,8 @@ resource "nxos_queuing_qos_policy_system_out_policy_map" "example" {
 
 Import is supported using the following syntax:
 
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
 terraform import nxos_queuing_qos_policy_system_out_policy_map.example "sys/ipqos/queuing/policy/out/sys/pmap"
 ```

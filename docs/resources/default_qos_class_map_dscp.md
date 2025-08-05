@@ -49,6 +49,8 @@ resource "nxos_default_qos_class_map_dscp" "example" {
 
 Import is supported using the following syntax:
 
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
 terraform import nxos_default_qos_class_map_dscp.example "sys/ipqos/dflt/c/name-[Voice]/dscp-[ef]"
 ```

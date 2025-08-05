@@ -70,6 +70,8 @@ resource "nxos_ospf_authentication" "example" {
 
 Import is supported using the following syntax:
 
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
 terraform import nxos_ospf_authentication.example "sys/ospf/inst-[OSPF1]/dom-[VRF1]/if-[eth1/10]/authnew"
 ```

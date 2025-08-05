@@ -50,6 +50,8 @@ resource "nxos_pim_anycast_rp_peer" "example" {
 
 Import is supported using the following syntax:
 
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
 terraform import nxos_pim_anycast_rp_peer.example "sys/pim/inst/dom-[default]/acastrpfunc/peer-[10.1.1.1/32]-peer-[20.1.1.1/32]"
 ```

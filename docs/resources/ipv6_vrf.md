@@ -47,6 +47,8 @@ resource "nxos_ipv6_vrf" "example" {
 
 Import is supported using the following syntax:
 
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
 terraform import nxos_ipv6_vrf.example "sys/ipv6/inst/dom-[VRF1]"
 ```

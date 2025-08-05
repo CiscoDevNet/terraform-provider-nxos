@@ -140,6 +140,8 @@ resource "nxos_default_qos_policy_map_match_class_map_police" "example" {
 
 Import is supported using the following syntax:
 
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
 terraform import nxos_default_qos_policy_map_match_class_map_police.example "sys/ipqos/dflt/p/name-[PM1]/cmap-[Voice]/police"
 ```

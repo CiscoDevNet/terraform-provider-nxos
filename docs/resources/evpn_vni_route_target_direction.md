@@ -55,6 +55,8 @@ resource "nxos_evpn_vni_route_target_direction" "example" {
 
 Import is supported using the following syntax:
 
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
 terraform import nxos_evpn_vni_route_target_direction.example "sys/evpn/bdevi-[vxlan-123456]/rttp-[import]"
 ```

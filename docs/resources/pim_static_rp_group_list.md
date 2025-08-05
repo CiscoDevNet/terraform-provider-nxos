@@ -56,6 +56,8 @@ resource "nxos_pim_static_rp_group_list" "example" {
 
 Import is supported using the following syntax:
 
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
 terraform import nxos_pim_static_rp_group_list.example "sys/pim/inst/dom-[default]/staticrp/rp-[1.2.3.4]/rpgrplist-[224.0.0.0/4]"
 ```

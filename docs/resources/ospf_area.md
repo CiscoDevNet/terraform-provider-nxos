@@ -63,6 +63,8 @@ resource "nxos_ospf_area" "example" {
 
 Import is supported using the following syntax:
 
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
 terraform import nxos_ospf_area.example "sys/ospf/inst-[OSPF1]/dom-[VRF1]/area-[0.0.0.10]"
 ```

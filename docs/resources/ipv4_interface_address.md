@@ -57,6 +57,8 @@ resource "nxos_ipv4_interface_address" "example" {
 
 Import is supported using the following syntax:
 
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
 terraform import nxos_ipv4_interface_address.example "sys/ipv4/inst/dom-[default]/if-[eth1/10]/addr-[24.63.46.49/30]"
 ```

@@ -170,6 +170,8 @@ resource "nxos_ipv4_access_list_entry" "example" {
 
 Import is supported using the following syntax:
 
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
 terraform import nxos_ipv4_access_list_entry.example "sys/acl/ipv4/name-[ACL1]/seq-[10]"
 ```

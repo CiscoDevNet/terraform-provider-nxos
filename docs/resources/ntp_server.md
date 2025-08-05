@@ -57,6 +57,8 @@ resource "nxos_ntp_server" "example" {
 
 Import is supported using the following syntax:
 
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
 terraform import nxos_ntp_server.example "sys/time/prov-[1.2.3.4]"
 ```

@@ -51,6 +51,8 @@ resource "nxos_nve_vni_ingress_replication" "example" {
 
 Import is supported using the following syntax:
 
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
 terraform import nxos_nve_vni_ingress_replication.example "sys/eps/epId-[1]/nws/vni-[103100]/IngRepl"
 ```

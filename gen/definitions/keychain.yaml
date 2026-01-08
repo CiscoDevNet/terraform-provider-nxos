@@ -1,0 +1,28 @@
+---
+name: Keychain
+class_name: kcmgrClassicKeychain
+dn: sys/kcmgr/keychains/classickeychain-[%s]
+ds_description: This data source can read the keychain configuration.
+res_description: This resource can manage the keychain configuration.
+doc_path: Security%20and%20Policing/kcmgr:ClassicKeychain/
+doc_category: Keychain
+parents:
+  - Keychain Manager
+children:
+  - Keychain Key
+attributes:
+  - nxos_name: keychainName
+    tf_name: name
+    type: String
+    id: true
+    description: 'Keychain name of classic keychain.'
+    example: 'Keychain1'
+test_prerequisites:
+  - dn: sys/kcmgr
+    class_name: kcmgrEntity
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/kcmgr/keychains
+    class_name: kcmgrKeychains
+    dependencies: [0]

@@ -1,0 +1,19 @@
+---
+name: Feature sFlow
+class_name: fmSflow
+dn: sys/fm/sflow
+ds_description: This data source can read the sFlow feature configuration.
+res_description: This resource can manage the sFlow feature configuration.
+doc_path: Feature%20Management/fm:Sflow/
+doc_category: Feature
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    mandatory: true
+    description: 'Administrative state.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+    delete_value: disabled

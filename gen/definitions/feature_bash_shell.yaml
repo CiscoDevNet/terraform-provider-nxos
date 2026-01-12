@@ -1,0 +1,19 @@
+---
+name: Feature Bash Shell
+class_name: fmBashShell
+dn: sys/fm/bashshell
+ds_description: This data source can read the Bash Shell feature configuration.
+res_description: This resource can manage the Bash Shell feature configuration.
+doc_path: Feature%20Management/fm:BashShell/
+doc_category: Feature
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    mandatory: true
+    description: 'Administrative state.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+    delete_value: disabled

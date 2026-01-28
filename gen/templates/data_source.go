@@ -86,6 +86,15 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 				{{- end}}
 			},
 			{{- end}}
+			{{- range .ChildClasses}}
+			{{- if eq .Type "list_flat"}}
+			"{{.TfName}}": schema.ListAttribute{
+				MarkdownDescription: "{{.Description}}",
+				Computed:            true,
+				ElementType:         types.StringType,
+			},
+			{{- end}}
+			{{- end}}
 			{{- else if eq .Type "list"}}
 			"{{.TfName}}": schema.ListNestedAttribute{
 				MarkdownDescription: "{{.Description}}",
@@ -100,6 +109,12 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 						{{- end}}
 					},
 				},
+			},
+			{{- else if eq .Type "list_flat"}}
+			"{{.TfName}}": schema.ListAttribute{
+				MarkdownDescription: "{{.Description}}",
+				Computed:            true,
+				ElementType:         types.StringType,
 			},
 			{{- end}}
 			{{- end}}
@@ -135,7 +150,13 @@ func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource
 
 	queries := []func(*nxos.Req){}
 	{{- if .ChildClasses}}
+	{{- $hasNestedChildren := false}}
+	{{- range .ChildClasses}}{{- if .ChildClasses}}{{$hasNestedChildren = true}}{{end}}{{end}}
+	{{- if $hasNestedChildren}}
+	queries = append(queries, nxos.Query("rsp-subtree", "full"))
+	{{- else}}
 	queries = append(queries, nxos.Query("rsp-subtree", "children"))
+	{{- end}}
 	{{- end}}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {

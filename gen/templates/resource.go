@@ -107,7 +107,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				Computed:            true,
 				{{- end}}
 				{{- end}}
-				{{- if and (len .DefaultValue) (not .Id) (not .ReferenceOnly) (not .Mandatory)}}
+				{{- if and (len .DefaultValue) (not .Id) (not .Mandatory)}}
 				{{- if eq .Type "Int64"}}
 				Default: int64default.StaticInt64({{.DefaultValue}}),
 				{{- else if eq .Type "Bool"}}
@@ -147,15 +147,18 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 					.AddDefaultValueDescription("{{.DefaultValue}}")
 					{{- end -}}
 					.String,
-				{{- if or .Id .ReferenceOnly .Mandatory}}
+				{{- if or .Id .Mandatory}}
 				Required:            true,
+				{{- else if .ReferenceOnly}}
+				Optional:            true,
+				Computed:            true,
 				{{- else}}
 				Optional:            true,
 				{{- if len .DefaultValue}}
 				Computed:            true,
 				{{- end}}
 				{{- end}}
-				{{- if and (len .DefaultValue) (not .Id) (not .ReferenceOnly) (not .Mandatory)}}
+				{{- if and (len .DefaultValue) (not .Id) (not .Mandatory)}}
 				{{- if eq .Type "Int64"}}
 				Default: int64default.StaticInt64({{.DefaultValue}}),
 				{{- else if eq .Type "Bool"}}
@@ -180,6 +183,15 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				{{- end}}
 			},
 			{{- end}}
+			{{- range .ChildClasses}}
+			{{- if eq .Type "list_flat"}}
+			"{{.TfName}}": schema.ListAttribute{
+				MarkdownDescription: "{{.Description}}",
+				Optional:            true,
+				ElementType:         types.StringType,
+			},
+			{{- end}}
+			{{- end}}
 			{{- else if eq .Type "list"}}
 			"{{.TfName}}": schema.ListNestedAttribute{
 				MarkdownDescription: "{{.Description}}",
@@ -199,15 +211,18 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 								.AddDefaultValueDescription("{{.DefaultValue}}")
 								{{- end -}}
 								.String,
-							{{- if or .Id .ReferenceOnly .Mandatory}}
+							{{- if or .Id .Mandatory}}
 							Required:            true,
+							{{- else if .ReferenceOnly}}
+							Optional:            true,
+							Computed:            true,
 							{{- else}}
 							Optional:            true,
 							{{- if len .DefaultValue}}
 							Computed:            true,
 							{{- end}}
 							{{- end}}
-							{{- if and (len .DefaultValue) (not .Id) (not .ReferenceOnly) (not .Mandatory)}}
+							{{- if and (len .DefaultValue) (not .Id) (not .Mandatory)}}
 							{{- if eq .Type "Int64"}}
 							Default: int64default.StaticInt64({{.DefaultValue}}),
 							{{- else if eq .Type "Bool"}}
@@ -234,6 +249,12 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 						{{- end}}
 					},
 				},
+			},
+			{{- else if eq .Type "list_flat"}}
+			"{{.TfName}}": schema.ListAttribute{
+				MarkdownDescription: "{{.Description}}",
+				Optional:            true,
+				ElementType:         types.StringType,
 			},
 			{{- end}}
 			{{- end}}
@@ -309,7 +330,13 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
 		{{- if .ChildClasses}}
+		{{- $hasNestedChildren := false}}
+		{{- range .ChildClasses}}{{- if .ChildClasses}}{{$hasNestedChildren = true}}{{end}}{{end}}
+		{{- if $hasNestedChildren}}
+		queries = append(queries, nxos.Query("rsp-subtree", "full"))
+		{{- else}}
 		queries = append(queries, nxos.Query("rsp-subtree", "children"))
+		{{- end}}
 		{{- end}}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {

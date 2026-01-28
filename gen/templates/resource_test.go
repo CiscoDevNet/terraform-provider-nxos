@@ -59,6 +59,12 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 					resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "{{$list}}.0.{{.TfName}}", "{{.Example}}"),
 					{{- end}}
 					{{- end}}
+					{{- else if eq .Type "list_flat"}}
+					{{- range .Attributes}}
+					{{- if and .Id (not .ExcludeTest)}}
+					resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "{{$list}}.0", "{{.Example}}"),
+					{{- end}}
+					{{- end}}
 					{{- end}}
 					{{- end}}
 				),
@@ -134,6 +140,12 @@ func testAccNxos{{camelCase .Name}}Config_all() string {
 		{{- end}}
 		{{- end}}
 		}]
+	{{- else if eq .Type "list_flat"}}
+		{{- range .Attributes}}
+		{{- if and .Id (not .ExcludeTest)}}
+		{{.TfName}} = ["{{.Example}}"]
+		{{- end}}
+		{{- end}}
 	{{- end}}
 	{{- end}}
 	{{- if .TestPrerequisites}}

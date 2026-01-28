@@ -1,0 +1,19 @@
+---
+name: Banner Prelogin
+class_name: aaaPreLoginBanner
+dn: sys/userext/preloginbanner
+ds_description: This data source can read the Prelogin Banner configuration.
+res_description: This resource can manage the Prelogin Banner configuration.
+doc_path: Security%20and%20Policing/aaa:PreLoginBanner/
+doc_category: AAA
+attributes:
+  - nxos_name: message
+    tf_name: motd_banner
+    type: String
+    description: "Banner message."
+    example: "Welcome to the network."
+    default_value: ""
+test_prerequisites:
+  - dn: sys/userext
+    class_name: aaaUserEp
+    dependencies: [0]

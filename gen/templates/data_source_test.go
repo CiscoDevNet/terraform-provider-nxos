@@ -53,10 +53,26 @@ func TestAccDataSourceNxos{{camelCase .Name}}(t *testing.T) {
 					resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"),
 					{{- end}}
 					{{- end}}
+					{{- range .ChildClasses}}
+					{{- $nestedList := .TfName}}
+					{{- if eq .Type "list_flat"}}
+					{{- range .Attributes}}
+					{{- if and .Id (not .ExcludeTest)}}
+					resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{$nestedList}}.0", "{{.Example}}"),
+					{{- end}}
+					{{- end}}
+					{{- end}}
+					{{- end}}
 					{{- else if eq .Type "list"}}
 					{{- range .Attributes}}
 					{{- if not .ExcludeTest}}
 					resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{$list}}.0.{{.TfName}}", "{{.Example}}"),
+					{{- end}}
+					{{- end}}
+					{{- else if eq .Type "list_flat"}}
+					{{- range .Attributes}}
+					{{- if and .Id (not .ExcludeTest)}}
+					resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{$list}}.0", "{{.Example}}"),
 					{{- end}}
 					{{- end}}
 					{{- end}}
@@ -100,10 +116,21 @@ resource "nxos_{{snakeCase $name}}" "test" {
 {{- end}}
 {{- end}}
 {{- range .ChildClasses}}
+{{- $list := .TfName}}
 {{- if eq .Type "single"}}
 {{- range .Attributes}}
 {{- if not .ExcludeTest}}
   {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+{{- end}}
+{{- end}}
+{{- range .ChildClasses}}
+{{- $nestedList := .TfName}}
+{{- if eq .Type "list_flat"}}
+{{- range .Attributes}}
+{{- if and .Id (not .ExcludeTest)}}
+  {{$nestedList}} = ["{{.Example}}"]
+{{- end}}
+{{- end}}
 {{- end}}
 {{- end}}
 {{- else if eq .Type "list"}}
@@ -114,6 +141,12 @@ resource "nxos_{{snakeCase $name}}" "test" {
 	{{- end}}
 	{{- end}}
   }]
+{{- else if eq .Type "list_flat"}}
+{{- range .Attributes}}
+{{- if and .Id (not .ExcludeTest)}}
+  {{$list}} = ["{{.Example}}"]
+{{- end}}
+{{- end}}
 {{- end}}
 {{- end}}
 {{- if .TestPrerequisites}}
@@ -125,6 +158,15 @@ data "nxos_{{snakeCase .Name}}" "test" {
 {{- range  .Attributes}}
 {{- if or .Id .ReferenceOnly}}
   {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+{{- end}}
+{{- end}}
+{{- range .ChildClasses}}
+{{- if eq .Type "single"}}
+{{- range .Attributes}}
+{{- if or .Id .ReferenceOnly}}
+  {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+{{- end}}
+{{- end}}
 {{- end}}
 {{- end}}
   depends_on = [nxos_{{snakeCase $name}}.test]

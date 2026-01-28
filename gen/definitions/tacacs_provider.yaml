@@ -1,0 +1,83 @@
+---
+name: Tacacs Provider
+class_name: aaaTacacsPlusProvider
+dn: sys/userext/tacacsext/tacacsplusprovider-[%s]
+ds_description: This data source can read the Tacacs Provider configuration.
+res_description: This resource can manage the Tacacs Provider configuration.
+doc_path: Security%20and%20Policing/aaa:aaaTacacsPlusProvider/
+doc_category: AAA
+parents:
+  - AAA
+  - Tacacs
+children:
+  - Tacacs Provider
+  - Tacacs Provider Group
+attributes:
+  - nxos_name: name
+    tf_name: name
+    type: String
+    id: true
+    description: 'TACACS+ provider.'
+    example: "1.2.3.4"
+  - nxos_name: authProtocol
+    tf_name: auth_protocol
+    type: String
+    description: 'The TACACS+ authentication protocol.'
+    enum_values:
+      - "pap"
+      - "chap"
+      - "mschap"
+      - "mschapv2"
+      - "ascii"
+    default_value: "pap"
+    example: "chap"
+  - nxos_name: keyEnc
+    tf_name: password_type
+    type: String
+    description: "Password Encryption Type."
+    enum_values:
+      - "0"
+      - "6"
+      - LINE
+      - "7"
+    example: inherit-from-global
+    exclude_test: true
+    omit_empty_value: true
+  - nxos_name: key
+    tf_name: password
+    description: "TACACS+ server shared secret."
+    type: String
+    example: secret_password
+    write_only: true
+  - nxos_name: port
+    tf_name: port
+    type: Int64
+    description: 'Port number for TACACS+ server.'
+    default_value: 49
+    example: 123
+  - nxos_name: retries
+    tf_name: retries
+    type: Int64
+    description: 'Number of retries for TACACS+ server.'
+    example: 3
+  - nxos_name: timeout
+    tf_name: timeout
+    type: Int64
+    description: 'Timeout value for TACACS+ server.'
+    default_value: 0
+    example: 10
+test_prerequisites:
+  - dn: sys/fm/tacacsplus
+    class_name: fmTacacsplus
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/userext
+    class_name: aaaUserEp
+    no_delete: true
+    dependencies: [0]
+  - dn: sys/userext/tacacsext
+    class_name: aaaTacacsPlusEp
+    dependencies: [1]
+

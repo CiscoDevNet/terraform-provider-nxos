@@ -36,3 +36,5 @@ website/vendor
 
 # Compiled provider binary
 terraform-provider-nxos
+
+tmp

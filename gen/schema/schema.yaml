@@ -39,7 +39,16 @@ attribute:
 child_classes:
   class_name: str()
   rn: str()
-  type: enum('single', 'list', required=False)
+  type: enum('single', 'list', 'list_flat', required=False)
+  tf_name: str(required=False)
+  description: str(required=False)
+  attributes: list(include('attribute'), required=False)
+  child_classes: list(include('child_child_classes'), required=False)
+
+child_child_classes:
+  class_name: str()
+  rn: str()
+  type: enum('single', 'list', 'list_flat', required=False)
   tf_name: str(required=False)
   description: str(required=False)
   attributes: list(include('attribute'), required=False)

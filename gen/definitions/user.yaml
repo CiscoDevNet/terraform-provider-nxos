@@ -7,8 +7,6 @@ ds_description: This data source can read the User configuration.
 res_description: This resource can manage the User configuration.
 doc_path: Security%20and%20Policing/aaa:User/
 doc_category: AAA
-parents:
-  - AAA
 attributes:
   - nxos_name: name
     tf_name: name

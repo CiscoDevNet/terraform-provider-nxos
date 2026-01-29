@@ -6,8 +6,9 @@ ds_description: This data source can read the Tacacs configuration.
 res_description: This resource can manage the Tacacs configuration.
 doc_path: Security%20and%20Policing/aaa:TacacsPlusEp/
 doc_category: AAA
-parents:
-  - AAA
+children:
+  - Tacacs Provider
+  - Tacacs Provider Group
 attributes:
   - nxos_name: deadtime
     tf_name: deadtime

@@ -7,11 +7,7 @@ res_description: This resource can manage the Tacacs Provider configuration.
 doc_path: Security%20and%20Policing/aaa:aaaTacacsPlusProvider/
 doc_category: AAA
 parents:
-  - AAA
   - Tacacs
-children:
-  - Tacacs Provider
-  - Tacacs Provider Group
 attributes:
   - nxos_name: name
     tf_name: name

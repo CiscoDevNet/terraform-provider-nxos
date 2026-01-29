@@ -57,7 +57,7 @@ func (r *TacacsResource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *TacacsResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Tacacs configuration.", "aaaTacacsPlusEp", "Security%20and%20Policing/aaa:TacacsPlusEp/").AddParents("aaa").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Tacacs configuration.", "aaaTacacsPlusEp", "Security%20and%20Policing/aaa:TacacsPlusEp/").AddChildren("tacacs_provider", "tacacs_provider_group").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

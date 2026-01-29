@@ -56,7 +56,7 @@ func (r *UserResource) Metadata(ctx context.Context, req resource.MetadataReques
 func (r *UserResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the User configuration.", "aaaUser", "Security%20and%20Policing/aaa:User/").AddParents("aaa").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the User configuration.", "aaaUser", "Security%20and%20Policing/aaa:User/").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

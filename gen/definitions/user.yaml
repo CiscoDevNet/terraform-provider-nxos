@@ -35,6 +35,7 @@ attributes:
     omit_empty_value: true
   - nxos_name: pwdEncryptType
     tf_name: password_encryption_type
+    description: "Password encryption type."
     type: String
     enum_values:
       - "0"

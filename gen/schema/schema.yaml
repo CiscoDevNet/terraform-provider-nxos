@@ -18,7 +18,7 @@ test_prerequisites: list(include('test_prerequisite'), required=False)
 ---
 attribute:
   nxos_name: str()
-  tf_name: str()
+  tf_name: str(required=False)
   type: enum('String', 'Int64', 'Bool')
   id: bool(required=False)
   reference_only: bool(required=False)

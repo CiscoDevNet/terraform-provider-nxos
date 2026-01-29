@@ -22,8 +22,10 @@ package provider
 import (
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -31,13 +33,67 @@ import (
 )
 
 type IPv4AccessList struct {
-	Device types.String `tfsdk:"device"`
-	Dn     types.String `tfsdk:"id"`
-	Name   types.String `tfsdk:"name"`
+	Device  types.String            `tfsdk:"device"`
+	Dn      types.String            `tfsdk:"id"`
+	Name    types.String            `tfsdk:"name"`
+	Entries []IPv4AccessListEntries `tfsdk:"entries"`
+}
+
+type IPv4AccessListEntries struct {
+	Sequence                types.Int64  `tfsdk:"sequence"`
+	Ack                     types.Bool   `tfsdk:"ack"`
+	Action                  types.String `tfsdk:"action"`
+	Dscp                    types.Int64  `tfsdk:"dscp"`
+	DestinationAddressGroup types.String `tfsdk:"destination_address_group"`
+	DestinationPort1        types.String `tfsdk:"destination_port_1"`
+	DestinationPort2        types.String `tfsdk:"destination_port_2"`
+	DestinationPortGroup    types.String `tfsdk:"destination_port_group"`
+	DestinationPortMask     types.String `tfsdk:"destination_port_mask"`
+	DestinationPortOperator types.String `tfsdk:"destination_port_operator"`
+	DestinationPrefix       types.String `tfsdk:"destination_prefix"`
+	DestinationPrefixLength types.String `tfsdk:"destination_prefix_length"`
+	DestinationPrefixMask   types.String `tfsdk:"destination_prefix_mask"`
+	Established             types.Bool   `tfsdk:"established"`
+	Fin                     types.Bool   `tfsdk:"fin"`
+	Fragment                types.Bool   `tfsdk:"fragment"`
+	HttpOptionType          types.String `tfsdk:"http_option_type"`
+	IcmpCode                types.Int64  `tfsdk:"icmp_code"`
+	IcmpType                types.Int64  `tfsdk:"icmp_type"`
+	Log                     types.Bool   `tfsdk:"log"`
+	PacketLength1           types.String `tfsdk:"packet_length_1"`
+	PacketLength2           types.String `tfsdk:"packet_length_2"`
+	PacketLengthOperator    types.String `tfsdk:"packet_length_operator"`
+	Precedence              types.String `tfsdk:"precedence"`
+	Protocol                types.String `tfsdk:"protocol"`
+	ProtocolMask            types.String `tfsdk:"protocol_mask"`
+	Psh                     types.Bool   `tfsdk:"psh"`
+	Redirect                types.String `tfsdk:"redirect"`
+	Remark                  types.String `tfsdk:"remark"`
+	Rev                     types.Bool   `tfsdk:"rev"`
+	Rst                     types.Bool   `tfsdk:"rst"`
+	SourceAddressGroup      types.String `tfsdk:"source_address_group"`
+	SourcePort1             types.String `tfsdk:"source_port_1"`
+	SourcePort2             types.String `tfsdk:"source_port_2"`
+	SourcePortGroup         types.String `tfsdk:"source_port_group"`
+	SourcePortMask          types.String `tfsdk:"source_port_mask"`
+	SourcePortOperator      types.String `tfsdk:"source_port_operator"`
+	SourcePrefix            types.String `tfsdk:"source_prefix"`
+	SourcePrefixLength      types.String `tfsdk:"source_prefix_length"`
+	SourcePrefixMask        types.String `tfsdk:"source_prefix_mask"`
+	Syn                     types.Bool   `tfsdk:"syn"`
+	TimeRange               types.String `tfsdk:"time_range"`
+	Ttl                     types.Int64  `tfsdk:"ttl"`
+	Urg                     types.Bool   `tfsdk:"urg"`
+	Vlan                    types.Int64  `tfsdk:"vlan"`
+	Vni                     types.String `tfsdk:"vni"`
 }
 
 func (data IPv4AccessList) getDn() string {
 	return fmt.Sprintf("sys/acl/ipv4/name-[%s]", data.Name.ValueString())
+}
+
+func (data IPv4AccessListEntries) getRn() string {
+	return fmt.Sprintf("seq-%v", data.Sequence.ValueInt64())
 }
 
 func (data IPv4AccessList) getClassName() string {
@@ -53,6 +109,149 @@ func (data IPv4AccessList) toBody(statusReplace bool) nxos.Body {
 	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}
+	var attrs string
+	for _, child := range data.Entries {
+		attrs = ""
+		if (!child.Sequence.IsUnknown() && !child.Sequence.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "seqNum", strconv.FormatInt(child.Sequence.ValueInt64(), 10))
+		}
+		if (!child.Ack.IsUnknown() && !child.Ack.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "ack", strconv.FormatBool(child.Ack.ValueBool()))
+		}
+		if (!child.Action.IsUnknown() && !child.Action.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "action", child.Action.ValueString())
+		}
+		if (!child.Dscp.IsUnknown() && !child.Dscp.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "dscp", strconv.FormatInt(child.Dscp.ValueInt64(), 10))
+		}
+		if (!child.DestinationAddressGroup.IsUnknown() && !child.DestinationAddressGroup.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "dstAddrGroup", child.DestinationAddressGroup.ValueString())
+		}
+		if (!child.DestinationPort1.IsUnknown() && !child.DestinationPort1.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "dstPort1", child.DestinationPort1.ValueString())
+		}
+		if (!child.DestinationPort2.IsUnknown() && !child.DestinationPort2.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "dstPort2", child.DestinationPort2.ValueString())
+		}
+		if (!child.DestinationPortGroup.IsUnknown() && !child.DestinationPortGroup.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "dstPortGroup", child.DestinationPortGroup.ValueString())
+		}
+		if (!child.DestinationPortMask.IsUnknown() && !child.DestinationPortMask.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "dstPortMask", child.DestinationPortMask.ValueString())
+		}
+		if (!child.DestinationPortOperator.IsUnknown() && !child.DestinationPortOperator.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "dstPortOp", child.DestinationPortOperator.ValueString())
+		}
+		if (!child.DestinationPrefix.IsUnknown() && !child.DestinationPrefix.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "dstPrefix", child.DestinationPrefix.ValueString())
+		}
+		if (!child.DestinationPrefixLength.IsUnknown() && !child.DestinationPrefixLength.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "dstPrefixLength", child.DestinationPrefixLength.ValueString())
+		}
+		if (!child.DestinationPrefixMask.IsUnknown() && !child.DestinationPrefixMask.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "dstPrefixMask", child.DestinationPrefixMask.ValueString())
+		}
+		if (!child.Established.IsUnknown() && !child.Established.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "est", strconv.FormatBool(child.Established.ValueBool()))
+		}
+		if (!child.Fin.IsUnknown() && !child.Fin.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "fin", strconv.FormatBool(child.Fin.ValueBool()))
+		}
+		if (!child.Fragment.IsUnknown() && !child.Fragment.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "fragment", strconv.FormatBool(child.Fragment.ValueBool()))
+		}
+		if (!child.HttpOptionType.IsUnknown() && !child.HttpOptionType.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "httpOption", child.HttpOptionType.ValueString())
+		}
+		if (!child.IcmpCode.IsUnknown() && !child.IcmpCode.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "icmpCode", strconv.FormatInt(child.IcmpCode.ValueInt64(), 10))
+		}
+		if (!child.IcmpType.IsUnknown() && !child.IcmpType.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "icmpType", strconv.FormatInt(child.IcmpType.ValueInt64(), 10))
+		}
+		if (!child.Log.IsUnknown() && !child.Log.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "logging", strconv.FormatBool(child.Log.ValueBool()))
+		}
+		if (!child.PacketLength1.IsUnknown() && !child.PacketLength1.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "pktLen1", child.PacketLength1.ValueString())
+		}
+		if (!child.PacketLength2.IsUnknown() && !child.PacketLength2.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "pktLen2", child.PacketLength2.ValueString())
+		}
+		if (!child.PacketLengthOperator.IsUnknown() && !child.PacketLengthOperator.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "pktLenOp", child.PacketLengthOperator.ValueString())
+		}
+		if (!child.Precedence.IsUnknown() && !child.Precedence.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "precedence", child.Precedence.ValueString())
+		}
+		if (!child.Protocol.IsUnknown() && !child.Protocol.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "protocol", child.Protocol.ValueString())
+		}
+		if (!child.ProtocolMask.IsUnknown() && !child.ProtocolMask.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "protocolMask", child.ProtocolMask.ValueString())
+		}
+		if (!child.Psh.IsUnknown() && !child.Psh.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "psh", strconv.FormatBool(child.Psh.ValueBool()))
+		}
+		if (!child.Redirect.IsUnknown() && !child.Redirect.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "redirect", child.Redirect.ValueString())
+		}
+		if (!child.Remark.IsUnknown() && !child.Remark.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "remark", child.Remark.ValueString())
+		}
+		if (!child.Rev.IsUnknown() && !child.Rev.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "rev", strconv.FormatBool(child.Rev.ValueBool()))
+		}
+		if (!child.Rst.IsUnknown() && !child.Rst.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "rst", strconv.FormatBool(child.Rst.ValueBool()))
+		}
+		if (!child.SourceAddressGroup.IsUnknown() && !child.SourceAddressGroup.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "srcAddrGroup", child.SourceAddressGroup.ValueString())
+		}
+		if (!child.SourcePort1.IsUnknown() && !child.SourcePort1.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "srcPort1", child.SourcePort1.ValueString())
+		}
+		if (!child.SourcePort2.IsUnknown() && !child.SourcePort2.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "srcPort2", child.SourcePort2.ValueString())
+		}
+		if (!child.SourcePortGroup.IsUnknown() && !child.SourcePortGroup.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "srcPortGroup", child.SourcePortGroup.ValueString())
+		}
+		if (!child.SourcePortMask.IsUnknown() && !child.SourcePortMask.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "srcPortMask", child.SourcePortMask.ValueString())
+		}
+		if (!child.SourcePortOperator.IsUnknown() && !child.SourcePortOperator.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "srcPortOp", child.SourcePortOperator.ValueString())
+		}
+		if (!child.SourcePrefix.IsUnknown() && !child.SourcePrefix.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "srcPrefix", child.SourcePrefix.ValueString())
+		}
+		if (!child.SourcePrefixLength.IsUnknown() && !child.SourcePrefixLength.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "srcPrefixLength", child.SourcePrefixLength.ValueString())
+		}
+		if (!child.SourcePrefixMask.IsUnknown() && !child.SourcePrefixMask.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "srcPrefixMask", child.SourcePrefixMask.ValueString())
+		}
+		if (!child.Syn.IsUnknown() && !child.Syn.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "syn", strconv.FormatBool(child.Syn.ValueBool()))
+		}
+		if (!child.TimeRange.IsUnknown() && !child.TimeRange.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "timeRange", child.TimeRange.ValueString())
+		}
+		if (!child.Ttl.IsUnknown() && !child.Ttl.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "ttl", strconv.FormatInt(child.Ttl.ValueInt64(), 10))
+		}
+		if (!child.Urg.IsUnknown() && !child.Urg.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "urg", strconv.FormatBool(child.Urg.ValueBool()))
+		}
+		if (!child.Vlan.IsUnknown() && !child.Vlan.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "vlan", strconv.FormatInt(child.Vlan.ValueInt64(), 10))
+		}
+		if (!child.Vni.IsUnknown() && !child.Vni.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "vni", child.Vni.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.ipv4aclACE.attributes", attrs)
+	}
 
 	return nxos.Body{body}
 }
@@ -62,6 +261,312 @@ func (data *IPv4AccessList) fromBody(res gjson.Result, all bool) {
 		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
 		data.Name = types.StringNull()
+	}
+	if all {
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "ipv4aclACE" {
+							var child IPv4AccessListEntries
+							child.Sequence = types.Int64Value(value.Get("attributes.seqNum").Int())
+							child.Ack = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.ack").String()))
+							child.Action = types.StringValue(value.Get("attributes.action").String())
+							child.Dscp = types.Int64Value(value.Get("attributes.dscp").Int())
+							child.DestinationAddressGroup = types.StringValue(value.Get("attributes.dstAddrGroup").String())
+							child.DestinationPort1 = types.StringValue(value.Get("attributes.dstPort1").String())
+							child.DestinationPort2 = types.StringValue(value.Get("attributes.dstPort2").String())
+							child.DestinationPortGroup = types.StringValue(value.Get("attributes.dstPortGroup").String())
+							child.DestinationPortMask = types.StringValue(value.Get("attributes.dstPortMask").String())
+							child.DestinationPortOperator = types.StringValue(value.Get("attributes.dstPortOp").String())
+							child.DestinationPrefix = types.StringValue(value.Get("attributes.dstPrefix").String())
+							child.DestinationPrefixLength = types.StringValue(value.Get("attributes.dstPrefixLength").String())
+							child.DestinationPrefixMask = types.StringValue(value.Get("attributes.dstPrefixMask").String())
+							child.Established = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.est").String()))
+							child.Fin = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.fin").String()))
+							child.Fragment = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.fragment").String()))
+							child.HttpOptionType = types.StringValue(value.Get("attributes.httpOption").String())
+							child.IcmpCode = types.Int64Value(value.Get("attributes.icmpCode").Int())
+							child.IcmpType = types.Int64Value(value.Get("attributes.icmpType").Int())
+							child.Log = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.logging").String()))
+							child.PacketLength1 = types.StringValue(value.Get("attributes.pktLen1").String())
+							child.PacketLength2 = types.StringValue(value.Get("attributes.pktLen2").String())
+							child.PacketLengthOperator = types.StringValue(value.Get("attributes.pktLenOp").String())
+							child.Precedence = types.StringValue(value.Get("attributes.precedence").String())
+							child.Protocol = types.StringValue(value.Get("attributes.protocol").String())
+							child.ProtocolMask = types.StringValue(value.Get("attributes.protocolMask").String())
+							child.Psh = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.psh").String()))
+							child.Redirect = types.StringValue(value.Get("attributes.redirect").String())
+							child.Remark = types.StringValue(value.Get("attributes.remark").String())
+							child.Rev = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.rev").String()))
+							child.Rst = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.rst").String()))
+							child.SourceAddressGroup = types.StringValue(value.Get("attributes.srcAddrGroup").String())
+							child.SourcePort1 = types.StringValue(value.Get("attributes.srcPort1").String())
+							child.SourcePort2 = types.StringValue(value.Get("attributes.srcPort2").String())
+							child.SourcePortGroup = types.StringValue(value.Get("attributes.srcPortGroup").String())
+							child.SourcePortMask = types.StringValue(value.Get("attributes.srcPortMask").String())
+							child.SourcePortOperator = types.StringValue(value.Get("attributes.srcPortOp").String())
+							child.SourcePrefix = types.StringValue(value.Get("attributes.srcPrefix").String())
+							child.SourcePrefixLength = types.StringValue(value.Get("attributes.srcPrefixLength").String())
+							child.SourcePrefixMask = types.StringValue(value.Get("attributes.srcPrefixMask").String())
+							child.Syn = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.syn").String()))
+							child.TimeRange = types.StringValue(value.Get("attributes.timeRange").String())
+							child.Ttl = types.Int64Value(value.Get("attributes.ttl").Int())
+							child.Urg = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.urg").String()))
+							child.Vlan = types.Int64Value(value.Get("attributes.vlan").Int())
+							child.Vni = types.StringValue(value.Get("attributes.vni").String())
+							data.Entries = append(data.Entries, child)
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+	} else {
+		for c := range data.Entries {
+			var r gjson.Result
+			res.Get(data.getClassName() + ".children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("ipv4aclACE.attributes.rn").String()
+					if key == data.Entries[c].getRn() {
+						r = v
+						return false
+					}
+					return true
+				},
+			)
+			if !data.Entries[c].Sequence.IsNull() || all {
+				data.Entries[c].Sequence = types.Int64Value(r.Get("ipv4aclACE.attributes.seqNum").Int())
+			} else {
+				data.Entries[c].Sequence = types.Int64Null()
+			}
+			if !data.Entries[c].Ack.IsNull() || all {
+				data.Entries[c].Ack = types.BoolValue(helpers.ParseNxosBoolean(r.Get("ipv4aclACE.attributes.ack").String()))
+			} else {
+				data.Entries[c].Ack = types.BoolNull()
+			}
+			if !data.Entries[c].Action.IsNull() || all {
+				data.Entries[c].Action = types.StringValue(r.Get("ipv4aclACE.attributes.action").String())
+			} else {
+				data.Entries[c].Action = types.StringNull()
+			}
+			if !data.Entries[c].Dscp.IsNull() || all {
+				data.Entries[c].Dscp = types.Int64Value(r.Get("ipv4aclACE.attributes.dscp").Int())
+			} else {
+				data.Entries[c].Dscp = types.Int64Null()
+			}
+			if !data.Entries[c].DestinationAddressGroup.IsNull() || all {
+				data.Entries[c].DestinationAddressGroup = types.StringValue(r.Get("ipv4aclACE.attributes.dstAddrGroup").String())
+			} else {
+				data.Entries[c].DestinationAddressGroup = types.StringNull()
+			}
+			if !data.Entries[c].DestinationPort1.IsNull() || all {
+				data.Entries[c].DestinationPort1 = types.StringValue(r.Get("ipv4aclACE.attributes.dstPort1").String())
+			} else {
+				data.Entries[c].DestinationPort1 = types.StringNull()
+			}
+			if !data.Entries[c].DestinationPort2.IsNull() || all {
+				data.Entries[c].DestinationPort2 = types.StringValue(r.Get("ipv4aclACE.attributes.dstPort2").String())
+			} else {
+				data.Entries[c].DestinationPort2 = types.StringNull()
+			}
+			if !data.Entries[c].DestinationPortGroup.IsNull() || all {
+				data.Entries[c].DestinationPortGroup = types.StringValue(r.Get("ipv4aclACE.attributes.dstPortGroup").String())
+			} else {
+				data.Entries[c].DestinationPortGroup = types.StringNull()
+			}
+			if !data.Entries[c].DestinationPortMask.IsNull() || all {
+				data.Entries[c].DestinationPortMask = types.StringValue(r.Get("ipv4aclACE.attributes.dstPortMask").String())
+			} else {
+				data.Entries[c].DestinationPortMask = types.StringNull()
+			}
+			if !data.Entries[c].DestinationPortOperator.IsNull() || all {
+				data.Entries[c].DestinationPortOperator = types.StringValue(r.Get("ipv4aclACE.attributes.dstPortOp").String())
+			} else {
+				data.Entries[c].DestinationPortOperator = types.StringNull()
+			}
+			if !data.Entries[c].DestinationPrefix.IsNull() || all {
+				data.Entries[c].DestinationPrefix = types.StringValue(r.Get("ipv4aclACE.attributes.dstPrefix").String())
+			} else {
+				data.Entries[c].DestinationPrefix = types.StringNull()
+			}
+			if !data.Entries[c].DestinationPrefixLength.IsNull() || all {
+				data.Entries[c].DestinationPrefixLength = types.StringValue(r.Get("ipv4aclACE.attributes.dstPrefixLength").String())
+			} else {
+				data.Entries[c].DestinationPrefixLength = types.StringNull()
+			}
+			if !data.Entries[c].DestinationPrefixMask.IsNull() || all {
+				data.Entries[c].DestinationPrefixMask = types.StringValue(r.Get("ipv4aclACE.attributes.dstPrefixMask").String())
+			} else {
+				data.Entries[c].DestinationPrefixMask = types.StringNull()
+			}
+			if !data.Entries[c].Established.IsNull() || all {
+				data.Entries[c].Established = types.BoolValue(helpers.ParseNxosBoolean(r.Get("ipv4aclACE.attributes.est").String()))
+			} else {
+				data.Entries[c].Established = types.BoolNull()
+			}
+			if !data.Entries[c].Fin.IsNull() || all {
+				data.Entries[c].Fin = types.BoolValue(helpers.ParseNxosBoolean(r.Get("ipv4aclACE.attributes.fin").String()))
+			} else {
+				data.Entries[c].Fin = types.BoolNull()
+			}
+			if !data.Entries[c].Fragment.IsNull() || all {
+				data.Entries[c].Fragment = types.BoolValue(helpers.ParseNxosBoolean(r.Get("ipv4aclACE.attributes.fragment").String()))
+			} else {
+				data.Entries[c].Fragment = types.BoolNull()
+			}
+			if !data.Entries[c].HttpOptionType.IsNull() || all {
+				data.Entries[c].HttpOptionType = types.StringValue(r.Get("ipv4aclACE.attributes.httpOption").String())
+			} else {
+				data.Entries[c].HttpOptionType = types.StringNull()
+			}
+			if !data.Entries[c].IcmpCode.IsNull() || all {
+				data.Entries[c].IcmpCode = types.Int64Value(r.Get("ipv4aclACE.attributes.icmpCode").Int())
+			} else {
+				data.Entries[c].IcmpCode = types.Int64Null()
+			}
+			if !data.Entries[c].IcmpType.IsNull() || all {
+				data.Entries[c].IcmpType = types.Int64Value(r.Get("ipv4aclACE.attributes.icmpType").Int())
+			} else {
+				data.Entries[c].IcmpType = types.Int64Null()
+			}
+			if !data.Entries[c].Log.IsNull() || all {
+				data.Entries[c].Log = types.BoolValue(helpers.ParseNxosBoolean(r.Get("ipv4aclACE.attributes.logging").String()))
+			} else {
+				data.Entries[c].Log = types.BoolNull()
+			}
+			if !data.Entries[c].PacketLength1.IsNull() || all {
+				data.Entries[c].PacketLength1 = types.StringValue(r.Get("ipv4aclACE.attributes.pktLen1").String())
+			} else {
+				data.Entries[c].PacketLength1 = types.StringNull()
+			}
+			if !data.Entries[c].PacketLength2.IsNull() || all {
+				data.Entries[c].PacketLength2 = types.StringValue(r.Get("ipv4aclACE.attributes.pktLen2").String())
+			} else {
+				data.Entries[c].PacketLength2 = types.StringNull()
+			}
+			if !data.Entries[c].PacketLengthOperator.IsNull() || all {
+				data.Entries[c].PacketLengthOperator = types.StringValue(r.Get("ipv4aclACE.attributes.pktLenOp").String())
+			} else {
+				data.Entries[c].PacketLengthOperator = types.StringNull()
+			}
+			if !data.Entries[c].Precedence.IsNull() || all {
+				data.Entries[c].Precedence = types.StringValue(r.Get("ipv4aclACE.attributes.precedence").String())
+			} else {
+				data.Entries[c].Precedence = types.StringNull()
+			}
+			if !data.Entries[c].Protocol.IsNull() || all {
+				data.Entries[c].Protocol = types.StringValue(r.Get("ipv4aclACE.attributes.protocol").String())
+			} else {
+				data.Entries[c].Protocol = types.StringNull()
+			}
+			if !data.Entries[c].ProtocolMask.IsNull() || all {
+				data.Entries[c].ProtocolMask = types.StringValue(r.Get("ipv4aclACE.attributes.protocolMask").String())
+			} else {
+				data.Entries[c].ProtocolMask = types.StringNull()
+			}
+			if !data.Entries[c].Psh.IsNull() || all {
+				data.Entries[c].Psh = types.BoolValue(helpers.ParseNxosBoolean(r.Get("ipv4aclACE.attributes.psh").String()))
+			} else {
+				data.Entries[c].Psh = types.BoolNull()
+			}
+			if !data.Entries[c].Redirect.IsNull() || all {
+				data.Entries[c].Redirect = types.StringValue(r.Get("ipv4aclACE.attributes.redirect").String())
+			} else {
+				data.Entries[c].Redirect = types.StringNull()
+			}
+			if !data.Entries[c].Remark.IsNull() || all {
+				data.Entries[c].Remark = types.StringValue(r.Get("ipv4aclACE.attributes.remark").String())
+			} else {
+				data.Entries[c].Remark = types.StringNull()
+			}
+			if !data.Entries[c].Rev.IsNull() || all {
+				data.Entries[c].Rev = types.BoolValue(helpers.ParseNxosBoolean(r.Get("ipv4aclACE.attributes.rev").String()))
+			} else {
+				data.Entries[c].Rev = types.BoolNull()
+			}
+			if !data.Entries[c].Rst.IsNull() || all {
+				data.Entries[c].Rst = types.BoolValue(helpers.ParseNxosBoolean(r.Get("ipv4aclACE.attributes.rst").String()))
+			} else {
+				data.Entries[c].Rst = types.BoolNull()
+			}
+			if !data.Entries[c].SourceAddressGroup.IsNull() || all {
+				data.Entries[c].SourceAddressGroup = types.StringValue(r.Get("ipv4aclACE.attributes.srcAddrGroup").String())
+			} else {
+				data.Entries[c].SourceAddressGroup = types.StringNull()
+			}
+			if !data.Entries[c].SourcePort1.IsNull() || all {
+				data.Entries[c].SourcePort1 = types.StringValue(r.Get("ipv4aclACE.attributes.srcPort1").String())
+			} else {
+				data.Entries[c].SourcePort1 = types.StringNull()
+			}
+			if !data.Entries[c].SourcePort2.IsNull() || all {
+				data.Entries[c].SourcePort2 = types.StringValue(r.Get("ipv4aclACE.attributes.srcPort2").String())
+			} else {
+				data.Entries[c].SourcePort2 = types.StringNull()
+			}
+			if !data.Entries[c].SourcePortGroup.IsNull() || all {
+				data.Entries[c].SourcePortGroup = types.StringValue(r.Get("ipv4aclACE.attributes.srcPortGroup").String())
+			} else {
+				data.Entries[c].SourcePortGroup = types.StringNull()
+			}
+			if !data.Entries[c].SourcePortMask.IsNull() || all {
+				data.Entries[c].SourcePortMask = types.StringValue(r.Get("ipv4aclACE.attributes.srcPortMask").String())
+			} else {
+				data.Entries[c].SourcePortMask = types.StringNull()
+			}
+			if !data.Entries[c].SourcePortOperator.IsNull() || all {
+				data.Entries[c].SourcePortOperator = types.StringValue(r.Get("ipv4aclACE.attributes.srcPortOp").String())
+			} else {
+				data.Entries[c].SourcePortOperator = types.StringNull()
+			}
+			if !data.Entries[c].SourcePrefix.IsNull() || all {
+				data.Entries[c].SourcePrefix = types.StringValue(r.Get("ipv4aclACE.attributes.srcPrefix").String())
+			} else {
+				data.Entries[c].SourcePrefix = types.StringNull()
+			}
+			if !data.Entries[c].SourcePrefixLength.IsNull() || all {
+				data.Entries[c].SourcePrefixLength = types.StringValue(r.Get("ipv4aclACE.attributes.srcPrefixLength").String())
+			} else {
+				data.Entries[c].SourcePrefixLength = types.StringNull()
+			}
+			if !data.Entries[c].SourcePrefixMask.IsNull() || all {
+				data.Entries[c].SourcePrefixMask = types.StringValue(r.Get("ipv4aclACE.attributes.srcPrefixMask").String())
+			} else {
+				data.Entries[c].SourcePrefixMask = types.StringNull()
+			}
+			if !data.Entries[c].Syn.IsNull() || all {
+				data.Entries[c].Syn = types.BoolValue(helpers.ParseNxosBoolean(r.Get("ipv4aclACE.attributes.syn").String()))
+			} else {
+				data.Entries[c].Syn = types.BoolNull()
+			}
+			if !data.Entries[c].TimeRange.IsNull() || all {
+				data.Entries[c].TimeRange = types.StringValue(r.Get("ipv4aclACE.attributes.timeRange").String())
+			} else {
+				data.Entries[c].TimeRange = types.StringNull()
+			}
+			if !data.Entries[c].Ttl.IsNull() || all {
+				data.Entries[c].Ttl = types.Int64Value(r.Get("ipv4aclACE.attributes.ttl").Int())
+			} else {
+				data.Entries[c].Ttl = types.Int64Null()
+			}
+			if !data.Entries[c].Urg.IsNull() || all {
+				data.Entries[c].Urg = types.BoolValue(helpers.ParseNxosBoolean(r.Get("ipv4aclACE.attributes.urg").String()))
+			} else {
+				data.Entries[c].Urg = types.BoolNull()
+			}
+			if !data.Entries[c].Vlan.IsNull() || all {
+				data.Entries[c].Vlan = types.Int64Value(r.Get("ipv4aclACE.attributes.vlan").Int())
+			} else {
+				data.Entries[c].Vlan = types.Int64Null()
+			}
+			if !data.Entries[c].Vni.IsNull() || all {
+				data.Entries[c].Vni = types.StringValue(r.Get("ipv4aclACE.attributes.vni").String())
+			} else {
+				data.Entries[c].Vni = types.StringNull()
+			}
+		}
 	}
 }
 

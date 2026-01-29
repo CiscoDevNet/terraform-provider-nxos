@@ -38,5 +38,5 @@ data "nxos_user" "example" {
 - `allow_expired` (String) Allow expired user to be configured.
 - `id` (String) The distinguished name of the object.
 - `password` (String) User password.
-- `password_encryption_type` (String)
+- `password_encryption_type` (String) Password encryption type.
 - `roles` (List of String) User roles.

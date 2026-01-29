@@ -76,7 +76,7 @@ func (d *UserDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				Computed:            true,
 			},
 			"password_encryption_type": schema.StringAttribute{
-				MarkdownDescription: "",
+				MarkdownDescription: "Password encryption type.",
 				Computed:            true,
 			},
 			"domain_name": schema.StringAttribute{

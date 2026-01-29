@@ -47,7 +47,8 @@ resource "nxos_user" "example" {
 - `domain_name` (String) User domain name.
   - Default value: `all`
 - `password` (String) User password.
-- `password_encryption_type` (String) - Choices: `0`, `5`, `8`, `9`, `clear`, `255`
+- `password_encryption_type` (String) Password encryption type.
+  - Choices: `0`, `5`, `8`, `9`, `clear`, `255`
 - `roles` (List of String) User roles.
 
 ### Read-Only

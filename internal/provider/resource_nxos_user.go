@@ -91,7 +91,7 @@ func (r *UserResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Optional:            true,
 			},
 			"password_encryption_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("").AddStringEnumDescription("0", "5", "8", "9", "clear", "255").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Password encryption type.").AddStringEnumDescription("0", "5", "8", "9", "clear", "255").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("0", "5", "8", "9", "clear", "255"),

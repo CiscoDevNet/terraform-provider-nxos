@@ -6,9 +6,7 @@ description: |-
   This resource can manage the Tacacs Provider configuration.
   API Documentation: aaaTacacsPlusProvider https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:aaaTacacsPlusProvider/
   Parent resources
-  nxos_aaa https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/aaanxos_tacacs https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/tacacs
-  Child resources
-  nxos_tacacs_provider https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/tacacs_providernxos_tacacs_provider_group https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/tacacs_provider_group
+  nxos_tacacs https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/tacacs
 ---
 
 # nxos_tacacs_provider (Resource)
@@ -19,13 +17,7 @@ This resource can manage the Tacacs Provider configuration.
 
 ### Parent resources
 
-- [nxos_aaa](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/aaa)
 - [nxos_tacacs](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/tacacs)
-
-### Child resources
-
-- [nxos_tacacs_provider](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/tacacs_provider)
-- [nxos_tacacs_provider_group](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/tacacs_provider_group)
 
 ## Example Usage
 

@@ -5,8 +5,6 @@ subcategory: "AAA"
 description: |-
   This resource can manage the User configuration.
   API Documentation: aaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:User/
-  Parent resources
-  nxos_aaa https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/aaa
 ---
 
 # nxos_user (Resource)
@@ -14,10 +12,6 @@ description: |-
 This resource can manage the User configuration.
 
 - API Documentation: [aaaUser](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:User/)
-
-### Parent resources
-
-- [nxos_aaa](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/aaa)
 
 ## Example Usage
 

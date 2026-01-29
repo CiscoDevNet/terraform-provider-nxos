@@ -5,8 +5,8 @@ subcategory: "AAA"
 description: |-
   This resource can manage the Tacacs configuration.
   API Documentation: aaaTacacsPlusEp https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:TacacsPlusEp/
-  Parent resources
-  nxos_aaa https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/aaa
+  Child resources
+  nxos_tacacs_provider https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/tacacs_providernxos_tacacs_provider_group https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/tacacs_provider_group
 ---
 
 # nxos_tacacs (Resource)
@@ -15,9 +15,10 @@ This resource can manage the Tacacs configuration.
 
 - API Documentation: [aaaTacacsPlusEp](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:TacacsPlusEp/)
 
-### Parent resources
+### Child resources
 
-- [nxos_aaa](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/aaa)
+- [nxos_tacacs_provider](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/tacacs_provider)
+- [nxos_tacacs_provider_group](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/tacacs_provider_group)
 
 ## Example Usage
 

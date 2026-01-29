@@ -6,7 +6,7 @@ description: |-
   This resource can manage the Tacacs Provider Group configuration.
   API Documentation: aaaTacacsPlusProviderGroup https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:aaaTacacsPlusProviderGroup/
   Parent resources
-  nxos_aaa https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/aaanxos_tacacs https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/tacacs
+  nxos_tacacs https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/tacacs
 ---
 
 # nxos_tacacs_provider_group (Resource)
@@ -17,7 +17,6 @@ This resource can manage the Tacacs Provider Group configuration.
 
 ### Parent resources
 
-- [nxos_aaa](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/aaa)
 - [nxos_tacacs](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/tacacs)
 
 ## Example Usage

@@ -22,7 +22,6 @@ package provider
 import (
 	"fmt"
 	"regexp"
-	"sort"
 	"strconv"
 	"strings"
 
@@ -33,14 +32,17 @@ import (
 )
 
 type User struct {
-	Device                 types.String   `tfsdk:"device"`
-	Dn                     types.String   `tfsdk:"id"`
-	Name                   types.String   `tfsdk:"name"`
-	AllowExpired           types.String   `tfsdk:"allow_expired"`
-	Password               types.String   `tfsdk:"password"`
-	PasswordEncryptionType types.String   `tfsdk:"password_encryption_type"`
-	DomainName             types.String   `tfsdk:"domain_name"`
-	Roles                  []types.String `tfsdk:"roles"`
+	Device                 types.String `tfsdk:"device"`
+	Dn                     types.String `tfsdk:"id"`
+	Name                   types.String `tfsdk:"name"`
+	AllowExpired           types.String `tfsdk:"allow_expired"`
+	Password               types.String `tfsdk:"password"`
+	PasswordEncryptionType types.String `tfsdk:"password_encryption_type"`
+	Roles                  []UserRoles  `tfsdk:"roles"`
+}
+
+type UserRoles struct {
+	Name types.String `tfsdk:"name"`
 }
 
 func (data User) getDn() string {
@@ -75,9 +77,11 @@ func (data User) toBody(statusReplace bool) nxos.Body {
 	attrs = ""
 	attrs, _ = sjson.Set(attrs, "name", "all")
 	body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".aaaUserDomain.attributes", attrs)
-	for _, nestedItem := range data.Roles {
+	for _, nestedChild := range data.Roles {
 		attrs = ""
-		attrs, _ = sjson.Set(attrs, "name", nestedItem.ValueString())
+		if (!nestedChild.Name.IsUnknown() && !nestedChild.Name.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "name", nestedChild.Name.ValueString())
+		}
 		body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".aaaUserDomain.children.-1.aaaUserRole.attributes", attrs)
 	}
 
@@ -95,36 +99,23 @@ func (data *User) fromBody(res gjson.Result, all bool) {
 	} else {
 		data.AllowExpired = types.StringNull()
 	}
-	data.Roles = []types.String{}
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			v.ForEach(
-				func(childClassname, childValue gjson.Result) bool {
-					if childClassname.String() == "aaaUserDomain" {
-						childValue.Get("children").ForEach(
-							func(_, nestedV gjson.Result) bool {
-								nestedV.ForEach(
-									func(nestedClassname, nestedValue gjson.Result) bool {
-										if nestedClassname.String() == "aaaUserRole" {
-											data.Roles = append(data.Roles, types.StringValue(nestedValue.Get("attributes.name").String()))
-										}
-										return true
-									},
-								)
-								return true
-							},
-						)
-					}
-					return true
-				},
-			)
-			return true
-		},
-	)
-	// Sort list_flat arrays for consistent ordering
-	sort.Slice(data.Roles, func(i, j int) bool {
-		return data.Roles[i].ValueString() < data.Roles[j].ValueString()
-	})
+	if all {
+		res.Get("aaaUserDomain.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(nestedClassname, nestedValue gjson.Result) bool {
+						if nestedClassname.String() == "aaaUserRole" {
+							var nestedChild UserRoles
+							nestedChild.Name = types.StringValue(nestedValue.Get("attributes.name").String())
+							data.Roles = append(data.Roles, nestedChild)
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+	}
 }
 
 func (data User) toDeleteBody() nxos.Body {

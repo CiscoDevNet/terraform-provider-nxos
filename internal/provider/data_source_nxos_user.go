@@ -79,14 +79,17 @@ func (d *UserDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "Password encryption type.",
 				Computed:            true,
 			},
-			"domain_name": schema.StringAttribute{
-				MarkdownDescription: "User domain name.",
-				Required:            true,
-			},
-			"roles": schema.ListAttribute{
+			"roles": schema.ListNestedAttribute{
 				MarkdownDescription: "User roles.",
 				Computed:            true,
-				ElementType:         types.StringType,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Role name.",
+							Computed:            true,
+						},
+					},
+				},
 			},
 		},
 	}

@@ -26,7 +26,6 @@ data "nxos_user" "example" {
 
 ### Required
 
-- `domain_name` (String) User domain name.
 - `name` (String) User name.
 
 ### Optional
@@ -39,4 +38,11 @@ data "nxos_user" "example" {
 - `id` (String) The distinguished name of the object.
 - `password` (String) User password.
 - `password_encryption_type` (String) Password encryption type.
-- `roles` (List of String) User roles.
+- `roles` (Attributes List) User roles. (see [below for nested schema](#nestedatt--roles))
+
+<a id="nestedatt--roles"></a>
+### Nested Schema for `roles`
+
+Read-Only:
+
+- `name` (String) Role name.

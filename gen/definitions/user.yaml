@@ -50,6 +50,7 @@ child_classes:
   - class_name: aaaUserDomain
     rn: userdomain-[all]
     type: single
+    hide_in_resource: true
     attributes:
       - nxos_name: name
         tf_name: domain_name
@@ -61,11 +62,12 @@ child_classes:
     child_classes:
       - class_name: aaaUserRole
         rn: role-[%s]
-        type: list_flat
+        type: list
         tf_name: roles
         description: 'User roles.'
         attributes:
           - nxos_name: name
+            tf_name: name
             type: String
             id: true
             description: "Role name."

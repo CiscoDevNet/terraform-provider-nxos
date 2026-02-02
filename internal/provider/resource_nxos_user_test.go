@@ -35,7 +35,7 @@ func TestAccNxosUser(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_user.test", "name", "user1"),
 					resource.TestCheckResourceAttr("nxos_user.test", "allow_expired", "yes"),
-					resource.TestCheckResourceAttr("nxos_user.test", "domain_name", "all"),
+					resource.TestCheckResourceAttr("nxos_user.test", "roles.0.name", "network-operator"),
 				),
 			},
 			{
@@ -69,7 +69,9 @@ func testAccNxosUserConfig_all() string {
 	resource "nxos_user" "test" {
 		name = "user1"
 		allow_expired = "yes"
-		domain_name = "all"
+		roles = [{
+			name = "network-operator"
+		}]
   		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`

@@ -42,10 +42,12 @@ type {{camelCase .Name}} struct {
 	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
 {{- end}}
 {{- range .ChildClasses}}
-{{- if eq .Type "single"}}
+{{- if and (not .HideInResource) (eq .Type "single")}}
 {{- range .Attributes}}
     {{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
 {{- end}}
+{{- end}}
+{{- if .ChildClasses}}
 {{- range .ChildClasses}}
 {{- if eq .Type "single"}}
 {{- range .Attributes}}
@@ -53,14 +55,10 @@ type {{camelCase .Name}} struct {
 {{- end}}
 {{- else if eq .Type "list"}}
 	{{toGoName .TfName}} []{{$name}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
-{{- else if eq .Type "list_flat"}}
-	{{toGoName .TfName}} []types.String `tfsdk:"{{.TfName}}"`
 {{- end}}
 {{- end}}
 {{- else if eq .Type "list"}}
 	{{toGoName .TfName}} []{{$name}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
-{{- else if eq .Type "list_flat"}}
-	{{toGoName .TfName}} []types.String `tfsdk:"{{.TfName}}"`
 {{- end}}
 {{- end}}
 }
@@ -78,12 +76,26 @@ type {{$name}}{{toGoName .TfName}} struct {
 {{- end}}
 {{- else if eq .Type "list"}}
 	{{toGoName .TfName}} []{{$name}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
-{{- else if eq .Type "list_flat"}}
-	{{toGoName .TfName}} []types.String `tfsdk:"{{.TfName}}"`
 {{- end}}
 {{- end}}
 }
 
+{{end}}
+{{end}}
+
+{{/* Generate struct types for nested child classes within hidden parents */}}
+{{range .ChildClasses}}
+{{if .HideInResource}}
+{{range .ChildClasses}}
+{{if eq .Type "list"}}
+type {{$name}}{{toGoName .TfName}} struct {
+{{- range .Attributes}}
+	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
+{{- end}}
+}
+
+{{end}}
+{{end}}
 {{end}}
 {{end}}
 
@@ -183,16 +195,6 @@ func (data {{camelCase .Name}}) toBody(statusReplace bool) nxos.Body {
 	}
 	{{- end}}
 	body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.children.-1.{{$nestedChildClassName}}.attributes", attrs)
-	{{- else if eq .Type "list_flat"}}
-	for _, nestedItem := range data.{{toGoName .TfName}} {
-		attrs = ""
-		{{- range .Attributes}}
-		{{- if .Id}}
-		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", nestedItem.ValueString())
-		{{- end}}
-		{{- end}}
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.children.-1.{{$nestedChildClassName}}.attributes", attrs)
-	}
 	{{- else if eq .Type "list"}}
 	for _, nestedChild := range data.{{toGoName .TfName}} {
 		attrs = ""
@@ -279,28 +281,8 @@ func (data {{camelCase .Name}}) toBody(statusReplace bool) nxos.Body {
 			{{- end}}
 			body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.children.-1.{{$nestedChildClassName}}.attributes", attrs)
 		}
-		{{- else if eq .Type "list_flat"}}
-		for _, nestedItem := range data.{{toGoName .TfName}} {
-			attrs = ""
-			{{- range .Attributes}}
-			{{- if .Id}}
-			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", nestedItem.ValueString())
-			{{- end}}
-			{{- end}}
-			body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.children.-1.{{$nestedChildClassName}}.attributes", attrs)
-		}
 		{{- end}}
 		{{- end}}
-	}
-	{{- else if eq .Type "list_flat"}}
-	for _, item := range data.{{toGoName .TfName}} {
-		attrs = ""
-		{{- range .Attributes}}
-		{{- if .Id}}
-		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", item.ValueString())
-		{{- end}}
-		{{- end}}
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.attributes", attrs)
 	}
 	{{- end}}
 	{{- end}}
@@ -367,7 +349,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 	{{- $nestedChildTfName := .TfName }}
 	{{- if eq .Type "single"}}
 	var nestedR gjson.Result
-	r.Get("{{$childClassName}}.children").ForEach(
+	res.Get("{{$childClassName}}.children").ForEach(
 		func(_, v gjson.Result) bool {
 			key := v.Get("{{$nestedChildClassName}}.attributes.rn").String()
 			if key == "{{$nestedChildRn}}" {
@@ -394,7 +376,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 	{{- end}}
 	{{- else if eq .Type "list"}}
 	if all {
-		r.Get("{{$childClassName}}.children").ForEach(
+		res.Get("{{$childClassName}}.children").ForEach(
 			func(_, v gjson.Result) bool {
 				v.ForEach(
 					func(nestedClassname, nestedValue gjson.Result) bool {
@@ -420,41 +402,6 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 			},
 		)
 	}
-	{{- else if eq .Type "list_flat"}}
-	data.{{toGoName $nestedChildTfName}} = []types.String{}
-	res.Get(data.getClassName() + ".children").ForEach(
-			func(_, v gjson.Result) bool {
-				v.ForEach(
-					func(childClassname, childValue gjson.Result) bool {
-						if childClassname.String() == "{{$childClassName}}" {
-							childValue.Get("children").ForEach(
-								func(_, nestedV gjson.Result) bool {
-									nestedV.ForEach(
-										func(nestedClassname, nestedValue gjson.Result) bool {
-											if nestedClassname.String() == "{{$nestedChildClassName}}" {
-												{{- range .Attributes}}
-												{{- if .Id}}
-												data.{{toGoName $nestedChildTfName}} = append(data.{{toGoName $nestedChildTfName}}, types.StringValue(nestedValue.Get("attributes.{{.NxosName}}").String()))
-												{{- end}}
-												{{- end}}
-											}
-											return true
-										},
-									)
-									return true
-								},
-							)
-						}
-						return true
-					},
-				)
-				return true
-			},
-		)
-		// Sort list_flat arrays for consistent ordering
-		sort.Slice(data.{{toGoName $nestedChildTfName}}, func(i, j int) bool {
-			return data.{{toGoName $nestedChildTfName}}[i].ValueString() < data.{{toGoName $nestedChildTfName}}[j].ValueString()
-		})
 	{{- end}}
 	{{- end}}
 	{{- else if eq .Type "list"}}
@@ -506,30 +453,6 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 							{{- end}}
 
 							{{- range .ChildClasses}}
-							{{- if eq .Type "list_flat"}}
-							data.{{toGoName .TfName}} = []types.String{}
-							value.Get("children").ForEach(
-								func(_, nestedV gjson.Result) bool {
-									nestedV.ForEach(
-										func(nestedClassname, nestedValue gjson.Result) bool {
-											if nestedClassname.String() == "{{.ClassName}}" {
-												{{- range .Attributes}}
-												{{- if .Id}}
-												data.{{toGoName .TfName}} = append(data.{{toGoName .TfName}}, types.StringValue(nestedValue.Get("attributes.{{.NxosName}}").String()))
-												{{- end}}
-												{{- end}}
-											}
-											return true
-										},
-									)
-									return true
-								},
-							)
-							// Sort list_flat arrays for consistent ordering
-							sort.Slice(data.{{toGoName .TfName}}, func(i, j int) bool {
-								return data.{{toGoName .TfName}}[i].ValueString() < data.{{toGoName .TfName}}[j].ValueString()
-							})
-							{{- end}}
 							{{- end}}
 
 							data.{{$list}} = append(data.{{$list}}, child)
@@ -576,7 +499,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 			{{- if eq .Type "list"}}
 			for nc := range data.{{$list}}[c].{{toGoName .TfName}} {
 				var nestedR gjson.Result
-				r.Get("{{$childClassName}}.children").ForEach(
+				res.Get("{{$childClassName}}.children").ForEach(
 					func(_, v gjson.Result) bool {
 						key := v.Get("{{$nestedChildClassName}}.attributes.rn").String()
 						if key == data.{{$list}}[c].{{$nestedList}}[nc].getRn() {
@@ -606,29 +529,6 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 			{{- end}}
 		}
 	}
-	{{- else if eq .Type "list_flat"}}
-	data.{{toGoName .TfName}} = []types.String{}
-	res.Get(data.getClassName() + ".children").ForEach(
-			func(_, v gjson.Result) bool {
-				v.ForEach(
-					func(classname, value gjson.Result) bool {
-						if classname.String() == "{{$childClassName}}" {
-							{{- range .Attributes}}
-							{{- if .Id}}
-							data.{{toGoName .TfName}} = append(data.{{toGoName .TfName}}, types.StringValue(value.Get("attributes.{{.NxosName}}").String()))
-							{{- end}}
-							{{- end}}
-						}
-						return true
-					},
-				)
-				return true
-			},
-		)
-		// Sort list_flat arrays for consistent ordering
-		sort.Slice(data.{{toGoName .TfName}}, func(i, j int) bool {
-			return data.{{toGoName .TfName}}[i].ValueString() < data.{{toGoName .TfName}}[j].ValueString()
-		})
 	{{- end}}
 	{{- end}}
 }

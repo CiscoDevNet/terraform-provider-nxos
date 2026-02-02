@@ -97,19 +97,20 @@ func (r *UserResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringvalidator.OneOf("0", "5", "8", "9", "clear", "255"),
 				},
 			},
-			"domain_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("User domain name.").AddDefaultValueDescription("all").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("all"),
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
-				},
-			},
-			"roles": schema.ListAttribute{
+			"roles": schema.ListNestedAttribute{
 				MarkdownDescription: "User roles.",
 				Optional:            true,
-				ElementType:         types.StringType,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Role name.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+					},
+				},
 			},
 		},
 	}

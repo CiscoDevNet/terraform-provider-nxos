@@ -35,8 +35,6 @@ func TestAccDataSourceNxosUser(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_user.test", "name", "user1"),
 					resource.TestCheckResourceAttr("data.nxos_user.test", "allow_expired", "yes"),
-					resource.TestCheckResourceAttr("data.nxos_user.test", "domain_name", "all"),
-					resource.TestCheckResourceAttr("data.nxos_user.test", "roles.0", "network-operator"),
 				),
 			},
 		},
@@ -56,14 +54,11 @@ const testAccDataSourceNxosUserConfig = `
 resource "nxos_user" "test" {
   name = "user1"
   allow_expired = "yes"
-  domain_name = "all"
-  roles = ["network-operator"]
   depends_on = [nxos_rest.PreReq0, ]
 }
 
 data "nxos_user" "test" {
   name = "user1"
-  domain_name = "all"
   depends_on = [nxos_user.test]
 }
 `

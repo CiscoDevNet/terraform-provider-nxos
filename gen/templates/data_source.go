@@ -75,7 +75,7 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 			},
 			{{- end}}
 			{{- range .ChildClasses}}
-			{{- if eq .Type "single"}}
+			{{- if and (not .HideInResource) (eq .Type "single")}}
 			{{- range .Attributes}}
 			"{{.TfName}}": schema.{{.Type}}Attribute{
 				MarkdownDescription: "{{.Description}}",
@@ -87,15 +87,8 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 			},
 			{{- end}}
 			{{- range .ChildClasses}}
-			{{- if eq .Type "list_flat"}}
-			"{{.TfName}}": schema.ListAttribute{
-				MarkdownDescription: "{{.Description}}",
-				Computed:            true,
-				ElementType:         types.StringType,
-			},
 			{{- end}}
-			{{- end}}
-			{{- else if eq .Type "list"}}
+			{{- else if and (not .HideInResource) (eq .Type "list")}}
 			"{{.TfName}}": schema.ListNestedAttribute{
 				MarkdownDescription: "{{.Description}}",
 				Computed:            true,
@@ -110,12 +103,33 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 					},
 				},
 			},
-			{{- else if eq .Type "list_flat"}}
-			"{{.TfName}}": schema.ListAttribute{
+			{{- end}}
+			{{- end}}
+			{{- /* Handle nested child classes within hidden parents */ -}}
+			{{- $hasHiddenNestedChildren := false -}}
+			{{- range .ChildClasses}}{{- if and .HideInResource .ChildClasses}}{{- $hasHiddenNestedChildren = true}}{{- end}}{{- end -}}
+			{{- if $hasHiddenNestedChildren}}
+			{{- range .ChildClasses}}
+			{{- if .HideInResource}}
+			{{- range .ChildClasses}}
+			{{- if eq .Type "list"}}
+			"{{.TfName}}": schema.ListNestedAttribute{
 				MarkdownDescription: "{{.Description}}",
 				Computed:            true,
-				ElementType:         types.StringType,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						{{- range  .Attributes}}
+						"{{.TfName}}": schema.{{.Type}}Attribute{
+							MarkdownDescription: "{{.Description}}",
+							Computed:            true,
+						},
+						{{- end}}
+					},
+				},
 			},
+			{{- end}}
+			{{- end}}
+			{{- end}}
 			{{- end}}
 			{{- end}}
 		},

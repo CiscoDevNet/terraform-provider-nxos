@@ -21,7 +21,9 @@ resource "nxos_user" "example" {
   allow_expired            = "yes"
   password                 = "password123"
   password_encryption_type = "clear"
-  domain_name              = "all"
+  roles = [{
+    name = "network-operator"
+  }]
 }
 ```
 
@@ -38,16 +40,21 @@ resource "nxos_user" "example" {
   - Choices: `yes`, `no`
   - Default value: `no`
 - `device` (String) A device name from the provider configuration.
-- `domain_name` (String) User domain name.
-  - Default value: `all`
 - `password` (String) User password.
 - `password_encryption_type` (String) Password encryption type.
   - Choices: `0`, `5`, `8`, `9`, `clear`, `255`
-- `roles` (List of String) User roles.
+- `roles` (Attributes List) User roles. (see [below for nested schema](#nestedatt--roles))
 
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--roles"></a>
+### Nested Schema for `roles`
+
+Required:
+
+- `name` (String) Role name.
 
 ## Import
 

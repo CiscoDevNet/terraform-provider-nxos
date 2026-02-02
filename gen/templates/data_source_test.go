@@ -54,11 +54,13 @@ func TestAccDataSourceNxos{{camelCase .Name}}(t *testing.T) {
 					{{- end}}
 					{{- end}}
 					{{- else if eq .Type "list"}}
-					{{- range .Attributes}}
-					{{- if not .ExcludeTest}}
-					resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{$list}}.0.{{.TfName}}", "{{.Example}}"),
-					{{- end}}
-					{{- end}}
+					resource.TestCheckTypeSetElemNestedAttrs("data.nxos_{{snakeCase $name}}.test", "{{$list}}.*", map[string]string{
+						{{- range .Attributes}}
+						{{- if not .ExcludeTest}}
+						"{{.TfName}}": "{{.Example}}",
+						{{- end}}
+						{{- end}}
+					}),
 					{{- end}}
 					{{- end}}
 				),

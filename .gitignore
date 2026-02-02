@@ -36,3 +36,6 @@ website/vendor
 
 # Compiled provider binary
 terraform-provider-nxos
+
+# Claude
+.claude

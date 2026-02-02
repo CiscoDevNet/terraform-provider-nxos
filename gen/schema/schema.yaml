@@ -42,6 +42,7 @@ child_classes:
   type: enum('single', 'list', required=False)
   tf_name: str(required=False)
   description: str(required=False)
+  mandatory: bool(required=False)
   attributes: list(include('attribute'), required=False)
 
 test_prerequisite:

@@ -183,7 +183,11 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 			{{- else if eq .Type "list"}}
 			"{{.TfName}}": schema.ListNestedAttribute{
 				MarkdownDescription: "{{.Description}}",
+				{{- if .Mandatory}}
 				Required:            true,
+				{{- else}}
+				Optional:            true,
+				{{- end}}
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						{{- range  .Attributes}}

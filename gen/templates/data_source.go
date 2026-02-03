@@ -55,9 +55,9 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: helpers.NewResourceDescription("{{.DsDescription}}", "{{.ClassName}}", "{{.DocPath}}")
 			{{- $hasChildDocs := false -}}
-			{{- range .ChildClasses -}}{{- if .DocPath -}}{{- $hasChildDocs = true -}}{{- end -}}{{- end -}}
+			{{- range .ChildClasses -}}{{- if .DocPath -}}{{- $hasChildDocs = true -}}{{- end -}}{{- range .ChildClasses -}}{{- if .DocPath -}}{{- $hasChildDocs = true -}}{{- end -}}{{- end -}}{{- end -}}
 			{{- if $hasChildDocs -}}
-			.AddAdditionalDocs([]string{ {{- $first := true -}}{{- range .ChildClasses -}}{{- if .DocPath -}}{{- if not $first -}}, {{- end -}}"{{.ClassName}}"{{- $first = false -}}{{- end -}}{{- end -}} }, []string{ {{- $first := true -}}{{- range .ChildClasses -}}{{- if .DocPath -}}{{- if not $first -}}, {{- end -}}"{{.DocPath}}"{{- $first = false -}}{{- end -}}{{- end -}} })
+			.AddAdditionalDocs([]string{ {{- $first := true -}}{{- range .ChildClasses -}}{{- if .DocPath -}}{{- if not $first -}}, {{- end -}}"{{.ClassName}}"{{- $first = false -}}{{- end -}}{{- range .ChildClasses -}}{{- if .DocPath -}}{{- if not $first -}}, {{- end -}}"{{.ClassName}}"{{- $first = false -}}{{- end -}}{{- end -}}{{- end -}} }, []string{ {{- $first := true -}}{{- range .ChildClasses -}}{{- if .DocPath -}}{{- if not $first -}}, {{- end -}}"{{.DocPath}}"{{- $first = false -}}{{- end -}}{{- range .ChildClasses -}}{{- if .DocPath -}}{{- if not $first -}}, {{- end -}}"{{.DocPath}}"{{- $first = false -}}{{- end -}}{{- end -}}{{- end -}} })
 			{{- end -}}
 			.String,
 

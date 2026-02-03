@@ -61,6 +61,7 @@ child_classes:
         reference_only: true
     child_classes:
       - class_name: aaaUserRole
+        doc_path: Security%20and%20Policing/aaa:UserRole/
         rn: role-[%s]
         type: list
         tf_name: roles

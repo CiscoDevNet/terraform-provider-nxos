@@ -7,6 +7,8 @@ description: |-
   API Documentation: aaaTacacsPlusEp https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:TacacsPlusEp/
   Child resources
   nxos_tacacs_provider_group https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/tacacs_provider_group
+  Additional API Documentation
+  aaaTacacsPlusProvider https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:TacacsPlusProvider/
 ---
 
 # nxos_tacacs (Resource)
@@ -18,6 +20,10 @@ This resource can manage the Tacacs configuration.
 ### Child resources
 
 - [nxos_tacacs_provider_group](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/tacacs_provider_group)
+
+### Additional API Documentation
+
+- [aaaTacacsPlusProvider](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:TacacsPlusProvider/)
 
 ## Example Usage
 

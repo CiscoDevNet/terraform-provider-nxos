@@ -52,7 +52,7 @@ func (d *TacacsDataSource) Metadata(_ context.Context, req datasource.MetadataRe
 func (d *TacacsDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the Tacacs configuration.", "aaaTacacsPlusEp", "Security%20and%20Policing/aaa:TacacsPlusEp/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the Tacacs configuration.", "aaaTacacsPlusEp", "Security%20and%20Policing/aaa:TacacsPlusEp/").AddAdditionalDocs([]string{"aaaTacacsPlusProvider"}, []string{"Security%20and%20Policing/aaa:TacacsPlusProvider/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

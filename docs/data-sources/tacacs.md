@@ -5,6 +5,8 @@ subcategory: "AAA"
 description: |-
   This data source can read the Tacacs configuration.
   API Documentation: aaaTacacsPlusEp https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:TacacsPlusEp/
+  Additional API Documentation
+  aaaTacacsPlusProvider https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:TacacsPlusProvider/
 ---
 
 # nxos_tacacs (Data Source)
@@ -12,6 +14,10 @@ description: |-
 This data source can read the Tacacs configuration.
 
 - API Documentation: [aaaTacacsPlusEp](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:TacacsPlusEp/)
+
+### Additional API Documentation
+
+- [aaaTacacsPlusProvider](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:TacacsPlusProvider/)
 
 ## Example Usage
 

@@ -35,25 +35,25 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &BannerPreloginResource{}
-var _ resource.ResourceWithImportState = &BannerPreloginResource{}
+var _ resource.Resource = &BannerResource{}
+var _ resource.ResourceWithImportState = &BannerResource{}
 
-func NewBannerPreloginResource() resource.Resource {
-	return &BannerPreloginResource{}
+func NewBannerResource() resource.Resource {
+	return &BannerResource{}
 }
 
-type BannerPreloginResource struct {
+type BannerResource struct {
 	data *NxosProviderData
 }
 
-func (r *BannerPreloginResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_banner_prelogin"
+func (r *BannerResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_banner"
 }
 
-func (r *BannerPreloginResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *BannerResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Prelogin Banner configuration.", "aaaPreLoginBanner", "Security%20and%20Policing/aaa:PreLoginBanner/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage banner configurations.", "aaaUserEp", "").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -68,14 +68,18 @@ func (r *BannerPreloginResource) Schema(ctx context.Context, req resource.Schema
 				},
 			},
 			"motd_banner": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Banner message.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("MOTD banner displayed before login.").String,
+				Optional:            true,
+			},
+			"exec_banner": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Exec banner displayed after login.").String,
 				Optional:            true,
 			},
 		},
 	}
 }
 
-func (r *BannerPreloginResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *BannerResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -84,8 +88,8 @@ func (r *BannerPreloginResource) Configure(ctx context.Context, req resource.Con
 	r.data = req.ProviderData.(*NxosProviderData)
 }
 
-func (r *BannerPreloginResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan BannerPrelogin
+func (r *BannerResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan Banner
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -122,8 +126,8 @@ func (r *BannerPreloginResource) Create(ctx context.Context, req resource.Create
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
-func (r *BannerPreloginResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state BannerPrelogin
+func (r *BannerResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state Banner
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -142,6 +146,7 @@ func (r *BannerPreloginResource) Read(ctx context.Context, req resource.ReadRequ
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		queries = append(queries, nxos.Query("rsp-subtree", "children"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -163,8 +168,8 @@ func (r *BannerPreloginResource) Read(ctx context.Context, req resource.ReadRequ
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
-func (r *BannerPreloginResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan BannerPrelogin
+func (r *BannerResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan Banner
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -198,8 +203,8 @@ func (r *BannerPreloginResource) Update(ctx context.Context, req resource.Update
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *BannerPreloginResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state BannerPrelogin
+func (r *BannerResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state Banner
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -243,7 +248,7 @@ func (r *BannerPreloginResource) Delete(ctx context.Context, req resource.Delete
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *BannerPreloginResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *BannerResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

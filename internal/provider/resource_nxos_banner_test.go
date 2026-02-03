@@ -25,47 +25,48 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccNxosBannerPostlogin(t *testing.T) {
+func TestAccNxosBanner(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosBannerPostloginPrerequisitesConfig + testAccNxosBannerPostloginConfig_all(),
+				Config: testAccNxosBannerPrerequisitesConfig + testAccNxosBannerConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_banner_postlogin.test", "exec_banner", "Welcome to the network."),
+					resource.TestCheckResourceAttr("nxos_banner.test", "motd_banner", "My MOTD Banner"),
+					resource.TestCheckResourceAttr("nxos_banner.test", "exec_banner", "My Exec Banner"),
 				),
 			},
 			{
-				ResourceName:  "nxos_banner_postlogin.test",
+				ResourceName:  "nxos_banner.test",
 				ImportState:   true,
-				ImportStateId: "sys/userext/postloginbanner",
+				ImportStateId: "sys/userext",
 			},
 		},
 	})
 }
 
-const testAccNxosBannerPostloginPrerequisitesConfig = `
+const testAccNxosBannerPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/userext"
   class_name = "aaaUserEp"
-  depends_on = [nxos_rest.PreReq0, ]
 }
 
 `
 
-func testAccNxosBannerPostloginConfig_minimum() string {
+func testAccNxosBannerConfig_minimum() string {
 	return `
-	resource "nxos_banner_postlogin" "test" {
+	resource "nxos_banner" "test" {
   		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`
 }
 
-func testAccNxosBannerPostloginConfig_all() string {
+func testAccNxosBannerConfig_all() string {
 	return `
-	resource "nxos_banner_postlogin" "test" {
-		exec_banner = "Welcome to the network."
+	resource "nxos_banner" "test" {
+		motd_banner = "My MOTD Banner"
+		exec_banner = "My Exec Banner"
   		depends_on = [nxos_rest.PreReq0, ]
 	}
 	`

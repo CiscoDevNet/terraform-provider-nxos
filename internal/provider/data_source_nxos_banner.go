@@ -33,26 +33,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &BannerPostloginDataSource{}
-	_ datasource.DataSourceWithConfigure = &BannerPostloginDataSource{}
+	_ datasource.DataSource              = &BannerDataSource{}
+	_ datasource.DataSourceWithConfigure = &BannerDataSource{}
 )
 
-func NewBannerPostloginDataSource() datasource.DataSource {
-	return &BannerPostloginDataSource{}
+func NewBannerDataSource() datasource.DataSource {
+	return &BannerDataSource{}
 }
 
-type BannerPostloginDataSource struct {
+type BannerDataSource struct {
 	data *NxosProviderData
 }
 
-func (d *BannerPostloginDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_banner_postlogin"
+func (d *BannerDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_banner"
 }
 
-func (d *BannerPostloginDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *BannerDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the Postlogin Banner configuration.", "aaaPostLoginBanner", "Security%20and%20Policing/aaa:PostLoginBanner/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read banner configurations.", "aaaUserEp", "").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -63,15 +63,19 @@ func (d *BannerPostloginDataSource) Schema(ctx context.Context, req datasource.S
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
+			"motd_banner": schema.StringAttribute{
+				MarkdownDescription: "MOTD banner displayed before login.",
+				Computed:            true,
+			},
 			"exec_banner": schema.StringAttribute{
-				MarkdownDescription: "Banner message.",
+				MarkdownDescription: "Exec banner displayed after login.",
 				Computed:            true,
 			},
 		},
 	}
 }
 
-func (d *BannerPostloginDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *BannerDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -79,8 +83,8 @@ func (d *BannerPostloginDataSource) Configure(_ context.Context, req datasource.
 	d.data = req.ProviderData.(*NxosProviderData)
 }
 
-func (d *BannerPostloginDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config BannerPostlogin
+func (d *BannerDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config Banner
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)
@@ -98,6 +102,7 @@ func (d *BannerPostloginDataSource) Read(ctx context.Context, req datasource.Rea
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "children"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

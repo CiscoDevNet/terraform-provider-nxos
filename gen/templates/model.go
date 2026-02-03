@@ -315,12 +315,12 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 	{{- $hasNonRefAttribs := false}}
 	{{- range .Attributes}}{{- if and (not .ReferenceOnly) (not .WriteOnly)}}{{$hasNonRefAttribs = true}}{{end}}{{end}}
 	{{- if $hasNonRefAttribs}}
-	var r gjson.Result
+	var r{{$childClassName}} gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
 			key := v.Get("{{$childClassName}}.attributes.rn").String()
 			if key == "{{$childRn}}" {
-				r = v
+				r{{$childClassName}} = v
 				return false
 			}
 			return true
@@ -331,11 +331,11 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 	{{- if and (not .ReferenceOnly) (not .WriteOnly)}}
 	if !data.{{toGoName .TfName}}.IsNull() || all {
 		{{- if eq .Type "Int64"}}
-		data.{{toGoName .TfName}} = types.Int64Value(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
+		data.{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
 		{{- else if eq .Type "Bool"}}
-		data.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
+		data.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
 		{{- else if eq .Type "String"}}
-		data.{{toGoName .TfName}} = types.StringValue(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
+		data.{{toGoName .TfName}} = types.StringValue(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
 		{{- end}}
 	} else {
 		data.{{toGoName .TfName}} = types.{{.Type}}Null()

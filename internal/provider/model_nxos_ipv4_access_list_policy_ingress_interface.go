@@ -70,19 +70,19 @@ func (data *IPv4AccessListPolicyIngressInterface) fromBody(res gjson.Result, all
 	} else {
 		data.InterfaceId = types.StringNull()
 	}
-	var r gjson.Result
+	var raclInst gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
 			key := v.Get("aclInst.attributes.rn").String()
 			if key == "acl" {
-				r = v
+				raclInst = v
 				return false
 			}
 			return true
 		},
 	)
 	if !data.AccessListName.IsNull() || all {
-		data.AccessListName = types.StringValue(r.Get("aclInst.attributes.name").String())
+		data.AccessListName = types.StringValue(raclInst.Get("aclInst.attributes.name").String())
 	} else {
 		data.AccessListName = types.StringNull()
 	}

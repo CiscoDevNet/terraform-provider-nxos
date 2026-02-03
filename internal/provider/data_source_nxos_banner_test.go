@@ -25,38 +25,39 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccDataSourceNxosBannerPostlogin(t *testing.T) {
+func TestAccDataSourceNxosBanner(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosBannerPostloginPrerequisitesConfig + testAccDataSourceNxosBannerPostloginConfig,
+				Config: testAccDataSourceNxosBannerPrerequisitesConfig + testAccDataSourceNxosBannerConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_banner_postlogin.test", "exec_banner", "Welcome to the network."),
+					resource.TestCheckResourceAttr("data.nxos_banner.test", "motd_banner", "My MOTD Banner"),
+					resource.TestCheckResourceAttr("data.nxos_banner.test", "exec_banner", "My Exec Banner"),
 				),
 			},
 		},
 	})
 }
 
-const testAccDataSourceNxosBannerPostloginPrerequisitesConfig = `
+const testAccDataSourceNxosBannerPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/userext"
   class_name = "aaaUserEp"
-  depends_on = [nxos_rest.PreReq0, ]
 }
 
 `
 
-const testAccDataSourceNxosBannerPostloginConfig = `
+const testAccDataSourceNxosBannerConfig = `
 
-resource "nxos_banner_postlogin" "test" {
-  exec_banner = "Welcome to the network."
+resource "nxos_banner" "test" {
+  motd_banner = "My MOTD Banner"
+  exec_banner = "My Exec Banner"
   depends_on = [nxos_rest.PreReq0, ]
 }
 
-data "nxos_banner_postlogin" "test" {
-  depends_on = [nxos_banner_postlogin.test]
+data "nxos_banner" "test" {
+  depends_on = [nxos_banner.test]
 }
 `

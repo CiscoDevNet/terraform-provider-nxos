@@ -83,6 +83,42 @@ func (d *TacacsDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				MarkdownDescription: "Source Interface. Must match first field in the output of `show intf brief",
 				Computed:            true,
 			},
+			"providers": schema.ListNestedAttribute{
+				MarkdownDescription: "List of TACACS+ providers.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "TACACS+ provider.",
+							Computed:            true,
+						},
+						"auth_protocol": schema.StringAttribute{
+							MarkdownDescription: "The TACACS+ authentication protocol.",
+							Computed:            true,
+						},
+						"password_type": schema.StringAttribute{
+							MarkdownDescription: "Password Encryption Type.",
+							Computed:            true,
+						},
+						"password": schema.StringAttribute{
+							MarkdownDescription: "TACACS+ server shared secret.",
+							Computed:            true,
+						},
+						"port": schema.Int64Attribute{
+							MarkdownDescription: "Port number for TACACS+ server.",
+							Computed:            true,
+						},
+						"retries": schema.Int64Attribute{
+							MarkdownDescription: "Number of retries for TACACS+ server.",
+							Computed:            true,
+						},
+						"timeout": schema.Int64Attribute{
+							MarkdownDescription: "Timeout value for TACACS+ server.",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -114,6 +150,7 @@ func (d *TacacsDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "children"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

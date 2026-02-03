@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -29,17 +30,32 @@ import (
 )
 
 type Tacacs struct {
-	Device          types.String `tfsdk:"device"`
-	Dn              types.String `tfsdk:"id"`
-	Deadtime        types.Int64  `tfsdk:"deadtime"`
-	PasswordType    types.String `tfsdk:"password_type"`
-	Password        types.String `tfsdk:"password"`
-	Timeout         types.Int64  `tfsdk:"timeout"`
-	SourceInterface types.String `tfsdk:"source_interface"`
+	Device          types.String      `tfsdk:"device"`
+	Dn              types.String      `tfsdk:"id"`
+	Deadtime        types.Int64       `tfsdk:"deadtime"`
+	PasswordType    types.String      `tfsdk:"password_type"`
+	Password        types.String      `tfsdk:"password"`
+	Timeout         types.Int64       `tfsdk:"timeout"`
+	SourceInterface types.String      `tfsdk:"source_interface"`
+	Providers       []TacacsProviders `tfsdk:"providers"`
+}
+
+type TacacsProviders struct {
+	Name         types.String `tfsdk:"name"`
+	AuthProtocol types.String `tfsdk:"auth_protocol"`
+	PasswordType types.String `tfsdk:"password_type"`
+	Password     types.String `tfsdk:"password"`
+	Port         types.Int64  `tfsdk:"port"`
+	Retries      types.Int64  `tfsdk:"retries"`
+	Timeout      types.Int64  `tfsdk:"timeout"`
 }
 
 func (data Tacacs) getDn() string {
 	return "sys/userext/tacacsext"
+}
+
+func (data TacacsProviders) getRn() string {
+	return fmt.Sprintf("tacacsplusprovider-[%v]", data.Name.ValueString())
 }
 
 func (data Tacacs) getClassName() string {
@@ -67,6 +83,32 @@ func (data Tacacs) toBody(statusReplace bool) nxos.Body {
 	if (!data.SourceInterface.IsUnknown() && !data.SourceInterface.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"srcIf", data.SourceInterface.ValueString())
 	}
+	var attrs string
+	for _, child := range data.Providers {
+		attrs = ""
+		if (!child.Name.IsUnknown() && !child.Name.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
+		}
+		if (!child.AuthProtocol.IsUnknown() && !child.AuthProtocol.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "authProtocol", child.AuthProtocol.ValueString())
+		}
+		if (!child.PasswordType.IsUnknown() && !child.PasswordType.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "keyEnc", child.PasswordType.ValueString())
+		}
+		if (!child.Password.IsUnknown() && !child.Password.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "key", child.Password.ValueString())
+		}
+		if (!child.Port.IsUnknown() && !child.Port.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "port", strconv.FormatInt(child.Port.ValueInt64(), 10))
+		}
+		if (!child.Retries.IsUnknown() && !child.Retries.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "retries", strconv.FormatInt(child.Retries.ValueInt64(), 10))
+		}
+		if (!child.Timeout.IsUnknown() && !child.Timeout.IsNull()) || true {
+			attrs, _ = sjson.Set(attrs, "timeout", strconv.FormatInt(child.Timeout.ValueInt64(), 10))
+		}
+		body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.aaaTacacsPlusProvider.attributes", attrs)
+	}
 
 	return nxos.Body{body}
 }
@@ -91,6 +133,73 @@ func (data *Tacacs) fromBody(res gjson.Result, all bool) {
 		data.SourceInterface = types.StringValue(res.Get(data.getClassName() + ".attributes.srcIf").String())
 	} else {
 		data.SourceInterface = types.StringNull()
+	}
+	if all {
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "aaaTacacsPlusProvider" {
+							var child TacacsProviders
+							child.Name = types.StringValue(value.Get("attributes.name").String())
+							child.AuthProtocol = types.StringValue(value.Get("attributes.authProtocol").String())
+							child.PasswordType = types.StringValue(value.Get("attributes.keyEnc").String())
+							child.Port = types.Int64Value(value.Get("attributes.port").Int())
+							child.Retries = types.Int64Value(value.Get("attributes.retries").Int())
+							child.Timeout = types.Int64Value(value.Get("attributes.timeout").Int())
+
+							data.Providers = append(data.Providers, child)
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+	} else {
+		for c := range data.Providers {
+			var r gjson.Result
+			res.Get(data.getClassName() + ".children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("aaaTacacsPlusProvider.attributes.rn").String()
+					if key == data.Providers[c].getRn() {
+						r = v
+						return false
+					}
+					return true
+				},
+			)
+			if !data.Providers[c].Name.IsNull() || all {
+				data.Providers[c].Name = types.StringValue(r.Get("aaaTacacsPlusProvider.attributes.name").String())
+			} else {
+				data.Providers[c].Name = types.StringNull()
+			}
+			if !data.Providers[c].AuthProtocol.IsNull() || all {
+				data.Providers[c].AuthProtocol = types.StringValue(r.Get("aaaTacacsPlusProvider.attributes.authProtocol").String())
+			} else {
+				data.Providers[c].AuthProtocol = types.StringNull()
+			}
+			if !data.Providers[c].PasswordType.IsNull() || all {
+				data.Providers[c].PasswordType = types.StringValue(r.Get("aaaTacacsPlusProvider.attributes.keyEnc").String())
+			} else {
+				data.Providers[c].PasswordType = types.StringNull()
+			}
+			if !data.Providers[c].Port.IsNull() || all {
+				data.Providers[c].Port = types.Int64Value(r.Get("aaaTacacsPlusProvider.attributes.port").Int())
+			} else {
+				data.Providers[c].Port = types.Int64Null()
+			}
+			if !data.Providers[c].Retries.IsNull() || all {
+				data.Providers[c].Retries = types.Int64Value(r.Get("aaaTacacsPlusProvider.attributes.retries").Int())
+			} else {
+				data.Providers[c].Retries = types.Int64Null()
+			}
+			if !data.Providers[c].Timeout.IsNull() || all {
+				data.Providers[c].Timeout = types.Int64Value(r.Get("aaaTacacsPlusProvider.attributes.timeout").Int())
+			} else {
+				data.Providers[c].Timeout = types.Int64Null()
+			}
+		}
 	}
 }
 

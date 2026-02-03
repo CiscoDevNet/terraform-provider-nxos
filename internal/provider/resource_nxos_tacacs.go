@@ -57,7 +57,7 @@ func (r *TacacsResource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *TacacsResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Tacacs configuration.", "aaaTacacsPlusEp", "Security%20and%20Policing/aaa:TacacsPlusEp/").AddChildren("tacacs_provider", "tacacs_provider_group").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Tacacs configuration.", "aaaTacacsPlusEp", "Security%20and%20Policing/aaa:TacacsPlusEp/").AddChildren("tacacs_provider_group").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -99,6 +99,57 @@ func (r *TacacsResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Optional:            true,
 				Computed:            true,
 				Default:             stringdefault.StaticString("unspecified"),
+			},
+			"providers": schema.ListNestedAttribute{
+				MarkdownDescription: "List of TACACS+ providers.",
+				Required:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("TACACS+ provider.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"auth_protocol": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The TACACS+ authentication protocol.").AddStringEnumDescription("pap", "chap", "mschap", "mschapv2", "ascii").AddDefaultValueDescription("pap").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("pap"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("pap", "chap", "mschap", "mschapv2", "ascii"),
+							},
+						},
+						"password_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Password Encryption Type.").AddStringEnumDescription("0", "6", "7").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("0", "6", "7"),
+							},
+						},
+						"password": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("TACACS+ server shared secret.").String,
+							Optional:            true,
+						},
+						"port": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Port number for TACACS+ server.").AddDefaultValueDescription("49").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(49),
+						},
+						"retries": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Number of retries for TACACS+ server.").String,
+							Optional:            true,
+						},
+						"timeout": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Timeout value for TACACS+ server.").AddDefaultValueDescription("0").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(0),
+						},
+					},
+				},
 			},
 		},
 	}
@@ -171,6 +222,7 @@ func (r *TacacsResource) Read(ctx context.Context, req resource.ReadRequest, res
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		queries = append(queries, nxos.Query("rsp-subtree", "children"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

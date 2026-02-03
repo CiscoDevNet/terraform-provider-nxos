@@ -33,5 +33,19 @@ data "nxos_tacacs" "example" {
 - `id` (String) The distinguished name of the object.
 - `password` (String) TACACS+ server shared secret.
 - `password_type` (String) Password Encryption Type.
+- `providers` (Attributes List) List of TACACS+ providers. (see [below for nested schema](#nestedatt--providers))
 - `source_interface` (String) Source Interface. Must match first field in the output of `show intf brief
+- `timeout` (Number) Timeout value for TACACS+ server.
+
+<a id="nestedatt--providers"></a>
+### Nested Schema for `providers`
+
+Read-Only:
+
+- `auth_protocol` (String) The TACACS+ authentication protocol.
+- `name` (String) TACACS+ provider.
+- `password` (String) TACACS+ server shared secret.
+- `password_type` (String) Password Encryption Type.
+- `port` (Number) Port number for TACACS+ server.
+- `retries` (Number) Number of retries for TACACS+ server.
 - `timeout` (Number) Timeout value for TACACS+ server.

@@ -7,8 +7,67 @@ res_description: This resource can manage the Tacacs configuration.
 doc_path: Security%20and%20Policing/aaa:TacacsPlusEp/
 doc_category: AAA
 children:
-  - Tacacs Provider
   - Tacacs Provider Group
+child_classes:
+  - tf_name: providers
+    class_name: aaaTacacsPlusProvider
+    type: list
+    rn: tacacsplusprovider-[%v]
+    description: List of TACACS+ providers.
+    attributes:
+      - nxos_name: name
+        tf_name: name
+        type: String
+        id: true
+        description: 'TACACS+ provider.'
+        example: "1.2.3.4"
+      - nxos_name: authProtocol
+        tf_name: auth_protocol
+        type: String
+        description: 'The TACACS+ authentication protocol.'
+        enum_values:
+          - "pap"
+          - "chap"
+          - "mschap"
+          - "mschapv2"
+          - "ascii"
+        default_value: "pap"
+        example: "chap"
+      - nxos_name: keyEnc
+        tf_name: password_type
+        type: String
+        description: "Password Encryption Type."
+        enum_values:
+          - "0"
+          - "6"
+          - "7"
+        example: "0"
+        exclude_test: true
+        omit_empty_value: true
+      - nxos_name: key
+        tf_name: password
+        description: "TACACS+ server shared secret."
+        type: String
+        example: secret_password
+        write_only: true
+        exclude_test: true
+      - nxos_name: port
+        tf_name: port
+        type: Int64
+        description: 'Port number for TACACS+ server.'
+        default_value: 49
+        example: 123
+      - nxos_name: retries
+        tf_name: retries
+        type: Int64
+        description: 'Number of retries for TACACS+ server.'
+        example: 3
+      - nxos_name: timeout
+        tf_name: timeout
+        type: Int64
+        description: 'Timeout value for TACACS+ server.'
+        default_value: 0
+        example: 10
 attributes:
   - nxos_name: deadtime
     tf_name: deadtime
@@ -33,6 +92,7 @@ attributes:
     type: String
     example: secret_password
     write_only: true
+    exclude_test: true
   - nxos_name: timeout
     tf_name: timeout
     type: Int64

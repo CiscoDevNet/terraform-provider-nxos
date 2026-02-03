@@ -36,6 +36,11 @@ func TestAccDataSourceNxosTacacs(t *testing.T) {
 					resource.TestCheckResourceAttr("data.nxos_tacacs.test", "deadtime", "100"),
 					resource.TestCheckResourceAttr("data.nxos_tacacs.test", "timeout", "10"),
 					resource.TestCheckResourceAttr("data.nxos_tacacs.test", "source_interface", "lo0"),
+					resource.TestCheckResourceAttr("data.nxos_tacacs.test", "providers.0.name", "1.2.3.4"),
+					resource.TestCheckResourceAttr("data.nxos_tacacs.test", "providers.0.auth_protocol", "chap"),
+					resource.TestCheckResourceAttr("data.nxos_tacacs.test", "providers.0.port", "123"),
+					resource.TestCheckResourceAttr("data.nxos_tacacs.test", "providers.0.retries", "3"),
+					resource.TestCheckResourceAttr("data.nxos_tacacs.test", "providers.0.timeout", "10"),
 				),
 			},
 		},
@@ -64,9 +69,15 @@ const testAccDataSourceNxosTacacsConfig = `
 
 resource "nxos_tacacs" "test" {
   deadtime = 100
-  password = "secret_password"
   timeout = 10
   source_interface = "lo0"
+  providers = [{
+    name = "1.2.3.4"
+    auth_protocol = "chap"
+    port = 123
+    retries = 3
+    timeout = 10
+  }]
   depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
 }
 

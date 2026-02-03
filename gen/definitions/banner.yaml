@@ -5,12 +5,14 @@ dn: sys/userext
 ds_description: This data source can read banner configurations.
 res_description: This resource can manage banner configurations.
 doc_category: AAA
+doc_path: Security%20and%20Policing/aaa:UserEp/
 
 child_classes:
   # Prelogin banner - flattened to direct attribute
   - class_name: aaaPreLoginBanner
     rn: preloginbanner
     type: single
+    doc_path: Security%20and%20Policing/aaa:PreLoginBanner/
     attributes:
       - nxos_name: message
         tf_name: motd_banner
@@ -23,6 +25,7 @@ child_classes:
   - class_name: aaaPostLoginBanner
     rn: postloginbanner
     type: single
+    doc_path: Security%20and%20Policing/aaa:PostLoginBanner/
     attributes:
       - nxos_name: message
         tf_name: exec_banner

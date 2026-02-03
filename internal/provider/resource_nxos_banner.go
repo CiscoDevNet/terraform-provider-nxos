@@ -53,7 +53,7 @@ func (r *BannerResource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *BannerResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage banner configurations.", "aaaUserEp", "").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage banner configurations.", "aaaUserEp", "Security%20and%20Policing/aaa:UserEp/").AddAdditionalDocs([]string{"aaaPreLoginBanner", "aaaPostLoginBanner"}, []string{"Security%20and%20Policing/aaa:PreLoginBanner/", "Security%20and%20Policing/aaa:PostLoginBanner/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

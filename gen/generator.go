@@ -139,6 +139,7 @@ type YamlConfigChildClass struct {
 	Type             string                     `yaml:"type"`
 	TfName           string                     `yaml:"tf_name"`
 	Description      string                     `yaml:"description"`
+	DocPath          string                     `yaml:"doc_path"`
 	Mandatory        bool                       `yaml:"mandatory"`
 	HideInResource   bool                       `yaml:"hide_in_resource"`
 	Attributes       []YamlConfigAttribute      `yaml:"attributes"`
@@ -151,6 +152,7 @@ type YamlConfigChildChildClass struct {
 	Type             string                `yaml:"type"`
 	TfName           string                `yaml:"tf_name"`
 	Description      string                `yaml:"description"`
+	DocPath          string                `yaml:"doc_path"`
 	Mandatory        bool                  `yaml:"mandatory"`
 	HideInResource   bool                  `yaml:"hide_in_resource"`
 	Attributes       []YamlConfigAttribute `yaml:"attributes"`

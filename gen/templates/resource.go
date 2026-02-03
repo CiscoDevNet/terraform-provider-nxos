@@ -72,6 +72,11 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 			{{- if len .References -}}
 			.AddReferences({{range .References}}"{{snakeCase .}}", {{end}})
 			{{- end -}}
+			{{- $hasChildDocs := false -}}
+			{{- range .ChildClasses -}}{{- if .DocPath -}}{{- $hasChildDocs = true -}}{{- end -}}{{- end -}}
+			{{- if $hasChildDocs -}}
+			.AddAdditionalDocs([]string{ {{- $first := true -}}{{- range .ChildClasses -}}{{- if .DocPath -}}{{- if not $first -}}, {{- end -}}"{{.ClassName}}"{{- $first = false -}}{{- end -}}{{- end -}} }, []string{ {{- $first := true -}}{{- range .ChildClasses -}}{{- if .DocPath -}}{{- if not $first -}}, {{- end -}}"{{.DocPath}}"{{- $first = false -}}{{- end -}}{{- end -}} })
+			{{- end -}}
 			.String,
 
 		Attributes: map[string]schema.Attribute{

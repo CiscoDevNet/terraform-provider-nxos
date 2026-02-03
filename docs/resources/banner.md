@@ -4,14 +4,21 @@ page_title: "nxos_banner Resource - terraform-provider-nxos"
 subcategory: "AAA"
 description: |-
   This resource can manage banner configurations.
-  API Documentation: aaaUserEp https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/
+  API Documentation: aaaUserEp https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:UserEp/
+  Additional API Documentation
+  aaaPreLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:PreLoginBanner/aaaPostLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:PostLoginBanner/
 ---
 
 # nxos_banner (Resource)
 
 This resource can manage banner configurations.
 
-- API Documentation: [aaaUserEp](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/)
+- API Documentation: [aaaUserEp](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:UserEp/)
+
+### Additional API Documentation
+
+- [aaaPreLoginBanner](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:PreLoginBanner/)
+- [aaaPostLoginBanner](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:PostLoginBanner/)
 
 ## Example Usage
 

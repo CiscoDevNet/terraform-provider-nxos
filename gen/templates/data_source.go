@@ -53,7 +53,13 @@ func (d *{{camelCase .Name}}DataSource) Metadata(_ context.Context, req datasour
 func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("{{.DsDescription}}", "{{.ClassName}}", "{{.DocPath}}").String,
+		MarkdownDescription: helpers.NewResourceDescription("{{.DsDescription}}", "{{.ClassName}}", "{{.DocPath}}")
+			{{- $hasChildDocs := false -}}
+			{{- range .ChildClasses -}}{{- if .DocPath -}}{{- $hasChildDocs = true -}}{{- end -}}{{- range .ChildClasses -}}{{- if .DocPath -}}{{- $hasChildDocs = true -}}{{- end -}}{{- end -}}{{- end -}}
+			{{- if $hasChildDocs -}}
+			.AddAdditionalDocs([]string{ {{- $first := true -}}{{- range .ChildClasses -}}{{- if .DocPath -}}{{- if not $first -}}, {{- end -}}"{{.ClassName}}"{{- $first = false -}}{{- end -}}{{- range .ChildClasses -}}{{- if .DocPath -}}{{- if not $first -}}, {{- end -}}"{{.ClassName}}"{{- $first = false -}}{{- end -}}{{- end -}}{{- end -}} }, []string{ {{- $first := true -}}{{- range .ChildClasses -}}{{- if .DocPath -}}{{- if not $first -}}, {{- end -}}"{{.DocPath}}"{{- $first = false -}}{{- end -}}{{- range .ChildClasses -}}{{- if .DocPath -}}{{- if not $first -}}, {{- end -}}"{{.DocPath}}"{{- $first = false -}}{{- end -}}{{- end -}}{{- end -}} })
+			{{- end -}}
+			.String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -75,7 +81,7 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 			},
 			{{- end}}
 			{{- range .ChildClasses}}
-			{{- if eq .Type "single"}}
+			{{- if and (not .HideInResource) (eq .Type "single")}}
 			{{- range .Attributes}}
 			"{{.TfName}}": schema.{{.Type}}Attribute{
 				MarkdownDescription: "{{.Description}}",
@@ -86,7 +92,9 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 				{{- end}}
 			},
 			{{- end}}
-			{{- else if eq .Type "list"}}
+			{{- range .ChildClasses}}
+			{{- end}}
+			{{- else if and (not .HideInResource) (eq .Type "list")}}
 			"{{.TfName}}": schema.ListNestedAttribute{
 				MarkdownDescription: "{{.Description}}",
 				Computed:            true,
@@ -101,6 +109,33 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 					},
 				},
 			},
+			{{- end}}
+			{{- end}}
+			{{- /* Handle nested child classes within hidden parents */ -}}
+			{{- $hasHiddenNestedChildren := false -}}
+			{{- range .ChildClasses}}{{- if and .HideInResource .ChildClasses}}{{- $hasHiddenNestedChildren = true}}{{- end}}{{- end -}}
+			{{- if $hasHiddenNestedChildren}}
+			{{- range .ChildClasses}}
+			{{- if .HideInResource}}
+			{{- range .ChildClasses}}
+			{{- if eq .Type "list"}}
+			"{{.TfName}}": schema.ListNestedAttribute{
+				MarkdownDescription: "{{.Description}}",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						{{- range  .Attributes}}
+						"{{.TfName}}": schema.{{.Type}}Attribute{
+							MarkdownDescription: "{{.Description}}",
+							Computed:            true,
+						},
+						{{- end}}
+					},
+				},
+			},
+			{{- end}}
+			{{- end}}
+			{{- end}}
 			{{- end}}
 			{{- end}}
 		},
@@ -135,7 +170,13 @@ func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource
 
 	queries := []func(*nxos.Req){}
 	{{- if .ChildClasses}}
+	{{- $hasNestedChildren := false}}
+	{{- range .ChildClasses}}{{- if .ChildClasses}}{{$hasNestedChildren = true}}{{end}}{{end}}
+	{{- if $hasNestedChildren}}
+	queries = append(queries, nxos.Query("rsp-subtree", "full"))
+	{{- else}}
 	queries = append(queries, nxos.Query("rsp-subtree", "children"))
+	{{- end}}
 	{{- end}}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {

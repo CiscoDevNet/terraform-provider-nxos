@@ -81,3 +81,13 @@ func (d *ResourceDescription) AddReferences(values ...string) *ResourceDescripti
 	}
 	return d
 }
+
+func (d *ResourceDescription) AddAdditionalDocs(classNames []string, docPaths []string) *ResourceDescription {
+	if len(classNames) == len(docPaths) && len(classNames) > 0 {
+		d.String += "\n### Additional API Documentation\n\n"
+		for i, className := range classNames {
+			d.String += fmt.Sprintf("- [%s](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/%s)\n", className, docPaths[i])
+		}
+	}
+	return d
+}

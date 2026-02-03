@@ -72,6 +72,11 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 			{{- if len .References -}}
 			.AddReferences({{range .References}}"{{snakeCase .}}", {{end}})
 			{{- end -}}
+			{{- $hasChildDocs := false -}}
+			{{- range .ChildClasses -}}{{- if .DocPath -}}{{- $hasChildDocs = true -}}{{- end -}}{{- range .ChildClasses -}}{{- if .DocPath -}}{{- $hasChildDocs = true -}}{{- end -}}{{- end -}}{{- end -}}
+			{{- if $hasChildDocs -}}
+			.AddAdditionalDocs([]string{ {{- $first := true -}}{{- range .ChildClasses -}}{{- if .DocPath -}}{{- if not $first -}}, {{- end -}}"{{.ClassName}}"{{- $first = false -}}{{- end -}}{{- range .ChildClasses -}}{{- if .DocPath -}}{{- if not $first -}}, {{- end -}}"{{.ClassName}}"{{- $first = false -}}{{- end -}}{{- end -}}{{- end -}} }, []string{ {{- $first := true -}}{{- range .ChildClasses -}}{{- if .DocPath -}}{{- if not $first -}}, {{- end -}}"{{.DocPath}}"{{- $first = false -}}{{- end -}}{{- range .ChildClasses -}}{{- if .DocPath -}}{{- if not $first -}}, {{- end -}}"{{.DocPath}}"{{- $first = false -}}{{- end -}}{{- end -}}{{- end -}} })
+			{{- end -}}
 			.String,
 
 		Attributes: map[string]schema.Attribute{
@@ -107,7 +112,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				Computed:            true,
 				{{- end}}
 				{{- end}}
-				{{- if and (len .DefaultValue) (not .Id) (not .ReferenceOnly) (not .Mandatory)}}
+				{{- if and (len .DefaultValue) (not .Id) (not .Mandatory)}}
 				{{- if eq .Type "Int64"}}
 				Default: int64default.StaticInt64({{.DefaultValue}}),
 				{{- else if eq .Type "Bool"}}
@@ -133,7 +138,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 			},
 			{{- end}}
 			{{- range .ChildClasses}}
-			{{- if eq .Type "single"}}
+			{{- if and (not .HideInResource) (eq .Type "single")}}
 			{{- range  .Attributes}}
 			"{{.TfName}}": schema.{{.Type}}Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
@@ -147,15 +152,18 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 					.AddDefaultValueDescription("{{.DefaultValue}}")
 					{{- end -}}
 					.String,
-				{{- if or .Id .ReferenceOnly .Mandatory}}
+				{{- if or .Id .Mandatory}}
 				Required:            true,
+				{{- else if .ReferenceOnly}}
+				Optional:            true,
+				Computed:            true,
 				{{- else}}
 				Optional:            true,
 				{{- if len .DefaultValue}}
 				Computed:            true,
 				{{- end}}
 				{{- end}}
-				{{- if and (len .DefaultValue) (not .Id) (not .ReferenceOnly) (not .Mandatory)}}
+				{{- if and (len .DefaultValue) (not .Id) (not .Mandatory)}}
 				{{- if eq .Type "Int64"}}
 				Default: int64default.StaticInt64({{.DefaultValue}}),
 				{{- else if eq .Type "Bool"}}
@@ -180,10 +188,15 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				{{- end}}
 			},
 			{{- end}}
-			{{- else if eq .Type "list"}}
+			{{- range .ChildClasses}}
+			{{- if eq .Type "list"}}
 			"{{.TfName}}": schema.ListNestedAttribute{
 				MarkdownDescription: "{{.Description}}",
+				{{- if .Mandatory}}
 				Required:            true,
+				{{- else}}
+				Optional:            true,
+				{{- end}}
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						{{- range  .Attributes}}
@@ -199,7 +212,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 								.AddDefaultValueDescription("{{.DefaultValue}}")
 								{{- end -}}
 								.String,
-							{{- if or .Id .ReferenceOnly .Mandatory}}
+							{{- if or .Id .Mandatory}}
 							Required:            true,
 							{{- else}}
 							Optional:            true,
@@ -207,7 +220,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 							Computed:            true,
 							{{- end}}
 							{{- end}}
-							{{- if and (len .DefaultValue) (not .Id) (not .ReferenceOnly) (not .Mandatory)}}
+							{{- if and (len .DefaultValue) (not .Id) (not .Mandatory)}}
 							{{- if eq .Type "Int64"}}
 							Default: int64default.StaticInt64({{.DefaultValue}}),
 							{{- else if eq .Type "Bool"}}
@@ -235,6 +248,137 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 					},
 				},
 			},
+			{{- end}}
+			{{- end}}
+			{{- else if and (not .HideInResource) (eq .Type "list")}}
+			"{{.TfName}}": schema.ListNestedAttribute{
+				MarkdownDescription: "{{.Description}}",
+				Required:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						{{- range  .Attributes}}
+						"{{.TfName}}": schema.{{.Type}}Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
+								{{- if len .EnumValues -}}
+								.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
+								{{- end -}}
+								{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}
+								.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
+								{{- end -}}
+								{{- if len .DefaultValue -}}
+								.AddDefaultValueDescription("{{.DefaultValue}}")
+								{{- end -}}
+								.String,
+							{{- if or .Id .Mandatory}}
+							Required:            true,
+							{{- else if .ReferenceOnly}}
+							Optional:            true,
+							Computed:            true,
+							{{- else}}
+							Optional:            true,
+							{{- if len .DefaultValue}}
+							Computed:            true,
+							{{- end}}
+							{{- end}}
+							{{- if and (len .DefaultValue) (not .Id) (not .Mandatory)}}
+							{{- if eq .Type "Int64"}}
+							Default: int64default.StaticInt64({{.DefaultValue}}),
+							{{- else if eq .Type "Bool"}}
+							Default: booldefault.StaticBool({{.DefaultValue}}),
+							{{- else if eq .Type "String"}}
+							Default: stringdefault.StaticString("{{.DefaultValue}}"),
+							{{- end}}
+							{{- end}}
+							{{- if and (len .EnumValues) (not .AllowNonEnumValues) }}
+							Validators: []validator.String{
+								stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
+							},
+							{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
+							Validators: []validator.Int64{
+								int64validator.Between({{.MinInt}}, {{.MaxInt}}),
+							},
+							{{- end}}
+							{{- if or .Id .ReferenceOnly .RequiresReplace}}
+							PlanModifiers: []planmodifier.{{.Type}}{
+								{{snakeCase .Type}}planmodifier.RequiresReplace(),
+							},
+							{{- end}}
+						},
+						{{- end}}
+					},
+				},
+			},
+			{{- end}}
+			{{- end}}
+			{{- /* Handle nested child classes within hidden parents */ -}}
+			{{- $hasHiddenNestedChildren := false -}}
+			{{- range .ChildClasses}}{{- if and .HideInResource .ChildClasses}}{{- $hasHiddenNestedChildren = true}}{{- end}}{{- end -}}
+			{{- if $hasHiddenNestedChildren}}
+			{{- range .ChildClasses}}
+			{{- if .HideInResource}}
+			{{- range .ChildClasses}}
+			{{- if eq .Type "list"}}
+			"{{.TfName}}": schema.ListNestedAttribute{
+				MarkdownDescription: "{{.Description}}",
+				{{- if .Mandatory}}
+				Required:            true,
+				{{- else}}
+				Optional:            true,
+				{{- end}}
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						{{- range  .Attributes}}
+						"{{.TfName}}": schema.{{.Type}}Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
+								{{- if len .EnumValues -}}
+								.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
+								{{- end -}}
+								{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}
+								.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
+								{{- end -}}
+								{{- if len .DefaultValue -}}
+								.AddDefaultValueDescription("{{.DefaultValue}}")
+								{{- end -}}
+								.String,
+							{{- if or .Id .Mandatory}}
+							Required:            true,
+							{{- else}}
+							Optional:            true,
+							{{- if len .DefaultValue}}
+							Computed:            true,
+							{{- end}}
+							{{- end}}
+							{{- if and (len .DefaultValue) (not .Id) (not .Mandatory)}}
+							{{- if eq .Type "Int64"}}
+							Default: int64default.StaticInt64({{.DefaultValue}}),
+							{{- else if eq .Type "Bool"}}
+							Default: booldefault.StaticBool({{.DefaultValue}}),
+							{{- else if eq .Type "String"}}
+							Default: stringdefault.StaticString("{{.DefaultValue}}"),
+							{{- end}}
+							{{- end}}
+							{{- if and (len .EnumValues) (not .AllowNonEnumValues) }}
+							Validators: []validator.String{
+								stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
+							},
+							{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
+							Validators: []validator.Int64{
+								int64validator.Between({{.MinInt}}, {{.MaxInt}}),
+							},
+							{{- end}}
+							{{- if or .Id .ReferenceOnly .RequiresReplace}}
+							PlanModifiers: []planmodifier.{{.Type}}{
+								{{snakeCase .Type}}planmodifier.RequiresReplace(),
+							},
+							{{- end}}
+						},
+						{{- end}}
+					},
+				},
+			},
+			{{- end}}
+			{{- end}}
+			{{- end}}
 			{{- end}}
 			{{- end}}
 		},
@@ -309,7 +453,13 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
 		{{- if .ChildClasses}}
+		{{- $hasNestedChildren := false}}
+		{{- range .ChildClasses}}{{- if .ChildClasses}}{{$hasNestedChildren = true}}{{end}}{{end}}
+		{{- if $hasNestedChildren}}
+		queries = append(queries, nxos.Query("rsp-subtree", "full"))
+		{{- else}}
 		queries = append(queries, nxos.Query("rsp-subtree", "children"))
+		{{- end}}
 		{{- end}}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {

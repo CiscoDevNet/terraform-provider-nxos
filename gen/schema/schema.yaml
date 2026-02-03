@@ -18,7 +18,7 @@ test_prerequisites: list(include('test_prerequisite'), required=False)
 ---
 attribute:
   nxos_name: str()
-  tf_name: str()
+  tf_name: str(required=False)
   type: enum('String', 'Int64', 'Bool')
   id: bool(required=False)
   reference_only: bool(required=False)
@@ -42,6 +42,21 @@ child_classes:
   type: enum('single', 'list', required=False)
   tf_name: str(required=False)
   description: str(required=False)
+  doc_path: str(required=False)
+  mandatory: bool(required=False)
+  hide_in_resource: bool(required=False)
+  attributes: list(include('attribute'), required=False)
+  child_classes: list(include('child_child_classes'), required=False)
+
+child_child_classes:
+  class_name: str()
+  rn: str()
+  type: enum('single', 'list', required=False)
+  tf_name: str(required=False)
+  description: str(required=False)
+  doc_path: str(required=False)
+  mandatory: bool(required=False)
+  hide_in_resource: bool(required=False)
   attributes: list(include('attribute'), required=False)
 
 test_prerequisite:

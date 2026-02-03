@@ -120,6 +120,7 @@ func (data *IPv4StaticRoute) fromBody(res gjson.Result, all bool) {
 							child.Object = types.Int64Value(value.Get("attributes.object").Int())
 							child.Preference = types.Int64Value(value.Get("attributes.pref").Int())
 							child.Tag = types.Int64Value(value.Get("attributes.tag").Int())
+
 							data.NextHops = append(data.NextHops, child)
 						}
 						return true

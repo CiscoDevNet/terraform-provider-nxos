@@ -72,19 +72,19 @@ func (data *VPCInterface) fromBody(res gjson.Result, all bool) {
 	} else {
 		data.VpcInterfaceId = types.Int64Null()
 	}
-	var r gjson.Result
+	var rvpcRsVpcConf gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
 			key := v.Get("vpcRsVpcConf.attributes.rn").String()
 			if key == "rsvpcConf" {
-				r = v
+				rvpcRsVpcConf = v
 				return false
 			}
 			return true
 		},
 	)
 	if !data.PortChannelInterfaceDn.IsNull() || all {
-		data.PortChannelInterfaceDn = types.StringValue(r.Get("vpcRsVpcConf.attributes.tDn").String())
+		data.PortChannelInterfaceDn = types.StringValue(rvpcRsVpcConf.Get("vpcRsVpcConf.attributes.tDn").String())
 	} else {
 		data.PortChannelInterfaceDn = types.StringNull()
 	}

@@ -1,58 +1,58 @@
 ---
-name: str()
-class_name: str()
-dn: str()
-no_delete: bool(required=False)
-test_tags: list(str(), required=False)
-ds_description: str()
-res_description: str()
-doc_path: str()
-doc_category: str()
-parents: list(str(), required=False)
-children: list(str(), required=False)
-references: list(str(), required=False)
-status_replace: bool(required=False)
-attributes: list(include('attribute'), required=False)
-child_classes: list(include('child_classes'), required=False)
-test_prerequisites: list(include('test_prerequisite'), required=False)
+name: str() # Name of the resource and data source
+class_name: str() # NX-API class name
+dn: str() # Distinguished Name path of the managed object
+no_delete: bool(required=False) # Set to true if the resource does not support deletion
+test_tags: list(str(), required=False) # List of test tags, tests are only executed if an environment variable with one of these tags is configured
+ds_description: str() # Description for the data source
+res_description: str() # Description for the resource
+doc_path: str() # NX-API documentation path
+doc_category: str() # Documentation category for the resource
+parents: list(str(), required=False) # List of parent resource names
+children: list(str(), required=False) # List of child resource names
+references: list(str(), required=False) # List of referenced resource names
+status_replace: bool(required=False) # Set to true if status attribute should be set to "replaced" when the resource is updated
+attributes: list(include('attribute'), required=False) # List of attributes
+child_classes: list(include('child_classes'), required=False) # List of child classes to be included inline
+test_prerequisites: list(include('test_prerequisite'), required=False) # List of test prerequisites
 ---
 attribute:
-  nxos_name: str()
-  tf_name: str()
-  type: enum('String', 'Int64', 'Bool')
-  id: bool(required=False)
-  reference_only: bool(required=False)
-  mandatory: bool(required=False)
-  write_only: bool(required=False)
-  description: str()
-  example: any(str(), int(), bool())
-  enum_values: list(str(), required=False)
-  allow_non_enum_values: bool(required=False)
-  omit_empty_value: bool(required=False)
-  min_int: int(required=False)
-  max_int: int(required=False)
-  default_value: any(str(), int(), bool(), required=False)
-  delete_value: any(str(), int(), bool(), required=False)
-  exclude_test: bool(required=False)
-  requires_replace: bool(required=False)
+  nxos_name: str() # NX-API attribute name
+  tf_name: str() # Terraform attribute name
+  type: enum('String', 'Int64', 'Bool') # Terraform attribute type
+  id: bool(required=False) # Set to true if the attribute is part of the resource ID
+  reference_only: bool(required=False) # Set to true if the attribute is only used as a reference to a parent resource
+  mandatory: bool(required=False) # Set to true if the attribute is mandatory
+  write_only: bool(required=False) # Set to true if the attribute is write-only, meaning we cannot read the value
+  description: str() # Attribute description
+  example: any(str(), int(), bool()) # Example value for documentation, also used for acceptance test
+  enum_values: list(str(), required=False) # List of enum values, only relevant if type is "String"
+  allow_non_enum_values: bool(required=False) # Set to true if non-enum values should also be accepted
+  omit_empty_value: bool(required=False) # Set to true if the attribute should be omitted from the payload when the value is empty
+  min_int: int(required=False) # Minimum value of an integer, only relevant if type is "Int64"
+  max_int: int(required=False) # Maximum value of an integer, only relevant if type is "Int64"
+  default_value: any(str(), int(), bool(), required=False) # Default value for the attribute
+  delete_value: any(str(), int(), bool(), required=False) # Value to set when the resource is deleted, instead of deleting the attribute
+  exclude_test: bool(required=False) # Exclude attribute from acceptance test
+  requires_replace: bool(required=False) # Set to true if the attribute update forces Terraform to destroy/recreate the entire resource
 
 child_classes:
-  class_name: str()
-  rn: str()
-  type: enum('single', 'list', required=False)
-  tf_name: str(required=False)
-  description: str(required=False)
-  mandatory: bool(required=False)
-  attributes: list(include('attribute'), required=False)
+  class_name: str() # NX-API class name of the child
+  rn: str() # Relative Name of the child class
+  type: enum('single', 'list', required=False) # Cardinality of the child class
+  tf_name: str(required=False) # Terraform attribute name for the child class
+  description: str(required=False) # Description of the child class
+  mandatory: bool(required=False) # Set to true if the child class(es) are mandatory
+  attributes: list(include('attribute'), required=False) # List of child class attributes
 
 test_prerequisite:
-  dn: str()
-  class_name: str()
-  no_delete: bool(required=False)
-  attributes: list(include('test_attribute'), required=False)
-  dependencies: list(int(), required=False)
+  dn: str() # Distinguished Name of the prerequisite managed object
+  class_name: str() # NX-API class name of the prerequisite
+  no_delete: bool(required=False) # Set to true if the prerequisite should not be deleted after the test
+  attributes: list(include('test_attribute'), required=False) # List of prerequisite attributes
+  dependencies: list(int(), required=False) # List of dependencies to other test prerequisites, referencing the index in the test_prerequisites list
 
 test_attribute:
-  name: str()
-  value: any(str(), int(), bool())
-  reference: str(required=False)
+  name: str() # NX-API attribute name
+  value: any(str(), int(), bool()) # Attribute value
+  reference: str(required=False) # Reference to a test prerequisite attribute value

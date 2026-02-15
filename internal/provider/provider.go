@@ -267,7 +267,7 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		)
 		return
 	}
-	data.Devices[""] = &NxosProviderDataDevice{Client: &c, Managed: true}
+	data.Devices[""] = &NxosProviderDataDevice{Client: c, Managed: true}
 
 	for _, device := range config.Devices {
 		var managed bool
@@ -284,7 +284,7 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 			)
 			return
 		}
-		data.Devices[device.Name.ValueString()] = &NxosProviderDataDevice{Client: &c, Managed: managed}
+		data.Devices[device.Name.ValueString()] = &NxosProviderDataDevice{Client: c, Managed: managed}
 	}
 
 	resp.DataSourceData = &data
@@ -327,6 +327,7 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewEVPNVNIResource,
 		NewEVPNVNIRouteTargetResource,
 		NewEVPNVNIRouteTargetDirectionResource,
+		NewFeatureBashShellResource,
 		NewFeatureBFDResource,
 		NewFeatureBGPResource,
 		NewFeatureDHCPResource,
@@ -347,6 +348,7 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewFeaturePIMResource,
 		NewFeaturePTPResource,
 		NewFeaturePVLANResource,
+		NewFeatureSFlowResource,
 		NewFeatureSSHResource,
 		NewFeatureTACACSResource,
 		NewFeatureTelnetResource,
@@ -361,7 +363,6 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewICMPv4InterfaceResource,
 		NewICMPv4VRFResource,
 		NewIPv4AccessListResource,
-		NewIPv4AccessListEntryResource,
 		NewIPv4AccessListPolicyEgressInterfaceResource,
 		NewIPv4AccessListPolicyIngressInterfaceResource,
 		NewIPv4InterfaceResource,
@@ -381,6 +382,9 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewISISOverloadResource,
 		NewISISVRFResource,
 		NewLoggingResource,
+		NewKeychainResource,
+		NewKeychainKeyResource,
+		NewKeychainManagerResource,
 		NewLoopbackInterfaceResource,
 		NewLoopbackInterfaceVRFResource,
 		NewNTPServerResource,
@@ -393,6 +397,7 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewOSPFAuthenticationResource,
 		NewOSPFInstanceResource,
 		NewOSPFInterfaceResource,
+		NewOSPFMaxMetricResource,
 		NewOSPFVRFResource,
 		NewOSPFv3Resource,
 		NewOSPFv3AreaResource,
@@ -484,6 +489,7 @@ func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.Data
 		NewEVPNVNIDataSource,
 		NewEVPNVNIRouteTargetDataSource,
 		NewEVPNVNIRouteTargetDirectionDataSource,
+		NewFeatureBashShellDataSource,
 		NewFeatureBFDDataSource,
 		NewFeatureBGPDataSource,
 		NewFeatureDHCPDataSource,
@@ -504,6 +510,7 @@ func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.Data
 		NewFeaturePIMDataSource,
 		NewFeaturePTPDataSource,
 		NewFeaturePVLANDataSource,
+		NewFeatureSFlowDataSource,
 		NewFeatureSSHDataSource,
 		NewFeatureTACACSDataSource,
 		NewFeatureTelnetDataSource,
@@ -518,7 +525,6 @@ func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.Data
 		NewICMPv4InterfaceDataSource,
 		NewICMPv4VRFDataSource,
 		NewIPv4AccessListDataSource,
-		NewIPv4AccessListEntryDataSource,
 		NewIPv4AccessListPolicyEgressInterfaceDataSource,
 		NewIPv4AccessListPolicyIngressInterfaceDataSource,
 		NewIPv4InterfaceDataSource,
@@ -537,7 +543,9 @@ func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.Data
 		NewISISInterfaceDataSource,
 		NewISISOverloadDataSource,
 		NewISISVRFDataSource,
-		NewLoggingDataSource,
+		NewKeychainDataSource,
+		NewKeychainKeyDataSource,
+		NewKeychainManagerDataSource,
 		NewLoopbackInterfaceDataSource,
 		NewLoopbackInterfaceVRFDataSource,
 		NewNTPServerDataSource,
@@ -550,6 +558,7 @@ func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.Data
 		NewOSPFAuthenticationDataSource,
 		NewOSPFInstanceDataSource,
 		NewOSPFInterfaceDataSource,
+		NewOSPFMaxMetricDataSource,
 		NewOSPFVRFDataSource,
 		NewOSPFv3DataSource,
 		NewOSPFv3AreaDataSource,

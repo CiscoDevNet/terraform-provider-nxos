@@ -7,6 +7,19 @@ description: |-
 
 # Changelog
 
+## Unreleased
+
+- BREAKING CHANGE: Remove `nxos_ipv4_access_list_entry` resource and data source, entries are now managed as child classes of `nxos_ipv4_access_list`
+- Add `nxos_keychain` resource and data source
+- Add `nxos_keychain_key` resource and data source
+- Add `nxos_keychain_manager` resource and data source
+- Add `nxos_ospf_max_metric` resource and data source
+- Add `log_adjacency_changes` attribute to `nxos_ospf_vrf` resource and data source
+- Add `nxos_feature_bash_shell` resource and data source
+- Add `nxos_feature_sflow` resource and data source
+- Fix `nxos_icmpv4_interface` controls
+- Update `go-nxos` client to improve HTTP connection reuse under Terraform parallelism
+
 ## 0.5.10
 
 - Add `nxos_ipv6_interface` resource and data source

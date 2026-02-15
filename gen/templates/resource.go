@@ -133,6 +133,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 			},
 			{{- end}}
 			{{- range .ChildClasses}}
+			{{- if len .Attributes}}
 			{{- if eq .Type "single"}}
 			{{- range  .Attributes}}
 			"{{.TfName}}": schema.{{.Type}}Attribute{
@@ -239,6 +240,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 					},
 				},
 			},
+			{{- end}}
 			{{- end}}
 			{{- end}}
 		},

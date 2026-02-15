@@ -11,6 +11,8 @@ parents:
 children:
   - OSPF Interface
   - OSPF Area
+  - OSPF Keychain
+  - OSPF Max Metric
 references:
   - VRF
 attributes:
@@ -27,6 +29,16 @@ attributes:
     id: true
     description: 'VRF name.'
     example: VRF1
+  - nxos_name: adjChangeLogLevel
+    tf_name: log_adjacency_changes
+    type: String
+    description: 'Log level for adjacency changes.'
+    enum_values:
+      - none
+      - brief
+      - detail
+    default_value: none
+    example: brief
   - nxos_name: adminSt
     tf_name: admin_state
     type: String

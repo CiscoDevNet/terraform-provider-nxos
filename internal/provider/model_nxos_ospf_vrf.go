@@ -36,6 +36,7 @@ type OSPFVRF struct {
 	Dn                     types.String `tfsdk:"id"`
 	InstanceName           types.String `tfsdk:"instance_name"`
 	Name                   types.String `tfsdk:"name"`
+	LogAdjacencyChanges    types.String `tfsdk:"log_adjacency_changes"`
 	AdminState             types.String `tfsdk:"admin_state"`
 	BandwidthReference     types.Int64  `tfsdk:"bandwidth_reference"`
 	BandwidthReferenceUnit types.String `tfsdk:"bandwidth_reference_unit"`
@@ -60,6 +61,9 @@ func (data OSPFVRF) toBody(statusReplace bool) nxos.Body {
 	}
 	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
+	}
+	if (!data.LogAdjacencyChanges.IsUnknown() && !data.LogAdjacencyChanges.IsNull()) || true {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adjChangeLogLevel", data.LogAdjacencyChanges.ValueString())
 	}
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
@@ -88,6 +92,11 @@ func (data *OSPFVRF) fromBody(res gjson.Result, all bool) {
 		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
 		data.Name = types.StringNull()
+	}
+	if !data.LogAdjacencyChanges.IsNull() || all {
+		data.LogAdjacencyChanges = types.StringValue(res.Get(data.getClassName() + ".attributes.adjChangeLogLevel").String())
+	} else {
+		data.LogAdjacencyChanges = types.StringNull()
 	}
 	if !data.AdminState.IsNull() || all {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())

@@ -72,7 +72,7 @@ func (data IPv6StaticRoute) toBody(statusReplace bool) nxos.Body {
 	}
 	var attrs string
 	for _, child := range data.NextHops {
-		attrs = ""
+		attrs = "{}"
 		if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || true {
 			attrs, _ = sjson.Set(attrs, "nhIf", child.InterfaceId.ValueString())
 		}

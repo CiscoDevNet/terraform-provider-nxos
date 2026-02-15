@@ -50,6 +50,8 @@ resource "nxos_keychain_key" "example" {
 
 Import is supported using the following syntax:
 
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
 terraform import nxos_keychain_key.example "sys/kcmgr/keychains/classickeychain-[KEYCHAIN1]/classickeyid-[1]"
 ```

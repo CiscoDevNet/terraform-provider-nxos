@@ -69,6 +69,15 @@ resource "nxos_bgp_route_redistribution" "example" {
 
 Import is supported using the following syntax:
 
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = nxos_bgp_route_redistribution.example
+  id = "sys/bgp/inst/dom-[default]/af-[ipv4-ucast]/interleak-[ospf]-interleak-[OSPF1]"
+}
+```
+
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell

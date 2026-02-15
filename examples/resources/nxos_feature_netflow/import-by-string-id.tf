@@ -1,0 +1,4 @@
+import {
+  to = nxos_feature_netflow.example
+  id = "sys/fm/netflow"
+}

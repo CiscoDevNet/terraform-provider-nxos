@@ -60,6 +60,15 @@ resource "nxos_bgp_peer_address_family_route_control" "example" {
 
 Import is supported using the following syntax:
 
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = nxos_bgp_peer_address_family_route_control.example
+  id = "sys/bgp/inst/dom-[default]/peer-[192.168.0.1]/af-[ipv4-ucast]/rtctrl-[in]"
+}
+```
+
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell

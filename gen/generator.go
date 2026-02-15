@@ -92,6 +92,11 @@ var templates = []t{
 		prefix: "./examples/resources/nxos_",
 		suffix: "/import.sh",
 	},
+	{
+		path:   "./gen/templates/import-by-string-id.tf",
+		prefix: "./examples/resources/nxos_",
+		suffix: "/import-by-string-id.tf",
+	},
 }
 
 type YamlConfig struct {

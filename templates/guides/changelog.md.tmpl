@@ -20,6 +20,7 @@ description: |-
 - Add `nxos_logging` resource and data source
 - Fix `nxos_icmpv4_interface` controls
 - Add `selected_devices` provider configuration attribute
+- Add support for device-specific imports using comma separator (e.g., `sys/bgp,LEAF-1`)
 - Update `go-nxos` client to improve HTTP connection reuse under Terraform parallelism
 
 ## 0.5.10

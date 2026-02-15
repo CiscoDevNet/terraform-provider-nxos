@@ -139,6 +139,7 @@ type YamlConfigChildClass struct {
 	Type        string                `yaml:"type"`
 	TfName      string                `yaml:"tf_name"`
 	Description string                `yaml:"description"`
+	Mandatory   bool                  `yaml:"mandatory"`
 	Attributes  []YamlConfigAttribute `yaml:"attributes"`
 }
 

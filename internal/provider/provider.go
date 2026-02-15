@@ -381,6 +381,7 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewISISInterfaceResource,
 		NewISISOverloadResource,
 		NewISISVRFResource,
+		NewLoggingResource,
 		NewKeychainResource,
 		NewKeychainKeyResource,
 		NewKeychainManagerResource,

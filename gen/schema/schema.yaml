@@ -42,6 +42,7 @@ child_classes:
   type: enum('single', 'list', required=False) # Cardinality of the child class
   tf_name: str(required=False) # Terraform attribute name for the child class
   description: str(required=False) # Description of the child class
+  mandatory: bool(required=False) # Set to true if the child class(es) are mandatory
   attributes: list(include('attribute'), required=False) # List of child class attributes
 
 test_prerequisite:

@@ -267,7 +267,7 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		)
 		return
 	}
-	data.Devices[""] = &NxosProviderDataDevice{Client: &c, Managed: true}
+	data.Devices[""] = &NxosProviderDataDevice{Client: c, Managed: true}
 
 	for _, device := range config.Devices {
 		var managed bool
@@ -284,7 +284,7 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 			)
 			return
 		}
-		data.Devices[device.Name.ValueString()] = &NxosProviderDataDevice{Client: &c, Managed: managed}
+		data.Devices[device.Name.ValueString()] = &NxosProviderDataDevice{Client: c, Managed: managed}
 	}
 
 	resp.DataSourceData = &data

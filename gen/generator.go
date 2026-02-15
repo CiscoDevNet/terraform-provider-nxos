@@ -288,6 +288,11 @@ func renderTemplate(templatePath, outputPath string, config interface{}) {
 }
 
 func main() {
+	resourceName := ""
+	if len(os.Args) == 2 {
+		resourceName = os.Args[1]
+	}
+
 	items, _ := ioutil.ReadDir(definitionsPath)
 	configs := make([]YamlConfig, len(items))
 	// Iterate over definitions
@@ -306,6 +311,9 @@ func main() {
 	}
 
 	for _, config := range configs {
+		if resourceName != "" && config.Name != resourceName {
+			continue
+		}
 		// Iterate over templates
 		for _, t := range templates {
 			renderTemplate(t.path, t.prefix+SnakeCase(config.Name)+t.suffix, config)

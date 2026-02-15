@@ -1,5 +1,6 @@
 ## Unreleased
 
+- BREAKING CHANGE: Remove `nxos_ipv4_access_list_entry` resource and data source, entries are now managed as child classes of `nxos_ipv4_access_list`
 - Add `nxos_keychain` resource and data source
 - Add `nxos_keychain_key` resource and data source
 - Add `nxos_keychain_manager` resource and data source

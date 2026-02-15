@@ -111,7 +111,7 @@ func (data IPv4AccessList) toBody(statusReplace bool) nxos.Body {
 	}
 	var attrs string
 	for _, child := range data.Entries {
-		attrs = ""
+		attrs = "{}"
 		if (!child.Sequence.IsUnknown() && !child.Sequence.IsNull()) || true {
 			attrs, _ = sjson.Set(attrs, "seqNum", strconv.FormatInt(child.Sequence.ValueInt64(), 10))
 		}

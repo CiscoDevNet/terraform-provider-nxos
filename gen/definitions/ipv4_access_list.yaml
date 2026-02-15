@@ -706,4 +706,3 @@ child_classes:
         exclude_test: true
         default_value: invalid
         example: invalid
-test_prerequisites: []

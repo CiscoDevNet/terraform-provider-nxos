@@ -19,6 +19,7 @@ description: |-
 - Add `nxos_feature_sflow` resource and data source
 - Add `nxos_logging` resource and data source
 - Fix `nxos_icmpv4_interface` controls
+- Add `selected_devices` provider configuration attribute
 - Update `go-nxos` client to improve HTTP connection reuse under Terraform parallelism
 
 ## 0.5.10

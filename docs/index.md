@@ -40,6 +40,7 @@ provider "nxos" {
 - `insecure` (Boolean) Allow insecure HTTPS client. This can also be set as the NXOS_INSECURE environment variable. Defaults to `true`.
 - `password` (String, Sensitive) Password for the NX-OS device account. This can also be set as the NXOS_PASSWORD environment variable.
 - `retries` (Number) Number of retries for REST API calls. This can also be set as the NXOS_RETRIES environment variable. Defaults to `3`.
+- `selected_devices` (List of String) This can be used to select a list of devices to manage from the `devices` list. Selected devices will be managed while other devices will be skipped and their state will be frozen. This can be used to deploy changes to a subset of devices. Defaults to all devices.
 - `url` (String) URL of the Cisco NX-OS device. This can also be set as the NXOS_URL environment variable. If no URL is provided, the URL of the first device from the `devices` list is being used.
 - `username` (String) Username for the NX-OS device account. This can also be set as the NXOS_USERNAME environment variable.
 

@@ -74,3 +74,77 @@ resource "nxos_bridge_domain" "VLAN10" {
   name         = "VLAN010"
 }
 ```
+
+## Device-Level Management Control
+
+### The "managed" Flag
+
+Each device in the `devices` list supports an optional `managed` attribute that controls whether the device is actively managed by Terraform:
+
+- **`managed = true`** (default): Device is actively managed - configurations are applied
+- **`managed = false`**: Device is "frozen" - state preserved but no changes applied
+- **Not specified**: Defaults to `true`
+
+### Basic Managed Flag Usage
+
+```hcl
+locals {
+  devices = [
+    {
+      name    = "LEAF-01"
+      url     = "https://10.1.1.10"
+      managed = true   # Actively managed
+    },
+    {
+      name    = "LEAF-02"
+      url     = "https://10.1.1.20"
+      managed = false  # Temporarily frozen for maintenance
+    },
+    {
+      name    = "SPINE-01"
+      url     = "https://10.1.1.30"
+      # managed defaults to true when not specified
+    }
+  ]
+}
+
+provider "nxos" {
+  username = "admin"
+  password = "Cisco123"
+  devices  = local.devices
+}
+
+resource "nxos_bridge_domain" "VLAN10" {
+  for_each     = toset([for device in local.devices : device.name])
+  device       = each.key
+  fabric_encap = "vlan-10"
+  name         = "VLAN010"
+}
+```
+
+**Result**:
+- `LEAF-01` and `SPINE-01`: Configuration applied
+- `LEAF-02`: Configuration skipped, existing state preserved
+
+### Relationship with `selected_devices`
+
+**Important**: The [`selected_devices` provider attribute](selective_deploy.md) takes precedence over individual `managed` flags:
+
+- **When `selected_devices` is specified**: Individual `managed` flags are ignored
+- **When `selected_devices` is not specified**: Individual `managed` flags are respected
+
+#### Example: selected_devices Override
+```hcl
+provider "nxos" {
+  username         = "admin"
+  password         = "Cisco123"
+  selected_devices = ["LEAF-01", "SPINE-01"]  # Only these devices managed
+  devices = [
+    { name = "LEAF-01", url = "https://10.1.1.10", managed = false },  # Overridden to managed=true
+    { name = "LEAF-02", url = "https://10.1.1.20", managed = true },   # Overridden to managed=false
+    { name = "SPINE-01", url = "https://10.1.1.30", managed = true }   # Remains managed=true
+  ]
+}
+```
+
+**Result**: Only `LEAF-01` and `SPINE-01` are managed, regardless of their individual `managed` flags.

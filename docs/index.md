@@ -31,6 +31,7 @@ All resources and data sources have been tested with the following releases.
 
 The following guides are available to help you get started with the NXOS provider:
 
+- **[Getting Started](guides/getting_started)** - A simple example demonstrating how to configure system settings, enable features, and create interfaces and VRFs
 - **[Manage Multiple Devices](guides/manage_multiple_devices)** - Learn how to manage multiple NX-OS devices using provider aliases or the single-provider approach with device-level management control
 - **[Selective Deploy](guides/selective_deploy)** - Deploy configurations to a subset of devices while keeping others in a "frozen" state for staged rollouts and maintenance scenarios
 - **[Importing Resources](guides/importing_resources)** - Import existing device configurations into Terraform state management

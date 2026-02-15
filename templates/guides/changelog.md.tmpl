@@ -17,6 +17,7 @@ description: |-
 - Add `log_adjacency_changes` attribute to `nxos_ospf_vrf` resource and data source
 - Add `nxos_feature_bash_shell` resource and data source
 - Add `nxos_feature_sflow` resource and data source
+- Add `nxos_logging` resource and data source
 - Fix `nxos_icmpv4_interface` controls
 - Update `go-nxos` client to improve HTTP connection reuse under Terraform parallelism
 

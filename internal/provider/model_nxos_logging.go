@@ -67,7 +67,7 @@ func (data Logging) toBody(statusReplace bool) nxos.Body {
 	}
 	var attrs string
 	for _, child := range data.Facilities {
-		attrs = ""
+		attrs = "{}"
 		if (!child.Name.IsUnknown() && !child.Name.IsNull()) || true {
 			attrs, _ = sjson.Set(attrs, "facilityName", child.Name.ValueString())
 		}

@@ -74,12 +74,12 @@ resource "nxos_ipv4_access_list" "example" {
 
 ### Required
 
-- `entries` (Attributes List) Access list entries. (see [below for nested schema](#nestedatt--entries))
 - `name` (String) Access list name.
 
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
+- `entries` (Attributes List) Access list entries. (see [below for nested schema](#nestedatt--entries))
 
 ### Read-Only
 

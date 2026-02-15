@@ -44,4 +44,5 @@ data "nxos_ospf_vrf" "example" {
   - Multiple values (comma-separated). Example: `bfd,default-passive`. In this case values must be in alphabetical order.
 - `distance` (Number) Administrative distance preference.
 - `id` (String) The distinguished name of the object.
+- `log_adjacency_changes` (String) Log level for adjacency changes.
 - `router_id` (String) Router ID.

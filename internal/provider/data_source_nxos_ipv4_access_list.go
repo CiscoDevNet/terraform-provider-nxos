@@ -67,6 +67,198 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 				MarkdownDescription: "Access list name.",
 				Required:            true,
 			},
+			"entries": schema.ListNestedAttribute{
+				MarkdownDescription: "Access list entries.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"sequence": schema.Int64Attribute{
+							MarkdownDescription: "Sequence ID.",
+							Computed:            true,
+						},
+						"ack": schema.BoolAttribute{
+							MarkdownDescription: "Match TCP ACK flag.",
+							Computed:            true,
+						},
+						"action": schema.StringAttribute{
+							MarkdownDescription: "Action.",
+							Computed:            true,
+						},
+						"dscp": schema.Int64Attribute{
+							MarkdownDescription: "Match DSCP.",
+							Computed:            true,
+						},
+						"destination_address_group": schema.StringAttribute{
+							MarkdownDescription: "Destination address group.",
+							Computed:            true,
+						},
+						"destination_port_1": schema.StringAttribute{
+							MarkdownDescription: "First destination port number or name.",
+							Computed:            true,
+						},
+						"destination_port_2": schema.StringAttribute{
+							MarkdownDescription: "Second destination port number or name.",
+							Computed:            true,
+						},
+						"destination_port_group": schema.StringAttribute{
+							MarkdownDescription: "Destination port group.",
+							Computed:            true,
+						},
+						"destination_port_mask": schema.StringAttribute{
+							MarkdownDescription: "Destination port mask number or name.",
+							Computed:            true,
+						},
+						"destination_port_operator": schema.StringAttribute{
+							MarkdownDescription: "Destination port operator.",
+							Computed:            true,
+						},
+						"destination_prefix": schema.StringAttribute{
+							MarkdownDescription: "Destination prefix.",
+							Computed:            true,
+						},
+						"destination_prefix_length": schema.StringAttribute{
+							MarkdownDescription: "Destination prefix length.",
+							Computed:            true,
+						},
+						"destination_prefix_mask": schema.StringAttribute{
+							MarkdownDescription: "Destination prefix mask.",
+							Computed:            true,
+						},
+						"established": schema.BoolAttribute{
+							MarkdownDescription: "Match TCP EST flag.",
+							Computed:            true,
+						},
+						"fin": schema.BoolAttribute{
+							MarkdownDescription: "Match TCP FIN flag.",
+							Computed:            true,
+						},
+						"fragment": schema.BoolAttribute{
+							MarkdownDescription: "Match non-initial fragment.",
+							Computed:            true,
+						},
+						"http_option_type": schema.StringAttribute{
+							MarkdownDescription: "HTTP option method.",
+							Computed:            true,
+						},
+						"icmp_code": schema.Int64Attribute{
+							MarkdownDescription: "ICMP code.",
+							Computed:            true,
+						},
+						"icmp_type": schema.Int64Attribute{
+							MarkdownDescription: "ICMP type.",
+							Computed:            true,
+						},
+						"log": schema.BoolAttribute{
+							MarkdownDescription: "Log matches against ACL entry.",
+							Computed:            true,
+						},
+						"packet_length_1": schema.StringAttribute{
+							MarkdownDescription: "First packet length. Either `invalid` or a number between 19 and 9210.",
+							Computed:            true,
+						},
+						"packet_length_2": schema.StringAttribute{
+							MarkdownDescription: "Second packet length. Either `invalid` or a number between 19 and 9210.",
+							Computed:            true,
+						},
+						"packet_length_operator": schema.StringAttribute{
+							MarkdownDescription: "Packet length operator.",
+							Computed:            true,
+						},
+						"precedence": schema.StringAttribute{
+							MarkdownDescription: "Precedence. Either `unspecified` or a number between 0 and 7.",
+							Computed:            true,
+						},
+						"protocol": schema.StringAttribute{
+							MarkdownDescription: "Protocol name or number.",
+							Computed:            true,
+						},
+						"protocol_mask": schema.StringAttribute{
+							MarkdownDescription: "Protocol mask name or number.",
+							Computed:            true,
+						},
+						"psh": schema.BoolAttribute{
+							MarkdownDescription: "Match TCP PSH flag.",
+							Computed:            true,
+						},
+						"redirect": schema.StringAttribute{
+							MarkdownDescription: "Redirect action.",
+							Computed:            true,
+						},
+						"remark": schema.StringAttribute{
+							MarkdownDescription: "ACL comment.",
+							Computed:            true,
+						},
+						"rev": schema.BoolAttribute{
+							MarkdownDescription: "Match TCP REV flag.",
+							Computed:            true,
+						},
+						"rst": schema.BoolAttribute{
+							MarkdownDescription: "Match TCP RST flag.",
+							Computed:            true,
+						},
+						"source_address_group": schema.StringAttribute{
+							MarkdownDescription: "Source address group.",
+							Computed:            true,
+						},
+						"source_port_1": schema.StringAttribute{
+							MarkdownDescription: "First source port name or number.",
+							Computed:            true,
+						},
+						"source_port_2": schema.StringAttribute{
+							MarkdownDescription: "Second source port name or number.",
+							Computed:            true,
+						},
+						"source_port_group": schema.StringAttribute{
+							MarkdownDescription: "Source port group.",
+							Computed:            true,
+						},
+						"source_port_mask": schema.StringAttribute{
+							MarkdownDescription: "Source port mask name or number.",
+							Computed:            true,
+						},
+						"source_port_operator": schema.StringAttribute{
+							MarkdownDescription: "Source port operator.",
+							Computed:            true,
+						},
+						"source_prefix": schema.StringAttribute{
+							MarkdownDescription: "Source prefix.",
+							Computed:            true,
+						},
+						"source_prefix_length": schema.StringAttribute{
+							MarkdownDescription: "Source prefix length.",
+							Computed:            true,
+						},
+						"source_prefix_mask": schema.StringAttribute{
+							MarkdownDescription: "Source prefix mask.",
+							Computed:            true,
+						},
+						"syn": schema.BoolAttribute{
+							MarkdownDescription: "Match TCP SYN flag.",
+							Computed:            true,
+						},
+						"time_range": schema.StringAttribute{
+							MarkdownDescription: "Time range name.",
+							Computed:            true,
+						},
+						"ttl": schema.Int64Attribute{
+							MarkdownDescription: "TTL.",
+							Computed:            true,
+						},
+						"urg": schema.BoolAttribute{
+							MarkdownDescription: "Match TCP URG flag.",
+							Computed:            true,
+						},
+						"vlan": schema.Int64Attribute{
+							MarkdownDescription: "VLAN ID.",
+							Computed:            true,
+						},
+						"vni": schema.StringAttribute{
+							MarkdownDescription: "NVE VNI ID. Either `invalid` or a number between 0 and 16777216.",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -98,6 +290,7 @@ func (d *IPv4AccessListDataSource) Read(ctx context.Context, req datasource.Read
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "children"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

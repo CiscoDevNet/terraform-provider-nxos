@@ -176,7 +176,6 @@ func (r *OSPFAuthenticationResource) Configure(ctx context.Context, req resource
 
 func (r *OSPFAuthenticationResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan OSPFAuthentication
-	var identity OSPFAuthenticationIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -204,6 +203,7 @@ func (r *OSPFAuthenticationResource) Create(ctx context.Context, req resource.Cr
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	var identity OSPFAuthenticationIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -218,7 +218,6 @@ func (r *OSPFAuthenticationResource) Create(ctx context.Context, req resource.Cr
 
 func (r *OSPFAuthenticationResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state OSPFAuthentication
-	var identity OSPFAuthenticationIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -227,13 +226,15 @@ func (r *OSPFAuthenticationResource) Read(ctx context.Context, req resource.Read
 		return
 	}
 
-	// Read identity
-	diags = req.Identity.Get(ctx, &identity)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity OSPFAuthenticationIdentity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
-
-	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -258,6 +259,7 @@ func (r *OSPFAuthenticationResource) Read(ctx context.Context, req resource.Read
 		state.fromBody(res, imp)
 	}
 
+	var identity OSPFAuthenticationIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

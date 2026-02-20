@@ -106,7 +106,6 @@ func (r *IPv6VRFResource) Configure(ctx context.Context, req resource.ConfigureR
 
 func (r *IPv6VRFResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan IPv6VRF
-	var identity IPv6VRFIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -134,6 +133,7 @@ func (r *IPv6VRFResource) Create(ctx context.Context, req resource.CreateRequest
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	var identity IPv6VRFIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -148,7 +148,6 @@ func (r *IPv6VRFResource) Create(ctx context.Context, req resource.CreateRequest
 
 func (r *IPv6VRFResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state IPv6VRF
-	var identity IPv6VRFIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -157,13 +156,15 @@ func (r *IPv6VRFResource) Read(ctx context.Context, req resource.ReadRequest, re
 		return
 	}
 
-	// Read identity
-	diags = req.Identity.Get(ctx, &identity)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity IPv6VRFIdentity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
-
-	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -188,6 +189,7 @@ func (r *IPv6VRFResource) Read(ctx context.Context, req resource.ReadRequest, re
 		state.fromBody(res, imp)
 	}
 
+	var identity IPv6VRFIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

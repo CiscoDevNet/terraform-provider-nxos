@@ -156,7 +156,6 @@ func (r *BGPPeerTemplateAddressFamilyResource) Configure(ctx context.Context, re
 
 func (r *BGPPeerTemplateAddressFamilyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan BGPPeerTemplateAddressFamily
-	var identity BGPPeerTemplateAddressFamilyIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -184,6 +183,7 @@ func (r *BGPPeerTemplateAddressFamilyResource) Create(ctx context.Context, req r
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	var identity BGPPeerTemplateAddressFamilyIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -198,7 +198,6 @@ func (r *BGPPeerTemplateAddressFamilyResource) Create(ctx context.Context, req r
 
 func (r *BGPPeerTemplateAddressFamilyResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state BGPPeerTemplateAddressFamily
-	var identity BGPPeerTemplateAddressFamilyIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -207,13 +206,15 @@ func (r *BGPPeerTemplateAddressFamilyResource) Read(ctx context.Context, req res
 		return
 	}
 
-	// Read identity
-	diags = req.Identity.Get(ctx, &identity)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity BGPPeerTemplateAddressFamilyIdentity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
-
-	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -238,6 +239,7 @@ func (r *BGPPeerTemplateAddressFamilyResource) Read(ctx context.Context, req res
 		state.fromBody(res, imp)
 	}
 
+	var identity BGPPeerTemplateAddressFamilyIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

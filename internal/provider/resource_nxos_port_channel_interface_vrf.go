@@ -110,7 +110,6 @@ func (r *PortChannelInterfaceVRFResource) Configure(ctx context.Context, req res
 
 func (r *PortChannelInterfaceVRFResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan PortChannelInterfaceVRF
-	var identity PortChannelInterfaceVRFIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -138,6 +137,7 @@ func (r *PortChannelInterfaceVRFResource) Create(ctx context.Context, req resour
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	var identity PortChannelInterfaceVRFIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -152,7 +152,6 @@ func (r *PortChannelInterfaceVRFResource) Create(ctx context.Context, req resour
 
 func (r *PortChannelInterfaceVRFResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state PortChannelInterfaceVRF
-	var identity PortChannelInterfaceVRFIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -161,13 +160,15 @@ func (r *PortChannelInterfaceVRFResource) Read(ctx context.Context, req resource
 		return
 	}
 
-	// Read identity
-	diags = req.Identity.Get(ctx, &identity)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity PortChannelInterfaceVRFIdentity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
-
-	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -192,6 +193,7 @@ func (r *PortChannelInterfaceVRFResource) Read(ctx context.Context, req resource
 		state.fromBody(res, imp)
 	}
 
+	var identity PortChannelInterfaceVRFIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

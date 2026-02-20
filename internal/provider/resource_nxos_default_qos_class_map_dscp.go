@@ -117,7 +117,6 @@ func (r *DefaultQOSClassMapDSCPResource) Configure(ctx context.Context, req reso
 
 func (r *DefaultQOSClassMapDSCPResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan DefaultQOSClassMapDSCP
-	var identity DefaultQOSClassMapDSCPIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -145,6 +144,7 @@ func (r *DefaultQOSClassMapDSCPResource) Create(ctx context.Context, req resourc
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	var identity DefaultQOSClassMapDSCPIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -159,7 +159,6 @@ func (r *DefaultQOSClassMapDSCPResource) Create(ctx context.Context, req resourc
 
 func (r *DefaultQOSClassMapDSCPResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state DefaultQOSClassMapDSCP
-	var identity DefaultQOSClassMapDSCPIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -168,13 +167,15 @@ func (r *DefaultQOSClassMapDSCPResource) Read(ctx context.Context, req resource.
 		return
 	}
 
-	// Read identity
-	diags = req.Identity.Get(ctx, &identity)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity DefaultQOSClassMapDSCPIdentity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
-
-	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -199,6 +200,7 @@ func (r *DefaultQOSClassMapDSCPResource) Read(ctx context.Context, req resource.
 		state.fromBody(res, imp)
 	}
 
+	var identity DefaultQOSClassMapDSCPIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

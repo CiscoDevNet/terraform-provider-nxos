@@ -129,7 +129,6 @@ func (r *ISISOverloadResource) Configure(ctx context.Context, req resource.Confi
 
 func (r *ISISOverloadResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan ISISOverload
-	var identity ISISOverloadIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -157,6 +156,7 @@ func (r *ISISOverloadResource) Create(ctx context.Context, req resource.CreateRe
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	var identity ISISOverloadIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -171,7 +171,6 @@ func (r *ISISOverloadResource) Create(ctx context.Context, req resource.CreateRe
 
 func (r *ISISOverloadResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state ISISOverload
-	var identity ISISOverloadIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -180,13 +179,15 @@ func (r *ISISOverloadResource) Read(ctx context.Context, req resource.ReadReques
 		return
 	}
 
-	// Read identity
-	diags = req.Identity.Get(ctx, &identity)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity ISISOverloadIdentity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
-
-	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -211,6 +212,7 @@ func (r *ISISOverloadResource) Read(ctx context.Context, req resource.ReadReques
 		state.fromBody(res, imp)
 	}
 
+	var identity ISISOverloadIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

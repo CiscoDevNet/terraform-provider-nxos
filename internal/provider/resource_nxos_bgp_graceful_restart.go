@@ -138,7 +138,6 @@ func (r *BGPGracefulRestartResource) Configure(ctx context.Context, req resource
 
 func (r *BGPGracefulRestartResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan BGPGracefulRestart
-	var identity BGPGracefulRestartIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -166,6 +165,7 @@ func (r *BGPGracefulRestartResource) Create(ctx context.Context, req resource.Cr
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	var identity BGPGracefulRestartIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -180,7 +180,6 @@ func (r *BGPGracefulRestartResource) Create(ctx context.Context, req resource.Cr
 
 func (r *BGPGracefulRestartResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state BGPGracefulRestart
-	var identity BGPGracefulRestartIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -189,13 +188,15 @@ func (r *BGPGracefulRestartResource) Read(ctx context.Context, req resource.Read
 		return
 	}
 
-	// Read identity
-	diags = req.Identity.Get(ctx, &identity)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity BGPGracefulRestartIdentity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
-
-	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -220,6 +221,7 @@ func (r *BGPGracefulRestartResource) Read(ctx context.Context, req resource.Read
 		state.fromBody(res, imp)
 	}
 
+	var identity BGPGracefulRestartIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

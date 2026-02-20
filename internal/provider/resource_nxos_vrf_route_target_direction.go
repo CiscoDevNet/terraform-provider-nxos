@@ -150,7 +150,6 @@ func (r *VRFRouteTargetDirectionResource) Configure(ctx context.Context, req res
 
 func (r *VRFRouteTargetDirectionResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan VRFRouteTargetDirection
-	var identity VRFRouteTargetDirectionIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -178,6 +177,7 @@ func (r *VRFRouteTargetDirectionResource) Create(ctx context.Context, req resour
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	var identity VRFRouteTargetDirectionIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -192,7 +192,6 @@ func (r *VRFRouteTargetDirectionResource) Create(ctx context.Context, req resour
 
 func (r *VRFRouteTargetDirectionResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state VRFRouteTargetDirection
-	var identity VRFRouteTargetDirectionIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -201,13 +200,15 @@ func (r *VRFRouteTargetDirectionResource) Read(ctx context.Context, req resource
 		return
 	}
 
-	// Read identity
-	diags = req.Identity.Get(ctx, &identity)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity VRFRouteTargetDirectionIdentity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
-
-	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -232,6 +233,7 @@ func (r *VRFRouteTargetDirectionResource) Read(ctx context.Context, req resource
 		state.fromBody(res, imp)
 	}
 
+	var identity VRFRouteTargetDirectionIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

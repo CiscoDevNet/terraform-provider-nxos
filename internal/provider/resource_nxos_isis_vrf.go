@@ -228,7 +228,6 @@ func (r *ISISVRFResource) Configure(ctx context.Context, req resource.ConfigureR
 
 func (r *ISISVRFResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan ISISVRF
-	var identity ISISVRFIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -256,6 +255,7 @@ func (r *ISISVRFResource) Create(ctx context.Context, req resource.CreateRequest
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	var identity ISISVRFIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -270,7 +270,6 @@ func (r *ISISVRFResource) Create(ctx context.Context, req resource.CreateRequest
 
 func (r *ISISVRFResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state ISISVRF
-	var identity ISISVRFIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -279,13 +278,15 @@ func (r *ISISVRFResource) Read(ctx context.Context, req resource.ReadRequest, re
 		return
 	}
 
-	// Read identity
-	diags = req.Identity.Get(ctx, &identity)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity ISISVRFIdentity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
-
-	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -310,6 +311,7 @@ func (r *ISISVRFResource) Read(ctx context.Context, req resource.ReadRequest, re
 		state.fromBody(res, imp)
 	}
 
+	var identity ISISVRFIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

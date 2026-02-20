@@ -256,7 +256,6 @@ func (r *{{camelCase .Name}}Resource) Configure(ctx context.Context, req resourc
 
 func (r *{{camelCase .Name}}Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan {{camelCase .Name}}
-	var identity {{camelCase .Name}}Identity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -284,6 +283,7 @@ func (r *{{camelCase .Name}}Resource) Create(ctx context.Context, req resource.C
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	var identity {{camelCase .Name}}Identity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -298,7 +298,6 @@ func (r *{{camelCase .Name}}Resource) Create(ctx context.Context, req resource.C
 
 func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state {{camelCase .Name}}
-	var identity {{camelCase .Name}}Identity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -307,13 +306,15 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 		return
 	}
 
-	// Read identity
-	diags = req.Identity.Get(ctx, &identity)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity {{camelCase .Name}}Identity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
-
-	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -345,6 +346,7 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 		state.fromBody(res, imp)
 	}
 
+	var identity {{camelCase .Name}}Identity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

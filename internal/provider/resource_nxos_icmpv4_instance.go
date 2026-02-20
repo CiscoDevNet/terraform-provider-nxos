@@ -107,7 +107,6 @@ func (r *ICMPv4InstanceResource) Configure(ctx context.Context, req resource.Con
 
 func (r *ICMPv4InstanceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan ICMPv4Instance
-	var identity ICMPv4InstanceIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -135,6 +134,7 @@ func (r *ICMPv4InstanceResource) Create(ctx context.Context, req resource.Create
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	var identity ICMPv4InstanceIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -149,7 +149,6 @@ func (r *ICMPv4InstanceResource) Create(ctx context.Context, req resource.Create
 
 func (r *ICMPv4InstanceResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state ICMPv4Instance
-	var identity ICMPv4InstanceIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -158,13 +157,15 @@ func (r *ICMPv4InstanceResource) Read(ctx context.Context, req resource.ReadRequ
 		return
 	}
 
-	// Read identity
-	diags = req.Identity.Get(ctx, &identity)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity ICMPv4InstanceIdentity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
-
-	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -189,6 +190,7 @@ func (r *ICMPv4InstanceResource) Read(ctx context.Context, req resource.ReadRequ
 		state.fromBody(res, imp)
 	}
 
+	var identity ICMPv4InstanceIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

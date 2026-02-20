@@ -143,7 +143,6 @@ func (r *BGPPeerTemplateResource) Configure(ctx context.Context, req resource.Co
 
 func (r *BGPPeerTemplateResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan BGPPeerTemplate
-	var identity BGPPeerTemplateIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -171,6 +170,7 @@ func (r *BGPPeerTemplateResource) Create(ctx context.Context, req resource.Creat
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	var identity BGPPeerTemplateIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -185,7 +185,6 @@ func (r *BGPPeerTemplateResource) Create(ctx context.Context, req resource.Creat
 
 func (r *BGPPeerTemplateResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state BGPPeerTemplate
-	var identity BGPPeerTemplateIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -194,13 +193,15 @@ func (r *BGPPeerTemplateResource) Read(ctx context.Context, req resource.ReadReq
 		return
 	}
 
-	// Read identity
-	diags = req.Identity.Get(ctx, &identity)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity BGPPeerTemplateIdentity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
-
-	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -225,6 +226,7 @@ func (r *BGPPeerTemplateResource) Read(ctx context.Context, req resource.ReadReq
 		state.fromBody(res, imp)
 	}
 
+	var identity BGPPeerTemplateIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

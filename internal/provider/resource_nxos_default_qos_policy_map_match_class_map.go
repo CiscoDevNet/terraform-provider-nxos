@@ -117,7 +117,6 @@ func (r *DefaultQOSPolicyMapMatchClassMapResource) Configure(ctx context.Context
 
 func (r *DefaultQOSPolicyMapMatchClassMapResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan DefaultQOSPolicyMapMatchClassMap
-	var identity DefaultQOSPolicyMapMatchClassMapIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -145,6 +144,7 @@ func (r *DefaultQOSPolicyMapMatchClassMapResource) Create(ctx context.Context, r
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	var identity DefaultQOSPolicyMapMatchClassMapIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -159,7 +159,6 @@ func (r *DefaultQOSPolicyMapMatchClassMapResource) Create(ctx context.Context, r
 
 func (r *DefaultQOSPolicyMapMatchClassMapResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state DefaultQOSPolicyMapMatchClassMap
-	var identity DefaultQOSPolicyMapMatchClassMapIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -168,13 +167,15 @@ func (r *DefaultQOSPolicyMapMatchClassMapResource) Read(ctx context.Context, req
 		return
 	}
 
-	// Read identity
-	diags = req.Identity.Get(ctx, &identity)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity DefaultQOSPolicyMapMatchClassMapIdentity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
-
-	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -199,6 +200,7 @@ func (r *DefaultQOSPolicyMapMatchClassMapResource) Read(ctx context.Context, req
 		state.fromBody(res, imp)
 	}
 
+	var identity DefaultQOSPolicyMapMatchClassMapIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

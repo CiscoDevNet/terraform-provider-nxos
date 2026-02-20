@@ -124,7 +124,6 @@ func (r *NVEVNIIngressReplicationResource) Configure(ctx context.Context, req re
 
 func (r *NVEVNIIngressReplicationResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan NVEVNIIngressReplication
-	var identity NVEVNIIngressReplicationIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -152,6 +151,7 @@ func (r *NVEVNIIngressReplicationResource) Create(ctx context.Context, req resou
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	var identity NVEVNIIngressReplicationIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -166,7 +166,6 @@ func (r *NVEVNIIngressReplicationResource) Create(ctx context.Context, req resou
 
 func (r *NVEVNIIngressReplicationResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state NVEVNIIngressReplication
-	var identity NVEVNIIngressReplicationIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -175,13 +174,15 @@ func (r *NVEVNIIngressReplicationResource) Read(ctx context.Context, req resourc
 		return
 	}
 
-	// Read identity
-	diags = req.Identity.Get(ctx, &identity)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity NVEVNIIngressReplicationIdentity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
-
-	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -206,6 +207,7 @@ func (r *NVEVNIIngressReplicationResource) Read(ctx context.Context, req resourc
 		state.fromBody(res, imp)
 	}
 
+	var identity NVEVNIIngressReplicationIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

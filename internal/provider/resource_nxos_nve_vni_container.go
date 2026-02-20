@@ -95,7 +95,6 @@ func (r *NVEVNIContainerResource) Configure(ctx context.Context, req resource.Co
 
 func (r *NVEVNIContainerResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan NVEVNIContainer
-	var identity NVEVNIContainerIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -123,6 +122,7 @@ func (r *NVEVNIContainerResource) Create(ctx context.Context, req resource.Creat
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	var identity NVEVNIContainerIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -137,7 +137,6 @@ func (r *NVEVNIContainerResource) Create(ctx context.Context, req resource.Creat
 
 func (r *NVEVNIContainerResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state NVEVNIContainer
-	var identity NVEVNIContainerIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -146,13 +145,15 @@ func (r *NVEVNIContainerResource) Read(ctx context.Context, req resource.ReadReq
 		return
 	}
 
-	// Read identity
-	diags = req.Identity.Get(ctx, &identity)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity NVEVNIContainerIdentity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
-
-	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -177,6 +178,7 @@ func (r *NVEVNIContainerResource) Read(ctx context.Context, req resource.ReadReq
 		state.fromBody(res, imp)
 	}
 
+	var identity NVEVNIContainerIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

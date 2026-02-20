@@ -167,7 +167,6 @@ func (r *IPv4PrefixListRuleEntryResource) Configure(ctx context.Context, req res
 
 func (r *IPv4PrefixListRuleEntryResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan IPv4PrefixListRuleEntry
-	var identity IPv4PrefixListRuleEntryIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -195,6 +194,7 @@ func (r *IPv4PrefixListRuleEntryResource) Create(ctx context.Context, req resour
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	var identity IPv4PrefixListRuleEntryIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -209,7 +209,6 @@ func (r *IPv4PrefixListRuleEntryResource) Create(ctx context.Context, req resour
 
 func (r *IPv4PrefixListRuleEntryResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state IPv4PrefixListRuleEntry
-	var identity IPv4PrefixListRuleEntryIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -218,13 +217,15 @@ func (r *IPv4PrefixListRuleEntryResource) Read(ctx context.Context, req resource
 		return
 	}
 
-	// Read identity
-	diags = req.Identity.Get(ctx, &identity)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity IPv4PrefixListRuleEntryIdentity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
-
-	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -249,6 +250,7 @@ func (r *IPv4PrefixListRuleEntryResource) Read(ctx context.Context, req resource
 		state.fromBody(res, imp)
 	}
 
+	var identity IPv4PrefixListRuleEntryIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

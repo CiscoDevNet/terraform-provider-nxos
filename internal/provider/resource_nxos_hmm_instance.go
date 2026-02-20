@@ -113,7 +113,6 @@ func (r *HMMInstanceResource) Configure(ctx context.Context, req resource.Config
 
 func (r *HMMInstanceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan HMMInstance
-	var identity HMMInstanceIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -141,6 +140,7 @@ func (r *HMMInstanceResource) Create(ctx context.Context, req resource.CreateReq
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	var identity HMMInstanceIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -155,7 +155,6 @@ func (r *HMMInstanceResource) Create(ctx context.Context, req resource.CreateReq
 
 func (r *HMMInstanceResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state HMMInstance
-	var identity HMMInstanceIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -164,13 +163,15 @@ func (r *HMMInstanceResource) Read(ctx context.Context, req resource.ReadRequest
 		return
 	}
 
-	// Read identity
-	diags = req.Identity.Get(ctx, &identity)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity HMMInstanceIdentity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
-
-	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -195,6 +196,7 @@ func (r *HMMInstanceResource) Read(ctx context.Context, req resource.ReadRequest
 		state.fromBody(res, imp)
 	}
 
+	var identity HMMInstanceIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

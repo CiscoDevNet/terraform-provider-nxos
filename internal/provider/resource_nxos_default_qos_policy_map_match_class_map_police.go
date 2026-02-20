@@ -327,7 +327,6 @@ func (r *DefaultQOSPolicyMapMatchClassMapPoliceResource) Configure(ctx context.C
 
 func (r *DefaultQOSPolicyMapMatchClassMapPoliceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan DefaultQOSPolicyMapMatchClassMapPolice
-	var identity DefaultQOSPolicyMapMatchClassMapPoliceIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -355,6 +354,7 @@ func (r *DefaultQOSPolicyMapMatchClassMapPoliceResource) Create(ctx context.Cont
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	var identity DefaultQOSPolicyMapMatchClassMapPoliceIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -369,7 +369,6 @@ func (r *DefaultQOSPolicyMapMatchClassMapPoliceResource) Create(ctx context.Cont
 
 func (r *DefaultQOSPolicyMapMatchClassMapPoliceResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state DefaultQOSPolicyMapMatchClassMapPolice
-	var identity DefaultQOSPolicyMapMatchClassMapPoliceIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -378,13 +377,15 @@ func (r *DefaultQOSPolicyMapMatchClassMapPoliceResource) Read(ctx context.Contex
 		return
 	}
 
-	// Read identity
-	diags = req.Identity.Get(ctx, &identity)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity DefaultQOSPolicyMapMatchClassMapPoliceIdentity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
-
-	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -409,6 +410,7 @@ func (r *DefaultQOSPolicyMapMatchClassMapPoliceResource) Read(ctx context.Contex
 		state.fromBody(res, imp)
 	}
 
+	var identity DefaultQOSPolicyMapMatchClassMapPoliceIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

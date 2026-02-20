@@ -121,7 +121,6 @@ func (r *PortChannelInterfaceMemberResource) Configure(ctx context.Context, req 
 
 func (r *PortChannelInterfaceMemberResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan PortChannelInterfaceMember
-	var identity PortChannelInterfaceMemberIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -149,6 +148,7 @@ func (r *PortChannelInterfaceMemberResource) Create(ctx context.Context, req res
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	var identity PortChannelInterfaceMemberIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -163,7 +163,6 @@ func (r *PortChannelInterfaceMemberResource) Create(ctx context.Context, req res
 
 func (r *PortChannelInterfaceMemberResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state PortChannelInterfaceMember
-	var identity PortChannelInterfaceMemberIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -172,13 +171,15 @@ func (r *PortChannelInterfaceMemberResource) Read(ctx context.Context, req resou
 		return
 	}
 
-	// Read identity
-	diags = req.Identity.Get(ctx, &identity)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity PortChannelInterfaceMemberIdentity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
-
-	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -203,6 +204,7 @@ func (r *PortChannelInterfaceMemberResource) Read(ctx context.Context, req resou
 		state.fromBody(res, imp)
 	}
 
+	var identity PortChannelInterfaceMemberIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

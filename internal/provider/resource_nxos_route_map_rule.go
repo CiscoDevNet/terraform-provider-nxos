@@ -106,7 +106,6 @@ func (r *RouteMapRuleResource) Configure(ctx context.Context, req resource.Confi
 
 func (r *RouteMapRuleResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan RouteMapRule
-	var identity RouteMapRuleIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -134,6 +133,7 @@ func (r *RouteMapRuleResource) Create(ctx context.Context, req resource.CreateRe
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	var identity RouteMapRuleIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -148,7 +148,6 @@ func (r *RouteMapRuleResource) Create(ctx context.Context, req resource.CreateRe
 
 func (r *RouteMapRuleResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state RouteMapRule
-	var identity RouteMapRuleIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -157,13 +156,15 @@ func (r *RouteMapRuleResource) Read(ctx context.Context, req resource.ReadReques
 		return
 	}
 
-	// Read identity
-	diags = req.Identity.Get(ctx, &identity)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity RouteMapRuleIdentity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
-
-	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -188,6 +189,7 @@ func (r *RouteMapRuleResource) Read(ctx context.Context, req resource.ReadReques
 		state.fromBody(res, imp)
 	}
 
+	var identity RouteMapRuleIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

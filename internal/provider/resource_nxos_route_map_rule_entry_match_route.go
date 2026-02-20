@@ -124,7 +124,6 @@ func (r *RouteMapRuleEntryMatchRouteResource) Configure(ctx context.Context, req
 
 func (r *RouteMapRuleEntryMatchRouteResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan RouteMapRuleEntryMatchRoute
-	var identity RouteMapRuleEntryMatchRouteIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -152,6 +151,7 @@ func (r *RouteMapRuleEntryMatchRouteResource) Create(ctx context.Context, req re
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	var identity RouteMapRuleEntryMatchRouteIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -166,7 +166,6 @@ func (r *RouteMapRuleEntryMatchRouteResource) Create(ctx context.Context, req re
 
 func (r *RouteMapRuleEntryMatchRouteResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state RouteMapRuleEntryMatchRoute
-	var identity RouteMapRuleEntryMatchRouteIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -175,13 +174,15 @@ func (r *RouteMapRuleEntryMatchRouteResource) Read(ctx context.Context, req reso
 		return
 	}
 
-	// Read identity
-	diags = req.Identity.Get(ctx, &identity)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity RouteMapRuleEntryMatchRouteIdentity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
-
-	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -206,6 +207,7 @@ func (r *RouteMapRuleEntryMatchRouteResource) Read(ctx context.Context, req reso
 		state.fromBody(res, imp)
 	}
 
+	var identity RouteMapRuleEntryMatchRouteIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

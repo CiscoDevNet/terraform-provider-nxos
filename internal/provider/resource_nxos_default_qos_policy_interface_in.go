@@ -106,7 +106,6 @@ func (r *DefaultQOSPolicyInterfaceInResource) Configure(ctx context.Context, req
 
 func (r *DefaultQOSPolicyInterfaceInResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan DefaultQOSPolicyInterfaceIn
-	var identity DefaultQOSPolicyInterfaceInIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -134,6 +133,7 @@ func (r *DefaultQOSPolicyInterfaceInResource) Create(ctx context.Context, req re
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	var identity DefaultQOSPolicyInterfaceInIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -148,7 +148,6 @@ func (r *DefaultQOSPolicyInterfaceInResource) Create(ctx context.Context, req re
 
 func (r *DefaultQOSPolicyInterfaceInResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state DefaultQOSPolicyInterfaceIn
-	var identity DefaultQOSPolicyInterfaceInIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -157,13 +156,15 @@ func (r *DefaultQOSPolicyInterfaceInResource) Read(ctx context.Context, req reso
 		return
 	}
 
-	// Read identity
-	diags = req.Identity.Get(ctx, &identity)
-	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-		return
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity DefaultQOSPolicyInterfaceInIdentity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
-
-	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -188,6 +189,7 @@ func (r *DefaultQOSPolicyInterfaceInResource) Read(ctx context.Context, req reso
 		state.fromBody(res, imp)
 	}
 
+	var identity DefaultQOSPolicyInterfaceInIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))

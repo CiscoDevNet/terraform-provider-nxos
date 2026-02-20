@@ -99,8 +99,19 @@ func (data *User) fromBody(res gjson.Result, all bool) {
 	} else {
 		data.AllowExpired = types.StringNull()
 	}
+	var raaaUserDomain gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("aaaUserDomain.attributes.rn").String()
+			if key == "userdomain-[all]" {
+				raaaUserDomain = v
+				return false
+			}
+			return true
+		},
+	)
 	if all {
-		res.Get("aaaUserDomain.children").ForEach(
+		raaaUserDomain.Get("aaaUserDomain.children").ForEach(
 			func(_, v gjson.Result) bool {
 				v.ForEach(
 					func(nestedClassname, nestedValue gjson.Result) bool {

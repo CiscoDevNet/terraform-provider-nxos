@@ -79,7 +79,6 @@ type {{$name}}{{toGoName .TfName}} struct {
 {{- end}}
 {{- end}}
 }
-
 {{end}}
 {{end}}
 
@@ -93,7 +92,6 @@ type {{$name}}{{toGoName .TfName}} struct {
 	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
 {{- end}}
 }
-
 {{end}}
 {{end}}
 {{end}}
@@ -149,13 +147,9 @@ func (data {{camelCase .Name}}) toBody(statusReplace bool) nxos.Body {
 	{{- range .ChildClasses}}
 	{{- $childClassName := .ClassName }}
 	{{- if eq .Type "single"}}
-	{{- $childHasNestedChildren := false}}
-	{{- range .ChildClasses}}{{$childHasNestedChildren = true}}{{end}}
-
-	{{- if $childHasNestedChildren}}
+	{{- if .ChildClasses}}
 	// Create child with attributes and nested children in one unified object
 	childIndex := len(gjson.Get(body, data.getClassName()+".children").Array())
-	{{- if .Attributes}}
 	attrs = "{}"
 	{{- range .Attributes}}
 	{{- if not .ReferenceOnly}}
@@ -173,10 +167,6 @@ func (data {{camelCase .Name}}) toBody(statusReplace bool) nxos.Body {
 	{{- end}}
 	{{- end}}
 	body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.attributes", attrs)
-	{{- else}}
-	// No attributes, just create empty attributes object
-	body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.attributes", "{}")
-	{{- end}}
 
 	{{- range .ChildClasses}}
 	{{- $nestedChildClassName := .ClassName }}
@@ -315,7 +305,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 	{{- if eq .Type "single"}}
 	{{- $hasNonRefAttribs := false}}
 	{{- range .Attributes}}{{- if and (not .ReferenceOnly) (not .WriteOnly)}}{{$hasNonRefAttribs = true}}{{end}}{{end}}
-	{{- if $hasNonRefAttribs}}
+	{{- if or $hasNonRefAttribs .ChildClasses}}
 	var r{{$childClassName}} gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -350,7 +340,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 	{{- $nestedChildTfName := .TfName }}
 	{{- if eq .Type "single"}}
 	var nestedR gjson.Result
-	res.Get("{{$childClassName}}.children").ForEach(
+	r{{$childClassName}}.Get("{{$childClassName}}.children").ForEach(
 		func(_, v gjson.Result) bool {
 			key := v.Get("{{$nestedChildClassName}}.attributes.rn").String()
 			if key == "{{$nestedChildRn}}" {
@@ -377,7 +367,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 	{{- end}}
 	{{- else if eq .Type "list"}}
 	if all {
-		res.Get("{{$childClassName}}.children").ForEach(
+		r{{$childClassName}}.Get("{{$childClassName}}.children").ForEach(
 			func(_, v gjson.Result) bool {
 				v.ForEach(
 					func(nestedClassname, nestedValue gjson.Result) bool {

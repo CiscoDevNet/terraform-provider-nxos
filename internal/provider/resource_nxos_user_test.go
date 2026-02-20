@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosUser(t *testing.T) {
@@ -39,12 +41,21 @@ func TestAccNxosUser(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_user.test",
-				ImportState:   true,
-				ImportStateId: "sys/userext/user-[user1]",
+				ResourceName:      "nxos_user.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosUserImportStateIdFunc("nxos_user.test"),
 			},
 		},
 	})
+}
+
+func nxosUserImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Name := primary.Attributes["name"]
+
+		return fmt.Sprintf("%s", Name), nil
+	}
 }
 
 const testAccNxosUserPrerequisitesConfig = `

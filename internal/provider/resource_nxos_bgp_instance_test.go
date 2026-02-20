@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosBGPInstance(t *testing.T) {
@@ -39,12 +41,19 @@ func TestAccNxosBGPInstance(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_bgp_instance.test",
-				ImportState:   true,
-				ImportStateId: "sys/bgp/inst",
+				ResourceName:      "nxos_bgp_instance.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosBGPInstanceImportStateIdFunc("nxos_bgp_instance.test"),
 			},
 		},
 	})
+}
+
+func nxosBGPInstanceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 const testAccNxosBGPInstancePrerequisitesConfig = `

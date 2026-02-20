@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosBGPRouteControl(t *testing.T) {
@@ -42,12 +44,22 @@ func TestAccNxosBGPRouteControl(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_bgp_route_control.test",
-				ImportState:   true,
-				ImportStateId: "sys/bgp/inst/dom-[default]/rtctrl",
+				ResourceName:      "nxos_bgp_route_control.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosBGPRouteControlImportStateIdFunc("nxos_bgp_route_control.test"),
 			},
 		},
 	})
+}
+
+func nxosBGPRouteControlImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Asn := primary.Attributes["asn"]
+		Vrf := primary.Attributes["vrf"]
+
+		return fmt.Sprintf("%s,%s", Asn, Vrf), nil
+	}
 }
 
 const testAccNxosBGPRouteControlPrerequisitesConfig = `

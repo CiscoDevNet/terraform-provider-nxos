@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosRouteMapRuleEntryMatchRoute(t *testing.T) {
@@ -38,12 +40,22 @@ func TestAccNxosRouteMapRuleEntryMatchRoute(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_route_map_rule_entry_match_route.test",
-				ImportState:   true,
-				ImportStateId: "sys/rpm/rtmap-[RULE1]/ent-[10]/mrtdst",
+				ResourceName:      "nxos_route_map_rule_entry_match_route.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosRouteMapRuleEntryMatchRouteImportStateIdFunc("nxos_route_map_rule_entry_match_route.test"),
 			},
 		},
 	})
+}
+
+func nxosRouteMapRuleEntryMatchRouteImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		RuleName := primary.Attributes["rule_name"]
+		Order := primary.Attributes["order"]
+
+		return fmt.Sprintf("%s,%s", RuleName, Order), nil
+	}
 }
 
 const testAccNxosRouteMapRuleEntryMatchRoutePrerequisitesConfig = `

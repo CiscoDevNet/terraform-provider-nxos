@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosOSPFVRF(t *testing.T) {
@@ -45,12 +47,22 @@ func TestAccNxosOSPFVRF(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_ospf_vrf.test",
-				ImportState:   true,
-				ImportStateId: "sys/ospf/inst-[OSPF1]/dom-[VRF1]",
+				ResourceName:      "nxos_ospf_vrf.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosOSPFVRFImportStateIdFunc("nxos_ospf_vrf.test"),
 			},
 		},
 	})
+}
+
+func nxosOSPFVRFImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InstanceName := primary.Attributes["instance_name"]
+		Name := primary.Attributes["name"]
+
+		return fmt.Sprintf("%s,%s", InstanceName, Name), nil
+	}
 }
 
 const testAccNxosOSPFVRFPrerequisitesConfig = `

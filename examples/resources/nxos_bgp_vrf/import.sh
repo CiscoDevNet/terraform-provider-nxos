@@ -1,1 +1,1 @@
-terraform import nxos_bgp_vrf.example "sys/bgp/inst/dom-[default]"
+terraform import nxos_bgp_vrf.example "<asn>,<name>"

@@ -51,12 +51,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_bridge_domain.example
-  id = "sys/bd/bd-[vlan-10]"
+  id = "<fabric_encap>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_bridge_domain.example "sys/bd/bd-[vlan-10]"
+terraform import nxos_bridge_domain.example "<fabric_encap>"
 ```

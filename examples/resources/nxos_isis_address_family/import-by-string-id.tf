@@ -1,4 +1,4 @@
 import {
   to = nxos_isis_address_family.example
-  id = "sys/isis/inst-[ISIS1]/dom-[default]/af-[v4]"
+  id = "<instance_name>,<vrf>,<address_family>"
 }

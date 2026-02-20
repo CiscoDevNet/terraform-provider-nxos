@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosHMMInterface(t *testing.T) {
@@ -39,12 +41,21 @@ func TestAccNxosHMMInterface(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_hmm_interface.test",
-				ImportState:   true,
-				ImportStateId: "sys/hmm/fwdinst/if-[vlan10]",
+				ResourceName:      "nxos_hmm_interface.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosHMMInterfaceImportStateIdFunc("nxos_hmm_interface.test"),
 			},
 		},
 	})
+}
+
+func nxosHMMInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InterfaceId := primary.Attributes["interface_id"]
+
+		return fmt.Sprintf("%s", InterfaceId), nil
+	}
 }
 
 const testAccNxosHMMInterfacePrerequisitesConfig = `

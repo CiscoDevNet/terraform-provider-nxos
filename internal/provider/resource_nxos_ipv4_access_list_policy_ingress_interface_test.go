@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosIPv4AccessListPolicyIngressInterface(t *testing.T) {
@@ -38,12 +40,21 @@ func TestAccNxosIPv4AccessListPolicyIngressInterface(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_ipv4_access_list_policy_ingress_interface.test",
-				ImportState:   true,
-				ImportStateId: "sys/acl/ipv4/policy/ingress/intf-[eth1/10]",
+				ResourceName:      "nxos_ipv4_access_list_policy_ingress_interface.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosIPv4AccessListPolicyIngressInterfaceImportStateIdFunc("nxos_ipv4_access_list_policy_ingress_interface.test"),
 			},
 		},
 	})
+}
+
+func nxosIPv4AccessListPolicyIngressInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InterfaceId := primary.Attributes["interface_id"]
+
+		return fmt.Sprintf("%s", InterfaceId), nil
+	}
 }
 
 func testAccNxosIPv4AccessListPolicyIngressInterfaceConfig_minimum() string {

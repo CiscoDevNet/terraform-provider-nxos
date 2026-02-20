@@ -23,6 +23,8 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -310,11 +312,6 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 			return
 		}
 		state.fromBody(res, imp)
-		{{- if hasId .Attributes}}
-		if imp {
-			state.getIdsFromDn()
-		}
-		{{- end}}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
@@ -408,12 +405,35 @@ func (r *{{camelCase .Name}}Resource) Delete(ctx context.Context, req resource.D
 }
 
 func (r *{{camelCase .Name}}Resource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	dn, device := helpers.ParseImportID(req.ID)
+	idParts := strings.Split(req.ID, ",")
+	idParts = helpers.RemoveEmptyStrings(idParts)
 
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), dn)...)
-	if device != "" {
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), device)...)
+	if len(idParts) != {{len (importAttributes .)}} && len(idParts) != {{add (len (importAttributes .)) 1}} {
+		expectedIdentifier := "Expected import identifier with format: '{{range $i, $e := (importAttributes .)}}{{if $i}},{{end}}<{{.TfName}}>{{end}}'"
+		expectedIdentifier += " or '{{range $i, $e := (importAttributes .)}}{{if $i}},{{end}}<{{.TfName}}>{{end}}{{if importAttributes .}},{{end}}<device>'"
+		resp.Diagnostics.AddError(
+			"Unexpected Import Identifier",
+			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
+		)
+		return
 	}
+
+	{{- range $index, $attr := (importAttributes .)}}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("{{.TfName}}"), {{if eq .Type "Int64"}}helpers.Must(strconv.ParseInt(idParts[{{$index}}], 10, 64)){{else}}idParts[{{$index}}]{{end}})...)
+	{{- end}}
+	if len(idParts) == {{add (len (importAttributes .)) 1}} {
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+	}
+
+	var state {{camelCase .Name}}
+	{{- if importAttributes .}}
+	diags := resp.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	{{- end}}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getDn())...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)
 }

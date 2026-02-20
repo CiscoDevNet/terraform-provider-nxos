@@ -1,1 +1,1 @@
-terraform import nxos_isis_interface.example "sys/isis/if-[eth1/10]"
+terraform import nxos_isis_interface.example "<interface_id>"

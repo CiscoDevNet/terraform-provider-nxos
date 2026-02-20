@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosEVPNVNIRouteTargetDirection(t *testing.T) {
@@ -38,12 +40,22 @@ func TestAccNxosEVPNVNIRouteTargetDirection(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_evpn_vni_route_target_direction.test",
-				ImportState:   true,
-				ImportStateId: "sys/evpn/bdevi-[vxlan-123456]/rttp-[import]",
+				ResourceName:      "nxos_evpn_vni_route_target_direction.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosEVPNVNIRouteTargetDirectionImportStateIdFunc("nxos_evpn_vni_route_target_direction.test"),
 			},
 		},
 	})
+}
+
+func nxosEVPNVNIRouteTargetDirectionImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Encap := primary.Attributes["encap"]
+		Direction := primary.Attributes["direction"]
+
+		return fmt.Sprintf("%s,%s", Encap, Direction), nil
+	}
 }
 
 const testAccNxosEVPNVNIRouteTargetDirectionPrerequisitesConfig = `

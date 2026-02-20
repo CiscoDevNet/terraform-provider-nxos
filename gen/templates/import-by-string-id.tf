@@ -1,4 +1,4 @@
 import {
   to = nxos_{{snakeCase .Name}}.example
-  id = "{{getExampleDn .Dn .Attributes}}"
+  id = "{{range $i, $e := (importAttributes .)}}{{if $i}},{{end}}<{{.TfName}}>{{end}}"
 }

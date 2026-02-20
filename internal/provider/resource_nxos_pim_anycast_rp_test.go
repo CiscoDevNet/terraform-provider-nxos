@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosPIMAnycastRP(t *testing.T) {
@@ -39,12 +41,21 @@ func TestAccNxosPIMAnycastRP(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_pim_anycast_rp.test",
-				ImportState:   true,
-				ImportStateId: "sys/pim/inst/dom-[default]/acastrpfunc",
+				ResourceName:      "nxos_pim_anycast_rp.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosPIMAnycastRPImportStateIdFunc("nxos_pim_anycast_rp.test"),
 			},
 		},
 	})
+}
+
+func nxosPIMAnycastRPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		VrfName := primary.Attributes["vrf_name"]
+
+		return fmt.Sprintf("%s", VrfName), nil
+	}
 }
 
 const testAccNxosPIMAnycastRPPrerequisitesConfig = `

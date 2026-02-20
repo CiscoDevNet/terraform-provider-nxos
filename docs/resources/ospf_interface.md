@@ -95,12 +95,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_ospf_interface.example
-  id = "sys/ospf/inst-[OSPF1]/dom-[VRF1]/if-[eth1/10]"
+  id = "<instance_name>,<vrf_name>,<interface_id>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_ospf_interface.example "sys/ospf/inst-[OSPF1]/dom-[VRF1]/if-[eth1/10]"
+terraform import nxos_ospf_interface.example "<instance_name>,<vrf_name>,<interface_id>"
 ```

@@ -1,1 +1,1 @@
-terraform import nxos_evpn.example "sys/evpn"
+terraform import nxos_evpn.example ""

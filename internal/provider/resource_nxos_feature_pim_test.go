@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosFeaturePIM(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosFeaturePIM(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_feature_pim.test",
-				ImportState:   true,
-				ImportStateId: "sys/fm/pim",
+				ResourceName:      "nxos_feature_pim.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosFeaturePIMImportStateIdFunc("nxos_feature_pim.test"),
 			},
 		},
 	})
+}
+
+func nxosFeaturePIMImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosFeaturePIMConfig_minimum() string {

@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosOSPF(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosOSPF(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_ospf.test",
-				ImportState:   true,
-				ImportStateId: "sys/ospf",
+				ResourceName:      "nxos_ospf.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosOSPFImportStateIdFunc("nxos_ospf.test"),
 			},
 		},
 	})
+}
+
+func nxosOSPFImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 const testAccNxosOSPFPrerequisitesConfig = `

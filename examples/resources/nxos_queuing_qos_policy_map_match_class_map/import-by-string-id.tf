@@ -1,4 +1,4 @@
 import {
   to = nxos_queuing_qos_policy_map_match_class_map.example
-  id = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q1]"
+  id = "<policy_map_name>,<name>"
 }

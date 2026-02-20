@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosNVEInterface(t *testing.T) {
@@ -47,12 +49,19 @@ func TestAccNxosNVEInterface(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_nve_interface.test",
-				ImportState:   true,
-				ImportStateId: "sys/eps/epId-[1]",
+				ResourceName:      "nxos_nve_interface.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosNVEInterfaceImportStateIdFunc("nxos_nve_interface.test"),
 			},
 		},
 	})
+}
+
+func nxosNVEInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 const testAccNxosNVEInterfacePrerequisitesConfig = `

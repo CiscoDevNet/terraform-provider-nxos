@@ -61,12 +61,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_ospfv3_instance.example
-  id = "sys/ospfv3/inst-[OSPFv3]"
+  id = "<name>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_ospfv3_instance.example "sys/ospfv3/inst-[OSPFv3]"
+terraform import nxos_ospfv3_instance.example "<name>"
 ```

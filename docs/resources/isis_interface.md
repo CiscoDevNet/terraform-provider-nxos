@@ -150,12 +150,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_isis_interface.example
-  id = "sys/isis/if-[eth1/10]"
+  id = "<interface_id>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_isis_interface.example "sys/isis/if-[eth1/10]"
+terraform import nxos_isis_interface.example "<interface_id>"
 ```

@@ -286,6 +286,17 @@ func HasNestedChildren(children []YamlConfigChildClass) bool {
 	return false
 }
 
+// Templating helper function to return import attributes (reference_only or id)
+func ImportAttributes(config YamlConfig) []YamlConfigAttribute {
+	attributes := []YamlConfigAttribute{}
+	for _, attr := range config.Attributes {
+		if attr.ReferenceOnly || attr.Id {
+			attributes = append(attributes, attr)
+		}
+	}
+	return attributes
+}
+
 // Map of templating functions
 var functions = template.FuncMap{
 	"toGoName":           ToGoName,
@@ -300,6 +311,7 @@ var functions = template.FuncMap{
 	"childDocClassNames": ChildDocClassNames,
 	"childDocPaths":      ChildDocPaths,
 	"hasNestedChildren":  HasNestedChildren,
+	"importAttributes":   ImportAttributes,
 }
 
 func renderTemplate(templatePath, outputPath string, config interface{}) {

@@ -1,4 +1,4 @@
 import {
   to = nxos_ipv6_interface_address.example
-  id = "sys/ipv6/inst/dom-[default]/if-[eth1/10]/addr-[2001:db8:3333:4444:5555:6666:7777:8888]"
+  id = "<vrf>,<interface_id>,<address>"
 }

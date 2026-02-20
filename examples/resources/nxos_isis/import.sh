@@ -1,1 +1,1 @@
-terraform import nxos_isis.example "sys/isis"
+terraform import nxos_isis.example ""

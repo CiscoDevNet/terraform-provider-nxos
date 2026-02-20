@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosFeatureSSH(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosFeatureSSH(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_feature_ssh.test",
-				ImportState:   true,
-				ImportStateId: "sys/fm/ssh",
+				ResourceName:      "nxos_feature_ssh.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosFeatureSSHImportStateIdFunc("nxos_feature_ssh.test"),
 			},
 		},
 	})
+}
+
+func nxosFeatureSSHImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosFeatureSSHConfig_minimum() string {

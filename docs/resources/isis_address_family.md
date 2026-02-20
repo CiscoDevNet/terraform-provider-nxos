@@ -75,12 +75,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_isis_address_family.example
-  id = "sys/isis/inst-[ISIS1]/dom-[default]/af-[v4]"
+  id = "<instance_name>,<vrf>,<address_family>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_isis_address_family.example "sys/isis/inst-[ISIS1]/dom-[default]/af-[v4]"
+terraform import nxos_isis_address_family.example "<instance_name>,<vrf>,<address_family>"
 ```

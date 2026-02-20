@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosRouteMapRule(t *testing.T) {
@@ -37,12 +39,21 @@ func TestAccNxosRouteMapRule(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_route_map_rule.test",
-				ImportState:   true,
-				ImportStateId: "sys/rpm/rtmap-[RULE1]",
+				ResourceName:      "nxos_route_map_rule.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosRouteMapRuleImportStateIdFunc("nxos_route_map_rule.test"),
 			},
 		},
 	})
+}
+
+func nxosRouteMapRuleImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Name := primary.Attributes["name"]
+
+		return fmt.Sprintf("%s", Name), nil
+	}
 }
 
 func testAccNxosRouteMapRuleConfig_minimum() string {

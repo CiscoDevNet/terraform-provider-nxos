@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosLogging(t *testing.T) {
@@ -40,12 +42,19 @@ func TestAccNxosLogging(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_logging.test",
-				ImportState:   true,
-				ImportStateId: "sys/logging/loglevel",
+				ResourceName:      "nxos_logging.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosLoggingImportStateIdFunc("nxos_logging.test"),
 			},
 		},
 	})
+}
+
+func nxosLoggingImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosLoggingConfig_minimum() string {

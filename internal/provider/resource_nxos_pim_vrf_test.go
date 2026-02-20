@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosPIMVRF(t *testing.T) {
@@ -39,12 +41,21 @@ func TestAccNxosPIMVRF(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_pim_vrf.test",
-				ImportState:   true,
-				ImportStateId: "sys/pim/inst/dom-[default]",
+				ResourceName:      "nxos_pim_vrf.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosPIMVRFImportStateIdFunc("nxos_pim_vrf.test"),
 			},
 		},
 	})
+}
+
+func nxosPIMVRFImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Name := primary.Attributes["name"]
+
+		return fmt.Sprintf("%s", Name), nil
+	}
 }
 
 const testAccNxosPIMVRFPrerequisitesConfig = `

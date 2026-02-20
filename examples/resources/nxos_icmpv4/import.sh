@@ -1,1 +1,1 @@
-terraform import nxos_icmpv4.example "sys/icmpv4"
+terraform import nxos_icmpv4.example ""

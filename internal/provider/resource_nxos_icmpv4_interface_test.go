@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosICMPv4Interface(t *testing.T) {
@@ -39,12 +41,22 @@ func TestAccNxosICMPv4Interface(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_icmpv4_interface.test",
-				ImportState:   true,
-				ImportStateId: "sys/icmpv4/inst/dom-[VRF1]/if-[vlan10]",
+				ResourceName:      "nxos_icmpv4_interface.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosICMPv4InterfaceImportStateIdFunc("nxos_icmpv4_interface.test"),
 			},
 		},
 	})
+}
+
+func nxosICMPv4InterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		VrfName := primary.Attributes["vrf_name"]
+		InterfaceId := primary.Attributes["interface_id"]
+
+		return fmt.Sprintf("%s,%s", VrfName, InterfaceId), nil
+	}
 }
 
 const testAccNxosICMPv4InterfacePrerequisitesConfig = `

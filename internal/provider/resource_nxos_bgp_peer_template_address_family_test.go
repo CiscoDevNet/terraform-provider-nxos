@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosBGPPeerTemplateAddressFamily(t *testing.T) {
@@ -42,12 +44,23 @@ func TestAccNxosBGPPeerTemplateAddressFamily(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_bgp_peer_template_address_family.test",
-				ImportState:   true,
-				ImportStateId: "sys/bgp/inst/dom-[default]/peercont-[SPINE-PEERS]/af-[ipv4-ucast]",
+				ResourceName:      "nxos_bgp_peer_template_address_family.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosBGPPeerTemplateAddressFamilyImportStateIdFunc("nxos_bgp_peer_template_address_family.test"),
 			},
 		},
 	})
+}
+
+func nxosBGPPeerTemplateAddressFamilyImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Asn := primary.Attributes["asn"]
+		TemplateName := primary.Attributes["template_name"]
+		AddressFamily := primary.Attributes["address_family"]
+
+		return fmt.Sprintf("%s,%s,%s", Asn, TemplateName, AddressFamily), nil
+	}
 }
 
 const testAccNxosBGPPeerTemplateAddressFamilyPrerequisitesConfig = `

@@ -51,12 +51,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_vpc_peerlink.example
-  id = "sys/vpc/inst/dom/keepalive/peerlink"
+  id = ""
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_vpc_peerlink.example "sys/vpc/inst/dom/keepalive/peerlink"
+terraform import nxos_vpc_peerlink.example ""
 ```

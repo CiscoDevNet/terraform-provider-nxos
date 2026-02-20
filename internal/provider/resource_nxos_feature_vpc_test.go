@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosFeatureVPC(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosFeatureVPC(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_feature_vpc.test",
-				ImportState:   true,
-				ImportStateId: "sys/fm/vpc",
+				ResourceName:      "nxos_feature_vpc.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosFeatureVPCImportStateIdFunc("nxos_feature_vpc.test"),
 			},
 		},
 	})
+}
+
+func nxosFeatureVPCImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosFeatureVPCConfig_minimum() string {

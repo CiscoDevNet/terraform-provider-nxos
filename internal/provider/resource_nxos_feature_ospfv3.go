@@ -22,6 +22,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -249,12 +250,24 @@ func (r *FeatureOSPFv3Resource) Delete(ctx context.Context, req resource.DeleteR
 }
 
 func (r *FeatureOSPFv3Resource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	dn, device := helpers.ParseImportID(req.ID)
+	idParts := strings.Split(req.ID, ",")
+	idParts = helpers.RemoveEmptyStrings(idParts)
 
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), dn)...)
-	if device != "" {
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), device)...)
+	if len(idParts) != 0 && len(idParts) != 1 {
+		expectedIdentifier := "Expected import identifier with format: ''"
+		expectedIdentifier += " or '<device>'"
+		resp.Diagnostics.AddError(
+			"Unexpected Import Identifier",
+			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
+		)
+		return
 	}
+	if len(idParts) == 1 {
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+	}
+
+	var state FeatureOSPFv3
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getDn())...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)
 }

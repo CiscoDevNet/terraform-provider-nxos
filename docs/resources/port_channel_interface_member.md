@@ -61,12 +61,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_port_channel_interface_member.example
-  id = "sys/intf/aggr-[po1]/rsmbrIfs-[sys/intf/phys-[eth1/11]]"
+  id = "<interface_id>,<interface_dn>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_port_channel_interface_member.example "sys/intf/aggr-[po1]/rsmbrIfs-[sys/intf/phys-[eth1/11]]"
+terraform import nxos_port_channel_interface_member.example "<interface_id>,<interface_dn>"
 ```

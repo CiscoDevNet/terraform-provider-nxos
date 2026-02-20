@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidth(t *testing.T) {
@@ -39,12 +41,22 @@ func TestAccNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidth(t *testing.T)
 				),
 			},
 			{
-				ResourceName:  "nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth.test",
-				ImportState:   true,
-				ImportStateId: "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q1]/setRemBW",
+				ResourceName:      "nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidthImportStateIdFunc("nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth.test"),
 			},
 		},
 	})
+}
+
+func nxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidthImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		PolicyMapName := primary.Attributes["policy_map_name"]
+		ClassMapName := primary.Attributes["class_map_name"]
+
+		return fmt.Sprintf("%s,%s", PolicyMapName, ClassMapName), nil
+	}
 }
 
 const testAccNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidthPrerequisitesConfig = `

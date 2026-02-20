@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosBGPAdvertisedPrefix(t *testing.T) {
@@ -42,12 +44,24 @@ func TestAccNxosBGPAdvertisedPrefix(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_bgp_advertised_prefix.test",
-				ImportState:   true,
-				ImportStateId: "sys/bgp/inst/dom-[default]/af-[ipv4-ucast]/prefix-[192.168.1.0/24]",
+				ResourceName:      "nxos_bgp_advertised_prefix.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosBGPAdvertisedPrefixImportStateIdFunc("nxos_bgp_advertised_prefix.test"),
 			},
 		},
 	})
+}
+
+func nxosBGPAdvertisedPrefixImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Asn := primary.Attributes["asn"]
+		Vrf := primary.Attributes["vrf"]
+		AddressFamily := primary.Attributes["address_family"]
+		Prefix := primary.Attributes["prefix"]
+
+		return fmt.Sprintf("%s,%s,%s,%s", Asn, Vrf, AddressFamily, Prefix), nil
+	}
 }
 
 const testAccNxosBGPAdvertisedPrefixPrerequisitesConfig = `

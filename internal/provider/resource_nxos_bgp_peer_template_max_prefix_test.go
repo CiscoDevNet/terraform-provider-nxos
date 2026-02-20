@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosBGPPeerTemplateMaxPrefix(t *testing.T) {
@@ -43,12 +45,23 @@ func TestAccNxosBGPPeerTemplateMaxPrefix(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_bgp_peer_template_max_prefix.test",
-				ImportState:   true,
-				ImportStateId: "sys/bgp/inst/dom-[default]/peercont-[SPINE-PEERS]/af-[ipv4-ucast]/maxpfxp",
+				ResourceName:      "nxos_bgp_peer_template_max_prefix.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosBGPPeerTemplateMaxPrefixImportStateIdFunc("nxos_bgp_peer_template_max_prefix.test"),
 			},
 		},
 	})
+}
+
+func nxosBGPPeerTemplateMaxPrefixImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Asn := primary.Attributes["asn"]
+		TemplateName := primary.Attributes["template_name"]
+		AddressFamily := primary.Attributes["address_family"]
+
+		return fmt.Sprintf("%s,%s,%s", Asn, TemplateName, AddressFamily), nil
+	}
 }
 
 const testAccNxosBGPPeerTemplateMaxPrefixPrerequisitesConfig = `

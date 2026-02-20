@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosBGPPeerLocalASN(t *testing.T) {
@@ -40,12 +42,22 @@ func TestAccNxosBGPPeerLocalASN(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_bgp_peer_local_asn.test",
-				ImportState:   true,
-				ImportStateId: "sys/bgp/inst/dom-[default]/peer-[192.168.0.1]/localasn",
+				ResourceName:      "nxos_bgp_peer_local_asn.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosBGPPeerLocalASNImportStateIdFunc("nxos_bgp_peer_local_asn.test"),
 			},
 		},
 	})
+}
+
+func nxosBGPPeerLocalASNImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Vrf := primary.Attributes["vrf"]
+		Address := primary.Attributes["address"]
+
+		return fmt.Sprintf("%s,%s", Vrf, Address), nil
+	}
 }
 
 const testAccNxosBGPPeerLocalASNPrerequisitesConfig = `

@@ -61,12 +61,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_dhcp_relay_address.example
-  id = "sys/dhcp/inst/relayif-[eth1/10]/addr-[VRF1]-[1.1.1.1]"
+  id = "<interface_id>,<vrf>,<address>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_dhcp_relay_address.example "sys/dhcp/inst/relayif-[eth1/10]/addr-[VRF1]-[1.1.1.1]"
+terraform import nxos_dhcp_relay_address.example "<interface_id>,<vrf>,<address>"
 ```

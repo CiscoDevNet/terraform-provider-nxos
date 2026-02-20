@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosIPv4PrefixListRule(t *testing.T) {
@@ -37,12 +39,21 @@ func TestAccNxosIPv4PrefixListRule(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_ipv4_prefix_list_rule.test",
-				ImportState:   true,
-				ImportStateId: "sys/rpm/pfxlistv4-[RULE1]",
+				ResourceName:      "nxos_ipv4_prefix_list_rule.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosIPv4PrefixListRuleImportStateIdFunc("nxos_ipv4_prefix_list_rule.test"),
 			},
 		},
 	})
+}
+
+func nxosIPv4PrefixListRuleImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Name := primary.Attributes["name"]
+
+		return fmt.Sprintf("%s", Name), nil
+	}
 }
 
 func testAccNxosIPv4PrefixListRuleConfig_minimum() string {

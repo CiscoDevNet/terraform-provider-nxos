@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosBGPRouteRedistribution(t *testing.T) {
@@ -44,12 +46,25 @@ func TestAccNxosBGPRouteRedistribution(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_bgp_route_redistribution.test",
-				ImportState:   true,
-				ImportStateId: "sys/bgp/inst/dom-[default]/af-[ipv4-ucast]/interleak-[ospf]-interleak-[OSPF1]",
+				ResourceName:      "nxos_bgp_route_redistribution.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosBGPRouteRedistributionImportStateIdFunc("nxos_bgp_route_redistribution.test"),
 			},
 		},
 	})
+}
+
+func nxosBGPRouteRedistributionImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Asn := primary.Attributes["asn"]
+		Vrf := primary.Attributes["vrf"]
+		AddressFamily := primary.Attributes["address_family"]
+		Protocol := primary.Attributes["protocol"]
+		ProtocolInstance := primary.Attributes["protocol_instance"]
+
+		return fmt.Sprintf("%s,%s,%s,%s,%s", Asn, Vrf, AddressFamily, Protocol, ProtocolInstance), nil
+	}
 }
 
 const testAccNxosBGPRouteRedistributionPrerequisitesConfig = `

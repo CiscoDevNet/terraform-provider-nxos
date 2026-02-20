@@ -1,1 +1,1 @@
-terraform import nxos_bgp.example "sys/bgp"
+terraform import nxos_bgp.example ""

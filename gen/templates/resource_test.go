@@ -21,9 +21,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxos{{camelCase .Name}}(t *testing.T) {
@@ -83,10 +85,24 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 			{
 				ResourceName:  "nxos_{{snakeCase $name}}.test",
 				ImportState:   true,
-				ImportStateId: "{{getExampleDn .Dn .Attributes}}",
+				ImportStateIdFunc: nxos{{camelCase .Name}}ImportStateIdFunc("nxos_{{snakeCase $name}}.test"),
 			},
 		},
 	})
+}
+
+func nxos{{camelCase .Name}}ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		{{- if importAttributes .}}
+		primary := s.RootModule().Resources[resourceName].Primary
+		{{- end}}
+
+		{{- range (importAttributes .)}}
+		{{toGoName .TfName}} := primary.Attributes["{{.TfName}}"]
+		{{- end}}
+
+		return fmt.Sprintf("{{range $i, $e := (importAttributes .)}}{{if $i}},{{end}}%s{{end}}", {{range $i, $e := (importAttributes .)}}{{if $i}}, {{end}}{{toGoName .TfName}}{{end}}), nil
+	}
 }
 
 {{- if .TestPrerequisites}}

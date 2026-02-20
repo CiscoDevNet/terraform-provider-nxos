@@ -73,12 +73,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_ospfv3_vrf_address_family.example
-  id = "sys/ospfv3/inst-[nac-ospfv3]/dom-[VRF1]/af-[ipv6-ucast]"
+  id = "<instance_name>,<vrf_name>,<address_family_type>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_ospfv3_vrf_address_family.example "sys/ospfv3/inst-[nac-ospfv3]/dom-[VRF1]/af-[ipv6-ucast]"
+terraform import nxos_ospfv3_vrf_address_family.example "<instance_name>,<vrf_name>,<address_family_type>"
 ```

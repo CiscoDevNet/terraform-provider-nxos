@@ -20,10 +20,12 @@
 package provider
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosFeatureHMM(t *testing.T) {
@@ -41,12 +43,19 @@ func TestAccNxosFeatureHMM(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_feature_hmm.test",
-				ImportState:   true,
-				ImportStateId: "sys/fm/hmm",
+				ResourceName:      "nxos_feature_hmm.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosFeatureHMMImportStateIdFunc("nxos_feature_hmm.test"),
 			},
 		},
 	})
+}
+
+func nxosFeatureHMMImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 const testAccNxosFeatureHMMPrerequisitesConfig = `

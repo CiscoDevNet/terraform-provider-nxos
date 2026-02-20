@@ -59,12 +59,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_pim_static_rp.example
-  id = "sys/pim/inst/dom-[default]/staticrp/rp-[1.2.3.4]"
+  id = "<vrf_name>,<address>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_pim_static_rp.example "sys/pim/inst/dom-[default]/staticrp/rp-[1.2.3.4]"
+terraform import nxos_pim_static_rp.example "<vrf_name>,<address>"
 ```

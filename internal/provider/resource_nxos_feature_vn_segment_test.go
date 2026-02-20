@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosFeatureVNSegment(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosFeatureVNSegment(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_feature_vn_segment.test",
-				ImportState:   true,
-				ImportStateId: "sys/fm/vnsegment",
+				ResourceName:      "nxos_feature_vn_segment.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosFeatureVNSegmentImportStateIdFunc("nxos_feature_vn_segment.test"),
 			},
 		},
 	})
+}
+
+func nxosFeatureVNSegmentImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosFeatureVNSegmentConfig_minimum() string {

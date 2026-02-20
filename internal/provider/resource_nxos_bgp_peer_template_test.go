@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosBGPPeerTemplate(t *testing.T) {
@@ -42,12 +44,22 @@ func TestAccNxosBGPPeerTemplate(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_bgp_peer_template.test",
-				ImportState:   true,
-				ImportStateId: "sys/bgp/inst/dom-[default]/peercont-[SPINE-PEERS]",
+				ResourceName:      "nxos_bgp_peer_template.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosBGPPeerTemplateImportStateIdFunc("nxos_bgp_peer_template.test"),
 			},
 		},
 	})
+}
+
+func nxosBGPPeerTemplateImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Asn := primary.Attributes["asn"]
+		TemplateName := primary.Attributes["template_name"]
+
+		return fmt.Sprintf("%s,%s", Asn, TemplateName), nil
+	}
 }
 
 const testAccNxosBGPPeerTemplatePrerequisitesConfig = `

@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosBGPGracefulRestart(t *testing.T) {
@@ -40,12 +42,22 @@ func TestAccNxosBGPGracefulRestart(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_bgp_graceful_restart.test",
-				ImportState:   true,
-				ImportStateId: "sys/bgp/inst/dom-[default]/gr",
+				ResourceName:      "nxos_bgp_graceful_restart.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosBGPGracefulRestartImportStateIdFunc("nxos_bgp_graceful_restart.test"),
 			},
 		},
 	})
+}
+
+func nxosBGPGracefulRestartImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Asn := primary.Attributes["asn"]
+		Vrf := primary.Attributes["vrf"]
+
+		return fmt.Sprintf("%s,%s", Asn, Vrf), nil
+	}
 }
 
 const testAccNxosBGPGracefulRestartPrerequisitesConfig = `

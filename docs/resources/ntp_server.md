@@ -62,12 +62,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_ntp_server.example
-  id = "sys/time/prov-[1.2.3.4]"
+  id = "<name>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_ntp_server.example "sys/time/prov-[1.2.3.4]"
+terraform import nxos_ntp_server.example "<name>"
 ```

@@ -82,12 +82,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_ipv4_static_route.example
-  id = "sys/ipv4/inst/dom-[default]/rt-[1.1.1.0/24]"
+  id = "<vrf_name>,<prefix>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_ipv4_static_route.example "sys/ipv4/inst/dom-[default]/rt-[1.1.1.0/24]"
+terraform import nxos_ipv4_static_route.example "<vrf_name>,<prefix>"
 ```

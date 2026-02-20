@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosRouteMapRuleEntrySetRegularCommunityItem(t *testing.T) {
@@ -39,12 +41,23 @@ func TestAccNxosRouteMapRuleEntrySetRegularCommunityItem(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_route_map_rule_entry_set_regular_community_item.test",
-				ImportState:   true,
-				ImportStateId: "sys/rpm/rtmap-[RULE1]/ent-[10]/sregcomm/item-[regular:as2-nn2:65001:123]",
+				ResourceName:      "nxos_route_map_rule_entry_set_regular_community_item.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosRouteMapRuleEntrySetRegularCommunityItemImportStateIdFunc("nxos_route_map_rule_entry_set_regular_community_item.test"),
 			},
 		},
 	})
+}
+
+func nxosRouteMapRuleEntrySetRegularCommunityItemImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		RuleName := primary.Attributes["rule_name"]
+		Order := primary.Attributes["order"]
+		Community := primary.Attributes["community"]
+
+		return fmt.Sprintf("%s,%s,%s", RuleName, Order, Community), nil
+	}
 }
 
 const testAccNxosRouteMapRuleEntrySetRegularCommunityItemPrerequisitesConfig = `

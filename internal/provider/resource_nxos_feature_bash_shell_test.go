@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosFeatureBashShell(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosFeatureBashShell(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_feature_bash_shell.test",
-				ImportState:   true,
-				ImportStateId: "sys/fm/bashshell",
+				ResourceName:      "nxos_feature_bash_shell.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosFeatureBashShellImportStateIdFunc("nxos_feature_bash_shell.test"),
 			},
 		},
 	})
+}
+
+func nxosFeatureBashShellImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosFeatureBashShellConfig_minimum() string {

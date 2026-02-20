@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosIPv6StaticRoute(t *testing.T) {
@@ -45,12 +47,22 @@ func TestAccNxosIPv6StaticRoute(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_ipv6_static_route.test",
-				ImportState:   true,
-				ImportStateId: "sys/ipv6/inst/dom-[default]/rt-[2001:db8:3333:4444:5555:6666:102:304/128]",
+				ResourceName:      "nxos_ipv6_static_route.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosIPv6StaticRouteImportStateIdFunc("nxos_ipv6_static_route.test"),
 			},
 		},
 	})
+}
+
+func nxosIPv6StaticRouteImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		VrfName := primary.Attributes["vrf_name"]
+		Prefix := primary.Attributes["prefix"]
+
+		return fmt.Sprintf("%s,%s", VrfName, Prefix), nil
+	}
 }
 
 const testAccNxosIPv6StaticRoutePrerequisitesConfig = `

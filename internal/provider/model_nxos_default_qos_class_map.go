@@ -21,8 +21,6 @@ package provider
 
 import (
 	"fmt"
-	"regexp"
-	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -78,15 +76,4 @@ func (data DefaultQOSClassMap) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
-}
-
-func (data *DefaultQOSClassMap) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/ipqos/dflt/c/name-[%s]", "%[1]s", ".+")
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
-	reString = strings.ReplaceAll(reString, "%v", "(.+)")
-	reString = strings.ReplaceAll(reString, "[", "\\[")
-	reString = strings.ReplaceAll(reString, "]", "\\]")
-	re := regexp.MustCompile(reString)
-	matches := re.FindStringSubmatch(data.Dn.ValueString())
-	data.Name = types.StringValue(matches[1])
 }

@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosEthernet(t *testing.T) {
@@ -38,12 +40,19 @@ func TestAccNxosEthernet(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_ethernet.test",
-				ImportState:   true,
-				ImportStateId: "sys/ethpm/inst",
+				ResourceName:      "nxos_ethernet.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosEthernetImportStateIdFunc("nxos_ethernet.test"),
 			},
 		},
 	})
+}
+
+func nxosEthernetImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosEthernetConfig_minimum() string {

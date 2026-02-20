@@ -21,9 +21,7 @@ package provider
 
 import (
 	"fmt"
-	"regexp"
 	"strconv"
-	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -184,16 +182,4 @@ func (data IPv4StaticRoute) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
-}
-
-func (data *IPv4StaticRoute) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/ipv4/inst/dom-[%s]/rt-[%s]", "%[1]s", ".+")
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
-	reString = strings.ReplaceAll(reString, "%v", "(.+)")
-	reString = strings.ReplaceAll(reString, "[", "\\[")
-	reString = strings.ReplaceAll(reString, "]", "\\]")
-	re := regexp.MustCompile(reString)
-	matches := re.FindStringSubmatch(data.Dn.ValueString())
-	data.VrfName = types.StringValue(matches[1])
-	data.Prefix = types.StringValue(matches[2])
 }

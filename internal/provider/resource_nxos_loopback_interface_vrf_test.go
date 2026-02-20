@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosLoopbackInterfaceVRF(t *testing.T) {
@@ -38,12 +40,21 @@ func TestAccNxosLoopbackInterfaceVRF(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_loopback_interface_vrf.test",
-				ImportState:   true,
-				ImportStateId: "sys/intf/lb-[lo123]/rtvrfMbr",
+				ResourceName:      "nxos_loopback_interface_vrf.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosLoopbackInterfaceVRFImportStateIdFunc("nxos_loopback_interface_vrf.test"),
 			},
 		},
 	})
+}
+
+func nxosLoopbackInterfaceVRFImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InterfaceId := primary.Attributes["interface_id"]
+
+		return fmt.Sprintf("%s", InterfaceId), nil
+	}
 }
 
 const testAccNxosLoopbackInterfaceVRFPrerequisitesConfig = `

@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosFeatureLLDP(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosFeatureLLDP(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_feature_lldp.test",
-				ImportState:   true,
-				ImportStateId: "sys/fm/lldp",
+				ResourceName:      "nxos_feature_lldp.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosFeatureLLDPImportStateIdFunc("nxos_feature_lldp.test"),
 			},
 		},
 	})
+}
+
+func nxosFeatureLLDPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosFeatureLLDPConfig_minimum() string {

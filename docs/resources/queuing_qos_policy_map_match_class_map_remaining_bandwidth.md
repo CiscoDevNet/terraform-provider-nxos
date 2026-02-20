@@ -56,12 +56,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth.example
-  id = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q1]/setRemBW"
+  id = "<policy_map_name>,<class_map_name>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth.example "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q1]/setRemBW"
+terraform import nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth.example "<policy_map_name>,<class_map_name>"
 ```

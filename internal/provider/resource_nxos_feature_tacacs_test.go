@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosFeatureTACACS(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosFeatureTACACS(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_feature_tacacs.test",
-				ImportState:   true,
-				ImportStateId: "sys/fm/tacacsplus",
+				ResourceName:      "nxos_feature_tacacs.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosFeatureTACACSImportStateIdFunc("nxos_feature_tacacs.test"),
 			},
 		},
 	})
+}
+
+func nxosFeatureTACACSImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosFeatureTACACSConfig_minimum() string {

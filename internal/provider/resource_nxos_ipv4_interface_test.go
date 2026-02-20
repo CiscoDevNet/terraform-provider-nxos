@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosIPv4Interface(t *testing.T) {
@@ -42,12 +44,22 @@ func TestAccNxosIPv4Interface(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_ipv4_interface.test",
-				ImportState:   true,
-				ImportStateId: "sys/ipv4/inst/dom-[default]/if-[eth1/10]",
+				ResourceName:      "nxos_ipv4_interface.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosIPv4InterfaceImportStateIdFunc("nxos_ipv4_interface.test"),
 			},
 		},
 	})
+}
+
+func nxosIPv4InterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Vrf := primary.Attributes["vrf"]
+		InterfaceId := primary.Attributes["interface_id"]
+
+		return fmt.Sprintf("%s,%s", Vrf, InterfaceId), nil
+	}
 }
 
 const testAccNxosIPv4InterfacePrerequisitesConfig = `

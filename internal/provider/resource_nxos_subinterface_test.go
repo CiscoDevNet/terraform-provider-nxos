@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosSubinterface(t *testing.T) {
@@ -45,12 +47,21 @@ func TestAccNxosSubinterface(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_subinterface.test",
-				ImportState:   true,
-				ImportStateId: "sys/intf/encrtd-[eth1/10.124]",
+				ResourceName:      "nxos_subinterface.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosSubinterfaceImportStateIdFunc("nxos_subinterface.test"),
 			},
 		},
 	})
+}
+
+func nxosSubinterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InterfaceId := primary.Attributes["interface_id"]
+
+		return fmt.Sprintf("%s", InterfaceId), nil
+	}
 }
 
 const testAccNxosSubinterfacePrerequisitesConfig = `

@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosEVPNVNIRouteTarget(t *testing.T) {
@@ -39,12 +41,23 @@ func TestAccNxosEVPNVNIRouteTarget(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_evpn_vni_route_target.test",
-				ImportState:   true,
-				ImportStateId: "sys/evpn/bdevi-[vxlan-123456]/rttp-[import]/ent-[route-target:as2-nn2:2:2]",
+				ResourceName:      "nxos_evpn_vni_route_target.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosEVPNVNIRouteTargetImportStateIdFunc("nxos_evpn_vni_route_target.test"),
 			},
 		},
 	})
+}
+
+func nxosEVPNVNIRouteTargetImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Encap := primary.Attributes["encap"]
+		Direction := primary.Attributes["direction"]
+		RouteTarget := primary.Attributes["route_target"]
+
+		return fmt.Sprintf("%s,%s,%s", Encap, Direction, RouteTarget), nil
+	}
 }
 
 const testAccNxosEVPNVNIRouteTargetPrerequisitesConfig = `

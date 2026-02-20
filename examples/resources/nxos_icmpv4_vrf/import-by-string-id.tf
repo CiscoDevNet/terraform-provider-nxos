@@ -1,4 +1,4 @@
 import {
   to = nxos_icmpv4_vrf.example
-  id = "sys/icmpv4/inst/dom-[VRF1]"
+  id = "<vrf_name>"
 }

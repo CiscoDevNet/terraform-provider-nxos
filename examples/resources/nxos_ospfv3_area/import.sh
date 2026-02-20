@@ -1,1 +1,1 @@
-terraform import nxos_ospfv3_area.example "sys/ospfv3/inst-[nac-ospfv3]/dom-[VRF1]/area-[0.0.0.10]"
+terraform import nxos_ospfv3_area.example "<instance_name>,<vrf_name>,<area_id>"

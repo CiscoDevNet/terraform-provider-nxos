@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosPortChannelInterfaceMember(t *testing.T) {
@@ -39,12 +41,22 @@ func TestAccNxosPortChannelInterfaceMember(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_port_channel_interface_member.test",
-				ImportState:   true,
-				ImportStateId: "sys/intf/aggr-[po1]/rsmbrIfs-[sys/intf/phys-[eth1/11]]",
+				ResourceName:      "nxos_port_channel_interface_member.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosPortChannelInterfaceMemberImportStateIdFunc("nxos_port_channel_interface_member.test"),
 			},
 		},
 	})
+}
+
+func nxosPortChannelInterfaceMemberImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InterfaceId := primary.Attributes["interface_id"]
+		InterfaceDn := primary.Attributes["interface_dn"]
+
+		return fmt.Sprintf("%s,%s", InterfaceId, InterfaceDn), nil
+	}
 }
 
 const testAccNxosPortChannelInterfaceMemberPrerequisitesConfig = `

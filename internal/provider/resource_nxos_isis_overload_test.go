@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosISISOverload(t *testing.T) {
@@ -39,12 +41,22 @@ func TestAccNxosISISOverload(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_isis_overload.test",
-				ImportState:   true,
-				ImportStateId: "sys/isis/inst-[ISIS1]/dom-[default]/overload",
+				ResourceName:      "nxos_isis_overload.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosISISOverloadImportStateIdFunc("nxos_isis_overload.test"),
 			},
 		},
 	})
+}
+
+func nxosISISOverloadImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InstanceName := primary.Attributes["instance_name"]
+		Vrf := primary.Attributes["vrf"]
+
+		return fmt.Sprintf("%s,%s", InstanceName, Vrf), nil
+	}
 }
 
 const testAccNxosISISOverloadPrerequisitesConfig = `

@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosPIMInterface(t *testing.T) {
@@ -43,12 +45,22 @@ func TestAccNxosPIMInterface(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_pim_interface.test",
-				ImportState:   true,
-				ImportStateId: "sys/pim/inst/dom-[default]/if-[eth1/10]",
+				ResourceName:      "nxos_pim_interface.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosPIMInterfaceImportStateIdFunc("nxos_pim_interface.test"),
 			},
 		},
 	})
+}
+
+func nxosPIMInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		VrfName := primary.Attributes["vrf_name"]
+		InterfaceId := primary.Attributes["interface_id"]
+
+		return fmt.Sprintf("%s,%s", VrfName, InterfaceId), nil
+	}
 }
 
 const testAccNxosPIMInterfacePrerequisitesConfig = `

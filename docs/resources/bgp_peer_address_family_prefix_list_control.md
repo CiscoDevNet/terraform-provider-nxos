@@ -65,12 +65,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_bgp_peer_address_family_prefix_list_control.example
-  id = "sys/bgp/inst/dom-[default]/peer-[192.168.0.1]/af-[ipv4-ucast]/pfxctrl-[in]"
+  id = "<asn>,<vrf>,<address>,<address_family>,<direction>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_bgp_peer_address_family_prefix_list_control.example "sys/bgp/inst/dom-[default]/peer-[192.168.0.1]/af-[ipv4-ucast]/pfxctrl-[in]"
+terraform import nxos_bgp_peer_address_family_prefix_list_control.example "<asn>,<vrf>,<address>,<address_family>,<direction>"
 ```

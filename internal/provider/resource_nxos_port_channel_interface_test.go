@@ -20,10 +20,12 @@
 package provider
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosPortChannelInterface(t *testing.T) {
@@ -61,12 +63,21 @@ func TestAccNxosPortChannelInterface(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_port_channel_interface.test",
-				ImportState:   true,
-				ImportStateId: "sys/intf/aggr-[po1]",
+				ResourceName:      "nxos_port_channel_interface.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosPortChannelInterfaceImportStateIdFunc("nxos_port_channel_interface.test"),
 			},
 		},
 	})
+}
+
+func nxosPortChannelInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InterfaceId := primary.Attributes["interface_id"]
+
+		return fmt.Sprintf("%s", InterfaceId), nil
+	}
 }
 
 func testAccNxosPortChannelInterfaceConfig_minimum() string {

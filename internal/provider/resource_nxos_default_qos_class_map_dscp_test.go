@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosDefaultQOSClassMapDSCP(t *testing.T) {
@@ -38,12 +40,22 @@ func TestAccNxosDefaultQOSClassMapDSCP(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_default_qos_class_map_dscp.test",
-				ImportState:   true,
-				ImportStateId: "sys/ipqos/dflt/c/name-[Voice]/dscp-[ef]",
+				ResourceName:      "nxos_default_qos_class_map_dscp.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosDefaultQOSClassMapDSCPImportStateIdFunc("nxos_default_qos_class_map_dscp.test"),
 			},
 		},
 	})
+}
+
+func nxosDefaultQOSClassMapDSCPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		ClassMapName := primary.Attributes["class_map_name"]
+		Value := primary.Attributes["value"]
+
+		return fmt.Sprintf("%s,%s", ClassMapName, Value), nil
+	}
 }
 
 const testAccNxosDefaultQOSClassMapDSCPPrerequisitesConfig = `

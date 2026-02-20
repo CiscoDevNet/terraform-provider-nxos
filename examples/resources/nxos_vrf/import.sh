@@ -1,1 +1,1 @@
-terraform import nxos_vrf.example "sys/inst-[VRF1]"
+terraform import nxos_vrf.example "<name>"

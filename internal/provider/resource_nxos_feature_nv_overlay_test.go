@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosFeatureNVOverlay(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosFeatureNVOverlay(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_feature_nv_overlay.test",
-				ImportState:   true,
-				ImportStateId: "sys/fm/nvo",
+				ResourceName:      "nxos_feature_nv_overlay.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosFeatureNVOverlayImportStateIdFunc("nxos_feature_nv_overlay.test"),
 			},
 		},
 	})
+}
+
+func nxosFeatureNVOverlayImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosFeatureNVOverlayConfig_minimum() string {

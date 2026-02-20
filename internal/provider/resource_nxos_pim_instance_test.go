@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosPIMInstance(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosPIMInstance(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_pim_instance.test",
-				ImportState:   true,
-				ImportStateId: "sys/pim/inst",
+				ResourceName:      "nxos_pim_instance.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosPIMInstanceImportStateIdFunc("nxos_pim_instance.test"),
 			},
 		},
 	})
+}
+
+func nxosPIMInstanceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 const testAccNxosPIMInstancePrerequisitesConfig = `

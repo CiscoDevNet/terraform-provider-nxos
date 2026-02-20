@@ -20,10 +20,12 @@
 package provider
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosFeatureMACsec(t *testing.T) {
@@ -41,12 +43,19 @@ func TestAccNxosFeatureMACsec(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_feature_macsec.test",
-				ImportState:   true,
-				ImportStateId: "sys/fm/macsec",
+				ResourceName:      "nxos_feature_macsec.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosFeatureMACsecImportStateIdFunc("nxos_feature_macsec.test"),
 			},
 		},
 	})
+}
+
+func nxosFeatureMACsecImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosFeatureMACsecConfig_minimum() string {

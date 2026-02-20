@@ -22,6 +22,8 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -168,9 +170,6 @@ func (r *KeychainKeyResource) Read(ctx context.Context, req resource.ReadRequest
 			return
 		}
 		state.fromBody(res, imp)
-		if imp {
-			state.getIdsFromDn()
-		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
@@ -262,12 +261,31 @@ func (r *KeychainKeyResource) Delete(ctx context.Context, req resource.DeleteReq
 }
 
 func (r *KeychainKeyResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	dn, device := helpers.ParseImportID(req.ID)
+	idParts := strings.Split(req.ID, ",")
+	idParts = helpers.RemoveEmptyStrings(idParts)
 
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), dn)...)
-	if device != "" {
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), device)...)
+	if len(idParts) != 2 && len(idParts) != 3 {
+		expectedIdentifier := "Expected import identifier with format: '<keychain>,<key_id>'"
+		expectedIdentifier += " or '<keychain>,<key_id>,<device>'"
+		resp.Diagnostics.AddError(
+			"Unexpected Import Identifier",
+			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
+		)
+		return
 	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("keychain"), idParts[0])...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("key_id"), helpers.Must(strconv.ParseInt(idParts[1], 10, 64)))...)
+	if len(idParts) == 3 {
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+	}
+
+	var state KeychainKey
+	diags := resp.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getDn())...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)
 }

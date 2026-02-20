@@ -22,6 +22,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -202,9 +203,6 @@ func (r *BGPRouteControlResource) Read(ctx context.Context, req resource.ReadReq
 			return
 		}
 		state.fromBody(res, imp)
-		if imp {
-			state.getIdsFromDn()
-		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
@@ -296,12 +294,31 @@ func (r *BGPRouteControlResource) Delete(ctx context.Context, req resource.Delet
 }
 
 func (r *BGPRouteControlResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	dn, device := helpers.ParseImportID(req.ID)
+	idParts := strings.Split(req.ID, ",")
+	idParts = helpers.RemoveEmptyStrings(idParts)
 
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), dn)...)
-	if device != "" {
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), device)...)
+	if len(idParts) != 2 && len(idParts) != 3 {
+		expectedIdentifier := "Expected import identifier with format: '<asn>,<vrf>'"
+		expectedIdentifier += " or '<asn>,<vrf>,<device>'"
+		resp.Diagnostics.AddError(
+			"Unexpected Import Identifier",
+			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
+		)
+		return
 	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("asn"), idParts[0])...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf"), idParts[1])...)
+	if len(idParts) == 3 {
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+	}
+
+	var state BGPRouteControl
+	diags := resp.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getDn())...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)
 }

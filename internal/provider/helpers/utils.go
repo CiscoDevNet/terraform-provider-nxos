@@ -17,32 +17,6 @@
 
 package helpers
 
-// ParseImportID splits an import identifier into a DN and an optional device name.
-// The format is "<dn>" or "<dn>,<device>". Since DNs can contain commas inside
-// brackets (e.g. "sys/acl/ipv4/name-[a,b]"), only the last comma that is not
-// enclosed in brackets is treated as the separator.
-func ParseImportID(id string) (dn string, device string) {
-	// Find the last comma at bracket depth 0
-	depth := 0
-	sepIdx := -1
-	for i, c := range id {
-		switch c {
-		case '[':
-			depth++
-		case ']':
-			depth--
-		case ',':
-			if depth == 0 {
-				sepIdx = i
-			}
-		}
-	}
-	if sepIdx == -1 {
-		return id, ""
-	}
-	return id[:sepIdx], id[sepIdx+1:]
-}
-
 func ParseNxosBoolean(s string) bool {
 	if s == "yes" || s == "true" {
 		return true
@@ -55,4 +29,14 @@ func Must[T any](v T, err error) T {
 		panic(err)
 	}
 	return v
+}
+
+func RemoveEmptyStrings(s []string) []string {
+	var r []string
+	for _, v := range s {
+		if v != "" {
+			r = append(r, v)
+		}
+	}
+	return r
 }

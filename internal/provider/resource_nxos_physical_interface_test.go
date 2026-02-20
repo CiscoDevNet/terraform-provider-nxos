@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosPhysicalInterface(t *testing.T) {
@@ -58,12 +60,21 @@ func TestAccNxosPhysicalInterface(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_physical_interface.test",
-				ImportState:   true,
-				ImportStateId: "sys/intf/phys-[eth1/10]",
+				ResourceName:      "nxos_physical_interface.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosPhysicalInterfaceImportStateIdFunc("nxos_physical_interface.test"),
 			},
 		},
 	})
+}
+
+func nxosPhysicalInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InterfaceId := primary.Attributes["interface_id"]
+
+		return fmt.Sprintf("%s", InterfaceId), nil
+	}
 }
 
 func testAccNxosPhysicalInterfaceConfig_minimum() string {

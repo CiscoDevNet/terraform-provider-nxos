@@ -1,1 +1,1 @@
-terraform import nxos_bgp_address_family.example "sys/bgp/inst/dom-[default]/af-[ipv4-ucast]"
+terraform import nxos_bgp_address_family.example "<asn>,<vrf>,<address_family>"

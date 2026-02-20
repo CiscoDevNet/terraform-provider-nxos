@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosPhysicalInterfaceVRF(t *testing.T) {
@@ -38,12 +40,21 @@ func TestAccNxosPhysicalInterfaceVRF(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_physical_interface_vrf.test",
-				ImportState:   true,
-				ImportStateId: "sys/intf/phys-[eth1/10]/rtvrfMbr",
+				ResourceName:      "nxos_physical_interface_vrf.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosPhysicalInterfaceVRFImportStateIdFunc("nxos_physical_interface_vrf.test"),
 			},
 		},
 	})
+}
+
+func nxosPhysicalInterfaceVRFImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InterfaceId := primary.Attributes["interface_id"]
+
+		return fmt.Sprintf("%s", InterfaceId), nil
+	}
 }
 
 const testAccNxosPhysicalInterfaceVRFPrerequisitesConfig = `

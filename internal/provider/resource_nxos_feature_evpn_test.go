@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosFeatureEVPN(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosFeatureEVPN(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_feature_evpn.test",
-				ImportState:   true,
-				ImportStateId: "sys/fm/evpn",
+				ResourceName:      "nxos_feature_evpn.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosFeatureEVPNImportStateIdFunc("nxos_feature_evpn.test"),
 			},
 		},
 	})
+}
+
+func nxosFeatureEVPNImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosFeatureEVPNConfig_minimum() string {

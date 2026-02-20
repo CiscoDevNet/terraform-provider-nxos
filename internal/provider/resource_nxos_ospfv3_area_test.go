@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosOSPFv3Area(t *testing.T) {
@@ -43,12 +45,23 @@ func TestAccNxosOSPFv3Area(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_ospfv3_area.test",
-				ImportState:   true,
-				ImportStateId: "sys/ospfv3/inst-[nac-ospfv3]/dom-[VRF1]/area-[0.0.0.10]",
+				ResourceName:      "nxos_ospfv3_area.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosOSPFv3AreaImportStateIdFunc("nxos_ospfv3_area.test"),
 			},
 		},
 	})
+}
+
+func nxosOSPFv3AreaImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InstanceName := primary.Attributes["instance_name"]
+		VrfName := primary.Attributes["vrf_name"]
+		AreaId := primary.Attributes["area_id"]
+
+		return fmt.Sprintf("%s,%s,%s", InstanceName, VrfName, AreaId), nil
+	}
 }
 
 const testAccNxosOSPFv3AreaPrerequisitesConfig = `

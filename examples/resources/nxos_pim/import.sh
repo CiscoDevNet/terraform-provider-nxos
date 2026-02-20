@@ -1,1 +1,1 @@
-terraform import nxos_pim.example "sys/pim"
+terraform import nxos_pim.example ""

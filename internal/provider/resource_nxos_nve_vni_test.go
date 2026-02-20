@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosNVEVNI(t *testing.T) {
@@ -41,12 +43,21 @@ func TestAccNxosNVEVNI(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_nve_vni.test",
-				ImportState:   true,
-				ImportStateId: "sys/eps/epId-[1]/nws/vni-[103100]",
+				ResourceName:      "nxos_nve_vni.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosNVEVNIImportStateIdFunc("nxos_nve_vni.test"),
 			},
 		},
 	})
+}
+
+func nxosNVEVNIImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Vni := primary.Attributes["vni"]
+
+		return fmt.Sprintf("%s", Vni), nil
+	}
 }
 
 const testAccNxosNVEVNIPrerequisitesConfig = `

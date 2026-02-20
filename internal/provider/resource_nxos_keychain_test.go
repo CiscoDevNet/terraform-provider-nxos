@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosKeychain(t *testing.T) {
@@ -37,12 +39,21 @@ func TestAccNxosKeychain(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_keychain.test",
-				ImportState:   true,
-				ImportStateId: "sys/kcmgr/keychains/classickeychain-[Keychain1]",
+				ResourceName:      "nxos_keychain.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosKeychainImportStateIdFunc("nxos_keychain.test"),
 			},
 		},
 	})
+}
+
+func nxosKeychainImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Name := primary.Attributes["name"]
+
+		return fmt.Sprintf("%s", Name), nil
+	}
 }
 
 const testAccNxosKeychainPrerequisitesConfig = `

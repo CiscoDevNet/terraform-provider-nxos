@@ -1,1 +1,1 @@
-terraform import nxos_system.example "sys"
+terraform import nxos_system.example ""

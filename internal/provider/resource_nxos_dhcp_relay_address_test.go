@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosDHCPRelayAddress(t *testing.T) {
@@ -39,12 +41,23 @@ func TestAccNxosDHCPRelayAddress(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_dhcp_relay_address.test",
-				ImportState:   true,
-				ImportStateId: "sys/dhcp/inst/relayif-[eth1/10]/addr-[VRF1]-[1.1.1.1]",
+				ResourceName:      "nxos_dhcp_relay_address.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosDHCPRelayAddressImportStateIdFunc("nxos_dhcp_relay_address.test"),
 			},
 		},
 	})
+}
+
+func nxosDHCPRelayAddressImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InterfaceId := primary.Attributes["interface_id"]
+		Vrf := primary.Attributes["vrf"]
+		Address := primary.Attributes["address"]
+
+		return fmt.Sprintf("%s,%s,%s", InterfaceId, Vrf, Address), nil
+	}
 }
 
 const testAccNxosDHCPRelayAddressPrerequisitesConfig = `

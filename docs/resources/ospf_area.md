@@ -68,12 +68,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_ospf_area.example
-  id = "sys/ospf/inst-[OSPF1]/dom-[VRF1]/area-[0.0.0.10]"
+  id = "<instance_name>,<vrf_name>,<area_id>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_ospf_area.example "sys/ospf/inst-[OSPF1]/dom-[VRF1]/area-[0.0.0.10]"
+terraform import nxos_ospf_area.example "<instance_name>,<vrf_name>,<area_id>"
 ```

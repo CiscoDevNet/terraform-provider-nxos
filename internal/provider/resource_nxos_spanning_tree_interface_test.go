@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosSpanningTreeInterface(t *testing.T) {
@@ -45,12 +47,21 @@ func TestAccNxosSpanningTreeInterface(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_spanning_tree_interface.test",
-				ImportState:   true,
-				ImportStateId: "sys/stp/inst/if-[eth1/9]",
+				ResourceName:      "nxos_spanning_tree_interface.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosSpanningTreeInterfaceImportStateIdFunc("nxos_spanning_tree_interface.test"),
 			},
 		},
 	})
+}
+
+func nxosSpanningTreeInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InterfaceId := primary.Attributes["interface_id"]
+
+		return fmt.Sprintf("%s", InterfaceId), nil
+	}
 }
 
 func testAccNxosSpanningTreeInterfaceConfig_minimum() string {

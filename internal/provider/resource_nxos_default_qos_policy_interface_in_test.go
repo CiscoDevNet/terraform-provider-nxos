@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosDefaultQOSPolicyInterfaceIn(t *testing.T) {
@@ -37,12 +39,21 @@ func TestAccNxosDefaultQOSPolicyInterfaceIn(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_default_qos_policy_interface_in.test",
-				ImportState:   true,
-				ImportStateId: "sys/ipqos/dflt/policy/in/intf-[eth1/10]",
+				ResourceName:      "nxos_default_qos_policy_interface_in.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosDefaultQOSPolicyInterfaceInImportStateIdFunc("nxos_default_qos_policy_interface_in.test"),
 			},
 		},
 	})
+}
+
+func nxosDefaultQOSPolicyInterfaceInImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InterfaceId := primary.Attributes["interface_id"]
+
+		return fmt.Sprintf("%s", InterfaceId), nil
+	}
 }
 
 func testAccNxosDefaultQOSPolicyInterfaceInConfig_minimum() string {

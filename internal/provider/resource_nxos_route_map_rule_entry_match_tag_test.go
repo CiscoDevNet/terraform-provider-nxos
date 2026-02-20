@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosRouteMapRuleEntryMatchTag(t *testing.T) {
@@ -39,12 +41,23 @@ func TestAccNxosRouteMapRuleEntryMatchTag(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_route_map_rule_entry_match_tag.test",
-				ImportState:   true,
-				ImportStateId: "sys/rpm/rtmap-[RULE1]/ent-[10]/mrttag-[12345]",
+				ResourceName:      "nxos_route_map_rule_entry_match_tag.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosRouteMapRuleEntryMatchTagImportStateIdFunc("nxos_route_map_rule_entry_match_tag.test"),
 			},
 		},
 	})
+}
+
+func nxosRouteMapRuleEntryMatchTagImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		RuleName := primary.Attributes["rule_name"]
+		Order := primary.Attributes["order"]
+		Tag := primary.Attributes["tag"]
+
+		return fmt.Sprintf("%s,%s,%s", RuleName, Order, Tag), nil
+	}
 }
 
 const testAccNxosRouteMapRuleEntryMatchTagPrerequisitesConfig = `

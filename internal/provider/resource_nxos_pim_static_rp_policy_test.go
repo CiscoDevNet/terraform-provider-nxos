@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosPIMStaticRPPolicy(t *testing.T) {
@@ -38,12 +40,21 @@ func TestAccNxosPIMStaticRPPolicy(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_pim_static_rp_policy.test",
-				ImportState:   true,
-				ImportStateId: "sys/pim/inst/dom-[default]/staticrp",
+				ResourceName:      "nxos_pim_static_rp_policy.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosPIMStaticRPPolicyImportStateIdFunc("nxos_pim_static_rp_policy.test"),
 			},
 		},
 	})
+}
+
+func nxosPIMStaticRPPolicyImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		VrfName := primary.Attributes["vrf_name"]
+
+		return fmt.Sprintf("%s", VrfName), nil
+	}
 }
 
 const testAccNxosPIMStaticRPPolicyPrerequisitesConfig = `

@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosISISAddressFamily(t *testing.T) {
@@ -43,12 +45,23 @@ func TestAccNxosISISAddressFamily(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_isis_address_family.test",
-				ImportState:   true,
-				ImportStateId: "sys/isis/inst-[ISIS1]/dom-[default]/af-[v4]",
+				ResourceName:      "nxos_isis_address_family.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosISISAddressFamilyImportStateIdFunc("nxos_isis_address_family.test"),
 			},
 		},
 	})
+}
+
+func nxosISISAddressFamilyImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InstanceName := primary.Attributes["instance_name"]
+		Vrf := primary.Attributes["vrf"]
+		AddressFamily := primary.Attributes["address_family"]
+
+		return fmt.Sprintf("%s,%s,%s", InstanceName, Vrf, AddressFamily), nil
+	}
 }
 
 const testAccNxosISISAddressFamilyPrerequisitesConfig = `

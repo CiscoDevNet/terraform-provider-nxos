@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosQueuingQOSPolicyMap(t *testing.T) {
@@ -38,12 +40,21 @@ func TestAccNxosQueuingQOSPolicyMap(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_queuing_qos_policy_map.test",
-				ImportState:   true,
-				ImportStateId: "sys/ipqos/queuing/p/name-[PM1]",
+				ResourceName:      "nxos_queuing_qos_policy_map.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosQueuingQOSPolicyMapImportStateIdFunc("nxos_queuing_qos_policy_map.test"),
 			},
 		},
 	})
+}
+
+func nxosQueuingQOSPolicyMapImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Name := primary.Attributes["name"]
+
+		return fmt.Sprintf("%s", Name), nil
+	}
 }
 
 func testAccNxosQueuingQOSPolicyMapConfig_minimum() string {

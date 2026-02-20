@@ -1,1 +1,1 @@
-terraform import nxos_{{snakeCase .Name}}.example "{{getExampleDn .Dn .Attributes}}"
+terraform import nxos_{{snakeCase .Name}}.example "{{range $i, $e := (importAttributes .)}}{{if $i}},{{end}}<{{.TfName}}>{{end}}"

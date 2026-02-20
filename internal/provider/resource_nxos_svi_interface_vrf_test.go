@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosSVIInterfaceVRF(t *testing.T) {
@@ -38,12 +40,21 @@ func TestAccNxosSVIInterfaceVRF(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_svi_interface_vrf.test",
-				ImportState:   true,
-				ImportStateId: "sys/intf/svi-[vlan293]/rtvrfMbr",
+				ResourceName:      "nxos_svi_interface_vrf.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosSVIInterfaceVRFImportStateIdFunc("nxos_svi_interface_vrf.test"),
 			},
 		},
 	})
+}
+
+func nxosSVIInterfaceVRFImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InterfaceId := primary.Attributes["interface_id"]
+
+		return fmt.Sprintf("%s", InterfaceId), nil
+	}
 }
 
 const testAccNxosSVIInterfaceVRFPrerequisitesConfig = `

@@ -50,12 +50,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_hmm.example
-  id = "sys/hmm"
+  id = ""
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_hmm.example "sys/hmm"
+terraform import nxos_hmm.example ""
 ```

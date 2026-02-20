@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosOSPFv3VRFAddressFamily(t *testing.T) {
@@ -42,12 +44,23 @@ func TestAccNxosOSPFv3VRFAddressFamily(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_ospfv3_vrf_address_family.test",
-				ImportState:   true,
-				ImportStateId: "sys/ospfv3/inst-[nac-ospfv3]/dom-[VRF1]/af-[ipv6-ucast]",
+				ResourceName:      "nxos_ospfv3_vrf_address_family.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosOSPFv3VRFAddressFamilyImportStateIdFunc("nxos_ospfv3_vrf_address_family.test"),
 			},
 		},
 	})
+}
+
+func nxosOSPFv3VRFAddressFamilyImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InstanceName := primary.Attributes["instance_name"]
+		VrfName := primary.Attributes["vrf_name"]
+		AddressFamilyType := primary.Attributes["address_family_type"]
+
+		return fmt.Sprintf("%s,%s,%s", InstanceName, VrfName, AddressFamilyType), nil
+	}
 }
 
 const testAccNxosOSPFv3VRFAddressFamilyPrerequisitesConfig = `

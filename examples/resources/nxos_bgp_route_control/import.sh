@@ -1,1 +1,1 @@
-terraform import nxos_bgp_route_control.example "sys/bgp/inst/dom-[default]/rtctrl"
+terraform import nxos_bgp_route_control.example "<asn>,<vrf>"

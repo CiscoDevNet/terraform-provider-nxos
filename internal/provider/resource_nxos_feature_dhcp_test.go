@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosFeatureDHCP(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosFeatureDHCP(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_feature_dhcp.test",
-				ImportState:   true,
-				ImportStateId: "sys/fm/dhcp",
+				ResourceName:      "nxos_feature_dhcp.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosFeatureDHCPImportStateIdFunc("nxos_feature_dhcp.test"),
 			},
 		},
 	})
+}
+
+func nxosFeatureDHCPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosFeatureDHCPConfig_minimum() string {

@@ -1,4 +1,4 @@
 import {
   to = nxos_hmm.example
-  id = "sys/hmm"
+  id = ""
 }

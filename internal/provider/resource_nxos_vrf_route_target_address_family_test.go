@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosVRFRouteTargetAddressFamily(t *testing.T) {
@@ -39,12 +41,23 @@ func TestAccNxosVRFRouteTargetAddressFamily(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_vrf_route_target_address_family.test",
-				ImportState:   true,
-				ImportStateId: "sys/inst-[VRF1]/dom-[VRF1]/af-[ipv4-ucast]/ctrl-[ipv4-ucast]",
+				ResourceName:      "nxos_vrf_route_target_address_family.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosVRFRouteTargetAddressFamilyImportStateIdFunc("nxos_vrf_route_target_address_family.test"),
 			},
 		},
 	})
+}
+
+func nxosVRFRouteTargetAddressFamilyImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Vrf := primary.Attributes["vrf"]
+		AddressFamily := primary.Attributes["address_family"]
+		RouteTargetAddressFamily := primary.Attributes["route_target_address_family"]
+
+		return fmt.Sprintf("%s,%s,%s", Vrf, AddressFamily, RouteTargetAddressFamily), nil
+	}
 }
 
 const testAccNxosVRFRouteTargetAddressFamilyPrerequisitesConfig = `

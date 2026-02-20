@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosNTPServer(t *testing.T) {
@@ -42,12 +44,21 @@ func TestAccNxosNTPServer(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_ntp_server.test",
-				ImportState:   true,
-				ImportStateId: "sys/time/prov-[1.2.3.4]",
+				ResourceName:      "nxos_ntp_server.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosNTPServerImportStateIdFunc("nxos_ntp_server.test"),
 			},
 		},
 	})
+}
+
+func nxosNTPServerImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Name := primary.Attributes["name"]
+
+		return fmt.Sprintf("%s", Name), nil
+	}
 }
 
 func testAccNxosNTPServerConfig_minimum() string {

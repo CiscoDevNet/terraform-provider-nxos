@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosIPv6InterfaceAddress(t *testing.T) {
@@ -41,12 +43,23 @@ func TestAccNxosIPv6InterfaceAddress(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_ipv6_interface_address.test",
-				ImportState:   true,
-				ImportStateId: "sys/ipv6/inst/dom-[default]/if-[eth1/10]/addr-[2001:db8:3333:4444:5555:6666:7777:8888]",
+				ResourceName:      "nxos_ipv6_interface_address.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosIPv6InterfaceAddressImportStateIdFunc("nxos_ipv6_interface_address.test"),
 			},
 		},
 	})
+}
+
+func nxosIPv6InterfaceAddressImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Vrf := primary.Attributes["vrf"]
+		InterfaceId := primary.Attributes["interface_id"]
+		Address := primary.Attributes["address"]
+
+		return fmt.Sprintf("%s,%s,%s", Vrf, InterfaceId, Address), nil
+	}
 }
 
 const testAccNxosIPv6InterfaceAddressPrerequisitesConfig = `

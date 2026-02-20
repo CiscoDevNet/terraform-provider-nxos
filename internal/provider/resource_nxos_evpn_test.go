@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosEVPN(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosEVPN(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_evpn.test",
-				ImportState:   true,
-				ImportStateId: "sys/evpn",
+				ResourceName:      "nxos_evpn.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosEVPNImportStateIdFunc("nxos_evpn.test"),
 			},
 		},
 	})
+}
+
+func nxosEVPNImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 const testAccNxosEVPNPrerequisitesConfig = `

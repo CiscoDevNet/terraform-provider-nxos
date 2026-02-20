@@ -1,1 +1,1 @@
-terraform import nxos_ospf.example "sys/ospf"
+terraform import nxos_ospf.example ""

@@ -1,1 +1,1 @@
-terraform import nxos_feature_bash_shell.example "sys/fm/bashshell"
+terraform import nxos_feature_bash_shell.example ""

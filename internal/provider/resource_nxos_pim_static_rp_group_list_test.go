@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosPIMStaticRPGroupList(t *testing.T) {
@@ -41,12 +43,23 @@ func TestAccNxosPIMStaticRPGroupList(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_pim_static_rp_group_list.test",
-				ImportState:   true,
-				ImportStateId: "sys/pim/inst/dom-[default]/staticrp/rp-[1.2.3.4]/rpgrplist-[224.0.0.0/4]",
+				ResourceName:      "nxos_pim_static_rp_group_list.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosPIMStaticRPGroupListImportStateIdFunc("nxos_pim_static_rp_group_list.test"),
 			},
 		},
 	})
+}
+
+func nxosPIMStaticRPGroupListImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		VrfName := primary.Attributes["vrf_name"]
+		RpAddress := primary.Attributes["rp_address"]
+		Address := primary.Attributes["address"]
+
+		return fmt.Sprintf("%s,%s,%s", VrfName, RpAddress, Address), nil
+	}
 }
 
 const testAccNxosPIMStaticRPGroupListPrerequisitesConfig = `

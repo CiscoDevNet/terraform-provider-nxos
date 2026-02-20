@@ -57,12 +57,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_icmpv4_vrf.example
-  id = "sys/icmpv4/inst/dom-[VRF1]"
+  id = "<vrf_name>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_icmpv4_vrf.example "sys/icmpv4/inst/dom-[VRF1]"
+terraform import nxos_icmpv4_vrf.example "<vrf_name>"
 ```

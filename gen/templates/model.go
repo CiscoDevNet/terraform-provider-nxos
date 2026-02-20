@@ -22,7 +22,6 @@ package provider
 
 import (
 	"fmt"
-	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -538,22 +537,3 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
-
-{{if hasId .Attributes}}
-func (data *{{camelCase .Name}}) getIdsFromDn() {
-	reString := strings.ReplaceAll("{{.Dn}}", "%[1]s", ".+")
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
-	reString = strings.ReplaceAll(reString, "%v", "(.+)")
-	reString = strings.ReplaceAll(reString, "[", "\\[")
-	reString = strings.ReplaceAll(reString, "]", "\\]")
-	re := regexp.MustCompile(reString)
-	matches := re.FindStringSubmatch(data.Dn.ValueString())
-{{- $count := 1}}
-{{- range .Attributes}}
-{{- if .Id}}
-	data.{{toGoName .TfName}} = types.{{.Type}}Value({{if eq .Type "Int64"}}helpers.Must(strconv.ParseInt(matches[{{$count}}], 10, 0)){{else}}matches[{{$count}}]{{end}})
-{{- $count = (add $count 1)}}
-{{- end}}
-{{- end}}
-}
-{{end}}

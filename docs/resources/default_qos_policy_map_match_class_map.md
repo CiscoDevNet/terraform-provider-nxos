@@ -66,12 +66,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_default_qos_policy_map_match_class_map.example
-  id = "sys/ipqos/dflt/p/name-[PM1]/cmap-[Voice]"
+  id = "<policy_map_name>,<name>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_default_qos_policy_map_match_class_map.example "sys/ipqos/dflt/p/name-[PM1]/cmap-[Voice]"
+terraform import nxos_default_qos_policy_map_match_class_map.example "<policy_map_name>,<name>"
 ```

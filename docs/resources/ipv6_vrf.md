@@ -52,12 +52,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_ipv6_vrf.example
-  id = "sys/ipv6/inst/dom-[VRF1]"
+  id = "<name>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_ipv6_vrf.example "sys/ipv6/inst/dom-[VRF1]"
+terraform import nxos_ipv6_vrf.example "<name>"
 ```

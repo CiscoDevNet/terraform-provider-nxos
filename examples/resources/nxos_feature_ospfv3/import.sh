@@ -1,1 +1,1 @@
-terraform import nxos_feature_ospfv3.example "sys/fm/ospfv3"
+terraform import nxos_feature_ospfv3.example ""

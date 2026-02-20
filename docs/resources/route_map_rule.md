@@ -51,12 +51,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_route_map_rule.example
-  id = "sys/rpm/rtmap-[RULE1]"
+  id = "<name>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_route_map_rule.example "sys/rpm/rtmap-[RULE1]"
+terraform import nxos_route_map_rule.example "<name>"
 ```

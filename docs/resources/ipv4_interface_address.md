@@ -62,12 +62,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_ipv4_interface_address.example
-  id = "sys/ipv4/inst/dom-[default]/if-[eth1/10]/addr-[24.63.46.49/30]"
+  id = "<vrf>,<interface_id>,<address>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_ipv4_interface_address.example "sys/ipv4/inst/dom-[default]/if-[eth1/10]/addr-[24.63.46.49/30]"
+terraform import nxos_ipv4_interface_address.example "<vrf>,<interface_id>,<address>"
 ```

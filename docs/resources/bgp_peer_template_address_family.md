@@ -75,12 +75,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_bgp_peer_template_address_family.example
-  id = "sys/bgp/inst/dom-[default]/peercont-[SPINE-PEERS]/af-[ipv4-ucast]"
+  id = "<asn>,<template_name>,<address_family>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_bgp_peer_template_address_family.example "sys/bgp/inst/dom-[default]/peercont-[SPINE-PEERS]/af-[ipv4-ucast]"
+terraform import nxos_bgp_peer_template_address_family.example "<asn>,<template_name>,<address_family>"
 ```

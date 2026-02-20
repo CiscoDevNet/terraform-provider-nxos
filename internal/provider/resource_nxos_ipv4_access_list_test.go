@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosIPv4AccessList(t *testing.T) {
@@ -64,12 +66,21 @@ func TestAccNxosIPv4AccessList(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_ipv4_access_list.test",
-				ImportState:   true,
-				ImportStateId: "sys/acl/ipv4/name-[ACL1]",
+				ResourceName:      "nxos_ipv4_access_list.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosIPv4AccessListImportStateIdFunc("nxos_ipv4_access_list.test"),
 			},
 		},
 	})
+}
+
+func nxosIPv4AccessListImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Name := primary.Attributes["name"]
+
+		return fmt.Sprintf("%s", Name), nil
+	}
 }
 
 func testAccNxosIPv4AccessListConfig_minimum() string {

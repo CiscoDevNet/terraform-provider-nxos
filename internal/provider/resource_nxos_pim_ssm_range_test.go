@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosPIMSSMRange(t *testing.T) {
@@ -44,12 +46,21 @@ func TestAccNxosPIMSSMRange(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_pim_ssm_range.test",
-				ImportState:   true,
-				ImportStateId: "sys/pim/inst/dom-[default]/ssm/range",
+				ResourceName:      "nxos_pim_ssm_range.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosPIMSSMRangeImportStateIdFunc("nxos_pim_ssm_range.test"),
 			},
 		},
 	})
+}
+
+func nxosPIMSSMRangeImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		VrfName := primary.Attributes["vrf_name"]
+
+		return fmt.Sprintf("%s", VrfName), nil
+	}
 }
 
 const testAccNxosPIMSSMRangePrerequisitesConfig = `

@@ -65,12 +65,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_bgp_advertised_prefix.example
-  id = "sys/bgp/inst/dom-[default]/af-[ipv4-ucast]/prefix-[192.168.1.0/24]"
+  id = "<asn>,<vrf>,<address_family>,<prefix>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_bgp_advertised_prefix.example "sys/bgp/inst/dom-[default]/af-[ipv4-ucast]/prefix-[192.168.1.0/24]"
+terraform import nxos_bgp_advertised_prefix.example "<asn>,<vrf>,<address_family>,<prefix>"
 ```

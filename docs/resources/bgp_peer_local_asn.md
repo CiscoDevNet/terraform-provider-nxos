@@ -59,12 +59,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_bgp_peer_local_asn.example
-  id = "sys/bgp/inst/dom-[default]/peer-[192.168.0.1]/localasn"
+  id = "<vrf>,<address>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_bgp_peer_local_asn.example "sys/bgp/inst/dom-[default]/peer-[192.168.0.1]/localasn"
+terraform import nxos_bgp_peer_local_asn.example "<vrf>,<address>"
 ```

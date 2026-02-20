@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosDefaultQOSPolicyMapMatchClassMap(t *testing.T) {
@@ -38,12 +40,22 @@ func TestAccNxosDefaultQOSPolicyMapMatchClassMap(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_default_qos_policy_map_match_class_map.test",
-				ImportState:   true,
-				ImportStateId: "sys/ipqos/dflt/p/name-[PM1]/cmap-[Voice]",
+				ResourceName:      "nxos_default_qos_policy_map_match_class_map.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosDefaultQOSPolicyMapMatchClassMapImportStateIdFunc("nxos_default_qos_policy_map_match_class_map.test"),
 			},
 		},
 	})
+}
+
+func nxosDefaultQOSPolicyMapMatchClassMapImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		PolicyMapName := primary.Attributes["policy_map_name"]
+		Name := primary.Attributes["name"]
+
+		return fmt.Sprintf("%s,%s", PolicyMapName, Name), nil
+	}
 }
 
 const testAccNxosDefaultQOSPolicyMapMatchClassMapPrerequisitesConfig = `

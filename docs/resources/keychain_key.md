@@ -55,12 +55,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_keychain_key.example
-  id = "sys/kcmgr/keychains/classickeychain-[KEYCHAIN1]/classickeyid-[1]"
+  id = "<keychain>,<key_id>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_keychain_key.example "sys/kcmgr/keychains/classickeychain-[KEYCHAIN1]/classickeyid-[1]"
+terraform import nxos_keychain_key.example "<keychain>,<key_id>"
 ```

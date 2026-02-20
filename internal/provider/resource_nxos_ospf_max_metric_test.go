@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosOSPFMaxMetric(t *testing.T) {
@@ -42,12 +44,22 @@ func TestAccNxosOSPFMaxMetric(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_ospf_max_metric.test",
-				ImportState:   true,
-				ImportStateId: "sys/ospf/inst-[OSPF1]/dom-[VRF1]/maxmetriclsap",
+				ResourceName:      "nxos_ospf_max_metric.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosOSPFMaxMetricImportStateIdFunc("nxos_ospf_max_metric.test"),
 			},
 		},
 	})
+}
+
+func nxosOSPFMaxMetricImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InstanceName := primary.Attributes["instance_name"]
+		VrfName := primary.Attributes["vrf_name"]
+
+		return fmt.Sprintf("%s,%s", InstanceName, VrfName), nil
+	}
 }
 
 const testAccNxosOSPFMaxMetricPrerequisitesConfig = `

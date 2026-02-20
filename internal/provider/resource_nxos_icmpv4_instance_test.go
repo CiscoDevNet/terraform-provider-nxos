@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosICMPv4Instance(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosICMPv4Instance(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_icmpv4_instance.test",
-				ImportState:   true,
-				ImportStateId: "sys/icmpv4/inst",
+				ResourceName:      "nxos_icmpv4_instance.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosICMPv4InstanceImportStateIdFunc("nxos_icmpv4_instance.test"),
 			},
 		},
 	})
+}
+
+func nxosICMPv4InstanceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 const testAccNxosICMPv4InstancePrerequisitesConfig = `

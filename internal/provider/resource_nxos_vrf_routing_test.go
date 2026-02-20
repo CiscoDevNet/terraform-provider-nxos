@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosVRFRouting(t *testing.T) {
@@ -38,12 +40,21 @@ func TestAccNxosVRFRouting(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_vrf_routing.test",
-				ImportState:   true,
-				ImportStateId: "sys/inst-[VRF1]/dom-[VRF1]",
+				ResourceName:      "nxos_vrf_routing.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosVRFRoutingImportStateIdFunc("nxos_vrf_routing.test"),
 			},
 		},
 	})
+}
+
+func nxosVRFRoutingImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Vrf := primary.Attributes["vrf"]
+
+		return fmt.Sprintf("%s", Vrf), nil
+	}
 }
 
 const testAccNxosVRFRoutingPrerequisitesConfig = `

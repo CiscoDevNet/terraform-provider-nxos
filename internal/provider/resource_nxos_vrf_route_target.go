@@ -22,6 +22,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -195,9 +196,6 @@ func (r *VRFRouteTargetResource) Read(ctx context.Context, req resource.ReadRequ
 			return
 		}
 		state.fromBody(res, imp)
-		if imp {
-			state.getIdsFromDn()
-		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
@@ -289,12 +287,34 @@ func (r *VRFRouteTargetResource) Delete(ctx context.Context, req resource.Delete
 }
 
 func (r *VRFRouteTargetResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	dn, device := helpers.ParseImportID(req.ID)
+	idParts := strings.Split(req.ID, ",")
+	idParts = helpers.RemoveEmptyStrings(idParts)
 
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), dn)...)
-	if device != "" {
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), device)...)
+	if len(idParts) != 5 && len(idParts) != 6 {
+		expectedIdentifier := "Expected import identifier with format: '<vrf>,<address_family>,<route_target_address_family>,<direction>,<route_target>'"
+		expectedIdentifier += " or '<vrf>,<address_family>,<route_target_address_family>,<direction>,<route_target>,<device>'"
+		resp.Diagnostics.AddError(
+			"Unexpected Import Identifier",
+			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
+		)
+		return
 	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf"), idParts[0])...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address_family"), idParts[1])...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("route_target_address_family"), idParts[2])...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("direction"), idParts[3])...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("route_target"), idParts[4])...)
+	if len(idParts) == 6 {
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+	}
+
+	var state VRFRouteTarget
+	diags := resp.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getDn())...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)
 }

@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosIPv6VRF(t *testing.T) {
@@ -37,12 +39,21 @@ func TestAccNxosIPv6VRF(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_ipv6_vrf.test",
-				ImportState:   true,
-				ImportStateId: "sys/ipv6/inst/dom-[VRF1]",
+				ResourceName:      "nxos_ipv6_vrf.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosIPv6VRFImportStateIdFunc("nxos_ipv6_vrf.test"),
 			},
 		},
 	})
+}
+
+func nxosIPv6VRFImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Name := primary.Attributes["name"]
+
+		return fmt.Sprintf("%s", Name), nil
+	}
 }
 
 func testAccNxosIPv6VRFConfig_minimum() string {

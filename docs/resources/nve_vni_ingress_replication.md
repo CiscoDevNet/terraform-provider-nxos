@@ -56,12 +56,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_nve_vni_ingress_replication.example
-  id = "sys/eps/epId-[1]/nws/vni-[103100]/IngRepl"
+  id = "<vni>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_nve_vni_ingress_replication.example "sys/eps/epId-[1]/nws/vni-[103100]/IngRepl"
+terraform import nxos_nve_vni_ingress_replication.example "<vni>"
 ```

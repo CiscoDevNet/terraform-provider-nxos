@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosFeaturePVLAN(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosFeaturePVLAN(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_feature_pvlan.test",
-				ImportState:   true,
-				ImportStateId: "sys/fm/pvlan",
+				ResourceName:      "nxos_feature_pvlan.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosFeaturePVLANImportStateIdFunc("nxos_feature_pvlan.test"),
 			},
 		},
 	})
+}
+
+func nxosFeaturePVLANImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosFeaturePVLANConfig_minimum() string {

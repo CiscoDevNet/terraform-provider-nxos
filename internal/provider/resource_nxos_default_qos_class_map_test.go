@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosDefaultQOSClassMap(t *testing.T) {
@@ -38,12 +40,21 @@ func TestAccNxosDefaultQOSClassMap(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_default_qos_class_map.test",
-				ImportState:   true,
-				ImportStateId: "sys/ipqos/dflt/c/name-[Voice]",
+				ResourceName:      "nxos_default_qos_class_map.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosDefaultQOSClassMapImportStateIdFunc("nxos_default_qos_class_map.test"),
 			},
 		},
 	})
+}
+
+func nxosDefaultQOSClassMapImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Name := primary.Attributes["name"]
+
+		return fmt.Sprintf("%s", Name), nil
+	}
 }
 
 func testAccNxosDefaultQOSClassMapConfig_minimum() string {

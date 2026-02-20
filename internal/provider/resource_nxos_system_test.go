@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosSystem(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosSystem(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_system.test",
-				ImportState:   true,
-				ImportStateId: "sys",
+				ResourceName:      "nxos_system.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosSystemImportStateIdFunc("nxos_system.test"),
 			},
 		},
 	})
+}
+
+func nxosSystemImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosSystemConfig_minimum() string {

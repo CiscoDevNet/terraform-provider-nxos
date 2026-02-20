@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosQueuingQOSPolicySystemOutPolicyMap(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosQueuingQOSPolicySystemOutPolicyMap(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_queuing_qos_policy_system_out_policy_map.test",
-				ImportState:   true,
-				ImportStateId: "sys/ipqos/queuing/policy/out/sys/pmap",
+				ResourceName:      "nxos_queuing_qos_policy_system_out_policy_map.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosQueuingQOSPolicySystemOutPolicyMapImportStateIdFunc("nxos_queuing_qos_policy_system_out_policy_map.test"),
 			},
 		},
 	})
+}
+
+func nxosQueuingQOSPolicySystemOutPolicyMapImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 const testAccNxosQueuingQOSPolicySystemOutPolicyMapPrerequisitesConfig = `

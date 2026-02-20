@@ -72,12 +72,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_route_map_rule_entry_set_regular_community.example
-  id = "sys/rpm/rtmap-[RULE1]/ent-[10]/sregcomm"
+  id = "<rule_name>,<order>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_route_map_rule_entry_set_regular_community.example "sys/rpm/rtmap-[RULE1]/ent-[10]/sregcomm"
+terraform import nxos_route_map_rule_entry_set_regular_community.example "<rule_name>,<order>"
 ```

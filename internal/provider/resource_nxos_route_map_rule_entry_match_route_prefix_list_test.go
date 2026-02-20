@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosRouteMapRuleEntryMatchRoutePrefixList(t *testing.T) {
@@ -39,12 +41,23 @@ func TestAccNxosRouteMapRuleEntryMatchRoutePrefixList(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_route_map_rule_entry_match_route_prefix_list.test",
-				ImportState:   true,
-				ImportStateId: "sys/rpm/rtmap-[RULE1]/ent-[10]/mrtdst/rsrtDstAtt-[sys/rpm/pfxlistv4-[LIST1]]",
+				ResourceName:      "nxos_route_map_rule_entry_match_route_prefix_list.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosRouteMapRuleEntryMatchRoutePrefixListImportStateIdFunc("nxos_route_map_rule_entry_match_route_prefix_list.test"),
 			},
 		},
 	})
+}
+
+func nxosRouteMapRuleEntryMatchRoutePrefixListImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		RuleName := primary.Attributes["rule_name"]
+		Order := primary.Attributes["order"]
+		PrefixListDn := primary.Attributes["prefix_list_dn"]
+
+		return fmt.Sprintf("%s,%s,%s", RuleName, Order, PrefixListDn), nil
+	}
 }
 
 const testAccNxosRouteMapRuleEntryMatchRoutePrefixListPrerequisitesConfig = `

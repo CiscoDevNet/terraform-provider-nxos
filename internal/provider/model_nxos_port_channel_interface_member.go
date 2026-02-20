@@ -21,9 +21,7 @@ package provider
 
 import (
 	"fmt"
-	"regexp"
 	"strconv"
-	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -81,16 +79,4 @@ func (data PortChannelInterfaceMember) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
-}
-
-func (data *PortChannelInterfaceMember) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/intf/aggr-[%s]/rsmbrIfs-[%s]", "%[1]s", ".+")
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
-	reString = strings.ReplaceAll(reString, "%v", "(.+)")
-	reString = strings.ReplaceAll(reString, "[", "\\[")
-	reString = strings.ReplaceAll(reString, "]", "\\]")
-	re := regexp.MustCompile(reString)
-	matches := re.FindStringSubmatch(data.Dn.ValueString())
-	data.InterfaceId = types.StringValue(matches[1])
-	data.InterfaceDn = types.StringValue(matches[2])
 }

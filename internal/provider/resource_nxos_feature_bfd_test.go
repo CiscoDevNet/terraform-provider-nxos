@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosFeatureBFD(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosFeatureBFD(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_feature_bfd.test",
-				ImportState:   true,
-				ImportStateId: "sys/fm/bfd",
+				ResourceName:      "nxos_feature_bfd.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosFeatureBFDImportStateIdFunc("nxos_feature_bfd.test"),
 			},
 		},
 	})
+}
+
+func nxosFeatureBFDImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosFeatureBFDConfig_minimum() string {

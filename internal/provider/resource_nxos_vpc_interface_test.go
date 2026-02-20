@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosVPCInterface(t *testing.T) {
@@ -38,12 +40,21 @@ func TestAccNxosVPCInterface(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_vpc_interface.test",
-				ImportState:   true,
-				ImportStateId: "sys/vpc/inst/dom/if-[1]",
+				ResourceName:      "nxos_vpc_interface.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosVPCInterfaceImportStateIdFunc("nxos_vpc_interface.test"),
 			},
 		},
 	})
+}
+
+func nxosVPCInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		VpcInterfaceId := primary.Attributes["vpc_interface_id"]
+
+		return fmt.Sprintf("%s", VpcInterfaceId), nil
+	}
 }
 
 const testAccNxosVPCInterfacePrerequisitesConfig = `

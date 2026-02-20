@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosQueuingQOSPolicySystemOut(t *testing.T) {
@@ -35,12 +37,19 @@ func TestAccNxosQueuingQOSPolicySystemOut(t *testing.T) {
 				Check:  resource.ComposeTestCheckFunc(),
 			},
 			{
-				ResourceName:  "nxos_queuing_qos_policy_system_out.test",
-				ImportState:   true,
-				ImportStateId: "sys/ipqos/queuing/policy/out/sys",
+				ResourceName:      "nxos_queuing_qos_policy_system_out.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosQueuingQOSPolicySystemOutImportStateIdFunc("nxos_queuing_qos_policy_system_out.test"),
 			},
 		},
 	})
+}
+
+func nxosQueuingQOSPolicySystemOutImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosQueuingQOSPolicySystemOutConfig_minimum() string {

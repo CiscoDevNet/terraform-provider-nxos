@@ -75,12 +75,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_ospf_authentication.example
-  id = "sys/ospf/inst-[OSPF1]/dom-[VRF1]/if-[eth1/10]/authnew"
+  id = "<instance_name>,<vrf_name>,<interface_id>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_ospf_authentication.example "sys/ospf/inst-[OSPF1]/dom-[VRF1]/if-[eth1/10]/authnew"
+terraform import nxos_ospf_authentication.example "<instance_name>,<vrf_name>,<interface_id>"
 ```

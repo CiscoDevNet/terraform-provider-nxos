@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosISISVRF(t *testing.T) {
@@ -52,12 +54,22 @@ func TestAccNxosISISVRF(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_isis_vrf.test",
-				ImportState:   true,
-				ImportStateId: "sys/isis/inst-[ISIS1]/dom-[default]",
+				ResourceName:      "nxos_isis_vrf.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosISISVRFImportStateIdFunc("nxos_isis_vrf.test"),
 			},
 		},
 	})
+}
+
+func nxosISISVRFImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InstanceName := primary.Attributes["instance_name"]
+		Name := primary.Attributes["name"]
+
+		return fmt.Sprintf("%s,%s", InstanceName, Name), nil
+	}
 }
 
 const testAccNxosISISVRFPrerequisitesConfig = `

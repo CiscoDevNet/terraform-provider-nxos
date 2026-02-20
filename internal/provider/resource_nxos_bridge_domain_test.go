@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosBridgeDomain(t *testing.T) {
@@ -39,12 +41,21 @@ func TestAccNxosBridgeDomain(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_bridge_domain.test",
-				ImportState:   true,
-				ImportStateId: "sys/bd/bd-[vlan-10]",
+				ResourceName:      "nxos_bridge_domain.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosBridgeDomainImportStateIdFunc("nxos_bridge_domain.test"),
 			},
 		},
 	})
+}
+
+func nxosBridgeDomainImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		FabricEncap := primary.Attributes["fabric_encap"]
+
+		return fmt.Sprintf("%s", FabricEncap), nil
+	}
 }
 
 func testAccNxosBridgeDomainConfig_minimum() string {

@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosFeatureTelnet(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosFeatureTelnet(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_feature_telnet.test",
-				ImportState:   true,
-				ImportStateId: "sys/fm/telnet",
+				ResourceName:      "nxos_feature_telnet.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosFeatureTelnetImportStateIdFunc("nxos_feature_telnet.test"),
 			},
 		},
 	})
+}
+
+func nxosFeatureTelnetImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosFeatureTelnetConfig_minimum() string {

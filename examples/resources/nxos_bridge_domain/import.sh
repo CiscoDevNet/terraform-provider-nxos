@@ -1,1 +1,1 @@
-terraform import nxos_bridge_domain.example "sys/bd/bd-[vlan-10]"
+terraform import nxos_bridge_domain.example "<fabric_encap>"

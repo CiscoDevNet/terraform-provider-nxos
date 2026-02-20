@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosFeatureUDLD(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosFeatureUDLD(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_feature_udld.test",
-				ImportState:   true,
-				ImportStateId: "sys/fm/udld",
+				ResourceName:      "nxos_feature_udld.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosFeatureUDLDImportStateIdFunc("nxos_feature_udld.test"),
 			},
 		},
 	})
+}
+
+func nxosFeatureUDLDImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosFeatureUDLDConfig_minimum() string {

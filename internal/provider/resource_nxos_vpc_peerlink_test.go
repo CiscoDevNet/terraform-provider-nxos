@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosVPCPeerlink(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosVPCPeerlink(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_vpc_peerlink.test",
-				ImportState:   true,
-				ImportStateId: "sys/vpc/inst/dom/keepalive/peerlink",
+				ResourceName:      "nxos_vpc_peerlink.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosVPCPeerlinkImportStateIdFunc("nxos_vpc_peerlink.test"),
 			},
 		},
 	})
+}
+
+func nxosVPCPeerlinkImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 const testAccNxosVPCPeerlinkPrerequisitesConfig = `

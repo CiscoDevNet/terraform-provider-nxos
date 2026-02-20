@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosOSPFAuthentication(t *testing.T) {
@@ -46,12 +48,23 @@ func TestAccNxosOSPFAuthentication(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_ospf_authentication.test",
-				ImportState:   true,
-				ImportStateId: "sys/ospf/inst-[OSPF1]/dom-[VRF1]/if-[eth1/10]/authnew",
+				ResourceName:      "nxos_ospf_authentication.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosOSPFAuthenticationImportStateIdFunc("nxos_ospf_authentication.test"),
 			},
 		},
 	})
+}
+
+func nxosOSPFAuthenticationImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InstanceName := primary.Attributes["instance_name"]
+		VrfName := primary.Attributes["vrf_name"]
+		InterfaceId := primary.Attributes["interface_id"]
+
+		return fmt.Sprintf("%s,%s,%s", InstanceName, VrfName, InterfaceId), nil
+	}
 }
 
 const testAccNxosOSPFAuthenticationPrerequisitesConfig = `

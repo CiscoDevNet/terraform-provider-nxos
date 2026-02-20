@@ -1,1 +1,1 @@
-terraform import nxos_keychain.example "sys/kcmgr/keychains/classickeychain-[Keychain1]"
+terraform import nxos_keychain.example "<name>"

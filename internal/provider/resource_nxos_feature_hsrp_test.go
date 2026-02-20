@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosFeatureHSRP(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosFeatureHSRP(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_feature_hsrp.test",
-				ImportState:   true,
-				ImportStateId: "sys/fm/hsrp",
+				ResourceName:      "nxos_feature_hsrp.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosFeatureHSRPImportStateIdFunc("nxos_feature_hsrp.test"),
 			},
 		},
 	})
+}
+
+func nxosFeatureHSRPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosFeatureHSRPConfig_minimum() string {

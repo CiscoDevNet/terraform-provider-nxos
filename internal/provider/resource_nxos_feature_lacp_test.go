@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosFeatureLACP(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosFeatureLACP(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_feature_lacp.test",
-				ImportState:   true,
-				ImportStateId: "sys/fm/lacp",
+				ResourceName:      "nxos_feature_lacp.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosFeatureLACPImportStateIdFunc("nxos_feature_lacp.test"),
 			},
 		},
 	})
+}
+
+func nxosFeatureLACPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosFeatureLACPConfig_minimum() string {

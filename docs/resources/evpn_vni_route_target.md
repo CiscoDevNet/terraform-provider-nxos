@@ -56,12 +56,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_evpn_vni_route_target.example
-  id = "sys/evpn/bdevi-[vxlan-123456]/rttp-[import]/ent-[route-target:as2-nn2:2:2]"
+  id = "<encap>,<direction>,<route_target>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_evpn_vni_route_target.example "sys/evpn/bdevi-[vxlan-123456]/rttp-[import]/ent-[route-target:as2-nn2:2:2]"
+terraform import nxos_evpn_vni_route_target.example "<encap>,<direction>,<route_target>"
 ```

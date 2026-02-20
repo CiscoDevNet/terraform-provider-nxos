@@ -1,1 +1,1 @@
-terraform import nxos_dhcp_relay_interface.example "sys/dhcp/inst/relayif-[eth1/10]"
+terraform import nxos_dhcp_relay_interface.example "<interface_id>"

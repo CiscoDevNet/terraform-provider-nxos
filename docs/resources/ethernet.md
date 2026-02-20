@@ -48,12 +48,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_ethernet.example
-  id = "sys/ethpm/inst"
+  id = ""
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_ethernet.example "sys/ethpm/inst"
+terraform import nxos_ethernet.example ""
 ```

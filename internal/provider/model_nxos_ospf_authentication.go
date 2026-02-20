@@ -21,9 +21,7 @@ package provider
 
 import (
 	"fmt"
-	"regexp"
 	"strconv"
-	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -118,17 +116,4 @@ func (data OSPFAuthentication) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
-}
-
-func (data *OSPFAuthentication) getIdsFromDn() {
-	reString := strings.ReplaceAll("sys/ospf/inst-[%s]/dom-[%s]/if-[%s]/authnew", "%[1]s", ".+")
-	reString = strings.ReplaceAll(reString, "%s", "(.+)")
-	reString = strings.ReplaceAll(reString, "%v", "(.+)")
-	reString = strings.ReplaceAll(reString, "[", "\\[")
-	reString = strings.ReplaceAll(reString, "]", "\\]")
-	re := regexp.MustCompile(reString)
-	matches := re.FindStringSubmatch(data.Dn.ValueString())
-	data.InstanceName = types.StringValue(matches[1])
-	data.VrfName = types.StringValue(matches[2])
-	data.InterfaceId = types.StringValue(matches[3])
 }

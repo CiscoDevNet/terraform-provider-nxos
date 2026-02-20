@@ -1,1 +1,1 @@
-terraform import nxos_pim_interface.example "sys/pim/inst/dom-[default]/if-[eth1/10]"
+terraform import nxos_pim_interface.example "<vrf_name>,<interface_id>"

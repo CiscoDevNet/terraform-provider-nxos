@@ -56,12 +56,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_route_map_rule_entry_match_route_prefix_list.example
-  id = "sys/rpm/rtmap-[RULE1]/ent-[10]/mrtdst/rsrtDstAtt-[sys/rpm/pfxlistv4-[LIST1]]"
+  id = "<rule_name>,<order>,<prefix_list_dn>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_route_map_rule_entry_match_route_prefix_list.example "sys/rpm/rtmap-[RULE1]/ent-[10]/mrtdst/rsrtDstAtt-[sys/rpm/pfxlistv4-[LIST1]]"
+terraform import nxos_route_map_rule_entry_match_route_prefix_list.example "<rule_name>,<order>,<prefix_list_dn>"
 ```

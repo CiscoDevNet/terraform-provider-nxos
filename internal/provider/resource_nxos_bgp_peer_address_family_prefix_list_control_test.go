@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosBGPPeerAddressFamilyPrefixListControl(t *testing.T) {
@@ -42,12 +44,25 @@ func TestAccNxosBGPPeerAddressFamilyPrefixListControl(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_bgp_peer_address_family_prefix_list_control.test",
-				ImportState:   true,
-				ImportStateId: "sys/bgp/inst/dom-[default]/peer-[192.168.0.1]/af-[ipv4-ucast]/pfxctrl-[in]",
+				ResourceName:      "nxos_bgp_peer_address_family_prefix_list_control.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosBGPPeerAddressFamilyPrefixListControlImportStateIdFunc("nxos_bgp_peer_address_family_prefix_list_control.test"),
 			},
 		},
 	})
+}
+
+func nxosBGPPeerAddressFamilyPrefixListControlImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Asn := primary.Attributes["asn"]
+		Vrf := primary.Attributes["vrf"]
+		Address := primary.Attributes["address"]
+		AddressFamily := primary.Attributes["address_family"]
+		Direction := primary.Attributes["direction"]
+
+		return fmt.Sprintf("%s,%s,%s,%s,%s", Asn, Vrf, Address, AddressFamily, Direction), nil
+	}
 }
 
 const testAccNxosBGPPeerAddressFamilyPrefixListControlPrerequisitesConfig = `

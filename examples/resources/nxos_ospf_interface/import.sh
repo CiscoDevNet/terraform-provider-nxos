@@ -1,1 +1,1 @@
-terraform import nxos_ospf_interface.example "sys/ospf/inst-[OSPF1]/dom-[VRF1]/if-[eth1/10]"
+terraform import nxos_ospf_interface.example "<instance_name>,<vrf_name>,<interface_id>"

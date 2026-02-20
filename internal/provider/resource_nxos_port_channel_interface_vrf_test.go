@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosPortChannelInterfaceVRF(t *testing.T) {
@@ -38,12 +40,21 @@ func TestAccNxosPortChannelInterfaceVRF(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_port_channel_interface_vrf.test",
-				ImportState:   true,
-				ImportStateId: "sys/intf/aggr-[po1]/rtvrfMbr",
+				ResourceName:      "nxos_port_channel_interface_vrf.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosPortChannelInterfaceVRFImportStateIdFunc("nxos_port_channel_interface_vrf.test"),
 			},
 		},
 	})
+}
+
+func nxosPortChannelInterfaceVRFImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InterfaceId := primary.Attributes["interface_id"]
+
+		return fmt.Sprintf("%s", InterfaceId), nil
+	}
 }
 
 const testAccNxosPortChannelInterfaceVRFPrerequisitesConfig = `

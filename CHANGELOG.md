@@ -1,3 +1,7 @@
+## Unreleased
+
+- BREAKING CHANGE: Resource imports now use comma-separated attribute values instead of full DN strings (e.g., `terraform import nxos_bgp_peer.example "<asn>,<vrf>,<address>"` instead of `terraform import nxos_bgp_peer.example "sys/bgp/inst/dom-[default]/peer-[192.168.0.1]"`)
+
 ## 0.6.0
 
 - BREAKING CHANGE: Remove `nxos_ipv4_access_list_entry` resource and data source, entries are now managed as child classes of `nxos_ipv4_access_list`

@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosFeatureNGOAM(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosFeatureNGOAM(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_feature_ngoam.test",
-				ImportState:   true,
-				ImportStateId: "sys/fm/ngoam",
+				ResourceName:      "nxos_feature_ngoam.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosFeatureNGOAMImportStateIdFunc("nxos_feature_ngoam.test"),
 			},
 		},
 	})
+}
+
+func nxosFeatureNGOAMImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosFeatureNGOAMConfig_minimum() string {

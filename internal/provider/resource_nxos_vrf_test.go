@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosVRF(t *testing.T) {
@@ -39,12 +41,21 @@ func TestAccNxosVRF(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_vrf.test",
-				ImportState:   true,
-				ImportStateId: "sys/inst-[VRF1]",
+				ResourceName:      "nxos_vrf.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosVRFImportStateIdFunc("nxos_vrf.test"),
 			},
 		},
 	})
+}
+
+func nxosVRFImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Name := primary.Attributes["name"]
+
+		return fmt.Sprintf("%s", Name), nil
+	}
 }
 
 func testAccNxosVRFConfig_minimum() string {

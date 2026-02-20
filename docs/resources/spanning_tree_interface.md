@@ -77,12 +77,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_spanning_tree_interface.example
-  id = "sys/stp/inst/if-[eth1/9]"
+  id = "<interface_id>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_spanning_tree_interface.example "sys/stp/inst/if-[eth1/9]"
+terraform import nxos_spanning_tree_interface.example "<interface_id>"
 ```

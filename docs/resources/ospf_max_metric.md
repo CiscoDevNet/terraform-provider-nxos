@@ -66,12 +66,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_ospf_max_metric.example
-  id = "sys/ospf/inst-[OSPF1]/dom-[VRF1]/maxmetriclsap"
+  id = "<instance_name>,<vrf_name>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_ospf_max_metric.example "sys/ospf/inst-[OSPF1]/dom-[VRF1]/maxmetriclsap"
+terraform import nxos_ospf_max_metric.example "<instance_name>,<vrf_name>"
 ```

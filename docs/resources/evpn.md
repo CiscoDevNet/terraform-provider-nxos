@@ -50,12 +50,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_evpn.example
-  id = "sys/evpn"
+  id = ""
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_evpn.example "sys/evpn"
+terraform import nxos_evpn.example ""
 ```

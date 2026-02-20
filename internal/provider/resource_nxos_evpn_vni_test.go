@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosEVPNVNI(t *testing.T) {
@@ -38,12 +40,21 @@ func TestAccNxosEVPNVNI(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_evpn_vni.test",
-				ImportState:   true,
-				ImportStateId: "sys/evpn/bdevi-[vxlan-123456]",
+				ResourceName:      "nxos_evpn_vni.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosEVPNVNIImportStateIdFunc("nxos_evpn_vni.test"),
 			},
 		},
 	})
+}
+
+func nxosEVPNVNIImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		Encap := primary.Attributes["encap"]
+
+		return fmt.Sprintf("%s", Encap), nil
+	}
 }
 
 const testAccNxosEVPNVNIPrerequisitesConfig = `

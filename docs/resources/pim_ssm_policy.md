@@ -59,12 +59,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = nxos_pim_ssm_policy.example
-  id = "sys/pim/inst/dom-[default]/ssm"
+  id = "<vrf_name>"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import nxos_pim_ssm_policy.example "sys/pim/inst/dom-[default]/ssm"
+terraform import nxos_pim_ssm_policy.example "<vrf_name>"
 ```

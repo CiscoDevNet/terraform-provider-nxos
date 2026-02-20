@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosNVEVNIContainer(t *testing.T) {
@@ -35,12 +37,19 @@ func TestAccNxosNVEVNIContainer(t *testing.T) {
 				Check:  resource.ComposeTestCheckFunc(),
 			},
 			{
-				ResourceName:  "nxos_nve_vni_container.test",
-				ImportState:   true,
-				ImportStateId: "sys/eps/epId-[1]/nws",
+				ResourceName:      "nxos_nve_vni_container.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosNVEVNIContainerImportStateIdFunc("nxos_nve_vni_container.test"),
 			},
 		},
 	})
+}
+
+func nxosNVEVNIContainerImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 const testAccNxosNVEVNIContainerPrerequisitesConfig = `

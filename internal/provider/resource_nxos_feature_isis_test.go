@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosFeatureISIS(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosFeatureISIS(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_feature_isis.test",
-				ImportState:   true,
-				ImportStateId: "sys/fm/isis",
+				ResourceName:      "nxos_feature_isis.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosFeatureISISImportStateIdFunc("nxos_feature_isis.test"),
 			},
 		},
 	})
+}
+
+func nxosFeatureISISImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosFeatureISISConfig_minimum() string {

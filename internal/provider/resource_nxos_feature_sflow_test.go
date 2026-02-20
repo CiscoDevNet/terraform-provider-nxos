@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosFeatureSFlow(t *testing.T) {
@@ -37,12 +39,19 @@ func TestAccNxosFeatureSFlow(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_feature_sflow.test",
-				ImportState:   true,
-				ImportStateId: "sys/fm/sflow",
+				ResourceName:      "nxos_feature_sflow.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosFeatureSFlowImportStateIdFunc("nxos_feature_sflow.test"),
 			},
 		},
 	})
+}
+
+func nxosFeatureSFlowImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 func testAccNxosFeatureSFlowConfig_minimum() string {

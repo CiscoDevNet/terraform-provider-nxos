@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosPIMAnycastRPPeer(t *testing.T) {
@@ -39,12 +41,23 @@ func TestAccNxosPIMAnycastRPPeer(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_pim_anycast_rp_peer.test",
-				ImportState:   true,
-				ImportStateId: "sys/pim/inst/dom-[default]/acastrpfunc/peer-[10.1.1.1/32]-peer-[20.1.1.1/32]",
+				ResourceName:      "nxos_pim_anycast_rp_peer.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosPIMAnycastRPPeerImportStateIdFunc("nxos_pim_anycast_rp_peer.test"),
 			},
 		},
 	})
+}
+
+func nxosPIMAnycastRPPeerImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		VrfName := primary.Attributes["vrf_name"]
+		Address := primary.Attributes["address"]
+		RpSetAddress := primary.Attributes["rp_set_address"]
+
+		return fmt.Sprintf("%s,%s,%s", VrfName, Address, RpSetAddress), nil
+	}
 }
 
 const testAccNxosPIMAnycastRPPeerPrerequisitesConfig = `

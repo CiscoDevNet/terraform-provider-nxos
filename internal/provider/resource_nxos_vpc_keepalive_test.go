@@ -20,9 +20,11 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 func TestAccNxosVPCKeepalive(t *testing.T) {
@@ -49,12 +51,19 @@ func TestAccNxosVPCKeepalive(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:  "nxos_vpc_keepalive.test",
-				ImportState:   true,
-				ImportStateId: "sys/vpc/inst/dom/keepalive",
+				ResourceName:      "nxos_vpc_keepalive.test",
+				ImportState:       true,
+				ImportStateIdFunc: nxosVPCKeepaliveImportStateIdFunc("nxos_vpc_keepalive.test"),
 			},
 		},
 	})
+}
+
+func nxosVPCKeepaliveImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
 }
 
 const testAccNxosVPCKeepalivePrerequisitesConfig = `

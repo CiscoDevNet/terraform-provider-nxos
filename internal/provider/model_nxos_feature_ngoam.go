@@ -47,7 +47,11 @@ func (data *FeatureNGOAMIdentity) toIdentity(ctx context.Context, plan *FeatureN
 }
 
 func (data *FeatureNGOAM) fromIdentity(ctx context.Context, identity *FeatureNGOAMIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data FeatureNGOAM) getDn() string {

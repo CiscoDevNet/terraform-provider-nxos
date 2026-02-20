@@ -72,7 +72,11 @@ func (data *PhysicalInterfaceIdentity) toIdentity(ctx context.Context, plan *Phy
 }
 
 func (data *PhysicalInterface) fromIdentity(ctx context.Context, identity *PhysicalInterfaceIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.InterfaceId = identity.InterfaceId
 }
 

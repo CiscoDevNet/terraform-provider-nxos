@@ -47,7 +47,11 @@ func (data *ISISIdentity) toIdentity(ctx context.Context, plan *ISIS) {
 }
 
 func (data *ISIS) fromIdentity(ctx context.Context, identity *ISISIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data ISIS) getDn() string {

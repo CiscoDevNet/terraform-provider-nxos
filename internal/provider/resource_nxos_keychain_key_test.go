@@ -51,12 +51,6 @@ func TestAccNxosKeychainKey(t *testing.T) {
 				ImportState:       true,
 				ImportStateIdFunc: nxosKeychainKeyImportStateIdFunc("nxos_keychain_key.test"),
 			},
-			{
-				ResourceName:    "nxos_keychain_key.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
 		},
 	})
 }

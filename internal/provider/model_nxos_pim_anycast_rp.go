@@ -52,7 +52,11 @@ func (data *PIMAnycastRPIdentity) toIdentity(ctx context.Context, plan *PIMAnyca
 }
 
 func (data *PIMAnycastRP) fromIdentity(ctx context.Context, identity *PIMAnycastRPIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.VrfName = identity.VrfName
 }
 

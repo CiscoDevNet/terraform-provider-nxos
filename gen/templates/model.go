@@ -116,7 +116,11 @@ func (data *{{camelCase .Name}}Identity) toIdentity(ctx context.Context, plan *{
 }
 
 func (data *{{camelCase .Name}}) fromIdentity(ctx context.Context, identity *{{camelCase .Name}}Identity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 {{- range (importAttributes .)}}
 	data.{{toGoName .TfName}} = identity.{{toGoName .TfName}}
 {{- end}}

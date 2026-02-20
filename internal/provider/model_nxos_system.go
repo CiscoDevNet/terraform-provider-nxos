@@ -47,7 +47,11 @@ func (data *SystemIdentity) toIdentity(ctx context.Context, plan *System) {
 }
 
 func (data *System) fromIdentity(ctx context.Context, identity *SystemIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data System) getDn() string {

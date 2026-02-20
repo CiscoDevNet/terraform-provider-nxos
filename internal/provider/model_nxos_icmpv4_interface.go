@@ -54,7 +54,11 @@ func (data *ICMPv4InterfaceIdentity) toIdentity(ctx context.Context, plan *ICMPv
 }
 
 func (data *ICMPv4Interface) fromIdentity(ctx context.Context, identity *ICMPv4InterfaceIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.VrfName = identity.VrfName
 	data.InterfaceId = identity.InterfaceId
 }

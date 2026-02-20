@@ -47,7 +47,11 @@ func (data *KeychainManagerIdentity) toIdentity(ctx context.Context, plan *Keych
 }
 
 func (data *KeychainManager) fromIdentity(ctx context.Context, identity *KeychainManagerIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data KeychainManager) getDn() string {

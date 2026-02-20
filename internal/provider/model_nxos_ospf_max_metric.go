@@ -58,7 +58,11 @@ func (data *OSPFMaxMetricIdentity) toIdentity(ctx context.Context, plan *OSPFMax
 }
 
 func (data *OSPFMaxMetric) fromIdentity(ctx context.Context, identity *OSPFMaxMetricIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.InstanceName = identity.InstanceName
 	data.VrfName = identity.VrfName
 }

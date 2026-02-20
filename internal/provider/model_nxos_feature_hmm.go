@@ -47,7 +47,11 @@ func (data *FeatureHMMIdentity) toIdentity(ctx context.Context, plan *FeatureHMM
 }
 
 func (data *FeatureHMM) fromIdentity(ctx context.Context, identity *FeatureHMMIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data FeatureHMM) getDn() string {

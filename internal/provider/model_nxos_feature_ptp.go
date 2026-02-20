@@ -47,7 +47,11 @@ func (data *FeaturePTPIdentity) toIdentity(ctx context.Context, plan *FeaturePTP
 }
 
 func (data *FeaturePTP) fromIdentity(ctx context.Context, identity *FeaturePTPIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data FeaturePTP) getDn() string {

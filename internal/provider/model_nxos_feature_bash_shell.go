@@ -47,7 +47,11 @@ func (data *FeatureBashShellIdentity) toIdentity(ctx context.Context, plan *Feat
 }
 
 func (data *FeatureBashShell) fromIdentity(ctx context.Context, identity *FeatureBashShellIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data FeatureBashShell) getDn() string {

@@ -61,12 +61,6 @@ func TestAccNxosBGPPeer(t *testing.T) {
 				ImportState:       true,
 				ImportStateIdFunc: nxosBGPPeerImportStateIdFunc("nxos_bgp_peer.test"),
 			},
-			{
-				ResourceName:    "nxos_bgp_peer.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
 		},
 	})
 }

@@ -55,7 +55,11 @@ func (data *LoggingIdentity) toIdentity(ctx context.Context, plan *Logging) {
 }
 
 func (data *Logging) fromIdentity(ctx context.Context, identity *LoggingIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data Logging) getDn() string {

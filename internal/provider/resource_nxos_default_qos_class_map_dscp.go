@@ -242,9 +242,15 @@ func (r *DefaultQOSClassMapDSCPResource) Update(ctx context.Context, req resourc
 		}
 	}
 
+	plan.Dn = types.StringValue(plan.getDn())
+	var identity DefaultQOSClassMapDSCPIdentity
+	identity.toIdentity(ctx, &plan)
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
 
 	diags = resp.State.Set(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 }
 
@@ -294,7 +300,7 @@ func (r *DefaultQOSClassMapDSCPResource) Delete(ctx context.Context, req resourc
 }
 
 func (r *DefaultQOSClassMapDSCPResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	if req.ID != "" {
+	if req.ID != "" || req.Identity == nil || req.Identity.Raw.IsNull() {
 		idParts := strings.Split(req.ID, ",")
 		idParts = helpers.RemoveEmptyStrings(idParts)
 

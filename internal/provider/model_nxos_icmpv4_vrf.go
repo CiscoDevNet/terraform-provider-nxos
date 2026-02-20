@@ -50,7 +50,11 @@ func (data *ICMPv4VRFIdentity) toIdentity(ctx context.Context, plan *ICMPv4VRF) 
 }
 
 func (data *ICMPv4VRF) fromIdentity(ctx context.Context, identity *ICMPv4VRFIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.VrfName = identity.VrfName
 }
 

@@ -47,7 +47,11 @@ func (data *FeatureSSHIdentity) toIdentity(ctx context.Context, plan *FeatureSSH
 }
 
 func (data *FeatureSSH) fromIdentity(ctx context.Context, identity *FeatureSSHIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data FeatureSSH) getDn() string {

@@ -54,7 +54,11 @@ func (data *PIMVRFIdentity) toIdentity(ctx context.Context, plan *PIMVRF) {
 }
 
 func (data *PIMVRF) fromIdentity(ctx context.Context, identity *PIMVRFIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Name = identity.Name
 }
 

@@ -57,7 +57,11 @@ func (data *RouteMapRuleEntryMatchTagIdentity) toIdentity(ctx context.Context, p
 }
 
 func (data *RouteMapRuleEntryMatchTag) fromIdentity(ctx context.Context, identity *RouteMapRuleEntryMatchTagIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.RuleName = identity.RuleName
 	data.Order = identity.Order
 	data.Tag = identity.Tag

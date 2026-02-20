@@ -62,7 +62,11 @@ func (data *ISISAddressFamilyIdentity) toIdentity(ctx context.Context, plan *ISI
 }
 
 func (data *ISISAddressFamily) fromIdentity(ctx context.Context, identity *ISISAddressFamilyIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.InstanceName = identity.InstanceName
 	data.Vrf = identity.Vrf
 	data.AddressFamily = identity.AddressFamily

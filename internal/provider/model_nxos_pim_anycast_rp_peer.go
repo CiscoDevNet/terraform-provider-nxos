@@ -56,7 +56,11 @@ func (data *PIMAnycastRPPeerIdentity) toIdentity(ctx context.Context, plan *PIMA
 }
 
 func (data *PIMAnycastRPPeer) fromIdentity(ctx context.Context, identity *PIMAnycastRPPeerIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.VrfName = identity.VrfName
 	data.Address = identity.Address
 	data.RpSetAddress = identity.RpSetAddress

@@ -56,7 +56,11 @@ func (data *EVPNVNIRouteTargetIdentity) toIdentity(ctx context.Context, plan *EV
 }
 
 func (data *EVPNVNIRouteTarget) fromIdentity(ctx context.Context, identity *EVPNVNIRouteTargetIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Encap = identity.Encap
 	data.Direction = identity.Direction
 	data.RouteTarget = identity.RouteTarget

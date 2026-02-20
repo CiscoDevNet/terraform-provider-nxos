@@ -55,7 +55,11 @@ func (data *DefaultQOSPolicyMapMatchClassMapSetQOSGroupIdentity) toIdentity(ctx 
 }
 
 func (data *DefaultQOSPolicyMapMatchClassMapSetQOSGroup) fromIdentity(ctx context.Context, identity *DefaultQOSPolicyMapMatchClassMapSetQOSGroupIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.PolicyMapName = identity.PolicyMapName
 	data.ClassMapName = identity.ClassMapName
 }

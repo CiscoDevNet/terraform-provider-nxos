@@ -57,7 +57,11 @@ func (data *BGPPeerTemplateIdentity) toIdentity(ctx context.Context, plan *BGPPe
 }
 
 func (data *BGPPeerTemplate) fromIdentity(ctx context.Context, identity *BGPPeerTemplateIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Asn = identity.Asn
 	data.TemplateName = identity.TemplateName
 }

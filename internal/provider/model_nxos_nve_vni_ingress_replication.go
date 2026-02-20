@@ -51,7 +51,11 @@ func (data *NVEVNIIngressReplicationIdentity) toIdentity(ctx context.Context, pl
 }
 
 func (data *NVEVNIIngressReplication) fromIdentity(ctx context.Context, identity *NVEVNIIngressReplicationIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Vni = identity.Vni
 }
 

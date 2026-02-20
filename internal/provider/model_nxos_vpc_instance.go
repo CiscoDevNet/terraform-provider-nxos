@@ -47,7 +47,11 @@ func (data *VPCInstanceIdentity) toIdentity(ctx context.Context, plan *VPCInstan
 }
 
 func (data *VPCInstance) fromIdentity(ctx context.Context, identity *VPCInstanceIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data VPCInstance) getDn() string {

@@ -53,7 +53,11 @@ func (data *PIMStaticRPIdentity) toIdentity(ctx context.Context, plan *PIMStatic
 }
 
 func (data *PIMStaticRP) fromIdentity(ctx context.Context, identity *PIMStaticRPIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.VrfName = identity.VrfName
 	data.Address = identity.Address
 }

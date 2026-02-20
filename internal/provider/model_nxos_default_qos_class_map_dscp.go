@@ -53,7 +53,11 @@ func (data *DefaultQOSClassMapDSCPIdentity) toIdentity(ctx context.Context, plan
 }
 
 func (data *DefaultQOSClassMapDSCP) fromIdentity(ctx context.Context, identity *DefaultQOSClassMapDSCPIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.ClassMapName = identity.ClassMapName
 	data.Value = identity.Value
 }

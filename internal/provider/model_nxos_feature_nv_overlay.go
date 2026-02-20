@@ -47,7 +47,11 @@ func (data *FeatureNVOverlayIdentity) toIdentity(ctx context.Context, plan *Feat
 }
 
 func (data *FeatureNVOverlay) fromIdentity(ctx context.Context, identity *FeatureNVOverlayIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data FeatureNVOverlay) getDn() string {

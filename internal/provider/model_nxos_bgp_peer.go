@@ -68,7 +68,11 @@ func (data *BGPPeerIdentity) toIdentity(ctx context.Context, plan *BGPPeer) {
 }
 
 func (data *BGPPeer) fromIdentity(ctx context.Context, identity *BGPPeerIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Asn = identity.Asn
 	data.Vrf = identity.Vrf
 	data.Address = identity.Address

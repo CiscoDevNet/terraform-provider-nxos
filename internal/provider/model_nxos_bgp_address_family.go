@@ -74,7 +74,11 @@ func (data *BGPAddressFamilyIdentity) toIdentity(ctx context.Context, plan *BGPA
 }
 
 func (data *BGPAddressFamily) fromIdentity(ctx context.Context, identity *BGPAddressFamilyIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Asn = identity.Asn
 	data.Vrf = identity.Vrf
 	data.AddressFamily = identity.AddressFamily

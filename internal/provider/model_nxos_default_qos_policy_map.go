@@ -51,7 +51,11 @@ func (data *DefaultQOSPolicyMapIdentity) toIdentity(ctx context.Context, plan *D
 }
 
 func (data *DefaultQOSPolicyMap) fromIdentity(ctx context.Context, identity *DefaultQOSPolicyMapIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Name = identity.Name
 }
 

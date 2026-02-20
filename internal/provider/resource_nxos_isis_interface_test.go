@@ -78,12 +78,6 @@ func TestAccNxosISISInterface(t *testing.T) {
 				ImportState:       true,
 				ImportStateIdFunc: nxosISISInterfaceImportStateIdFunc("nxos_isis_interface.test"),
 			},
-			{
-				ResourceName:    "nxos_isis_interface.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
 		},
 	})
 }

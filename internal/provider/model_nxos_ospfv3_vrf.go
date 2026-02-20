@@ -60,7 +60,11 @@ func (data *OSPFv3VRFIdentity) toIdentity(ctx context.Context, plan *OSPFv3VRF) 
 }
 
 func (data *OSPFv3VRF) fromIdentity(ctx context.Context, identity *OSPFv3VRFIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.InstanceName = identity.InstanceName
 	data.Name = identity.Name
 }

@@ -94,12 +94,14 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 				ImportState:   true,
 				ImportStateIdFunc: nxos{{camelCase .Name}}ImportStateIdFunc("nxos_{{snakeCase $name}}.test"),
 			},
+			{{- if not (hasWriteOnly .Attributes)}}
 			{
 				ResourceName:    "nxos_{{snakeCase $name}}.test",
 				ImportState:     true,
 				ImportStateKind: resource.ImportBlockWithResourceIdentity,
 				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
+			{{- end}}
 		},
 	})
 }

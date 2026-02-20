@@ -51,7 +51,11 @@ func (data *ISISInstanceIdentity) toIdentity(ctx context.Context, plan *ISISInst
 }
 
 func (data *ISISInstance) fromIdentity(ctx context.Context, identity *ISISInstanceIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Name = identity.Name
 }
 

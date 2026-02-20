@@ -56,7 +56,11 @@ func (data *RouteMapRuleEntrySetRegularCommunityItemIdentity) toIdentity(ctx con
 }
 
 func (data *RouteMapRuleEntrySetRegularCommunityItem) fromIdentity(ctx context.Context, identity *RouteMapRuleEntrySetRegularCommunityItemIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.RuleName = identity.RuleName
 	data.Order = identity.Order
 	data.Community = identity.Community

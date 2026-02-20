@@ -47,7 +47,11 @@ func (data *FeatureNgMVPNIdentity) toIdentity(ctx context.Context, plan *Feature
 }
 
 func (data *FeatureNgMVPN) fromIdentity(ctx context.Context, identity *FeatureNgMVPNIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data FeatureNgMVPN) getDn() string {

@@ -55,7 +55,11 @@ func (data *QueuingQOSPolicyMapMatchClassMapPriorityIdentity) toIdentity(ctx con
 }
 
 func (data *QueuingQOSPolicyMapMatchClassMapPriority) fromIdentity(ctx context.Context, identity *QueuingQOSPolicyMapMatchClassMapPriorityIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.PolicyMapName = identity.PolicyMapName
 	data.ClassMapName = identity.ClassMapName
 }

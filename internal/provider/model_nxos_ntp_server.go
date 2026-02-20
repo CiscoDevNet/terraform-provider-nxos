@@ -56,7 +56,11 @@ func (data *NTPServerIdentity) toIdentity(ctx context.Context, plan *NTPServer) 
 }
 
 func (data *NTPServer) fromIdentity(ctx context.Context, identity *NTPServerIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Name = identity.Name
 }
 

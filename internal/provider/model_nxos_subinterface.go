@@ -59,7 +59,11 @@ func (data *SubinterfaceIdentity) toIdentity(ctx context.Context, plan *Subinter
 }
 
 func (data *Subinterface) fromIdentity(ctx context.Context, identity *SubinterfaceIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.InterfaceId = identity.InterfaceId
 }
 

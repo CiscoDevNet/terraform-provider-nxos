@@ -63,7 +63,11 @@ func (data *BGPPeerAddressFamilyRouteControlIdentity) toIdentity(ctx context.Con
 }
 
 func (data *BGPPeerAddressFamilyRouteControl) fromIdentity(ctx context.Context, identity *BGPPeerAddressFamilyRouteControlIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Asn = identity.Asn
 	data.Vrf = identity.Vrf
 	data.Address = identity.Address

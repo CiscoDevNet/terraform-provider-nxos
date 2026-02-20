@@ -61,7 +61,11 @@ func (data *BGPPeerTemplateMaxPrefixIdentity) toIdentity(ctx context.Context, pl
 }
 
 func (data *BGPPeerTemplateMaxPrefix) fromIdentity(ctx context.Context, identity *BGPPeerTemplateMaxPrefixIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Asn = identity.Asn
 	data.TemplateName = identity.TemplateName
 	data.AddressFamily = identity.AddressFamily

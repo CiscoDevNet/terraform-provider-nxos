@@ -49,7 +49,11 @@ func (data *EthernetIdentity) toIdentity(ctx context.Context, plan *Ethernet) {
 }
 
 func (data *Ethernet) fromIdentity(ctx context.Context, identity *EthernetIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data Ethernet) getDn() string {

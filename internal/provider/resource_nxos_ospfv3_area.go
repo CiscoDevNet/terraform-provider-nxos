@@ -284,9 +284,15 @@ func (r *OSPFv3AreaResource) Update(ctx context.Context, req resource.UpdateRequ
 		}
 	}
 
+	plan.Dn = types.StringValue(plan.getDn())
+	var identity OSPFv3AreaIdentity
+	identity.toIdentity(ctx, &plan)
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
 
 	diags = resp.State.Set(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 }
 
@@ -336,7 +342,7 @@ func (r *OSPFv3AreaResource) Delete(ctx context.Context, req resource.DeleteRequ
 }
 
 func (r *OSPFv3AreaResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	if req.ID != "" {
+	if req.ID != "" || req.Identity == nil || req.Identity.Raw.IsNull() {
 		idParts := strings.Split(req.ID, ",")
 		idParts = helpers.RemoveEmptyStrings(idParts)
 

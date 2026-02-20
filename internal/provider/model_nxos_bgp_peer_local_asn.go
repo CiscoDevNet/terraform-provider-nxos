@@ -55,7 +55,11 @@ func (data *BGPPeerLocalASNIdentity) toIdentity(ctx context.Context, plan *BGPPe
 }
 
 func (data *BGPPeerLocalASN) fromIdentity(ctx context.Context, identity *BGPPeerLocalASNIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Vrf = identity.Vrf
 	data.Address = identity.Address
 }

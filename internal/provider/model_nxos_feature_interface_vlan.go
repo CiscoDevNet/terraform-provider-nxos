@@ -47,7 +47,11 @@ func (data *FeatureInterfaceVLANIdentity) toIdentity(ctx context.Context, plan *
 }
 
 func (data *FeatureInterfaceVLAN) fromIdentity(ctx context.Context, identity *FeatureInterfaceVLANIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data FeatureInterfaceVLAN) getDn() string {

@@ -51,7 +51,11 @@ func (data *DefaultQOSPolicyInterfaceInPolicyMapIdentity) toIdentity(ctx context
 }
 
 func (data *DefaultQOSPolicyInterfaceInPolicyMap) fromIdentity(ctx context.Context, identity *DefaultQOSPolicyInterfaceInPolicyMapIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.InterfaceId = identity.InterfaceId
 }
 

@@ -47,7 +47,11 @@ func (data *FeatureOSPFIdentity) toIdentity(ctx context.Context, plan *FeatureOS
 }
 
 func (data *FeatureOSPF) fromIdentity(ctx context.Context, identity *FeatureOSPFIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data FeatureOSPF) getDn() string {

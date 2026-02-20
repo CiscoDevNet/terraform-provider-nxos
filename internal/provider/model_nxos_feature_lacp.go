@@ -47,7 +47,11 @@ func (data *FeatureLACPIdentity) toIdentity(ctx context.Context, plan *FeatureLA
 }
 
 func (data *FeatureLACP) fromIdentity(ctx context.Context, identity *FeatureLACPIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data FeatureLACP) getDn() string {

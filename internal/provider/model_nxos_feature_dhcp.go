@@ -47,7 +47,11 @@ func (data *FeatureDHCPIdentity) toIdentity(ctx context.Context, plan *FeatureDH
 }
 
 func (data *FeatureDHCP) fromIdentity(ctx context.Context, identity *FeatureDHCPIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data FeatureDHCP) getDn() string {

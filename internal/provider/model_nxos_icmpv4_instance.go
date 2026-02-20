@@ -47,7 +47,11 @@ func (data *ICMPv4InstanceIdentity) toIdentity(ctx context.Context, plan *ICMPv4
 }
 
 func (data *ICMPv4Instance) fromIdentity(ctx context.Context, identity *ICMPv4InstanceIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data ICMPv4Instance) getDn() string {

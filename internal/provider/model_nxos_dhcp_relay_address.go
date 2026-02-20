@@ -56,7 +56,11 @@ func (data *DHCPRelayAddressIdentity) toIdentity(ctx context.Context, plan *DHCP
 }
 
 func (data *DHCPRelayAddress) fromIdentity(ctx context.Context, identity *DHCPRelayAddressIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.InterfaceId = identity.InterfaceId
 	data.Vrf = identity.Vrf
 	data.Address = identity.Address

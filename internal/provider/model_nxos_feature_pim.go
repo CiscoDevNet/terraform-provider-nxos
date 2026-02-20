@@ -47,7 +47,11 @@ func (data *FeaturePIMIdentity) toIdentity(ctx context.Context, plan *FeaturePIM
 }
 
 func (data *FeaturePIM) fromIdentity(ctx context.Context, identity *FeaturePIMIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data FeaturePIM) getDn() string {

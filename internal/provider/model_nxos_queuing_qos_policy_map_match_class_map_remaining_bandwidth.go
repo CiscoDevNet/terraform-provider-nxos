@@ -55,7 +55,11 @@ func (data *QueuingQOSPolicyMapMatchClassMapRemainingBandwidthIdentity) toIdenti
 }
 
 func (data *QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) fromIdentity(ctx context.Context, identity *QueuingQOSPolicyMapMatchClassMapRemainingBandwidthIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.PolicyMapName = identity.PolicyMapName
 	data.ClassMapName = identity.ClassMapName
 }

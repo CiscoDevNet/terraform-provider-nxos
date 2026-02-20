@@ -64,12 +64,6 @@ func TestAccNxosISISVRF(t *testing.T) {
 				ImportState:       true,
 				ImportStateIdFunc: nxosISISVRFImportStateIdFunc("nxos_isis_vrf.test"),
 			},
-			{
-				ResourceName:    "nxos_isis_vrf.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
 		},
 	})
 }

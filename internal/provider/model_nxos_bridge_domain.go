@@ -52,7 +52,11 @@ func (data *BridgeDomainIdentity) toIdentity(ctx context.Context, plan *BridgeDo
 }
 
 func (data *BridgeDomain) fromIdentity(ctx context.Context, identity *BridgeDomainIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.FabricEncap = identity.FabricEncap
 }
 

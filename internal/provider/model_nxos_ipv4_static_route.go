@@ -65,7 +65,11 @@ func (data *IPv4StaticRouteIdentity) toIdentity(ctx context.Context, plan *IPv4S
 }
 
 func (data *IPv4StaticRoute) fromIdentity(ctx context.Context, identity *IPv4StaticRouteIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.VrfName = identity.VrfName
 	data.Prefix = identity.Prefix
 }

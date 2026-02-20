@@ -47,7 +47,11 @@ func (data *FeaturePVLANIdentity) toIdentity(ctx context.Context, plan *FeatureP
 }
 
 func (data *FeaturePVLAN) fromIdentity(ctx context.Context, identity *FeaturePVLANIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data FeaturePVLAN) getDn() string {

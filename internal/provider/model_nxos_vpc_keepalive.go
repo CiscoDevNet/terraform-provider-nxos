@@ -60,7 +60,11 @@ func (data *VPCKeepaliveIdentity) toIdentity(ctx context.Context, plan *VPCKeepa
 }
 
 func (data *VPCKeepalive) fromIdentity(ctx context.Context, identity *VPCKeepaliveIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data VPCKeepalive) getDn() string {

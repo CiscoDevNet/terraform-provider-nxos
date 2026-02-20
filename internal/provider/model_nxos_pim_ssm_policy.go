@@ -51,7 +51,11 @@ func (data *PIMSSMPolicyIdentity) toIdentity(ctx context.Context, plan *PIMSSMPo
 }
 
 func (data *PIMSSMPolicy) fromIdentity(ctx context.Context, identity *PIMSSMPolicyIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.VrfName = identity.VrfName
 }
 

@@ -60,7 +60,11 @@ func (data *PIMInterfaceIdentity) toIdentity(ctx context.Context, plan *PIMInter
 }
 
 func (data *PIMInterface) fromIdentity(ctx context.Context, identity *PIMInterfaceIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.VrfName = identity.VrfName
 	data.InterfaceId = identity.InterfaceId
 }

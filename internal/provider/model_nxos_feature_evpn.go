@@ -47,7 +47,11 @@ func (data *FeatureEVPNIdentity) toIdentity(ctx context.Context, plan *FeatureEV
 }
 
 func (data *FeatureEVPN) fromIdentity(ctx context.Context, identity *FeatureEVPNIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data FeatureEVPN) getDn() string {

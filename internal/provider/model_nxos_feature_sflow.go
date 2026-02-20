@@ -47,7 +47,11 @@ func (data *FeatureSFlowIdentity) toIdentity(ctx context.Context, plan *FeatureS
 }
 
 func (data *FeatureSFlow) fromIdentity(ctx context.Context, identity *FeatureSFlowIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data FeatureSFlow) getDn() string {

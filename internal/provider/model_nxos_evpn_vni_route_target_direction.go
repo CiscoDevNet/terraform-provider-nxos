@@ -53,7 +53,11 @@ func (data *EVPNVNIRouteTargetDirectionIdentity) toIdentity(ctx context.Context,
 }
 
 func (data *EVPNVNIRouteTargetDirection) fromIdentity(ctx context.Context, identity *EVPNVNIRouteTargetDirectionIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Encap = identity.Encap
 	data.Direction = identity.Direction
 }

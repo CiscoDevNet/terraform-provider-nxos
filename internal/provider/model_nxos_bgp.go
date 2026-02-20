@@ -47,7 +47,11 @@ func (data *BGPIdentity) toIdentity(ctx context.Context, plan *BGP) {
 }
 
 func (data *BGP) fromIdentity(ctx context.Context, identity *BGPIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data BGP) getDn() string {

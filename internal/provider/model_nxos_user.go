@@ -59,7 +59,11 @@ func (data *UserIdentity) toIdentity(ctx context.Context, plan *User) {
 }
 
 func (data *User) fromIdentity(ctx context.Context, identity *UserIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Name = identity.Name
 }
 

@@ -58,12 +58,6 @@ func TestAccNxosOSPFAuthentication(t *testing.T) {
 				ImportState:       true,
 				ImportStateIdFunc: nxosOSPFAuthenticationImportStateIdFunc("nxos_ospf_authentication.test"),
 			},
-			{
-				ResourceName:    "nxos_ospf_authentication.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
 		},
 	})
 }

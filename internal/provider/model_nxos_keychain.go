@@ -50,7 +50,11 @@ func (data *KeychainIdentity) toIdentity(ctx context.Context, plan *Keychain) {
 }
 
 func (data *Keychain) fromIdentity(ctx context.Context, identity *KeychainIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Name = identity.Name
 }
 

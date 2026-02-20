@@ -59,7 +59,11 @@ func (data *IPv6InterfaceAddressIdentity) toIdentity(ctx context.Context, plan *
 }
 
 func (data *IPv6InterfaceAddress) fromIdentity(ctx context.Context, identity *IPv6InterfaceAddressIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Vrf = identity.Vrf
 	data.InterfaceId = identity.InterfaceId
 	data.Address = identity.Address

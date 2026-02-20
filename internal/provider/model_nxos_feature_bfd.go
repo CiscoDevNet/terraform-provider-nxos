@@ -47,7 +47,11 @@ func (data *FeatureBFDIdentity) toIdentity(ctx context.Context, plan *FeatureBFD
 }
 
 func (data *FeatureBFD) fromIdentity(ctx context.Context, identity *FeatureBFDIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data FeatureBFD) getDn() string {

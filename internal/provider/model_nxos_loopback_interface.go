@@ -52,7 +52,11 @@ func (data *LoopbackInterfaceIdentity) toIdentity(ctx context.Context, plan *Loo
 }
 
 func (data *LoopbackInterface) fromIdentity(ctx context.Context, identity *LoopbackInterfaceIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.InterfaceId = identity.InterfaceId
 }
 

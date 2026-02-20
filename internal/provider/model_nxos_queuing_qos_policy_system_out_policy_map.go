@@ -47,7 +47,11 @@ func (data *QueuingQOSPolicySystemOutPolicyMapIdentity) toIdentity(ctx context.C
 }
 
 func (data *QueuingQOSPolicySystemOutPolicyMap) fromIdentity(ctx context.Context, identity *QueuingQOSPolicySystemOutPolicyMapIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data QueuingQOSPolicySystemOutPolicyMap) getDn() string {

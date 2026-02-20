@@ -56,7 +56,11 @@ func (data *VRFRouteTargetAddressFamilyIdentity) toIdentity(ctx context.Context,
 }
 
 func (data *VRFRouteTargetAddressFamily) fromIdentity(ctx context.Context, identity *VRFRouteTargetAddressFamilyIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Vrf = identity.Vrf
 	data.AddressFamily = identity.AddressFamily
 	data.RouteTargetAddressFamily = identity.RouteTargetAddressFamily

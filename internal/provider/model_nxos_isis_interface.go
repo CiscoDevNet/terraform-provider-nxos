@@ -81,7 +81,11 @@ func (data *ISISInterfaceIdentity) toIdentity(ctx context.Context, plan *ISISInt
 }
 
 func (data *ISISInterface) fromIdentity(ctx context.Context, identity *ISISInterfaceIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.InterfaceId = identity.InterfaceId
 }
 

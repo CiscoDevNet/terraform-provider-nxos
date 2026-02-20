@@ -51,7 +51,11 @@ func (data *IPv4AccessListPolicyEgressInterfaceIdentity) toIdentity(ctx context.
 }
 
 func (data *IPv4AccessListPolicyEgressInterface) fromIdentity(ctx context.Context, identity *IPv4AccessListPolicyEgressInterfaceIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.InterfaceId = identity.InterfaceId
 }
 

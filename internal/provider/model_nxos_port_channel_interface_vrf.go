@@ -51,7 +51,11 @@ func (data *PortChannelInterfaceVRFIdentity) toIdentity(ctx context.Context, pla
 }
 
 func (data *PortChannelInterfaceVRF) fromIdentity(ctx context.Context, identity *PortChannelInterfaceVRFIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.InterfaceId = identity.InterfaceId
 }
 

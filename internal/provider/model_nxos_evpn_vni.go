@@ -51,7 +51,11 @@ func (data *EVPNVNIIdentity) toIdentity(ctx context.Context, plan *EVPNVNI) {
 }
 
 func (data *EVPNVNI) fromIdentity(ctx context.Context, identity *EVPNVNIIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Encap = identity.Encap
 }
 

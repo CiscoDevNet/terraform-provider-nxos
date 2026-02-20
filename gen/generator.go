@@ -217,6 +217,15 @@ func HasId(attributes []YamlConfigAttribute) bool {
 	return false
 }
 
+func HasWriteOnly(attributes []YamlConfigAttribute) bool {
+	for _, attr := range attributes {
+		if attr.WriteOnly && !attr.ExcludeTest {
+			return true
+		}
+	}
+	return false
+}
+
 // Templating helper function to get example dn
 func GetExampleDn(dn string, attributes []YamlConfigAttribute) string {
 	a := make([]interface{}, 0, len(attributes))
@@ -316,6 +325,7 @@ var functions = template.FuncMap{
 	"childDocClassNames": ChildDocClassNames,
 	"childDocPaths":      ChildDocPaths,
 	"hasNestedChildren":  HasNestedChildren,
+	"hasWriteOnly":       HasWriteOnly,
 	"importAttributes":   ImportAttributes,
 }
 

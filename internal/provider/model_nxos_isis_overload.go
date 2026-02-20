@@ -55,7 +55,11 @@ func (data *ISISOverloadIdentity) toIdentity(ctx context.Context, plan *ISISOver
 }
 
 func (data *ISISOverload) fromIdentity(ctx context.Context, identity *ISISOverloadIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.InstanceName = identity.InstanceName
 	data.Vrf = identity.Vrf
 }

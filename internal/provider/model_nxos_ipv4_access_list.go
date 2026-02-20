@@ -102,7 +102,11 @@ func (data *IPv4AccessListIdentity) toIdentity(ctx context.Context, plan *IPv4Ac
 }
 
 func (data *IPv4AccessList) fromIdentity(ctx context.Context, identity *IPv4AccessListIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Name = identity.Name
 }
 

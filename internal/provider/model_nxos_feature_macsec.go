@@ -47,7 +47,11 @@ func (data *FeatureMACsecIdentity) toIdentity(ctx context.Context, plan *Feature
 }
 
 func (data *FeatureMACsec) fromIdentity(ctx context.Context, identity *FeatureMACsecIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data FeatureMACsec) getDn() string {

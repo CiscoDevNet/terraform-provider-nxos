@@ -57,7 +57,11 @@ func (data *SVIInterfaceIdentity) toIdentity(ctx context.Context, plan *SVIInter
 }
 
 func (data *SVIInterface) fromIdentity(ctx context.Context, identity *SVIInterfaceIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.InterfaceId = identity.InterfaceId
 }
 

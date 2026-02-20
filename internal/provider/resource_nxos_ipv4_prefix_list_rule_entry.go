@@ -292,9 +292,15 @@ func (r *IPv4PrefixListRuleEntryResource) Update(ctx context.Context, req resour
 		}
 	}
 
+	plan.Dn = types.StringValue(plan.getDn())
+	var identity IPv4PrefixListRuleEntryIdentity
+	identity.toIdentity(ctx, &plan)
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
 
 	diags = resp.State.Set(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 }
 
@@ -344,7 +350,7 @@ func (r *IPv4PrefixListRuleEntryResource) Delete(ctx context.Context, req resour
 }
 
 func (r *IPv4PrefixListRuleEntryResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	if req.ID != "" {
+	if req.ID != "" || req.Identity == nil || req.Identity.Raw.IsNull() {
 		idParts := strings.Split(req.ID, ",")
 		idParts = helpers.RemoveEmptyStrings(idParts)
 

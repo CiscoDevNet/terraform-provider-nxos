@@ -68,7 +68,11 @@ func (data *VPCDomainIdentity) toIdentity(ctx context.Context, plan *VPCDomain) 
 }
 
 func (data *VPCDomain) fromIdentity(ctx context.Context, identity *VPCDomainIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data VPCDomain) getDn() string {

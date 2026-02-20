@@ -56,7 +56,11 @@ func (data *PortChannelInterfaceMemberIdentity) toIdentity(ctx context.Context, 
 }
 
 func (data *PortChannelInterfaceMember) fromIdentity(ctx context.Context, identity *PortChannelInterfaceMemberIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.InterfaceId = identity.InterfaceId
 	data.InterfaceDn = identity.InterfaceDn
 }

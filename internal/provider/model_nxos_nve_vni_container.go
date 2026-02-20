@@ -46,7 +46,11 @@ func (data *NVEVNIContainerIdentity) toIdentity(ctx context.Context, plan *NVEVN
 }
 
 func (data *NVEVNIContainer) fromIdentity(ctx context.Context, identity *NVEVNIContainerIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data NVEVNIContainer) getDn() string {

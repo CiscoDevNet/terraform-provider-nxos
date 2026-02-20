@@ -52,7 +52,11 @@ func (data *VPCInterfaceIdentity) toIdentity(ctx context.Context, plan *VPCInter
 }
 
 func (data *VPCInterface) fromIdentity(ctx context.Context, identity *VPCInterfaceIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.VpcInterfaceId = identity.VpcInterfaceId
 }
 

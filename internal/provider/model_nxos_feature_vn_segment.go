@@ -47,7 +47,11 @@ func (data *FeatureVNSegmentIdentity) toIdentity(ctx context.Context, plan *Feat
 }
 
 func (data *FeatureVNSegment) fromIdentity(ctx context.Context, identity *FeatureVNSegmentIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data FeatureVNSegment) getDn() string {

@@ -65,7 +65,11 @@ func (data *BGPRouteRedistributionIdentity) toIdentity(ctx context.Context, plan
 }
 
 func (data *BGPRouteRedistribution) fromIdentity(ctx context.Context, identity *BGPRouteRedistributionIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Asn = identity.Asn
 	data.Vrf = identity.Vrf
 	data.AddressFamily = identity.AddressFamily

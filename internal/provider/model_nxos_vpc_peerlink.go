@@ -47,7 +47,11 @@ func (data *VPCPeerlinkIdentity) toIdentity(ctx context.Context, plan *VPCPeerli
 }
 
 func (data *VPCPeerlink) fromIdentity(ctx context.Context, identity *VPCPeerlinkIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 }
 
 func (data VPCPeerlink) getDn() string {

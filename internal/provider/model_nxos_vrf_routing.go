@@ -51,7 +51,11 @@ func (data *VRFRoutingIdentity) toIdentity(ctx context.Context, plan *VRFRouting
 }
 
 func (data *VRFRouting) fromIdentity(ctx context.Context, identity *VRFRoutingIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Vrf = identity.Vrf
 }
 

@@ -60,7 +60,11 @@ func (data *PIMStaticRPGroupListIdentity) toIdentity(ctx context.Context, plan *
 }
 
 func (data *PIMStaticRPGroupList) fromIdentity(ctx context.Context, identity *PIMStaticRPGroupListIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.VrfName = identity.VrfName
 	data.RpAddress = identity.RpAddress
 	data.Address = identity.Address

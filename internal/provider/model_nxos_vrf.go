@@ -52,7 +52,11 @@ func (data *VRFIdentity) toIdentity(ctx context.Context, plan *VRF) {
 }
 
 func (data *VRF) fromIdentity(ctx context.Context, identity *VRFIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Name = identity.Name
 }
 

@@ -56,7 +56,11 @@ func (data *RouteMapRuleEntryMatchRoutePrefixListIdentity) toIdentity(ctx contex
 }
 
 func (data *RouteMapRuleEntryMatchRoutePrefixList) fromIdentity(ctx context.Context, identity *RouteMapRuleEntryMatchRoutePrefixListIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.RuleName = identity.RuleName
 	data.Order = identity.Order
 	data.PrefixListDn = identity.PrefixListDn

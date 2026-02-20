@@ -59,7 +59,11 @@ func (data *IPv4PrefixListRuleEntryIdentity) toIdentity(ctx context.Context, pla
 }
 
 func (data *IPv4PrefixListRuleEntry) fromIdentity(ctx context.Context, identity *IPv4PrefixListRuleEntryIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.RuleName = identity.RuleName
 	data.Order = identity.Order
 }

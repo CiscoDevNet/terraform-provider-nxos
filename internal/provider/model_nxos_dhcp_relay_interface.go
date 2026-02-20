@@ -50,7 +50,11 @@ func (data *DHCPRelayInterfaceIdentity) toIdentity(ctx context.Context, plan *DH
 }
 
 func (data *DHCPRelayInterface) fromIdentity(ctx context.Context, identity *DHCPRelayInterfaceIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.InterfaceId = identity.InterfaceId
 }
 

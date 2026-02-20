@@ -51,7 +51,11 @@ func (data *SubinterfaceVRFIdentity) toIdentity(ctx context.Context, plan *Subin
 }
 
 func (data *SubinterfaceVRF) fromIdentity(ctx context.Context, identity *SubinterfaceVRFIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.InterfaceId = identity.InterfaceId
 }
 

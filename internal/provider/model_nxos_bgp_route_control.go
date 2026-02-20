@@ -57,7 +57,11 @@ func (data *BGPRouteControlIdentity) toIdentity(ctx context.Context, plan *BGPRo
 }
 
 func (data *BGPRouteControl) fromIdentity(ctx context.Context, identity *BGPRouteControlIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Asn = identity.Asn
 	data.Vrf = identity.Vrf
 }

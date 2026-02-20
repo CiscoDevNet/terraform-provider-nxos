@@ -52,7 +52,11 @@ func (data *HMMInterfaceIdentity) toIdentity(ctx context.Context, plan *HMMInter
 }
 
 func (data *HMMInterface) fromIdentity(ctx context.Context, identity *HMMInterfaceIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.InterfaceId = identity.InterfaceId
 }
 

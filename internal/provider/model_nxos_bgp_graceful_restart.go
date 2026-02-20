@@ -56,7 +56,11 @@ func (data *BGPGracefulRestartIdentity) toIdentity(ctx context.Context, plan *BG
 }
 
 func (data *BGPGracefulRestart) fromIdentity(ctx context.Context, identity *BGPGracefulRestartIdentity) {
-	data.Device = identity.Device
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
 	data.Asn = identity.Asn
 	data.Vrf = identity.Vrf
 }

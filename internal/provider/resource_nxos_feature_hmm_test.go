@@ -24,17 +24,23 @@ import (
 	"os"
 	"testing"
 
+	goversion "github.com/hashicorp/go-version"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
+	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
 func TestAccNxosFeatureHMM(t *testing.T) {
 	if os.Getenv("FEATURE_HMM") == "" {
 		t.Skip("skipping test, set environment variable FEATURE_HMM")
 	}
+	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
+			terraformVersionCapture{Version: &tfVersion},
+		},
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosFeatureHMMPrerequisitesConfig + testAccNxosFeatureHMMConfig_all(),
@@ -46,6 +52,12 @@ func TestAccNxosFeatureHMM(t *testing.T) {
 				ResourceName:      "nxos_feature_hmm.test",
 				ImportState:       true,
 				ImportStateIdFunc: nxosFeatureHMMImportStateIdFunc("nxos_feature_hmm.test"),
+			},
+			{
+				ResourceName:    "nxos_feature_hmm.test",
+				ImportState:     true,
+				ImportStateKind: resource.ImportBlockWithResourceIdentity,
+				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

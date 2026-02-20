@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -36,6 +37,24 @@ type PortChannelInterfaceMember struct {
 	InterfaceId types.String `tfsdk:"interface_id"`
 	InterfaceDn types.String `tfsdk:"interface_dn"`
 	Force       types.Bool   `tfsdk:"force"`
+}
+
+type PortChannelInterfaceMemberIdentity struct {
+	Device      types.String `tfsdk:"device"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+	InterfaceDn types.String `tfsdk:"interface_dn"`
+}
+
+func (data *PortChannelInterfaceMemberIdentity) toIdentity(ctx context.Context, plan *PortChannelInterfaceMember) {
+	data.Device = plan.Device
+	data.InterfaceId = plan.InterfaceId
+	data.InterfaceDn = plan.InterfaceDn
+}
+
+func (data *PortChannelInterfaceMember) fromIdentity(ctx context.Context, identity *PortChannelInterfaceMemberIdentity) {
+	data.Device = identity.Device
+	data.InterfaceId = identity.InterfaceId
+	data.InterfaceDn = identity.InterfaceDn
 }
 
 func (data PortChannelInterfaceMember) getDn() string {

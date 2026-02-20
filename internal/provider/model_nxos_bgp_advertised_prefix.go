@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -37,6 +38,30 @@ type BGPAdvertisedPrefix struct {
 	Prefix        types.String `tfsdk:"prefix"`
 	RouteMap      types.String `tfsdk:"route_map"`
 	Evpn          types.String `tfsdk:"evpn"`
+}
+
+type BGPAdvertisedPrefixIdentity struct {
+	Device        types.String `tfsdk:"device"`
+	Asn           types.String `tfsdk:"asn"`
+	Vrf           types.String `tfsdk:"vrf"`
+	AddressFamily types.String `tfsdk:"address_family"`
+	Prefix        types.String `tfsdk:"prefix"`
+}
+
+func (data *BGPAdvertisedPrefixIdentity) toIdentity(ctx context.Context, plan *BGPAdvertisedPrefix) {
+	data.Device = plan.Device
+	data.Asn = plan.Asn
+	data.Vrf = plan.Vrf
+	data.AddressFamily = plan.AddressFamily
+	data.Prefix = plan.Prefix
+}
+
+func (data *BGPAdvertisedPrefix) fromIdentity(ctx context.Context, identity *BGPAdvertisedPrefixIdentity) {
+	data.Device = identity.Device
+	data.Asn = identity.Asn
+	data.Vrf = identity.Vrf
+	data.AddressFamily = identity.AddressFamily
+	data.Prefix = identity.Prefix
 }
 
 func (data BGPAdvertisedPrefix) getDn() string {

@@ -28,6 +28,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
@@ -40,7 +41,7 @@ import (
 
 // Ensure provider defined types fully satisfy framework interfaces
 var _ resource.Resource = &BGPPeerLocalASNResource{}
-var _ resource.ResourceWithImportState = &BGPPeerLocalASNResource{}
+var _ resource.ResourceWithIdentity = &BGPPeerLocalASNResource{}
 
 func NewBGPPeerLocalASNResource() resource.Resource {
 	return &BGPPeerLocalASNResource{}
@@ -102,6 +103,25 @@ func (r *BGPPeerLocalASNResource) Schema(ctx context.Context, req resource.Schem
 	}
 }
 
+func (r *BGPPeerLocalASNResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+	resp.IdentitySchema = identityschema.Schema{
+		Attributes: map[string]identityschema.Attribute{
+			"device": identityschema.StringAttribute{
+				Description:       "A device name from the provider configuration.",
+				OptionalForImport: true,
+			},
+			"vrf": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("VRF name.").String,
+				RequiredForImport: true,
+			},
+			"address": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("Peer address.").String,
+				RequiredForImport: true,
+			},
+		},
+	}
+}
+
 func (r *BGPPeerLocalASNResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
@@ -113,6 +133,7 @@ func (r *BGPPeerLocalASNResource) Configure(ctx context.Context, req resource.Co
 
 func (r *BGPPeerLocalASNResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan BGPPeerLocalASN
+	var identity BGPPeerLocalASNIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -140,10 +161,13 @@ func (r *BGPPeerLocalASNResource) Create(ctx context.Context, req resource.Creat
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
 
 	diags = resp.State.Set(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
@@ -151,6 +175,7 @@ func (r *BGPPeerLocalASNResource) Create(ctx context.Context, req resource.Creat
 
 func (r *BGPPeerLocalASNResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state BGPPeerLocalASN
+	var identity BGPPeerLocalASNIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -158,6 +183,14 @@ func (r *BGPPeerLocalASNResource) Read(ctx context.Context, req resource.ReadReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	// Read identity
+	diags = req.Identity.Get(ctx, &identity)
+	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+		return
+	}
+
+	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -182,9 +215,13 @@ func (r *BGPPeerLocalASNResource) Read(ctx context.Context, req resource.ReadReq
 		state.fromBody(res, imp)
 	}
 
+	identity.toIdentity(ctx, &state)
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
@@ -271,22 +308,38 @@ func (r *BGPPeerLocalASNResource) Delete(ctx context.Context, req resource.Delet
 }
 
 func (r *BGPPeerLocalASNResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	idParts := strings.Split(req.ID, ",")
-	idParts = helpers.RemoveEmptyStrings(idParts)
+	if req.ID != "" {
+		idParts := strings.Split(req.ID, ",")
+		idParts = helpers.RemoveEmptyStrings(idParts)
 
-	if len(idParts) != 2 && len(idParts) != 3 {
-		expectedIdentifier := "Expected import identifier with format: '<vrf>,<address>'"
-		expectedIdentifier += " or '<vrf>,<address>,<device>'"
-		resp.Diagnostics.AddError(
-			"Unexpected Import Identifier",
-			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
-		)
-		return
-	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf"), idParts[0])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address"), idParts[1])...)
-	if len(idParts) == 3 {
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+		if len(idParts) != 2 && len(idParts) != 3 {
+			expectedIdentifier := "Expected import identifier with format: '<vrf>,<address>'"
+			expectedIdentifier += " or '<vrf>,<address>,<device>'"
+			resp.Diagnostics.AddError(
+				"Unexpected Import Identifier",
+				fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
+			)
+			return
+		}
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("vrf"), idParts[0])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf"), idParts[0])...)
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("address"), idParts[1])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address"), idParts[1])...)
+		if len(idParts) == 3 {
+			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+		}
+	} else {
+		var identity BGPPeerLocalASNIdentity
+		diags := req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf"), identity.Vrf.ValueString())...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address"), identity.Address.ValueString())...)
+		if !identity.Device.IsNull() && !identity.Device.IsUnknown() {
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), identity.Device.ValueString())...)
+		}
 	}
 
 	var state BGPPeerLocalASN

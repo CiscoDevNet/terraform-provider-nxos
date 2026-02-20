@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -34,6 +35,24 @@ type BGPVRF struct {
 	Asn      types.String `tfsdk:"asn"`
 	Name     types.String `tfsdk:"name"`
 	RouterId types.String `tfsdk:"router_id"`
+}
+
+type BGPVRFIdentity struct {
+	Device types.String `tfsdk:"device"`
+	Asn    types.String `tfsdk:"asn"`
+	Name   types.String `tfsdk:"name"`
+}
+
+func (data *BGPVRFIdentity) toIdentity(ctx context.Context, plan *BGPVRF) {
+	data.Device = plan.Device
+	data.Asn = plan.Asn
+	data.Name = plan.Name
+}
+
+func (data *BGPVRF) fromIdentity(ctx context.Context, identity *BGPVRFIdentity) {
+	data.Device = identity.Device
+	data.Asn = identity.Asn
+	data.Name = identity.Name
 }
 
 func (data BGPVRF) getDn() string {

@@ -23,14 +23,20 @@ import (
 	"fmt"
 	"testing"
 
+	goversion "github.com/hashicorp/go-version"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
+	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
 func TestAccNxosOSPFAuthentication(t *testing.T) {
+	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
+			terraformVersionCapture{Version: &tfVersion},
+		},
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosOSPFAuthenticationPrerequisitesConfig + testAccNxosOSPFAuthenticationConfig_all(),
@@ -51,6 +57,12 @@ func TestAccNxosOSPFAuthentication(t *testing.T) {
 				ResourceName:      "nxos_ospf_authentication.test",
 				ImportState:       true,
 				ImportStateIdFunc: nxosOSPFAuthenticationImportStateIdFunc("nxos_ospf_authentication.test"),
+			},
+			{
+				ResourceName:    "nxos_ospf_authentication.test",
+				ImportState:     true,
+				ImportStateKind: resource.ImportBlockWithResourceIdentity,
+				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

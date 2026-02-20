@@ -23,14 +23,20 @@ import (
 	"fmt"
 	"testing"
 
+	goversion "github.com/hashicorp/go-version"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
+	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
 func TestAccNxosRouteMapRuleEntrySetRegularCommunity(t *testing.T) {
+	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
+			terraformVersionCapture{Version: &tfVersion},
+		},
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosRouteMapRuleEntrySetRegularCommunityPrerequisitesConfig + testAccNxosRouteMapRuleEntrySetRegularCommunityConfig_all(),
@@ -46,6 +52,12 @@ func TestAccNxosRouteMapRuleEntrySetRegularCommunity(t *testing.T) {
 				ResourceName:      "nxos_route_map_rule_entry_set_regular_community.test",
 				ImportState:       true,
 				ImportStateIdFunc: nxosRouteMapRuleEntrySetRegularCommunityImportStateIdFunc("nxos_route_map_rule_entry_set_regular_community.test"),
+			},
+			{
+				ResourceName:    "nxos_route_map_rule_entry_set_regular_community.test",
+				ImportState:     true,
+				ImportStateKind: resource.ImportBlockWithResourceIdentity,
+				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

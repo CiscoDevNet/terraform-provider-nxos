@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -38,6 +39,27 @@ type OSPFArea struct {
 	AuthenticationType types.String `tfsdk:"authentication_type"`
 	Cost               types.Int64  `tfsdk:"cost"`
 	Type               types.String `tfsdk:"type"`
+}
+
+type OSPFAreaIdentity struct {
+	Device       types.String `tfsdk:"device"`
+	InstanceName types.String `tfsdk:"instance_name"`
+	VrfName      types.String `tfsdk:"vrf_name"`
+	AreaId       types.String `tfsdk:"area_id"`
+}
+
+func (data *OSPFAreaIdentity) toIdentity(ctx context.Context, plan *OSPFArea) {
+	data.Device = plan.Device
+	data.InstanceName = plan.InstanceName
+	data.VrfName = plan.VrfName
+	data.AreaId = plan.AreaId
+}
+
+func (data *OSPFArea) fromIdentity(ctx context.Context, identity *OSPFAreaIdentity) {
+	data.Device = identity.Device
+	data.InstanceName = identity.InstanceName
+	data.VrfName = identity.VrfName
+	data.AreaId = identity.AreaId
 }
 
 func (data OSPFArea) getDn() string {

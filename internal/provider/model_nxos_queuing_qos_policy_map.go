@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -33,6 +34,21 @@ type QueuingQOSPolicyMap struct {
 	Dn        types.String `tfsdk:"id"`
 	Name      types.String `tfsdk:"name"`
 	MatchType types.String `tfsdk:"match_type"`
+}
+
+type QueuingQOSPolicyMapIdentity struct {
+	Device types.String `tfsdk:"device"`
+	Name   types.String `tfsdk:"name"`
+}
+
+func (data *QueuingQOSPolicyMapIdentity) toIdentity(ctx context.Context, plan *QueuingQOSPolicyMap) {
+	data.Device = plan.Device
+	data.Name = plan.Name
+}
+
+func (data *QueuingQOSPolicyMap) fromIdentity(ctx context.Context, identity *QueuingQOSPolicyMapIdentity) {
+	data.Device = identity.Device
+	data.Name = identity.Name
 }
 
 func (data QueuingQOSPolicyMap) getDn() string {

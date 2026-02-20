@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -52,6 +53,27 @@ type BGPAddressFamily struct {
 	TableMapRouteMapName              types.String `tfsdk:"table_map_route_map_name"`
 	VniEthernetTag                    types.String `tfsdk:"vni_ethernet_tag"`
 	WaitIgpConverged                  types.String `tfsdk:"wait_igp_converged"`
+}
+
+type BGPAddressFamilyIdentity struct {
+	Device        types.String `tfsdk:"device"`
+	Asn           types.String `tfsdk:"asn"`
+	Vrf           types.String `tfsdk:"vrf"`
+	AddressFamily types.String `tfsdk:"address_family"`
+}
+
+func (data *BGPAddressFamilyIdentity) toIdentity(ctx context.Context, plan *BGPAddressFamily) {
+	data.Device = plan.Device
+	data.Asn = plan.Asn
+	data.Vrf = plan.Vrf
+	data.AddressFamily = plan.AddressFamily
+}
+
+func (data *BGPAddressFamily) fromIdentity(ctx context.Context, identity *BGPAddressFamilyIdentity) {
+	data.Device = identity.Device
+	data.Asn = identity.Asn
+	data.Vrf = identity.Vrf
+	data.AddressFamily = identity.AddressFamily
 }
 
 func (data BGPAddressFamily) getDn() string {

@@ -23,14 +23,20 @@ import (
 	"fmt"
 	"testing"
 
+	goversion "github.com/hashicorp/go-version"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
+	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
 func TestAccNxosBGPPeerAddressFamilyRouteControl(t *testing.T) {
+	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
+			terraformVersionCapture{Version: &tfVersion},
+		},
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosBGPPeerAddressFamilyRouteControlPrerequisitesConfig + testAccNxosBGPPeerAddressFamilyRouteControlConfig_all(),
@@ -47,6 +53,12 @@ func TestAccNxosBGPPeerAddressFamilyRouteControl(t *testing.T) {
 				ResourceName:      "nxos_bgp_peer_address_family_route_control.test",
 				ImportState:       true,
 				ImportStateIdFunc: nxosBGPPeerAddressFamilyRouteControlImportStateIdFunc("nxos_bgp_peer_address_family_route_control.test"),
+			},
+			{
+				ResourceName:    "nxos_bgp_peer_address_family_route_control.test",
+				ImportState:     true,
+				ImportStateKind: resource.ImportBlockWithResourceIdentity,
+				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

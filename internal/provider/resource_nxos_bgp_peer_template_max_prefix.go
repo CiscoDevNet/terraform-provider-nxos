@@ -29,6 +29,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
@@ -42,7 +43,7 @@ import (
 
 // Ensure provider defined types fully satisfy framework interfaces
 var _ resource.Resource = &BGPPeerTemplateMaxPrefixResource{}
-var _ resource.ResourceWithImportState = &BGPPeerTemplateMaxPrefixResource{}
+var _ resource.ResourceWithIdentity = &BGPPeerTemplateMaxPrefixResource{}
 
 func NewBGPPeerTemplateMaxPrefixResource() resource.Resource {
 	return &BGPPeerTemplateMaxPrefixResource{}
@@ -132,6 +133,29 @@ func (r *BGPPeerTemplateMaxPrefixResource) Schema(ctx context.Context, req resou
 	}
 }
 
+func (r *BGPPeerTemplateMaxPrefixResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+	resp.IdentitySchema = identityschema.Schema{
+		Attributes: map[string]identityschema.Attribute{
+			"device": identityschema.StringAttribute{
+				Description:       "A device name from the provider configuration.",
+				OptionalForImport: true,
+			},
+			"asn": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("Autonomous system number.").String,
+				RequiredForImport: true,
+			},
+			"template_name": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("Peer template name.").String,
+				RequiredForImport: true,
+			},
+			"address_family": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("Address Family.").String,
+				RequiredForImport: true,
+			},
+		},
+	}
+}
+
 func (r *BGPPeerTemplateMaxPrefixResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
@@ -143,6 +167,7 @@ func (r *BGPPeerTemplateMaxPrefixResource) Configure(ctx context.Context, req re
 
 func (r *BGPPeerTemplateMaxPrefixResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan BGPPeerTemplateMaxPrefix
+	var identity BGPPeerTemplateMaxPrefixIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -170,10 +195,13 @@ func (r *BGPPeerTemplateMaxPrefixResource) Create(ctx context.Context, req resou
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
 
 	diags = resp.State.Set(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
@@ -181,6 +209,7 @@ func (r *BGPPeerTemplateMaxPrefixResource) Create(ctx context.Context, req resou
 
 func (r *BGPPeerTemplateMaxPrefixResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state BGPPeerTemplateMaxPrefix
+	var identity BGPPeerTemplateMaxPrefixIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -188,6 +217,14 @@ func (r *BGPPeerTemplateMaxPrefixResource) Read(ctx context.Context, req resourc
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	// Read identity
+	diags = req.Identity.Get(ctx, &identity)
+	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+		return
+	}
+
+	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -212,9 +249,13 @@ func (r *BGPPeerTemplateMaxPrefixResource) Read(ctx context.Context, req resourc
 		state.fromBody(res, imp)
 	}
 
+	identity.toIdentity(ctx, &state)
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
@@ -301,23 +342,41 @@ func (r *BGPPeerTemplateMaxPrefixResource) Delete(ctx context.Context, req resou
 }
 
 func (r *BGPPeerTemplateMaxPrefixResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	idParts := strings.Split(req.ID, ",")
-	idParts = helpers.RemoveEmptyStrings(idParts)
+	if req.ID != "" {
+		idParts := strings.Split(req.ID, ",")
+		idParts = helpers.RemoveEmptyStrings(idParts)
 
-	if len(idParts) != 3 && len(idParts) != 4 {
-		expectedIdentifier := "Expected import identifier with format: '<asn>,<template_name>,<address_family>'"
-		expectedIdentifier += " or '<asn>,<template_name>,<address_family>,<device>'"
-		resp.Diagnostics.AddError(
-			"Unexpected Import Identifier",
-			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
-		)
-		return
-	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("asn"), idParts[0])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("template_name"), idParts[1])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address_family"), idParts[2])...)
-	if len(idParts) == 4 {
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+		if len(idParts) != 3 && len(idParts) != 4 {
+			expectedIdentifier := "Expected import identifier with format: '<asn>,<template_name>,<address_family>'"
+			expectedIdentifier += " or '<asn>,<template_name>,<address_family>,<device>'"
+			resp.Diagnostics.AddError(
+				"Unexpected Import Identifier",
+				fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
+			)
+			return
+		}
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("asn"), idParts[0])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("asn"), idParts[0])...)
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("template_name"), idParts[1])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("template_name"), idParts[1])...)
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("address_family"), idParts[2])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address_family"), idParts[2])...)
+		if len(idParts) == 4 {
+			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+		}
+	} else {
+		var identity BGPPeerTemplateMaxPrefixIdentity
+		diags := req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("asn"), identity.Asn.ValueString())...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("template_name"), identity.TemplateName.ValueString())...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address_family"), identity.AddressFamily.ValueString())...)
+		if !identity.Device.IsNull() && !identity.Device.IsUnknown() {
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), identity.Device.ValueString())...)
+		}
 	}
 
 	var state BGPPeerTemplateMaxPrefix

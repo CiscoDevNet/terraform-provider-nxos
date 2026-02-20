@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -34,6 +35,21 @@ type PIMAnycastRP struct {
 	VrfName         types.String `tfsdk:"vrf_name"`
 	LocalInterface  types.String `tfsdk:"local_interface"`
 	SourceInterface types.String `tfsdk:"source_interface"`
+}
+
+type PIMAnycastRPIdentity struct {
+	Device  types.String `tfsdk:"device"`
+	VrfName types.String `tfsdk:"vrf_name"`
+}
+
+func (data *PIMAnycastRPIdentity) toIdentity(ctx context.Context, plan *PIMAnycastRP) {
+	data.Device = plan.Device
+	data.VrfName = plan.VrfName
+}
+
+func (data *PIMAnycastRP) fromIdentity(ctx context.Context, identity *PIMAnycastRPIdentity) {
+	data.Device = identity.Device
+	data.VrfName = identity.VrfName
 }
 
 func (data PIMAnycastRP) getDn() string {

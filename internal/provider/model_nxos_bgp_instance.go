@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -35,6 +36,18 @@ type BGPInstance struct {
 	AdminState            types.String `tfsdk:"admin_state"`
 	Asn                   types.String `tfsdk:"asn"`
 	EnhancedErrorHandling types.Bool   `tfsdk:"enhanced_error_handling"`
+}
+
+type BGPInstanceIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *BGPInstanceIdentity) toIdentity(ctx context.Context, plan *BGPInstance) {
+	data.Device = plan.Device
+}
+
+func (data *BGPInstance) fromIdentity(ctx context.Context, identity *BGPInstanceIdentity) {
+	data.Device = identity.Device
 }
 
 func (data BGPInstance) getDn() string {

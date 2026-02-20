@@ -20,6 +20,8 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -30,6 +32,18 @@ type FeatureHMM struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
 	AdminState types.String `tfsdk:"admin_state"`
+}
+
+type FeatureHMMIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *FeatureHMMIdentity) toIdentity(ctx context.Context, plan *FeatureHMM) {
+	data.Device = plan.Device
+}
+
+func (data *FeatureHMM) fromIdentity(ctx context.Context, identity *FeatureHMMIdentity) {
+	data.Device = identity.Device
 }
 
 func (data FeatureHMM) getDn() string {

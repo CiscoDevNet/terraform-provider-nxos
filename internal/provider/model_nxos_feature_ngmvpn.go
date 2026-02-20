@@ -20,6 +20,8 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -30,6 +32,18 @@ type FeatureNgMVPN struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
 	AdminState types.String `tfsdk:"admin_state"`
+}
+
+type FeatureNgMVPNIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *FeatureNgMVPNIdentity) toIdentity(ctx context.Context, plan *FeatureNgMVPN) {
+	data.Device = plan.Device
+}
+
+func (data *FeatureNgMVPN) fromIdentity(ctx context.Context, identity *FeatureNgMVPNIdentity) {
+	data.Device = identity.Device
 }
 
 func (data FeatureNgMVPN) getDn() string {

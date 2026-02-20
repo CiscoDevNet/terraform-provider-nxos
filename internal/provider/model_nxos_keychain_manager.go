@@ -20,6 +20,8 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -30,6 +32,18 @@ type KeychainManager struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
 	AdminState types.String `tfsdk:"admin_state"`
+}
+
+type KeychainManagerIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *KeychainManagerIdentity) toIdentity(ctx context.Context, plan *KeychainManager) {
+	data.Device = plan.Device
+}
+
+func (data *KeychainManager) fromIdentity(ctx context.Context, identity *KeychainManagerIdentity) {
+	data.Device = identity.Device
 }
 
 func (data KeychainManager) getDn() string {

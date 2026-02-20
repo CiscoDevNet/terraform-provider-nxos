@@ -20,6 +20,8 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -30,6 +32,18 @@ type FeaturePVLAN struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
 	AdminState types.String `tfsdk:"admin_state"`
+}
+
+type FeaturePVLANIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *FeaturePVLANIdentity) toIdentity(ctx context.Context, plan *FeaturePVLAN) {
+	data.Device = plan.Device
+}
+
+func (data *FeaturePVLAN) fromIdentity(ctx context.Context, identity *FeaturePVLANIdentity) {
+	data.Device = identity.Device
 }
 
 func (data FeaturePVLAN) getDn() string {

@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -41,6 +42,21 @@ type SpanningTreeInterface struct {
 	LinkType    types.String `tfsdk:"link_type"`
 	Mode        types.String `tfsdk:"mode"`
 	Priority    types.Int64  `tfsdk:"priority"`
+}
+
+type SpanningTreeInterfaceIdentity struct {
+	Device      types.String `tfsdk:"device"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+}
+
+func (data *SpanningTreeInterfaceIdentity) toIdentity(ctx context.Context, plan *SpanningTreeInterface) {
+	data.Device = plan.Device
+	data.InterfaceId = plan.InterfaceId
+}
+
+func (data *SpanningTreeInterface) fromIdentity(ctx context.Context, identity *SpanningTreeInterfaceIdentity) {
+	data.Device = identity.Device
+	data.InterfaceId = identity.InterfaceId
 }
 
 func (data SpanningTreeInterface) getDn() string {

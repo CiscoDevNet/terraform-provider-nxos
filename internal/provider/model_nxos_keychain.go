@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -32,6 +33,21 @@ type Keychain struct {
 	Device types.String `tfsdk:"device"`
 	Dn     types.String `tfsdk:"id"`
 	Name   types.String `tfsdk:"name"`
+}
+
+type KeychainIdentity struct {
+	Device types.String `tfsdk:"device"`
+	Name   types.String `tfsdk:"name"`
+}
+
+func (data *KeychainIdentity) toIdentity(ctx context.Context, plan *Keychain) {
+	data.Device = plan.Device
+	data.Name = plan.Name
+}
+
+func (data *Keychain) fromIdentity(ctx context.Context, identity *KeychainIdentity) {
+	data.Device = identity.Device
+	data.Name = identity.Name
 }
 
 func (data Keychain) getDn() string {

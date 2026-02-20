@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -35,6 +36,24 @@ type RouteMapRuleEntry struct {
 	RuleName types.String `tfsdk:"rule_name"`
 	Order    types.Int64  `tfsdk:"order"`
 	Action   types.String `tfsdk:"action"`
+}
+
+type RouteMapRuleEntryIdentity struct {
+	Device   types.String `tfsdk:"device"`
+	RuleName types.String `tfsdk:"rule_name"`
+	Order    types.Int64  `tfsdk:"order"`
+}
+
+func (data *RouteMapRuleEntryIdentity) toIdentity(ctx context.Context, plan *RouteMapRuleEntry) {
+	data.Device = plan.Device
+	data.RuleName = plan.RuleName
+	data.Order = plan.Order
+}
+
+func (data *RouteMapRuleEntry) fromIdentity(ctx context.Context, identity *RouteMapRuleEntryIdentity) {
+	data.Device = identity.Device
+	data.RuleName = identity.RuleName
+	data.Order = identity.Order
 }
 
 func (data RouteMapRuleEntry) getDn() string {

@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -37,6 +38,27 @@ type IPv4InterfaceAddress struct {
 	Address     types.String `tfsdk:"address"`
 	Type        types.String `tfsdk:"type"`
 	Tag         types.Int64  `tfsdk:"tag"`
+}
+
+type IPv4InterfaceAddressIdentity struct {
+	Device      types.String `tfsdk:"device"`
+	Vrf         types.String `tfsdk:"vrf"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+	Address     types.String `tfsdk:"address"`
+}
+
+func (data *IPv4InterfaceAddressIdentity) toIdentity(ctx context.Context, plan *IPv4InterfaceAddress) {
+	data.Device = plan.Device
+	data.Vrf = plan.Vrf
+	data.InterfaceId = plan.InterfaceId
+	data.Address = plan.Address
+}
+
+func (data *IPv4InterfaceAddress) fromIdentity(ctx context.Context, identity *IPv4InterfaceAddressIdentity) {
+	data.Device = identity.Device
+	data.Vrf = identity.Vrf
+	data.InterfaceId = identity.InterfaceId
+	data.Address = identity.Address
 }
 
 func (data IPv4InterfaceAddress) getDn() string {

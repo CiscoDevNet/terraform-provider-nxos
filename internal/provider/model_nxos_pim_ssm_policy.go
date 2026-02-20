@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -33,6 +34,21 @@ type PIMSSMPolicy struct {
 	Dn      types.String `tfsdk:"id"`
 	VrfName types.String `tfsdk:"vrf_name"`
 	Name    types.String `tfsdk:"name"`
+}
+
+type PIMSSMPolicyIdentity struct {
+	Device  types.String `tfsdk:"device"`
+	VrfName types.String `tfsdk:"vrf_name"`
+}
+
+func (data *PIMSSMPolicyIdentity) toIdentity(ctx context.Context, plan *PIMSSMPolicy) {
+	data.Device = plan.Device
+	data.VrfName = plan.VrfName
+}
+
+func (data *PIMSSMPolicy) fromIdentity(ctx context.Context, identity *PIMSSMPolicyIdentity) {
+	data.Device = identity.Device
+	data.VrfName = identity.VrfName
 }
 
 func (data PIMSSMPolicy) getDn() string {

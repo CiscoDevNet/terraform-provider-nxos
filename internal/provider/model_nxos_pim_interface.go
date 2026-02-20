@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -40,6 +41,24 @@ type PIMInterface struct {
 	DrPriority  types.Int64  `tfsdk:"dr_priority"`
 	Passive     types.Bool   `tfsdk:"passive"`
 	SparseMode  types.Bool   `tfsdk:"sparse_mode"`
+}
+
+type PIMInterfaceIdentity struct {
+	Device      types.String `tfsdk:"device"`
+	VrfName     types.String `tfsdk:"vrf_name"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+}
+
+func (data *PIMInterfaceIdentity) toIdentity(ctx context.Context, plan *PIMInterface) {
+	data.Device = plan.Device
+	data.VrfName = plan.VrfName
+	data.InterfaceId = plan.InterfaceId
+}
+
+func (data *PIMInterface) fromIdentity(ctx context.Context, identity *PIMInterfaceIdentity) {
+	data.Device = identity.Device
+	data.VrfName = identity.VrfName
+	data.InterfaceId = identity.InterfaceId
 }
 
 func (data PIMInterface) getDn() string {

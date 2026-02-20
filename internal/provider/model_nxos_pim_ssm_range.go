@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -41,6 +42,21 @@ type PIMSSMRange struct {
 	PrefixList types.String `tfsdk:"prefix_list"`
 	RouteMap   types.String `tfsdk:"route_map"`
 	SsmNone    types.Bool   `tfsdk:"ssm_none"`
+}
+
+type PIMSSMRangeIdentity struct {
+	Device  types.String `tfsdk:"device"`
+	VrfName types.String `tfsdk:"vrf_name"`
+}
+
+func (data *PIMSSMRangeIdentity) toIdentity(ctx context.Context, plan *PIMSSMRange) {
+	data.Device = plan.Device
+	data.VrfName = plan.VrfName
+}
+
+func (data *PIMSSMRange) fromIdentity(ctx context.Context, identity *PIMSSMRangeIdentity) {
+	data.Device = identity.Device
+	data.VrfName = identity.VrfName
 }
 
 func (data PIMSSMRange) getDn() string {

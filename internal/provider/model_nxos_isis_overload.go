@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -35,6 +36,24 @@ type ISISOverload struct {
 	InstanceName types.String `tfsdk:"instance_name"`
 	Vrf          types.String `tfsdk:"vrf"`
 	StartupTime  types.Int64  `tfsdk:"startup_time"`
+}
+
+type ISISOverloadIdentity struct {
+	Device       types.String `tfsdk:"device"`
+	InstanceName types.String `tfsdk:"instance_name"`
+	Vrf          types.String `tfsdk:"vrf"`
+}
+
+func (data *ISISOverloadIdentity) toIdentity(ctx context.Context, plan *ISISOverload) {
+	data.Device = plan.Device
+	data.InstanceName = plan.InstanceName
+	data.Vrf = plan.Vrf
+}
+
+func (data *ISISOverload) fromIdentity(ctx context.Context, identity *ISISOverloadIdentity) {
+	data.Device = identity.Device
+	data.InstanceName = identity.InstanceName
+	data.Vrf = identity.Vrf
 }
 
 func (data ISISOverload) getDn() string {

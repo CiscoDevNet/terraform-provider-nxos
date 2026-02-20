@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -37,6 +38,24 @@ type IPv4Interface struct {
 	Forward     types.String `tfsdk:"forward"`
 	Unnumbered  types.String `tfsdk:"unnumbered"`
 	Urpf        types.String `tfsdk:"urpf"`
+}
+
+type IPv4InterfaceIdentity struct {
+	Device      types.String `tfsdk:"device"`
+	Vrf         types.String `tfsdk:"vrf"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+}
+
+func (data *IPv4InterfaceIdentity) toIdentity(ctx context.Context, plan *IPv4Interface) {
+	data.Device = plan.Device
+	data.Vrf = plan.Vrf
+	data.InterfaceId = plan.InterfaceId
+}
+
+func (data *IPv4Interface) fromIdentity(ctx context.Context, identity *IPv4InterfaceIdentity) {
+	data.Device = identity.Device
+	data.Vrf = identity.Vrf
+	data.InterfaceId = identity.InterfaceId
 }
 
 func (data IPv4Interface) getDn() string {

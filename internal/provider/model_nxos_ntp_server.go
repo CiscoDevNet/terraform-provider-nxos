@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -38,6 +39,21 @@ type NTPServer struct {
 	KeyId   types.Int64  `tfsdk:"key_id"`
 	MinPoll types.Int64  `tfsdk:"min_poll"`
 	MaxPoll types.Int64  `tfsdk:"max_poll"`
+}
+
+type NTPServerIdentity struct {
+	Device types.String `tfsdk:"device"`
+	Name   types.String `tfsdk:"name"`
+}
+
+func (data *NTPServerIdentity) toIdentity(ctx context.Context, plan *NTPServer) {
+	data.Device = plan.Device
+	data.Name = plan.Name
+}
+
+func (data *NTPServer) fromIdentity(ctx context.Context, identity *NTPServerIdentity) {
+	data.Device = identity.Device
+	data.Name = identity.Name
 }
 
 func (data NTPServer) getDn() string {

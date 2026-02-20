@@ -24,17 +24,23 @@ import (
 	"os"
 	"testing"
 
+	goversion "github.com/hashicorp/go-version"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
+	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
 func TestAccNxosFeatureNetflow(t *testing.T) {
 	if os.Getenv("NETFLOW") == "" {
 		t.Skip("skipping test, set environment variable NETFLOW")
 	}
+	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
+			terraformVersionCapture{Version: &tfVersion},
+		},
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosFeatureNetflowConfig_all(),
@@ -46,6 +52,12 @@ func TestAccNxosFeatureNetflow(t *testing.T) {
 				ResourceName:      "nxos_feature_netflow.test",
 				ImportState:       true,
 				ImportStateIdFunc: nxosFeatureNetflowImportStateIdFunc("nxos_feature_netflow.test"),
+			},
+			{
+				ResourceName:    "nxos_feature_netflow.test",
+				ImportState:     true,
+				ImportStateKind: resource.ImportBlockWithResourceIdentity,
+				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

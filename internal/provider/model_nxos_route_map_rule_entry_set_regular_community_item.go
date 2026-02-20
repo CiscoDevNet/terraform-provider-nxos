@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -34,6 +35,27 @@ type RouteMapRuleEntrySetRegularCommunityItem struct {
 	RuleName  types.String `tfsdk:"rule_name"`
 	Order     types.Int64  `tfsdk:"order"`
 	Community types.String `tfsdk:"community"`
+}
+
+type RouteMapRuleEntrySetRegularCommunityItemIdentity struct {
+	Device    types.String `tfsdk:"device"`
+	RuleName  types.String `tfsdk:"rule_name"`
+	Order     types.Int64  `tfsdk:"order"`
+	Community types.String `tfsdk:"community"`
+}
+
+func (data *RouteMapRuleEntrySetRegularCommunityItemIdentity) toIdentity(ctx context.Context, plan *RouteMapRuleEntrySetRegularCommunityItem) {
+	data.Device = plan.Device
+	data.RuleName = plan.RuleName
+	data.Order = plan.Order
+	data.Community = plan.Community
+}
+
+func (data *RouteMapRuleEntrySetRegularCommunityItem) fromIdentity(ctx context.Context, identity *RouteMapRuleEntrySetRegularCommunityItemIdentity) {
+	data.Device = identity.Device
+	data.RuleName = identity.RuleName
+	data.Order = identity.Order
+	data.Community = identity.Community
 }
 
 func (data RouteMapRuleEntrySetRegularCommunityItem) getDn() string {

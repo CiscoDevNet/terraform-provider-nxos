@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -38,6 +39,30 @@ type BGPPeerAddressFamily struct {
 	Control               types.String `tfsdk:"control"`
 	SendCommunityExtended types.String `tfsdk:"send_community_extended"`
 	SendCommunityStandard types.String `tfsdk:"send_community_standard"`
+}
+
+type BGPPeerAddressFamilyIdentity struct {
+	Device        types.String `tfsdk:"device"`
+	Asn           types.String `tfsdk:"asn"`
+	Vrf           types.String `tfsdk:"vrf"`
+	Address       types.String `tfsdk:"address"`
+	AddressFamily types.String `tfsdk:"address_family"`
+}
+
+func (data *BGPPeerAddressFamilyIdentity) toIdentity(ctx context.Context, plan *BGPPeerAddressFamily) {
+	data.Device = plan.Device
+	data.Asn = plan.Asn
+	data.Vrf = plan.Vrf
+	data.Address = plan.Address
+	data.AddressFamily = plan.AddressFamily
+}
+
+func (data *BGPPeerAddressFamily) fromIdentity(ctx context.Context, identity *BGPPeerAddressFamilyIdentity) {
+	data.Device = identity.Device
+	data.Asn = identity.Asn
+	data.Vrf = identity.Vrf
+	data.Address = identity.Address
+	data.AddressFamily = identity.AddressFamily
 }
 
 func (data BGPPeerAddressFamily) getDn() string {

@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -46,6 +47,27 @@ type BGPPeer struct {
 	PeerControl     types.String `tfsdk:"peer_control"`
 	PasswordType    types.String `tfsdk:"password_type"`
 	Password        types.String `tfsdk:"password"`
+}
+
+type BGPPeerIdentity struct {
+	Device  types.String `tfsdk:"device"`
+	Asn     types.String `tfsdk:"asn"`
+	Vrf     types.String `tfsdk:"vrf"`
+	Address types.String `tfsdk:"address"`
+}
+
+func (data *BGPPeerIdentity) toIdentity(ctx context.Context, plan *BGPPeer) {
+	data.Device = plan.Device
+	data.Asn = plan.Asn
+	data.Vrf = plan.Vrf
+	data.Address = plan.Address
+}
+
+func (data *BGPPeer) fromIdentity(ctx context.Context, identity *BGPPeerIdentity) {
+	data.Device = identity.Device
+	data.Asn = identity.Asn
+	data.Vrf = identity.Vrf
+	data.Address = identity.Address
 }
 
 func (data BGPPeer) getDn() string {

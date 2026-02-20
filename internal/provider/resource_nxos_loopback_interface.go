@@ -28,6 +28,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
@@ -40,7 +41,7 @@ import (
 
 // Ensure provider defined types fully satisfy framework interfaces
 var _ resource.Resource = &LoopbackInterfaceResource{}
-var _ resource.ResourceWithImportState = &LoopbackInterfaceResource{}
+var _ resource.ResourceWithIdentity = &LoopbackInterfaceResource{}
 
 func NewLoopbackInterfaceResource() resource.Resource {
 	return &LoopbackInterfaceResource{}
@@ -95,6 +96,21 @@ func (r *LoopbackInterfaceResource) Schema(ctx context.Context, req resource.Sch
 	}
 }
 
+func (r *LoopbackInterfaceResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+	resp.IdentitySchema = identityschema.Schema{
+		Attributes: map[string]identityschema.Attribute{
+			"device": identityschema.StringAttribute{
+				Description:       "A device name from the provider configuration.",
+				OptionalForImport: true,
+			},
+			"interface_id": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `lo123`.").String,
+				RequiredForImport: true,
+			},
+		},
+	}
+}
+
 func (r *LoopbackInterfaceResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
@@ -106,6 +122,7 @@ func (r *LoopbackInterfaceResource) Configure(ctx context.Context, req resource.
 
 func (r *LoopbackInterfaceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan LoopbackInterface
+	var identity LoopbackInterfaceIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -133,10 +150,13 @@ func (r *LoopbackInterfaceResource) Create(ctx context.Context, req resource.Cre
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
 
 	diags = resp.State.Set(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
@@ -144,6 +164,7 @@ func (r *LoopbackInterfaceResource) Create(ctx context.Context, req resource.Cre
 
 func (r *LoopbackInterfaceResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state LoopbackInterface
+	var identity LoopbackInterfaceIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -151,6 +172,14 @@ func (r *LoopbackInterfaceResource) Read(ctx context.Context, req resource.ReadR
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	// Read identity
+	diags = req.Identity.Get(ctx, &identity)
+	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+		return
+	}
+
+	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -175,9 +204,13 @@ func (r *LoopbackInterfaceResource) Read(ctx context.Context, req resource.ReadR
 		state.fromBody(res, imp)
 	}
 
+	identity.toIdentity(ctx, &state)
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
@@ -264,21 +297,35 @@ func (r *LoopbackInterfaceResource) Delete(ctx context.Context, req resource.Del
 }
 
 func (r *LoopbackInterfaceResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	idParts := strings.Split(req.ID, ",")
-	idParts = helpers.RemoveEmptyStrings(idParts)
+	if req.ID != "" {
+		idParts := strings.Split(req.ID, ",")
+		idParts = helpers.RemoveEmptyStrings(idParts)
 
-	if len(idParts) != 1 && len(idParts) != 2 {
-		expectedIdentifier := "Expected import identifier with format: '<interface_id>'"
-		expectedIdentifier += " or '<interface_id>,<device>'"
-		resp.Diagnostics.AddError(
-			"Unexpected Import Identifier",
-			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
-		)
-		return
-	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_id"), idParts[0])...)
-	if len(idParts) == 2 {
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+		if len(idParts) != 1 && len(idParts) != 2 {
+			expectedIdentifier := "Expected import identifier with format: '<interface_id>'"
+			expectedIdentifier += " or '<interface_id>,<device>'"
+			resp.Diagnostics.AddError(
+				"Unexpected Import Identifier",
+				fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
+			)
+			return
+		}
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("interface_id"), idParts[0])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_id"), idParts[0])...)
+		if len(idParts) == 2 {
+			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+		}
+	} else {
+		var identity LoopbackInterfaceIdentity
+		diags := req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_id"), identity.InterfaceId.ValueString())...)
+		if !identity.Device.IsNull() && !identity.Device.IsUnknown() {
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), identity.Device.ValueString())...)
+		}
 	}
 
 	var state LoopbackInterface

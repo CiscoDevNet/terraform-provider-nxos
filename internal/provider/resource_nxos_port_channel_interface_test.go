@@ -24,17 +24,23 @@ import (
 	"os"
 	"testing"
 
+	goversion "github.com/hashicorp/go-version"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
+	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
 func TestAccNxosPortChannelInterface(t *testing.T) {
 	if os.Getenv("PORT_CHANNEL_INTERFACE") == "" {
 		t.Skip("skipping test, set environment variable PORT_CHANNEL_INTERFACE")
 	}
+	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
+			terraformVersionCapture{Version: &tfVersion},
+		},
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosPortChannelInterfaceConfig_all(),
@@ -66,6 +72,12 @@ func TestAccNxosPortChannelInterface(t *testing.T) {
 				ResourceName:      "nxos_port_channel_interface.test",
 				ImportState:       true,
 				ImportStateIdFunc: nxosPortChannelInterfaceImportStateIdFunc("nxos_port_channel_interface.test"),
+			},
+			{
+				ResourceName:    "nxos_port_channel_interface.test",
+				ImportState:     true,
+				ImportStateKind: resource.ImportBlockWithResourceIdentity,
+				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

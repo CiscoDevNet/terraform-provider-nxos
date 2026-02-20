@@ -28,6 +28,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -39,7 +40,7 @@ import (
 
 // Ensure provider defined types fully satisfy framework interfaces
 var _ resource.Resource = &VRFRouteTargetResource{}
-var _ resource.ResourceWithImportState = &VRFRouteTargetResource{}
+var _ resource.ResourceWithIdentity = &VRFRouteTargetResource{}
 
 func NewVRFRouteTargetResource() resource.Resource {
 	return &VRFRouteTargetResource{}
@@ -118,6 +119,37 @@ func (r *VRFRouteTargetResource) Schema(ctx context.Context, req resource.Schema
 	}
 }
 
+func (r *VRFRouteTargetResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+	resp.IdentitySchema = identityschema.Schema{
+		Attributes: map[string]identityschema.Attribute{
+			"device": identityschema.StringAttribute{
+				Description:       "A device name from the provider configuration.",
+				OptionalForImport: true,
+			},
+			"vrf": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("VRF name.").String,
+				RequiredForImport: true,
+			},
+			"address_family": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("Address family.").String,
+				RequiredForImport: true,
+			},
+			"route_target_address_family": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("Route Target Address Family.").String,
+				RequiredForImport: true,
+			},
+			"direction": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("Route Target direction.").String,
+				RequiredForImport: true,
+			},
+			"route_target": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("Route Target in NX-OS DME format.").String,
+				RequiredForImport: true,
+			},
+		},
+	}
+}
+
 func (r *VRFRouteTargetResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
@@ -129,6 +161,7 @@ func (r *VRFRouteTargetResource) Configure(ctx context.Context, req resource.Con
 
 func (r *VRFRouteTargetResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan VRFRouteTarget
+	var identity VRFRouteTargetIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -156,10 +189,13 @@ func (r *VRFRouteTargetResource) Create(ctx context.Context, req resource.Create
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
 
 	diags = resp.State.Set(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
@@ -167,6 +203,7 @@ func (r *VRFRouteTargetResource) Create(ctx context.Context, req resource.Create
 
 func (r *VRFRouteTargetResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state VRFRouteTarget
+	var identity VRFRouteTargetIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -174,6 +211,14 @@ func (r *VRFRouteTargetResource) Read(ctx context.Context, req resource.ReadRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	// Read identity
+	diags = req.Identity.Get(ctx, &identity)
+	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+		return
+	}
+
+	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -198,9 +243,13 @@ func (r *VRFRouteTargetResource) Read(ctx context.Context, req resource.ReadRequ
 		state.fromBody(res, imp)
 	}
 
+	identity.toIdentity(ctx, &state)
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
@@ -287,25 +336,47 @@ func (r *VRFRouteTargetResource) Delete(ctx context.Context, req resource.Delete
 }
 
 func (r *VRFRouteTargetResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	idParts := strings.Split(req.ID, ",")
-	idParts = helpers.RemoveEmptyStrings(idParts)
+	if req.ID != "" {
+		idParts := strings.Split(req.ID, ",")
+		idParts = helpers.RemoveEmptyStrings(idParts)
 
-	if len(idParts) != 5 && len(idParts) != 6 {
-		expectedIdentifier := "Expected import identifier with format: '<vrf>,<address_family>,<route_target_address_family>,<direction>,<route_target>'"
-		expectedIdentifier += " or '<vrf>,<address_family>,<route_target_address_family>,<direction>,<route_target>,<device>'"
-		resp.Diagnostics.AddError(
-			"Unexpected Import Identifier",
-			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
-		)
-		return
-	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf"), idParts[0])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address_family"), idParts[1])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("route_target_address_family"), idParts[2])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("direction"), idParts[3])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("route_target"), idParts[4])...)
-	if len(idParts) == 6 {
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+		if len(idParts) != 5 && len(idParts) != 6 {
+			expectedIdentifier := "Expected import identifier with format: '<vrf>,<address_family>,<route_target_address_family>,<direction>,<route_target>'"
+			expectedIdentifier += " or '<vrf>,<address_family>,<route_target_address_family>,<direction>,<route_target>,<device>'"
+			resp.Diagnostics.AddError(
+				"Unexpected Import Identifier",
+				fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
+			)
+			return
+		}
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("vrf"), idParts[0])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf"), idParts[0])...)
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("address_family"), idParts[1])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address_family"), idParts[1])...)
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("route_target_address_family"), idParts[2])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("route_target_address_family"), idParts[2])...)
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("direction"), idParts[3])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("direction"), idParts[3])...)
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("route_target"), idParts[4])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("route_target"), idParts[4])...)
+		if len(idParts) == 6 {
+			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+		}
+	} else {
+		var identity VRFRouteTargetIdentity
+		diags := req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf"), identity.Vrf.ValueString())...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address_family"), identity.AddressFamily.ValueString())...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("route_target_address_family"), identity.RouteTargetAddressFamily.ValueString())...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("direction"), identity.Direction.ValueString())...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("route_target"), identity.RouteTarget.ValueString())...)
+		if !identity.Device.IsNull() && !identity.Device.IsUnknown() {
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), identity.Device.ValueString())...)
+		}
 	}
 
 	var state VRFRouteTarget

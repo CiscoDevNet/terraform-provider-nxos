@@ -22,10 +22,13 @@ package provider
 
 import (
 	"fmt"
+	"os"
 	"testing"
 
+	goversion "github.com/hashicorp/go-version"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
+	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
 func TestAccNxos{{camelCase .Name}}(t *testing.T) {
@@ -34,9 +37,13 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
         t.Skip("skipping test, set environment variable {{range $i, $e := .TestTags}}{{if $i}} or {{end}}{{$e}}{{end}}")
     }
 	{{- end}}
+	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
+			terraformVersionCapture{Version: &tfVersion},
+		},
 		Steps: []resource.TestStep{
 			{
 				Config: {{if .TestPrerequisites}}testAccNxos{{camelCase .Name}}PrerequisitesConfig+{{end}}testAccNxos{{camelCase .Name}}Config_all(),
@@ -86,6 +93,12 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 				ResourceName:  "nxos_{{snakeCase $name}}.test",
 				ImportState:   true,
 				ImportStateIdFunc: nxos{{camelCase .Name}}ImportStateIdFunc("nxos_{{snakeCase $name}}.test"),
+			},
+			{
+				ResourceName:    "nxos_{{snakeCase $name}}.test",
+				ImportState:     true,
+				ImportStateKind: resource.ImportBlockWithResourceIdentity,
+				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

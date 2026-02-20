@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -41,6 +42,21 @@ type Subinterface struct {
 	LinkLogging types.String `tfsdk:"link_logging"`
 	Medium      types.String `tfsdk:"medium"`
 	Mtu         types.Int64  `tfsdk:"mtu"`
+}
+
+type SubinterfaceIdentity struct {
+	Device      types.String `tfsdk:"device"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+}
+
+func (data *SubinterfaceIdentity) toIdentity(ctx context.Context, plan *Subinterface) {
+	data.Device = plan.Device
+	data.InterfaceId = plan.InterfaceId
+}
+
+func (data *Subinterface) fromIdentity(ctx context.Context, identity *SubinterfaceIdentity) {
+	data.Device = identity.Device
+	data.InterfaceId = identity.InterfaceId
 }
 
 func (data Subinterface) getDn() string {

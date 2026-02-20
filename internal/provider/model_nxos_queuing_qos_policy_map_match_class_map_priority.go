@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -35,6 +36,24 @@ type QueuingQOSPolicyMapMatchClassMapPriority struct {
 	PolicyMapName types.String `tfsdk:"policy_map_name"`
 	ClassMapName  types.String `tfsdk:"class_map_name"`
 	Level         types.Int64  `tfsdk:"level"`
+}
+
+type QueuingQOSPolicyMapMatchClassMapPriorityIdentity struct {
+	Device        types.String `tfsdk:"device"`
+	PolicyMapName types.String `tfsdk:"policy_map_name"`
+	ClassMapName  types.String `tfsdk:"class_map_name"`
+}
+
+func (data *QueuingQOSPolicyMapMatchClassMapPriorityIdentity) toIdentity(ctx context.Context, plan *QueuingQOSPolicyMapMatchClassMapPriority) {
+	data.Device = plan.Device
+	data.PolicyMapName = plan.PolicyMapName
+	data.ClassMapName = plan.ClassMapName
+}
+
+func (data *QueuingQOSPolicyMapMatchClassMapPriority) fromIdentity(ctx context.Context, identity *QueuingQOSPolicyMapMatchClassMapPriorityIdentity) {
+	data.Device = identity.Device
+	data.PolicyMapName = identity.PolicyMapName
+	data.ClassMapName = identity.ClassMapName
 }
 
 func (data QueuingQOSPolicyMapMatchClassMapPriority) getDn() string {

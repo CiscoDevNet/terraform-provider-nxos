@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -34,6 +35,24 @@ type ICMPv4Interface struct {
 	VrfName     types.String `tfsdk:"vrf_name"`
 	InterfaceId types.String `tfsdk:"interface_id"`
 	Control     types.String `tfsdk:"control"`
+}
+
+type ICMPv4InterfaceIdentity struct {
+	Device      types.String `tfsdk:"device"`
+	VrfName     types.String `tfsdk:"vrf_name"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+}
+
+func (data *ICMPv4InterfaceIdentity) toIdentity(ctx context.Context, plan *ICMPv4Interface) {
+	data.Device = plan.Device
+	data.VrfName = plan.VrfName
+	data.InterfaceId = plan.InterfaceId
+}
+
+func (data *ICMPv4Interface) fromIdentity(ctx context.Context, identity *ICMPv4InterfaceIdentity) {
+	data.Device = identity.Device
+	data.VrfName = identity.VrfName
+	data.InterfaceId = identity.InterfaceId
 }
 
 func (data ICMPv4Interface) getDn() string {

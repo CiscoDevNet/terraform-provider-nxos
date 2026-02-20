@@ -20,6 +20,8 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -30,6 +32,18 @@ type FeatureEVPN struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
 	AdminState types.String `tfsdk:"admin_state"`
+}
+
+type FeatureEVPNIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *FeatureEVPNIdentity) toIdentity(ctx context.Context, plan *FeatureEVPN) {
+	data.Device = plan.Device
+}
+
+func (data *FeatureEVPN) fromIdentity(ctx context.Context, identity *FeatureEVPNIdentity) {
+	data.Device = identity.Device
 }
 
 func (data FeatureEVPN) getDn() string {

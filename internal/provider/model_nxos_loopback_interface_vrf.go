@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -33,6 +34,21 @@ type LoopbackInterfaceVRF struct {
 	Dn          types.String `tfsdk:"id"`
 	InterfaceId types.String `tfsdk:"interface_id"`
 	VrfDn       types.String `tfsdk:"vrf_dn"`
+}
+
+type LoopbackInterfaceVRFIdentity struct {
+	Device      types.String `tfsdk:"device"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+}
+
+func (data *LoopbackInterfaceVRFIdentity) toIdentity(ctx context.Context, plan *LoopbackInterfaceVRF) {
+	data.Device = plan.Device
+	data.InterfaceId = plan.InterfaceId
+}
+
+func (data *LoopbackInterfaceVRF) fromIdentity(ctx context.Context, identity *LoopbackInterfaceVRFIdentity) {
+	data.Device = identity.Device
+	data.InterfaceId = identity.InterfaceId
 }
 
 func (data LoopbackInterfaceVRF) getDn() string {

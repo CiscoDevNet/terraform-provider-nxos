@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -33,6 +34,21 @@ type OSPFInstance struct {
 	Dn         types.String `tfsdk:"id"`
 	AdminState types.String `tfsdk:"admin_state"`
 	Name       types.String `tfsdk:"name"`
+}
+
+type OSPFInstanceIdentity struct {
+	Device types.String `tfsdk:"device"`
+	Name   types.String `tfsdk:"name"`
+}
+
+func (data *OSPFInstanceIdentity) toIdentity(ctx context.Context, plan *OSPFInstance) {
+	data.Device = plan.Device
+	data.Name = plan.Name
+}
+
+func (data *OSPFInstance) fromIdentity(ctx context.Context, identity *OSPFInstanceIdentity) {
+	data.Device = identity.Device
+	data.Name = identity.Name
 }
 
 func (data OSPFInstance) getDn() string {

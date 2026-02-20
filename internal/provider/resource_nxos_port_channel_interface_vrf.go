@@ -27,6 +27,7 @@ import (
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -37,7 +38,7 @@ import (
 
 // Ensure provider defined types fully satisfy framework interfaces
 var _ resource.Resource = &PortChannelInterfaceVRFResource{}
-var _ resource.ResourceWithImportState = &PortChannelInterfaceVRFResource{}
+var _ resource.ResourceWithIdentity = &PortChannelInterfaceVRFResource{}
 
 func NewPortChannelInterfaceVRFResource() resource.Resource {
 	return &PortChannelInterfaceVRFResource{}
@@ -83,6 +84,21 @@ func (r *PortChannelInterfaceVRFResource) Schema(ctx context.Context, req resour
 	}
 }
 
+func (r *PortChannelInterfaceVRFResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+	resp.IdentitySchema = identityschema.Schema{
+		Attributes: map[string]identityschema.Attribute{
+			"device": identityschema.StringAttribute{
+				Description:       "A device name from the provider configuration.",
+				OptionalForImport: true,
+			},
+			"interface_id": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `po1`.").String,
+				RequiredForImport: true,
+			},
+		},
+	}
+}
+
 func (r *PortChannelInterfaceVRFResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
@@ -94,6 +110,7 @@ func (r *PortChannelInterfaceVRFResource) Configure(ctx context.Context, req res
 
 func (r *PortChannelInterfaceVRFResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan PortChannelInterfaceVRF
+	var identity PortChannelInterfaceVRFIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -121,10 +138,13 @@ func (r *PortChannelInterfaceVRFResource) Create(ctx context.Context, req resour
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
 
 	diags = resp.State.Set(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
@@ -132,6 +152,7 @@ func (r *PortChannelInterfaceVRFResource) Create(ctx context.Context, req resour
 
 func (r *PortChannelInterfaceVRFResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state PortChannelInterfaceVRF
+	var identity PortChannelInterfaceVRFIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -139,6 +160,14 @@ func (r *PortChannelInterfaceVRFResource) Read(ctx context.Context, req resource
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	// Read identity
+	diags = req.Identity.Get(ctx, &identity)
+	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+		return
+	}
+
+	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -163,9 +192,13 @@ func (r *PortChannelInterfaceVRFResource) Read(ctx context.Context, req resource
 		state.fromBody(res, imp)
 	}
 
+	identity.toIdentity(ctx, &state)
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
@@ -252,21 +285,35 @@ func (r *PortChannelInterfaceVRFResource) Delete(ctx context.Context, req resour
 }
 
 func (r *PortChannelInterfaceVRFResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	idParts := strings.Split(req.ID, ",")
-	idParts = helpers.RemoveEmptyStrings(idParts)
+	if req.ID != "" {
+		idParts := strings.Split(req.ID, ",")
+		idParts = helpers.RemoveEmptyStrings(idParts)
 
-	if len(idParts) != 1 && len(idParts) != 2 {
-		expectedIdentifier := "Expected import identifier with format: '<interface_id>'"
-		expectedIdentifier += " or '<interface_id>,<device>'"
-		resp.Diagnostics.AddError(
-			"Unexpected Import Identifier",
-			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
-		)
-		return
-	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_id"), idParts[0])...)
-	if len(idParts) == 2 {
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+		if len(idParts) != 1 && len(idParts) != 2 {
+			expectedIdentifier := "Expected import identifier with format: '<interface_id>'"
+			expectedIdentifier += " or '<interface_id>,<device>'"
+			resp.Diagnostics.AddError(
+				"Unexpected Import Identifier",
+				fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
+			)
+			return
+		}
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("interface_id"), idParts[0])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_id"), idParts[0])...)
+		if len(idParts) == 2 {
+			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+		}
+	} else {
+		var identity PortChannelInterfaceVRFIdentity
+		diags := req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_id"), identity.InterfaceId.ValueString())...)
+		if !identity.Device.IsNull() && !identity.Device.IsUnknown() {
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), identity.Device.ValueString())...)
+		}
 	}
 
 	var state PortChannelInterfaceVRF

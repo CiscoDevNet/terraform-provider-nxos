@@ -20,6 +20,8 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -30,6 +32,18 @@ type FeatureMACsec struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
 	AdminState types.String `tfsdk:"admin_state"`
+}
+
+type FeatureMACsecIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *FeatureMACsecIdentity) toIdentity(ctx context.Context, plan *FeatureMACsec) {
+	data.Device = plan.Device
+}
+
+func (data *FeatureMACsec) fromIdentity(ctx context.Context, identity *FeatureMACsecIdentity) {
+	data.Device = identity.Device
 }
 
 func (data FeatureMACsec) getDn() string {

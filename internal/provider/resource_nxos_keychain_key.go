@@ -28,6 +28,7 @@ import (
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
@@ -39,7 +40,7 @@ import (
 
 // Ensure provider defined types fully satisfy framework interfaces
 var _ resource.Resource = &KeychainKeyResource{}
-var _ resource.ResourceWithImportState = &KeychainKeyResource{}
+var _ resource.ResourceWithIdentity = &KeychainKeyResource{}
 
 func NewKeychainKeyResource() resource.Resource {
 	return &KeychainKeyResource{}
@@ -92,6 +93,25 @@ func (r *KeychainKeyResource) Schema(ctx context.Context, req resource.SchemaReq
 	}
 }
 
+func (r *KeychainKeyResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+	resp.IdentitySchema = identityschema.Schema{
+		Attributes: map[string]identityschema.Attribute{
+			"device": identityschema.StringAttribute{
+				Description:       "A device name from the provider configuration.",
+				OptionalForImport: true,
+			},
+			"keychain": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("Keychain name.").String,
+				RequiredForImport: true,
+			},
+			"key_id": identityschema.Int64Attribute{
+				Description:       helpers.NewAttributeDescription("keyId of classic key chain.").String,
+				RequiredForImport: true,
+			},
+		},
+	}
+}
+
 func (r *KeychainKeyResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
@@ -103,6 +123,7 @@ func (r *KeychainKeyResource) Configure(ctx context.Context, req resource.Config
 
 func (r *KeychainKeyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan KeychainKey
+	var identity KeychainKeyIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -130,10 +151,13 @@ func (r *KeychainKeyResource) Create(ctx context.Context, req resource.CreateReq
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
 
 	diags = resp.State.Set(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
@@ -141,6 +165,7 @@ func (r *KeychainKeyResource) Create(ctx context.Context, req resource.CreateReq
 
 func (r *KeychainKeyResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state KeychainKey
+	var identity KeychainKeyIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -148,6 +173,14 @@ func (r *KeychainKeyResource) Read(ctx context.Context, req resource.ReadRequest
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	// Read identity
+	diags = req.Identity.Get(ctx, &identity)
+	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+		return
+	}
+
+	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -172,9 +205,13 @@ func (r *KeychainKeyResource) Read(ctx context.Context, req resource.ReadRequest
 		state.fromBody(res, imp)
 	}
 
+	identity.toIdentity(ctx, &state)
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
@@ -261,22 +298,38 @@ func (r *KeychainKeyResource) Delete(ctx context.Context, req resource.DeleteReq
 }
 
 func (r *KeychainKeyResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	idParts := strings.Split(req.ID, ",")
-	idParts = helpers.RemoveEmptyStrings(idParts)
+	if req.ID != "" {
+		idParts := strings.Split(req.ID, ",")
+		idParts = helpers.RemoveEmptyStrings(idParts)
 
-	if len(idParts) != 2 && len(idParts) != 3 {
-		expectedIdentifier := "Expected import identifier with format: '<keychain>,<key_id>'"
-		expectedIdentifier += " or '<keychain>,<key_id>,<device>'"
-		resp.Diagnostics.AddError(
-			"Unexpected Import Identifier",
-			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
-		)
-		return
-	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("keychain"), idParts[0])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("key_id"), helpers.Must(strconv.ParseInt(idParts[1], 10, 64)))...)
-	if len(idParts) == 3 {
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+		if len(idParts) != 2 && len(idParts) != 3 {
+			expectedIdentifier := "Expected import identifier with format: '<keychain>,<key_id>'"
+			expectedIdentifier += " or '<keychain>,<key_id>,<device>'"
+			resp.Diagnostics.AddError(
+				"Unexpected Import Identifier",
+				fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
+			)
+			return
+		}
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("keychain"), idParts[0])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("keychain"), idParts[0])...)
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("key_id"), helpers.Must(strconv.ParseInt(idParts[1], 10, 64)))...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("key_id"), helpers.Must(strconv.ParseInt(idParts[1], 10, 64)))...)
+		if len(idParts) == 3 {
+			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+		}
+	} else {
+		var identity KeychainKeyIdentity
+		diags := req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("keychain"), identity.Keychain.ValueString())...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("key_id"), identity.KeyId.ValueInt64())...)
+		if !identity.Device.IsNull() && !identity.Device.IsUnknown() {
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), identity.Device.ValueString())...)
+		}
 	}
 
 	var state KeychainKey

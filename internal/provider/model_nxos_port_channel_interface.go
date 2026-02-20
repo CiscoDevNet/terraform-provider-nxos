@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -53,6 +54,21 @@ type PortChannelInterface struct {
 	Speed               types.String `tfsdk:"speed"`
 	TrunkVlans          types.String `tfsdk:"trunk_vlans"`
 	UserConfiguredFlags types.String `tfsdk:"user_configured_flags"`
+}
+
+type PortChannelInterfaceIdentity struct {
+	Device      types.String `tfsdk:"device"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+}
+
+func (data *PortChannelInterfaceIdentity) toIdentity(ctx context.Context, plan *PortChannelInterface) {
+	data.Device = plan.Device
+	data.InterfaceId = plan.InterfaceId
+}
+
+func (data *PortChannelInterface) fromIdentity(ctx context.Context, identity *PortChannelInterfaceIdentity) {
+	data.Device = identity.Device
+	data.InterfaceId = identity.InterfaceId
 }
 
 func (data PortChannelInterface) getDn() string {

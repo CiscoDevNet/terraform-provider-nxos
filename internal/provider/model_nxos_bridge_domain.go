@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -34,6 +35,21 @@ type BridgeDomain struct {
 	FabricEncap types.String `tfsdk:"fabric_encap"`
 	AccessEncap types.String `tfsdk:"access_encap"`
 	Name        types.String `tfsdk:"name"`
+}
+
+type BridgeDomainIdentity struct {
+	Device      types.String `tfsdk:"device"`
+	FabricEncap types.String `tfsdk:"fabric_encap"`
+}
+
+func (data *BridgeDomainIdentity) toIdentity(ctx context.Context, plan *BridgeDomain) {
+	data.Device = plan.Device
+	data.FabricEncap = plan.FabricEncap
+}
+
+func (data *BridgeDomain) fromIdentity(ctx context.Context, identity *BridgeDomainIdentity) {
+	data.Device = identity.Device
+	data.FabricEncap = identity.FabricEncap
 }
 
 func (data BridgeDomain) getDn() string {

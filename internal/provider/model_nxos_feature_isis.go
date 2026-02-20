@@ -20,6 +20,8 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -30,6 +32,18 @@ type FeatureISIS struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
 	AdminState types.String `tfsdk:"admin_state"`
+}
+
+type FeatureISISIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *FeatureISISIdentity) toIdentity(ctx context.Context, plan *FeatureISIS) {
+	data.Device = plan.Device
+}
+
+func (data *FeatureISIS) fromIdentity(ctx context.Context, identity *FeatureISISIdentity) {
+	data.Device = identity.Device
 }
 
 func (data FeatureISIS) getDn() string {

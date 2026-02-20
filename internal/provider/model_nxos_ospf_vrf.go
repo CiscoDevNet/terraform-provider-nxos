@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -41,6 +42,24 @@ type OSPFVRF struct {
 	Distance               types.Int64  `tfsdk:"distance"`
 	RouterId               types.String `tfsdk:"router_id"`
 	Control                types.String `tfsdk:"control"`
+}
+
+type OSPFVRFIdentity struct {
+	Device       types.String `tfsdk:"device"`
+	InstanceName types.String `tfsdk:"instance_name"`
+	Name         types.String `tfsdk:"name"`
+}
+
+func (data *OSPFVRFIdentity) toIdentity(ctx context.Context, plan *OSPFVRF) {
+	data.Device = plan.Device
+	data.InstanceName = plan.InstanceName
+	data.Name = plan.Name
+}
+
+func (data *OSPFVRF) fromIdentity(ctx context.Context, identity *OSPFVRFIdentity) {
+	data.Device = identity.Device
+	data.InstanceName = identity.InstanceName
+	data.Name = identity.Name
 }
 
 func (data OSPFVRF) getDn() string {

@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -32,6 +33,21 @@ type RouteMapRule struct {
 	Device types.String `tfsdk:"device"`
 	Dn     types.String `tfsdk:"id"`
 	Name   types.String `tfsdk:"name"`
+}
+
+type RouteMapRuleIdentity struct {
+	Device types.String `tfsdk:"device"`
+	Name   types.String `tfsdk:"name"`
+}
+
+func (data *RouteMapRuleIdentity) toIdentity(ctx context.Context, plan *RouteMapRule) {
+	data.Device = plan.Device
+	data.Name = plan.Name
+}
+
+func (data *RouteMapRule) fromIdentity(ctx context.Context, identity *RouteMapRuleIdentity) {
+	data.Device = identity.Device
+	data.Name = identity.Name
 }
 
 func (data RouteMapRule) getDn() string {

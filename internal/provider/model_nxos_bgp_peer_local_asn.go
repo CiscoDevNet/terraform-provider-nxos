@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -35,6 +36,24 @@ type BGPPeerLocalASN struct {
 	LocalAsn       types.String `tfsdk:"local_asn"`
 	Vrf            types.String `tfsdk:"vrf"`
 	Address        types.String `tfsdk:"address"`
+}
+
+type BGPPeerLocalASNIdentity struct {
+	Device  types.String `tfsdk:"device"`
+	Vrf     types.String `tfsdk:"vrf"`
+	Address types.String `tfsdk:"address"`
+}
+
+func (data *BGPPeerLocalASNIdentity) toIdentity(ctx context.Context, plan *BGPPeerLocalASN) {
+	data.Device = plan.Device
+	data.Vrf = plan.Vrf
+	data.Address = plan.Address
+}
+
+func (data *BGPPeerLocalASN) fromIdentity(ctx context.Context, identity *BGPPeerLocalASNIdentity) {
+	data.Device = identity.Device
+	data.Vrf = identity.Vrf
+	data.Address = identity.Address
 }
 
 func (data BGPPeerLocalASN) getDn() string {

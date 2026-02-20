@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -37,6 +38,24 @@ type BGPPeerTemplate struct {
 	Description     types.String `tfsdk:"description"`
 	PeerType        types.String `tfsdk:"peer_type"`
 	SourceInterface types.String `tfsdk:"source_interface"`
+}
+
+type BGPPeerTemplateIdentity struct {
+	Device       types.String `tfsdk:"device"`
+	Asn          types.String `tfsdk:"asn"`
+	TemplateName types.String `tfsdk:"template_name"`
+}
+
+func (data *BGPPeerTemplateIdentity) toIdentity(ctx context.Context, plan *BGPPeerTemplate) {
+	data.Device = plan.Device
+	data.Asn = plan.Asn
+	data.TemplateName = plan.TemplateName
+}
+
+func (data *BGPPeerTemplate) fromIdentity(ctx context.Context, identity *BGPPeerTemplateIdentity) {
+	data.Device = identity.Device
+	data.Asn = identity.Asn
+	data.TemplateName = identity.TemplateName
 }
 
 func (data BGPPeerTemplate) getDn() string {

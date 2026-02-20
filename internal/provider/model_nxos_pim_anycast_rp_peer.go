@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -34,6 +35,27 @@ type PIMAnycastRPPeer struct {
 	VrfName      types.String `tfsdk:"vrf_name"`
 	Address      types.String `tfsdk:"address"`
 	RpSetAddress types.String `tfsdk:"rp_set_address"`
+}
+
+type PIMAnycastRPPeerIdentity struct {
+	Device       types.String `tfsdk:"device"`
+	VrfName      types.String `tfsdk:"vrf_name"`
+	Address      types.String `tfsdk:"address"`
+	RpSetAddress types.String `tfsdk:"rp_set_address"`
+}
+
+func (data *PIMAnycastRPPeerIdentity) toIdentity(ctx context.Context, plan *PIMAnycastRPPeer) {
+	data.Device = plan.Device
+	data.VrfName = plan.VrfName
+	data.Address = plan.Address
+	data.RpSetAddress = plan.RpSetAddress
+}
+
+func (data *PIMAnycastRPPeer) fromIdentity(ctx context.Context, identity *PIMAnycastRPPeerIdentity) {
+	data.Device = identity.Device
+	data.VrfName = identity.VrfName
+	data.Address = identity.Address
+	data.RpSetAddress = identity.RpSetAddress
 }
 
 func (data PIMAnycastRPPeer) getDn() string {

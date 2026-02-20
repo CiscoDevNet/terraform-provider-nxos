@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -34,6 +35,27 @@ type VRFRouteTargetAddressFamily struct {
 	Vrf                      types.String `tfsdk:"vrf"`
 	AddressFamily            types.String `tfsdk:"address_family"`
 	RouteTargetAddressFamily types.String `tfsdk:"route_target_address_family"`
+}
+
+type VRFRouteTargetAddressFamilyIdentity struct {
+	Device                   types.String `tfsdk:"device"`
+	Vrf                      types.String `tfsdk:"vrf"`
+	AddressFamily            types.String `tfsdk:"address_family"`
+	RouteTargetAddressFamily types.String `tfsdk:"route_target_address_family"`
+}
+
+func (data *VRFRouteTargetAddressFamilyIdentity) toIdentity(ctx context.Context, plan *VRFRouteTargetAddressFamily) {
+	data.Device = plan.Device
+	data.Vrf = plan.Vrf
+	data.AddressFamily = plan.AddressFamily
+	data.RouteTargetAddressFamily = plan.RouteTargetAddressFamily
+}
+
+func (data *VRFRouteTargetAddressFamily) fromIdentity(ctx context.Context, identity *VRFRouteTargetAddressFamilyIdentity) {
+	data.Device = identity.Device
+	data.Vrf = identity.Vrf
+	data.AddressFamily = identity.AddressFamily
+	data.RouteTargetAddressFamily = identity.RouteTargetAddressFamily
 }
 
 func (data VRFRouteTargetAddressFamily) getDn() string {

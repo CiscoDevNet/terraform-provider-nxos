@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -45,6 +46,24 @@ type IPv6StaticRouteNextHops struct {
 	Object      types.Int64  `tfsdk:"object"`
 	Preference  types.Int64  `tfsdk:"preference"`
 	Tag         types.Int64  `tfsdk:"tag"`
+}
+
+type IPv6StaticRouteIdentity struct {
+	Device  types.String `tfsdk:"device"`
+	VrfName types.String `tfsdk:"vrf_name"`
+	Prefix  types.String `tfsdk:"prefix"`
+}
+
+func (data *IPv6StaticRouteIdentity) toIdentity(ctx context.Context, plan *IPv6StaticRoute) {
+	data.Device = plan.Device
+	data.VrfName = plan.VrfName
+	data.Prefix = plan.Prefix
+}
+
+func (data *IPv6StaticRoute) fromIdentity(ctx context.Context, identity *IPv6StaticRouteIdentity) {
+	data.Device = identity.Device
+	data.VrfName = identity.VrfName
+	data.Prefix = identity.Prefix
 }
 
 func (data IPv6StaticRoute) getDn() string {

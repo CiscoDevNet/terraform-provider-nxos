@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -33,6 +34,21 @@ type IPv4AccessListPolicyIngressInterface struct {
 	Dn             types.String `tfsdk:"id"`
 	InterfaceId    types.String `tfsdk:"interface_id"`
 	AccessListName types.String `tfsdk:"access_list_name"`
+}
+
+type IPv4AccessListPolicyIngressInterfaceIdentity struct {
+	Device      types.String `tfsdk:"device"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+}
+
+func (data *IPv4AccessListPolicyIngressInterfaceIdentity) toIdentity(ctx context.Context, plan *IPv4AccessListPolicyIngressInterface) {
+	data.Device = plan.Device
+	data.InterfaceId = plan.InterfaceId
+}
+
+func (data *IPv4AccessListPolicyIngressInterface) fromIdentity(ctx context.Context, identity *IPv4AccessListPolicyIngressInterfaceIdentity) {
+	data.Device = identity.Device
+	data.InterfaceId = identity.InterfaceId
 }
 
 func (data IPv4AccessListPolicyIngressInterface) getDn() string {

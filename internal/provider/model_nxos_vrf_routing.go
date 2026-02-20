@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -33,6 +34,21 @@ type VRFRouting struct {
 	Dn                 types.String `tfsdk:"id"`
 	Vrf                types.String `tfsdk:"vrf"`
 	RouteDistinguisher types.String `tfsdk:"route_distinguisher"`
+}
+
+type VRFRoutingIdentity struct {
+	Device types.String `tfsdk:"device"`
+	Vrf    types.String `tfsdk:"vrf"`
+}
+
+func (data *VRFRoutingIdentity) toIdentity(ctx context.Context, plan *VRFRouting) {
+	data.Device = plan.Device
+	data.Vrf = plan.Vrf
+}
+
+func (data *VRFRouting) fromIdentity(ctx context.Context, identity *VRFRoutingIdentity) {
+	data.Device = identity.Device
+	data.Vrf = identity.Vrf
 }
 
 func (data VRFRouting) getDn() string {

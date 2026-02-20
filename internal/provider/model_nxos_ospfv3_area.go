@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -40,6 +41,27 @@ type OSPFv3Area struct {
 	Summary                types.Bool   `tfsdk:"summary"`
 	SuppressForwardAddress types.Bool   `tfsdk:"suppress_forward_address"`
 	Type                   types.String `tfsdk:"type"`
+}
+
+type OSPFv3AreaIdentity struct {
+	Device       types.String `tfsdk:"device"`
+	InstanceName types.String `tfsdk:"instance_name"`
+	VrfName      types.String `tfsdk:"vrf_name"`
+	AreaId       types.String `tfsdk:"area_id"`
+}
+
+func (data *OSPFv3AreaIdentity) toIdentity(ctx context.Context, plan *OSPFv3Area) {
+	data.Device = plan.Device
+	data.InstanceName = plan.InstanceName
+	data.VrfName = plan.VrfName
+	data.AreaId = plan.AreaId
+}
+
+func (data *OSPFv3Area) fromIdentity(ctx context.Context, identity *OSPFv3AreaIdentity) {
+	data.Device = identity.Device
+	data.InstanceName = identity.InstanceName
+	data.VrfName = identity.VrfName
+	data.AreaId = identity.AreaId
 }
 
 func (data OSPFv3Area) getDn() string {

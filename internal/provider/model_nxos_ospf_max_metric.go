@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -38,6 +39,24 @@ type OSPFMaxMetric struct {
 	ExternalLsa     types.Int64  `tfsdk:"external_lsa"`
 	SummaryLsa      types.Int64  `tfsdk:"summary_lsa"`
 	StartupInterval types.Int64  `tfsdk:"startup_interval"`
+}
+
+type OSPFMaxMetricIdentity struct {
+	Device       types.String `tfsdk:"device"`
+	InstanceName types.String `tfsdk:"instance_name"`
+	VrfName      types.String `tfsdk:"vrf_name"`
+}
+
+func (data *OSPFMaxMetricIdentity) toIdentity(ctx context.Context, plan *OSPFMaxMetric) {
+	data.Device = plan.Device
+	data.InstanceName = plan.InstanceName
+	data.VrfName = plan.VrfName
+}
+
+func (data *OSPFMaxMetric) fromIdentity(ctx context.Context, identity *OSPFMaxMetricIdentity) {
+	data.Device = identity.Device
+	data.InstanceName = identity.InstanceName
+	data.VrfName = identity.VrfName
 }
 
 func (data OSPFMaxMetric) getDn() string {

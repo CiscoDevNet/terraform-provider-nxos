@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -36,6 +37,24 @@ type BGPGracefulRestart struct {
 	Vrf             types.String `tfsdk:"vrf"`
 	RestartInterval types.Int64  `tfsdk:"restart_interval"`
 	StaleInterval   types.Int64  `tfsdk:"stale_interval"`
+}
+
+type BGPGracefulRestartIdentity struct {
+	Device types.String `tfsdk:"device"`
+	Asn    types.String `tfsdk:"asn"`
+	Vrf    types.String `tfsdk:"vrf"`
+}
+
+func (data *BGPGracefulRestartIdentity) toIdentity(ctx context.Context, plan *BGPGracefulRestart) {
+	data.Device = plan.Device
+	data.Asn = plan.Asn
+	data.Vrf = plan.Vrf
+}
+
+func (data *BGPGracefulRestart) fromIdentity(ctx context.Context, identity *BGPGracefulRestartIdentity) {
+	data.Device = identity.Device
+	data.Asn = identity.Asn
+	data.Vrf = identity.Vrf
 }
 
 func (data BGPGracefulRestart) getDn() string {

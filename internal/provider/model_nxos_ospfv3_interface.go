@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -43,6 +44,21 @@ type OSPFv3Interface struct {
 	NetworkType          types.String `tfsdk:"network_type"`
 	Passive              types.String `tfsdk:"passive"`
 	Priority             types.Int64  `tfsdk:"priority"`
+}
+
+type OSPFv3InterfaceIdentity struct {
+	Device      types.String `tfsdk:"device"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+}
+
+func (data *OSPFv3InterfaceIdentity) toIdentity(ctx context.Context, plan *OSPFv3Interface) {
+	data.Device = plan.Device
+	data.InterfaceId = plan.InterfaceId
+}
+
+func (data *OSPFv3Interface) fromIdentity(ctx context.Context, identity *OSPFv3InterfaceIdentity) {
+	data.Device = identity.Device
+	data.InterfaceId = identity.InterfaceId
 }
 
 func (data OSPFv3Interface) getDn() string {

@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -38,6 +39,21 @@ type NVEVNI struct {
 	MulticastGroup              types.String `tfsdk:"multicast_group"`
 	MultisiteIngressReplication types.String `tfsdk:"multisite_ingress_replication"`
 	SuppressArp                 types.String `tfsdk:"suppress_arp"`
+}
+
+type NVEVNIIdentity struct {
+	Device types.String `tfsdk:"device"`
+	Vni    types.Int64  `tfsdk:"vni"`
+}
+
+func (data *NVEVNIIdentity) toIdentity(ctx context.Context, plan *NVEVNI) {
+	data.Device = plan.Device
+	data.Vni = plan.Vni
+}
+
+func (data *NVEVNI) fromIdentity(ctx context.Context, identity *NVEVNIIdentity) {
+	data.Device = identity.Device
+	data.Vni = identity.Vni
 }
 
 func (data NVEVNI) getDn() string {

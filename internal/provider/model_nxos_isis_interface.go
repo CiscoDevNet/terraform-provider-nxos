@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -63,6 +64,21 @@ type ISISInterface struct {
 	PriorityL1            types.Int64  `tfsdk:"priority_l1"`
 	PriorityL2            types.Int64  `tfsdk:"priority_l2"`
 	EnableIpv4            types.Bool   `tfsdk:"enable_ipv4"`
+}
+
+type ISISInterfaceIdentity struct {
+	Device      types.String `tfsdk:"device"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+}
+
+func (data *ISISInterfaceIdentity) toIdentity(ctx context.Context, plan *ISISInterface) {
+	data.Device = plan.Device
+	data.InterfaceId = plan.InterfaceId
+}
+
+func (data *ISISInterface) fromIdentity(ctx context.Context, identity *ISISInterfaceIdentity) {
+	data.Device = identity.Device
+	data.InterfaceId = identity.InterfaceId
 }
 
 func (data ISISInterface) getDn() string {

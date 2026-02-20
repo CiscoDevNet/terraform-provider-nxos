@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -39,6 +40,33 @@ type BGPRouteRedistribution struct {
 	RouteMap         types.String `tfsdk:"route_map"`
 	Scope            types.String `tfsdk:"scope"`
 	Srv6PrefixType   types.String `tfsdk:"srv6_prefix_type"`
+}
+
+type BGPRouteRedistributionIdentity struct {
+	Device           types.String `tfsdk:"device"`
+	Asn              types.String `tfsdk:"asn"`
+	Vrf              types.String `tfsdk:"vrf"`
+	AddressFamily    types.String `tfsdk:"address_family"`
+	Protocol         types.String `tfsdk:"protocol"`
+	ProtocolInstance types.String `tfsdk:"protocol_instance"`
+}
+
+func (data *BGPRouteRedistributionIdentity) toIdentity(ctx context.Context, plan *BGPRouteRedistribution) {
+	data.Device = plan.Device
+	data.Asn = plan.Asn
+	data.Vrf = plan.Vrf
+	data.AddressFamily = plan.AddressFamily
+	data.Protocol = plan.Protocol
+	data.ProtocolInstance = plan.ProtocolInstance
+}
+
+func (data *BGPRouteRedistribution) fromIdentity(ctx context.Context, identity *BGPRouteRedistributionIdentity) {
+	data.Device = identity.Device
+	data.Asn = identity.Asn
+	data.Vrf = identity.Vrf
+	data.AddressFamily = identity.AddressFamily
+	data.Protocol = identity.Protocol
+	data.ProtocolInstance = identity.ProtocolInstance
 }
 
 func (data BGPRouteRedistribution) getDn() string {

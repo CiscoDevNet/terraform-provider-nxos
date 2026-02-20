@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -33,6 +34,21 @@ type NVEVNIIngressReplication struct {
 	Dn       types.String `tfsdk:"id"`
 	Vni      types.Int64  `tfsdk:"vni"`
 	Protocol types.String `tfsdk:"protocol"`
+}
+
+type NVEVNIIngressReplicationIdentity struct {
+	Device types.String `tfsdk:"device"`
+	Vni    types.Int64  `tfsdk:"vni"`
+}
+
+func (data *NVEVNIIngressReplicationIdentity) toIdentity(ctx context.Context, plan *NVEVNIIngressReplication) {
+	data.Device = plan.Device
+	data.Vni = plan.Vni
+}
+
+func (data *NVEVNIIngressReplication) fromIdentity(ctx context.Context, identity *NVEVNIIngressReplicationIdentity) {
+	data.Device = identity.Device
+	data.Vni = identity.Vni
 }
 
 func (data NVEVNIIngressReplication) getDn() string {

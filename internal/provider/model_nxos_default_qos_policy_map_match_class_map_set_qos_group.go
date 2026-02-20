@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -35,6 +36,24 @@ type DefaultQOSPolicyMapMatchClassMapSetQOSGroup struct {
 	PolicyMapName types.String `tfsdk:"policy_map_name"`
 	ClassMapName  types.String `tfsdk:"class_map_name"`
 	QosGroupId    types.Int64  `tfsdk:"qos_group_id"`
+}
+
+type DefaultQOSPolicyMapMatchClassMapSetQOSGroupIdentity struct {
+	Device        types.String `tfsdk:"device"`
+	PolicyMapName types.String `tfsdk:"policy_map_name"`
+	ClassMapName  types.String `tfsdk:"class_map_name"`
+}
+
+func (data *DefaultQOSPolicyMapMatchClassMapSetQOSGroupIdentity) toIdentity(ctx context.Context, plan *DefaultQOSPolicyMapMatchClassMapSetQOSGroup) {
+	data.Device = plan.Device
+	data.PolicyMapName = plan.PolicyMapName
+	data.ClassMapName = plan.ClassMapName
+}
+
+func (data *DefaultQOSPolicyMapMatchClassMapSetQOSGroup) fromIdentity(ctx context.Context, identity *DefaultQOSPolicyMapMatchClassMapSetQOSGroupIdentity) {
+	data.Device = identity.Device
+	data.PolicyMapName = identity.PolicyMapName
+	data.ClassMapName = identity.ClassMapName
 }
 
 func (data DefaultQOSPolicyMapMatchClassMapSetQOSGroup) getDn() string {

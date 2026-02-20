@@ -23,14 +23,20 @@ import (
 	"fmt"
 	"testing"
 
+	goversion "github.com/hashicorp/go-version"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
+	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
 func TestAccNxosBGPPeerLocalASN(t *testing.T) {
+	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
+			terraformVersionCapture{Version: &tfVersion},
+		},
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosBGPPeerLocalASNPrerequisitesConfig + testAccNxosBGPPeerLocalASNConfig_all(),
@@ -45,6 +51,12 @@ func TestAccNxosBGPPeerLocalASN(t *testing.T) {
 				ResourceName:      "nxos_bgp_peer_local_asn.test",
 				ImportState:       true,
 				ImportStateIdFunc: nxosBGPPeerLocalASNImportStateIdFunc("nxos_bgp_peer_local_asn.test"),
+			},
+			{
+				ResourceName:    "nxos_bgp_peer_local_asn.test",
+				ImportState:     true,
+				ImportStateKind: resource.ImportBlockWithResourceIdentity,
+				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

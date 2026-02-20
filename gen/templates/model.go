@@ -21,6 +21,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"sort"
 	"strconv"
@@ -95,6 +96,27 @@ type {{$name}}{{toGoName .TfName}} struct {
 {{end}}
 {{end}}
 {{end}}
+
+type {{camelCase .Name}}Identity struct {
+	Device types.String `tfsdk:"device"`
+{{- range (importAttributes .)}}
+	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
+{{- end}}
+}
+
+func (data *{{camelCase .Name}}Identity) toIdentity(ctx context.Context, plan *{{camelCase .Name}}) {
+	data.Device = plan.Device
+{{- range (importAttributes .)}}
+	data.{{toGoName .TfName}} = plan.{{toGoName .TfName}}
+{{- end}}
+}
+
+func (data *{{camelCase .Name}}) fromIdentity(ctx context.Context, identity *{{camelCase .Name}}Identity) {
+	data.Device = identity.Device
+{{- range (importAttributes .)}}
+	data.{{toGoName .TfName}} = identity.{{toGoName .TfName}}
+{{- end}}
+}
 
 func (data {{camelCase .Name}}) getDn() string {
 {{- if hasId .Attributes}}

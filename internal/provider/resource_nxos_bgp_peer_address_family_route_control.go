@@ -28,6 +28,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -39,7 +40,7 @@ import (
 
 // Ensure provider defined types fully satisfy framework interfaces
 var _ resource.Resource = &BGPPeerAddressFamilyRouteControlResource{}
-var _ resource.ResourceWithImportState = &BGPPeerAddressFamilyRouteControlResource{}
+var _ resource.ResourceWithIdentity = &BGPPeerAddressFamilyRouteControlResource{}
 
 func NewBGPPeerAddressFamilyRouteControlResource() resource.Resource {
 	return &BGPPeerAddressFamilyRouteControlResource{}
@@ -119,6 +120,37 @@ func (r *BGPPeerAddressFamilyRouteControlResource) Schema(ctx context.Context, r
 	}
 }
 
+func (r *BGPPeerAddressFamilyRouteControlResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+	resp.IdentitySchema = identityschema.Schema{
+		Attributes: map[string]identityschema.Attribute{
+			"device": identityschema.StringAttribute{
+				Description:       "A device name from the provider configuration.",
+				OptionalForImport: true,
+			},
+			"asn": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("Autonomous system number.").String,
+				RequiredForImport: true,
+			},
+			"vrf": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("VRF name.").String,
+				RequiredForImport: true,
+			},
+			"address": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("Peer address.").String,
+				RequiredForImport: true,
+			},
+			"address_family": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("Address Family.").String,
+				RequiredForImport: true,
+			},
+			"direction": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("Route Control direction.").String,
+				RequiredForImport: true,
+			},
+		},
+	}
+}
+
 func (r *BGPPeerAddressFamilyRouteControlResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
@@ -130,6 +162,7 @@ func (r *BGPPeerAddressFamilyRouteControlResource) Configure(ctx context.Context
 
 func (r *BGPPeerAddressFamilyRouteControlResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan BGPPeerAddressFamilyRouteControl
+	var identity BGPPeerAddressFamilyRouteControlIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -157,10 +190,13 @@ func (r *BGPPeerAddressFamilyRouteControlResource) Create(ctx context.Context, r
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
 
 	diags = resp.State.Set(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
@@ -168,6 +204,7 @@ func (r *BGPPeerAddressFamilyRouteControlResource) Create(ctx context.Context, r
 
 func (r *BGPPeerAddressFamilyRouteControlResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state BGPPeerAddressFamilyRouteControl
+	var identity BGPPeerAddressFamilyRouteControlIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -175,6 +212,14 @@ func (r *BGPPeerAddressFamilyRouteControlResource) Read(ctx context.Context, req
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	// Read identity
+	diags = req.Identity.Get(ctx, &identity)
+	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+		return
+	}
+
+	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -199,9 +244,13 @@ func (r *BGPPeerAddressFamilyRouteControlResource) Read(ctx context.Context, req
 		state.fromBody(res, imp)
 	}
 
+	identity.toIdentity(ctx, &state)
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
@@ -288,25 +337,47 @@ func (r *BGPPeerAddressFamilyRouteControlResource) Delete(ctx context.Context, r
 }
 
 func (r *BGPPeerAddressFamilyRouteControlResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	idParts := strings.Split(req.ID, ",")
-	idParts = helpers.RemoveEmptyStrings(idParts)
+	if req.ID != "" {
+		idParts := strings.Split(req.ID, ",")
+		idParts = helpers.RemoveEmptyStrings(idParts)
 
-	if len(idParts) != 5 && len(idParts) != 6 {
-		expectedIdentifier := "Expected import identifier with format: '<asn>,<vrf>,<address>,<address_family>,<direction>'"
-		expectedIdentifier += " or '<asn>,<vrf>,<address>,<address_family>,<direction>,<device>'"
-		resp.Diagnostics.AddError(
-			"Unexpected Import Identifier",
-			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
-		)
-		return
-	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("asn"), idParts[0])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf"), idParts[1])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address"), idParts[2])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address_family"), idParts[3])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("direction"), idParts[4])...)
-	if len(idParts) == 6 {
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+		if len(idParts) != 5 && len(idParts) != 6 {
+			expectedIdentifier := "Expected import identifier with format: '<asn>,<vrf>,<address>,<address_family>,<direction>'"
+			expectedIdentifier += " or '<asn>,<vrf>,<address>,<address_family>,<direction>,<device>'"
+			resp.Diagnostics.AddError(
+				"Unexpected Import Identifier",
+				fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
+			)
+			return
+		}
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("asn"), idParts[0])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("asn"), idParts[0])...)
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("vrf"), idParts[1])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf"), idParts[1])...)
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("address"), idParts[2])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address"), idParts[2])...)
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("address_family"), idParts[3])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address_family"), idParts[3])...)
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("direction"), idParts[4])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("direction"), idParts[4])...)
+		if len(idParts) == 6 {
+			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+		}
+	} else {
+		var identity BGPPeerAddressFamilyRouteControlIdentity
+		diags := req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("asn"), identity.Asn.ValueString())...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf"), identity.Vrf.ValueString())...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address"), identity.Address.ValueString())...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address_family"), identity.AddressFamily.ValueString())...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("direction"), identity.Direction.ValueString())...)
+		if !identity.Device.IsNull() && !identity.Device.IsUnknown() {
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), identity.Device.ValueString())...)
+		}
 	}
 
 	var state BGPPeerAddressFamilyRouteControl

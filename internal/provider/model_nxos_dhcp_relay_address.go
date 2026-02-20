@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -34,6 +35,27 @@ type DHCPRelayAddress struct {
 	InterfaceId types.String `tfsdk:"interface_id"`
 	Vrf         types.String `tfsdk:"vrf"`
 	Address     types.String `tfsdk:"address"`
+}
+
+type DHCPRelayAddressIdentity struct {
+	Device      types.String `tfsdk:"device"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+	Vrf         types.String `tfsdk:"vrf"`
+	Address     types.String `tfsdk:"address"`
+}
+
+func (data *DHCPRelayAddressIdentity) toIdentity(ctx context.Context, plan *DHCPRelayAddress) {
+	data.Device = plan.Device
+	data.InterfaceId = plan.InterfaceId
+	data.Vrf = plan.Vrf
+	data.Address = plan.Address
+}
+
+func (data *DHCPRelayAddress) fromIdentity(ctx context.Context, identity *DHCPRelayAddressIdentity) {
+	data.Device = identity.Device
+	data.InterfaceId = identity.InterfaceId
+	data.Vrf = identity.Vrf
+	data.Address = identity.Address
 }
 
 func (data DHCPRelayAddress) getDn() string {

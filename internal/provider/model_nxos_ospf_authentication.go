@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -43,6 +44,27 @@ type OSPFAuthentication struct {
 	Md5Key           types.String `tfsdk:"md5_key"`
 	Md5KeySecureMode types.Bool   `tfsdk:"md5_key_secure_mode"`
 	Type             types.String `tfsdk:"type"`
+}
+
+type OSPFAuthenticationIdentity struct {
+	Device       types.String `tfsdk:"device"`
+	InstanceName types.String `tfsdk:"instance_name"`
+	VrfName      types.String `tfsdk:"vrf_name"`
+	InterfaceId  types.String `tfsdk:"interface_id"`
+}
+
+func (data *OSPFAuthenticationIdentity) toIdentity(ctx context.Context, plan *OSPFAuthentication) {
+	data.Device = plan.Device
+	data.InstanceName = plan.InstanceName
+	data.VrfName = plan.VrfName
+	data.InterfaceId = plan.InterfaceId
+}
+
+func (data *OSPFAuthentication) fromIdentity(ctx context.Context, identity *OSPFAuthenticationIdentity) {
+	data.Device = identity.Device
+	data.InstanceName = identity.InstanceName
+	data.VrfName = identity.VrfName
+	data.InterfaceId = identity.InterfaceId
 }
 
 func (data OSPFAuthentication) getDn() string {

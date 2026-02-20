@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -41,6 +42,21 @@ type User struct {
 
 type UserRoles struct {
 	Name types.String `tfsdk:"name"`
+}
+
+type UserIdentity struct {
+	Device types.String `tfsdk:"device"`
+	Name   types.String `tfsdk:"name"`
+}
+
+func (data *UserIdentity) toIdentity(ctx context.Context, plan *User) {
+	data.Device = plan.Device
+	data.Name = plan.Name
+}
+
+func (data *User) fromIdentity(ctx context.Context, identity *UserIdentity) {
+	data.Device = identity.Device
+	data.Name = identity.Name
 }
 
 func (data User) getDn() string {

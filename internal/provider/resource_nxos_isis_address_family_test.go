@@ -23,14 +23,20 @@ import (
 	"fmt"
 	"testing"
 
+	goversion "github.com/hashicorp/go-version"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
+	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
 func TestAccNxosISISAddressFamily(t *testing.T) {
+	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
+			terraformVersionCapture{Version: &tfVersion},
+		},
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosISISAddressFamilyPrerequisitesConfig + testAccNxosISISAddressFamilyConfig_all(),
@@ -48,6 +54,12 @@ func TestAccNxosISISAddressFamily(t *testing.T) {
 				ResourceName:      "nxos_isis_address_family.test",
 				ImportState:       true,
 				ImportStateIdFunc: nxosISISAddressFamilyImportStateIdFunc("nxos_isis_address_family.test"),
+			},
+			{
+				ResourceName:    "nxos_isis_address_family.test",
+				ImportState:     true,
+				ImportStateKind: resource.ImportBlockWithResourceIdentity,
+				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

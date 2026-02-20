@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -37,6 +38,24 @@ type BGPRouteControl struct {
 	FibAccelerate      types.String `tfsdk:"fib_accelerate"`
 	LogNeighborChanges types.String `tfsdk:"log_neighbor_changes"`
 	SuppressRoutes     types.String `tfsdk:"suppress_routes"`
+}
+
+type BGPRouteControlIdentity struct {
+	Device types.String `tfsdk:"device"`
+	Asn    types.String `tfsdk:"asn"`
+	Vrf    types.String `tfsdk:"vrf"`
+}
+
+func (data *BGPRouteControlIdentity) toIdentity(ctx context.Context, plan *BGPRouteControl) {
+	data.Device = plan.Device
+	data.Asn = plan.Asn
+	data.Vrf = plan.Vrf
+}
+
+func (data *BGPRouteControl) fromIdentity(ctx context.Context, identity *BGPRouteControlIdentity) {
+	data.Device = identity.Device
+	data.Asn = identity.Asn
+	data.Vrf = identity.Vrf
 }
 
 func (data BGPRouteControl) getDn() string {

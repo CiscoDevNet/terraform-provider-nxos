@@ -28,6 +28,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
@@ -41,7 +42,7 @@ import (
 
 // Ensure provider defined types fully satisfy framework interfaces
 var _ resource.Resource = &IPv6InterfaceAddressResource{}
-var _ resource.ResourceWithImportState = &IPv6InterfaceAddressResource{}
+var _ resource.ResourceWithIdentity = &IPv6InterfaceAddressResource{}
 
 func NewIPv6InterfaceAddressResource() resource.Resource {
 	return &IPv6InterfaceAddressResource{}
@@ -112,6 +113,29 @@ func (r *IPv6InterfaceAddressResource) Schema(ctx context.Context, req resource.
 	}
 }
 
+func (r *IPv6InterfaceAddressResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+	resp.IdentitySchema = identityschema.Schema{
+		Attributes: map[string]identityschema.Attribute{
+			"device": identityschema.StringAttribute{
+				Description:       "A device name from the provider configuration.",
+				OptionalForImport: true,
+			},
+			"vrf": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("VRF name.").String,
+				RequiredForImport: true,
+			},
+			"interface_id": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+				RequiredForImport: true,
+			},
+			"address": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("IPv6 address.").String,
+				RequiredForImport: true,
+			},
+		},
+	}
+}
+
 func (r *IPv6InterfaceAddressResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
@@ -123,6 +147,7 @@ func (r *IPv6InterfaceAddressResource) Configure(ctx context.Context, req resour
 
 func (r *IPv6InterfaceAddressResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan IPv6InterfaceAddress
+	var identity IPv6InterfaceAddressIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -150,10 +175,13 @@ func (r *IPv6InterfaceAddressResource) Create(ctx context.Context, req resource.
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
 
 	diags = resp.State.Set(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
@@ -161,6 +189,7 @@ func (r *IPv6InterfaceAddressResource) Create(ctx context.Context, req resource.
 
 func (r *IPv6InterfaceAddressResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state IPv6InterfaceAddress
+	var identity IPv6InterfaceAddressIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -168,6 +197,14 @@ func (r *IPv6InterfaceAddressResource) Read(ctx context.Context, req resource.Re
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	// Read identity
+	diags = req.Identity.Get(ctx, &identity)
+	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+		return
+	}
+
+	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -192,9 +229,13 @@ func (r *IPv6InterfaceAddressResource) Read(ctx context.Context, req resource.Re
 		state.fromBody(res, imp)
 	}
 
+	identity.toIdentity(ctx, &state)
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
@@ -281,23 +322,41 @@ func (r *IPv6InterfaceAddressResource) Delete(ctx context.Context, req resource.
 }
 
 func (r *IPv6InterfaceAddressResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	idParts := strings.Split(req.ID, ",")
-	idParts = helpers.RemoveEmptyStrings(idParts)
+	if req.ID != "" {
+		idParts := strings.Split(req.ID, ",")
+		idParts = helpers.RemoveEmptyStrings(idParts)
 
-	if len(idParts) != 3 && len(idParts) != 4 {
-		expectedIdentifier := "Expected import identifier with format: '<vrf>,<interface_id>,<address>'"
-		expectedIdentifier += " or '<vrf>,<interface_id>,<address>,<device>'"
-		resp.Diagnostics.AddError(
-			"Unexpected Import Identifier",
-			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
-		)
-		return
-	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf"), idParts[0])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_id"), idParts[1])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address"), idParts[2])...)
-	if len(idParts) == 4 {
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+		if len(idParts) != 3 && len(idParts) != 4 {
+			expectedIdentifier := "Expected import identifier with format: '<vrf>,<interface_id>,<address>'"
+			expectedIdentifier += " or '<vrf>,<interface_id>,<address>,<device>'"
+			resp.Diagnostics.AddError(
+				"Unexpected Import Identifier",
+				fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
+			)
+			return
+		}
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("vrf"), idParts[0])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf"), idParts[0])...)
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("interface_id"), idParts[1])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_id"), idParts[1])...)
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("address"), idParts[2])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address"), idParts[2])...)
+		if len(idParts) == 4 {
+			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+		}
+	} else {
+		var identity IPv6InterfaceAddressIdentity
+		diags := req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf"), identity.Vrf.ValueString())...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_id"), identity.InterfaceId.ValueString())...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address"), identity.Address.ValueString())...)
+		if !identity.Device.IsNull() && !identity.Device.IsUnknown() {
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), identity.Device.ValueString())...)
+		}
 	}
 
 	var state IPv6InterfaceAddress

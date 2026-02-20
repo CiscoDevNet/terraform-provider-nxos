@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -34,6 +35,21 @@ type VRF struct {
 	Name        types.String `tfsdk:"name"`
 	Description types.String `tfsdk:"description"`
 	Encap       types.String `tfsdk:"encap"`
+}
+
+type VRFIdentity struct {
+	Device types.String `tfsdk:"device"`
+	Name   types.String `tfsdk:"name"`
+}
+
+func (data *VRFIdentity) toIdentity(ctx context.Context, plan *VRF) {
+	data.Device = plan.Device
+	data.Name = plan.Name
+}
+
+func (data *VRF) fromIdentity(ctx context.Context, identity *VRFIdentity) {
+	data.Device = identity.Device
+	data.Name = identity.Name
 }
 
 func (data VRF) getDn() string {

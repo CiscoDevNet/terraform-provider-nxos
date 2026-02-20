@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -35,6 +36,24 @@ type KeychainKey struct {
 	Keychain  types.String `tfsdk:"keychain"`
 	KeyId     types.Int64  `tfsdk:"key_id"`
 	KeyString types.String `tfsdk:"key_string"`
+}
+
+type KeychainKeyIdentity struct {
+	Device   types.String `tfsdk:"device"`
+	Keychain types.String `tfsdk:"keychain"`
+	KeyId    types.Int64  `tfsdk:"key_id"`
+}
+
+func (data *KeychainKeyIdentity) toIdentity(ctx context.Context, plan *KeychainKey) {
+	data.Device = plan.Device
+	data.Keychain = plan.Keychain
+	data.KeyId = plan.KeyId
+}
+
+func (data *KeychainKey) fromIdentity(ctx context.Context, identity *KeychainKeyIdentity) {
+	data.Device = identity.Device
+	data.Keychain = identity.Keychain
+	data.KeyId = identity.KeyId
 }
 
 func (data KeychainKey) getDn() string {

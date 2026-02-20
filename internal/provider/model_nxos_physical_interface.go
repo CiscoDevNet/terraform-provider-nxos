@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -54,6 +55,21 @@ type PhysicalInterface struct {
 	TrunkVlans             types.String `tfsdk:"trunk_vlans"`
 	UniDirectionalEthernet types.String `tfsdk:"uni_directional_ethernet"`
 	UserConfiguredFlags    types.String `tfsdk:"user_configured_flags"`
+}
+
+type PhysicalInterfaceIdentity struct {
+	Device      types.String `tfsdk:"device"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+}
+
+func (data *PhysicalInterfaceIdentity) toIdentity(ctx context.Context, plan *PhysicalInterface) {
+	data.Device = plan.Device
+	data.InterfaceId = plan.InterfaceId
+}
+
+func (data *PhysicalInterface) fromIdentity(ctx context.Context, identity *PhysicalInterfaceIdentity) {
+	data.Device = identity.Device
+	data.InterfaceId = identity.InterfaceId
 }
 
 func (data PhysicalInterface) getDn() string {

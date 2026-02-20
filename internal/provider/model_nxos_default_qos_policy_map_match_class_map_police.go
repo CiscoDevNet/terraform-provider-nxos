@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -57,6 +58,24 @@ type DefaultQOSPolicyMapMatchClassMapPolice struct {
 	ViolateSetDscp       types.Int64  `tfsdk:"violate_set_dscp"`
 	ViolateSetPrecedence types.String `tfsdk:"violate_set_precedence"`
 	ViolateSetQosGroup   types.Int64  `tfsdk:"violate_set_qos_group"`
+}
+
+type DefaultQOSPolicyMapMatchClassMapPoliceIdentity struct {
+	Device        types.String `tfsdk:"device"`
+	PolicyMapName types.String `tfsdk:"policy_map_name"`
+	ClassMapName  types.String `tfsdk:"class_map_name"`
+}
+
+func (data *DefaultQOSPolicyMapMatchClassMapPoliceIdentity) toIdentity(ctx context.Context, plan *DefaultQOSPolicyMapMatchClassMapPolice) {
+	data.Device = plan.Device
+	data.PolicyMapName = plan.PolicyMapName
+	data.ClassMapName = plan.ClassMapName
+}
+
+func (data *DefaultQOSPolicyMapMatchClassMapPolice) fromIdentity(ctx context.Context, identity *DefaultQOSPolicyMapMatchClassMapPoliceIdentity) {
+	data.Device = identity.Device
+	data.PolicyMapName = identity.PolicyMapName
+	data.ClassMapName = identity.ClassMapName
 }
 
 func (data DefaultQOSPolicyMapMatchClassMapPolice) getDn() string {

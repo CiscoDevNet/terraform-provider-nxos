@@ -20,6 +20,8 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -30,6 +32,18 @@ type ICMPv4 struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
 	AdminState types.String `tfsdk:"admin_state"`
+}
+
+type ICMPv4Identity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *ICMPv4Identity) toIdentity(ctx context.Context, plan *ICMPv4) {
+	data.Device = plan.Device
+}
+
+func (data *ICMPv4) fromIdentity(ctx context.Context, identity *ICMPv4Identity) {
+	data.Device = identity.Device
 }
 
 func (data ICMPv4) getDn() string {

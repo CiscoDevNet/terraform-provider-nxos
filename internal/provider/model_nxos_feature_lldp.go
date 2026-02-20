@@ -20,6 +20,8 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -30,6 +32,18 @@ type FeatureLLDP struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
 	AdminState types.String `tfsdk:"admin_state"`
+}
+
+type FeatureLLDPIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *FeatureLLDPIdentity) toIdentity(ctx context.Context, plan *FeatureLLDP) {
+	data.Device = plan.Device
+}
+
+func (data *FeatureLLDP) fromIdentity(ctx context.Context, identity *FeatureLLDPIdentity) {
+	data.Device = identity.Device
 }
 
 func (data FeatureLLDP) getDn() string {

@@ -27,6 +27,7 @@ import (
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -37,7 +38,7 @@ import (
 
 // Ensure provider defined types fully satisfy framework interfaces
 var _ resource.Resource = &DefaultQOSPolicyInterfaceInResource{}
-var _ resource.ResourceWithImportState = &DefaultQOSPolicyInterfaceInResource{}
+var _ resource.ResourceWithIdentity = &DefaultQOSPolicyInterfaceInResource{}
 
 func NewDefaultQOSPolicyInterfaceInResource() resource.Resource {
 	return &DefaultQOSPolicyInterfaceInResource{}
@@ -79,6 +80,21 @@ func (r *DefaultQOSPolicyInterfaceInResource) Schema(ctx context.Context, req re
 	}
 }
 
+func (r *DefaultQOSPolicyInterfaceInResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+	resp.IdentitySchema = identityschema.Schema{
+		Attributes: map[string]identityschema.Attribute{
+			"device": identityschema.StringAttribute{
+				Description:       "A device name from the provider configuration.",
+				OptionalForImport: true,
+			},
+			"interface_id": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+				RequiredForImport: true,
+			},
+		},
+	}
+}
+
 func (r *DefaultQOSPolicyInterfaceInResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
@@ -90,6 +106,7 @@ func (r *DefaultQOSPolicyInterfaceInResource) Configure(ctx context.Context, req
 
 func (r *DefaultQOSPolicyInterfaceInResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan DefaultQOSPolicyInterfaceIn
+	var identity DefaultQOSPolicyInterfaceInIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -117,10 +134,13 @@ func (r *DefaultQOSPolicyInterfaceInResource) Create(ctx context.Context, req re
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
 
 	diags = resp.State.Set(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
@@ -128,6 +148,7 @@ func (r *DefaultQOSPolicyInterfaceInResource) Create(ctx context.Context, req re
 
 func (r *DefaultQOSPolicyInterfaceInResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state DefaultQOSPolicyInterfaceIn
+	var identity DefaultQOSPolicyInterfaceInIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -135,6 +156,14 @@ func (r *DefaultQOSPolicyInterfaceInResource) Read(ctx context.Context, req reso
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	// Read identity
+	diags = req.Identity.Get(ctx, &identity)
+	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+		return
+	}
+
+	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -159,9 +188,13 @@ func (r *DefaultQOSPolicyInterfaceInResource) Read(ctx context.Context, req reso
 		state.fromBody(res, imp)
 	}
 
+	identity.toIdentity(ctx, &state)
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
@@ -248,21 +281,35 @@ func (r *DefaultQOSPolicyInterfaceInResource) Delete(ctx context.Context, req re
 }
 
 func (r *DefaultQOSPolicyInterfaceInResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	idParts := strings.Split(req.ID, ",")
-	idParts = helpers.RemoveEmptyStrings(idParts)
+	if req.ID != "" {
+		idParts := strings.Split(req.ID, ",")
+		idParts = helpers.RemoveEmptyStrings(idParts)
 
-	if len(idParts) != 1 && len(idParts) != 2 {
-		expectedIdentifier := "Expected import identifier with format: '<interface_id>'"
-		expectedIdentifier += " or '<interface_id>,<device>'"
-		resp.Diagnostics.AddError(
-			"Unexpected Import Identifier",
-			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
-		)
-		return
-	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_id"), idParts[0])...)
-	if len(idParts) == 2 {
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+		if len(idParts) != 1 && len(idParts) != 2 {
+			expectedIdentifier := "Expected import identifier with format: '<interface_id>'"
+			expectedIdentifier += " or '<interface_id>,<device>'"
+			resp.Diagnostics.AddError(
+				"Unexpected Import Identifier",
+				fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
+			)
+			return
+		}
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("interface_id"), idParts[0])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_id"), idParts[0])...)
+		if len(idParts) == 2 {
+			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+		}
+	} else {
+		var identity DefaultQOSPolicyInterfaceInIdentity
+		diags := req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_id"), identity.InterfaceId.ValueString())...)
+		if !identity.Device.IsNull() && !identity.Device.IsUnknown() {
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), identity.Device.ValueString())...)
+		}
 	}
 
 	var state DefaultQOSPolicyInterfaceIn

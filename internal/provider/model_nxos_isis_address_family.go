@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -40,6 +41,27 @@ type ISISAddressFamily struct {
 	EnableBfd                types.Bool   `tfsdk:"enable_bfd"`
 	PrefixAdvertisePassiveL1 types.Bool   `tfsdk:"prefix_advertise_passive_l1"`
 	PrefixAdvertisePassiveL2 types.Bool   `tfsdk:"prefix_advertise_passive_l2"`
+}
+
+type ISISAddressFamilyIdentity struct {
+	Device        types.String `tfsdk:"device"`
+	InstanceName  types.String `tfsdk:"instance_name"`
+	Vrf           types.String `tfsdk:"vrf"`
+	AddressFamily types.String `tfsdk:"address_family"`
+}
+
+func (data *ISISAddressFamilyIdentity) toIdentity(ctx context.Context, plan *ISISAddressFamily) {
+	data.Device = plan.Device
+	data.InstanceName = plan.InstanceName
+	data.Vrf = plan.Vrf
+	data.AddressFamily = plan.AddressFamily
+}
+
+func (data *ISISAddressFamily) fromIdentity(ctx context.Context, identity *ISISAddressFamilyIdentity) {
+	data.Device = identity.Device
+	data.InstanceName = identity.InstanceName
+	data.Vrf = identity.Vrf
+	data.AddressFamily = identity.AddressFamily
 }
 
 func (data ISISAddressFamily) getDn() string {

@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -33,6 +34,21 @@ type ISISInstance struct {
 	Dn         types.String `tfsdk:"id"`
 	Name       types.String `tfsdk:"name"`
 	AdminState types.String `tfsdk:"admin_state"`
+}
+
+type ISISInstanceIdentity struct {
+	Device types.String `tfsdk:"device"`
+	Name   types.String `tfsdk:"name"`
+}
+
+func (data *ISISInstanceIdentity) toIdentity(ctx context.Context, plan *ISISInstance) {
+	data.Device = plan.Device
+	data.Name = plan.Name
+}
+
+func (data *ISISInstance) fromIdentity(ctx context.Context, identity *ISISInstanceIdentity) {
+	data.Device = identity.Device
+	data.Name = identity.Name
 }
 
 func (data ISISInstance) getDn() string {

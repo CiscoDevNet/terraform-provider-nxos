@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -32,6 +33,21 @@ type IPv4VRF struct {
 	Device types.String `tfsdk:"device"`
 	Dn     types.String `tfsdk:"id"`
 	Name   types.String `tfsdk:"name"`
+}
+
+type IPv4VRFIdentity struct {
+	Device types.String `tfsdk:"device"`
+	Name   types.String `tfsdk:"name"`
+}
+
+func (data *IPv4VRFIdentity) toIdentity(ctx context.Context, plan *IPv4VRF) {
+	data.Device = plan.Device
+	data.Name = plan.Name
+}
+
+func (data *IPv4VRF) fromIdentity(ctx context.Context, identity *IPv4VRFIdentity) {
+	data.Device = identity.Device
+	data.Name = identity.Name
 }
 
 func (data IPv4VRF) getDn() string {

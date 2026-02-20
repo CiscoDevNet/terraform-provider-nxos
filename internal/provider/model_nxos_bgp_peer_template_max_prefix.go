@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -39,6 +40,27 @@ type BGPPeerTemplateMaxPrefix struct {
 	MaximumPrefix types.Int64  `tfsdk:"maximum_prefix"`
 	RestartTime   types.Int64  `tfsdk:"restart_time"`
 	Threshold     types.Int64  `tfsdk:"threshold"`
+}
+
+type BGPPeerTemplateMaxPrefixIdentity struct {
+	Device        types.String `tfsdk:"device"`
+	Asn           types.String `tfsdk:"asn"`
+	TemplateName  types.String `tfsdk:"template_name"`
+	AddressFamily types.String `tfsdk:"address_family"`
+}
+
+func (data *BGPPeerTemplateMaxPrefixIdentity) toIdentity(ctx context.Context, plan *BGPPeerTemplateMaxPrefix) {
+	data.Device = plan.Device
+	data.Asn = plan.Asn
+	data.TemplateName = plan.TemplateName
+	data.AddressFamily = plan.AddressFamily
+}
+
+func (data *BGPPeerTemplateMaxPrefix) fromIdentity(ctx context.Context, identity *BGPPeerTemplateMaxPrefixIdentity) {
+	data.Device = identity.Device
+	data.Asn = identity.Asn
+	data.TemplateName = identity.TemplateName
+	data.AddressFamily = identity.AddressFamily
 }
 
 func (data BGPPeerTemplateMaxPrefix) getDn() string {

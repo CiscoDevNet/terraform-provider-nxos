@@ -20,6 +20,8 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -30,6 +32,18 @@ type VPCPeerlink struct {
 	Device        types.String `tfsdk:"device"`
 	Dn            types.String `tfsdk:"id"`
 	PortChannelId types.String `tfsdk:"port_channel_id"`
+}
+
+type VPCPeerlinkIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *VPCPeerlinkIdentity) toIdentity(ctx context.Context, plan *VPCPeerlink) {
+	data.Device = plan.Device
+}
+
+func (data *VPCPeerlink) fromIdentity(ctx context.Context, identity *VPCPeerlinkIdentity) {
+	data.Device = identity.Device
 }
 
 func (data VPCPeerlink) getDn() string {

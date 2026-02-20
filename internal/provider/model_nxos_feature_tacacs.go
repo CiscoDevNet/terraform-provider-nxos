@@ -20,6 +20,8 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -30,6 +32,18 @@ type FeatureTACACS struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
 	AdminState types.String `tfsdk:"admin_state"`
+}
+
+type FeatureTACACSIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *FeatureTACACSIdentity) toIdentity(ctx context.Context, plan *FeatureTACACS) {
+	data.Device = plan.Device
+}
+
+func (data *FeatureTACACS) fromIdentity(ctx context.Context, identity *FeatureTACACSIdentity) {
+	data.Device = identity.Device
 }
 
 func (data FeatureTACACS) getDn() string {

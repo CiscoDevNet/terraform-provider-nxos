@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -37,6 +38,33 @@ type BGPPeerAddressFamilyRouteControl struct {
 	AddressFamily types.String `tfsdk:"address_family"`
 	Direction     types.String `tfsdk:"direction"`
 	RouteMapName  types.String `tfsdk:"route_map_name"`
+}
+
+type BGPPeerAddressFamilyRouteControlIdentity struct {
+	Device        types.String `tfsdk:"device"`
+	Asn           types.String `tfsdk:"asn"`
+	Vrf           types.String `tfsdk:"vrf"`
+	Address       types.String `tfsdk:"address"`
+	AddressFamily types.String `tfsdk:"address_family"`
+	Direction     types.String `tfsdk:"direction"`
+}
+
+func (data *BGPPeerAddressFamilyRouteControlIdentity) toIdentity(ctx context.Context, plan *BGPPeerAddressFamilyRouteControl) {
+	data.Device = plan.Device
+	data.Asn = plan.Asn
+	data.Vrf = plan.Vrf
+	data.Address = plan.Address
+	data.AddressFamily = plan.AddressFamily
+	data.Direction = plan.Direction
+}
+
+func (data *BGPPeerAddressFamilyRouteControl) fromIdentity(ctx context.Context, identity *BGPPeerAddressFamilyRouteControlIdentity) {
+	data.Device = identity.Device
+	data.Asn = identity.Asn
+	data.Vrf = identity.Vrf
+	data.Address = identity.Address
+	data.AddressFamily = identity.AddressFamily
+	data.Direction = identity.Direction
 }
 
 func (data BGPPeerAddressFamilyRouteControl) getDn() string {

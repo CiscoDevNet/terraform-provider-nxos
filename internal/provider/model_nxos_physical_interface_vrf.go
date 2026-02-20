@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -33,6 +34,21 @@ type PhysicalInterfaceVRF struct {
 	Dn          types.String `tfsdk:"id"`
 	InterfaceId types.String `tfsdk:"interface_id"`
 	VrfDn       types.String `tfsdk:"vrf_dn"`
+}
+
+type PhysicalInterfaceVRFIdentity struct {
+	Device      types.String `tfsdk:"device"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+}
+
+func (data *PhysicalInterfaceVRFIdentity) toIdentity(ctx context.Context, plan *PhysicalInterfaceVRF) {
+	data.Device = plan.Device
+	data.InterfaceId = plan.InterfaceId
+}
+
+func (data *PhysicalInterfaceVRF) fromIdentity(ctx context.Context, identity *PhysicalInterfaceVRFIdentity) {
+	data.Device = identity.Device
+	data.InterfaceId = identity.InterfaceId
 }
 
 func (data PhysicalInterfaceVRF) getDn() string {

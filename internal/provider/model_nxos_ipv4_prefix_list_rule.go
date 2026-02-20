@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -32,6 +33,21 @@ type IPv4PrefixListRule struct {
 	Device types.String `tfsdk:"device"`
 	Dn     types.String `tfsdk:"id"`
 	Name   types.String `tfsdk:"name"`
+}
+
+type IPv4PrefixListRuleIdentity struct {
+	Device types.String `tfsdk:"device"`
+	Name   types.String `tfsdk:"name"`
+}
+
+func (data *IPv4PrefixListRuleIdentity) toIdentity(ctx context.Context, plan *IPv4PrefixListRule) {
+	data.Device = plan.Device
+	data.Name = plan.Name
+}
+
+func (data *IPv4PrefixListRule) fromIdentity(ctx context.Context, identity *IPv4PrefixListRuleIdentity) {
+	data.Device = identity.Device
+	data.Name = identity.Name
 }
 
 func (data IPv4PrefixListRule) getDn() string {

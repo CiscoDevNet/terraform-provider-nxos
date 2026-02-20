@@ -20,6 +20,8 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -30,6 +32,18 @@ type FeatureTelnet struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
 	AdminState types.String `tfsdk:"admin_state"`
+}
+
+type FeatureTelnetIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *FeatureTelnetIdentity) toIdentity(ctx context.Context, plan *FeatureTelnet) {
+	data.Device = plan.Device
+}
+
+func (data *FeatureTelnet) fromIdentity(ctx context.Context, identity *FeatureTelnetIdentity) {
+	data.Device = identity.Device
 }
 
 func (data FeatureTelnet) getDn() string {

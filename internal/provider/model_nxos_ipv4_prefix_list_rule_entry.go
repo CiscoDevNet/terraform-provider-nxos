@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -39,6 +40,24 @@ type IPv4PrefixListRuleEntry struct {
 	Prefix    types.String `tfsdk:"prefix"`
 	FromRange types.Int64  `tfsdk:"from_range"`
 	ToRange   types.Int64  `tfsdk:"to_range"`
+}
+
+type IPv4PrefixListRuleEntryIdentity struct {
+	Device   types.String `tfsdk:"device"`
+	RuleName types.String `tfsdk:"rule_name"`
+	Order    types.Int64  `tfsdk:"order"`
+}
+
+func (data *IPv4PrefixListRuleEntryIdentity) toIdentity(ctx context.Context, plan *IPv4PrefixListRuleEntry) {
+	data.Device = plan.Device
+	data.RuleName = plan.RuleName
+	data.Order = plan.Order
+}
+
+func (data *IPv4PrefixListRuleEntry) fromIdentity(ctx context.Context, identity *IPv4PrefixListRuleEntryIdentity) {
+	data.Device = identity.Device
+	data.RuleName = identity.RuleName
+	data.Order = identity.Order
 }
 
 func (data IPv4PrefixListRuleEntry) getDn() string {

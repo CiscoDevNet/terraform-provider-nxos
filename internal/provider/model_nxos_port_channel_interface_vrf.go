@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -33,6 +34,21 @@ type PortChannelInterfaceVRF struct {
 	Dn          types.String `tfsdk:"id"`
 	InterfaceId types.String `tfsdk:"interface_id"`
 	VrfDn       types.String `tfsdk:"vrf_dn"`
+}
+
+type PortChannelInterfaceVRFIdentity struct {
+	Device      types.String `tfsdk:"device"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+}
+
+func (data *PortChannelInterfaceVRFIdentity) toIdentity(ctx context.Context, plan *PortChannelInterfaceVRF) {
+	data.Device = plan.Device
+	data.InterfaceId = plan.InterfaceId
+}
+
+func (data *PortChannelInterfaceVRF) fromIdentity(ctx context.Context, identity *PortChannelInterfaceVRFIdentity) {
+	data.Device = identity.Device
+	data.InterfaceId = identity.InterfaceId
 }
 
 func (data PortChannelInterfaceVRF) getDn() string {

@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -36,6 +37,24 @@ type RouteMapRuleEntrySetRegularCommunity struct {
 	Additive    types.String `tfsdk:"additive"`
 	NoCommunity types.String `tfsdk:"no_community"`
 	SetCriteria types.String `tfsdk:"set_criteria"`
+}
+
+type RouteMapRuleEntrySetRegularCommunityIdentity struct {
+	Device   types.String `tfsdk:"device"`
+	RuleName types.String `tfsdk:"rule_name"`
+	Order    types.Int64  `tfsdk:"order"`
+}
+
+func (data *RouteMapRuleEntrySetRegularCommunityIdentity) toIdentity(ctx context.Context, plan *RouteMapRuleEntrySetRegularCommunity) {
+	data.Device = plan.Device
+	data.RuleName = plan.RuleName
+	data.Order = plan.Order
+}
+
+func (data *RouteMapRuleEntrySetRegularCommunity) fromIdentity(ctx context.Context, identity *RouteMapRuleEntrySetRegularCommunityIdentity) {
+	data.Device = identity.Device
+	data.RuleName = identity.RuleName
+	data.Order = identity.Order
 }
 
 func (data RouteMapRuleEntrySetRegularCommunity) getDn() string {

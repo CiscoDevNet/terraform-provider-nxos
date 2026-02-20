@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -39,6 +40,18 @@ type Logging struct {
 type LoggingFacilities struct {
 	Name  types.String `tfsdk:"name"`
 	Level types.String `tfsdk:"level"`
+}
+
+type LoggingIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *LoggingIdentity) toIdentity(ctx context.Context, plan *Logging) {
+	data.Device = plan.Device
+}
+
+func (data *Logging) fromIdentity(ctx context.Context, identity *LoggingIdentity) {
+	data.Device = identity.Device
 }
 
 func (data Logging) getDn() string {

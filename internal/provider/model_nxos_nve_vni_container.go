@@ -20,6 +20,8 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -29,6 +31,18 @@ import (
 type NVEVNIContainer struct {
 	Device types.String `tfsdk:"device"`
 	Dn     types.String `tfsdk:"id"`
+}
+
+type NVEVNIContainerIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *NVEVNIContainerIdentity) toIdentity(ctx context.Context, plan *NVEVNIContainer) {
+	data.Device = plan.Device
+}
+
+func (data *NVEVNIContainer) fromIdentity(ctx context.Context, identity *NVEVNIContainerIdentity) {
+	data.Device = identity.Device
 }
 
 func (data NVEVNIContainer) getDn() string {

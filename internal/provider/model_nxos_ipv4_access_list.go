@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -84,6 +85,21 @@ type IPv4AccessListEntries struct {
 	Urg                     types.Bool   `tfsdk:"urg"`
 	Vlan                    types.Int64  `tfsdk:"vlan"`
 	Vni                     types.String `tfsdk:"vni"`
+}
+
+type IPv4AccessListIdentity struct {
+	Device types.String `tfsdk:"device"`
+	Name   types.String `tfsdk:"name"`
+}
+
+func (data *IPv4AccessListIdentity) toIdentity(ctx context.Context, plan *IPv4AccessList) {
+	data.Device = plan.Device
+	data.Name = plan.Name
+}
+
+func (data *IPv4AccessList) fromIdentity(ctx context.Context, identity *IPv4AccessListIdentity) {
+	data.Device = identity.Device
+	data.Name = identity.Name
 }
 
 func (data IPv4AccessList) getDn() string {

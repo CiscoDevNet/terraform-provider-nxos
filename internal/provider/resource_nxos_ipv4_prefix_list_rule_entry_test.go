@@ -23,14 +23,20 @@ import (
 	"fmt"
 	"testing"
 
+	goversion "github.com/hashicorp/go-version"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
+	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
 func TestAccNxosIPv4PrefixListRuleEntry(t *testing.T) {
+	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
+			terraformVersionCapture{Version: &tfVersion},
+		},
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosIPv4PrefixListRuleEntryPrerequisitesConfig + testAccNxosIPv4PrefixListRuleEntryConfig_all(),
@@ -48,6 +54,12 @@ func TestAccNxosIPv4PrefixListRuleEntry(t *testing.T) {
 				ResourceName:      "nxos_ipv4_prefix_list_rule_entry.test",
 				ImportState:       true,
 				ImportStateIdFunc: nxosIPv4PrefixListRuleEntryImportStateIdFunc("nxos_ipv4_prefix_list_rule_entry.test"),
+			},
+			{
+				ResourceName:    "nxos_ipv4_prefix_list_rule_entry.test",
+				ImportState:     true,
+				ImportStateKind: resource.ImportBlockWithResourceIdentity,
+				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

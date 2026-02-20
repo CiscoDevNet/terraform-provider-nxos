@@ -20,6 +20,8 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -30,6 +32,18 @@ type QueuingQOSPolicySystemOutPolicyMap struct {
 	Device        types.String `tfsdk:"device"`
 	Dn            types.String `tfsdk:"id"`
 	PolicyMapName types.String `tfsdk:"policy_map_name"`
+}
+
+type QueuingQOSPolicySystemOutPolicyMapIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *QueuingQOSPolicySystemOutPolicyMapIdentity) toIdentity(ctx context.Context, plan *QueuingQOSPolicySystemOutPolicyMap) {
+	data.Device = plan.Device
+}
+
+func (data *QueuingQOSPolicySystemOutPolicyMap) fromIdentity(ctx context.Context, identity *QueuingQOSPolicySystemOutPolicyMapIdentity) {
+	data.Device = identity.Device
 }
 
 func (data QueuingQOSPolicySystemOutPolicyMap) getDn() string {

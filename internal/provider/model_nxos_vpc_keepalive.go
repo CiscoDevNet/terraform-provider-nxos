@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -44,6 +45,18 @@ type VPCKeepalive struct {
 	TypeOfServiceValue             types.Int64  `tfsdk:"type_of_service_value"`
 	UdpPort                        types.Int64  `tfsdk:"udp_port"`
 	Vrf                            types.String `tfsdk:"vrf"`
+}
+
+type VPCKeepaliveIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *VPCKeepaliveIdentity) toIdentity(ctx context.Context, plan *VPCKeepalive) {
+	data.Device = plan.Device
+}
+
+func (data *VPCKeepalive) fromIdentity(ctx context.Context, identity *VPCKeepaliveIdentity) {
+	data.Device = identity.Device
 }
 
 func (data VPCKeepalive) getDn() string {

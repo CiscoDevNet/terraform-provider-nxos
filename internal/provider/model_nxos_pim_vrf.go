@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -36,6 +37,21 @@ type PIMVRF struct {
 	Name       types.String `tfsdk:"name"`
 	AdminState types.String `tfsdk:"admin_state"`
 	Bfd        types.Bool   `tfsdk:"bfd"`
+}
+
+type PIMVRFIdentity struct {
+	Device types.String `tfsdk:"device"`
+	Name   types.String `tfsdk:"name"`
+}
+
+func (data *PIMVRFIdentity) toIdentity(ctx context.Context, plan *PIMVRF) {
+	data.Device = plan.Device
+	data.Name = plan.Name
+}
+
+func (data *PIMVRF) fromIdentity(ctx context.Context, identity *PIMVRFIdentity) {
+	data.Device = identity.Device
+	data.Name = identity.Name
 }
 
 func (data PIMVRF) getDn() string {

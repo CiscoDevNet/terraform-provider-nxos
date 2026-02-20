@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -35,6 +36,24 @@ type QueuingQOSPolicyMapMatchClassMapRemainingBandwidth struct {
 	PolicyMapName types.String `tfsdk:"policy_map_name"`
 	ClassMapName  types.String `tfsdk:"class_map_name"`
 	Value         types.Int64  `tfsdk:"value"`
+}
+
+type QueuingQOSPolicyMapMatchClassMapRemainingBandwidthIdentity struct {
+	Device        types.String `tfsdk:"device"`
+	PolicyMapName types.String `tfsdk:"policy_map_name"`
+	ClassMapName  types.String `tfsdk:"class_map_name"`
+}
+
+func (data *QueuingQOSPolicyMapMatchClassMapRemainingBandwidthIdentity) toIdentity(ctx context.Context, plan *QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) {
+	data.Device = plan.Device
+	data.PolicyMapName = plan.PolicyMapName
+	data.ClassMapName = plan.ClassMapName
+}
+
+func (data *QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) fromIdentity(ctx context.Context, identity *QueuingQOSPolicyMapMatchClassMapRemainingBandwidthIdentity) {
+	data.Device = identity.Device
+	data.PolicyMapName = identity.PolicyMapName
+	data.ClassMapName = identity.ClassMapName
 }
 
 func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) getDn() string {

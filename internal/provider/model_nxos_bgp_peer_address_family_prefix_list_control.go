@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -37,6 +38,33 @@ type BGPPeerAddressFamilyPrefixListControl struct {
 	AddressFamily types.String `tfsdk:"address_family"`
 	Direction     types.String `tfsdk:"direction"`
 	List          types.String `tfsdk:"list"`
+}
+
+type BGPPeerAddressFamilyPrefixListControlIdentity struct {
+	Device        types.String `tfsdk:"device"`
+	Asn           types.String `tfsdk:"asn"`
+	Vrf           types.String `tfsdk:"vrf"`
+	Address       types.String `tfsdk:"address"`
+	AddressFamily types.String `tfsdk:"address_family"`
+	Direction     types.String `tfsdk:"direction"`
+}
+
+func (data *BGPPeerAddressFamilyPrefixListControlIdentity) toIdentity(ctx context.Context, plan *BGPPeerAddressFamilyPrefixListControl) {
+	data.Device = plan.Device
+	data.Asn = plan.Asn
+	data.Vrf = plan.Vrf
+	data.Address = plan.Address
+	data.AddressFamily = plan.AddressFamily
+	data.Direction = plan.Direction
+}
+
+func (data *BGPPeerAddressFamilyPrefixListControl) fromIdentity(ctx context.Context, identity *BGPPeerAddressFamilyPrefixListControlIdentity) {
+	data.Device = identity.Device
+	data.Asn = identity.Asn
+	data.Vrf = identity.Vrf
+	data.Address = identity.Address
+	data.AddressFamily = identity.AddressFamily
+	data.Direction = identity.Direction
 }
 
 func (data BGPPeerAddressFamilyPrefixListControl) getDn() string {

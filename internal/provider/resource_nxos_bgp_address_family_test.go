@@ -23,14 +23,20 @@ import (
 	"fmt"
 	"testing"
 
+	goversion "github.com/hashicorp/go-version"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
+	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
 func TestAccNxosBGPAddressFamily(t *testing.T) {
+	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
+			terraformVersionCapture{Version: &tfVersion},
+		},
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosBGPAddressFamilyPrerequisitesConfig + testAccNxosBGPAddressFamilyConfig_all(),
@@ -61,6 +67,12 @@ func TestAccNxosBGPAddressFamily(t *testing.T) {
 				ResourceName:      "nxos_bgp_address_family.test",
 				ImportState:       true,
 				ImportStateIdFunc: nxosBGPAddressFamilyImportStateIdFunc("nxos_bgp_address_family.test"),
+			},
+			{
+				ResourceName:    "nxos_bgp_address_family.test",
+				ImportState:     true,
+				ImportStateKind: resource.ImportBlockWithResourceIdentity,
+				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

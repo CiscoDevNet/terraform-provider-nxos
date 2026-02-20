@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -38,6 +39,27 @@ type OSPFv3VRFAddressFamily struct {
 	AdministrativeDistance types.String `tfsdk:"administrative_distance"`
 	DefaultMetric          types.String `tfsdk:"default_metric"`
 	MaxEcmpCost            types.Int64  `tfsdk:"max_ecmp_cost"`
+}
+
+type OSPFv3VRFAddressFamilyIdentity struct {
+	Device            types.String `tfsdk:"device"`
+	InstanceName      types.String `tfsdk:"instance_name"`
+	VrfName           types.String `tfsdk:"vrf_name"`
+	AddressFamilyType types.String `tfsdk:"address_family_type"`
+}
+
+func (data *OSPFv3VRFAddressFamilyIdentity) toIdentity(ctx context.Context, plan *OSPFv3VRFAddressFamily) {
+	data.Device = plan.Device
+	data.InstanceName = plan.InstanceName
+	data.VrfName = plan.VrfName
+	data.AddressFamilyType = plan.AddressFamilyType
+}
+
+func (data *OSPFv3VRFAddressFamily) fromIdentity(ctx context.Context, identity *OSPFv3VRFAddressFamilyIdentity) {
+	data.Device = identity.Device
+	data.InstanceName = identity.InstanceName
+	data.VrfName = identity.VrfName
+	data.AddressFamilyType = identity.AddressFamilyType
 }
 
 func (data OSPFv3VRFAddressFamily) getDn() string {

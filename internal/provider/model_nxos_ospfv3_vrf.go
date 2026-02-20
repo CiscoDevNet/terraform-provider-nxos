@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -40,6 +41,24 @@ type OSPFv3VRF struct {
 	BandwidthReferenceUnit types.String `tfsdk:"bandwidth_reference_unit"`
 	RouterId               types.String `tfsdk:"router_id"`
 	BfdControl             types.Bool   `tfsdk:"bfd_control"`
+}
+
+type OSPFv3VRFIdentity struct {
+	Device       types.String `tfsdk:"device"`
+	InstanceName types.String `tfsdk:"instance_name"`
+	Name         types.String `tfsdk:"name"`
+}
+
+func (data *OSPFv3VRFIdentity) toIdentity(ctx context.Context, plan *OSPFv3VRF) {
+	data.Device = plan.Device
+	data.InstanceName = plan.InstanceName
+	data.Name = plan.Name
+}
+
+func (data *OSPFv3VRF) fromIdentity(ctx context.Context, identity *OSPFv3VRFIdentity) {
+	data.Device = identity.Device
+	data.InstanceName = identity.InstanceName
+	data.Name = identity.Name
 }
 
 func (data OSPFv3VRF) getDn() string {

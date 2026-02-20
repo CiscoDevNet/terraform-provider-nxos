@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -34,6 +35,21 @@ type VPCInterface struct {
 	Dn                     types.String `tfsdk:"id"`
 	VpcInterfaceId         types.Int64  `tfsdk:"vpc_interface_id"`
 	PortChannelInterfaceDn types.String `tfsdk:"port_channel_interface_dn"`
+}
+
+type VPCInterfaceIdentity struct {
+	Device         types.String `tfsdk:"device"`
+	VpcInterfaceId types.Int64  `tfsdk:"vpc_interface_id"`
+}
+
+func (data *VPCInterfaceIdentity) toIdentity(ctx context.Context, plan *VPCInterface) {
+	data.Device = plan.Device
+	data.VpcInterfaceId = plan.VpcInterfaceId
+}
+
+func (data *VPCInterface) fromIdentity(ctx context.Context, identity *VPCInterfaceIdentity) {
+	data.Device = identity.Device
+	data.VpcInterfaceId = identity.VpcInterfaceId
 }
 
 func (data VPCInterface) getDn() string {

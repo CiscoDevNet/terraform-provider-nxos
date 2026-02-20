@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -35,6 +36,27 @@ type RouteMapRuleEntryMatchTag struct {
 	RuleName types.String `tfsdk:"rule_name"`
 	Order    types.Int64  `tfsdk:"order"`
 	Tag      types.Int64  `tfsdk:"tag"`
+}
+
+type RouteMapRuleEntryMatchTagIdentity struct {
+	Device   types.String `tfsdk:"device"`
+	RuleName types.String `tfsdk:"rule_name"`
+	Order    types.Int64  `tfsdk:"order"`
+	Tag      types.Int64  `tfsdk:"tag"`
+}
+
+func (data *RouteMapRuleEntryMatchTagIdentity) toIdentity(ctx context.Context, plan *RouteMapRuleEntryMatchTag) {
+	data.Device = plan.Device
+	data.RuleName = plan.RuleName
+	data.Order = plan.Order
+	data.Tag = plan.Tag
+}
+
+func (data *RouteMapRuleEntryMatchTag) fromIdentity(ctx context.Context, identity *RouteMapRuleEntryMatchTagIdentity) {
+	data.Device = identity.Device
+	data.RuleName = identity.RuleName
+	data.Order = identity.Order
+	data.Tag = identity.Tag
 }
 
 func (data RouteMapRuleEntryMatchTag) getDn() string {

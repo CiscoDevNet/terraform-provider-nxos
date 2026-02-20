@@ -29,6 +29,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
@@ -41,7 +42,7 @@ import (
 
 // Ensure provider defined types fully satisfy framework interfaces
 var _ resource.Resource = &RouteMapRuleEntryMatchRouteResource{}
-var _ resource.ResourceWithImportState = &RouteMapRuleEntryMatchRouteResource{}
+var _ resource.ResourceWithIdentity = &RouteMapRuleEntryMatchRouteResource{}
 
 func NewRouteMapRuleEntryMatchRouteResource() resource.Resource {
 	return &RouteMapRuleEntryMatchRouteResource{}
@@ -93,6 +94,25 @@ func (r *RouteMapRuleEntryMatchRouteResource) Schema(ctx context.Context, req re
 	}
 }
 
+func (r *RouteMapRuleEntryMatchRouteResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+	resp.IdentitySchema = identityschema.Schema{
+		Attributes: map[string]identityschema.Attribute{
+			"device": identityschema.StringAttribute{
+				Description:       "A device name from the provider configuration.",
+				OptionalForImport: true,
+			},
+			"rule_name": identityschema.StringAttribute{
+				Description:       helpers.NewAttributeDescription("Route Map rule name.").String,
+				RequiredForImport: true,
+			},
+			"order": identityschema.Int64Attribute{
+				Description:       helpers.NewAttributeDescription("Route-Map Rule Entry order.").String,
+				RequiredForImport: true,
+			},
+		},
+	}
+}
+
 func (r *RouteMapRuleEntryMatchRouteResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
@@ -104,6 +124,7 @@ func (r *RouteMapRuleEntryMatchRouteResource) Configure(ctx context.Context, req
 
 func (r *RouteMapRuleEntryMatchRouteResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan RouteMapRuleEntryMatchRoute
+	var identity RouteMapRuleEntryMatchRouteIdentity
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -131,10 +152,13 @@ func (r *RouteMapRuleEntryMatchRouteResource) Create(ctx context.Context, req re
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
+	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
 
 	diags = resp.State.Set(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
@@ -142,6 +166,7 @@ func (r *RouteMapRuleEntryMatchRouteResource) Create(ctx context.Context, req re
 
 func (r *RouteMapRuleEntryMatchRouteResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state RouteMapRuleEntryMatchRoute
+	var identity RouteMapRuleEntryMatchRouteIdentity
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -149,6 +174,14 @@ func (r *RouteMapRuleEntryMatchRouteResource) Read(ctx context.Context, req reso
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	// Read identity
+	diags = req.Identity.Get(ctx, &identity)
+	if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+		return
+	}
+
+	state.fromIdentity(ctx, &identity)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
@@ -173,9 +206,13 @@ func (r *RouteMapRuleEntryMatchRouteResource) Read(ctx context.Context, req reso
 		state.fromBody(res, imp)
 	}
 
+	identity.toIdentity(ctx, &state)
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
@@ -262,22 +299,38 @@ func (r *RouteMapRuleEntryMatchRouteResource) Delete(ctx context.Context, req re
 }
 
 func (r *RouteMapRuleEntryMatchRouteResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	idParts := strings.Split(req.ID, ",")
-	idParts = helpers.RemoveEmptyStrings(idParts)
+	if req.ID != "" {
+		idParts := strings.Split(req.ID, ",")
+		idParts = helpers.RemoveEmptyStrings(idParts)
 
-	if len(idParts) != 2 && len(idParts) != 3 {
-		expectedIdentifier := "Expected import identifier with format: '<rule_name>,<order>'"
-		expectedIdentifier += " or '<rule_name>,<order>,<device>'"
-		resp.Diagnostics.AddError(
-			"Unexpected Import Identifier",
-			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
-		)
-		return
-	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("rule_name"), idParts[0])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("order"), helpers.Must(strconv.ParseInt(idParts[1], 10, 64)))...)
-	if len(idParts) == 3 {
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+		if len(idParts) != 2 && len(idParts) != 3 {
+			expectedIdentifier := "Expected import identifier with format: '<rule_name>,<order>'"
+			expectedIdentifier += " or '<rule_name>,<order>,<device>'"
+			resp.Diagnostics.AddError(
+				"Unexpected Import Identifier",
+				fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
+			)
+			return
+		}
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("rule_name"), idParts[0])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("rule_name"), idParts[0])...)
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("order"), helpers.Must(strconv.ParseInt(idParts[1], 10, 64)))...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("order"), helpers.Must(strconv.ParseInt(idParts[1], 10, 64)))...)
+		if len(idParts) == 3 {
+			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+		}
+	} else {
+		var identity RouteMapRuleEntryMatchRouteIdentity
+		diags := req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("rule_name"), identity.RuleName.ValueString())...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("order"), identity.Order.ValueInt64())...)
+		if !identity.Device.IsNull() && !identity.Device.IsUnknown() {
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), identity.Device.ValueString())...)
+		}
 	}
 
 	var state RouteMapRuleEntryMatchRoute

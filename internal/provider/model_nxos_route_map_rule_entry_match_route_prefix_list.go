@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -34,6 +35,27 @@ type RouteMapRuleEntryMatchRoutePrefixList struct {
 	RuleName     types.String `tfsdk:"rule_name"`
 	Order        types.Int64  `tfsdk:"order"`
 	PrefixListDn types.String `tfsdk:"prefix_list_dn"`
+}
+
+type RouteMapRuleEntryMatchRoutePrefixListIdentity struct {
+	Device       types.String `tfsdk:"device"`
+	RuleName     types.String `tfsdk:"rule_name"`
+	Order        types.Int64  `tfsdk:"order"`
+	PrefixListDn types.String `tfsdk:"prefix_list_dn"`
+}
+
+func (data *RouteMapRuleEntryMatchRoutePrefixListIdentity) toIdentity(ctx context.Context, plan *RouteMapRuleEntryMatchRoutePrefixList) {
+	data.Device = plan.Device
+	data.RuleName = plan.RuleName
+	data.Order = plan.Order
+	data.PrefixListDn = plan.PrefixListDn
+}
+
+func (data *RouteMapRuleEntryMatchRoutePrefixList) fromIdentity(ctx context.Context, identity *RouteMapRuleEntryMatchRoutePrefixListIdentity) {
+	data.Device = identity.Device
+	data.RuleName = identity.RuleName
+	data.Order = identity.Order
+	data.PrefixListDn = identity.PrefixListDn
 }
 
 func (data RouteMapRuleEntryMatchRoutePrefixList) getDn() string {

@@ -18,11 +18,14 @@
 package provider
 
 import (
+	"context"
 	"os"
 	"testing"
 
+	"github.com/hashicorp/go-version"
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
+	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
 // testAccProtoV6ProviderFactories are used to instantiate a provider during
@@ -45,5 +48,28 @@ func testAccPreCheck(t *testing.T) {
 	}
 	if v := os.Getenv("NXOS_URL"); v == "" {
 		t.Fatal("NXOS_URL env variable must be set for acceptance tests")
+	}
+}
+
+// terraformVersionCapture implements tfversion.TerraformVersionCheck to capture
+// the Terraform version detected by the test framework into a local variable.
+// This allows SkipFunc on individual test steps to use the version without
+// shelling out to the Terraform binary again.
+type terraformVersionCapture struct {
+	Version **version.Version
+}
+
+func (c terraformVersionCapture) CheckTerraformVersion(_ context.Context, req tfversion.CheckTerraformVersionRequest, _ *tfversion.CheckTerraformVersionResponse) {
+	*c.Version = req.TerraformVersion
+}
+
+// skipBelowTerraformVersion returns a SkipFunc that skips a test step if the
+// captured Terraform version is below the given minimum.
+func skipBelowTerraformVersion(tfVersion **version.Version, min *version.Version) func() (bool, error) {
+	return func() (bool, error) {
+		if *tfVersion == nil {
+			return true, nil
+		}
+		return (*tfVersion).LessThan(min), nil
 	}
 }

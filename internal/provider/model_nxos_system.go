@@ -20,6 +20,8 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -30,6 +32,18 @@ type System struct {
 	Device types.String `tfsdk:"device"`
 	Dn     types.String `tfsdk:"id"`
 	Name   types.String `tfsdk:"name"`
+}
+
+type SystemIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *SystemIdentity) toIdentity(ctx context.Context, plan *System) {
+	data.Device = plan.Device
+}
+
+func (data *System) fromIdentity(ctx context.Context, identity *SystemIdentity) {
+	data.Device = identity.Device
 }
 
 func (data System) getDn() string {

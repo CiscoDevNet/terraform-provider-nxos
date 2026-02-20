@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -34,6 +35,27 @@ type EVPNVNIRouteTarget struct {
 	Encap       types.String `tfsdk:"encap"`
 	Direction   types.String `tfsdk:"direction"`
 	RouteTarget types.String `tfsdk:"route_target"`
+}
+
+type EVPNVNIRouteTargetIdentity struct {
+	Device      types.String `tfsdk:"device"`
+	Encap       types.String `tfsdk:"encap"`
+	Direction   types.String `tfsdk:"direction"`
+	RouteTarget types.String `tfsdk:"route_target"`
+}
+
+func (data *EVPNVNIRouteTargetIdentity) toIdentity(ctx context.Context, plan *EVPNVNIRouteTarget) {
+	data.Device = plan.Device
+	data.Encap = plan.Encap
+	data.Direction = plan.Direction
+	data.RouteTarget = plan.RouteTarget
+}
+
+func (data *EVPNVNIRouteTarget) fromIdentity(ctx context.Context, identity *EVPNVNIRouteTargetIdentity) {
+	data.Device = identity.Device
+	data.Encap = identity.Encap
+	data.Direction = identity.Direction
+	data.RouteTarget = identity.RouteTarget
 }
 
 func (data EVPNVNIRouteTarget) getDn() string {

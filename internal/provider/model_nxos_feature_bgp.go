@@ -20,6 +20,8 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -30,6 +32,18 @@ type FeatureBGP struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
 	AdminState types.String `tfsdk:"admin_state"`
+}
+
+type FeatureBGPIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *FeatureBGPIdentity) toIdentity(ctx context.Context, plan *FeatureBGP) {
+	data.Device = plan.Device
+}
+
+func (data *FeatureBGP) fromIdentity(ctx context.Context, identity *FeatureBGPIdentity) {
+	data.Device = identity.Device
 }
 
 func (data FeatureBGP) getDn() string {

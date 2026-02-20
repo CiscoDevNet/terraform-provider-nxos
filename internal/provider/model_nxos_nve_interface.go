@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -43,6 +44,18 @@ type NVEInterface struct {
 	SourceInterface               types.String `tfsdk:"source_interface"`
 	SuppressArp                   types.Bool   `tfsdk:"suppress_arp"`
 	SuppressMacRoute              types.Bool   `tfsdk:"suppress_mac_route"`
+}
+
+type NVEInterfaceIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *NVEInterfaceIdentity) toIdentity(ctx context.Context, plan *NVEInterface) {
+	data.Device = plan.Device
+}
+
+func (data *NVEInterface) fromIdentity(ctx context.Context, identity *NVEInterfaceIdentity) {
+	data.Device = identity.Device
 }
 
 func (data NVEInterface) getDn() string {

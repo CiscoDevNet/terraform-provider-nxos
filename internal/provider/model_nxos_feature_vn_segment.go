@@ -20,6 +20,8 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -30,6 +32,18 @@ type FeatureVNSegment struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
 	AdminState types.String `tfsdk:"admin_state"`
+}
+
+type FeatureVNSegmentIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *FeatureVNSegmentIdentity) toIdentity(ctx context.Context, plan *FeatureVNSegment) {
+	data.Device = plan.Device
+}
+
+func (data *FeatureVNSegment) fromIdentity(ctx context.Context, identity *FeatureVNSegmentIdentity) {
+	data.Device = identity.Device
 }
 
 func (data FeatureVNSegment) getDn() string {

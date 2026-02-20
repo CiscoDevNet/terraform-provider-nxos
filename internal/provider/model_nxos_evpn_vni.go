@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -33,6 +34,21 @@ type EVPNVNI struct {
 	Dn                 types.String `tfsdk:"id"`
 	Encap              types.String `tfsdk:"encap"`
 	RouteDistinguisher types.String `tfsdk:"route_distinguisher"`
+}
+
+type EVPNVNIIdentity struct {
+	Device types.String `tfsdk:"device"`
+	Encap  types.String `tfsdk:"encap"`
+}
+
+func (data *EVPNVNIIdentity) toIdentity(ctx context.Context, plan *EVPNVNI) {
+	data.Device = plan.Device
+	data.Encap = plan.Encap
+}
+
+func (data *EVPNVNI) fromIdentity(ctx context.Context, identity *EVPNVNIIdentity) {
+	data.Device = identity.Device
+	data.Encap = identity.Encap
 }
 
 func (data EVPNVNI) getDn() string {

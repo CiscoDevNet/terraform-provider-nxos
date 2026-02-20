@@ -20,6 +20,8 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -30,6 +32,18 @@ type FeatureSSH struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
 	AdminState types.String `tfsdk:"admin_state"`
+}
+
+type FeatureSSHIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *FeatureSSHIdentity) toIdentity(ctx context.Context, plan *FeatureSSH) {
+	data.Device = plan.Device
+}
+
+func (data *FeatureSSH) fromIdentity(ctx context.Context, identity *FeatureSSHIdentity) {
+	data.Device = identity.Device
 }
 
 func (data FeatureSSH) getDn() string {

@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -52,6 +53,18 @@ type VPCDomain struct {
 	SystemPriority             types.Int64  `tfsdk:"system_priority"`
 	Track                      types.Int64  `tfsdk:"track"`
 	VirtualIp                  types.String `tfsdk:"virtual_ip"`
+}
+
+type VPCDomainIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *VPCDomainIdentity) toIdentity(ctx context.Context, plan *VPCDomain) {
+	data.Device = plan.Device
+}
+
+func (data *VPCDomain) fromIdentity(ctx context.Context, identity *VPCDomainIdentity) {
+	data.Device = identity.Device
 }
 
 func (data VPCDomain) getDn() string {

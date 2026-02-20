@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -33,6 +34,18 @@ type Ethernet struct {
 	Dn                 types.String `tfsdk:"id"`
 	Mtu                types.Int64  `tfsdk:"mtu"`
 	DefaultAdminStatus types.String `tfsdk:"default_admin_status"`
+}
+
+type EthernetIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *EthernetIdentity) toIdentity(ctx context.Context, plan *Ethernet) {
+	data.Device = plan.Device
+}
+
+func (data *Ethernet) fromIdentity(ctx context.Context, identity *EthernetIdentity) {
+	data.Device = identity.Device
 }
 
 func (data Ethernet) getDn() string {

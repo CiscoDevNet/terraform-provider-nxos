@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -33,6 +34,24 @@ type RouteMapRuleEntryMatchRoute struct {
 	Dn       types.String `tfsdk:"id"`
 	RuleName types.String `tfsdk:"rule_name"`
 	Order    types.Int64  `tfsdk:"order"`
+}
+
+type RouteMapRuleEntryMatchRouteIdentity struct {
+	Device   types.String `tfsdk:"device"`
+	RuleName types.String `tfsdk:"rule_name"`
+	Order    types.Int64  `tfsdk:"order"`
+}
+
+func (data *RouteMapRuleEntryMatchRouteIdentity) toIdentity(ctx context.Context, plan *RouteMapRuleEntryMatchRoute) {
+	data.Device = plan.Device
+	data.RuleName = plan.RuleName
+	data.Order = plan.Order
+}
+
+func (data *RouteMapRuleEntryMatchRoute) fromIdentity(ctx context.Context, identity *RouteMapRuleEntryMatchRouteIdentity) {
+	data.Device = identity.Device
+	data.RuleName = identity.RuleName
+	data.Order = identity.Order
 }
 
 func (data RouteMapRuleEntryMatchRoute) getDn() string {

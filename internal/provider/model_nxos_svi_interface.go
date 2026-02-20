@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -39,6 +40,21 @@ type SVIInterface struct {
 	Description types.String `tfsdk:"description"`
 	Medium      types.String `tfsdk:"medium"`
 	Mtu         types.Int64  `tfsdk:"mtu"`
+}
+
+type SVIInterfaceIdentity struct {
+	Device      types.String `tfsdk:"device"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+}
+
+func (data *SVIInterfaceIdentity) toIdentity(ctx context.Context, plan *SVIInterface) {
+	data.Device = plan.Device
+	data.InterfaceId = plan.InterfaceId
+}
+
+func (data *SVIInterface) fromIdentity(ctx context.Context, identity *SVIInterfaceIdentity) {
+	data.Device = identity.Device
+	data.InterfaceId = identity.InterfaceId
 }
 
 func (data SVIInterface) getDn() string {

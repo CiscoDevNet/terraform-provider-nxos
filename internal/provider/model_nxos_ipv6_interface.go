@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -41,6 +42,24 @@ type IPv6Interface struct {
 	UseLinkLocalAddress types.String `tfsdk:"use_link_local_address"`
 	Urpf                types.String `tfsdk:"urpf"`
 	LinkLocalAddress    types.String `tfsdk:"link_local_address"`
+}
+
+type IPv6InterfaceIdentity struct {
+	Device      types.String `tfsdk:"device"`
+	Vrf         types.String `tfsdk:"vrf"`
+	InterfaceId types.String `tfsdk:"interface_id"`
+}
+
+func (data *IPv6InterfaceIdentity) toIdentity(ctx context.Context, plan *IPv6Interface) {
+	data.Device = plan.Device
+	data.Vrf = plan.Vrf
+	data.InterfaceId = plan.InterfaceId
+}
+
+func (data *IPv6Interface) fromIdentity(ctx context.Context, identity *IPv6InterfaceIdentity) {
+	data.Device = identity.Device
+	data.Vrf = identity.Vrf
+	data.InterfaceId = identity.InterfaceId
 }
 
 func (data IPv6Interface) getDn() string {

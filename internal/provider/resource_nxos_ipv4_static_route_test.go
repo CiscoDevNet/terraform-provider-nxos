@@ -23,14 +23,20 @@ import (
 	"fmt"
 	"testing"
 
+	goversion "github.com/hashicorp/go-version"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
+	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
 func TestAccNxosIPv4StaticRoute(t *testing.T) {
+	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
+			terraformVersionCapture{Version: &tfVersion},
+		},
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosIPv4StaticRoutePrerequisitesConfig + testAccNxosIPv4StaticRouteConfig_all(),
@@ -50,6 +56,12 @@ func TestAccNxosIPv4StaticRoute(t *testing.T) {
 				ResourceName:      "nxos_ipv4_static_route.test",
 				ImportState:       true,
 				ImportStateIdFunc: nxosIPv4StaticRouteImportStateIdFunc("nxos_ipv4_static_route.test"),
+			},
+			{
+				ResourceName:    "nxos_ipv4_static_route.test",
+				ImportState:     true,
+				ImportStateKind: resource.ImportBlockWithResourceIdentity,
+				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

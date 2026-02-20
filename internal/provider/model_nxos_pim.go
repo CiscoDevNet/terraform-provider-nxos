@@ -20,6 +20,8 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -30,6 +32,18 @@ type PIM struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
 	AdminState types.String `tfsdk:"admin_state"`
+}
+
+type PIMIdentity struct {
+	Device types.String `tfsdk:"device"`
+}
+
+func (data *PIMIdentity) toIdentity(ctx context.Context, plan *PIM) {
+	data.Device = plan.Device
+}
+
+func (data *PIM) fromIdentity(ctx context.Context, identity *PIMIdentity) {
+	data.Device = identity.Device
 }
 
 func (data PIM) getDn() string {

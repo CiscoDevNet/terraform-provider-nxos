@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -49,6 +50,24 @@ type ISISVRF struct {
 	Mtu                   types.Int64  `tfsdk:"mtu"`
 	Net                   types.String `tfsdk:"net"`
 	PassiveDefault        types.String `tfsdk:"passive_default"`
+}
+
+type ISISVRFIdentity struct {
+	Device       types.String `tfsdk:"device"`
+	InstanceName types.String `tfsdk:"instance_name"`
+	Name         types.String `tfsdk:"name"`
+}
+
+func (data *ISISVRFIdentity) toIdentity(ctx context.Context, plan *ISISVRF) {
+	data.Device = plan.Device
+	data.InstanceName = plan.InstanceName
+	data.Name = plan.Name
+}
+
+func (data *ISISVRF) fromIdentity(ctx context.Context, identity *ISISVRFIdentity) {
+	data.Device = identity.Device
+	data.InstanceName = identity.InstanceName
+	data.Name = identity.Name
 }
 
 func (data ISISVRF) getDn() string {

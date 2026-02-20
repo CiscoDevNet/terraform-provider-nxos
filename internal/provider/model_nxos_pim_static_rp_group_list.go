@@ -20,6 +20,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -38,6 +39,27 @@ type PIMStaticRPGroupList struct {
 	Address   types.String `tfsdk:"address"`
 	Bidir     types.Bool   `tfsdk:"bidir"`
 	Override  types.Bool   `tfsdk:"override"`
+}
+
+type PIMStaticRPGroupListIdentity struct {
+	Device    types.String `tfsdk:"device"`
+	VrfName   types.String `tfsdk:"vrf_name"`
+	RpAddress types.String `tfsdk:"rp_address"`
+	Address   types.String `tfsdk:"address"`
+}
+
+func (data *PIMStaticRPGroupListIdentity) toIdentity(ctx context.Context, plan *PIMStaticRPGroupList) {
+	data.Device = plan.Device
+	data.VrfName = plan.VrfName
+	data.RpAddress = plan.RpAddress
+	data.Address = plan.Address
+}
+
+func (data *PIMStaticRPGroupList) fromIdentity(ctx context.Context, identity *PIMStaticRPGroupListIdentity) {
+	data.Device = identity.Device
+	data.VrfName = identity.VrfName
+	data.RpAddress = identity.RpAddress
+	data.Address = identity.Address
 }
 
 func (data PIMStaticRPGroupList) getDn() string {

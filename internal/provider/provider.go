@@ -331,7 +331,6 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 	return []func() resource.Resource{
 		NewRestResource,
 		NewSaveConfigResource,
-		NewBannerResource,
 		NewBGPResource,
 		NewBGPAddressFamilyResource,
 		NewBGPAdvertisedPrefixResource,
@@ -477,8 +476,6 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewSVIInterfaceResource,
 		NewSVIInterfaceVRFResource,
 		NewSystemResource,
-		NewTacacsResource,
-		NewTacacsProviderGroupResource,
 		NewUserResource,
 		NewVPCDomainResource,
 		NewVPCInstanceResource,
@@ -497,7 +494,6 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		NewRestDataSource,
-		NewBannerDataSource,
 		NewBGPDataSource,
 		NewBGPAddressFamilyDataSource,
 		NewBGPAdvertisedPrefixDataSource,
@@ -643,8 +639,6 @@ func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.Data
 		NewSVIInterfaceDataSource,
 		NewSVIInterfaceVRFDataSource,
 		NewSystemDataSource,
-		NewTacacsDataSource,
-		NewTacacsProviderGroupDataSource,
 		NewUserDataSource,
 		NewVPCDomainDataSource,
 		NewVPCInstanceDataSource,

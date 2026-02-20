@@ -311,6 +311,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 			},
 			{{- end}}
 			{{- end}}
+			{{- end}}
 			{{- /* Handle nested child classes within hidden parents */ -}}
 			{{- $hasHiddenNestedChildren := false -}}
 			{{- range .ChildClasses}}{{- if and .HideInResource .ChildClasses}}{{- $hasHiddenNestedChildren = true}}{{- end}}{{- end -}}

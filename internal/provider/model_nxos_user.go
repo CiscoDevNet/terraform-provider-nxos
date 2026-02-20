@@ -74,7 +74,7 @@ func (data User) toBody(statusReplace bool) nxos.Body {
 	var attrs string
 	// Create child with attributes and nested children in one unified object
 	childIndex := len(gjson.Get(body, data.getClassName()+".children").Array())
-	attrs = ""
+	attrs = "{}"
 	attrs, _ = sjson.Set(attrs, "name", "all")
 	body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".aaaUserDomain.attributes", attrs)
 	for _, nestedChild := range data.Roles {

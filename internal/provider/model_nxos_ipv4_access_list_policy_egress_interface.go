@@ -55,7 +55,7 @@ func (data IPv4AccessListPolicyEgressInterface) toBody(statusReplace bool) nxos.
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.InterfaceId.ValueString())
 	}
 	var attrs string
-	attrs = "{}"
+	attrs = ""
 	if (!data.AccessListName.IsUnknown() && !data.AccessListName.IsNull()) || true {
 		attrs, _ = sjson.Set(attrs, "name", data.AccessListName.ValueString())
 	}

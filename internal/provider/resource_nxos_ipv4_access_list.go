@@ -83,7 +83,7 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 			},
 			"entries": schema.ListNestedAttribute{
 				MarkdownDescription: "Access list entries.",
-				Optional:            true,
+				Required:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"sequence": schema.Int64Attribute{

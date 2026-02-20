@@ -90,7 +90,7 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 			},
 			"facilities": schema.ListNestedAttribute{
 				MarkdownDescription: "List of logging facilities.",
-				Optional:            true,
+				Required:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{

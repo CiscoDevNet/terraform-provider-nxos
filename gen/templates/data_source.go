@@ -154,9 +154,7 @@ func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource
 
 	queries := []func(*nxos.Req){}
 	{{- if .ChildClasses}}
-	{{- $hasNestedChildren := false}}
-	{{- range .ChildClasses}}{{- if .ChildClasses}}{{$hasNestedChildren = true}}{{end}}{{end}}
-	{{- if $hasNestedChildren}}
+	{{- if hasNestedChildren .ChildClasses}}
 	queries = append(queries, nxos.Query("rsp-subtree", "full"))
 	{{- else}}
 	queries = append(queries, nxos.Query("rsp-subtree", "children"))

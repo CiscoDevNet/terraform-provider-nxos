@@ -276,6 +276,16 @@ func ChildDocPaths(children []YamlConfigChildClass) []string {
 	return paths
 }
 
+// Templating helper function to check if any child class has nested children
+func HasNestedChildren(children []YamlConfigChildClass) bool {
+	for _, c := range children {
+		if len(c.ChildClasses) > 0 {
+			return true
+		}
+	}
+	return false
+}
+
 // Map of templating functions
 var functions = template.FuncMap{
 	"toGoName":           ToGoName,
@@ -289,6 +299,7 @@ var functions = template.FuncMap{
 	"add":                Add,
 	"childDocClassNames": ChildDocClassNames,
 	"childDocPaths":      ChildDocPaths,
+	"hasNestedChildren":  HasNestedChildren,
 }
 
 func renderTemplate(templatePath, outputPath string, config interface{}) {

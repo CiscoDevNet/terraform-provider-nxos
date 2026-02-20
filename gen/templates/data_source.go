@@ -80,6 +80,22 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 				{{- end}}
 			},
 			{{- end}}
+			{{- define "dsListNestedChildClassSchema" -}}
+			"{{.TfName}}": schema.ListNestedAttribute{
+				MarkdownDescription: "{{.Description}}",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						{{- range  .Attributes}}
+						"{{.TfName}}": schema.{{.Type}}Attribute{
+							MarkdownDescription: "{{.Description}}",
+							Computed:            true,
+						},
+						{{- end}}
+					},
+				},
+			},
+			{{- end}}
 			{{- range .ChildClasses}}
 			{{- if and (not .HideTf) (eq .Type "single")}}
 			{{- range .Attributes}}
@@ -93,47 +109,16 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 			},
 			{{- end}}
 			{{- range .ChildClasses}}
+			{{- if eq .Type "list"}}
+			{{template "dsListNestedChildClassSchema" .}}
+			{{- end}}
 			{{- end}}
 			{{- else if and (not .HideTf) (eq .Type "list")}}
-			"{{.TfName}}": schema.ListNestedAttribute{
-				MarkdownDescription: "{{.Description}}",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						{{- range  .Attributes}}
-						"{{.TfName}}": schema.{{.Type}}Attribute{
-							MarkdownDescription: "{{.Description}}",
-							Computed:            true,
-						},
-						{{- end}}
-					},
-				},
-			},
-			{{- end}}
-			{{- end}}
-			{{- /* Handle nested child classes within hidden parents */ -}}
-			{{- $hasHiddenNestedChildren := false -}}
-			{{- range .ChildClasses}}{{- if and .HideTf .ChildClasses}}{{- $hasHiddenNestedChildren = true}}{{- end}}{{- end -}}
-			{{- if $hasHiddenNestedChildren}}
-			{{- range .ChildClasses}}
-			{{- if .HideTf}}
+			{{template "dsListNestedChildClassSchema" .}}
+			{{- else if .HideTf}}
 			{{- range .ChildClasses}}
 			{{- if eq .Type "list"}}
-			"{{.TfName}}": schema.ListNestedAttribute{
-				MarkdownDescription: "{{.Description}}",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						{{- range  .Attributes}}
-						"{{.TfName}}": schema.{{.Type}}Attribute{
-							MarkdownDescription: "{{.Description}}",
-							Computed:            true,
-						},
-						{{- end}}
-					},
-				},
-			},
-			{{- end}}
+			{{template "dsListNestedChildClassSchema" .}}
 			{{- end}}
 			{{- end}}
 			{{- end}}

@@ -137,10 +137,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				{{- end}}
 			},
 			{{- end}}
-			{{- range .ChildClasses}}
-			{{- if len .Attributes}}
-			{{- if and (not .HideTf) (eq .Type "single")}}
-			{{- range  .Attributes}}
+			{{- define "childClassAttrSchema" -}}
 			"{{.TfName}}": schema.{{.Type}}Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
 					{{- if len .EnumValues -}}
@@ -186,8 +183,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				{{- end}}
 			},
 			{{- end}}
-			{{- range .ChildClasses}}
-			{{- if eq .Type "list"}}
+			{{- define "listNestedChildClassSchema" -}}
 			"{{.TfName}}": schema.ListNestedAttribute{
 				MarkdownDescription: "{{.Description}}",
 				{{- if .Mandatory}}
@@ -198,184 +194,29 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						{{- range  .Attributes}}
-						"{{.TfName}}": schema.{{.Type}}Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
-								{{- if len .EnumValues -}}
-								.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
-								{{- end -}}
-								{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}
-								.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
-								{{- end -}}
-								{{- if len .DefaultValue -}}
-								.AddDefaultValueDescription("{{.DefaultValue}}")
-								{{- end -}}
-								.String,
-							{{- if or .Id .Mandatory}}
-							Required:            true,
-							{{- else}}
-							Optional:            true,
-							{{- if len .DefaultValue}}
-							Computed:            true,
-							{{- end}}
-							{{- end}}
-							{{- if and (len .DefaultValue) (not .Id) (not .Mandatory)}}
-							{{- if eq .Type "Int64"}}
-							Default: int64default.StaticInt64({{.DefaultValue}}),
-							{{- else if eq .Type "Bool"}}
-							Default: booldefault.StaticBool({{.DefaultValue}}),
-							{{- else if eq .Type "String"}}
-							Default: stringdefault.StaticString("{{.DefaultValue}}"),
-							{{- end}}
-							{{- end}}
-							{{- if and (len .EnumValues) (not .AllowNonEnumValues) }}
-							Validators: []validator.String{
-								stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
-							},
-							{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
-							Validators: []validator.Int64{
-								int64validator.Between({{.MinInt}}, {{.MaxInt}}),
-							},
-							{{- end}}
-							{{- if or .Id .RequiresReplace}}
-							PlanModifiers: []planmodifier.{{.Type}}{
-								{{snakeCase .Type}}planmodifier.RequiresReplace(),
-							},
-							{{- end}}
-						},
+						{{template "childClassAttrSchema" .}}
 						{{- end}}
 					},
 				},
 			},
+			{{- end}}
+			{{- range .ChildClasses}}
+			{{- if len .Attributes}}
+			{{- if and (not .HideTf) (eq .Type "single")}}
+			{{- range  .Attributes}}
+			{{template "childClassAttrSchema" .}}
+			{{- end}}
+			{{- range .ChildClasses}}
+			{{- if eq .Type "list"}}
+			{{template "listNestedChildClassSchema" .}}
 			{{- end}}
 			{{- end}}
 			{{- else if and (not .HideTf) (eq .Type "list")}}
-			"{{.TfName}}": schema.ListNestedAttribute{
-				MarkdownDescription: "{{.Description}}",
-				{{- if .Mandatory}}
-				Required:            true,
-				{{- else}}
-				Optional:            true,
-				{{- end}}
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						{{- range  .Attributes}}
-						"{{.TfName}}": schema.{{.Type}}Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
-								{{- if len .EnumValues -}}
-								.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
-								{{- end -}}
-								{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}
-								.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
-								{{- end -}}
-								{{- if len .DefaultValue -}}
-								.AddDefaultValueDescription("{{.DefaultValue}}")
-								{{- end -}}
-								.String,
-							{{- if or .Id .Mandatory}}
-							Required:            true,
-							{{- else}}
-							Optional:            true,
-							{{- if len .DefaultValue}}
-							Computed:            true,
-							{{- end}}
-							{{- end}}
-							{{- if and (len .DefaultValue) (not .Id) (not .Mandatory)}}
-							{{- if eq .Type "Int64"}}
-							Default: int64default.StaticInt64({{.DefaultValue}}),
-							{{- else if eq .Type "Bool"}}
-							Default: booldefault.StaticBool({{.DefaultValue}}),
-							{{- else if eq .Type "String"}}
-							Default: stringdefault.StaticString("{{.DefaultValue}}"),
-							{{- end}}
-							{{- end}}
-							{{- if and (len .EnumValues) (not .AllowNonEnumValues) }}
-							Validators: []validator.String{
-								stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
-							},
-							{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
-							Validators: []validator.Int64{
-								int64validator.Between({{.MinInt}}, {{.MaxInt}}),
-							},
-							{{- end}}
-							{{- if or .Id .RequiresReplace}}
-							PlanModifiers: []planmodifier.{{.Type}}{
-								{{snakeCase .Type}}planmodifier.RequiresReplace(),
-							},
-							{{- end}}
-						},
-						{{- end}}
-					},
-				},
-			},
-			{{- end}}
-			{{- end}}
-			{{- end}}
-			{{- /* Handle nested child classes within hidden parents */ -}}
-			{{- $hasHiddenNestedChildren := false -}}
-			{{- range .ChildClasses}}{{- if and .HideTf .ChildClasses}}{{- $hasHiddenNestedChildren = true}}{{- end}}{{- end -}}
-			{{- if $hasHiddenNestedChildren}}
-			{{- range .ChildClasses}}
-			{{- if .HideTf}}
+			{{template "listNestedChildClassSchema" .}}
+			{{- else if .HideTf}}
 			{{- range .ChildClasses}}
 			{{- if eq .Type "list"}}
-			"{{.TfName}}": schema.ListNestedAttribute{
-				MarkdownDescription: "{{.Description}}",
-				{{- if .Mandatory}}
-				Required:            true,
-				{{- else}}
-				Optional:            true,
-				{{- end}}
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						{{- range  .Attributes}}
-						"{{.TfName}}": schema.{{.Type}}Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
-								{{- if len .EnumValues -}}
-								.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
-								{{- end -}}
-								{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}
-								.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
-								{{- end -}}
-								{{- if len .DefaultValue -}}
-								.AddDefaultValueDescription("{{.DefaultValue}}")
-								{{- end -}}
-								.String,
-							{{- if or .Id .Mandatory}}
-							Required:            true,
-							{{- else}}
-							Optional:            true,
-							{{- if len .DefaultValue}}
-							Computed:            true,
-							{{- end}}
-							{{- end}}
-							{{- if and (len .DefaultValue) (not .Id) (not .Mandatory)}}
-							{{- if eq .Type "Int64"}}
-							Default: int64default.StaticInt64({{.DefaultValue}}),
-							{{- else if eq .Type "Bool"}}
-							Default: booldefault.StaticBool({{.DefaultValue}}),
-							{{- else if eq .Type "String"}}
-							Default: stringdefault.StaticString("{{.DefaultValue}}"),
-							{{- end}}
-							{{- end}}
-							{{- if and (len .EnumValues) (not .AllowNonEnumValues) }}
-							Validators: []validator.String{
-								stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
-							},
-							{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
-							Validators: []validator.Int64{
-								int64validator.Between({{.MinInt}}, {{.MaxInt}}),
-							},
-							{{- end}}
-							{{- if or .Id .RequiresReplace}}
-							PlanModifiers: []planmodifier.{{.Type}}{
-								{{snakeCase .Type}}planmodifier.RequiresReplace(),
-							},
-							{{- end}}
-						},
-						{{- end}}
-					},
-				},
-			},
+			{{template "listNestedChildClassSchema" .}}
 			{{- end}}
 			{{- end}}
 			{{- end}}

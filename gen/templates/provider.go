@@ -27,6 +27,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/hashicorp/terraform-plugin-framework/action"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
@@ -44,6 +45,8 @@ type NxosProvider struct {
 	// testing.
 	version string
 }
+
+var _ provider.ProviderWithActions = &NxosProvider{}
 
 // NxosProviderModel describes the provider data model.
 type NxosProviderModel struct {
@@ -344,6 +347,12 @@ func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.Data
 		{{- range .}}
 		New{{camelCase .Name}}DataSource,
 		{{- end}}
+	}
+}
+
+func (p *NxosProvider) Actions(_ context.Context) []func() action.Action {
+	return []func() action.Action{
+		NewSaveConfigAction,
 	}
 }
 

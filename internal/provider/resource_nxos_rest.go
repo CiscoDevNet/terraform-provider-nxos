@@ -22,8 +22,10 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
@@ -35,7 +37,7 @@ import (
 
 // Ensure provider defined types fully satisfy framework interfaces
 var _ resource.Resource = &RestResource{}
-var _ resource.ResourceWithImportState = &RestResource{}
+var _ resource.ResourceWithIdentity = &RestResource{}
 
 func NewRestResource() resource.Resource {
 	return &RestResource{}
@@ -116,6 +118,25 @@ func (r *RestResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 	}
 }
 
+func (r *RestResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+	resp.IdentitySchema = identityschema.Schema{
+		Attributes: map[string]identityschema.Attribute{
+			"dn": identityschema.StringAttribute{
+				Description:       "Distinguished name of object being managed including its relative name, e.g. sys/intf/phys-[eth1/1].",
+				RequiredForImport: true,
+			},
+			"class_name": identityschema.StringAttribute{
+				Description:       "Which class object is being created.",
+				RequiredForImport: true,
+			},
+			"device": identityschema.StringAttribute{
+				Description:       "A device name from the provider configuration.",
+				OptionalForImport: true,
+			},
+		},
+	}
+}
+
 func (r *RestResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
@@ -153,11 +174,17 @@ func (r *RestResource) Create(ctx context.Context, req resource.CreateRequest, r
 	}
 
 	plan.Id = plan.Dn
+	var identity RestIdentity
+	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
+	resp.Diagnostics.Append(diags...)
+
+	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
 func (r *RestResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
@@ -168,6 +195,16 @@ func (r *RestResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
+	}
+
+	// Read identity if available (requires Terraform >= 1.12.0)
+	if req.Identity != nil && !req.Identity.Raw.IsNull() {
+		var identity RestIdentity
+		diags = req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromIdentity(ctx, &identity)
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
@@ -189,13 +226,24 @@ func (r *RestResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 			return
 		}
 
-		state.fromBody(ctx, res)
+		imp, diags := helpers.IsFlagImporting(ctx, req)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		state.fromBody(ctx, res, imp)
 	}
+
+	var identity RestIdentity
+	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
+	diags = resp.Identity.Set(ctx, &identity)
+	resp.Diagnostics.Append(diags...)
+
+	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
 func (r *RestResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
@@ -228,6 +276,10 @@ func (r *RestResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
+	var identity RestIdentity
+	identity.toIdentity(ctx, &plan)
+	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 }
 
@@ -269,21 +321,53 @@ func (r *RestResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 }
 
 func (r *RestResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	idParts := strings.Split(req.ID, ":")
+	if req.ID != "" || req.Identity == nil || req.Identity.Raw.IsNull() {
+		idParts := strings.Split(req.ID, ",")
+		idParts = helpers.RemoveEmptyStrings(idParts)
 
-	if len(idParts) != 2 || idParts[0] == "" || idParts[1] == "" {
-		resp.Diagnostics.AddError(
-			"Unexpected Import Identifier",
-			fmt.Sprintf("Unexpected format of ID (%s), expected class_name:dn", req.ID),
-		)
-		return
+		if len(idParts) != 2 && len(idParts) != 3 {
+			expectedIdentifier := "Expected import identifier with format: '<dn>,<class_name>'"
+			expectedIdentifier += " or '<dn>,<class_name>,<device>'"
+			resp.Diagnostics.AddError(
+				"Unexpected Import Identifier",
+				fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
+			)
+			return
+		}
+
+		tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Import", idParts[0]))
+
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("dn"), idParts[0])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("class_name"), idParts[1])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), idParts[0])...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("delete"), true)...)
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("dn"), idParts[0])...)
+		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("class_name"), idParts[1])...)
+		if len(idParts) == 3 {
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[2])...)
+			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[2])...)
+		}
+
+		tflog.Debug(ctx, fmt.Sprintf("%s: Import finished successfully", idParts[0]))
+	} else {
+		var identity RestIdentity
+		diags := req.Identity.Get(ctx, &identity)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+
+		tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Import", identity.Dn.ValueString()))
+
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("dn"), identity.Dn.ValueString())...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("class_name"), identity.ClassName.ValueString())...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), identity.Dn.ValueString())...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("delete"), true)...)
+		if !identity.Device.IsNull() && !identity.Device.IsUnknown() && identity.Device.ValueString() != "" {
+			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), identity.Device.ValueString())...)
+		}
+
+		tflog.Debug(ctx, fmt.Sprintf("%s: Import finished successfully", identity.Dn.ValueString()))
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Import", idParts[1]))
-
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("dn"), idParts[1])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("class_name"), idParts[0])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), idParts[1])...)
-
-	tflog.Debug(ctx, fmt.Sprintf("%s: Import finished successfully", idParts[1]))
+	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)
 }

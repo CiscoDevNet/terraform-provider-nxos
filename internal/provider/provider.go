@@ -27,6 +27,7 @@ import (
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework/action"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
@@ -43,6 +44,8 @@ type NxosProvider struct {
 	// testing.
 	version string
 }
+
+var _ provider.ProviderWithActions = &NxosProvider{}
 
 // NxosProviderModel describes the provider data model.
 type NxosProviderModel struct {
@@ -651,6 +654,12 @@ func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.Data
 		NewVRFRouteTargetAddressFamilyDataSource,
 		NewVRFRouteTargetDirectionDataSource,
 		NewVRFRoutingDataSource,
+	}
+}
+
+func (p *NxosProvider) Actions(_ context.Context) []func() action.Action {
+	return []func() action.Action{
+		NewSaveConfigAction,
 	}
 }
 

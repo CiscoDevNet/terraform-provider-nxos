@@ -20,7 +20,6 @@
 package main
 
 import (
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -38,7 +37,7 @@ type YamlConfig struct {
 	DocCategory string `yaml:"doc_category"`
 }
 
-var docPaths = []string{"./docs/data-sources/", "./docs/resources/"}
+var docPaths = []string{"./docs/data-sources/", "./docs/resources/", "./docs/actions/"}
 
 var extraDocs = map[string]string{
 	"rest":        "General",
@@ -57,7 +56,7 @@ func SnakeCase(s string) string {
 }
 
 func main() {
-	items, _ := ioutil.ReadDir(definitionsPath)
+	items, _ := os.ReadDir(definitionsPath)
 	configs := make([]YamlConfig, len(items))
 
 	// Load configs
@@ -80,13 +79,13 @@ func main() {
 			filename := path + SnakeCase(configs[i].Name) + ".md"
 			content, err := os.ReadFile(filename)
 			if err != nil {
-				log.Fatalf("Error opening documentation: %v", err)
+				continue
 			}
 
 			s := string(content)
 			s = strings.ReplaceAll(s, `subcategory: ""`, `subcategory: "`+configs[i].DocCategory+`"`)
 
-			ioutil.WriteFile(filename, []byte(s), 0644)
+			os.WriteFile(filename, []byte(s), 0644)
 		}
 	}
 

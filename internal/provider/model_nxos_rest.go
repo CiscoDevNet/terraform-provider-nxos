@@ -21,6 +21,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -41,6 +42,32 @@ type RestModelChild struct {
 	Rn        types.String `tfsdk:"rn"`
 	ClassName types.String `tfsdk:"class_name"`
 	Content   types.Map    `tfsdk:"content"`
+}
+
+type RestIdentity struct {
+	Device    types.String `tfsdk:"device"`
+	Dn        types.String `tfsdk:"dn"`
+	ClassName types.String `tfsdk:"class_name"`
+}
+
+func (data *RestIdentity) toIdentity(ctx context.Context, plan *RestModel) {
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
+	data.Dn = plan.Dn
+	data.ClassName = plan.ClassName
+}
+
+func (data *RestModel) fromIdentity(ctx context.Context, identity *RestIdentity) {
+	if identity.Device.ValueString() == "" {
+		data.Device = types.StringNull()
+	} else {
+		data.Device = identity.Device
+	}
+	data.Dn = identity.Dn
+	data.ClassName = identity.ClassName
 }
 
 type RestDataSourceModel struct {
@@ -77,22 +104,34 @@ func (data RestModel) toBody(ctx context.Context) nxos.Body {
 	return body
 }
 
-func (data *RestModel) fromBody(ctx context.Context, res gjson.Result) {
+func (data *RestModel) fromBody(ctx context.Context, res gjson.Result, all bool) {
 	if !res.Exists() {
 		data.Id = types.StringNull()
 		return
 	}
 
-	content := data.Content.Elements()
-	for attr := range content {
-		value := res.Get(data.ClassName.ValueString() + ".attributes." + attr)
-		content[attr] = types.StringValue(value.String())
-	}
-
-	if len(content) > 0 {
-		data.Content = types.MapValueMust(types.StringType, content)
+	if all {
+		content := make(map[string]attr.Value)
+		for a, value := range res.Get(data.ClassName.ValueString() + ".attributes").Map() {
+			content[a] = types.StringValue(value.String())
+		}
+		if len(content) > 0 {
+			data.Content = types.MapValueMust(types.StringType, content)
+		} else {
+			data.Content = types.MapNull(types.StringType)
+		}
 	} else {
-		data.Content = types.MapNull(types.StringType)
+		content := data.Content.Elements()
+		for a := range content {
+			value := res.Get(data.ClassName.ValueString() + ".attributes." + a)
+			content[a] = types.StringValue(value.String())
+		}
+
+		if len(content) > 0 {
+			data.Content = types.MapValueMust(types.StringType, content)
+		} else {
+			data.Content = types.MapNull(types.StringType)
+		}
 	}
 
 	for c := range data.Children {
@@ -114,7 +153,7 @@ func (data *RestModel) fromBody(ctx context.Context, res gjson.Result) {
 			childContent[attr] = types.StringValue(value.String())
 		}
 
-		if len(content) > 0 {
+		if len(childContent) > 0 {
 			data.Children[c].Content = types.MapValueMust(types.StringType, childContent)
 		} else {
 			data.Children[c].Content = types.MapNull(types.StringType)

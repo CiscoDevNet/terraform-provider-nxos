@@ -21,13 +21,19 @@ import (
 	"fmt"
 	"testing"
 
+	goversion "github.com/hashicorp/go-version"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
 func TestAccNxosRest(t *testing.T) {
+	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
+			terraformVersionCapture{Version: &tfVersion},
+		},
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosRestConfig_empty(),
@@ -55,7 +61,14 @@ func TestAccNxosRest(t *testing.T) {
 			{
 				ResourceName:  "nxos_rest.l1PhysIf",
 				ImportState:   true,
-				ImportStateId: "l1PhysIf:sys/intf/phys-[eth1/1]",
+				ImportStateId: "sys/intf/phys-[eth1/1],l1PhysIf",
+			},
+			{
+				ResourceName:       "nxos_rest.l1PhysIf",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 			{
 				Config: testAccNxosRestConfig_interface("Updated description"),

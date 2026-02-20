@@ -1,7 +1,9 @@
 ## Unreleased
 
 - BREAKING CHANGE: Resource imports now use comma-separated attribute values instead of full DN strings (e.g., `terraform import nxos_bgp_peer.example "<asn>,<vrf>,<address>"` instead of `terraform import nxos_bgp_peer.example "sys/bgp/inst/dom-[default]/peer-[192.168.0.1]"`)
+- BREAKING CHANGE: `nxos_rest` import ID format changed from `<class_name>:<dn>` to `<dn>,<class_name>` (with optional `,<device>` suffix)
 - Add identity-based import support for all resources
+- Add `nxos_save_config` action
 
 ## 0.6.0
 

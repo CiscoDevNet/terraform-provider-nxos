@@ -43,7 +43,11 @@ type QueuingQOSPolicyMapMatchClassMapIdentity struct {
 }
 
 func (data *QueuingQOSPolicyMapMatchClassMapIdentity) toIdentity(ctx context.Context, plan *QueuingQOSPolicyMapMatchClassMap) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.PolicyMapName = plan.PolicyMapName
 	data.Name = plan.Name
 }

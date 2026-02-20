@@ -49,7 +49,11 @@ type BGPAdvertisedPrefixIdentity struct {
 }
 
 func (data *BGPAdvertisedPrefixIdentity) toIdentity(ctx context.Context, plan *BGPAdvertisedPrefix) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.Asn = plan.Asn
 	data.Vrf = plan.Vrf
 	data.AddressFamily = plan.AddressFamily

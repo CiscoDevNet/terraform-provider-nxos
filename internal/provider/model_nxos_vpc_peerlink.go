@@ -39,7 +39,11 @@ type VPCPeerlinkIdentity struct {
 }
 
 func (data *VPCPeerlinkIdentity) toIdentity(ctx context.Context, plan *VPCPeerlink) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *VPCPeerlink) fromIdentity(ctx context.Context, identity *VPCPeerlinkIdentity) {

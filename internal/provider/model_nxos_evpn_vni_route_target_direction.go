@@ -43,7 +43,11 @@ type EVPNVNIRouteTargetDirectionIdentity struct {
 }
 
 func (data *EVPNVNIRouteTargetDirectionIdentity) toIdentity(ctx context.Context, plan *EVPNVNIRouteTargetDirection) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.Encap = plan.Encap
 	data.Direction = plan.Direction
 }

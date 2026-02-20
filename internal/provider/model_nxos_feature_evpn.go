@@ -39,7 +39,11 @@ type FeatureEVPNIdentity struct {
 }
 
 func (data *FeatureEVPNIdentity) toIdentity(ctx context.Context, plan *FeatureEVPN) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *FeatureEVPN) fromIdentity(ctx context.Context, identity *FeatureEVPNIdentity) {

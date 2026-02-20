@@ -39,7 +39,11 @@ type FeatureNetflowIdentity struct {
 }
 
 func (data *FeatureNetflowIdentity) toIdentity(ctx context.Context, plan *FeatureNetflow) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *FeatureNetflow) fromIdentity(ctx context.Context, identity *FeatureNetflowIdentity) {

@@ -46,7 +46,11 @@ type PortChannelInterfaceMemberIdentity struct {
 }
 
 func (data *PortChannelInterfaceMemberIdentity) toIdentity(ctx context.Context, plan *PortChannelInterfaceMember) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.InterfaceId = plan.InterfaceId
 	data.InterfaceDn = plan.InterfaceDn
 }

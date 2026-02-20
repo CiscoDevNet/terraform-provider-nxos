@@ -39,7 +39,11 @@ type VPCInstanceIdentity struct {
 }
 
 func (data *VPCInstanceIdentity) toIdentity(ctx context.Context, plan *VPCInstance) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *VPCInstance) fromIdentity(ctx context.Context, identity *VPCInstanceIdentity) {

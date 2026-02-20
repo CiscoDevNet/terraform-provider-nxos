@@ -43,7 +43,11 @@ type DefaultQOSClassMapDSCPIdentity struct {
 }
 
 func (data *DefaultQOSClassMapDSCPIdentity) toIdentity(ctx context.Context, plan *DefaultQOSClassMapDSCP) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.ClassMapName = plan.ClassMapName
 	data.Value = plan.Value
 }

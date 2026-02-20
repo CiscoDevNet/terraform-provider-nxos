@@ -49,7 +49,11 @@ type OSPFAreaIdentity struct {
 }
 
 func (data *OSPFAreaIdentity) toIdentity(ctx context.Context, plan *OSPFArea) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.InstanceName = plan.InstanceName
 	data.VrfName = plan.VrfName
 	data.AreaId = plan.AreaId

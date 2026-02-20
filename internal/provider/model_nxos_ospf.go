@@ -39,7 +39,11 @@ type OSPFIdentity struct {
 }
 
 func (data *OSPFIdentity) toIdentity(ctx context.Context, plan *OSPF) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *OSPF) fromIdentity(ctx context.Context, identity *OSPFIdentity) {

@@ -50,7 +50,11 @@ type SubinterfaceIdentity struct {
 }
 
 func (data *SubinterfaceIdentity) toIdentity(ctx context.Context, plan *Subinterface) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.InterfaceId = plan.InterfaceId
 }
 

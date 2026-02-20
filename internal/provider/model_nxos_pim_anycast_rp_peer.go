@@ -45,7 +45,11 @@ type PIMAnycastRPPeerIdentity struct {
 }
 
 func (data *PIMAnycastRPPeerIdentity) toIdentity(ctx context.Context, plan *PIMAnycastRPPeer) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.VrfName = plan.VrfName
 	data.Address = plan.Address
 	data.RpSetAddress = plan.RpSetAddress

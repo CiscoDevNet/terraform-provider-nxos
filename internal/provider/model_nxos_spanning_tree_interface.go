@@ -50,7 +50,11 @@ type SpanningTreeInterfaceIdentity struct {
 }
 
 func (data *SpanningTreeInterfaceIdentity) toIdentity(ctx context.Context, plan *SpanningTreeInterface) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.InterfaceId = plan.InterfaceId
 }
 

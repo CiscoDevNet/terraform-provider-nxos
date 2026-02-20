@@ -38,7 +38,11 @@ type QueuingQOSPolicySystemOutIdentity struct {
 }
 
 func (data *QueuingQOSPolicySystemOutIdentity) toIdentity(ctx context.Context, plan *QueuingQOSPolicySystemOut) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *QueuingQOSPolicySystemOut) fromIdentity(ctx context.Context, identity *QueuingQOSPolicySystemOutIdentity) {

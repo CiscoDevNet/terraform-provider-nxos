@@ -39,7 +39,11 @@ type FeatureUDLDIdentity struct {
 }
 
 func (data *FeatureUDLDIdentity) toIdentity(ctx context.Context, plan *FeatureUDLD) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *FeatureUDLD) fromIdentity(ctx context.Context, identity *FeatureUDLDIdentity) {

@@ -39,7 +39,11 @@ type FeatureMACsecIdentity struct {
 }
 
 func (data *FeatureMACsecIdentity) toIdentity(ctx context.Context, plan *FeatureMACsec) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *FeatureMACsec) fromIdentity(ctx context.Context, identity *FeatureMACsecIdentity) {

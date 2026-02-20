@@ -43,7 +43,11 @@ type VPCInterfaceIdentity struct {
 }
 
 func (data *VPCInterfaceIdentity) toIdentity(ctx context.Context, plan *VPCInterface) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.VpcInterfaceId = plan.VpcInterfaceId
 }
 

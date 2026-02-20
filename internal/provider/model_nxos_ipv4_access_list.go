@@ -93,7 +93,11 @@ type IPv4AccessListIdentity struct {
 }
 
 func (data *IPv4AccessListIdentity) toIdentity(ctx context.Context, plan *IPv4AccessList) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.Name = plan.Name
 }
 

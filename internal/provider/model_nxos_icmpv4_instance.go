@@ -39,7 +39,11 @@ type ICMPv4InstanceIdentity struct {
 }
 
 func (data *ICMPv4InstanceIdentity) toIdentity(ctx context.Context, plan *ICMPv4Instance) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *ICMPv4Instance) fromIdentity(ctx context.Context, identity *ICMPv4InstanceIdentity) {

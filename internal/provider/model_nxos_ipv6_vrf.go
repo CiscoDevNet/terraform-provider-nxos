@@ -41,7 +41,11 @@ type IPv6VRFIdentity struct {
 }
 
 func (data *IPv6VRFIdentity) toIdentity(ctx context.Context, plan *IPv6VRF) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.Name = plan.Name
 }
 

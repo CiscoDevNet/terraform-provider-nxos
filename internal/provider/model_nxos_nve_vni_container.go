@@ -38,7 +38,11 @@ type NVEVNIContainerIdentity struct {
 }
 
 func (data *NVEVNIContainerIdentity) toIdentity(ctx context.Context, plan *NVEVNIContainer) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *NVEVNIContainer) fromIdentity(ctx context.Context, identity *NVEVNIContainerIdentity) {

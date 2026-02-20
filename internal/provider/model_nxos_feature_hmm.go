@@ -39,7 +39,11 @@ type FeatureHMMIdentity struct {
 }
 
 func (data *FeatureHMMIdentity) toIdentity(ctx context.Context, plan *FeatureHMM) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *FeatureHMM) fromIdentity(ctx context.Context, identity *FeatureHMMIdentity) {

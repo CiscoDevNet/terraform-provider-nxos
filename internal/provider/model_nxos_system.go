@@ -39,7 +39,11 @@ type SystemIdentity struct {
 }
 
 func (data *SystemIdentity) toIdentity(ctx context.Context, plan *System) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *System) fromIdentity(ctx context.Context, identity *SystemIdentity) {

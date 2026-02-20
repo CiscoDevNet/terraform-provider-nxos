@@ -59,7 +59,11 @@ type ISISVRFIdentity struct {
 }
 
 func (data *ISISVRFIdentity) toIdentity(ctx context.Context, plan *ISISVRF) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.InstanceName = plan.InstanceName
 	data.Name = plan.Name
 }

@@ -56,7 +56,11 @@ type OSPFInterfaceIdentity struct {
 }
 
 func (data *OSPFInterfaceIdentity) toIdentity(ctx context.Context, plan *OSPFInterface) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.InstanceName = plan.InstanceName
 	data.VrfName = plan.VrfName
 	data.InterfaceId = plan.InterfaceId

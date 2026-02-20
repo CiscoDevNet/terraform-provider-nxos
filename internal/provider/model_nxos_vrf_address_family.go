@@ -43,7 +43,11 @@ type VRFAddressFamilyIdentity struct {
 }
 
 func (data *VRFAddressFamilyIdentity) toIdentity(ctx context.Context, plan *VRFAddressFamily) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.Vrf = plan.Vrf
 	data.AddressFamily = plan.AddressFamily
 }

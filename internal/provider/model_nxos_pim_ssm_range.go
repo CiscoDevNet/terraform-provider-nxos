@@ -50,7 +50,11 @@ type PIMSSMRangeIdentity struct {
 }
 
 func (data *PIMSSMRangeIdentity) toIdentity(ctx context.Context, plan *PIMSSMRange) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.VrfName = plan.VrfName
 }
 

@@ -39,7 +39,11 @@ type ISISIdentity struct {
 }
 
 func (data *ISISIdentity) toIdentity(ctx context.Context, plan *ISIS) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *ISIS) fromIdentity(ctx context.Context, identity *ISISIdentity) {

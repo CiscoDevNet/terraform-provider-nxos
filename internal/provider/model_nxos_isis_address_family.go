@@ -51,7 +51,11 @@ type ISISAddressFamilyIdentity struct {
 }
 
 func (data *ISISAddressFamilyIdentity) toIdentity(ctx context.Context, plan *ISISAddressFamily) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.InstanceName = plan.InstanceName
 	data.Vrf = plan.Vrf
 	data.AddressFamily = plan.AddressFamily

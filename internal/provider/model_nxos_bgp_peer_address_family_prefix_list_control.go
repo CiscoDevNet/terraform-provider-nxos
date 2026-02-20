@@ -50,7 +50,11 @@ type BGPPeerAddressFamilyPrefixListControlIdentity struct {
 }
 
 func (data *BGPPeerAddressFamilyPrefixListControlIdentity) toIdentity(ctx context.Context, plan *BGPPeerAddressFamilyPrefixListControl) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.Asn = plan.Asn
 	data.Vrf = plan.Vrf
 	data.Address = plan.Address

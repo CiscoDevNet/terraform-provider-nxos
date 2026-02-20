@@ -42,7 +42,11 @@ type SubinterfaceVRFIdentity struct {
 }
 
 func (data *SubinterfaceVRFIdentity) toIdentity(ctx context.Context, plan *SubinterfaceVRF) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.InterfaceId = plan.InterfaceId
 }
 

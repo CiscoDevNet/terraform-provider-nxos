@@ -54,7 +54,11 @@ type OSPFAuthenticationIdentity struct {
 }
 
 func (data *OSPFAuthenticationIdentity) toIdentity(ctx context.Context, plan *OSPFAuthentication) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.InstanceName = plan.InstanceName
 	data.VrfName = plan.VrfName
 	data.InterfaceId = plan.InterfaceId

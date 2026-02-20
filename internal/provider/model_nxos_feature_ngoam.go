@@ -39,7 +39,11 @@ type FeatureNGOAMIdentity struct {
 }
 
 func (data *FeatureNGOAMIdentity) toIdentity(ctx context.Context, plan *FeatureNGOAM) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *FeatureNGOAM) fromIdentity(ctx context.Context, identity *FeatureNGOAMIdentity) {

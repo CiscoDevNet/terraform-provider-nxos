@@ -39,7 +39,11 @@ type FeatureBashShellIdentity struct {
 }
 
 func (data *FeatureBashShellIdentity) toIdentity(ctx context.Context, plan *FeatureBashShell) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *FeatureBashShell) fromIdentity(ctx context.Context, identity *FeatureBashShellIdentity) {

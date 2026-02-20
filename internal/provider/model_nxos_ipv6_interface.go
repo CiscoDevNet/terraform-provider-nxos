@@ -51,7 +51,11 @@ type IPv6InterfaceIdentity struct {
 }
 
 func (data *IPv6InterfaceIdentity) toIdentity(ctx context.Context, plan *IPv6Interface) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.Vrf = plan.Vrf
 	data.InterfaceId = plan.InterfaceId
 }

@@ -39,7 +39,11 @@ type FeatureTACACSIdentity struct {
 }
 
 func (data *FeatureTACACSIdentity) toIdentity(ctx context.Context, plan *FeatureTACACS) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *FeatureTACACS) fromIdentity(ctx context.Context, identity *FeatureTACACSIdentity) {

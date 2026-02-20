@@ -63,7 +63,11 @@ type PhysicalInterfaceIdentity struct {
 }
 
 func (data *PhysicalInterfaceIdentity) toIdentity(ctx context.Context, plan *PhysicalInterface) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.InterfaceId = plan.InterfaceId
 }
 

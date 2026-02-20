@@ -42,7 +42,11 @@ type IPv4AccessListPolicyEgressInterfaceIdentity struct {
 }
 
 func (data *IPv4AccessListPolicyEgressInterfaceIdentity) toIdentity(ctx context.Context, plan *IPv4AccessListPolicyEgressInterface) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.InterfaceId = plan.InterfaceId
 }
 

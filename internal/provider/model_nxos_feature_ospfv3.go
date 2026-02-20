@@ -39,7 +39,11 @@ type FeatureOSPFv3Identity struct {
 }
 
 func (data *FeatureOSPFv3Identity) toIdentity(ctx context.Context, plan *FeatureOSPFv3) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *FeatureOSPFv3) fromIdentity(ctx context.Context, identity *FeatureOSPFv3Identity) {

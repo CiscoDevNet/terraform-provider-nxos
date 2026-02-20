@@ -42,7 +42,11 @@ type NVEVNIIngressReplicationIdentity struct {
 }
 
 func (data *NVEVNIIngressReplicationIdentity) toIdentity(ctx context.Context, plan *NVEVNIIngressReplication) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.Vni = plan.Vni
 }
 

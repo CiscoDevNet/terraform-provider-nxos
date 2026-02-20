@@ -44,7 +44,11 @@ type ICMPv4InterfaceIdentity struct {
 }
 
 func (data *ICMPv4InterfaceIdentity) toIdentity(ctx context.Context, plan *ICMPv4Interface) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.VrfName = plan.VrfName
 	data.InterfaceId = plan.InterfaceId
 }

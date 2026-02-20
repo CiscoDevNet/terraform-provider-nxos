@@ -50,7 +50,11 @@ type OSPFv3VRFIdentity struct {
 }
 
 func (data *OSPFv3VRFIdentity) toIdentity(ctx context.Context, plan *OSPFv3VRF) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.InstanceName = plan.InstanceName
 	data.Name = plan.Name
 }

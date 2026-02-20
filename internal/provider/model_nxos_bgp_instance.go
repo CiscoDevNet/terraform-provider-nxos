@@ -43,7 +43,11 @@ type BGPInstanceIdentity struct {
 }
 
 func (data *BGPInstanceIdentity) toIdentity(ctx context.Context, plan *BGPInstance) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *BGPInstance) fromIdentity(ctx context.Context, identity *BGPInstanceIdentity) {

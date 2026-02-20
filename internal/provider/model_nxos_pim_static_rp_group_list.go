@@ -49,7 +49,11 @@ type PIMStaticRPGroupListIdentity struct {
 }
 
 func (data *PIMStaticRPGroupListIdentity) toIdentity(ctx context.Context, plan *PIMStaticRPGroupList) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.VrfName = plan.VrfName
 	data.RpAddress = plan.RpAddress
 	data.Address = plan.Address

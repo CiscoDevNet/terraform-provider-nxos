@@ -45,7 +45,11 @@ type VRFRouteTargetAddressFamilyIdentity struct {
 }
 
 func (data *VRFRouteTargetAddressFamilyIdentity) toIdentity(ctx context.Context, plan *VRFRouteTargetAddressFamily) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.Vrf = plan.Vrf
 	data.AddressFamily = plan.AddressFamily
 	data.RouteTargetAddressFamily = plan.RouteTargetAddressFamily

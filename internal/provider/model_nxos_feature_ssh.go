@@ -39,7 +39,11 @@ type FeatureSSHIdentity struct {
 }
 
 func (data *FeatureSSHIdentity) toIdentity(ctx context.Context, plan *FeatureSSH) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *FeatureSSH) fromIdentity(ctx context.Context, identity *FeatureSSHIdentity) {

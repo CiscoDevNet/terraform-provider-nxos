@@ -47,7 +47,11 @@ type IPv4InterfaceIdentity struct {
 }
 
 func (data *IPv4InterfaceIdentity) toIdentity(ctx context.Context, plan *IPv4Interface) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.Vrf = plan.Vrf
 	data.InterfaceId = plan.InterfaceId
 }

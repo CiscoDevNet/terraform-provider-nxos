@@ -43,7 +43,11 @@ type BridgeDomainIdentity struct {
 }
 
 func (data *BridgeDomainIdentity) toIdentity(ctx context.Context, plan *BridgeDomain) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.FabricEncap = plan.FabricEncap
 }
 

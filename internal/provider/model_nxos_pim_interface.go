@@ -50,7 +50,11 @@ type PIMInterfaceIdentity struct {
 }
 
 func (data *PIMInterfaceIdentity) toIdentity(ctx context.Context, plan *PIMInterface) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.VrfName = plan.VrfName
 	data.InterfaceId = plan.InterfaceId
 }

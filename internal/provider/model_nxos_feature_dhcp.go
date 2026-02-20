@@ -39,7 +39,11 @@ type FeatureDHCPIdentity struct {
 }
 
 func (data *FeatureDHCPIdentity) toIdentity(ctx context.Context, plan *FeatureDHCP) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *FeatureDHCP) fromIdentity(ctx context.Context, identity *FeatureDHCPIdentity) {

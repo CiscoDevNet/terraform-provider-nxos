@@ -42,7 +42,11 @@ type LoopbackInterfaceVRFIdentity struct {
 }
 
 func (data *LoopbackInterfaceVRFIdentity) toIdentity(ctx context.Context, plan *LoopbackInterfaceVRF) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.InterfaceId = plan.InterfaceId
 }
 

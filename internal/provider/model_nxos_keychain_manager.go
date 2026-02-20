@@ -39,7 +39,11 @@ type KeychainManagerIdentity struct {
 }
 
 func (data *KeychainManagerIdentity) toIdentity(ctx context.Context, plan *KeychainManager) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *KeychainManager) fromIdentity(ctx context.Context, identity *KeychainManagerIdentity) {

@@ -44,7 +44,11 @@ type BGPVRFIdentity struct {
 }
 
 func (data *BGPVRFIdentity) toIdentity(ctx context.Context, plan *BGPVRF) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.Asn = plan.Asn
 	data.Name = plan.Name
 }

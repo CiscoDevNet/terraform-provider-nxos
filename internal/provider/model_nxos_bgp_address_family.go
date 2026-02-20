@@ -63,7 +63,11 @@ type BGPAddressFamilyIdentity struct {
 }
 
 func (data *BGPAddressFamilyIdentity) toIdentity(ctx context.Context, plan *BGPAddressFamily) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.Asn = plan.Asn
 	data.Vrf = plan.Vrf
 	data.AddressFamily = plan.AddressFamily

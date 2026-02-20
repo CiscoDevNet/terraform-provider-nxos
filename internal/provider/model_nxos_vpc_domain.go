@@ -60,7 +60,11 @@ type VPCDomainIdentity struct {
 }
 
 func (data *VPCDomainIdentity) toIdentity(ctx context.Context, plan *VPCDomain) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *VPCDomain) fromIdentity(ctx context.Context, identity *VPCDomainIdentity) {

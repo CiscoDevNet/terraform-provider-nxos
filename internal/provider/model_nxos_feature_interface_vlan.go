@@ -39,7 +39,11 @@ type FeatureInterfaceVLANIdentity struct {
 }
 
 func (data *FeatureInterfaceVLANIdentity) toIdentity(ctx context.Context, plan *FeatureInterfaceVLAN) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *FeatureInterfaceVLAN) fromIdentity(ctx context.Context, identity *FeatureInterfaceVLANIdentity) {

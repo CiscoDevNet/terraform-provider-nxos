@@ -39,7 +39,11 @@ type PIMIdentity struct {
 }
 
 func (data *PIMIdentity) toIdentity(ctx context.Context, plan *PIM) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *PIM) fromIdentity(ctx context.Context, identity *PIMIdentity) {

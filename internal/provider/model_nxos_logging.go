@@ -47,7 +47,11 @@ type LoggingIdentity struct {
 }
 
 func (data *LoggingIdentity) toIdentity(ctx context.Context, plan *Logging) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *Logging) fromIdentity(ctx context.Context, identity *LoggingIdentity) {

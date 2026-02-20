@@ -39,7 +39,11 @@ type FeatureTelnetIdentity struct {
 }
 
 func (data *FeatureTelnetIdentity) toIdentity(ctx context.Context, plan *FeatureTelnet) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *FeatureTelnet) fromIdentity(ctx context.Context, identity *FeatureTelnetIdentity) {

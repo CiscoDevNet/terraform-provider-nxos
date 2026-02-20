@@ -39,7 +39,11 @@ type FeatureNVOverlayIdentity struct {
 }
 
 func (data *FeatureNVOverlayIdentity) toIdentity(ctx context.Context, plan *FeatureNVOverlay) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *FeatureNVOverlay) fromIdentity(ctx context.Context, identity *FeatureNVOverlayIdentity) {

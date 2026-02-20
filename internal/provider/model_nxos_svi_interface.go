@@ -48,7 +48,11 @@ type SVIInterfaceIdentity struct {
 }
 
 func (data *SVIInterfaceIdentity) toIdentity(ctx context.Context, plan *SVIInterface) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.InterfaceId = plan.InterfaceId
 }
 

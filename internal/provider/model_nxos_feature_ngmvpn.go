@@ -39,7 +39,11 @@ type FeatureNgMVPNIdentity struct {
 }
 
 func (data *FeatureNgMVPNIdentity) toIdentity(ctx context.Context, plan *FeatureNgMVPN) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *FeatureNgMVPN) fromIdentity(ctx context.Context, identity *FeatureNgMVPNIdentity) {

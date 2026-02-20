@@ -41,7 +41,11 @@ type DefaultQOSPolicyInterfaceInIdentity struct {
 }
 
 func (data *DefaultQOSPolicyInterfaceInIdentity) toIdentity(ctx context.Context, plan *DefaultQOSPolicyInterfaceIn) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.InterfaceId = plan.InterfaceId
 }
 

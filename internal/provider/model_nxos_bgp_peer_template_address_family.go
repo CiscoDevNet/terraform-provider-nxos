@@ -48,7 +48,11 @@ type BGPPeerTemplateAddressFamilyIdentity struct {
 }
 
 func (data *BGPPeerTemplateAddressFamilyIdentity) toIdentity(ctx context.Context, plan *BGPPeerTemplateAddressFamily) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.Asn = plan.Asn
 	data.TemplateName = plan.TemplateName
 	data.AddressFamily = plan.AddressFamily

@@ -39,7 +39,11 @@ type FeaturePTPIdentity struct {
 }
 
 func (data *FeaturePTPIdentity) toIdentity(ctx context.Context, plan *FeaturePTP) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *FeaturePTP) fromIdentity(ctx context.Context, identity *FeaturePTPIdentity) {

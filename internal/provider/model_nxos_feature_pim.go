@@ -39,7 +39,11 @@ type FeaturePIMIdentity struct {
 }
 
 func (data *FeaturePIMIdentity) toIdentity(ctx context.Context, plan *FeaturePIM) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *FeaturePIM) fromIdentity(ctx context.Context, identity *FeaturePIMIdentity) {

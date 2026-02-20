@@ -40,7 +40,11 @@ type HMMInstanceIdentity struct {
 }
 
 func (data *HMMInstanceIdentity) toIdentity(ctx context.Context, plan *HMMInstance) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *HMMInstance) fromIdentity(ctx context.Context, identity *HMMInstanceIdentity) {

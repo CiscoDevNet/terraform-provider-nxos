@@ -41,7 +41,11 @@ type ICMPv4VRFIdentity struct {
 }
 
 func (data *ICMPv4VRFIdentity) toIdentity(ctx context.Context, plan *ICMPv4VRF) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.VrfName = plan.VrfName
 }
 

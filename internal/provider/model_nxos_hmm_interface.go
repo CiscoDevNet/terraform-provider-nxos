@@ -43,7 +43,11 @@ type HMMInterfaceIdentity struct {
 }
 
 func (data *HMMInterfaceIdentity) toIdentity(ctx context.Context, plan *HMMInterface) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.InterfaceId = plan.InterfaceId
 }
 

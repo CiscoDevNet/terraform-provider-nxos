@@ -45,7 +45,11 @@ type KeychainKeyIdentity struct {
 }
 
 func (data *KeychainKeyIdentity) toIdentity(ctx context.Context, plan *KeychainKey) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.Keychain = plan.Keychain
 	data.KeyId = plan.KeyId
 }

@@ -43,7 +43,11 @@ type VRFIdentity struct {
 }
 
 func (data *VRFIdentity) toIdentity(ctx context.Context, plan *VRF) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.Name = plan.Name
 }
 

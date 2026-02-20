@@ -48,7 +48,11 @@ type OSPFMaxMetricIdentity struct {
 }
 
 func (data *OSPFMaxMetricIdentity) toIdentity(ctx context.Context, plan *OSPFMaxMetric) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.InstanceName = plan.InstanceName
 	data.VrfName = plan.VrfName
 }

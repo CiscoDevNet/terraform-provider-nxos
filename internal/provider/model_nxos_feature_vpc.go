@@ -39,7 +39,11 @@ type FeatureVPCIdentity struct {
 }
 
 func (data *FeatureVPCIdentity) toIdentity(ctx context.Context, plan *FeatureVPC) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *FeatureVPC) fromIdentity(ctx context.Context, identity *FeatureVPCIdentity) {

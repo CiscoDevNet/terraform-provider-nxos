@@ -39,7 +39,11 @@ type FeatureISISIdentity struct {
 }
 
 func (data *FeatureISISIdentity) toIdentity(ctx context.Context, plan *FeatureISIS) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *FeatureISIS) fromIdentity(ctx context.Context, identity *FeatureISISIdentity) {

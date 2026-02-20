@@ -52,7 +52,11 @@ type VPCKeepaliveIdentity struct {
 }
 
 func (data *VPCKeepaliveIdentity) toIdentity(ctx context.Context, plan *VPCKeepalive) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 }
 
 func (data *VPCKeepalive) fromIdentity(ctx context.Context, identity *VPCKeepaliveIdentity) {

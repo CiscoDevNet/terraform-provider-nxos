@@ -105,7 +105,11 @@ type {{camelCase .Name}}Identity struct {
 }
 
 func (data *{{camelCase .Name}}Identity) toIdentity(ctx context.Context, plan *{{camelCase .Name}}) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 {{- range (importAttributes .)}}
 	data.{{toGoName .TfName}} = plan.{{toGoName .TfName}}
 {{- end}}

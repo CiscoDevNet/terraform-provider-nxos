@@ -41,7 +41,11 @@ type IPv4PrefixListRuleIdentity struct {
 }
 
 func (data *IPv4PrefixListRuleIdentity) toIdentity(ctx context.Context, plan *IPv4PrefixListRule) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.Name = plan.Name
 }
 

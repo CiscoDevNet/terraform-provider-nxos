@@ -43,7 +43,11 @@ type LoopbackInterfaceIdentity struct {
 }
 
 func (data *LoopbackInterfaceIdentity) toIdentity(ctx context.Context, plan *LoopbackInterface) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.InterfaceId = plan.InterfaceId
 }
 

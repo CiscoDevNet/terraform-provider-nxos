@@ -45,7 +45,11 @@ type RouteMapRuleEntrySetRegularCommunityItemIdentity struct {
 }
 
 func (data *RouteMapRuleEntrySetRegularCommunityItemIdentity) toIdentity(ctx context.Context, plan *RouteMapRuleEntrySetRegularCommunityItem) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.RuleName = plan.RuleName
 	data.Order = plan.Order
 	data.Community = plan.Community

@@ -45,7 +45,11 @@ type ISISOverloadIdentity struct {
 }
 
 func (data *ISISOverloadIdentity) toIdentity(ctx context.Context, plan *ISISOverload) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.InstanceName = plan.InstanceName
 	data.Vrf = plan.Vrf
 }

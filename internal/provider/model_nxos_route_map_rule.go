@@ -41,7 +41,11 @@ type RouteMapRuleIdentity struct {
 }
 
 func (data *RouteMapRuleIdentity) toIdentity(ctx context.Context, plan *RouteMapRule) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.Name = plan.Name
 }
 

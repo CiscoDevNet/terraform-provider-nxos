@@ -67,7 +67,11 @@ type DefaultQOSPolicyMapMatchClassMapPoliceIdentity struct {
 }
 
 func (data *DefaultQOSPolicyMapMatchClassMapPoliceIdentity) toIdentity(ctx context.Context, plan *DefaultQOSPolicyMapMatchClassMapPolice) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.PolicyMapName = plan.PolicyMapName
 	data.ClassMapName = plan.ClassMapName
 }

@@ -41,7 +41,11 @@ type DHCPRelayInterfaceIdentity struct {
 }
 
 func (data *DHCPRelayInterfaceIdentity) toIdentity(ctx context.Context, plan *DHCPRelayInterface) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.InterfaceId = plan.InterfaceId
 }
 

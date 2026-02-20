@@ -42,7 +42,11 @@ type EVPNVNIIdentity struct {
 }
 
 func (data *EVPNVNIIdentity) toIdentity(ctx context.Context, plan *EVPNVNI) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.Encap = plan.Encap
 }
 

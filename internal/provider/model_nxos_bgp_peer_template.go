@@ -47,7 +47,11 @@ type BGPPeerTemplateIdentity struct {
 }
 
 func (data *BGPPeerTemplateIdentity) toIdentity(ctx context.Context, plan *BGPPeerTemplate) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.Asn = plan.Asn
 	data.TemplateName = plan.TemplateName
 }

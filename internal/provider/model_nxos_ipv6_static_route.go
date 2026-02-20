@@ -55,7 +55,11 @@ type IPv6StaticRouteIdentity struct {
 }
 
 func (data *IPv6StaticRouteIdentity) toIdentity(ctx context.Context, plan *IPv6StaticRoute) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.VrfName = plan.VrfName
 	data.Prefix = plan.Prefix
 }

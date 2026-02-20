@@ -42,7 +42,11 @@ type DefaultQOSPolicyMapIdentity struct {
 }
 
 func (data *DefaultQOSPolicyMapIdentity) toIdentity(ctx context.Context, plan *DefaultQOSPolicyMap) {
-	data.Device = plan.Device
+	if plan.Device.IsNull() {
+		data.Device = types.StringValue("")
+	} else {
+		data.Device = plan.Device
+	}
 	data.Name = plan.Name
 }
 

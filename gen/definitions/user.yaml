@@ -1,0 +1,78 @@
+---
+name: User
+class_name: aaaUser
+dn: sys/userext/user-[%s]
+status_replace: true
+ds_description: This data source can read the User configuration.
+res_description: This resource can manage the User configuration.
+doc_path: Security%20and%20Policing/aaa:User/
+doc_category: AAA
+attributes:
+  - nxos_name: name
+    tf_name: name
+    type: String
+    id: true
+    description: 'User name.'
+    example: user1
+  - nxos_name: allowExpired
+    tf_name: allow_expired
+    type: String
+    enum_values:
+      - "yes"
+      - "no"
+    default_value: "no"
+    description: "Allow expired user to be configured."
+    example: "yes"
+  - nxos_name: pwd
+    tf_name: password
+    type: String
+    description: "User password."
+    example: "password123"
+    write_only: true
+    exclude_test: true
+    omit_empty_value: true
+  - nxos_name: pwdEncryptType
+    tf_name: password_encryption_type
+    description: "Password encryption type."
+    type: String
+    enum_values:
+      - "0"
+      - "5"
+      - "8"
+      - "9"
+      - "clear"
+      - "255"
+    example: "clear"
+    exclude_test: true
+    omit_empty_value: true
+    write_only: true
+child_classes:
+  - class_name: aaaUserDomain
+    rn: userdomain-[all]
+    type: single
+    hide_tf: true
+    attributes:
+      - nxos_name: name
+        tf_name: domain_name
+        type: String
+        description: "User domain name."
+        example: "all"
+        default_value: "all"
+        reference_only: true
+    child_classes:
+      - class_name: aaaUserRole
+        doc_path: Security%20and%20Policing/aaa:UserRole/
+        rn: role-[%s]
+        type: list
+        tf_name: roles
+        description: 'User roles.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: "Role name."
+            example: "network-operator"
+test_prerequisites:
+  - dn: sys/userext
+    class_name: aaaUserEp

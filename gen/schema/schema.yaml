@@ -42,8 +42,11 @@ child_classes:
   type: enum('single', 'list', required=False) # Cardinality of the child class
   tf_name: str(required=False) # Terraform attribute name for the child class
   description: str(required=False) # Description of the child class
+  doc_path: str(required=False) # NX-API documentation path of the child class
   mandatory: bool(required=False) # Set to true if the child class(es) are mandatory
+  hide_tf: bool(required=False) # Set to true if the child class should be hidden from the Terraform resource and data source schema
   attributes: list(include('attribute'), required=False) # List of child class attributes
+  child_classes: list(include('child_classes'), required=False) # List of child classes to be included inline
 
 test_prerequisite:
   dn: str() # Distinguished Name of the prerequisite managed object

@@ -92,7 +92,7 @@ In order to run the full suite of acceptance tests, set up a `.env` file with th
 cp .env.sample .env
 ```
 
-Then, run `make testacc` to execute all acceptance tests.
+Then, run `make test` to execute all acceptance tests.
 
 > **Note**: Acceptance tests create real resources.
 

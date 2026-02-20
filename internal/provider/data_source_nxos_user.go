@@ -1,4 +1,3 @@
-//go:build ignore
 // Copyright © 2023 Cisco Systems, Inc. and its affiliates.
 // All rights reserved.
 //
@@ -24,41 +23,36 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
-	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 )
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &{{camelCase .Name}}DataSource{}
-	_ datasource.DataSourceWithConfigure = &{{camelCase .Name}}DataSource{}
+	_ datasource.DataSource              = &UserDataSource{}
+	_ datasource.DataSourceWithConfigure = &UserDataSource{}
 )
 
-func New{{camelCase .Name}}DataSource() datasource.DataSource {
-	return &{{camelCase .Name}}DataSource{}
+func NewUserDataSource() datasource.DataSource {
+	return &UserDataSource{}
 }
 
-type {{camelCase .Name}}DataSource struct {
+type UserDataSource struct {
 	data *NxosProviderData
 }
 
-func (d *{{camelCase .Name}}DataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_{{snakeCase .Name}}"
+func (d *UserDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_user"
 }
 
-func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *UserDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("{{.DsDescription}}", "{{.ClassName}}", "{{.DocPath}}")
-			{{- $classNames := childDocClassNames .ChildClasses -}}
-			{{- if $classNames -}}
-			.AddAdditionalDocs([]string{ {{- range $i, $v := $classNames}}{{if $i}}, {{end}}"{{$v}}"{{end -}} }, []string{ {{- range $i, $v := childDocPaths .ChildClasses}}{{if $i}}, {{end}}"{{$v}}"{{end -}} })
-			{{- end -}}
-			.String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the User configuration.", "aaaUser", "Security%20and%20Policing/aaa:User/").AddAdditionalDocs([]string{"aaaUserRole"}, []string{"Security%20and%20Policing/aaa:UserRole/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -69,64 +63,39 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
-			{{- range .Attributes}}
-			"{{.TfName}}": schema.{{.Type}}Attribute{
-				MarkdownDescription: "{{.Description}}",
-				{{- if or .Id .ReferenceOnly}}
+			"name": schema.StringAttribute{
+				MarkdownDescription: "User name.",
 				Required:            true,
-				{{- else}}
-				Computed:            true,
-				{{- end}}
 			},
-			{{- end}}
-			{{- define "dsListNestedChildClassSchema" -}}
-			"{{.TfName}}": schema.ListNestedAttribute{
-				MarkdownDescription: "{{.Description}}",
+			"allow_expired": schema.StringAttribute{
+				MarkdownDescription: "Allow expired user to be configured.",
+				Computed:            true,
+			},
+			"password": schema.StringAttribute{
+				MarkdownDescription: "User password.",
+				Computed:            true,
+			},
+			"password_encryption_type": schema.StringAttribute{
+				MarkdownDescription: "Password encryption type.",
+				Computed:            true,
+			},
+			"roles": schema.ListNestedAttribute{
+				MarkdownDescription: "User roles.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						{{- range  .Attributes}}
-						"{{.TfName}}": schema.{{.Type}}Attribute{
-							MarkdownDescription: "{{.Description}}",
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Role name.",
 							Computed:            true,
 						},
-						{{- end}}
 					},
 				},
 			},
-			{{- end}}
-			{{- range .ChildClasses}}
-			{{- if and (not .HideTf) (eq .Type "single")}}
-			{{- range .Attributes}}
-			"{{.TfName}}": schema.{{.Type}}Attribute{
-				MarkdownDescription: "{{.Description}}",
-				{{- if .Id}}
-				Required:            true,
-				{{- else}}
-				Computed:            true,
-				{{- end}}
-			},
-			{{- end}}
-			{{- range .ChildClasses}}
-			{{- if eq .Type "list"}}
-			{{template "dsListNestedChildClassSchema" .}}
-			{{- end}}
-			{{- end}}
-			{{- else if and (not .HideTf) (eq .Type "list")}}
-			{{template "dsListNestedChildClassSchema" .}}
-			{{- else if .HideTf}}
-			{{- range .ChildClasses}}
-			{{- if eq .Type "list"}}
-			{{template "dsListNestedChildClassSchema" .}}
-			{{- end}}
-			{{- end}}
-			{{- end}}
-			{{- end}}
 		},
 	}
 }
 
-func (d *{{camelCase .Name}}DataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *UserDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -134,8 +103,8 @@ func (d *{{camelCase .Name}}DataSource) Configure(_ context.Context, req datasou
 	d.data = req.ProviderData.(*NxosProviderData)
 }
 
-func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config {{camelCase .Name}}
+func (d *UserDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config User
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)
@@ -153,13 +122,7 @@ func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource
 	}
 
 	queries := []func(*nxos.Req){}
-	{{- if .ChildClasses}}
-	{{- if hasNestedChildren .ChildClasses}}
 	queries = append(queries, nxos.Query("rsp-subtree", "full"))
-	{{- else}}
-	queries = append(queries, nxos.Query("rsp-subtree", "children"))
-	{{- end}}
-	{{- end}}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

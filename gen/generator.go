@@ -139,13 +139,16 @@ type YamlConfigAttribute struct {
 }
 
 type YamlConfigChildClass struct {
-	ClassName   string                `yaml:"class_name"`
-	Rn          string                `yaml:"rn"`
-	Type        string                `yaml:"type"`
-	TfName      string                `yaml:"tf_name"`
-	Description string                `yaml:"description"`
-	Mandatory   bool                  `yaml:"mandatory"`
-	Attributes  []YamlConfigAttribute `yaml:"attributes"`
+	ClassName    string                 `yaml:"class_name"`
+	Rn           string                 `yaml:"rn"`
+	Type         string                 `yaml:"type"`
+	TfName       string                 `yaml:"tf_name"`
+	Description  string                 `yaml:"description"`
+	DocPath      string                 `yaml:"doc_path"`
+	Mandatory    bool                   `yaml:"mandatory"`
+	HideTf       bool                   `yaml:"hide_tf"`
+	Attributes   []YamlConfigAttribute  `yaml:"attributes"`
+	ChildClasses []YamlConfigChildClass `yaml:"child_classes"`
 }
 
 type YamlTest struct {
@@ -241,17 +244,62 @@ func Add(a, b int) int {
 	return a + b
 }
 
+// Templating helper function to collect child class names with doc paths (2 levels deep)
+func ChildDocClassNames(children []YamlConfigChildClass) []string {
+	var names []string
+	for _, c := range children {
+		if c.DocPath != "" {
+			names = append(names, c.ClassName)
+		}
+		for _, cc := range c.ChildClasses {
+			if cc.DocPath != "" {
+				names = append(names, cc.ClassName)
+			}
+		}
+	}
+	return names
+}
+
+// Templating helper function to collect child doc paths (2 levels deep)
+func ChildDocPaths(children []YamlConfigChildClass) []string {
+	var paths []string
+	for _, c := range children {
+		if c.DocPath != "" {
+			paths = append(paths, c.DocPath)
+		}
+		for _, cc := range c.ChildClasses {
+			if cc.DocPath != "" {
+				paths = append(paths, cc.DocPath)
+			}
+		}
+	}
+	return paths
+}
+
+// Templating helper function to check if any child class has nested children
+func HasNestedChildren(children []YamlConfigChildClass) bool {
+	for _, c := range children {
+		if len(c.ChildClasses) > 0 {
+			return true
+		}
+	}
+	return false
+}
+
 // Map of templating functions
 var functions = template.FuncMap{
-	"toGoName":     ToGoName,
-	"camelCase":    CamelCase,
-	"snakeCase":    SnakeCase,
-	"hasId":        HasId,
-	"getExampleDn": GetExampleDn,
-	"isLast":       IsLast,
-	"sprintf":      fmt.Sprintf,
-	"lenNoRef":     LenNoRef,
-	"add":          Add,
+	"toGoName":           ToGoName,
+	"camelCase":          CamelCase,
+	"snakeCase":          SnakeCase,
+	"hasId":              HasId,
+	"getExampleDn":       GetExampleDn,
+	"isLast":             IsLast,
+	"sprintf":            fmt.Sprintf,
+	"lenNoRef":           LenNoRef,
+	"add":                Add,
+	"childDocClassNames": ChildDocClassNames,
+	"childDocPaths":      ChildDocPaths,
+	"hasNestedChildren":  HasNestedChildren,
 }
 
 func renderTemplate(templatePath, outputPath string, config interface{}) {

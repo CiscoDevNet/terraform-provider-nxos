@@ -85,7 +85,7 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 			{{- range .Attributes}}
 			"{{.TfName}}": schema.{{.Type}}Attribute{
 				MarkdownDescription: "{{.Description}}",
-				{{- if or .Id .ReferenceOnly}}
+				{{- if .Id}}
 				Required:            true,
 				{{- else}}
 				Computed:            true,

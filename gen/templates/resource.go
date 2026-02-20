@@ -155,9 +155,6 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 					.String,
 				{{- if or .Id .Mandatory}}
 				Required:            true,
-				{{- else if .ReferenceOnly}}
-				Optional:            true,
-				Computed:            true,
 				{{- else}}
 				Optional:            true,
 				{{- if len .DefaultValue}}
@@ -182,7 +179,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 					int64validator.Between({{.MinInt}}, {{.MaxInt}}),
 				},
 				{{- end}}
-				{{- if or .Id .ReferenceOnly .RequiresReplace}}
+				{{- if or .Id .RequiresReplace}}
 				PlanModifiers: []planmodifier.{{.Type}}{
 					{{snakeCase .Type}}planmodifier.RequiresReplace(),
 				},
@@ -239,7 +236,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 								int64validator.Between({{.MinInt}}, {{.MaxInt}}),
 							},
 							{{- end}}
-							{{- if or .Id .ReferenceOnly .RequiresReplace}}
+							{{- if or .Id .RequiresReplace}}
 							PlanModifiers: []planmodifier.{{.Type}}{
 								{{snakeCase .Type}}planmodifier.RequiresReplace(),
 							},
@@ -254,7 +251,11 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 			{{- else if and (not .HideTf) (eq .Type "list")}}
 			"{{.TfName}}": schema.ListNestedAttribute{
 				MarkdownDescription: "{{.Description}}",
+				{{- if .Mandatory}}
 				Required:            true,
+				{{- else}}
+				Optional:            true,
+				{{- end}}
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						{{- range  .Attributes}}
@@ -272,9 +273,6 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 								.String,
 							{{- if or .Id .Mandatory}}
 							Required:            true,
-							{{- else if .ReferenceOnly}}
-							Optional:            true,
-							Computed:            true,
 							{{- else}}
 							Optional:            true,
 							{{- if len .DefaultValue}}
@@ -299,7 +297,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 								int64validator.Between({{.MinInt}}, {{.MaxInt}}),
 							},
 							{{- end}}
-							{{- if or .Id .ReferenceOnly .RequiresReplace}}
+							{{- if or .Id .RequiresReplace}}
 							PlanModifiers: []planmodifier.{{.Type}}{
 								{{snakeCase .Type}}planmodifier.RequiresReplace(),
 							},
@@ -368,7 +366,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 								int64validator.Between({{.MinInt}}, {{.MaxInt}}),
 							},
 							{{- end}}
-							{{- if or .Id .ReferenceOnly .RequiresReplace}}
+							{{- if or .Id .RequiresReplace}}
 							PlanModifiers: []planmodifier.{{.Type}}{
 								{{snakeCase .Type}}planmodifier.RequiresReplace(),
 							},

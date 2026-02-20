@@ -78,7 +78,7 @@ func (data User) toBody(statusReplace bool) nxos.Body {
 	attrs, _ = sjson.Set(attrs, "name", "all")
 	body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".aaaUserDomain.attributes", attrs)
 	for _, nestedChild := range data.Roles {
-		attrs = ""
+		attrs = "{}"
 		if (!nestedChild.Name.IsUnknown() && !nestedChild.Name.IsNull()) || true {
 			attrs, _ = sjson.Set(attrs, "name", nestedChild.Name.ValueString())
 		}

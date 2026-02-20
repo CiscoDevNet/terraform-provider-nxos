@@ -197,7 +197,7 @@ func (data {{camelCase .Name}}) toBody(statusReplace bool) nxos.Body {
 	body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.children.-1.{{$nestedChildClassName}}.attributes", attrs)
 	{{- else if eq .Type "list"}}
 	for _, nestedChild := range data.{{toGoName .TfName}} {
-		attrs = ""
+		attrs = "{}"
 		{{- range .Attributes}}
 		if (!nestedChild.{{toGoName .TfName}}.IsUnknown() && !nestedChild.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
 			{{- if eq .Type "Int64"}}
@@ -215,7 +215,7 @@ func (data {{camelCase .Name}}) toBody(statusReplace bool) nxos.Body {
 	{{- end}}
 
 	{{- else}}
-	attrs = ""
+	attrs = "{}"
 	{{- range .Attributes}}
 	{{- if not .ReferenceOnly}}
 	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
@@ -252,7 +252,7 @@ func (data {{camelCase .Name}}) toBody(statusReplace bool) nxos.Body {
 		{{- range .ChildClasses}}
 		{{- $nestedChildClassName := .ClassName }}
 		{{- if eq .Type "single"}}
-		attrs = ""
+		attrs = "{}"
 		{{- range .Attributes}}
 		if (!child.{{toGoName .TfName}}.IsUnknown() && !child.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
 			{{- if eq .Type "Int64"}}
@@ -267,7 +267,7 @@ func (data {{camelCase .Name}}) toBody(statusReplace bool) nxos.Body {
 		body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.children.-1.{{$nestedChildClassName}}.attributes", attrs)
 		{{- else if eq .Type "list"}}
 		for _, nestedChild := range child.{{toGoName .TfName}} {
-			attrs = ""
+			attrs = "{}"
 			{{- range .Attributes}}
 			if (!nestedChild.{{toGoName .TfName}}.IsUnknown() && !nestedChild.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
 				{{- if eq .Type "Int64"}}

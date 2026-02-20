@@ -50,7 +50,7 @@ func (data KeychainManager) toBody(statusReplace bool) nxos.Body {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
 	var attrs string
-	attrs = ""
+	attrs = "{}"
 	body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.kcmgrKeychains.attributes", attrs)
 
 	return nxos.Body{body}

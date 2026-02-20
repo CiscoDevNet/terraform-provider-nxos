@@ -315,7 +315,6 @@ func (data *IPv4AccessList) fromBody(res gjson.Result, all bool) {
 							child.Urg = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.urg").String()))
 							child.Vlan = types.Int64Value(value.Get("attributes.vlan").Int())
 							child.Vni = types.StringValue(value.Get("attributes.vni").String())
-
 							data.Entries = append(data.Entries, child)
 						}
 						return true

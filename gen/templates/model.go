@@ -452,10 +452,6 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 								},
 							)
 							{{- end}}
-
-							{{- range .ChildClasses}}
-							{{- end}}
-
 							data.{{$list}} = append(data.{{$list}}, child)
 						}
 						return true

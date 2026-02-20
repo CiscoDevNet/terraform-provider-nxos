@@ -90,7 +90,6 @@ func (data *Logging) fromBody(res gjson.Result, all bool) {
 							var child LoggingFacilities
 							child.Name = types.StringValue(value.Get("attributes.facilityName").String())
 							child.Level = types.StringValue(value.Get("attributes.severityLevel").String())
-
 							data.Facilities = append(data.Facilities, child)
 						}
 						return true

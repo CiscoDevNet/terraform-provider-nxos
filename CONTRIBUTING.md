@@ -66,12 +66,12 @@ make gen
 
 ### Acceptance Tests
 
-In order to run the full suite of Acceptance tests, run `make testacc`. Make sure the respective environment variables are set (e.g., `NXOS_USERNAME`, `NXOS_PASSWORD`, `NXOS_URL`).
+In order to run the full suite of Acceptance tests, run `make test`. Make sure the respective environment variables are set (e.g., `NXOS_USERNAME`, `NXOS_PASSWORD`, `NXOS_URL`).
 
 > **Note**: Acceptance tests create real resources.
 
 ```shell
-make testacc
+make test
 ```
 
 ## Sending Pull Requests

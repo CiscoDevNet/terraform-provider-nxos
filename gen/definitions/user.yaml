@@ -50,7 +50,7 @@ child_classes:
   - class_name: aaaUserDomain
     rn: userdomain-[all]
     type: single
-    hide_in_resource: true
+    hide_tf: true
     attributes:
       - nxos_name: name
         tf_name: domain_name

@@ -3,11 +3,11 @@ resource "nxos_{{snakeCase .Name}}" "example" {
   {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
 {{- end}}
 {{- range .ChildClasses}}
-{{- if and (not .HideInResource) (eq .Type "single")}}
+{{- if and (not .HideTf) (eq .Type "single")}}
 {{- range .Attributes}}
   {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
 {{- end}}
-{{- else if and (not .HideInResource) (eq .Type "list")}}
+{{- else if and (not .HideTf) (eq .Type "list")}}
   {{.TfName}} = [{
   {{- range .Attributes}}
     {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
@@ -16,10 +16,10 @@ resource "nxos_{{snakeCase .Name}}" "example" {
 {{- end}}
 {{- end}}
 {{- $hasHiddenNestedChildren := false}}
-{{- range .ChildClasses}}{{- if and .HideInResource .ChildClasses}}{{$hasHiddenNestedChildren = true}}{{end}}{{end}}
+{{- range .ChildClasses}}{{- if and .HideTf .ChildClasses}}{{$hasHiddenNestedChildren = true}}{{end}}{{end}}
 {{- if $hasHiddenNestedChildren}}
 {{- range .ChildClasses}}
-{{- if .HideInResource}}
+{{- if .HideTf}}
 {{- range .ChildClasses}}
 {{- if eq .Type "list"}}
   {{.TfName}} = [{

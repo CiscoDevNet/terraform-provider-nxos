@@ -42,7 +42,7 @@ type {{camelCase .Name}} struct {
 	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
 {{- end}}
 {{- range .ChildClasses}}
-{{- if and (not .HideInResource) (eq .Type "single")}}
+{{- if and (not .HideTf) (eq .Type "single")}}
 {{- range .Attributes}}
     {{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
 {{- end}}
@@ -85,7 +85,7 @@ type {{$name}}{{toGoName .TfName}} struct {
 
 {{/* Generate struct types for nested child classes within hidden parents */}}
 {{range .ChildClasses}}
-{{if .HideInResource}}
+{{if .HideTf}}
 {{range .ChildClasses}}
 {{if eq .Type "list"}}
 type {{$name}}{{toGoName .TfName}} struct {

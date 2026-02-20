@@ -46,7 +46,7 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 					{{- end}}
 					{{- end}}
 					{{- range .ChildClasses}}
-					{{- if not .HideInResource}}
+					{{- if not .HideTf}}
 					{{- $list := .TfName}}
 					{{- if eq .Type "single"}}
 					{{- range .Attributes}}
@@ -65,7 +65,7 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 					{{- end}}
 					{{- /* Handle nested child classes within hidden parents */ -}}
 					{{- range .ChildClasses -}}
-					{{- if .HideInResource -}}
+					{{- if .HideTf -}}
 					{{- range .ChildClasses -}}
 					{{- $list := .TfName -}}
 					{{- if eq .Type "list" -}}
@@ -137,13 +137,13 @@ func testAccNxos{{camelCase .Name}}Config_all() string {
 	{{- end}}
 	{{- end}}
 	{{- range .ChildClasses}}
-	{{- if and (not .HideInResource) (eq .Type "single")}}
+	{{- if and (not .HideTf) (eq .Type "single")}}
 	{{- range .Attributes}}
 	{{- if not .ExcludeTest}}
 		{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
 	{{- end}}
 	{{- end}}
-	{{- else if and (not .HideInResource) (eq .Type "list")}}
+	{{- else if and (not .HideTf) (eq .Type "list")}}
 		{{.TfName}} = [{
 		{{- range .Attributes}}
 		{{- if not .ExcludeTest}}
@@ -155,7 +155,7 @@ func testAccNxos{{camelCase .Name}}Config_all() string {
 	{{- end}}
 	{{- /* Handle nested child classes within hidden parents */ -}}
 	{{- range .ChildClasses -}}
-	{{- if .HideInResource -}}
+	{{- if .HideTf -}}
 	{{- range .ChildClasses -}}
 	{{- if eq .Type "list"}}
 		{{.TfName}} = [{

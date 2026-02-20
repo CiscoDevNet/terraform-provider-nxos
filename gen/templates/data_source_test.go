@@ -47,7 +47,7 @@ func TestAccDataSourceNxos{{camelCase .Name}}(t *testing.T) {
 					{{- end}}
 					{{- range .ChildClasses}}
 					{{- $list := .TfName}}
-					{{- if and (not .HideInResource) (eq .Type "single")}}
+					{{- if and (not .HideTf) (eq .Type "single")}}
 					{{- range .Attributes}}
 					{{- if not .ExcludeTest}}
 					resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"),
@@ -56,7 +56,7 @@ func TestAccDataSourceNxos{{camelCase .Name}}(t *testing.T) {
 					{{- range .ChildClasses}}
 					{{- $nestedList := .TfName}}
 					{{- end}}
-					{{- else if and (not .HideInResource) (eq .Type "list")}}
+					{{- else if and (not .HideTf) (eq .Type "list")}}
 					{{- else if eq .Type "list"}}
 					resource.TestCheckTypeSetElemNestedAttrs("data.nxos_{{snakeCase $name}}.test", "{{$list}}.*", map[string]string{
 						{{- range .Attributes}}
@@ -107,7 +107,7 @@ resource "nxos_{{snakeCase $name}}" "test" {
 {{- end}}
 {{- range .ChildClasses}}
 {{- $list := .TfName}}
-{{- if and (not .HideInResource) (eq .Type "single")}}
+{{- if and (not .HideTf) (eq .Type "single")}}
 {{- range .Attributes}}
 {{- if not .ExcludeTest}}
   {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
@@ -116,7 +116,7 @@ resource "nxos_{{snakeCase $name}}" "test" {
 {{- range .ChildClasses}}
 {{- $nestedList := .TfName}}
 {{- end}}
-{{- else if and (not .HideInResource) (eq .Type "list")}}
+{{- else if and (not .HideTf) (eq .Type "list")}}
   {{.TfName}} = [{
 	{{- range .Attributes}}
 	{{- if not .ExcludeTest}}
@@ -138,7 +138,7 @@ data "nxos_{{snakeCase .Name}}" "test" {
 {{- end}}
 {{- end}}
 {{- range .ChildClasses}}
-{{- if and (not .HideInResource) (eq .Type "single")}}
+{{- if and (not .HideTf) (eq .Type "single")}}
 {{- range .Attributes}}
 {{- if or .Id .ReferenceOnly}}
   {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}

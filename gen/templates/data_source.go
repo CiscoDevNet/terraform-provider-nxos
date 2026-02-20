@@ -81,7 +81,7 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 			},
 			{{- end}}
 			{{- range .ChildClasses}}
-			{{- if and (not .HideInResource) (eq .Type "single")}}
+			{{- if and (not .HideTf) (eq .Type "single")}}
 			{{- range .Attributes}}
 			"{{.TfName}}": schema.{{.Type}}Attribute{
 				MarkdownDescription: "{{.Description}}",
@@ -94,7 +94,7 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 			{{- end}}
 			{{- range .ChildClasses}}
 			{{- end}}
-			{{- else if and (not .HideInResource) (eq .Type "list")}}
+			{{- else if and (not .HideTf) (eq .Type "list")}}
 			"{{.TfName}}": schema.ListNestedAttribute{
 				MarkdownDescription: "{{.Description}}",
 				Computed:            true,
@@ -113,10 +113,10 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 			{{- end}}
 			{{- /* Handle nested child classes within hidden parents */ -}}
 			{{- $hasHiddenNestedChildren := false -}}
-			{{- range .ChildClasses}}{{- if and .HideInResource .ChildClasses}}{{- $hasHiddenNestedChildren = true}}{{- end}}{{- end -}}
+			{{- range .ChildClasses}}{{- if and .HideTf .ChildClasses}}{{- $hasHiddenNestedChildren = true}}{{- end}}{{- end -}}
 			{{- if $hasHiddenNestedChildren}}
 			{{- range .ChildClasses}}
-			{{- if .HideInResource}}
+			{{- if .HideTf}}
 			{{- range .ChildClasses}}
 			{{- if eq .Type "list"}}
 			"{{.TfName}}": schema.ListNestedAttribute{

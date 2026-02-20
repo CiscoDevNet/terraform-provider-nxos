@@ -42,6 +42,7 @@ var docPaths = []string{"./docs/data-sources/", "./docs/resources/", "./docs/act
 var extraDocs = map[string]string{
 	"rest":        "General",
 	"save_config": "General",
+	"cli":         "General",
 }
 
 func SnakeCase(s string) string {

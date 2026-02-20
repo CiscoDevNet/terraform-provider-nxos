@@ -96,7 +96,7 @@ func (r *SaveConfigResource) Create(ctx context.Context, req resource.CreateRequ
 	}
 
 	if d.Managed {
-		_, err := d.Client.JsonRpc("copy run start")
+		_, err := d.Client.JsonRpc([]string{"copy run start"})
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to save config, got error: %s", err))
 			return
@@ -139,7 +139,7 @@ func (r *SaveConfigResource) Update(ctx context.Context, req resource.UpdateRequ
 	}
 
 	if d.Managed {
-		_, err := d.Client.JsonRpc("copy run start")
+		_, err := d.Client.JsonRpc([]string{"copy run start"})
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to save config, got error: %s", err))
 			return

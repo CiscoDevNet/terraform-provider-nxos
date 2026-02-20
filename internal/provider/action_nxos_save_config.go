@@ -83,7 +83,7 @@ func (r *SaveConfigAction) Invoke(ctx context.Context, req action.InvokeRequest,
 	}
 
 	if d.Managed {
-		_, err := d.Client.JsonRpc("copy run start")
+		_, err := d.Client.JsonRpc([]string{"copy run start"})
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to save config, got error: %s", err))
 			return

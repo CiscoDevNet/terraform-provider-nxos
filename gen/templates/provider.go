@@ -335,6 +335,7 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 	return []func() resource.Resource{
 		NewRestResource,
 		NewSaveConfigResource,
+		NewCliResource,
 		{{- range .}}
 		New{{camelCase .Name}}Resource,
 		{{- end}}

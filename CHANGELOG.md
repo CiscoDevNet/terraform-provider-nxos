@@ -4,6 +4,7 @@
 - BREAKING CHANGE: `nxos_rest` import ID format changed from `<class_name>:<dn>` to `<dn>,<class_name>` (with optional `,<device>` suffix)
 - Add identity-based import support for all resources
 - Add `nxos_save_config` action
+- Add `nxos_cli` resource
 
 ## 0.6.0
 

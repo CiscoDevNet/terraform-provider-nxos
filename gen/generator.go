@@ -92,6 +92,11 @@ var templates = []t{
 		prefix: "./examples/resources/nxos_",
 		suffix: "/import.sh",
 	},
+	{
+		path:   "./gen/templates/import-by-string-id.tf",
+		prefix: "./examples/resources/nxos_",
+		suffix: "/import-by-string-id.tf",
+	},
 }
 
 type YamlConfig struct {
@@ -134,28 +139,28 @@ type YamlConfigAttribute struct {
 }
 
 type YamlConfigChildClass struct {
-	ClassName        string                     `yaml:"class_name"`
-	Rn               string                     `yaml:"rn"`
-	Type             string                     `yaml:"type"`
-	TfName           string                     `yaml:"tf_name"`
-	Description      string                     `yaml:"description"`
-	DocPath          string                     `yaml:"doc_path"`
-	Mandatory        bool                       `yaml:"mandatory"`
-	HideInResource   bool                       `yaml:"hide_in_resource"`
-	Attributes       []YamlConfigAttribute      `yaml:"attributes"`
-	ChildClasses     []YamlConfigChildChildClass `yaml:"child_classes"`
+	ClassName      string                      `yaml:"class_name"`
+	Rn             string                      `yaml:"rn"`
+	Type           string                      `yaml:"type"`
+	TfName         string                      `yaml:"tf_name"`
+	Description    string                      `yaml:"description"`
+	DocPath        string                      `yaml:"doc_path"`
+	Mandatory      bool                        `yaml:"mandatory"`
+	HideInResource bool                        `yaml:"hide_in_resource"`
+	Attributes     []YamlConfigAttribute       `yaml:"attributes"`
+	ChildClasses   []YamlConfigChildChildClass `yaml:"child_classes"`
 }
 
 type YamlConfigChildChildClass struct {
-	ClassName        string                `yaml:"class_name"`
-	Rn               string                `yaml:"rn"`
-	Type             string                `yaml:"type"`
-	TfName           string                `yaml:"tf_name"`
-	Description      string                `yaml:"description"`
-	DocPath          string                `yaml:"doc_path"`
-	Mandatory        bool                  `yaml:"mandatory"`
-	HideInResource   bool                  `yaml:"hide_in_resource"`
-	Attributes       []YamlConfigAttribute `yaml:"attributes"`
+	ClassName      string                `yaml:"class_name"`
+	Rn             string                `yaml:"rn"`
+	Type           string                `yaml:"type"`
+	TfName         string                `yaml:"tf_name"`
+	Description    string                `yaml:"description"`
+	DocPath        string                `yaml:"doc_path"`
+	Mandatory      bool                  `yaml:"mandatory"`
+	HideInResource bool                  `yaml:"hide_in_resource"`
+	Attributes     []YamlConfigAttribute `yaml:"attributes"`
 }
 
 type YamlTest struct {
@@ -303,6 +308,11 @@ func renderTemplate(templatePath, outputPath string, config interface{}) {
 }
 
 func main() {
+	resourceName := ""
+	if len(os.Args) == 2 {
+		resourceName = os.Args[1]
+	}
+
 	items, _ := ioutil.ReadDir(definitionsPath)
 	configs := make([]YamlConfig, len(items))
 	// Iterate over definitions
@@ -321,6 +331,9 @@ func main() {
 	}
 
 	for _, config := range configs {
+		if resourceName != "" && config.Name != resourceName {
+			continue
+		}
 		// Iterate over templates
 		for _, t := range templates {
 			renderTemplate(t.path, t.prefix+SnakeCase(config.Name)+t.suffix, config)

@@ -21,6 +21,23 @@ It communicates with NX-OS devices via the NX-API REST, which requires the follo
 feature nxapi
 ```
 
+All resources and data sources have been tested with the following releases.
+
+| Platform  | Version |
+| --------- | ------- |
+| Nexus 9Kv | 10.3(1) |
+
+## Guides
+
+The following guides are available to help you get started with the NXOS provider:
+
+- **[Getting Started](guides/getting_started)** - A simple example demonstrating how to configure system settings, enable features, and create interfaces and VRFs
+- **[Manage Multiple Devices](guides/manage_multiple_devices)** - Learn how to manage multiple NX-OS devices using provider aliases or the single-provider approach with device-level management control
+- **[Selective Deploy](guides/selective_deploy)** - Deploy configurations to a subset of devices while keeping others in a "frozen" state for staged rollouts and maintenance scenarios
+- **[Importing Resources](guides/importing_resources)** - Import existing device configurations into Terraform state management
+- **[Supported Objects](guides/supported_objects)** - View the complete list of supported NX-OS DME objects
+- **[Changelog](guides/changelog)** - Review version history and breaking changes
+
 ## Example Usage
 
 ```terraform
@@ -40,6 +57,7 @@ provider "nxos" {
 - `insecure` (Boolean) Allow insecure HTTPS client. This can also be set as the NXOS_INSECURE environment variable. Defaults to `true`.
 - `password` (String, Sensitive) Password for the NX-OS device account. This can also be set as the NXOS_PASSWORD environment variable.
 - `retries` (Number) Number of retries for REST API calls. This can also be set as the NXOS_RETRIES environment variable. Defaults to `3`.
+- `selected_devices` (List of String) This can be used to select a list of devices to manage from the `devices` list. Selected devices will be managed while other devices will be skipped and their state will be frozen. This can be used to deploy changes to a subset of devices. Defaults to all devices.
 - `url` (String) URL of the Cisco NX-OS device. This can also be set as the NXOS_URL environment variable. If no URL is provided, the URL of the first device from the `devices` list is being used.
 - `username` (String) Username for the NX-OS device account. This can also be set as the NXOS_USERNAME environment variable.
 

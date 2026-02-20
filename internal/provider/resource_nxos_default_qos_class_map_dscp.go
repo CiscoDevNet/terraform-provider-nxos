@@ -257,7 +257,12 @@ func (r *DefaultQOSClassMapDSCPResource) Delete(ctx context.Context, req resourc
 }
 
 func (r *DefaultQOSClassMapDSCPResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
+	dn, device := helpers.ParseImportID(req.ID)
+
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), dn)...)
+	if device != "" {
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), device)...)
+	}
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)
 }

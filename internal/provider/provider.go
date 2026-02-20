@@ -22,7 +22,9 @@ package provider
 import (
 	"context"
 	"os"
+	"slices"
 	"strconv"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -44,12 +46,13 @@ type NxosProvider struct {
 
 // NxosProviderModel describes the provider data model.
 type NxosProviderModel struct {
-	Username types.String              `tfsdk:"username"`
-	Password types.String              `tfsdk:"password"`
-	URL      types.String              `tfsdk:"url"`
-	Insecure types.Bool                `tfsdk:"insecure"`
-	Retries  types.Int64               `tfsdk:"retries"`
-	Devices  []NxosProviderModelDevice `tfsdk:"devices"`
+	Username        types.String              `tfsdk:"username"`
+	Password        types.String              `tfsdk:"password"`
+	URL             types.String              `tfsdk:"url"`
+	Insecure        types.Bool                `tfsdk:"insecure"`
+	Retries         types.Int64               `tfsdk:"retries"`
+	SelectedDevices types.List                `tfsdk:"selected_devices"`
+	Devices         []NxosProviderModelDevice `tfsdk:"devices"`
 }
 
 type NxosProviderModelDevice struct {
@@ -99,6 +102,11 @@ func (p *NxosProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 				Validators: []validator.Int64{
 					int64validator.Between(0, 9),
 				},
+			},
+			"selected_devices": schema.ListAttribute{
+				MarkdownDescription: "This can be used to select a list of devices to manage from the `devices` list. Selected devices will be managed while other devices will be skipped and their state will be frozen. This can be used to deploy changes to a subset of devices. Defaults to all devices.",
+				Optional:            true,
+				ElementType:         types.StringType,
 			},
 			"devices": schema.ListNestedAttribute{
 				MarkdownDescription: "This can be used to manage a list of devices from a single provider. All devices must use the same credentials. Each resource and data source has an optional attribute named `device`, which can then select a device by its name from this list.",
@@ -235,6 +243,26 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		insecure = config.Insecure.ValueBool()
 	}
 
+	var selectedDevices []string
+	if config.SelectedDevices.IsUnknown() {
+		// Cannot connect to client with an unknown value
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as selectedDevices",
+		)
+		return
+	}
+
+	if config.SelectedDevices.IsNull() {
+		selectedDevicesStr := os.Getenv("NXOS_SELECTED_DEVICES")
+		if selectedDevicesStr != "" {
+			selectedDevices = strings.Split(selectedDevicesStr, ",")
+		}
+	} else {
+		diags = config.SelectedDevices.ElementsAs(ctx, &selectedDevices, false)
+		resp.Diagnostics.Append(diags...)
+	}
+
 	var retries int64
 	if config.Retries.IsUnknown() {
 		// Cannot connect to client with an unknown value
@@ -267,14 +295,22 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		)
 		return
 	}
-	data.Devices[""] = &NxosProviderDataDevice{Client: &c, Managed: true}
+	data.Devices[""] = &NxosProviderDataDevice{Client: c, Managed: true}
 
 	for _, device := range config.Devices {
 		var managed bool
-		if device.Managed.IsUnknown() || device.Managed.IsNull() {
-			managed = true
+		if len(selectedDevices) > 0 {
+			if slices.Contains(selectedDevices, device.Name.ValueString()) {
+				managed = true
+			} else {
+				managed = false
+			}
 		} else {
-			managed = device.Managed.ValueBool()
+			if device.Managed.IsUnknown() || device.Managed.IsNull() {
+				managed = true
+			} else {
+				managed = device.Managed.ValueBool()
+			}
 		}
 		c, err := nxos.NewClient(device.URL.ValueString(), username, password, insecure, nxos.MaxRetries(int(retries)))
 		if err != nil {
@@ -284,7 +320,7 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 			)
 			return
 		}
-		data.Devices[device.Name.ValueString()] = &NxosProviderDataDevice{Client: &c, Managed: managed}
+		data.Devices[device.Name.ValueString()] = &NxosProviderDataDevice{Client: c, Managed: managed}
 	}
 
 	resp.DataSourceData = &data
@@ -328,6 +364,7 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewEVPNVNIResource,
 		NewEVPNVNIRouteTargetResource,
 		NewEVPNVNIRouteTargetDirectionResource,
+		NewFeatureBashShellResource,
 		NewFeatureBFDResource,
 		NewFeatureBGPResource,
 		NewFeatureDHCPResource,
@@ -348,6 +385,7 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewFeaturePIMResource,
 		NewFeaturePTPResource,
 		NewFeaturePVLANResource,
+		NewFeatureSFlowResource,
 		NewFeatureSSHResource,
 		NewFeatureTACACSResource,
 		NewFeatureTelnetResource,
@@ -362,7 +400,6 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewICMPv4InterfaceResource,
 		NewICMPv4VRFResource,
 		NewIPv4AccessListResource,
-		NewIPv4AccessListEntryResource,
 		NewIPv4AccessListPolicyEgressInterfaceResource,
 		NewIPv4AccessListPolicyIngressInterfaceResource,
 		NewIPv4InterfaceResource,
@@ -381,6 +418,10 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewISISInterfaceResource,
 		NewISISOverloadResource,
 		NewISISVRFResource,
+		NewKeychainResource,
+		NewKeychainKeyResource,
+		NewKeychainManagerResource,
+		NewLoggingResource,
 		NewLoopbackInterfaceResource,
 		NewLoopbackInterfaceVRFResource,
 		NewNTPServerResource,
@@ -393,6 +434,7 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewOSPFAuthenticationResource,
 		NewOSPFInstanceResource,
 		NewOSPFInterfaceResource,
+		NewOSPFMaxMetricResource,
 		NewOSPFVRFResource,
 		NewOSPFv3Resource,
 		NewOSPFv3AreaResource,
@@ -488,6 +530,7 @@ func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.Data
 		NewEVPNVNIDataSource,
 		NewEVPNVNIRouteTargetDataSource,
 		NewEVPNVNIRouteTargetDirectionDataSource,
+		NewFeatureBashShellDataSource,
 		NewFeatureBFDDataSource,
 		NewFeatureBGPDataSource,
 		NewFeatureDHCPDataSource,
@@ -508,6 +551,7 @@ func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.Data
 		NewFeaturePIMDataSource,
 		NewFeaturePTPDataSource,
 		NewFeaturePVLANDataSource,
+		NewFeatureSFlowDataSource,
 		NewFeatureSSHDataSource,
 		NewFeatureTACACSDataSource,
 		NewFeatureTelnetDataSource,
@@ -522,7 +566,6 @@ func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.Data
 		NewICMPv4InterfaceDataSource,
 		NewICMPv4VRFDataSource,
 		NewIPv4AccessListDataSource,
-		NewIPv4AccessListEntryDataSource,
 		NewIPv4AccessListPolicyEgressInterfaceDataSource,
 		NewIPv4AccessListPolicyIngressInterfaceDataSource,
 		NewIPv4InterfaceDataSource,
@@ -541,6 +584,10 @@ func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.Data
 		NewISISInterfaceDataSource,
 		NewISISOverloadDataSource,
 		NewISISVRFDataSource,
+		NewKeychainDataSource,
+		NewKeychainKeyDataSource,
+		NewKeychainManagerDataSource,
+		NewLoggingDataSource,
 		NewLoopbackInterfaceDataSource,
 		NewLoopbackInterfaceVRFDataSource,
 		NewNTPServerDataSource,
@@ -553,6 +600,7 @@ func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.Data
 		NewOSPFAuthenticationDataSource,
 		NewOSPFInstanceDataSource,
 		NewOSPFInterfaceDataSource,
+		NewOSPFMaxMetricDataSource,
 		NewOSPFVRFDataSource,
 		NewOSPFv3DataSource,
 		NewOSPFv3AreaDataSource,

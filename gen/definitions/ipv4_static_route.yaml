@@ -27,6 +27,7 @@ child_classes:
     class_name: ipv4Nexthop
     rn: nh-[%s]-addr-[%s]-vrf-[%s]
     description: List of next hops.
+    mandatory: true
     type: list
     attributes:
       - nxos_name: nhIf

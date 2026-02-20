@@ -57,6 +57,15 @@ resource "nxos_ipv6_interface_address" "example" {
 
 Import is supported using the following syntax:
 
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = nxos_ipv6_interface_address.example
+  id = "sys/ipv6/inst/dom-[default]/if-[eth1/10]/addr-[2001:db8:3333:4444:5555:6666:7777:8888]"
+}
+```
+
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell

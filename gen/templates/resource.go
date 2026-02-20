@@ -138,6 +138,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 			},
 			{{- end}}
 			{{- range .ChildClasses}}
+			{{- if len .Attributes}}
 			{{- if and (not .HideInResource) (eq .Type "single")}}
 			{{- range  .Attributes}}
 			"{{.TfName}}": schema.{{.Type}}Attribute{
@@ -570,7 +571,12 @@ func (r *{{camelCase .Name}}Resource) Delete(ctx context.Context, req resource.D
 }
 
 func (r *{{camelCase .Name}}Resource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
+	dn, device := helpers.ParseImportID(req.ID)
+
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), dn)...)
+	if device != "" {
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), device)...)
+	}
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)
 }

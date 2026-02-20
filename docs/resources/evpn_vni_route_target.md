@@ -51,6 +51,15 @@ resource "nxos_evpn_vni_route_target" "example" {
 
 Import is supported using the following syntax:
 
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = nxos_evpn_vni_route_target.example
+  id = "sys/evpn/bdevi-[vxlan-123456]/rttp-[import]/ent-[route-target:as2-nn2:2:2]"
+}
+```
+
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell

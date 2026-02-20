@@ -15,8 +15,9 @@ any real-time space e.g., Slack, Discord, etc.
 
 - [Reporting Issues](#reporting-issues)
 - [Development](#development)
-    - [Building the Provider](#building-the-provider)
-    - [Acceptance Tests](#acceptance-tests)
+  - [Building the Provider](#building-the-provider)
+  - [Code Generation](#code-generation)
+  - [Acceptance Tests](#acceptance-tests)
 - [Sending Pull Requests](#sending-pull-requests)
 - [Other Ways to Contribute](#other-ways-to-contribute)
 
@@ -43,11 +44,31 @@ possible, and, if possible, a test case.
 go install
 ```
 
+### Code Generation
+
+This provider heavily relies on code generation to create the necessary resources and data sources. The generator takes care of creating the necessary code, documentation and acceptance tests for a particular resource or data source. The generator is written in Go and can be found in the `gen` directory. There is a two step process to eventually generate the code for a new resource or data source. First, a "definition" is being created, which is a YAML file with all the necessary information to render the code artifacts. The second step is to run the generator with the "definition" file(s) as input. The generator will then render the code artifacts for the resources or data sources.
+
+Definition files are being maintained in the `gen/definitions` directory. The model of the definition files is defined by a [Yamale](https://github.com/23andMe/Yamale) schema located [here](https://github.com/CiscoDevNet/terraform-provider-nxos/blob/main/gen/schema/schema.yaml). The schema also includes a description of the fields and their purpose.
+
+To generate the code for a new resource or data source, run the following command:
+
+```shell
+make gen NAME="NAME"
+```
+
+Where `NAME` is the name of the resource or data source to generate. Whenever the `definition` is updated, it is necessary to run the generator again.
+
+To regenerate and/or update the complete codebase for all resources and data sources, run the following command:
+
+```shell
+make gen
+```
+
 ### Acceptance Tests
 
 In order to run the full suite of Acceptance tests, run `make testacc`. Make sure the respective environment variables are set (e.g., `NXOS_USERNAME`, `NXOS_PASSWORD`, `NXOS_URL`).
 
-Note: Acceptance tests create real resources.
+> **Note**: Acceptance tests create real resources.
 
 ```shell
 make testacc

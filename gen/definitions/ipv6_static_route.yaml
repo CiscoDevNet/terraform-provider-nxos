@@ -28,6 +28,7 @@ child_classes:
     rn: nh-[%s]-addr-[%s]-vrf-[%s]
     description: List of next hops.
     type: list
+    mandatory: true
     attributes:
       - nxos_name: nhIf
         tf_name: interface_id

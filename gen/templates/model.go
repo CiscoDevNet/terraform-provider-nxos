@@ -156,7 +156,7 @@ func (data {{camelCase .Name}}) toBody(statusReplace bool) nxos.Body {
 	// Create child with attributes and nested children in one unified object
 	childIndex := len(gjson.Get(body, data.getClassName()+".children").Array())
 	{{- if .Attributes}}
-	attrs = ""
+	attrs = "{}"
 	{{- range .Attributes}}
 	{{- if not .ReferenceOnly}}
 	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
@@ -182,7 +182,7 @@ func (data {{camelCase .Name}}) toBody(statusReplace bool) nxos.Body {
 	{{- $nestedChildClassName := .ClassName }}
 	{{- $nestedChildTfName := .TfName }}
 	{{- if eq .Type "single"}}
-	attrs = ""
+	attrs = "{}"
 	{{- range .Attributes}}
 	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
 		{{- if eq .Type "Int64"}}
@@ -235,7 +235,7 @@ func (data {{camelCase .Name}}) toBody(statusReplace bool) nxos.Body {
 	{{- end}}
 	{{- else if eq .Type "list"}}
 	for _, child := range data.{{toGoName .TfName}} {
-		attrs = ""
+		attrs = "{}"
 		{{- range .Attributes}}
 		if (!child.{{toGoName .TfName}}.IsUnknown() && !child.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
 			{{- if eq .Type "Int64"}}
@@ -311,6 +311,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 	{{- $childClassName := .ClassName }}
 	{{- $childRn := .Rn }}
 	{{- $list := (toGoName .TfName)}}
+	{{- if len .Attributes }}
 	{{- if eq .Type "single"}}
 	{{- $hasNonRefAttribs := false}}
 	{{- range .Attributes}}{{- if and (not .ReferenceOnly) (not .WriteOnly)}}{{$hasNonRefAttribs = true}}{{end}}{{end}}
@@ -529,6 +530,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 			{{- end}}
 		}
 	}
+	{{- end}}
 	{{- end}}
 	{{- end}}
 }

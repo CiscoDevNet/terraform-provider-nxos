@@ -41,6 +41,15 @@ resource "nxos_queuing_qos_policy_system_out" "example" {
 
 Import is supported using the following syntax:
 
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = nxos_queuing_qos_policy_system_out.example
+  id = "sys/ipqos/queuing/policy/out/sys"
+}
+```
+
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell

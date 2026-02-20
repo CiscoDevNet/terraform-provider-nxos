@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## Unreleased
+## 0.6.0
 
 - BREAKING CHANGE: Remove `nxos_ipv4_access_list_entry` resource and data source, entries are now managed as child classes of `nxos_ipv4_access_list`
 - Add `nxos_keychain` resource and data source

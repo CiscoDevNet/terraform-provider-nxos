@@ -244,17 +244,51 @@ func Add(a, b int) int {
 	return a + b
 }
 
+// Templating helper function to collect child class names with doc paths (2 levels deep)
+func ChildDocClassNames(children []YamlConfigChildClass) []string {
+	var names []string
+	for _, c := range children {
+		if c.DocPath != "" {
+			names = append(names, c.ClassName)
+		}
+		for _, cc := range c.ChildClasses {
+			if cc.DocPath != "" {
+				names = append(names, cc.ClassName)
+			}
+		}
+	}
+	return names
+}
+
+// Templating helper function to collect child doc paths (2 levels deep)
+func ChildDocPaths(children []YamlConfigChildClass) []string {
+	var paths []string
+	for _, c := range children {
+		if c.DocPath != "" {
+			paths = append(paths, c.DocPath)
+		}
+		for _, cc := range c.ChildClasses {
+			if cc.DocPath != "" {
+				paths = append(paths, cc.DocPath)
+			}
+		}
+	}
+	return paths
+}
+
 // Map of templating functions
 var functions = template.FuncMap{
-	"toGoName":     ToGoName,
-	"camelCase":    CamelCase,
-	"snakeCase":    SnakeCase,
-	"hasId":        HasId,
-	"getExampleDn": GetExampleDn,
-	"isLast":       IsLast,
-	"sprintf":      fmt.Sprintf,
-	"lenNoRef":     LenNoRef,
-	"add":          Add,
+	"toGoName":           ToGoName,
+	"camelCase":          CamelCase,
+	"snakeCase":          SnakeCase,
+	"hasId":              HasId,
+	"getExampleDn":       GetExampleDn,
+	"isLast":             IsLast,
+	"sprintf":            fmt.Sprintf,
+	"lenNoRef":           LenNoRef,
+	"add":                Add,
+	"childDocClassNames": ChildDocClassNames,
+	"childDocPaths":      ChildDocPaths,
 }
 
 func renderTemplate(templatePath, outputPath string, config interface{}) {

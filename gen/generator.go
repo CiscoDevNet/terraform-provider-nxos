@@ -139,28 +139,16 @@ type YamlConfigAttribute struct {
 }
 
 type YamlConfigChildClass struct {
-	ClassName      string                      `yaml:"class_name"`
-	Rn             string                      `yaml:"rn"`
-	Type           string                      `yaml:"type"`
-	TfName         string                      `yaml:"tf_name"`
-	Description    string                      `yaml:"description"`
-	DocPath        string                      `yaml:"doc_path"`
-	Mandatory      bool                        `yaml:"mandatory"`
-	HideTf       bool                        `yaml:"hide_tf"`
-	Attributes   []YamlConfigAttribute       `yaml:"attributes"`
-	ChildClasses []YamlConfigChildChildClass `yaml:"child_classes"`
-}
-
-type YamlConfigChildChildClass struct {
-	ClassName  string                `yaml:"class_name"`
-	Rn         string                `yaml:"rn"`
-	Type       string                `yaml:"type"`
-	TfName     string                `yaml:"tf_name"`
-	Description string               `yaml:"description"`
-	DocPath    string                `yaml:"doc_path"`
-	Mandatory  bool                  `yaml:"mandatory"`
-	HideTf     bool                  `yaml:"hide_tf"`
-	Attributes []YamlConfigAttribute `yaml:"attributes"`
+	ClassName    string                 `yaml:"class_name"`
+	Rn           string                 `yaml:"rn"`
+	Type         string                 `yaml:"type"`
+	TfName       string                 `yaml:"tf_name"`
+	Description  string                 `yaml:"description"`
+	DocPath      string                 `yaml:"doc_path"`
+	Mandatory    bool                   `yaml:"mandatory"`
+	HideTf       bool                   `yaml:"hide_tf"`
+	Attributes   []YamlConfigAttribute  `yaml:"attributes"`
+	ChildClasses []YamlConfigChildClass `yaml:"child_classes"`
 }
 
 type YamlTest struct {

@@ -32,7 +32,12 @@ func TestAccDataSourceNxosLogging(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceNxosLoggingConfig,
-				Check:  resource.ComposeTestCheckFunc(),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckTypeSetElemNestedAttrs("data.nxos_logging.test", "facilities.*", map[string]string{
+						"name":  "spanning-tree",
+						"level": "information",
+					}),
+				),
 			},
 		},
 	})

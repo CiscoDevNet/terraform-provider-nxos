@@ -57,7 +57,6 @@ func TestAccDataSourceNxos{{camelCase .Name}}(t *testing.T) {
 					{{- $nestedList := .TfName}}
 					{{- end}}
 					{{- else if and (not .HideTf) (eq .Type "list")}}
-					{{- else if eq .Type "list"}}
 					resource.TestCheckTypeSetElemNestedAttrs("data.nxos_{{snakeCase $name}}.test", "{{$list}}.*", map[string]string{
 						{{- range .Attributes}}
 						{{- if not .ExcludeTest}}

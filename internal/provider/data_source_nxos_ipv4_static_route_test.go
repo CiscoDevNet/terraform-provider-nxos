@@ -34,6 +34,15 @@ func TestAccDataSourceNxosIPv4StaticRoute(t *testing.T) {
 				Config: testAccDataSourceNxosIPv4StaticRoutePrerequisitesConfig + testAccDataSourceNxosIPv4StaticRouteConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_ipv4_static_route.test", "prefix", "1.1.1.0/24"),
+					resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv4_static_route.test", "next_hops.*", map[string]string{
+						"interface_id": "unspecified",
+						"address":      "1.2.3.4",
+						"vrf_name":     "default",
+						"description":  "My Description",
+						"object":       "10",
+						"preference":   "123",
+						"tag":          "10",
+					}),
 				),
 			},
 		},

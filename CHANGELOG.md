@@ -9,7 +9,9 @@
 - Add `nxos_feature_bash_shell` resource and data source
 - Add `nxos_feature_sflow` resource and data source
 - Add `nxos_logging` resource and data source
+- Add `nxos_user` resource and data source
 - Fix `nxos_icmpv4_interface` controls
+- Fix reading nested child classes during import
 - Add `selected_devices` provider configuration attribute
 - Add support for device-specific imports using comma separator (e.g., `sys/bgp,LEAF-1`)
 - Update `go-nxos` client to improve HTTP connection reuse under Terraform parallelism

@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -29,6 +30,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type EVPNVNI struct {
 	Device             types.String `tfsdk:"device"`
 	Dn                 types.String `tfsdk:"id"`
@@ -59,6 +63,9 @@ func (data *EVPNVNI) fromIdentity(ctx context.Context, identity *EVPNVNIIdentity
 	data.Encap = identity.Encap
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data EVPNVNI) getDn() string {
 	return fmt.Sprintf("sys/evpn/bdevi-[%s]", data.Encap.ValueString())
 }
@@ -67,6 +74,9 @@ func (data EVPNVNI) getClassName() string {
 	return "rtctrlBDEvi"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data EVPNVNI) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -80,11 +90,17 @@ func (data EVPNVNI) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *EVPNVNI) fromBody(res gjson.Result) {
 	data.Encap = types.StringValue(res.Get(data.getClassName() + ".attributes.encap").String())
 	data.RouteDistinguisher = types.StringValue(res.Get(data.getClassName() + ".attributes.rd").String())
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *EVPNVNI) updateFromBody(res gjson.Result) {
 	if !data.Encap.IsNull() {
 		data.Encap = types.StringValue(res.Get(data.getClassName() + ".attributes.encap").String())
@@ -98,15 +114,27 @@ func (data *EVPNVNI) updateFromBody(res gjson.Result) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data EVPNVNI) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data EVPNVNI) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
 
 	return dns
 }
+
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+// End of section. //template:end getDeletedItems

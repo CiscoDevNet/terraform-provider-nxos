@@ -19,12 +19,16 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosNVEVNI(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,6 +48,9 @@ func TestAccDataSourceNxosNVEVNI(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosNVEVNIPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/nvo"
@@ -82,6 +89,9 @@ resource "nxos_rest" "PreReq3" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 const testAccDataSourceNxosNVEVNIConfig = `
 
 resource "nxos_nve_vni" "test" {
@@ -98,3 +108,5 @@ data "nxos_nve_vni" "test" {
   depends_on = [nxos_nve_vni.test]
 }
 `
+
+// End of section. //template:end testAccDataSourceConfig

@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
 	"testing"
@@ -29,6 +30,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosBGPRouteControl(t *testing.T) {
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -65,6 +69,9 @@ func TestAccNxosBGPRouteControl(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxosBGPRouteControlImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 		primary := s.RootModule().Resources[resourceName].Primary
@@ -75,6 +82,9 @@ func nxosBGPRouteControlImportStateIdFunc(resourceName string) resource.ImportSt
 	}
 }
 
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosBGPRouteControlPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/bgp"
@@ -112,6 +122,9 @@ resource "nxos_rest" "PreReq3" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosBGPRouteControlConfig_minimum() string {
 	return `
 	resource "nxos_bgp_route_control" "test" {
@@ -122,6 +135,9 @@ func testAccNxosBGPRouteControlConfig_minimum() string {
 	`
 }
 
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosBGPRouteControlConfig_all() string {
 	return `
 	resource "nxos_bgp_route_control" "test" {
@@ -135,3 +151,5 @@ func testAccNxosBGPRouteControlConfig_all() string {
 	}
 	`
 }
+
+// End of section. //template:end testAccConfigAll

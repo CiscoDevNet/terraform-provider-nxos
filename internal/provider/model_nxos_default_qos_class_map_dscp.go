@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -29,6 +30,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type DefaultQOSClassMapDSCP struct {
 	Device       types.String `tfsdk:"device"`
 	Dn           types.String `tfsdk:"id"`
@@ -62,6 +66,9 @@ func (data *DefaultQOSClassMapDSCP) fromIdentity(ctx context.Context, identity *
 	data.Value = identity.Value
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data DefaultQOSClassMapDSCP) getDn() string {
 	return fmt.Sprintf("sys/ipqos/dflt/c/name-[%s]/dscp-[%v]", data.ClassMapName.ValueString(), data.Value.ValueString())
 }
@@ -70,6 +77,9 @@ func (data DefaultQOSClassMapDSCP) getClassName() string {
 	return "ipqosDscp"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data DefaultQOSClassMapDSCP) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -80,10 +90,16 @@ func (data DefaultQOSClassMapDSCP) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *DefaultQOSClassMapDSCP) fromBody(res gjson.Result) {
 	data.Value = types.StringValue(res.Get(data.getClassName() + ".attributes.val").String())
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *DefaultQOSClassMapDSCP) updateFromBody(res gjson.Result) {
 	if !data.Value.IsNull() {
 		data.Value = types.StringValue(res.Get(data.getClassName() + ".attributes.val").String())
@@ -92,15 +108,27 @@ func (data *DefaultQOSClassMapDSCP) updateFromBody(res gjson.Result) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data DefaultQOSClassMapDSCP) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data DefaultQOSClassMapDSCP) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
 
 	return dns
 }
+
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+// End of section. //template:end getDeletedItems

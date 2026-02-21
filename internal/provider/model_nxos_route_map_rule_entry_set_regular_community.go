@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -29,6 +30,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouteMapRuleEntrySetRegularCommunity struct {
 	Device      types.String `tfsdk:"device"`
 	Dn          types.String `tfsdk:"id"`
@@ -65,6 +69,9 @@ func (data *RouteMapRuleEntrySetRegularCommunity) fromIdentity(ctx context.Conte
 	data.Order = identity.Order
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data RouteMapRuleEntrySetRegularCommunity) getDn() string {
 	return fmt.Sprintf("sys/rpm/rtmap-[%s]/ent-[%v]/sregcomm", data.RuleName.ValueString(), data.Order.ValueInt64())
 }
@@ -73,6 +80,9 @@ func (data RouteMapRuleEntrySetRegularCommunity) getClassName() string {
 	return "rtmapSetRegComm"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data RouteMapRuleEntrySetRegularCommunity) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -89,12 +99,18 @@ func (data RouteMapRuleEntrySetRegularCommunity) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *RouteMapRuleEntrySetRegularCommunity) fromBody(res gjson.Result) {
 	data.Additive = types.StringValue(res.Get(data.getClassName() + ".attributes.additive").String())
 	data.NoCommunity = types.StringValue(res.Get(data.getClassName() + ".attributes.noCommAttr").String())
 	data.SetCriteria = types.StringValue(res.Get(data.getClassName() + ".attributes.setCriteria").String())
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *RouteMapRuleEntrySetRegularCommunity) updateFromBody(res gjson.Result) {
 	if !data.Additive.IsNull() {
 		data.Additive = types.StringValue(res.Get(data.getClassName() + ".attributes.additive").String())
@@ -113,15 +129,27 @@ func (data *RouteMapRuleEntrySetRegularCommunity) updateFromBody(res gjson.Resul
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data RouteMapRuleEntrySetRegularCommunity) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data RouteMapRuleEntrySetRegularCommunity) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
 
 	return dns
 }
+
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+// End of section. //template:end getDeletedItems

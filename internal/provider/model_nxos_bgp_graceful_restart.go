@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type BGPGracefulRestart struct {
 	Device          types.String `tfsdk:"device"`
 	Dn              types.String `tfsdk:"id"`
@@ -65,6 +69,9 @@ func (data *BGPGracefulRestart) fromIdentity(ctx context.Context, identity *BGPG
 	data.Vrf = identity.Vrf
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data BGPGracefulRestart) getDn() string {
 	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/gr", data.Vrf.ValueString())
 }
@@ -73,6 +80,9 @@ func (data BGPGracefulRestart) getClassName() string {
 	return "bgpGr"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data BGPGracefulRestart) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -86,11 +96,17 @@ func (data BGPGracefulRestart) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *BGPGracefulRestart) fromBody(res gjson.Result) {
 	data.RestartInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.restartIntvl").Int())
 	data.StaleInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.staleIntvl").Int())
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *BGPGracefulRestart) updateFromBody(res gjson.Result) {
 	if !data.RestartInterval.IsNull() {
 		data.RestartInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.restartIntvl").Int())
@@ -104,15 +120,27 @@ func (data *BGPGracefulRestart) updateFromBody(res gjson.Result) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data BGPGracefulRestart) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data BGPGracefulRestart) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
 
 	return dns
 }
+
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+// End of section. //template:end getDeletedItems

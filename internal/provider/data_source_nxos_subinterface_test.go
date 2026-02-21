@@ -19,12 +19,16 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosSubinterface(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -48,6 +52,9 @@ func TestAccDataSourceNxosSubinterface(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosSubinterfacePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/intf/phys-[eth1/10]"
@@ -60,6 +67,9 @@ resource "nxos_rest" "PreReq0" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 const testAccDataSourceNxosSubinterfaceConfig = `
 
 resource "nxos_subinterface" "test" {
@@ -80,3 +90,5 @@ data "nxos_subinterface" "test" {
   depends_on = [nxos_subinterface.test]
 }
 `
+
+// End of section. //template:end testAccDataSourceConfig

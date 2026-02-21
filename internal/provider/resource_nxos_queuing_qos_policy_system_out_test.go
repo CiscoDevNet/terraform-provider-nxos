@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
 	"testing"
@@ -29,6 +30,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosQueuingQOSPolicySystemOut(t *testing.T) {
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -58,6 +62,9 @@ func TestAccNxosQueuingQOSPolicySystemOut(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxosQueuingQOSPolicySystemOutImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
@@ -65,6 +72,13 @@ func nxosQueuingQOSPolicySystemOutImportStateIdFunc(resourceName string) resourc
 	}
 }
 
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosQueuingQOSPolicySystemOutConfig_minimum() string {
 	return `
 	resource "nxos_queuing_qos_policy_system_out" "test" {
@@ -72,9 +86,14 @@ func testAccNxosQueuingQOSPolicySystemOutConfig_minimum() string {
 	`
 }
 
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosQueuingQOSPolicySystemOutConfig_all() string {
 	return `
 	resource "nxos_queuing_qos_policy_system_out" "test" {
 	}
 	`
 }
+
+// End of section. //template:end testAccConfigAll

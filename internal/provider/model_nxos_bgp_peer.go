@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type BGPPeer struct {
 	Device          types.String `tfsdk:"device"`
 	Dn              types.String `tfsdk:"id"`
@@ -78,6 +82,9 @@ func (data *BGPPeer) fromIdentity(ctx context.Context, identity *BGPPeerIdentity
 	data.Address = identity.Address
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data BGPPeer) getDn() string {
 	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/peer-[%s]", data.Vrf.ValueString(), data.Address.ValueString())
 }
@@ -86,6 +93,9 @@ func (data BGPPeer) getClassName() string {
 	return "bgpPeer"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data BGPPeer) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -129,6 +139,9 @@ func (data BGPPeer) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *BGPPeer) fromBody(res gjson.Result) {
 	data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.addr").String())
 	data.RemoteAsn = types.StringValue(res.Get(data.getClassName() + ".attributes.asn").String())
@@ -143,6 +156,9 @@ func (data *BGPPeer) fromBody(res gjson.Result) {
 	data.PasswordType = types.StringValue(res.Get(data.getClassName() + ".attributes.passwdType").String())
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *BGPPeer) updateFromBody(res gjson.Result) {
 	if !data.Address.IsNull() {
 		data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.addr").String())
@@ -201,15 +217,27 @@ func (data *BGPPeer) updateFromBody(res gjson.Result) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data BGPPeer) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data BGPPeer) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
 
 	return dns
 }
+
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+// End of section. //template:end getDeletedItems

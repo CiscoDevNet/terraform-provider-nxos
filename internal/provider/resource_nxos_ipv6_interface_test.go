@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
 	"testing"
@@ -29,6 +30,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosIPv6Interface(t *testing.T) {
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -69,6 +73,9 @@ func TestAccNxosIPv6Interface(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxosIPv6InterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 		primary := s.RootModule().Resources[resourceName].Primary
@@ -79,6 +86,9 @@ func nxosIPv6InterfaceImportStateIdFunc(resourceName string) resource.ImportStat
 	}
 }
 
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosIPv6InterfacePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/ipv6/inst/dom-[default]"
@@ -87,6 +97,9 @@ resource "nxos_rest" "PreReq0" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosIPv6InterfaceConfig_minimum() string {
 	return `
 	resource "nxos_ipv6_interface" "test" {
@@ -97,6 +110,9 @@ func testAccNxosIPv6InterfaceConfig_minimum() string {
 	`
 }
 
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosIPv6InterfaceConfig_all() string {
 	return `
 	resource "nxos_ipv6_interface" "test" {
@@ -114,3 +130,5 @@ func testAccNxosIPv6InterfaceConfig_all() string {
 	}
 	`
 }
+
+// End of section. //template:end testAccConfigAll

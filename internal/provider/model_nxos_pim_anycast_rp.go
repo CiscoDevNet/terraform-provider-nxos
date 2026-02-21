@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -29,6 +30,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type PIMAnycastRP struct {
 	Device          types.String `tfsdk:"device"`
 	Dn              types.String `tfsdk:"id"`
@@ -60,6 +64,9 @@ func (data *PIMAnycastRP) fromIdentity(ctx context.Context, identity *PIMAnycast
 	data.VrfName = identity.VrfName
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data PIMAnycastRP) getDn() string {
 	return fmt.Sprintf("sys/pim/inst/dom-[%s]/acastrpfunc", data.VrfName.ValueString())
 }
@@ -68,6 +75,9 @@ func (data PIMAnycastRP) getClassName() string {
 	return "pimAcastRPFuncP"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data PIMAnycastRP) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -81,11 +91,17 @@ func (data PIMAnycastRP) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *PIMAnycastRP) fromBody(res gjson.Result) {
 	data.LocalInterface = types.StringValue(res.Get(data.getClassName() + ".attributes.localIf").String())
 	data.SourceInterface = types.StringValue(res.Get(data.getClassName() + ".attributes.srcIf").String())
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *PIMAnycastRP) updateFromBody(res gjson.Result) {
 	if !data.LocalInterface.IsNull() {
 		data.LocalInterface = types.StringValue(res.Get(data.getClassName() + ".attributes.localIf").String())
@@ -99,15 +115,27 @@ func (data *PIMAnycastRP) updateFromBody(res gjson.Result) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data PIMAnycastRP) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data PIMAnycastRP) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
 
 	return dns
 }
+
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+// End of section. //template:end getDeletedItems

@@ -23,11 +23,11 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"path"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"text/template"
 
@@ -384,6 +384,31 @@ func allAttributesHaveValue(attrs []YamlConfigAttribute) bool {
 	return true
 }
 
+func getTemplateSection(content, name string) string {
+	scanner := bufio.NewScanner(strings.NewReader(content))
+	result := ""
+	foundSection := false
+	beginRegex := regexp.MustCompile(`\/\/template:begin\s` + name + `$`)
+	endRegex := regexp.MustCompile(`\/\/template:end\s` + name + `$`)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if !foundSection {
+			match := beginRegex.MatchString(line)
+			if match {
+				foundSection = true
+				result += line + "\n"
+			}
+		} else {
+			result += line + "\n"
+			match := endRegex.MatchString(line)
+			if match {
+				foundSection = false
+			}
+		}
+	}
+	return result
+}
+
 func renderTemplate(templatePath, outputPath string, config interface{}) {
 	file, err := os.Open(templatePath)
 	if err != nil {
@@ -406,18 +431,54 @@ func renderTemplate(templatePath, outputPath string, config interface{}) {
 		log.Fatalf("Error parsing template: %v", err)
 	}
 
-	// create output file
-	outputFile := filepath.Join(outputPath)
-	os.MkdirAll(filepath.Dir(outputFile), 0755)
-	f, err := os.Create(outputFile)
-	if err != nil {
-		log.Fatalf("Error creating output file: %v", err)
-	}
-
 	output := new(bytes.Buffer)
 	err = template.Execute(output, config)
 	if err != nil {
 		log.Fatalf("Error executing template: %v", err)
+	}
+
+	// create output file
+	outputFile := filepath.Join(outputPath)
+	existingFile, err := os.Open(outputPath)
+	if err != nil {
+		os.MkdirAll(filepath.Dir(outputFile), 0755)
+	} else if strings.HasSuffix(templatePath, ".go") {
+		existingScanner := bufio.NewScanner(existingFile)
+		var newContent string
+		currentSectionName := ""
+		foundSections := false
+		beginRegex := regexp.MustCompile(`\/\/template:begin\s(.*?)$`)
+		endRegex := regexp.MustCompile(`\/\/template:end\s(.*?)$`)
+		for existingScanner.Scan() {
+			line := existingScanner.Text()
+			if currentSectionName == "" {
+				matches := beginRegex.FindStringSubmatch(line)
+				if len(matches) > 1 && matches[1] != "" {
+					currentSectionName = matches[1]
+					foundSections = true
+				} else {
+					newContent += line + "\n"
+				}
+			} else {
+				matches := endRegex.FindStringSubmatch(line)
+				if len(matches) > 1 && matches[1] == currentSectionName {
+					currentSectionName = ""
+					newSection := getTemplateSection(string(output.Bytes()), matches[1])
+					newContent += newSection
+				}
+			}
+		}
+		if foundSections && newContent != "" {
+			output = bytes.NewBufferString(newContent)
+		}
+	}
+	if existingFile != nil {
+		existingFile.Close()
+	}
+
+	f, err := os.Create(outputFile)
+	if err != nil {
+		log.Fatalf("Error creating output file: %v", err)
 	}
 	f.Write(output.Bytes())
 }
@@ -428,11 +489,11 @@ func main() {
 		resourceName = os.Args[1]
 	}
 
-	items, _ := ioutil.ReadDir(definitionsPath)
+	items, _ := os.ReadDir(definitionsPath)
 	configs := make([]YamlConfig, len(items))
 	// Iterate over definitions
 	for i, filename := range items {
-		yamlFile, err := ioutil.ReadFile(filepath.Join(definitionsPath, filename.Name()))
+		yamlFile, err := os.ReadFile(filepath.Join(definitionsPath, filename.Name()))
 		if err != nil {
 			log.Fatalf("Error reading file: %v", err)
 		}
@@ -463,7 +524,7 @@ func main() {
 	renderTemplate(providerTemplate, providerLocation, configs)
 	renderTemplate(objectsTemplate, objectsLocation, configs)
 
-	changelog, err := ioutil.ReadFile(changelogOriginal)
+	changelog, err := os.ReadFile(changelogOriginal)
 	if err != nil {
 		log.Fatalf("Error reading changelog: %v", err)
 	}

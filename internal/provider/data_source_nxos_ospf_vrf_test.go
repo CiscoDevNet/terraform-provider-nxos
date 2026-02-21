@@ -19,12 +19,16 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosOSPFVRF(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -47,6 +51,9 @@ func TestAccDataSourceNxosOSPFVRF(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosOSPFVRFPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/ospf"
@@ -84,6 +91,9 @@ resource "nxos_rest" "PreReq3" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 const testAccDataSourceNxosOSPFVRFConfig = `
 
 resource "nxos_ospf_vrf" "test" {
@@ -105,3 +115,5 @@ data "nxos_ospf_vrf" "test" {
   depends_on = [nxos_ospf_vrf.test]
 }
 `
+
+// End of section. //template:end testAccDataSourceConfig

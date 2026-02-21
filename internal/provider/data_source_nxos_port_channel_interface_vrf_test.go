@@ -19,12 +19,16 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosPortChannelInterfaceVRF(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -40,6 +44,9 @@ func TestAccDataSourceNxosPortChannelInterfaceVRF(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosPortChannelInterfaceVRFPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/intf/aggr-[po1]"
@@ -52,6 +59,9 @@ resource "nxos_rest" "PreReq0" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 const testAccDataSourceNxosPortChannelInterfaceVRFConfig = `
 
 resource "nxos_port_channel_interface_vrf" "test" {
@@ -65,3 +75,5 @@ data "nxos_port_channel_interface_vrf" "test" {
   depends_on = [nxos_port_channel_interface_vrf.test]
 }
 `
+
+// End of section. //template:end testAccDataSourceConfig

@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
 	"testing"
@@ -29,6 +30,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosSubinterface(t *testing.T) {
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -68,6 +72,9 @@ func TestAccNxosSubinterface(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxosSubinterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 		primary := s.RootModule().Resources[resourceName].Primary
@@ -77,6 +84,9 @@ func nxosSubinterfaceImportStateIdFunc(resourceName string) resource.ImportState
 	}
 }
 
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosSubinterfacePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/intf/phys-[eth1/10]"
@@ -89,6 +99,9 @@ resource "nxos_rest" "PreReq0" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosSubinterfaceConfig_minimum() string {
 	return `
 	resource "nxos_subinterface" "test" {
@@ -98,6 +111,9 @@ func testAccNxosSubinterfaceConfig_minimum() string {
 	`
 }
 
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosSubinterfaceConfig_all() string {
 	return `
 	resource "nxos_subinterface" "test" {
@@ -114,3 +130,5 @@ func testAccNxosSubinterfaceConfig_all() string {
 	}
 	`
 }
+
+// End of section. //template:end testAccConfigAll

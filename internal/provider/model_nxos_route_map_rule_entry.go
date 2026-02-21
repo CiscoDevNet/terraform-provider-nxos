@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouteMapRuleEntry struct {
 	Device   types.String `tfsdk:"device"`
 	Dn       types.String `tfsdk:"id"`
@@ -64,6 +68,9 @@ func (data *RouteMapRuleEntry) fromIdentity(ctx context.Context, identity *Route
 	data.Order = identity.Order
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data RouteMapRuleEntry) getDn() string {
 	return fmt.Sprintf("sys/rpm/rtmap-[%s]/ent-[%v]", data.RuleName.ValueString(), data.Order.ValueInt64())
 }
@@ -72,6 +79,9 @@ func (data RouteMapRuleEntry) getClassName() string {
 	return "rtmapEntry"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data RouteMapRuleEntry) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -85,11 +95,17 @@ func (data RouteMapRuleEntry) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *RouteMapRuleEntry) fromBody(res gjson.Result) {
 	data.Order = types.Int64Value(res.Get(data.getClassName() + ".attributes.order").Int())
 	data.Action = types.StringValue(res.Get(data.getClassName() + ".attributes.action").String())
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *RouteMapRuleEntry) updateFromBody(res gjson.Result) {
 	if !data.Order.IsNull() {
 		data.Order = types.Int64Value(res.Get(data.getClassName() + ".attributes.order").Int())
@@ -103,15 +119,27 @@ func (data *RouteMapRuleEntry) updateFromBody(res gjson.Result) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data RouteMapRuleEntry) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data RouteMapRuleEntry) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
 
 	return dns
 }
+
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+// End of section. //template:end getDeletedItems

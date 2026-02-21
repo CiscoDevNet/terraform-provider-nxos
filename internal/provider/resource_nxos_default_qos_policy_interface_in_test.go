@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
 	"testing"
@@ -29,6 +30,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosDefaultQOSPolicyInterfaceIn(t *testing.T) {
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -60,6 +64,9 @@ func TestAccNxosDefaultQOSPolicyInterfaceIn(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxosDefaultQOSPolicyInterfaceInImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 		primary := s.RootModule().Resources[resourceName].Primary
@@ -69,6 +76,13 @@ func nxosDefaultQOSPolicyInterfaceInImportStateIdFunc(resourceName string) resou
 	}
 }
 
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosDefaultQOSPolicyInterfaceInConfig_minimum() string {
 	return `
 	resource "nxos_default_qos_policy_interface_in" "test" {
@@ -77,6 +91,9 @@ func testAccNxosDefaultQOSPolicyInterfaceInConfig_minimum() string {
 	`
 }
 
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosDefaultQOSPolicyInterfaceInConfig_all() string {
 	return `
 	resource "nxos_default_qos_policy_interface_in" "test" {
@@ -84,3 +101,5 @@ func testAccNxosDefaultQOSPolicyInterfaceInConfig_all() string {
 	}
 	`
 }
+
+// End of section. //template:end testAccConfigAll

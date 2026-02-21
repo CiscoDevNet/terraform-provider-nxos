@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"os"
 	"testing"
@@ -26,6 +27,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosFeatureNetflow(t *testing.T) {
 	if os.Getenv("NETFLOW") == "" {
 		t.Skip("skipping test, set environment variable NETFLOW")
@@ -44,6 +48,13 @@ func TestAccDataSourceNxosFeatureNetflow(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 const testAccDataSourceNxosFeatureNetflowConfig = `
 
 resource "nxos_feature_netflow" "test" {
@@ -54,3 +65,5 @@ data "nxos_feature_netflow" "test" {
   depends_on = [nxos_feature_netflow.test]
 }
 `
+
+// End of section. //template:end testAccDataSourceConfig

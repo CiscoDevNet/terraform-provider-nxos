@@ -19,12 +19,16 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidth(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -40,6 +44,9 @@ func TestAccDataSourceNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidth(t *
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidthPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/ipqos/queuing/p/name-[PM1]"
@@ -60,6 +67,9 @@ resource "nxos_rest" "PreReq1" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 const testAccDataSourceNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidthConfig = `
 
 resource "nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth" "test" {
@@ -75,3 +85,5 @@ data "nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth" "test" {
   depends_on = [nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth.test]
 }
 `
+
+// End of section. //template:end testAccDataSourceConfig

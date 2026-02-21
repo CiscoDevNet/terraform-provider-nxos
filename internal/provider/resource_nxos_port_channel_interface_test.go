@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
 	"os"
@@ -30,6 +31,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosPortChannelInterface(t *testing.T) {
 	if os.Getenv("PORT_CHANNEL_INTERFACE") == "" {
 		t.Skip("skipping test, set environment variable PORT_CHANNEL_INTERFACE")
@@ -84,6 +88,9 @@ func TestAccNxosPortChannelInterface(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxosPortChannelInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 		primary := s.RootModule().Resources[resourceName].Primary
@@ -93,6 +100,13 @@ func nxosPortChannelInterfaceImportStateIdFunc(resourceName string) resource.Imp
 	}
 }
 
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosPortChannelInterfaceConfig_minimum() string {
 	return `
 	resource "nxos_port_channel_interface" "test" {
@@ -101,6 +115,9 @@ func testAccNxosPortChannelInterfaceConfig_minimum() string {
 	`
 }
 
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosPortChannelInterfaceConfig_all() string {
 	return `
 	resource "nxos_port_channel_interface" "test" {
@@ -128,3 +145,5 @@ func testAccNxosPortChannelInterfaceConfig_all() string {
 	}
 	`
 }
+
+// End of section. //template:end testAccConfigAll

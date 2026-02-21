@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type IPv4InterfaceAddress struct {
 	Device      types.String `tfsdk:"device"`
 	Dn          types.String `tfsdk:"id"`
@@ -69,6 +73,9 @@ func (data *IPv4InterfaceAddress) fromIdentity(ctx context.Context, identity *IP
 	data.Address = identity.Address
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data IPv4InterfaceAddress) getDn() string {
 	return fmt.Sprintf("sys/ipv4/inst/dom-[%s]/if-[%s]/addr-[%s]", data.Vrf.ValueString(), data.InterfaceId.ValueString(), data.Address.ValueString())
 }
@@ -77,6 +84,9 @@ func (data IPv4InterfaceAddress) getClassName() string {
 	return "ipv4Addr"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data IPv4InterfaceAddress) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -93,12 +103,18 @@ func (data IPv4InterfaceAddress) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *IPv4InterfaceAddress) fromBody(res gjson.Result) {
 	data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.addr").String())
 	data.Type = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
 	data.Tag = types.Int64Value(res.Get(data.getClassName() + ".attributes.tag").Int())
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *IPv4InterfaceAddress) updateFromBody(res gjson.Result) {
 	if !data.Address.IsNull() {
 		data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.addr").String())
@@ -117,15 +133,27 @@ func (data *IPv4InterfaceAddress) updateFromBody(res gjson.Result) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data IPv4InterfaceAddress) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data IPv4InterfaceAddress) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
 
 	return dns
 }
+
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+// End of section. //template:end getDeletedItems

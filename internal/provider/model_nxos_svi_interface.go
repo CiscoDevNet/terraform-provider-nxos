@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type SVIInterface struct {
 	Device      types.String `tfsdk:"device"`
 	Dn          types.String `tfsdk:"id"`
@@ -65,6 +69,9 @@ func (data *SVIInterface) fromIdentity(ctx context.Context, identity *SVIInterfa
 	data.InterfaceId = identity.InterfaceId
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data SVIInterface) getDn() string {
 	return fmt.Sprintf("sys/intf/svi-[%s]", data.InterfaceId.ValueString())
 }
@@ -73,6 +80,9 @@ func (data SVIInterface) getClassName() string {
 	return "sviIf"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data SVIInterface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -101,6 +111,9 @@ func (data SVIInterface) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *SVIInterface) fromBody(res gjson.Result) {
 	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
@@ -111,6 +124,9 @@ func (data *SVIInterface) fromBody(res gjson.Result) {
 	data.Mtu = types.Int64Value(res.Get(data.getClassName() + ".attributes.mtu").Int())
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *SVIInterface) updateFromBody(res gjson.Result) {
 	if !data.InterfaceId.IsNull() {
 		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
@@ -149,15 +165,27 @@ func (data *SVIInterface) updateFromBody(res gjson.Result) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data SVIInterface) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data SVIInterface) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
 
 	return dns
 }
+
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+// End of section. //template:end getDeletedItems

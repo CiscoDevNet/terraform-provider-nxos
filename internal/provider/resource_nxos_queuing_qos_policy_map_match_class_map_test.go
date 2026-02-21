@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
 	"testing"
@@ -29,6 +30,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosQueuingQOSPolicyMapMatchClassMap(t *testing.T) {
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -61,6 +65,9 @@ func TestAccNxosQueuingQOSPolicyMapMatchClassMap(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxosQueuingQOSPolicyMapMatchClassMapImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 		primary := s.RootModule().Resources[resourceName].Primary
@@ -71,6 +78,9 @@ func nxosQueuingQOSPolicyMapMatchClassMapImportStateIdFunc(resourceName string) 
 	}
 }
 
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosQueuingQOSPolicyMapMatchClassMapPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/ipqos/queuing/p/name-[PM1]"
@@ -82,6 +92,9 @@ resource "nxos_rest" "PreReq0" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosQueuingQOSPolicyMapMatchClassMapConfig_minimum() string {
 	return `
 	resource "nxos_queuing_qos_policy_map_match_class_map" "test" {
@@ -92,6 +105,9 @@ func testAccNxosQueuingQOSPolicyMapMatchClassMapConfig_minimum() string {
 	`
 }
 
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosQueuingQOSPolicyMapMatchClassMapConfig_all() string {
 	return `
 	resource "nxos_queuing_qos_policy_map_match_class_map" "test" {
@@ -101,3 +117,5 @@ func testAccNxosQueuingQOSPolicyMapMatchClassMapConfig_all() string {
 	}
 	`
 }
+
+// End of section. //template:end testAccConfigAll

@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
 	"testing"
@@ -29,6 +30,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosEVPN(t *testing.T) {
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -60,6 +64,9 @@ func TestAccNxosEVPN(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxosEVPNImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
@@ -67,6 +74,9 @@ func nxosEVPNImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	}
 }
 
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosEVPNPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/nvo"
@@ -89,6 +99,9 @@ resource "nxos_rest" "PreReq1" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosEVPNConfig_minimum() string {
 	return `
 	resource "nxos_evpn" "test" {
@@ -97,6 +110,9 @@ func testAccNxosEVPNConfig_minimum() string {
 	`
 }
 
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosEVPNConfig_all() string {
 	return `
 	resource "nxos_evpn" "test" {
@@ -105,3 +121,5 @@ func testAccNxosEVPNConfig_all() string {
 	}
 	`
 }
+
+// End of section. //template:end testAccConfigAll

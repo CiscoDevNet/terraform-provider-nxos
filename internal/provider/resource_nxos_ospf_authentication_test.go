@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
 	"testing"
@@ -29,6 +30,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosOSPFAuthentication(t *testing.T) {
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -62,6 +66,9 @@ func TestAccNxosOSPFAuthentication(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxosOSPFAuthenticationImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 		primary := s.RootModule().Resources[resourceName].Primary
@@ -73,6 +80,9 @@ func nxosOSPFAuthenticationImportStateIdFunc(resourceName string) resource.Impor
 	}
 }
 
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosOSPFAuthenticationPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/ospf"
@@ -136,6 +146,9 @@ resource "nxos_rest" "PreReq6" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosOSPFAuthenticationConfig_minimum() string {
 	return `
 	resource "nxos_ospf_authentication" "test" {
@@ -147,6 +160,9 @@ func testAccNxosOSPFAuthenticationConfig_minimum() string {
 	`
 }
 
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosOSPFAuthenticationConfig_all() string {
 	return `
 	resource "nxos_ospf_authentication" "test" {
@@ -164,3 +180,5 @@ func testAccNxosOSPFAuthenticationConfig_all() string {
 	}
 	`
 }
+
+// End of section. //template:end testAccConfigAll

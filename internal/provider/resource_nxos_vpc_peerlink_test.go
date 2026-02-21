@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
 	"testing"
@@ -29,6 +30,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosVPCPeerlink(t *testing.T) {
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -60,6 +64,9 @@ func TestAccNxosVPCPeerlink(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxosVPCPeerlinkImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
@@ -67,6 +74,9 @@ func nxosVPCPeerlinkImportStateIdFunc(resourceName string) resource.ImportStateI
 	}
 }
 
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosVPCPeerlinkPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/vpc"
@@ -122,6 +132,9 @@ resource "nxos_rest" "PreReq5" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosVPCPeerlinkConfig_minimum() string {
 	return `
 	resource "nxos_vpc_peerlink" "test" {
@@ -131,6 +144,9 @@ func testAccNxosVPCPeerlinkConfig_minimum() string {
 	`
 }
 
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosVPCPeerlinkConfig_all() string {
 	return `
 	resource "nxos_vpc_peerlink" "test" {
@@ -139,3 +155,5 @@ func testAccNxosVPCPeerlinkConfig_all() string {
 	}
 	`
 }
+
+// End of section. //template:end testAccConfigAll

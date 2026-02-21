@@ -20,6 +20,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -34,6 +35,9 @@ import (
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 {{- $name := camelCase .Name}}
 type {{camelCase .Name}} struct {
 	Device types.String `tfsdk:"device"`
@@ -152,6 +156,9 @@ func (data *{{camelCase .Name}}) fromIdentity(ctx context.Context, identity *{{c
 {{- end}}
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data {{camelCase .Name}}) getDn() string {
 {{- if hasId .Attributes}}
 	return fmt.Sprintf("{{.Dn}}"{{range .Attributes}}{{if .Id}}, data.{{toGoName .TfName}}.Value{{.Type}}(){{end}}{{end}})
@@ -198,6 +205,9 @@ func (data {{camelCase .Name}}) getClassName() string {
 	return "{{.ClassName}}"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data {{camelCase .Name}}) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -510,6 +520,9 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 	{{- range .Attributes}}
 	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
@@ -806,6 +819,9 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 	{{- end}}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 	{{- range .Attributes}}
 	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
@@ -1245,6 +1261,9 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 	{{- end}}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -1312,6 +1331,9 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data {{camelCase .Name}}) getDeleteDns() []string {
 	dns := []string{}
 
@@ -1364,6 +1386,9 @@ func (data {{camelCase .Name}}) getDeleteDns() []string {
 	return dns
 }
 
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 {{- if hasListChildClasses .ChildClasses}}
 
 func (data {{camelCase .Name}}) getDeletedItems(ctx context.Context, state {{camelCase .Name}}) []string {
@@ -1423,3 +1448,5 @@ func (data {{camelCase .Name}}) getDeletedItems(ctx context.Context, state {{cam
 	return deletedItems
 }
 {{- end}}
+
+// End of section. //template:end getDeletedItems

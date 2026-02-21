@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -31,6 +32,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type PortChannelInterfaceMember struct {
 	Device      types.String `tfsdk:"device"`
 	Dn          types.String `tfsdk:"id"`
@@ -65,6 +69,9 @@ func (data *PortChannelInterfaceMember) fromIdentity(ctx context.Context, identi
 	data.InterfaceDn = identity.InterfaceDn
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data PortChannelInterfaceMember) getDn() string {
 	return fmt.Sprintf("sys/intf/aggr-[%s]/rsmbrIfs-[%s]", data.InterfaceId.ValueString(), data.InterfaceDn.ValueString())
 }
@@ -73,6 +80,9 @@ func (data PortChannelInterfaceMember) getClassName() string {
 	return "pcRsMbrIfs"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data PortChannelInterfaceMember) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -86,11 +96,17 @@ func (data PortChannelInterfaceMember) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *PortChannelInterfaceMember) fromBody(res gjson.Result) {
 	data.InterfaceDn = types.StringValue(res.Get(data.getClassName() + ".attributes.tDn").String())
 	data.Force = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.isMbrForce").String()))
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *PortChannelInterfaceMember) updateFromBody(res gjson.Result) {
 	if !data.InterfaceDn.IsNull() {
 		data.InterfaceDn = types.StringValue(res.Get(data.getClassName() + ".attributes.tDn").String())
@@ -104,15 +120,27 @@ func (data *PortChannelInterfaceMember) updateFromBody(res gjson.Result) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data PortChannelInterfaceMember) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data PortChannelInterfaceMember) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
 
 	return dns
 }
+
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+// End of section. //template:end getDeletedItems

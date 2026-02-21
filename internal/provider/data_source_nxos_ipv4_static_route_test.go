@@ -19,12 +19,16 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosIPv4StaticRoute(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -49,6 +53,9 @@ func TestAccDataSourceNxosIPv4StaticRoute(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosIPv4StaticRoutePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/ipv4/inst/dom-[default]"
@@ -57,6 +64,9 @@ resource "nxos_rest" "PreReq0" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 const testAccDataSourceNxosIPv4StaticRouteConfig = `
 
 resource "nxos_ipv4_static_route" "test" {
@@ -80,3 +90,5 @@ data "nxos_ipv4_static_route" "test" {
   depends_on = [nxos_ipv4_static_route.test]
 }
 `
+
+// End of section. //template:end testAccDataSourceConfig

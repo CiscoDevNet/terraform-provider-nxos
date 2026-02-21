@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
 	"testing"
@@ -29,6 +30,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosSubinterfaceVRF(t *testing.T) {
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -61,6 +65,9 @@ func TestAccNxosSubinterfaceVRF(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxosSubinterfaceVRFImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 		primary := s.RootModule().Resources[resourceName].Primary
@@ -70,6 +77,9 @@ func nxosSubinterfaceVRFImportStateIdFunc(resourceName string) resource.ImportSt
 	}
 }
 
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosSubinterfaceVRFPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/intf/phys-[eth1/10]"
@@ -90,6 +100,9 @@ resource "nxos_rest" "PreReq1" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosSubinterfaceVRFConfig_minimum() string {
 	return `
 	resource "nxos_subinterface_vrf" "test" {
@@ -100,6 +113,9 @@ func testAccNxosSubinterfaceVRFConfig_minimum() string {
 	`
 }
 
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosSubinterfaceVRFConfig_all() string {
 	return `
 	resource "nxos_subinterface_vrf" "test" {
@@ -109,3 +125,5 @@ func testAccNxosSubinterfaceVRFConfig_all() string {
 	}
 	`
 }
+
+// End of section. //template:end testAccConfigAll

@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -29,6 +30,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type Keychain struct {
 	Device types.String `tfsdk:"device"`
 	Dn     types.String `tfsdk:"id"`
@@ -58,6 +62,9 @@ func (data *Keychain) fromIdentity(ctx context.Context, identity *KeychainIdenti
 	data.Name = identity.Name
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data Keychain) getDn() string {
 	return fmt.Sprintf("sys/kcmgr/keychains/classickeychain-[%s]", data.Name.ValueString())
 }
@@ -66,6 +73,9 @@ func (data Keychain) getClassName() string {
 	return "kcmgrClassicKeychain"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data Keychain) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -76,10 +86,16 @@ func (data Keychain) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *Keychain) fromBody(res gjson.Result) {
 	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.keychainName").String())
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *Keychain) updateFromBody(res gjson.Result) {
 	if !data.Name.IsNull() {
 		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.keychainName").String())
@@ -88,15 +104,27 @@ func (data *Keychain) updateFromBody(res gjson.Result) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data Keychain) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data Keychain) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
 
 	return dns
 }
+
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+// End of section. //template:end getDeletedItems

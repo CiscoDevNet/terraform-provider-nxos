@@ -19,12 +19,16 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosIPv6Interface(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -48,6 +52,9 @@ func TestAccDataSourceNxosIPv6Interface(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosIPv6InterfacePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/ipv6/inst/dom-[default]"
@@ -56,6 +63,9 @@ resource "nxos_rest" "PreReq0" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 const testAccDataSourceNxosIPv6InterfaceConfig = `
 
 resource "nxos_ipv6_interface" "test" {
@@ -78,3 +88,5 @@ data "nxos_ipv6_interface" "test" {
   depends_on = [nxos_ipv6_interface.test]
 }
 `
+
+// End of section. //template:end testAccDataSourceConfig

@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -29,6 +30,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type PIMAnycastRPPeer struct {
 	Device       types.String `tfsdk:"device"`
 	Dn           types.String `tfsdk:"id"`
@@ -66,6 +70,9 @@ func (data *PIMAnycastRPPeer) fromIdentity(ctx context.Context, identity *PIMAny
 	data.RpSetAddress = identity.RpSetAddress
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data PIMAnycastRPPeer) getDn() string {
 	return fmt.Sprintf("sys/pim/inst/dom-[%s]/acastrpfunc/peer-[%s]-peer-[%s]", data.VrfName.ValueString(), data.Address.ValueString(), data.RpSetAddress.ValueString())
 }
@@ -74,6 +81,9 @@ func (data PIMAnycastRPPeer) getClassName() string {
 	return "pimAcastRPPeer"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data PIMAnycastRPPeer) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -87,11 +97,17 @@ func (data PIMAnycastRPPeer) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *PIMAnycastRPPeer) fromBody(res gjson.Result) {
 	data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.addr").String())
 	data.RpSetAddress = types.StringValue(res.Get(data.getClassName() + ".attributes.rpSetAddr").String())
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *PIMAnycastRPPeer) updateFromBody(res gjson.Result) {
 	if !data.Address.IsNull() {
 		data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.addr").String())
@@ -105,15 +121,27 @@ func (data *PIMAnycastRPPeer) updateFromBody(res gjson.Result) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data PIMAnycastRPPeer) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data PIMAnycastRPPeer) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
 
 	return dns
 }
+
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+// End of section. //template:end getDeletedItems

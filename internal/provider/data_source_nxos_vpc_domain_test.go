@@ -19,12 +19,16 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosVPCDomain(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -60,6 +64,9 @@ func TestAccDataSourceNxosVPCDomain(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosVPCDomainPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/vpc"
@@ -78,6 +85,9 @@ resource "nxos_rest" "PreReq1" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 const testAccDataSourceNxosVPCDomainConfig = `
 
 resource "nxos_vpc_domain" "test" {
@@ -109,3 +119,5 @@ data "nxos_vpc_domain" "test" {
   depends_on = [nxos_vpc_domain.test]
 }
 `
+
+// End of section. //template:end testAccDataSourceConfig

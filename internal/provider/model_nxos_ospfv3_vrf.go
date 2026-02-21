@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -31,6 +32,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type OSPFv3VRF struct {
 	Device                 types.String `tfsdk:"device"`
 	Dn                     types.String `tfsdk:"id"`
@@ -69,6 +73,9 @@ func (data *OSPFv3VRF) fromIdentity(ctx context.Context, identity *OSPFv3VRFIden
 	data.Name = identity.Name
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data OSPFv3VRF) getDn() string {
 	return fmt.Sprintf("sys/ospfv3/inst-[%s]/dom-[%s]", data.InstanceName.ValueString(), data.Name.ValueString())
 }
@@ -77,6 +84,9 @@ func (data OSPFv3VRF) getClassName() string {
 	return "ospfv3Dom"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data OSPFv3VRF) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -102,6 +112,9 @@ func (data OSPFv3VRF) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *OSPFv3VRF) fromBody(res gjson.Result) {
 	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
@@ -111,6 +124,9 @@ func (data *OSPFv3VRF) fromBody(res gjson.Result) {
 	data.BfdControl = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.bfdCtrl").String()))
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *OSPFv3VRF) updateFromBody(res gjson.Result) {
 	if !data.Name.IsNull() {
 		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
@@ -144,15 +160,27 @@ func (data *OSPFv3VRF) updateFromBody(res gjson.Result) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data OSPFv3VRF) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data OSPFv3VRF) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
 
 	return dns
 }
+
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+// End of section. //template:end getDeletedItems

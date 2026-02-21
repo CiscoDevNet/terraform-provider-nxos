@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -29,6 +30,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type DefaultQOSPolicyInterfaceInPolicyMap struct {
 	Device        types.String `tfsdk:"device"`
 	Dn            types.String `tfsdk:"id"`
@@ -59,6 +63,9 @@ func (data *DefaultQOSPolicyInterfaceInPolicyMap) fromIdentity(ctx context.Conte
 	data.InterfaceId = identity.InterfaceId
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data DefaultQOSPolicyInterfaceInPolicyMap) getDn() string {
 	return fmt.Sprintf("sys/ipqos/dflt/policy/in/intf-[%s]/pmap", data.InterfaceId.ValueString())
 }
@@ -67,6 +74,9 @@ func (data DefaultQOSPolicyInterfaceInPolicyMap) getClassName() string {
 	return "ipqosInst"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data DefaultQOSPolicyInterfaceInPolicyMap) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -77,10 +87,16 @@ func (data DefaultQOSPolicyInterfaceInPolicyMap) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *DefaultQOSPolicyInterfaceInPolicyMap) fromBody(res gjson.Result) {
 	data.PolicyMapName = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *DefaultQOSPolicyInterfaceInPolicyMap) updateFromBody(res gjson.Result) {
 	if !data.PolicyMapName.IsNull() {
 		data.PolicyMapName = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
@@ -89,15 +105,27 @@ func (data *DefaultQOSPolicyInterfaceInPolicyMap) updateFromBody(res gjson.Resul
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data DefaultQOSPolicyInterfaceInPolicyMap) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data DefaultQOSPolicyInterfaceInPolicyMap) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
 
 	return dns
 }
+
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+// End of section. //template:end getDeletedItems

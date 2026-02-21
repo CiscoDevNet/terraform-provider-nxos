@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -29,6 +30,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type VRFRouting struct {
 	Device             types.String `tfsdk:"device"`
 	Dn                 types.String `tfsdk:"id"`
@@ -59,6 +63,9 @@ func (data *VRFRouting) fromIdentity(ctx context.Context, identity *VRFRoutingId
 	data.Vrf = identity.Vrf
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data VRFRouting) getDn() string {
 	return fmt.Sprintf("sys/inst-[%s]/dom-[%[1]s]", data.Vrf.ValueString())
 }
@@ -67,6 +74,9 @@ func (data VRFRouting) getClassName() string {
 	return "rtctrlDom"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data VRFRouting) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -77,10 +87,16 @@ func (data VRFRouting) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *VRFRouting) fromBody(res gjson.Result) {
 	data.RouteDistinguisher = types.StringValue(res.Get(data.getClassName() + ".attributes.rd").String())
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *VRFRouting) updateFromBody(res gjson.Result) {
 	if !data.RouteDistinguisher.IsNull() {
 		data.RouteDistinguisher = types.StringValue(res.Get(data.getClassName() + ".attributes.rd").String())
@@ -89,15 +105,27 @@ func (data *VRFRouting) updateFromBody(res gjson.Result) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data VRFRouting) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data VRFRouting) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
 
 	return dns
 }
+
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+// End of section. //template:end getDeletedItems

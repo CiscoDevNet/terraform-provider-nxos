@@ -19,12 +19,16 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosHMMInterface(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -42,6 +46,9 @@ func TestAccDataSourceNxosHMMInterface(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosHMMInterfacePrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/ifvlan"
@@ -97,6 +104,9 @@ resource "nxos_rest" "PreReq5" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 const testAccDataSourceNxosHMMInterfaceConfig = `
 
 resource "nxos_hmm_interface" "test" {
@@ -111,3 +121,5 @@ data "nxos_hmm_interface" "test" {
   depends_on = [nxos_hmm_interface.test]
 }
 `
+
+// End of section. //template:end testAccDataSourceConfig

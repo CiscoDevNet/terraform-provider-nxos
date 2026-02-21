@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type IPv6StaticRoute struct {
 	Device   types.String              `tfsdk:"device"`
 	Dn       types.String              `tfsdk:"id"`
@@ -74,6 +78,9 @@ func (data *IPv6StaticRoute) fromIdentity(ctx context.Context, identity *IPv6Sta
 	data.Prefix = identity.Prefix
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data IPv6StaticRoute) getDn() string {
 	return fmt.Sprintf("sys/ipv6/inst/dom-[%s]/rt-[%s]", data.VrfName.ValueString(), data.Prefix.ValueString())
 }
@@ -86,6 +93,9 @@ func (data IPv6StaticRoute) getClassName() string {
 	return "ipv6Route"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data IPv6StaticRoute) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -122,6 +132,9 @@ func (data IPv6StaticRoute) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *IPv6StaticRoute) fromBody(res gjson.Result) {
 	data.Prefix = types.StringValue(res.Get(data.getClassName() + ".attributes.prefix").String())
 	res.Get(data.getClassName() + ".children").ForEach(
@@ -147,6 +160,9 @@ func (data *IPv6StaticRoute) fromBody(res gjson.Result) {
 	)
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *IPv6StaticRoute) updateFromBody(res gjson.Result) {
 	if !data.Prefix.IsNull() {
 		data.Prefix = types.StringValue(res.Get(data.getClassName() + ".attributes.prefix").String())
@@ -203,18 +219,28 @@ func (data *IPv6StaticRoute) updateFromBody(res gjson.Result) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data IPv6StaticRoute) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data IPv6StaticRoute) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
 
 	return dns
 }
+
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data IPv6StaticRoute) getDeletedItems(ctx context.Context, state IPv6StaticRoute) []string {
 	deletedItems := []string{}
@@ -232,3 +258,5 @@ func (data IPv6StaticRoute) getDeletedItems(ctx context.Context, state IPv6Stati
 	}
 	return deletedItems
 }
+
+// End of section. //template:end getDeletedItems

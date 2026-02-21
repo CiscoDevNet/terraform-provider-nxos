@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
 	"testing"
@@ -29,6 +30,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosIPv6InterfaceAddress(t *testing.T) {
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -64,6 +68,9 @@ func TestAccNxosIPv6InterfaceAddress(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxosIPv6InterfaceAddressImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 		primary := s.RootModule().Resources[resourceName].Primary
@@ -75,6 +82,9 @@ func nxosIPv6InterfaceAddressImportStateIdFunc(resourceName string) resource.Imp
 	}
 }
 
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosIPv6InterfaceAddressPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/intf/phys-[eth1/10]"
@@ -101,6 +111,9 @@ resource "nxos_rest" "PreReq2" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosIPv6InterfaceAddressConfig_minimum() string {
 	return `
 	resource "nxos_ipv6_interface_address" "test" {
@@ -112,6 +125,9 @@ func testAccNxosIPv6InterfaceAddressConfig_minimum() string {
 	`
 }
 
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosIPv6InterfaceAddressConfig_all() string {
 	return `
 	resource "nxos_ipv6_interface_address" "test" {
@@ -124,3 +140,5 @@ func testAccNxosIPv6InterfaceAddressConfig_all() string {
 	}
 	`
 }
+
+// End of section. //template:end testAccConfigAll

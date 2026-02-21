@@ -20,6 +20,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
 	"os"
@@ -31,6 +32,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 	{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} && {{end}}os.Getenv("{{$e}}") == ""{{end}} {
@@ -140,6 +144,9 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxos{{camelCase .Name}}ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 		{{- if importAttributes .}}
@@ -154,6 +161,9 @@ func nxos{{camelCase .Name}}ImportStateIdFunc(resourceName string) resource.Impo
 	}
 }
 
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 {{- if .TestPrerequisites}}
 const testAccNxos{{camelCase .Name}}PrerequisitesConfig = `
 {{- range $index, $item := .TestPrerequisites}}
@@ -178,6 +188,9 @@ resource "nxos_rest" "PreReq{{$index}}" {
 `
 {{- end}}
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxos{{camelCase .Name}}Config_minimum() string {
 	return `
 	resource "nxos_{{snakeCase $name}}" "test" {
@@ -193,6 +206,9 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 	`
 }
 
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxos{{camelCase .Name}}Config_all() string {
 	return `
 	resource "nxos_{{snakeCase $name}}" "test" {
@@ -280,3 +296,5 @@ func testAccNxos{{camelCase .Name}}Config_all() string {
 	}
 	`
 }
+
+// End of section. //template:end testAccConfigAll

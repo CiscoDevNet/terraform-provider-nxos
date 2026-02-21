@@ -19,12 +19,16 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosISIS(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -40,6 +44,9 @@ func TestAccDataSourceNxosISIS(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosISISPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/isis"
@@ -52,6 +59,9 @@ resource "nxos_rest" "PreReq0" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 const testAccDataSourceNxosISISConfig = `
 
 resource "nxos_isis" "test" {
@@ -63,3 +73,5 @@ data "nxos_isis" "test" {
   depends_on = [nxos_isis.test]
 }
 `
+
+// End of section. //template:end testAccDataSourceConfig

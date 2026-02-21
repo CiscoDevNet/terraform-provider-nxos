@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type BGPPeerTemplateMaxPrefix struct {
 	Device        types.String `tfsdk:"device"`
 	Dn            types.String `tfsdk:"id"`
@@ -71,6 +75,9 @@ func (data *BGPPeerTemplateMaxPrefix) fromIdentity(ctx context.Context, identity
 	data.AddressFamily = identity.AddressFamily
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data BGPPeerTemplateMaxPrefix) getDn() string {
 	return fmt.Sprintf("sys/bgp/inst/dom-[default]/peercont-[%s]/af-[%s]/maxpfxp", data.TemplateName.ValueString(), data.AddressFamily.ValueString())
 }
@@ -79,6 +86,9 @@ func (data BGPPeerTemplateMaxPrefix) getClassName() string {
 	return "bgpMaxPfxP"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data BGPPeerTemplateMaxPrefix) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -98,6 +108,9 @@ func (data BGPPeerTemplateMaxPrefix) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *BGPPeerTemplateMaxPrefix) fromBody(res gjson.Result) {
 	data.Action = types.StringValue(res.Get(data.getClassName() + ".attributes.action").String())
 	data.MaximumPrefix = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxPfx").Int())
@@ -105,6 +118,9 @@ func (data *BGPPeerTemplateMaxPrefix) fromBody(res gjson.Result) {
 	data.Threshold = types.Int64Value(res.Get(data.getClassName() + ".attributes.thresh").Int())
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *BGPPeerTemplateMaxPrefix) updateFromBody(res gjson.Result) {
 	if !data.Action.IsNull() {
 		data.Action = types.StringValue(res.Get(data.getClassName() + ".attributes.action").String())
@@ -128,15 +144,27 @@ func (data *BGPPeerTemplateMaxPrefix) updateFromBody(res gjson.Result) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data BGPPeerTemplateMaxPrefix) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data BGPPeerTemplateMaxPrefix) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
 
 	return dns
 }
+
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+// End of section. //template:end getDeletedItems

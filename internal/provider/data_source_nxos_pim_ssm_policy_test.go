@@ -19,12 +19,16 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosPIMSSMPolicy(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -40,6 +44,9 @@ func TestAccDataSourceNxosPIMSSMPolicy(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosPIMSSMPolicyPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/pim"
@@ -73,6 +80,9 @@ resource "nxos_rest" "PreReq3" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 const testAccDataSourceNxosPIMSSMPolicyConfig = `
 
 resource "nxos_pim_ssm_policy" "test" {
@@ -86,3 +96,5 @@ data "nxos_pim_ssm_policy" "test" {
   depends_on = [nxos_pim_ssm_policy.test]
 }
 `
+
+// End of section. //template:end testAccDataSourceConfig

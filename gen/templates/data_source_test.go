@@ -20,12 +20,16 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxos{{camelCase .Name}}(t *testing.T) {
 	{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} && {{end}}os.Getenv("{{$e}}") == ""{{end}} {
@@ -98,6 +102,9 @@ func TestAccDataSourceNxos{{camelCase .Name}}(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 {{- if .TestPrerequisites}}
 const testAccDataSourceNxos{{camelCase .Name}}PrerequisitesConfig = `
 {{- range $index, $item := .TestPrerequisites}}
@@ -122,6 +129,9 @@ resource "nxos_rest" "PreReq{{$index}}" {
 `
 {{- end}}
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 const testAccDataSourceNxos{{camelCase .Name}}Config = `
 
 resource "nxos_{{snakeCase $name}}" "test" {
@@ -237,3 +247,5 @@ data "nxos_{{snakeCase .Name}}" "test" {
   depends_on = [nxos_{{snakeCase $name}}.test]
 }
 `
+
+// End of section. //template:end testAccDataSourceConfig

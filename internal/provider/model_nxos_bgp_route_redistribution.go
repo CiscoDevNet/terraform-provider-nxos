@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -29,6 +30,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type BGPRouteRedistribution struct {
 	Device           types.String `tfsdk:"device"`
 	Dn               types.String `tfsdk:"id"`
@@ -77,6 +81,9 @@ func (data *BGPRouteRedistribution) fromIdentity(ctx context.Context, identity *
 	data.ProtocolInstance = identity.ProtocolInstance
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data BGPRouteRedistribution) getDn() string {
 	return fmt.Sprintf("sys/bgp/inst/dom-[%s]/af-[%s]/interleak-[%s]-interleak-[%s]", data.Vrf.ValueString(), data.AddressFamily.ValueString(), data.Protocol.ValueString(), data.ProtocolInstance.ValueString())
 }
@@ -85,6 +92,9 @@ func (data BGPRouteRedistribution) getClassName() string {
 	return "bgpInterLeakP"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data BGPRouteRedistribution) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -107,6 +117,9 @@ func (data BGPRouteRedistribution) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *BGPRouteRedistribution) fromBody(res gjson.Result) {
 	data.Protocol = types.StringValue(res.Get(data.getClassName() + ".attributes.proto").String())
 	data.ProtocolInstance = types.StringValue(res.Get(data.getClassName() + ".attributes.inst").String())
@@ -115,6 +128,9 @@ func (data *BGPRouteRedistribution) fromBody(res gjson.Result) {
 	data.Srv6PrefixType = types.StringValue(res.Get(data.getClassName() + ".attributes.srv6PrefixType").String())
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *BGPRouteRedistribution) updateFromBody(res gjson.Result) {
 	if !data.Protocol.IsNull() {
 		data.Protocol = types.StringValue(res.Get(data.getClassName() + ".attributes.proto").String())
@@ -143,15 +159,27 @@ func (data *BGPRouteRedistribution) updateFromBody(res gjson.Result) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data BGPRouteRedistribution) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data BGPRouteRedistribution) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
 
 	return dns
 }
+
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+// End of section. //template:end getDeletedItems

@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
 	"testing"
@@ -29,6 +30,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosPIMStaticRPGroupList(t *testing.T) {
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -64,6 +68,9 @@ func TestAccNxosPIMStaticRPGroupList(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxosPIMStaticRPGroupListImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 		primary := s.RootModule().Resources[resourceName].Primary
@@ -75,6 +82,9 @@ func nxosPIMStaticRPGroupListImportStateIdFunc(resourceName string) resource.Imp
 	}
 }
 
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosPIMStaticRPGroupListPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/pim"
@@ -123,6 +133,9 @@ resource "nxos_rest" "PreReq5" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosPIMStaticRPGroupListConfig_minimum() string {
 	return `
 	resource "nxos_pim_static_rp_group_list" "test" {
@@ -134,6 +147,9 @@ func testAccNxosPIMStaticRPGroupListConfig_minimum() string {
 	`
 }
 
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosPIMStaticRPGroupListConfig_all() string {
 	return `
 	resource "nxos_pim_static_rp_group_list" "test" {
@@ -146,3 +162,5 @@ func testAccNxosPIMStaticRPGroupListConfig_all() string {
 	}
 	`
 }
+
+// End of section. //template:end testAccConfigAll

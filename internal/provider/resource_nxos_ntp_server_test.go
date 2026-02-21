@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
 	"testing"
@@ -29,6 +30,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosNTPServer(t *testing.T) {
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -65,6 +69,9 @@ func TestAccNxosNTPServer(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxosNTPServerImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 		primary := s.RootModule().Resources[resourceName].Primary
@@ -74,6 +81,13 @@ func nxosNTPServerImportStateIdFunc(resourceName string) resource.ImportStateIdF
 	}
 }
 
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosNTPServerConfig_minimum() string {
 	return `
 	resource "nxos_ntp_server" "test" {
@@ -83,6 +97,9 @@ func testAccNxosNTPServerConfig_minimum() string {
 	`
 }
 
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosNTPServerConfig_all() string {
 	return `
 	resource "nxos_ntp_server" "test" {
@@ -95,3 +112,5 @@ func testAccNxosNTPServerConfig_all() string {
 	}
 	`
 }
+
+// End of section. //template:end testAccConfigAll

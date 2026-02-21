@@ -19,12 +19,16 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosVRFRouteTarget(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -40,6 +44,9 @@ func TestAccDataSourceNxosVRFRouteTarget(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosVRFRouteTargetPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/bgp"
@@ -101,6 +108,9 @@ resource "nxos_rest" "PreReq6" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 const testAccDataSourceNxosVRFRouteTargetConfig = `
 
 resource "nxos_vrf_route_target" "test" {
@@ -121,3 +131,5 @@ data "nxos_vrf_route_target" "test" {
   depends_on = [nxos_vrf_route_target.test]
 }
 `
+
+// End of section. //template:end testAccDataSourceConfig

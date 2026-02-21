@@ -19,12 +19,16 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosBGPRouteRedistribution(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,6 +48,9 @@ func TestAccDataSourceNxosBGPRouteRedistribution(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosBGPRouteRedistributionPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/bgp"
@@ -90,6 +97,9 @@ resource "nxos_rest" "PreReq4" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 const testAccDataSourceNxosBGPRouteRedistributionConfig = `
 
 resource "nxos_bgp_route_redistribution" "test" {
@@ -113,3 +123,5 @@ data "nxos_bgp_route_redistribution" "test" {
   depends_on = [nxos_bgp_route_redistribution.test]
 }
 `
+
+// End of section. //template:end testAccDataSourceConfig

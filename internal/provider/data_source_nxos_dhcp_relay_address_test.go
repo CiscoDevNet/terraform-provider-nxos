@@ -19,12 +19,16 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosDHCPRelayAddress(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -41,6 +45,9 @@ func TestAccDataSourceNxosDHCPRelayAddress(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosDHCPRelayAddressPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/fm/dhcp"
@@ -70,6 +77,9 @@ resource "nxos_rest" "PreReq2" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 const testAccDataSourceNxosDHCPRelayAddressConfig = `
 
 resource "nxos_dhcp_relay_address" "test" {
@@ -86,3 +96,5 @@ data "nxos_dhcp_relay_address" "test" {
   depends_on = [nxos_dhcp_relay_address.test]
 }
 `
+
+// End of section. //template:end testAccDataSourceConfig

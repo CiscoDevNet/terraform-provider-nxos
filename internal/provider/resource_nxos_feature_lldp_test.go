@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
 	"testing"
@@ -29,6 +30,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosFeatureLLDP(t *testing.T) {
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -60,6 +64,9 @@ func TestAccNxosFeatureLLDP(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxosFeatureLLDPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
@@ -67,6 +74,13 @@ func nxosFeatureLLDPImportStateIdFunc(resourceName string) resource.ImportStateI
 	}
 }
 
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosFeatureLLDPConfig_minimum() string {
 	return `
 	resource "nxos_feature_lldp" "test" {
@@ -75,6 +89,9 @@ func testAccNxosFeatureLLDPConfig_minimum() string {
 	`
 }
 
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosFeatureLLDPConfig_all() string {
 	return `
 	resource "nxos_feature_lldp" "test" {
@@ -82,3 +99,5 @@ func testAccNxosFeatureLLDPConfig_all() string {
 	}
 	`
 }
+
+// End of section. //template:end testAccConfigAll

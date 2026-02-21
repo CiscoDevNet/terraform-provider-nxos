@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -31,6 +32,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type ISISInterface struct {
 	Device                types.String `tfsdk:"device"`
 	Dn                    types.String `tfsdk:"id"`
@@ -89,6 +93,9 @@ func (data *ISISInterface) fromIdentity(ctx context.Context, identity *ISISInter
 	data.InterfaceId = identity.InterfaceId
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data ISISInterface) getDn() string {
 	return fmt.Sprintf("sys/isis/if-[%s]", data.InterfaceId.ValueString())
 }
@@ -97,6 +104,9 @@ func (data ISISInterface) getClassName() string {
 	return "isisInternalIf"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data ISISInterface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -194,6 +204,9 @@ func (data ISISInterface) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *ISISInterface) fromBody(res gjson.Result) {
 	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	data.AuthenticationCheck = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.authCheck").String()))
@@ -224,6 +237,9 @@ func (data *ISISInterface) fromBody(res gjson.Result) {
 	data.EnableIpv4 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.v4enable").String()))
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *ISISInterface) updateFromBody(res gjson.Result) {
 	if !data.InterfaceId.IsNull() {
 		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
@@ -362,15 +378,27 @@ func (data *ISISInterface) updateFromBody(res gjson.Result) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data ISISInterface) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data ISISInterface) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
 
 	return dns
 }
+
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+// End of section. //template:end getDeletedItems

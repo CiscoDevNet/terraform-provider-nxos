@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type QueuingQOSPolicyMapMatchClassMapRemainingBandwidth struct {
 	Device        types.String `tfsdk:"device"`
 	Dn            types.String `tfsdk:"id"`
@@ -64,6 +68,9 @@ func (data *QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) fromIdentity(ctx
 	data.ClassMapName = identity.ClassMapName
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) getDn() string {
 	return fmt.Sprintf("sys/ipqos/queuing/p/name-[%s]/cmap-[%s]/setRemBW", data.PolicyMapName.ValueString(), data.ClassMapName.ValueString())
 }
@@ -72,6 +79,9 @@ func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) getClassName() st
 	return "ipqosSetRemBW"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -82,10 +92,16 @@ func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) toBody() nxos.Bod
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) fromBody(res gjson.Result) {
 	data.Value = types.Int64Value(res.Get(data.getClassName() + ".attributes.val").Int())
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) updateFromBody(res gjson.Result) {
 	if !data.Value.IsNull() {
 		data.Value = types.Int64Value(res.Get(data.getClassName() + ".attributes.val").Int())
@@ -94,15 +110,27 @@ func (data *QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) updateFromBody(r
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
 
 	return dns
 }
+
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+// End of section. //template:end getDeletedItems

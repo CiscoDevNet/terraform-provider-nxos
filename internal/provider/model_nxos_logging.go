@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -29,6 +30,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type Logging struct {
 	Device     types.String        `tfsdk:"device"`
 	Dn         types.String        `tfsdk:"id"`
@@ -62,6 +66,9 @@ func (data *Logging) fromIdentity(ctx context.Context, identity *LoggingIdentity
 	}
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data Logging) getDn() string {
 	return "sys/logging/loglevel"
 }
@@ -74,6 +81,9 @@ func (data Logging) getClassName() string {
 	return "loggingLogLevel"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data Logging) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -98,6 +108,9 @@ func (data Logging) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *Logging) fromBody(res gjson.Result) {
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -117,6 +130,9 @@ func (data *Logging) fromBody(res gjson.Result) {
 	)
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *Logging) updateFromBody(res gjson.Result) {
 	for c := range data.Facilities {
 		var r gjson.Result
@@ -143,18 +159,28 @@ func (data *Logging) updateFromBody(res gjson.Result) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data Logging) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data Logging) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
 
 	return dns
 }
+
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data Logging) getDeletedItems(ctx context.Context, state Logging) []string {
 	deletedItems := []string{}
@@ -172,3 +198,5 @@ func (data Logging) getDeletedItems(ctx context.Context, state Logging) []string
 	}
 	return deletedItems
 }
+
+// End of section. //template:end getDeletedItems

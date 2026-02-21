@@ -58,6 +58,19 @@ make gen NAME="NAME"
 
 Where `NAME` is the name of the resource or data source to generate. Whenever the `definition` is updated, it is necessary to run the generator again.
 
+In some cases it might also be required to update some of the generated Go code. This can be done by modifying the generated files in the `internal/provider` directory. Every code section has comment markers as shown below:
+
+```go
+// Section below is generated&owned by "gen/generator.go". //template:begin create
+
+func Create() {
+}
+
+// End of section. //template:end create
+```
+
+As long as those markers remain in the code, the code will continue to be updated by the generator. If the markers are removed, the code will not be updated anymore and the code can be modified manually.
+
 To regenerate and/or update the complete codebase for all resources and data sources, run the following command:
 
 ```shell

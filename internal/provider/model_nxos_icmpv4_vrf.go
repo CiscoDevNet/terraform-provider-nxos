@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -29,6 +30,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type ICMPv4VRF struct {
 	Device  types.String `tfsdk:"device"`
 	Dn      types.String `tfsdk:"id"`
@@ -58,6 +62,9 @@ func (data *ICMPv4VRF) fromIdentity(ctx context.Context, identity *ICMPv4VRFIden
 	data.VrfName = identity.VrfName
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
 func (data ICMPv4VRF) getDn() string {
 	return fmt.Sprintf("sys/icmpv4/inst/dom-[%s]", data.VrfName.ValueString())
 }
@@ -66,6 +73,9 @@ func (data ICMPv4VRF) getClassName() string {
 	return "icmpv4Dom"
 }
 
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 func (data ICMPv4VRF) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -76,10 +86,16 @@ func (data ICMPv4VRF) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 func (data *ICMPv4VRF) fromBody(res gjson.Result) {
 	data.VrfName = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *ICMPv4VRF) updateFromBody(res gjson.Result) {
 	if !data.VrfName.IsNull() {
 		data.VrfName = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
@@ -88,15 +104,27 @@ func (data *ICMPv4VRF) updateFromBody(res gjson.Result) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data ICMPv4VRF) toDeleteBody() nxos.Body {
 	body := ""
 
 	return nxos.Body{body}
 }
 
+// End of section. //template:end toDeleteBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
 func (data ICMPv4VRF) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
 
 	return dns
 }
+
+// End of section. //template:end getDeleteDns
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+// End of section. //template:end getDeletedItems

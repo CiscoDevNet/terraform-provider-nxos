@@ -19,12 +19,16 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosDefaultQOSPolicyInterfaceInPolicyMap(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -40,6 +44,9 @@ func TestAccDataSourceNxosDefaultQOSPolicyInterfaceInPolicyMap(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosDefaultQOSPolicyInterfaceInPolicyMapPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
   dn = "sys/ipqos/dflt/p/name-[PM1]"
@@ -59,6 +66,9 @@ resource "nxos_rest" "PreReq1" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 const testAccDataSourceNxosDefaultQOSPolicyInterfaceInPolicyMapConfig = `
 
 resource "nxos_default_qos_policy_interface_in_policy_map" "test" {
@@ -72,3 +82,5 @@ data "nxos_default_qos_policy_interface_in_policy_map" "test" {
   depends_on = [nxos_default_qos_policy_interface_in_policy_map.test]
 }
 `
+
+// End of section. //template:end testAccDataSourceConfig

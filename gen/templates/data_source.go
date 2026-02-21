@@ -91,6 +91,23 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 							Computed:            true,
 						},
 						{{- end}}
+						{{- range .TfChildClasses}}
+						{{- if eq .Type "single"}}
+						{{- range .Attributes}}
+						"{{.TfName}}": schema.{{.Type}}Attribute{
+							MarkdownDescription: "{{.Description}}",
+							Computed:            true,
+						},
+						{{- end}}
+						{{- range .TfChildClasses}}
+						{{- if eq .Type "list"}}
+						{{template "dsListNestedChildClassSchema" .}}
+						{{- end}}
+						{{- end}}
+						{{- else if eq .Type "list"}}
+						{{template "dsListNestedChildClassSchema" .}}
+						{{- end}}
+						{{- end}}
 					},
 				},
 			},
@@ -108,7 +125,19 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 			},
 			{{- end}}
 			{{- range .TfChildClasses}}
+			{{- if eq .Type "single"}}
+			{{- range .Attributes}}
+			"{{.TfName}}": schema.{{.Type}}Attribute{
+				MarkdownDescription: "{{.Description}}",
+				Computed:            true,
+			},
+			{{- end}}
+			{{- range .TfChildClasses}}
 			{{- if eq .Type "list"}}
+			{{template "dsListNestedChildClassSchema" .}}
+			{{- end}}
+			{{- end}}
+			{{- else if eq .Type "list"}}
 			{{template "dsListNestedChildClassSchema" .}}
 			{{- end}}
 			{{- end}}

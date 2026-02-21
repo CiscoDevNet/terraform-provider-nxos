@@ -71,6 +71,10 @@ func (data User) getDn() string {
 	return fmt.Sprintf("sys/userext/user-[%s]", data.Name.ValueString())
 }
 
+func (data UserRoles) getRn() string {
+	return fmt.Sprintf("role-[%s]", data.Name.ValueString())
+}
+
 func (data User) getClassName() string {
 	return "aaaUser"
 }

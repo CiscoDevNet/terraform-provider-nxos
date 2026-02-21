@@ -55,6 +55,32 @@ func TestAccDataSourceNxos{{camelCase .Name}}(t *testing.T) {
 					{{- end}}
 					{{- range .TfChildClasses}}
 					{{- $nestedList := .TfName}}
+					{{- if eq .Type "single"}}
+					{{- range .Attributes}}
+					{{- if not .ExcludeTest}}
+					resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"),
+					{{- end}}
+					{{- end}}
+					{{- range .TfChildClasses}}
+					{{- if eq .Type "list"}}
+					resource.TestCheckTypeSetElemNestedAttrs("data.nxos_{{snakeCase $name}}.test", "{{$nestedList}}.*", map[string]string{
+						{{- range .Attributes}}
+						{{- if not .ExcludeTest}}
+						"{{.TfName}}": "{{.Example}}",
+						{{- end}}
+						{{- end}}
+					}),
+					{{- end}}
+					{{- end}}
+					{{- else if eq .Type "list"}}
+					resource.TestCheckTypeSetElemNestedAttrs("data.nxos_{{snakeCase $name}}.test", "{{$nestedList}}.*", map[string]string{
+						{{- range .Attributes}}
+						{{- if not .ExcludeTest}}
+						"{{.TfName}}": "{{.Example}}",
+						{{- end}}
+						{{- end}}
+					}),
+					{{- end}}
 					{{- end}}
 					{{- else if eq .Type "list"}}
 					resource.TestCheckTypeSetElemNestedAttrs("data.nxos_{{snakeCase $name}}.test", "{{$list}}.*", map[string]string{
@@ -114,12 +140,66 @@ resource "nxos_{{snakeCase $name}}" "test" {
 {{- end}}
 {{- range .TfChildClasses}}
 {{- $nestedList := .TfName}}
+{{- if eq .Type "single"}}
+{{- range .Attributes}}
+{{- if not .ExcludeTest}}
+  {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+{{- end}}
+{{- end}}
+{{- range .TfChildClasses}}
+{{- if eq .Type "list"}}
+  {{.TfName}} = [{
+	{{- range .Attributes}}
+	{{- if not .ExcludeTest}}
+    {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+	{{- end}}
+	{{- end}}
+  }]
+{{- end}}
 {{- end}}
 {{- else if eq .Type "list"}}
   {{.TfName}} = [{
 	{{- range .Attributes}}
 	{{- if not .ExcludeTest}}
     {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+	{{- end}}
+	{{- end}}
+  }]
+{{- end}}
+{{- end}}
+{{- else if eq .Type "list"}}
+  {{.TfName}} = [{
+	{{- range .Attributes}}
+	{{- if not .ExcludeTest}}
+    {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+	{{- end}}
+	{{- end}}
+	{{- range .TfChildClasses}}
+	{{- if eq .Type "single"}}
+	{{- range .Attributes}}
+	{{- if not .ExcludeTest}}
+    {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+	{{- end}}
+	{{- end}}
+	{{- range .TfChildClasses}}
+	{{- if eq .Type "list"}}
+    {{.TfName}} = [{
+		{{- range .Attributes}}
+		{{- if not .ExcludeTest}}
+      {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+		{{- end}}
+		{{- end}}
+    }]
+	{{- end}}
+	{{- end}}
+	{{- else if eq .Type "list"}}
+    {{.TfName}} = [{
+		{{- range .Attributes}}
+		{{- if not .ExcludeTest}}
+      {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+		{{- end}}
+		{{- end}}
+    }]
 	{{- end}}
 	{{- end}}
   }]
@@ -141,6 +221,15 @@ data "nxos_{{snakeCase .Name}}" "test" {
 {{- range .Attributes}}
 {{- if or .Id .ReferenceOnly}}
   {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+{{- end}}
+{{- end}}
+{{- range .TfChildClasses}}
+{{- if eq .Type "single"}}
+{{- range .Attributes}}
+{{- if or .Id .ReferenceOnly}}
+  {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+{{- end}}
+{{- end}}
 {{- end}}
 {{- end}}
 {{- end}}

@@ -62,10 +62,60 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 					resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"),
 					{{- end}}
 					{{- end}}
+					{{- range .TfChildClasses}}
+					{{- $nestedList := .TfName}}
+					{{- if eq .Type "single"}}
+					{{- range .Attributes}}
+					{{- if not .ExcludeTest}}
+					resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"),
+					{{- end}}
+					{{- end}}
+					{{- range .TfChildClasses}}
+					{{- if eq .Type "list"}}
+					{{- range .Attributes}}
+					{{- if not .ExcludeTest}}
+					resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "{{$nestedList}}.0.{{.TfName}}", "{{.Example}}"),
+					{{- end}}
+					{{- end}}
+					{{- end}}
+					{{- end}}
+					{{- else if eq .Type "list"}}
+					{{- range .Attributes}}
+					{{- if not .ExcludeTest}}
+					resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "{{$nestedList}}.0.{{.TfName}}", "{{.Example}}"),
+					{{- end}}
+					{{- end}}
+					{{- end}}
+					{{- end}}
 					{{- else if eq .Type "list"}}
 					{{- range .Attributes}}
 					{{- if not .ExcludeTest}}
 					resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "{{$list}}.0.{{.TfName}}", "{{.Example}}"),
+					{{- end}}
+					{{- end}}
+					{{- range .TfChildClasses}}
+					{{- $nestedList := .TfName}}
+					{{- if eq .Type "single"}}
+					{{- range .Attributes}}
+					{{- if not .ExcludeTest}}
+					resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "{{$list}}.0.{{.TfName}}", "{{.Example}}"),
+					{{- end}}
+					{{- end}}
+					{{- range .TfChildClasses}}
+					{{- if eq .Type "list"}}
+					{{- range .Attributes}}
+					{{- if not .ExcludeTest}}
+					resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "{{$list}}.0.{{$nestedList}}.0.{{.TfName}}", "{{.Example}}"),
+					{{- end}}
+					{{- end}}
+					{{- end}}
+					{{- end}}
+					{{- else if eq .Type "list"}}
+					{{- range .Attributes}}
+					{{- if not .ExcludeTest}}
+					resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "{{$list}}.0.{{$nestedList}}.0.{{.TfName}}", "{{.Example}}"),
+					{{- end}}
+					{{- end}}
 					{{- end}}
 					{{- end}}
 					{{- end}}
@@ -157,11 +207,67 @@ func testAccNxos{{camelCase .Name}}Config_all() string {
 		{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
 	{{- end}}
 	{{- end}}
+	{{- range .TfChildClasses}}
+	{{- if eq .Type "single"}}
+	{{- range .Attributes}}
+	{{- if not .ExcludeTest}}
+		{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+	{{- end}}
+	{{- end}}
+	{{- range .TfChildClasses}}
+	{{- if eq .Type "list"}}
+		{{.TfName}} = [{
+		{{- range .Attributes}}
+		{{- if not .ExcludeTest}}
+			{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+		{{- end}}
+		{{- end}}
+		}]
+	{{- end}}
+	{{- end}}
 	{{- else if eq .Type "list"}}
 		{{.TfName}} = [{
 		{{- range .Attributes}}
 		{{- if not .ExcludeTest}}
 			{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+		{{- end}}
+		{{- end}}
+		}]
+	{{- end}}
+	{{- end}}
+	{{- else if eq .Type "list"}}
+		{{.TfName}} = [{
+		{{- range .Attributes}}
+		{{- if not .ExcludeTest}}
+			{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+		{{- end}}
+		{{- end}}
+		{{- range .TfChildClasses}}
+		{{- if eq .Type "single"}}
+		{{- range .Attributes}}
+		{{- if not .ExcludeTest}}
+			{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+		{{- end}}
+		{{- end}}
+		{{- range .TfChildClasses}}
+		{{- if eq .Type "list"}}
+			{{.TfName}} = [{
+			{{- range .Attributes}}
+			{{- if not .ExcludeTest}}
+				{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+			{{- end}}
+			{{- end}}
+			}]
+		{{- end}}
+		{{- end}}
+		{{- else if eq .Type "list"}}
+			{{.TfName}} = [{
+			{{- range .Attributes}}
+			{{- if not .ExcludeTest}}
+				{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+			{{- end}}
+			{{- end}}
+			}]
 		{{- end}}
 		{{- end}}
 		}]

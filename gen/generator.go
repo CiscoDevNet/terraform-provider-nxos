@@ -260,34 +260,26 @@ func Add(a, b int) int {
 	return a + b
 }
 
-// Templating helper function to collect child class names with doc paths (2 levels deep)
+// Templating helper function to collect child class names with doc paths (recursive)
 func ChildDocClassNames(children []YamlConfigChildClass) []string {
 	var names []string
 	for _, c := range children {
 		if c.DocPath != "" {
 			names = append(names, c.ClassName)
 		}
-		for _, cc := range c.ChildClasses {
-			if cc.DocPath != "" {
-				names = append(names, cc.ClassName)
-			}
-		}
+		names = append(names, ChildDocClassNames(c.ChildClasses)...)
 	}
 	return names
 }
 
-// Templating helper function to collect child doc paths (2 levels deep)
+// Templating helper function to collect child doc paths (recursive)
 func ChildDocPaths(children []YamlConfigChildClass) []string {
 	var paths []string
 	for _, c := range children {
 		if c.DocPath != "" {
 			paths = append(paths, c.DocPath)
 		}
-		for _, cc := range c.ChildClasses {
-			if cc.DocPath != "" {
-				paths = append(paths, cc.DocPath)
-			}
-		}
+		paths = append(paths, ChildDocPaths(c.ChildClasses)...)
 	}
 	return paths
 }
@@ -347,6 +339,14 @@ func buildTfChildClasses(children []YamlConfigChildClass) []YamlConfigChildClass
 		}
 	}
 	return result
+}
+
+// buildChildTfChildClasses recursively sets TfChildClasses on all ChildClasses at every depth.
+func buildChildTfChildClasses(children []YamlConfigChildClass) {
+	for i := range children {
+		children[i].TfChildClasses = buildTfChildClasses(children[i].ChildClasses)
+		buildChildTfChildClasses(children[i].ChildClasses)
+	}
 }
 
 // allAttributesHaveValue returns true if every attribute has a non-empty Value field.
@@ -422,9 +422,7 @@ func main() {
 
 	for i := range configs {
 		configs[i].TfChildClasses = buildTfChildClasses(configs[i].ChildClasses)
-		for j := range configs[i].ChildClasses {
-			configs[i].ChildClasses[j].TfChildClasses = buildTfChildClasses(configs[i].ChildClasses[j].ChildClasses)
-		}
+		buildChildTfChildClasses(configs[i].ChildClasses)
 	}
 
 	for _, config := range configs {

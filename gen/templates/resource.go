@@ -198,6 +198,20 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 						{{- range  .Attributes}}
 						{{template "childClassAttrSchema" .}}
 						{{- end}}
+						{{- range .TfChildClasses}}
+						{{- if eq .Type "single"}}
+						{{- range .Attributes}}
+						{{template "childClassAttrSchema" .}}
+						{{- end}}
+						{{- range .TfChildClasses}}
+						{{- if eq .Type "list"}}
+						{{template "listNestedChildClassSchema" .}}
+						{{- end}}
+						{{- end}}
+						{{- else if eq .Type "list"}}
+						{{template "listNestedChildClassSchema" .}}
+						{{- end}}
+						{{- end}}
 					},
 				},
 			},
@@ -209,7 +223,16 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 			{{template "childClassAttrSchema" .}}
 			{{- end}}
 			{{- range .TfChildClasses}}
+			{{- if eq .Type "single"}}
+			{{- range .Attributes}}
+			{{template "childClassAttrSchema" .}}
+			{{- end}}
+			{{- range .TfChildClasses}}
 			{{- if eq .Type "list"}}
+			{{template "listNestedChildClassSchema" .}}
+			{{- end}}
+			{{- end}}
+			{{- else if eq .Type "list"}}
 			{{template "listNestedChildClassSchema" .}}
 			{{- end}}
 			{{- end}}

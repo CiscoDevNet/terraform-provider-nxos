@@ -93,3 +93,9 @@ func (data FeatureHSRP) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data FeatureHSRP) getDeleteDns() []string {
+	dns := []string{}
+
+	return dns
+}

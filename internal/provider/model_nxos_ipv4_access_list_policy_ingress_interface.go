@@ -131,3 +131,10 @@ func (data IPv4AccessListPolicyIngressInterface) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data IPv4AccessListPolicyIngressInterface) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

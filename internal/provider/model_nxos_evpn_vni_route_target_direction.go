@@ -100,3 +100,10 @@ func (data EVPNVNIRouteTargetDirection) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data EVPNVNIRouteTargetDirection) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

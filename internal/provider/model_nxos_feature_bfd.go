@@ -93,3 +93,9 @@ func (data FeatureBFD) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data FeatureBFD) getDeleteDns() []string {
+	dns := []string{}
+
+	return dns
+}

@@ -100,3 +100,10 @@ func (data DefaultQOSClassMapDSCP) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data DefaultQOSClassMapDSCP) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

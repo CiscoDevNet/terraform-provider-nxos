@@ -93,3 +93,9 @@ func (data FeatureEVPN) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data FeatureEVPN) getDeleteDns() []string {
+	dns := []string{}
+
+	return dns
+}

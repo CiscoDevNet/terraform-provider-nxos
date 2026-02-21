@@ -121,3 +121,10 @@ func (data RouteMapRuleEntrySetRegularCommunity) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data RouteMapRuleEntrySetRegularCommunity) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

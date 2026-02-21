@@ -93,3 +93,9 @@ func (data FeatureInterfaceVLAN) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data FeatureInterfaceVLAN) getDeleteDns() []string {
+	dns := []string{}
+
+	return dns
+}

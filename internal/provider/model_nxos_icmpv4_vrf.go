@@ -96,3 +96,10 @@ func (data ICMPv4VRF) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data ICMPv4VRF) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

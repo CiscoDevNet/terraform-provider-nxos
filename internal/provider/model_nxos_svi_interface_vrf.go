@@ -97,3 +97,10 @@ func (data SVIInterfaceVRF) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data SVIInterfaceVRF) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

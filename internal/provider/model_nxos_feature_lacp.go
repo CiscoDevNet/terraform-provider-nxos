@@ -93,3 +93,9 @@ func (data FeatureLACP) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data FeatureLACP) getDeleteDns() []string {
+	dns := []string{}
+
+	return dns
+}

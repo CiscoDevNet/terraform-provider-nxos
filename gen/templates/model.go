@@ -1263,5 +1263,106 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 	{{- end}}
 	{{- end}}
 
+	{{- range .ChildClasses}}
+	{{- if .NoDelete}}
+	{{- $childClassName := .ClassName }}
+	{{- range .Attributes}}
+	{{- if and (not .ReferenceOnly) (.DeleteValue)}}
+	{{- if eq .Type "Int64"}}
+	body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
+	{{- else if eq .Type "Bool"}}
+	body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
+	{{- else if eq .Type "String"}}
+	body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- range .ChildClasses}}
+	{{- if .NoDelete}}
+	{{- $nestedChildClassName := .ClassName }}
+	{{- range .Attributes}}
+	{{- if and (not .ReferenceOnly) (.DeleteValue)}}
+	{{- if eq .Type "Int64"}}
+	body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
+	{{- else if eq .Type "Bool"}}
+	body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
+	{{- else if eq .Type "String"}}
+	body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- range .ChildClasses}}
+	{{- if .NoDelete}}
+	{{- $deepNestedChildClassName := .ClassName }}
+	{{- range .Attributes}}
+	{{- if and (not .ReferenceOnly) (.DeleteValue)}}
+	{{- if eq .Type "Int64"}}
+	body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".children.-1."+"{{$deepNestedChildClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
+	{{- else if eq .Type "Bool"}}
+	body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".children.-1."+"{{$deepNestedChildClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
+	{{- else if eq .Type "String"}}
+	body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".children.-1."+"{{$deepNestedChildClassName}}"+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+
 	return nxos.Body{body}
+}
+
+func (data {{camelCase .Name}}) getDeleteDns() []string {
+	dns := []string{}
+
+	{{- if not .NoDelete}}
+	{{- if not (hasDeleteValue .Attributes)}}
+	dns = append(dns, data.getDn())
+	{{- end}}
+	{{- else}}
+	{{- range .ChildClasses}}
+	{{- $l1Rn := .Rn}}
+	{{- if not .NoDelete}}
+	{{- if eq .Type "single"}}
+	dns = append(dns, data.getDn()+"/{{.Rn}}")
+	{{- else if eq .Type "list"}}
+	for _, child := range data.{{toGoName .TfName}} {
+		dns = append(dns, data.getDn()+"/"+child.getRn())
+	}
+	{{- end}}
+	{{- else}}
+	{{- /* no_delete child at level 1: check level 2 */}}
+	{{- range .ChildClasses}}
+	{{- $l2Rn := .Rn}}
+	{{- if not .NoDelete}}
+	{{- if eq .Type "single"}}
+	dns = append(dns, data.getDn()+"/{{$l1Rn}}/{{.Rn}}")
+	{{- else if eq .Type "list"}}
+	for _, child := range data.{{toGoName .TfName}} {
+		dns = append(dns, data.getDn()+"/{{$l1Rn}}/"+child.getRn())
+	}
+	{{- end}}
+	{{- else}}
+	{{- /* no_delete child at level 2: check level 3 */}}
+	{{- range .ChildClasses}}
+	{{- if not .NoDelete}}
+	{{- if eq .Type "single"}}
+	dns = append(dns, data.getDn()+"/{{$l1Rn}}/{{$l2Rn}}/{{.Rn}}")
+	{{- else if eq .Type "list"}}
+	for _, child := range data.{{toGoName .TfName}} {
+		dns = append(dns, data.getDn()+"/{{$l1Rn}}/{{$l2Rn}}/"+child.getRn())
+	}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+
+	return dns
 }

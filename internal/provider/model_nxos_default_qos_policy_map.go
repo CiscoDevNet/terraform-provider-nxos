@@ -106,3 +106,10 @@ func (data DefaultQOSPolicyMap) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data DefaultQOSPolicyMap) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

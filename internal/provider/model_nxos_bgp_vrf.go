@@ -110,3 +110,10 @@ func (data BGPVRF) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data BGPVRF) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

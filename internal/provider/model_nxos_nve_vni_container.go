@@ -82,3 +82,10 @@ func (data NVEVNIContainer) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data NVEVNIContainer) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

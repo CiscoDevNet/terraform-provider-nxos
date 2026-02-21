@@ -155,3 +155,10 @@ func (data OSPFAuthentication) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data OSPFAuthentication) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

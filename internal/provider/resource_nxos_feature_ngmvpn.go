@@ -265,15 +265,16 @@ func (r *FeatureNgMVPNResource) Delete(ctx context.Context, req resource.DeleteR
 
 	if device.Managed {
 		body := state.toDeleteBody()
-
 		if len(body.Str) > 0 {
 			_, err := device.Client.Post(state.getDn(), body.Str)
 			if err != nil {
 				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 				return
 			}
-		} else {
-			res, err := device.Client.DeleteDn(state.Dn.ValueString())
+		}
+
+		for _, dn := range state.getDeleteDns() {
+			res, err := device.Client.DeleteDn(dn)
 			if err != nil {
 				errCode := res.Get("imdata.0.error.attributes.code").Str
 				// Ignore errors of type "Cannot delete object"

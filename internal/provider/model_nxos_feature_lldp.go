@@ -93,3 +93,9 @@ func (data FeatureLLDP) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data FeatureLLDP) getDeleteDns() []string {
+	dns := []string{}
+
+	return dns
+}

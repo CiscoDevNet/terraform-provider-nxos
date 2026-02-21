@@ -136,3 +136,10 @@ func (data BGPPeerTemplateMaxPrefix) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data BGPPeerTemplateMaxPrefix) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

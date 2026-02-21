@@ -132,3 +132,10 @@ func (data OSPFMaxMetric) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data OSPFMaxMetric) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

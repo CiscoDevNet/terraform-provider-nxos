@@ -92,3 +92,10 @@ func (data ISIS) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data ISIS) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

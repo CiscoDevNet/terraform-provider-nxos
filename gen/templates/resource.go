@@ -434,7 +434,7 @@ func (r *{{camelCase .Name}}Resource) Delete(ctx context.Context, req resource.D
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Dn.ValueString()))
-{{ if not .NoDelete}}
+
 	device, ok := r.data.Devices[state.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", state.Device.ValueString()))
@@ -443,15 +443,16 @@ func (r *{{camelCase .Name}}Resource) Delete(ctx context.Context, req resource.D
 
 	if device.Managed {
 		body := state.toDeleteBody()
-
-		if (len(body.Str) > 0) {
+		if len(body.Str) > 0 {
 			_, err := device.Client.Post(state.getDn(), body.Str)
 			if err != nil {
 				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 				return
 			}
-		} else {
-			res, err := device.Client.DeleteDn(state.Dn.ValueString())
+		}
+
+		for _, dn := range state.getDeleteDns() {
+			res, err := device.Client.DeleteDn(dn)
 			if err != nil {
 				errCode := res.Get("imdata.0.error.attributes.code").Str
 				// Ignore errors of type "Cannot delete object"
@@ -462,7 +463,7 @@ func (r *{{camelCase .Name}}Resource) Delete(ctx context.Context, req resource.D
 			}
 		}
 	}
-{{ end}}
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Dn.ValueString()))
 
 	resp.State.RemoveResource(ctx)

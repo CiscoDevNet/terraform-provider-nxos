@@ -153,6 +153,7 @@ type YamlConfigChildClass struct {
 	Description    string                 `yaml:"description"`
 	DocPath        string                 `yaml:"doc_path"`
 	Mandatory      bool                   `yaml:"mandatory"`
+	NoDelete       bool                   `yaml:"no_delete"`
 	Attributes     []YamlConfigAttribute  `yaml:"attributes"`
 	ChildClasses   []YamlConfigChildClass `yaml:"child_classes"`
 	TfChildClasses []YamlConfigChildClass `yaml:"-"`
@@ -305,6 +306,16 @@ func ImportAttributes(config YamlConfig) []YamlConfigAttribute {
 	return attributes
 }
 
+// Templating helper function to check if any attribute has a delete_value
+func HasDeleteValue(attributes []YamlConfigAttribute) bool {
+	for _, attr := range attributes {
+		if attr.DeleteValue != "" && !attr.ReferenceOnly {
+			return true
+		}
+	}
+	return false
+}
+
 // Map of templating functions
 var functions = template.FuncMap{
 	"toGoName":           ToGoName,
@@ -321,6 +332,7 @@ var functions = template.FuncMap{
 	"hasNestedChildren":  HasNestedChildren,
 	"hasWriteOnly":       HasWriteOnly,
 	"importAttributes":   ImportAttributes,
+	"hasDeleteValue":     HasDeleteValue,
 }
 
 // buildTfChildClasses builds the TfChildClasses list by promoting children

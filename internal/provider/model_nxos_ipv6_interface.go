@@ -180,3 +180,10 @@ func (data IPv6Interface) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data IPv6Interface) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

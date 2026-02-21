@@ -93,3 +93,9 @@ func (data FeatureVNSegment) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data FeatureVNSegment) getDeleteDns() []string {
+	dns := []string{}
+
+	return dns
+}

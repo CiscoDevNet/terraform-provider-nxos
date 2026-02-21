@@ -93,3 +93,9 @@ func (data FeatureISIS) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data FeatureISIS) getDeleteDns() []string {
+	dns := []string{}
+
+	return dns
+}

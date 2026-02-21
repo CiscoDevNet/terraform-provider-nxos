@@ -275,3 +275,10 @@ func (data BGPAddressFamily) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data BGPAddressFamily) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

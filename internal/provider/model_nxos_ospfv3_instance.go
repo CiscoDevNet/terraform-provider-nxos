@@ -106,3 +106,10 @@ func (data OSPFv3Instance) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data OSPFv3Instance) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

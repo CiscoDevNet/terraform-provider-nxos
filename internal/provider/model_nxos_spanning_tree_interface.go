@@ -177,3 +177,10 @@ func (data SpanningTreeInterface) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data SpanningTreeInterface) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

@@ -125,3 +125,10 @@ func (data IPv6InterfaceAddress) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data IPv6InterfaceAddress) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

@@ -140,3 +140,10 @@ func (data IPv4Interface) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data IPv4Interface) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

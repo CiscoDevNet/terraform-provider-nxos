@@ -93,3 +93,9 @@ func (data FeatureNGOAM) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data FeatureNGOAM) getDeleteDns() []string {
+	dns := []string{}
+
+	return dns
+}

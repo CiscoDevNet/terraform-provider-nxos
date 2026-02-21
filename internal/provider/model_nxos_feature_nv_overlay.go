@@ -93,3 +93,9 @@ func (data FeatureNVOverlay) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data FeatureNVOverlay) getDeleteDns() []string {
+	dns := []string{}
+
+	return dns
+}

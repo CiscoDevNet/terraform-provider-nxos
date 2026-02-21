@@ -152,3 +152,10 @@ func (data PIMInterface) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data PIMInterface) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

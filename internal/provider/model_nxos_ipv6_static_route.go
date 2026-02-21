@@ -211,3 +211,10 @@ func (data IPv6StaticRoute) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data IPv6StaticRoute) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

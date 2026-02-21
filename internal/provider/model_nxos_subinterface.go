@@ -177,3 +177,10 @@ func (data Subinterface) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data Subinterface) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

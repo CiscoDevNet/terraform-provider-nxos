@@ -194,3 +194,10 @@ func (data NVEInterface) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data NVEInterface) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

@@ -92,3 +92,10 @@ func (data VPCPeerlink) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data VPCPeerlink) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

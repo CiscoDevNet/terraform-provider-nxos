@@ -97,3 +97,10 @@ func (data PIMSSMPolicy) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data PIMSSMPolicy) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

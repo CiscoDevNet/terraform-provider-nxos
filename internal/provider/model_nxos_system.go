@@ -92,3 +92,9 @@ func (data System) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data System) getDeleteDns() []string {
+	dns := []string{}
+
+	return dns
+}

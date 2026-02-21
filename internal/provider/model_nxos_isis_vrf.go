@@ -230,3 +230,10 @@ func (data ISISVRF) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data ISISVRF) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

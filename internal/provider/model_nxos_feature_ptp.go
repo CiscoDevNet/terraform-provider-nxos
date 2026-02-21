@@ -93,3 +93,9 @@ func (data FeaturePTP) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data FeaturePTP) getDeleteDns() []string {
+	dns := []string{}
+
+	return dns
+}

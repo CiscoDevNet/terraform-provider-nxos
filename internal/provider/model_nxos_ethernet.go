@@ -105,3 +105,9 @@ func (data Ethernet) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data Ethernet) getDeleteDns() []string {
+	dns := []string{}
+
+	return dns
+}

@@ -93,3 +93,9 @@ func (data FeatureSSH) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data FeatureSSH) getDeleteDns() []string {
+	dns := []string{}
+
+	return dns
+}

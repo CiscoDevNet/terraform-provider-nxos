@@ -93,3 +93,9 @@ func (data FeatureOSPFv3) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data FeatureOSPFv3) getDeleteDns() []string {
+	dns := []string{}
+
+	return dns
+}

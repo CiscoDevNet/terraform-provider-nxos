@@ -93,3 +93,9 @@ func (data FeatureTelnet) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data FeatureTelnet) getDeleteDns() []string {
+	dns := []string{}
+
+	return dns
+}

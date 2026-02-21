@@ -93,3 +93,9 @@ func (data FeatureVPC) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data FeatureVPC) getDeleteDns() []string {
+	dns := []string{}
+
+	return dns
+}

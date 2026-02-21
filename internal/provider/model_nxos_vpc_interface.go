@@ -132,3 +132,10 @@ func (data VPCInterface) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data VPCInterface) getDeleteDns() []string {
+	dns := []string{}
+	dns = append(dns, data.getDn())
+
+	return dns
+}

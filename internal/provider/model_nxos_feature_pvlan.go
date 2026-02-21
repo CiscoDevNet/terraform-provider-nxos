@@ -93,3 +93,9 @@ func (data FeaturePVLAN) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data FeaturePVLAN) getDeleteDns() []string {
+	dns := []string{}
+
+	return dns
+}

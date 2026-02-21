@@ -93,3 +93,9 @@ func (data FeatureDHCP) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data FeatureDHCP) getDeleteDns() []string {
+	dns := []string{}
+
+	return dns
+}

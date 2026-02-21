@@ -93,3 +93,9 @@ func (data FeatureMACsec) toDeleteBody() nxos.Body {
 
 	return nxos.Body{body}
 }
+
+func (data FeatureMACsec) getDeleteDns() []string {
+	dns := []string{}
+
+	return dns
+}

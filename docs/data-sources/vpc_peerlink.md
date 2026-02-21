@@ -4,14 +4,14 @@ page_title: "nxos_vpc_peerlink Data Source - terraform-provider-nxos"
 subcategory: "vPC"
 description: |-
   This data source can read the vPC peerlink configuration.
-  API Documentation: vpcPeerLink https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/vpc:PeerLink/
+  API Documentation: vpcPeerLink https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:PeerLink/
 ---
 
 # nxos_vpc_peerlink (Data Source)
 
 This data source can read the vPC peerlink configuration.
 
-- API Documentation: [vpcPeerLink](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/vpc:PeerLink/)
+- API Documentation: [vpcPeerLink](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:PeerLink/)
 
 ## Example Usage
 

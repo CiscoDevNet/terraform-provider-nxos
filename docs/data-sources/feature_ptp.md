@@ -4,14 +4,14 @@ page_title: "nxos_feature_ptp Data Source - terraform-provider-nxos"
 subcategory: "Feature"
 description: |-
   This data source can read the PTP feature configuration.
-  API Documentation: fmPtp https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Ptp/
+  API Documentation: fmPtp https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Ptp/
 ---
 
 # nxos_feature_ptp (Data Source)
 
 This data source can read the PTP feature configuration.
 
-- API Documentation: [fmPtp](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Ptp/)
+- API Documentation: [fmPtp](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Ptp/)
 
 ## Example Usage
 

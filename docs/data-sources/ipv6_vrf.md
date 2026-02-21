@@ -4,14 +4,14 @@ page_title: "nxos_ipv6_vrf Data Source - terraform-provider-nxos"
 subcategory: "IPv6"
 description: |-
   This data source can read the IPv6 VRF information.
-  API Documentation: ipv6Dom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv6:Dom/
+  API Documentation: ipv6Dom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Dom/
 ---
 
 # nxos_ipv6_vrf (Data Source)
 
 This data source can read the IPv6 VRF information.
 
-- API Documentation: [ipv6Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv6:Dom/)
+- API Documentation: [ipv6Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Dom/)
 
 ## Example Usage
 

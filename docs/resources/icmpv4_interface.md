@@ -4,7 +4,7 @@ page_title: "nxos_icmpv4_interface Resource - terraform-provider-nxos"
 subcategory: "ICMP"
 description: |-
   This resource can manage the global ICMP Instance configuration.
-  API Documentation: icmpv4If https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/icmpv4:If/
+  API Documentation: icmpv4If https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/icmpv4:If/
   Parent resources
   nxos_icmpv4_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/icmpv4_vrf
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the global ICMP Instance configuration.
 
-- API Documentation: [icmpv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/icmpv4:If/)
+- API Documentation: [icmpv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/icmpv4:If/)
 
 ### Parent resources
 

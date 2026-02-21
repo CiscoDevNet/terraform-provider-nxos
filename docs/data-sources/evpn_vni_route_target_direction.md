@@ -4,14 +4,14 @@ page_title: "nxos_evpn_vni_route_target_direction Data Source - terraform-provid
 subcategory: "EVPN"
 description: |-
   This data source can read a EVPN VNI Route Target direction.
-  API Documentation: rtctrlRttP https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:RttP/
+  API Documentation: rtctrlRttP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttP/
 ---
 
 # nxos_evpn_vni_route_target_direction (Data Source)
 
 This data source can read a EVPN VNI Route Target direction.
 
-- API Documentation: [rtctrlRttP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:RttP/)
+- API Documentation: [rtctrlRttP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttP/)
 
 ## Example Usage
 

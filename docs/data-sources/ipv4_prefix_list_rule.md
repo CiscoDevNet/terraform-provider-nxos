@@ -4,14 +4,14 @@ page_title: "nxos_ipv4_prefix_list_rule Data Source - terraform-provider-nxos"
 subcategory: "Routing"
 description: |-
   This data source can read an IPv4 Prefix List configuration.
-  API Documentation: rtpfxRuleV4 https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtpfx:RuleV4/
+  API Documentation: rtpfxRuleV4 https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtpfx:RuleV4/
 ---
 
 # nxos_ipv4_prefix_list_rule (Data Source)
 
 This data source can read an IPv4 Prefix List configuration.
 
-- API Documentation: [rtpfxRuleV4](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtpfx:RuleV4/)
+- API Documentation: [rtpfxRuleV4](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtpfx:RuleV4/)
 
 ## Example Usage
 

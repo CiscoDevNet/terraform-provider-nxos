@@ -4,14 +4,14 @@ page_title: "nxos_pim_interface Data Source - terraform-provider-nxos"
 subcategory: "PIM"
 description: |-
   This data source can read the PIM interface configuration.
-  API Documentation: pimIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:If/
+  API Documentation: pimIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:If/
 ---
 
 # nxos_pim_interface (Data Source)
 
 This data source can read the PIM interface configuration.
 
-- API Documentation: [pimIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:If/)
+- API Documentation: [pimIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:If/)
 
 ## Example Usage
 

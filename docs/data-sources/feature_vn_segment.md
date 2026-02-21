@@ -4,14 +4,14 @@ page_title: "nxos_feature_vn_segment Data Source - terraform-provider-nxos"
 subcategory: "Feature"
 description: |-
   This data source can read the VN Segment feature configuration.
-  API Documentation: fmVnSegment https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:VnSegment/
+  API Documentation: fmVnSegment https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:VnSegment/
 ---
 
 # nxos_feature_vn_segment (Data Source)
 
 This data source can read the VN Segment feature configuration.
 
-- API Documentation: [fmVnSegment](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:VnSegment/)
+- API Documentation: [fmVnSegment](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:VnSegment/)
 
 ## Example Usage
 

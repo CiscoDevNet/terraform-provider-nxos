@@ -4,14 +4,14 @@ page_title: "nxos_port_channel_interface_vrf Data Source - terraform-provider-nx
 subcategory: "Interface"
 description: |-
   This data source can read a port-channel interface VRF association.
-  API Documentation: nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
+  API Documentation: nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
 ---
 
 # nxos_port_channel_interface_vrf (Data Source)
 
 This data source can read a port-channel interface VRF association.
 
-- API Documentation: [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
+- API Documentation: [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 
 ## Example Usage
 

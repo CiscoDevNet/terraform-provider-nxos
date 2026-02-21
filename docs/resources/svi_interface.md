@@ -4,7 +4,7 @@ page_title: "nxos_svi_interface Resource - terraform-provider-nxos"
 subcategory: "Interface"
 description: |-
   This resource can manage an SVI interface.
-  API Documentation: sviIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Interfaces/svi:If/
+  API Documentation: sviIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/svi:If/
   Child resources
   nxos_svi_interface_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/svi_interface_vrf
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage an SVI interface.
 
-- API Documentation: [sviIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Interfaces/svi:If/)
+- API Documentation: [sviIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/svi:If/)
 
 ### Child resources
 

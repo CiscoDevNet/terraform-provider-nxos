@@ -4,7 +4,7 @@ page_title: "nxos_default_qos_policy_map_match_class_map_set_qos_group Resource 
 subcategory: "QoS"
 description: |-
   This resource can manage the default QoS policy map match class map set QoS group configuration.
-  API Documentation: ipqosSetQoSGrp https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:SetQoSGrp/
+  API Documentation: ipqosSetQoSGrp https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:SetQoSGrp/
   Parent resources
   nxos_default_qos_policy_map_match_class_map https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/default_qos_policy_map_match_class_map
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the default QoS policy map match class map set QoS group configuration.
 
-- API Documentation: [ipqosSetQoSGrp](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:SetQoSGrp/)
+- API Documentation: [ipqosSetQoSGrp](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:SetQoSGrp/)
 
 ### Parent resources
 

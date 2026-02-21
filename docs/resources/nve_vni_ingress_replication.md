@@ -4,7 +4,7 @@ page_title: "nxos_nve_vni_ingress_replication Resource - terraform-provider-nxos
 subcategory: "NVE"
 description: |-
   This resource can manage the configuration of Ingress Replication for Virtual Network ID (VNI).
-  API Documentation: nvoIngRepl https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Network%20Virtualization/nvo:IngRepl/
+  API Documentation: nvoIngRepl https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Network%20Virtualization/nvo:IngRepl/
   Parent resources
   nxos_nve_vni https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/nve_vni
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the configuration of Ingress Replication for Virtual Network ID (VNI).
 
-- API Documentation: [nvoIngRepl](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Network%20Virtualization/nvo:IngRepl/)
+- API Documentation: [nvoIngRepl](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Network%20Virtualization/nvo:IngRepl/)
 
 ### Parent resources
 

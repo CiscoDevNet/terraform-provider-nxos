@@ -4,14 +4,14 @@ page_title: "nxos_vpc_domain Data Source - terraform-provider-nxos"
 subcategory: "vPC"
 description: |-
   This data source can read the vPC domain configuration.
-  API Documentation: vpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/vpc:Dom/
+  API Documentation: vpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:Dom/
 ---
 
 # nxos_vpc_domain (Data Source)
 
 This data source can read the vPC domain configuration.
 
-- API Documentation: [vpcDom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/vpc:Dom/)
+- API Documentation: [vpcDom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:Dom/)
 
 ## Example Usage
 

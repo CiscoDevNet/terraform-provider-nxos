@@ -4,14 +4,14 @@ page_title: "nxos_ospf_interface Data Source - terraform-provider-nxos"
 subcategory: "OSPF"
 description: |-
   This data source can read the OSPF interface configuration.
-  API Documentation: ospfIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:If/
+  API Documentation: ospfIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:If/
 ---
 
 # nxos_ospf_interface (Data Source)
 
 This data source can read the OSPF interface configuration.
 
-- API Documentation: [ospfIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:If/)
+- API Documentation: [ospfIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:If/)
 
 ## Example Usage
 

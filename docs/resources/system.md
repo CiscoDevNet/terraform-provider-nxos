@@ -4,14 +4,14 @@ page_title: "nxos_system Resource - terraform-provider-nxos"
 subcategory: "System"
 description: |-
   This resource can manage the system configuration.
-  API Documentation: topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/top:System/
+  API Documentation: topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/top:System/
 ---
 
 # nxos_system (Resource)
 
 This resource can manage the system configuration.
 
-- API Documentation: [topSystem](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/top:System/)
+- API Documentation: [topSystem](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/top:System/)
 
 ## Example Usage
 

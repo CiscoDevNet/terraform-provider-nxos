@@ -4,7 +4,7 @@ page_title: "nxos_bgp_peer_local_asn Resource - terraform-provider-nxos"
 subcategory: "BGP"
 description: |-
   This resource can manage the BGP peer local asn configuration.
-  API Documentation: bgpLocalAsn https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:localasn/
+  API Documentation: bgpLocalAsn https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/bgp:localasn/
   Parent resources
   nxos_bgp_peer https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_peer
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the BGP peer local asn configuration.
 
-- API Documentation: [bgpLocalAsn](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:localasn/)
+- API Documentation: [bgpLocalAsn](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/bgp:localasn/)
 
 ### Parent resources
 

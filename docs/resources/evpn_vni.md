@@ -4,7 +4,7 @@ page_title: "nxos_evpn_vni Resource - terraform-provider-nxos"
 subcategory: "EVPN"
 description: |-
   This resource can manage a EVPN VNI Route Distinguisher.
-  API Documentation: rtctrlBDEvi https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:BDEvi/
+  API Documentation: rtctrlBDEvi https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:BDEvi/
   Parent resources
   nxos_evpn https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/evpn
   Child resources
@@ -15,7 +15,7 @@ description: |-
 
 This resource can manage a EVPN VNI Route Distinguisher.
 
-- API Documentation: [rtctrlBDEvi](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:BDEvi/)
+- API Documentation: [rtctrlBDEvi](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:BDEvi/)
 
 ### Parent resources
 

@@ -4,14 +4,14 @@ page_title: "nxos_feature_ssh Resource - terraform-provider-nxos"
 subcategory: "Feature"
 description: |-
   This resource can manage the SSH feature configuration.
-  API Documentation: fmSsh https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Ssh/
+  API Documentation: fmSsh https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Ssh/
 ---
 
 # nxos_feature_ssh (Resource)
 
 This resource can manage the SSH feature configuration.
 
-- API Documentation: [fmSsh](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Ssh/)
+- API Documentation: [fmSsh](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Ssh/)
 
 ## Example Usage
 

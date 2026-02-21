@@ -4,14 +4,14 @@ page_title: "nxos_bgp_route_control Data Source - terraform-provider-nxos"
 subcategory: "BGP"
 description: |-
   This data source can read the BGP Route Control configuration.
-  API Documentation: bgpRtCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:RtCtrl/
+  API Documentation: bgpRtCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/bgp:RtCtrl/
 ---
 
 # nxos_bgp_route_control (Data Source)
 
 This data source can read the BGP Route Control configuration.
 
-- API Documentation: [bgpRtCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:RtCtrl/)
+- API Documentation: [bgpRtCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/bgp:RtCtrl/)
 
 ## Example Usage
 

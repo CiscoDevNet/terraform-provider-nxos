@@ -4,14 +4,14 @@ page_title: "nxos_ipv4_interface_address Data Source - terraform-provider-nxos"
 subcategory: "IPv4"
 description: |-
   This data source can read an IPv4 interface address.
-  API Documentation: ipv4Addr https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:Addr/
+  API Documentation: ipv4Addr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv4:Addr/
 ---
 
 # nxos_ipv4_interface_address (Data Source)
 
 This data source can read an IPv4 interface address.
 
-- API Documentation: [ipv4Addr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:Addr/)
+- API Documentation: [ipv4Addr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv4:Addr/)
 
 ## Example Usage
 

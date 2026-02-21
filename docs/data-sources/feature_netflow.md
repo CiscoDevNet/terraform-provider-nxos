@@ -4,14 +4,14 @@ page_title: "nxos_feature_netflow Data Source - terraform-provider-nxos"
 subcategory: "Feature"
 description: |-
   This data source can read the Netflow feature configuration.
-  API Documentation: fmNetflow https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Netflow/
+  API Documentation: fmNetflow https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Netflow/
 ---
 
 # nxos_feature_netflow (Data Source)
 
 This data source can read the Netflow feature configuration.
 
-- API Documentation: [fmNetflow](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Netflow/)
+- API Documentation: [fmNetflow](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Netflow/)
 
 ## Example Usage
 

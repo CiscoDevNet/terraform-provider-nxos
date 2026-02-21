@@ -4,7 +4,7 @@ page_title: "nxos_pim_vrf Resource - terraform-provider-nxos"
 subcategory: "PIM"
 description: |-
   This resource can manage the PIM VRF configuration.
-  API Documentation: pimDom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:Dom/
+  API Documentation: pimDom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:Dom/
   Parent resources
   nxos_pim_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_instance
   Child resources
@@ -17,7 +17,7 @@ description: |-
 
 This resource can manage the PIM VRF configuration.
 
-- API Documentation: [pimDom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:Dom/)
+- API Documentation: [pimDom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:Dom/)
 
 ### Parent resources
 

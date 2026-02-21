@@ -4,14 +4,14 @@ page_title: "nxos_route_map_rule_entry_match_tag Data Source - terraform-provide
 subcategory: "Routing"
 description: |-
   This data source can read a Match Tag in Route-Map Rule Entry configuration.
-  API Documentation: rtmapMatchRtTag https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtmap:MatchRtTag/
+  API Documentation: rtmapMatchRtTag https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtmap:MatchRtTag/
 ---
 
 # nxos_route_map_rule_entry_match_tag (Data Source)
 
 This data source can read a Match Tag in Route-Map Rule Entry configuration.
 
-- API Documentation: [rtmapMatchRtTag](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtmap:MatchRtTag/)
+- API Documentation: [rtmapMatchRtTag](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtmap:MatchRtTag/)
 
 ## Example Usage
 

@@ -4,20 +4,20 @@ page_title: "nxos_user Resource - terraform-provider-nxos"
 subcategory: "AAA"
 description: |-
   This resource can manage the User configuration.
-  API Documentation: aaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:User/
+  API Documentation: aaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/aaa:User/
   Additional API Documentation
-  aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:UserRole/
+  aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/aaa:UserRole/
 ---
 
 # nxos_user (Resource)
 
 This resource can manage the User configuration.
 
-- API Documentation: [aaaUser](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:User/)
+- API Documentation: [aaaUser](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/aaa:User/)
 
 ### Additional API Documentation
 
-- [aaaUserRole](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/aaa:UserRole/)
+- [aaaUserRole](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/aaa:UserRole/)
 
 ## Example Usage
 

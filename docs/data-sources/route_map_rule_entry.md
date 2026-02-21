@@ -4,14 +4,14 @@ page_title: "nxos_route_map_rule_entry Data Source - terraform-provider-nxos"
 subcategory: "Routing"
 description: |-
   This data source can read a Route-Map Rule Entry configuration.
-  API Documentation: rtmapEntry https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtmap:Entry/
+  API Documentation: rtmapEntry https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtmap:Entry/
 ---
 
 # nxos_route_map_rule_entry (Data Source)
 
 This data source can read a Route-Map Rule Entry configuration.
 
-- API Documentation: [rtmapEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtmap:Entry/)
+- API Documentation: [rtmapEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtmap:Entry/)
 
 ## Example Usage
 

@@ -4,14 +4,14 @@ page_title: "nxos_vpc_interface Data Source - terraform-provider-nxos"
 subcategory: "vPC"
 description: |-
   This data source can read the vPC interface configuration.
-  API Documentation: vpcIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/vpc:If/
+  API Documentation: vpcIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:If/
 ---
 
 # nxos_vpc_interface (Data Source)
 
 This data source can read the vPC interface configuration.
 
-- API Documentation: [vpcIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/vpc:If/)
+- API Documentation: [vpcIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:If/)
 
 ## Example Usage
 

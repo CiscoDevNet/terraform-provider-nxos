@@ -4,14 +4,14 @@ page_title: "nxos_vrf_route_target_direction Data Source - terraform-provider-nx
 subcategory: "VRF"
 description: |-
   This data source can read a VRF Route Target direction.
-  API Documentation: rtctrlRttP https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:RttP/
+  API Documentation: rtctrlRttP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttP/
 ---
 
 # nxos_vrf_route_target_direction (Data Source)
 
 This data source can read a VRF Route Target direction.
 
-- API Documentation: [rtctrlRttP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:RttP/)
+- API Documentation: [rtctrlRttP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttP/)
 
 ## Example Usage
 

@@ -4,7 +4,7 @@ page_title: "nxos_pim Resource - terraform-provider-nxos"
 subcategory: "PIM"
 description: |-
   This resource can manage the global PIM configuration.
-  API Documentation: pimEntity https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:Entity/
+  API Documentation: pimEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:Entity/
   Child resources
   nxos_pim_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_instance
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the global PIM configuration.
 
-- API Documentation: [pimEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:Entity/)
+- API Documentation: [pimEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:Entity/)
 
 ### Child resources
 

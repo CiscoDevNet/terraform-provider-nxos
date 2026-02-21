@@ -4,7 +4,7 @@ page_title: "nxos_subinterface Resource - terraform-provider-nxos"
 subcategory: "Interface"
 description: |-
   This resource can manage a subinterface.
-  API Documentation: l3EncRtdIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:EncRtdIf/
+  API Documentation: l3EncRtdIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:EncRtdIf/
   Child resources
   nxos_subinterface_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/subinterface_vrf
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage a subinterface.
 
-- API Documentation: [l3EncRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:EncRtdIf/)
+- API Documentation: [l3EncRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:EncRtdIf/)
 
 ### Child resources
 

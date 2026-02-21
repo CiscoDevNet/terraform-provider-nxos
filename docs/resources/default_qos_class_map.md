@@ -4,7 +4,7 @@ page_title: "nxos_default_qos_class_map Resource - terraform-provider-nxos"
 subcategory: "QoS"
 description: |-
   This resource can manage the default QoS class map configuration.
-  API Documentation: ipqosCMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:CMapInst/
+  API Documentation: ipqosCMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:CMapInst/
   Child resources
   nxos_default_qos_class_map_dscp https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/default_qos_class_map_dscp
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the default QoS class map configuration.
 
-- API Documentation: [ipqosCMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:CMapInst/)
+- API Documentation: [ipqosCMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:CMapInst/)
 
 ### Child resources
 

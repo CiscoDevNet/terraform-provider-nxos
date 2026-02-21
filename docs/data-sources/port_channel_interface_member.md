@@ -4,14 +4,14 @@ page_title: "nxos_port_channel_interface_member Data Source - terraform-provider
 subcategory: "Interface"
 description: |-
   This data source can read the configuration of a port-channel interface member.
-  API Documentation: pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Interfaces/pc:RsMbrIfs/
+  API Documentation: pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/pc:RsMbrIfs/
 ---
 
 # nxos_port_channel_interface_member (Data Source)
 
 This data source can read the configuration of a port-channel interface member.
 
-- API Documentation: [pcRsMbrIfs](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Interfaces/pc:RsMbrIfs/)
+- API Documentation: [pcRsMbrIfs](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/pc:RsMbrIfs/)
 
 ## Example Usage
 

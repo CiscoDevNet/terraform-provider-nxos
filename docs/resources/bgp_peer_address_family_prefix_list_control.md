@@ -4,7 +4,7 @@ page_title: "nxos_bgp_peer_address_family_prefix_list_control Resource - terrafo
 subcategory: "BGP"
 description: |-
   This resource can manage the BGP peer address family prefix list control configuration.
-  API Documentation: bgpPfxCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/
+  API Documentation: bgpPfxCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/
   Parent resources
   nxos_bgp_peer_address_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_peer_address_family
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the BGP peer address family prefix list control configuration.
 
-- API Documentation: [bgpPfxCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/)
+- API Documentation: [bgpPfxCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/)
 
 ### Parent resources
 

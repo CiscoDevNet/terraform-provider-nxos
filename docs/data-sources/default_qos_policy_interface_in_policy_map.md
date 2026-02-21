@@ -4,14 +4,14 @@ page_title: "nxos_default_qos_policy_interface_in_policy_map Data Source - terra
 subcategory: "QoS"
 description: |-
   This data source can read the default QoS policy interface in policy map configuration.
-  API Documentation: ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Inst/
+  API Documentation: ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Inst/
 ---
 
 # nxos_default_qos_policy_interface_in_policy_map (Data Source)
 
 This data source can read the default QoS policy interface in policy map configuration.
 
-- API Documentation: [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Inst/)
+- API Documentation: [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Inst/)
 
 ## Example Usage
 

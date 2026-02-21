@@ -4,14 +4,14 @@ page_title: "nxos_vrf_routing Data Source - terraform-provider-nxos"
 subcategory: "VRF"
 description: |-
   This data source can read a VRF Route Distinguisher and VRF VNI.
-  API Documentation: rtctrlDom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:Dom/
+  API Documentation: rtctrlDom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:Dom/
 ---
 
 # nxos_vrf_routing (Data Source)
 
 This data source can read a VRF Route Distinguisher and VRF VNI.
 
-- API Documentation: [rtctrlDom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:Dom/)
+- API Documentation: [rtctrlDom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:Dom/)
 
 ## Example Usage
 

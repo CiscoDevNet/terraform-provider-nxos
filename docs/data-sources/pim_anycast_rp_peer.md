@@ -4,14 +4,14 @@ page_title: "nxos_pim_anycast_rp_peer Data Source - terraform-provider-nxos"
 subcategory: "PIM"
 description: |-
   This data source can read the PIM Anycast RP peer configuration.
-  API Documentation: pimAcastRPPeer https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:AcastRPPeer/
+  API Documentation: pimAcastRPPeer https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:AcastRPPeer/
 ---
 
 # nxos_pim_anycast_rp_peer (Data Source)
 
 This data source can read the PIM Anycast RP peer configuration.
 
-- API Documentation: [pimAcastRPPeer](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:AcastRPPeer/)
+- API Documentation: [pimAcastRPPeer](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:AcastRPPeer/)
 
 ## Example Usage
 

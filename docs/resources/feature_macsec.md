@@ -4,14 +4,14 @@ page_title: "nxos_feature_macsec Resource - terraform-provider-nxos"
 subcategory: "Feature"
 description: |-
   This resource can manage the MACsec feature configuration.
-  API Documentation: fmMacsec https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Macsec/
+  API Documentation: fmMacsec https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Macsec/
 ---
 
 # nxos_feature_macsec (Resource)
 
 This resource can manage the MACsec feature configuration.
 
-- API Documentation: [fmMacsec](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Macsec/)
+- API Documentation: [fmMacsec](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Macsec/)
 
 ## Example Usage
 

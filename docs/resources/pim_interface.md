@@ -4,7 +4,7 @@ page_title: "nxos_pim_interface Resource - terraform-provider-nxos"
 subcategory: "PIM"
 description: |-
   This resource can manage the PIM interface configuration.
-  API Documentation: pimIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:If/
+  API Documentation: pimIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:If/
   Parent resources
   nxos_pim_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_vrf
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the PIM interface configuration.
 
-- API Documentation: [pimIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:If/)
+- API Documentation: [pimIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:If/)
 
 ### Parent resources
 

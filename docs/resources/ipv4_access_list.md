@@ -4,14 +4,14 @@ page_title: "nxos_ipv4_access_list Resource - terraform-provider-nxos"
 subcategory: "IPv4"
 description: |-
   This resource can manage IPv4 Access Lists.
-  API Documentation: ipv4aclACL https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/ipv4acl:ACL/
+  API Documentation: ipv4aclACL https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/ipv4acl:ACL/
 ---
 
 # nxos_ipv4_access_list (Resource)
 
 This resource can manage IPv4 Access Lists.
 
-- API Documentation: [ipv4aclACL](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/ipv4acl:ACL/)
+- API Documentation: [ipv4aclACL](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/ipv4acl:ACL/)
 
 ## Example Usage
 

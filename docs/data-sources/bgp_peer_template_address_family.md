@@ -4,14 +4,14 @@ page_title: "nxos_bgp_peer_template_address_family Data Source - terraform-provi
 subcategory: "BGP"
 description: |-
   This data source can read the BGP peer template address family configuration.
-  API Documentation: bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:PeerAf/
+  API Documentation: bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/bgp:PeerAf/
 ---
 
 # nxos_bgp_peer_template_address_family (Data Source)
 
 This data source can read the BGP peer template address family configuration.
 
-- API Documentation: [bgpPeerAf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:PeerAf/)
+- API Documentation: [bgpPeerAf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/bgp:PeerAf/)
 
 ## Example Usage
 

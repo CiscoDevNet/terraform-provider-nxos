@@ -4,14 +4,14 @@ page_title: "nxos_route_map_rule_entry_set_regular_community_item Data Source - 
 subcategory: "Routing"
 description: |-
   This data source can read a Set Community item in a Route-Map Rule Entry.
-  API Documentation: rtregcomItem https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtregcom:Item/
+  API Documentation: rtregcomItem https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtregcom:Item/
 ---
 
 # nxos_route_map_rule_entry_set_regular_community_item (Data Source)
 
 This data source can read a Set Community item in a Route-Map Rule Entry.
 
-- API Documentation: [rtregcomItem](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtregcom:Item/)
+- API Documentation: [rtregcomItem](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtregcom:Item/)
 
 ## Example Usage
 

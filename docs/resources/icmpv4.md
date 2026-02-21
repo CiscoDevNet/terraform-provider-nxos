@@ -4,7 +4,7 @@ page_title: "nxos_icmpv4 Resource - terraform-provider-nxos"
 subcategory: "ICMP"
 description: |-
   This resource can manage the global ICMP configuration.
-  API Documentation: icmpv4Entity https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/icmpv4:Entity/
+  API Documentation: icmpv4Entity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/icmpv4:Entity/
   Child resources
   nxos_icmpv4_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/icmpv4_instance
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the global ICMP configuration.
 
-- API Documentation: [icmpv4Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/icmpv4:Entity/)
+- API Documentation: [icmpv4Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/icmpv4:Entity/)
 
 ### Child resources
 

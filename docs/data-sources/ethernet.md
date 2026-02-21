@@ -4,14 +4,14 @@ page_title: "nxos_ethernet Data Source - terraform-provider-nxos"
 subcategory: "Switching"
 description: |-
   This data source can read global ethernet settings.
-  API Documentation: ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Interfaces/ethpm:Inst/
+  API Documentation: ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/ethpm:Inst/
 ---
 
 # nxos_ethernet (Data Source)
 
 This data source can read global ethernet settings.
 
-- API Documentation: [ethpmInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Interfaces/ethpm:Inst/)
+- API Documentation: [ethpmInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/ethpm:Inst/)
 
 ## Example Usage
 

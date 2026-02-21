@@ -4,7 +4,7 @@ page_title: "nxos_nve_interface Resource - terraform-provider-nxos"
 subcategory: "NVE"
 description: |-
   This resource can manage the NVE interface configuration.
-  API Documentation: nvoEp https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Network%20Virtualization/nvo:Ep/
+  API Documentation: nvoEp https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Network%20Virtualization/nvo:Ep/
   Child resources
   nxos_nve_vni_container https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/nve_vni_container
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the NVE interface configuration.
 
-- API Documentation: [nvoEp](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Network%20Virtualization/nvo:Ep/)
+- API Documentation: [nvoEp](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Network%20Virtualization/nvo:Ep/)
 
 ### Child resources
 

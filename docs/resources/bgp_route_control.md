@@ -4,7 +4,7 @@ page_title: "nxos_bgp_route_control Resource - terraform-provider-nxos"
 subcategory: "BGP"
 description: |-
   This resource can manage the BGP Route Control configuration.
-  API Documentation: bgpRtCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:RtCtrl/
+  API Documentation: bgpRtCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/bgp:RtCtrl/
   Parent resources
   nxos_bgp_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_vrf
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the BGP Route Control configuration.
 
-- API Documentation: [bgpRtCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:RtCtrl/)
+- API Documentation: [bgpRtCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/bgp:RtCtrl/)
 
 ### Parent resources
 

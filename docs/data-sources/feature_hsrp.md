@@ -4,14 +4,14 @@ page_title: "nxos_feature_hsrp Data Source - terraform-provider-nxos"
 subcategory: "Feature"
 description: |-
   This data source can read the HSRP feature configuration.
-  API Documentation: fmHsrp https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Hsrp/
+  API Documentation: fmHsrp https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Hsrp/
 ---
 
 # nxos_feature_hsrp (Data Source)
 
 This data source can read the HSRP feature configuration.
 
-- API Documentation: [fmHsrp](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Hsrp/)
+- API Documentation: [fmHsrp](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Hsrp/)
 
 ## Example Usage
 

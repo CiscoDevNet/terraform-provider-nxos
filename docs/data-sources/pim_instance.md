@@ -4,14 +4,14 @@ page_title: "nxos_pim_instance Data Source - terraform-provider-nxos"
 subcategory: "PIM"
 description: |-
   This data source can read the PIM instance configuration.
-  API Documentation: pimInst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:Inst/
+  API Documentation: pimInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:Inst/
 ---
 
 # nxos_pim_instance (Data Source)
 
 This data source can read the PIM instance configuration.
 
-- API Documentation: [pimInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:Inst/)
+- API Documentation: [pimInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:Inst/)
 
 ## Example Usage
 

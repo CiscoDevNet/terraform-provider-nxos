@@ -4,7 +4,7 @@ page_title: "nxos_vrf_address_family Resource - terraform-provider-nxos"
 subcategory: "VRF"
 description: |-
   This resource can manage a VRF Address Family.
-  API Documentation: rtctrlDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:DomAf/
+  API Documentation: rtctrlDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:DomAf/
   Parent resources
   nxos_vrf_routing https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf_routing
   Child resources
@@ -15,7 +15,7 @@ description: |-
 
 This resource can manage a VRF Address Family.
 
-- API Documentation: [rtctrlDomAf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:DomAf/)
+- API Documentation: [rtctrlDomAf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:DomAf/)
 
 ### Parent resources
 

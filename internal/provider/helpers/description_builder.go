@@ -54,7 +54,7 @@ type ResourceDescription struct {
 }
 
 func NewResourceDescription(description, className, docPath string) *ResourceDescription {
-	d := fmt.Sprintf("%s\n\n- API Documentation: [%s](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/%s)\n", description, className, docPath)
+	d := fmt.Sprintf("%s\n\n- API Documentation: [%s](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/%s)\n", description, className, docPath)
 	return &ResourceDescription{d}
 }
 
@@ -86,7 +86,7 @@ func (d *ResourceDescription) AddAdditionalDocs(classNames []string, docPaths []
 	if len(classNames) == len(docPaths) && len(classNames) > 0 {
 		d.String += "\n### Additional API Documentation\n\n"
 		for i, className := range classNames {
-			d.String += fmt.Sprintf("- [%s](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/%s)\n", className, docPaths[i])
+			d.String += fmt.Sprintf("- [%s](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/%s)\n", className, docPaths[i])
 		}
 	}
 	return d

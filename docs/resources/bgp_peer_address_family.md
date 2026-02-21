@@ -4,7 +4,7 @@ page_title: "nxos_bgp_peer_address_family Resource - terraform-provider-nxos"
 subcategory: "BGP"
 description: |-
   This resource can manage the BGP peer address family configuration.
-  API Documentation: bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:PeerAf/
+  API Documentation: bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/bgp:PeerAf/
   Parent resources
   nxos_bgp_peer https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_peer
   Child resources
@@ -15,7 +15,7 @@ description: |-
 
 This resource can manage the BGP peer address family configuration.
 
-- API Documentation: [bgpPeerAf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:PeerAf/)
+- API Documentation: [bgpPeerAf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/bgp:PeerAf/)
 
 ### Parent resources
 

@@ -4,7 +4,7 @@ page_title: "nxos_subinterface_vrf Resource - terraform-provider-nxos"
 subcategory: "Interface"
 description: |-
   This resource can manage a subinterface VRF association.
-  API Documentation: nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
+  API Documentation: nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
   Parent resources
   nxos_subinterface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/subinterface
   Referenced resources
@@ -15,7 +15,7 @@ description: |-
 
 This resource can manage a subinterface VRF association.
 
-- API Documentation: [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
+- API Documentation: [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 
 ### Parent resources
 

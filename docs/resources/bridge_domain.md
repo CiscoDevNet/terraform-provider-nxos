@@ -4,14 +4,14 @@ page_title: "nxos_bridge_domain Resource - terraform-provider-nxos"
 subcategory: "Switching"
 description: |-
   This resource can manage a bridge domain.
-  API Documentation: l2BD https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%202/l2:BD/
+  API Documentation: l2BD https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%202/l2:BD/
 ---
 
 # nxos_bridge_domain (Resource)
 
 This resource can manage a bridge domain.
 
-- API Documentation: [l2BD](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%202/l2:BD/)
+- API Documentation: [l2BD](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%202/l2:BD/)
 
 ## Example Usage
 

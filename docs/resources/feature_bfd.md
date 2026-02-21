@@ -4,14 +4,14 @@ page_title: "nxos_feature_bfd Resource - terraform-provider-nxos"
 subcategory: "Feature"
 description: |-
   This resource can manage the BFD feature configuration.
-  API Documentation: fmBfd https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Bfd/
+  API Documentation: fmBfd https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Bfd/
 ---
 
 # nxos_feature_bfd (Resource)
 
 This resource can manage the BFD feature configuration.
 
-- API Documentation: [fmBfd](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Bfd/)
+- API Documentation: [fmBfd](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Bfd/)
 
 ## Example Usage
 

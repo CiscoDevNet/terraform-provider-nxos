@@ -4,14 +4,14 @@ page_title: "nxos_vpc_keepalive Data Source - terraform-provider-nxos"
 subcategory: "vPC"
 description: |-
   This data source can read the vPC keepalive configuration.
-  API Documentation: vpcKeepalive https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/vpc:Keepalive/
+  API Documentation: vpcKeepalive https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:Keepalive/
 ---
 
 # nxos_vpc_keepalive (Data Source)
 
 This data source can read the vPC keepalive configuration.
 
-- API Documentation: [vpcKeepalive](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/vpc:Keepalive/)
+- API Documentation: [vpcKeepalive](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:Keepalive/)
 
 ## Example Usage
 

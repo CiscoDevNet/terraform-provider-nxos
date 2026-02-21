@@ -4,14 +4,14 @@ page_title: "nxos_feature_lacp Resource - terraform-provider-nxos"
 subcategory: "Feature"
 description: |-
   This resource can manage the LACP feature configuration.
-  API Documentation: fmLacp https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Lacp/
+  API Documentation: fmLacp https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Lacp/
 ---
 
 # nxos_feature_lacp (Resource)
 
 This resource can manage the LACP feature configuration.
 
-- API Documentation: [fmLacp](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Lacp/)
+- API Documentation: [fmLacp](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Lacp/)
 
 ## Example Usage
 

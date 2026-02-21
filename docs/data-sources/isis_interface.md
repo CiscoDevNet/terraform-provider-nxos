@@ -4,14 +4,14 @@ page_title: "nxos_isis_interface Data Source - terraform-provider-nxos"
 subcategory: "ISIS"
 description: |-
   This data source can read the IS-IS interface configuration.
-  API Documentation: isisInternalIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/isis:InternalIf/
+  API Documentation: isisInternalIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:InternalIf/
 ---
 
 # nxos_isis_interface (Data Source)
 
 This data source can read the IS-IS interface configuration.
 
-- API Documentation: [isisInternalIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/isis:InternalIf/)
+- API Documentation: [isisInternalIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:InternalIf/)
 
 ## Example Usage
 

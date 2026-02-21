@@ -4,14 +4,14 @@ page_title: "nxos_isis Data Source - terraform-provider-nxos"
 subcategory: "ISIS"
 description: |-
   This data source can read the global IS-IS configuration.
-  API Documentation: isisEntity https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/isis:Entity/
+  API Documentation: isisEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Entity/
 ---
 
 # nxos_isis (Data Source)
 
 This data source can read the global IS-IS configuration.
 
-- API Documentation: [isisEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/isis:Entity/)
+- API Documentation: [isisEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Entity/)
 
 ## Example Usage
 

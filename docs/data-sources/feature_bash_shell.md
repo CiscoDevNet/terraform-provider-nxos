@@ -4,14 +4,14 @@ page_title: "nxos_feature_bash_shell Data Source - terraform-provider-nxos"
 subcategory: "Feature"
 description: |-
   This data source can read the Bash Shell feature configuration.
-  API Documentation: fmBashShell https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:BashShell/
+  API Documentation: fmBashShell https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:BashShell/
 ---
 
 # nxos_feature_bash_shell (Data Source)
 
 This data source can read the Bash Shell feature configuration.
 
-- API Documentation: [fmBashShell](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:BashShell/)
+- API Documentation: [fmBashShell](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:BashShell/)
 
 ## Example Usage
 

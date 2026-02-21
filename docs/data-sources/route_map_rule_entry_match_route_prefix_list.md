@@ -4,14 +4,14 @@ page_title: "nxos_route_map_rule_entry_match_route_prefix_list Data Source - ter
 subcategory: "Routing"
 description: |-
   This data source can read a Match Route Prefix List in Route-Map Rule Entry configuration.
-  API Documentation: rtmapRsRtDstAtt https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtmap:RsRtDstAtt/
+  API Documentation: rtmapRsRtDstAtt https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtmap:RsRtDstAtt/
 ---
 
 # nxos_route_map_rule_entry_match_route_prefix_list (Data Source)
 
 This data source can read a Match Route Prefix List in Route-Map Rule Entry configuration.
 
-- API Documentation: [rtmapRsRtDstAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtmap:RsRtDstAtt/)
+- API Documentation: [rtmapRsRtDstAtt](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtmap:RsRtDstAtt/)
 
 ## Example Usage
 

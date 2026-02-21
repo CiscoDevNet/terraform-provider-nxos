@@ -4,7 +4,7 @@ page_title: "nxos_ipv4_static_route Resource - terraform-provider-nxos"
 subcategory: "IPv4"
 description: |-
   This resource can manage an IPv4 static route.
-  API Documentation: ipv4Route https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:Route/
+  API Documentation: ipv4Route https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv4:Route/
   Parent resources
   nxos_ipv4_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv4_vrf
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage an IPv4 static route.
 
-- API Documentation: [ipv4Route](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:Route/)
+- API Documentation: [ipv4Route](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv4:Route/)
 
 ### Parent resources
 

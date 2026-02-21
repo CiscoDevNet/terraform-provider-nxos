@@ -4,7 +4,7 @@ page_title: "nxos_isis Resource - terraform-provider-nxos"
 subcategory: "ISIS"
 description: |-
   This resource can manage the global IS-IS configuration.
-  API Documentation: isisEntity https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/isis:Entity/
+  API Documentation: isisEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Entity/
   Child resources
   nxos_isis_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/isis_instancenxos_isis_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/isis_interface
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the global IS-IS configuration.
 
-- API Documentation: [isisEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/isis:Entity/)
+- API Documentation: [isisEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Entity/)
 
 ### Child resources
 

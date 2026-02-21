@@ -4,7 +4,7 @@ page_title: "nxos_ospf_max_metric Resource - terraform-provider-nxos"
 subcategory: "OSPF"
 description: |-
   This resource can manage the OSPF Max Metric Link State Advertisement configuration.
-  API Documentation: ospfMaxMetricLsaP https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:maxmetriclsap/
+  API Documentation: ospfMaxMetricLsaP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:maxmetriclsap/
   Parent resources
   nxos_ospf_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_vrf
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the OSPF Max Metric Link State Advertisement configuration.
 
-- API Documentation: [ospfMaxMetricLsaP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:maxmetriclsap/)
+- API Documentation: [ospfMaxMetricLsaP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:maxmetriclsap/)
 
 ### Parent resources
 

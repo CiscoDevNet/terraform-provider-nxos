@@ -4,14 +4,14 @@ page_title: "nxos_feature_ptp Resource - terraform-provider-nxos"
 subcategory: "Feature"
 description: |-
   This resource can manage the PTP feature configuration.
-  API Documentation: fmPtp https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Ptp/
+  API Documentation: fmPtp https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Ptp/
 ---
 
 # nxos_feature_ptp (Resource)
 
 This resource can manage the PTP feature configuration.
 
-- API Documentation: [fmPtp](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Ptp/)
+- API Documentation: [fmPtp](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Ptp/)
 
 ## Example Usage
 

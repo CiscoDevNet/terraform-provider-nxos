@@ -4,14 +4,14 @@ page_title: "nxos_feature_netflow Resource - terraform-provider-nxos"
 subcategory: "Feature"
 description: |-
   This resource can manage the Netflow feature configuration.
-  API Documentation: fmNetflow https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Netflow/
+  API Documentation: fmNetflow https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Netflow/
 ---
 
 # nxos_feature_netflow (Resource)
 
 This resource can manage the Netflow feature configuration.
 
-- API Documentation: [fmNetflow](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Netflow/)
+- API Documentation: [fmNetflow](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Netflow/)
 
 ## Example Usage
 

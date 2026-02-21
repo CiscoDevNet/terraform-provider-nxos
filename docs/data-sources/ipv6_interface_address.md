@@ -4,14 +4,14 @@ page_title: "nxos_ipv6_interface_address Data Source - terraform-provider-nxos"
 subcategory: "IPv6"
 description: |-
   This data source can read an IPv6 interface address.
-  API Documentation: ipv6Addr https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv6:Addr/
+  API Documentation: ipv6Addr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Addr/
 ---
 
 # nxos_ipv6_interface_address (Data Source)
 
 This data source can read an IPv6 interface address.
 
-- API Documentation: [ipv6Addr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv6:Addr/)
+- API Documentation: [ipv6Addr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Addr/)
 
 ## Example Usage
 

@@ -4,14 +4,14 @@ page_title: "nxos_evpn_vni Data Source - terraform-provider-nxos"
 subcategory: "EVPN"
 description: |-
   This data source can read a EVPN VNI Route Distinguisher.
-  API Documentation: rtctrlBDEvi https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:BDEvi/
+  API Documentation: rtctrlBDEvi https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:BDEvi/
 ---
 
 # nxos_evpn_vni (Data Source)
 
 This data source can read a EVPN VNI Route Distinguisher.
 
-- API Documentation: [rtctrlBDEvi](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:BDEvi/)
+- API Documentation: [rtctrlBDEvi](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:BDEvi/)
 
 ## Example Usage
 

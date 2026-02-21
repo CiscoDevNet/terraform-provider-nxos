@@ -4,7 +4,7 @@ page_title: "nxos_vrf Resource - terraform-provider-nxos"
 subcategory: "VRF"
 description: |-
   This resource can manage a VRF.
-  API Documentation: l3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:Inst/
+  API Documentation: l3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:Inst/
   Child resources
   nxos_vrf_routing https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf_routing
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage a VRF.
 
-- API Documentation: [l3Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:Inst/)
+- API Documentation: [l3Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:Inst/)
 
 ### Child resources
 

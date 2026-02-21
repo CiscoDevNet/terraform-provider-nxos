@@ -4,14 +4,14 @@ page_title: "nxos_feature_bash_shell Resource - terraform-provider-nxos"
 subcategory: "Feature"
 description: |-
   This resource can manage the Bash Shell feature configuration.
-  API Documentation: fmBashShell https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:BashShell/
+  API Documentation: fmBashShell https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:BashShell/
 ---
 
 # nxos_feature_bash_shell (Resource)
 
 This resource can manage the Bash Shell feature configuration.
 
-- API Documentation: [fmBashShell](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:BashShell/)
+- API Documentation: [fmBashShell](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:BashShell/)
 
 ## Example Usage
 

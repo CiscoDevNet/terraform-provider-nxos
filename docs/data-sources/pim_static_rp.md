@@ -4,14 +4,14 @@ page_title: "nxos_pim_static_rp Data Source - terraform-provider-nxos"
 subcategory: "PIM"
 description: |-
   This data source can read the PIM Static RP configuration.
-  API Documentation: pimStaticRP https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:StaticRP/
+  API Documentation: pimStaticRP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:StaticRP/
 ---
 
 # nxos_pim_static_rp (Data Source)
 
 This data source can read the PIM Static RP configuration.
 
-- API Documentation: [pimStaticRP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:StaticRP/)
+- API Documentation: [pimStaticRP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:StaticRP/)
 
 ## Example Usage
 

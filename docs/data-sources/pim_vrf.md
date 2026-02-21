@@ -4,14 +4,14 @@ page_title: "nxos_pim_vrf Data Source - terraform-provider-nxos"
 subcategory: "PIM"
 description: |-
   This data source can read the PIM VRF configuration.
-  API Documentation: pimDom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:Dom/
+  API Documentation: pimDom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:Dom/
 ---
 
 # nxos_pim_vrf (Data Source)
 
 This data source can read the PIM VRF configuration.
 
-- API Documentation: [pimDom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:Dom/)
+- API Documentation: [pimDom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:Dom/)
 
 ## Example Usage
 

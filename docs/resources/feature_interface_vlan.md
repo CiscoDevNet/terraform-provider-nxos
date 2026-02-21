@@ -4,14 +4,14 @@ page_title: "nxos_feature_interface_vlan Resource - terraform-provider-nxos"
 subcategory: "Feature"
 description: |-
   This resource can manage the Interface VLAN feature configuration.
-  API Documentation: fmInterfaceVlan https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:InterfaceVlan/
+  API Documentation: fmInterfaceVlan https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:InterfaceVlan/
 ---
 
 # nxos_feature_interface_vlan (Resource)
 
 This resource can manage the Interface VLAN feature configuration.
 
-- API Documentation: [fmInterfaceVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:InterfaceVlan/)
+- API Documentation: [fmInterfaceVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:InterfaceVlan/)
 
 ## Example Usage
 

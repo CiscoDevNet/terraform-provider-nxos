@@ -4,14 +4,14 @@ page_title: "nxos_evpn_vni_route_target Data Source - terraform-provider-nxos"
 subcategory: "EVPN"
 description: |-
   This data source can read a EVPN VNI Route Target Entry.
-  API Documentation: rtctrlRttEntry https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/
+  API Documentation: rtctrlRttEntry https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/
 ---
 
 # nxos_evpn_vni_route_target (Data Source)
 
 This data source can read a EVPN VNI Route Target Entry.
 
-- API Documentation: [rtctrlRttEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/)
+- API Documentation: [rtctrlRttEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/)
 
 ## Example Usage
 

@@ -4,14 +4,14 @@ page_title: "nxos_dhcp_relay_address Data Source - terraform-provider-nxos"
 subcategory: "DHCP"
 description: |-
   This data source can read a DHCP relay address.
-  API Documentation: dhcpRelayAddr https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/DHCP/dhcp:RelayAddr/
+  API Documentation: dhcpRelayAddr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/DHCP/dhcp:RelayAddr/
 ---
 
 # nxos_dhcp_relay_address (Data Source)
 
 This data source can read a DHCP relay address.
 
-- API Documentation: [dhcpRelayAddr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/DHCP/dhcp:RelayAddr/)
+- API Documentation: [dhcpRelayAddr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/DHCP/dhcp:RelayAddr/)
 
 ## Example Usage
 

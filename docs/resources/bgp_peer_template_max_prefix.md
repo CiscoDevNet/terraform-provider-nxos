@@ -4,7 +4,7 @@ page_title: "nxos_bgp_peer_template_max_prefix Resource - terraform-provider-nxo
 subcategory: "BGP"
 description: |-
   This resource can manage the BGP peer template Maximum Prefix Policy configuration.
-  API Documentation: bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/
+  API Documentation: bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/
   Parent resources
   nxos_bgp_peer_template_address_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_peer_template_address_family
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the BGP peer template Maximum Prefix Policy configuration.
 
-- API Documentation: [bgpMaxPfxP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/)
+- API Documentation: [bgpMaxPfxP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/)
 
 ### Parent resources
 

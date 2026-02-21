@@ -4,7 +4,7 @@ page_title: "nxos_pim_anycast_rp_peer Resource - terraform-provider-nxos"
 subcategory: "PIM"
 description: |-
   This resource can manage the PIM Anycast RP peer configuration.
-  API Documentation: pimAcastRPPeer https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:AcastRPPeer/
+  API Documentation: pimAcastRPPeer https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:AcastRPPeer/
   Parent resources
   nxos_pim_anycast_rp https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_anycast_rp
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the PIM Anycast RP peer configuration.
 
-- API Documentation: [pimAcastRPPeer](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:AcastRPPeer/)
+- API Documentation: [pimAcastRPPeer](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:AcastRPPeer/)
 
 ### Parent resources
 

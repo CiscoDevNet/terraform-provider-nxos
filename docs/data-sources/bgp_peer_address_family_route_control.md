@@ -4,14 +4,14 @@ page_title: "nxos_bgp_peer_address_family_route_control Data Source - terraform-
 subcategory: "BGP"
 description: |-
   This data source can read the BGP peer address family route control configuration.
-  API Documentation: bgpRtCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/
+  API Documentation: bgpRtCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/
 ---
 
 # nxos_bgp_peer_address_family_route_control (Data Source)
 
 This data source can read the BGP peer address family route control configuration.
 
-- API Documentation: [bgpRtCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/)
+- API Documentation: [bgpRtCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/)
 
 ## Example Usage
 

@@ -4,14 +4,14 @@ page_title: "nxos_ntp_server Data Source - terraform-provider-nxos"
 subcategory: "System"
 description: |-
   This data source can read an ntp server or peer.
-  API Documentation: datetimeNtpProvider https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/datetime:NtpProvider/
+  API Documentation: datetimeNtpProvider https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/datetime:NtpProvider/
 ---
 
 # nxos_ntp_server (Data Source)
 
 This data source can read an ntp server or peer.
 
-- API Documentation: [datetimeNtpProvider](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/datetime:NtpProvider/)
+- API Documentation: [datetimeNtpProvider](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/datetime:NtpProvider/)
 
 ## Example Usage
 

@@ -4,14 +4,14 @@ page_title: "nxos_hmm_interface Data Source - terraform-provider-nxos"
 subcategory: "HMM"
 description: |-
   This data source can read the HMM Fabric Forwarding mode information related to an Interface.
-  API Documentation: hmmFwdIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Host%20Mobility/hmm:FwdIf/
+  API Documentation: hmmFwdIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Host%20Mobility/hmm:FwdIf/
 ---
 
 # nxos_hmm_interface (Data Source)
 
 This data source can read the HMM Fabric Forwarding mode information related to an Interface.
 
-- API Documentation: [hmmFwdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Host%20Mobility/hmm:FwdIf/)
+- API Documentation: [hmmFwdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Host%20Mobility/hmm:FwdIf/)
 
 ## Example Usage
 

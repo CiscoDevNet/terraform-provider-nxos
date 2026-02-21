@@ -4,7 +4,7 @@ page_title: "nxos_ospf_vrf Resource - terraform-provider-nxos"
 subcategory: "OSPF"
 description: |-
   This resource can manage the OSPF VRF configuration.
-  API Documentation: ospfDom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:Dom/
+  API Documentation: ospfDom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:Dom/
   Parent resources
   nxos_ospf_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_instance
   Child resources
@@ -17,7 +17,7 @@ description: |-
 
 This resource can manage the OSPF VRF configuration.
 
-- API Documentation: [ospfDom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:Dom/)
+- API Documentation: [ospfDom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:Dom/)
 
 ### Parent resources
 

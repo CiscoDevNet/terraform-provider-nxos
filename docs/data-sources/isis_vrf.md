@@ -4,14 +4,14 @@ page_title: "nxos_isis_vrf Data Source - terraform-provider-nxos"
 subcategory: "ISIS"
 description: |-
   This data source can read the IS-IS VRF configuration.
-  API Documentation: isisDom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/isis:Dom/
+  API Documentation: isisDom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Dom/
 ---
 
 # nxos_isis_vrf (Data Source)
 
 This data source can read the IS-IS VRF configuration.
 
-- API Documentation: [isisDom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/isis:Dom/)
+- API Documentation: [isisDom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Dom/)
 
 ## Example Usage
 

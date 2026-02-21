@@ -4,7 +4,7 @@ page_title: "nxos_ipv6_static_route Resource - terraform-provider-nxos"
 subcategory: "IPv6"
 description: |-
   This resource can manage an IPv6 static route.
-  API Documentation: ipv6Route https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv6:Route/
+  API Documentation: ipv6Route https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Route/
   Parent resources
   nxos_ipv6_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv6_vrf
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage an IPv6 static route.
 
-- API Documentation: [ipv6Route](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv6:Route/)
+- API Documentation: [ipv6Route](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Route/)
 
 ### Parent resources
 

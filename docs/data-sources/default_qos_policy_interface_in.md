@@ -4,14 +4,14 @@ page_title: "nxos_default_qos_policy_interface_in Data Source - terraform-provid
 subcategory: "QoS"
 description: |-
   This data source can read the default QoS policy interface in configuration.
-  API Documentation: ipqosIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:If/
+  API Documentation: ipqosIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:If/
 ---
 
 # nxos_default_qos_policy_interface_in (Data Source)
 
 This data source can read the default QoS policy interface in configuration.
 
-- API Documentation: [ipqosIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:If/)
+- API Documentation: [ipqosIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:If/)
 
 ## Example Usage
 

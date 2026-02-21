@@ -4,7 +4,7 @@ page_title: "nxos_ospfv3_area Resource - terraform-provider-nxos"
 subcategory: "OSPFv3"
 description: |-
   This resource can manage the OSPFv3 Area configuration.
-  API Documentation: ospfv3Area https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospfv3:Area/
+  API Documentation: ospfv3Area https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:Area/
   Parent resources
   nxos_ospfv3_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospfv3_vrf
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the OSPFv3 Area configuration.
 
-- API Documentation: [ospfv3Area](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospfv3:Area/)
+- API Documentation: [ospfv3Area](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:Area/)
 
 ### Parent resources
 

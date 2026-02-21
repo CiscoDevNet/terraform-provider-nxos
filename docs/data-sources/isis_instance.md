@@ -4,14 +4,14 @@ page_title: "nxos_isis_instance Data Source - terraform-provider-nxos"
 subcategory: "ISIS"
 description: |-
   This data source can read the IS-IS instance configuration.
-  API Documentation: isisInst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/isis:Inst/
+  API Documentation: isisInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Inst/
 ---
 
 # nxos_isis_instance (Data Source)
 
 This data source can read the IS-IS instance configuration.
 
-- API Documentation: [isisInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/isis:Inst/)
+- API Documentation: [isisInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Inst/)
 
 ## Example Usage
 

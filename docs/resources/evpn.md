@@ -4,7 +4,7 @@ page_title: "nxos_evpn Resource - terraform-provider-nxos"
 subcategory: "EVPN"
 description: |-
   This resource can manage a global EVPN configuration.
-  API Documentation: rtctrlL2Evpn https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:L2Evpn/
+  API Documentation: rtctrlL2Evpn https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:L2Evpn/
   Child resources
   nxos_evpn_vni https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/evpn_vni
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage a global EVPN configuration.
 
-- API Documentation: [rtctrlL2Evpn](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:L2Evpn/)
+- API Documentation: [rtctrlL2Evpn](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:L2Evpn/)
 
 ### Child resources
 

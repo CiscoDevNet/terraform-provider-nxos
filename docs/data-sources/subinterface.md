@@ -4,14 +4,14 @@ page_title: "nxos_subinterface Data Source - terraform-provider-nxos"
 subcategory: "Interface"
 description: |-
   This data source can read a subinterface.
-  API Documentation: l3EncRtdIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:EncRtdIf/
+  API Documentation: l3EncRtdIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:EncRtdIf/
 ---
 
 # nxos_subinterface (Data Source)
 
 This data source can read a subinterface.
 
-- API Documentation: [l3EncRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/l3:EncRtdIf/)
+- API Documentation: [l3EncRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:EncRtdIf/)
 
 ## Example Usage
 

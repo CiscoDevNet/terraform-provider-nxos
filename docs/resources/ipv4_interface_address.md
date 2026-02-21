@@ -4,7 +4,7 @@ page_title: "nxos_ipv4_interface_address Resource - terraform-provider-nxos"
 subcategory: "IPv4"
 description: |-
   This resource can manage an IPv4 interface address.
-  API Documentation: ipv4Addr https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:Addr/
+  API Documentation: ipv4Addr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv4:Addr/
   Parent resources
   nxos_ipv4_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv4_interface
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage an IPv4 interface address.
 
-- API Documentation: [ipv4Addr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv4:Addr/)
+- API Documentation: [ipv4Addr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv4:Addr/)
 
 ### Parent resources
 

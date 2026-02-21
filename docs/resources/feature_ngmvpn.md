@@ -4,14 +4,14 @@ page_title: "nxos_feature_ngmvpn Resource - terraform-provider-nxos"
 subcategory: "Feature"
 description: |-
   This resource can manage the Next Generation Multicast VPN Feature.
-  API Documentation: fmNgmvpn https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:NgMvpn/
+  API Documentation: fmNgmvpn https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:NgMvpn/
 ---
 
 # nxos_feature_ngmvpn (Resource)
 
 This resource can manage the Next Generation Multicast VPN Feature.
 
-- API Documentation: [fmNgmvpn](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:NgMvpn/)
+- API Documentation: [fmNgmvpn](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:NgMvpn/)
 
 ## Example Usage
 

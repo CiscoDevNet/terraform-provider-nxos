@@ -4,14 +4,14 @@ page_title: "nxos_nve_vni_ingress_replication Data Source - terraform-provider-n
 subcategory: "NVE"
 description: |-
   This data source can read the configuration of Ingress Replication for Virtual Network ID (VNI).
-  API Documentation: nvoIngRepl https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Network%20Virtualization/nvo:IngRepl/
+  API Documentation: nvoIngRepl https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Network%20Virtualization/nvo:IngRepl/
 ---
 
 # nxos_nve_vni_ingress_replication (Data Source)
 
 This data source can read the configuration of Ingress Replication for Virtual Network ID (VNI).
 
-- API Documentation: [nvoIngRepl](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Network%20Virtualization/nvo:IngRepl/)
+- API Documentation: [nvoIngRepl](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Network%20Virtualization/nvo:IngRepl/)
 
 ## Example Usage
 

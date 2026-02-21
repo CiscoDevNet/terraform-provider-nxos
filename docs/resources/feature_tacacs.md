@@ -4,14 +4,14 @@ page_title: "nxos_feature_tacacs Resource - terraform-provider-nxos"
 subcategory: "Feature"
 description: |-
   This resource can manage the TACACS+ feature configuration.
-  API Documentation: fmTacacsplus https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Tacacsplus/
+  API Documentation: fmTacacsplus https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Tacacsplus/
 ---
 
 # nxos_feature_tacacs (Resource)
 
 This resource can manage the TACACS+ feature configuration.
 
-- API Documentation: [fmTacacsplus](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Tacacsplus/)
+- API Documentation: [fmTacacsplus](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Tacacsplus/)
 
 ## Example Usage
 

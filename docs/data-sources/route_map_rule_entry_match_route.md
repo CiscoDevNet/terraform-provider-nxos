@@ -4,14 +4,14 @@ page_title: "nxos_route_map_rule_entry_match_route Data Source - terraform-provi
 subcategory: "Routing"
 description: |-
   This data source can read a Match Route in Route-Map Rule Entry configuration.
-  API Documentation: rtmapMatchRtDst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtmap:MatchRtDst/
+  API Documentation: rtmapMatchRtDst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtmap:MatchRtDst/
 ---
 
 # nxos_route_map_rule_entry_match_route (Data Source)
 
 This data source can read a Match Route in Route-Map Rule Entry configuration.
 
-- API Documentation: [rtmapMatchRtDst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtmap:MatchRtDst/)
+- API Documentation: [rtmapMatchRtDst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtmap:MatchRtDst/)
 
 ## Example Usage
 

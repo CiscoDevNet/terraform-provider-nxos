@@ -4,14 +4,14 @@ page_title: "nxos_feature_ospf Data Source - terraform-provider-nxos"
 subcategory: "Feature"
 description: |-
   This data source can read the OSPF feature configuration.
-  API Documentation: fmOspf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Ospf/
+  API Documentation: fmOspf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Ospf/
 ---
 
 # nxos_feature_ospf (Data Source)
 
 This data source can read the OSPF feature configuration.
 
-- API Documentation: [fmOspf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Ospf/)
+- API Documentation: [fmOspf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Ospf/)
 
 ## Example Usage
 

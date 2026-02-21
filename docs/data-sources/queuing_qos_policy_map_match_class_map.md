@@ -4,14 +4,14 @@ page_title: "nxos_queuing_qos_policy_map_match_class_map Data Source - terraform
 subcategory: "QoS"
 description: |-
   This data source can read the queuing QoS policy map match class map configuration.
-  API Documentation: ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:MatchCMap/
+  API Documentation: ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:MatchCMap/
 ---
 
 # nxos_queuing_qos_policy_map_match_class_map (Data Source)
 
 This data source can read the queuing QoS policy map match class map configuration.
 
-- API Documentation: [ipqosMatchCMap](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:MatchCMap/)
+- API Documentation: [ipqosMatchCMap](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:MatchCMap/)
 
 ## Example Usage
 

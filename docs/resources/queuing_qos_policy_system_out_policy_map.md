@@ -4,7 +4,7 @@ page_title: "nxos_queuing_qos_policy_system_out_policy_map Resource - terraform-
 subcategory: "QoS"
 description: |-
   This resource can manage the queuing QoS policy system out policy map configuration.
-  API Documentation: ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Inst/
+  API Documentation: ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Inst/
   Parent resources
   nxos_queuing_qos_policy_system_out https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/queuing_qos_policy_system_out
   Referenced resources
@@ -15,7 +15,7 @@ description: |-
 
 This resource can manage the queuing QoS policy system out policy map configuration.
 
-- API Documentation: [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Inst/)
+- API Documentation: [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Inst/)
 
 ### Parent resources
 

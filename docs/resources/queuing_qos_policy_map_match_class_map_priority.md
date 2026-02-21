@@ -4,7 +4,7 @@ page_title: "nxos_queuing_qos_policy_map_match_class_map_priority Resource - ter
 subcategory: "QoS"
 description: |-
   This resource can manage the queuing QoS policy map match class map priority configuration.
-  API Documentation: ipqosPriority https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Priority/
+  API Documentation: ipqosPriority https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Priority/
   Parent resources
   nxos_queuing_qos_policy_map_match_class_map https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/queuing_qos_policy_map_match_class_map
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the queuing QoS policy map match class map priority configuration.
 
-- API Documentation: [ipqosPriority](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Priority/)
+- API Documentation: [ipqosPriority](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Priority/)
 
 ### Parent resources
 

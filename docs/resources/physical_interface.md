@@ -4,7 +4,7 @@ page_title: "nxos_physical_interface Resource - terraform-provider-nxos"
 subcategory: "Interface"
 description: |-
   This resource can manage a physical interface.
-  API Documentation: l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/l1:PhysIf/
+  API Documentation: l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/l1:PhysIf/
   Child resources
   nxos_physical_interface_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/physical_interface_vrf
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage a physical interface.
 
-- API Documentation: [l1PhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/l1:PhysIf/)
+- API Documentation: [l1PhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/l1:PhysIf/)
 
 ### Child resources
 

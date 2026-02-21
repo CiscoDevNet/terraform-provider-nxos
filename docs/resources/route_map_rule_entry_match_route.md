@@ -4,7 +4,7 @@ page_title: "nxos_route_map_rule_entry_match_route Resource - terraform-provider
 subcategory: "Routing"
 description: |-
   This resource can manage a Match Route in  Route-Map Rule Entry configuration.
-  API Documentation: rtmapMatchRtDst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtmap:MatchRtDst/
+  API Documentation: rtmapMatchRtDst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtmap:MatchRtDst/
   Parent resources
   nxos_route_map_rule_entry https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/route_map_rule_entry
   Child resources
@@ -15,7 +15,7 @@ description: |-
 
 This resource can manage a Match Route in  Route-Map Rule Entry configuration.
 
-- API Documentation: [rtmapMatchRtDst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtmap:MatchRtDst/)
+- API Documentation: [rtmapMatchRtDst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtmap:MatchRtDst/)
 
 ### Parent resources
 

@@ -4,7 +4,7 @@ page_title: "nxos_ipv4_prefix_list_rule Resource - terraform-provider-nxos"
 subcategory: "Routing"
 description: |-
   This resource can manage an IPv4 Prefix List configuration.
-  API Documentation: rtpfxRuleV4 https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtpfx:RuleV4/
+  API Documentation: rtpfxRuleV4 https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtpfx:RuleV4/
   Child resources
   nxos_ipv4_prefix_list_rule_entry https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv4_prefix_list_rule_entry
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage an IPv4 Prefix List configuration.
 
-- API Documentation: [rtpfxRuleV4](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtpfx:RuleV4/)
+- API Documentation: [rtpfxRuleV4](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtpfx:RuleV4/)
 
 ### Child resources
 

@@ -4,14 +4,14 @@ page_title: "nxos_vpc_instance Data Source - terraform-provider-nxos"
 subcategory: "vPC"
 description: |-
   This data source can read the vPC instance configuration.
-  API Documentation: vpcInst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/vpc:Inst/
+  API Documentation: vpcInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:Inst/
 ---
 
 # nxos_vpc_instance (Data Source)
 
 This data source can read the vPC instance configuration.
 
-- API Documentation: [vpcInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/vpc:Inst/)
+- API Documentation: [vpcInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:Inst/)
 
 ## Example Usage
 

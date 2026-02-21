@@ -4,7 +4,7 @@ page_title: "nxos_dhcp_relay_address Resource - terraform-provider-nxos"
 subcategory: "DHCP"
 description: |-
   This resource can manage a DHCP relay address.
-  API Documentation: dhcpRelayAddr https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/DHCP/dhcp:RelayAddr/
+  API Documentation: dhcpRelayAddr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/DHCP/dhcp:RelayAddr/
   Parent resources
   nxos_dhcp_relay_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/dhcp_relay_interface
   Referenced resources
@@ -15,7 +15,7 @@ description: |-
 
 This resource can manage a DHCP relay address.
 
-- API Documentation: [dhcpRelayAddr](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/DHCP/dhcp:RelayAddr/)
+- API Documentation: [dhcpRelayAddr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/DHCP/dhcp:RelayAddr/)
 
 ### Parent resources
 

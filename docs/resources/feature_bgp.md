@@ -4,14 +4,14 @@ page_title: "nxos_feature_bgp Resource - terraform-provider-nxos"
 subcategory: "Feature"
 description: |-
   This resource can manage the BGP feature configuration.
-  API Documentation: fmBgp https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Bgp/
+  API Documentation: fmBgp https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Bgp/
 ---
 
 # nxos_feature_bgp (Resource)
 
 This resource can manage the BGP feature configuration.
 
-- API Documentation: [fmBgp](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Bgp/)
+- API Documentation: [fmBgp](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Bgp/)
 
 ## Example Usage
 

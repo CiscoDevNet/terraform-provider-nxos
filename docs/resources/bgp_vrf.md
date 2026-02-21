@@ -4,7 +4,7 @@ page_title: "nxos_bgp_vrf Resource - terraform-provider-nxos"
 subcategory: "BGP"
 description: |-
   This resource can manage the BGP domain (VRF) configuration.
-  API Documentation: bgpDom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:Dom/
+  API Documentation: bgpDom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/bgp:Dom/
   Parent resources
   nxos_bgp_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/bgp_instance
   Child resources
@@ -17,7 +17,7 @@ description: |-
 
 This resource can manage the BGP domain (VRF) configuration.
 
-- API Documentation: [bgpDom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:Dom/)
+- API Documentation: [bgpDom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/bgp:Dom/)
 
 ### Parent resources
 

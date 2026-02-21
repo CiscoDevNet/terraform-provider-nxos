@@ -4,14 +4,14 @@ page_title: "nxos_port_channel_interface Data Source - terraform-provider-nxos"
 subcategory: "Interface"
 description: |-
   This data source can read the configuration of a port-channel interface.
-  API Documentation: pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Interfaces/pc:AggrIf/
+  API Documentation: pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/pc:AggrIf/
 ---
 
 # nxos_port_channel_interface (Data Source)
 
 This data source can read the configuration of a port-channel interface.
 
-- API Documentation: [pcAggrIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Interfaces/pc:AggrIf/)
+- API Documentation: [pcAggrIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/pc:AggrIf/)
 
 ## Example Usage
 

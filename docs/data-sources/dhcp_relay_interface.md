@@ -4,14 +4,14 @@ page_title: "nxos_dhcp_relay_interface Data Source - terraform-provider-nxos"
 subcategory: "DHCP"
 description: |-
   This data source can read a DHCP relay interface.
-  API Documentation: dhcpRelayIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/DHCP/dhcp:RelayIf/
+  API Documentation: dhcpRelayIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/DHCP/dhcp:RelayIf/
 ---
 
 # nxos_dhcp_relay_interface (Data Source)
 
 This data source can read a DHCP relay interface.
 
-- API Documentation: [dhcpRelayIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/DHCP/dhcp:RelayIf/)
+- API Documentation: [dhcpRelayIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/DHCP/dhcp:RelayIf/)
 
 ## Example Usage
 

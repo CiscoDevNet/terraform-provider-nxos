@@ -4,7 +4,7 @@ page_title: "nxos_hmm_instance Resource - terraform-provider-nxos"
 subcategory: "HMM"
 description: |-
   This resource can manage the HMM Fabric Forwarding Instance configuration.
-  API Documentation: hmmFwdInst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Host%20Mobility/hmm:FwdInst/
+  API Documentation: hmmFwdInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Host%20Mobility/hmm:FwdInst/
   Parent resources
   nxos_hmm https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/hmm
   Child resources
@@ -15,7 +15,7 @@ description: |-
 
 This resource can manage the HMM Fabric Forwarding Instance configuration.
 
-- API Documentation: [hmmFwdInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Host%20Mobility/hmm:FwdInst/)
+- API Documentation: [hmmFwdInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Host%20Mobility/hmm:FwdInst/)
 
 ### Parent resources
 

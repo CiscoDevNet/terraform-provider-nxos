@@ -4,14 +4,14 @@ page_title: "nxos_keychain_manager Data Source - terraform-provider-nxos"
 subcategory: "Keychain"
 description: |-
   This data source can read the keychain configuration.
-  API Documentation: kcmgrEntity https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/kcmgr:Entity/
+  API Documentation: kcmgrEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/kcmgr:Entity/
 ---
 
 # nxos_keychain_manager (Data Source)
 
 This data source can read the keychain configuration.
 
-- API Documentation: [kcmgrEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/kcmgr:Entity/)
+- API Documentation: [kcmgrEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/kcmgr:Entity/)
 
 ## Example Usage
 

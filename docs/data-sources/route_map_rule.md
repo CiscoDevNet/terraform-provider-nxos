@@ -4,14 +4,14 @@ page_title: "nxos_route_map_rule Data Source - terraform-provider-nxos"
 subcategory: "Routing"
 description: |-
   This data source can read a Route-Map Rule configuration.
-  API Documentation: rtmapRule https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtmap:Rule/
+  API Documentation: rtmapRule https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtmap:Rule/
 ---
 
 # nxos_route_map_rule (Data Source)
 
 This data source can read a Route-Map Rule configuration.
 
-- API Documentation: [rtmapRule](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtmap:Rule/)
+- API Documentation: [rtmapRule](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtmap:Rule/)
 
 ## Example Usage
 

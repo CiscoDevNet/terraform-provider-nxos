@@ -4,7 +4,7 @@ page_title: "nxos_ospf Resource - terraform-provider-nxos"
 subcategory: "OSPF"
 description: |-
   This resource can manage the global OSPF configuration.
-  API Documentation: ospfEntity https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:Entity/
+  API Documentation: ospfEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:Entity/
   Child resources
   nxos_ospf_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_instance
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the global OSPF configuration.
 
-- API Documentation: [ospfEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/ospf:Entity/)
+- API Documentation: [ospfEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:Entity/)
 
 ### Child resources
 

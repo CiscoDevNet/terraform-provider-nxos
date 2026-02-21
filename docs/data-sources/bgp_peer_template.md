@@ -4,14 +4,14 @@ page_title: "nxos_bgp_peer_template Data Source - terraform-provider-nxos"
 subcategory: "BGP"
 description: |-
   This data source can read the BGP peer template configuration.
-  API Documentation: bgpPeerCont https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:PeerCont/
+  API Documentation: bgpPeerCont https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/bgp:PeerCont/
 ---
 
 # nxos_bgp_peer_template (Data Source)
 
 This data source can read the BGP peer template configuration.
 
-- API Documentation: [bgpPeerCont](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/bgp:PeerCont/)
+- API Documentation: [bgpPeerCont](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/bgp:PeerCont/)
 
 ## Example Usage
 

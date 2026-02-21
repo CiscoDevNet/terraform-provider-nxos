@@ -4,7 +4,7 @@ page_title: "nxos_dhcp_relay_interface Resource - terraform-provider-nxos"
 subcategory: "DHCP"
 description: |-
   This resource can manage a DHCP relay interface.
-  API Documentation: dhcpRelayIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/DHCP/dhcp:RelayIf/
+  API Documentation: dhcpRelayIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/DHCP/dhcp:RelayIf/
   Child resources
   nxos_dhcp_relay_address https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/dhcp_relay_address
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage a DHCP relay interface.
 
-- API Documentation: [dhcpRelayIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/DHCP/dhcp:RelayIf/)
+- API Documentation: [dhcpRelayIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/DHCP/dhcp:RelayIf/)
 
 ### Child resources
 

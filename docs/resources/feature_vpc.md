@@ -4,14 +4,14 @@ page_title: "nxos_feature_vpc Resource - terraform-provider-nxos"
 subcategory: "Feature"
 description: |-
   This resource can manage the VPC feature configuration.
-  API Documentation: fmVpc https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Vpc/
+  API Documentation: fmVpc https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Vpc/
 ---
 
 # nxos_feature_vpc (Resource)
 
 This resource can manage the VPC feature configuration.
 
-- API Documentation: [fmVpc](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Vpc/)
+- API Documentation: [fmVpc](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Vpc/)
 
 ## Example Usage
 

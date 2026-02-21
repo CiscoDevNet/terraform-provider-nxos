@@ -4,14 +4,14 @@ page_title: "nxos_default_qos_policy_map_match_class_map_police Data Source - te
 subcategory: "QoS"
 description: |-
   This data source can read the default QoS policy map match class map police configuration.
-  API Documentation: ipqosPolice https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Police/
+  API Documentation: ipqosPolice https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Police/
 ---
 
 # nxos_default_qos_policy_map_match_class_map_police (Data Source)
 
 This data source can read the default QoS policy map match class map police configuration.
 
-- API Documentation: [ipqosPolice](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:Police/)
+- API Documentation: [ipqosPolice](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Police/)
 
 ## Example Usage
 

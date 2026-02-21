@@ -4,7 +4,7 @@ page_title: "nxos_default_qos_policy_map Resource - terraform-provider-nxos"
 subcategory: "QoS"
 description: |-
   This resource can manage the default QoS policy map configuration.
-  API Documentation: ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:PMapInst/
+  API Documentation: ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:PMapInst/
   Child resources
   nxos_default_qos_policy_map_match_class_map https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/default_qos_policy_map_match_class_map
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the default QoS policy map configuration.
 
-- API Documentation: [ipqosPMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:PMapInst/)
+- API Documentation: [ipqosPMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:PMapInst/)
 
 ### Child resources
 

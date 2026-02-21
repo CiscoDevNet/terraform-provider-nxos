@@ -4,7 +4,7 @@ page_title: "nxos_icmpv4_vrf Resource - terraform-provider-nxos"
 subcategory: "ICMP"
 description: |-
   This resource can manage the global ICMP Domain configuration.
-  API Documentation: icmpv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/icmpv4:Dom/
+  API Documentation: icmpv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/icmpv4:Dom/
   Parent resources
   nxos_icmpv4_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/icmpv4_instance
   Child resources
@@ -15,7 +15,7 @@ description: |-
 
 This resource can manage the global ICMP Domain configuration.
 
-- API Documentation: [icmpv4Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/icmpv4:Dom/)
+- API Documentation: [icmpv4Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/icmpv4:Dom/)
 
 ### Parent resources
 

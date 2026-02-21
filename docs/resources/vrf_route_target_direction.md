@@ -4,7 +4,7 @@ page_title: "nxos_vrf_route_target_direction Resource - terraform-provider-nxos"
 subcategory: "VRF"
 description: |-
   This resource can manage a VRF Route Target direction.
-  API Documentation: rtctrlRttP https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:RttP/
+  API Documentation: rtctrlRttP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttP/
   Parent resources
   nxos_vrf_route_target_address_family https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf_route_target_address_family
   Child resources
@@ -15,7 +15,7 @@ description: |-
 
 This resource can manage a VRF Route Target direction.
 
-- API Documentation: [rtctrlRttP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:RttP/)
+- API Documentation: [rtctrlRttP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttP/)
 
 ### Parent resources
 

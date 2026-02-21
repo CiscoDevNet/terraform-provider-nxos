@@ -4,7 +4,7 @@ page_title: "nxos_ipv6_vrf Resource - terraform-provider-nxos"
 subcategory: "IPv6"
 description: |-
   This resource can manage the IPv6 VRF information.
-  API Documentation: ipv6Dom https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv6:Dom/
+  API Documentation: ipv6Dom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Dom/
   Child resources
   nxos_ipv6_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv6_interfacenxos_ipv6_static_route https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv6_static_route
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the IPv6 VRF information.
 
-- API Documentation: [ipv6Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv6:Dom/)
+- API Documentation: [ipv6Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Dom/)
 
 ### Child resources
 

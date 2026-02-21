@@ -4,7 +4,7 @@ page_title: "nxos_pim_static_rp Resource - terraform-provider-nxos"
 subcategory: "PIM"
 description: |-
   This resource can manage the PIM Static RP configuration.
-  API Documentation: pimStaticRP https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:StaticRP/
+  API Documentation: pimStaticRP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:StaticRP/
   Parent resources
   nxos_pim_static_rp_policy https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_static_rp_policy
   Child resources
@@ -15,7 +15,7 @@ description: |-
 
 This resource can manage the PIM Static RP configuration.
 
-- API Documentation: [pimStaticRP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:StaticRP/)
+- API Documentation: [pimStaticRP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:StaticRP/)
 
 ### Parent resources
 

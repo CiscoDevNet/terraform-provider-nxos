@@ -4,7 +4,7 @@ page_title: "nxos_vpc_peerlink Resource - terraform-provider-nxos"
 subcategory: "vPC"
 description: |-
   This resource can manage the vPC peerlink configuration.
-  API Documentation: vpcPeerLink https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/vpc:PeerLink/
+  API Documentation: vpcPeerLink https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:PeerLink/
   Parent resources
   nxos_vpc_keepalive https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vpc_keepalive
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the vPC peerlink configuration.
 
-- API Documentation: [vpcPeerLink](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/vpc:PeerLink/)
+- API Documentation: [vpcPeerLink](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:PeerLink/)
 
 ### Parent resources
 

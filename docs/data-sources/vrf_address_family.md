@@ -4,14 +4,14 @@ page_title: "nxos_vrf_address_family Data Source - terraform-provider-nxos"
 subcategory: "VRF"
 description: |-
   This data source can read a VRF Address Family.
-  API Documentation: rtctrlDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:DomAf/
+  API Documentation: rtctrlDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:DomAf/
 ---
 
 # nxos_vrf_address_family (Data Source)
 
 This data source can read a VRF Address Family.
 
-- API Documentation: [rtctrlDomAf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/rtctrl:DomAf/)
+- API Documentation: [rtctrlDomAf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:DomAf/)
 
 ## Example Usage
 

@@ -4,14 +4,14 @@ page_title: "nxos_ipv6_static_route Data Source - terraform-provider-nxos"
 subcategory: "IPv6"
 description: |-
   This data source can read an IPv6 static route.
-  API Documentation: ipv6Route https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv6:Route/
+  API Documentation: ipv6Route https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Route/
 ---
 
 # nxos_ipv6_static_route (Data Source)
 
 This data source can read an IPv6 static route.
 
-- API Documentation: [ipv6Route](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/ipv6:Route/)
+- API Documentation: [ipv6Route](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Route/)
 
 ## Example Usage
 

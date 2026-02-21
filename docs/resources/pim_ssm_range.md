@@ -4,7 +4,7 @@ page_title: "nxos_pim_ssm_range Resource - terraform-provider-nxos"
 subcategory: "PIM"
 description: |-
   This resource can manage the PIM SSM range configuration.
-  API Documentation: pimSSMRangeP https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:SSMRangeP/
+  API Documentation: pimSSMRangeP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:SSMRangeP/
   Parent resources
   nxos_pim_ssm_policy https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_ssm_policy
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the PIM SSM range configuration.
 
-- API Documentation: [pimSSMRangeP](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Layer%203/pim:SSMRangeP/)
+- API Documentation: [pimSSMRangeP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:SSMRangeP/)
 
 ### Parent resources
 

@@ -4,7 +4,7 @@ page_title: "nxos_keychain_key Resource - terraform-provider-nxos"
 subcategory: "Keychain"
 description: |-
   This resource can manage the key configuration.
-  API Documentation: kcmgrKey https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/kcmgr:kcmgrKey/
+  API Documentation: kcmgrKey https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/kcmgr:kcmgrKey/
   Parent resources
   nxos_keychain https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/keychain
 ---
@@ -13,7 +13,7 @@ description: |-
 
 This resource can manage the key configuration.
 
-- API Documentation: [kcmgrKey](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Security%20and%20Policing/kcmgr:kcmgrKey/)
+- API Documentation: [kcmgrKey](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/kcmgr:kcmgrKey/)
 
 ### Parent resources
 

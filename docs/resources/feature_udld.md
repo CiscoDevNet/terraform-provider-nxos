@@ -4,14 +4,14 @@ page_title: "nxos_feature_udld Resource - terraform-provider-nxos"
 subcategory: "Feature"
 description: |-
   This resource can manage the UDLD feature configuration.
-  API Documentation: fmUdld https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Udld/
+  API Documentation: fmUdld https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Udld/
 ---
 
 # nxos_feature_udld (Resource)
 
 This resource can manage the UDLD feature configuration.
 
-- API Documentation: [fmUdld](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Feature%20Management/fm:Udld/)
+- API Documentation: [fmUdld](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Feature%20Management/fm:Udld/)
 
 ## Example Usage
 

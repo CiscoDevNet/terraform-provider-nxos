@@ -4,7 +4,7 @@ page_title: "nxos_isis_instance Resource - terraform-provider-nxos"
 subcategory: "ISIS"
 description: |-
   This resource can manage the IS-IS instance configuration.
-  API Documentation: isisInst https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/isis:Inst/
+  API Documentation: isisInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Inst/
   Parent resources
   nxos_isis https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/isis
   Child resources
@@ -15,7 +15,7 @@ description: |-
 
 This resource can manage the IS-IS instance configuration.
 
-- API Documentation: [isisInst](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Routing%20and%20Forwarding/isis:Inst/)
+- API Documentation: [isisInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Inst/)
 
 ### Parent resources
 

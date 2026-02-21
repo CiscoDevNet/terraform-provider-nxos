@@ -4,14 +4,14 @@ page_title: "nxos_spanning_tree_interface Data Source - terraform-provider-nxos"
 subcategory: "Switching"
 description: |-
   This data source can read the Spanning Tree interface configuration.
-  API Documentation: stpIf https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Discovery%20Protocols/stp:If/
+  API Documentation: stpIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Discovery%20Protocols/stp:If/
 ---
 
 # nxos_spanning_tree_interface (Data Source)
 
 This data source can read the Spanning Tree interface configuration.
 
-- API Documentation: [stpIf](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Discovery%20Protocols/stp:If/)
+- API Documentation: [stpIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Discovery%20Protocols/stp:If/)
 
 ## Example Usage
 

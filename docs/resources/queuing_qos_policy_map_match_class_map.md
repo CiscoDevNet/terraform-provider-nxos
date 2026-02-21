@@ -4,7 +4,7 @@ page_title: "nxos_queuing_qos_policy_map_match_class_map Resource - terraform-pr
 subcategory: "QoS"
 description: |-
   This resource can manage the queuing QoS policy map match class map configuration.
-  API Documentation: ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:MatchCMap/
+  API Documentation: ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:MatchCMap/
   Parent resources
   nxos_queuing_qos_policy_map https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/queuing_qos_policy_map
   Child resources
@@ -15,7 +15,7 @@ description: |-
 
 This resource can manage the queuing QoS policy map match class map configuration.
 
-- API Documentation: [ipqosMatchCMap](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/Qos/ipqos:MatchCMap/)
+- API Documentation: [ipqosMatchCMap](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:MatchCMap/)
 
 ### Parent resources
 

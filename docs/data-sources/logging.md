@@ -4,14 +4,14 @@ page_title: "nxos_logging Data Source - terraform-provider-nxos"
 subcategory: "System"
 description: |-
   This data source can read the logging configuration.
-  API Documentation: loggingLogLevel https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/logging:LogLevel/
+  API Documentation: loggingLogLevel https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/logging:LogLevel/
 ---
 
 # nxos_logging (Data Source)
 
 This data source can read the logging configuration.
 
-- API Documentation: [loggingLogLevel](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/System/logging:LogLevel/)
+- API Documentation: [loggingLogLevel](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/logging:LogLevel/)
 
 ## Example Usage
 

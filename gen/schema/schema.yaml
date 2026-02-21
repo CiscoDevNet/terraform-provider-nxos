@@ -32,6 +32,7 @@ attribute:
   min_int: int(required=False) # Minimum value of an integer, only relevant if type is "Int64"
   max_int: int(required=False) # Maximum value of an integer, only relevant if type is "Int64"
   default_value: any(str(), int(), bool(), required=False) # Default value for the attribute
+  value: any(str(), int(), bool(), required=False) # Static value always sent to the API, attribute hidden from Terraform schema
   delete_value: any(str(), int(), bool(), required=False) # Value to set when the resource is deleted, instead of deleting the attribute
   exclude_test: bool(required=False) # Exclude attribute from acceptance test
   requires_replace: bool(required=False) # Set to true if the attribute update forces Terraform to destroy/recreate the entire resource
@@ -44,7 +45,6 @@ child_classes:
   description: str(required=False) # Description of the child class
   doc_path: str(required=False) # NX-API documentation path of the child class
   mandatory: bool(required=False) # Set to true if the child class(es) are mandatory
-  hide_tf: bool(required=False) # Set to true if the child class should be hidden from the Terraform resource and data source schema
   attributes: list(include('attribute'), required=False) # List of child class attributes
   child_classes: list(include('child_classes'), required=False) # List of child classes to be included inline
 

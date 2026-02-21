@@ -95,8 +95,8 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 				},
 			},
 			{{- end}}
-			{{- range .ChildClasses}}
-			{{- if and (not .HideTf) (eq .Type "single")}}
+			{{- range .TfChildClasses}}
+			{{- if eq .Type "single"}}
 			{{- range .Attributes}}
 			"{{.TfName}}": schema.{{.Type}}Attribute{
 				MarkdownDescription: "{{.Description}}",
@@ -107,19 +107,13 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 				{{- end}}
 			},
 			{{- end}}
-			{{- range .ChildClasses}}
+			{{- range .TfChildClasses}}
 			{{- if eq .Type "list"}}
 			{{template "dsListNestedChildClassSchema" .}}
 			{{- end}}
 			{{- end}}
-			{{- else if and (not .HideTf) (eq .Type "list")}}
+			{{- else if eq .Type "list"}}
 			{{template "dsListNestedChildClassSchema" .}}
-			{{- else if .HideTf}}
-			{{- range .ChildClasses}}
-			{{- if eq .Type "list"}}
-			{{template "dsListNestedChildClassSchema" .}}
-			{{- end}}
-			{{- end}}
 			{{- end}}
 			{{- end}}
 		},

@@ -54,8 +54,7 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 					resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"),
 					{{- end}}
 					{{- end}}
-					{{- range .ChildClasses}}
-					{{- if not .HideTf}}
+					{{- range .TfChildClasses}}
 					{{- $list := .TfName}}
 					{{- if eq .Type "single"}}
 					{{- range .Attributes}}
@@ -70,22 +69,6 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 					{{- end}}
 					{{- end}}
 					{{- end}}
-					{{- end}}
-					{{- end}}
-					{{- /* Handle nested child classes within hidden parents */ -}}
-					{{- range .ChildClasses -}}
-					{{- if .HideTf -}}
-					{{- range .ChildClasses -}}
-					{{- $list := .TfName -}}
-					{{- if eq .Type "list" -}}
-					{{- range .Attributes -}}
-					{{- if not .ExcludeTest}}
-					resource.TestCheckResourceAttr("nxos_{{snakeCase $name}}.test", "{{$list}}.0.{{.TfName}}", "{{.Example}}"),
-					{{- end -}}
-					{{- end -}}
-					{{- end -}}
-					{{- end -}}
-					{{- end -}}
 					{{- end}}
 				),
 			},
@@ -167,14 +150,14 @@ func testAccNxos{{camelCase .Name}}Config_all() string {
 		{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
 	{{- end}}
 	{{- end}}
-	{{- range .ChildClasses}}
-	{{- if and (not .HideTf) (eq .Type "single")}}
+	{{- range .TfChildClasses}}
+	{{- if eq .Type "single"}}
 	{{- range .Attributes}}
 	{{- if not .ExcludeTest}}
 		{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
 	{{- end}}
 	{{- end}}
-	{{- else if and (not .HideTf) (eq .Type "list")}}
+	{{- else if eq .Type "list"}}
 		{{.TfName}} = [{
 		{{- range .Attributes}}
 		{{- if not .ExcludeTest}}
@@ -183,22 +166,6 @@ func testAccNxos{{camelCase .Name}}Config_all() string {
 		{{- end}}
 		}]
 	{{- end}}
-	{{- end}}
-	{{- /* Handle nested child classes within hidden parents */ -}}
-	{{- range .ChildClasses -}}
-	{{- if .HideTf -}}
-	{{- range .ChildClasses -}}
-	{{- if eq .Type "list"}}
-		{{.TfName}} = [{
-		{{- range .Attributes}}
-		{{- if not .ExcludeTest}}
-			{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
-		{{- end}}
-		{{- end}}
-		}]
-	{{- end -}}
-	{{- end -}}
-	{{- end -}}
 	{{- end}}
 	{{- if .TestPrerequisites}}
   		depends_on = [{{range $index, $item := .TestPrerequisites}}nxos_rest.PreReq{{$index}}, {{end}}]

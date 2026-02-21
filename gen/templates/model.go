@@ -41,14 +41,14 @@ type {{camelCase .Name}} struct {
 {{- range .Attributes}}
 	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
 {{- end}}
-{{- range .ChildClasses}}
-{{- if and (not .HideTf) (eq .Type "single")}}
+{{- range .TfChildClasses}}
+{{- if eq .Type "single"}}
 {{- range .Attributes}}
     {{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
 {{- end}}
 {{- end}}
-{{- if .ChildClasses}}
-{{- range .ChildClasses}}
+{{- if .TfChildClasses}}
+{{- range .TfChildClasses}}
 {{- if eq .Type "single"}}
 {{- range .Attributes}}
     {{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
@@ -63,13 +63,13 @@ type {{camelCase .Name}} struct {
 {{- end}}
 }
 
-{{range .ChildClasses}}
+{{range .TfChildClasses}}
 {{if eq .Type "list"}}
 type {{$name}}{{toGoName .TfName}} struct {
 {{- range .Attributes}}
 	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
 {{- end}}
-{{- range .ChildClasses}}
+{{- range .TfChildClasses}}
 {{- if eq .Type "single"}}
 {{- range .Attributes}}
     {{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
@@ -82,20 +82,6 @@ type {{$name}}{{toGoName .TfName}} struct {
 {{end}}
 {{end}}
 
-{{/* Generate struct types for nested child classes within hidden parents */}}
-{{range .ChildClasses}}
-{{if .HideTf}}
-{{range .ChildClasses}}
-{{if eq .Type "list"}}
-type {{$name}}{{toGoName .TfName}} struct {
-{{- range .Attributes}}
-	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
-{{- end}}
-}
-{{end}}
-{{end}}
-{{end}}
-{{end}}
 
 type {{camelCase .Name}}Identity struct {
 	Device types.String `tfsdk:"device"`
@@ -181,7 +167,9 @@ func (data {{camelCase .Name}}) toBody(statusReplace bool) nxos.Body {
 	childIndex := len(gjson.Get(body, data.getClassName()+".children").Array())
 	attrs = "{}"
 	{{- range .Attributes}}
-	{{- if not .ReferenceOnly}}
+	{{- if .Value}}
+	attrs, _ = sjson.Set(attrs, "{{.NxosName}}", "{{.Value}}")
+	{{- else if not .ReferenceOnly}}
 	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
 		{{- if eq .Type "Int64"}}
 		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
@@ -191,8 +179,6 @@ func (data {{camelCase .Name}}) toBody(statusReplace bool) nxos.Body {
 		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", data.{{toGoName .TfName}}.ValueString())
 		{{- end}}
 	}
-	{{- else}}
-	attrs, _ = sjson.Set(attrs, "{{.NxosName}}", "{{.DefaultValue}}")
 	{{- end}}
 	{{- end}}
 	body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.attributes", attrs)
@@ -236,7 +222,9 @@ func (data {{camelCase .Name}}) toBody(statusReplace bool) nxos.Body {
 	{{- else}}
 	attrs = "{}"
 	{{- range .Attributes}}
-	{{- if not .ReferenceOnly}}
+	{{- if .Value}}
+	attrs, _ = sjson.Set(attrs, "{{.NxosName}}", "{{.Value}}")
+	{{- else if not .ReferenceOnly}}
 	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
 		{{- if eq .Type "Int64"}}
 		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
@@ -246,8 +234,6 @@ func (data {{camelCase .Name}}) toBody(statusReplace bool) nxos.Body {
 		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", data.{{toGoName .TfName}}.ValueString())
 		{{- end}}
 	}
-	{{- else}}
-	attrs, _ = sjson.Set(attrs, "{{.NxosName}}", "{{.DefaultValue}}")
 	{{- end}}
 	{{- end}}
 	body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.attributes", attrs)
@@ -311,7 +297,7 @@ func (data {{camelCase .Name}}) toBody(statusReplace bool) nxos.Body {
 
 func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 	{{- range .Attributes}}
-	{{- if and (not .ReferenceOnly) (not .WriteOnly)}}
+	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
 	if !data.{{toGoName .TfName}}.IsNull() || all {
 		{{- if eq .Type "Int64"}}
 		data.{{toGoName .TfName}} = types.Int64Value(res.Get(data.getClassName()+".attributes.{{.NxosName}}").Int())
@@ -333,7 +319,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 	{{- if len .Attributes }}
 	{{- if eq .Type "single"}}
 	{{- $hasNonRefAttribs := false}}
-	{{- range .Attributes}}{{- if and (not .ReferenceOnly) (not .WriteOnly)}}{{$hasNonRefAttribs = true}}{{end}}{{end}}
+	{{- range .Attributes}}{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}{{$hasNonRefAttribs = true}}{{end}}{{end}}
 	{{- if or $hasNonRefAttribs .ChildClasses}}
 	var r{{$childClassName}} gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
@@ -348,7 +334,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 	)
 	{{- end}}
 	{{- range .Attributes}}
-	{{- if and (not .ReferenceOnly) (not .WriteOnly)}}
+	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
 	if !data.{{toGoName .TfName}}.IsNull() || all {
 		{{- if eq .Type "Int64"}}
 		data.{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
@@ -380,7 +366,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 		},
 	)
 	{{- range .Attributes}}
-	{{- if and (not .ReferenceOnly) (not .WriteOnly)}}
+	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
 	if !data.{{toGoName .TfName}}.IsNull() || all {
 		{{- if eq .Type "Int64"}}
 		data.{{toGoName .TfName}} = types.Int64Value(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").Int())
@@ -403,7 +389,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 						if nestedClassname.String() == "{{$nestedChildClassName}}" {
 							var nestedChild {{$name}}{{toGoName .TfName}}
 							{{- range .Attributes}}
-							{{- if and (not .ReferenceOnly) (not .WriteOnly)}}
+							{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
 							{{- if eq .Type "Int64"}}
 							nestedChild.{{toGoName .TfName}} = types.Int64Value(nestedValue.Get("attributes.{{.NxosName}}").Int())
 							{{- else if eq .Type "Bool"}}
@@ -433,7 +419,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 						if classname.String() == "{{$childClassName}}" {
 							var child {{$name}}{{toGoName .TfName}}
 							{{- range .Attributes}}
-							{{- if and (not .ReferenceOnly) (not .WriteOnly)}}
+							{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
 							{{- if eq .Type "Int64"}}
 							child.{{toGoName .TfName}} = types.Int64Value(value.Get("attributes.{{.NxosName}}").Int())
 							{{- else if eq .Type "Bool"}}
@@ -452,7 +438,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 											if nestedClassname.String() == "{{.ClassName}}" {
 												var nestedChild {{$name}}{{toGoName .TfName}}
 												{{- range .Attributes}}
-												{{- if and (not .ReferenceOnly) (not .WriteOnly)}}
+												{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
 												{{- if eq .Type "Int64"}}
 												nestedChild.{{toGoName .TfName}} = types.Int64Value(nestedValue.Get("attributes.{{.NxosName}}").Int())
 												{{- else if eq .Type "Bool"}}
@@ -493,7 +479,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 				},
 			)
 			{{- range .Attributes}}
-			{{- if and (not .ReferenceOnly) (not .WriteOnly)}}
+			{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
 			if !data.{{$list}}[c].{{toGoName .TfName}}.IsNull() || all {
 				{{- if eq .Type "Int64"}}
 				data.{{$list}}[c].{{toGoName .TfName}} = types.Int64Value(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
@@ -526,7 +512,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 					},
 				)
 				{{- range .Attributes}}
-				{{- if and (not .ReferenceOnly) (not .WriteOnly)}}
+				{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
 				if !data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}}.IsNull() || all {
 					{{- if eq .Type "Int64"}}
 					data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.Int64Value(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").Int())

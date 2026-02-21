@@ -50,15 +50,11 @@ child_classes:
   - class_name: aaaUserDomain
     rn: userdomain-[all]
     type: single
-    hide_tf: true
     attributes:
       - nxos_name: name
         tf_name: domain_name
         type: String
-        description: "User domain name."
-        example: "all"
-        default_value: "all"
-        reference_only: true
+        value: "all"
     child_classes:
       - class_name: aaaUserRole
         doc_path: Security%20and%20Policing/aaa:UserRole/

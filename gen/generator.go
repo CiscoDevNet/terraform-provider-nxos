@@ -119,6 +119,7 @@ type YamlConfig struct {
 	References        []string               `yaml:"references"`
 	Attributes        []YamlConfigAttribute  `yaml:"attributes"`
 	ChildClasses      []YamlConfigChildClass `yaml:"child_classes"`
+	TfChildClasses    []YamlConfigChildClass `yaml:"-"`
 	TestPrerequisites []YamlTest             `yaml:"test_prerequisites"`
 }
 
@@ -138,22 +139,23 @@ type YamlConfigAttribute struct {
 	MinInt             int      `yaml:"min_int"`
 	MaxInt             int      `yaml:"max_int"`
 	DefaultValue       string   `yaml:"default_value"`
+	Value              string   `yaml:"value"`
 	DeleteValue        string   `yaml:"delete_value"`
 	ExcludeTest        bool     `yaml:"exclude_test"`
 	RequiresReplace    bool     `yaml:"requires_replace"`
 }
 
 type YamlConfigChildClass struct {
-	ClassName    string                 `yaml:"class_name"`
-	Rn           string                 `yaml:"rn"`
-	Type         string                 `yaml:"type"`
-	TfName       string                 `yaml:"tf_name"`
-	Description  string                 `yaml:"description"`
-	DocPath      string                 `yaml:"doc_path"`
-	Mandatory    bool                   `yaml:"mandatory"`
-	HideTf       bool                   `yaml:"hide_tf"`
-	Attributes   []YamlConfigAttribute  `yaml:"attributes"`
-	ChildClasses []YamlConfigChildClass `yaml:"child_classes"`
+	ClassName      string                 `yaml:"class_name"`
+	Rn             string                 `yaml:"rn"`
+	Type           string                 `yaml:"type"`
+	TfName         string                 `yaml:"tf_name"`
+	Description    string                 `yaml:"description"`
+	DocPath        string                 `yaml:"doc_path"`
+	Mandatory      bool                   `yaml:"mandatory"`
+	Attributes     []YamlConfigAttribute  `yaml:"attributes"`
+	ChildClasses   []YamlConfigChildClass `yaml:"child_classes"`
+	TfChildClasses []YamlConfigChildClass `yaml:"-"`
 }
 
 type YamlTest struct {
@@ -329,6 +331,34 @@ var functions = template.FuncMap{
 	"importAttributes":   ImportAttributes,
 }
 
+// buildTfChildClasses builds the TfChildClasses list by promoting children
+// of auto-hidden classes (single-type classes where all attributes have a value).
+func buildTfChildClasses(children []YamlConfigChildClass) []YamlConfigChildClass {
+	var result []YamlConfigChildClass
+	for _, c := range children {
+		if c.Type == "single" && allAttributesHaveValue(c.Attributes) {
+			// Promote this class's children up
+			promoted := buildTfChildClasses(c.ChildClasses)
+			result = append(result, promoted...)
+		} else {
+			flattened := c
+			flattened.TfChildClasses = buildTfChildClasses(c.ChildClasses)
+			result = append(result, flattened)
+		}
+	}
+	return result
+}
+
+// allAttributesHaveValue returns true if every attribute has a non-empty Value field.
+func allAttributesHaveValue(attrs []YamlConfigAttribute) bool {
+	for _, a := range attrs {
+		if a.Value == "" {
+			return false
+		}
+	}
+	return true
+}
+
 func renderTemplate(templatePath, outputPath string, config interface{}) {
 	file, err := os.Open(templatePath)
 	if err != nil {
@@ -388,6 +418,13 @@ func main() {
 			log.Fatalf("Error parsing yaml: %v", err)
 		}
 		configs[i] = config
+	}
+
+	for i := range configs {
+		configs[i].TfChildClasses = buildTfChildClasses(configs[i].ChildClasses)
+		for j := range configs[i].ChildClasses {
+			configs[i].ChildClasses[j].TfChildClasses = buildTfChildClasses(configs[i].ChildClasses[j].ChildClasses)
+		}
 	}
 
 	for _, config := range configs {

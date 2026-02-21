@@ -35,6 +35,9 @@ func TestAccDataSourceNxosUser(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.nxos_user.test", "name", "user1"),
 					resource.TestCheckResourceAttr("data.nxos_user.test", "allow_expired", "yes"),
+					resource.TestCheckTypeSetElemNestedAttrs("data.nxos_user.test", "roles.*", map[string]string{
+						"name": "network-operator",
+					}),
 				),
 			},
 		},
@@ -54,6 +57,9 @@ const testAccDataSourceNxosUserConfig = `
 resource "nxos_user" "test" {
   name = "user1"
   allow_expired = "yes"
+  roles = [{
+    name = "network-operator"
+  }]
   depends_on = [nxos_rest.PreReq0, ]
 }
 

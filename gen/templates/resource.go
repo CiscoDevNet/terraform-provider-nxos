@@ -202,25 +202,19 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				},
 			},
 			{{- end}}
-			{{- range .ChildClasses}}
+			{{- range .TfChildClasses}}
 			{{- if len .Attributes}}
-			{{- if and (not .HideTf) (eq .Type "single")}}
+			{{- if eq .Type "single"}}
 			{{- range  .Attributes}}
 			{{template "childClassAttrSchema" .}}
 			{{- end}}
-			{{- range .ChildClasses}}
+			{{- range .TfChildClasses}}
 			{{- if eq .Type "list"}}
 			{{template "listNestedChildClassSchema" .}}
 			{{- end}}
 			{{- end}}
-			{{- else if and (not .HideTf) (eq .Type "list")}}
+			{{- else if eq .Type "list"}}
 			{{template "listNestedChildClassSchema" .}}
-			{{- else if .HideTf}}
-			{{- range .ChildClasses}}
-			{{- if eq .Type "list"}}
-			{{template "listNestedChildClassSchema" .}}
-			{{- end}}
-			{{- end}}
 			{{- end}}
 			{{- end}}
 			{{- end}}

@@ -132,58 +132,72 @@ func (data BGPPeer) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *BGPPeer) fromBody(res gjson.Result, all bool) {
-	if !data.Address.IsNull() || all {
+func (data *BGPPeer) fromBody(res gjson.Result) {
+	data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.addr").String())
+	data.RemoteAsn = types.StringValue(res.Get(data.getClassName() + ".attributes.asn").String())
+	data.Description = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	data.PeerTemplate = types.StringValue(res.Get(data.getClassName() + ".attributes.peerImp").String())
+	data.PeerType = types.StringValue(res.Get(data.getClassName() + ".attributes.peerType").String())
+	data.SourceInterface = types.StringValue(res.Get(data.getClassName() + ".attributes.srcIf").String())
+	data.HoldTime = types.Int64Value(res.Get(data.getClassName() + ".attributes.holdIntvl").Int())
+	data.Keepalive = types.Int64Value(res.Get(data.getClassName() + ".attributes.kaIntvl").Int())
+	data.EbgpMultihopTtl = types.Int64Value(res.Get(data.getClassName() + ".attributes.ttl").Int())
+	data.PeerControl = types.StringValue(res.Get(data.getClassName() + ".attributes.ctrl").String())
+	data.PasswordType = types.StringValue(res.Get(data.getClassName() + ".attributes.passwdType").String())
+}
+
+func (data *BGPPeer) updateFromBody(res gjson.Result) {
+	if !data.Address.IsNull() {
 		data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.addr").String())
 	} else {
 		data.Address = types.StringNull()
 	}
-	if !data.RemoteAsn.IsNull() || all {
+	if !data.RemoteAsn.IsNull() {
 		data.RemoteAsn = types.StringValue(res.Get(data.getClassName() + ".attributes.asn").String())
 	} else {
 		data.RemoteAsn = types.StringNull()
 	}
-	if !data.Description.IsNull() || all {
+	if !data.Description.IsNull() {
 		data.Description = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
 		data.Description = types.StringNull()
 	}
-	if !data.PeerTemplate.IsNull() || all {
+	if !data.PeerTemplate.IsNull() {
 		data.PeerTemplate = types.StringValue(res.Get(data.getClassName() + ".attributes.peerImp").String())
 	} else {
 		data.PeerTemplate = types.StringNull()
 	}
-	if !data.PeerType.IsNull() || all {
+	if !data.PeerType.IsNull() {
 		data.PeerType = types.StringValue(res.Get(data.getClassName() + ".attributes.peerType").String())
 	} else {
 		data.PeerType = types.StringNull()
 	}
-	if !data.SourceInterface.IsNull() || all {
+	if !data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringValue(res.Get(data.getClassName() + ".attributes.srcIf").String())
 	} else {
 		data.SourceInterface = types.StringNull()
 	}
-	if !data.HoldTime.IsNull() || all {
+	if !data.HoldTime.IsNull() {
 		data.HoldTime = types.Int64Value(res.Get(data.getClassName() + ".attributes.holdIntvl").Int())
 	} else {
 		data.HoldTime = types.Int64Null()
 	}
-	if !data.Keepalive.IsNull() || all {
+	if !data.Keepalive.IsNull() {
 		data.Keepalive = types.Int64Value(res.Get(data.getClassName() + ".attributes.kaIntvl").Int())
 	} else {
 		data.Keepalive = types.Int64Null()
 	}
-	if !data.EbgpMultihopTtl.IsNull() || all {
+	if !data.EbgpMultihopTtl.IsNull() {
 		data.EbgpMultihopTtl = types.Int64Value(res.Get(data.getClassName() + ".attributes.ttl").Int())
 	} else {
 		data.EbgpMultihopTtl = types.Int64Null()
 	}
-	if !data.PeerControl.IsNull() || all {
+	if !data.PeerControl.IsNull() {
 		data.PeerControl = types.StringValue(res.Get(data.getClassName() + ".attributes.ctrl").String())
 	} else {
 		data.PeerControl = types.StringNull()
 	}
-	if !data.PasswordType.IsNull() || all {
+	if !data.PasswordType.IsNull() {
 		data.PasswordType = types.StringValue(res.Get(data.getClassName() + ".attributes.passwdType").String())
 	} else {
 		data.PasswordType = types.StringNull()

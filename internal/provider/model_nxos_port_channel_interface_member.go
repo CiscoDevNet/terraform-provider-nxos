@@ -89,13 +89,18 @@ func (data PortChannelInterfaceMember) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *PortChannelInterfaceMember) fromBody(res gjson.Result, all bool) {
-	if !data.InterfaceDn.IsNull() || all {
+func (data *PortChannelInterfaceMember) fromBody(res gjson.Result) {
+	data.InterfaceDn = types.StringValue(res.Get(data.getClassName() + ".attributes.tDn").String())
+	data.Force = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.isMbrForce").String()))
+}
+
+func (data *PortChannelInterfaceMember) updateFromBody(res gjson.Result) {
+	if !data.InterfaceDn.IsNull() {
 		data.InterfaceDn = types.StringValue(res.Get(data.getClassName() + ".attributes.tDn").String())
 	} else {
 		data.InterfaceDn = types.StringNull()
 	}
-	if !data.Force.IsNull() || all {
+	if !data.Force.IsNull() {
 		data.Force = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.isMbrForce").String()))
 	} else {
 		data.Force = types.BoolNull()

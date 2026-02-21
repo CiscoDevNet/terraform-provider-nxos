@@ -92,18 +92,24 @@ func (data RouteMapRuleEntrySetRegularCommunity) toBody(statusReplace bool) nxos
 	return nxos.Body{body}
 }
 
-func (data *RouteMapRuleEntrySetRegularCommunity) fromBody(res gjson.Result, all bool) {
-	if !data.Additive.IsNull() || all {
+func (data *RouteMapRuleEntrySetRegularCommunity) fromBody(res gjson.Result) {
+	data.Additive = types.StringValue(res.Get(data.getClassName() + ".attributes.additive").String())
+	data.NoCommunity = types.StringValue(res.Get(data.getClassName() + ".attributes.noCommAttr").String())
+	data.SetCriteria = types.StringValue(res.Get(data.getClassName() + ".attributes.setCriteria").String())
+}
+
+func (data *RouteMapRuleEntrySetRegularCommunity) updateFromBody(res gjson.Result) {
+	if !data.Additive.IsNull() {
 		data.Additive = types.StringValue(res.Get(data.getClassName() + ".attributes.additive").String())
 	} else {
 		data.Additive = types.StringNull()
 	}
-	if !data.NoCommunity.IsNull() || all {
+	if !data.NoCommunity.IsNull() {
 		data.NoCommunity = types.StringValue(res.Get(data.getClassName() + ".attributes.noCommAttr").String())
 	} else {
 		data.NoCommunity = types.StringNull()
 	}
-	if !data.SetCriteria.IsNull() || all {
+	if !data.SetCriteria.IsNull() {
 		data.SetCriteria = types.StringValue(res.Get(data.getClassName() + ".attributes.setCriteria").String())
 	} else {
 		data.SetCriteria = types.StringNull()

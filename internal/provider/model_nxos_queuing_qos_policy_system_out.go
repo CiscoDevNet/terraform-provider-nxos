@@ -71,7 +71,10 @@ func (data QueuingQOSPolicySystemOut) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *QueuingQOSPolicySystemOut) fromBody(res gjson.Result, all bool) {
+func (data *QueuingQOSPolicySystemOut) fromBody(res gjson.Result) {
+}
+
+func (data *QueuingQOSPolicySystemOut) updateFromBody(res gjson.Result) {
 }
 
 func (data QueuingQOSPolicySystemOut) toDeleteBody() nxos.Body {

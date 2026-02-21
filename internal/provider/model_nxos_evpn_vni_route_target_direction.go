@@ -83,8 +83,12 @@ func (data EVPNVNIRouteTargetDirection) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *EVPNVNIRouteTargetDirection) fromBody(res gjson.Result, all bool) {
-	if !data.Direction.IsNull() || all {
+func (data *EVPNVNIRouteTargetDirection) fromBody(res gjson.Result) {
+	data.Direction = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
+}
+
+func (data *EVPNVNIRouteTargetDirection) updateFromBody(res gjson.Result) {
+	if !data.Direction.IsNull() {
 		data.Direction = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
 	} else {
 		data.Direction = types.StringNull()

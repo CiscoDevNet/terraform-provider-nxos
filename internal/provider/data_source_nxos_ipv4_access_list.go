@@ -297,7 +297,7 @@ func (d *IPv4AccessListDataSource) Read(ctx context.Context, req datasource.Read
 		return
 	}
 
-	config.fromBody(res, true)
+	config.fromBody(res)
 	config.Dn = types.StringValue(config.getDn())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getDn()))

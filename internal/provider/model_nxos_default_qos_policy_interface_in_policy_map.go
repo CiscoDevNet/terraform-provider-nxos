@@ -80,8 +80,12 @@ func (data DefaultQOSPolicyInterfaceInPolicyMap) toBody(statusReplace bool) nxos
 	return nxos.Body{body}
 }
 
-func (data *DefaultQOSPolicyInterfaceInPolicyMap) fromBody(res gjson.Result, all bool) {
-	if !data.PolicyMapName.IsNull() || all {
+func (data *DefaultQOSPolicyInterfaceInPolicyMap) fromBody(res gjson.Result) {
+	data.PolicyMapName = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+}
+
+func (data *DefaultQOSPolicyInterfaceInPolicyMap) updateFromBody(res gjson.Result) {
+	if !data.PolicyMapName.IsNull() {
 		data.PolicyMapName = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
 		data.PolicyMapName = types.StringNull()

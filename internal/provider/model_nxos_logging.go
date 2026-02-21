@@ -101,47 +101,47 @@ func (data Logging) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *Logging) fromBody(res gjson.Result, all bool) {
-	if all {
-		res.Get(data.getClassName() + ".children").ForEach(
-			func(_, v gjson.Result) bool {
-				v.ForEach(
-					func(classname, value gjson.Result) bool {
-						if classname.String() == "loggingFacility" {
-							var child LoggingFacilities
-							child.Name = types.StringValue(value.Get("attributes.facilityName").String())
-							child.Level = types.StringValue(value.Get("attributes.severityLevel").String())
-							data.Facilities = append(data.Facilities, child)
-						}
-						return true
-					},
-				)
-				return true
-			},
-		)
-	} else {
-		for c := range data.Facilities {
-			var r gjson.Result
-			res.Get(data.getClassName() + ".children").ForEach(
-				func(_, v gjson.Result) bool {
-					key := v.Get("loggingFacility.attributes.rn").String()
-					if key == data.Facilities[c].getRn() {
-						r = v
-						return false
+func (data *Logging) fromBody(res gjson.Result) {
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "loggingFacility" {
+						var child LoggingFacilities
+						child.Name = types.StringValue(value.Get("attributes.facilityName").String())
+						child.Level = types.StringValue(value.Get("attributes.severityLevel").String())
+						data.Facilities = append(data.Facilities, child)
 					}
 					return true
 				},
 			)
-			if !data.Facilities[c].Name.IsNull() || all {
-				data.Facilities[c].Name = types.StringValue(r.Get("loggingFacility.attributes.facilityName").String())
-			} else {
-				data.Facilities[c].Name = types.StringNull()
-			}
-			if !data.Facilities[c].Level.IsNull() || all {
-				data.Facilities[c].Level = types.StringValue(r.Get("loggingFacility.attributes.severityLevel").String())
-			} else {
-				data.Facilities[c].Level = types.StringNull()
-			}
+			return true
+		},
+	)
+}
+
+func (data *Logging) updateFromBody(res gjson.Result) {
+	for c := range data.Facilities {
+		var r gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("loggingFacility.attributes.rn").String()
+				if key == data.Facilities[c].getRn() {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.Facilities[c].Name.IsNull() {
+			data.Facilities[c].Name = types.StringValue(r.Get("loggingFacility.attributes.facilityName").String())
+		} else {
+			data.Facilities[c].Name = types.StringNull()
+		}
+		if !data.Facilities[c].Level.IsNull() {
+			data.Facilities[c].Level = types.StringValue(r.Get("loggingFacility.attributes.severityLevel").String())
+		} else {
+			data.Facilities[c].Level = types.StringNull()
 		}
 	}
 }

@@ -75,8 +75,12 @@ func (data ICMPv4) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *ICMPv4) fromBody(res gjson.Result, all bool) {
-	if !data.AdminState.IsNull() || all {
+func (data *ICMPv4) fromBody(res gjson.Result) {
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+}
+
+func (data *ICMPv4) updateFromBody(res gjson.Result) {
+	if !data.AdminState.IsNull() {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
 		data.AdminState = types.StringNull()

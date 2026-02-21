@@ -84,13 +84,18 @@ func (data PIMAnycastRP) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *PIMAnycastRP) fromBody(res gjson.Result, all bool) {
-	if !data.LocalInterface.IsNull() || all {
+func (data *PIMAnycastRP) fromBody(res gjson.Result) {
+	data.LocalInterface = types.StringValue(res.Get(data.getClassName() + ".attributes.localIf").String())
+	data.SourceInterface = types.StringValue(res.Get(data.getClassName() + ".attributes.srcIf").String())
+}
+
+func (data *PIMAnycastRP) updateFromBody(res gjson.Result) {
+	if !data.LocalInterface.IsNull() {
 		data.LocalInterface = types.StringValue(res.Get(data.getClassName() + ".attributes.localIf").String())
 	} else {
 		data.LocalInterface = types.StringNull()
 	}
-	if !data.SourceInterface.IsNull() || all {
+	if !data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringValue(res.Get(data.getClassName() + ".attributes.srcIf").String())
 	} else {
 		data.SourceInterface = types.StringNull()

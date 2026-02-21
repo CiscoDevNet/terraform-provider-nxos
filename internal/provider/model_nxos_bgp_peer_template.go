@@ -99,28 +99,36 @@ func (data BGPPeerTemplate) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *BGPPeerTemplate) fromBody(res gjson.Result, all bool) {
-	if !data.TemplateName.IsNull() || all {
+func (data *BGPPeerTemplate) fromBody(res gjson.Result) {
+	data.TemplateName = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	data.RemoteAsn = types.StringValue(res.Get(data.getClassName() + ".attributes.asn").String())
+	data.Description = types.StringValue(res.Get(data.getClassName() + ".attributes.desc").String())
+	data.PeerType = types.StringValue(res.Get(data.getClassName() + ".attributes.peerType").String())
+	data.SourceInterface = types.StringValue(res.Get(data.getClassName() + ".attributes.srcIf").String())
+}
+
+func (data *BGPPeerTemplate) updateFromBody(res gjson.Result) {
+	if !data.TemplateName.IsNull() {
 		data.TemplateName = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
 		data.TemplateName = types.StringNull()
 	}
-	if !data.RemoteAsn.IsNull() || all {
+	if !data.RemoteAsn.IsNull() {
 		data.RemoteAsn = types.StringValue(res.Get(data.getClassName() + ".attributes.asn").String())
 	} else {
 		data.RemoteAsn = types.StringNull()
 	}
-	if !data.Description.IsNull() || all {
+	if !data.Description.IsNull() {
 		data.Description = types.StringValue(res.Get(data.getClassName() + ".attributes.desc").String())
 	} else {
 		data.Description = types.StringNull()
 	}
-	if !data.PeerType.IsNull() || all {
+	if !data.PeerType.IsNull() {
 		data.PeerType = types.StringValue(res.Get(data.getClassName() + ".attributes.peerType").String())
 	} else {
 		data.PeerType = types.StringNull()
 	}
-	if !data.SourceInterface.IsNull() || all {
+	if !data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringValue(res.Get(data.getClassName() + ".attributes.srcIf").String())
 	} else {
 		data.SourceInterface = types.StringNull()

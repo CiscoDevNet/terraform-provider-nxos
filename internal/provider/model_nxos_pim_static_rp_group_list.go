@@ -97,18 +97,24 @@ func (data PIMStaticRPGroupList) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *PIMStaticRPGroupList) fromBody(res gjson.Result, all bool) {
-	if !data.Address.IsNull() || all {
+func (data *PIMStaticRPGroupList) fromBody(res gjson.Result) {
+	data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.grpListName").String())
+	data.Bidir = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.bidir").String()))
+	data.Override = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.override").String()))
+}
+
+func (data *PIMStaticRPGroupList) updateFromBody(res gjson.Result) {
+	if !data.Address.IsNull() {
 		data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.grpListName").String())
 	} else {
 		data.Address = types.StringNull()
 	}
-	if !data.Bidir.IsNull() || all {
+	if !data.Bidir.IsNull() {
 		data.Bidir = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.bidir").String()))
 	} else {
 		data.Bidir = types.BoolNull()
 	}
-	if !data.Override.IsNull() || all {
+	if !data.Override.IsNull() {
 		data.Override = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.override").String()))
 	} else {
 		data.Override = types.BoolNull()

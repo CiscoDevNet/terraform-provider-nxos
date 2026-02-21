@@ -114,13 +114,44 @@ func (data User) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *User) fromBody(res gjson.Result, all bool) {
-	if !data.Name.IsNull() || all {
+func (data *User) fromBody(res gjson.Result) {
+	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	data.AllowExpired = types.StringValue(res.Get(data.getClassName() + ".attributes.allowExpired").String())
+	var raaaUserDomain gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("aaaUserDomain.attributes.rn").String()
+			if key == "userdomain-[all]" {
+				raaaUserDomain = v
+				return false
+			}
+			return true
+		},
+	)
+	raaaUserDomain.Get("aaaUserDomain.children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(nestedClassname, nestedValue gjson.Result) bool {
+					if nestedClassname.String() == "aaaUserRole" {
+						var nestedChild UserRoles
+						nestedChild.Name = types.StringValue(nestedValue.Get("attributes.name").String())
+						data.Roles = append(data.Roles, nestedChild)
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
+}
+
+func (data *User) updateFromBody(res gjson.Result) {
+	if !data.Name.IsNull() {
 		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
 		data.Name = types.StringNull()
 	}
-	if !data.AllowExpired.IsNull() || all {
+	if !data.AllowExpired.IsNull() {
 		data.AllowExpired = types.StringValue(res.Get(data.getClassName() + ".attributes.allowExpired").String())
 	} else {
 		data.AllowExpired = types.StringNull()
@@ -136,22 +167,23 @@ func (data *User) fromBody(res gjson.Result, all bool) {
 			return true
 		},
 	)
-	if all {
+	for nc := range data.Roles {
+		var nestedR gjson.Result
 		raaaUserDomain.Get("aaaUserDomain.children").ForEach(
 			func(_, v gjson.Result) bool {
-				v.ForEach(
-					func(nestedClassname, nestedValue gjson.Result) bool {
-						if nestedClassname.String() == "aaaUserRole" {
-							var nestedChild UserRoles
-							nestedChild.Name = types.StringValue(nestedValue.Get("attributes.name").String())
-							data.Roles = append(data.Roles, nestedChild)
-						}
-						return true
-					},
-				)
+				key := v.Get("aaaUserRole.attributes.rn").String()
+				if key == data.Roles[nc].getRn() {
+					nestedR = v
+					return false
+				}
 				return true
 			},
 		)
+		if !data.Roles[nc].Name.IsNull() {
+			data.Roles[nc].Name = types.StringValue(nestedR.Get("aaaUserRole.attributes.name").String())
+		} else {
+			data.Roles[nc].Name = types.StringNull()
+		}
 	}
 }
 

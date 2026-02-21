@@ -75,8 +75,12 @@ func (data VPCPeerlink) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *VPCPeerlink) fromBody(res gjson.Result, all bool) {
-	if !data.PortChannelId.IsNull() || all {
+func (data *VPCPeerlink) fromBody(res gjson.Result) {
+	data.PortChannelId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
+}
+
+func (data *VPCPeerlink) updateFromBody(res gjson.Result) {
+	if !data.PortChannelId.IsNull() {
 		data.PortChannelId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	} else {
 		data.PortChannelId = types.StringNull()

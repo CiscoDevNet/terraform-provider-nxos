@@ -95,8 +95,12 @@ func (data VRFRouteTarget) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *VRFRouteTarget) fromBody(res gjson.Result, all bool) {
-	if !data.RouteTarget.IsNull() || all {
+func (data *VRFRouteTarget) fromBody(res gjson.Result) {
+	data.RouteTarget = types.StringValue(res.Get(data.getClassName() + ".attributes.rtt").String())
+}
+
+func (data *VRFRouteTarget) updateFromBody(res gjson.Result) {
+	if !data.RouteTarget.IsNull() {
 		data.RouteTarget = types.StringValue(res.Get(data.getClassName() + ".attributes.rtt").String())
 	} else {
 		data.RouteTarget = types.StringNull()

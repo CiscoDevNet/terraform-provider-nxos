@@ -85,18 +85,24 @@ func (data BGPInstance) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *BGPInstance) fromBody(res gjson.Result, all bool) {
-	if !data.AdminState.IsNull() || all {
+func (data *BGPInstance) fromBody(res gjson.Result) {
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	data.Asn = types.StringValue(res.Get(data.getClassName() + ".attributes.asn").String())
+	data.EnhancedErrorHandling = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.enhancedErr").String()))
+}
+
+func (data *BGPInstance) updateFromBody(res gjson.Result) {
+	if !data.AdminState.IsNull() {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
 		data.AdminState = types.StringNull()
 	}
-	if !data.Asn.IsNull() || all {
+	if !data.Asn.IsNull() {
 		data.Asn = types.StringValue(res.Get(data.getClassName() + ".attributes.asn").String())
 	} else {
 		data.Asn = types.StringNull()
 	}
-	if !data.EnhancedErrorHandling.IsNull() || all {
+	if !data.EnhancedErrorHandling.IsNull() {
 		data.EnhancedErrorHandling = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.enhancedErr").String()))
 	} else {
 		data.EnhancedErrorHandling = types.BoolNull()

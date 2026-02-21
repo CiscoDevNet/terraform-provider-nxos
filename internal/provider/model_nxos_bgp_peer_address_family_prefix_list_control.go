@@ -99,13 +99,18 @@ func (data BGPPeerAddressFamilyPrefixListControl) toBody(statusReplace bool) nxo
 	return nxos.Body{body}
 }
 
-func (data *BGPPeerAddressFamilyPrefixListControl) fromBody(res gjson.Result, all bool) {
-	if !data.Direction.IsNull() || all {
+func (data *BGPPeerAddressFamilyPrefixListControl) fromBody(res gjson.Result) {
+	data.Direction = types.StringValue(res.Get(data.getClassName() + ".attributes.direction").String())
+	data.List = types.StringValue(res.Get(data.getClassName() + ".attributes.list").String())
+}
+
+func (data *BGPPeerAddressFamilyPrefixListControl) updateFromBody(res gjson.Result) {
+	if !data.Direction.IsNull() {
 		data.Direction = types.StringValue(res.Get(data.getClassName() + ".attributes.direction").String())
 	} else {
 		data.Direction = types.StringNull()
 	}
-	if !data.List.IsNull() || all {
+	if !data.List.IsNull() {
 		data.List = types.StringValue(res.Get(data.getClassName() + ".attributes.list").String())
 	} else {
 		data.List = types.StringNull()

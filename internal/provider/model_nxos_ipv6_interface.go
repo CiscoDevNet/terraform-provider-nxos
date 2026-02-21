@@ -115,48 +115,60 @@ func (data IPv6Interface) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *IPv6Interface) fromBody(res gjson.Result, all bool) {
-	if !data.InterfaceId.IsNull() || all {
+func (data *IPv6Interface) fromBody(res gjson.Result) {
+	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
+	data.AutoConfiguration = types.StringValue(res.Get(data.getClassName() + ".attributes.autoconfig").String())
+	data.DefaultRoute = types.StringValue(res.Get(data.getClassName() + ".attributes.defaultRoute").String())
+	data.Ipv6Forward = types.StringValue(res.Get(data.getClassName() + ".attributes.forward").String())
+	data.Forward = types.StringValue(res.Get(data.getClassName() + ".attributes.forward").String())
+	data.LinkAddressUseBia = types.StringValue(res.Get(data.getClassName() + ".attributes.llAddrUseBia").String())
+	data.UseLinkLocalAddress = types.StringValue(res.Get(data.getClassName() + ".attributes.useLinkLocalAddr").String())
+	data.Urpf = types.StringValue(res.Get(data.getClassName() + ".attributes.urpf").String())
+	data.LinkLocalAddress = types.StringValue(res.Get(data.getClassName() + ".attributes.llAddr").String())
+}
+
+func (data *IPv6Interface) updateFromBody(res gjson.Result) {
+	if !data.InterfaceId.IsNull() {
 		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	} else {
 		data.InterfaceId = types.StringNull()
 	}
-	if !data.AutoConfiguration.IsNull() || all {
+	if !data.AutoConfiguration.IsNull() {
 		data.AutoConfiguration = types.StringValue(res.Get(data.getClassName() + ".attributes.autoconfig").String())
 	} else {
 		data.AutoConfiguration = types.StringNull()
 	}
-	if !data.DefaultRoute.IsNull() || all {
+	if !data.DefaultRoute.IsNull() {
 		data.DefaultRoute = types.StringValue(res.Get(data.getClassName() + ".attributes.defaultRoute").String())
 	} else {
 		data.DefaultRoute = types.StringNull()
 	}
-	if !data.Ipv6Forward.IsNull() || all {
+	if !data.Ipv6Forward.IsNull() {
 		data.Ipv6Forward = types.StringValue(res.Get(data.getClassName() + ".attributes.forward").String())
 	} else {
 		data.Ipv6Forward = types.StringNull()
 	}
-	if !data.Forward.IsNull() || all {
+	if !data.Forward.IsNull() {
 		data.Forward = types.StringValue(res.Get(data.getClassName() + ".attributes.forward").String())
 	} else {
 		data.Forward = types.StringNull()
 	}
-	if !data.LinkAddressUseBia.IsNull() || all {
+	if !data.LinkAddressUseBia.IsNull() {
 		data.LinkAddressUseBia = types.StringValue(res.Get(data.getClassName() + ".attributes.llAddrUseBia").String())
 	} else {
 		data.LinkAddressUseBia = types.StringNull()
 	}
-	if !data.UseLinkLocalAddress.IsNull() || all {
+	if !data.UseLinkLocalAddress.IsNull() {
 		data.UseLinkLocalAddress = types.StringValue(res.Get(data.getClassName() + ".attributes.useLinkLocalAddr").String())
 	} else {
 		data.UseLinkLocalAddress = types.StringNull()
 	}
-	if !data.Urpf.IsNull() || all {
+	if !data.Urpf.IsNull() {
 		data.Urpf = types.StringValue(res.Get(data.getClassName() + ".attributes.urpf").String())
 	} else {
 		data.Urpf = types.StringNull()
 	}
-	if !data.LinkLocalAddress.IsNull() || all {
+	if !data.LinkLocalAddress.IsNull() {
 		data.LinkLocalAddress = types.StringValue(res.Get(data.getClassName() + ".attributes.llAddr").String())
 	} else {
 		data.LinkLocalAddress = types.StringNull()

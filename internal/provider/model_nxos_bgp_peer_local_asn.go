@@ -88,13 +88,18 @@ func (data BGPPeerLocalASN) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *BGPPeerLocalASN) fromBody(res gjson.Result, all bool) {
-	if !data.AsnPropagation.IsNull() || all {
+func (data *BGPPeerLocalASN) fromBody(res gjson.Result) {
+	data.AsnPropagation = types.StringValue(res.Get(data.getClassName() + ".attributes.asnPropagate").String())
+	data.LocalAsn = types.StringValue(res.Get(data.getClassName() + ".attributes.localAsn").String())
+}
+
+func (data *BGPPeerLocalASN) updateFromBody(res gjson.Result) {
+	if !data.AsnPropagation.IsNull() {
 		data.AsnPropagation = types.StringValue(res.Get(data.getClassName() + ".attributes.asnPropagate").String())
 	} else {
 		data.AsnPropagation = types.StringNull()
 	}
-	if !data.LocalAsn.IsNull() || all {
+	if !data.LocalAsn.IsNull() {
 		data.LocalAsn = types.StringValue(res.Get(data.getClassName() + ".attributes.localAsn").String())
 	} else {
 		data.LocalAsn = types.StringNull()

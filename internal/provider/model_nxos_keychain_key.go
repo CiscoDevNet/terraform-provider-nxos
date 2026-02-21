@@ -88,8 +88,12 @@ func (data KeychainKey) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *KeychainKey) fromBody(res gjson.Result, all bool) {
-	if !data.KeyId.IsNull() || all {
+func (data *KeychainKey) fromBody(res gjson.Result) {
+	data.KeyId = types.Int64Value(res.Get(data.getClassName() + ".attributes.keyId").Int())
+}
+
+func (data *KeychainKey) updateFromBody(res gjson.Result) {
+	if !data.KeyId.IsNull() {
 		data.KeyId = types.Int64Value(res.Get(data.getClassName() + ".attributes.keyId").Int())
 	} else {
 		data.KeyId = types.Int64Null()

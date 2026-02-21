@@ -87,18 +87,24 @@ func (data HMMInterface) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *HMMInterface) fromBody(res gjson.Result, all bool) {
-	if !data.InterfaceId.IsNull() || all {
+func (data *HMMInterface) fromBody(res gjson.Result) {
+	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	data.Mode = types.StringValue(res.Get(data.getClassName() + ".attributes.mode").String())
+}
+
+func (data *HMMInterface) updateFromBody(res gjson.Result) {
+	if !data.InterfaceId.IsNull() {
 		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	} else {
 		data.InterfaceId = types.StringNull()
 	}
-	if !data.AdminState.IsNull() || all {
+	if !data.AdminState.IsNull() {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
 		data.AdminState = types.StringNull()
 	}
-	if !data.Mode.IsNull() || all {
+	if !data.Mode.IsNull() {
 		data.Mode = types.StringValue(res.Get(data.getClassName() + ".attributes.mode").String())
 	} else {
 		data.Mode = types.StringNull()

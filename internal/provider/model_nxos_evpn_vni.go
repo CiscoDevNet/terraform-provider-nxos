@@ -83,13 +83,18 @@ func (data EVPNVNI) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *EVPNVNI) fromBody(res gjson.Result, all bool) {
-	if !data.Encap.IsNull() || all {
+func (data *EVPNVNI) fromBody(res gjson.Result) {
+	data.Encap = types.StringValue(res.Get(data.getClassName() + ".attributes.encap").String())
+	data.RouteDistinguisher = types.StringValue(res.Get(data.getClassName() + ".attributes.rd").String())
+}
+
+func (data *EVPNVNI) updateFromBody(res gjson.Result) {
+	if !data.Encap.IsNull() {
 		data.Encap = types.StringValue(res.Get(data.getClassName() + ".attributes.encap").String())
 	} else {
 		data.Encap = types.StringNull()
 	}
-	if !data.RouteDistinguisher.IsNull() || all {
+	if !data.RouteDistinguisher.IsNull() {
 		data.RouteDistinguisher = types.StringValue(res.Get(data.getClassName() + ".attributes.rd").String())
 	} else {
 		data.RouteDistinguisher = types.StringNull()

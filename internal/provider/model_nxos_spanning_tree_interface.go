@@ -112,48 +112,60 @@ func (data SpanningTreeInterface) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *SpanningTreeInterface) fromBody(res gjson.Result, all bool) {
-	if !data.InterfaceId.IsNull() || all {
+func (data *SpanningTreeInterface) fromBody(res gjson.Result) {
+	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	data.BpduFilter = types.StringValue(res.Get(data.getClassName() + ".attributes.bpdufilter").String())
+	data.BpduGuard = types.StringValue(res.Get(data.getClassName() + ".attributes.bpduguard").String())
+	data.Cost = types.Int64Value(res.Get(data.getClassName() + ".attributes.cost").Int())
+	data.Guard = types.StringValue(res.Get(data.getClassName() + ".attributes.guard").String())
+	data.LinkType = types.StringValue(res.Get(data.getClassName() + ".attributes.linkType").String())
+	data.Mode = types.StringValue(res.Get(data.getClassName() + ".attributes.mode").String())
+	data.Priority = types.Int64Value(res.Get(data.getClassName() + ".attributes.priority").Int())
+}
+
+func (data *SpanningTreeInterface) updateFromBody(res gjson.Result) {
+	if !data.InterfaceId.IsNull() {
 		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	} else {
 		data.InterfaceId = types.StringNull()
 	}
-	if !data.AdminState.IsNull() || all {
+	if !data.AdminState.IsNull() {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
 		data.AdminState = types.StringNull()
 	}
-	if !data.BpduFilter.IsNull() || all {
+	if !data.BpduFilter.IsNull() {
 		data.BpduFilter = types.StringValue(res.Get(data.getClassName() + ".attributes.bpdufilter").String())
 	} else {
 		data.BpduFilter = types.StringNull()
 	}
-	if !data.BpduGuard.IsNull() || all {
+	if !data.BpduGuard.IsNull() {
 		data.BpduGuard = types.StringValue(res.Get(data.getClassName() + ".attributes.bpduguard").String())
 	} else {
 		data.BpduGuard = types.StringNull()
 	}
-	if !data.Cost.IsNull() || all {
+	if !data.Cost.IsNull() {
 		data.Cost = types.Int64Value(res.Get(data.getClassName() + ".attributes.cost").Int())
 	} else {
 		data.Cost = types.Int64Null()
 	}
-	if !data.Guard.IsNull() || all {
+	if !data.Guard.IsNull() {
 		data.Guard = types.StringValue(res.Get(data.getClassName() + ".attributes.guard").String())
 	} else {
 		data.Guard = types.StringNull()
 	}
-	if !data.LinkType.IsNull() || all {
+	if !data.LinkType.IsNull() {
 		data.LinkType = types.StringValue(res.Get(data.getClassName() + ".attributes.linkType").String())
 	} else {
 		data.LinkType = types.StringNull()
 	}
-	if !data.Mode.IsNull() || all {
+	if !data.Mode.IsNull() {
 		data.Mode = types.StringValue(res.Get(data.getClassName() + ".attributes.mode").String())
 	} else {
 		data.Mode = types.StringNull()
 	}
-	if !data.Priority.IsNull() || all {
+	if !data.Priority.IsNull() {
 		data.Priority = types.Int64Value(res.Get(data.getClassName() + ".attributes.priority").Int())
 	} else {
 		data.Priority = types.Int64Null()

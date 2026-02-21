@@ -87,8 +87,12 @@ func (data RouteMapRuleEntryMatchRoutePrefixList) toBody(statusReplace bool) nxo
 	return nxos.Body{body}
 }
 
-func (data *RouteMapRuleEntryMatchRoutePrefixList) fromBody(res gjson.Result, all bool) {
-	if !data.PrefixListDn.IsNull() || all {
+func (data *RouteMapRuleEntryMatchRoutePrefixList) fromBody(res gjson.Result) {
+	data.PrefixListDn = types.StringValue(res.Get(data.getClassName() + ".attributes.tDn").String())
+}
+
+func (data *RouteMapRuleEntryMatchRoutePrefixList) updateFromBody(res gjson.Result) {
+	if !data.PrefixListDn.IsNull() {
 		data.PrefixListDn = types.StringValue(res.Get(data.getClassName() + ".attributes.tDn").String())
 	} else {
 		data.PrefixListDn = types.StringNull()

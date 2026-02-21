@@ -106,38 +106,48 @@ func (data PIMSSMRange) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *PIMSSMRange) fromBody(res gjson.Result, all bool) {
-	if !data.GroupList1.IsNull() || all {
+func (data *PIMSSMRange) fromBody(res gjson.Result) {
+	data.GroupList1 = types.StringValue(res.Get(data.getClassName() + ".attributes.grpList").String())
+	data.GroupList2 = types.StringValue(res.Get(data.getClassName() + ".attributes.grpList1").String())
+	data.GroupList3 = types.StringValue(res.Get(data.getClassName() + ".attributes.grpList2").String())
+	data.GroupList4 = types.StringValue(res.Get(data.getClassName() + ".attributes.grpList3").String())
+	data.PrefixList = types.StringValue(res.Get(data.getClassName() + ".attributes.pfxList").String())
+	data.RouteMap = types.StringValue(res.Get(data.getClassName() + ".attributes.rtMap").String())
+	data.SsmNone = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.ssmNone").String()))
+}
+
+func (data *PIMSSMRange) updateFromBody(res gjson.Result) {
+	if !data.GroupList1.IsNull() {
 		data.GroupList1 = types.StringValue(res.Get(data.getClassName() + ".attributes.grpList").String())
 	} else {
 		data.GroupList1 = types.StringNull()
 	}
-	if !data.GroupList2.IsNull() || all {
+	if !data.GroupList2.IsNull() {
 		data.GroupList2 = types.StringValue(res.Get(data.getClassName() + ".attributes.grpList1").String())
 	} else {
 		data.GroupList2 = types.StringNull()
 	}
-	if !data.GroupList3.IsNull() || all {
+	if !data.GroupList3.IsNull() {
 		data.GroupList3 = types.StringValue(res.Get(data.getClassName() + ".attributes.grpList2").String())
 	} else {
 		data.GroupList3 = types.StringNull()
 	}
-	if !data.GroupList4.IsNull() || all {
+	if !data.GroupList4.IsNull() {
 		data.GroupList4 = types.StringValue(res.Get(data.getClassName() + ".attributes.grpList3").String())
 	} else {
 		data.GroupList4 = types.StringNull()
 	}
-	if !data.PrefixList.IsNull() || all {
+	if !data.PrefixList.IsNull() {
 		data.PrefixList = types.StringValue(res.Get(data.getClassName() + ".attributes.pfxList").String())
 	} else {
 		data.PrefixList = types.StringNull()
 	}
-	if !data.RouteMap.IsNull() || all {
+	if !data.RouteMap.IsNull() {
 		data.RouteMap = types.StringValue(res.Get(data.getClassName() + ".attributes.rtMap").String())
 	} else {
 		data.RouteMap = types.StringNull()
 	}
-	if !data.SsmNone.IsNull() || all {
+	if !data.SsmNone.IsNull() {
 		data.SsmNone = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.ssmNone").String()))
 	} else {
 		data.SsmNone = types.BoolNull()

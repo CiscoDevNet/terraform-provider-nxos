@@ -88,8 +88,12 @@ func (data RouteMapRuleEntryMatchTag) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *RouteMapRuleEntryMatchTag) fromBody(res gjson.Result, all bool) {
-	if !data.Tag.IsNull() || all {
+func (data *RouteMapRuleEntryMatchTag) fromBody(res gjson.Result) {
+	data.Tag = types.Int64Value(res.Get(data.getClassName() + ".attributes.tag").Int())
+}
+
+func (data *RouteMapRuleEntryMatchTag) updateFromBody(res gjson.Result) {
+	if !data.Tag.IsNull() {
 		data.Tag = types.Int64Value(res.Get(data.getClassName() + ".attributes.tag").Int())
 	} else {
 		data.Tag = types.Int64Null()

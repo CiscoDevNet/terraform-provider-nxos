@@ -96,23 +96,30 @@ func (data BGPRouteControl) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *BGPRouteControl) fromBody(res gjson.Result, all bool) {
-	if !data.EnforceFirstAs.IsNull() || all {
+func (data *BGPRouteControl) fromBody(res gjson.Result) {
+	data.EnforceFirstAs = types.StringValue(res.Get(data.getClassName() + ".attributes.enforceFirstAs").String())
+	data.FibAccelerate = types.StringValue(res.Get(data.getClassName() + ".attributes.fibAccelerate").String())
+	data.LogNeighborChanges = types.StringValue(res.Get(data.getClassName() + ".attributes.logNeighborChanges").String())
+	data.SuppressRoutes = types.StringValue(res.Get(data.getClassName() + ".attributes.supprRt").String())
+}
+
+func (data *BGPRouteControl) updateFromBody(res gjson.Result) {
+	if !data.EnforceFirstAs.IsNull() {
 		data.EnforceFirstAs = types.StringValue(res.Get(data.getClassName() + ".attributes.enforceFirstAs").String())
 	} else {
 		data.EnforceFirstAs = types.StringNull()
 	}
-	if !data.FibAccelerate.IsNull() || all {
+	if !data.FibAccelerate.IsNull() {
 		data.FibAccelerate = types.StringValue(res.Get(data.getClassName() + ".attributes.fibAccelerate").String())
 	} else {
 		data.FibAccelerate = types.StringNull()
 	}
-	if !data.LogNeighborChanges.IsNull() || all {
+	if !data.LogNeighborChanges.IsNull() {
 		data.LogNeighborChanges = types.StringValue(res.Get(data.getClassName() + ".attributes.logNeighborChanges").String())
 	} else {
 		data.LogNeighborChanges = types.StringNull()
 	}
-	if !data.SuppressRoutes.IsNull() || all {
+	if !data.SuppressRoutes.IsNull() {
 		data.SuppressRoutes = types.StringValue(res.Get(data.getClassName() + ".attributes.supprRt").String())
 	} else {
 		data.SuppressRoutes = types.StringNull()

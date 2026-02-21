@@ -85,8 +85,12 @@ func (data QueuingQOSPolicyMapMatchClassMapPriority) toBody(statusReplace bool) 
 	return nxos.Body{body}
 }
 
-func (data *QueuingQOSPolicyMapMatchClassMapPriority) fromBody(res gjson.Result, all bool) {
-	if !data.Level.IsNull() || all {
+func (data *QueuingQOSPolicyMapMatchClassMapPriority) fromBody(res gjson.Result) {
+	data.Level = types.Int64Value(res.Get(data.getClassName() + ".attributes.level").Int())
+}
+
+func (data *QueuingQOSPolicyMapMatchClassMapPriority) updateFromBody(res gjson.Result) {
+	if !data.Level.IsNull() {
 		data.Level = types.Int64Value(res.Get(data.getClassName() + ".attributes.level").Int())
 	} else {
 		data.Level = types.Int64Null()

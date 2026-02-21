@@ -79,8 +79,12 @@ func (data DHCPRelayInterface) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *DHCPRelayInterface) fromBody(res gjson.Result, all bool) {
-	if !data.InterfaceId.IsNull() || all {
+func (data *DHCPRelayInterface) fromBody(res gjson.Result) {
+	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
+}
+
+func (data *DHCPRelayInterface) updateFromBody(res gjson.Result) {
+	if !data.InterfaceId.IsNull() {
 		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	} else {
 		data.InterfaceId = types.StringNull()

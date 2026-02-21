@@ -75,8 +75,12 @@ func (data FeatureSFlow) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *FeatureSFlow) fromBody(res gjson.Result, all bool) {
-	if !data.AdminState.IsNull() || all {
+func (data *FeatureSFlow) fromBody(res gjson.Result) {
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+}
+
+func (data *FeatureSFlow) updateFromBody(res gjson.Result) {
+	if !data.AdminState.IsNull() {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
 		data.AdminState = types.StringNull()

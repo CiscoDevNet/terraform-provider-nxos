@@ -156,108 +156,132 @@ func (data VPCDomain) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *VPCDomain) fromBody(res gjson.Result, all bool) {
-	if !data.AdminState.IsNull() || all {
+func (data *VPCDomain) fromBody(res gjson.Result) {
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	data.DomainId = types.Int64Value(res.Get(data.getClassName() + ".attributes.id").Int())
+	data.AutoRecovery = types.StringValue(res.Get(data.getClassName() + ".attributes.autoRecovery").String())
+	data.AutoRecoveryInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.autoRecoveryIntvl").Int())
+	data.DelayRestoreOrphanPort = types.Int64Value(res.Get(data.getClassName() + ".attributes.delayRestoreOrphanPort").Int())
+	data.DelayRestoreSvi = types.Int64Value(res.Get(data.getClassName() + ".attributes.delayRestoreSVI").Int())
+	data.DelayRestoreVpc = types.Int64Value(res.Get(data.getClassName() + ".attributes.delayRestoreVPC").Int())
+	data.Dscp = types.Int64Value(res.Get(data.getClassName() + ".attributes.dscp").Int())
+	data.FastConvergence = types.StringValue(res.Get(data.getClassName() + ".attributes.fastConvergence").String())
+	data.GracefulConsistencyCheck = types.StringValue(res.Get(data.getClassName() + ".attributes.grcflCnstncyChck").String())
+	data.L3PeerRouter = types.StringValue(res.Get(data.getClassName() + ".attributes.l3PeerRouter").String())
+	data.L3PeerRouterSyslog = types.StringValue(res.Get(data.getClassName() + ".attributes.l3PeerRouterSyslog").String())
+	data.L3PeerRouterSyslogInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.l3PeerRouterSyslogInterval").Int())
+	data.PeerGateway = types.StringValue(res.Get(data.getClassName() + ".attributes.peerGw").String())
+	data.PeerIp = types.StringValue(res.Get(data.getClassName() + ".attributes.peerIp").String())
+	data.PeerSwitch = types.StringValue(res.Get(data.getClassName() + ".attributes.peerSwitch").String())
+	data.RolePriority = types.Int64Value(res.Get(data.getClassName() + ".attributes.rolePrio").Int())
+	data.SysMac = types.StringValue(res.Get(data.getClassName() + ".attributes.sysMac").String())
+	data.SystemPriority = types.Int64Value(res.Get(data.getClassName() + ".attributes.sysPrio").Int())
+	data.Track = types.Int64Value(res.Get(data.getClassName() + ".attributes.track").Int())
+	data.VirtualIp = types.StringValue(res.Get(data.getClassName() + ".attributes.virtualIp").String())
+}
+
+func (data *VPCDomain) updateFromBody(res gjson.Result) {
+	if !data.AdminState.IsNull() {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
 		data.AdminState = types.StringNull()
 	}
-	if !data.DomainId.IsNull() || all {
+	if !data.DomainId.IsNull() {
 		data.DomainId = types.Int64Value(res.Get(data.getClassName() + ".attributes.id").Int())
 	} else {
 		data.DomainId = types.Int64Null()
 	}
-	if !data.AutoRecovery.IsNull() || all {
+	if !data.AutoRecovery.IsNull() {
 		data.AutoRecovery = types.StringValue(res.Get(data.getClassName() + ".attributes.autoRecovery").String())
 	} else {
 		data.AutoRecovery = types.StringNull()
 	}
-	if !data.AutoRecoveryInterval.IsNull() || all {
+	if !data.AutoRecoveryInterval.IsNull() {
 		data.AutoRecoveryInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.autoRecoveryIntvl").Int())
 	} else {
 		data.AutoRecoveryInterval = types.Int64Null()
 	}
-	if !data.DelayRestoreOrphanPort.IsNull() || all {
+	if !data.DelayRestoreOrphanPort.IsNull() {
 		data.DelayRestoreOrphanPort = types.Int64Value(res.Get(data.getClassName() + ".attributes.delayRestoreOrphanPort").Int())
 	} else {
 		data.DelayRestoreOrphanPort = types.Int64Null()
 	}
-	if !data.DelayRestoreSvi.IsNull() || all {
+	if !data.DelayRestoreSvi.IsNull() {
 		data.DelayRestoreSvi = types.Int64Value(res.Get(data.getClassName() + ".attributes.delayRestoreSVI").Int())
 	} else {
 		data.DelayRestoreSvi = types.Int64Null()
 	}
-	if !data.DelayRestoreVpc.IsNull() || all {
+	if !data.DelayRestoreVpc.IsNull() {
 		data.DelayRestoreVpc = types.Int64Value(res.Get(data.getClassName() + ".attributes.delayRestoreVPC").Int())
 	} else {
 		data.DelayRestoreVpc = types.Int64Null()
 	}
-	if !data.Dscp.IsNull() || all {
+	if !data.Dscp.IsNull() {
 		data.Dscp = types.Int64Value(res.Get(data.getClassName() + ".attributes.dscp").Int())
 	} else {
 		data.Dscp = types.Int64Null()
 	}
-	if !data.FastConvergence.IsNull() || all {
+	if !data.FastConvergence.IsNull() {
 		data.FastConvergence = types.StringValue(res.Get(data.getClassName() + ".attributes.fastConvergence").String())
 	} else {
 		data.FastConvergence = types.StringNull()
 	}
-	if !data.GracefulConsistencyCheck.IsNull() || all {
+	if !data.GracefulConsistencyCheck.IsNull() {
 		data.GracefulConsistencyCheck = types.StringValue(res.Get(data.getClassName() + ".attributes.grcflCnstncyChck").String())
 	} else {
 		data.GracefulConsistencyCheck = types.StringNull()
 	}
-	if !data.L3PeerRouter.IsNull() || all {
+	if !data.L3PeerRouter.IsNull() {
 		data.L3PeerRouter = types.StringValue(res.Get(data.getClassName() + ".attributes.l3PeerRouter").String())
 	} else {
 		data.L3PeerRouter = types.StringNull()
 	}
-	if !data.L3PeerRouterSyslog.IsNull() || all {
+	if !data.L3PeerRouterSyslog.IsNull() {
 		data.L3PeerRouterSyslog = types.StringValue(res.Get(data.getClassName() + ".attributes.l3PeerRouterSyslog").String())
 	} else {
 		data.L3PeerRouterSyslog = types.StringNull()
 	}
-	if !data.L3PeerRouterSyslogInterval.IsNull() || all {
+	if !data.L3PeerRouterSyslogInterval.IsNull() {
 		data.L3PeerRouterSyslogInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.l3PeerRouterSyslogInterval").Int())
 	} else {
 		data.L3PeerRouterSyslogInterval = types.Int64Null()
 	}
-	if !data.PeerGateway.IsNull() || all {
+	if !data.PeerGateway.IsNull() {
 		data.PeerGateway = types.StringValue(res.Get(data.getClassName() + ".attributes.peerGw").String())
 	} else {
 		data.PeerGateway = types.StringNull()
 	}
-	if !data.PeerIp.IsNull() || all {
+	if !data.PeerIp.IsNull() {
 		data.PeerIp = types.StringValue(res.Get(data.getClassName() + ".attributes.peerIp").String())
 	} else {
 		data.PeerIp = types.StringNull()
 	}
-	if !data.PeerSwitch.IsNull() || all {
+	if !data.PeerSwitch.IsNull() {
 		data.PeerSwitch = types.StringValue(res.Get(data.getClassName() + ".attributes.peerSwitch").String())
 	} else {
 		data.PeerSwitch = types.StringNull()
 	}
-	if !data.RolePriority.IsNull() || all {
+	if !data.RolePriority.IsNull() {
 		data.RolePriority = types.Int64Value(res.Get(data.getClassName() + ".attributes.rolePrio").Int())
 	} else {
 		data.RolePriority = types.Int64Null()
 	}
-	if !data.SysMac.IsNull() || all {
+	if !data.SysMac.IsNull() {
 		data.SysMac = types.StringValue(res.Get(data.getClassName() + ".attributes.sysMac").String())
 	} else {
 		data.SysMac = types.StringNull()
 	}
-	if !data.SystemPriority.IsNull() || all {
+	if !data.SystemPriority.IsNull() {
 		data.SystemPriority = types.Int64Value(res.Get(data.getClassName() + ".attributes.sysPrio").Int())
 	} else {
 		data.SystemPriority = types.Int64Null()
 	}
-	if !data.Track.IsNull() || all {
+	if !data.Track.IsNull() {
 		data.Track = types.Int64Value(res.Get(data.getClassName() + ".attributes.track").Int())
 	} else {
 		data.Track = types.Int64Null()
 	}
-	if !data.VirtualIp.IsNull() || all {
+	if !data.VirtualIp.IsNull() {
 		data.VirtualIp = types.StringValue(res.Get(data.getClassName() + ".attributes.virtualIp").String())
 	} else {
 		data.VirtualIp = types.StringNull()

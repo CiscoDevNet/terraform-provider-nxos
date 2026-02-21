@@ -156,93 +156,114 @@ func (data BGPAddressFamily) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *BGPAddressFamily) fromBody(res gjson.Result, all bool) {
-	if !data.AddressFamily.IsNull() || all {
+func (data *BGPAddressFamily) fromBody(res gjson.Result) {
+	data.AddressFamily = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
+	data.CriticalNexthopTimeout = types.StringValue(res.Get(data.getClassName() + ".attributes.critNhTimeout").String())
+	data.NonCriticalNexthopTimeout = types.StringValue(res.Get(data.getClassName() + ".attributes.nonCritNhTimeout").String())
+	data.AdvertiseL2vpnEvpn = types.StringValue(res.Get(data.getClassName() + ".attributes.advertL2vpnEvpn").String())
+	data.AdvertisePhysicalIpForType5Routes = types.StringValue(res.Get(data.getClassName() + ".attributes.advPip").String())
+	data.MaxEcmpPaths = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxEcmp").Int())
+	data.MaxExternalEcmpPaths = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxExtEcmp").Int())
+	data.MaxExternalInternalEcmpPaths = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxExtIntEcmp").Int())
+	data.MaxLocalEcmpPaths = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxLclEcmp").Int())
+	data.MaxMixedEcmpPaths = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxMxdEcmp").Int())
+	data.DefaultInformationOriginate = types.StringValue(res.Get(data.getClassName() + ".attributes.defInfOriginate").String())
+	data.NextHopRouteMapName = types.StringValue(res.Get(data.getClassName() + ".attributes.nhRtMap").String())
+	data.PrefixPriority = types.StringValue(res.Get(data.getClassName() + ".attributes.prfxPriority").String())
+	data.RetainRtAll = types.StringValue(res.Get(data.getClassName() + ".attributes.retainRttAll").String())
+	data.AdvertiseOnlyActiveRoutes = types.StringValue(res.Get(data.getClassName() + ".attributes.supprInactive").String())
+	data.TableMapRouteMapName = types.StringValue(res.Get(data.getClassName() + ".attributes.tblMap").String())
+	data.VniEthernetTag = types.StringValue(res.Get(data.getClassName() + ".attributes.vniEthTag").String())
+	data.WaitIgpConverged = types.StringValue(res.Get(data.getClassName() + ".attributes.waitIgpConv").String())
+}
+
+func (data *BGPAddressFamily) updateFromBody(res gjson.Result) {
+	if !data.AddressFamily.IsNull() {
 		data.AddressFamily = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
 	} else {
 		data.AddressFamily = types.StringNull()
 	}
-	if !data.CriticalNexthopTimeout.IsNull() || all {
+	if !data.CriticalNexthopTimeout.IsNull() {
 		data.CriticalNexthopTimeout = types.StringValue(res.Get(data.getClassName() + ".attributes.critNhTimeout").String())
 	} else {
 		data.CriticalNexthopTimeout = types.StringNull()
 	}
-	if !data.NonCriticalNexthopTimeout.IsNull() || all {
+	if !data.NonCriticalNexthopTimeout.IsNull() {
 		data.NonCriticalNexthopTimeout = types.StringValue(res.Get(data.getClassName() + ".attributes.nonCritNhTimeout").String())
 	} else {
 		data.NonCriticalNexthopTimeout = types.StringNull()
 	}
-	if !data.AdvertiseL2vpnEvpn.IsNull() || all {
+	if !data.AdvertiseL2vpnEvpn.IsNull() {
 		data.AdvertiseL2vpnEvpn = types.StringValue(res.Get(data.getClassName() + ".attributes.advertL2vpnEvpn").String())
 	} else {
 		data.AdvertiseL2vpnEvpn = types.StringNull()
 	}
-	if !data.AdvertisePhysicalIpForType5Routes.IsNull() || all {
+	if !data.AdvertisePhysicalIpForType5Routes.IsNull() {
 		data.AdvertisePhysicalIpForType5Routes = types.StringValue(res.Get(data.getClassName() + ".attributes.advPip").String())
 	} else {
 		data.AdvertisePhysicalIpForType5Routes = types.StringNull()
 	}
-	if !data.MaxEcmpPaths.IsNull() || all {
+	if !data.MaxEcmpPaths.IsNull() {
 		data.MaxEcmpPaths = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxEcmp").Int())
 	} else {
 		data.MaxEcmpPaths = types.Int64Null()
 	}
-	if !data.MaxExternalEcmpPaths.IsNull() || all {
+	if !data.MaxExternalEcmpPaths.IsNull() {
 		data.MaxExternalEcmpPaths = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxExtEcmp").Int())
 	} else {
 		data.MaxExternalEcmpPaths = types.Int64Null()
 	}
-	if !data.MaxExternalInternalEcmpPaths.IsNull() || all {
+	if !data.MaxExternalInternalEcmpPaths.IsNull() {
 		data.MaxExternalInternalEcmpPaths = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxExtIntEcmp").Int())
 	} else {
 		data.MaxExternalInternalEcmpPaths = types.Int64Null()
 	}
-	if !data.MaxLocalEcmpPaths.IsNull() || all {
+	if !data.MaxLocalEcmpPaths.IsNull() {
 		data.MaxLocalEcmpPaths = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxLclEcmp").Int())
 	} else {
 		data.MaxLocalEcmpPaths = types.Int64Null()
 	}
-	if !data.MaxMixedEcmpPaths.IsNull() || all {
+	if !data.MaxMixedEcmpPaths.IsNull() {
 		data.MaxMixedEcmpPaths = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxMxdEcmp").Int())
 	} else {
 		data.MaxMixedEcmpPaths = types.Int64Null()
 	}
-	if !data.DefaultInformationOriginate.IsNull() || all {
+	if !data.DefaultInformationOriginate.IsNull() {
 		data.DefaultInformationOriginate = types.StringValue(res.Get(data.getClassName() + ".attributes.defInfOriginate").String())
 	} else {
 		data.DefaultInformationOriginate = types.StringNull()
 	}
-	if !data.NextHopRouteMapName.IsNull() || all {
+	if !data.NextHopRouteMapName.IsNull() {
 		data.NextHopRouteMapName = types.StringValue(res.Get(data.getClassName() + ".attributes.nhRtMap").String())
 	} else {
 		data.NextHopRouteMapName = types.StringNull()
 	}
-	if !data.PrefixPriority.IsNull() || all {
+	if !data.PrefixPriority.IsNull() {
 		data.PrefixPriority = types.StringValue(res.Get(data.getClassName() + ".attributes.prfxPriority").String())
 	} else {
 		data.PrefixPriority = types.StringNull()
 	}
-	if !data.RetainRtAll.IsNull() || all {
+	if !data.RetainRtAll.IsNull() {
 		data.RetainRtAll = types.StringValue(res.Get(data.getClassName() + ".attributes.retainRttAll").String())
 	} else {
 		data.RetainRtAll = types.StringNull()
 	}
-	if !data.AdvertiseOnlyActiveRoutes.IsNull() || all {
+	if !data.AdvertiseOnlyActiveRoutes.IsNull() {
 		data.AdvertiseOnlyActiveRoutes = types.StringValue(res.Get(data.getClassName() + ".attributes.supprInactive").String())
 	} else {
 		data.AdvertiseOnlyActiveRoutes = types.StringNull()
 	}
-	if !data.TableMapRouteMapName.IsNull() || all {
+	if !data.TableMapRouteMapName.IsNull() {
 		data.TableMapRouteMapName = types.StringValue(res.Get(data.getClassName() + ".attributes.tblMap").String())
 	} else {
 		data.TableMapRouteMapName = types.StringNull()
 	}
-	if !data.VniEthernetTag.IsNull() || all {
+	if !data.VniEthernetTag.IsNull() {
 		data.VniEthernetTag = types.StringValue(res.Get(data.getClassName() + ".attributes.vniEthTag").String())
 	} else {
 		data.VniEthernetTag = types.StringNull()
 	}
-	if !data.WaitIgpConverged.IsNull() || all {
+	if !data.WaitIgpConverged.IsNull() {
 		data.WaitIgpConverged = types.StringValue(res.Get(data.getClassName() + ".attributes.waitIgpConv").String())
 	} else {
 		data.WaitIgpConverged = types.StringNull()

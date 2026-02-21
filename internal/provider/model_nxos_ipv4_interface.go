@@ -99,28 +99,36 @@ func (data IPv4Interface) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *IPv4Interface) fromBody(res gjson.Result, all bool) {
-	if !data.InterfaceId.IsNull() || all {
+func (data *IPv4Interface) fromBody(res gjson.Result) {
+	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
+	data.DropGlean = types.StringValue(res.Get(data.getClassName() + ".attributes.dropGlean").String())
+	data.Forward = types.StringValue(res.Get(data.getClassName() + ".attributes.forward").String())
+	data.Unnumbered = types.StringValue(res.Get(data.getClassName() + ".attributes.unnumbered").String())
+	data.Urpf = types.StringValue(res.Get(data.getClassName() + ".attributes.urpf").String())
+}
+
+func (data *IPv4Interface) updateFromBody(res gjson.Result) {
+	if !data.InterfaceId.IsNull() {
 		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	} else {
 		data.InterfaceId = types.StringNull()
 	}
-	if !data.DropGlean.IsNull() || all {
+	if !data.DropGlean.IsNull() {
 		data.DropGlean = types.StringValue(res.Get(data.getClassName() + ".attributes.dropGlean").String())
 	} else {
 		data.DropGlean = types.StringNull()
 	}
-	if !data.Forward.IsNull() || all {
+	if !data.Forward.IsNull() {
 		data.Forward = types.StringValue(res.Get(data.getClassName() + ".attributes.forward").String())
 	} else {
 		data.Forward = types.StringNull()
 	}
-	if !data.Unnumbered.IsNull() || all {
+	if !data.Unnumbered.IsNull() {
 		data.Unnumbered = types.StringValue(res.Get(data.getClassName() + ".attributes.unnumbered").String())
 	} else {
 		data.Unnumbered = types.StringNull()
 	}
-	if !data.Urpf.IsNull() || all {
+	if !data.Urpf.IsNull() {
 		data.Urpf = types.StringValue(res.Get(data.getClassName() + ".attributes.urpf").String())
 	} else {
 		data.Urpf = types.StringNull()

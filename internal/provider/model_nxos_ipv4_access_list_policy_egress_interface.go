@@ -86,8 +86,24 @@ func (data IPv4AccessListPolicyEgressInterface) toBody(statusReplace bool) nxos.
 	return nxos.Body{body}
 }
 
-func (data *IPv4AccessListPolicyEgressInterface) fromBody(res gjson.Result, all bool) {
-	if !data.InterfaceId.IsNull() || all {
+func (data *IPv4AccessListPolicyEgressInterface) fromBody(res gjson.Result) {
+	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	var raclInst gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("aclInst.attributes.rn").String()
+			if key == "acl" {
+				raclInst = v
+				return false
+			}
+			return true
+		},
+	)
+	data.AccessListName = types.StringValue(raclInst.Get("aclInst.attributes.name").String())
+}
+
+func (data *IPv4AccessListPolicyEgressInterface) updateFromBody(res gjson.Result) {
+	if !data.InterfaceId.IsNull() {
 		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
 		data.InterfaceId = types.StringNull()
@@ -103,7 +119,7 @@ func (data *IPv4AccessListPolicyEgressInterface) fromBody(res gjson.Result, all 
 			return true
 		},
 	)
-	if !data.AccessListName.IsNull() || all {
+	if !data.AccessListName.IsNull() {
 		data.AccessListName = types.StringValue(raclInst.Get("aclInst.attributes.name").String())
 	} else {
 		data.AccessListName = types.StringNull()

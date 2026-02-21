@@ -125,82 +125,83 @@ func (data IPv4StaticRoute) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *IPv4StaticRoute) fromBody(res gjson.Result, all bool) {
-	if !data.Prefix.IsNull() || all {
-		data.Prefix = types.StringValue(res.Get(data.getClassName() + ".attributes.prefix").String())
-	} else {
-		data.Prefix = types.StringNull()
-	}
-	if all {
-		res.Get(data.getClassName() + ".children").ForEach(
-			func(_, v gjson.Result) bool {
-				v.ForEach(
-					func(classname, value gjson.Result) bool {
-						if classname.String() == "ipv4Nexthop" {
-							var child IPv4StaticRouteNextHops
-							child.InterfaceId = types.StringValue(value.Get("attributes.nhIf").String())
-							child.Address = types.StringValue(value.Get("attributes.nhAddr").String())
-							child.VrfName = types.StringValue(value.Get("attributes.nhVrf").String())
-							child.Description = types.StringValue(value.Get("attributes.descr").String())
-							child.Object = types.Int64Value(value.Get("attributes.object").Int())
-							child.Preference = types.Int64Value(value.Get("attributes.pref").Int())
-							child.Tag = types.Int64Value(value.Get("attributes.tag").Int())
-							data.NextHops = append(data.NextHops, child)
-						}
-						return true
-					},
-				)
-				return true
-			},
-		)
-	} else {
-		for c := range data.NextHops {
-			var r gjson.Result
-			res.Get(data.getClassName() + ".children").ForEach(
-				func(_, v gjson.Result) bool {
-					key := v.Get("ipv4Nexthop.attributes.rn").String()
-					if key == data.NextHops[c].getRn() {
-						r = v
-						return false
+func (data *IPv4StaticRoute) fromBody(res gjson.Result) {
+	data.Prefix = types.StringValue(res.Get(data.getClassName() + ".attributes.prefix").String())
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "ipv4Nexthop" {
+						var child IPv4StaticRouteNextHops
+						child.InterfaceId = types.StringValue(value.Get("attributes.nhIf").String())
+						child.Address = types.StringValue(value.Get("attributes.nhAddr").String())
+						child.VrfName = types.StringValue(value.Get("attributes.nhVrf").String())
+						child.Description = types.StringValue(value.Get("attributes.descr").String())
+						child.Object = types.Int64Value(value.Get("attributes.object").Int())
+						child.Preference = types.Int64Value(value.Get("attributes.pref").Int())
+						child.Tag = types.Int64Value(value.Get("attributes.tag").Int())
+						data.NextHops = append(data.NextHops, child)
 					}
 					return true
 				},
 			)
-			if !data.NextHops[c].InterfaceId.IsNull() || all {
-				data.NextHops[c].InterfaceId = types.StringValue(r.Get("ipv4Nexthop.attributes.nhIf").String())
-			} else {
-				data.NextHops[c].InterfaceId = types.StringNull()
-			}
-			if !data.NextHops[c].Address.IsNull() || all {
-				data.NextHops[c].Address = types.StringValue(r.Get("ipv4Nexthop.attributes.nhAddr").String())
-			} else {
-				data.NextHops[c].Address = types.StringNull()
-			}
-			if !data.NextHops[c].VrfName.IsNull() || all {
-				data.NextHops[c].VrfName = types.StringValue(r.Get("ipv4Nexthop.attributes.nhVrf").String())
-			} else {
-				data.NextHops[c].VrfName = types.StringNull()
-			}
-			if !data.NextHops[c].Description.IsNull() || all {
-				data.NextHops[c].Description = types.StringValue(r.Get("ipv4Nexthop.attributes.descr").String())
-			} else {
-				data.NextHops[c].Description = types.StringNull()
-			}
-			if !data.NextHops[c].Object.IsNull() || all {
-				data.NextHops[c].Object = types.Int64Value(r.Get("ipv4Nexthop.attributes.object").Int())
-			} else {
-				data.NextHops[c].Object = types.Int64Null()
-			}
-			if !data.NextHops[c].Preference.IsNull() || all {
-				data.NextHops[c].Preference = types.Int64Value(r.Get("ipv4Nexthop.attributes.pref").Int())
-			} else {
-				data.NextHops[c].Preference = types.Int64Null()
-			}
-			if !data.NextHops[c].Tag.IsNull() || all {
-				data.NextHops[c].Tag = types.Int64Value(r.Get("ipv4Nexthop.attributes.tag").Int())
-			} else {
-				data.NextHops[c].Tag = types.Int64Null()
-			}
+			return true
+		},
+	)
+}
+
+func (data *IPv4StaticRoute) updateFromBody(res gjson.Result) {
+	if !data.Prefix.IsNull() {
+		data.Prefix = types.StringValue(res.Get(data.getClassName() + ".attributes.prefix").String())
+	} else {
+		data.Prefix = types.StringNull()
+	}
+	for c := range data.NextHops {
+		var r gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("ipv4Nexthop.attributes.rn").String()
+				if key == data.NextHops[c].getRn() {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.NextHops[c].InterfaceId.IsNull() {
+			data.NextHops[c].InterfaceId = types.StringValue(r.Get("ipv4Nexthop.attributes.nhIf").String())
+		} else {
+			data.NextHops[c].InterfaceId = types.StringNull()
+		}
+		if !data.NextHops[c].Address.IsNull() {
+			data.NextHops[c].Address = types.StringValue(r.Get("ipv4Nexthop.attributes.nhAddr").String())
+		} else {
+			data.NextHops[c].Address = types.StringNull()
+		}
+		if !data.NextHops[c].VrfName.IsNull() {
+			data.NextHops[c].VrfName = types.StringValue(r.Get("ipv4Nexthop.attributes.nhVrf").String())
+		} else {
+			data.NextHops[c].VrfName = types.StringNull()
+		}
+		if !data.NextHops[c].Description.IsNull() {
+			data.NextHops[c].Description = types.StringValue(r.Get("ipv4Nexthop.attributes.descr").String())
+		} else {
+			data.NextHops[c].Description = types.StringNull()
+		}
+		if !data.NextHops[c].Object.IsNull() {
+			data.NextHops[c].Object = types.Int64Value(r.Get("ipv4Nexthop.attributes.object").Int())
+		} else {
+			data.NextHops[c].Object = types.Int64Null()
+		}
+		if !data.NextHops[c].Preference.IsNull() {
+			data.NextHops[c].Preference = types.Int64Value(r.Get("ipv4Nexthop.attributes.pref").Int())
+		} else {
+			data.NextHops[c].Preference = types.Int64Null()
+		}
+		if !data.NextHops[c].Tag.IsNull() {
+			data.NextHops[c].Tag = types.Int64Value(r.Get("ipv4Nexthop.attributes.tag").Int())
+		} else {
+			data.NextHops[c].Tag = types.Int64Null()
 		}
 	}
 }

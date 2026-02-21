@@ -80,8 +80,12 @@ func (data PhysicalInterfaceVRF) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *PhysicalInterfaceVRF) fromBody(res gjson.Result, all bool) {
-	if !data.VrfDn.IsNull() || all {
+func (data *PhysicalInterfaceVRF) fromBody(res gjson.Result) {
+	data.VrfDn = types.StringValue(res.Get(data.getClassName() + ".attributes.tDn").String())
+}
+
+func (data *PhysicalInterfaceVRF) updateFromBody(res gjson.Result) {
+	if !data.VrfDn.IsNull() {
 		data.VrfDn = types.StringValue(res.Get(data.getClassName() + ".attributes.tDn").String())
 	} else {
 		data.VrfDn = types.StringNull()

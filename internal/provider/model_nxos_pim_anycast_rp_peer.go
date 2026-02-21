@@ -90,13 +90,18 @@ func (data PIMAnycastRPPeer) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *PIMAnycastRPPeer) fromBody(res gjson.Result, all bool) {
-	if !data.Address.IsNull() || all {
+func (data *PIMAnycastRPPeer) fromBody(res gjson.Result) {
+	data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.addr").String())
+	data.RpSetAddress = types.StringValue(res.Get(data.getClassName() + ".attributes.rpSetAddr").String())
+}
+
+func (data *PIMAnycastRPPeer) updateFromBody(res gjson.Result) {
+	if !data.Address.IsNull() {
 		data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.addr").String())
 	} else {
 		data.Address = types.StringNull()
 	}
-	if !data.RpSetAddress.IsNull() || all {
+	if !data.RpSetAddress.IsNull() {
 		data.RpSetAddress = types.StringValue(res.Get(data.getClassName() + ".attributes.rpSetAddr").String())
 	} else {
 		data.RpSetAddress = types.StringNull()

@@ -110,28 +110,36 @@ func (data BGPRouteRedistribution) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *BGPRouteRedistribution) fromBody(res gjson.Result, all bool) {
-	if !data.Protocol.IsNull() || all {
+func (data *BGPRouteRedistribution) fromBody(res gjson.Result) {
+	data.Protocol = types.StringValue(res.Get(data.getClassName() + ".attributes.proto").String())
+	data.ProtocolInstance = types.StringValue(res.Get(data.getClassName() + ".attributes.inst").String())
+	data.RouteMap = types.StringValue(res.Get(data.getClassName() + ".attributes.rtMap").String())
+	data.Scope = types.StringValue(res.Get(data.getClassName() + ".attributes.scope").String())
+	data.Srv6PrefixType = types.StringValue(res.Get(data.getClassName() + ".attributes.srv6PrefixType").String())
+}
+
+func (data *BGPRouteRedistribution) updateFromBody(res gjson.Result) {
+	if !data.Protocol.IsNull() {
 		data.Protocol = types.StringValue(res.Get(data.getClassName() + ".attributes.proto").String())
 	} else {
 		data.Protocol = types.StringNull()
 	}
-	if !data.ProtocolInstance.IsNull() || all {
+	if !data.ProtocolInstance.IsNull() {
 		data.ProtocolInstance = types.StringValue(res.Get(data.getClassName() + ".attributes.inst").String())
 	} else {
 		data.ProtocolInstance = types.StringNull()
 	}
-	if !data.RouteMap.IsNull() || all {
+	if !data.RouteMap.IsNull() {
 		data.RouteMap = types.StringValue(res.Get(data.getClassName() + ".attributes.rtMap").String())
 	} else {
 		data.RouteMap = types.StringNull()
 	}
-	if !data.Scope.IsNull() || all {
+	if !data.Scope.IsNull() {
 		data.Scope = types.StringValue(res.Get(data.getClassName() + ".attributes.scope").String())
 	} else {
 		data.Scope = types.StringNull()
 	}
-	if !data.Srv6PrefixType.IsNull() || all {
+	if !data.Srv6PrefixType.IsNull() {
 		data.Srv6PrefixType = types.StringValue(res.Get(data.getClassName() + ".attributes.srv6PrefixType").String())
 	} else {
 		data.Srv6PrefixType = types.StringNull()

@@ -87,18 +87,24 @@ func (data BridgeDomain) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *BridgeDomain) fromBody(res gjson.Result, all bool) {
-	if !data.FabricEncap.IsNull() || all {
+func (data *BridgeDomain) fromBody(res gjson.Result) {
+	data.FabricEncap = types.StringValue(res.Get(data.getClassName() + ".attributes.fabEncap").String())
+	data.AccessEncap = types.StringValue(res.Get(data.getClassName() + ".attributes.accEncap").String())
+	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+}
+
+func (data *BridgeDomain) updateFromBody(res gjson.Result) {
+	if !data.FabricEncap.IsNull() {
 		data.FabricEncap = types.StringValue(res.Get(data.getClassName() + ".attributes.fabEncap").String())
 	} else {
 		data.FabricEncap = types.StringNull()
 	}
-	if !data.AccessEncap.IsNull() || all {
+	if !data.AccessEncap.IsNull() {
 		data.AccessEncap = types.StringValue(res.Get(data.getClassName() + ".attributes.accEncap").String())
 	} else {
 		data.AccessEncap = types.StringNull()
 	}
-	if !data.Name.IsNull() || all {
+	if !data.Name.IsNull() {
 		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
 		data.Name = types.StringNull()

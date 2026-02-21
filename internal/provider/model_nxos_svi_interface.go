@@ -104,38 +104,48 @@ func (data SVIInterface) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *SVIInterface) fromBody(res gjson.Result, all bool) {
-	if !data.InterfaceId.IsNull() || all {
+func (data *SVIInterface) fromBody(res gjson.Result) {
+	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	data.Bandwidth = types.Int64Value(res.Get(data.getClassName() + ".attributes.bw").Int())
+	data.Delay = types.Int64Value(res.Get(data.getClassName() + ".attributes.delay").Int())
+	data.Description = types.StringValue(res.Get(data.getClassName() + ".attributes.descr").String())
+	data.Medium = types.StringValue(res.Get(data.getClassName() + ".attributes.medium").String())
+	data.Mtu = types.Int64Value(res.Get(data.getClassName() + ".attributes.mtu").Int())
+}
+
+func (data *SVIInterface) updateFromBody(res gjson.Result) {
+	if !data.InterfaceId.IsNull() {
 		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	} else {
 		data.InterfaceId = types.StringNull()
 	}
-	if !data.AdminState.IsNull() || all {
+	if !data.AdminState.IsNull() {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
 		data.AdminState = types.StringNull()
 	}
-	if !data.Bandwidth.IsNull() || all {
+	if !data.Bandwidth.IsNull() {
 		data.Bandwidth = types.Int64Value(res.Get(data.getClassName() + ".attributes.bw").Int())
 	} else {
 		data.Bandwidth = types.Int64Null()
 	}
-	if !data.Delay.IsNull() || all {
+	if !data.Delay.IsNull() {
 		data.Delay = types.Int64Value(res.Get(data.getClassName() + ".attributes.delay").Int())
 	} else {
 		data.Delay = types.Int64Null()
 	}
-	if !data.Description.IsNull() || all {
+	if !data.Description.IsNull() {
 		data.Description = types.StringValue(res.Get(data.getClassName() + ".attributes.descr").String())
 	} else {
 		data.Description = types.StringNull()
 	}
-	if !data.Medium.IsNull() || all {
+	if !data.Medium.IsNull() {
 		data.Medium = types.StringValue(res.Get(data.getClassName() + ".attributes.medium").String())
 	} else {
 		data.Medium = types.StringNull()
 	}
-	if !data.Mtu.IsNull() || all {
+	if !data.Mtu.IsNull() {
 		data.Mtu = types.Int64Value(res.Get(data.getClassName() + ".attributes.mtu").Int())
 	} else {
 		data.Mtu = types.Int64Null()

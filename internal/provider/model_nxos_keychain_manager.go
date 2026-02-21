@@ -78,8 +78,12 @@ func (data KeychainManager) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *KeychainManager) fromBody(res gjson.Result, all bool) {
-	if !data.AdminState.IsNull() || all {
+func (data *KeychainManager) fromBody(res gjson.Result) {
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+}
+
+func (data *KeychainManager) updateFromBody(res gjson.Result) {
+	if !data.AdminState.IsNull() {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
 		data.AdminState = types.StringNull()

@@ -80,8 +80,12 @@ func (data NVEVNIIngressReplication) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *NVEVNIIngressReplication) fromBody(res gjson.Result, all bool) {
-	if !data.Protocol.IsNull() || all {
+func (data *NVEVNIIngressReplication) fromBody(res gjson.Result) {
+	data.Protocol = types.StringValue(res.Get(data.getClassName() + ".attributes.proto").String())
+}
+
+func (data *NVEVNIIngressReplication) updateFromBody(res gjson.Result) {
+	if !data.Protocol.IsNull() {
 		data.Protocol = types.StringValue(res.Get(data.getClassName() + ".attributes.proto").String())
 	} else {
 		data.Protocol = types.StringNull()

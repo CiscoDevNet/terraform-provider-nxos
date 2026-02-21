@@ -83,13 +83,18 @@ func (data OSPFInstance) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *OSPFInstance) fromBody(res gjson.Result, all bool) {
-	if !data.AdminState.IsNull() || all {
+func (data *OSPFInstance) fromBody(res gjson.Result) {
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+}
+
+func (data *OSPFInstance) updateFromBody(res gjson.Result) {
+	if !data.AdminState.IsNull() {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
 		data.AdminState = types.StringNull()
 	}
-	if !data.Name.IsNull() || all {
+	if !data.Name.IsNull() {
 		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
 		data.Name = types.StringNull()

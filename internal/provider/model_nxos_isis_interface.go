@@ -197,138 +197,168 @@ func (data ISISInterface) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *ISISInterface) fromBody(res gjson.Result, all bool) {
-	if !data.InterfaceId.IsNull() || all {
+func (data *ISISInterface) fromBody(res gjson.Result) {
+	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
+	data.AuthenticationCheck = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.authCheck").String()))
+	data.AuthenticationCheckL1 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.authCheckLvl1").String()))
+	data.AuthenticationCheckL2 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.authCheckLvl2").String()))
+	data.AuthenticationType = types.StringValue(res.Get(data.getClassName() + ".attributes.authType").String())
+	data.AuthenticationTypeL1 = types.StringValue(res.Get(data.getClassName() + ".attributes.authTypeLvl1").String())
+	data.AuthenticationTypeL2 = types.StringValue(res.Get(data.getClassName() + ".attributes.authTypeLvl2").String())
+	data.CircuitType = types.StringValue(res.Get(data.getClassName() + ".attributes.cktT").String())
+	data.Vrf = types.StringValue(res.Get(data.getClassName() + ".attributes.dom").String())
+	data.HelloInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.helloIntvl").Int())
+	data.HelloIntervalL1 = types.Int64Value(res.Get(data.getClassName() + ".attributes.helloIntvlLvl1").Int())
+	data.HelloIntervalL2 = types.Int64Value(res.Get(data.getClassName() + ".attributes.helloIntvlLvl2").Int())
+	data.HelloMultiplier = types.Int64Value(res.Get(data.getClassName() + ".attributes.helloMult").Int())
+	data.HelloMultiplierL1 = types.Int64Value(res.Get(data.getClassName() + ".attributes.helloMultLvl1").Int())
+	data.HelloMultiplierL2 = types.Int64Value(res.Get(data.getClassName() + ".attributes.helloMultLvl2").Int())
+	data.HelloPadding = types.StringValue(res.Get(data.getClassName() + ".attributes.helloPad").String())
+	data.InstanceName = types.StringValue(res.Get(data.getClassName() + ".attributes.instance").String())
+	data.MetricL1 = types.Int64Value(res.Get(data.getClassName() + ".attributes.metricLvl1").Int())
+	data.MetricL2 = types.Int64Value(res.Get(data.getClassName() + ".attributes.metricLvl2").Int())
+	data.MtuCheck = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.mtuCheck").String()))
+	data.MtuCheckL1 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.mtuCheckLvl1").String()))
+	data.MtuCheckL2 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.mtuCheckLvl2").String()))
+	data.NetworkTypeP2p = types.StringValue(res.Get(data.getClassName() + ".attributes.networkTypeP2P").String())
+	data.Passive = types.StringValue(res.Get(data.getClassName() + ".attributes.passive").String())
+	data.PriorityL1 = types.Int64Value(res.Get(data.getClassName() + ".attributes.priorityLvl1").Int())
+	data.PriorityL2 = types.Int64Value(res.Get(data.getClassName() + ".attributes.priorityLvl2").Int())
+	data.EnableIpv4 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.v4enable").String()))
+}
+
+func (data *ISISInterface) updateFromBody(res gjson.Result) {
+	if !data.InterfaceId.IsNull() {
 		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	} else {
 		data.InterfaceId = types.StringNull()
 	}
-	if !data.AuthenticationCheck.IsNull() || all {
+	if !data.AuthenticationCheck.IsNull() {
 		data.AuthenticationCheck = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.authCheck").String()))
 	} else {
 		data.AuthenticationCheck = types.BoolNull()
 	}
-	if !data.AuthenticationCheckL1.IsNull() || all {
+	if !data.AuthenticationCheckL1.IsNull() {
 		data.AuthenticationCheckL1 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.authCheckLvl1").String()))
 	} else {
 		data.AuthenticationCheckL1 = types.BoolNull()
 	}
-	if !data.AuthenticationCheckL2.IsNull() || all {
+	if !data.AuthenticationCheckL2.IsNull() {
 		data.AuthenticationCheckL2 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.authCheckLvl2").String()))
 	} else {
 		data.AuthenticationCheckL2 = types.BoolNull()
 	}
-	if !data.AuthenticationType.IsNull() || all {
+	if !data.AuthenticationType.IsNull() {
 		data.AuthenticationType = types.StringValue(res.Get(data.getClassName() + ".attributes.authType").String())
 	} else {
 		data.AuthenticationType = types.StringNull()
 	}
-	if !data.AuthenticationTypeL1.IsNull() || all {
+	if !data.AuthenticationTypeL1.IsNull() {
 		data.AuthenticationTypeL1 = types.StringValue(res.Get(data.getClassName() + ".attributes.authTypeLvl1").String())
 	} else {
 		data.AuthenticationTypeL1 = types.StringNull()
 	}
-	if !data.AuthenticationTypeL2.IsNull() || all {
+	if !data.AuthenticationTypeL2.IsNull() {
 		data.AuthenticationTypeL2 = types.StringValue(res.Get(data.getClassName() + ".attributes.authTypeLvl2").String())
 	} else {
 		data.AuthenticationTypeL2 = types.StringNull()
 	}
-	if !data.CircuitType.IsNull() || all {
+	if !data.CircuitType.IsNull() {
 		data.CircuitType = types.StringValue(res.Get(data.getClassName() + ".attributes.cktT").String())
 	} else {
 		data.CircuitType = types.StringNull()
 	}
-	if !data.Vrf.IsNull() || all {
+	if !data.Vrf.IsNull() {
 		data.Vrf = types.StringValue(res.Get(data.getClassName() + ".attributes.dom").String())
 	} else {
 		data.Vrf = types.StringNull()
 	}
-	if !data.HelloInterval.IsNull() || all {
+	if !data.HelloInterval.IsNull() {
 		data.HelloInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.helloIntvl").Int())
 	} else {
 		data.HelloInterval = types.Int64Null()
 	}
-	if !data.HelloIntervalL1.IsNull() || all {
+	if !data.HelloIntervalL1.IsNull() {
 		data.HelloIntervalL1 = types.Int64Value(res.Get(data.getClassName() + ".attributes.helloIntvlLvl1").Int())
 	} else {
 		data.HelloIntervalL1 = types.Int64Null()
 	}
-	if !data.HelloIntervalL2.IsNull() || all {
+	if !data.HelloIntervalL2.IsNull() {
 		data.HelloIntervalL2 = types.Int64Value(res.Get(data.getClassName() + ".attributes.helloIntvlLvl2").Int())
 	} else {
 		data.HelloIntervalL2 = types.Int64Null()
 	}
-	if !data.HelloMultiplier.IsNull() || all {
+	if !data.HelloMultiplier.IsNull() {
 		data.HelloMultiplier = types.Int64Value(res.Get(data.getClassName() + ".attributes.helloMult").Int())
 	} else {
 		data.HelloMultiplier = types.Int64Null()
 	}
-	if !data.HelloMultiplierL1.IsNull() || all {
+	if !data.HelloMultiplierL1.IsNull() {
 		data.HelloMultiplierL1 = types.Int64Value(res.Get(data.getClassName() + ".attributes.helloMultLvl1").Int())
 	} else {
 		data.HelloMultiplierL1 = types.Int64Null()
 	}
-	if !data.HelloMultiplierL2.IsNull() || all {
+	if !data.HelloMultiplierL2.IsNull() {
 		data.HelloMultiplierL2 = types.Int64Value(res.Get(data.getClassName() + ".attributes.helloMultLvl2").Int())
 	} else {
 		data.HelloMultiplierL2 = types.Int64Null()
 	}
-	if !data.HelloPadding.IsNull() || all {
+	if !data.HelloPadding.IsNull() {
 		data.HelloPadding = types.StringValue(res.Get(data.getClassName() + ".attributes.helloPad").String())
 	} else {
 		data.HelloPadding = types.StringNull()
 	}
-	if !data.InstanceName.IsNull() || all {
+	if !data.InstanceName.IsNull() {
 		data.InstanceName = types.StringValue(res.Get(data.getClassName() + ".attributes.instance").String())
 	} else {
 		data.InstanceName = types.StringNull()
 	}
-	if !data.MetricL1.IsNull() || all {
+	if !data.MetricL1.IsNull() {
 		data.MetricL1 = types.Int64Value(res.Get(data.getClassName() + ".attributes.metricLvl1").Int())
 	} else {
 		data.MetricL1 = types.Int64Null()
 	}
-	if !data.MetricL2.IsNull() || all {
+	if !data.MetricL2.IsNull() {
 		data.MetricL2 = types.Int64Value(res.Get(data.getClassName() + ".attributes.metricLvl2").Int())
 	} else {
 		data.MetricL2 = types.Int64Null()
 	}
-	if !data.MtuCheck.IsNull() || all {
+	if !data.MtuCheck.IsNull() {
 		data.MtuCheck = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.mtuCheck").String()))
 	} else {
 		data.MtuCheck = types.BoolNull()
 	}
-	if !data.MtuCheckL1.IsNull() || all {
+	if !data.MtuCheckL1.IsNull() {
 		data.MtuCheckL1 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.mtuCheckLvl1").String()))
 	} else {
 		data.MtuCheckL1 = types.BoolNull()
 	}
-	if !data.MtuCheckL2.IsNull() || all {
+	if !data.MtuCheckL2.IsNull() {
 		data.MtuCheckL2 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.mtuCheckLvl2").String()))
 	} else {
 		data.MtuCheckL2 = types.BoolNull()
 	}
-	if !data.NetworkTypeP2p.IsNull() || all {
+	if !data.NetworkTypeP2p.IsNull() {
 		data.NetworkTypeP2p = types.StringValue(res.Get(data.getClassName() + ".attributes.networkTypeP2P").String())
 	} else {
 		data.NetworkTypeP2p = types.StringNull()
 	}
-	if !data.Passive.IsNull() || all {
+	if !data.Passive.IsNull() {
 		data.Passive = types.StringValue(res.Get(data.getClassName() + ".attributes.passive").String())
 	} else {
 		data.Passive = types.StringNull()
 	}
-	if !data.PriorityL1.IsNull() || all {
+	if !data.PriorityL1.IsNull() {
 		data.PriorityL1 = types.Int64Value(res.Get(data.getClassName() + ".attributes.priorityLvl1").Int())
 	} else {
 		data.PriorityL1 = types.Int64Null()
 	}
-	if !data.PriorityL2.IsNull() || all {
+	if !data.PriorityL2.IsNull() {
 		data.PriorityL2 = types.Int64Value(res.Get(data.getClassName() + ".attributes.priorityLvl2").Int())
 	} else {
 		data.PriorityL2 = types.Int64Null()
 	}
-	if !data.EnableIpv4.IsNull() || all {
+	if !data.EnableIpv4.IsNull() {
 		data.EnableIpv4 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.v4enable").String()))
 	} else {
 		data.EnableIpv4 = types.BoolNull()

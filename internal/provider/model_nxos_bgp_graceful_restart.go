@@ -89,13 +89,18 @@ func (data BGPGracefulRestart) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *BGPGracefulRestart) fromBody(res gjson.Result, all bool) {
-	if !data.RestartInterval.IsNull() || all {
+func (data *BGPGracefulRestart) fromBody(res gjson.Result) {
+	data.RestartInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.restartIntvl").Int())
+	data.StaleInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.staleIntvl").Int())
+}
+
+func (data *BGPGracefulRestart) updateFromBody(res gjson.Result) {
+	if !data.RestartInterval.IsNull() {
 		data.RestartInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.restartIntvl").Int())
 	} else {
 		data.RestartInterval = types.Int64Null()
 	}
-	if !data.StaleInterval.IsNull() || all {
+	if !data.StaleInterval.IsNull() {
 		data.StaleInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.staleIntvl").Int())
 	} else {
 		data.StaleInterval = types.Int64Null()

@@ -164,113 +164,138 @@ func (data PhysicalInterface) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *PhysicalInterface) fromBody(res gjson.Result, all bool) {
-	if !data.InterfaceId.IsNull() || all {
+func (data *PhysicalInterface) fromBody(res gjson.Result) {
+	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
+	data.FecMode = types.StringValue(res.Get(data.getClassName() + ".attributes.FECMode").String())
+	data.AccessVlan = types.StringValue(res.Get(data.getClassName() + ".attributes.accessVlan").String())
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	data.AutoNegotiation = types.StringValue(res.Get(data.getClassName() + ".attributes.autoNeg").String())
+	data.Bandwidth = types.Int64Value(res.Get(data.getClassName() + ".attributes.bw").Int())
+	data.Delay = types.Int64Value(res.Get(data.getClassName() + ".attributes.delay").Int())
+	data.Description = types.StringValue(res.Get(data.getClassName() + ".attributes.descr").String())
+	data.Duplex = types.StringValue(res.Get(data.getClassName() + ".attributes.duplex").String())
+	data.Layer = types.StringValue(res.Get(data.getClassName() + ".attributes.layer").String())
+	data.LinkLogging = types.StringValue(res.Get(data.getClassName() + ".attributes.linkLog").String())
+	data.LinkDebounceDown = types.Int64Value(res.Get(data.getClassName() + ".attributes.linkDebounce").Int())
+	data.LinkDebounceUp = types.Int64Value(res.Get(data.getClassName() + ".attributes.linkDebounceLinkUp").Int())
+	data.Medium = types.StringValue(res.Get(data.getClassName() + ".attributes.medium").String())
+	data.Mode = types.StringValue(res.Get(data.getClassName() + ".attributes.mode").String())
+	data.Mtu = types.Int64Value(res.Get(data.getClassName() + ".attributes.mtu").Int())
+	data.NativeVlan = types.StringValue(res.Get(data.getClassName() + ".attributes.nativeVlan").String())
+	data.Speed = types.StringValue(res.Get(data.getClassName() + ".attributes.speed").String())
+	data.SpeedGroup = types.StringValue(res.Get(data.getClassName() + ".attributes.speedGroup").String())
+	data.TrunkVlans = types.StringValue(res.Get(data.getClassName() + ".attributes.trunkVlans").String())
+	data.UniDirectionalEthernet = types.StringValue(res.Get(data.getClassName() + ".attributes.uniDirectionalEthernet").String())
+	data.UserConfiguredFlags = types.StringValue(res.Get(data.getClassName() + ".attributes.userCfgdFlags").String())
+}
+
+func (data *PhysicalInterface) updateFromBody(res gjson.Result) {
+	if !data.InterfaceId.IsNull() {
 		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	} else {
 		data.InterfaceId = types.StringNull()
 	}
-	if !data.FecMode.IsNull() || all {
+	if !data.FecMode.IsNull() {
 		data.FecMode = types.StringValue(res.Get(data.getClassName() + ".attributes.FECMode").String())
 	} else {
 		data.FecMode = types.StringNull()
 	}
-	if !data.AccessVlan.IsNull() || all {
+	if !data.AccessVlan.IsNull() {
 		data.AccessVlan = types.StringValue(res.Get(data.getClassName() + ".attributes.accessVlan").String())
 	} else {
 		data.AccessVlan = types.StringNull()
 	}
-	if !data.AdminState.IsNull() || all {
+	if !data.AdminState.IsNull() {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
 		data.AdminState = types.StringNull()
 	}
-	if !data.AutoNegotiation.IsNull() || all {
+	if !data.AutoNegotiation.IsNull() {
 		data.AutoNegotiation = types.StringValue(res.Get(data.getClassName() + ".attributes.autoNeg").String())
 	} else {
 		data.AutoNegotiation = types.StringNull()
 	}
-	if !data.Bandwidth.IsNull() || all {
+	if !data.Bandwidth.IsNull() {
 		data.Bandwidth = types.Int64Value(res.Get(data.getClassName() + ".attributes.bw").Int())
 	} else {
 		data.Bandwidth = types.Int64Null()
 	}
-	if !data.Delay.IsNull() || all {
+	if !data.Delay.IsNull() {
 		data.Delay = types.Int64Value(res.Get(data.getClassName() + ".attributes.delay").Int())
 	} else {
 		data.Delay = types.Int64Null()
 	}
-	if !data.Description.IsNull() || all {
+	if !data.Description.IsNull() {
 		data.Description = types.StringValue(res.Get(data.getClassName() + ".attributes.descr").String())
 	} else {
 		data.Description = types.StringNull()
 	}
-	if !data.Duplex.IsNull() || all {
+	if !data.Duplex.IsNull() {
 		data.Duplex = types.StringValue(res.Get(data.getClassName() + ".attributes.duplex").String())
 	} else {
 		data.Duplex = types.StringNull()
 	}
-	if !data.Layer.IsNull() || all {
+	if !data.Layer.IsNull() {
 		data.Layer = types.StringValue(res.Get(data.getClassName() + ".attributes.layer").String())
 	} else {
 		data.Layer = types.StringNull()
 	}
-	if !data.LinkLogging.IsNull() || all {
+	if !data.LinkLogging.IsNull() {
 		data.LinkLogging = types.StringValue(res.Get(data.getClassName() + ".attributes.linkLog").String())
 	} else {
 		data.LinkLogging = types.StringNull()
 	}
-	if !data.LinkDebounceDown.IsNull() || all {
+	if !data.LinkDebounceDown.IsNull() {
 		data.LinkDebounceDown = types.Int64Value(res.Get(data.getClassName() + ".attributes.linkDebounce").Int())
 	} else {
 		data.LinkDebounceDown = types.Int64Null()
 	}
-	if !data.LinkDebounceUp.IsNull() || all {
+	if !data.LinkDebounceUp.IsNull() {
 		data.LinkDebounceUp = types.Int64Value(res.Get(data.getClassName() + ".attributes.linkDebounceLinkUp").Int())
 	} else {
 		data.LinkDebounceUp = types.Int64Null()
 	}
-	if !data.Medium.IsNull() || all {
+	if !data.Medium.IsNull() {
 		data.Medium = types.StringValue(res.Get(data.getClassName() + ".attributes.medium").String())
 	} else {
 		data.Medium = types.StringNull()
 	}
-	if !data.Mode.IsNull() || all {
+	if !data.Mode.IsNull() {
 		data.Mode = types.StringValue(res.Get(data.getClassName() + ".attributes.mode").String())
 	} else {
 		data.Mode = types.StringNull()
 	}
-	if !data.Mtu.IsNull() || all {
+	if !data.Mtu.IsNull() {
 		data.Mtu = types.Int64Value(res.Get(data.getClassName() + ".attributes.mtu").Int())
 	} else {
 		data.Mtu = types.Int64Null()
 	}
-	if !data.NativeVlan.IsNull() || all {
+	if !data.NativeVlan.IsNull() {
 		data.NativeVlan = types.StringValue(res.Get(data.getClassName() + ".attributes.nativeVlan").String())
 	} else {
 		data.NativeVlan = types.StringNull()
 	}
-	if !data.Speed.IsNull() || all {
+	if !data.Speed.IsNull() {
 		data.Speed = types.StringValue(res.Get(data.getClassName() + ".attributes.speed").String())
 	} else {
 		data.Speed = types.StringNull()
 	}
-	if !data.SpeedGroup.IsNull() || all {
+	if !data.SpeedGroup.IsNull() {
 		data.SpeedGroup = types.StringValue(res.Get(data.getClassName() + ".attributes.speedGroup").String())
 	} else {
 		data.SpeedGroup = types.StringNull()
 	}
-	if !data.TrunkVlans.IsNull() || all {
+	if !data.TrunkVlans.IsNull() {
 		data.TrunkVlans = types.StringValue(res.Get(data.getClassName() + ".attributes.trunkVlans").String())
 	} else {
 		data.TrunkVlans = types.StringNull()
 	}
-	if !data.UniDirectionalEthernet.IsNull() || all {
+	if !data.UniDirectionalEthernet.IsNull() {
 		data.UniDirectionalEthernet = types.StringValue(res.Get(data.getClassName() + ".attributes.uniDirectionalEthernet").String())
 	} else {
 		data.UniDirectionalEthernet = types.StringNull()
 	}
-	if !data.UserConfiguredFlags.IsNull() || all {
+	if !data.UserConfiguredFlags.IsNull() {
 		data.UserConfiguredFlags = types.StringValue(res.Get(data.getClassName() + ".attributes.userCfgdFlags").String())
 	} else {
 		data.UserConfiguredFlags = types.StringNull()

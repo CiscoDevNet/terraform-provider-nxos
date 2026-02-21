@@ -71,7 +71,10 @@ func (data NVEVNIContainer) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *NVEVNIContainer) fromBody(res gjson.Result, all bool) {
+func (data *NVEVNIContainer) fromBody(res gjson.Result) {
+}
+
+func (data *NVEVNIContainer) updateFromBody(res gjson.Result) {
 }
 
 func (data NVEVNIContainer) toDeleteBody() nxos.Body {

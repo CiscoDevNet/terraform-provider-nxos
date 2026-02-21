@@ -85,8 +85,12 @@ func (data QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) toBody(statusRepl
 	return nxos.Body{body}
 }
 
-func (data *QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) fromBody(res gjson.Result, all bool) {
-	if !data.Value.IsNull() || all {
+func (data *QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) fromBody(res gjson.Result) {
+	data.Value = types.Int64Value(res.Get(data.getClassName() + ".attributes.val").Int())
+}
+
+func (data *QueuingQOSPolicyMapMatchClassMapRemainingBandwidth) updateFromBody(res gjson.Result) {
+	if !data.Value.IsNull() {
 		data.Value = types.Int64Value(res.Get(data.getClassName() + ".attributes.val").Int())
 	} else {
 		data.Value = types.Int64Null()

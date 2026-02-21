@@ -79,8 +79,12 @@ func (data ICMPv4VRF) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *ICMPv4VRF) fromBody(res gjson.Result, all bool) {
-	if !data.VrfName.IsNull() || all {
+func (data *ICMPv4VRF) fromBody(res gjson.Result) {
+	data.VrfName = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+}
+
+func (data *ICMPv4VRF) updateFromBody(res gjson.Result) {
+	if !data.VrfName.IsNull() {
 		data.VrfName = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
 		data.VrfName = types.StringNull()

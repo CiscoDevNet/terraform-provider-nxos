@@ -99,13 +99,18 @@ func (data BGPPeerAddressFamilyRouteControl) toBody(statusReplace bool) nxos.Bod
 	return nxos.Body{body}
 }
 
-func (data *BGPPeerAddressFamilyRouteControl) fromBody(res gjson.Result, all bool) {
-	if !data.Direction.IsNull() || all {
+func (data *BGPPeerAddressFamilyRouteControl) fromBody(res gjson.Result) {
+	data.Direction = types.StringValue(res.Get(data.getClassName() + ".attributes.direction").String())
+	data.RouteMapName = types.StringValue(res.Get(data.getClassName() + ".attributes.rtMap").String())
+}
+
+func (data *BGPPeerAddressFamilyRouteControl) updateFromBody(res gjson.Result) {
+	if !data.Direction.IsNull() {
 		data.Direction = types.StringValue(res.Get(data.getClassName() + ".attributes.direction").String())
 	} else {
 		data.Direction = types.StringNull()
 	}
-	if !data.RouteMapName.IsNull() || all {
+	if !data.RouteMapName.IsNull() {
 		data.RouteMapName = types.StringValue(res.Get(data.getClassName() + ".attributes.rtMap").String())
 	} else {
 		data.RouteMapName = types.StringNull()

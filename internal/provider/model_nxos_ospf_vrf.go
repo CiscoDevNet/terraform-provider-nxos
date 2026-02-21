@@ -112,43 +112,54 @@ func (data OSPFVRF) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *OSPFVRF) fromBody(res gjson.Result, all bool) {
-	if !data.Name.IsNull() || all {
+func (data *OSPFVRF) fromBody(res gjson.Result) {
+	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	data.LogAdjacencyChanges = types.StringValue(res.Get(data.getClassName() + ".attributes.adjChangeLogLevel").String())
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	data.BandwidthReference = types.Int64Value(res.Get(data.getClassName() + ".attributes.bwRef").Int())
+	data.BandwidthReferenceUnit = types.StringValue(res.Get(data.getClassName() + ".attributes.bwRefUnit").String())
+	data.Distance = types.Int64Value(res.Get(data.getClassName() + ".attributes.dist").Int())
+	data.RouterId = types.StringValue(res.Get(data.getClassName() + ".attributes.rtrId").String())
+	data.Control = types.StringValue(res.Get(data.getClassName() + ".attributes.ctrl").String())
+}
+
+func (data *OSPFVRF) updateFromBody(res gjson.Result) {
+	if !data.Name.IsNull() {
 		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
 		data.Name = types.StringNull()
 	}
-	if !data.LogAdjacencyChanges.IsNull() || all {
+	if !data.LogAdjacencyChanges.IsNull() {
 		data.LogAdjacencyChanges = types.StringValue(res.Get(data.getClassName() + ".attributes.adjChangeLogLevel").String())
 	} else {
 		data.LogAdjacencyChanges = types.StringNull()
 	}
-	if !data.AdminState.IsNull() || all {
+	if !data.AdminState.IsNull() {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
 		data.AdminState = types.StringNull()
 	}
-	if !data.BandwidthReference.IsNull() || all {
+	if !data.BandwidthReference.IsNull() {
 		data.BandwidthReference = types.Int64Value(res.Get(data.getClassName() + ".attributes.bwRef").Int())
 	} else {
 		data.BandwidthReference = types.Int64Null()
 	}
-	if !data.BandwidthReferenceUnit.IsNull() || all {
+	if !data.BandwidthReferenceUnit.IsNull() {
 		data.BandwidthReferenceUnit = types.StringValue(res.Get(data.getClassName() + ".attributes.bwRefUnit").String())
 	} else {
 		data.BandwidthReferenceUnit = types.StringNull()
 	}
-	if !data.Distance.IsNull() || all {
+	if !data.Distance.IsNull() {
 		data.Distance = types.Int64Value(res.Get(data.getClassName() + ".attributes.dist").Int())
 	} else {
 		data.Distance = types.Int64Null()
 	}
-	if !data.RouterId.IsNull() || all {
+	if !data.RouterId.IsNull() {
 		data.RouterId = types.StringValue(res.Get(data.getClassName() + ".attributes.rtrId").String())
 	} else {
 		data.RouterId = types.StringNull()
 	}
-	if !data.Control.IsNull() || all {
+	if !data.Control.IsNull() {
 		data.Control = types.StringValue(res.Get(data.getClassName() + ".attributes.ctrl").String())
 	} else {
 		data.Control = types.StringNull()

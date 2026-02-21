@@ -99,23 +99,30 @@ func (data BGPPeerTemplateAddressFamily) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *BGPPeerTemplateAddressFamily) fromBody(res gjson.Result, all bool) {
-	if !data.AddressFamily.IsNull() || all {
+func (data *BGPPeerTemplateAddressFamily) fromBody(res gjson.Result) {
+	data.AddressFamily = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
+	data.Control = types.StringValue(res.Get(data.getClassName() + ".attributes.ctrl").String())
+	data.SendCommunityExtended = types.StringValue(res.Get(data.getClassName() + ".attributes.sendComExt").String())
+	data.SendCommunityStandard = types.StringValue(res.Get(data.getClassName() + ".attributes.sendComStd").String())
+}
+
+func (data *BGPPeerTemplateAddressFamily) updateFromBody(res gjson.Result) {
+	if !data.AddressFamily.IsNull() {
 		data.AddressFamily = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
 	} else {
 		data.AddressFamily = types.StringNull()
 	}
-	if !data.Control.IsNull() || all {
+	if !data.Control.IsNull() {
 		data.Control = types.StringValue(res.Get(data.getClassName() + ".attributes.ctrl").String())
 	} else {
 		data.Control = types.StringNull()
 	}
-	if !data.SendCommunityExtended.IsNull() || all {
+	if !data.SendCommunityExtended.IsNull() {
 		data.SendCommunityExtended = types.StringValue(res.Get(data.getClassName() + ".attributes.sendComExt").String())
 	} else {
 		data.SendCommunityExtended = types.StringNull()
 	}
-	if !data.SendCommunityStandard.IsNull() || all {
+	if !data.SendCommunityStandard.IsNull() {
 		data.SendCommunityStandard = types.StringValue(res.Get(data.getClassName() + ".attributes.sendComStd").String())
 	} else {
 		data.SendCommunityStandard = types.StringNull()

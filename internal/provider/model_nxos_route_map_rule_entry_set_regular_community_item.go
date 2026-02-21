@@ -87,8 +87,12 @@ func (data RouteMapRuleEntrySetRegularCommunityItem) toBody(statusReplace bool) 
 	return nxos.Body{body}
 }
 
-func (data *RouteMapRuleEntrySetRegularCommunityItem) fromBody(res gjson.Result, all bool) {
-	if !data.Community.IsNull() || all {
+func (data *RouteMapRuleEntrySetRegularCommunityItem) fromBody(res gjson.Result) {
+	data.Community = types.StringValue(res.Get(data.getClassName() + ".attributes.community").String())
+}
+
+func (data *RouteMapRuleEntrySetRegularCommunityItem) updateFromBody(res gjson.Result) {
+	if !data.Community.IsNull() {
 		data.Community = types.StringValue(res.Get(data.getClassName() + ".attributes.community").String())
 	} else {
 		data.Community = types.StringNull()

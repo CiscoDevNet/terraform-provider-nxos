@@ -141,68 +141,84 @@ func (data ISISVRF) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *ISISVRF) fromBody(res gjson.Result, all bool) {
-	if !data.Name.IsNull() || all {
+func (data *ISISVRF) fromBody(res gjson.Result) {
+	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	data.AuthenticationCheckL1 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.authCheckLvl1").String()))
+	data.AuthenticationCheckL2 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.authCheckLvl2").String()))
+	data.AuthenticationTypeL1 = types.StringValue(res.Get(data.getClassName() + ".attributes.authTypeLvl1").String())
+	data.AuthenticationTypeL2 = types.StringValue(res.Get(data.getClassName() + ".attributes.authTypeLvl2").String())
+	data.BandwidthReference = types.Int64Value(res.Get(data.getClassName() + ".attributes.bwRef").Int())
+	data.BanwidthReferenceUnit = types.StringValue(res.Get(data.getClassName() + ".attributes.bwRefUnit").String())
+	data.IsType = types.StringValue(res.Get(data.getClassName() + ".attributes.isType").String())
+	data.MetricType = types.StringValue(res.Get(data.getClassName() + ".attributes.metricStyle").String())
+	data.Mtu = types.Int64Value(res.Get(data.getClassName() + ".attributes.mtu").Int())
+	data.Net = types.StringValue(res.Get(data.getClassName() + ".attributes.net").String())
+	data.PassiveDefault = types.StringValue(res.Get(data.getClassName() + ".attributes.passiveDflt").String())
+}
+
+func (data *ISISVRF) updateFromBody(res gjson.Result) {
+	if !data.Name.IsNull() {
 		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
 		data.Name = types.StringNull()
 	}
-	if !data.AdminState.IsNull() || all {
+	if !data.AdminState.IsNull() {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
 		data.AdminState = types.StringNull()
 	}
-	if !data.AuthenticationCheckL1.IsNull() || all {
+	if !data.AuthenticationCheckL1.IsNull() {
 		data.AuthenticationCheckL1 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.authCheckLvl1").String()))
 	} else {
 		data.AuthenticationCheckL1 = types.BoolNull()
 	}
-	if !data.AuthenticationCheckL2.IsNull() || all {
+	if !data.AuthenticationCheckL2.IsNull() {
 		data.AuthenticationCheckL2 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.authCheckLvl2").String()))
 	} else {
 		data.AuthenticationCheckL2 = types.BoolNull()
 	}
-	if !data.AuthenticationTypeL1.IsNull() || all {
+	if !data.AuthenticationTypeL1.IsNull() {
 		data.AuthenticationTypeL1 = types.StringValue(res.Get(data.getClassName() + ".attributes.authTypeLvl1").String())
 	} else {
 		data.AuthenticationTypeL1 = types.StringNull()
 	}
-	if !data.AuthenticationTypeL2.IsNull() || all {
+	if !data.AuthenticationTypeL2.IsNull() {
 		data.AuthenticationTypeL2 = types.StringValue(res.Get(data.getClassName() + ".attributes.authTypeLvl2").String())
 	} else {
 		data.AuthenticationTypeL2 = types.StringNull()
 	}
-	if !data.BandwidthReference.IsNull() || all {
+	if !data.BandwidthReference.IsNull() {
 		data.BandwidthReference = types.Int64Value(res.Get(data.getClassName() + ".attributes.bwRef").Int())
 	} else {
 		data.BandwidthReference = types.Int64Null()
 	}
-	if !data.BanwidthReferenceUnit.IsNull() || all {
+	if !data.BanwidthReferenceUnit.IsNull() {
 		data.BanwidthReferenceUnit = types.StringValue(res.Get(data.getClassName() + ".attributes.bwRefUnit").String())
 	} else {
 		data.BanwidthReferenceUnit = types.StringNull()
 	}
-	if !data.IsType.IsNull() || all {
+	if !data.IsType.IsNull() {
 		data.IsType = types.StringValue(res.Get(data.getClassName() + ".attributes.isType").String())
 	} else {
 		data.IsType = types.StringNull()
 	}
-	if !data.MetricType.IsNull() || all {
+	if !data.MetricType.IsNull() {
 		data.MetricType = types.StringValue(res.Get(data.getClassName() + ".attributes.metricStyle").String())
 	} else {
 		data.MetricType = types.StringNull()
 	}
-	if !data.Mtu.IsNull() || all {
+	if !data.Mtu.IsNull() {
 		data.Mtu = types.Int64Value(res.Get(data.getClassName() + ".attributes.mtu").Int())
 	} else {
 		data.Mtu = types.Int64Null()
 	}
-	if !data.Net.IsNull() || all {
+	if !data.Net.IsNull() {
 		data.Net = types.StringValue(res.Get(data.getClassName() + ".attributes.net").String())
 	} else {
 		data.Net = types.StringNull()
 	}
-	if !data.PassiveDefault.IsNull() || all {
+	if !data.PassiveDefault.IsNull() {
 		data.PassiveDefault = types.StringValue(res.Get(data.getClassName() + ".attributes.passiveDflt").String())
 	} else {
 		data.PassiveDefault = types.StringNull()

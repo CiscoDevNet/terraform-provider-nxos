@@ -79,13 +79,18 @@ func (data HMMInstance) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *HMMInstance) fromBody(res gjson.Result, all bool) {
-	if !data.AdminState.IsNull() || all {
+func (data *HMMInstance) fromBody(res gjson.Result) {
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	data.AnycastMac = types.StringValue(res.Get(data.getClassName() + ".attributes.amac").String())
+}
+
+func (data *HMMInstance) updateFromBody(res gjson.Result) {
+	if !data.AdminState.IsNull() {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
 		data.AdminState = types.StringNull()
 	}
-	if !data.AnycastMac.IsNull() || all {
+	if !data.AnycastMac.IsNull() {
 		data.AnycastMac = types.StringValue(res.Get(data.getClassName() + ".attributes.amac").String())
 	} else {
 		data.AnycastMac = types.StringNull()

@@ -117,53 +117,66 @@ func (data OSPFv3Interface) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *OSPFv3Interface) fromBody(res gjson.Result, all bool) {
-	if !data.InterfaceId.IsNull() || all {
+func (data *OSPFv3Interface) fromBody(res gjson.Result) {
+	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
+	data.AdvertiseSecondaries = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.advSecondary").String()))
+	data.Area = types.StringValue(res.Get(data.getClassName() + ".attributes.area").String())
+	data.Bfd = types.StringValue(res.Get(data.getClassName() + ".attributes.bfdCtrl").String())
+	data.Cost = types.Int64Value(res.Get(data.getClassName() + ".attributes.cost").Int())
+	data.DeadInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.deadIntvl").Int())
+	data.HelloInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.helloIntvl").Int())
+	data.NetworkType = types.StringValue(res.Get(data.getClassName() + ".attributes.nwT").String())
+	data.Passive = types.StringValue(res.Get(data.getClassName() + ".attributes.passive").String())
+	data.Priority = types.Int64Value(res.Get(data.getClassName() + ".attributes.prio").Int())
+}
+
+func (data *OSPFv3Interface) updateFromBody(res gjson.Result) {
+	if !data.InterfaceId.IsNull() {
 		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	} else {
 		data.InterfaceId = types.StringNull()
 	}
-	if !data.AdvertiseSecondaries.IsNull() || all {
+	if !data.AdvertiseSecondaries.IsNull() {
 		data.AdvertiseSecondaries = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.advSecondary").String()))
 	} else {
 		data.AdvertiseSecondaries = types.BoolNull()
 	}
-	if !data.Area.IsNull() || all {
+	if !data.Area.IsNull() {
 		data.Area = types.StringValue(res.Get(data.getClassName() + ".attributes.area").String())
 	} else {
 		data.Area = types.StringNull()
 	}
-	if !data.Bfd.IsNull() || all {
+	if !data.Bfd.IsNull() {
 		data.Bfd = types.StringValue(res.Get(data.getClassName() + ".attributes.bfdCtrl").String())
 	} else {
 		data.Bfd = types.StringNull()
 	}
-	if !data.Cost.IsNull() || all {
+	if !data.Cost.IsNull() {
 		data.Cost = types.Int64Value(res.Get(data.getClassName() + ".attributes.cost").Int())
 	} else {
 		data.Cost = types.Int64Null()
 	}
-	if !data.DeadInterval.IsNull() || all {
+	if !data.DeadInterval.IsNull() {
 		data.DeadInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.deadIntvl").Int())
 	} else {
 		data.DeadInterval = types.Int64Null()
 	}
-	if !data.HelloInterval.IsNull() || all {
+	if !data.HelloInterval.IsNull() {
 		data.HelloInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.helloIntvl").Int())
 	} else {
 		data.HelloInterval = types.Int64Null()
 	}
-	if !data.NetworkType.IsNull() || all {
+	if !data.NetworkType.IsNull() {
 		data.NetworkType = types.StringValue(res.Get(data.getClassName() + ".attributes.nwT").String())
 	} else {
 		data.NetworkType = types.StringNull()
 	}
-	if !data.Passive.IsNull() || all {
+	if !data.Passive.IsNull() {
 		data.Passive = types.StringValue(res.Get(data.getClassName() + ".attributes.passive").String())
 	} else {
 		data.Passive = types.StringNull()
 	}
-	if !data.Priority.IsNull() || all {
+	if !data.Priority.IsNull() {
 		data.Priority = types.Int64Value(res.Get(data.getClassName() + ".attributes.prio").Int())
 	} else {
 		data.Priority = types.Int64Null()

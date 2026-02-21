@@ -87,8 +87,24 @@ func (data VPCInterface) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *VPCInterface) fromBody(res gjson.Result, all bool) {
-	if !data.VpcInterfaceId.IsNull() || all {
+func (data *VPCInterface) fromBody(res gjson.Result) {
+	data.VpcInterfaceId = types.Int64Value(res.Get(data.getClassName() + ".attributes.id").Int())
+	var rvpcRsVpcConf gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("vpcRsVpcConf.attributes.rn").String()
+			if key == "rsvpcConf" {
+				rvpcRsVpcConf = v
+				return false
+			}
+			return true
+		},
+	)
+	data.PortChannelInterfaceDn = types.StringValue(rvpcRsVpcConf.Get("vpcRsVpcConf.attributes.tDn").String())
+}
+
+func (data *VPCInterface) updateFromBody(res gjson.Result) {
+	if !data.VpcInterfaceId.IsNull() {
 		data.VpcInterfaceId = types.Int64Value(res.Get(data.getClassName() + ".attributes.id").Int())
 	} else {
 		data.VpcInterfaceId = types.Int64Null()
@@ -104,7 +120,7 @@ func (data *VPCInterface) fromBody(res gjson.Result, all bool) {
 			return true
 		},
 	)
-	if !data.PortChannelInterfaceDn.IsNull() || all {
+	if !data.PortChannelInterfaceDn.IsNull() {
 		data.PortChannelInterfaceDn = types.StringValue(rvpcRsVpcConf.Get("vpcRsVpcConf.attributes.tDn").String())
 	} else {
 		data.PortChannelInterfaceDn = types.StringNull()

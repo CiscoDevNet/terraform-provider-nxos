@@ -80,8 +80,12 @@ func (data LoopbackInterfaceVRF) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *LoopbackInterfaceVRF) fromBody(res gjson.Result, all bool) {
-	if !data.VrfDn.IsNull() || all {
+func (data *LoopbackInterfaceVRF) fromBody(res gjson.Result) {
+	data.VrfDn = types.StringValue(res.Get(data.getClassName() + ".attributes.tDn").String())
+}
+
+func (data *LoopbackInterfaceVRF) updateFromBody(res gjson.Result) {
+	if !data.VrfDn.IsNull() {
 		data.VrfDn = types.StringValue(res.Get(data.getClassName() + ".attributes.tDn").String())
 	} else {
 		data.VrfDn = types.StringNull()

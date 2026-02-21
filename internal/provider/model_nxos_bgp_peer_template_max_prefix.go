@@ -101,23 +101,30 @@ func (data BGPPeerTemplateMaxPrefix) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *BGPPeerTemplateMaxPrefix) fromBody(res gjson.Result, all bool) {
-	if !data.Action.IsNull() || all {
+func (data *BGPPeerTemplateMaxPrefix) fromBody(res gjson.Result) {
+	data.Action = types.StringValue(res.Get(data.getClassName() + ".attributes.action").String())
+	data.MaximumPrefix = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxPfx").Int())
+	data.RestartTime = types.Int64Value(res.Get(data.getClassName() + ".attributes.restartTime").Int())
+	data.Threshold = types.Int64Value(res.Get(data.getClassName() + ".attributes.thresh").Int())
+}
+
+func (data *BGPPeerTemplateMaxPrefix) updateFromBody(res gjson.Result) {
+	if !data.Action.IsNull() {
 		data.Action = types.StringValue(res.Get(data.getClassName() + ".attributes.action").String())
 	} else {
 		data.Action = types.StringNull()
 	}
-	if !data.MaximumPrefix.IsNull() || all {
+	if !data.MaximumPrefix.IsNull() {
 		data.MaximumPrefix = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxPfx").Int())
 	} else {
 		data.MaximumPrefix = types.Int64Null()
 	}
-	if !data.RestartTime.IsNull() || all {
+	if !data.RestartTime.IsNull() {
 		data.RestartTime = types.Int64Value(res.Get(data.getClassName() + ".attributes.restartTime").Int())
 	} else {
 		data.RestartTime = types.Int64Null()
 	}
-	if !data.Threshold.IsNull() || all {
+	if !data.Threshold.IsNull() {
 		data.Threshold = types.Int64Value(res.Get(data.getClassName() + ".attributes.thresh").Int())
 	} else {
 		data.Threshold = types.Int64Null()

@@ -88,13 +88,18 @@ func (data RouteMapRuleEntry) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *RouteMapRuleEntry) fromBody(res gjson.Result, all bool) {
-	if !data.Order.IsNull() || all {
+func (data *RouteMapRuleEntry) fromBody(res gjson.Result) {
+	data.Order = types.Int64Value(res.Get(data.getClassName() + ".attributes.order").Int())
+	data.Action = types.StringValue(res.Get(data.getClassName() + ".attributes.action").String())
+}
+
+func (data *RouteMapRuleEntry) updateFromBody(res gjson.Result) {
+	if !data.Order.IsNull() {
 		data.Order = types.Int64Value(res.Get(data.getClassName() + ".attributes.order").Int())
 	} else {
 		data.Order = types.Int64Null()
 	}
-	if !data.Action.IsNull() || all {
+	if !data.Action.IsNull() {
 		data.Action = types.StringValue(res.Get(data.getClassName() + ".attributes.action").String())
 	} else {
 		data.Action = types.StringNull()

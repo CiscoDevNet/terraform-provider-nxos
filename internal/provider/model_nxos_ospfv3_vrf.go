@@ -105,33 +105,42 @@ func (data OSPFv3VRF) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *OSPFv3VRF) fromBody(res gjson.Result, all bool) {
-	if !data.Name.IsNull() || all {
+func (data *OSPFv3VRF) fromBody(res gjson.Result) {
+	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	data.BandwidthReference = types.Int64Value(res.Get(data.getClassName() + ".attributes.bwRef").Int())
+	data.BandwidthReferenceUnit = types.StringValue(res.Get(data.getClassName() + ".attributes.bwRefUnit").String())
+	data.RouterId = types.StringValue(res.Get(data.getClassName() + ".attributes.rtrId").String())
+	data.BfdControl = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.bfdCtrl").String()))
+}
+
+func (data *OSPFv3VRF) updateFromBody(res gjson.Result) {
+	if !data.Name.IsNull() {
 		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
 		data.Name = types.StringNull()
 	}
-	if !data.AdminState.IsNull() || all {
+	if !data.AdminState.IsNull() {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
 		data.AdminState = types.StringNull()
 	}
-	if !data.BandwidthReference.IsNull() || all {
+	if !data.BandwidthReference.IsNull() {
 		data.BandwidthReference = types.Int64Value(res.Get(data.getClassName() + ".attributes.bwRef").Int())
 	} else {
 		data.BandwidthReference = types.Int64Null()
 	}
-	if !data.BandwidthReferenceUnit.IsNull() || all {
+	if !data.BandwidthReferenceUnit.IsNull() {
 		data.BandwidthReferenceUnit = types.StringValue(res.Get(data.getClassName() + ".attributes.bwRefUnit").String())
 	} else {
 		data.BandwidthReferenceUnit = types.StringNull()
 	}
-	if !data.RouterId.IsNull() || all {
+	if !data.RouterId.IsNull() {
 		data.RouterId = types.StringValue(res.Get(data.getClassName() + ".attributes.rtrId").String())
 	} else {
 		data.RouterId = types.StringNull()
 	}
-	if !data.BfdControl.IsNull() || all {
+	if !data.BfdControl.IsNull() {
 		data.BfdControl = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.bfdCtrl").String()))
 	} else {
 		data.BfdControl = types.BoolNull()

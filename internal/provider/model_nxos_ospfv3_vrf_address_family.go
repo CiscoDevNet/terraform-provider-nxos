@@ -100,23 +100,30 @@ func (data OSPFv3VRFAddressFamily) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *OSPFv3VRFAddressFamily) fromBody(res gjson.Result, all bool) {
-	if !data.AddressFamilyType.IsNull() || all {
+func (data *OSPFv3VRFAddressFamily) fromBody(res gjson.Result) {
+	data.AddressFamilyType = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
+	data.AdministrativeDistance = types.StringValue(res.Get(data.getClassName() + ".attributes.adminDistance").String())
+	data.DefaultMetric = types.StringValue(res.Get(data.getClassName() + ".attributes.defaultMetric").String())
+	data.MaxEcmpCost = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxEcmp").Int())
+}
+
+func (data *OSPFv3VRFAddressFamily) updateFromBody(res gjson.Result) {
+	if !data.AddressFamilyType.IsNull() {
 		data.AddressFamilyType = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
 	} else {
 		data.AddressFamilyType = types.StringNull()
 	}
-	if !data.AdministrativeDistance.IsNull() || all {
+	if !data.AdministrativeDistance.IsNull() {
 		data.AdministrativeDistance = types.StringValue(res.Get(data.getClassName() + ".attributes.adminDistance").String())
 	} else {
 		data.AdministrativeDistance = types.StringNull()
 	}
-	if !data.DefaultMetric.IsNull() || all {
+	if !data.DefaultMetric.IsNull() {
 		data.DefaultMetric = types.StringValue(res.Get(data.getClassName() + ".attributes.defaultMetric").String())
 	} else {
 		data.DefaultMetric = types.StringNull()
 	}
-	if !data.MaxEcmpCost.IsNull() || all {
+	if !data.MaxEcmpCost.IsNull() {
 		data.MaxEcmpCost = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxEcmp").Int())
 	} else {
 		data.MaxEcmpCost = types.Int64Null()

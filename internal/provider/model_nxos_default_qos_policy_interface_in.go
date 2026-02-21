@@ -79,8 +79,12 @@ func (data DefaultQOSPolicyInterfaceIn) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *DefaultQOSPolicyInterfaceIn) fromBody(res gjson.Result, all bool) {
-	if !data.InterfaceId.IsNull() || all {
+func (data *DefaultQOSPolicyInterfaceIn) fromBody(res gjson.Result) {
+	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+}
+
+func (data *DefaultQOSPolicyInterfaceIn) updateFromBody(res gjson.Result) {
+	if !data.InterfaceId.IsNull() {
 		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
 		data.InterfaceId = types.StringNull()

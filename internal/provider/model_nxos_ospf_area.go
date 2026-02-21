@@ -100,23 +100,30 @@ func (data OSPFArea) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *OSPFArea) fromBody(res gjson.Result, all bool) {
-	if !data.AreaId.IsNull() || all {
+func (data *OSPFArea) fromBody(res gjson.Result) {
+	data.AreaId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
+	data.AuthenticationType = types.StringValue(res.Get(data.getClassName() + ".attributes.authType").String())
+	data.Cost = types.Int64Value(res.Get(data.getClassName() + ".attributes.cost").Int())
+	data.Type = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
+}
+
+func (data *OSPFArea) updateFromBody(res gjson.Result) {
+	if !data.AreaId.IsNull() {
 		data.AreaId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	} else {
 		data.AreaId = types.StringNull()
 	}
-	if !data.AuthenticationType.IsNull() || all {
+	if !data.AuthenticationType.IsNull() {
 		data.AuthenticationType = types.StringValue(res.Get(data.getClassName() + ".attributes.authType").String())
 	} else {
 		data.AuthenticationType = types.StringNull()
 	}
-	if !data.Cost.IsNull() || all {
+	if !data.Cost.IsNull() {
 		data.Cost = types.Int64Value(res.Get(data.getClassName() + ".attributes.cost").Int())
 	} else {
 		data.Cost = types.Int64Null()
 	}
-	if !data.Type.IsNull() || all {
+	if !data.Type.IsNull() {
 		data.Type = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
 	} else {
 		data.Type = types.StringNull()

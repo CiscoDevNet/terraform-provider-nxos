@@ -96,18 +96,24 @@ func (data IPv6InterfaceAddress) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *IPv6InterfaceAddress) fromBody(res gjson.Result, all bool) {
-	if !data.Address.IsNull() || all {
+func (data *IPv6InterfaceAddress) fromBody(res gjson.Result) {
+	data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.addr").String())
+	data.Type = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
+	data.Tag = types.Int64Value(res.Get(data.getClassName() + ".attributes.tag").Int())
+}
+
+func (data *IPv6InterfaceAddress) updateFromBody(res gjson.Result) {
+	if !data.Address.IsNull() {
 		data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.addr").String())
 	} else {
 		data.Address = types.StringNull()
 	}
-	if !data.Type.IsNull() || all {
+	if !data.Type.IsNull() {
 		data.Type = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
 	} else {
 		data.Type = types.StringNull()
 	}
-	if !data.Tag.IsNull() || all {
+	if !data.Tag.IsNull() {
 		data.Tag = types.Int64Value(res.Get(data.getClassName() + ".attributes.tag").Int())
 	} else {
 		data.Tag = types.Int64Null()

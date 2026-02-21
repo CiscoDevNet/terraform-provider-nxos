@@ -80,7 +80,10 @@ func (data RouteMapRuleEntryMatchRoute) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *RouteMapRuleEntryMatchRoute) fromBody(res gjson.Result, all bool) {
+func (data *RouteMapRuleEntryMatchRoute) fromBody(res gjson.Result) {
+}
+
+func (data *RouteMapRuleEntryMatchRoute) updateFromBody(res gjson.Result) {
 }
 
 func (data RouteMapRuleEntryMatchRoute) toDeleteBody() nxos.Body {

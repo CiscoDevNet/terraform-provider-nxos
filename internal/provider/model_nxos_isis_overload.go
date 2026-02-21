@@ -85,8 +85,12 @@ func (data ISISOverload) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *ISISOverload) fromBody(res gjson.Result, all bool) {
-	if !data.StartupTime.IsNull() || all {
+func (data *ISISOverload) fromBody(res gjson.Result) {
+	data.StartupTime = types.Int64Value(res.Get(data.getClassName() + ".attributes.startupTime").Int())
+}
+
+func (data *ISISOverload) updateFromBody(res gjson.Result) {
+	if !data.StartupTime.IsNull() {
 		data.StartupTime = types.Int64Value(res.Get(data.getClassName() + ".attributes.startupTime").Int())
 	} else {
 		data.StartupTime = types.Int64Null()

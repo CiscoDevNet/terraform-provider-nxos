@@ -105,33 +105,42 @@ func (data PIMInterface) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *PIMInterface) fromBody(res gjson.Result, all bool) {
-	if !data.InterfaceId.IsNull() || all {
+func (data *PIMInterface) fromBody(res gjson.Result) {
+	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	data.Bfd = types.StringValue(res.Get(data.getClassName() + ".attributes.bfdInst").String())
+	data.DrPriority = types.Int64Value(res.Get(data.getClassName() + ".attributes.drPrio").Int())
+	data.Passive = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.passive").String()))
+	data.SparseMode = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.pimSparseMode").String()))
+}
+
+func (data *PIMInterface) updateFromBody(res gjson.Result) {
+	if !data.InterfaceId.IsNull() {
 		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	} else {
 		data.InterfaceId = types.StringNull()
 	}
-	if !data.AdminState.IsNull() || all {
+	if !data.AdminState.IsNull() {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
 		data.AdminState = types.StringNull()
 	}
-	if !data.Bfd.IsNull() || all {
+	if !data.Bfd.IsNull() {
 		data.Bfd = types.StringValue(res.Get(data.getClassName() + ".attributes.bfdInst").String())
 	} else {
 		data.Bfd = types.StringNull()
 	}
-	if !data.DrPriority.IsNull() || all {
+	if !data.DrPriority.IsNull() {
 		data.DrPriority = types.Int64Value(res.Get(data.getClassName() + ".attributes.drPrio").Int())
 	} else {
 		data.DrPriority = types.Int64Null()
 	}
-	if !data.Passive.IsNull() || all {
+	if !data.Passive.IsNull() {
 		data.Passive = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.passive").String()))
 	} else {
 		data.Passive = types.BoolNull()
 	}
-	if !data.SparseMode.IsNull() || all {
+	if !data.SparseMode.IsNull() {
 		data.SparseMode = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.pimSparseMode").String()))
 	} else {
 		data.SparseMode = types.BoolNull()

@@ -87,8 +87,12 @@ func (data EVPNVNIRouteTarget) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *EVPNVNIRouteTarget) fromBody(res gjson.Result, all bool) {
-	if !data.RouteTarget.IsNull() || all {
+func (data *EVPNVNIRouteTarget) fromBody(res gjson.Result) {
+	data.RouteTarget = types.StringValue(res.Get(data.getClassName() + ".attributes.rtt").String())
+}
+
+func (data *EVPNVNIRouteTarget) updateFromBody(res gjson.Result) {
+	if !data.RouteTarget.IsNull() {
 		data.RouteTarget = types.StringValue(res.Get(data.getClassName() + ".attributes.rtt").String())
 	} else {
 		data.RouteTarget = types.StringNull()

@@ -97,23 +97,30 @@ func (data OSPFMaxMetric) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *OSPFMaxMetric) fromBody(res gjson.Result, all bool) {
-	if !data.Control.IsNull() || all {
+func (data *OSPFMaxMetric) fromBody(res gjson.Result) {
+	data.Control = types.StringValue(res.Get(data.getClassName() + ".attributes.ctrl").String())
+	data.ExternalLsa = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxMetricExtLsa").Int())
+	data.SummaryLsa = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxMetricSummLsa").Int())
+	data.StartupInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.startupIntvl").Int())
+}
+
+func (data *OSPFMaxMetric) updateFromBody(res gjson.Result) {
+	if !data.Control.IsNull() {
 		data.Control = types.StringValue(res.Get(data.getClassName() + ".attributes.ctrl").String())
 	} else {
 		data.Control = types.StringNull()
 	}
-	if !data.ExternalLsa.IsNull() || all {
+	if !data.ExternalLsa.IsNull() {
 		data.ExternalLsa = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxMetricExtLsa").Int())
 	} else {
 		data.ExternalLsa = types.Int64Null()
 	}
-	if !data.SummaryLsa.IsNull() || all {
+	if !data.SummaryLsa.IsNull() {
 		data.SummaryLsa = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxMetricSummLsa").Int())
 	} else {
 		data.SummaryLsa = types.Int64Null()
 	}
-	if !data.StartupInterval.IsNull() || all {
+	if !data.StartupInterval.IsNull() {
 		data.StartupInterval = types.Int64Value(res.Get(data.getClassName() + ".attributes.startupIntvl").Int())
 	} else {
 		data.StartupInterval = types.Int64Null()

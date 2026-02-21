@@ -513,20 +513,16 @@ func (data {{camelCase .Name}}) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
+func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 	{{- range .Attributes}}
 	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-	if !data.{{toGoName .TfName}}.IsNull() || all {
-		{{- if eq .Type "Int64"}}
-		data.{{toGoName .TfName}} = types.Int64Value(res.Get(data.getClassName()+".attributes.{{.NxosName}}").Int())
-		{{- else if eq .Type "Bool"}}
-		data.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName()+".attributes.{{.NxosName}}").String()))
-		{{- else if eq .Type "String"}}
-		data.{{toGoName .TfName}} = types.StringValue(res.Get(data.getClassName()+".attributes.{{.NxosName}}").String())
-		{{- end}}
-	} else {
-		data.{{toGoName .TfName}} = types.{{.Type}}Null()
-	}
+	{{- if eq .Type "Int64"}}
+	data.{{toGoName .TfName}} = types.Int64Value(res.Get(data.getClassName()+".attributes.{{.NxosName}}").Int())
+	{{- else if eq .Type "Bool"}}
+	data.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName()+".attributes.{{.NxosName}}").String()))
+	{{- else if eq .Type "String"}}
+	data.{{toGoName .TfName}} = types.StringValue(res.Get(data.getClassName()+".attributes.{{.NxosName}}").String())
+	{{- end}}
 	{{- end}}
 	{{- end}}
 
@@ -553,17 +549,13 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 	{{- end}}
 	{{- range .Attributes}}
 	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-	if !data.{{toGoName .TfName}}.IsNull() || all {
-		{{- if eq .Type "Int64"}}
-		data.{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
-		{{- else if eq .Type "Bool"}}
-		data.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
-		{{- else if eq .Type "String"}}
-		data.{{toGoName .TfName}} = types.StringValue(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
-		{{- end}}
-	} else {
-		data.{{toGoName .TfName}} = types.{{.Type}}Null()
-	}
+	{{- if eq .Type "Int64"}}
+	data.{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
+	{{- else if eq .Type "Bool"}}
+	data.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
+	{{- else if eq .Type "String"}}
+	data.{{toGoName .TfName}} = types.StringValue(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
+	{{- end}}
 	{{- end}}
 	{{- end}}
 
@@ -586,17 +578,13 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 	)
 	{{- range .Attributes}}
 	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-	if !data.{{toGoName .TfName}}.IsNull() || all {
-		{{- if eq .Type "Int64"}}
-		data.{{toGoName .TfName}} = types.Int64Value(r{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").Int())
-		{{- else if eq .Type "Bool"}}
-		data.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String()))
-		{{- else if eq .Type "String"}}
-		data.{{toGoName .TfName}} = types.StringValue(r{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String())
-		{{- end}}
-	} else {
-		data.{{toGoName .TfName}} = types.{{.Type}}Null()
-	}
+	{{- if eq .Type "Int64"}}
+	data.{{toGoName .TfName}} = types.Int64Value(r{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").Int())
+	{{- else if eq .Type "Bool"}}
+	data.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String()))
+	{{- else if eq .Type "String"}}
+	data.{{toGoName .TfName}} = types.StringValue(r{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String())
+	{{- end}}
 	{{- end}}
 	{{- end}}
 
@@ -617,7 +605,324 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 	)
 	{{- range .Attributes}}
 	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-	if !data.{{toGoName .TfName}}.IsNull() || all {
+	{{- if eq .Type "Int64"}}
+	data.{{toGoName .TfName}} = types.Int64Value(r{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").Int())
+	{{- else if eq .Type "Bool"}}
+	data.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String()))
+	{{- else if eq .Type "String"}}
+	data.{{toGoName .TfName}} = types.StringValue(r{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String())
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- else if eq .Type "list"}}
+	r{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(deepNestedClassname, deepNestedValue gjson.Result) bool {
+					if deepNestedClassname.String() == "{{$deepNestedChildClassName}}" {
+						var deepNestedChild {{$name}}{{toGoName .TfName}}
+						{{- range .Attributes}}
+						{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+						{{- if eq .Type "Int64"}}
+						deepNestedChild.{{toGoName .TfName}} = types.Int64Value(deepNestedValue.Get("attributes.{{.NxosName}}").Int())
+						{{- else if eq .Type "Bool"}}
+						deepNestedChild.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(deepNestedValue.Get("attributes.{{.NxosName}}").String()))
+						{{- else if eq .Type "String"}}
+						deepNestedChild.{{toGoName .TfName}} = types.StringValue(deepNestedValue.Get("attributes.{{.NxosName}}").String())
+						{{- end}}
+						{{- end}}
+						{{- end}}
+						data.{{toGoName .TfName}} = append(data.{{toGoName .TfName}}, deepNestedChild)
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
+	{{- end}}
+	{{- end}}
+	{{- else}}
+	var nestedR gjson.Result
+	r{{$childClassName}}.Get("{{$childClassName}}.children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("{{$nestedChildClassName}}.attributes.rn").String()
+			if key == "{{$nestedChildRn}}" {
+				nestedR = v
+				return false
+			}
+			return true
+		},
+	)
+	{{- range .Attributes}}
+	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+	{{- if eq .Type "Int64"}}
+	data.{{toGoName .TfName}} = types.Int64Value(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").Int())
+	{{- else if eq .Type "Bool"}}
+	data.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String()))
+	{{- else if eq .Type "String"}}
+	data.{{toGoName .TfName}} = types.StringValue(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String())
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- else if eq .Type "list"}}
+	r{{$childClassName}}.Get("{{$childClassName}}.children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(nestedClassname, nestedValue gjson.Result) bool {
+					if nestedClassname.String() == "{{$nestedChildClassName}}" {
+						var nestedChild {{$name}}{{toGoName .TfName}}
+						{{- range .Attributes}}
+						{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+						{{- if eq .Type "Int64"}}
+						nestedChild.{{toGoName .TfName}} = types.Int64Value(nestedValue.Get("attributes.{{.NxosName}}").Int())
+						{{- else if eq .Type "Bool"}}
+						nestedChild.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.{{.NxosName}}").String()))
+						{{- else if eq .Type "String"}}
+						nestedChild.{{toGoName .TfName}} = types.StringValue(nestedValue.Get("attributes.{{.NxosName}}").String())
+						{{- end}}
+						{{- end}}
+						{{- end}}
+
+						{{- range .ChildClasses}}
+						nestedValue.Get("children").ForEach(
+							func(_, deepNestedV gjson.Result) bool {
+								deepNestedV.ForEach(
+									func(deepNestedClassname, deepNestedValue gjson.Result) bool {
+										if deepNestedClassname.String() == "{{.ClassName}}" {
+											var deepNestedChild {{$name}}{{toGoName .TfName}}
+											{{- range .Attributes}}
+											{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+											{{- if eq .Type "Int64"}}
+											deepNestedChild.{{toGoName .TfName}} = types.Int64Value(deepNestedValue.Get("attributes.{{.NxosName}}").Int())
+											{{- else if eq .Type "Bool"}}
+											deepNestedChild.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(deepNestedValue.Get("attributes.{{.NxosName}}").String()))
+											{{- else if eq .Type "String"}}
+											deepNestedChild.{{toGoName .TfName}} = types.StringValue(deepNestedValue.Get("attributes.{{.NxosName}}").String())
+											{{- end}}
+											{{- end}}
+											{{- end}}
+											nestedChild.{{toGoName .TfName}} = append(nestedChild.{{toGoName .TfName}}, deepNestedChild)
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
+						{{- end}}
+						data.{{toGoName .TfName}} = append(data.{{toGoName .TfName}}, nestedChild)
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
+	{{- end}}
+	{{- end}}
+	{{- else if eq .Type "list"}}
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "{{$childClassName}}" {
+						var child {{$name}}{{toGoName .TfName}}
+						{{- range .Attributes}}
+						{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+						{{- if eq .Type "Int64"}}
+						child.{{toGoName .TfName}} = types.Int64Value(value.Get("attributes.{{.NxosName}}").Int())
+						{{- else if eq .Type "Bool"}}
+						child.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.{{.NxosName}}").String()))
+						{{- else if eq .Type "String"}}
+						child.{{toGoName .TfName}} = types.StringValue(value.Get("attributes.{{.NxosName}}").String())
+						{{- end}}
+						{{- end}}
+						{{- end}}
+
+						{{- range .ChildClasses}}
+						value.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "{{.ClassName}}" {
+											var nestedChild {{$name}}{{toGoName .TfName}}
+											{{- range .Attributes}}
+											{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+											{{- if eq .Type "Int64"}}
+											nestedChild.{{toGoName .TfName}} = types.Int64Value(nestedValue.Get("attributes.{{.NxosName}}").Int())
+											{{- else if eq .Type "Bool"}}
+											nestedChild.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.{{.NxosName}}").String()))
+											{{- else if eq .Type "String"}}
+											nestedChild.{{toGoName .TfName}} = types.StringValue(nestedValue.Get("attributes.{{.NxosName}}").String())
+											{{- end}}
+											{{- end}}
+											{{- end}}
+
+											{{- range .ChildClasses}}
+											nestedValue.Get("children").ForEach(
+												func(_, deepNestedV gjson.Result) bool {
+													deepNestedV.ForEach(
+														func(deepNestedClassname, deepNestedValue gjson.Result) bool {
+															if deepNestedClassname.String() == "{{.ClassName}}" {
+																var deepNestedChild {{$name}}{{toGoName .TfName}}
+																{{- range .Attributes}}
+																{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+																{{- if eq .Type "Int64"}}
+																deepNestedChild.{{toGoName .TfName}} = types.Int64Value(deepNestedValue.Get("attributes.{{.NxosName}}").Int())
+																{{- else if eq .Type "Bool"}}
+																deepNestedChild.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(deepNestedValue.Get("attributes.{{.NxosName}}").String()))
+																{{- else if eq .Type "String"}}
+																deepNestedChild.{{toGoName .TfName}} = types.StringValue(deepNestedValue.Get("attributes.{{.NxosName}}").String())
+																{{- end}}
+																{{- end}}
+																{{- end}}
+																nestedChild.{{toGoName .TfName}} = append(nestedChild.{{toGoName .TfName}}, deepNestedChild)
+															}
+															return true
+														},
+													)
+													return true
+												},
+											)
+											{{- end}}
+											child.{{toGoName .TfName}} = append(child.{{toGoName .TfName}}, nestedChild)
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
+						{{- end}}
+						data.{{$list}} = append(data.{{$list}}, child)
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
+	{{- end}}
+	{{- end}}
+	{{- end}}
+}
+
+func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
+	{{- range .Attributes}}
+	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+	if !data.{{toGoName .TfName}}.IsNull() {
+		{{- if eq .Type "Int64"}}
+		data.{{toGoName .TfName}} = types.Int64Value(res.Get(data.getClassName()+".attributes.{{.NxosName}}").Int())
+		{{- else if eq .Type "Bool"}}
+		data.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName()+".attributes.{{.NxosName}}").String()))
+		{{- else if eq .Type "String"}}
+		data.{{toGoName .TfName}} = types.StringValue(res.Get(data.getClassName()+".attributes.{{.NxosName}}").String())
+		{{- end}}
+	} else {
+		data.{{toGoName .TfName}} = types.{{.Type}}Null()
+	}
+	{{- end}}
+	{{- end}}
+
+	{{- range .ChildClasses}}
+	{{- $childClassName := .ClassName }}
+	{{- $childRn := .Rn }}
+	{{- $list := (toGoName .TfName)}}
+	{{- if len .Attributes }}
+	{{- if eq .Type "single"}}
+	{{- $hasNonRefAttribs := false}}
+	{{- range .Attributes}}{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}{{$hasNonRefAttribs = true}}{{end}}{{end}}
+	{{- $hasChildren := false}}
+	{{- if .ChildClasses}}{{$hasChildren = true}}{{end}}
+	{{- if or $hasNonRefAttribs $hasChildren}}
+	var r{{$childClassName}} gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("{{$childClassName}}.attributes.rn").String()
+			if key == "{{$childRn}}" {
+				r{{$childClassName}} = v
+				return false
+			}
+			return true
+		},
+	)
+	{{- end}}
+	{{- range .Attributes}}
+	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+	if !data.{{toGoName .TfName}}.IsNull() {
+		{{- if eq .Type "Int64"}}
+		data.{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
+		{{- else if eq .Type "Bool"}}
+		data.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
+		{{- else if eq .Type "String"}}
+		data.{{toGoName .TfName}} = types.StringValue(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
+		{{- end}}
+	} else {
+		data.{{toGoName .TfName}} = types.{{.Type}}Null()
+	}
+	{{- end}}
+	{{- end}}
+
+	{{- range .ChildClasses}}
+	{{- $nestedChildClassName := .ClassName }}
+	{{- $nestedChildRn := .Rn }}
+	{{- $nestedChildTfName := .TfName }}
+	{{- if eq .Type "single"}}
+	{{- if .ChildClasses}}
+	{{- $nestedHasChildren := false}}
+	{{- if .ChildClasses}}{{$nestedHasChildren = true}}{{end}}
+	{{- $nestedHasNonRefAttribs := false}}
+	{{- range .Attributes}}{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}{{$nestedHasNonRefAttribs = true}}{{end}}{{end}}
+	{{- if or $nestedHasNonRefAttribs $nestedHasChildren}}
+	var r{{$nestedChildClassName}} gjson.Result
+	r{{$childClassName}}.Get("{{$childClassName}}.children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("{{$nestedChildClassName}}.attributes.rn").String()
+			if key == "{{$nestedChildRn}}" {
+				r{{$nestedChildClassName}} = v
+				return false
+			}
+			return true
+		},
+	)
+	{{- end}}
+	{{- range .Attributes}}
+	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+	if !data.{{toGoName .TfName}}.IsNull() {
+		{{- if eq .Type "Int64"}}
+		data.{{toGoName .TfName}} = types.Int64Value(r{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").Int())
+		{{- else if eq .Type "Bool"}}
+		data.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String()))
+		{{- else if eq .Type "String"}}
+		data.{{toGoName .TfName}} = types.StringValue(r{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String())
+		{{- end}}
+	} else {
+		data.{{toGoName .TfName}} = types.{{.Type}}Null()
+	}
+	{{- end}}
+	{{- end}}
+
+	{{- range .ChildClasses}}
+	{{- $deepNestedChildClassName := .ClassName }}
+	{{- $deepNestedChildRn := .Rn }}
+	{{- $deepNestedList := (toGoName .TfName)}}
+	{{- if eq .Type "single"}}
+	var r{{$deepNestedChildClassName}} gjson.Result
+	r{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("{{$deepNestedChildClassName}}.attributes.rn").String()
+			if key == "{{$deepNestedChildRn}}" {
+				r{{$deepNestedChildClassName}} = v
+				return false
+			}
+			return true
+		},
+	)
+	{{- range .Attributes}}
+	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+	if !data.{{toGoName .TfName}}.IsNull() {
 		{{- if eq .Type "Int64"}}
 		data.{{toGoName .TfName}} = types.Int64Value(r{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").Int())
 		{{- else if eq .Type "Bool"}}
@@ -631,32 +936,33 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 	{{- end}}
 	{{- end}}
 	{{- else if eq .Type "list"}}
-	if all {
+	for dnc := range data.{{toGoName .TfName}} {
+		var deepNestedR gjson.Result
 		r{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.children").ForEach(
 			func(_, v gjson.Result) bool {
-				v.ForEach(
-					func(deepNestedClassname, deepNestedValue gjson.Result) bool {
-						if deepNestedClassname.String() == "{{$deepNestedChildClassName}}" {
-							var deepNestedChild {{$name}}{{toGoName .TfName}}
-							{{- range .Attributes}}
-							{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-							{{- if eq .Type "Int64"}}
-							deepNestedChild.{{toGoName .TfName}} = types.Int64Value(deepNestedValue.Get("attributes.{{.NxosName}}").Int())
-							{{- else if eq .Type "Bool"}}
-							deepNestedChild.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(deepNestedValue.Get("attributes.{{.NxosName}}").String()))
-							{{- else if eq .Type "String"}}
-							deepNestedChild.{{toGoName .TfName}} = types.StringValue(deepNestedValue.Get("attributes.{{.NxosName}}").String())
-							{{- end}}
-							{{- end}}
-							{{- end}}
-							data.{{toGoName .TfName}} = append(data.{{toGoName .TfName}}, deepNestedChild)
-						}
-						return true
-					},
-				)
+				key := v.Get("{{$deepNestedChildClassName}}.attributes.rn").String()
+				if key == data.{{$deepNestedList}}[dnc].getRn() {
+					deepNestedR = v
+					return false
+				}
 				return true
 			},
 		)
+		{{- range .Attributes}}
+		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+		if !data.{{$deepNestedList}}[dnc].{{toGoName .TfName}}.IsNull() {
+			{{- if eq .Type "Int64"}}
+			data.{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.Int64Value(deepNestedR.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").Int())
+			{{- else if eq .Type "Bool"}}
+			data.{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(deepNestedR.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String()))
+			{{- else if eq .Type "String"}}
+			data.{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.StringValue(deepNestedR.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String())
+			{{- end}}
+		} else {
+			data.{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.{{.Type}}Null()
+		}
+		{{- end}}
+		{{- end}}
 	}
 	{{- end}}
 	{{- end}}
@@ -674,7 +980,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 	)
 	{{- range .Attributes}}
 	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-	if !data.{{toGoName .TfName}}.IsNull() || all {
+	if !data.{{toGoName .TfName}}.IsNull() {
 		{{- if eq .Type "Int64"}}
 		data.{{toGoName .TfName}} = types.Int64Value(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").Int())
 		{{- else if eq .Type "Bool"}}
@@ -689,154 +995,136 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 	{{- end}}
 	{{- end}}
 	{{- else if eq .Type "list"}}
-	if all {
+	for nc := range data.{{toGoName .TfName}} {
+		var nestedR gjson.Result
 		r{{$childClassName}}.Get("{{$childClassName}}.children").ForEach(
 			func(_, v gjson.Result) bool {
-				v.ForEach(
-					func(nestedClassname, nestedValue gjson.Result) bool {
-						if nestedClassname.String() == "{{$nestedChildClassName}}" {
-							var nestedChild {{$name}}{{toGoName .TfName}}
-							{{- range .Attributes}}
-							{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-							{{- if eq .Type "Int64"}}
-							nestedChild.{{toGoName .TfName}} = types.Int64Value(nestedValue.Get("attributes.{{.NxosName}}").Int())
-							{{- else if eq .Type "Bool"}}
-							nestedChild.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.{{.NxosName}}").String()))
-							{{- else if eq .Type "String"}}
-							nestedChild.{{toGoName .TfName}} = types.StringValue(nestedValue.Get("attributes.{{.NxosName}}").String())
-							{{- end}}
-							{{- end}}
-							{{- end}}
-
-							{{- range .ChildClasses}}
-							nestedValue.Get("children").ForEach(
-								func(_, deepNestedV gjson.Result) bool {
-									deepNestedV.ForEach(
-										func(deepNestedClassname, deepNestedValue gjson.Result) bool {
-											if deepNestedClassname.String() == "{{.ClassName}}" {
-												var deepNestedChild {{$name}}{{toGoName .TfName}}
-												{{- range .Attributes}}
-												{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-												{{- if eq .Type "Int64"}}
-												deepNestedChild.{{toGoName .TfName}} = types.Int64Value(deepNestedValue.Get("attributes.{{.NxosName}}").Int())
-												{{- else if eq .Type "Bool"}}
-												deepNestedChild.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(deepNestedValue.Get("attributes.{{.NxosName}}").String()))
-												{{- else if eq .Type "String"}}
-												deepNestedChild.{{toGoName .TfName}} = types.StringValue(deepNestedValue.Get("attributes.{{.NxosName}}").String())
-												{{- end}}
-												{{- end}}
-												{{- end}}
-												nestedChild.{{toGoName .TfName}} = append(nestedChild.{{toGoName .TfName}}, deepNestedChild)
-											}
-											return true
-										},
-									)
-									return true
-								},
-							)
-							{{- end}}
-							data.{{toGoName .TfName}} = append(data.{{toGoName .TfName}}, nestedChild)
-						}
-						return true
-					},
-				)
+				key := v.Get("{{$nestedChildClassName}}.attributes.rn").String()
+				if key == data.{{(toGoName .TfName)}}[nc].getRn() {
+					nestedR = v
+					return false
+				}
 				return true
 			},
 		)
+		{{- range .Attributes}}
+		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+		if !data.{{(toGoName $nestedChildTfName)}}[nc].{{toGoName .TfName}}.IsNull() {
+			{{- if eq .Type "Int64"}}
+			data.{{(toGoName $nestedChildTfName)}}[nc].{{toGoName .TfName}} = types.Int64Value(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").Int())
+			{{- else if eq .Type "Bool"}}
+			data.{{(toGoName $nestedChildTfName)}}[nc].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String()))
+			{{- else if eq .Type "String"}}
+			data.{{(toGoName $nestedChildTfName)}}[nc].{{toGoName .TfName}} = types.StringValue(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String())
+			{{- end}}
+		} else {
+			data.{{(toGoName $nestedChildTfName)}}[nc].{{toGoName .TfName}} = types.{{.Type}}Null()
+		}
+		{{- end}}
+		{{- end}}
 	}
 	{{- end}}
 	{{- end}}
 	{{- else if eq .Type "list"}}
-	if all {
+	for c := range data.{{toGoName .TfName}} {
+		var r gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				v.ForEach(
-					func(classname, value gjson.Result) bool {
-						if classname.String() == "{{$childClassName}}" {
-							var child {{$name}}{{toGoName .TfName}}
-							{{- range .Attributes}}
-							{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-							{{- if eq .Type "Int64"}}
-							child.{{toGoName .TfName}} = types.Int64Value(value.Get("attributes.{{.NxosName}}").Int())
-							{{- else if eq .Type "Bool"}}
-							child.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.{{.NxosName}}").String()))
-							{{- else if eq .Type "String"}}
-							child.{{toGoName .TfName}} = types.StringValue(value.Get("attributes.{{.NxosName}}").String())
-							{{- end}}
-							{{- end}}
-							{{- end}}
-
-							{{- range .ChildClasses}}
-							value.Get("children").ForEach(
-								func(_, nestedV gjson.Result) bool {
-									nestedV.ForEach(
-										func(nestedClassname, nestedValue gjson.Result) bool {
-											if nestedClassname.String() == "{{.ClassName}}" {
-												var nestedChild {{$name}}{{toGoName .TfName}}
-												{{- range .Attributes}}
-												{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-												{{- if eq .Type "Int64"}}
-												nestedChild.{{toGoName .TfName}} = types.Int64Value(nestedValue.Get("attributes.{{.NxosName}}").Int())
-												{{- else if eq .Type "Bool"}}
-												nestedChild.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.{{.NxosName}}").String()))
-												{{- else if eq .Type "String"}}
-												nestedChild.{{toGoName .TfName}} = types.StringValue(nestedValue.Get("attributes.{{.NxosName}}").String())
-												{{- end}}
-												{{- end}}
-												{{- end}}
-
-												{{- range .ChildClasses}}
-												nestedValue.Get("children").ForEach(
-													func(_, deepNestedV gjson.Result) bool {
-														deepNestedV.ForEach(
-															func(deepNestedClassname, deepNestedValue gjson.Result) bool {
-																if deepNestedClassname.String() == "{{.ClassName}}" {
-																	var deepNestedChild {{$name}}{{toGoName .TfName}}
-																	{{- range .Attributes}}
-																	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-																	{{- if eq .Type "Int64"}}
-																	deepNestedChild.{{toGoName .TfName}} = types.Int64Value(deepNestedValue.Get("attributes.{{.NxosName}}").Int())
-																	{{- else if eq .Type "Bool"}}
-																	deepNestedChild.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(deepNestedValue.Get("attributes.{{.NxosName}}").String()))
-																	{{- else if eq .Type "String"}}
-																	deepNestedChild.{{toGoName .TfName}} = types.StringValue(deepNestedValue.Get("attributes.{{.NxosName}}").String())
-																	{{- end}}
-																	{{- end}}
-																	{{- end}}
-																	nestedChild.{{toGoName .TfName}} = append(nestedChild.{{toGoName .TfName}}, deepNestedChild)
-																}
-																return true
-															},
-														)
-														return true
-													},
-												)
-												{{- end}}
-												child.{{toGoName .TfName}} = append(child.{{toGoName .TfName}}, nestedChild)
-											}
-											return true
-										},
-									)
-									return true
-								},
-							)
-							{{- end}}
-							data.{{$list}} = append(data.{{$list}}, child)
-						}
-						return true
-					},
-				)
+				key := v.Get("{{$childClassName}}.attributes.rn").String()
+				if key == data.{{$list}}[c].getRn() {
+					r = v
+					return false
+				}
 				return true
 			},
 		)
-	} else {
-		for c := range data.{{toGoName .TfName}} {
-			var r gjson.Result
-			res.Get(data.getClassName() + ".children").ForEach(
+		{{- range .Attributes}}
+		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+		if !data.{{$list}}[c].{{toGoName .TfName}}.IsNull() {
+			{{- if eq .Type "Int64"}}
+			data.{{$list}}[c].{{toGoName .TfName}} = types.Int64Value(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
+			{{- else if eq .Type "Bool"}}
+			data.{{$list}}[c].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
+			{{- else if eq .Type "String"}}
+			data.{{$list}}[c].{{toGoName .TfName}} = types.StringValue(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
+			{{- end}}
+		} else {
+			data.{{$list}}[c].{{toGoName .TfName}} = types.{{.Type}}Null()
+		}
+		{{- end}}
+		{{- end}}
+
+		{{- range .ChildClasses}}
+		{{- $nestedChildClassName := .ClassName }}
+		{{- $nestedChildRn := .Rn }}
+		{{- $nestedList := (toGoName .TfName)}}
+		{{- if eq .Type "single"}}
+		var nestedR{{$nestedChildClassName}} gjson.Result
+		r.Get("{{$childClassName}}.children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("{{$nestedChildClassName}}.attributes.rn").String()
+				if key == "{{$nestedChildRn}}" {
+					nestedR{{$nestedChildClassName}} = v
+					return false
+				}
+				return true
+			},
+		)
+		{{- range .Attributes}}
+		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+		if !data.{{$list}}[c].{{toGoName .TfName}}.IsNull() {
+			{{- if eq .Type "Int64"}}
+			data.{{$list}}[c].{{toGoName .TfName}} = types.Int64Value(nestedR{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").Int())
+			{{- else if eq .Type "Bool"}}
+			data.{{$list}}[c].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(nestedR{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String()))
+			{{- else if eq .Type "String"}}
+			data.{{$list}}[c].{{toGoName .TfName}} = types.StringValue(nestedR{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String())
+			{{- end}}
+		} else {
+			data.{{$list}}[c].{{toGoName .TfName}} = types.{{.Type}}Null()
+		}
+		{{- end}}
+		{{- end}}
+
+		{{- range .ChildClasses}}
+		{{- $deepNestedChildClassName := .ClassName }}
+		{{- $deepNestedChildRn := .Rn }}
+		{{- $deepNestedList := (toGoName .TfName)}}
+		{{- if eq .Type "single"}}
+		var deepNestedR{{$deepNestedChildClassName}} gjson.Result
+		nestedR{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("{{$deepNestedChildClassName}}.attributes.rn").String()
+				if key == "{{$deepNestedChildRn}}" {
+					deepNestedR{{$deepNestedChildClassName}} = v
+					return false
+				}
+				return true
+			},
+		)
+		{{- range .Attributes}}
+		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+		if !data.{{$list}}[c].{{toGoName .TfName}}.IsNull() {
+			{{- if eq .Type "Int64"}}
+			data.{{$list}}[c].{{toGoName .TfName}} = types.Int64Value(deepNestedR{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").Int())
+			{{- else if eq .Type "Bool"}}
+			data.{{$list}}[c].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(deepNestedR{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String()))
+			{{- else if eq .Type "String"}}
+			data.{{$list}}[c].{{toGoName .TfName}} = types.StringValue(deepNestedR{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String())
+			{{- end}}
+		} else {
+			data.{{$list}}[c].{{toGoName .TfName}} = types.{{.Type}}Null()
+		}
+		{{- end}}
+		{{- end}}
+		{{- else if eq .Type "list"}}
+		for dnc := range data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} {
+			var deepNestedR gjson.Result
+			nestedR{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("{{$childClassName}}.attributes.rn").String()
-					if key == data.{{$list}}[c].getRn() {
-						r = v
+					key := v.Get("{{$deepNestedChildClassName}}.attributes.rn").String()
+					if key == data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].getRn() {
+						deepNestedR = v
 						return false
 					}
 					return true
@@ -844,31 +1132,30 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 			)
 			{{- range .Attributes}}
 			{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-			if !data.{{$list}}[c].{{toGoName .TfName}}.IsNull() || all {
+			if !data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}}.IsNull() {
 				{{- if eq .Type "Int64"}}
-				data.{{$list}}[c].{{toGoName .TfName}} = types.Int64Value(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
+				data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.Int64Value(deepNestedR.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").Int())
 				{{- else if eq .Type "Bool"}}
-				data.{{$list}}[c].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
+				data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(deepNestedR.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String()))
 				{{- else if eq .Type "String"}}
-				data.{{$list}}[c].{{toGoName .TfName}} = types.StringValue(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
+				data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.StringValue(deepNestedR.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String())
 				{{- end}}
 			} else {
-				data.{{$list}}[c].{{toGoName .TfName}} = types.{{.Type}}Null()
+				data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.{{.Type}}Null()
 			}
 			{{- end}}
 			{{- end}}
-
-			{{- range .ChildClasses}}
-			{{- $nestedChildClassName := .ClassName }}
-			{{- $nestedChildRn := .Rn }}
-			{{- $nestedList := (toGoName .TfName)}}
-			{{- if eq .Type "single"}}
-			var nestedR{{$nestedChildClassName}} gjson.Result
+		}
+		{{- end}}
+		{{- end}}
+		{{- else if eq .Type "list"}}
+		for nc := range data.{{$list}}[c].{{toGoName .TfName}} {
+			var nestedR gjson.Result
 			r.Get("{{$childClassName}}.children").ForEach(
 				func(_, v gjson.Result) bool {
 					key := v.Get("{{$nestedChildClassName}}.attributes.rn").String()
-					if key == "{{$nestedChildRn}}" {
-						nestedR{{$nestedChildClassName}} = v
+					if key == data.{{$list}}[c].{{$nestedList}}[nc].getRn() {
+						nestedR = v
 						return false
 					}
 					return true
@@ -876,16 +1163,16 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 			)
 			{{- range .Attributes}}
 			{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-			if !data.{{$list}}[c].{{toGoName .TfName}}.IsNull() || all {
+			if !data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}}.IsNull() {
 				{{- if eq .Type "Int64"}}
-				data.{{$list}}[c].{{toGoName .TfName}} = types.Int64Value(nestedR{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").Int())
+				data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.Int64Value(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").Int())
 				{{- else if eq .Type "Bool"}}
-				data.{{$list}}[c].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(nestedR{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String()))
+				data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String()))
 				{{- else if eq .Type "String"}}
-				data.{{$list}}[c].{{toGoName .TfName}} = types.StringValue(nestedR{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String())
+				data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.StringValue(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String())
 				{{- end}}
 			} else {
-				data.{{$list}}[c].{{toGoName .TfName}} = types.{{.Type}}Null()
+				data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.{{.Type}}Null()
 			}
 			{{- end}}
 			{{- end}}
@@ -896,7 +1183,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 			{{- $deepNestedList := (toGoName .TfName)}}
 			{{- if eq .Type "single"}}
 			var deepNestedR{{$deepNestedChildClassName}} gjson.Result
-			nestedR{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.children").ForEach(
+			nestedR.Get("{{$nestedChildClassName}}.children").ForEach(
 				func(_, v gjson.Result) bool {
 					key := v.Get("{{$deepNestedChildClassName}}.attributes.rn").String()
 					if key == "{{$deepNestedChildRn}}" {
@@ -908,23 +1195,23 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 			)
 			{{- range .Attributes}}
 			{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-			if !data.{{$list}}[c].{{toGoName .TfName}}.IsNull() || all {
+			if !data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}}.IsNull() {
 				{{- if eq .Type "Int64"}}
-				data.{{$list}}[c].{{toGoName .TfName}} = types.Int64Value(deepNestedR{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").Int())
+				data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.Int64Value(deepNestedR{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").Int())
 				{{- else if eq .Type "Bool"}}
-				data.{{$list}}[c].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(deepNestedR{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String()))
+				data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(deepNestedR{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String()))
 				{{- else if eq .Type "String"}}
-				data.{{$list}}[c].{{toGoName .TfName}} = types.StringValue(deepNestedR{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String())
+				data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.StringValue(deepNestedR{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String())
 				{{- end}}
 			} else {
-				data.{{$list}}[c].{{toGoName .TfName}} = types.{{.Type}}Null()
+				data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.{{.Type}}Null()
 			}
 			{{- end}}
 			{{- end}}
 			{{- else if eq .Type "list"}}
 			for dnc := range data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} {
 				var deepNestedR gjson.Result
-				nestedR{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.children").ForEach(
+				nestedR.Get("{{$nestedChildClassName}}.children").ForEach(
 					func(_, v gjson.Result) bool {
 						key := v.Get("{{$deepNestedChildClassName}}.attributes.rn").String()
 						if key == data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].getRn() {
@@ -936,7 +1223,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 				)
 				{{- range .Attributes}}
 				{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-				if !data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}}.IsNull() || all {
+				if !data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}}.IsNull() {
 					{{- if eq .Type "Int64"}}
 					data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.Int64Value(deepNestedR.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").Int())
 					{{- else if eq .Type "Bool"}}
@@ -952,101 +1239,9 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result, all bool) {
 			}
 			{{- end}}
 			{{- end}}
-			{{- else if eq .Type "list"}}
-			for nc := range data.{{$list}}[c].{{toGoName .TfName}} {
-				var nestedR gjson.Result
-				r.Get("{{$childClassName}}.children").ForEach(
-					func(_, v gjson.Result) bool {
-						key := v.Get("{{$nestedChildClassName}}.attributes.rn").String()
-						if key == data.{{$list}}[c].{{$nestedList}}[nc].getRn() {
-							nestedR = v
-							return false
-						}
-						return true
-					},
-				)
-				{{- range .Attributes}}
-				{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-				if !data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}}.IsNull() || all {
-					{{- if eq .Type "Int64"}}
-					data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.Int64Value(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").Int())
-					{{- else if eq .Type "Bool"}}
-					data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String()))
-					{{- else if eq .Type "String"}}
-					data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.StringValue(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String())
-					{{- end}}
-				} else {
-					data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.{{.Type}}Null()
-				}
-				{{- end}}
-				{{- end}}
-
-				{{- range .ChildClasses}}
-				{{- $deepNestedChildClassName := .ClassName }}
-				{{- $deepNestedChildRn := .Rn }}
-				{{- $deepNestedList := (toGoName .TfName)}}
-				{{- if eq .Type "single"}}
-				var deepNestedR{{$deepNestedChildClassName}} gjson.Result
-				nestedR.Get("{{$nestedChildClassName}}.children").ForEach(
-					func(_, v gjson.Result) bool {
-						key := v.Get("{{$deepNestedChildClassName}}.attributes.rn").String()
-						if key == "{{$deepNestedChildRn}}" {
-							deepNestedR{{$deepNestedChildClassName}} = v
-							return false
-						}
-						return true
-					},
-				)
-				{{- range .Attributes}}
-				{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-				if !data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}}.IsNull() || all {
-					{{- if eq .Type "Int64"}}
-					data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.Int64Value(deepNestedR{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").Int())
-					{{- else if eq .Type "Bool"}}
-					data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(deepNestedR{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String()))
-					{{- else if eq .Type "String"}}
-					data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.StringValue(deepNestedR{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String())
-					{{- end}}
-				} else {
-					data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.{{.Type}}Null()
-				}
-				{{- end}}
-				{{- end}}
-				{{- else if eq .Type "list"}}
-				for dnc := range data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} {
-					var deepNestedR gjson.Result
-					nestedR.Get("{{$nestedChildClassName}}.children").ForEach(
-						func(_, v gjson.Result) bool {
-							key := v.Get("{{$deepNestedChildClassName}}.attributes.rn").String()
-							if key == data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].getRn() {
-								deepNestedR = v
-								return false
-							}
-							return true
-						},
-					)
-					{{- range .Attributes}}
-					{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-					if !data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}}.IsNull() || all {
-						{{- if eq .Type "Int64"}}
-						data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.Int64Value(deepNestedR.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").Int())
-						{{- else if eq .Type "Bool"}}
-						data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(deepNestedR.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String()))
-						{{- else if eq .Type "String"}}
-						data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.StringValue(deepNestedR.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String())
-						{{- end}}
-					} else {
-						data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.{{.Type}}Null()
-					}
-					{{- end}}
-					{{- end}}
-				}
-				{{- end}}
-				{{- end}}
-			}
-			{{- end}}
-			{{- end}}
 		}
+		{{- end}}
+		{{- end}}
 	}
 	{{- end}}
 	{{- end}}

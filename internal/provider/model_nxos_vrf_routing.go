@@ -80,8 +80,12 @@ func (data VRFRouting) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *VRFRouting) fromBody(res gjson.Result, all bool) {
-	if !data.RouteDistinguisher.IsNull() || all {
+func (data *VRFRouting) fromBody(res gjson.Result) {
+	data.RouteDistinguisher = types.StringValue(res.Get(data.getClassName() + ".attributes.rd").String())
+}
+
+func (data *VRFRouting) updateFromBody(res gjson.Result) {
+	if !data.RouteDistinguisher.IsNull() {
 		data.RouteDistinguisher = types.StringValue(res.Get(data.getClassName() + ".attributes.rd").String())
 	} else {
 		data.RouteDistinguisher = types.StringNull()

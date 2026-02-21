@@ -83,8 +83,12 @@ func (data DefaultQOSClassMapDSCP) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *DefaultQOSClassMapDSCP) fromBody(res gjson.Result, all bool) {
-	if !data.Value.IsNull() || all {
+func (data *DefaultQOSClassMapDSCP) fromBody(res gjson.Result) {
+	data.Value = types.StringValue(res.Get(data.getClassName() + ".attributes.val").String())
+}
+
+func (data *DefaultQOSClassMapDSCP) updateFromBody(res gjson.Result) {
+	if !data.Value.IsNull() {
 		data.Value = types.StringValue(res.Get(data.getClassName() + ".attributes.val").String())
 	} else {
 		data.Value = types.StringNull()

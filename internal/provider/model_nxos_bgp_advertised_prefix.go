@@ -99,18 +99,24 @@ func (data BGPAdvertisedPrefix) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *BGPAdvertisedPrefix) fromBody(res gjson.Result, all bool) {
-	if !data.Prefix.IsNull() || all {
+func (data *BGPAdvertisedPrefix) fromBody(res gjson.Result) {
+	data.Prefix = types.StringValue(res.Get(data.getClassName() + ".attributes.addr").String())
+	data.RouteMap = types.StringValue(res.Get(data.getClassName() + ".attributes.rtMap").String())
+	data.Evpn = types.StringValue(res.Get(data.getClassName() + ".attributes.evpn").String())
+}
+
+func (data *BGPAdvertisedPrefix) updateFromBody(res gjson.Result) {
+	if !data.Prefix.IsNull() {
 		data.Prefix = types.StringValue(res.Get(data.getClassName() + ".attributes.addr").String())
 	} else {
 		data.Prefix = types.StringNull()
 	}
-	if !data.RouteMap.IsNull() || all {
+	if !data.RouteMap.IsNull() {
 		data.RouteMap = types.StringValue(res.Get(data.getClassName() + ".attributes.rtMap").String())
 	} else {
 		data.RouteMap = types.StringNull()
 	}
-	if !data.Evpn.IsNull() || all {
+	if !data.Evpn.IsNull() {
 		data.Evpn = types.StringValue(res.Get(data.getClassName() + ".attributes.evpn").String())
 	} else {
 		data.Evpn = types.StringNull()

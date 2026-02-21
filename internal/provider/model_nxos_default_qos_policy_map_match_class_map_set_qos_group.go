@@ -85,8 +85,12 @@ func (data DefaultQOSPolicyMapMatchClassMapSetQOSGroup) toBody(statusReplace boo
 	return nxos.Body{body}
 }
 
-func (data *DefaultQOSPolicyMapMatchClassMapSetQOSGroup) fromBody(res gjson.Result, all bool) {
-	if !data.QosGroupId.IsNull() || all {
+func (data *DefaultQOSPolicyMapMatchClassMapSetQOSGroup) fromBody(res gjson.Result) {
+	data.QosGroupId = types.Int64Value(res.Get(data.getClassName() + ".attributes.id").Int())
+}
+
+func (data *DefaultQOSPolicyMapMatchClassMapSetQOSGroup) updateFromBody(res gjson.Result) {
+	if !data.QosGroupId.IsNull() {
 		data.QosGroupId = types.Int64Value(res.Get(data.getClassName() + ".attributes.id").Int())
 	} else {
 		data.QosGroupId = types.Int64Null()

@@ -114,28 +114,36 @@ func (data OSPFAuthentication) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *OSPFAuthentication) fromBody(res gjson.Result, all bool) {
-	if !data.KeyId.IsNull() || all {
+func (data *OSPFAuthentication) fromBody(res gjson.Result) {
+	data.KeyId = types.Int64Value(res.Get(data.getClassName() + ".attributes.keyId").Int())
+	data.KeySecureMode = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.keySecureMode").String()))
+	data.Keychain = types.StringValue(res.Get(data.getClassName() + ".attributes.keychain").String())
+	data.Md5KeySecureMode = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.md5keySecureMode").String()))
+	data.Type = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
+}
+
+func (data *OSPFAuthentication) updateFromBody(res gjson.Result) {
+	if !data.KeyId.IsNull() {
 		data.KeyId = types.Int64Value(res.Get(data.getClassName() + ".attributes.keyId").Int())
 	} else {
 		data.KeyId = types.Int64Null()
 	}
-	if !data.KeySecureMode.IsNull() || all {
+	if !data.KeySecureMode.IsNull() {
 		data.KeySecureMode = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.keySecureMode").String()))
 	} else {
 		data.KeySecureMode = types.BoolNull()
 	}
-	if !data.Keychain.IsNull() || all {
+	if !data.Keychain.IsNull() {
 		data.Keychain = types.StringValue(res.Get(data.getClassName() + ".attributes.keychain").String())
 	} else {
 		data.Keychain = types.StringNull()
 	}
-	if !data.Md5KeySecureMode.IsNull() || all {
+	if !data.Md5KeySecureMode.IsNull() {
 		data.Md5KeySecureMode = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.md5keySecureMode").String()))
 	} else {
 		data.Md5KeySecureMode = types.BoolNull()
 	}
-	if !data.Type.IsNull() || all {
+	if !data.Type.IsNull() {
 		data.Type = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
 	} else {
 		data.Type = types.StringNull()

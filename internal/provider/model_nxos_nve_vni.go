@@ -97,28 +97,36 @@ func (data NVEVNI) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *NVEVNI) fromBody(res gjson.Result, all bool) {
-	if !data.Vni.IsNull() || all {
+func (data *NVEVNI) fromBody(res gjson.Result) {
+	data.Vni = types.Int64Value(res.Get(data.getClassName() + ".attributes.vni").Int())
+	data.AssociateVrf = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.associateVrfFlag").String()))
+	data.MulticastGroup = types.StringValue(res.Get(data.getClassName() + ".attributes.mcastGroup").String())
+	data.MultisiteIngressReplication = types.StringValue(res.Get(data.getClassName() + ".attributes.multisiteIngRepl").String())
+	data.SuppressArp = types.StringValue(res.Get(data.getClassName() + ".attributes.suppressARP").String())
+}
+
+func (data *NVEVNI) updateFromBody(res gjson.Result) {
+	if !data.Vni.IsNull() {
 		data.Vni = types.Int64Value(res.Get(data.getClassName() + ".attributes.vni").Int())
 	} else {
 		data.Vni = types.Int64Null()
 	}
-	if !data.AssociateVrf.IsNull() || all {
+	if !data.AssociateVrf.IsNull() {
 		data.AssociateVrf = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.associateVrfFlag").String()))
 	} else {
 		data.AssociateVrf = types.BoolNull()
 	}
-	if !data.MulticastGroup.IsNull() || all {
+	if !data.MulticastGroup.IsNull() {
 		data.MulticastGroup = types.StringValue(res.Get(data.getClassName() + ".attributes.mcastGroup").String())
 	} else {
 		data.MulticastGroup = types.StringNull()
 	}
-	if !data.MultisiteIngressReplication.IsNull() || all {
+	if !data.MultisiteIngressReplication.IsNull() {
 		data.MultisiteIngressReplication = types.StringValue(res.Get(data.getClassName() + ".attributes.multisiteIngRepl").String())
 	} else {
 		data.MultisiteIngressReplication = types.StringNull()
 	}
-	if !data.SuppressArp.IsNull() || all {
+	if !data.SuppressArp.IsNull() {
 		data.SuppressArp = types.StringValue(res.Get(data.getClassName() + ".attributes.suppressARP").String())
 	} else {
 		data.SuppressArp = types.StringNull()

@@ -87,13 +87,18 @@ func (data ICMPv4Interface) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *ICMPv4Interface) fromBody(res gjson.Result, all bool) {
-	if !data.InterfaceId.IsNull() || all {
+func (data *ICMPv4Interface) fromBody(res gjson.Result) {
+	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
+	data.Control = types.StringValue(res.Get(data.getClassName() + ".attributes.ctrl").String())
+}
+
+func (data *ICMPv4Interface) updateFromBody(res gjson.Result) {
+	if !data.InterfaceId.IsNull() {
 		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	} else {
 		data.InterfaceId = types.StringNull()
 	}
-	if !data.Control.IsNull() || all {
+	if !data.Control.IsNull() {
 		data.Control = types.StringValue(res.Get(data.getClassName() + ".attributes.ctrl").String())
 	} else {
 		data.Control = types.StringNull()

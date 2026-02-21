@@ -90,13 +90,18 @@ func (data DHCPRelayAddress) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *DHCPRelayAddress) fromBody(res gjson.Result, all bool) {
-	if !data.Vrf.IsNull() || all {
+func (data *DHCPRelayAddress) fromBody(res gjson.Result) {
+	data.Vrf = types.StringValue(res.Get(data.getClassName() + ".attributes.vrf").String())
+	data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.address").String())
+}
+
+func (data *DHCPRelayAddress) updateFromBody(res gjson.Result) {
+	if !data.Vrf.IsNull() {
 		data.Vrf = types.StringValue(res.Get(data.getClassName() + ".attributes.vrf").String())
 	} else {
 		data.Vrf = types.StringNull()
 	}
-	if !data.Address.IsNull() || all {
+	if !data.Address.IsNull() {
 		data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.address").String())
 	} else {
 		data.Address = types.StringNull()

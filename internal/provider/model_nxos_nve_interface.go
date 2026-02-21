@@ -117,58 +117,72 @@ func (data NVEInterface) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *NVEInterface) fromBody(res gjson.Result, all bool) {
-	if !data.AdminState.IsNull() || all {
+func (data *NVEInterface) fromBody(res gjson.Result) {
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	data.AdvertiseVirtualMac = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.advertiseVmac").String()))
+	data.HoldDownTime = types.Int64Value(res.Get(data.getClassName() + ".attributes.holdDownTime").Int())
+	data.HostReachabilityProtocol = types.StringValue(res.Get(data.getClassName() + ".attributes.hostReach").String())
+	data.IngressReplicationProtocolBgp = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.ingressReplProtoBGP").String()))
+	data.MulticastGroupL2 = types.StringValue(res.Get(data.getClassName() + ".attributes.mcastGroupL2").String())
+	data.MulticastGroupL3 = types.StringValue(res.Get(data.getClassName() + ".attributes.mcastGroupL3").String())
+	data.MultisiteSourceInterface = types.StringValue(res.Get(data.getClassName() + ".attributes.multisiteBordergwInterface").String())
+	data.SourceInterface = types.StringValue(res.Get(data.getClassName() + ".attributes.sourceInterface").String())
+	data.SuppressArp = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.suppressARP").String()))
+	data.SuppressMacRoute = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.suppressMacRoute").String()))
+}
+
+func (data *NVEInterface) updateFromBody(res gjson.Result) {
+	if !data.AdminState.IsNull() {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
 		data.AdminState = types.StringNull()
 	}
-	if !data.AdvertiseVirtualMac.IsNull() || all {
+	if !data.AdvertiseVirtualMac.IsNull() {
 		data.AdvertiseVirtualMac = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.advertiseVmac").String()))
 	} else {
 		data.AdvertiseVirtualMac = types.BoolNull()
 	}
-	if !data.HoldDownTime.IsNull() || all {
+	if !data.HoldDownTime.IsNull() {
 		data.HoldDownTime = types.Int64Value(res.Get(data.getClassName() + ".attributes.holdDownTime").Int())
 	} else {
 		data.HoldDownTime = types.Int64Null()
 	}
-	if !data.HostReachabilityProtocol.IsNull() || all {
+	if !data.HostReachabilityProtocol.IsNull() {
 		data.HostReachabilityProtocol = types.StringValue(res.Get(data.getClassName() + ".attributes.hostReach").String())
 	} else {
 		data.HostReachabilityProtocol = types.StringNull()
 	}
-	if !data.IngressReplicationProtocolBgp.IsNull() || all {
+	if !data.IngressReplicationProtocolBgp.IsNull() {
 		data.IngressReplicationProtocolBgp = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.ingressReplProtoBGP").String()))
 	} else {
 		data.IngressReplicationProtocolBgp = types.BoolNull()
 	}
-	if !data.MulticastGroupL2.IsNull() || all {
+	if !data.MulticastGroupL2.IsNull() {
 		data.MulticastGroupL2 = types.StringValue(res.Get(data.getClassName() + ".attributes.mcastGroupL2").String())
 	} else {
 		data.MulticastGroupL2 = types.StringNull()
 	}
-	if !data.MulticastGroupL3.IsNull() || all {
+	if !data.MulticastGroupL3.IsNull() {
 		data.MulticastGroupL3 = types.StringValue(res.Get(data.getClassName() + ".attributes.mcastGroupL3").String())
 	} else {
 		data.MulticastGroupL3 = types.StringNull()
 	}
-	if !data.MultisiteSourceInterface.IsNull() || all {
+	if !data.MultisiteSourceInterface.IsNull() {
 		data.MultisiteSourceInterface = types.StringValue(res.Get(data.getClassName() + ".attributes.multisiteBordergwInterface").String())
 	} else {
 		data.MultisiteSourceInterface = types.StringNull()
 	}
-	if !data.SourceInterface.IsNull() || all {
+	if !data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringValue(res.Get(data.getClassName() + ".attributes.sourceInterface").String())
 	} else {
 		data.SourceInterface = types.StringNull()
 	}
-	if !data.SuppressArp.IsNull() || all {
+	if !data.SuppressArp.IsNull() {
 		data.SuppressArp = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.suppressARP").String()))
 	} else {
 		data.SuppressArp = types.BoolNull()
 	}
-	if !data.SuppressMacRoute.IsNull() || all {
+	if !data.SuppressMacRoute.IsNull() {
 		data.SuppressMacRoute = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.suppressMacRoute").String()))
 	} else {
 		data.SuppressMacRoute = types.BoolNull()

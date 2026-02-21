@@ -173,118 +173,144 @@ func (data DefaultQOSPolicyMapMatchClassMapPolice) toBody(statusReplace bool) nx
 	return nxos.Body{body}
 }
 
-func (data *DefaultQOSPolicyMapMatchClassMapPolice) fromBody(res gjson.Result, all bool) {
-	if !data.BcRate.IsNull() || all {
+func (data *DefaultQOSPolicyMapMatchClassMapPolice) fromBody(res gjson.Result) {
+	data.BcRate = types.Int64Value(res.Get(data.getClassName() + ".attributes.bcRate").Int())
+	data.BcUnit = types.StringValue(res.Get(data.getClassName() + ".attributes.bcUnit").String())
+	data.BeRate = types.Int64Value(res.Get(data.getClassName() + ".attributes.beRate").Int())
+	data.BeUnit = types.StringValue(res.Get(data.getClassName() + ".attributes.beUnit").String())
+	data.CirRate = types.Int64Value(res.Get(data.getClassName() + ".attributes.cirRate").Int())
+	data.CirUnit = types.StringValue(res.Get(data.getClassName() + ".attributes.cirUnit").String())
+	data.ConformAction = types.StringValue(res.Get(data.getClassName() + ".attributes.conformAction").String())
+	data.ConformSetCos = types.Int64Value(res.Get(data.getClassName() + ".attributes.conformSetCosTransmit").Int())
+	data.ConformSetDscp = types.Int64Value(res.Get(data.getClassName() + ".attributes.conformSetDscpTransmit").Int())
+	data.ConformSetPrecedence = types.StringValue(res.Get(data.getClassName() + ".attributes.conformSetPrecTransmit").String())
+	data.ConformSetQosGroup = types.Int64Value(res.Get(data.getClassName() + ".attributes.conformSetQosGrpTransmit").Int())
+	data.ExceedAction = types.StringValue(res.Get(data.getClassName() + ".attributes.exceedAction").String())
+	data.ExceedSetCos = types.Int64Value(res.Get(data.getClassName() + ".attributes.exceedSetCosTransmit").Int())
+	data.ExceedSetDscp = types.Int64Value(res.Get(data.getClassName() + ".attributes.exceedSetDscpTransmit").Int())
+	data.ExceedSetPrecedence = types.StringValue(res.Get(data.getClassName() + ".attributes.exceedSetPrecTransmit").String())
+	data.ExceedSetQosGroup = types.Int64Value(res.Get(data.getClassName() + ".attributes.exceedSetQosGrpTransmit").Int())
+	data.PirRate = types.Int64Value(res.Get(data.getClassName() + ".attributes.pirRate").Int())
+	data.PirUnit = types.StringValue(res.Get(data.getClassName() + ".attributes.pirUnit").String())
+	data.ViolateAction = types.StringValue(res.Get(data.getClassName() + ".attributes.violateAction").String())
+	data.ViolateSetCos = types.Int64Value(res.Get(data.getClassName() + ".attributes.violateSetCosTransmit").Int())
+	data.ViolateSetDscp = types.Int64Value(res.Get(data.getClassName() + ".attributes.violateSetDscpTransmit").Int())
+	data.ViolateSetPrecedence = types.StringValue(res.Get(data.getClassName() + ".attributes.violateSetPrecTransmit").String())
+	data.ViolateSetQosGroup = types.Int64Value(res.Get(data.getClassName() + ".attributes.violateSetQosGrpTransmit").Int())
+}
+
+func (data *DefaultQOSPolicyMapMatchClassMapPolice) updateFromBody(res gjson.Result) {
+	if !data.BcRate.IsNull() {
 		data.BcRate = types.Int64Value(res.Get(data.getClassName() + ".attributes.bcRate").Int())
 	} else {
 		data.BcRate = types.Int64Null()
 	}
-	if !data.BcUnit.IsNull() || all {
+	if !data.BcUnit.IsNull() {
 		data.BcUnit = types.StringValue(res.Get(data.getClassName() + ".attributes.bcUnit").String())
 	} else {
 		data.BcUnit = types.StringNull()
 	}
-	if !data.BeRate.IsNull() || all {
+	if !data.BeRate.IsNull() {
 		data.BeRate = types.Int64Value(res.Get(data.getClassName() + ".attributes.beRate").Int())
 	} else {
 		data.BeRate = types.Int64Null()
 	}
-	if !data.BeUnit.IsNull() || all {
+	if !data.BeUnit.IsNull() {
 		data.BeUnit = types.StringValue(res.Get(data.getClassName() + ".attributes.beUnit").String())
 	} else {
 		data.BeUnit = types.StringNull()
 	}
-	if !data.CirRate.IsNull() || all {
+	if !data.CirRate.IsNull() {
 		data.CirRate = types.Int64Value(res.Get(data.getClassName() + ".attributes.cirRate").Int())
 	} else {
 		data.CirRate = types.Int64Null()
 	}
-	if !data.CirUnit.IsNull() || all {
+	if !data.CirUnit.IsNull() {
 		data.CirUnit = types.StringValue(res.Get(data.getClassName() + ".attributes.cirUnit").String())
 	} else {
 		data.CirUnit = types.StringNull()
 	}
-	if !data.ConformAction.IsNull() || all {
+	if !data.ConformAction.IsNull() {
 		data.ConformAction = types.StringValue(res.Get(data.getClassName() + ".attributes.conformAction").String())
 	} else {
 		data.ConformAction = types.StringNull()
 	}
-	if !data.ConformSetCos.IsNull() || all {
+	if !data.ConformSetCos.IsNull() {
 		data.ConformSetCos = types.Int64Value(res.Get(data.getClassName() + ".attributes.conformSetCosTransmit").Int())
 	} else {
 		data.ConformSetCos = types.Int64Null()
 	}
-	if !data.ConformSetDscp.IsNull() || all {
+	if !data.ConformSetDscp.IsNull() {
 		data.ConformSetDscp = types.Int64Value(res.Get(data.getClassName() + ".attributes.conformSetDscpTransmit").Int())
 	} else {
 		data.ConformSetDscp = types.Int64Null()
 	}
-	if !data.ConformSetPrecedence.IsNull() || all {
+	if !data.ConformSetPrecedence.IsNull() {
 		data.ConformSetPrecedence = types.StringValue(res.Get(data.getClassName() + ".attributes.conformSetPrecTransmit").String())
 	} else {
 		data.ConformSetPrecedence = types.StringNull()
 	}
-	if !data.ConformSetQosGroup.IsNull() || all {
+	if !data.ConformSetQosGroup.IsNull() {
 		data.ConformSetQosGroup = types.Int64Value(res.Get(data.getClassName() + ".attributes.conformSetQosGrpTransmit").Int())
 	} else {
 		data.ConformSetQosGroup = types.Int64Null()
 	}
-	if !data.ExceedAction.IsNull() || all {
+	if !data.ExceedAction.IsNull() {
 		data.ExceedAction = types.StringValue(res.Get(data.getClassName() + ".attributes.exceedAction").String())
 	} else {
 		data.ExceedAction = types.StringNull()
 	}
-	if !data.ExceedSetCos.IsNull() || all {
+	if !data.ExceedSetCos.IsNull() {
 		data.ExceedSetCos = types.Int64Value(res.Get(data.getClassName() + ".attributes.exceedSetCosTransmit").Int())
 	} else {
 		data.ExceedSetCos = types.Int64Null()
 	}
-	if !data.ExceedSetDscp.IsNull() || all {
+	if !data.ExceedSetDscp.IsNull() {
 		data.ExceedSetDscp = types.Int64Value(res.Get(data.getClassName() + ".attributes.exceedSetDscpTransmit").Int())
 	} else {
 		data.ExceedSetDscp = types.Int64Null()
 	}
-	if !data.ExceedSetPrecedence.IsNull() || all {
+	if !data.ExceedSetPrecedence.IsNull() {
 		data.ExceedSetPrecedence = types.StringValue(res.Get(data.getClassName() + ".attributes.exceedSetPrecTransmit").String())
 	} else {
 		data.ExceedSetPrecedence = types.StringNull()
 	}
-	if !data.ExceedSetQosGroup.IsNull() || all {
+	if !data.ExceedSetQosGroup.IsNull() {
 		data.ExceedSetQosGroup = types.Int64Value(res.Get(data.getClassName() + ".attributes.exceedSetQosGrpTransmit").Int())
 	} else {
 		data.ExceedSetQosGroup = types.Int64Null()
 	}
-	if !data.PirRate.IsNull() || all {
+	if !data.PirRate.IsNull() {
 		data.PirRate = types.Int64Value(res.Get(data.getClassName() + ".attributes.pirRate").Int())
 	} else {
 		data.PirRate = types.Int64Null()
 	}
-	if !data.PirUnit.IsNull() || all {
+	if !data.PirUnit.IsNull() {
 		data.PirUnit = types.StringValue(res.Get(data.getClassName() + ".attributes.pirUnit").String())
 	} else {
 		data.PirUnit = types.StringNull()
 	}
-	if !data.ViolateAction.IsNull() || all {
+	if !data.ViolateAction.IsNull() {
 		data.ViolateAction = types.StringValue(res.Get(data.getClassName() + ".attributes.violateAction").String())
 	} else {
 		data.ViolateAction = types.StringNull()
 	}
-	if !data.ViolateSetCos.IsNull() || all {
+	if !data.ViolateSetCos.IsNull() {
 		data.ViolateSetCos = types.Int64Value(res.Get(data.getClassName() + ".attributes.violateSetCosTransmit").Int())
 	} else {
 		data.ViolateSetCos = types.Int64Null()
 	}
-	if !data.ViolateSetDscp.IsNull() || all {
+	if !data.ViolateSetDscp.IsNull() {
 		data.ViolateSetDscp = types.Int64Value(res.Get(data.getClassName() + ".attributes.violateSetDscpTransmit").Int())
 	} else {
 		data.ViolateSetDscp = types.Int64Null()
 	}
-	if !data.ViolateSetPrecedence.IsNull() || all {
+	if !data.ViolateSetPrecedence.IsNull() {
 		data.ViolateSetPrecedence = types.StringValue(res.Get(data.getClassName() + ".attributes.violateSetPrecTransmit").String())
 	} else {
 		data.ViolateSetPrecedence = types.StringNull()
 	}
-	if !data.ViolateSetQosGroup.IsNull() || all {
+	if !data.ViolateSetQosGroup.IsNull() {
 		data.ViolateSetQosGroup = types.Int64Value(res.Get(data.getClassName() + ".attributes.violateSetQosGrpTransmit").Int())
 	} else {
 		data.ViolateSetQosGroup = types.Int64Null()

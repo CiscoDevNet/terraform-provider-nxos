@@ -87,8 +87,12 @@ func (data VRFRouteTargetAddressFamily) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *VRFRouteTargetAddressFamily) fromBody(res gjson.Result, all bool) {
-	if !data.RouteTargetAddressFamily.IsNull() || all {
+func (data *VRFRouteTargetAddressFamily) fromBody(res gjson.Result) {
+	data.RouteTargetAddressFamily = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
+}
+
+func (data *VRFRouteTargetAddressFamily) updateFromBody(res gjson.Result) {
+	if !data.RouteTargetAddressFamily.IsNull() {
 		data.RouteTargetAddressFamily = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
 	} else {
 		data.RouteTargetAddressFamily = types.StringNull()

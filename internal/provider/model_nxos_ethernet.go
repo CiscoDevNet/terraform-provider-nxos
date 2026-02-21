@@ -80,13 +80,18 @@ func (data Ethernet) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *Ethernet) fromBody(res gjson.Result, all bool) {
-	if !data.Mtu.IsNull() || all {
+func (data *Ethernet) fromBody(res gjson.Result) {
+	data.Mtu = types.Int64Value(res.Get(data.getClassName() + ".attributes.systemJumboMtu").Int())
+	data.DefaultAdminStatus = types.StringValue(res.Get(data.getClassName() + ".attributes.systemDefaultAdminSt").String())
+}
+
+func (data *Ethernet) updateFromBody(res gjson.Result) {
+	if !data.Mtu.IsNull() {
 		data.Mtu = types.Int64Value(res.Get(data.getClassName() + ".attributes.systemJumboMtu").Int())
 	} else {
 		data.Mtu = types.Int64Null()
 	}
-	if !data.DefaultAdminStatus.IsNull() || all {
+	if !data.DefaultAdminStatus.IsNull() {
 		data.DefaultAdminStatus = types.StringValue(res.Get(data.getClassName() + ".attributes.systemDefaultAdminSt").String())
 	} else {
 		data.DefaultAdminStatus = types.StringNull()

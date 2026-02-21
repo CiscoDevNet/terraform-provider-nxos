@@ -100,33 +100,42 @@ func (data NTPServer) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *NTPServer) fromBody(res gjson.Result, all bool) {
-	if !data.Name.IsNull() || all {
+func (data *NTPServer) fromBody(res gjson.Result) {
+	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	data.Vrf = types.StringValue(res.Get(data.getClassName() + ".attributes.vrf").String())
+	data.Type = types.StringValue(res.Get(data.getClassName() + ".attributes.provT").String())
+	data.KeyId = types.Int64Value(res.Get(data.getClassName() + ".attributes.keyId").Int())
+	data.MinPoll = types.Int64Value(res.Get(data.getClassName() + ".attributes.minPoll").Int())
+	data.MaxPoll = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxPoll").Int())
+}
+
+func (data *NTPServer) updateFromBody(res gjson.Result) {
+	if !data.Name.IsNull() {
 		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
 		data.Name = types.StringNull()
 	}
-	if !data.Vrf.IsNull() || all {
+	if !data.Vrf.IsNull() {
 		data.Vrf = types.StringValue(res.Get(data.getClassName() + ".attributes.vrf").String())
 	} else {
 		data.Vrf = types.StringNull()
 	}
-	if !data.Type.IsNull() || all {
+	if !data.Type.IsNull() {
 		data.Type = types.StringValue(res.Get(data.getClassName() + ".attributes.provT").String())
 	} else {
 		data.Type = types.StringNull()
 	}
-	if !data.KeyId.IsNull() || all {
+	if !data.KeyId.IsNull() {
 		data.KeyId = types.Int64Value(res.Get(data.getClassName() + ".attributes.keyId").Int())
 	} else {
 		data.KeyId = types.Int64Null()
 	}
-	if !data.MinPoll.IsNull() || all {
+	if !data.MinPoll.IsNull() {
 		data.MinPoll = types.Int64Value(res.Get(data.getClassName() + ".attributes.minPoll").Int())
 	} else {
 		data.MinPoll = types.Int64Null()
 	}
-	if !data.MaxPoll.IsNull() || all {
+	if !data.MaxPoll.IsNull() {
 		data.MaxPoll = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxPoll").Int())
 	} else {
 		data.MaxPoll = types.Int64Null()

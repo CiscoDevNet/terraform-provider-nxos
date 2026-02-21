@@ -124,68 +124,84 @@ func (data VPCKeepalive) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *VPCKeepalive) fromBody(res gjson.Result, all bool) {
-	if !data.DestinationIp.IsNull() || all {
+func (data *VPCKeepalive) fromBody(res gjson.Result) {
+	data.DestinationIp = types.StringValue(res.Get(data.getClassName() + ".attributes.destIp").String())
+	data.FlushTimeout = types.Int64Value(res.Get(data.getClassName() + ".attributes.flushTout").Int())
+	data.Interval = types.Int64Value(res.Get(data.getClassName() + ".attributes.interval").Int())
+	data.PrecedenceType = types.Int64Value(res.Get(data.getClassName() + ".attributes.precType").Int())
+	data.PrecedenceValue = types.Int64Value(res.Get(data.getClassName() + ".attributes.precValue").Int())
+	data.SourceIp = types.StringValue(res.Get(data.getClassName() + ".attributes.srcIp").String())
+	data.Timeout = types.Int64Value(res.Get(data.getClassName() + ".attributes.timeout").Int())
+	data.TypeOfServiceByte = types.Int64Value(res.Get(data.getClassName() + ".attributes.tosByte").Int())
+	data.TypeOfServiceConfigurationType = types.Int64Value(res.Get(data.getClassName() + ".attributes.tosCfgType").Int())
+	data.TypeOfServiceType = types.Int64Value(res.Get(data.getClassName() + ".attributes.tosType").Int())
+	data.TypeOfServiceValue = types.Int64Value(res.Get(data.getClassName() + ".attributes.tosValue").Int())
+	data.UdpPort = types.Int64Value(res.Get(data.getClassName() + ".attributes.udpPort").Int())
+	data.Vrf = types.StringValue(res.Get(data.getClassName() + ".attributes.vrf").String())
+}
+
+func (data *VPCKeepalive) updateFromBody(res gjson.Result) {
+	if !data.DestinationIp.IsNull() {
 		data.DestinationIp = types.StringValue(res.Get(data.getClassName() + ".attributes.destIp").String())
 	} else {
 		data.DestinationIp = types.StringNull()
 	}
-	if !data.FlushTimeout.IsNull() || all {
+	if !data.FlushTimeout.IsNull() {
 		data.FlushTimeout = types.Int64Value(res.Get(data.getClassName() + ".attributes.flushTout").Int())
 	} else {
 		data.FlushTimeout = types.Int64Null()
 	}
-	if !data.Interval.IsNull() || all {
+	if !data.Interval.IsNull() {
 		data.Interval = types.Int64Value(res.Get(data.getClassName() + ".attributes.interval").Int())
 	} else {
 		data.Interval = types.Int64Null()
 	}
-	if !data.PrecedenceType.IsNull() || all {
+	if !data.PrecedenceType.IsNull() {
 		data.PrecedenceType = types.Int64Value(res.Get(data.getClassName() + ".attributes.precType").Int())
 	} else {
 		data.PrecedenceType = types.Int64Null()
 	}
-	if !data.PrecedenceValue.IsNull() || all {
+	if !data.PrecedenceValue.IsNull() {
 		data.PrecedenceValue = types.Int64Value(res.Get(data.getClassName() + ".attributes.precValue").Int())
 	} else {
 		data.PrecedenceValue = types.Int64Null()
 	}
-	if !data.SourceIp.IsNull() || all {
+	if !data.SourceIp.IsNull() {
 		data.SourceIp = types.StringValue(res.Get(data.getClassName() + ".attributes.srcIp").String())
 	} else {
 		data.SourceIp = types.StringNull()
 	}
-	if !data.Timeout.IsNull() || all {
+	if !data.Timeout.IsNull() {
 		data.Timeout = types.Int64Value(res.Get(data.getClassName() + ".attributes.timeout").Int())
 	} else {
 		data.Timeout = types.Int64Null()
 	}
-	if !data.TypeOfServiceByte.IsNull() || all {
+	if !data.TypeOfServiceByte.IsNull() {
 		data.TypeOfServiceByte = types.Int64Value(res.Get(data.getClassName() + ".attributes.tosByte").Int())
 	} else {
 		data.TypeOfServiceByte = types.Int64Null()
 	}
-	if !data.TypeOfServiceConfigurationType.IsNull() || all {
+	if !data.TypeOfServiceConfigurationType.IsNull() {
 		data.TypeOfServiceConfigurationType = types.Int64Value(res.Get(data.getClassName() + ".attributes.tosCfgType").Int())
 	} else {
 		data.TypeOfServiceConfigurationType = types.Int64Null()
 	}
-	if !data.TypeOfServiceType.IsNull() || all {
+	if !data.TypeOfServiceType.IsNull() {
 		data.TypeOfServiceType = types.Int64Value(res.Get(data.getClassName() + ".attributes.tosType").Int())
 	} else {
 		data.TypeOfServiceType = types.Int64Null()
 	}
-	if !data.TypeOfServiceValue.IsNull() || all {
+	if !data.TypeOfServiceValue.IsNull() {
 		data.TypeOfServiceValue = types.Int64Value(res.Get(data.getClassName() + ".attributes.tosValue").Int())
 	} else {
 		data.TypeOfServiceValue = types.Int64Null()
 	}
-	if !data.UdpPort.IsNull() || all {
+	if !data.UdpPort.IsNull() {
 		data.UdpPort = types.Int64Value(res.Get(data.getClassName() + ".attributes.udpPort").Int())
 	} else {
 		data.UdpPort = types.Int64Null()
 	}
-	if !data.Vrf.IsNull() || all {
+	if !data.Vrf.IsNull() {
 		data.Vrf = types.StringValue(res.Get(data.getClassName() + ".attributes.vrf").String())
 	} else {
 		data.Vrf = types.StringNull()

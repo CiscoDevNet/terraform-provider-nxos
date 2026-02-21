@@ -206,7 +206,11 @@ func (r *QueuingQOSPolicyMapMatchClassMapRemainingBandwidthResource) Read(ctx co
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
 		}
-		state.fromBody(res, imp)
+		if imp {
+			state.fromBody(res)
+		} else {
+			state.updateFromBody(res)
+		}
 	}
 
 	var identity QueuingQOSPolicyMapMatchClassMapRemainingBandwidthIdentity

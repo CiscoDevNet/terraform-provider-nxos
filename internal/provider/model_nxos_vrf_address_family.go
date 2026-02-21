@@ -83,8 +83,12 @@ func (data VRFAddressFamily) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *VRFAddressFamily) fromBody(res gjson.Result, all bool) {
-	if !data.AddressFamily.IsNull() || all {
+func (data *VRFAddressFamily) fromBody(res gjson.Result) {
+	data.AddressFamily = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
+}
+
+func (data *VRFAddressFamily) updateFromBody(res gjson.Result) {
+	if !data.AddressFamily.IsNull() {
 		data.AddressFamily = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
 	} else {
 		data.AddressFamily = types.StringNull()

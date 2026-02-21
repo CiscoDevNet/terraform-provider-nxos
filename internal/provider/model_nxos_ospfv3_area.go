@@ -105,28 +105,36 @@ func (data OSPFv3Area) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *OSPFv3Area) fromBody(res gjson.Result, all bool) {
-	if !data.AreaId.IsNull() || all {
+func (data *OSPFv3Area) fromBody(res gjson.Result) {
+	data.AreaId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
+	data.Redistribute = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.redistribute").String()))
+	data.Summary = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.summary").String()))
+	data.SuppressForwardAddress = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.supressFa").String()))
+	data.Type = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
+}
+
+func (data *OSPFv3Area) updateFromBody(res gjson.Result) {
+	if !data.AreaId.IsNull() {
 		data.AreaId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	} else {
 		data.AreaId = types.StringNull()
 	}
-	if !data.Redistribute.IsNull() || all {
+	if !data.Redistribute.IsNull() {
 		data.Redistribute = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.redistribute").String()))
 	} else {
 		data.Redistribute = types.BoolNull()
 	}
-	if !data.Summary.IsNull() || all {
+	if !data.Summary.IsNull() {
 		data.Summary = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.summary").String()))
 	} else {
 		data.Summary = types.BoolNull()
 	}
-	if !data.SuppressForwardAddress.IsNull() || all {
+	if !data.SuppressForwardAddress.IsNull() {
 		data.SuppressForwardAddress = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.supressFa").String()))
 	} else {
 		data.SuppressForwardAddress = types.BoolNull()
 	}
-	if !data.Type.IsNull() || all {
+	if !data.Type.IsNull() {
 		data.Type = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
 	} else {
 		data.Type = types.StringNull()

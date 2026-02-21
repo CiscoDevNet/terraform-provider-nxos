@@ -108,33 +108,42 @@ func (data ISISAddressFamily) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *ISISAddressFamily) fromBody(res gjson.Result, all bool) {
-	if !data.Vrf.IsNull() || all {
+func (data *ISISAddressFamily) fromBody(res gjson.Result) {
+	data.Vrf = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	data.AddressFamily = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
+	data.SegmentRoutingMpls = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.srMpls").String()))
+	data.EnableBfd = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.enableBfd").String()))
+	data.PrefixAdvertisePassiveL1 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.advPassiveLvl1").String()))
+	data.PrefixAdvertisePassiveL2 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.advPassiveLvl2").String()))
+}
+
+func (data *ISISAddressFamily) updateFromBody(res gjson.Result) {
+	if !data.Vrf.IsNull() {
 		data.Vrf = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
 		data.Vrf = types.StringNull()
 	}
-	if !data.AddressFamily.IsNull() || all {
+	if !data.AddressFamily.IsNull() {
 		data.AddressFamily = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
 	} else {
 		data.AddressFamily = types.StringNull()
 	}
-	if !data.SegmentRoutingMpls.IsNull() || all {
+	if !data.SegmentRoutingMpls.IsNull() {
 		data.SegmentRoutingMpls = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.srMpls").String()))
 	} else {
 		data.SegmentRoutingMpls = types.BoolNull()
 	}
-	if !data.EnableBfd.IsNull() || all {
+	if !data.EnableBfd.IsNull() {
 		data.EnableBfd = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.enableBfd").String()))
 	} else {
 		data.EnableBfd = types.BoolNull()
 	}
-	if !data.PrefixAdvertisePassiveL1.IsNull() || all {
+	if !data.PrefixAdvertisePassiveL1.IsNull() {
 		data.PrefixAdvertisePassiveL1 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.advPassiveLvl1").String()))
 	} else {
 		data.PrefixAdvertisePassiveL1 = types.BoolNull()
 	}
-	if !data.PrefixAdvertisePassiveL2.IsNull() || all {
+	if !data.PrefixAdvertisePassiveL2.IsNull() {
 		data.PrefixAdvertisePassiveL2 = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.advPassiveLvl2").String()))
 	} else {
 		data.PrefixAdvertisePassiveL2 = types.BoolNull()

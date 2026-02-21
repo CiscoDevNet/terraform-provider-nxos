@@ -75,8 +75,12 @@ func (data QueuingQOSPolicySystemOutPolicyMap) toBody(statusReplace bool) nxos.B
 	return nxos.Body{body}
 }
 
-func (data *QueuingQOSPolicySystemOutPolicyMap) fromBody(res gjson.Result, all bool) {
-	if !data.PolicyMapName.IsNull() || all {
+func (data *QueuingQOSPolicySystemOutPolicyMap) fromBody(res gjson.Result) {
+	data.PolicyMapName = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+}
+
+func (data *QueuingQOSPolicySystemOutPolicyMap) updateFromBody(res gjson.Result) {
+	if !data.PolicyMapName.IsNull() {
 		data.PolicyMapName = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
 		data.PolicyMapName = types.StringNull()

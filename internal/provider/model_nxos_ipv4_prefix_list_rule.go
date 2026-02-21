@@ -79,8 +79,12 @@ func (data IPv4PrefixListRule) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *IPv4PrefixListRule) fromBody(res gjson.Result, all bool) {
-	if !data.Name.IsNull() || all {
+func (data *IPv4PrefixListRule) fromBody(res gjson.Result) {
+	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+}
+
+func (data *IPv4PrefixListRule) updateFromBody(res gjson.Result) {
+	if !data.Name.IsNull() {
 		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
 		data.Name = types.StringNull()

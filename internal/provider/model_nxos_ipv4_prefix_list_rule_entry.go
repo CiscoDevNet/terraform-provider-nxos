@@ -104,33 +104,42 @@ func (data IPv4PrefixListRuleEntry) toBody(statusReplace bool) nxos.Body {
 	return nxos.Body{body}
 }
 
-func (data *IPv4PrefixListRuleEntry) fromBody(res gjson.Result, all bool) {
-	if !data.Order.IsNull() || all {
+func (data *IPv4PrefixListRuleEntry) fromBody(res gjson.Result) {
+	data.Order = types.Int64Value(res.Get(data.getClassName() + ".attributes.order").Int())
+	data.Action = types.StringValue(res.Get(data.getClassName() + ".attributes.action").String())
+	data.Criteria = types.StringValue(res.Get(data.getClassName() + ".attributes.criteria").String())
+	data.Prefix = types.StringValue(res.Get(data.getClassName() + ".attributes.pfx").String())
+	data.FromRange = types.Int64Value(res.Get(data.getClassName() + ".attributes.fromPfxLen").Int())
+	data.ToRange = types.Int64Value(res.Get(data.getClassName() + ".attributes.toPfxLen").Int())
+}
+
+func (data *IPv4PrefixListRuleEntry) updateFromBody(res gjson.Result) {
+	if !data.Order.IsNull() {
 		data.Order = types.Int64Value(res.Get(data.getClassName() + ".attributes.order").Int())
 	} else {
 		data.Order = types.Int64Null()
 	}
-	if !data.Action.IsNull() || all {
+	if !data.Action.IsNull() {
 		data.Action = types.StringValue(res.Get(data.getClassName() + ".attributes.action").String())
 	} else {
 		data.Action = types.StringNull()
 	}
-	if !data.Criteria.IsNull() || all {
+	if !data.Criteria.IsNull() {
 		data.Criteria = types.StringValue(res.Get(data.getClassName() + ".attributes.criteria").String())
 	} else {
 		data.Criteria = types.StringNull()
 	}
-	if !data.Prefix.IsNull() || all {
+	if !data.Prefix.IsNull() {
 		data.Prefix = types.StringValue(res.Get(data.getClassName() + ".attributes.pfx").String())
 	} else {
 		data.Prefix = types.StringNull()
 	}
-	if !data.FromRange.IsNull() || all {
+	if !data.FromRange.IsNull() {
 		data.FromRange = types.Int64Value(res.Get(data.getClassName() + ".attributes.fromPfxLen").Int())
 	} else {
 		data.FromRange = types.Int64Null()
 	}
-	if !data.ToRange.IsNull() || all {
+	if !data.ToRange.IsNull() {
 		data.ToRange = types.Int64Value(res.Get(data.getClassName() + ".attributes.toPfxLen").Int())
 	} else {
 		data.ToRange = types.Int64Null()

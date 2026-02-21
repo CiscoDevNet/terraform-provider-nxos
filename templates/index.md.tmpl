@@ -10,11 +10,6 @@ description: |-
 
 The NXOS provider provides resources to interact with one or [more](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/guides/manage_multiple_devices) Cisco NX-OS devices. Each resource or data source maps to a single NX-OS DME object. There are several [Terraform Modules](https://registry.terraform.io/browse/modules?provider=nxos) available which offer a certain level of abstraction and therefore not requiring in-depth knowledge of the DME object model.
 
-The following example repositories exist to demonstrate the use of the provider:
-
-- [Nexus 9000 EVPN Fabric](https://github.com/netascode/terraform-nxos-evpn-example)
-- [Nexus 9000 ACLs](https://github.com/netascode/terraform-nxos-acl-example)
-
 It communicates with NX-OS devices via the NX-API REST, which requires the following device configuration.
 
 ```

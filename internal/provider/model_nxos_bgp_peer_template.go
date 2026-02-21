@@ -74,12 +74,9 @@ func (data BGPPeerTemplate) getClassName() string {
 	return "bgpPeerCont"
 }
 
-func (data BGPPeerTemplate) toBody(statusReplace bool) nxos.Body {
+func (data BGPPeerTemplate) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.TemplateName.IsUnknown() && !data.TemplateName.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.TemplateName.ValueString())
 	}

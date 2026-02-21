@@ -67,12 +67,9 @@ func (data SVIInterfaceVRF) getClassName() string {
 	return "nwRtVrfMbr"
 }
 
-func (data SVIInterfaceVRF) toBody(statusReplace bool) nxos.Body {
+func (data SVIInterfaceVRF) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.VrfDn.IsUnknown() && !data.VrfDn.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"tDn", data.VrfDn.ValueString())
 	}

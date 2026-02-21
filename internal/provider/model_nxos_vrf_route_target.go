@@ -82,12 +82,9 @@ func (data VRFRouteTarget) getClassName() string {
 	return "rtctrlRttEntry"
 }
 
-func (data VRFRouteTarget) toBody(statusReplace bool) nxos.Body {
+func (data VRFRouteTarget) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.RouteTarget.IsUnknown() && !data.RouteTarget.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rtt", data.RouteTarget.ValueString())
 	}

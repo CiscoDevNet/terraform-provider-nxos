@@ -53,10 +53,11 @@ func TestAccNxosBGPGracefulRestart(t *testing.T) {
 				ImportStateIdFunc: nxosBGPGracefulRestartImportStateIdFunc("nxos_bgp_graceful_restart.test"),
 			},
 			{
-				ResourceName:    "nxos_bgp_graceful_restart.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_bgp_graceful_restart.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

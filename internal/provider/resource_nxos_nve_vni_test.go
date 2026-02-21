@@ -54,10 +54,11 @@ func TestAccNxosNVEVNI(t *testing.T) {
 				ImportStateIdFunc: nxosNVEVNIImportStateIdFunc("nxos_nve_vni.test"),
 			},
 			{
-				ResourceName:    "nxos_nve_vni.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_nve_vni.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

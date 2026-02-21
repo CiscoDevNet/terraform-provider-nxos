@@ -52,10 +52,11 @@ func TestAccNxosBridgeDomain(t *testing.T) {
 				ImportStateIdFunc: nxosBridgeDomainImportStateIdFunc("nxos_bridge_domain.test"),
 			},
 			{
-				ResourceName:    "nxos_bridge_domain.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_bridge_domain.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

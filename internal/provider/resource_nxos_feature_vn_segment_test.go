@@ -50,10 +50,11 @@ func TestAccNxosFeatureVNSegment(t *testing.T) {
 				ImportStateIdFunc: nxosFeatureVNSegmentImportStateIdFunc("nxos_feature_vn_segment.test"),
 			},
 			{
-				ResourceName:    "nxos_feature_vn_segment.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_feature_vn_segment.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

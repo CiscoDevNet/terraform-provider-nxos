@@ -86,12 +86,9 @@ func (data IPv6StaticRoute) getClassName() string {
 	return "ipv6Route"
 }
 
-func (data IPv6StaticRoute) toBody(statusReplace bool) nxos.Body {
+func (data IPv6StaticRoute) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.Prefix.IsUnknown() && !data.Prefix.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"prefix", data.Prefix.ValueString())
 	}
@@ -217,4 +214,21 @@ func (data IPv6StaticRoute) getDeleteDns() []string {
 	dns = append(dns, data.getDn())
 
 	return dns
+}
+
+func (data IPv6StaticRoute) getDeletedItems(ctx context.Context, state IPv6StaticRoute) []string {
+	deletedItems := []string{}
+	for _, stateChild := range state.NextHops {
+		found := false
+		for _, planChild := range data.NextHops {
+			if stateChild.InterfaceId == planChild.InterfaceId && stateChild.Address == planChild.Address && stateChild.VrfName == planChild.VrfName {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, data.getDn()+"/"+stateChild.getRn())
+		}
+	}
+	return deletedItems
 }

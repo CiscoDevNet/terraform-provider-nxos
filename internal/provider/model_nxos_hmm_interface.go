@@ -68,12 +68,9 @@ func (data HMMInterface) getClassName() string {
 	return "hmmFwdIf"
 }
 
-func (data HMMInterface) toBody(statusReplace bool) nxos.Body {
+func (data HMMInterface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.InterfaceId.ValueString())
 	}

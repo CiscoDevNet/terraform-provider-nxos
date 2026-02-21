@@ -67,12 +67,9 @@ func (data QueuingQOSPolicyMap) getClassName() string {
 	return "ipqosPMapInst"
 }
 
-func (data QueuingQOSPolicyMap) toBody(statusReplace bool) nxos.Body {
+func (data QueuingQOSPolicyMap) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}

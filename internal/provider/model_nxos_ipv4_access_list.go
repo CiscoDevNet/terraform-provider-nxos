@@ -122,12 +122,9 @@ func (data IPv4AccessList) getClassName() string {
 	return "ipv4aclACL"
 }
 
-func (data IPv4AccessList) toBody(statusReplace bool) nxos.Body {
+func (data IPv4AccessList) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}
@@ -604,4 +601,21 @@ func (data IPv4AccessList) getDeleteDns() []string {
 	dns = append(dns, data.getDn())
 
 	return dns
+}
+
+func (data IPv4AccessList) getDeletedItems(ctx context.Context, state IPv4AccessList) []string {
+	deletedItems := []string{}
+	for _, stateChild := range state.Entries {
+		found := false
+		for _, planChild := range data.Entries {
+			if stateChild.Sequence == planChild.Sequence {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, data.getDn()+"/"+stateChild.getRn())
+		}
+	}
+	return deletedItems
 }

@@ -50,10 +50,11 @@ func TestAccNxosFeatureTACACS(t *testing.T) {
 				ImportStateIdFunc: nxosFeatureTACACSImportStateIdFunc("nxos_feature_tacacs.test"),
 			},
 			{
-				ResourceName:    "nxos_feature_tacacs.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_feature_tacacs.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

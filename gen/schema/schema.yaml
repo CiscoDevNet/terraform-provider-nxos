@@ -11,7 +11,6 @@ doc_category: str() # Documentation category for the resource
 parents: list(str(), required=False) # List of parent resource names
 children: list(str(), required=False) # List of child resource names
 references: list(str(), required=False) # List of referenced resource names
-status_replace: bool(required=False) # Set to true if status attribute should be set to "replaced" when the resource is updated
 attributes: list(include('attribute'), required=False) # List of attributes
 child_classes: list(include('child_classes'), required=False) # List of child classes to be included inline
 test_prerequisites: list(include('test_prerequisite'), required=False) # List of test prerequisites

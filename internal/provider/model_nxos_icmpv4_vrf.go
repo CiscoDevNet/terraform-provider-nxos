@@ -66,12 +66,9 @@ func (data ICMPv4VRF) getClassName() string {
 	return "icmpv4Dom"
 }
 
-func (data ICMPv4VRF) toBody(statusReplace bool) nxos.Body {
+func (data ICMPv4VRF) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.VrfName.IsUnknown() && !data.VrfName.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.VrfName.ValueString())
 	}

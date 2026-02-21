@@ -80,12 +80,9 @@ func (data ISISAddressFamily) getClassName() string {
 	return "isisDomAf"
 }
 
-func (data ISISAddressFamily) toBody(statusReplace bool) nxos.Body {
+func (data ISISAddressFamily) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.Vrf.IsUnknown() && !data.Vrf.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Vrf.ValueString())
 	}

@@ -2,7 +2,6 @@
 name: User
 class_name: aaaUser
 dn: sys/userext/user-[%s]
-status_replace: true
 ds_description: This data source can read the User configuration.
 res_description: This resource can manage the User configuration.
 doc_path: Security%20and%20Policing/aaa:User/

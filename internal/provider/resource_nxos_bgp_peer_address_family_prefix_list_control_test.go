@@ -55,10 +55,11 @@ func TestAccNxosBGPPeerAddressFamilyPrefixListControl(t *testing.T) {
 				ImportStateIdFunc: nxosBGPPeerAddressFamilyPrefixListControlImportStateIdFunc("nxos_bgp_peer_address_family_prefix_list_control.test"),
 			},
 			{
-				ResourceName:    "nxos_bgp_peer_address_family_prefix_list_control.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_bgp_peer_address_family_prefix_list_control.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

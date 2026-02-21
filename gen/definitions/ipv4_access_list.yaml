@@ -2,7 +2,6 @@
 name: IPv4 Access List
 class_name: ipv4aclACL
 dn: sys/acl/ipv4/name-[%s]
-status_replace: true
 ds_description: This data source can read IPv4 Access Lists.
 res_description: This resource can manage IPv4 Access Lists.
 doc_path: Security%20and%20Policing/ipv4acl:ACL/

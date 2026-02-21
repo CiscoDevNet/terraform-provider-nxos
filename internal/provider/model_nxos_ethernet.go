@@ -64,12 +64,9 @@ func (data Ethernet) getClassName() string {
 	return "ethpmInst"
 }
 
-func (data Ethernet) toBody(statusReplace bool) nxos.Body {
+func (data Ethernet) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.Mtu.IsUnknown() && !data.Mtu.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"systemJumboMtu", strconv.FormatInt(data.Mtu.ValueInt64(), 10))
 	}

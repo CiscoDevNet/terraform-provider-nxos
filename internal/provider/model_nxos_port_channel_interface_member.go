@@ -73,12 +73,9 @@ func (data PortChannelInterfaceMember) getClassName() string {
 	return "pcRsMbrIfs"
 }
 
-func (data PortChannelInterfaceMember) toBody(statusReplace bool) nxos.Body {
+func (data PortChannelInterfaceMember) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.InterfaceDn.IsUnknown() && !data.InterfaceDn.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"tDn", data.InterfaceDn.ValueString())
 	}

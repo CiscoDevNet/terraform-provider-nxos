@@ -55,10 +55,11 @@ func TestAccNxosOSPFArea(t *testing.T) {
 				ImportStateIdFunc: nxosOSPFAreaImportStateIdFunc("nxos_ospf_area.test"),
 			},
 			{
-				ResourceName:    "nxos_ospf_area.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_ospf_area.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

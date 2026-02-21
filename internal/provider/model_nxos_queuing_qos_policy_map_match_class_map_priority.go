@@ -72,12 +72,9 @@ func (data QueuingQOSPolicyMapMatchClassMapPriority) getClassName() string {
 	return "ipqosPriority"
 }
 
-func (data QueuingQOSPolicyMapMatchClassMapPriority) toBody(statusReplace bool) nxos.Body {
+func (data QueuingQOSPolicyMapMatchClassMapPriority) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.Level.IsUnknown() && !data.Level.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"level", strconv.FormatInt(data.Level.ValueInt64(), 10))
 	}

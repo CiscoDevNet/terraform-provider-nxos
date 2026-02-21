@@ -55,10 +55,11 @@ func TestAccNxosNTPServer(t *testing.T) {
 				ImportStateIdFunc: nxosNTPServerImportStateIdFunc("nxos_ntp_server.test"),
 			},
 			{
-				ResourceName:    "nxos_ntp_server.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_ntp_server.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

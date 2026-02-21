@@ -53,10 +53,11 @@ func TestAccNxosBGPPeerLocalASN(t *testing.T) {
 				ImportStateIdFunc: nxosBGPPeerLocalASNImportStateIdFunc("nxos_bgp_peer_local_asn.test"),
 			},
 			{
-				ResourceName:    "nxos_bgp_peer_local_asn.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_bgp_peer_local_asn.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

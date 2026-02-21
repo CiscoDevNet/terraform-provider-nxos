@@ -55,10 +55,11 @@ func TestAccNxosBGPPeerTemplate(t *testing.T) {
 				ImportStateIdFunc: nxosBGPPeerTemplateImportStateIdFunc("nxos_bgp_peer_template.test"),
 			},
 			{
-				ResourceName:    "nxos_bgp_peer_template.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_bgp_peer_template.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

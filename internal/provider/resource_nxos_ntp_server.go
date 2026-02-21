@@ -167,7 +167,7 @@ func (r *NTPServerResource) Create(ctx context.Context, req resource.CreateReque
 
 	// Post object
 	if device.Managed {
-		body := plan.toBody(false)
+		body := plan.toBody()
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
@@ -268,9 +268,7 @@ func (r *NTPServerResource) Update(ctx context.Context, req resource.UpdateReque
 	}
 
 	if device.Managed {
-
-		body := plan.toBody(false)
-
+		body := plan.toBody()
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))

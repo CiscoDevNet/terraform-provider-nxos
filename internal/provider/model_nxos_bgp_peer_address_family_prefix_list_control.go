@@ -83,12 +83,9 @@ func (data BGPPeerAddressFamilyPrefixListControl) getClassName() string {
 	return "bgpPfxCtrlP"
 }
 
-func (data BGPPeerAddressFamilyPrefixListControl) toBody(statusReplace bool) nxos.Body {
+func (data BGPPeerAddressFamilyPrefixListControl) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.Direction.IsUnknown() && !data.Direction.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"direction", data.Direction.ValueString())
 	}

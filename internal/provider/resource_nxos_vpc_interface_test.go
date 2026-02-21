@@ -51,10 +51,11 @@ func TestAccNxosVPCInterface(t *testing.T) {
 				ImportStateIdFunc: nxosVPCInterfaceImportStateIdFunc("nxos_vpc_interface.test"),
 			},
 			{
-				ResourceName:    "nxos_vpc_interface.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_vpc_interface.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

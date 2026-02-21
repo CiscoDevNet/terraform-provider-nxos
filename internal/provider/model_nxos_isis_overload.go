@@ -72,12 +72,9 @@ func (data ISISOverload) getClassName() string {
 	return "isisOverload"
 }
 
-func (data ISISOverload) toBody(statusReplace bool) nxos.Body {
+func (data ISISOverload) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.StartupTime.IsUnknown() && !data.StartupTime.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"startupTime", strconv.FormatInt(data.StartupTime.ValueInt64(), 10))
 	}

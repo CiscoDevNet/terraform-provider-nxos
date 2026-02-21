@@ -54,10 +54,11 @@ func TestAccNxosPIMStaticRPGroupList(t *testing.T) {
 				ImportStateIdFunc: nxosPIMStaticRPGroupListImportStateIdFunc("nxos_pim_static_rp_group_list.test"),
 			},
 			{
-				ResourceName:    "nxos_pim_static_rp_group_list.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_pim_static_rp_group_list.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

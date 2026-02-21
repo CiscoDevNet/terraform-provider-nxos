@@ -54,10 +54,11 @@ func TestAccNxosFeatureNetflow(t *testing.T) {
 				ImportStateIdFunc: nxosFeatureNetflowImportStateIdFunc("nxos_feature_netflow.test"),
 			},
 			{
-				ResourceName:    "nxos_feature_netflow.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_feature_netflow.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

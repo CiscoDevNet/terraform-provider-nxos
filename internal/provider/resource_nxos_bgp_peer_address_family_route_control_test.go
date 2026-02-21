@@ -55,10 +55,11 @@ func TestAccNxosBGPPeerAddressFamilyRouteControl(t *testing.T) {
 				ImportStateIdFunc: nxosBGPPeerAddressFamilyRouteControlImportStateIdFunc("nxos_bgp_peer_address_family_route_control.test"),
 			},
 			{
-				ResourceName:    "nxos_bgp_peer_address_family_route_control.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_bgp_peer_address_family_route_control.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

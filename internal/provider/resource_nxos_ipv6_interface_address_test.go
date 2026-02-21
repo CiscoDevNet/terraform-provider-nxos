@@ -54,10 +54,11 @@ func TestAccNxosIPv6InterfaceAddress(t *testing.T) {
 				ImportStateIdFunc: nxosIPv6InterfaceAddressImportStateIdFunc("nxos_ipv6_interface_address.test"),
 			},
 			{
-				ResourceName:    "nxos_ipv6_interface_address.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_ipv6_interface_address.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

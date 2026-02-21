@@ -50,10 +50,11 @@ func TestAccNxosFeatureDHCP(t *testing.T) {
 				ImportStateIdFunc: nxosFeatureDHCPImportStateIdFunc("nxos_feature_dhcp.test"),
 			},
 			{
-				ResourceName:    "nxos_feature_dhcp.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_feature_dhcp.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

@@ -83,12 +83,9 @@ func (data OSPFAuthentication) getClassName() string {
 	return "ospfAuthNewP"
 }
 
-func (data OSPFAuthentication) toBody(statusReplace bool) nxos.Body {
+func (data OSPFAuthentication) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.Key.IsUnknown() && !data.Key.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"key", data.Key.ValueString())
 	}

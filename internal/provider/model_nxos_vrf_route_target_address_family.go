@@ -74,12 +74,9 @@ func (data VRFRouteTargetAddressFamily) getClassName() string {
 	return "rtctrlAfCtrl"
 }
 
-func (data VRFRouteTargetAddressFamily) toBody(statusReplace bool) nxos.Body {
+func (data VRFRouteTargetAddressFamily) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.RouteTargetAddressFamily.IsUnknown() && !data.RouteTargetAddressFamily.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.RouteTargetAddressFamily.ValueString())
 	}

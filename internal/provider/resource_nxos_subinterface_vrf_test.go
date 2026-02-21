@@ -51,10 +51,11 @@ func TestAccNxosSubinterfaceVRF(t *testing.T) {
 				ImportStateIdFunc: nxosSubinterfaceVRFImportStateIdFunc("nxos_subinterface_vrf.test"),
 			},
 			{
-				ResourceName:    "nxos_subinterface_vrf.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_subinterface_vrf.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

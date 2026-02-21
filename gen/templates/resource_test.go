@@ -129,10 +129,11 @@ func TestAccNxos{{camelCase .Name}}(t *testing.T) {
 			},
 			{{- if not (hasWriteOnly .Attributes)}}
 			{
-				ResourceName:    "nxos_{{snakeCase $name}}.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_{{snakeCase $name}}.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 			{{- end}}
 		},

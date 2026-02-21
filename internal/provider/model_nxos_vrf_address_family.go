@@ -70,12 +70,9 @@ func (data VRFAddressFamily) getClassName() string {
 	return "rtctrlDomAf"
 }
 
-func (data VRFAddressFamily) toBody(statusReplace bool) nxos.Body {
+func (data VRFAddressFamily) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.AddressFamily.IsUnknown() && !data.AddressFamily.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.AddressFamily.ValueString())
 	}

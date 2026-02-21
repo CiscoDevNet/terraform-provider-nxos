@@ -50,10 +50,11 @@ func TestAccNxosICMPv4Instance(t *testing.T) {
 				ImportStateIdFunc: nxosICMPv4InstanceImportStateIdFunc("nxos_icmpv4_instance.test"),
 			},
 			{
-				ResourceName:    "nxos_icmpv4_instance.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_icmpv4_instance.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

@@ -54,10 +54,11 @@ func TestAccNxosFeatureMACsec(t *testing.T) {
 				ImportStateIdFunc: nxosFeatureMACsecImportStateIdFunc("nxos_feature_macsec.test"),
 			},
 			{
-				ResourceName:    "nxos_feature_macsec.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_feature_macsec.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

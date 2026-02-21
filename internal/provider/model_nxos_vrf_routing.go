@@ -67,12 +67,9 @@ func (data VRFRouting) getClassName() string {
 	return "rtctrlDom"
 }
 
-func (data VRFRouting) toBody(statusReplace bool) nxos.Body {
+func (data VRFRouting) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.RouteDistinguisher.IsUnknown() && !data.RouteDistinguisher.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rd", data.RouteDistinguisher.ValueString())
 	}

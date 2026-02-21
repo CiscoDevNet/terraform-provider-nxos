@@ -50,10 +50,11 @@ func TestAccNxosFeatureOSPFv3(t *testing.T) {
 				ImportStateIdFunc: nxosFeatureOSPFv3ImportStateIdFunc("nxos_feature_ospfv3.test"),
 			},
 			{
-				ResourceName:    "nxos_feature_ospfv3.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_feature_ospfv3.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

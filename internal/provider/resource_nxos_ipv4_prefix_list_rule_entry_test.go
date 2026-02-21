@@ -56,10 +56,11 @@ func TestAccNxosIPv4PrefixListRuleEntry(t *testing.T) {
 				ImportStateIdFunc: nxosIPv4PrefixListRuleEntryImportStateIdFunc("nxos_ipv4_prefix_list_rule_entry.test"),
 			},
 			{
-				ResourceName:    "nxos_ipv4_prefix_list_rule_entry.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_ipv4_prefix_list_rule_entry.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

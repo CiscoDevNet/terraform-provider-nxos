@@ -55,10 +55,11 @@ func TestAccNxosBGPAdvertisedPrefix(t *testing.T) {
 				ImportStateIdFunc: nxosBGPAdvertisedPrefixImportStateIdFunc("nxos_bgp_advertised_prefix.test"),
 			},
 			{
-				ResourceName:    "nxos_bgp_advertised_prefix.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_bgp_advertised_prefix.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

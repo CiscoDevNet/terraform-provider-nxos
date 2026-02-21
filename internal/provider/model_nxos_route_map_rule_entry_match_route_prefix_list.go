@@ -74,12 +74,9 @@ func (data RouteMapRuleEntryMatchRoutePrefixList) getClassName() string {
 	return "rtmapRsRtDstAtt"
 }
 
-func (data RouteMapRuleEntryMatchRoutePrefixList) toBody(statusReplace bool) nxos.Body {
+func (data RouteMapRuleEntryMatchRoutePrefixList) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.PrefixListDn.IsUnknown() && !data.PrefixListDn.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"tDn", data.PrefixListDn.ValueString())
 	}

@@ -51,10 +51,11 @@ func TestAccNxosPIMStaticRPPolicy(t *testing.T) {
 				ImportStateIdFunc: nxosPIMStaticRPPolicyImportStateIdFunc("nxos_pim_static_rp_policy.test"),
 			},
 			{
-				ResourceName:    "nxos_pim_static_rp_policy.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_pim_static_rp_policy.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

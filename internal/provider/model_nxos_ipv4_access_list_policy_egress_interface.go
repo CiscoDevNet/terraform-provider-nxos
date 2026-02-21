@@ -67,12 +67,9 @@ func (data IPv4AccessListPolicyEgressInterface) getClassName() string {
 	return "aclIf"
 }
 
-func (data IPv4AccessListPolicyEgressInterface) toBody(statusReplace bool) nxos.Body {
+func (data IPv4AccessListPolicyEgressInterface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.InterfaceId.ValueString())
 	}

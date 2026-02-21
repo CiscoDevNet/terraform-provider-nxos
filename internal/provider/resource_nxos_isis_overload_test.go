@@ -52,10 +52,11 @@ func TestAccNxosISISOverload(t *testing.T) {
 				ImportStateIdFunc: nxosISISOverloadImportStateIdFunc("nxos_isis_overload.test"),
 			},
 			{
-				ResourceName:    "nxos_isis_overload.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_isis_overload.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

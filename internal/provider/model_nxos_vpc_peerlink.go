@@ -62,12 +62,9 @@ func (data VPCPeerlink) getClassName() string {
 	return "vpcPeerLink"
 }
 
-func (data VPCPeerlink) toBody(statusReplace bool) nxos.Body {
+func (data VPCPeerlink) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.PortChannelId.IsUnknown() && !data.PortChannelId.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.PortChannelId.ValueString())
 	}

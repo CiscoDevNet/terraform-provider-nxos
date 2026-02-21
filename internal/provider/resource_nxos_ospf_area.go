@@ -178,7 +178,7 @@ func (r *OSPFAreaResource) Create(ctx context.Context, req resource.CreateReques
 
 	// Post object
 	if device.Managed {
-		body := plan.toBody(false)
+		body := plan.toBody()
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
@@ -279,9 +279,7 @@ func (r *OSPFAreaResource) Update(ctx context.Context, req resource.UpdateReques
 	}
 
 	if device.Managed {
-
-		body := plan.toBody(false)
-
+		body := plan.toBody()
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))

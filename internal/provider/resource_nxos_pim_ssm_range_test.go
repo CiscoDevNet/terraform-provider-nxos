@@ -57,10 +57,11 @@ func TestAccNxosPIMSSMRange(t *testing.T) {
 				ImportStateIdFunc: nxosPIMSSMRangeImportStateIdFunc("nxos_pim_ssm_range.test"),
 			},
 			{
-				ResourceName:    "nxos_pim_ssm_range.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_pim_ssm_range.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

@@ -75,12 +75,9 @@ func (data VPCKeepalive) getClassName() string {
 	return "vpcKeepalive"
 }
 
-func (data VPCKeepalive) toBody(statusReplace bool) nxos.Body {
+func (data VPCKeepalive) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.DestinationIp.IsUnknown() && !data.DestinationIp.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"destIp", data.DestinationIp.ValueString())
 	}

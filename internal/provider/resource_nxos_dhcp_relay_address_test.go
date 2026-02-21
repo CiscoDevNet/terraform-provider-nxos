@@ -52,10 +52,11 @@ func TestAccNxosDHCPRelayAddress(t *testing.T) {
 				ImportStateIdFunc: nxosDHCPRelayAddressImportStateIdFunc("nxos_dhcp_relay_address.test"),
 			},
 			{
-				ResourceName:    "nxos_dhcp_relay_address.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_dhcp_relay_address.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

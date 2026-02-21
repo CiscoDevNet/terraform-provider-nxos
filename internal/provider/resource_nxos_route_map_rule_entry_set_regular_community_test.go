@@ -54,10 +54,11 @@ func TestAccNxosRouteMapRuleEntrySetRegularCommunity(t *testing.T) {
 				ImportStateIdFunc: nxosRouteMapRuleEntrySetRegularCommunityImportStateIdFunc("nxos_route_map_rule_entry_set_regular_community.test"),
 			},
 			{
-				ResourceName:    "nxos_route_map_rule_entry_set_regular_community.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_route_map_rule_entry_set_regular_community.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

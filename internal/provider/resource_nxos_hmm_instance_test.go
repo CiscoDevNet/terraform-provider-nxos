@@ -51,10 +51,11 @@ func TestAccNxosHMMInstance(t *testing.T) {
 				ImportStateIdFunc: nxosHMMInstanceImportStateIdFunc("nxos_hmm_instance.test"),
 			},
 			{
-				ResourceName:    "nxos_hmm_instance.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_hmm_instance.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

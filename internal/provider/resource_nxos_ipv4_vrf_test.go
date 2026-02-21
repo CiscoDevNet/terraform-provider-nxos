@@ -50,10 +50,11 @@ func TestAccNxosIPv4VRF(t *testing.T) {
 				ImportStateIdFunc: nxosIPv4VRFImportStateIdFunc("nxos_ipv4_vrf.test"),
 			},
 			{
-				ResourceName:    "nxos_ipv4_vrf.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_ipv4_vrf.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

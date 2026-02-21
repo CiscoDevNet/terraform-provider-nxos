@@ -86,12 +86,9 @@ func (data IPv4StaticRoute) getClassName() string {
 	return "ipv4Route"
 }
 
-func (data IPv4StaticRoute) toBody(statusReplace bool) nxos.Body {
+func (data IPv4StaticRoute) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.Prefix.IsUnknown() && !data.Prefix.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"prefix", data.Prefix.ValueString())
 	}
@@ -217,4 +214,21 @@ func (data IPv4StaticRoute) getDeleteDns() []string {
 	dns = append(dns, data.getDn())
 
 	return dns
+}
+
+func (data IPv4StaticRoute) getDeletedItems(ctx context.Context, state IPv4StaticRoute) []string {
+	deletedItems := []string{}
+	for _, stateChild := range state.NextHops {
+		found := false
+		for _, planChild := range data.NextHops {
+			if stateChild.InterfaceId == planChild.InterfaceId && stateChild.Address == planChild.Address && stateChild.VrfName == planChild.VrfName {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, data.getDn()+"/"+stateChild.getRn())
+		}
+	}
+	return deletedItems
 }

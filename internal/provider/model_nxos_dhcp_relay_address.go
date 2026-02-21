@@ -74,12 +74,9 @@ func (data DHCPRelayAddress) getClassName() string {
 	return "dhcpRelayAddr"
 }
 
-func (data DHCPRelayAddress) toBody(statusReplace bool) nxos.Body {
+func (data DHCPRelayAddress) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.Vrf.IsUnknown() && !data.Vrf.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"vrf", data.Vrf.ValueString())
 	}

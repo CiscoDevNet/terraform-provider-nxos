@@ -55,10 +55,11 @@ func TestAccNxosBGPPeerTemplateAddressFamily(t *testing.T) {
 				ImportStateIdFunc: nxosBGPPeerTemplateAddressFamilyImportStateIdFunc("nxos_bgp_peer_template_address_family.test"),
 			},
 			{
-				ResourceName:    "nxos_bgp_peer_template_address_family.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_bgp_peer_template_address_family.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

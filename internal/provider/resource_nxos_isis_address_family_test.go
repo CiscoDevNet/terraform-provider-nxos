@@ -56,10 +56,11 @@ func TestAccNxosISISAddressFamily(t *testing.T) {
 				ImportStateIdFunc: nxosISISAddressFamilyImportStateIdFunc("nxos_isis_address_family.test"),
 			},
 			{
-				ResourceName:    "nxos_isis_address_family.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_isis_address_family.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

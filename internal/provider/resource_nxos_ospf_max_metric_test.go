@@ -55,10 +55,11 @@ func TestAccNxosOSPFMaxMetric(t *testing.T) {
 				ImportStateIdFunc: nxosOSPFMaxMetricImportStateIdFunc("nxos_ospf_max_metric.test"),
 			},
 			{
-				ResourceName:    "nxos_ospf_max_metric.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_ospf_max_metric.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

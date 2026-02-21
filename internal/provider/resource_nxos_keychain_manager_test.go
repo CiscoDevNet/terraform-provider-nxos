@@ -50,10 +50,11 @@ func TestAccNxosKeychainManager(t *testing.T) {
 				ImportStateIdFunc: nxosKeychainManagerImportStateIdFunc("nxos_keychain_manager.test"),
 			},
 			{
-				ResourceName:    "nxos_keychain_manager.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_keychain_manager.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

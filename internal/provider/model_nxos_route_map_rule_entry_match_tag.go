@@ -75,12 +75,9 @@ func (data RouteMapRuleEntryMatchTag) getClassName() string {
 	return "rtmapMatchRtTag"
 }
 
-func (data RouteMapRuleEntryMatchTag) toBody(statusReplace bool) nxos.Body {
+func (data RouteMapRuleEntryMatchTag) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.Tag.IsUnknown() && !data.Tag.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"tag", strconv.FormatInt(data.Tag.ValueInt64(), 10))
 	}

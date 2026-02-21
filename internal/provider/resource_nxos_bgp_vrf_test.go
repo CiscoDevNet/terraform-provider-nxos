@@ -52,10 +52,11 @@ func TestAccNxosBGPVRF(t *testing.T) {
 				ImportStateIdFunc: nxosBGPVRFImportStateIdFunc("nxos_bgp_vrf.test"),
 			},
 			{
-				ResourceName:    "nxos_bgp_vrf.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_bgp_vrf.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

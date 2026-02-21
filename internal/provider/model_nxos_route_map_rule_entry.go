@@ -72,12 +72,9 @@ func (data RouteMapRuleEntry) getClassName() string {
 	return "rtmapEntry"
 }
 
-func (data RouteMapRuleEntry) toBody(statusReplace bool) nxos.Body {
+func (data RouteMapRuleEntry) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.Order.IsUnknown() && !data.Order.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"order", strconv.FormatInt(data.Order.ValueInt64(), 10))
 	}

@@ -51,10 +51,11 @@ func TestAccNxosDefaultQOSPolicyInterfaceInPolicyMap(t *testing.T) {
 				ImportStateIdFunc: nxosDefaultQOSPolicyInterfaceInPolicyMapImportStateIdFunc("nxos_default_qos_policy_interface_in_policy_map.test"),
 			},
 			{
-				ResourceName:    "nxos_default_qos_policy_interface_in_policy_map.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_default_qos_policy_interface_in_policy_map.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

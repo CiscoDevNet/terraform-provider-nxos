@@ -92,12 +92,9 @@ func (data BGPAddressFamily) getClassName() string {
 	return "bgpDomAf"
 }
 
-func (data BGPAddressFamily) toBody(statusReplace bool) nxos.Body {
+func (data BGPAddressFamily) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.AddressFamily.IsUnknown() && !data.AddressFamily.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.AddressFamily.ValueString())
 	}

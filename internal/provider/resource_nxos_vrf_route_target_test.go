@@ -54,10 +54,11 @@ func TestAccNxosVRFRouteTarget(t *testing.T) {
 				ImportStateIdFunc: nxosVRFRouteTargetImportStateIdFunc("nxos_vrf_route_target.test"),
 			},
 			{
-				ResourceName:    "nxos_vrf_route_target.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_vrf_route_target.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

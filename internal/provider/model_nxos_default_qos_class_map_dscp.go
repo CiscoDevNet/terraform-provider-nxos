@@ -70,12 +70,9 @@ func (data DefaultQOSClassMapDSCP) getClassName() string {
 	return "ipqosDscp"
 }
 
-func (data DefaultQOSClassMapDSCP) toBody(statusReplace bool) nxos.Body {
+func (data DefaultQOSClassMapDSCP) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.Value.IsUnknown() && !data.Value.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"val", data.Value.ValueString())
 	}

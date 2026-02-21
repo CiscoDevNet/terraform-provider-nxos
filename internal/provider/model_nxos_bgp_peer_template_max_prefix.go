@@ -79,12 +79,9 @@ func (data BGPPeerTemplateMaxPrefix) getClassName() string {
 	return "bgpMaxPfxP"
 }
 
-func (data BGPPeerTemplateMaxPrefix) toBody(statusReplace bool) nxos.Body {
+func (data BGPPeerTemplateMaxPrefix) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.Action.IsUnknown() && !data.Action.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"action", data.Action.ValueString())
 	}

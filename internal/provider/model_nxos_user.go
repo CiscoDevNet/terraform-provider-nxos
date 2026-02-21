@@ -79,12 +79,9 @@ func (data User) getClassName() string {
 	return "aaaUser"
 }
 
-func (data User) toBody(statusReplace bool) nxos.Body {
+func (data User) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}
@@ -198,4 +195,21 @@ func (data User) getDeleteDns() []string {
 	dns = append(dns, data.getDn())
 
 	return dns
+}
+
+func (data User) getDeletedItems(ctx context.Context, state User) []string {
+	deletedItems := []string{}
+	for _, stateChild := range state.Roles {
+		found := false
+		for _, planChild := range data.Roles {
+			if stateChild.Name == planChild.Name {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, data.getDn()+"/userdomain-[all]/"+stateChild.getRn())
+		}
+	}
+	return deletedItems
 }

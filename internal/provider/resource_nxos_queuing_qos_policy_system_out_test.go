@@ -48,10 +48,11 @@ func TestAccNxosQueuingQOSPolicySystemOut(t *testing.T) {
 				ImportStateIdFunc: nxosQueuingQOSPolicySystemOutImportStateIdFunc("nxos_queuing_qos_policy_system_out.test"),
 			},
 			{
-				ResourceName:    "nxos_queuing_qos_policy_system_out.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_queuing_qos_policy_system_out.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

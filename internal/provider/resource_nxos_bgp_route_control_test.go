@@ -55,10 +55,11 @@ func TestAccNxosBGPRouteControl(t *testing.T) {
 				ImportStateIdFunc: nxosBGPRouteControlImportStateIdFunc("nxos_bgp_route_control.test"),
 			},
 			{
-				ResourceName:    "nxos_bgp_route_control.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_bgp_route_control.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

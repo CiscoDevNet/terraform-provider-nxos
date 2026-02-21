@@ -58,10 +58,11 @@ func TestAccNxosOSPFVRF(t *testing.T) {
 				ImportStateIdFunc: nxosOSPFVRFImportStateIdFunc("nxos_ospf_vrf.test"),
 			},
 			{
-				ResourceName:    "nxos_ospf_vrf.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_ospf_vrf.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

@@ -67,12 +67,9 @@ func (data EVPNVNI) getClassName() string {
 	return "rtctrlBDEvi"
 }
 
-func (data EVPNVNI) toBody(statusReplace bool) nxos.Body {
+func (data EVPNVNI) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.Encap.IsUnknown() && !data.Encap.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"encap", data.Encap.ValueString())
 	}

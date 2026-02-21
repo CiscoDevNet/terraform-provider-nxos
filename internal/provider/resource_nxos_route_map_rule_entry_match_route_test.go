@@ -51,10 +51,11 @@ func TestAccNxosRouteMapRuleEntryMatchRoute(t *testing.T) {
 				ImportStateIdFunc: nxosRouteMapRuleEntryMatchRouteImportStateIdFunc("nxos_route_map_rule_entry_match_route.test"),
 			},
 			{
-				ResourceName:    "nxos_route_map_rule_entry_match_route.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_route_map_rule_entry_match_route.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

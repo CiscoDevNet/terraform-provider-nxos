@@ -80,12 +80,9 @@ func (data OSPFv3Area) getClassName() string {
 	return "ospfv3Area"
 }
 
-func (data OSPFv3Area) toBody(statusReplace bool) nxos.Body {
+func (data OSPFv3Area) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.AreaId.IsUnknown() && !data.AreaId.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.AreaId.ValueString())
 	}

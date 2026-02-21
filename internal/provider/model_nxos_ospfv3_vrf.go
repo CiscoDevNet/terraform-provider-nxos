@@ -77,12 +77,9 @@ func (data OSPFv3VRF) getClassName() string {
 	return "ospfv3Dom"
 }
 
-func (data OSPFv3VRF) toBody(statusReplace bool) nxos.Body {
+func (data OSPFv3VRF) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}

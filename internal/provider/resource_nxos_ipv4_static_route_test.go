@@ -58,10 +58,11 @@ func TestAccNxosIPv4StaticRoute(t *testing.T) {
 				ImportStateIdFunc: nxosIPv4StaticRouteImportStateIdFunc("nxos_ipv4_static_route.test"),
 			},
 			{
-				ResourceName:    "nxos_ipv4_static_route.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_ipv4_static_route.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

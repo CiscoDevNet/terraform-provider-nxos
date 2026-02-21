@@ -50,10 +50,11 @@ func TestAccNxosFeatureNGOAM(t *testing.T) {
 				ImportStateIdFunc: nxosFeatureNGOAMImportStateIdFunc("nxos_feature_ngoam.test"),
 			},
 			{
-				ResourceName:    "nxos_feature_ngoam.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_feature_ngoam.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

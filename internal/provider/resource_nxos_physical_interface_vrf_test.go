@@ -51,10 +51,11 @@ func TestAccNxosPhysicalInterfaceVRF(t *testing.T) {
 				ImportStateIdFunc: nxosPhysicalInterfaceVRFImportStateIdFunc("nxos_physical_interface_vrf.test"),
 			},
 			{
-				ResourceName:    "nxos_physical_interface_vrf.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_physical_interface_vrf.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

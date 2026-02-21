@@ -51,10 +51,11 @@ func TestAccNxosPIMSSMPolicy(t *testing.T) {
 				ImportStateIdFunc: nxosPIMSSMPolicyImportStateIdFunc("nxos_pim_ssm_policy.test"),
 			},
 			{
-				ResourceName:    "nxos_pim_ssm_policy.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_pim_ssm_policy.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

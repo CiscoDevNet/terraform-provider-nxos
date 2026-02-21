@@ -72,12 +72,9 @@ func (data KeychainKey) getClassName() string {
 	return "kcmgrKey"
 }
 
-func (data KeychainKey) toBody(statusReplace bool) nxos.Body {
+func (data KeychainKey) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.KeyId.IsUnknown() && !data.KeyId.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"keyId", strconv.FormatInt(data.KeyId.ValueInt64(), 10))
 	}

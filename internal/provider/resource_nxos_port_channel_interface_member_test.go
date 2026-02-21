@@ -52,10 +52,11 @@ func TestAccNxosPortChannelInterfaceMember(t *testing.T) {
 				ImportStateIdFunc: nxosPortChannelInterfaceMemberImportStateIdFunc("nxos_port_channel_interface_member.test"),
 			},
 			{
-				ResourceName:    "nxos_port_channel_interface_member.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_port_channel_interface_member.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

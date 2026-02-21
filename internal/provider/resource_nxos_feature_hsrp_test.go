@@ -50,10 +50,11 @@ func TestAccNxosFeatureHSRP(t *testing.T) {
 				ImportStateIdFunc: nxosFeatureHSRPImportStateIdFunc("nxos_feature_hsrp.test"),
 			},
 			{
-				ResourceName:    "nxos_feature_hsrp.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_feature_hsrp.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

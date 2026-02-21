@@ -78,12 +78,9 @@ func (data OSPFv3VRFAddressFamily) getClassName() string {
 	return "ospfv3DomAf"
 }
 
-func (data OSPFv3VRFAddressFamily) toBody(statusReplace bool) nxos.Body {
+func (data OSPFv3VRFAddressFamily) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.AddressFamilyType.IsUnknown() && !data.AddressFamilyType.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.AddressFamilyType.ValueString())
 	}

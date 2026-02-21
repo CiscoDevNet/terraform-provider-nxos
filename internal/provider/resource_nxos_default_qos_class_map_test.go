@@ -51,10 +51,11 @@ func TestAccNxosDefaultQOSClassMap(t *testing.T) {
 				ImportStateIdFunc: nxosDefaultQOSClassMapImportStateIdFunc("nxos_default_qos_class_map.test"),
 			},
 			{
-				ResourceName:    "nxos_default_qos_class_map.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_default_qos_class_map.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

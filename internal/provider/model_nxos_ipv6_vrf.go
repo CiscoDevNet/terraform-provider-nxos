@@ -66,12 +66,9 @@ func (data IPv6VRF) getClassName() string {
 	return "ipv6Dom"
 }
 
-func (data IPv6VRF) toBody(statusReplace bool) nxos.Body {
+func (data IPv6VRF) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}

@@ -94,12 +94,9 @@ func (data DefaultQOSPolicyMapMatchClassMapPolice) getClassName() string {
 	return "ipqosPolice"
 }
 
-func (data DefaultQOSPolicyMapMatchClassMapPolice) toBody(statusReplace bool) nxos.Body {
+func (data DefaultQOSPolicyMapMatchClassMapPolice) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.BcRate.IsUnknown() && !data.BcRate.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bcRate", strconv.FormatInt(data.BcRate.ValueInt64(), 10))
 	}

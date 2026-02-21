@@ -109,7 +109,6 @@ type YamlConfig struct {
 	ClassName         string                 `yaml:"class_name"`
 	Dn                string                 `yaml:"dn"`
 	NoDelete          bool                   `yaml:"no_delete"`
-	StatusReplace     bool                   `yaml:"status_replace"`
 	TestTags          []string               `yaml:"test_tags"`
 	DsDescription     string                 `yaml:"ds_description"`
 	ResDescription    string                 `yaml:"res_description"`
@@ -316,6 +315,19 @@ func HasDeleteValue(attributes []YamlConfigAttribute) bool {
 	return false
 }
 
+// Templating helper function to check if any child class (recursively) is a list
+func HasListChildClasses(children []YamlConfigChildClass) bool {
+	for _, c := range children {
+		if c.Type == "list" {
+			return true
+		}
+		if HasListChildClasses(c.ChildClasses) {
+			return true
+		}
+	}
+	return false
+}
+
 // Map of templating functions
 var functions = template.FuncMap{
 	"toGoName":           ToGoName,
@@ -332,7 +344,8 @@ var functions = template.FuncMap{
 	"hasNestedChildren":  HasNestedChildren,
 	"hasWriteOnly":       HasWriteOnly,
 	"importAttributes":   ImportAttributes,
-	"hasDeleteValue":     HasDeleteValue,
+	"hasDeleteValue":      HasDeleteValue,
+	"hasListChildClasses": HasListChildClasses,
 }
 
 // buildTfChildClasses builds the TfChildClasses list by promoting children

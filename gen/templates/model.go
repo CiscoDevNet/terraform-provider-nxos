@@ -198,12 +198,9 @@ func (data {{camelCase .Name}}) getClassName() string {
 	return "{{.ClassName}}"
 }
 
-func (data {{camelCase .Name}}) toBody(statusReplace bool) nxos.Body {
+func (data {{camelCase .Name}}) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (statusReplace){
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	{{- range .Attributes}}
 	{{- if not .ReferenceOnly}}
 	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
@@ -1366,3 +1363,63 @@ func (data {{camelCase .Name}}) getDeleteDns() []string {
 
 	return dns
 }
+
+{{- if hasListChildClasses .ChildClasses}}
+
+func (data {{camelCase .Name}}) getDeletedItems(ctx context.Context, state {{camelCase .Name}}) []string {
+	deletedItems := []string{}
+	{{- range .ChildClasses}}
+	{{- $l1Rn := .Rn}}
+	{{- if eq .Type "list"}}
+	for _, stateChild := range state.{{toGoName .TfName}} {
+		found := false
+		for _, planChild := range data.{{toGoName .TfName}} {
+			if {{range $i, $a := .Attributes}}{{if $a.Id}}{{if $i}} && {{end}}stateChild.{{toGoName $a.TfName}} == planChild.{{toGoName $a.TfName}}{{end}}{{end}} {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, data.getDn()+"/"+stateChild.getRn())
+		}
+	}
+	{{- else if eq .Type "single"}}
+	{{- range .ChildClasses}}
+	{{- $l2Rn := .Rn}}
+	{{- if eq .Type "list"}}
+	for _, stateChild := range state.{{toGoName .TfName}} {
+		found := false
+		for _, planChild := range data.{{toGoName .TfName}} {
+			if {{range $i, $a := .Attributes}}{{if $a.Id}}{{if $i}} && {{end}}stateChild.{{toGoName $a.TfName}} == planChild.{{toGoName $a.TfName}}{{end}}{{end}} {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, data.getDn()+"/{{$l1Rn}}/"+stateChild.getRn())
+		}
+	}
+	{{- else if eq .Type "single"}}
+	{{- range .ChildClasses}}
+	{{- if eq .Type "list"}}
+	for _, stateChild := range state.{{toGoName .TfName}} {
+		found := false
+		for _, planChild := range data.{{toGoName .TfName}} {
+			if {{range $i, $a := .Attributes}}{{if $a.Id}}{{if $i}} && {{end}}stateChild.{{toGoName $a.TfName}} == planChild.{{toGoName $a.TfName}}{{end}}{{end}} {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, data.getDn()+"/{{$l1Rn}}/{{$l2Rn}}/"+stateChild.getRn())
+		}
+	}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	return deletedItems
+}
+{{- end}}

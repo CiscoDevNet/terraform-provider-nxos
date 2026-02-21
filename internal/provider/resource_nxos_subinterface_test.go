@@ -58,10 +58,11 @@ func TestAccNxosSubinterface(t *testing.T) {
 				ImportStateIdFunc: nxosSubinterfaceImportStateIdFunc("nxos_subinterface.test"),
 			},
 			{
-				ResourceName:    "nxos_subinterface.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_subinterface.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

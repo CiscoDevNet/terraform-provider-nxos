@@ -52,10 +52,11 @@ func TestAccNxosPIMAnycastRPPeer(t *testing.T) {
 				ImportStateIdFunc: nxosPIMAnycastRPPeerImportStateIdFunc("nxos_pim_anycast_rp_peer.test"),
 			},
 			{
-				ResourceName:    "nxos_pim_anycast_rp_peer.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_pim_anycast_rp_peer.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

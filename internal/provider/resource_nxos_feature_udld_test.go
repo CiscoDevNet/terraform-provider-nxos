@@ -50,10 +50,11 @@ func TestAccNxosFeatureUDLD(t *testing.T) {
 				ImportStateIdFunc: nxosFeatureUDLDImportStateIdFunc("nxos_feature_udld.test"),
 			},
 			{
-				ResourceName:    "nxos_feature_udld.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_feature_udld.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

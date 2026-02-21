@@ -74,10 +74,11 @@ func TestAccNxosDefaultQOSPolicyMapMatchClassMapPolice(t *testing.T) {
 				ImportStateIdFunc: nxosDefaultQOSPolicyMapMatchClassMapPoliceImportStateIdFunc("nxos_default_qos_policy_map_match_class_map_police.test"),
 			},
 			{
-				ResourceName:    "nxos_default_qos_policy_map_match_class_map_police.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_default_qos_policy_map_match_class_map_police.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

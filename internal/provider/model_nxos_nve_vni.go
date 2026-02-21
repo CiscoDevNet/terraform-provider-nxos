@@ -72,12 +72,9 @@ func (data NVEVNI) getClassName() string {
 	return "nvoNw"
 }
 
-func (data NVEVNI) toBody(statusReplace bool) nxos.Body {
+func (data NVEVNI) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.Vni.IsUnknown() && !data.Vni.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"vni", strconv.FormatInt(data.Vni.ValueInt64(), 10))
 	}

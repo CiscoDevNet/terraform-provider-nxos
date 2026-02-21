@@ -68,12 +68,9 @@ func (data VPCInterface) getClassName() string {
 	return "vpcIf"
 }
 
-func (data VPCInterface) toBody(statusReplace bool) nxos.Body {
+func (data VPCInterface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.VpcInterfaceId.IsUnknown() && !data.VpcInterfaceId.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", strconv.FormatInt(data.VpcInterfaceId.ValueInt64(), 10))
 	}

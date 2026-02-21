@@ -74,12 +74,9 @@ func (data Logging) getClassName() string {
 	return "loggingLogLevel"
 }
 
-func (data Logging) toBody(statusReplace bool) nxos.Body {
+func (data Logging) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.All.IsUnknown() && !data.All.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"all", data.All.ValueString())
 	}
@@ -157,4 +154,21 @@ func (data Logging) getDeleteDns() []string {
 	dns = append(dns, data.getDn())
 
 	return dns
+}
+
+func (data Logging) getDeletedItems(ctx context.Context, state Logging) []string {
+	deletedItems := []string{}
+	for _, stateChild := range state.Facilities {
+		found := false
+		for _, planChild := range data.Facilities {
+			if stateChild.Name == planChild.Name {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, data.getDn()+"/"+stateChild.getRn())
+		}
+	}
+	return deletedItems
 }

@@ -83,12 +83,9 @@ func (data BGPPeerAddressFamilyRouteControl) getClassName() string {
 	return "bgpRtCtrlP"
 }
 
-func (data BGPPeerAddressFamilyRouteControl) toBody(statusReplace bool) nxos.Body {
+func (data BGPPeerAddressFamilyRouteControl) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.Direction.IsUnknown() && !data.Direction.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"direction", data.Direction.ValueString())
 	}

@@ -51,10 +51,11 @@ func TestAccNxosEVPNVNIRouteTargetDirection(t *testing.T) {
 				ImportStateIdFunc: nxosEVPNVNIRouteTargetDirectionImportStateIdFunc("nxos_evpn_vni_route_target_direction.test"),
 			},
 			{
-				ResourceName:    "nxos_evpn_vni_route_target_direction.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_evpn_vni_route_target_direction.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

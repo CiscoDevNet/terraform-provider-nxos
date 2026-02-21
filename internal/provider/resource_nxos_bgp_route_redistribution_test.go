@@ -57,10 +57,11 @@ func TestAccNxosBGPRouteRedistribution(t *testing.T) {
 				ImportStateIdFunc: nxosBGPRouteRedistributionImportStateIdFunc("nxos_bgp_route_redistribution.test"),
 			},
 			{
-				ResourceName:    "nxos_bgp_route_redistribution.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_bgp_route_redistribution.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

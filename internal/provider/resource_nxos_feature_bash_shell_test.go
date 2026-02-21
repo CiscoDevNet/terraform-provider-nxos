@@ -50,10 +50,11 @@ func TestAccNxosFeatureBashShell(t *testing.T) {
 				ImportStateIdFunc: nxosFeatureBashShellImportStateIdFunc("nxos_feature_bash_shell.test"),
 			},
 			{
-				ResourceName:    "nxos_feature_bash_shell.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_feature_bash_shell.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

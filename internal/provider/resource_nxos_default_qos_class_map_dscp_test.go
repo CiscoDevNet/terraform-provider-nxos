@@ -51,10 +51,11 @@ func TestAccNxosDefaultQOSClassMapDSCP(t *testing.T) {
 				ImportStateIdFunc: nxosDefaultQOSClassMapDSCPImportStateIdFunc("nxos_default_qos_class_map_dscp.test"),
 			},
 			{
-				ResourceName:    "nxos_default_qos_class_map_dscp.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_default_qos_class_map_dscp.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

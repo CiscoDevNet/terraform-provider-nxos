@@ -75,12 +75,9 @@ func (data OSPFMaxMetric) getClassName() string {
 	return "ospfMaxMetricLsaP"
 }
 
-func (data OSPFMaxMetric) toBody(statusReplace bool) nxos.Body {
+func (data OSPFMaxMetric) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.Control.IsUnknown() && !data.Control.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ctrl", data.Control.ValueString())
 	}

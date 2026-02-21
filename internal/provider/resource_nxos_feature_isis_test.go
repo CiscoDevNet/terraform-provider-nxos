@@ -50,10 +50,11 @@ func TestAccNxosFeatureISIS(t *testing.T) {
 				ImportStateIdFunc: nxosFeatureISISImportStateIdFunc("nxos_feature_isis.test"),
 			},
 			{
-				ResourceName:    "nxos_feature_isis.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_feature_isis.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

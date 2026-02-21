@@ -62,10 +62,11 @@ func TestAccNxosVPCKeepalive(t *testing.T) {
 				ImportStateIdFunc: nxosVPCKeepaliveImportStateIdFunc("nxos_vpc_keepalive.test"),
 			},
 			{
-				ResourceName:    "nxos_vpc_keepalive.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_vpc_keepalive.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

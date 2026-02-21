@@ -66,12 +66,9 @@ func (data BGPInstance) getClassName() string {
 	return "bgpInst"
 }
 
-func (data BGPInstance) toBody(statusReplace bool) nxos.Body {
+func (data BGPInstance) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if statusReplace {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"status", "replaced")
-	}
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}

@@ -58,10 +58,11 @@ func TestAccNxosSpanningTreeInterface(t *testing.T) {
 				ImportStateIdFunc: nxosSpanningTreeInterfaceImportStateIdFunc("nxos_spanning_tree_interface.test"),
 			},
 			{
-				ResourceName:    "nxos_spanning_tree_interface.test",
-				ImportState:     true,
-				ImportStateKind: resource.ImportBlockWithResourceIdentity,
-				SkipFunc:        skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+				ResourceName:       "nxos_spanning_tree_interface.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 		},
 	})

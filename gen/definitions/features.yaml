@@ -1,0 +1,458 @@
+---
+name: Features
+class_name: fmEntity
+dn: sys/fm
+no_delete: true
+ds_description: This data source can read the feature configuration.
+res_description: This resource can manage the feature configuration.
+doc_path: Feature%20Management/fm:Entity/
+doc_category: Feature
+child_classes:
+  - class_name: fmBashShell
+    rn: bashshell
+    type: single
+    no_delete: true
+    description: 'Bash Shell feature configuration.'
+    doc_path: Feature%20Management/fm:BashShell/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: bash_shell
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmBfd
+    rn: bfd
+    type: single
+    no_delete: true
+    description: 'BFD feature configuration.'
+    doc_path: Feature%20Management/fm:Bfd/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: bfd
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmBgp
+    rn: bgp
+    type: single
+    no_delete: true
+    description: 'BGP feature configuration.'
+    doc_path: Feature%20Management/fm:Bgp/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: bgp
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmDhcp
+    rn: dhcp
+    type: single
+    no_delete: true
+    description: 'DHCP feature configuration.'
+    doc_path: Feature%20Management/fm:Dhcp/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: dhcp
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmEvpn
+    rn: evpn
+    type: single
+    no_delete: true
+    description: 'EVPN feature (aka `nv overlay evpn`) configuration.'
+    doc_path: Feature%20Management/fm:Evpn/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: evpn
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmHmm
+    rn: hmm
+    type: single
+    no_delete: true
+    description: 'HMM feature (aka `feature fabric forwarding`) configuration.'
+    doc_path: Feature%20Management/fm:Hmm/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: hmm
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmHsrp
+    rn: hsrp
+    type: single
+    no_delete: true
+    description: 'HSRP feature configuration.'
+    doc_path: Feature%20Management/fm:Hsrp/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: hsrp
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmInterfaceVlan
+    rn: ifvlan
+    type: single
+    no_delete: true
+    description: 'Interface VLAN feature configuration.'
+    doc_path: Feature%20Management/fm:InterfaceVlan/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: interface_vlan
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmIsis
+    rn: isis
+    type: single
+    no_delete: true
+    description: 'ISIS feature configuration.'
+    doc_path: Feature%20Management/fm:Isis/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: isis
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmLacp
+    rn: lacp
+    type: single
+    no_delete: true
+    description: 'LACP feature configuration.'
+    doc_path: Feature%20Management/fm:Lacp/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: lacp
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmLldp
+    rn: lldp
+    type: single
+    no_delete: true
+    description: 'LLDP feature configuration.'
+    doc_path: Feature%20Management/fm:Lldp/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: lldp
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmMacsec
+    rn: macsec
+    type: single
+    no_delete: true
+    description: 'MACsec feature configuration.'
+    doc_path: Feature%20Management/fm:Macsec/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: macsec
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmNetflow
+    rn: netflow
+    type: single
+    no_delete: true
+    description: 'Netflow feature configuration.'
+    doc_path: Feature%20Management/fm:Netflow/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: netflow
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmNgmvpn
+    rn: ngmvpn
+    type: single
+    no_delete: true
+    description: 'Next Generation Multicast VPN feature configuration.'
+    doc_path: Feature%20Management/fm:NgMvpn/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: ngmvpn
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmNgoam
+    rn: ngoam
+    type: single
+    no_delete: true
+    description: 'VXLAN operations, administration, and maintenance feature configuration.'
+    doc_path: Feature%20Management/fm:Ngoam/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: ngoam
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmNvo
+    rn: nvo
+    type: single
+    no_delete: true
+    description: 'NV Overlay feature configuration.'
+    doc_path: Feature%20Management/fm:Nvo/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: nv_overlay
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmOspf
+    rn: ospf
+    type: single
+    no_delete: true
+    description: 'OSPF feature configuration.'
+    doc_path: Feature%20Management/fm:Ospf/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: ospf
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmOspfv3
+    rn: ospfv3
+    type: single
+    no_delete: true
+    description: 'OSPFv3 feature configuration.'
+    doc_path: Feature%20Management/fm:Ospfv3/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: ospfv3
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmPim
+    rn: pim
+    type: single
+    no_delete: true
+    description: 'PIM feature configuration.'
+    doc_path: Feature%20Management/fm:Pim/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: pim
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmPtp
+    rn: ptp
+    type: single
+    no_delete: true
+    description: 'PTP feature configuration.'
+    doc_path: Feature%20Management/fm:Ptp/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: ptp
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmPvlan
+    rn: pvlan
+    type: single
+    no_delete: true
+    description: 'PVLAN feature configuration.'
+    doc_path: Feature%20Management/fm:Pvlan/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: pvlan
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmSflow
+    rn: sflow
+    type: single
+    no_delete: true
+    description: 'sFlow feature configuration.'
+    doc_path: Feature%20Management/fm:Sflow/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: sflow
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmSsh
+    rn: ssh
+    type: single
+    no_delete: true
+    description: 'SSH feature configuration.'
+    doc_path: Feature%20Management/fm:Ssh/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: ssh
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmTacacsplus
+    rn: tacacsplus
+    type: single
+    no_delete: true
+    description: 'TACACS+ feature configuration.'
+    doc_path: Feature%20Management/fm:Tacacsplus/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: tacacs
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmTelnet
+    rn: telnet
+    type: single
+    no_delete: true
+    description: 'Telnet feature configuration.'
+    doc_path: Feature%20Management/fm:Telnet/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: telnet
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmUdld
+    rn: udld
+    type: single
+    no_delete: true
+    description: 'UDLD feature configuration.'
+    doc_path: Feature%20Management/fm:Udld/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: udld
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmVnSegment
+    rn: vnsegment
+    type: single
+    no_delete: true
+    description: 'VN Segment feature configuration.'
+    doc_path: Feature%20Management/fm:VnSegment/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: vn_segment
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled
+  - class_name: fmVpc
+    rn: vpc
+    type: single
+    no_delete: true
+    description: 'VPC feature configuration.'
+    doc_path: Feature%20Management/fm:Vpc/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: vpc
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        delete_value: disabled

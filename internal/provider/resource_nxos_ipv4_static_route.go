@@ -62,7 +62,7 @@ func (r *IPv4StaticRouteResource) Metadata(ctx context.Context, req resource.Met
 func (r *IPv4StaticRouteResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage an IPv4 static route.", "ipv4Route", "Layer%203/ipv4:Route/").AddParents("ipv4_vrf").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage an IPv4 static route.", "ipv4Route", "Layer%203/ipv4:Route/").AddParents("ipv4_vrf").AddAdditionalDocs([]string{"ipv4Nexthop"}, []string{"Layer%203/ipv4:Nexthop/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

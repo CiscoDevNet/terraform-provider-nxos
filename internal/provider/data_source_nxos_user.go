@@ -57,7 +57,7 @@ func (d *UserDataSource) Metadata(_ context.Context, req datasource.MetadataRequ
 func (d *UserDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the User configuration.", "aaaUser", "Security%20and%20Policing/aaa:User/").AddAdditionalDocs([]string{"aaaUserRole"}, []string{"Security%20and%20Policing/aaa:UserRole/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the User configuration.", "aaaUser", "Security%20and%20Policing/aaa:User/").AddAdditionalDocs([]string{"aaaUserDomain", "aaaUserRole"}, []string{"Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

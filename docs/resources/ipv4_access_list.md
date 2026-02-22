@@ -5,6 +5,8 @@ subcategory: "IPv4"
 description: |-
   This resource can manage IPv4 Access Lists.
   API Documentation: ipv4aclACL https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/ipv4acl:ACL/
+  Additional API Documentation
+  ipv4aclACE https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/ipv4acl:ACE/
 ---
 
 # nxos_ipv4_access_list (Resource)
@@ -12,6 +14,10 @@ description: |-
 This resource can manage IPv4 Access Lists.
 
 - API Documentation: [ipv4aclACL](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/ipv4acl:ACL/)
+
+### Additional API Documentation
+
+- [ipv4aclACE](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/ipv4acl:ACE/)
 
 ## Example Usage
 

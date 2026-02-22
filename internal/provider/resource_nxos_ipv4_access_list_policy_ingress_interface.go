@@ -60,7 +60,7 @@ func (r *IPv4AccessListPolicyIngressInterfaceResource) Metadata(ctx context.Cont
 func (r *IPv4AccessListPolicyIngressInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage an IPv4 Access List Policy Ingress Interface.", "aclIf", "Security%20and%20Policing/acl:If/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage an IPv4 Access List Policy Ingress Interface.", "aclIf", "Security%20and%20Policing/acl:If/").AddAdditionalDocs([]string{"aclInst"}, []string{"Security%20and%20Policing/acl:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

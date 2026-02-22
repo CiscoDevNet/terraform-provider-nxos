@@ -7,6 +7,8 @@ description: |-
   API Documentation: ipv6Route https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Route/
   Parent resources
   nxos_ipv6_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv6_vrf
+  Additional API Documentation
+  ipv6Nexthop https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Nexthop/
 ---
 
 # nxos_ipv6_static_route (Resource)
@@ -18,6 +20,10 @@ This resource can manage an IPv6 static route.
 ### Parent resources
 
 - [nxos_ipv6_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv6_vrf)
+
+### Additional API Documentation
+
+- [ipv6Nexthop](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Nexthop/)
 
 ## Example Usage
 

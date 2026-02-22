@@ -5,6 +5,8 @@ subcategory: "System"
 description: |-
   This data source can read the logging configuration.
   API Documentation: loggingLogLevel https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/logging:LogLevel/
+  Additional API Documentation
+  loggingFacility https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/logging:Facility/
 ---
 
 # nxos_logging (Data Source)
@@ -12,6 +14,10 @@ description: |-
 This data source can read the logging configuration.
 
 - API Documentation: [loggingLogLevel](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/logging:LogLevel/)
+
+### Additional API Documentation
+
+- [loggingFacility](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/logging:Facility/)
 
 ## Example Usage
 

@@ -36,6 +36,7 @@ attributes:
     write_only: true
 child_classes:
   - class_name: loggingFacility
+    doc_path: System/logging:Facility/
     rn: facility-[%v]
     tf_name: facilities
     description: List of logging facilities.

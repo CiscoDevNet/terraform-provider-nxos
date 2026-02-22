@@ -15,6 +15,7 @@ attributes:
     example: eth1/10
 child_classes:
   - class_name: aclInst
+    doc_path: Security%20and%20Policing/acl:Inst/
     rn: acl
     type: single
     attributes:

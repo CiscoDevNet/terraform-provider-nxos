@@ -67,7 +67,7 @@ func (r *IPv4AccessListResource) Metadata(ctx context.Context, req resource.Meta
 func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage IPv4 Access Lists.", "ipv4aclACL", "Security%20and%20Policing/ipv4acl:ACL/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage IPv4 Access Lists.", "ipv4aclACL", "Security%20and%20Policing/ipv4acl:ACL/").AddAdditionalDocs([]string{"ipv4aclACE"}, []string{"Security%20and%20Policing/ipv4acl:ACE/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

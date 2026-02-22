@@ -5,6 +5,8 @@ subcategory: "vPC"
 description: |-
   This data source can read the vPC interface configuration.
   API Documentation: vpcIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:If/
+  Additional API Documentation
+  vpcRsVpcConf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:RsVpcConf/
 ---
 
 # nxos_vpc_interface (Data Source)
@@ -12,6 +14,10 @@ description: |-
 This data source can read the vPC interface configuration.
 
 - API Documentation: [vpcIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:If/)
+
+### Additional API Documentation
+
+- [vpcRsVpcConf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:RsVpcConf/)
 
 ## Example Usage
 

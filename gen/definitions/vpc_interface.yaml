@@ -21,6 +21,7 @@ attributes:
     example: 1
 child_classes:
   - class_name: vpcRsVpcConf
+    doc_path: System/vpc:RsVpcConf/
     rn: rsvpcConf
     type: single
     attributes:

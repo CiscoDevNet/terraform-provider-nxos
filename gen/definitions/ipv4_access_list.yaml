@@ -15,6 +15,7 @@ attributes:
     example: 'ACL1'
 child_classes:
   - class_name: ipv4aclACE
+    doc_path: Security%20and%20Policing/ipv4acl:ACE/
     rn: seq-%v
     type: list
     tf_name: entries

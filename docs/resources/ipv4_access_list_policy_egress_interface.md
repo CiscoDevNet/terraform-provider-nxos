@@ -5,6 +5,8 @@ subcategory: "IPv4"
 description: |-
   This resource can manage an IPv4 Access List Policy Egress Interface.
   API Documentation: aclIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/acl:If/
+  Additional API Documentation
+  aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/acl:Inst/
 ---
 
 # nxos_ipv4_access_list_policy_egress_interface (Resource)
@@ -12,6 +14,10 @@ description: |-
 This resource can manage an IPv4 Access List Policy Egress Interface.
 
 - API Documentation: [aclIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/acl:If/)
+
+### Additional API Documentation
+
+- [aclInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/acl:Inst/)
 
 ## Example Usage
 

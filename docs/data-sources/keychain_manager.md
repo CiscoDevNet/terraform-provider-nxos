@@ -5,6 +5,8 @@ subcategory: "Keychain"
 description: |-
   This data source can read the keychain configuration.
   API Documentation: kcmgrEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/kcmgr:Entity/
+  Additional API Documentation
+  kcmgrKeychains https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/kcmgr:Keychains/
 ---
 
 # nxos_keychain_manager (Data Source)
@@ -12,6 +14,10 @@ description: |-
 This data source can read the keychain configuration.
 
 - API Documentation: [kcmgrEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/kcmgr:Entity/)
+
+### Additional API Documentation
+
+- [kcmgrKeychains](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/kcmgr:Keychains/)
 
 ## Example Usage
 

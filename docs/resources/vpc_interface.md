@@ -9,6 +9,8 @@ description: |-
   nxos_vpc_domain https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vpc_domain
   Referenced resources
   nxos_port_channel_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/port_channel_interface
+  Additional API Documentation
+  vpcRsVpcConf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:RsVpcConf/
 ---
 
 # nxos_vpc_interface (Resource)
@@ -24,6 +26,10 @@ This resource can manage the vPC interface configuration.
 ### Referenced resources
 
 - [nxos_port_channel_interface](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/port_channel_interface)
+
+### Additional API Documentation
+
+- [vpcRsVpcConf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:RsVpcConf/)
 
 ## Example Usage
 

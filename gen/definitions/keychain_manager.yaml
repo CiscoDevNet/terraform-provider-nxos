@@ -20,6 +20,7 @@ attributes:
     example: enabled
 child_classes:
   - class_name: kcmgrKeychains
+    doc_path: Security%20and%20Policing/kcmgr:Keychains/
     rn: keychains
     type: single
     always_include: true

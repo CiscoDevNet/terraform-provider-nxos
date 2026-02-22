@@ -5,6 +5,8 @@ subcategory: "IPv4"
 description: |-
   This data source can read an IPv4 static route.
   API Documentation: ipv4Route https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv4:Route/
+  Additional API Documentation
+  ipv4Nexthop https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv4:Nexthop/
 ---
 
 # nxos_ipv4_static_route (Data Source)
@@ -12,6 +14,10 @@ description: |-
 This data source can read an IPv4 static route.
 
 - API Documentation: [ipv4Route](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv4:Route/)
+
+### Additional API Documentation
+
+- [ipv4Nexthop](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv4:Nexthop/)
 
 ## Example Usage
 

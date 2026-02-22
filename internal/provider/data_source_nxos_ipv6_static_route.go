@@ -57,7 +57,7 @@ func (d *IPv6StaticRouteDataSource) Metadata(_ context.Context, req datasource.M
 func (d *IPv6StaticRouteDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read an IPv6 static route.", "ipv6Route", "Layer%203/ipv6:Route/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read an IPv6 static route.", "ipv6Route", "Layer%203/ipv6:Route/").AddAdditionalDocs([]string{"ipv6Nexthop"}, []string{"Layer%203/ipv6:Nexthop/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

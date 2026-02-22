@@ -25,6 +25,7 @@ attributes:
 child_classes:
   - tf_name: next_hops
     class_name: ipv4Nexthop
+    doc_path: Layer%203/ipv4:Nexthop/
     rn: nh-[%s]-addr-[%s]-vrf-[%s]
     description: List of next hops.
     mandatory: true

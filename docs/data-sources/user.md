@@ -6,7 +6,7 @@ description: |-
   This data source can read the User configuration.
   API Documentation: aaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/aaa:User/
   Additional API Documentation
-  aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/aaa:UserRole/
+  aaaUserDomain https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/aaa:UserDomain/aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/aaa:UserRole/
 ---
 
 # nxos_user (Data Source)
@@ -17,6 +17,7 @@ This data source can read the User configuration.
 
 ### Additional API Documentation
 
+- [aaaUserDomain](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/aaa:UserDomain/)
 - [aaaUserRole](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/aaa:UserRole/)
 
 ## Example Usage

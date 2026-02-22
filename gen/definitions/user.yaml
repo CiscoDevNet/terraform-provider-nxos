@@ -45,6 +45,7 @@ attributes:
     write_only: true
 child_classes:
   - class_name: aaaUserDomain
+    doc_path: Security%20and%20Policing/aaa:UserDomain/
     rn: userdomain-[all]
     type: single
     attributes:

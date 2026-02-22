@@ -5,6 +5,8 @@ subcategory: "IPv6"
 description: |-
   This data source can read an IPv6 static route.
   API Documentation: ipv6Route https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Route/
+  Additional API Documentation
+  ipv6Nexthop https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Nexthop/
 ---
 
 # nxos_ipv6_static_route (Data Source)
@@ -12,6 +14,10 @@ description: |-
 This data source can read an IPv6 static route.
 
 - API Documentation: [ipv6Route](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Route/)
+
+### Additional API Documentation
+
+- [ipv6Nexthop](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Nexthop/)
 
 ## Example Usage
 

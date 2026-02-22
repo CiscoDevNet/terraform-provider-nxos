@@ -57,7 +57,7 @@ func (d *VPCInterfaceDataSource) Metadata(_ context.Context, req datasource.Meta
 func (d *VPCInterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the vPC interface configuration.", "vpcIf", "System/vpc:If/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the vPC interface configuration.", "vpcIf", "System/vpc:If/").AddAdditionalDocs([]string{"vpcRsVpcConf"}, []string{"System/vpc:RsVpcConf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

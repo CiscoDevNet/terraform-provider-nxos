@@ -1338,9 +1338,7 @@ func (data {{camelCase .Name}}) getDeleteDns() []string {
 	dns := []string{}
 
 	{{- if not .NoDelete}}
-	{{- if not (hasDeleteValue .Attributes)}}
 	dns = append(dns, data.getDn())
-	{{- end}}
 	{{- else}}
 	{{- range .ChildClasses}}
 	{{- $l1Rn := .Rn}}

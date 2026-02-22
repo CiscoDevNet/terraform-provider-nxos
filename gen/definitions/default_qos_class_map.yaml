@@ -25,7 +25,7 @@ attributes:
     example: match-any
 child_classes:
   - class_name: ipqosDscp
-    rn: dscp-[%v]
+    rn: dscp-%v
     type: list
     tf_name: dscp_values
     description: 'List of DSCP values to match.'

@@ -76,7 +76,7 @@ func (data DefaultQOSClassMap) getDn() string {
 }
 
 func (data DefaultQOSClassMapDscpValues) getRn() string {
-	return fmt.Sprintf("dscp-[%v]", data.Value.ValueString())
+	return fmt.Sprintf("dscp-%v", data.Value.ValueString())
 }
 
 func (data DefaultQOSClassMap) getClassName() string {

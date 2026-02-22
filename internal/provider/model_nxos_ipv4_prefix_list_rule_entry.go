@@ -89,22 +89,22 @@ func (data IPv4PrefixListRuleEntry) getClassName() string {
 func (data IPv4PrefixListRuleEntry) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Order.IsUnknown() && !data.Order.IsNull()) || true {
+	if (!data.Order.IsUnknown() && !data.Order.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"order", strconv.FormatInt(data.Order.ValueInt64(), 10))
 	}
-	if (!data.Action.IsUnknown() && !data.Action.IsNull()) || true {
+	if (!data.Action.IsUnknown() && !data.Action.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"action", data.Action.ValueString())
 	}
-	if (!data.Criteria.IsUnknown() && !data.Criteria.IsNull()) || true {
+	if (!data.Criteria.IsUnknown() && !data.Criteria.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"criteria", data.Criteria.ValueString())
 	}
-	if (!data.Prefix.IsUnknown() && !data.Prefix.IsNull()) || true {
+	if (!data.Prefix.IsUnknown() && !data.Prefix.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pfx", data.Prefix.ValueString())
 	}
-	if (!data.FromRange.IsUnknown() && !data.FromRange.IsNull()) || true {
+	if (!data.FromRange.IsUnknown() && !data.FromRange.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"fromPfxLen", strconv.FormatInt(data.FromRange.ValueInt64(), 10))
 	}
-	if (!data.ToRange.IsUnknown() && !data.ToRange.IsNull()) || true {
+	if (!data.ToRange.IsUnknown() && !data.ToRange.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"toPfxLen", strconv.FormatInt(data.ToRange.ValueInt64(), 10))
 	}
 

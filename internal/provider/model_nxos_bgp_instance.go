@@ -79,13 +79,13 @@ func (data BGPInstance) getClassName() string {
 func (data BGPInstance) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
-	if (!data.Asn.IsUnknown() && !data.Asn.IsNull()) || true {
+	if (!data.Asn.IsUnknown() && !data.Asn.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"asn", data.Asn.ValueString())
 	}
-	if (!data.EnhancedErrorHandling.IsUnknown() && !data.EnhancedErrorHandling.IsNull()) || true {
+	if (!data.EnhancedErrorHandling.IsUnknown() && !data.EnhancedErrorHandling.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"enhancedErr", strconv.FormatBool(data.EnhancedErrorHandling.ValueBool()))
 	}
 

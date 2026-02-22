@@ -80,7 +80,7 @@ func (data PhysicalInterfaceVRF) getClassName() string {
 func (data PhysicalInterfaceVRF) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.VrfDn.IsUnknown() && !data.VrfDn.IsNull()) || true {
+	if (!data.VrfDn.IsUnknown() && !data.VrfDn.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"tDn", data.VrfDn.ValueString())
 	}
 

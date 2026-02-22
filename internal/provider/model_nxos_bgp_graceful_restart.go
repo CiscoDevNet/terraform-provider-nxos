@@ -86,10 +86,10 @@ func (data BGPGracefulRestart) getClassName() string {
 func (data BGPGracefulRestart) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.RestartInterval.IsUnknown() && !data.RestartInterval.IsNull()) || true {
+	if (!data.RestartInterval.IsUnknown() && !data.RestartInterval.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"restartIntvl", strconv.FormatInt(data.RestartInterval.ValueInt64(), 10))
 	}
-	if (!data.StaleInterval.IsUnknown() && !data.StaleInterval.IsNull()) || true {
+	if (!data.StaleInterval.IsUnknown() && !data.StaleInterval.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"staleIntvl", strconv.FormatInt(data.StaleInterval.ValueInt64(), 10))
 	}
 

@@ -85,7 +85,7 @@ func (data QueuingQOSPolicyMapMatchClassMapPriority) getClassName() string {
 func (data QueuingQOSPolicyMapMatchClassMapPriority) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Level.IsUnknown() && !data.Level.IsNull()) || true {
+	if (!data.Level.IsUnknown() && !data.Level.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"level", strconv.FormatInt(data.Level.ValueInt64(), 10))
 	}
 

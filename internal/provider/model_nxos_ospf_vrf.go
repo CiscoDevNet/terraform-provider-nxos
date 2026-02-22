@@ -91,28 +91,28 @@ func (data OSPFVRF) getClassName() string {
 func (data OSPFVRF) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
+	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}
-	if (!data.LogAdjacencyChanges.IsUnknown() && !data.LogAdjacencyChanges.IsNull()) || true {
+	if (!data.LogAdjacencyChanges.IsUnknown() && !data.LogAdjacencyChanges.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adjChangeLogLevel", data.LogAdjacencyChanges.ValueString())
 	}
-	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
-	if (!data.BandwidthReference.IsUnknown() && !data.BandwidthReference.IsNull()) || true {
+	if (!data.BandwidthReference.IsUnknown() && !data.BandwidthReference.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bwRef", strconv.FormatInt(data.BandwidthReference.ValueInt64(), 10))
 	}
-	if (!data.BandwidthReferenceUnit.IsUnknown() && !data.BandwidthReferenceUnit.IsNull()) || true {
+	if (!data.BandwidthReferenceUnit.IsUnknown() && !data.BandwidthReferenceUnit.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bwRefUnit", data.BandwidthReferenceUnit.ValueString())
 	}
-	if (!data.Distance.IsUnknown() && !data.Distance.IsNull()) || true {
+	if (!data.Distance.IsUnknown() && !data.Distance.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dist", strconv.FormatInt(data.Distance.ValueInt64(), 10))
 	}
-	if (!data.RouterId.IsUnknown() && !data.RouterId.IsNull()) || true {
+	if (!data.RouterId.IsUnknown() && !data.RouterId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rtrId", data.RouterId.ValueString())
 	}
-	if (!data.Control.IsUnknown() && !data.Control.IsNull()) || true {
+	if (!data.Control.IsUnknown() && !data.Control.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ctrl", data.Control.ValueString())
 	}
 

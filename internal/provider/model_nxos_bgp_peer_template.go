@@ -87,19 +87,19 @@ func (data BGPPeerTemplate) getClassName() string {
 func (data BGPPeerTemplate) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.TemplateName.IsUnknown() && !data.TemplateName.IsNull()) || true {
+	if (!data.TemplateName.IsUnknown() && !data.TemplateName.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.TemplateName.ValueString())
 	}
-	if (!data.RemoteAsn.IsUnknown() && !data.RemoteAsn.IsNull()) || true {
+	if (!data.RemoteAsn.IsUnknown() && !data.RemoteAsn.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"asn", data.RemoteAsn.ValueString())
 	}
-	if (!data.Description.IsUnknown() && !data.Description.IsNull()) || true {
+	if (!data.Description.IsUnknown() && !data.Description.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"desc", data.Description.ValueString())
 	}
-	if (!data.PeerType.IsUnknown() && !data.PeerType.IsNull()) || true {
+	if (!data.PeerType.IsUnknown() && !data.PeerType.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"peerType", data.PeerType.ValueString())
 	}
-	if (!data.SourceInterface.IsUnknown() && !data.SourceInterface.IsNull()) || true {
+	if (!data.SourceInterface.IsUnknown() && !data.SourceInterface.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"srcIf", data.SourceInterface.ValueString())
 	}
 

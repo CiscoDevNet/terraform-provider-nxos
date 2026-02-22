@@ -80,12 +80,12 @@ func (data IPv4AccessListPolicyIngressInterface) getClassName() string {
 func (data IPv4AccessListPolicyIngressInterface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
+	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.InterfaceId.ValueString())
 	}
 	var attrs string
 	attrs = "{}"
-	if (!data.AccessListName.IsUnknown() && !data.AccessListName.IsNull()) || true {
+	if (!data.AccessListName.IsUnknown() && !data.AccessListName.IsNull()) || false {
 		attrs, _ = sjson.Set(attrs, "name", data.AccessListName.ValueString())
 	}
 	body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.aclInst.attributes", attrs)

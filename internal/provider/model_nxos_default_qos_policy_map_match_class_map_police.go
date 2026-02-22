@@ -107,73 +107,73 @@ func (data DefaultQOSPolicyMapMatchClassMapPolice) getClassName() string {
 func (data DefaultQOSPolicyMapMatchClassMapPolice) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.BcRate.IsUnknown() && !data.BcRate.IsNull()) || true {
+	if (!data.BcRate.IsUnknown() && !data.BcRate.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bcRate", strconv.FormatInt(data.BcRate.ValueInt64(), 10))
 	}
-	if (!data.BcUnit.IsUnknown() && !data.BcUnit.IsNull()) || true {
+	if (!data.BcUnit.IsUnknown() && !data.BcUnit.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bcUnit", data.BcUnit.ValueString())
 	}
-	if (!data.BeRate.IsUnknown() && !data.BeRate.IsNull()) || true {
+	if (!data.BeRate.IsUnknown() && !data.BeRate.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"beRate", strconv.FormatInt(data.BeRate.ValueInt64(), 10))
 	}
-	if (!data.BeUnit.IsUnknown() && !data.BeUnit.IsNull()) || true {
+	if (!data.BeUnit.IsUnknown() && !data.BeUnit.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"beUnit", data.BeUnit.ValueString())
 	}
-	if (!data.CirRate.IsUnknown() && !data.CirRate.IsNull()) || true {
+	if (!data.CirRate.IsUnknown() && !data.CirRate.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"cirRate", strconv.FormatInt(data.CirRate.ValueInt64(), 10))
 	}
-	if (!data.CirUnit.IsUnknown() && !data.CirUnit.IsNull()) || true {
+	if (!data.CirUnit.IsUnknown() && !data.CirUnit.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"cirUnit", data.CirUnit.ValueString())
 	}
-	if (!data.ConformAction.IsUnknown() && !data.ConformAction.IsNull()) || true {
+	if (!data.ConformAction.IsUnknown() && !data.ConformAction.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"conformAction", data.ConformAction.ValueString())
 	}
-	if (!data.ConformSetCos.IsUnknown() && !data.ConformSetCos.IsNull()) || true {
+	if (!data.ConformSetCos.IsUnknown() && !data.ConformSetCos.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"conformSetCosTransmit", strconv.FormatInt(data.ConformSetCos.ValueInt64(), 10))
 	}
-	if (!data.ConformSetDscp.IsUnknown() && !data.ConformSetDscp.IsNull()) || true {
+	if (!data.ConformSetDscp.IsUnknown() && !data.ConformSetDscp.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"conformSetDscpTransmit", strconv.FormatInt(data.ConformSetDscp.ValueInt64(), 10))
 	}
-	if (!data.ConformSetPrecedence.IsUnknown() && !data.ConformSetPrecedence.IsNull()) || true {
+	if (!data.ConformSetPrecedence.IsUnknown() && !data.ConformSetPrecedence.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"conformSetPrecTransmit", data.ConformSetPrecedence.ValueString())
 	}
-	if (!data.ConformSetQosGroup.IsUnknown() && !data.ConformSetQosGroup.IsNull()) || true {
+	if (!data.ConformSetQosGroup.IsUnknown() && !data.ConformSetQosGroup.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"conformSetQosGrpTransmit", strconv.FormatInt(data.ConformSetQosGroup.ValueInt64(), 10))
 	}
-	if (!data.ExceedAction.IsUnknown() && !data.ExceedAction.IsNull()) || true {
+	if (!data.ExceedAction.IsUnknown() && !data.ExceedAction.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"exceedAction", data.ExceedAction.ValueString())
 	}
-	if (!data.ExceedSetCos.IsUnknown() && !data.ExceedSetCos.IsNull()) || true {
+	if (!data.ExceedSetCos.IsUnknown() && !data.ExceedSetCos.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"exceedSetCosTransmit", strconv.FormatInt(data.ExceedSetCos.ValueInt64(), 10))
 	}
-	if (!data.ExceedSetDscp.IsUnknown() && !data.ExceedSetDscp.IsNull()) || true {
+	if (!data.ExceedSetDscp.IsUnknown() && !data.ExceedSetDscp.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"exceedSetDscpTransmit", strconv.FormatInt(data.ExceedSetDscp.ValueInt64(), 10))
 	}
-	if (!data.ExceedSetPrecedence.IsUnknown() && !data.ExceedSetPrecedence.IsNull()) || true {
+	if (!data.ExceedSetPrecedence.IsUnknown() && !data.ExceedSetPrecedence.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"exceedSetPrecTransmit", data.ExceedSetPrecedence.ValueString())
 	}
-	if (!data.ExceedSetQosGroup.IsUnknown() && !data.ExceedSetQosGroup.IsNull()) || true {
+	if (!data.ExceedSetQosGroup.IsUnknown() && !data.ExceedSetQosGroup.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"exceedSetQosGrpTransmit", strconv.FormatInt(data.ExceedSetQosGroup.ValueInt64(), 10))
 	}
-	if (!data.PirRate.IsUnknown() && !data.PirRate.IsNull()) || true {
+	if (!data.PirRate.IsUnknown() && !data.PirRate.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pirRate", strconv.FormatInt(data.PirRate.ValueInt64(), 10))
 	}
-	if (!data.PirUnit.IsUnknown() && !data.PirUnit.IsNull()) || true {
+	if (!data.PirUnit.IsUnknown() && !data.PirUnit.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pirUnit", data.PirUnit.ValueString())
 	}
-	if (!data.ViolateAction.IsUnknown() && !data.ViolateAction.IsNull()) || true {
+	if (!data.ViolateAction.IsUnknown() && !data.ViolateAction.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"violateAction", data.ViolateAction.ValueString())
 	}
-	if (!data.ViolateSetCos.IsUnknown() && !data.ViolateSetCos.IsNull()) || true {
+	if (!data.ViolateSetCos.IsUnknown() && !data.ViolateSetCos.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"violateSetCosTransmit", strconv.FormatInt(data.ViolateSetCos.ValueInt64(), 10))
 	}
-	if (!data.ViolateSetDscp.IsUnknown() && !data.ViolateSetDscp.IsNull()) || true {
+	if (!data.ViolateSetDscp.IsUnknown() && !data.ViolateSetDscp.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"violateSetDscpTransmit", strconv.FormatInt(data.ViolateSetDscp.ValueInt64(), 10))
 	}
-	if (!data.ViolateSetPrecedence.IsUnknown() && !data.ViolateSetPrecedence.IsNull()) || true {
+	if (!data.ViolateSetPrecedence.IsUnknown() && !data.ViolateSetPrecedence.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"violateSetPrecTransmit", data.ViolateSetPrecedence.ValueString())
 	}
-	if (!data.ViolateSetQosGroup.IsUnknown() && !data.ViolateSetQosGroup.IsNull()) || true {
+	if (!data.ViolateSetQosGroup.IsUnknown() && !data.ViolateSetQosGroup.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"violateSetQosGrpTransmit", strconv.FormatInt(data.ViolateSetQosGroup.ValueInt64(), 10))
 	}
 

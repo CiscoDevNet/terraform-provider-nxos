@@ -80,7 +80,7 @@ func (data SVIInterfaceVRF) getClassName() string {
 func (data SVIInterfaceVRF) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.VrfDn.IsUnknown() && !data.VrfDn.IsNull()) || true {
+	if (!data.VrfDn.IsUnknown() && !data.VrfDn.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"tDn", data.VrfDn.ValueString())
 	}
 

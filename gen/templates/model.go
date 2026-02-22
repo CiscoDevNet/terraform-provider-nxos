@@ -213,7 +213,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	{{- range .Attributes}}
 	{{- if not .ReferenceOnly}}
-	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
+	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
 		{{- if eq .Type "Int64"}}
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
 		{{- else if eq .Type "Bool"}}
@@ -239,7 +239,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 	{{- if .Value}}
 	attrs, _ = sjson.Set(attrs, "{{.NxosName}}", "{{.Value}}")
 	{{- else if not .ReferenceOnly}}
-	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
+	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
 		{{- if eq .Type "Int64"}}
 		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
 		{{- else if eq .Type "Bool"}}
@@ -260,7 +260,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 	nestedChildIndex := len(gjson.Get(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.children").Array())
 	attrs = "{}"
 	{{- range .Attributes}}
-	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
+	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
 		{{- if eq .Type "Int64"}}
 		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
 		{{- else if eq .Type "Bool"}}
@@ -276,7 +276,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 	{{- if eq .Type "single"}}
 	attrs = "{}"
 	{{- range .Attributes}}
-	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
+	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
 		{{- if eq .Type "Int64"}}
 		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
 		{{- else if eq .Type "Bool"}}
@@ -291,7 +291,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 	for _, deepNestedChild := range data.{{toGoName .TfName}} {
 		attrs = "{}"
 		{{- range .Attributes}}
-		if (!deepNestedChild.{{toGoName .TfName}}.IsUnknown() && !deepNestedChild.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
+		if (!deepNestedChild.{{toGoName .TfName}}.IsUnknown() && !deepNestedChild.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
 			{{- if eq .Type "Int64"}}
 			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(deepNestedChild.{{toGoName .TfName}}.ValueInt64(), 10))
 			{{- else if eq .Type "Bool"}}
@@ -308,7 +308,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 	{{- else}}
 	attrs = "{}"
 	{{- range .Attributes}}
-	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
+	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
 		{{- if eq .Type "Int64"}}
 		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
 		{{- else if eq .Type "Bool"}}
@@ -324,7 +324,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 	for _, nestedChild := range data.{{toGoName .TfName}} {
 		attrs = "{}"
 		{{- range .Attributes}}
-		if (!nestedChild.{{toGoName .TfName}}.IsUnknown() && !nestedChild.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
+		if (!nestedChild.{{toGoName .TfName}}.IsUnknown() && !nestedChild.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
 			{{- if eq .Type "Int64"}}
 			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(nestedChild.{{toGoName .TfName}}.ValueInt64(), 10))
 			{{- else if eq .Type "Bool"}}
@@ -341,7 +341,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 		{{- if eq .Type "single"}}
 		attrs = "{}"
 		{{- range .Attributes}}
-		if (!nestedChild.{{toGoName .TfName}}.IsUnknown() && !nestedChild.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
+		if (!nestedChild.{{toGoName .TfName}}.IsUnknown() && !nestedChild.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
 			{{- if eq .Type "Int64"}}
 			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(nestedChild.{{toGoName .TfName}}.ValueInt64(), 10))
 			{{- else if eq .Type "Bool"}}
@@ -356,7 +356,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 		for _, deepNestedChild := range nestedChild.{{toGoName .TfName}} {
 			attrs = "{}"
 			{{- range .Attributes}}
-			if (!deepNestedChild.{{toGoName .TfName}}.IsUnknown() && !deepNestedChild.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
+			if (!deepNestedChild.{{toGoName .TfName}}.IsUnknown() && !deepNestedChild.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
 				{{- if eq .Type "Int64"}}
 				attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(deepNestedChild.{{toGoName .TfName}}.ValueInt64(), 10))
 				{{- else if eq .Type "Bool"}}
@@ -380,7 +380,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 	{{- if .Value}}
 	attrs, _ = sjson.Set(attrs, "{{.NxosName}}", "{{.Value}}")
 	{{- else if not .ReferenceOnly}}
-	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
+	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
 		{{- if eq .Type "Int64"}}
 		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
 		{{- else if eq .Type "Bool"}}
@@ -397,7 +397,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 	for _, child := range data.{{toGoName .TfName}} {
 		attrs = "{}"
 		{{- range .Attributes}}
-		if (!child.{{toGoName .TfName}}.IsUnknown() && !child.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
+		if (!child.{{toGoName .TfName}}.IsUnknown() && !child.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
 			{{- if eq .Type "Int64"}}
 			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(child.{{toGoName .TfName}}.ValueInt64(), 10))
 			{{- else if eq .Type "Bool"}}
@@ -414,7 +414,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 		{{- if eq .Type "single"}}
 		attrs = "{}"
 		{{- range .Attributes}}
-		if (!child.{{toGoName .TfName}}.IsUnknown() && !child.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
+		if (!child.{{toGoName .TfName}}.IsUnknown() && !child.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
 			{{- if eq .Type "Int64"}}
 			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(child.{{toGoName .TfName}}.ValueInt64(), 10))
 			{{- else if eq .Type "Bool"}}
@@ -431,7 +431,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 		{{- if eq .Type "single"}}
 		attrs = "{}"
 		{{- range .Attributes}}
-		if (!child.{{toGoName .TfName}}.IsUnknown() && !child.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
+		if (!child.{{toGoName .TfName}}.IsUnknown() && !child.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
 			{{- if eq .Type "Int64"}}
 			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(child.{{toGoName .TfName}}.ValueInt64(), 10))
 			{{- else if eq .Type "Bool"}}
@@ -446,7 +446,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 		for _, deepNestedChild := range child.{{toGoName .TfName}} {
 			attrs = "{}"
 			{{- range .Attributes}}
-			if (!deepNestedChild.{{toGoName .TfName}}.IsUnknown() && !deepNestedChild.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
+			if (!deepNestedChild.{{toGoName .TfName}}.IsUnknown() && !deepNestedChild.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
 				{{- if eq .Type "Int64"}}
 				attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(deepNestedChild.{{toGoName .TfName}}.ValueInt64(), 10))
 				{{- else if eq .Type "Bool"}}
@@ -464,7 +464,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 		for _, nestedChild := range child.{{toGoName .TfName}} {
 			attrs = "{}"
 			{{- range .Attributes}}
-			if (!nestedChild.{{toGoName .TfName}}.IsUnknown() && !nestedChild.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
+			if (!nestedChild.{{toGoName .TfName}}.IsUnknown() && !nestedChild.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
 				{{- if eq .Type "Int64"}}
 				attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(nestedChild.{{toGoName .TfName}}.ValueInt64(), 10))
 				{{- else if eq .Type "Bool"}}
@@ -481,7 +481,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 			{{- if eq .Type "single"}}
 			attrs = "{}"
 			{{- range .Attributes}}
-			if (!nestedChild.{{toGoName .TfName}}.IsUnknown() && !nestedChild.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
+			if (!nestedChild.{{toGoName .TfName}}.IsUnknown() && !nestedChild.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
 				{{- if eq .Type "Int64"}}
 				attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(nestedChild.{{toGoName .TfName}}.ValueInt64(), 10))
 				{{- else if eq .Type "Bool"}}
@@ -496,7 +496,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 			for _, deepNestedChild := range nestedChild.{{toGoName .TfName}} {
 				attrs = "{}"
 				{{- range .Attributes}}
-				if (!deepNestedChild.{{toGoName .TfName}}.IsUnknown() && !deepNestedChild.{{toGoName .TfName}}.IsNull()) || {{not .OmitEmptyValue}} {
+				if (!deepNestedChild.{{toGoName .TfName}}.IsUnknown() && !deepNestedChild.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
 					{{- if eq .Type "Int64"}}
 					attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(deepNestedChild.{{toGoName .TfName}}.ValueInt64(), 10))
 					{{- else if eq .Type "Bool"}}

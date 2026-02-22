@@ -83,13 +83,13 @@ func (data PIMVRF) getClassName() string {
 func (data PIMVRF) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
+	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}
-	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
-	if (!data.Bfd.IsUnknown() && !data.Bfd.IsNull()) || true {
+	if (!data.Bfd.IsUnknown() && !data.Bfd.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bfd", strconv.FormatBool(data.Bfd.ValueBool()))
 	}
 

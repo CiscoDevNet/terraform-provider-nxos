@@ -91,7 +91,6 @@ attributes:
       - defrt
     default_value: 'inter'
     example: 'inter'
-    omit_empty_value: true
   - nxos_name: srv6PrefixType
     tf_name: srv6_prefix_type
     type: String
@@ -101,7 +100,6 @@ attributes:
       - locator
     default_value: 'unspecified'
     example: 'unspecified'
-    omit_empty_value: true
 test_prerequisites:
   - dn: sys/fm/bgp
     class_name: fmBgp

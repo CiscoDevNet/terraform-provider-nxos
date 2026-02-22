@@ -87,7 +87,7 @@ func (data VRFRouteTargetAddressFamily) getClassName() string {
 func (data VRFRouteTargetAddressFamily) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.RouteTargetAddressFamily.IsUnknown() && !data.RouteTargetAddressFamily.IsNull()) || true {
+	if (!data.RouteTargetAddressFamily.IsUnknown() && !data.RouteTargetAddressFamily.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.RouteTargetAddressFamily.ValueString())
 	}
 

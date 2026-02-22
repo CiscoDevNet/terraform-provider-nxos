@@ -93,19 +93,19 @@ func (data OSPFv3Area) getClassName() string {
 func (data OSPFv3Area) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.AreaId.IsUnknown() && !data.AreaId.IsNull()) || true {
+	if (!data.AreaId.IsUnknown() && !data.AreaId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.AreaId.ValueString())
 	}
-	if (!data.Redistribute.IsUnknown() && !data.Redistribute.IsNull()) || true {
+	if (!data.Redistribute.IsUnknown() && !data.Redistribute.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"redistribute", strconv.FormatBool(data.Redistribute.ValueBool()))
 	}
-	if (!data.Summary.IsUnknown() && !data.Summary.IsNull()) || true {
+	if (!data.Summary.IsUnknown() && !data.Summary.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"summary", strconv.FormatBool(data.Summary.ValueBool()))
 	}
-	if (!data.SuppressForwardAddress.IsUnknown() && !data.SuppressForwardAddress.IsNull()) || true {
+	if (!data.SuppressForwardAddress.IsUnknown() && !data.SuppressForwardAddress.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"supressFa", strconv.FormatBool(data.SuppressForwardAddress.ValueBool()))
 	}
-	if (!data.Type.IsUnknown() && !data.Type.IsNull()) || true {
+	if (!data.Type.IsUnknown() && !data.Type.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.Type.ValueString())
 	}
 

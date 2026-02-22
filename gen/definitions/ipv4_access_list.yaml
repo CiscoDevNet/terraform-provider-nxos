@@ -46,7 +46,6 @@ child_classes:
         type: Int64
         min_int: 0
         max_int: 63
-        omit_empty_value: true
         description: "Match DSCP."
         example: 0
       - nxos_name: dstAddrGroup
@@ -54,7 +53,6 @@ child_classes:
         type: String
         description: "Destination address group."
         exclude_test: true
-        omit_empty_value: true
         example: AG1
       - nxos_name: dstPort1
         tf_name: destination_port_1
@@ -113,7 +111,6 @@ child_classes:
           - drip
           - non500-isakmp
         allow_non_enum_values: true
-        omit_empty_value: true
         description: "First destination port number or name."
         example: 443
       - nxos_name: dstPort2
@@ -173,7 +170,6 @@ child_classes:
           - drip
           - non500-isakmp
         allow_non_enum_values: true
-        omit_empty_value: true
         description: "Second destination port number or name."
         example: 0
       - nxos_name: dstPortGroup
@@ -181,7 +177,6 @@ child_classes:
         type: String
         description: "Destination port group."
         exclude_test: true
-        omit_empty_value: true
         example: PG1
       - nxos_name: dstPortMask
         tf_name: destination_port_mask
@@ -240,7 +235,6 @@ child_classes:
           - drip
           - non500-isakmp
         allow_non_enum_values: true
-        omit_empty_value: true
         description: "Destination port mask number or name."
         exclude_test: true
         example: 0
@@ -260,13 +254,11 @@ child_classes:
       - nxos_name: dstPrefix
         tf_name: destination_prefix
         type: String
-        omit_empty_value: true
         description: "Destination prefix."
         example: 10.1.1.0
       - nxos_name: dstPrefixLength
         tf_name: destination_prefix_length
         type: String
-        omit_empty_value: true
         description: "Destination prefix length."
         example: 24
       - nxos_name: dstPrefixMask
@@ -274,7 +266,6 @@ child_classes:
         type: String
         description: "Destination prefix mask."
         exclude_test: true
-        omit_empty_value: true
         example: 255.255.255.0
       - nxos_name: est
         tf_name: established
@@ -382,7 +373,6 @@ child_classes:
           - pcp
           - udf
         allow_non_enum_values: true
-        omit_empty_value: true
         description: "Protocol name or number."
         example: tcp
       - nxos_name: protocolMask
@@ -404,7 +394,6 @@ child_classes:
           - pcp
           - udf
         allow_non_enum_values: true
-        omit_empty_value: true
         description: "Protocol mask name or number."
         exclude_test: true
         example: tcp
@@ -424,7 +413,6 @@ child_classes:
         type: String
         description: "ACL comment."
         exclude_test: true
-        omit_empty_value: true
         example: Line1
       - nxos_name: rev
         tf_name: rev
@@ -441,7 +429,6 @@ child_classes:
         type: String
         description: "Source address group."
         exclude_test: true
-        omit_empty_value: true
         example: AG2
       - nxos_name: srcPort1
         tf_name: source_port_1
@@ -500,7 +487,6 @@ child_classes:
           - drip
           - non500-isakmp
         allow_non_enum_values: true
-        omit_empty_value: true
         description: "First source port name or number."
         example: 443
       - nxos_name: srcPort2
@@ -560,7 +546,6 @@ child_classes:
           - drip
           - non500-isakmp
         allow_non_enum_values: true
-        omit_empty_value: true
         description: "Second source port name or number."
         example: 0
       - nxos_name: srcPortGroup
@@ -568,7 +553,6 @@ child_classes:
         type: String
         description: "Source port group."
         exclude_test: true
-        omit_empty_value: true
         example: PG2
       - nxos_name: srcPortMask
         tf_name: source_port_mask
@@ -627,7 +611,6 @@ child_classes:
           - drip
           - non500-isakmp
         allow_non_enum_values: true
-        omit_empty_value: true
         description: "Source port mask name or number."
         exclude_test: true
         example: 0
@@ -647,13 +630,11 @@ child_classes:
       - nxos_name: srcPrefix
         tf_name: source_prefix
         type: String
-        omit_empty_value: true
         description: "Source prefix."
         example: 20.1.0.0
       - nxos_name: srcPrefixLength
         tf_name: source_prefix_length
         type: String
-        omit_empty_value: true
         description: "Source prefix length."
         example: 16
       - nxos_name: srcPrefixMask
@@ -661,7 +642,6 @@ child_classes:
         type: String
         description: "Source prefix mask."
         exclude_test: true
-        omit_empty_value: true
         example: 255.255.0.0
       - nxos_name: syn
         tf_name: syn
@@ -673,7 +653,6 @@ child_classes:
         type: String
         description: "Time range name."
         exclude_test: true
-        omit_empty_value: true
         example: TR1
       - nxos_name: ttl
         tf_name: ttl

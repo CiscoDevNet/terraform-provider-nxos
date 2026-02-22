@@ -87,7 +87,7 @@ func (data RouteMapRuleEntryMatchRoutePrefixList) getClassName() string {
 func (data RouteMapRuleEntryMatchRoutePrefixList) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.PrefixListDn.IsUnknown() && !data.PrefixListDn.IsNull()) || true {
+	if (!data.PrefixListDn.IsUnknown() && !data.PrefixListDn.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"tDn", data.PrefixListDn.ValueString())
 	}
 

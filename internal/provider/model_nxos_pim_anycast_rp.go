@@ -81,10 +81,10 @@ func (data PIMAnycastRP) getClassName() string {
 func (data PIMAnycastRP) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.LocalInterface.IsUnknown() && !data.LocalInterface.IsNull()) || true {
+	if (!data.LocalInterface.IsUnknown() && !data.LocalInterface.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"localIf", data.LocalInterface.ValueString())
 	}
-	if (!data.SourceInterface.IsUnknown() && !data.SourceInterface.IsNull()) || true {
+	if (!data.SourceInterface.IsUnknown() && !data.SourceInterface.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"srcIf", data.SourceInterface.ValueString())
 	}
 

@@ -85,7 +85,7 @@ func (data DefaultQOSPolicyMapMatchClassMapSetQOSGroup) getClassName() string {
 func (data DefaultQOSPolicyMapMatchClassMapSetQOSGroup) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.QosGroupId.IsUnknown() && !data.QosGroupId.IsNull()) || true {
+	if (!data.QosGroupId.IsUnknown() && !data.QosGroupId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", strconv.FormatInt(data.QosGroupId.ValueInt64(), 10))
 	}
 

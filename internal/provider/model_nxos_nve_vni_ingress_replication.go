@@ -80,7 +80,7 @@ func (data NVEVNIIngressReplication) getClassName() string {
 func (data NVEVNIIngressReplication) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Protocol.IsUnknown() && !data.Protocol.IsNull()) || true {
+	if (!data.Protocol.IsUnknown() && !data.Protocol.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"proto", data.Protocol.ValueString())
 	}
 

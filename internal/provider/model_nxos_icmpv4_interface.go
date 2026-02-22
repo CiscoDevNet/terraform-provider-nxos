@@ -84,10 +84,10 @@ func (data ICMPv4Interface) getClassName() string {
 func (data ICMPv4Interface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
+	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.InterfaceId.ValueString())
 	}
-	if (!data.Control.IsUnknown() && !data.Control.IsNull()) || true {
+	if (!data.Control.IsUnknown() && !data.Control.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ctrl", data.Control.ValueString())
 	}
 

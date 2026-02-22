@@ -81,13 +81,13 @@ func (data LoopbackInterface) getClassName() string {
 func (data LoopbackInterface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
+	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.InterfaceId.ValueString())
 	}
-	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
-	if (!data.Description.IsUnknown() && !data.Description.IsNull()) || true {
+	if (!data.Description.IsUnknown() && !data.Description.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"descr", data.Description.ValueString())
 	}
 

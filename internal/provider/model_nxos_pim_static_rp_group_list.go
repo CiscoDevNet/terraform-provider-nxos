@@ -91,13 +91,13 @@ func (data PIMStaticRPGroupList) getClassName() string {
 func (data PIMStaticRPGroupList) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Address.IsUnknown() && !data.Address.IsNull()) || true {
+	if (!data.Address.IsUnknown() && !data.Address.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"grpListName", data.Address.ValueString())
 	}
-	if (!data.Bidir.IsUnknown() && !data.Bidir.IsNull()) || true {
+	if (!data.Bidir.IsUnknown() && !data.Bidir.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bidir", strconv.FormatBool(data.Bidir.ValueBool()))
 	}
-	if (!data.Override.IsUnknown() && !data.Override.IsNull()) || true {
+	if (!data.Override.IsUnknown() && !data.Override.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"override", strconv.FormatBool(data.Override.ValueBool()))
 	}
 

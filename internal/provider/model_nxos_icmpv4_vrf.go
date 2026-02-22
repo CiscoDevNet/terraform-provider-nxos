@@ -79,7 +79,7 @@ func (data ICMPv4VRF) getClassName() string {
 func (data ICMPv4VRF) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.VrfName.IsUnknown() && !data.VrfName.IsNull()) || true {
+	if (!data.VrfName.IsUnknown() && !data.VrfName.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.VrfName.ValueString())
 	}
 

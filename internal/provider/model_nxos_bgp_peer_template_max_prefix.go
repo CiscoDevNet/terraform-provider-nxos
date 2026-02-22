@@ -92,16 +92,16 @@ func (data BGPPeerTemplateMaxPrefix) getClassName() string {
 func (data BGPPeerTemplateMaxPrefix) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Action.IsUnknown() && !data.Action.IsNull()) || true {
+	if (!data.Action.IsUnknown() && !data.Action.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"action", data.Action.ValueString())
 	}
-	if (!data.MaximumPrefix.IsUnknown() && !data.MaximumPrefix.IsNull()) || true {
+	if (!data.MaximumPrefix.IsUnknown() && !data.MaximumPrefix.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxPfx", strconv.FormatInt(data.MaximumPrefix.ValueInt64(), 10))
 	}
-	if (!data.RestartTime.IsUnknown() && !data.RestartTime.IsNull()) || true {
+	if (!data.RestartTime.IsUnknown() && !data.RestartTime.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"restartTime", strconv.FormatInt(data.RestartTime.ValueInt64(), 10))
 	}
-	if (!data.Threshold.IsUnknown() && !data.Threshold.IsNull()) || true {
+	if (!data.Threshold.IsUnknown() && !data.Threshold.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"thresh", strconv.FormatInt(data.Threshold.ValueInt64(), 10))
 	}
 

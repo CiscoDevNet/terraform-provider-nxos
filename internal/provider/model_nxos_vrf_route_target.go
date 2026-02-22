@@ -95,7 +95,7 @@ func (data VRFRouteTarget) getClassName() string {
 func (data VRFRouteTarget) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.RouteTarget.IsUnknown() && !data.RouteTarget.IsNull()) || true {
+	if (!data.RouteTarget.IsUnknown() && !data.RouteTarget.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rtt", data.RouteTarget.ValueString())
 	}
 

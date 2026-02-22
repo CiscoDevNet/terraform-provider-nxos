@@ -96,67 +96,67 @@ func (data VPCDomain) getClassName() string {
 func (data VPCDomain) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
-	if (!data.DomainId.IsUnknown() && !data.DomainId.IsNull()) || true {
+	if (!data.DomainId.IsUnknown() && !data.DomainId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", strconv.FormatInt(data.DomainId.ValueInt64(), 10))
 	}
-	if (!data.AutoRecovery.IsUnknown() && !data.AutoRecovery.IsNull()) || true {
+	if (!data.AutoRecovery.IsUnknown() && !data.AutoRecovery.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"autoRecovery", data.AutoRecovery.ValueString())
 	}
-	if (!data.AutoRecoveryInterval.IsUnknown() && !data.AutoRecoveryInterval.IsNull()) || true {
+	if (!data.AutoRecoveryInterval.IsUnknown() && !data.AutoRecoveryInterval.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"autoRecoveryIntvl", strconv.FormatInt(data.AutoRecoveryInterval.ValueInt64(), 10))
 	}
-	if (!data.DelayRestoreOrphanPort.IsUnknown() && !data.DelayRestoreOrphanPort.IsNull()) || true {
+	if (!data.DelayRestoreOrphanPort.IsUnknown() && !data.DelayRestoreOrphanPort.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"delayRestoreOrphanPort", strconv.FormatInt(data.DelayRestoreOrphanPort.ValueInt64(), 10))
 	}
-	if (!data.DelayRestoreSvi.IsUnknown() && !data.DelayRestoreSvi.IsNull()) || true {
+	if (!data.DelayRestoreSvi.IsUnknown() && !data.DelayRestoreSvi.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"delayRestoreSVI", strconv.FormatInt(data.DelayRestoreSvi.ValueInt64(), 10))
 	}
-	if (!data.DelayRestoreVpc.IsUnknown() && !data.DelayRestoreVpc.IsNull()) || true {
+	if (!data.DelayRestoreVpc.IsUnknown() && !data.DelayRestoreVpc.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"delayRestoreVPC", strconv.FormatInt(data.DelayRestoreVpc.ValueInt64(), 10))
 	}
-	if (!data.Dscp.IsUnknown() && !data.Dscp.IsNull()) || true {
+	if (!data.Dscp.IsUnknown() && !data.Dscp.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dscp", strconv.FormatInt(data.Dscp.ValueInt64(), 10))
 	}
-	if (!data.FastConvergence.IsUnknown() && !data.FastConvergence.IsNull()) || true {
+	if (!data.FastConvergence.IsUnknown() && !data.FastConvergence.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"fastConvergence", data.FastConvergence.ValueString())
 	}
-	if (!data.GracefulConsistencyCheck.IsUnknown() && !data.GracefulConsistencyCheck.IsNull()) || true {
+	if (!data.GracefulConsistencyCheck.IsUnknown() && !data.GracefulConsistencyCheck.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"grcflCnstncyChck", data.GracefulConsistencyCheck.ValueString())
 	}
-	if (!data.L3PeerRouter.IsUnknown() && !data.L3PeerRouter.IsNull()) || true {
+	if (!data.L3PeerRouter.IsUnknown() && !data.L3PeerRouter.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"l3PeerRouter", data.L3PeerRouter.ValueString())
 	}
-	if (!data.L3PeerRouterSyslog.IsUnknown() && !data.L3PeerRouterSyslog.IsNull()) || true {
+	if (!data.L3PeerRouterSyslog.IsUnknown() && !data.L3PeerRouterSyslog.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"l3PeerRouterSyslog", data.L3PeerRouterSyslog.ValueString())
 	}
-	if (!data.L3PeerRouterSyslogInterval.IsUnknown() && !data.L3PeerRouterSyslogInterval.IsNull()) || true {
+	if (!data.L3PeerRouterSyslogInterval.IsUnknown() && !data.L3PeerRouterSyslogInterval.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"l3PeerRouterSyslogInterval", strconv.FormatInt(data.L3PeerRouterSyslogInterval.ValueInt64(), 10))
 	}
-	if (!data.PeerGateway.IsUnknown() && !data.PeerGateway.IsNull()) || true {
+	if (!data.PeerGateway.IsUnknown() && !data.PeerGateway.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"peerGw", data.PeerGateway.ValueString())
 	}
-	if (!data.PeerIp.IsUnknown() && !data.PeerIp.IsNull()) || true {
+	if (!data.PeerIp.IsUnknown() && !data.PeerIp.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"peerIp", data.PeerIp.ValueString())
 	}
-	if (!data.PeerSwitch.IsUnknown() && !data.PeerSwitch.IsNull()) || true {
+	if (!data.PeerSwitch.IsUnknown() && !data.PeerSwitch.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"peerSwitch", data.PeerSwitch.ValueString())
 	}
-	if (!data.RolePriority.IsUnknown() && !data.RolePriority.IsNull()) || true {
+	if (!data.RolePriority.IsUnknown() && !data.RolePriority.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rolePrio", strconv.FormatInt(data.RolePriority.ValueInt64(), 10))
 	}
-	if (!data.SysMac.IsUnknown() && !data.SysMac.IsNull()) || true {
+	if (!data.SysMac.IsUnknown() && !data.SysMac.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"sysMac", data.SysMac.ValueString())
 	}
-	if (!data.SystemPriority.IsUnknown() && !data.SystemPriority.IsNull()) || true {
+	if (!data.SystemPriority.IsUnknown() && !data.SystemPriority.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"sysPrio", strconv.FormatInt(data.SystemPriority.ValueInt64(), 10))
 	}
-	if (!data.Track.IsUnknown() && !data.Track.IsNull()) || true {
+	if (!data.Track.IsUnknown() && !data.Track.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"track", strconv.FormatInt(data.Track.ValueInt64(), 10))
 	}
-	if (!data.VirtualIp.IsUnknown() && !data.VirtualIp.IsNull()) || true {
+	if (!data.VirtualIp.IsUnknown() && !data.VirtualIp.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"virtualIp", data.VirtualIp.ValueString())
 	}
 

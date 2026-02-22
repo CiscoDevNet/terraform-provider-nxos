@@ -88,31 +88,31 @@ func (data SpanningTreeInterface) getClassName() string {
 func (data SpanningTreeInterface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
+	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.InterfaceId.ValueString())
 	}
-	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
-	if (!data.BpduFilter.IsUnknown() && !data.BpduFilter.IsNull()) || true {
+	if (!data.BpduFilter.IsUnknown() && !data.BpduFilter.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bpdufilter", data.BpduFilter.ValueString())
 	}
-	if (!data.BpduGuard.IsUnknown() && !data.BpduGuard.IsNull()) || true {
+	if (!data.BpduGuard.IsUnknown() && !data.BpduGuard.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bpduguard", data.BpduGuard.ValueString())
 	}
-	if (!data.Cost.IsUnknown() && !data.Cost.IsNull()) || true {
+	if (!data.Cost.IsUnknown() && !data.Cost.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"cost", strconv.FormatInt(data.Cost.ValueInt64(), 10))
 	}
-	if (!data.Guard.IsUnknown() && !data.Guard.IsNull()) || true {
+	if (!data.Guard.IsUnknown() && !data.Guard.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"guard", data.Guard.ValueString())
 	}
-	if (!data.LinkType.IsUnknown() && !data.LinkType.IsNull()) || true {
+	if (!data.LinkType.IsUnknown() && !data.LinkType.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkType", data.LinkType.ValueString())
 	}
-	if (!data.Mode.IsUnknown() && !data.Mode.IsNull()) || true {
+	if (!data.Mode.IsUnknown() && !data.Mode.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mode", data.Mode.ValueString())
 	}
-	if (!data.Priority.IsUnknown() && !data.Priority.IsNull()) || true {
+	if (!data.Priority.IsUnknown() && !data.Priority.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"priority", strconv.FormatInt(data.Priority.ValueInt64(), 10))
 	}
 

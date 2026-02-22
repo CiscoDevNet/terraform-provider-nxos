@@ -80,10 +80,10 @@ func (data DefaultQOSClassMap) getClassName() string {
 func (data DefaultQOSClassMap) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
+	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}
-	if (!data.MatchType.IsUnknown() && !data.MatchType.IsNull()) || true {
+	if (!data.MatchType.IsUnknown() && !data.MatchType.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"matchType", data.MatchType.ValueString())
 	}
 

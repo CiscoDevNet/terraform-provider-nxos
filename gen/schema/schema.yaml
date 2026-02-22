@@ -27,7 +27,7 @@ attribute:
   example: any(str(), int(), bool(), required=False) # Example value for documentation, also used for acceptance test
   enum_values: list(str(), required=False) # List of enum values, only relevant if type is "String"
   allow_non_enum_values: bool(required=False) # Set to true if non-enum values should also be accepted
-  omit_empty_value: bool(required=False) # Set to true if the attribute should be omitted from the payload when the value is empty
+  always_include: bool(required=False) # Set to true if the attribute should always be included in the payload even when the value is empty
   min_int: int(required=False) # Minimum value of an integer, only relevant if type is "Int64"
   max_int: int(required=False) # Maximum value of an integer, only relevant if type is "Int64"
   default_value: any(str(), int(), bool(), required=False) # Default value for the attribute

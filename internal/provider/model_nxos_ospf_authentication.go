@@ -96,25 +96,25 @@ func (data OSPFAuthentication) getClassName() string {
 func (data OSPFAuthentication) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Key.IsUnknown() && !data.Key.IsNull()) || true {
+	if (!data.Key.IsUnknown() && !data.Key.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"key", data.Key.ValueString())
 	}
-	if (!data.KeyId.IsUnknown() && !data.KeyId.IsNull()) || true {
+	if (!data.KeyId.IsUnknown() && !data.KeyId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"keyId", strconv.FormatInt(data.KeyId.ValueInt64(), 10))
 	}
-	if (!data.KeySecureMode.IsUnknown() && !data.KeySecureMode.IsNull()) || true {
+	if (!data.KeySecureMode.IsUnknown() && !data.KeySecureMode.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"keySecureMode", strconv.FormatBool(data.KeySecureMode.ValueBool()))
 	}
-	if (!data.Keychain.IsUnknown() && !data.Keychain.IsNull()) || true {
+	if (!data.Keychain.IsUnknown() && !data.Keychain.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"keychain", data.Keychain.ValueString())
 	}
-	if (!data.Md5Key.IsUnknown() && !data.Md5Key.IsNull()) || true {
+	if (!data.Md5Key.IsUnknown() && !data.Md5Key.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"md5key", data.Md5Key.ValueString())
 	}
-	if (!data.Md5KeySecureMode.IsUnknown() && !data.Md5KeySecureMode.IsNull()) || true {
+	if (!data.Md5KeySecureMode.IsUnknown() && !data.Md5KeySecureMode.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"md5keySecureMode", strconv.FormatBool(data.Md5KeySecureMode.ValueBool()))
 	}
-	if (!data.Type.IsUnknown() && !data.Type.IsNull()) || true {
+	if (!data.Type.IsUnknown() && !data.Type.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.Type.ValueString())
 	}
 

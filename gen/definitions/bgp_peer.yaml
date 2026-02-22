@@ -87,7 +87,6 @@ attributes:
     example: 5
     min_int: 0
     max_int: 255
-    omit_empty_value: true
   - nxos_name: ctrl
     tf_name: peer_control
     type: String
@@ -104,7 +103,6 @@ attributes:
       - "7"
     example: LINE
     exclude_test: true
-    omit_empty_value: true
   - nxos_name: password
     tf_name: password
     description: "Password."

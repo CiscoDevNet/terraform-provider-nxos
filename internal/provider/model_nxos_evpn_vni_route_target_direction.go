@@ -83,7 +83,7 @@ func (data EVPNVNIRouteTargetDirection) getClassName() string {
 func (data EVPNVNIRouteTargetDirection) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Direction.IsUnknown() && !data.Direction.IsNull()) || true {
+	if (!data.Direction.IsUnknown() && !data.Direction.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.Direction.ValueString())
 	}
 

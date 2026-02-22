@@ -87,37 +87,37 @@ func (data NVEInterface) getClassName() string {
 func (data NVEInterface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
-	if (!data.AdvertiseVirtualMac.IsUnknown() && !data.AdvertiseVirtualMac.IsNull()) || true {
+	if (!data.AdvertiseVirtualMac.IsUnknown() && !data.AdvertiseVirtualMac.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"advertiseVmac", strconv.FormatBool(data.AdvertiseVirtualMac.ValueBool()))
 	}
-	if (!data.HoldDownTime.IsUnknown() && !data.HoldDownTime.IsNull()) || true {
+	if (!data.HoldDownTime.IsUnknown() && !data.HoldDownTime.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"holdDownTime", strconv.FormatInt(data.HoldDownTime.ValueInt64(), 10))
 	}
-	if (!data.HostReachabilityProtocol.IsUnknown() && !data.HostReachabilityProtocol.IsNull()) || true {
+	if (!data.HostReachabilityProtocol.IsUnknown() && !data.HostReachabilityProtocol.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"hostReach", data.HostReachabilityProtocol.ValueString())
 	}
-	if (!data.IngressReplicationProtocolBgp.IsUnknown() && !data.IngressReplicationProtocolBgp.IsNull()) || true {
+	if (!data.IngressReplicationProtocolBgp.IsUnknown() && !data.IngressReplicationProtocolBgp.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ingressReplProtoBGP", strconv.FormatBool(data.IngressReplicationProtocolBgp.ValueBool()))
 	}
-	if (!data.MulticastGroupL2.IsUnknown() && !data.MulticastGroupL2.IsNull()) || true {
+	if (!data.MulticastGroupL2.IsUnknown() && !data.MulticastGroupL2.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mcastGroupL2", data.MulticastGroupL2.ValueString())
 	}
-	if (!data.MulticastGroupL3.IsUnknown() && !data.MulticastGroupL3.IsNull()) || true {
+	if (!data.MulticastGroupL3.IsUnknown() && !data.MulticastGroupL3.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mcastGroupL3", data.MulticastGroupL3.ValueString())
 	}
-	if (!data.MultisiteSourceInterface.IsUnknown() && !data.MultisiteSourceInterface.IsNull()) || true {
+	if (!data.MultisiteSourceInterface.IsUnknown() && !data.MultisiteSourceInterface.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"multisiteBordergwInterface", data.MultisiteSourceInterface.ValueString())
 	}
-	if (!data.SourceInterface.IsUnknown() && !data.SourceInterface.IsNull()) || true {
+	if (!data.SourceInterface.IsUnknown() && !data.SourceInterface.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"sourceInterface", data.SourceInterface.ValueString())
 	}
-	if (!data.SuppressArp.IsUnknown() && !data.SuppressArp.IsNull()) || true {
+	if (!data.SuppressArp.IsUnknown() && !data.SuppressArp.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"suppressARP", strconv.FormatBool(data.SuppressArp.ValueBool()))
 	}
-	if (!data.SuppressMacRoute.IsUnknown() && !data.SuppressMacRoute.IsNull()) || true {
+	if (!data.SuppressMacRoute.IsUnknown() && !data.SuppressMacRoute.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"suppressMacRoute", strconv.FormatBool(data.SuppressMacRoute.ValueBool()))
 	}
 

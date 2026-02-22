@@ -79,7 +79,7 @@ func (data DefaultQOSPolicyInterfaceIn) getClassName() string {
 func (data DefaultQOSPolicyInterfaceIn) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
+	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.InterfaceId.ValueString())
 	}
 

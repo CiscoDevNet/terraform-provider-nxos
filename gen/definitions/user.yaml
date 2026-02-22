@@ -29,7 +29,6 @@ attributes:
     example: "password123"
     write_only: true
     exclude_test: true
-    omit_empty_value: true
   - nxos_name: pwdEncryptType
     tf_name: password_encryption_type
     description: "Password encryption type."
@@ -43,7 +42,6 @@ attributes:
       - "255"
     example: "clear"
     exclude_test: true
-    omit_empty_value: true
     write_only: true
 child_classes:
   - class_name: aaaUserDomain

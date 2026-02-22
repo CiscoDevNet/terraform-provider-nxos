@@ -87,10 +87,10 @@ func (data DHCPRelayAddress) getClassName() string {
 func (data DHCPRelayAddress) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Vrf.IsUnknown() && !data.Vrf.IsNull()) || true {
+	if (!data.Vrf.IsUnknown() && !data.Vrf.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"vrf", data.Vrf.ValueString())
 	}
-	if (!data.Address.IsUnknown() && !data.Address.IsNull()) || true {
+	if (!data.Address.IsUnknown() && !data.Address.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"address", data.Address.ValueString())
 	}
 

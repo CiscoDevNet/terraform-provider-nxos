@@ -85,7 +85,7 @@ func (data ISISOverload) getClassName() string {
 func (data ISISOverload) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.StartupTime.IsUnknown() && !data.StartupTime.IsNull()) || true {
+	if (!data.StartupTime.IsUnknown() && !data.StartupTime.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"startupTime", strconv.FormatInt(data.StartupTime.ValueInt64(), 10))
 	}
 

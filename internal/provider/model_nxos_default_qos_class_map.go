@@ -34,10 +34,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type DefaultQOSClassMap struct {
-	Device    types.String `tfsdk:"device"`
-	Dn        types.String `tfsdk:"id"`
-	Name      types.String `tfsdk:"name"`
-	MatchType types.String `tfsdk:"match_type"`
+	Device     types.String                   `tfsdk:"device"`
+	Dn         types.String                   `tfsdk:"id"`
+	Name       types.String                   `tfsdk:"name"`
+	MatchType  types.String                   `tfsdk:"match_type"`
+	DscpValues []DefaultQOSClassMapDscpValues `tfsdk:"dscp_values"`
+}
+
+type DefaultQOSClassMapDscpValues struct {
+	Value types.String `tfsdk:"value"`
 }
 
 type DefaultQOSClassMapIdentity struct {
@@ -70,6 +75,10 @@ func (data DefaultQOSClassMap) getDn() string {
 	return fmt.Sprintf("sys/ipqos/dflt/c/name-[%s]", data.Name.ValueString())
 }
 
+func (data DefaultQOSClassMapDscpValues) getRn() string {
+	return fmt.Sprintf("dscp-[%v]", data.Value.ValueString())
+}
+
 func (data DefaultQOSClassMap) getClassName() string {
 	return "ipqosCMapInst"
 }
@@ -86,6 +95,14 @@ func (data DefaultQOSClassMap) toBody() nxos.Body {
 	if (!data.MatchType.IsUnknown() && !data.MatchType.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"matchType", data.MatchType.ValueString())
 	}
+	var attrs string
+	for _, child := range data.DscpValues {
+		attrs = "{}"
+		if (!child.Value.IsUnknown() && !child.Value.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "val", child.Value.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.ipqosDscp.attributes", attrs)
+	}
 
 	return nxos.Body{body}
 }
@@ -96,6 +113,21 @@ func (data DefaultQOSClassMap) toBody() nxos.Body {
 func (data *DefaultQOSClassMap) fromBody(res gjson.Result) {
 	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	data.MatchType = types.StringValue(res.Get(data.getClassName() + ".attributes.matchType").String())
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "ipqosDscp" {
+						var child DefaultQOSClassMapDscpValues
+						child.Value = types.StringValue(value.Get("attributes.val").String())
+						data.DscpValues = append(data.DscpValues, child)
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
 }
 
 // End of section. //template:end fromBody
@@ -111,6 +143,24 @@ func (data *DefaultQOSClassMap) updateFromBody(res gjson.Result) {
 		data.MatchType = types.StringValue(res.Get(data.getClassName() + ".attributes.matchType").String())
 	} else {
 		data.MatchType = types.StringNull()
+	}
+	for c := range data.DscpValues {
+		var r gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("ipqosDscp.attributes.rn").String()
+				if key == data.DscpValues[c].getRn() {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.DscpValues[c].Value.IsNull() {
+			data.DscpValues[c].Value = types.StringValue(r.Get("ipqosDscp.attributes.val").String())
+		} else {
+			data.DscpValues[c].Value = types.StringNull()
+		}
 	}
 }
 
@@ -136,5 +186,22 @@ func (data DefaultQOSClassMap) getDeleteDns() []string {
 // End of section. //template:end getDeleteDns
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data DefaultQOSClassMap) getDeletedItems(ctx context.Context, state DefaultQOSClassMap) []string {
+	deletedItems := []string{}
+	for _, stateChild := range state.DscpValues {
+		found := false
+		for _, planChild := range data.DscpValues {
+			if stateChild.Value == planChild.Value {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, data.getDn()+"/"+stateChild.getRn())
+		}
+	}
+	return deletedItems
+}
 
 // End of section. //template:end getDeletedItems

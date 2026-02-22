@@ -5,6 +5,8 @@ subcategory: "QoS"
 description: |-
   This data source can read the default QoS class map configuration.
   API Documentation: ipqosCMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:CMapInst/
+  Additional API Documentation
+  ipqosDscp https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Dscp/
 ---
 
 # nxos_default_qos_class_map (Data Source)
@@ -12,6 +14,10 @@ description: |-
 This data source can read the default QoS class map configuration.
 
 - API Documentation: [ipqosCMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:CMapInst/)
+
+### Additional API Documentation
+
+- [ipqosDscp](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Dscp/)
 
 ## Example Usage
 
@@ -34,5 +40,13 @@ data "nxos_default_qos_class_map" "example" {
 
 ### Read-Only
 
+- `dscp_values` (Attributes List) List of DSCP values to match. (see [below for nested schema](#nestedatt--dscp_values))
 - `id` (String) The distinguished name of the object.
 - `match_type` (String) Match type.
+
+<a id="nestedatt--dscp_values"></a>
+### Nested Schema for `dscp_values`
+
+Read-Only:
+
+- `value` (String) DSCP value.

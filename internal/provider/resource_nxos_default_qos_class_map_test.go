@@ -37,6 +37,7 @@ func TestAccNxosDefaultQOSClassMap(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_class_map.test", "name", "Voice"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_class_map.test", "match_type", "match-any"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_class_map.test", "dscp_values.0.value", "ef"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -98,6 +99,9 @@ func testAccNxosDefaultQOSClassMapConfig_all() string {
 	config := `resource "nxos_default_qos_class_map" "test" {` + "\n"
 	config += `	name = "Voice"` + "\n"
 	config += `	match_type = "match-any"` + "\n"
+	config += `	dscp_values = [{` + "\n"
+	config += `		value = "ef"` + "\n"
+	config += `	}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

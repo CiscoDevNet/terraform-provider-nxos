@@ -63,7 +63,7 @@ func (r *DefaultQOSClassMapResource) Metadata(ctx context.Context, req resource.
 func (r *DefaultQOSClassMapResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the default QoS class map configuration.", "ipqosCMapInst", "Qos/ipqos:CMapInst/").AddChildren("default_qos_class_map_dscp").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the default QoS class map configuration.", "ipqosCMapInst", "Qos/ipqos:CMapInst/").AddAdditionalDocs([]string{"ipqosDscp"}, []string{"Qos/ipqos:Dscp/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -91,6 +91,21 @@ func (r *DefaultQOSClassMapResource) Schema(ctx context.Context, req resource.Sc
 				Default:             stringdefault.StaticString("match-all"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("match-any", "match-all", "match-first"),
+				},
+			},
+			"dscp_values": schema.ListNestedAttribute{
+				MarkdownDescription: "List of DSCP values to match.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"value": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("DSCP value.").AddDefaultValueDescription("0").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+					},
 				},
 			},
 		},
@@ -199,6 +214,7 @@ func (r *DefaultQOSClassMapResource) Read(ctx context.Context, req resource.Read
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		queries = append(queries, nxos.Query("rsp-subtree", "children"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -241,6 +257,14 @@ func (r *DefaultQOSClassMapResource) Update(ctx context.Context, req resource.Up
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	var state DefaultQOSClassMap
+
+	// Read state
+	diags = req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
@@ -256,6 +280,19 @@ func (r *DefaultQOSClassMapResource) Update(ctx context.Context, req resource.Up
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
+		}
+
+		deletedItems := plan.getDeletedItems(ctx, state)
+		tflog.Debug(ctx, fmt.Sprintf("%s: List items to delete: %v", plan.getDn(), deletedItems))
+		for _, dn := range deletedItems {
+			res, err := device.Client.DeleteDn(dn)
+			if err != nil {
+				errCode := res.Get("imdata.0.error.attributes.code").Str
+				if errCode != "1" && errCode != "107" {
+					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+					return
+				}
+			}
 		}
 	}
 

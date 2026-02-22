@@ -33,6 +33,9 @@ func TestAccDataSourceNxosDefaultQOSClassMap(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos_class_map.test", "name", "Voice"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos_class_map.test", "match_type", "match-any"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_default_qos_class_map.test", "dscp_values.*", map[string]string{
+		"value": "ef",
+	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -56,6 +59,9 @@ func testAccDataSourceNxosDefaultQOSClassMapConfig() string {
 	config := `resource "nxos_default_qos_class_map" "test" {` + "\n"
 	config += `	name = "Voice"` + "\n"
 	config += `	match_type = "match-any"` + "\n"
+	config += `	dscp_values = [{` + "\n"
+	config += `		value = "ef"` + "\n"
+	config += `	}]` + "\n"
 	config += `}` + "\n"
 
 	config += `

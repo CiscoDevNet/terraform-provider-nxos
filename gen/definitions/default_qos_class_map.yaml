@@ -6,8 +6,6 @@ ds_description: This data source can read the default QoS class map configuratio
 res_description: This resource can manage the default QoS class map configuration.
 doc_path: Qos/ipqos:CMapInst/
 doc_category: QoS
-children:
-  - Default QOS Class Map DSCP
 attributes:
   - nxos_name: name
     tf_name: name
@@ -25,3 +23,18 @@ attributes:
       - match-first
     default_value: match-all
     example: match-any
+child_classes:
+  - class_name: ipqosDscp
+    rn: dscp-[%v]
+    type: list
+    tf_name: dscp_values
+    description: 'List of DSCP values to match.'
+    doc_path: Qos/ipqos:Dscp/
+    attributes:
+      - nxos_name: val
+        tf_name: value
+        type: String
+        id: true
+        description: 'DSCP value.'
+        default_value: '0'
+        example: ef

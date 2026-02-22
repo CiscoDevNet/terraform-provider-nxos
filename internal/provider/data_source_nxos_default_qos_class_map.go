@@ -57,7 +57,7 @@ func (d *DefaultQOSClassMapDataSource) Metadata(_ context.Context, req datasourc
 func (d *DefaultQOSClassMapDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the default QoS class map configuration.", "ipqosCMapInst", "Qos/ipqos:CMapInst/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the default QoS class map configuration.", "ipqosCMapInst", "Qos/ipqos:CMapInst/").AddAdditionalDocs([]string{"ipqosDscp"}, []string{"Qos/ipqos:Dscp/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -75,6 +75,18 @@ func (d *DefaultQOSClassMapDataSource) Schema(ctx context.Context, req datasourc
 			"match_type": schema.StringAttribute{
 				MarkdownDescription: "Match type.",
 				Computed:            true,
+			},
+			"dscp_values": schema.ListNestedAttribute{
+				MarkdownDescription: "List of DSCP values to match.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"value": schema.StringAttribute{
+							MarkdownDescription: "DSCP value.",
+							Computed:            true,
+						},
+					},
+				},
 			},
 		},
 	}
@@ -110,6 +122,7 @@ func (d *DefaultQOSClassMapDataSource) Read(ctx context.Context, req datasource.
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "children"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

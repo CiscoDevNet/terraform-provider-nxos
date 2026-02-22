@@ -10,6 +10,7 @@ description: |-
 ## Unreleased
 
 - BREAKING CHANGE: Omit empty or null attribute values from API payload by default
+- BREAKING CHANGE: Remove `nxos_default_qos_class_map_dscp` resource and data source, DSCP values are now managed as child classes of `nxos_default_qos_class_map`
 - Add `nxos_features` resource and data source
 
 ## 0.7.0

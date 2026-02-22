@@ -5,8 +5,8 @@ subcategory: "QoS"
 description: |-
   This resource can manage the default QoS class map configuration.
   API Documentation: ipqosCMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:CMapInst/
-  Child resources
-  nxos_default_qos_class_map_dscp https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/default_qos_class_map_dscp
+  Additional API Documentation
+  ipqosDscp https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Dscp/
 ---
 
 # nxos_default_qos_class_map (Resource)
@@ -15,9 +15,9 @@ This resource can manage the default QoS class map configuration.
 
 - API Documentation: [ipqosCMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:CMapInst/)
 
-### Child resources
+### Additional API Documentation
 
-- [nxos_default_qos_class_map_dscp](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/default_qos_class_map_dscp)
+- [ipqosDscp](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Dscp/)
 
 ## Example Usage
 
@@ -25,6 +25,9 @@ This resource can manage the default QoS class map configuration.
 resource "nxos_default_qos_class_map" "example" {
   name       = "Voice"
   match_type = "match-any"
+  dscp_values = [{
+    value = "ef"
+  }]
 }
 ```
 
@@ -38,6 +41,7 @@ resource "nxos_default_qos_class_map" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
+- `dscp_values` (Attributes List) List of DSCP values to match. (see [below for nested schema](#nestedatt--dscp_values))
 - `match_type` (String) Match type.
   - Choices: `match-any`, `match-all`, `match-first`
   - Default value: `match-all`
@@ -45,6 +49,14 @@ resource "nxos_default_qos_class_map" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--dscp_values"></a>
+### Nested Schema for `dscp_values`
+
+Required:
+
+- `value` (String) DSCP value.
+  - Default value: `0`
 
 ## Import
 

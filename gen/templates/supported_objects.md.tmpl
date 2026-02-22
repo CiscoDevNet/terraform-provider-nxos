@@ -15,6 +15,6 @@ For the following DME objects a corresponding Terraform resource and data source
 {{- $parent := .}}
 | [{{.ClassName}}](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/{{.DocPath}}) | [nxos_{{snakeCase .Name}}](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/{{snakeCase .Name}}) | [nxos_{{snakeCase .Name}}](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/data-sources/{{snakeCase .Name}}) |
 {{- range $i, $v := childDocPaths $parent.ChildClasses}}
-| [{{index (childDocClassNames $parent.ChildClasses) $i}}](https://pubhub.devnetcloud.com/media/dme-docs-10-2-2/docs/{{$v}}) | [nxos_{{snakeCase $parent.Name}}](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/{{snakeCase $parent.Name}}) | [nxos_{{snakeCase $parent.Name}}](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/data-sources/{{snakeCase $parent.Name}}) |
+| [{{index (childDocClassNames $parent.ChildClasses) $i}}](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/{{$v}}) | [nxos_{{snakeCase $parent.Name}}](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/{{snakeCase $parent.Name}}) | [nxos_{{snakeCase $parent.Name}}](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/data-sources/{{snakeCase $parent.Name}}) |
 {{- end}}
 {{- end}}

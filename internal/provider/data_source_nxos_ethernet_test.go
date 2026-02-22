@@ -30,16 +30,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosEthernet(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ethernet.test", "mtu", "9216"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ethernet.test", "default_admin_status", "up"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosEthernetConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_ethernet.test", "mtu", "9216"),
-					resource.TestCheckResourceAttr("data.nxos_ethernet.test", "default_admin_status", "up"),
-				),
+				Config: testAccDataSourceNxosEthernetConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -52,16 +52,18 @@ func TestAccDataSourceNxosEthernet(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosEthernetConfig = `
+func testAccDataSourceNxosEthernetConfig() string {
+	config := `resource "nxos_ethernet" "test" {` + "\n"
+	config += `	mtu = 9216` + "\n"
+	config += `	default_admin_status = "up"` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_ethernet" "test" {
-  mtu = 9216
-  default_admin_status = "up"
-}
-
+	config += `
 data "nxos_ethernet" "test" {
-  depends_on = [nxos_ethernet.test]
+	depends_on = [nxos_ethernet.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

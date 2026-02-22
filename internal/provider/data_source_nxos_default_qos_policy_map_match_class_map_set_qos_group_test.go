@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosDefaultQOSPolicyMapMatchClassMapSetQOSGroup(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos_policy_map_match_class_map_set_qos_group.test", "qos_group_id", "1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosDefaultQOSPolicyMapMatchClassMapSetQOSGroupPrerequisitesConfig + testAccDataSourceNxosDefaultQOSPolicyMapMatchClassMapSetQOSGroupConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_default_qos_policy_map_match_class_map_set_qos_group.test", "qos_group_id", "1"),
-				),
+				Config: testAccDataSourceNxosDefaultQOSPolicyMapMatchClassMapSetQOSGroupPrerequisitesConfig + testAccDataSourceNxosDefaultQOSPolicyMapMatchClassMapSetQOSGroupConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -78,20 +78,22 @@ resource "nxos_rest" "PreReq2" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosDefaultQOSPolicyMapMatchClassMapSetQOSGroupConfig = `
+func testAccDataSourceNxosDefaultQOSPolicyMapMatchClassMapSetQOSGroupConfig() string {
+	config := `resource "nxos_default_qos_policy_map_match_class_map_set_qos_group" "test" {` + "\n"
+	config += `	policy_map_name = "PM1"` + "\n"
+	config += `	class_map_name = "Voice"` + "\n"
+	config += `	qos_group_id = 1` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_default_qos_policy_map_match_class_map_set_qos_group" "test" {
-  policy_map_name = "PM1"
-  class_map_name = "Voice"
-  qos_group_id = 1
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-}
-
+	config += `
 data "nxos_default_qos_policy_map_match_class_map_set_qos_group" "test" {
-  policy_map_name = "PM1"
-  class_map_name = "Voice"
-  depends_on = [nxos_default_qos_policy_map_match_class_map_set_qos_group.test]
+	policy_map_name = "PM1"
+	class_map_name = "Voice"
+	depends_on = [nxos_default_qos_policy_map_match_class_map_set_qos_group.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

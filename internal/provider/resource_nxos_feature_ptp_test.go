@@ -34,6 +34,8 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosFeaturePTP(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature_ptp.test", "admin_state", "enabled"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,9 +46,7 @@ func TestAccNxosFeaturePTP(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosFeaturePTPConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_feature_ptp.test", "admin_state", "enabled"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_feature_ptp.test",
@@ -82,22 +82,20 @@ func nxosFeaturePTPImportStateIdFunc(resourceName string) resource.ImportStateId
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosFeaturePTPConfig_minimum() string {
-	return `
-	resource "nxos_feature_ptp" "test" {
-		admin_state = "enabled"
-	}
-	`
+	config := `resource "nxos_feature_ptp" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosFeaturePTPConfig_all() string {
-	return `
-	resource "nxos_feature_ptp" "test" {
-		admin_state = "enabled"
-	}
-	`
+	config := `resource "nxos_feature_ptp" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

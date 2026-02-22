@@ -30,21 +30,21 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosSVIInterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "interface_id", "vlan293"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "admin_state", "down"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "bandwidth", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "delay", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "medium", "bcast"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "mtu", "9216"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosSVIInterfacePrerequisitesConfig + testAccDataSourceNxosSVIInterfaceConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "interface_id", "vlan293"),
-					resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "admin_state", "down"),
-					resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "bandwidth", "1000"),
-					resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "delay", "10"),
-					resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "description", "My Description"),
-					resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "medium", "bcast"),
-					resource.TestCheckResourceAttr("data.nxos_svi_interface.test", "mtu", "9216"),
-				),
+				Config: testAccDataSourceNxosSVIInterfacePrerequisitesConfig + testAccDataSourceNxosSVIInterfaceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -68,23 +68,25 @@ resource "nxos_rest" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosSVIInterfaceConfig = `
+func testAccDataSourceNxosSVIInterfaceConfig() string {
+	config := `resource "nxos_svi_interface" "test" {` + "\n"
+	config += `	interface_id = "vlan293"` + "\n"
+	config += `	admin_state = "down"` + "\n"
+	config += `	bandwidth = 1000` + "\n"
+	config += `	delay = 10` + "\n"
+	config += `	description = "My Description"` + "\n"
+	config += `	medium = "bcast"` + "\n"
+	config += `	mtu = 9216` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_svi_interface" "test" {
-  interface_id = "vlan293"
-  admin_state = "down"
-  bandwidth = 1000
-  delay = 10
-  description = "My Description"
-  medium = "bcast"
-  mtu = 9216
-  depends_on = [nxos_rest.PreReq0, ]
-}
-
+	config += `
 data "nxos_svi_interface" "test" {
-  interface_id = "vlan293"
-  depends_on = [nxos_svi_interface.test]
+	interface_id = "vlan293"
+	depends_on = [nxos_svi_interface.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

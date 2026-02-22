@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosPhysicalInterfaceVRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface_vrf.test", "vrf_dn", "sys/inst-default"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosPhysicalInterfaceVRFPrerequisitesConfig + testAccDataSourceNxosPhysicalInterfaceVRFConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_physical_interface_vrf.test", "vrf_dn", "sys/inst-default"),
-				),
+				Config: testAccDataSourceNxosPhysicalInterfaceVRFPrerequisitesConfig + testAccDataSourceNxosPhysicalInterfaceVRFConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -62,18 +62,20 @@ resource "nxos_rest" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosPhysicalInterfaceVRFConfig = `
+func testAccDataSourceNxosPhysicalInterfaceVRFConfig() string {
+	config := `resource "nxos_physical_interface_vrf" "test" {` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `	vrf_dn = "sys/inst-default"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_physical_interface_vrf" "test" {
-  interface_id = "eth1/10"
-  vrf_dn = "sys/inst-default"
-  depends_on = [nxos_rest.PreReq0, ]
-}
-
+	config += `
 data "nxos_physical_interface_vrf" "test" {
-  interface_id = "eth1/10"
-  depends_on = [nxos_physical_interface_vrf.test]
+	interface_id = "eth1/10"
+	depends_on = [nxos_physical_interface_vrf.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

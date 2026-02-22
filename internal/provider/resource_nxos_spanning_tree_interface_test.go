@@ -34,6 +34,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosSpanningTreeInterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "interface_id", "eth1/9"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "bpdu_filter", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "bpdu_guard", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "cost", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "guard", "root"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "link_type", "p2p"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "mode", "edge"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "priority", "200"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,17 +54,7 @@ func TestAccNxosSpanningTreeInterface(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosSpanningTreeInterfaceConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "interface_id", "eth1/9"),
-					resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "admin_state", "enabled"),
-					resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "bpdu_filter", "enable"),
-					resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "bpdu_guard", "enable"),
-					resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "cost", "100"),
-					resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "guard", "root"),
-					resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "link_type", "p2p"),
-					resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "mode", "edge"),
-					resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "priority", "200"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_spanning_tree_interface.test",
@@ -92,30 +92,28 @@ func nxosSpanningTreeInterfaceImportStateIdFunc(resourceName string) resource.Im
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosSpanningTreeInterfaceConfig_minimum() string {
-	return `
-	resource "nxos_spanning_tree_interface" "test" {
-		interface_id = "eth1/9"
-	}
-	`
+	config := `resource "nxos_spanning_tree_interface" "test" {` + "\n"
+	config += `	interface_id = "eth1/9"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosSpanningTreeInterfaceConfig_all() string {
-	return `
-	resource "nxos_spanning_tree_interface" "test" {
-		interface_id = "eth1/9"
-		admin_state = "enabled"
-		bpdu_filter = "enable"
-		bpdu_guard = "enable"
-		cost = 100
-		guard = "root"
-		link_type = "p2p"
-		mode = "edge"
-		priority = 200
-	}
-	`
+	config := `resource "nxos_spanning_tree_interface" "test" {` + "\n"
+	config += `	interface_id = "eth1/9"` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	bpdu_filter = "enable"` + "\n"
+	config += `	bpdu_guard = "enable"` + "\n"
+	config += `	cost = 100` + "\n"
+	config += `	guard = "root"` + "\n"
+	config += `	link_type = "p2p"` + "\n"
+	config += `	mode = "edge"` + "\n"
+	config += `	priority = 200` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

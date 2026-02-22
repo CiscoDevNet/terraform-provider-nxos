@@ -34,6 +34,9 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosPIMStaticRP(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim_static_rp.test", "vrf_name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim_static_rp.test", "address", "1.2.3.4"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,10 +47,7 @@ func TestAccNxosPIMStaticRP(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosPIMStaticRPPrerequisitesConfig + testAccNxosPIMStaticRPConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_pim_static_rp.test", "vrf_name", "default"),
-					resource.TestCheckResourceAttr("nxos_pim_static_rp.test", "address", "1.2.3.4"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_pim_static_rp.test",
@@ -124,26 +124,24 @@ resource "nxos_rest" "PreReq4" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosPIMStaticRPConfig_minimum() string {
-	return `
-	resource "nxos_pim_static_rp" "test" {
-		vrf_name = "default"
-		address = "1.2.3.4"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-	}
-	`
+	config := `resource "nxos_pim_static_rp" "test" {` + "\n"
+	config += `	vrf_name = "default"` + "\n"
+	config += `	address = "1.2.3.4"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosPIMStaticRPConfig_all() string {
-	return `
-	resource "nxos_pim_static_rp" "test" {
-		vrf_name = "default"
-		address = "1.2.3.4"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-	}
-	`
+	config := `resource "nxos_pim_static_rp" "test" {` + "\n"
+	config += `	vrf_name = "default"` + "\n"
+	config += `	address = "1.2.3.4"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

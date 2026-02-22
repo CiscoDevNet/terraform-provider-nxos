@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosKeychainManager(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain_manager.test", "admin_state", "enabled"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosKeychainManagerConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_keychain_manager.test", "admin_state", "enabled"),
-				),
+				Config: testAccDataSourceNxosKeychainManagerConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -51,15 +51,17 @@ func TestAccDataSourceNxosKeychainManager(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosKeychainManagerConfig = `
+func testAccDataSourceNxosKeychainManagerConfig() string {
+	config := `resource "nxos_keychain_manager" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_keychain_manager" "test" {
-  admin_state = "enabled"
-}
-
+	config += `
 data "nxos_keychain_manager" "test" {
-  depends_on = [nxos_keychain_manager.test]
+	depends_on = [nxos_keychain_manager.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

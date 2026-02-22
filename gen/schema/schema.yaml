@@ -35,6 +35,7 @@ attribute:
   delete_value: any(str(), int(), bool(), required=False) # Value to set when the resource is deleted, instead of deleting the attribute
   exclude_test: bool(required=False) # Exclude attribute from acceptance test
   requires_replace: bool(required=False) # Set to true if the attribute update forces Terraform to destroy/recreate the entire resource
+  test_tags: list(str(), required=False) # List of test tags, attribute only included in test if env var is set
 
 child_classes:
   class_name: str() # NX-API class name of the child

@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosDefaultQOSPolicyMapMatchClassMap(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos_policy_map_match_class_map.test", "name", "Voice"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosDefaultQOSPolicyMapMatchClassMapPrerequisitesConfig + testAccDataSourceNxosDefaultQOSPolicyMapMatchClassMapConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_default_qos_policy_map_match_class_map.test", "name", "Voice"),
-				),
+				Config: testAccDataSourceNxosDefaultQOSPolicyMapMatchClassMapPrerequisitesConfig + testAccDataSourceNxosDefaultQOSPolicyMapMatchClassMapConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -69,19 +69,21 @@ resource "nxos_rest" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosDefaultQOSPolicyMapMatchClassMapConfig = `
+func testAccDataSourceNxosDefaultQOSPolicyMapMatchClassMapConfig() string {
+	config := `resource "nxos_default_qos_policy_map_match_class_map" "test" {` + "\n"
+	config += `	policy_map_name = "PM1"` + "\n"
+	config += `	name = "Voice"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_default_qos_policy_map_match_class_map" "test" {
-  policy_map_name = "PM1"
-  name = "Voice"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-}
-
+	config += `
 data "nxos_default_qos_policy_map_match_class_map" "test" {
-  policy_map_name = "PM1"
-  name = "Voice"
-  depends_on = [nxos_default_qos_policy_map_match_class_map.test]
+	policy_map_name = "PM1"
+	name = "Voice"
+	depends_on = [nxos_default_qos_policy_map_match_class_map.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

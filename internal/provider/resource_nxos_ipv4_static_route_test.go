@@ -34,6 +34,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosIPv4StaticRoute(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_static_route.test", "vrf_name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_static_route.test", "prefix", "1.1.1.0/24"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_static_route.test", "next_hops.0.interface_id", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_static_route.test", "next_hops.0.address", "1.2.3.4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_static_route.test", "next_hops.0.vrf_name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_static_route.test", "next_hops.0.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_static_route.test", "next_hops.0.object", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_static_route.test", "next_hops.0.preference", "123"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_static_route.test", "next_hops.0.tag", "10"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,17 +54,7 @@ func TestAccNxosIPv4StaticRoute(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosIPv4StaticRoutePrerequisitesConfig + testAccNxosIPv4StaticRouteConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ipv4_static_route.test", "vrf_name", "default"),
-					resource.TestCheckResourceAttr("nxos_ipv4_static_route.test", "prefix", "1.1.1.0/24"),
-					resource.TestCheckResourceAttr("nxos_ipv4_static_route.test", "next_hops.0.interface_id", "unspecified"),
-					resource.TestCheckResourceAttr("nxos_ipv4_static_route.test", "next_hops.0.address", "1.2.3.4"),
-					resource.TestCheckResourceAttr("nxos_ipv4_static_route.test", "next_hops.0.vrf_name", "default"),
-					resource.TestCheckResourceAttr("nxos_ipv4_static_route.test", "next_hops.0.description", "My Description"),
-					resource.TestCheckResourceAttr("nxos_ipv4_static_route.test", "next_hops.0.object", "10"),
-					resource.TestCheckResourceAttr("nxos_ipv4_static_route.test", "next_hops.0.preference", "123"),
-					resource.TestCheckResourceAttr("nxos_ipv4_static_route.test", "next_hops.0.tag", "10"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_ipv4_static_route.test",
@@ -100,35 +100,33 @@ resource "nxos_rest" "PreReq0" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosIPv4StaticRouteConfig_minimum() string {
-	return `
-	resource "nxos_ipv4_static_route" "test" {
-		vrf_name = "default"
-		prefix = "1.1.1.0/24"
-  		depends_on = [nxos_rest.PreReq0, ]
-	}
-	`
+	config := `resource "nxos_ipv4_static_route" "test" {` + "\n"
+	config += `	vrf_name = "default"` + "\n"
+	config += `	prefix = "1.1.1.0/24"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosIPv4StaticRouteConfig_all() string {
-	return `
-	resource "nxos_ipv4_static_route" "test" {
-		vrf_name = "default"
-		prefix = "1.1.1.0/24"
-		next_hops = [{
-			interface_id = "unspecified"
-			address = "1.2.3.4"
-			vrf_name = "default"
-			description = "My Description"
-			object = 10
-			preference = 123
-			tag = 10
-		}]
-  		depends_on = [nxos_rest.PreReq0, ]
-	}
-	`
+	config := `resource "nxos_ipv4_static_route" "test" {` + "\n"
+	config += `	vrf_name = "default"` + "\n"
+	config += `	prefix = "1.1.1.0/24"` + "\n"
+	config += `	next_hops = [{` + "\n"
+	config += `		interface_id = "unspecified"` + "\n"
+	config += `		address = "1.2.3.4"` + "\n"
+	config += `		vrf_name = "default"` + "\n"
+	config += `		description = "My Description"` + "\n"
+	config += `		object = 10` + "\n"
+	config += `		preference = 123` + "\n"
+	config += `		tag = 10` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

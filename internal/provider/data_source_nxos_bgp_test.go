@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosBGP(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "admin_state", "enabled"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosBGPPrerequisitesConfig + testAccDataSourceNxosBGPConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_bgp.test", "admin_state", "enabled"),
-				),
+				Config: testAccDataSourceNxosBGPPrerequisitesConfig + testAccDataSourceNxosBGPConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -62,16 +62,18 @@ resource "nxos_rest" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosBGPConfig = `
+func testAccDataSourceNxosBGPConfig() string {
+	config := `resource "nxos_bgp" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_bgp" "test" {
-  admin_state = "enabled"
-  depends_on = [nxos_rest.PreReq0, ]
-}
-
+	config += `
 data "nxos_bgp" "test" {
-  depends_on = [nxos_bgp.test]
+	depends_on = [nxos_bgp.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

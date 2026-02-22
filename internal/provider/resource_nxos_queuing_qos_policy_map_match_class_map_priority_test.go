@@ -34,6 +34,10 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosQueuingQOSPolicyMapMatchClassMapPriority(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos_policy_map_match_class_map_priority.test", "policy_map_name", "PM1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos_policy_map_match_class_map_priority.test", "class_map_name", "c-out-q1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos_policy_map_match_class_map_priority.test", "level", "1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,11 +48,7 @@ func TestAccNxosQueuingQOSPolicyMapMatchClassMapPriority(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosQueuingQOSPolicyMapMatchClassMapPriorityPrerequisitesConfig + testAccNxosQueuingQOSPolicyMapMatchClassMapPriorityConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_queuing_qos_policy_map_match_class_map_priority.test", "policy_map_name", "PM1"),
-					resource.TestCheckResourceAttr("nxos_queuing_qos_policy_map_match_class_map_priority.test", "class_map_name", "c-out-q1"),
-					resource.TestCheckResourceAttr("nxos_queuing_qos_policy_map_match_class_map_priority.test", "level", "1"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_queuing_qos_policy_map_match_class_map_priority.test",
@@ -106,28 +106,26 @@ resource "nxos_rest" "PreReq1" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosQueuingQOSPolicyMapMatchClassMapPriorityConfig_minimum() string {
-	return `
-	resource "nxos_queuing_qos_policy_map_match_class_map_priority" "test" {
-		policy_map_name = "PM1"
-		class_map_name = "c-out-q1"
-		level = 1
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-	}
-	`
+	config := `resource "nxos_queuing_qos_policy_map_match_class_map_priority" "test" {` + "\n"
+	config += `	policy_map_name = "PM1"` + "\n"
+	config += `	class_map_name = "c-out-q1"` + "\n"
+	config += `	level = 1` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosQueuingQOSPolicyMapMatchClassMapPriorityConfig_all() string {
-	return `
-	resource "nxos_queuing_qos_policy_map_match_class_map_priority" "test" {
-		policy_map_name = "PM1"
-		class_map_name = "c-out-q1"
-		level = 1
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-	}
-	`
+	config := `resource "nxos_queuing_qos_policy_map_match_class_map_priority" "test" {` + "\n"
+	config += `	policy_map_name = "PM1"` + "\n"
+	config += `	class_map_name = "c-out-q1"` + "\n"
+	config += `	level = 1` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

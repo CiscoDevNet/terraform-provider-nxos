@@ -34,6 +34,8 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosKeychain(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "name", "Keychain1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,9 +46,7 @@ func TestAccNxosKeychain(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosKeychainPrerequisitesConfig + testAccNxosKeychainConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_keychain.test", "name", "Keychain1"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_keychain.test",
@@ -100,24 +100,22 @@ resource "nxos_rest" "PreReq1" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosKeychainConfig_minimum() string {
-	return `
-	resource "nxos_keychain" "test" {
-		name = "Keychain1"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-	}
-	`
+	config := `resource "nxos_keychain" "test" {` + "\n"
+	config += `	name = "Keychain1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosKeychainConfig_all() string {
-	return `
-	resource "nxos_keychain" "test" {
-		name = "Keychain1"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-	}
-	`
+	config := `resource "nxos_keychain" "test" {` + "\n"
+	config += `	name = "Keychain1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

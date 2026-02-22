@@ -34,6 +34,10 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosRouteMapRuleEntryMatchRoutePrefixList(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_map_rule_entry_match_route_prefix_list.test", "rule_name", "RULE1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_map_rule_entry_match_route_prefix_list.test", "order", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_map_rule_entry_match_route_prefix_list.test", "prefix_list_dn", "sys/rpm/pfxlistv4-[LIST1]"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,11 +48,7 @@ func TestAccNxosRouteMapRuleEntryMatchRoutePrefixList(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosRouteMapRuleEntryMatchRoutePrefixListPrerequisitesConfig + testAccNxosRouteMapRuleEntryMatchRoutePrefixListConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_route_map_rule_entry_match_route_prefix_list.test", "rule_name", "RULE1"),
-					resource.TestCheckResourceAttr("nxos_route_map_rule_entry_match_route_prefix_list.test", "order", "10"),
-					resource.TestCheckResourceAttr("nxos_route_map_rule_entry_match_route_prefix_list.test", "prefix_list_dn", "sys/rpm/pfxlistv4-[LIST1]"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_route_map_rule_entry_match_route_prefix_list.test",
@@ -113,28 +113,26 @@ resource "nxos_rest" "PreReq2" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosRouteMapRuleEntryMatchRoutePrefixListConfig_minimum() string {
-	return `
-	resource "nxos_route_map_rule_entry_match_route_prefix_list" "test" {
-		rule_name = "RULE1"
-		order = 10
-		prefix_list_dn = "sys/rpm/pfxlistv4-[LIST1]"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-	}
-	`
+	config := `resource "nxos_route_map_rule_entry_match_route_prefix_list" "test" {` + "\n"
+	config += `	rule_name = "RULE1"` + "\n"
+	config += `	order = 10` + "\n"
+	config += `	prefix_list_dn = "sys/rpm/pfxlistv4-[LIST1]"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosRouteMapRuleEntryMatchRoutePrefixListConfig_all() string {
-	return `
-	resource "nxos_route_map_rule_entry_match_route_prefix_list" "test" {
-		rule_name = "RULE1"
-		order = 10
-		prefix_list_dn = "sys/rpm/pfxlistv4-[LIST1]"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-	}
-	`
+	config := `resource "nxos_route_map_rule_entry_match_route_prefix_list" "test" {` + "\n"
+	config += `	rule_name = "RULE1"` + "\n"
+	config += `	order = 10` + "\n"
+	config += `	prefix_list_dn = "sys/rpm/pfxlistv4-[LIST1]"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

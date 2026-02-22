@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosRouteMapRule(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_map_rule.test", "name", "RULE1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosRouteMapRuleConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_route_map_rule.test", "name", "RULE1"),
-				),
+				Config: testAccDataSourceNxosRouteMapRuleConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -51,16 +51,18 @@ func TestAccDataSourceNxosRouteMapRule(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosRouteMapRuleConfig = `
+func testAccDataSourceNxosRouteMapRuleConfig() string {
+	config := `resource "nxos_route_map_rule" "test" {` + "\n"
+	config += `	name = "RULE1"` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_route_map_rule" "test" {
-  name = "RULE1"
-}
-
+	config += `
 data "nxos_route_map_rule" "test" {
-  name = "RULE1"
-  depends_on = [nxos_route_map_rule.test]
+	name = "RULE1"
+	depends_on = [nxos_route_map_rule.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

@@ -30,16 +30,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosRouteMapRuleEntry(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_map_rule_entry.test", "order", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_map_rule_entry.test", "action", "permit"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosRouteMapRuleEntryPrerequisitesConfig + testAccDataSourceNxosRouteMapRuleEntryConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_route_map_rule_entry.test", "order", "10"),
-					resource.TestCheckResourceAttr("data.nxos_route_map_rule_entry.test", "action", "permit"),
-				),
+				Config: testAccDataSourceNxosRouteMapRuleEntryPrerequisitesConfig + testAccDataSourceNxosRouteMapRuleEntryConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -62,20 +62,22 @@ resource "nxos_rest" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosRouteMapRuleEntryConfig = `
+func testAccDataSourceNxosRouteMapRuleEntryConfig() string {
+	config := `resource "nxos_route_map_rule_entry" "test" {` + "\n"
+	config += `	rule_name = "RULE1"` + "\n"
+	config += `	order = 10` + "\n"
+	config += `	action = "permit"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_route_map_rule_entry" "test" {
-  rule_name = "RULE1"
-  order = 10
-  action = "permit"
-  depends_on = [nxos_rest.PreReq0, ]
-}
-
+	config += `
 data "nxos_route_map_rule_entry" "test" {
-  rule_name = "RULE1"
-  order = 10
-  depends_on = [nxos_route_map_rule_entry.test]
+	rule_name = "RULE1"
+	order = 10
+	depends_on = [nxos_route_map_rule_entry.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

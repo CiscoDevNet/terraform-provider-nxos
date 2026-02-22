@@ -34,6 +34,17 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosOSPFAuthentication(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "instance_name", "OSPF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "vrf_name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "key", "0 mykey"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "key_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "key_secure_mode", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "keychain", "mykeychain"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "md5_key", "0 mymd5key"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "md5_key_secure_mode", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "type", "none"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,18 +55,7 @@ func TestAccNxosOSPFAuthentication(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosOSPFAuthenticationPrerequisitesConfig + testAccNxosOSPFAuthenticationConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "instance_name", "OSPF1"),
-					resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "vrf_name", "VRF1"),
-					resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "interface_id", "eth1/10"),
-					resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "key", "0 mykey"),
-					resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "key_id", "1"),
-					resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "key_secure_mode", "false"),
-					resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "keychain", "mykeychain"),
-					resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "md5_key", "0 mymd5key"),
-					resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "md5_key_secure_mode", "false"),
-					resource.TestCheckResourceAttr("nxos_ospf_authentication.test", "type", "none"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_ospf_authentication.test",
@@ -150,35 +150,33 @@ resource "nxos_rest" "PreReq6" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosOSPFAuthenticationConfig_minimum() string {
-	return `
-	resource "nxos_ospf_authentication" "test" {
-		instance_name = "OSPF1"
-		vrf_name = "VRF1"
-		interface_id = "eth1/10"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, ]
-	}
-	`
+	config := `resource "nxos_ospf_authentication" "test" {` + "\n"
+	config += `	instance_name = "OSPF1"` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosOSPFAuthenticationConfig_all() string {
-	return `
-	resource "nxos_ospf_authentication" "test" {
-		instance_name = "OSPF1"
-		vrf_name = "VRF1"
-		interface_id = "eth1/10"
-		key = "0 mykey"
-		key_id = 1
-		key_secure_mode = false
-		keychain = "mykeychain"
-		md5_key = "0 mymd5key"
-		md5_key_secure_mode = false
-		type = "none"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, ]
-	}
-	`
+	config := `resource "nxos_ospf_authentication" "test" {` + "\n"
+	config += `	instance_name = "OSPF1"` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `	key = "0 mykey"` + "\n"
+	config += `	key_id = 1` + "\n"
+	config += `	key_secure_mode = false` + "\n"
+	config += `	keychain = "mykeychain"` + "\n"
+	config += `	md5_key = "0 mymd5key"` + "\n"
+	config += `	md5_key_secure_mode = false` + "\n"
+	config += `	type = "none"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

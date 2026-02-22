@@ -34,6 +34,8 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosIPv4VRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrf.test", "name", "VRF1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,9 +46,7 @@ func TestAccNxosIPv4VRF(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosIPv4VRFConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ipv4_vrf.test", "name", "VRF1"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_ipv4_vrf.test",
@@ -84,22 +84,20 @@ func nxosIPv4VRFImportStateIdFunc(resourceName string) resource.ImportStateIdFun
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosIPv4VRFConfig_minimum() string {
-	return `
-	resource "nxos_ipv4_vrf" "test" {
-		name = "VRF1"
-	}
-	`
+	config := `resource "nxos_ipv4_vrf" "test" {` + "\n"
+	config += `	name = "VRF1"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosIPv4VRFConfig_all() string {
-	return `
-	resource "nxos_ipv4_vrf" "test" {
-		name = "VRF1"
-	}
-	`
+	config := `resource "nxos_ipv4_vrf" "test" {` + "\n"
+	config += `	name = "VRF1"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

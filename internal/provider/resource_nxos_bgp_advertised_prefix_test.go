@@ -34,6 +34,13 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosBGPAdvertisedPrefix(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_advertised_prefix.test", "asn", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_advertised_prefix.test", "vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_advertised_prefix.test", "address_family", "ipv4-ucast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_advertised_prefix.test", "prefix", "192.168.1.0/24"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_advertised_prefix.test", "route_map", "rt-map"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_advertised_prefix.test", "evpn", "enabled"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,14 +51,7 @@ func TestAccNxosBGPAdvertisedPrefix(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosBGPAdvertisedPrefixPrerequisitesConfig + testAccNxosBGPAdvertisedPrefixConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_bgp_advertised_prefix.test", "asn", "65001"),
-					resource.TestCheckResourceAttr("nxos_bgp_advertised_prefix.test", "vrf", "default"),
-					resource.TestCheckResourceAttr("nxos_bgp_advertised_prefix.test", "address_family", "ipv4-ucast"),
-					resource.TestCheckResourceAttr("nxos_bgp_advertised_prefix.test", "prefix", "192.168.1.0/24"),
-					resource.TestCheckResourceAttr("nxos_bgp_advertised_prefix.test", "route_map", "rt-map"),
-					resource.TestCheckResourceAttr("nxos_bgp_advertised_prefix.test", "evpn", "enabled"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_bgp_advertised_prefix.test",
@@ -137,32 +137,30 @@ resource "nxos_rest" "PreReq4" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosBGPAdvertisedPrefixConfig_minimum() string {
-	return `
-	resource "nxos_bgp_advertised_prefix" "test" {
-		asn = "65001"
-		vrf = "default"
-		address_family = "ipv4-ucast"
-		prefix = "192.168.1.0/24"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-	}
-	`
+	config := `resource "nxos_bgp_advertised_prefix" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	address_family = "ipv4-ucast"` + "\n"
+	config += `	prefix = "192.168.1.0/24"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosBGPAdvertisedPrefixConfig_all() string {
-	return `
-	resource "nxos_bgp_advertised_prefix" "test" {
-		asn = "65001"
-		vrf = "default"
-		address_family = "ipv4-ucast"
-		prefix = "192.168.1.0/24"
-		route_map = "rt-map"
-		evpn = "enabled"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-	}
-	`
+	config := `resource "nxos_bgp_advertised_prefix" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	address_family = "ipv4-ucast"` + "\n"
+	config += `	prefix = "192.168.1.0/24"` + "\n"
+	config += `	route_map = "rt-map"` + "\n"
+	config += `	evpn = "enabled"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

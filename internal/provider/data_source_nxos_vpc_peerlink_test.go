@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosVPCPeerlink(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc_peerlink.test", "port_channel_id", "po1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosVPCPeerlinkPrerequisitesConfig + testAccDataSourceNxosVPCPeerlinkConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_vpc_peerlink.test", "port_channel_id", "po1"),
-				),
+				Config: testAccDataSourceNxosVPCPeerlinkPrerequisitesConfig + testAccDataSourceNxosVPCPeerlinkConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -105,16 +105,18 @@ resource "nxos_rest" "PreReq5" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosVPCPeerlinkConfig = `
+func testAccDataSourceNxosVPCPeerlinkConfig() string {
+	config := `resource "nxos_vpc_peerlink" "test" {` + "\n"
+	config += `	port_channel_id = "po1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_vpc_peerlink" "test" {
-  port_channel_id = "po1"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]
-}
-
+	config += `
 data "nxos_vpc_peerlink" "test" {
-  depends_on = [nxos_vpc_peerlink.test]
+	depends_on = [nxos_vpc_peerlink.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

@@ -34,6 +34,8 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosICMPv4VRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_icmpv4_vrf.test", "vrf_name", "VRF1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,9 +46,7 @@ func TestAccNxosICMPv4VRF(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosICMPv4VRFPrerequisitesConfig + testAccNxosICMPv4VRFConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_icmpv4_vrf.test", "vrf_name", "VRF1"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_icmpv4_vrf.test",
@@ -105,24 +105,22 @@ resource "nxos_rest" "PreReq1" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosICMPv4VRFConfig_minimum() string {
-	return `
-	resource "nxos_icmpv4_vrf" "test" {
-		vrf_name = "VRF1"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-	}
-	`
+	config := `resource "nxos_icmpv4_vrf" "test" {` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosICMPv4VRFConfig_all() string {
-	return `
-	resource "nxos_icmpv4_vrf" "test" {
-		vrf_name = "VRF1"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-	}
-	`
+	config := `resource "nxos_icmpv4_vrf" "test" {` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosEVPN(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_evpn.test", "admin_state", "enabled"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosEVPNPrerequisitesConfig + testAccDataSourceNxosEVPNConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_evpn.test", "admin_state", "enabled"),
-				),
+				Config: testAccDataSourceNxosEVPNPrerequisitesConfig + testAccDataSourceNxosEVPNConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -72,16 +72,18 @@ resource "nxos_rest" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosEVPNConfig = `
+func testAccDataSourceNxosEVPNConfig() string {
+	config := `resource "nxos_evpn" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_evpn" "test" {
-  admin_state = "enabled"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-}
-
+	config += `
 data "nxos_evpn" "test" {
-  depends_on = [nxos_evpn.test]
+	depends_on = [nxos_evpn.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

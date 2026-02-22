@@ -34,6 +34,10 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosVRFRouteTargetAddressFamily(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf_route_target_address_family.test", "vrf", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf_route_target_address_family.test", "address_family", "ipv4-ucast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf_route_target_address_family.test", "route_target_address_family", "ipv4-ucast"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,11 +48,7 @@ func TestAccNxosVRFRouteTargetAddressFamily(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosVRFRouteTargetAddressFamilyPrerequisitesConfig + testAccNxosVRFRouteTargetAddressFamilyConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_vrf_route_target_address_family.test", "vrf", "VRF1"),
-					resource.TestCheckResourceAttr("nxos_vrf_route_target_address_family.test", "address_family", "ipv4-ucast"),
-					resource.TestCheckResourceAttr("nxos_vrf_route_target_address_family.test", "route_target_address_family", "ipv4-ucast"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_vrf_route_target_address_family.test",
@@ -130,28 +130,26 @@ resource "nxos_rest" "PreReq4" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosVRFRouteTargetAddressFamilyConfig_minimum() string {
-	return `
-	resource "nxos_vrf_route_target_address_family" "test" {
-		vrf = "VRF1"
-		address_family = "ipv4-ucast"
-		route_target_address_family = "ipv4-ucast"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-	}
-	`
+	config := `resource "nxos_vrf_route_target_address_family" "test" {` + "\n"
+	config += `	vrf = "VRF1"` + "\n"
+	config += `	address_family = "ipv4-ucast"` + "\n"
+	config += `	route_target_address_family = "ipv4-ucast"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosVRFRouteTargetAddressFamilyConfig_all() string {
-	return `
-	resource "nxos_vrf_route_target_address_family" "test" {
-		vrf = "VRF1"
-		address_family = "ipv4-ucast"
-		route_target_address_family = "ipv4-ucast"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-	}
-	`
+	config := `resource "nxos_vrf_route_target_address_family" "test" {` + "\n"
+	config += `	vrf = "VRF1"` + "\n"
+	config += `	address_family = "ipv4-ucast"` + "\n"
+	config += `	route_target_address_family = "ipv4-ucast"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

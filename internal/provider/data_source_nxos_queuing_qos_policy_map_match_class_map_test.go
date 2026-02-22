@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosQueuingQOSPolicyMapMatchClassMap(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos_policy_map_match_class_map.test", "name", "c-out-q1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosQueuingQOSPolicyMapMatchClassMapPrerequisitesConfig + testAccDataSourceNxosQueuingQOSPolicyMapMatchClassMapConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_queuing_qos_policy_map_match_class_map.test", "name", "c-out-q1"),
-				),
+				Config: testAccDataSourceNxosQueuingQOSPolicyMapMatchClassMapPrerequisitesConfig + testAccDataSourceNxosQueuingQOSPolicyMapMatchClassMapConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -61,19 +61,21 @@ resource "nxos_rest" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosQueuingQOSPolicyMapMatchClassMapConfig = `
+func testAccDataSourceNxosQueuingQOSPolicyMapMatchClassMapConfig() string {
+	config := `resource "nxos_queuing_qos_policy_map_match_class_map" "test" {` + "\n"
+	config += `	policy_map_name = "PM1"` + "\n"
+	config += `	name = "c-out-q1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_queuing_qos_policy_map_match_class_map" "test" {
-  policy_map_name = "PM1"
-  name = "c-out-q1"
-  depends_on = [nxos_rest.PreReq0, ]
-}
-
+	config += `
 data "nxos_queuing_qos_policy_map_match_class_map" "test" {
-  policy_map_name = "PM1"
-  name = "c-out-q1"
-  depends_on = [nxos_queuing_qos_policy_map_match_class_map.test]
+	policy_map_name = "PM1"
+	name = "c-out-q1"
+	depends_on = [nxos_queuing_qos_policy_map_match_class_map.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

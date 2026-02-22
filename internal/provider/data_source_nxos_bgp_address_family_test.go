@@ -30,32 +30,32 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosBGPAddressFamily(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "address_family", "ipv4-ucast"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "critical_nexthop_timeout", "2500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "non_critical_nexthop_timeout", "8000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "advertise_l2vpn_evpn", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "advertise_physical_ip_for_type5_routes", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "max_ecmp_paths", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "max_external_ecmp_paths", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "max_external_internal_ecmp_paths", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "max_local_ecmp_paths", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "max_mixed_ecmp_paths", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "default_information_originate", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "next_hop_route_map_name", "ROUTEMAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "prefix_priority", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "retain_rt_all", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "advertise_only_active_routes", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "table_map_route_map_name", "ROUTE_MAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "vni_ethernet_tag", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "wait_igp_converged", "disabled"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosBGPAddressFamilyPrerequisitesConfig + testAccDataSourceNxosBGPAddressFamilyConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "address_family", "ipv4-ucast"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "critical_nexthop_timeout", "2500"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "non_critical_nexthop_timeout", "8000"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "advertise_l2vpn_evpn", "disabled"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "advertise_physical_ip_for_type5_routes", "disabled"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "max_ecmp_paths", "2"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "max_external_ecmp_paths", "1"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "max_external_internal_ecmp_paths", "1"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "max_local_ecmp_paths", "1"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "max_mixed_ecmp_paths", "1"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "default_information_originate", "disabled"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "next_hop_route_map_name", "ROUTEMAP1"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "prefix_priority", "none"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "retain_rt_all", "disabled"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "advertise_only_active_routes", "disabled"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "table_map_route_map_name", "ROUTE_MAP1"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "vni_ethernet_tag", "disabled"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_address_family.test", "wait_igp_converged", "disabled"),
-				),
+				Config: testAccDataSourceNxosBGPAddressFamilyPrerequisitesConfig + testAccDataSourceNxosBGPAddressFamilyConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -104,38 +104,40 @@ resource "nxos_rest" "PreReq3" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosBGPAddressFamilyConfig = `
+func testAccDataSourceNxosBGPAddressFamilyConfig() string {
+	config := `resource "nxos_bgp_address_family" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	address_family = "ipv4-ucast"` + "\n"
+	config += `	critical_nexthop_timeout = "2500"` + "\n"
+	config += `	non_critical_nexthop_timeout = "8000"` + "\n"
+	config += `	advertise_l2vpn_evpn = "disabled"` + "\n"
+	config += `	advertise_physical_ip_for_type5_routes = "disabled"` + "\n"
+	config += `	max_ecmp_paths = 2` + "\n"
+	config += `	max_external_ecmp_paths = 1` + "\n"
+	config += `	max_external_internal_ecmp_paths = 1` + "\n"
+	config += `	max_local_ecmp_paths = 1` + "\n"
+	config += `	max_mixed_ecmp_paths = 1` + "\n"
+	config += `	default_information_originate = "disabled"` + "\n"
+	config += `	next_hop_route_map_name = "ROUTEMAP1"` + "\n"
+	config += `	prefix_priority = "none"` + "\n"
+	config += `	retain_rt_all = "disabled"` + "\n"
+	config += `	advertise_only_active_routes = "disabled"` + "\n"
+	config += `	table_map_route_map_name = "ROUTE_MAP1"` + "\n"
+	config += `	vni_ethernet_tag = "disabled"` + "\n"
+	config += `	wait_igp_converged = "disabled"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_bgp_address_family" "test" {
-  asn = "65001"
-  vrf = "default"
-  address_family = "ipv4-ucast"
-  critical_nexthop_timeout = "2500"
-  non_critical_nexthop_timeout = "8000"
-  advertise_l2vpn_evpn = "disabled"
-  advertise_physical_ip_for_type5_routes = "disabled"
-  max_ecmp_paths = 2
-  max_external_ecmp_paths = 1
-  max_external_internal_ecmp_paths = 1
-  max_local_ecmp_paths = 1
-  max_mixed_ecmp_paths = 1
-  default_information_originate = "disabled"
-  next_hop_route_map_name = "ROUTEMAP1"
-  prefix_priority = "none"
-  retain_rt_all = "disabled"
-  advertise_only_active_routes = "disabled"
-  table_map_route_map_name = "ROUTE_MAP1"
-  vni_ethernet_tag = "disabled"
-  wait_igp_converged = "disabled"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-}
-
+	config += `
 data "nxos_bgp_address_family" "test" {
-  asn = "65001"
-  vrf = "default"
-  address_family = "ipv4-ucast"
-  depends_on = [nxos_bgp_address_family.test]
+	asn = "65001"
+	vrf = "default"
+	address_family = "ipv4-ucast"
+	depends_on = [nxos_bgp_address_family.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

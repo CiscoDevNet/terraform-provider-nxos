@@ -34,6 +34,14 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosISISAddressFamily(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis_address_family.test", "instance_name", "ISIS1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis_address_family.test", "vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis_address_family.test", "address_family", "v4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis_address_family.test", "segment_routing_mpls", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis_address_family.test", "enable_bfd", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis_address_family.test", "prefix_advertise_passive_l1", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis_address_family.test", "prefix_advertise_passive_l2", "true"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,15 +52,7 @@ func TestAccNxosISISAddressFamily(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosISISAddressFamilyPrerequisitesConfig + testAccNxosISISAddressFamilyConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_isis_address_family.test", "instance_name", "ISIS1"),
-					resource.TestCheckResourceAttr("nxos_isis_address_family.test", "vrf", "default"),
-					resource.TestCheckResourceAttr("nxos_isis_address_family.test", "address_family", "v4"),
-					resource.TestCheckResourceAttr("nxos_isis_address_family.test", "segment_routing_mpls", "true"),
-					resource.TestCheckResourceAttr("nxos_isis_address_family.test", "enable_bfd", "false"),
-					resource.TestCheckResourceAttr("nxos_isis_address_family.test", "prefix_advertise_passive_l1", "true"),
-					resource.TestCheckResourceAttr("nxos_isis_address_family.test", "prefix_advertise_passive_l2", "true"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_isis_address_family.test",
@@ -127,32 +127,30 @@ resource "nxos_rest" "PreReq3" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosISISAddressFamilyConfig_minimum() string {
-	return `
-	resource "nxos_isis_address_family" "test" {
-		instance_name = "ISIS1"
-		vrf = "default"
-		address_family = "v4"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_isis_address_family" "test" {` + "\n"
+	config += `	instance_name = "ISIS1"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	address_family = "v4"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosISISAddressFamilyConfig_all() string {
-	return `
-	resource "nxos_isis_address_family" "test" {
-		instance_name = "ISIS1"
-		vrf = "default"
-		address_family = "v4"
-		segment_routing_mpls = true
-		enable_bfd = false
-		prefix_advertise_passive_l1 = true
-		prefix_advertise_passive_l2 = true
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_isis_address_family" "test" {` + "\n"
+	config += `	instance_name = "ISIS1"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	address_family = "v4"` + "\n"
+	config += `	segment_routing_mpls = true` + "\n"
+	config += `	enable_bfd = false` + "\n"
+	config += `	prefix_advertise_passive_l1 = true` + "\n"
+	config += `	prefix_advertise_passive_l2 = true` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

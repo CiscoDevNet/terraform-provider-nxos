@@ -30,16 +30,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosPIMAnycastRP(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim_anycast_rp.test", "local_interface", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim_anycast_rp.test", "source_interface", "eth1/10"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosPIMAnycastRPPrerequisitesConfig + testAccDataSourceNxosPIMAnycastRPConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_pim_anycast_rp.test", "local_interface", "eth1/10"),
-					resource.TestCheckResourceAttr("data.nxos_pim_anycast_rp.test", "source_interface", "eth1/10"),
-				),
+				Config: testAccDataSourceNxosPIMAnycastRPPrerequisitesConfig + testAccDataSourceNxosPIMAnycastRPConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -84,19 +84,21 @@ resource "nxos_rest" "PreReq3" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosPIMAnycastRPConfig = `
+func testAccDataSourceNxosPIMAnycastRPConfig() string {
+	config := `resource "nxos_pim_anycast_rp" "test" {` + "\n"
+	config += `	vrf_name = "default"` + "\n"
+	config += `	local_interface = "eth1/10"` + "\n"
+	config += `	source_interface = "eth1/10"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_pim_anycast_rp" "test" {
-  vrf_name = "default"
-  local_interface = "eth1/10"
-  source_interface = "eth1/10"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-}
-
+	config += `
 data "nxos_pim_anycast_rp" "test" {
-  vrf_name = "default"
-  depends_on = [nxos_pim_anycast_rp.test]
+	vrf_name = "default"
+	depends_on = [nxos_pim_anycast_rp.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

@@ -24,6 +24,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmBfd
     rn: bfd
     type: single
@@ -40,6 +41,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmBgp
     rn: bgp
     type: single
@@ -56,6 +58,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmDhcp
     rn: dhcp
     type: single
@@ -72,6 +75,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmEvpn
     rn: evpn
     type: single
@@ -88,6 +92,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmHmm
     rn: hmm
     type: single
@@ -104,6 +109,8 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
+        test_tags: [FEATURE_HMM]
   - class_name: fmHsrp
     rn: hsrp
     type: single
@@ -120,6 +127,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmInterfaceVlan
     rn: ifvlan
     type: single
@@ -136,6 +144,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmIsis
     rn: isis
     type: single
@@ -152,6 +161,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmLacp
     rn: lacp
     type: single
@@ -168,6 +178,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmLldp
     rn: lldp
     type: single
@@ -184,6 +195,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmMacsec
     rn: macsec
     type: single
@@ -200,6 +212,8 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
+        test_tags: [MACSEC]
   - class_name: fmNetflow
     rn: netflow
     type: single
@@ -216,6 +230,8 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
+        test_tags: [NETFLOW]
   - class_name: fmNgmvpn
     rn: ngmvpn
     type: single
@@ -232,6 +248,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmNgoam
     rn: ngoam
     type: single
@@ -248,6 +265,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmNvo
     rn: nvo
     type: single
@@ -264,6 +282,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmOspf
     rn: ospf
     type: single
@@ -280,6 +299,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmOspfv3
     rn: ospfv3
     type: single
@@ -296,6 +316,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmPim
     rn: pim
     type: single
@@ -312,6 +333,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmPtp
     rn: ptp
     type: single
@@ -328,6 +350,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmPvlan
     rn: pvlan
     type: single
@@ -344,6 +367,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmSflow
     rn: sflow
     type: single
@@ -360,6 +384,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmSsh
     rn: ssh
     type: single
@@ -376,6 +401,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmTacacsplus
     rn: tacacsplus
     type: single
@@ -392,6 +418,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmTelnet
     rn: telnet
     type: single
@@ -408,6 +435,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmUdld
     rn: udld
     type: single
@@ -424,6 +452,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmVnSegment
     rn: vnsegment
     type: single
@@ -440,6 +469,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true
   - class_name: fmVpc
     rn: vpc
     type: single
@@ -456,3 +486,4 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
+        omit_empty_value: true

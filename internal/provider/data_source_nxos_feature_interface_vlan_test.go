@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosFeatureInterfaceVLAN(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature_interface_vlan.test", "admin_state", "enabled"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosFeatureInterfaceVLANConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_feature_interface_vlan.test", "admin_state", "enabled"),
-				),
+				Config: testAccDataSourceNxosFeatureInterfaceVLANConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -51,15 +51,17 @@ func TestAccDataSourceNxosFeatureInterfaceVLAN(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosFeatureInterfaceVLANConfig = `
+func testAccDataSourceNxosFeatureInterfaceVLANConfig() string {
+	config := `resource "nxos_feature_interface_vlan" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_feature_interface_vlan" "test" {
-  admin_state = "enabled"
-}
-
+	config += `
 data "nxos_feature_interface_vlan" "test" {
-  depends_on = [nxos_feature_interface_vlan.test]
+	depends_on = [nxos_feature_interface_vlan.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

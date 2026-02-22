@@ -34,6 +34,10 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosEVPNVNIRouteTarget(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_evpn_vni_route_target.test", "encap", "vxlan-123456"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_evpn_vni_route_target.test", "direction", "import"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_evpn_vni_route_target.test", "route_target", "route-target:as2-nn2:2:2"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,11 +48,7 @@ func TestAccNxosEVPNVNIRouteTarget(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosEVPNVNIRouteTargetPrerequisitesConfig + testAccNxosEVPNVNIRouteTargetConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_evpn_vni_route_target.test", "encap", "vxlan-123456"),
-					resource.TestCheckResourceAttr("nxos_evpn_vni_route_target.test", "direction", "import"),
-					resource.TestCheckResourceAttr("nxos_evpn_vni_route_target.test", "route_target", "route-target:as2-nn2:2:2"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_evpn_vni_route_target.test",
@@ -136,28 +136,26 @@ resource "nxos_rest" "PreReq4" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosEVPNVNIRouteTargetConfig_minimum() string {
-	return `
-	resource "nxos_evpn_vni_route_target" "test" {
-		encap = "vxlan-123456"
-		direction = "import"
-		route_target = "route-target:as2-nn2:2:2"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-	}
-	`
+	config := `resource "nxos_evpn_vni_route_target" "test" {` + "\n"
+	config += `	encap = "vxlan-123456"` + "\n"
+	config += `	direction = "import"` + "\n"
+	config += `	route_target = "route-target:as2-nn2:2:2"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosEVPNVNIRouteTargetConfig_all() string {
-	return `
-	resource "nxos_evpn_vni_route_target" "test" {
-		encap = "vxlan-123456"
-		direction = "import"
-		route_target = "route-target:as2-nn2:2:2"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-	}
-	`
+	config := `resource "nxos_evpn_vni_route_target" "test" {` + "\n"
+	config += `	encap = "vxlan-123456"` + "\n"
+	config += `	direction = "import"` + "\n"
+	config += `	route_target = "route-target:as2-nn2:2:2"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

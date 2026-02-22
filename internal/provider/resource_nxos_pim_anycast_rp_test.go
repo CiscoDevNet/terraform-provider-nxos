@@ -34,6 +34,10 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosPIMAnycastRP(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim_anycast_rp.test", "vrf_name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim_anycast_rp.test", "local_interface", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim_anycast_rp.test", "source_interface", "eth1/10"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,11 +48,7 @@ func TestAccNxosPIMAnycastRP(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosPIMAnycastRPPrerequisitesConfig + testAccNxosPIMAnycastRPConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_pim_anycast_rp.test", "vrf_name", "default"),
-					resource.TestCheckResourceAttr("nxos_pim_anycast_rp.test", "local_interface", "eth1/10"),
-					resource.TestCheckResourceAttr("nxos_pim_anycast_rp.test", "source_interface", "eth1/10"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_pim_anycast_rp.test",
@@ -118,26 +118,24 @@ resource "nxos_rest" "PreReq3" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosPIMAnycastRPConfig_minimum() string {
-	return `
-	resource "nxos_pim_anycast_rp" "test" {
-		vrf_name = "default"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_pim_anycast_rp" "test" {` + "\n"
+	config += `	vrf_name = "default"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosPIMAnycastRPConfig_all() string {
-	return `
-	resource "nxos_pim_anycast_rp" "test" {
-		vrf_name = "default"
-		local_interface = "eth1/10"
-		source_interface = "eth1/10"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_pim_anycast_rp" "test" {` + "\n"
+	config += `	vrf_name = "default"` + "\n"
+	config += `	local_interface = "eth1/10"` + "\n"
+	config += `	source_interface = "eth1/10"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

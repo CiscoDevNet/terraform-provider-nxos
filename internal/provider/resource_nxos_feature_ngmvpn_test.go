@@ -34,6 +34,8 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosFeatureNgMVPN(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature_ngmvpn.test", "admin_state", "enabled"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,9 +46,7 @@ func TestAccNxosFeatureNgMVPN(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosFeatureNgMVPNConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_feature_ngmvpn.test", "admin_state", "enabled"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_feature_ngmvpn.test",
@@ -82,22 +82,20 @@ func nxosFeatureNgMVPNImportStateIdFunc(resourceName string) resource.ImportStat
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosFeatureNgMVPNConfig_minimum() string {
-	return `
-	resource "nxos_feature_ngmvpn" "test" {
-		admin_state = "enabled"
-	}
-	`
+	config := `resource "nxos_feature_ngmvpn" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosFeatureNgMVPNConfig_all() string {
-	return `
-	resource "nxos_feature_ngmvpn" "test" {
-		admin_state = "enabled"
-	}
-	`
+	config := `resource "nxos_feature_ngmvpn" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

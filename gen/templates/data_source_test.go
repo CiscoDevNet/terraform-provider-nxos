@@ -36,67 +36,85 @@ func TestAccDataSourceNxos{{camelCase .Name}}(t *testing.T) {
         t.Skip("skipping test, set environment variable {{range $i, $e := .TestTags}}{{if $i}} or {{end}}{{$e}}{{end}}")
     }
 	{{- end}}
+	var checks []resource.TestCheckFunc
+	{{- $name := .Name }}
+	{{- range  .Attributes}}
+	{{- if and (not .ReferenceOnly) (not .WriteOnly) (not .ExcludeTest)}}
+	{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"))
+	}
+	{{- else}}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"))
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- range .TfChildClasses}}
+	{{- $list := .TfName}}
+	{{- if eq .Type "single"}}
+	{{- range .Attributes}}
+	{{- if not .ExcludeTest}}
+	{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"))
+	}
+	{{- else}}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"))
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- range .TfChildClasses}}
+	{{- $nestedList := .TfName}}
+	{{- if eq .Type "single"}}
+	{{- range .Attributes}}
+	{{- if not .ExcludeTest}}
+	{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"))
+	}
+	{{- else}}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"))
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- range .TfChildClasses}}
+	{{- if eq .Type "list"}}
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_{{snakeCase $name}}.test", "{{$nestedList}}.*", map[string]string{
+		{{- range .Attributes}}
+		{{- if not .ExcludeTest}}
+		"{{.TfName}}": "{{.Example}}",
+		{{- end}}
+		{{- end}}
+	}))
+	{{- end}}
+	{{- end}}
+	{{- else if eq .Type "list"}}
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_{{snakeCase $name}}.test", "{{$nestedList}}.*", map[string]string{
+		{{- range .Attributes}}
+		{{- if not .ExcludeTest}}
+		"{{.TfName}}": "{{.Example}}",
+		{{- end}}
+		{{- end}}
+	}))
+	{{- end}}
+	{{- end}}
+	{{- else if eq .Type "list"}}
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_{{snakeCase $name}}.test", "{{$list}}.*", map[string]string{
+		{{- range .Attributes}}
+		{{- if not .ExcludeTest}}
+		"{{.TfName}}": "{{.Example}}",
+		{{- end}}
+		{{- end}}
+	}))
+	{{- end}}
+	{{- end}}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: {{if .TestPrerequisites}}testAccDataSourceNxos{{camelCase .Name}}PrerequisitesConfig+{{end}}testAccDataSourceNxos{{camelCase .Name}}Config,
-				Check: resource.ComposeTestCheckFunc(
-					{{- $name := .Name }}
-					{{- range  .Attributes}}
-					{{- if and (not .ReferenceOnly) (not .WriteOnly) (not .ExcludeTest)}}
-					resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"),
-					{{- end}}
-					{{- end}}
-					{{- range .TfChildClasses}}
-					{{- $list := .TfName}}
-					{{- if eq .Type "single"}}
-					{{- range .Attributes}}
-					{{- if not .ExcludeTest}}
-					resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"),
-					{{- end}}
-					{{- end}}
-					{{- range .TfChildClasses}}
-					{{- $nestedList := .TfName}}
-					{{- if eq .Type "single"}}
-					{{- range .Attributes}}
-					{{- if not .ExcludeTest}}
-					resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"),
-					{{- end}}
-					{{- end}}
-					{{- range .TfChildClasses}}
-					{{- if eq .Type "list"}}
-					resource.TestCheckTypeSetElemNestedAttrs("data.nxos_{{snakeCase $name}}.test", "{{$nestedList}}.*", map[string]string{
-						{{- range .Attributes}}
-						{{- if not .ExcludeTest}}
-						"{{.TfName}}": "{{.Example}}",
-						{{- end}}
-						{{- end}}
-					}),
-					{{- end}}
-					{{- end}}
-					{{- else if eq .Type "list"}}
-					resource.TestCheckTypeSetElemNestedAttrs("data.nxos_{{snakeCase $name}}.test", "{{$nestedList}}.*", map[string]string{
-						{{- range .Attributes}}
-						{{- if not .ExcludeTest}}
-						"{{.TfName}}": "{{.Example}}",
-						{{- end}}
-						{{- end}}
-					}),
-					{{- end}}
-					{{- end}}
-					{{- else if eq .Type "list"}}
-					resource.TestCheckTypeSetElemNestedAttrs("data.nxos_{{snakeCase $name}}.test", "{{$list}}.*", map[string]string{
-						{{- range .Attributes}}
-						{{- if not .ExcludeTest}}
-						"{{.TfName}}": "{{.Example}}",
-						{{- end}}
-						{{- end}}
-					}),
-					{{- end}}
-					{{- end}}
-				),
+				Config: {{if .TestPrerequisites}}testAccDataSourceNxos{{camelCase .Name}}PrerequisitesConfig+{{end}}testAccDataSourceNxos{{camelCase .Name}}Config(),
+				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -132,120 +150,176 @@ resource "nxos_rest" "PreReq{{$index}}" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxos{{camelCase .Name}}Config = `
-
-resource "nxos_{{snakeCase $name}}" "test" {
-{{- range  .Attributes}}
-{{- if not .ExcludeTest}}
-  {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
-{{- end}}
-{{- end}}
-{{- range .TfChildClasses}}
-{{- $list := .TfName}}
-{{- if eq .Type "single"}}
-{{- range .Attributes}}
-{{- if not .ExcludeTest}}
-  {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
-{{- end}}
-{{- end}}
-{{- range .TfChildClasses}}
-{{- $nestedList := .TfName}}
-{{- if eq .Type "single"}}
-{{- range .Attributes}}
-{{- if not .ExcludeTest}}
-  {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
-{{- end}}
-{{- end}}
-{{- range .TfChildClasses}}
-{{- if eq .Type "list"}}
-  {{.TfName}} = [{
+func testAccDataSourceNxos{{camelCase .Name}}Config() string {
+	config := `resource "nxos_{{snakeCase $name}}" "test" {` + "\n"
+	{{- range  .Attributes}}
+	{{- if not .ExcludeTest}}
+	{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		config += `	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	}
+	{{- else}}
+	config += `	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- range .TfChildClasses}}
+	{{- $list := .TfName}}
+	{{- if eq .Type "single"}}
 	{{- range .Attributes}}
 	{{- if not .ExcludeTest}}
-    {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+	{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		config += `	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	}
+	{{- else}}
+	config += `	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
 	{{- end}}
 	{{- end}}
-  }]
-{{- end}}
-{{- end}}
-{{- else if eq .Type "list"}}
-  {{.TfName}} = [{
+	{{- end}}
+	{{- range .TfChildClasses}}
+	{{- $nestedList := .TfName}}
+	{{- if eq .Type "single"}}
 	{{- range .Attributes}}
 	{{- if not .ExcludeTest}}
-    {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+	{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		config += `	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	}
+	{{- else}}
+	config += `	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
 	{{- end}}
 	{{- end}}
-  }]
-{{- end}}
-{{- end}}
-{{- else if eq .Type "list"}}
-  {{.TfName}} = [{
+	{{- end}}
+	{{- range .TfChildClasses}}
+	{{- if eq .Type "list"}}
+	config += `	{{.TfName}} = [{` + "\n"
 	{{- range .Attributes}}
 	{{- if not .ExcludeTest}}
-    {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+	{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		config += `		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	}
+	{{- else}}
+	config += `		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	config += `	}]` + "\n"
+	{{- end}}
+	{{- end}}
+	{{- else if eq .Type "list"}}
+	config += `	{{.TfName}} = [{` + "\n"
+	{{- range .Attributes}}
+	{{- if not .ExcludeTest}}
+	{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		config += `		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	}
+	{{- else}}
+	config += `		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	config += `	}]` + "\n"
+	{{- end}}
+	{{- end}}
+	{{- else if eq .Type "list"}}
+	config += `	{{.TfName}} = [{` + "\n"
+	{{- range .Attributes}}
+	{{- if not .ExcludeTest}}
+	{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		config += `		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	}
+	{{- else}}
+	config += `		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	{{- end}}
 	{{- end}}
 	{{- end}}
 	{{- range .TfChildClasses}}
 	{{- if eq .Type "single"}}
 	{{- range .Attributes}}
 	{{- if not .ExcludeTest}}
-    {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+	{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		config += `		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	}
+	{{- else}}
+	config += `		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	{{- end}}
 	{{- end}}
 	{{- end}}
 	{{- range .TfChildClasses}}
 	{{- if eq .Type "list"}}
-    {{.TfName}} = [{
-		{{- range .Attributes}}
-		{{- if not .ExcludeTest}}
-      {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
-		{{- end}}
-		{{- end}}
-    }]
+	config += `		{{.TfName}} = [{` + "\n"
+	{{- range .Attributes}}
+	{{- if not .ExcludeTest}}
+	{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		config += `			{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	}
+	{{- else}}
+	config += `			{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	config += `		}]` + "\n"
 	{{- end}}
 	{{- end}}
 	{{- else if eq .Type "list"}}
-    {{.TfName}} = [{
-		{{- range .Attributes}}
-		{{- if not .ExcludeTest}}
-      {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
-		{{- end}}
-		{{- end}}
-    }]
+	config += `		{{.TfName}} = [{` + "\n"
+	{{- range .Attributes}}
+	{{- if not .ExcludeTest}}
+	{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		config += `			{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	}
+	{{- else}}
+	config += `			{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
 	{{- end}}
 	{{- end}}
-  }]
-{{- end}}
-{{- end}}
-{{- if .TestPrerequisites}}
-  depends_on = [{{range $index, $item := .TestPrerequisites}}nxos_rest.PreReq{{$index}}, {{end}}]
-{{- end}}
-}
+	{{- end}}
+	config += `		}]` + "\n"
+	{{- end}}
+	{{- end}}
+	config += `	}]` + "\n"
+	{{- end}}
+	{{- end}}
+	{{- if .TestPrerequisites}}
+	config += `	depends_on = [{{range $index, $item := .TestPrerequisites}}nxos_rest.PreReq{{$index}}, {{end}}]` + "\n"
+	{{- end}}
+	config += `}` + "\n"
 
+	config += `
 data "nxos_{{snakeCase .Name}}" "test" {
 {{- range  .Attributes}}
 {{- if or .Id .ReferenceOnly}}
-  {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}
 {{- end}}
 {{- end}}
 {{- range .TfChildClasses}}
 {{- if eq .Type "single"}}
 {{- range .Attributes}}
 {{- if or .Id .ReferenceOnly}}
-  {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}
 {{- end}}
 {{- end}}
 {{- range .TfChildClasses}}
 {{- if eq .Type "single"}}
 {{- range .Attributes}}
 {{- if or .Id .ReferenceOnly}}
-  {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}
 {{- end}}
 {{- end}}
 {{- end}}
 {{- end}}
 {{- end}}
 {{- end}}
-  depends_on = [nxos_{{snakeCase $name}}.test]
+	depends_on = [nxos_{{snakeCase $name}}.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

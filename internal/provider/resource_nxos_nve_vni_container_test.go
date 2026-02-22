@@ -34,6 +34,7 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosNVEVNIContainer(t *testing.T) {
+	var checks []resource.TestCheckFunc
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,7 +45,7 @@ func TestAccNxosNVEVNIContainer(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosNVEVNIContainerPrerequisitesConfig + testAccNxosNVEVNIContainerConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_nve_vni_container.test",
@@ -110,22 +111,20 @@ resource "nxos_rest" "PreReq2" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosNVEVNIContainerConfig_minimum() string {
-	return `
-	resource "nxos_nve_vni_container" "test" {
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-	}
-	`
+	config := `resource "nxos_nve_vni_container" "test" {` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosNVEVNIContainerConfig_all() string {
-	return `
-	resource "nxos_nve_vni_container" "test" {
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-	}
-	`
+	config := `resource "nxos_nve_vni_container" "test" {` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

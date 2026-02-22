@@ -34,6 +34,13 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosOSPFv3VRFAddressFamily(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_vrf_address_family.test", "instance_name", "nac-ospfv3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_vrf_address_family.test", "vrf_name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_vrf_address_family.test", "address_family_type", "ipv6-ucast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_vrf_address_family.test", "administrative_distance", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_vrf_address_family.test", "default_metric", "1024"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_vrf_address_family.test", "max_ecmp_cost", "16"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,14 +51,7 @@ func TestAccNxosOSPFv3VRFAddressFamily(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosOSPFv3VRFAddressFamilyPrerequisitesConfig + testAccNxosOSPFv3VRFAddressFamilyConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ospfv3_vrf_address_family.test", "instance_name", "nac-ospfv3"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_vrf_address_family.test", "vrf_name", "VRF1"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_vrf_address_family.test", "address_family_type", "ipv6-ucast"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_vrf_address_family.test", "administrative_distance", "10"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_vrf_address_family.test", "default_metric", "1024"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_vrf_address_family.test", "max_ecmp_cost", "16"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_ospfv3_vrf_address_family.test",
@@ -126,31 +126,29 @@ resource "nxos_rest" "PreReq3" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosOSPFv3VRFAddressFamilyConfig_minimum() string {
-	return `
-	resource "nxos_ospfv3_vrf_address_family" "test" {
-		instance_name = "nac-ospfv3"
-		vrf_name = "VRF1"
-		address_family_type = "ipv6-ucast"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_ospfv3_vrf_address_family" "test" {` + "\n"
+	config += `	instance_name = "nac-ospfv3"` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	address_family_type = "ipv6-ucast"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosOSPFv3VRFAddressFamilyConfig_all() string {
-	return `
-	resource "nxos_ospfv3_vrf_address_family" "test" {
-		instance_name = "nac-ospfv3"
-		vrf_name = "VRF1"
-		address_family_type = "ipv6-ucast"
-		administrative_distance = "10"
-		default_metric = "1024"
-		max_ecmp_cost = 16
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_ospfv3_vrf_address_family" "test" {` + "\n"
+	config += `	instance_name = "nac-ospfv3"` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	address_family_type = "ipv6-ucast"` + "\n"
+	config += `	administrative_distance = "10"` + "\n"
+	config += `	default_metric = "1024"` + "\n"
+	config += `	max_ecmp_cost = 16` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

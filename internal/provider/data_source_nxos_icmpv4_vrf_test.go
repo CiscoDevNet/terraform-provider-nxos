@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosICMPv4VRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_icmpv4_vrf.test", "vrf_name", "VRF1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosICMPv4VRFPrerequisitesConfig + testAccDataSourceNxosICMPv4VRFConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_icmpv4_vrf.test", "vrf_name", "VRF1"),
-				),
+				Config: testAccDataSourceNxosICMPv4VRFPrerequisitesConfig + testAccDataSourceNxosICMPv4VRFConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -72,17 +72,19 @@ resource "nxos_rest" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosICMPv4VRFConfig = `
+func testAccDataSourceNxosICMPv4VRFConfig() string {
+	config := `resource "nxos_icmpv4_vrf" "test" {` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_icmpv4_vrf" "test" {
-  vrf_name = "VRF1"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-}
-
+	config += `
 data "nxos_icmpv4_vrf" "test" {
-  vrf_name = "VRF1"
-  depends_on = [nxos_icmpv4_vrf.test]
+	vrf_name = "VRF1"
+	depends_on = [nxos_icmpv4_vrf.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

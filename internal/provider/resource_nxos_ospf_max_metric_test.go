@@ -34,6 +34,13 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosOSPFMaxMetric(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "instance_name", "OSPF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "vrf_name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "control", "external-lsa,startup,stub,summary-lsa"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "external_lsa", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "summary_lsa", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "startup_interval", "300"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,14 +51,7 @@ func TestAccNxosOSPFMaxMetric(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosOSPFMaxMetricPrerequisitesConfig + testAccNxosOSPFMaxMetricConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "instance_name", "OSPF1"),
-					resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "vrf_name", "VRF1"),
-					resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "control", "external-lsa,startup,stub,summary-lsa"),
-					resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "external_lsa", "600"),
-					resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "summary_lsa", "600"),
-					resource.TestCheckResourceAttr("nxos_ospf_max_metric.test", "startup_interval", "300"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_ospf_max_metric.test",
@@ -135,30 +135,28 @@ resource "nxos_rest" "PreReq4" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosOSPFMaxMetricConfig_minimum() string {
-	return `
-	resource "nxos_ospf_max_metric" "test" {
-		instance_name = "OSPF1"
-		vrf_name = "VRF1"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-	}
-	`
+	config := `resource "nxos_ospf_max_metric" "test" {` + "\n"
+	config += `	instance_name = "OSPF1"` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosOSPFMaxMetricConfig_all() string {
-	return `
-	resource "nxos_ospf_max_metric" "test" {
-		instance_name = "OSPF1"
-		vrf_name = "VRF1"
-		control = "external-lsa,startup,stub,summary-lsa"
-		external_lsa = 600
-		summary_lsa = 600
-		startup_interval = 300
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-	}
-	`
+	config := `resource "nxos_ospf_max_metric" "test" {` + "\n"
+	config += `	instance_name = "OSPF1"` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	control = "external-lsa,startup,stub,summary-lsa"` + "\n"
+	config += `	external_lsa = 600` + "\n"
+	config += `	summary_lsa = 600` + "\n"
+	config += `	startup_interval = 300` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

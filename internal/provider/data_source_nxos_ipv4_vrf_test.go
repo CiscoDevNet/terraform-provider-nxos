@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosIPv4VRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4_vrf.test", "name", "VRF1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosIPv4VRFConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_ipv4_vrf.test", "name", "VRF1"),
-				),
+				Config: testAccDataSourceNxosIPv4VRFConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -51,16 +51,18 @@ func TestAccDataSourceNxosIPv4VRF(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosIPv4VRFConfig = `
+func testAccDataSourceNxosIPv4VRFConfig() string {
+	config := `resource "nxos_ipv4_vrf" "test" {` + "\n"
+	config += `	name = "VRF1"` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_ipv4_vrf" "test" {
-  name = "VRF1"
-}
-
+	config += `
 data "nxos_ipv4_vrf" "test" {
-  name = "VRF1"
-  depends_on = [nxos_ipv4_vrf.test]
+	name = "VRF1"
+	depends_on = [nxos_ipv4_vrf.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

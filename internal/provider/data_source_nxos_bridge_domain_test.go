@@ -30,17 +30,17 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosBridgeDomain(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bridge_domain.test", "fabric_encap", "vlan-10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bridge_domain.test", "access_encap", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bridge_domain.test", "name", "VLAN10"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosBridgeDomainConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_bridge_domain.test", "fabric_encap", "vlan-10"),
-					resource.TestCheckResourceAttr("data.nxos_bridge_domain.test", "access_encap", "unknown"),
-					resource.TestCheckResourceAttr("data.nxos_bridge_domain.test", "name", "VLAN10"),
-				),
+				Config: testAccDataSourceNxosBridgeDomainConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -53,18 +53,20 @@ func TestAccDataSourceNxosBridgeDomain(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosBridgeDomainConfig = `
+func testAccDataSourceNxosBridgeDomainConfig() string {
+	config := `resource "nxos_bridge_domain" "test" {` + "\n"
+	config += `	fabric_encap = "vlan-10"` + "\n"
+	config += `	access_encap = "unknown"` + "\n"
+	config += `	name = "VLAN10"` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_bridge_domain" "test" {
-  fabric_encap = "vlan-10"
-  access_encap = "unknown"
-  name = "VLAN10"
-}
-
+	config += `
 data "nxos_bridge_domain" "test" {
-  fabric_encap = "vlan-10"
-  depends_on = [nxos_bridge_domain.test]
+	fabric_encap = "vlan-10"
+	depends_on = [nxos_bridge_domain.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

@@ -34,6 +34,8 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosDefaultQOSPolicyInterfaceIn(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_interface_in.test", "interface_id", "eth1/10"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,9 +46,7 @@ func TestAccNxosDefaultQOSPolicyInterfaceIn(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosDefaultQOSPolicyInterfaceInConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_default_qos_policy_interface_in.test", "interface_id", "eth1/10"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_default_qos_policy_interface_in.test",
@@ -84,22 +84,20 @@ func nxosDefaultQOSPolicyInterfaceInImportStateIdFunc(resourceName string) resou
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosDefaultQOSPolicyInterfaceInConfig_minimum() string {
-	return `
-	resource "nxos_default_qos_policy_interface_in" "test" {
-		interface_id = "eth1/10"
-	}
-	`
+	config := `resource "nxos_default_qos_policy_interface_in" "test" {` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosDefaultQOSPolicyInterfaceInConfig_all() string {
-	return `
-	resource "nxos_default_qos_policy_interface_in" "test" {
-		interface_id = "eth1/10"
-	}
-	`
+	config := `resource "nxos_default_qos_policy_interface_in" "test" {` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

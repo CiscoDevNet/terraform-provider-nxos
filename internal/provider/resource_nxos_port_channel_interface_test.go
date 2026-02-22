@@ -38,6 +38,28 @@ func TestAccNxosPortChannelInterface(t *testing.T) {
 	if os.Getenv("PORT_CHANNEL_INTERFACE") == "" {
 		t.Skip("skipping test, set environment variable PORT_CHANNEL_INTERFACE")
 	}
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "interface_id", "po1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_mode", "active"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "minimum_links", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "maximum_links", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "suspend_individual", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "access_vlan", "vlan-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "admin_state", "up"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "auto_negotiation", "on"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "bandwidth", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "delay", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "duplex", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "layer", "Layer2"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "link_logging", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "medium", "broadcast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "mode", "access"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "mtu", "1500"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "native_vlan", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "speed", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "trunk_vlans", "1-4094"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "user_configured_flags", "admin_layer,admin_mtu,admin_state"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -48,29 +70,7 @@ func TestAccNxosPortChannelInterface(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosPortChannelInterfaceConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "interface_id", "po1"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_mode", "active"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "minimum_links", "2"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "maximum_links", "10"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "suspend_individual", "disable"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "access_vlan", "vlan-1"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "admin_state", "up"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "auto_negotiation", "on"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "bandwidth", "0"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "delay", "1"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "description", "My Description"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "duplex", "auto"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "layer", "Layer2"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "link_logging", "enable"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "medium", "broadcast"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "mode", "access"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "mtu", "1500"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "native_vlan", "unknown"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "speed", "auto"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "trunk_vlans", "1-4094"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "user_configured_flags", "admin_layer,admin_mtu,admin_state"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_port_channel_interface.test",
@@ -108,42 +108,40 @@ func nxosPortChannelInterfaceImportStateIdFunc(resourceName string) resource.Imp
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosPortChannelInterfaceConfig_minimum() string {
-	return `
-	resource "nxos_port_channel_interface" "test" {
-		interface_id = "po1"
-	}
-	`
+	config := `resource "nxos_port_channel_interface" "test" {` + "\n"
+	config += `	interface_id = "po1"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosPortChannelInterfaceConfig_all() string {
-	return `
-	resource "nxos_port_channel_interface" "test" {
-		interface_id = "po1"
-		port_channel_mode = "active"
-		minimum_links = 2
-		maximum_links = 10
-		suspend_individual = "disable"
-		access_vlan = "vlan-1"
-		admin_state = "up"
-		auto_negotiation = "on"
-		bandwidth = 0
-		delay = 1
-		description = "My Description"
-		duplex = "auto"
-		layer = "Layer2"
-		link_logging = "enable"
-		medium = "broadcast"
-		mode = "access"
-		mtu = 1500
-		native_vlan = "unknown"
-		speed = "auto"
-		trunk_vlans = "1-4094"
-		user_configured_flags = "admin_layer,admin_mtu,admin_state"
-	}
-	`
+	config := `resource "nxos_port_channel_interface" "test" {` + "\n"
+	config += `	interface_id = "po1"` + "\n"
+	config += `	port_channel_mode = "active"` + "\n"
+	config += `	minimum_links = 2` + "\n"
+	config += `	maximum_links = 10` + "\n"
+	config += `	suspend_individual = "disable"` + "\n"
+	config += `	access_vlan = "vlan-1"` + "\n"
+	config += `	admin_state = "up"` + "\n"
+	config += `	auto_negotiation = "on"` + "\n"
+	config += `	bandwidth = 0` + "\n"
+	config += `	delay = 1` + "\n"
+	config += `	description = "My Description"` + "\n"
+	config += `	duplex = "auto"` + "\n"
+	config += `	layer = "Layer2"` + "\n"
+	config += `	link_logging = "enable"` + "\n"
+	config += `	medium = "broadcast"` + "\n"
+	config += `	mode = "access"` + "\n"
+	config += `	mtu = 1500` + "\n"
+	config += `	native_vlan = "unknown"` + "\n"
+	config += `	speed = "auto"` + "\n"
+	config += `	trunk_vlans = "1-4094"` + "\n"
+	config += `	user_configured_flags = "admin_layer,admin_mtu,admin_state"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

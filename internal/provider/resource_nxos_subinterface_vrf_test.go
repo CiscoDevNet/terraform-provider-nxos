@@ -34,6 +34,9 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosSubinterfaceVRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterface_vrf.test", "interface_id", "eth1/10.124"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterface_vrf.test", "vrf_dn", "sys/inst-VRF123"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,10 +47,7 @@ func TestAccNxosSubinterfaceVRF(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosSubinterfaceVRFPrerequisitesConfig + testAccNxosSubinterfaceVRFConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_subinterface_vrf.test", "interface_id", "eth1/10.124"),
-					resource.TestCheckResourceAttr("nxos_subinterface_vrf.test", "vrf_dn", "sys/inst-VRF123"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_subinterface_vrf.test",
@@ -104,26 +104,24 @@ resource "nxos_rest" "PreReq1" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosSubinterfaceVRFConfig_minimum() string {
-	return `
-	resource "nxos_subinterface_vrf" "test" {
-		interface_id = "eth1/10.124"
-		vrf_dn = "sys/inst-VRF123"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-	}
-	`
+	config := `resource "nxos_subinterface_vrf" "test" {` + "\n"
+	config += `	interface_id = "eth1/10.124"` + "\n"
+	config += `	vrf_dn = "sys/inst-VRF123"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosSubinterfaceVRFConfig_all() string {
-	return `
-	resource "nxos_subinterface_vrf" "test" {
-		interface_id = "eth1/10.124"
-		vrf_dn = "sys/inst-VRF123"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-	}
-	`
+	config := `resource "nxos_subinterface_vrf" "test" {` + "\n"
+	config += `	interface_id = "eth1/10.124"` + "\n"
+	config += `	vrf_dn = "sys/inst-VRF123"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosDefaultQOSPolicyInterfaceIn(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos_policy_interface_in.test", "interface_id", "eth1/10"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosDefaultQOSPolicyInterfaceInConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_default_qos_policy_interface_in.test", "interface_id", "eth1/10"),
-				),
+				Config: testAccDataSourceNxosDefaultQOSPolicyInterfaceInConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -51,16 +51,18 @@ func TestAccDataSourceNxosDefaultQOSPolicyInterfaceIn(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosDefaultQOSPolicyInterfaceInConfig = `
+func testAccDataSourceNxosDefaultQOSPolicyInterfaceInConfig() string {
+	config := `resource "nxos_default_qos_policy_interface_in" "test" {` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_default_qos_policy_interface_in" "test" {
-  interface_id = "eth1/10"
-}
-
+	config += `
 data "nxos_default_qos_policy_interface_in" "test" {
-  interface_id = "eth1/10"
-  depends_on = [nxos_default_qos_policy_interface_in.test]
+	interface_id = "eth1/10"
+	depends_on = [nxos_default_qos_policy_interface_in.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

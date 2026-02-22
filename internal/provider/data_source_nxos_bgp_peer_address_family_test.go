@@ -30,18 +30,18 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosBGPPeerAddressFamily(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer_address_family.test", "address_family", "ipv4-ucast"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer_address_family.test", "control", "nh-self,rr-client"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer_address_family.test", "send_community_extended", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer_address_family.test", "send_community_standard", "enabled"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosBGPPeerAddressFamilyPrerequisitesConfig + testAccDataSourceNxosBGPPeerAddressFamilyConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer_address_family.test", "address_family", "ipv4-ucast"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer_address_family.test", "control", "nh-self,rr-client"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer_address_family.test", "send_community_extended", "enabled"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer_address_family.test", "send_community_standard", "enabled"),
-				),
+				Config: testAccDataSourceNxosBGPPeerAddressFamilyPrerequisitesConfig + testAccDataSourceNxosBGPPeerAddressFamilyConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -100,26 +100,28 @@ resource "nxos_rest" "PreReq4" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosBGPPeerAddressFamilyConfig = `
+func testAccDataSourceNxosBGPPeerAddressFamilyConfig() string {
+	config := `resource "nxos_bgp_peer_address_family" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	address = "192.168.0.1"` + "\n"
+	config += `	address_family = "ipv4-ucast"` + "\n"
+	config += `	control = "nh-self,rr-client"` + "\n"
+	config += `	send_community_extended = "enabled"` + "\n"
+	config += `	send_community_standard = "enabled"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_bgp_peer_address_family" "test" {
-  asn = "65001"
-  vrf = "default"
-  address = "192.168.0.1"
-  address_family = "ipv4-ucast"
-  control = "nh-self,rr-client"
-  send_community_extended = "enabled"
-  send_community_standard = "enabled"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-}
-
+	config += `
 data "nxos_bgp_peer_address_family" "test" {
-  asn = "65001"
-  vrf = "default"
-  address = "192.168.0.1"
-  address_family = "ipv4-ucast"
-  depends_on = [nxos_bgp_peer_address_family.test]
+	asn = "65001"
+	vrf = "default"
+	address = "192.168.0.1"
+	address_family = "ipv4-ucast"
+	depends_on = [nxos_bgp_peer_address_family.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

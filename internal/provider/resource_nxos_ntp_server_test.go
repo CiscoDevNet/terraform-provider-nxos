@@ -34,6 +34,13 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosNTPServer(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp_server.test", "name", "1.2.3.4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp_server.test", "vrf", "management"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp_server.test", "type", "server"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp_server.test", "key_id", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp_server.test", "min_poll", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp_server.test", "max_poll", "6"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,14 +51,7 @@ func TestAccNxosNTPServer(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosNTPServerConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ntp_server.test", "name", "1.2.3.4"),
-					resource.TestCheckResourceAttr("nxos_ntp_server.test", "vrf", "management"),
-					resource.TestCheckResourceAttr("nxos_ntp_server.test", "type", "server"),
-					resource.TestCheckResourceAttr("nxos_ntp_server.test", "key_id", "10"),
-					resource.TestCheckResourceAttr("nxos_ntp_server.test", "min_poll", "4"),
-					resource.TestCheckResourceAttr("nxos_ntp_server.test", "max_poll", "6"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_ntp_server.test",
@@ -89,28 +89,26 @@ func nxosNTPServerImportStateIdFunc(resourceName string) resource.ImportStateIdF
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosNTPServerConfig_minimum() string {
-	return `
-	resource "nxos_ntp_server" "test" {
-		name = "1.2.3.4"
-		type = "server"
-	}
-	`
+	config := `resource "nxos_ntp_server" "test" {` + "\n"
+	config += `	name = "1.2.3.4"` + "\n"
+	config += `	type = "server"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosNTPServerConfig_all() string {
-	return `
-	resource "nxos_ntp_server" "test" {
-		name = "1.2.3.4"
-		vrf = "management"
-		type = "server"
-		key_id = 10
-		min_poll = 4
-		max_poll = 6
-	}
-	`
+	config := `resource "nxos_ntp_server" "test" {` + "\n"
+	config += `	name = "1.2.3.4"` + "\n"
+	config += `	vrf = "management"` + "\n"
+	config += `	type = "server"` + "\n"
+	config += `	key_id = 10` + "\n"
+	config += `	min_poll = 4` + "\n"
+	config += `	max_poll = 6` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

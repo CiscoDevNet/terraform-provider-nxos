@@ -34,6 +34,29 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosPhysicalInterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "fec_mode", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "access_vlan", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "admin_state", "up"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "auto_negotiation", "on"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "bandwidth", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "delay", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "duplex", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "layer", "Layer3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "link_logging", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "link_debounce_down", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "link_debounce_up", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "medium", "broadcast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "mode", "access"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "mtu", "1500"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "native_vlan", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "speed", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "speed_group", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "trunk_vlans", "1-4094"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "uni_directional_ethernet", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface.test", "user_configured_flags", "admin_layer,admin_mtu,admin_state"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,30 +67,7 @@ func TestAccNxosPhysicalInterface(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosPhysicalInterfaceConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "interface_id", "eth1/10"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "fec_mode", "auto"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "access_vlan", "unknown"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "admin_state", "up"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "auto_negotiation", "on"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "bandwidth", "1000"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "delay", "10"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "description", "My Description"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "duplex", "auto"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "layer", "Layer3"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "link_logging", "enable"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "link_debounce_down", "200"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "link_debounce_up", "0"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "medium", "broadcast"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "mode", "access"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "mtu", "1500"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "native_vlan", "unknown"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "speed", "auto"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "speed_group", "auto"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "trunk_vlans", "1-4094"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "uni_directional_ethernet", "disable"),
-					resource.TestCheckResourceAttr("nxos_physical_interface.test", "user_configured_flags", "admin_layer,admin_mtu,admin_state"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_physical_interface.test",
@@ -105,43 +105,41 @@ func nxosPhysicalInterfaceImportStateIdFunc(resourceName string) resource.Import
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosPhysicalInterfaceConfig_minimum() string {
-	return `
-	resource "nxos_physical_interface" "test" {
-		interface_id = "eth1/10"
-	}
-	`
+	config := `resource "nxos_physical_interface" "test" {` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosPhysicalInterfaceConfig_all() string {
-	return `
-	resource "nxos_physical_interface" "test" {
-		interface_id = "eth1/10"
-		fec_mode = "auto"
-		access_vlan = "unknown"
-		admin_state = "up"
-		auto_negotiation = "on"
-		bandwidth = 1000
-		delay = 10
-		description = "My Description"
-		duplex = "auto"
-		layer = "Layer3"
-		link_logging = "enable"
-		link_debounce_down = 200
-		link_debounce_up = 0
-		medium = "broadcast"
-		mode = "access"
-		mtu = 1500
-		native_vlan = "unknown"
-		speed = "auto"
-		speed_group = "auto"
-		trunk_vlans = "1-4094"
-		uni_directional_ethernet = "disable"
-		user_configured_flags = "admin_layer,admin_mtu,admin_state"
-	}
-	`
+	config := `resource "nxos_physical_interface" "test" {` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `	fec_mode = "auto"` + "\n"
+	config += `	access_vlan = "unknown"` + "\n"
+	config += `	admin_state = "up"` + "\n"
+	config += `	auto_negotiation = "on"` + "\n"
+	config += `	bandwidth = 1000` + "\n"
+	config += `	delay = 10` + "\n"
+	config += `	description = "My Description"` + "\n"
+	config += `	duplex = "auto"` + "\n"
+	config += `	layer = "Layer3"` + "\n"
+	config += `	link_logging = "enable"` + "\n"
+	config += `	link_debounce_down = 200` + "\n"
+	config += `	link_debounce_up = 0` + "\n"
+	config += `	medium = "broadcast"` + "\n"
+	config += `	mode = "access"` + "\n"
+	config += `	mtu = 1500` + "\n"
+	config += `	native_vlan = "unknown"` + "\n"
+	config += `	speed = "auto"` + "\n"
+	config += `	speed_group = "auto"` + "\n"
+	config += `	trunk_vlans = "1-4094"` + "\n"
+	config += `	uni_directional_ethernet = "disable"` + "\n"
+	config += `	user_configured_flags = "admin_layer,admin_mtu,admin_state"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

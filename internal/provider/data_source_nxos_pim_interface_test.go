@@ -30,20 +30,20 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosPIMInterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim_interface.test", "interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim_interface.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim_interface.test", "bfd", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim_interface.test", "dr_priority", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim_interface.test", "passive", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim_interface.test", "sparse_mode", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosPIMInterfacePrerequisitesConfig + testAccDataSourceNxosPIMInterfaceConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_pim_interface.test", "interface_id", "eth1/10"),
-					resource.TestCheckResourceAttr("data.nxos_pim_interface.test", "admin_state", "enabled"),
-					resource.TestCheckResourceAttr("data.nxos_pim_interface.test", "bfd", "enabled"),
-					resource.TestCheckResourceAttr("data.nxos_pim_interface.test", "dr_priority", "10"),
-					resource.TestCheckResourceAttr("data.nxos_pim_interface.test", "passive", "false"),
-					resource.TestCheckResourceAttr("data.nxos_pim_interface.test", "sparse_mode", "true"),
-				),
+				Config: testAccDataSourceNxosPIMInterfacePrerequisitesConfig + testAccDataSourceNxosPIMInterfaceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -97,24 +97,26 @@ resource "nxos_rest" "PreReq4" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosPIMInterfaceConfig = `
+func testAccDataSourceNxosPIMInterfaceConfig() string {
+	config := `resource "nxos_pim_interface" "test" {` + "\n"
+	config += `	vrf_name = "default"` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	bfd = "enabled"` + "\n"
+	config += `	dr_priority = 10` + "\n"
+	config += `	passive = false` + "\n"
+	config += `	sparse_mode = true` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_pim_interface" "test" {
-  vrf_name = "default"
-  interface_id = "eth1/10"
-  admin_state = "enabled"
-  bfd = "enabled"
-  dr_priority = 10
-  passive = false
-  sparse_mode = true
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-}
-
+	config += `
 data "nxos_pim_interface" "test" {
-  vrf_name = "default"
-  interface_id = "eth1/10"
-  depends_on = [nxos_pim_interface.test]
+	vrf_name = "default"
+	interface_id = "eth1/10"
+	depends_on = [nxos_pim_interface.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

@@ -30,17 +30,17 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosBGPAdvertisedPrefix(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_advertised_prefix.test", "prefix", "192.168.1.0/24"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_advertised_prefix.test", "route_map", "rt-map"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_advertised_prefix.test", "evpn", "enabled"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosBGPAdvertisedPrefixPrerequisitesConfig + testAccDataSourceNxosBGPAdvertisedPrefixConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_bgp_advertised_prefix.test", "prefix", "192.168.1.0/24"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_advertised_prefix.test", "route_map", "rt-map"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_advertised_prefix.test", "evpn", "enabled"),
-				),
+				Config: testAccDataSourceNxosBGPAdvertisedPrefixPrerequisitesConfig + testAccDataSourceNxosBGPAdvertisedPrefixConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -98,25 +98,27 @@ resource "nxos_rest" "PreReq4" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosBGPAdvertisedPrefixConfig = `
+func testAccDataSourceNxosBGPAdvertisedPrefixConfig() string {
+	config := `resource "nxos_bgp_advertised_prefix" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	address_family = "ipv4-ucast"` + "\n"
+	config += `	prefix = "192.168.1.0/24"` + "\n"
+	config += `	route_map = "rt-map"` + "\n"
+	config += `	evpn = "enabled"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_bgp_advertised_prefix" "test" {
-  asn = "65001"
-  vrf = "default"
-  address_family = "ipv4-ucast"
-  prefix = "192.168.1.0/24"
-  route_map = "rt-map"
-  evpn = "enabled"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-}
-
+	config += `
 data "nxos_bgp_advertised_prefix" "test" {
-  asn = "65001"
-  vrf = "default"
-  address_family = "ipv4-ucast"
-  prefix = "192.168.1.0/24"
-  depends_on = [nxos_bgp_advertised_prefix.test]
+	asn = "65001"
+	vrf = "default"
+	address_family = "ipv4-ucast"
+	prefix = "192.168.1.0/24"
+	depends_on = [nxos_bgp_advertised_prefix.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

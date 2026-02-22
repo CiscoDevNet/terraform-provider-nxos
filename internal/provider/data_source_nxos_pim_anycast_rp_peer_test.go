@@ -30,16 +30,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosPIMAnycastRPPeer(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim_anycast_rp_peer.test", "address", "10.1.1.1/32"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim_anycast_rp_peer.test", "rp_set_address", "20.1.1.1/32"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosPIMAnycastRPPeerPrerequisitesConfig + testAccDataSourceNxosPIMAnycastRPPeerConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_pim_anycast_rp_peer.test", "address", "10.1.1.1/32"),
-					resource.TestCheckResourceAttr("data.nxos_pim_anycast_rp_peer.test", "rp_set_address", "20.1.1.1/32"),
-				),
+				Config: testAccDataSourceNxosPIMAnycastRPPeerPrerequisitesConfig + testAccDataSourceNxosPIMAnycastRPPeerConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -90,21 +90,23 @@ resource "nxos_rest" "PreReq4" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosPIMAnycastRPPeerConfig = `
+func testAccDataSourceNxosPIMAnycastRPPeerConfig() string {
+	config := `resource "nxos_pim_anycast_rp_peer" "test" {` + "\n"
+	config += `	vrf_name = "default"` + "\n"
+	config += `	address = "10.1.1.1/32"` + "\n"
+	config += `	rp_set_address = "20.1.1.1/32"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_pim_anycast_rp_peer" "test" {
-  vrf_name = "default"
-  address = "10.1.1.1/32"
-  rp_set_address = "20.1.1.1/32"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-}
-
+	config += `
 data "nxos_pim_anycast_rp_peer" "test" {
-  vrf_name = "default"
-  address = "10.1.1.1/32"
-  rp_set_address = "20.1.1.1/32"
-  depends_on = [nxos_pim_anycast_rp_peer.test]
+	vrf_name = "default"
+	address = "10.1.1.1/32"
+	rp_set_address = "20.1.1.1/32"
+	depends_on = [nxos_pim_anycast_rp_peer.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

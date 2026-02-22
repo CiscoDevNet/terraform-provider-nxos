@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosDefaultQOSPolicyInterfaceInPolicyMap(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos_policy_interface_in_policy_map.test", "policy_map_name", "PM1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosDefaultQOSPolicyInterfaceInPolicyMapPrerequisitesConfig + testAccDataSourceNxosDefaultQOSPolicyInterfaceInPolicyMapConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_default_qos_policy_interface_in_policy_map.test", "policy_map_name", "PM1"),
-				),
+				Config: testAccDataSourceNxosDefaultQOSPolicyInterfaceInPolicyMapPrerequisitesConfig + testAccDataSourceNxosDefaultQOSPolicyInterfaceInPolicyMapConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -69,18 +69,20 @@ resource "nxos_rest" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosDefaultQOSPolicyInterfaceInPolicyMapConfig = `
+func testAccDataSourceNxosDefaultQOSPolicyInterfaceInPolicyMapConfig() string {
+	config := `resource "nxos_default_qos_policy_interface_in_policy_map" "test" {` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `	policy_map_name = "PM1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_default_qos_policy_interface_in_policy_map" "test" {
-  interface_id = "eth1/10"
-  policy_map_name = "PM1"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-}
-
+	config += `
 data "nxos_default_qos_policy_interface_in_policy_map" "test" {
-  interface_id = "eth1/10"
-  depends_on = [nxos_default_qos_policy_interface_in_policy_map.test]
+	interface_id = "eth1/10"
+	depends_on = [nxos_default_qos_policy_interface_in_policy_map.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

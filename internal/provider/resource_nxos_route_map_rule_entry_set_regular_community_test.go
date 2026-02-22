@@ -34,6 +34,12 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosRouteMapRuleEntrySetRegularCommunity(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_map_rule_entry_set_regular_community.test", "rule_name", "RULE1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_map_rule_entry_set_regular_community.test", "order", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_map_rule_entry_set_regular_community.test", "additive", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_map_rule_entry_set_regular_community.test", "no_community", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_map_rule_entry_set_regular_community.test", "set_criteria", "none"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,13 +50,7 @@ func TestAccNxosRouteMapRuleEntrySetRegularCommunity(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosRouteMapRuleEntrySetRegularCommunityPrerequisitesConfig + testAccNxosRouteMapRuleEntrySetRegularCommunityConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_route_map_rule_entry_set_regular_community.test", "rule_name", "RULE1"),
-					resource.TestCheckResourceAttr("nxos_route_map_rule_entry_set_regular_community.test", "order", "10"),
-					resource.TestCheckResourceAttr("nxos_route_map_rule_entry_set_regular_community.test", "additive", "disabled"),
-					resource.TestCheckResourceAttr("nxos_route_map_rule_entry_set_regular_community.test", "no_community", "disabled"),
-					resource.TestCheckResourceAttr("nxos_route_map_rule_entry_set_regular_community.test", "set_criteria", "none"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_route_map_rule_entry_set_regular_community.test",
@@ -108,29 +108,27 @@ resource "nxos_rest" "PreReq1" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosRouteMapRuleEntrySetRegularCommunityConfig_minimum() string {
-	return `
-	resource "nxos_route_map_rule_entry_set_regular_community" "test" {
-		rule_name = "RULE1"
-		order = 10
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-	}
-	`
+	config := `resource "nxos_route_map_rule_entry_set_regular_community" "test" {` + "\n"
+	config += `	rule_name = "RULE1"` + "\n"
+	config += `	order = 10` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosRouteMapRuleEntrySetRegularCommunityConfig_all() string {
-	return `
-	resource "nxos_route_map_rule_entry_set_regular_community" "test" {
-		rule_name = "RULE1"
-		order = 10
-		additive = "disabled"
-		no_community = "disabled"
-		set_criteria = "none"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-	}
-	`
+	config := `resource "nxos_route_map_rule_entry_set_regular_community" "test" {` + "\n"
+	config += `	rule_name = "RULE1"` + "\n"
+	config += `	order = 10` + "\n"
+	config += `	additive = "disabled"` + "\n"
+	config += `	no_community = "disabled"` + "\n"
+	config += `	set_criteria = "none"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

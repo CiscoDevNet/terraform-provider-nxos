@@ -34,6 +34,10 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosBridgeDomain(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domain.test", "fabric_encap", "vlan-10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domain.test", "access_encap", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domain.test", "name", "VLAN10"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,11 +48,7 @@ func TestAccNxosBridgeDomain(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosBridgeDomainConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_bridge_domain.test", "fabric_encap", "vlan-10"),
-					resource.TestCheckResourceAttr("nxos_bridge_domain.test", "access_encap", "unknown"),
-					resource.TestCheckResourceAttr("nxos_bridge_domain.test", "name", "VLAN10"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_bridge_domain.test",
@@ -86,24 +86,22 @@ func nxosBridgeDomainImportStateIdFunc(resourceName string) resource.ImportState
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosBridgeDomainConfig_minimum() string {
-	return `
-	resource "nxos_bridge_domain" "test" {
-		fabric_encap = "vlan-10"
-	}
-	`
+	config := `resource "nxos_bridge_domain" "test" {` + "\n"
+	config += `	fabric_encap = "vlan-10"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosBridgeDomainConfig_all() string {
-	return `
-	resource "nxos_bridge_domain" "test" {
-		fabric_encap = "vlan-10"
-		access_encap = "unknown"
-		name = "VLAN10"
-	}
-	`
+	config := `resource "nxos_bridge_domain" "test" {` + "\n"
+	config += `	fabric_encap = "vlan-10"` + "\n"
+	config += `	access_encap = "unknown"` + "\n"
+	config += `	name = "VLAN10"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

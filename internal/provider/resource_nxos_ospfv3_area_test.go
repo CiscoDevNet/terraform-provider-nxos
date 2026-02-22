@@ -34,6 +34,14 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosOSPFv3Area(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "instance_name", "nac-ospfv3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "vrf_name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "area_id", "0.0.0.10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "redistribute", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "summary", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "suppress_forward_address", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "type", "regular"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,15 +52,7 @@ func TestAccNxosOSPFv3Area(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosOSPFv3AreaPrerequisitesConfig + testAccNxosOSPFv3AreaConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "instance_name", "nac-ospfv3"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "vrf_name", "VRF1"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "area_id", "0.0.0.10"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "redistribute", "false"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "summary", "false"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "suppress_forward_address", "false"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_area.test", "type", "regular"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_ospfv3_area.test",
@@ -127,32 +127,30 @@ resource "nxos_rest" "PreReq3" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosOSPFv3AreaConfig_minimum() string {
-	return `
-	resource "nxos_ospfv3_area" "test" {
-		instance_name = "nac-ospfv3"
-		vrf_name = "VRF1"
-		area_id = "0.0.0.10"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_ospfv3_area" "test" {` + "\n"
+	config += `	instance_name = "nac-ospfv3"` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	area_id = "0.0.0.10"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosOSPFv3AreaConfig_all() string {
-	return `
-	resource "nxos_ospfv3_area" "test" {
-		instance_name = "nac-ospfv3"
-		vrf_name = "VRF1"
-		area_id = "0.0.0.10"
-		redistribute = false
-		summary = false
-		suppress_forward_address = false
-		type = "regular"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_ospfv3_area" "test" {` + "\n"
+	config += `	instance_name = "nac-ospfv3"` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	area_id = "0.0.0.10"` + "\n"
+	config += `	redistribute = false` + "\n"
+	config += `	summary = false` + "\n"
+	config += `	suppress_forward_address = false` + "\n"
+	config += `	type = "regular"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

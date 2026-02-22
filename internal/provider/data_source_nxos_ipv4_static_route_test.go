@@ -30,24 +30,24 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosIPv4StaticRoute(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4_static_route.test", "prefix", "1.1.1.0/24"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv4_static_route.test", "next_hops.*", map[string]string{
+		"interface_id": "unspecified",
+		"address":      "1.2.3.4",
+		"vrf_name":     "default",
+		"description":  "My Description",
+		"object":       "10",
+		"preference":   "123",
+		"tag":          "10",
+	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosIPv4StaticRoutePrerequisitesConfig + testAccDataSourceNxosIPv4StaticRouteConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_ipv4_static_route.test", "prefix", "1.1.1.0/24"),
-					resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv4_static_route.test", "next_hops.*", map[string]string{
-						"interface_id": "unspecified",
-						"address":      "1.2.3.4",
-						"vrf_name":     "default",
-						"description":  "My Description",
-						"object":       "10",
-						"preference":   "123",
-						"tag":          "10",
-					}),
-				),
+				Config: testAccDataSourceNxosIPv4StaticRoutePrerequisitesConfig + testAccDataSourceNxosIPv4StaticRouteConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -67,28 +67,30 @@ resource "nxos_rest" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosIPv4StaticRouteConfig = `
+func testAccDataSourceNxosIPv4StaticRouteConfig() string {
+	config := `resource "nxos_ipv4_static_route" "test" {` + "\n"
+	config += `	vrf_name = "default"` + "\n"
+	config += `	prefix = "1.1.1.0/24"` + "\n"
+	config += `	next_hops = [{` + "\n"
+	config += `		interface_id = "unspecified"` + "\n"
+	config += `		address = "1.2.3.4"` + "\n"
+	config += `		vrf_name = "default"` + "\n"
+	config += `		description = "My Description"` + "\n"
+	config += `		object = 10` + "\n"
+	config += `		preference = 123` + "\n"
+	config += `		tag = 10` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_ipv4_static_route" "test" {
-  vrf_name = "default"
-  prefix = "1.1.1.0/24"
-  next_hops = [{
-    interface_id = "unspecified"
-    address = "1.2.3.4"
-    vrf_name = "default"
-    description = "My Description"
-    object = 10
-    preference = 123
-    tag = 10
-  }]
-  depends_on = [nxos_rest.PreReq0, ]
-}
-
+	config += `
 data "nxos_ipv4_static_route" "test" {
-  vrf_name = "default"
-  prefix = "1.1.1.0/24"
-  depends_on = [nxos_ipv4_static_route.test]
+	vrf_name = "default"
+	prefix = "1.1.1.0/24"
+	depends_on = [nxos_ipv4_static_route.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

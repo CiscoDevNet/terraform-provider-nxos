@@ -30,17 +30,17 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosBGPInstance(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_instance.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_instance.test", "asn", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_instance.test", "enhanced_error_handling", "false"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosBGPInstancePrerequisitesConfig + testAccDataSourceNxosBGPInstanceConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_bgp_instance.test", "admin_state", "enabled"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_instance.test", "asn", "65001"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_instance.test", "enhanced_error_handling", "false"),
-				),
+				Config: testAccDataSourceNxosBGPInstancePrerequisitesConfig + testAccDataSourceNxosBGPInstanceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -70,18 +70,20 @@ resource "nxos_rest" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosBGPInstanceConfig = `
+func testAccDataSourceNxosBGPInstanceConfig() string {
+	config := `resource "nxos_bgp_instance" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	enhanced_error_handling = false` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_bgp_instance" "test" {
-  admin_state = "enabled"
-  asn = "65001"
-  enhanced_error_handling = false
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-}
-
+	config += `
 data "nxos_bgp_instance" "test" {
-  depends_on = [nxos_bgp_instance.test]
+	depends_on = [nxos_bgp_instance.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

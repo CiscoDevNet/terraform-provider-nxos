@@ -30,17 +30,17 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosHMMInterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm_interface.test", "interface_id", "vlan10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm_interface.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm_interface.test", "mode", "anycastGW"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosHMMInterfacePrerequisitesConfig + testAccDataSourceNxosHMMInterfaceConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_hmm_interface.test", "interface_id", "vlan10"),
-					resource.TestCheckResourceAttr("data.nxos_hmm_interface.test", "admin_state", "enabled"),
-					resource.TestCheckResourceAttr("data.nxos_hmm_interface.test", "mode", "anycastGW"),
-				),
+				Config: testAccDataSourceNxosHMMInterfacePrerequisitesConfig + testAccDataSourceNxosHMMInterfaceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -107,19 +107,21 @@ resource "nxos_rest" "PreReq5" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosHMMInterfaceConfig = `
+func testAccDataSourceNxosHMMInterfaceConfig() string {
+	config := `resource "nxos_hmm_interface" "test" {` + "\n"
+	config += `	interface_id = "vlan10"` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	mode = "anycastGW"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_hmm_interface" "test" {
-  interface_id = "vlan10"
-  admin_state = "enabled"
-  mode = "anycastGW"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]
-}
-
+	config += `
 data "nxos_hmm_interface" "test" {
-  interface_id = "vlan10"
-  depends_on = [nxos_hmm_interface.test]
+	interface_id = "vlan10"
+	depends_on = [nxos_hmm_interface.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

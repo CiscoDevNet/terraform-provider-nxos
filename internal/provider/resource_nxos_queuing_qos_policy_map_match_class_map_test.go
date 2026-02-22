@@ -34,6 +34,9 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosQueuingQOSPolicyMapMatchClassMap(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos_policy_map_match_class_map.test", "policy_map_name", "PM1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos_policy_map_match_class_map.test", "name", "c-out-q1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,10 +47,7 @@ func TestAccNxosQueuingQOSPolicyMapMatchClassMap(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosQueuingQOSPolicyMapMatchClassMapPrerequisitesConfig + testAccNxosQueuingQOSPolicyMapMatchClassMapConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_queuing_qos_policy_map_match_class_map.test", "policy_map_name", "PM1"),
-					resource.TestCheckResourceAttr("nxos_queuing_qos_policy_map_match_class_map.test", "name", "c-out-q1"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_queuing_qos_policy_map_match_class_map.test",
@@ -96,26 +96,24 @@ resource "nxos_rest" "PreReq0" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosQueuingQOSPolicyMapMatchClassMapConfig_minimum() string {
-	return `
-	resource "nxos_queuing_qos_policy_map_match_class_map" "test" {
-		policy_map_name = "PM1"
-		name = "c-out-q1"
-  		depends_on = [nxos_rest.PreReq0, ]
-	}
-	`
+	config := `resource "nxos_queuing_qos_policy_map_match_class_map" "test" {` + "\n"
+	config += `	policy_map_name = "PM1"` + "\n"
+	config += `	name = "c-out-q1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosQueuingQOSPolicyMapMatchClassMapConfig_all() string {
-	return `
-	resource "nxos_queuing_qos_policy_map_match_class_map" "test" {
-		policy_map_name = "PM1"
-		name = "c-out-q1"
-  		depends_on = [nxos_rest.PreReq0, ]
-	}
-	`
+	config := `resource "nxos_queuing_qos_policy_map_match_class_map" "test" {` + "\n"
+	config += `	policy_map_name = "PM1"` + "\n"
+	config += `	name = "c-out-q1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

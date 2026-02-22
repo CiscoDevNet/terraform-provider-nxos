@@ -34,6 +34,18 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosNVEInterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nve_interface.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nve_interface.test", "advertise_virtual_mac", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nve_interface.test", "hold_down_time", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nve_interface.test", "host_reachability_protocol", "bgp"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nve_interface.test", "ingress_replication_protocol_bgp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nve_interface.test", "multicast_group_l2", "0.0.0.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nve_interface.test", "multicast_group_l3", "0.0.0.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nve_interface.test", "multisite_source_interface", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nve_interface.test", "source_interface", "lo0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nve_interface.test", "suppress_arp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nve_interface.test", "suppress_mac_route", "false"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,19 +56,7 @@ func TestAccNxosNVEInterface(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosNVEInterfacePrerequisitesConfig + testAccNxosNVEInterfaceConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_nve_interface.test", "admin_state", "enabled"),
-					resource.TestCheckResourceAttr("nxos_nve_interface.test", "advertise_virtual_mac", "true"),
-					resource.TestCheckResourceAttr("nxos_nve_interface.test", "hold_down_time", "60"),
-					resource.TestCheckResourceAttr("nxos_nve_interface.test", "host_reachability_protocol", "bgp"),
-					resource.TestCheckResourceAttr("nxos_nve_interface.test", "ingress_replication_protocol_bgp", "true"),
-					resource.TestCheckResourceAttr("nxos_nve_interface.test", "multicast_group_l2", "0.0.0.0"),
-					resource.TestCheckResourceAttr("nxos_nve_interface.test", "multicast_group_l3", "0.0.0.0"),
-					resource.TestCheckResourceAttr("nxos_nve_interface.test", "multisite_source_interface", "unspecified"),
-					resource.TestCheckResourceAttr("nxos_nve_interface.test", "source_interface", "lo0"),
-					resource.TestCheckResourceAttr("nxos_nve_interface.test", "suppress_arp", "true"),
-					resource.TestCheckResourceAttr("nxos_nve_interface.test", "suppress_mac_route", "false"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_nve_interface.test",
@@ -113,33 +113,31 @@ resource "nxos_rest" "PreReq1" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosNVEInterfaceConfig_minimum() string {
-	return `
-	resource "nxos_nve_interface" "test" {
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-	}
-	`
+	config := `resource "nxos_nve_interface" "test" {` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosNVEInterfaceConfig_all() string {
-	return `
-	resource "nxos_nve_interface" "test" {
-		admin_state = "enabled"
-		advertise_virtual_mac = true
-		hold_down_time = 60
-		host_reachability_protocol = "bgp"
-		ingress_replication_protocol_bgp = true
-		multicast_group_l2 = "0.0.0.0"
-		multicast_group_l3 = "0.0.0.0"
-		multisite_source_interface = "unspecified"
-		source_interface = "lo0"
-		suppress_arp = true
-		suppress_mac_route = false
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-	}
-	`
+	config := `resource "nxos_nve_interface" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	advertise_virtual_mac = true` + "\n"
+	config += `	hold_down_time = 60` + "\n"
+	config += `	host_reachability_protocol = "bgp"` + "\n"
+	config += `	ingress_replication_protocol_bgp = true` + "\n"
+	config += `	multicast_group_l2 = "0.0.0.0"` + "\n"
+	config += `	multicast_group_l3 = "0.0.0.0"` + "\n"
+	config += `	multisite_source_interface = "unspecified"` + "\n"
+	config += `	source_interface = "lo0"` + "\n"
+	config += `	suppress_arp = true` + "\n"
+	config += `	suppress_mac_route = false` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

@@ -34,6 +34,10 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosPIMVRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim_vrf.test", "name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim_vrf.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim_vrf.test", "bfd", "true"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,11 +48,7 @@ func TestAccNxosPIMVRF(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosPIMVRFPrerequisitesConfig + testAccNxosPIMVRFConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_pim_vrf.test", "name", "default"),
-					resource.TestCheckResourceAttr("nxos_pim_vrf.test", "admin_state", "enabled"),
-					resource.TestCheckResourceAttr("nxos_pim_vrf.test", "bfd", "true"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_pim_vrf.test",
@@ -109,26 +109,24 @@ resource "nxos_rest" "PreReq2" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosPIMVRFConfig_minimum() string {
-	return `
-	resource "nxos_pim_vrf" "test" {
-		name = "default"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-	}
-	`
+	config := `resource "nxos_pim_vrf" "test" {` + "\n"
+	config += `	name = "default"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosPIMVRFConfig_all() string {
-	return `
-	resource "nxos_pim_vrf" "test" {
-		name = "default"
-		admin_state = "enabled"
-		bfd = true
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-	}
-	`
+	config := `resource "nxos_pim_vrf" "test" {` + "\n"
+	config += `	name = "default"` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	bfd = true` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

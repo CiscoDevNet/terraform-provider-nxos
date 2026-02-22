@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosDefaultQOSClassMapDSCP(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos_class_map_dscp.test", "value", "ef"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosDefaultQOSClassMapDSCPPrerequisitesConfig + testAccDataSourceNxosDefaultQOSClassMapDSCPConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_default_qos_class_map_dscp.test", "value", "ef"),
-				),
+				Config: testAccDataSourceNxosDefaultQOSClassMapDSCPPrerequisitesConfig + testAccDataSourceNxosDefaultQOSClassMapDSCPConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -61,19 +61,21 @@ resource "nxos_rest" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosDefaultQOSClassMapDSCPConfig = `
+func testAccDataSourceNxosDefaultQOSClassMapDSCPConfig() string {
+	config := `resource "nxos_default_qos_class_map_dscp" "test" {` + "\n"
+	config += `	class_map_name = "Voice"` + "\n"
+	config += `	value = "ef"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_default_qos_class_map_dscp" "test" {
-  class_map_name = "Voice"
-  value = "ef"
-  depends_on = [nxos_rest.PreReq0, ]
-}
-
+	config += `
 data "nxos_default_qos_class_map_dscp" "test" {
-  class_map_name = "Voice"
-  value = "ef"
-  depends_on = [nxos_default_qos_class_map_dscp.test]
+	class_map_name = "Voice"
+	value = "ef"
+	depends_on = [nxos_default_qos_class_map_dscp.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

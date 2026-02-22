@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosISISOverload(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_overload.test", "startup_time", "60"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosISISOverloadPrerequisitesConfig + testAccDataSourceNxosISISOverloadConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_isis_overload.test", "startup_time", "60"),
-				),
+				Config: testAccDataSourceNxosISISOverloadPrerequisitesConfig + testAccDataSourceNxosISISOverloadConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -86,20 +86,22 @@ resource "nxos_rest" "PreReq3" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosISISOverloadConfig = `
+func testAccDataSourceNxosISISOverloadConfig() string {
+	config := `resource "nxos_isis_overload" "test" {` + "\n"
+	config += `	instance_name = "ISIS1"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	startup_time = 60` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_isis_overload" "test" {
-  instance_name = "ISIS1"
-  vrf = "default"
-  startup_time = 60
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-}
-
+	config += `
 data "nxos_isis_overload" "test" {
-  instance_name = "ISIS1"
-  vrf = "default"
-  depends_on = [nxos_isis_overload.test]
+	instance_name = "ISIS1"
+	vrf = "default"
+	depends_on = [nxos_isis_overload.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

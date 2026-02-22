@@ -34,6 +34,13 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosBGPPeerTemplateAddressFamily(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_peer_template_address_family.test", "asn", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_peer_template_address_family.test", "template_name", "SPINE-PEERS"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_peer_template_address_family.test", "address_family", "ipv4-ucast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_peer_template_address_family.test", "control", "nh-self,rr-client"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_peer_template_address_family.test", "send_community_extended", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_peer_template_address_family.test", "send_community_standard", "enabled"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,14 +51,7 @@ func TestAccNxosBGPPeerTemplateAddressFamily(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosBGPPeerTemplateAddressFamilyPrerequisitesConfig + testAccNxosBGPPeerTemplateAddressFamilyConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_bgp_peer_template_address_family.test", "asn", "65001"),
-					resource.TestCheckResourceAttr("nxos_bgp_peer_template_address_family.test", "template_name", "SPINE-PEERS"),
-					resource.TestCheckResourceAttr("nxos_bgp_peer_template_address_family.test", "address_family", "ipv4-ucast"),
-					resource.TestCheckResourceAttr("nxos_bgp_peer_template_address_family.test", "control", "nh-self,rr-client"),
-					resource.TestCheckResourceAttr("nxos_bgp_peer_template_address_family.test", "send_community_extended", "enabled"),
-					resource.TestCheckResourceAttr("nxos_bgp_peer_template_address_family.test", "send_community_standard", "enabled"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_bgp_peer_template_address_family.test",
@@ -136,31 +136,29 @@ resource "nxos_rest" "PreReq4" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosBGPPeerTemplateAddressFamilyConfig_minimum() string {
-	return `
-	resource "nxos_bgp_peer_template_address_family" "test" {
-		asn = "65001"
-		template_name = "SPINE-PEERS"
-		address_family = "ipv4-ucast"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-	}
-	`
+	config := `resource "nxos_bgp_peer_template_address_family" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	template_name = "SPINE-PEERS"` + "\n"
+	config += `	address_family = "ipv4-ucast"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosBGPPeerTemplateAddressFamilyConfig_all() string {
-	return `
-	resource "nxos_bgp_peer_template_address_family" "test" {
-		asn = "65001"
-		template_name = "SPINE-PEERS"
-		address_family = "ipv4-ucast"
-		control = "nh-self,rr-client"
-		send_community_extended = "enabled"
-		send_community_standard = "enabled"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-	}
-	`
+	config := `resource "nxos_bgp_peer_template_address_family" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	template_name = "SPINE-PEERS"` + "\n"
+	config += `	address_family = "ipv4-ucast"` + "\n"
+	config += `	control = "nh-self,rr-client"` + "\n"
+	config += `	send_community_extended = "enabled"` + "\n"
+	config += `	send_community_standard = "enabled"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

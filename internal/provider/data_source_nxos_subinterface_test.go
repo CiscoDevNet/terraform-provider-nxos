@@ -30,23 +30,23 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosSubinterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface.test", "interface_id", "eth1/10.124"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface.test", "admin_state", "down"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface.test", "bandwidth", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface.test", "delay", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface.test", "description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface.test", "encap", "vlan-124"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface.test", "link_logging", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface.test", "medium", "broadcast"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface.test", "mtu", "1500"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosSubinterfacePrerequisitesConfig + testAccDataSourceNxosSubinterfaceConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_subinterface.test", "interface_id", "eth1/10.124"),
-					resource.TestCheckResourceAttr("data.nxos_subinterface.test", "admin_state", "down"),
-					resource.TestCheckResourceAttr("data.nxos_subinterface.test", "bandwidth", "1000"),
-					resource.TestCheckResourceAttr("data.nxos_subinterface.test", "delay", "10"),
-					resource.TestCheckResourceAttr("data.nxos_subinterface.test", "description", "My Description"),
-					resource.TestCheckResourceAttr("data.nxos_subinterface.test", "encap", "vlan-124"),
-					resource.TestCheckResourceAttr("data.nxos_subinterface.test", "link_logging", "enable"),
-					resource.TestCheckResourceAttr("data.nxos_subinterface.test", "medium", "broadcast"),
-					resource.TestCheckResourceAttr("data.nxos_subinterface.test", "mtu", "1500"),
-				),
+				Config: testAccDataSourceNxosSubinterfacePrerequisitesConfig + testAccDataSourceNxosSubinterfaceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -70,25 +70,27 @@ resource "nxos_rest" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosSubinterfaceConfig = `
+func testAccDataSourceNxosSubinterfaceConfig() string {
+	config := `resource "nxos_subinterface" "test" {` + "\n"
+	config += `	interface_id = "eth1/10.124"` + "\n"
+	config += `	admin_state = "down"` + "\n"
+	config += `	bandwidth = 1000` + "\n"
+	config += `	delay = 10` + "\n"
+	config += `	description = "My Description"` + "\n"
+	config += `	encap = "vlan-124"` + "\n"
+	config += `	link_logging = "enable"` + "\n"
+	config += `	medium = "broadcast"` + "\n"
+	config += `	mtu = 1500` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_subinterface" "test" {
-  interface_id = "eth1/10.124"
-  admin_state = "down"
-  bandwidth = 1000
-  delay = 10
-  description = "My Description"
-  encap = "vlan-124"
-  link_logging = "enable"
-  medium = "broadcast"
-  mtu = 1500
-  depends_on = [nxos_rest.PreReq0, ]
-}
-
+	config += `
 data "nxos_subinterface" "test" {
-  interface_id = "eth1/10.124"
-  depends_on = [nxos_subinterface.test]
+	interface_id = "eth1/10.124"
+	depends_on = [nxos_subinterface.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

@@ -34,6 +34,35 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosIPv4AccessList(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "name", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.sequence", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.ack", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.action", "permit"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.dscp", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.destination_port_1", "443"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.destination_port_2", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.destination_port_operator", "eq"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.destination_prefix", "10.1.1.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.destination_prefix_length", "24"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.established", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.fin", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.fragment", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.http_option_type", "invalid"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.icmp_code", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.icmp_type", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.log", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.protocol", "tcp"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.psh", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.rev", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.rst", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.source_port_1", "443"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.source_port_2", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.source_port_operator", "eq"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.source_prefix", "20.1.0.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.source_prefix_length", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.syn", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.urg", "false"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,36 +73,7 @@ func TestAccNxosIPv4AccessList(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosIPv4AccessListConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "name", "ACL1"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.sequence", "10"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.ack", "false"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.action", "permit"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.dscp", "0"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.destination_port_1", "443"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.destination_port_2", "0"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.destination_port_operator", "eq"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.destination_prefix", "10.1.1.0"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.destination_prefix_length", "24"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.established", "false"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.fin", "false"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.fragment", "false"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.http_option_type", "invalid"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.icmp_code", "0"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.icmp_type", "0"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.log", "true"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.protocol", "tcp"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.psh", "false"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.rev", "false"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.rst", "false"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.source_port_1", "443"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.source_port_2", "0"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.source_port_operator", "eq"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.source_prefix", "20.1.0.0"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.source_prefix_length", "16"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.syn", "false"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list.test", "entries.0.urg", "false"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_ipv4_access_list.test",
@@ -111,51 +111,49 @@ func nxosIPv4AccessListImportStateIdFunc(resourceName string) resource.ImportSta
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosIPv4AccessListConfig_minimum() string {
-	return `
-	resource "nxos_ipv4_access_list" "test" {
-		name = "ACL1"
-	}
-	`
+	config := `resource "nxos_ipv4_access_list" "test" {` + "\n"
+	config += `	name = "ACL1"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosIPv4AccessListConfig_all() string {
-	return `
-	resource "nxos_ipv4_access_list" "test" {
-		name = "ACL1"
-		entries = [{
-			sequence = 10
-			ack = false
-			action = "permit"
-			dscp = 0
-			destination_port_1 = "443"
-			destination_port_2 = "0"
-			destination_port_operator = "eq"
-			destination_prefix = "10.1.1.0"
-			destination_prefix_length = "24"
-			established = false
-			fin = false
-			fragment = false
-			http_option_type = "invalid"
-			icmp_code = 0
-			icmp_type = 0
-			log = true
-			protocol = "tcp"
-			psh = false
-			rev = false
-			rst = false
-			source_port_1 = "443"
-			source_port_2 = "0"
-			source_port_operator = "eq"
-			source_prefix = "20.1.0.0"
-			source_prefix_length = "16"
-			syn = false
-			urg = false
-		}]
-	}
-	`
+	config := `resource "nxos_ipv4_access_list" "test" {` + "\n"
+	config += `	name = "ACL1"` + "\n"
+	config += `	entries = [{` + "\n"
+	config += `		sequence = 10` + "\n"
+	config += `		ack = false` + "\n"
+	config += `		action = "permit"` + "\n"
+	config += `		dscp = 0` + "\n"
+	config += `		destination_port_1 = "443"` + "\n"
+	config += `		destination_port_2 = "0"` + "\n"
+	config += `		destination_port_operator = "eq"` + "\n"
+	config += `		destination_prefix = "10.1.1.0"` + "\n"
+	config += `		destination_prefix_length = "24"` + "\n"
+	config += `		established = false` + "\n"
+	config += `		fin = false` + "\n"
+	config += `		fragment = false` + "\n"
+	config += `		http_option_type = "invalid"` + "\n"
+	config += `		icmp_code = 0` + "\n"
+	config += `		icmp_type = 0` + "\n"
+	config += `		log = true` + "\n"
+	config += `		protocol = "tcp"` + "\n"
+	config += `		psh = false` + "\n"
+	config += `		rev = false` + "\n"
+	config += `		rst = false` + "\n"
+	config += `		source_port_1 = "443"` + "\n"
+	config += `		source_port_2 = "0"` + "\n"
+	config += `		source_port_operator = "eq"` + "\n"
+	config += `		source_prefix = "20.1.0.0"` + "\n"
+	config += `		source_prefix_length = "16"` + "\n"
+	config += `		syn = false` + "\n"
+	config += `		urg = false` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

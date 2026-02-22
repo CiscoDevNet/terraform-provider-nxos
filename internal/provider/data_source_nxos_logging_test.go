@@ -30,18 +30,18 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosLogging(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_logging.test", "facilities.*", map[string]string{
+		"name":  "spanning-tree",
+		"level": "information",
+	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosLoggingConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckTypeSetElemNestedAttrs("data.nxos_logging.test", "facilities.*", map[string]string{
-						"name":  "spanning-tree",
-						"level": "information",
-					}),
-				),
+				Config: testAccDataSourceNxosLoggingConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -54,20 +54,22 @@ func TestAccDataSourceNxosLogging(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosLoggingConfig = `
+func testAccDataSourceNxosLoggingConfig() string {
+	config := `resource "nxos_logging" "test" {` + "\n"
+	config += `	all = "unspecified"` + "\n"
+	config += `	level = "information"` + "\n"
+	config += `	facilities = [{` + "\n"
+	config += `		name = "spanning-tree"` + "\n"
+	config += `		level = "information"` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_logging" "test" {
-  all = "unspecified"
-  level = "information"
-  facilities = [{
-    name = "spanning-tree"
-    level = "information"
-  }]
-}
-
+	config += `
 data "nxos_logging" "test" {
-  depends_on = [nxos_logging.test]
+	depends_on = [nxos_logging.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

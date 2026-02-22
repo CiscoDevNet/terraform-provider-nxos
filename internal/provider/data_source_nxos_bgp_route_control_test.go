@@ -30,18 +30,18 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosBGPRouteControl(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_route_control.test", "enforce_first_as", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_route_control.test", "fib_accelerate", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_route_control.test", "log_neighbor_changes", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_route_control.test", "suppress_routes", "disabled"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosBGPRouteControlPrerequisitesConfig + testAccDataSourceNxosBGPRouteControlConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_bgp_route_control.test", "enforce_first_as", "disabled"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_route_control.test", "fib_accelerate", "enabled"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_route_control.test", "log_neighbor_changes", "enabled"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_route_control.test", "suppress_routes", "disabled"),
-				),
+				Config: testAccDataSourceNxosBGPRouteControlPrerequisitesConfig + testAccDataSourceNxosBGPRouteControlConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -90,23 +90,25 @@ resource "nxos_rest" "PreReq3" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosBGPRouteControlConfig = `
+func testAccDataSourceNxosBGPRouteControlConfig() string {
+	config := `resource "nxos_bgp_route_control" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	enforce_first_as = "disabled"` + "\n"
+	config += `	fib_accelerate = "enabled"` + "\n"
+	config += `	log_neighbor_changes = "enabled"` + "\n"
+	config += `	suppress_routes = "disabled"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_bgp_route_control" "test" {
-  asn = "65001"
-  vrf = "default"
-  enforce_first_as = "disabled"
-  fib_accelerate = "enabled"
-  log_neighbor_changes = "enabled"
-  suppress_routes = "disabled"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-}
-
+	config += `
 data "nxos_bgp_route_control" "test" {
-  asn = "65001"
-  vrf = "default"
-  depends_on = [nxos_bgp_route_control.test]
+	asn = "65001"
+	vrf = "default"
+	depends_on = [nxos_bgp_route_control.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

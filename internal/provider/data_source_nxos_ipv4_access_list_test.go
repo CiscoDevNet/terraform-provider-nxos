@@ -30,44 +30,44 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosIPv4AccessList(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4_access_list.test", "name", "ACL1"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv4_access_list.test", "entries.*", map[string]string{
+		"sequence":                  "10",
+		"ack":                       "false",
+		"action":                    "permit",
+		"dscp":                      "0",
+		"destination_port_1":        "443",
+		"destination_port_2":        "0",
+		"destination_port_operator": "eq",
+		"destination_prefix":        "10.1.1.0",
+		"destination_prefix_length": "24",
+		"established":               "false",
+		"fin":                       "false",
+		"fragment":                  "false",
+		"http_option_type":          "invalid",
+		"icmp_code":                 "0",
+		"icmp_type":                 "0",
+		"log":                       "true",
+		"protocol":                  "tcp",
+		"psh":                       "false",
+		"rev":                       "false",
+		"rst":                       "false",
+		"source_port_1":             "443",
+		"source_port_2":             "0",
+		"source_port_operator":      "eq",
+		"source_prefix":             "20.1.0.0",
+		"source_prefix_length":      "16",
+		"syn":                       "false",
+		"urg":                       "false",
+	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosIPv4AccessListConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_ipv4_access_list.test", "name", "ACL1"),
-					resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv4_access_list.test", "entries.*", map[string]string{
-						"sequence":                  "10",
-						"ack":                       "false",
-						"action":                    "permit",
-						"dscp":                      "0",
-						"destination_port_1":        "443",
-						"destination_port_2":        "0",
-						"destination_port_operator": "eq",
-						"destination_prefix":        "10.1.1.0",
-						"destination_prefix_length": "24",
-						"established":               "false",
-						"fin":                       "false",
-						"fragment":                  "false",
-						"http_option_type":          "invalid",
-						"icmp_code":                 "0",
-						"icmp_type":                 "0",
-						"log":                       "true",
-						"protocol":                  "tcp",
-						"psh":                       "false",
-						"rev":                       "false",
-						"rst":                       "false",
-						"source_port_1":             "443",
-						"source_port_2":             "0",
-						"source_port_operator":      "eq",
-						"source_prefix":             "20.1.0.0",
-						"source_prefix_length":      "16",
-						"syn":                       "false",
-						"urg":                       "false",
-					}),
-				),
+				Config: testAccDataSourceNxosIPv4AccessListConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -80,45 +80,47 @@ func TestAccDataSourceNxosIPv4AccessList(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosIPv4AccessListConfig = `
+func testAccDataSourceNxosIPv4AccessListConfig() string {
+	config := `resource "nxos_ipv4_access_list" "test" {` + "\n"
+	config += `	name = "ACL1"` + "\n"
+	config += `	entries = [{` + "\n"
+	config += `		sequence = 10` + "\n"
+	config += `		ack = false` + "\n"
+	config += `		action = "permit"` + "\n"
+	config += `		dscp = 0` + "\n"
+	config += `		destination_port_1 = "443"` + "\n"
+	config += `		destination_port_2 = "0"` + "\n"
+	config += `		destination_port_operator = "eq"` + "\n"
+	config += `		destination_prefix = "10.1.1.0"` + "\n"
+	config += `		destination_prefix_length = "24"` + "\n"
+	config += `		established = false` + "\n"
+	config += `		fin = false` + "\n"
+	config += `		fragment = false` + "\n"
+	config += `		http_option_type = "invalid"` + "\n"
+	config += `		icmp_code = 0` + "\n"
+	config += `		icmp_type = 0` + "\n"
+	config += `		log = true` + "\n"
+	config += `		protocol = "tcp"` + "\n"
+	config += `		psh = false` + "\n"
+	config += `		rev = false` + "\n"
+	config += `		rst = false` + "\n"
+	config += `		source_port_1 = "443"` + "\n"
+	config += `		source_port_2 = "0"` + "\n"
+	config += `		source_port_operator = "eq"` + "\n"
+	config += `		source_prefix = "20.1.0.0"` + "\n"
+	config += `		source_prefix_length = "16"` + "\n"
+	config += `		syn = false` + "\n"
+	config += `		urg = false` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_ipv4_access_list" "test" {
-  name = "ACL1"
-  entries = [{
-    sequence = 10
-    ack = false
-    action = "permit"
-    dscp = 0
-    destination_port_1 = "443"
-    destination_port_2 = "0"
-    destination_port_operator = "eq"
-    destination_prefix = "10.1.1.0"
-    destination_prefix_length = "24"
-    established = false
-    fin = false
-    fragment = false
-    http_option_type = "invalid"
-    icmp_code = 0
-    icmp_type = 0
-    log = true
-    protocol = "tcp"
-    psh = false
-    rev = false
-    rst = false
-    source_port_1 = "443"
-    source_port_2 = "0"
-    source_port_operator = "eq"
-    source_prefix = "20.1.0.0"
-    source_prefix_length = "16"
-    syn = false
-    urg = false
-  }]
-}
-
+	config += `
 data "nxos_ipv4_access_list" "test" {
-  name = "ACL1"
-  depends_on = [nxos_ipv4_access_list.test]
+	name = "ACL1"
+	depends_on = [nxos_ipv4_access_list.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

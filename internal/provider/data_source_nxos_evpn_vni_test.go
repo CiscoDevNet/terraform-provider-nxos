@@ -30,16 +30,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosEVPNVNI(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_evpn_vni.test", "encap", "vxlan-123456"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_evpn_vni.test", "route_distinguisher", "rd:unknown:0:0"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosEVPNVNIPrerequisitesConfig + testAccDataSourceNxosEVPNVNIConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_evpn_vni.test", "encap", "vxlan-123456"),
-					resource.TestCheckResourceAttr("data.nxos_evpn_vni.test", "route_distinguisher", "rd:unknown:0:0"),
-				),
+				Config: testAccDataSourceNxosEVPNVNIPrerequisitesConfig + testAccDataSourceNxosEVPNVNIConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -82,18 +82,20 @@ resource "nxos_rest" "PreReq2" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosEVPNVNIConfig = `
+func testAccDataSourceNxosEVPNVNIConfig() string {
+	config := `resource "nxos_evpn_vni" "test" {` + "\n"
+	config += `	encap = "vxlan-123456"` + "\n"
+	config += `	route_distinguisher = "rd:unknown:0:0"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_evpn_vni" "test" {
-  encap = "vxlan-123456"
-  route_distinguisher = "rd:unknown:0:0"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-}
-
+	config += `
 data "nxos_evpn_vni" "test" {
-  encap = "vxlan-123456"
-  depends_on = [nxos_evpn_vni.test]
+	encap = "vxlan-123456"
+	depends_on = [nxos_evpn_vni.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

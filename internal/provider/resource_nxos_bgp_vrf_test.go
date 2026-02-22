@@ -34,6 +34,10 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosBGPVRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_vrf.test", "asn", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_vrf.test", "name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_vrf.test", "router_id", "1.1.1.1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,11 +48,7 @@ func TestAccNxosBGPVRF(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosBGPVRFPrerequisitesConfig + testAccNxosBGPVRFConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_bgp_vrf.test", "asn", "65001"),
-					resource.TestCheckResourceAttr("nxos_bgp_vrf.test", "name", "default"),
-					resource.TestCheckResourceAttr("nxos_bgp_vrf.test", "router_id", "1.1.1.1"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_bgp_vrf.test",
@@ -114,27 +114,25 @@ resource "nxos_rest" "PreReq2" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosBGPVRFConfig_minimum() string {
-	return `
-	resource "nxos_bgp_vrf" "test" {
-		asn = "65001"
-		name = "default"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-	}
-	`
+	config := `resource "nxos_bgp_vrf" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	name = "default"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosBGPVRFConfig_all() string {
-	return `
-	resource "nxos_bgp_vrf" "test" {
-		asn = "65001"
-		name = "default"
-		router_id = "1.1.1.1"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-	}
-	`
+	config := `resource "nxos_bgp_vrf" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	name = "default"` + "\n"
+	config += `	router_id = "1.1.1.1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

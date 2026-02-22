@@ -30,24 +30,24 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosOSPFInterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_interface.test", "interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_interface.test", "advertise_secondaries", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_interface.test", "area", "0.0.0.10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_interface.test", "bfd", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_interface.test", "cost", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_interface.test", "dead_interval", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_interface.test", "hello_interval", "15"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_interface.test", "network_type", "p2p"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_interface.test", "passive", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_interface.test", "priority", "10"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosOSPFInterfacePrerequisitesConfig + testAccDataSourceNxosOSPFInterfaceConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_ospf_interface.test", "interface_id", "eth1/10"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_interface.test", "advertise_secondaries", "false"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_interface.test", "area", "0.0.0.10"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_interface.test", "bfd", "disabled"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_interface.test", "cost", "1000"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_interface.test", "dead_interval", "60"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_interface.test", "hello_interval", "15"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_interface.test", "network_type", "p2p"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_interface.test", "passive", "enabled"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_interface.test", "priority", "10"),
-				),
+				Config: testAccDataSourceNxosOSPFInterfacePrerequisitesConfig + testAccDataSourceNxosOSPFInterfaceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -122,30 +122,32 @@ resource "nxos_rest" "PreReq6" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosOSPFInterfaceConfig = `
+func testAccDataSourceNxosOSPFInterfaceConfig() string {
+	config := `resource "nxos_ospf_interface" "test" {` + "\n"
+	config += `	instance_name = "OSPF1"` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `	advertise_secondaries = false` + "\n"
+	config += `	area = "0.0.0.10"` + "\n"
+	config += `	bfd = "disabled"` + "\n"
+	config += `	cost = 1000` + "\n"
+	config += `	dead_interval = 60` + "\n"
+	config += `	hello_interval = 15` + "\n"
+	config += `	network_type = "p2p"` + "\n"
+	config += `	passive = "enabled"` + "\n"
+	config += `	priority = 10` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_ospf_interface" "test" {
-  instance_name = "OSPF1"
-  vrf_name = "VRF1"
-  interface_id = "eth1/10"
-  advertise_secondaries = false
-  area = "0.0.0.10"
-  bfd = "disabled"
-  cost = 1000
-  dead_interval = 60
-  hello_interval = 15
-  network_type = "p2p"
-  passive = "enabled"
-  priority = 10
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, ]
-}
-
+	config += `
 data "nxos_ospf_interface" "test" {
-  instance_name = "OSPF1"
-  vrf_name = "VRF1"
-  interface_id = "eth1/10"
-  depends_on = [nxos_ospf_interface.test]
+	instance_name = "OSPF1"
+	vrf_name = "VRF1"
+	interface_id = "eth1/10"
+	depends_on = [nxos_ospf_interface.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

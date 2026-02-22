@@ -34,6 +34,13 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosBGPRouteControl(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_route_control.test", "asn", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_route_control.test", "vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_route_control.test", "enforce_first_as", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_route_control.test", "fib_accelerate", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_route_control.test", "log_neighbor_changes", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_route_control.test", "suppress_routes", "disabled"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,14 +51,7 @@ func TestAccNxosBGPRouteControl(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosBGPRouteControlPrerequisitesConfig + testAccNxosBGPRouteControlConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_bgp_route_control.test", "asn", "65001"),
-					resource.TestCheckResourceAttr("nxos_bgp_route_control.test", "vrf", "default"),
-					resource.TestCheckResourceAttr("nxos_bgp_route_control.test", "enforce_first_as", "disabled"),
-					resource.TestCheckResourceAttr("nxos_bgp_route_control.test", "fib_accelerate", "enabled"),
-					resource.TestCheckResourceAttr("nxos_bgp_route_control.test", "log_neighbor_changes", "enabled"),
-					resource.TestCheckResourceAttr("nxos_bgp_route_control.test", "suppress_routes", "disabled"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_bgp_route_control.test",
@@ -126,30 +126,28 @@ resource "nxos_rest" "PreReq3" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosBGPRouteControlConfig_minimum() string {
-	return `
-	resource "nxos_bgp_route_control" "test" {
-		asn = "65001"
-		vrf = "default"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_bgp_route_control" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosBGPRouteControlConfig_all() string {
-	return `
-	resource "nxos_bgp_route_control" "test" {
-		asn = "65001"
-		vrf = "default"
-		enforce_first_as = "disabled"
-		fib_accelerate = "enabled"
-		log_neighbor_changes = "enabled"
-		suppress_routes = "disabled"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_bgp_route_control" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	enforce_first_as = "disabled"` + "\n"
+	config += `	fib_accelerate = "enabled"` + "\n"
+	config += `	log_neighbor_changes = "enabled"` + "\n"
+	config += `	suppress_routes = "disabled"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

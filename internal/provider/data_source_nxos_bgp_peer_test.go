@@ -30,24 +30,24 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosBGPPeer(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "address", "192.168.0.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "remote_asn", "65002"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "description", "My description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "peer_template", "SPINE-PEERS"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "peer_type", "fabric-internal"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "source_interface", "lo0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "hold_time", "45"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "keepalive", "15"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "ebgp_multihop_ttl", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "peer_control", "bfd,dis-conn-check"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosBGPPeerPrerequisitesConfig + testAccDataSourceNxosBGPPeerConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "address", "192.168.0.1"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "remote_asn", "65002"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "description", "My description"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "peer_template", "SPINE-PEERS"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "peer_type", "fabric-internal"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "source_interface", "lo0"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "hold_time", "45"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "keepalive", "15"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "ebgp_multihop_ttl", "5"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer.test", "peer_control", "bfd,dis-conn-check"),
-				),
+				Config: testAccDataSourceNxosBGPPeerPrerequisitesConfig + testAccDataSourceNxosBGPPeerConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -106,31 +106,33 @@ resource "nxos_rest" "PreReq4" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosBGPPeerConfig = `
+func testAccDataSourceNxosBGPPeerConfig() string {
+	config := `resource "nxos_bgp_peer" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	address = "192.168.0.1"` + "\n"
+	config += `	remote_asn = "65002"` + "\n"
+	config += `	description = "My description"` + "\n"
+	config += `	peer_template = "SPINE-PEERS"` + "\n"
+	config += `	peer_type = "fabric-internal"` + "\n"
+	config += `	source_interface = "lo0"` + "\n"
+	config += `	hold_time = 45` + "\n"
+	config += `	keepalive = 15` + "\n"
+	config += `	ebgp_multihop_ttl = 5` + "\n"
+	config += `	peer_control = "bfd,dis-conn-check"` + "\n"
+	config += `	password = "secret_password"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_bgp_peer" "test" {
-  asn = "65001"
-  vrf = "default"
-  address = "192.168.0.1"
-  remote_asn = "65002"
-  description = "My description"
-  peer_template = "SPINE-PEERS"
-  peer_type = "fabric-internal"
-  source_interface = "lo0"
-  hold_time = 45
-  keepalive = 15
-  ebgp_multihop_ttl = 5
-  peer_control = "bfd,dis-conn-check"
-  password = "secret_password"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-}
-
+	config += `
 data "nxos_bgp_peer" "test" {
-  asn = "65001"
-  vrf = "default"
-  address = "192.168.0.1"
-  depends_on = [nxos_bgp_peer.test]
+	asn = "65001"
+	vrf = "default"
+	address = "192.168.0.1"
+	depends_on = [nxos_bgp_peer.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

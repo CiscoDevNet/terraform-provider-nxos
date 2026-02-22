@@ -34,6 +34,10 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosRouteMapRuleEntrySetRegularCommunityItem(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_map_rule_entry_set_regular_community_item.test", "rule_name", "RULE1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_map_rule_entry_set_regular_community_item.test", "order", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_map_rule_entry_set_regular_community_item.test", "community", "regular:as2-nn2:65001:123"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,11 +48,7 @@ func TestAccNxosRouteMapRuleEntrySetRegularCommunityItem(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosRouteMapRuleEntrySetRegularCommunityItemPrerequisitesConfig + testAccNxosRouteMapRuleEntrySetRegularCommunityItemConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_route_map_rule_entry_set_regular_community_item.test", "rule_name", "RULE1"),
-					resource.TestCheckResourceAttr("nxos_route_map_rule_entry_set_regular_community_item.test", "order", "10"),
-					resource.TestCheckResourceAttr("nxos_route_map_rule_entry_set_regular_community_item.test", "community", "regular:as2-nn2:65001:123"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_route_map_rule_entry_set_regular_community_item.test",
@@ -113,28 +113,26 @@ resource "nxos_rest" "PreReq2" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosRouteMapRuleEntrySetRegularCommunityItemConfig_minimum() string {
-	return `
-	resource "nxos_route_map_rule_entry_set_regular_community_item" "test" {
-		rule_name = "RULE1"
-		order = 10
-		community = "regular:as2-nn2:65001:123"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-	}
-	`
+	config := `resource "nxos_route_map_rule_entry_set_regular_community_item" "test" {` + "\n"
+	config += `	rule_name = "RULE1"` + "\n"
+	config += `	order = 10` + "\n"
+	config += `	community = "regular:as2-nn2:65001:123"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosRouteMapRuleEntrySetRegularCommunityItemConfig_all() string {
-	return `
-	resource "nxos_route_map_rule_entry_set_regular_community_item" "test" {
-		rule_name = "RULE1"
-		order = 10
-		community = "regular:as2-nn2:65001:123"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-	}
-	`
+	config := `resource "nxos_route_map_rule_entry_set_regular_community_item" "test" {` + "\n"
+	config += `	rule_name = "RULE1"` + "\n"
+	config += `	order = 10` + "\n"
+	config += `	community = "regular:as2-nn2:65001:123"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

@@ -34,6 +34,11 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosBGPGracefulRestart(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_graceful_restart.test", "asn", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_graceful_restart.test", "vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_graceful_restart.test", "restart_interval", "240"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_graceful_restart.test", "stale_interval", "1800"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,12 +49,7 @@ func TestAccNxosBGPGracefulRestart(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosBGPGracefulRestartPrerequisitesConfig + testAccNxosBGPGracefulRestartConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_bgp_graceful_restart.test", "asn", "65001"),
-					resource.TestCheckResourceAttr("nxos_bgp_graceful_restart.test", "vrf", "default"),
-					resource.TestCheckResourceAttr("nxos_bgp_graceful_restart.test", "restart_interval", "240"),
-					resource.TestCheckResourceAttr("nxos_bgp_graceful_restart.test", "stale_interval", "1800"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_bgp_graceful_restart.test",
@@ -124,28 +124,26 @@ resource "nxos_rest" "PreReq3" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosBGPGracefulRestartConfig_minimum() string {
-	return `
-	resource "nxos_bgp_graceful_restart" "test" {
-		asn = "65001"
-		vrf = "default"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_bgp_graceful_restart" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosBGPGracefulRestartConfig_all() string {
-	return `
-	resource "nxos_bgp_graceful_restart" "test" {
-		asn = "65001"
-		vrf = "default"
-		restart_interval = 240
-		stale_interval = 1800
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_bgp_graceful_restart" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	restart_interval = 240` + "\n"
+	config += `	stale_interval = 1800` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

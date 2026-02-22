@@ -30,22 +30,22 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosOSPFVRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "log_adjacency_changes", "brief"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "bandwidth_reference", "400000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "bandwidth_reference_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "distance", "110"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "router_id", "34.56.78.90"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "control", "bfd,default-passive"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosOSPFVRFPrerequisitesConfig + testAccDataSourceNxosOSPFVRFConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "name", "VRF1"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "log_adjacency_changes", "brief"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "admin_state", "enabled"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "bandwidth_reference", "400000"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "bandwidth_reference_unit", "mbps"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "distance", "110"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "router_id", "34.56.78.90"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_vrf.test", "control", "bfd,default-passive"),
-				),
+				Config: testAccDataSourceNxosOSPFVRFPrerequisitesConfig + testAccDataSourceNxosOSPFVRFConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -94,26 +94,28 @@ resource "nxos_rest" "PreReq3" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosOSPFVRFConfig = `
+func testAccDataSourceNxosOSPFVRFConfig() string {
+	config := `resource "nxos_ospf_vrf" "test" {` + "\n"
+	config += `	instance_name = "OSPF1"` + "\n"
+	config += `	name = "VRF1"` + "\n"
+	config += `	log_adjacency_changes = "brief"` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	bandwidth_reference = 400000` + "\n"
+	config += `	bandwidth_reference_unit = "mbps"` + "\n"
+	config += `	distance = 110` + "\n"
+	config += `	router_id = "34.56.78.90"` + "\n"
+	config += `	control = "bfd,default-passive"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_ospf_vrf" "test" {
-  instance_name = "OSPF1"
-  name = "VRF1"
-  log_adjacency_changes = "brief"
-  admin_state = "enabled"
-  bandwidth_reference = 400000
-  bandwidth_reference_unit = "mbps"
-  distance = 110
-  router_id = "34.56.78.90"
-  control = "bfd,default-passive"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-}
-
+	config += `
 data "nxos_ospf_vrf" "test" {
-  instance_name = "OSPF1"
-  name = "VRF1"
-  depends_on = [nxos_ospf_vrf.test]
+	instance_name = "OSPF1"
+	name = "VRF1"
+	depends_on = [nxos_ospf_vrf.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

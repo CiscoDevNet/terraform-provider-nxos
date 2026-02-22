@@ -30,16 +30,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosDHCPRelayAddress(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp_relay_address.test", "vrf", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp_relay_address.test", "address", "1.1.1.1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosDHCPRelayAddressPrerequisitesConfig + testAccDataSourceNxosDHCPRelayAddressConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_dhcp_relay_address.test", "vrf", "VRF1"),
-					resource.TestCheckResourceAttr("data.nxos_dhcp_relay_address.test", "address", "1.1.1.1"),
-				),
+				Config: testAccDataSourceNxosDHCPRelayAddressPrerequisitesConfig + testAccDataSourceNxosDHCPRelayAddressConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -80,21 +80,23 @@ resource "nxos_rest" "PreReq2" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosDHCPRelayAddressConfig = `
+func testAccDataSourceNxosDHCPRelayAddressConfig() string {
+	config := `resource "nxos_dhcp_relay_address" "test" {` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `	vrf = "VRF1"` + "\n"
+	config += `	address = "1.1.1.1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_dhcp_relay_address" "test" {
-  interface_id = "eth1/10"
-  vrf = "VRF1"
-  address = "1.1.1.1"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-}
-
+	config += `
 data "nxos_dhcp_relay_address" "test" {
-  interface_id = "eth1/10"
-  vrf = "VRF1"
-  address = "1.1.1.1"
-  depends_on = [nxos_dhcp_relay_address.test]
+	interface_id = "eth1/10"
+	vrf = "VRF1"
+	address = "1.1.1.1"
+	depends_on = [nxos_dhcp_relay_address.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

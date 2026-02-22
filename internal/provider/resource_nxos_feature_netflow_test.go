@@ -38,6 +38,8 @@ func TestAccNxosFeatureNetflow(t *testing.T) {
 	if os.Getenv("NETFLOW") == "" {
 		t.Skip("skipping test, set environment variable NETFLOW")
 	}
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature_netflow.test", "admin_state", "enabled"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -48,9 +50,7 @@ func TestAccNxosFeatureNetflow(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosFeatureNetflowConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_feature_netflow.test", "admin_state", "enabled"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_feature_netflow.test",
@@ -86,22 +86,20 @@ func nxosFeatureNetflowImportStateIdFunc(resourceName string) resource.ImportSta
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosFeatureNetflowConfig_minimum() string {
-	return `
-	resource "nxos_feature_netflow" "test" {
-		admin_state = "enabled"
-	}
-	`
+	config := `resource "nxos_feature_netflow" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosFeatureNetflowConfig_all() string {
-	return `
-	resource "nxos_feature_netflow" "test" {
-		admin_state = "enabled"
-	}
-	`
+	config := `resource "nxos_feature_netflow" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

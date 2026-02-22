@@ -30,19 +30,19 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosOSPFv3Area(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3_area.test", "area_id", "0.0.0.10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3_area.test", "redistribute", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3_area.test", "summary", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3_area.test", "suppress_forward_address", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3_area.test", "type", "regular"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosOSPFv3AreaPrerequisitesConfig + testAccDataSourceNxosOSPFv3AreaConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_ospfv3_area.test", "area_id", "0.0.0.10"),
-					resource.TestCheckResourceAttr("data.nxos_ospfv3_area.test", "redistribute", "false"),
-					resource.TestCheckResourceAttr("data.nxos_ospfv3_area.test", "summary", "false"),
-					resource.TestCheckResourceAttr("data.nxos_ospfv3_area.test", "suppress_forward_address", "false"),
-					resource.TestCheckResourceAttr("data.nxos_ospfv3_area.test", "type", "regular"),
-				),
+				Config: testAccDataSourceNxosOSPFv3AreaPrerequisitesConfig + testAccDataSourceNxosOSPFv3AreaConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -90,25 +90,27 @@ resource "nxos_rest" "PreReq3" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosOSPFv3AreaConfig = `
+func testAccDataSourceNxosOSPFv3AreaConfig() string {
+	config := `resource "nxos_ospfv3_area" "test" {` + "\n"
+	config += `	instance_name = "nac-ospfv3"` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	area_id = "0.0.0.10"` + "\n"
+	config += `	redistribute = false` + "\n"
+	config += `	summary = false` + "\n"
+	config += `	suppress_forward_address = false` + "\n"
+	config += `	type = "regular"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_ospfv3_area" "test" {
-  instance_name = "nac-ospfv3"
-  vrf_name = "VRF1"
-  area_id = "0.0.0.10"
-  redistribute = false
-  summary = false
-  suppress_forward_address = false
-  type = "regular"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-}
-
+	config += `
 data "nxos_ospfv3_area" "test" {
-  instance_name = "nac-ospfv3"
-  vrf_name = "VRF1"
-  area_id = "0.0.0.10"
-  depends_on = [nxos_ospfv3_area.test]
+	instance_name = "nac-ospfv3"
+	vrf_name = "VRF1"
+	area_id = "0.0.0.10"
+	depends_on = [nxos_ospfv3_area.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

@@ -34,6 +34,9 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosVPCInterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_interface.test", "vpc_interface_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_interface.test", "port_channel_interface_dn", "sys/intf/aggr-[po1]"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,10 +47,7 @@ func TestAccNxosVPCInterface(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosVPCInterfacePrerequisitesConfig + testAccNxosVPCInterfaceConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_vpc_interface.test", "vpc_interface_id", "1"),
-					resource.TestCheckResourceAttr("nxos_vpc_interface.test", "port_channel_interface_dn", "sys/intf/aggr-[po1]"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_vpc_interface.test",
@@ -119,25 +119,23 @@ resource "nxos_rest" "PreReq3" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosVPCInterfaceConfig_minimum() string {
-	return `
-	resource "nxos_vpc_interface" "test" {
-		vpc_interface_id = 1
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_vpc_interface" "test" {` + "\n"
+	config += `	vpc_interface_id = 1` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosVPCInterfaceConfig_all() string {
-	return `
-	resource "nxos_vpc_interface" "test" {
-		vpc_interface_id = 1
-		port_channel_interface_dn = "sys/intf/aggr-[po1]"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_vpc_interface" "test" {` + "\n"
+	config += `	vpc_interface_id = 1` + "\n"
+	config += `	port_channel_interface_dn = "sys/intf/aggr-[po1]"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

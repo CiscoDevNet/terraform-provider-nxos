@@ -30,16 +30,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosPortChannelInterfaceMember(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface_member.test", "interface_dn", "sys/intf/phys-[eth1/11]"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface_member.test", "force", "false"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosPortChannelInterfaceMemberPrerequisitesConfig + testAccDataSourceNxosPortChannelInterfaceMemberConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_port_channel_interface_member.test", "interface_dn", "sys/intf/phys-[eth1/11]"),
-					resource.TestCheckResourceAttr("data.nxos_port_channel_interface_member.test", "force", "false"),
-				),
+				Config: testAccDataSourceNxosPortChannelInterfaceMemberPrerequisitesConfig + testAccDataSourceNxosPortChannelInterfaceMemberConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -62,20 +62,22 @@ resource "nxos_rest" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosPortChannelInterfaceMemberConfig = `
+func testAccDataSourceNxosPortChannelInterfaceMemberConfig() string {
+	config := `resource "nxos_port_channel_interface_member" "test" {` + "\n"
+	config += `	interface_id = "po1"` + "\n"
+	config += `	interface_dn = "sys/intf/phys-[eth1/11]"` + "\n"
+	config += `	force = false` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_port_channel_interface_member" "test" {
-  interface_id = "po1"
-  interface_dn = "sys/intf/phys-[eth1/11]"
-  force = false
-  depends_on = [nxos_rest.PreReq0, ]
-}
-
+	config += `
 data "nxos_port_channel_interface_member" "test" {
-  interface_id = "po1"
-  interface_dn = "sys/intf/phys-[eth1/11]"
-  depends_on = [nxos_port_channel_interface_member.test]
+	interface_id = "po1"
+	interface_dn = "sys/intf/phys-[eth1/11]"
+	depends_on = [nxos_port_channel_interface_member.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

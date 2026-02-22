@@ -34,6 +34,13 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosBGPPeerTemplate(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "asn", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "template_name", "SPINE-PEERS"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "remote_asn", "65002"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "peer_type", "fabric-internal"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "source_interface", "lo0"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,14 +51,7 @@ func TestAccNxosBGPPeerTemplate(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosBGPPeerTemplatePrerequisitesConfig + testAccNxosBGPPeerTemplateConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "asn", "65001"),
-					resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "template_name", "SPINE-PEERS"),
-					resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "remote_asn", "65002"),
-					resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "description", "My Description"),
-					resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "peer_type", "fabric-internal"),
-					resource.TestCheckResourceAttr("nxos_bgp_peer_template.test", "source_interface", "lo0"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_bgp_peer_template.test",
@@ -126,30 +126,28 @@ resource "nxos_rest" "PreReq3" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosBGPPeerTemplateConfig_minimum() string {
-	return `
-	resource "nxos_bgp_peer_template" "test" {
-		asn = "65001"
-		template_name = "SPINE-PEERS"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_bgp_peer_template" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	template_name = "SPINE-PEERS"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosBGPPeerTemplateConfig_all() string {
-	return `
-	resource "nxos_bgp_peer_template" "test" {
-		asn = "65001"
-		template_name = "SPINE-PEERS"
-		remote_asn = "65002"
-		description = "My Description"
-		peer_type = "fabric-internal"
-		source_interface = "lo0"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_bgp_peer_template" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	template_name = "SPINE-PEERS"` + "\n"
+	config += `	remote_asn = "65002"` + "\n"
+	config += `	description = "My Description"` + "\n"
+	config += `	peer_type = "fabric-internal"` + "\n"
+	config += `	source_interface = "lo0"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

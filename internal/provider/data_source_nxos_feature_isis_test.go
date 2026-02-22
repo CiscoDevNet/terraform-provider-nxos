@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosFeatureISIS(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature_isis.test", "admin_state", "enabled"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosFeatureISISConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_feature_isis.test", "admin_state", "enabled"),
-				),
+				Config: testAccDataSourceNxosFeatureISISConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -51,15 +51,17 @@ func TestAccDataSourceNxosFeatureISIS(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosFeatureISISConfig = `
+func testAccDataSourceNxosFeatureISISConfig() string {
+	config := `resource "nxos_feature_isis" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_feature_isis" "test" {
-  admin_state = "enabled"
-}
-
+	config += `
 data "nxos_feature_isis" "test" {
-  depends_on = [nxos_feature_isis.test]
+	depends_on = [nxos_feature_isis.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

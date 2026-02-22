@@ -34,6 +34,12 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosIPv6InterfaceAddress(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_interface_address.test", "vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_interface_address.test", "interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_interface_address.test", "address", "2001:db8:3333:4444:5555:6666:7777:8888"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_interface_address.test", "type", "primary"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_interface_address.test", "tag", "1234"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,13 +50,7 @@ func TestAccNxosIPv6InterfaceAddress(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosIPv6InterfaceAddressPrerequisitesConfig + testAccNxosIPv6InterfaceAddressConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ipv6_interface_address.test", "vrf", "default"),
-					resource.TestCheckResourceAttr("nxos_ipv6_interface_address.test", "interface_id", "eth1/10"),
-					resource.TestCheckResourceAttr("nxos_ipv6_interface_address.test", "address", "2001:db8:3333:4444:5555:6666:7777:8888"),
-					resource.TestCheckResourceAttr("nxos_ipv6_interface_address.test", "type", "primary"),
-					resource.TestCheckResourceAttr("nxos_ipv6_interface_address.test", "tag", "1234"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_ipv6_interface_address.test",
@@ -115,30 +115,28 @@ resource "nxos_rest" "PreReq2" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosIPv6InterfaceAddressConfig_minimum() string {
-	return `
-	resource "nxos_ipv6_interface_address" "test" {
-		vrf = "default"
-		interface_id = "eth1/10"
-		address = "2001:db8:3333:4444:5555:6666:7777:8888"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-	}
-	`
+	config := `resource "nxos_ipv6_interface_address" "test" {` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `	address = "2001:db8:3333:4444:5555:6666:7777:8888"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosIPv6InterfaceAddressConfig_all() string {
-	return `
-	resource "nxos_ipv6_interface_address" "test" {
-		vrf = "default"
-		interface_id = "eth1/10"
-		address = "2001:db8:3333:4444:5555:6666:7777:8888"
-		type = "primary"
-		tag = 1234
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-	}
-	`
+	config := `resource "nxos_ipv6_interface_address" "test" {` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `	address = "2001:db8:3333:4444:5555:6666:7777:8888"` + "\n"
+	config += `	type = "primary"` + "\n"
+	config += `	tag = 1234` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosQueuingQOSPolicySystemOutPolicyMap(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos_policy_system_out_policy_map.test", "policy_map_name", "PM1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosQueuingQOSPolicySystemOutPolicyMapPrerequisitesConfig + testAccDataSourceNxosQueuingQOSPolicySystemOutPolicyMapConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_queuing_qos_policy_system_out_policy_map.test", "policy_map_name", "PM1"),
-				),
+				Config: testAccDataSourceNxosQueuingQOSPolicySystemOutPolicyMapPrerequisitesConfig + testAccDataSourceNxosQueuingQOSPolicySystemOutPolicyMapConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -142,16 +142,18 @@ resource "nxos_rest" "PreReq9" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosQueuingQOSPolicySystemOutPolicyMapConfig = `
+func testAccDataSourceNxosQueuingQOSPolicySystemOutPolicyMapConfig() string {
+	config := `resource "nxos_queuing_qos_policy_system_out_policy_map" "test" {` + "\n"
+	config += `	policy_map_name = "PM1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, nxos_rest.PreReq7, nxos_rest.PreReq8, nxos_rest.PreReq9, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_queuing_qos_policy_system_out_policy_map" "test" {
-  policy_map_name = "PM1"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, nxos_rest.PreReq7, nxos_rest.PreReq8, nxos_rest.PreReq9, ]
-}
-
+	config += `
 data "nxos_queuing_qos_policy_system_out_policy_map" "test" {
-  depends_on = [nxos_queuing_qos_policy_system_out_policy_map.test]
+	depends_on = [nxos_queuing_qos_policy_system_out_policy_map.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

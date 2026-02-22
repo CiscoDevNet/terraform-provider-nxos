@@ -30,18 +30,18 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosBGPPeerTemplateMaxPrefix(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer_template_max_prefix.test", "action", "log"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer_template_max_prefix.test", "maximum_prefix", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer_template_max_prefix.test", "restart_time", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer_template_max_prefix.test", "threshold", "30"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosBGPPeerTemplateMaxPrefixPrerequisitesConfig + testAccDataSourceNxosBGPPeerTemplateMaxPrefixConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer_template_max_prefix.test", "action", "log"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer_template_max_prefix.test", "maximum_prefix", "10000"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer_template_max_prefix.test", "restart_time", "0"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer_template_max_prefix.test", "threshold", "30"),
-				),
+				Config: testAccDataSourceNxosBGPPeerTemplateMaxPrefixPrerequisitesConfig + testAccDataSourceNxosBGPPeerTemplateMaxPrefixConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -108,25 +108,27 @@ resource "nxos_rest" "PreReq5" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosBGPPeerTemplateMaxPrefixConfig = `
+func testAccDataSourceNxosBGPPeerTemplateMaxPrefixConfig() string {
+	config := `resource "nxos_bgp_peer_template_max_prefix" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	template_name = "SPINE-PEERS"` + "\n"
+	config += `	address_family = "ipv4-ucast"` + "\n"
+	config += `	action = "log"` + "\n"
+	config += `	maximum_prefix = 10000` + "\n"
+	config += `	restart_time = 0` + "\n"
+	config += `	threshold = 30` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_bgp_peer_template_max_prefix" "test" {
-  asn = "65001"
-  template_name = "SPINE-PEERS"
-  address_family = "ipv4-ucast"
-  action = "log"
-  maximum_prefix = 10000
-  restart_time = 0
-  threshold = 30
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]
-}
-
+	config += `
 data "nxos_bgp_peer_template_max_prefix" "test" {
-  asn = "65001"
-  template_name = "SPINE-PEERS"
-  address_family = "ipv4-ucast"
-  depends_on = [nxos_bgp_peer_template_max_prefix.test]
+	asn = "65001"
+	template_name = "SPINE-PEERS"
+	address_family = "ipv4-ucast"
+	depends_on = [nxos_bgp_peer_template_max_prefix.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

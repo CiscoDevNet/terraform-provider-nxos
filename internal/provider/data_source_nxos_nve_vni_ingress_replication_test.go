@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosNVEVNIIngressReplication(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nve_vni_ingress_replication.test", "protocol", "bgp"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosNVEVNIIngressReplicationPrerequisitesConfig + testAccDataSourceNxosNVEVNIIngressReplicationConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_nve_vni_ingress_replication.test", "protocol", "bgp"),
-				),
+				Config: testAccDataSourceNxosNVEVNIIngressReplicationPrerequisitesConfig + testAccDataSourceNxosNVEVNIIngressReplicationConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -97,18 +97,20 @@ resource "nxos_rest" "PreReq4" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosNVEVNIIngressReplicationConfig = `
+func testAccDataSourceNxosNVEVNIIngressReplicationConfig() string {
+	config := `resource "nxos_nve_vni_ingress_replication" "test" {` + "\n"
+	config += `	vni = 103100` + "\n"
+	config += `	protocol = "bgp"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_nve_vni_ingress_replication" "test" {
-  vni = 103100
-  protocol = "bgp"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-}
-
+	config += `
 data "nxos_nve_vni_ingress_replication" "test" {
-  vni = 103100
-  depends_on = [nxos_nve_vni_ingress_replication.test]
+	vni = 103100
+	depends_on = [nxos_nve_vni_ingress_replication.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

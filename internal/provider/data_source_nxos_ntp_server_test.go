@@ -30,20 +30,20 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosNTPServer(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp_server.test", "name", "1.2.3.4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp_server.test", "vrf", "management"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp_server.test", "type", "server"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp_server.test", "key_id", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp_server.test", "min_poll", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp_server.test", "max_poll", "6"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosNTPServerConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_ntp_server.test", "name", "1.2.3.4"),
-					resource.TestCheckResourceAttr("data.nxos_ntp_server.test", "vrf", "management"),
-					resource.TestCheckResourceAttr("data.nxos_ntp_server.test", "type", "server"),
-					resource.TestCheckResourceAttr("data.nxos_ntp_server.test", "key_id", "10"),
-					resource.TestCheckResourceAttr("data.nxos_ntp_server.test", "min_poll", "4"),
-					resource.TestCheckResourceAttr("data.nxos_ntp_server.test", "max_poll", "6"),
-				),
+				Config: testAccDataSourceNxosNTPServerConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -56,21 +56,23 @@ func TestAccDataSourceNxosNTPServer(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosNTPServerConfig = `
+func testAccDataSourceNxosNTPServerConfig() string {
+	config := `resource "nxos_ntp_server" "test" {` + "\n"
+	config += `	name = "1.2.3.4"` + "\n"
+	config += `	vrf = "management"` + "\n"
+	config += `	type = "server"` + "\n"
+	config += `	key_id = 10` + "\n"
+	config += `	min_poll = 4` + "\n"
+	config += `	max_poll = 6` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_ntp_server" "test" {
-  name = "1.2.3.4"
-  vrf = "management"
-  type = "server"
-  key_id = 10
-  min_poll = 4
-  max_poll = 6
-}
-
+	config += `
 data "nxos_ntp_server" "test" {
-  name = "1.2.3.4"
-  depends_on = [nxos_ntp_server.test]
+	name = "1.2.3.4"
+	depends_on = [nxos_ntp_server.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

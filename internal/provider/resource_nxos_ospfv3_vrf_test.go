@@ -34,6 +34,14 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosOSPFv3VRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_vrf.test", "instance_name", "nac-ospfv3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_vrf.test", "name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_vrf.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_vrf.test", "bandwidth_reference", "400000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_vrf.test", "bandwidth_reference_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_vrf.test", "router_id", "34.56.78.90"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_vrf.test", "bfd_control", "false"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,15 +52,7 @@ func TestAccNxosOSPFv3VRF(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosOSPFv3VRFPrerequisitesConfig + testAccNxosOSPFv3VRFConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ospfv3_vrf.test", "instance_name", "nac-ospfv3"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_vrf.test", "name", "VRF1"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_vrf.test", "admin_state", "enabled"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_vrf.test", "bandwidth_reference", "400000"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_vrf.test", "bandwidth_reference_unit", "mbps"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_vrf.test", "router_id", "34.56.78.90"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_vrf.test", "bfd_control", "false"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_ospfv3_vrf.test",
@@ -127,31 +127,29 @@ resource "nxos_rest" "PreReq3" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosOSPFv3VRFConfig_minimum() string {
-	return `
-	resource "nxos_ospfv3_vrf" "test" {
-		instance_name = "nac-ospfv3"
-		name = "VRF1"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_ospfv3_vrf" "test" {` + "\n"
+	config += `	instance_name = "nac-ospfv3"` + "\n"
+	config += `	name = "VRF1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosOSPFv3VRFConfig_all() string {
-	return `
-	resource "nxos_ospfv3_vrf" "test" {
-		instance_name = "nac-ospfv3"
-		name = "VRF1"
-		admin_state = "enabled"
-		bandwidth_reference = 400000
-		bandwidth_reference_unit = "mbps"
-		router_id = "34.56.78.90"
-		bfd_control = false
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_ospfv3_vrf" "test" {` + "\n"
+	config += `	instance_name = "nac-ospfv3"` + "\n"
+	config += `	name = "VRF1"` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	bandwidth_reference = 400000` + "\n"
+	config += `	bandwidth_reference_unit = "mbps"` + "\n"
+	config += `	router_id = "34.56.78.90"` + "\n"
+	config += `	bfd_control = false` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

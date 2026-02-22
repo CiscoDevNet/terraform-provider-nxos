@@ -34,6 +34,10 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosLoopbackInterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interface.test", "interface_id", "lo123"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interface.test", "admin_state", "down"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interface.test", "description", "My Description"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,11 +48,7 @@ func TestAccNxosLoopbackInterface(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosLoopbackInterfaceConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_loopback_interface.test", "interface_id", "lo123"),
-					resource.TestCheckResourceAttr("nxos_loopback_interface.test", "admin_state", "down"),
-					resource.TestCheckResourceAttr("nxos_loopback_interface.test", "description", "My Description"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_loopback_interface.test",
@@ -86,24 +86,22 @@ func nxosLoopbackInterfaceImportStateIdFunc(resourceName string) resource.Import
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosLoopbackInterfaceConfig_minimum() string {
-	return `
-	resource "nxos_loopback_interface" "test" {
-		interface_id = "lo123"
-	}
-	`
+	config := `resource "nxos_loopback_interface" "test" {` + "\n"
+	config += `	interface_id = "lo123"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosLoopbackInterfaceConfig_all() string {
-	return `
-	resource "nxos_loopback_interface" "test" {
-		interface_id = "lo123"
-		admin_state = "down"
-		description = "My Description"
-	}
-	`
+	config := `resource "nxos_loopback_interface" "test" {` + "\n"
+	config += `	interface_id = "lo123"` + "\n"
+	config += `	admin_state = "down"` + "\n"
+	config += `	description = "My Description"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

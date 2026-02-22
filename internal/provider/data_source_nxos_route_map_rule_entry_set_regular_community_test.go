@@ -30,17 +30,17 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosRouteMapRuleEntrySetRegularCommunity(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_map_rule_entry_set_regular_community.test", "additive", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_map_rule_entry_set_regular_community.test", "no_community", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_map_rule_entry_set_regular_community.test", "set_criteria", "none"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosRouteMapRuleEntrySetRegularCommunityPrerequisitesConfig + testAccDataSourceNxosRouteMapRuleEntrySetRegularCommunityConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_route_map_rule_entry_set_regular_community.test", "additive", "disabled"),
-					resource.TestCheckResourceAttr("data.nxos_route_map_rule_entry_set_regular_community.test", "no_community", "disabled"),
-					resource.TestCheckResourceAttr("data.nxos_route_map_rule_entry_set_regular_community.test", "set_criteria", "none"),
-				),
+				Config: testAccDataSourceNxosRouteMapRuleEntrySetRegularCommunityPrerequisitesConfig + testAccDataSourceNxosRouteMapRuleEntrySetRegularCommunityConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -72,22 +72,24 @@ resource "nxos_rest" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosRouteMapRuleEntrySetRegularCommunityConfig = `
+func testAccDataSourceNxosRouteMapRuleEntrySetRegularCommunityConfig() string {
+	config := `resource "nxos_route_map_rule_entry_set_regular_community" "test" {` + "\n"
+	config += `	rule_name = "RULE1"` + "\n"
+	config += `	order = 10` + "\n"
+	config += `	additive = "disabled"` + "\n"
+	config += `	no_community = "disabled"` + "\n"
+	config += `	set_criteria = "none"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_route_map_rule_entry_set_regular_community" "test" {
-  rule_name = "RULE1"
-  order = 10
-  additive = "disabled"
-  no_community = "disabled"
-  set_criteria = "none"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-}
-
+	config += `
 data "nxos_route_map_rule_entry_set_regular_community" "test" {
-  rule_name = "RULE1"
-  order = 10
-  depends_on = [nxos_route_map_rule_entry_set_regular_community.test]
+	rule_name = "RULE1"
+	order = 10
+	depends_on = [nxos_route_map_rule_entry_set_regular_community.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

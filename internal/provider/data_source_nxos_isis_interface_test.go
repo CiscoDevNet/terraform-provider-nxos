@@ -30,41 +30,41 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosISISInterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "authentication_check", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "authentication_check_l1", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "authentication_check_l2", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "authentication_type", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "authentication_type_l1", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "authentication_type_l2", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "circuit_type", "l2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "hello_interval", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "hello_interval_l1", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "hello_interval_l2", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "hello_multiplier", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "hello_multiplier_l1", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "hello_multiplier_l2", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "hello_padding", "never"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "instance_name", "ISIS1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "metric_l1", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "metric_l2", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "mtu_check", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "mtu_check_l1", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "mtu_check_l2", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "network_type_p2p", "on"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "passive", "l1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "priority_l1", "80"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "priority_l2", "80"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "enable_ipv4", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosISISInterfacePrerequisitesConfig + testAccDataSourceNxosISISInterfaceConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "interface_id", "eth1/10"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "authentication_check", "false"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "authentication_check_l1", "false"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "authentication_check_l2", "false"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "authentication_type", "unknown"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "authentication_type_l1", "unknown"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "authentication_type_l2", "unknown"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "circuit_type", "l2"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "vrf", "default"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "hello_interval", "20"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "hello_interval_l1", "20"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "hello_interval_l2", "20"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "hello_multiplier", "4"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "hello_multiplier_l1", "4"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "hello_multiplier_l2", "4"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "hello_padding", "never"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "instance_name", "ISIS1"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "metric_l1", "1000"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "metric_l2", "1000"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "mtu_check", "true"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "mtu_check_l1", "true"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "mtu_check_l2", "true"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "network_type_p2p", "on"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "passive", "l1"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "priority_l1", "80"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "priority_l2", "80"),
-					resource.TestCheckResourceAttr("data.nxos_isis_interface.test", "enable_ipv4", "true"),
-				),
+				Config: testAccDataSourceNxosISISInterfacePrerequisitesConfig + testAccDataSourceNxosISISInterfaceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -94,46 +94,48 @@ resource "nxos_rest" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosISISInterfaceConfig = `
+func testAccDataSourceNxosISISInterfaceConfig() string {
+	config := `resource "nxos_isis_interface" "test" {` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `	authentication_check = false` + "\n"
+	config += `	authentication_check_l1 = false` + "\n"
+	config += `	authentication_check_l2 = false` + "\n"
+	config += `	authentication_key = ""` + "\n"
+	config += `	authentication_key_l1 = ""` + "\n"
+	config += `	authentication_key_l2 = ""` + "\n"
+	config += `	authentication_type = "unknown"` + "\n"
+	config += `	authentication_type_l1 = "unknown"` + "\n"
+	config += `	authentication_type_l2 = "unknown"` + "\n"
+	config += `	circuit_type = "l2"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	hello_interval = 20` + "\n"
+	config += `	hello_interval_l1 = 20` + "\n"
+	config += `	hello_interval_l2 = 20` + "\n"
+	config += `	hello_multiplier = 4` + "\n"
+	config += `	hello_multiplier_l1 = 4` + "\n"
+	config += `	hello_multiplier_l2 = 4` + "\n"
+	config += `	hello_padding = "never"` + "\n"
+	config += `	instance_name = "ISIS1"` + "\n"
+	config += `	metric_l1 = 1000` + "\n"
+	config += `	metric_l2 = 1000` + "\n"
+	config += `	mtu_check = true` + "\n"
+	config += `	mtu_check_l1 = true` + "\n"
+	config += `	mtu_check_l2 = true` + "\n"
+	config += `	network_type_p2p = "on"` + "\n"
+	config += `	passive = "l1"` + "\n"
+	config += `	priority_l1 = 80` + "\n"
+	config += `	priority_l2 = 80` + "\n"
+	config += `	enable_ipv4 = true` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_isis_interface" "test" {
-  interface_id = "eth1/10"
-  authentication_check = false
-  authentication_check_l1 = false
-  authentication_check_l2 = false
-  authentication_key = ""
-  authentication_key_l1 = ""
-  authentication_key_l2 = ""
-  authentication_type = "unknown"
-  authentication_type_l1 = "unknown"
-  authentication_type_l2 = "unknown"
-  circuit_type = "l2"
-  vrf = "default"
-  hello_interval = 20
-  hello_interval_l1 = 20
-  hello_interval_l2 = 20
-  hello_multiplier = 4
-  hello_multiplier_l1 = 4
-  hello_multiplier_l2 = 4
-  hello_padding = "never"
-  instance_name = "ISIS1"
-  metric_l1 = 1000
-  metric_l2 = 1000
-  mtu_check = true
-  mtu_check_l1 = true
-  mtu_check_l2 = true
-  network_type_p2p = "on"
-  passive = "l1"
-  priority_l1 = 80
-  priority_l2 = 80
-  enable_ipv4 = true
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-}
-
+	config += `
 data "nxos_isis_interface" "test" {
-  interface_id = "eth1/10"
-  depends_on = [nxos_isis_interface.test]
+	interface_id = "eth1/10"
+	depends_on = [nxos_isis_interface.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

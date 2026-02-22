@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosLoopbackInterfaceVRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_loopback_interface_vrf.test", "vrf_dn", "sys/inst-default"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosLoopbackInterfaceVRFPrerequisitesConfig + testAccDataSourceNxosLoopbackInterfaceVRFConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_loopback_interface_vrf.test", "vrf_dn", "sys/inst-default"),
-				),
+				Config: testAccDataSourceNxosLoopbackInterfaceVRFPrerequisitesConfig + testAccDataSourceNxosLoopbackInterfaceVRFConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -61,18 +61,20 @@ resource "nxos_rest" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosLoopbackInterfaceVRFConfig = `
+func testAccDataSourceNxosLoopbackInterfaceVRFConfig() string {
+	config := `resource "nxos_loopback_interface_vrf" "test" {` + "\n"
+	config += `	interface_id = "lo123"` + "\n"
+	config += `	vrf_dn = "sys/inst-default"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_loopback_interface_vrf" "test" {
-  interface_id = "lo123"
-  vrf_dn = "sys/inst-default"
-  depends_on = [nxos_rest.PreReq0, ]
-}
-
+	config += `
 data "nxos_loopback_interface_vrf" "test" {
-  interface_id = "lo123"
-  depends_on = [nxos_loopback_interface_vrf.test]
+	interface_id = "lo123"
+	depends_on = [nxos_loopback_interface_vrf.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

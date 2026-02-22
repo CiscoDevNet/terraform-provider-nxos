@@ -30,16 +30,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosBGPPeerLocalASN(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer_local_asn.test", "asn_propagation", "no-prepend"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer_local_asn.test", "local_asn", "65001"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosBGPPeerLocalASNPrerequisitesConfig + testAccDataSourceNxosBGPPeerLocalASNConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer_local_asn.test", "asn_propagation", "no-prepend"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer_local_asn.test", "local_asn", "65001"),
-				),
+				Config: testAccDataSourceNxosBGPPeerLocalASNPrerequisitesConfig + testAccDataSourceNxosBGPPeerLocalASNConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -98,21 +98,23 @@ resource "nxos_rest" "PreReq4" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosBGPPeerLocalASNConfig = `
+func testAccDataSourceNxosBGPPeerLocalASNConfig() string {
+	config := `resource "nxos_bgp_peer_local_asn" "test" {` + "\n"
+	config += `	asn_propagation = "no-prepend"` + "\n"
+	config += `	local_asn = "65001"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	address = "192.168.0.1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_bgp_peer_local_asn" "test" {
-  asn_propagation = "no-prepend"
-  local_asn = "65001"
-  vrf = "default"
-  address = "192.168.0.1"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-}
-
+	config += `
 data "nxos_bgp_peer_local_asn" "test" {
-  vrf = "default"
-  address = "192.168.0.1"
-  depends_on = [nxos_bgp_peer_local_asn.test]
+	vrf = "default"
+	address = "192.168.0.1"
+	depends_on = [nxos_bgp_peer_local_asn.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

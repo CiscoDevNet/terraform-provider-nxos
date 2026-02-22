@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosVRFRouteTargetAddressFamily(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vrf_route_target_address_family.test", "route_target_address_family", "ipv4-ucast"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosVRFRouteTargetAddressFamilyPrerequisitesConfig + testAccDataSourceNxosVRFRouteTargetAddressFamilyConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_vrf_route_target_address_family.test", "route_target_address_family", "ipv4-ucast"),
-				),
+				Config: testAccDataSourceNxosVRFRouteTargetAddressFamilyPrerequisitesConfig + testAccDataSourceNxosVRFRouteTargetAddressFamilyConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -93,21 +93,23 @@ resource "nxos_rest" "PreReq4" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosVRFRouteTargetAddressFamilyConfig = `
+func testAccDataSourceNxosVRFRouteTargetAddressFamilyConfig() string {
+	config := `resource "nxos_vrf_route_target_address_family" "test" {` + "\n"
+	config += `	vrf = "VRF1"` + "\n"
+	config += `	address_family = "ipv4-ucast"` + "\n"
+	config += `	route_target_address_family = "ipv4-ucast"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_vrf_route_target_address_family" "test" {
-  vrf = "VRF1"
-  address_family = "ipv4-ucast"
-  route_target_address_family = "ipv4-ucast"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-}
-
+	config += `
 data "nxos_vrf_route_target_address_family" "test" {
-  vrf = "VRF1"
-  address_family = "ipv4-ucast"
-  route_target_address_family = "ipv4-ucast"
-  depends_on = [nxos_vrf_route_target_address_family.test]
+	vrf = "VRF1"
+	address_family = "ipv4-ucast"
+	route_target_address_family = "ipv4-ucast"
+	depends_on = [nxos_vrf_route_target_address_family.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

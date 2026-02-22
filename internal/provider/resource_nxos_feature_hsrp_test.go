@@ -34,6 +34,8 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosFeatureHSRP(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature_hsrp.test", "admin_state", "enabled"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,9 +46,7 @@ func TestAccNxosFeatureHSRP(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosFeatureHSRPConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_feature_hsrp.test", "admin_state", "enabled"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_feature_hsrp.test",
@@ -82,22 +82,20 @@ func nxosFeatureHSRPImportStateIdFunc(resourceName string) resource.ImportStateI
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosFeatureHSRPConfig_minimum() string {
-	return `
-	resource "nxos_feature_hsrp" "test" {
-		admin_state = "enabled"
-	}
-	`
+	config := `resource "nxos_feature_hsrp" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosFeatureHSRPConfig_all() string {
-	return `
-	resource "nxos_feature_hsrp" "test" {
-		admin_state = "enabled"
-	}
-	`
+	config := `resource "nxos_feature_hsrp" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

@@ -34,6 +34,11 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosLogging(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "all", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "level", "information"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "facilities.0.name", "spanning-tree"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "facilities.0.level", "information"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,12 +49,7 @@ func TestAccNxosLogging(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosLoggingConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_logging.test", "all", "unspecified"),
-					resource.TestCheckResourceAttr("nxos_logging.test", "level", "information"),
-					resource.TestCheckResourceAttr("nxos_logging.test", "facilities.0.name", "spanning-tree"),
-					resource.TestCheckResourceAttr("nxos_logging.test", "facilities.0.level", "information"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_logging.test",
@@ -78,26 +78,24 @@ func nxosLoggingImportStateIdFunc(resourceName string) resource.ImportStateIdFun
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosLoggingConfig_minimum() string {
-	return `
-	resource "nxos_logging" "test" {
-	}
-	`
+	config := `resource "nxos_logging" "test" {` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosLoggingConfig_all() string {
-	return `
-	resource "nxos_logging" "test" {
-		all = "unspecified"
-		level = "information"
-		facilities = [{
-			name = "spanning-tree"
-			level = "information"
-		}]
-	}
-	`
+	config := `resource "nxos_logging" "test" {` + "\n"
+	config += `	all = "unspecified"` + "\n"
+	config += `	level = "information"` + "\n"
+	config += `	facilities = [{` + "\n"
+	config += `		name = "spanning-tree"` + "\n"
+	config += `		level = "information"` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

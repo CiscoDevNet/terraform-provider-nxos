@@ -34,6 +34,9 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosDefaultQOSClassMapDSCP(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_class_map_dscp.test", "class_map_name", "Voice"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_class_map_dscp.test", "value", "ef"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,10 +47,7 @@ func TestAccNxosDefaultQOSClassMapDSCP(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosDefaultQOSClassMapDSCPPrerequisitesConfig + testAccNxosDefaultQOSClassMapDSCPConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_default_qos_class_map_dscp.test", "class_map_name", "Voice"),
-					resource.TestCheckResourceAttr("nxos_default_qos_class_map_dscp.test", "value", "ef"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_default_qos_class_map_dscp.test",
@@ -96,26 +96,24 @@ resource "nxos_rest" "PreReq0" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosDefaultQOSClassMapDSCPConfig_minimum() string {
-	return `
-	resource "nxos_default_qos_class_map_dscp" "test" {
-		class_map_name = "Voice"
-		value = "ef"
-  		depends_on = [nxos_rest.PreReq0, ]
-	}
-	`
+	config := `resource "nxos_default_qos_class_map_dscp" "test" {` + "\n"
+	config += `	class_map_name = "Voice"` + "\n"
+	config += `	value = "ef"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosDefaultQOSClassMapDSCPConfig_all() string {
-	return `
-	resource "nxos_default_qos_class_map_dscp" "test" {
-		class_map_name = "Voice"
-		value = "ef"
-  		depends_on = [nxos_rest.PreReq0, ]
-	}
-	`
+	config := `resource "nxos_default_qos_class_map_dscp" "test" {` + "\n"
+	config += `	class_map_name = "Voice"` + "\n"
+	config += `	value = "ef"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

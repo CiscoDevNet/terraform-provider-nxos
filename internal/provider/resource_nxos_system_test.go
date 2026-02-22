@@ -34,6 +34,8 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosSystem(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "name", "LEAF1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,9 +46,7 @@ func TestAccNxosSystem(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosSystemConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_system.test", "name", "LEAF1"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_system.test",
@@ -82,21 +82,19 @@ func nxosSystemImportStateIdFunc(resourceName string) resource.ImportStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosSystemConfig_minimum() string {
-	return `
-	resource "nxos_system" "test" {
-	}
-	`
+	config := `resource "nxos_system" "test" {` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosSystemConfig_all() string {
-	return `
-	resource "nxos_system" "test" {
-		name = "LEAF1"
-	}
-	`
+	config := `resource "nxos_system" "test" {` + "\n"
+	config += `	name = "LEAF1"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

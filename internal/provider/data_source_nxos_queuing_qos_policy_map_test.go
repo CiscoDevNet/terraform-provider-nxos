@@ -30,16 +30,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosQueuingQOSPolicyMap(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos_policy_map.test", "name", "PM1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos_policy_map.test", "match_type", "match-any"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosQueuingQOSPolicyMapConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_queuing_qos_policy_map.test", "name", "PM1"),
-					resource.TestCheckResourceAttr("data.nxos_queuing_qos_policy_map.test", "match_type", "match-any"),
-				),
+				Config: testAccDataSourceNxosQueuingQOSPolicyMapConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -52,17 +52,19 @@ func TestAccDataSourceNxosQueuingQOSPolicyMap(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosQueuingQOSPolicyMapConfig = `
+func testAccDataSourceNxosQueuingQOSPolicyMapConfig() string {
+	config := `resource "nxos_queuing_qos_policy_map" "test" {` + "\n"
+	config += `	name = "PM1"` + "\n"
+	config += `	match_type = "match-any"` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_queuing_qos_policy_map" "test" {
-  name = "PM1"
-  match_type = "match-any"
-}
-
+	config += `
 data "nxos_queuing_qos_policy_map" "test" {
-  name = "PM1"
-  depends_on = [nxos_queuing_qos_policy_map.test]
+	name = "PM1"
+	depends_on = [nxos_queuing_qos_policy_map.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

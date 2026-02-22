@@ -30,16 +30,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosICMPv4Interface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_icmpv4_interface.test", "interface_id", "vlan10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_icmpv4_interface.test", "control", "port-unreachable"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosICMPv4InterfacePrerequisitesConfig + testAccDataSourceNxosICMPv4InterfaceConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_icmpv4_interface.test", "interface_id", "vlan10"),
-					resource.TestCheckResourceAttr("data.nxos_icmpv4_interface.test", "control", "port-unreachable"),
-				),
+				Config: testAccDataSourceNxosICMPv4InterfacePrerequisitesConfig + testAccDataSourceNxosICMPv4InterfaceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -101,20 +101,22 @@ resource "nxos_rest" "PreReq4" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosICMPv4InterfaceConfig = `
+func testAccDataSourceNxosICMPv4InterfaceConfig() string {
+	config := `resource "nxos_icmpv4_interface" "test" {` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	interface_id = "vlan10"` + "\n"
+	config += `	control = "port-unreachable"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_icmpv4_interface" "test" {
-  vrf_name = "VRF1"
-  interface_id = "vlan10"
-  control = "port-unreachable"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-}
-
+	config += `
 data "nxos_icmpv4_interface" "test" {
-  vrf_name = "VRF1"
-  interface_id = "vlan10"
-  depends_on = [nxos_icmpv4_interface.test]
+	vrf_name = "VRF1"
+	interface_id = "vlan10"
+	depends_on = [nxos_icmpv4_interface.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

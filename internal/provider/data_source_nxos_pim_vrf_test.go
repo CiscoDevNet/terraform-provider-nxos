@@ -30,17 +30,17 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosPIMVRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim_vrf.test", "name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim_vrf.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim_vrf.test", "bfd", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosPIMVRFPrerequisitesConfig + testAccDataSourceNxosPIMVRFConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_pim_vrf.test", "name", "default"),
-					resource.TestCheckResourceAttr("data.nxos_pim_vrf.test", "admin_state", "enabled"),
-					resource.TestCheckResourceAttr("data.nxos_pim_vrf.test", "bfd", "true"),
-				),
+				Config: testAccDataSourceNxosPIMVRFPrerequisitesConfig + testAccDataSourceNxosPIMVRFConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -76,19 +76,21 @@ resource "nxos_rest" "PreReq2" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosPIMVRFConfig = `
+func testAccDataSourceNxosPIMVRFConfig() string {
+	config := `resource "nxos_pim_vrf" "test" {` + "\n"
+	config += `	name = "default"` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	bfd = true` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_pim_vrf" "test" {
-  name = "default"
-  admin_state = "enabled"
-  bfd = true
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-}
-
+	config += `
 data "nxos_pim_vrf" "test" {
-  name = "default"
-  depends_on = [nxos_pim_vrf.test]
+	name = "default"
+	depends_on = [nxos_pim_vrf.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

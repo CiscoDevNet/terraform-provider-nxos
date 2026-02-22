@@ -30,17 +30,17 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosPIMStaticRPGroupList(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim_static_rp_group_list.test", "address", "224.0.0.0/4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim_static_rp_group_list.test", "bidir", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim_static_rp_group_list.test", "override", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosPIMStaticRPGroupListPrerequisitesConfig + testAccDataSourceNxosPIMStaticRPGroupListConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_pim_static_rp_group_list.test", "address", "224.0.0.0/4"),
-					resource.TestCheckResourceAttr("data.nxos_pim_static_rp_group_list.test", "bidir", "true"),
-					resource.TestCheckResourceAttr("data.nxos_pim_static_rp_group_list.test", "override", "true"),
-				),
+				Config: testAccDataSourceNxosPIMStaticRPGroupListPrerequisitesConfig + testAccDataSourceNxosPIMStaticRPGroupListConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -100,23 +100,25 @@ resource "nxos_rest" "PreReq5" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosPIMStaticRPGroupListConfig = `
+func testAccDataSourceNxosPIMStaticRPGroupListConfig() string {
+	config := `resource "nxos_pim_static_rp_group_list" "test" {` + "\n"
+	config += `	vrf_name = "default"` + "\n"
+	config += `	rp_address = "1.2.3.4"` + "\n"
+	config += `	address = "224.0.0.0/4"` + "\n"
+	config += `	bidir = true` + "\n"
+	config += `	override = true` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_pim_static_rp_group_list" "test" {
-  vrf_name = "default"
-  rp_address = "1.2.3.4"
-  address = "224.0.0.0/4"
-  bidir = true
-  override = true
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]
-}
-
+	config += `
 data "nxos_pim_static_rp_group_list" "test" {
-  vrf_name = "default"
-  rp_address = "1.2.3.4"
-  address = "224.0.0.0/4"
-  depends_on = [nxos_pim_static_rp_group_list.test]
+	vrf_name = "default"
+	rp_address = "1.2.3.4"
+	address = "224.0.0.0/4"
+	depends_on = [nxos_pim_static_rp_group_list.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

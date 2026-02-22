@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidth(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth.test", "value", "10"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidthPrerequisitesConfig + testAccDataSourceNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidthConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth.test", "value", "10"),
-				),
+				Config: testAccDataSourceNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidthPrerequisitesConfig + testAccDataSourceNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidthConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -70,20 +70,22 @@ resource "nxos_rest" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidthConfig = `
+func testAccDataSourceNxosQueuingQOSPolicyMapMatchClassMapRemainingBandwidthConfig() string {
+	config := `resource "nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth" "test" {` + "\n"
+	config += `	policy_map_name = "PM1"` + "\n"
+	config += `	class_map_name = "c-out-q1"` + "\n"
+	config += `	value = 10` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth" "test" {
-  policy_map_name = "PM1"
-  class_map_name = "c-out-q1"
-  value = 10
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-}
-
+	config += `
 data "nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth" "test" {
-  policy_map_name = "PM1"
-  class_map_name = "c-out-q1"
-  depends_on = [nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth.test]
+	policy_map_name = "PM1"
+	class_map_name = "c-out-q1"
+	depends_on = [nxos_queuing_qos_policy_map_match_class_map_remaining_bandwidth.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

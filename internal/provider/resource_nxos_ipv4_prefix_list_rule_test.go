@@ -34,6 +34,8 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosIPv4PrefixListRule(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_prefix_list_rule.test", "name", "RULE1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,9 +46,7 @@ func TestAccNxosIPv4PrefixListRule(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosIPv4PrefixListRuleConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ipv4_prefix_list_rule.test", "name", "RULE1"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_ipv4_prefix_list_rule.test",
@@ -84,22 +84,20 @@ func nxosIPv4PrefixListRuleImportStateIdFunc(resourceName string) resource.Impor
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosIPv4PrefixListRuleConfig_minimum() string {
-	return `
-	resource "nxos_ipv4_prefix_list_rule" "test" {
-		name = "RULE1"
-	}
-	`
+	config := `resource "nxos_ipv4_prefix_list_rule" "test" {` + "\n"
+	config += `	name = "RULE1"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosIPv4PrefixListRuleConfig_all() string {
-	return `
-	resource "nxos_ipv4_prefix_list_rule" "test" {
-		name = "RULE1"
-	}
-	`
+	config := `resource "nxos_ipv4_prefix_list_rule" "test" {` + "\n"
+	config += `	name = "RULE1"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

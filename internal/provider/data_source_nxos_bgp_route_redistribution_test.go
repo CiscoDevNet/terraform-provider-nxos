@@ -30,19 +30,19 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosBGPRouteRedistribution(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_route_redistribution.test", "protocol", "ospf"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_route_redistribution.test", "protocol_instance", "OSPF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_route_redistribution.test", "route_map", "route_map_ospf_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_route_redistribution.test", "scope", "inter"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_route_redistribution.test", "srv6_prefix_type", "unspecified"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosBGPRouteRedistributionPrerequisitesConfig + testAccDataSourceNxosBGPRouteRedistributionConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_bgp_route_redistribution.test", "protocol", "ospf"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_route_redistribution.test", "protocol_instance", "OSPF1"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_route_redistribution.test", "route_map", "route_map_ospf_1"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_route_redistribution.test", "scope", "inter"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_route_redistribution.test", "srv6_prefix_type", "unspecified"),
-				),
+				Config: testAccDataSourceNxosBGPRouteRedistributionPrerequisitesConfig + testAccDataSourceNxosBGPRouteRedistributionConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -100,28 +100,30 @@ resource "nxos_rest" "PreReq4" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosBGPRouteRedistributionConfig = `
+func testAccDataSourceNxosBGPRouteRedistributionConfig() string {
+	config := `resource "nxos_bgp_route_redistribution" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	address_family = "ipv4-ucast"` + "\n"
+	config += `	protocol = "ospf"` + "\n"
+	config += `	protocol_instance = "OSPF1"` + "\n"
+	config += `	route_map = "route_map_ospf_1"` + "\n"
+	config += `	scope = "inter"` + "\n"
+	config += `	srv6_prefix_type = "unspecified"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_bgp_route_redistribution" "test" {
-  asn = "65001"
-  vrf = "default"
-  address_family = "ipv4-ucast"
-  protocol = "ospf"
-  protocol_instance = "OSPF1"
-  route_map = "route_map_ospf_1"
-  scope = "inter"
-  srv6_prefix_type = "unspecified"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-}
-
+	config += `
 data "nxos_bgp_route_redistribution" "test" {
-  asn = "65001"
-  vrf = "default"
-  address_family = "ipv4-ucast"
-  protocol = "ospf"
-  protocol_instance = "OSPF1"
-  depends_on = [nxos_bgp_route_redistribution.test]
+	asn = "65001"
+	vrf = "default"
+	address_family = "ipv4-ucast"
+	protocol = "ospf"
+	protocol_instance = "OSPF1"
+	depends_on = [nxos_bgp_route_redistribution.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

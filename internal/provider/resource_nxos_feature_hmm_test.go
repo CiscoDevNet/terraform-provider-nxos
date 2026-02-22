@@ -38,6 +38,8 @@ func TestAccNxosFeatureHMM(t *testing.T) {
 	if os.Getenv("FEATURE_HMM") == "" {
 		t.Skip("skipping test, set environment variable FEATURE_HMM")
 	}
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature_hmm.test", "admin_state", "enabled"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -48,9 +50,7 @@ func TestAccNxosFeatureHMM(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosFeatureHMMPrerequisitesConfig + testAccNxosFeatureHMMConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_feature_hmm.test", "admin_state", "enabled"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_feature_hmm.test",
@@ -97,24 +97,22 @@ resource "nxos_rest" "PreReq0" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosFeatureHMMConfig_minimum() string {
-	return `
-	resource "nxos_feature_hmm" "test" {
-		admin_state = "enabled"
-  		depends_on = [nxos_rest.PreReq0, ]
-	}
-	`
+	config := `resource "nxos_feature_hmm" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosFeatureHMMConfig_all() string {
-	return `
-	resource "nxos_feature_hmm" "test" {
-		admin_state = "enabled"
-  		depends_on = [nxos_rest.PreReq0, ]
-	}
-	`
+	config := `resource "nxos_feature_hmm" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

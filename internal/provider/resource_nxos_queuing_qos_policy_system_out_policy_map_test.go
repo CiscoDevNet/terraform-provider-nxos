@@ -34,6 +34,8 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosQueuingQOSPolicySystemOutPolicyMap(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos_policy_system_out_policy_map.test", "policy_map_name", "PM1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,9 +46,7 @@ func TestAccNxosQueuingQOSPolicySystemOutPolicyMap(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosQueuingQOSPolicySystemOutPolicyMapPrerequisitesConfig + testAccNxosQueuingQOSPolicySystemOutPolicyMapConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_queuing_qos_policy_system_out_policy_map.test", "policy_map_name", "PM1"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_queuing_qos_policy_system_out_policy_map.test",
@@ -173,24 +173,22 @@ resource "nxos_rest" "PreReq9" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosQueuingQOSPolicySystemOutPolicyMapConfig_minimum() string {
-	return `
-	resource "nxos_queuing_qos_policy_system_out_policy_map" "test" {
-		policy_map_name = "PM1"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, nxos_rest.PreReq7, nxos_rest.PreReq8, nxos_rest.PreReq9, ]
-	}
-	`
+	config := `resource "nxos_queuing_qos_policy_system_out_policy_map" "test" {` + "\n"
+	config += `	policy_map_name = "PM1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, nxos_rest.PreReq7, nxos_rest.PreReq8, nxos_rest.PreReq9, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosQueuingQOSPolicySystemOutPolicyMapConfig_all() string {
-	return `
-	resource "nxos_queuing_qos_policy_system_out_policy_map" "test" {
-		policy_map_name = "PM1"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, nxos_rest.PreReq7, nxos_rest.PreReq8, nxos_rest.PreReq9, ]
-	}
-	`
+	config := `resource "nxos_queuing_qos_policy_system_out_policy_map" "test" {` + "\n"
+	config += `	policy_map_name = "PM1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, nxos_rest.PreReq7, nxos_rest.PreReq8, nxos_rest.PreReq9, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

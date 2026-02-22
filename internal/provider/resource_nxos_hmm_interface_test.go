@@ -34,6 +34,10 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosHMMInterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm_interface.test", "interface_id", "vlan10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm_interface.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm_interface.test", "mode", "anycastGW"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,11 +48,7 @@ func TestAccNxosHMMInterface(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosHMMInterfacePrerequisitesConfig + testAccNxosHMMInterfaceConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_hmm_interface.test", "interface_id", "vlan10"),
-					resource.TestCheckResourceAttr("nxos_hmm_interface.test", "admin_state", "enabled"),
-					resource.TestCheckResourceAttr("nxos_hmm_interface.test", "mode", "anycastGW"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_hmm_interface.test",
@@ -140,26 +140,24 @@ resource "nxos_rest" "PreReq5" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosHMMInterfaceConfig_minimum() string {
-	return `
-	resource "nxos_hmm_interface" "test" {
-		interface_id = "vlan10"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]
-	}
-	`
+	config := `resource "nxos_hmm_interface" "test" {` + "\n"
+	config += `	interface_id = "vlan10"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosHMMInterfaceConfig_all() string {
-	return `
-	resource "nxos_hmm_interface" "test" {
-		interface_id = "vlan10"
-		admin_state = "enabled"
-		mode = "anycastGW"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]
-	}
-	`
+	config := `resource "nxos_hmm_interface" "test" {` + "\n"
+	config += `	interface_id = "vlan10"` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	mode = "anycastGW"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

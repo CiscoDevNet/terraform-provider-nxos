@@ -34,6 +34,10 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosPortChannelInterfaceMember(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface_member.test", "interface_id", "po1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface_member.test", "interface_dn", "sys/intf/phys-[eth1/11]"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface_member.test", "force", "false"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,11 +48,7 @@ func TestAccNxosPortChannelInterfaceMember(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosPortChannelInterfaceMemberPrerequisitesConfig + testAccNxosPortChannelInterfaceMemberConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_port_channel_interface_member.test", "interface_id", "po1"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface_member.test", "interface_dn", "sys/intf/phys-[eth1/11]"),
-					resource.TestCheckResourceAttr("nxos_port_channel_interface_member.test", "force", "false"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_port_channel_interface_member.test",
@@ -97,27 +97,25 @@ resource "nxos_rest" "PreReq0" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosPortChannelInterfaceMemberConfig_minimum() string {
-	return `
-	resource "nxos_port_channel_interface_member" "test" {
-		interface_id = "po1"
-		interface_dn = "sys/intf/phys-[eth1/11]"
-  		depends_on = [nxos_rest.PreReq0, ]
-	}
-	`
+	config := `resource "nxos_port_channel_interface_member" "test" {` + "\n"
+	config += `	interface_id = "po1"` + "\n"
+	config += `	interface_dn = "sys/intf/phys-[eth1/11]"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosPortChannelInterfaceMemberConfig_all() string {
-	return `
-	resource "nxos_port_channel_interface_member" "test" {
-		interface_id = "po1"
-		interface_dn = "sys/intf/phys-[eth1/11]"
-		force = false
-  		depends_on = [nxos_rest.PreReq0, ]
-	}
-	`
+	config := `resource "nxos_port_channel_interface_member" "test" {` + "\n"
+	config += `	interface_id = "po1"` + "\n"
+	config += `	interface_dn = "sys/intf/phys-[eth1/11]"` + "\n"
+	config += `	force = false` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

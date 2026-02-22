@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosPIMSSMPolicy(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim_ssm_policy.test", "name", "SSM"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosPIMSSMPolicyPrerequisitesConfig + testAccDataSourceNxosPIMSSMPolicyConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_pim_ssm_policy.test", "name", "SSM"),
-				),
+				Config: testAccDataSourceNxosPIMSSMPolicyPrerequisitesConfig + testAccDataSourceNxosPIMSSMPolicyConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -83,18 +83,20 @@ resource "nxos_rest" "PreReq3" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosPIMSSMPolicyConfig = `
+func testAccDataSourceNxosPIMSSMPolicyConfig() string {
+	config := `resource "nxos_pim_ssm_policy" "test" {` + "\n"
+	config += `	vrf_name = "default"` + "\n"
+	config += `	name = "SSM"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_pim_ssm_policy" "test" {
-  vrf_name = "default"
-  name = "SSM"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-}
-
+	config += `
 data "nxos_pim_ssm_policy" "test" {
-  vrf_name = "default"
-  depends_on = [nxos_pim_ssm_policy.test]
+	vrf_name = "default"
+	depends_on = [nxos_pim_ssm_policy.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

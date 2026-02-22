@@ -30,17 +30,17 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosVRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vrf.test", "name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vrf.test", "description", "My VRF1 Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vrf.test", "encap", "vxlan-103901"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosVRFConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_vrf.test", "name", "VRF1"),
-					resource.TestCheckResourceAttr("data.nxos_vrf.test", "description", "My VRF1 Description"),
-					resource.TestCheckResourceAttr("data.nxos_vrf.test", "encap", "vxlan-103901"),
-				),
+				Config: testAccDataSourceNxosVRFConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -53,18 +53,20 @@ func TestAccDataSourceNxosVRF(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosVRFConfig = `
+func testAccDataSourceNxosVRFConfig() string {
+	config := `resource "nxos_vrf" "test" {` + "\n"
+	config += `	name = "VRF1"` + "\n"
+	config += `	description = "My VRF1 Description"` + "\n"
+	config += `	encap = "vxlan-103901"` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_vrf" "test" {
-  name = "VRF1"
-  description = "My VRF1 Description"
-  encap = "vxlan-103901"
-}
-
+	config += `
 data "nxos_vrf" "test" {
-  name = "VRF1"
-  depends_on = [nxos_vrf.test]
+	name = "VRF1"
+	depends_on = [nxos_vrf.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

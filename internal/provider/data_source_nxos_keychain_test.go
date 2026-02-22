@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosKeychain(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "name", "Keychain1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosKeychainPrerequisitesConfig + testAccDataSourceNxosKeychainConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_keychain.test", "name", "Keychain1"),
-				),
+				Config: testAccDataSourceNxosKeychainPrerequisitesConfig + testAccDataSourceNxosKeychainConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -67,17 +67,19 @@ resource "nxos_rest" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosKeychainConfig = `
+func testAccDataSourceNxosKeychainConfig() string {
+	config := `resource "nxos_keychain" "test" {` + "\n"
+	config += `	name = "Keychain1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_keychain" "test" {
-  name = "Keychain1"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-}
-
+	config += `
 data "nxos_keychain" "test" {
-  name = "Keychain1"
-  depends_on = [nxos_keychain.test]
+	name = "Keychain1"
+	depends_on = [nxos_keychain.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

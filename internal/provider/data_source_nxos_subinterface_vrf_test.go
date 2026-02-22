@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosSubinterfaceVRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_subinterface_vrf.test", "vrf_dn", "sys/inst-VRF123"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosSubinterfaceVRFPrerequisitesConfig + testAccDataSourceNxosSubinterfaceVRFConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_subinterface_vrf.test", "vrf_dn", "sys/inst-VRF123"),
-				),
+				Config: testAccDataSourceNxosSubinterfaceVRFPrerequisitesConfig + testAccDataSourceNxosSubinterfaceVRFConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -70,18 +70,20 @@ resource "nxos_rest" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosSubinterfaceVRFConfig = `
+func testAccDataSourceNxosSubinterfaceVRFConfig() string {
+	config := `resource "nxos_subinterface_vrf" "test" {` + "\n"
+	config += `	interface_id = "eth1/10.124"` + "\n"
+	config += `	vrf_dn = "sys/inst-VRF123"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_subinterface_vrf" "test" {
-  interface_id = "eth1/10.124"
-  vrf_dn = "sys/inst-VRF123"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-}
-
+	config += `
 data "nxos_subinterface_vrf" "test" {
-  interface_id = "eth1/10.124"
-  depends_on = [nxos_subinterface_vrf.test]
+	interface_id = "eth1/10.124"
+	depends_on = [nxos_subinterface_vrf.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

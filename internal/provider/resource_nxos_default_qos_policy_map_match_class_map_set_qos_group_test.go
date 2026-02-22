@@ -34,6 +34,10 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosDefaultQOSPolicyMapMatchClassMapSetQOSGroup(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map_match_class_map_set_qos_group.test", "policy_map_name", "PM1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map_match_class_map_set_qos_group.test", "class_map_name", "Voice"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map_match_class_map_set_qos_group.test", "qos_group_id", "1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,11 +48,7 @@ func TestAccNxosDefaultQOSPolicyMapMatchClassMapSetQOSGroup(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosDefaultQOSPolicyMapMatchClassMapSetQOSGroupPrerequisitesConfig + testAccNxosDefaultQOSPolicyMapMatchClassMapSetQOSGroupConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_default_qos_policy_map_match_class_map_set_qos_group.test", "policy_map_name", "PM1"),
-					resource.TestCheckResourceAttr("nxos_default_qos_policy_map_match_class_map_set_qos_group.test", "class_map_name", "Voice"),
-					resource.TestCheckResourceAttr("nxos_default_qos_policy_map_match_class_map_set_qos_group.test", "qos_group_id", "1"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_default_qos_policy_map_match_class_map_set_qos_group.test",
@@ -114,27 +114,25 @@ resource "nxos_rest" "PreReq2" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosDefaultQOSPolicyMapMatchClassMapSetQOSGroupConfig_minimum() string {
-	return `
-	resource "nxos_default_qos_policy_map_match_class_map_set_qos_group" "test" {
-		policy_map_name = "PM1"
-		class_map_name = "Voice"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-	}
-	`
+	config := `resource "nxos_default_qos_policy_map_match_class_map_set_qos_group" "test" {` + "\n"
+	config += `	policy_map_name = "PM1"` + "\n"
+	config += `	class_map_name = "Voice"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosDefaultQOSPolicyMapMatchClassMapSetQOSGroupConfig_all() string {
-	return `
-	resource "nxos_default_qos_policy_map_match_class_map_set_qos_group" "test" {
-		policy_map_name = "PM1"
-		class_map_name = "Voice"
-		qos_group_id = 1
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-	}
-	`
+	config := `resource "nxos_default_qos_policy_map_match_class_map_set_qos_group" "test" {` + "\n"
+	config += `	policy_map_name = "PM1"` + "\n"
+	config += `	class_map_name = "Voice"` + "\n"
+	config += `	qos_group_id = 1` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

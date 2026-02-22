@@ -30,23 +30,23 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosIPv6Interface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6_interface.test", "interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6_interface.test", "auto_configuration", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6_interface.test", "default_route", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6_interface.test", "ipv6_forward", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6_interface.test", "forward", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6_interface.test", "link_address_use_bia", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6_interface.test", "use_link_local_address", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6_interface.test", "urpf", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6_interface.test", "link_local_address", "2001:db8:3333:4444:5555:6666:7777:8888"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosIPv6InterfacePrerequisitesConfig + testAccDataSourceNxosIPv6InterfaceConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_ipv6_interface.test", "interface_id", "eth1/10"),
-					resource.TestCheckResourceAttr("data.nxos_ipv6_interface.test", "auto_configuration", "disabled"),
-					resource.TestCheckResourceAttr("data.nxos_ipv6_interface.test", "default_route", "disabled"),
-					resource.TestCheckResourceAttr("data.nxos_ipv6_interface.test", "ipv6_forward", "disabled"),
-					resource.TestCheckResourceAttr("data.nxos_ipv6_interface.test", "forward", "disabled"),
-					resource.TestCheckResourceAttr("data.nxos_ipv6_interface.test", "link_address_use_bia", "disabled"),
-					resource.TestCheckResourceAttr("data.nxos_ipv6_interface.test", "use_link_local_address", "disabled"),
-					resource.TestCheckResourceAttr("data.nxos_ipv6_interface.test", "urpf", "disabled"),
-					resource.TestCheckResourceAttr("data.nxos_ipv6_interface.test", "link_local_address", "2001:db8:3333:4444:5555:6666:7777:8888"),
-				),
+				Config: testAccDataSourceNxosIPv6InterfacePrerequisitesConfig + testAccDataSourceNxosIPv6InterfaceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -66,27 +66,29 @@ resource "nxos_rest" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosIPv6InterfaceConfig = `
+func testAccDataSourceNxosIPv6InterfaceConfig() string {
+	config := `resource "nxos_ipv6_interface" "test" {` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `	auto_configuration = "disabled"` + "\n"
+	config += `	default_route = "disabled"` + "\n"
+	config += `	ipv6_forward = "disabled"` + "\n"
+	config += `	forward = "disabled"` + "\n"
+	config += `	link_address_use_bia = "disabled"` + "\n"
+	config += `	use_link_local_address = "disabled"` + "\n"
+	config += `	urpf = "disabled"` + "\n"
+	config += `	link_local_address = "2001:db8:3333:4444:5555:6666:7777:8888"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_ipv6_interface" "test" {
-  vrf = "default"
-  interface_id = "eth1/10"
-  auto_configuration = "disabled"
-  default_route = "disabled"
-  ipv6_forward = "disabled"
-  forward = "disabled"
-  link_address_use_bia = "disabled"
-  use_link_local_address = "disabled"
-  urpf = "disabled"
-  link_local_address = "2001:db8:3333:4444:5555:6666:7777:8888"
-  depends_on = [nxos_rest.PreReq0, ]
-}
-
+	config += `
 data "nxos_ipv6_interface" "test" {
-  vrf = "default"
-  interface_id = "eth1/10"
-  depends_on = [nxos_ipv6_interface.test]
+	vrf = "default"
+	interface_id = "eth1/10"
+	depends_on = [nxos_ipv6_interface.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

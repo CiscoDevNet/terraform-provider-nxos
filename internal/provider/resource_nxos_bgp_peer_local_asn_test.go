@@ -34,6 +34,11 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosBGPPeerLocalASN(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_peer_local_asn.test", "asn_propagation", "no-prepend"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_peer_local_asn.test", "local_asn", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_peer_local_asn.test", "vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_peer_local_asn.test", "address", "192.168.0.1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,12 +49,7 @@ func TestAccNxosBGPPeerLocalASN(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosBGPPeerLocalASNPrerequisitesConfig + testAccNxosBGPPeerLocalASNConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_bgp_peer_local_asn.test", "asn_propagation", "no-prepend"),
-					resource.TestCheckResourceAttr("nxos_bgp_peer_local_asn.test", "local_asn", "65001"),
-					resource.TestCheckResourceAttr("nxos_bgp_peer_local_asn.test", "vrf", "default"),
-					resource.TestCheckResourceAttr("nxos_bgp_peer_local_asn.test", "address", "192.168.0.1"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_bgp_peer_local_asn.test",
@@ -134,29 +134,27 @@ resource "nxos_rest" "PreReq4" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosBGPPeerLocalASNConfig_minimum() string {
-	return `
-	resource "nxos_bgp_peer_local_asn" "test" {
-		local_asn = "65001"
-		vrf = "default"
-		address = "192.168.0.1"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-	}
-	`
+	config := `resource "nxos_bgp_peer_local_asn" "test" {` + "\n"
+	config += `	local_asn = "65001"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	address = "192.168.0.1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosBGPPeerLocalASNConfig_all() string {
-	return `
-	resource "nxos_bgp_peer_local_asn" "test" {
-		asn_propagation = "no-prepend"
-		local_asn = "65001"
-		vrf = "default"
-		address = "192.168.0.1"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-	}
-	`
+	config := `resource "nxos_bgp_peer_local_asn" "test" {` + "\n"
+	config += `	asn_propagation = "no-prepend"` + "\n"
+	config += `	local_asn = "65001"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	address = "192.168.0.1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

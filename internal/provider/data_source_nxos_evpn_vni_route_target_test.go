@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosEVPNVNIRouteTarget(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_evpn_vni_route_target.test", "route_target", "route-target:as2-nn2:2:2"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosEVPNVNIRouteTargetPrerequisitesConfig + testAccDataSourceNxosEVPNVNIRouteTargetConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_evpn_vni_route_target.test", "route_target", "route-target:as2-nn2:2:2"),
-				),
+				Config: testAccDataSourceNxosEVPNVNIRouteTargetPrerequisitesConfig + testAccDataSourceNxosEVPNVNIRouteTargetConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -99,21 +99,23 @@ resource "nxos_rest" "PreReq4" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosEVPNVNIRouteTargetConfig = `
+func testAccDataSourceNxosEVPNVNIRouteTargetConfig() string {
+	config := `resource "nxos_evpn_vni_route_target" "test" {` + "\n"
+	config += `	encap = "vxlan-123456"` + "\n"
+	config += `	direction = "import"` + "\n"
+	config += `	route_target = "route-target:as2-nn2:2:2"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_evpn_vni_route_target" "test" {
-  encap = "vxlan-123456"
-  direction = "import"
-  route_target = "route-target:as2-nn2:2:2"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-}
-
+	config += `
 data "nxos_evpn_vni_route_target" "test" {
-  encap = "vxlan-123456"
-  direction = "import"
-  route_target = "route-target:as2-nn2:2:2"
-  depends_on = [nxos_evpn_vni_route_target.test]
+	encap = "vxlan-123456"
+	direction = "import"
+	route_target = "route-target:as2-nn2:2:2"
+	depends_on = [nxos_evpn_vni_route_target.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

@@ -34,6 +34,9 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosISISInstance(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis_instance.test", "name", "ISIS1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis_instance.test", "admin_state", "enabled"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,10 +47,7 @@ func TestAccNxosISISInstance(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosISISInstancePrerequisitesConfig + testAccNxosISISInstanceConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_isis_instance.test", "name", "ISIS1"),
-					resource.TestCheckResourceAttr("nxos_isis_instance.test", "admin_state", "enabled"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_isis_instance.test",
@@ -102,25 +102,23 @@ resource "nxos_rest" "PreReq1" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosISISInstanceConfig_minimum() string {
-	return `
-	resource "nxos_isis_instance" "test" {
-		name = "ISIS1"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-	}
-	`
+	config := `resource "nxos_isis_instance" "test" {` + "\n"
+	config += `	name = "ISIS1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosISISInstanceConfig_all() string {
-	return `
-	resource "nxos_isis_instance" "test" {
-		name = "ISIS1"
-		admin_state = "enabled"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-	}
-	`
+	config := `resource "nxos_isis_instance" "test" {` + "\n"
+	config += `	name = "ISIS1"` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

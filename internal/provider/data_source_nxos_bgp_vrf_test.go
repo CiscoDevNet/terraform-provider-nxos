@@ -30,16 +30,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosBGPVRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_vrf.test", "name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_vrf.test", "router_id", "1.1.1.1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosBGPVRFPrerequisitesConfig + testAccDataSourceNxosBGPVRFConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_bgp_vrf.test", "name", "default"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_vrf.test", "router_id", "1.1.1.1"),
-				),
+				Config: testAccDataSourceNxosBGPVRFPrerequisitesConfig + testAccDataSourceNxosBGPVRFConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -79,20 +79,22 @@ resource "nxos_rest" "PreReq2" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosBGPVRFConfig = `
+func testAccDataSourceNxosBGPVRFConfig() string {
+	config := `resource "nxos_bgp_vrf" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	name = "default"` + "\n"
+	config += `	router_id = "1.1.1.1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_bgp_vrf" "test" {
-  asn = "65001"
-  name = "default"
-  router_id = "1.1.1.1"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-}
-
+	config += `
 data "nxos_bgp_vrf" "test" {
-  asn = "65001"
-  name = "default"
-  depends_on = [nxos_bgp_vrf.test]
+	asn = "65001"
+	name = "default"
+	depends_on = [nxos_bgp_vrf.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

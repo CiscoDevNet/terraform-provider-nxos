@@ -34,15 +34,15 @@ func TestAccDataSourceNxosFeatureMACsec(t *testing.T) {
 	if os.Getenv("MACSEC") == "" {
 		t.Skip("skipping test, set environment variable MACSEC")
 	}
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature_macsec.test", "admin_state", "enabled"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosFeatureMACsecConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_feature_macsec.test", "admin_state", "enabled"),
-				),
+				Config: testAccDataSourceNxosFeatureMACsecConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -55,15 +55,17 @@ func TestAccDataSourceNxosFeatureMACsec(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosFeatureMACsecConfig = `
+func testAccDataSourceNxosFeatureMACsecConfig() string {
+	config := `resource "nxos_feature_macsec" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_feature_macsec" "test" {
-  admin_state = "enabled"
-}
-
+	config += `
 data "nxos_feature_macsec" "test" {
-  depends_on = [nxos_feature_macsec.test]
+	depends_on = [nxos_feature_macsec.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

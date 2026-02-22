@@ -30,18 +30,18 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosOSPFMaxMetric(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_max_metric.test", "control", "external-lsa,startup,stub,summary-lsa"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_max_metric.test", "external_lsa", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_max_metric.test", "summary_lsa", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_max_metric.test", "startup_interval", "300"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosOSPFMaxMetricPrerequisitesConfig + testAccDataSourceNxosOSPFMaxMetricConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_ospf_max_metric.test", "control", "external-lsa,startup,stub,summary-lsa"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_max_metric.test", "external_lsa", "600"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_max_metric.test", "summary_lsa", "600"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_max_metric.test", "startup_interval", "300"),
-				),
+				Config: testAccDataSourceNxosOSPFMaxMetricPrerequisitesConfig + testAccDataSourceNxosOSPFMaxMetricConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -99,23 +99,25 @@ resource "nxos_rest" "PreReq4" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosOSPFMaxMetricConfig = `
+func testAccDataSourceNxosOSPFMaxMetricConfig() string {
+	config := `resource "nxos_ospf_max_metric" "test" {` + "\n"
+	config += `	instance_name = "OSPF1"` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	control = "external-lsa,startup,stub,summary-lsa"` + "\n"
+	config += `	external_lsa = 600` + "\n"
+	config += `	summary_lsa = 600` + "\n"
+	config += `	startup_interval = 300` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_ospf_max_metric" "test" {
-  instance_name = "OSPF1"
-  vrf_name = "VRF1"
-  control = "external-lsa,startup,stub,summary-lsa"
-  external_lsa = 600
-  summary_lsa = 600
-  startup_interval = 300
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-}
-
+	config += `
 data "nxos_ospf_max_metric" "test" {
-  instance_name = "OSPF1"
-  vrf_name = "VRF1"
-  depends_on = [nxos_ospf_max_metric.test]
+	instance_name = "OSPF1"
+	vrf_name = "VRF1"
+	depends_on = [nxos_ospf_max_metric.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

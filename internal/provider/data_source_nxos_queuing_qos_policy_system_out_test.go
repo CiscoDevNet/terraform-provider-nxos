@@ -30,13 +30,14 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosQueuingQOSPolicySystemOut(t *testing.T) {
+	var checks []resource.TestCheckFunc
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosQueuingQOSPolicySystemOutConfig,
-				Check:  resource.ComposeTestCheckFunc(),
+				Config: testAccDataSourceNxosQueuingQOSPolicySystemOutConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -49,14 +50,16 @@ func TestAccDataSourceNxosQueuingQOSPolicySystemOut(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosQueuingQOSPolicySystemOutConfig = `
+func testAccDataSourceNxosQueuingQOSPolicySystemOutConfig() string {
+	config := `resource "nxos_queuing_qos_policy_system_out" "test" {` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_queuing_qos_policy_system_out" "test" {
-}
-
+	config += `
 data "nxos_queuing_qos_policy_system_out" "test" {
-  depends_on = [nxos_queuing_qos_policy_system_out.test]
+	depends_on = [nxos_queuing_qos_policy_system_out.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

@@ -30,16 +30,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosVPCInterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc_interface.test", "vpc_interface_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc_interface.test", "port_channel_interface_dn", "sys/intf/aggr-[po1]"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosVPCInterfacePrerequisitesConfig + testAccDataSourceNxosVPCInterfaceConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_vpc_interface.test", "vpc_interface_id", "1"),
-					resource.TestCheckResourceAttr("data.nxos_vpc_interface.test", "port_channel_interface_dn", "sys/intf/aggr-[po1]"),
-				),
+				Config: testAccDataSourceNxosVPCInterfacePrerequisitesConfig + testAccDataSourceNxosVPCInterfaceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -86,18 +86,20 @@ resource "nxos_rest" "PreReq3" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosVPCInterfaceConfig = `
+func testAccDataSourceNxosVPCInterfaceConfig() string {
+	config := `resource "nxos_vpc_interface" "test" {` + "\n"
+	config += `	vpc_interface_id = 1` + "\n"
+	config += `	port_channel_interface_dn = "sys/intf/aggr-[po1]"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_vpc_interface" "test" {
-  vpc_interface_id = 1
-  port_channel_interface_dn = "sys/intf/aggr-[po1]"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-}
-
+	config += `
 data "nxos_vpc_interface" "test" {
-  vpc_interface_id = 1
-  depends_on = [nxos_vpc_interface.test]
+	vpc_interface_id = 1
+	depends_on = [nxos_vpc_interface.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

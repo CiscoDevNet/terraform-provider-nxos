@@ -34,6 +34,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosPIMSSMRange(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim_ssm_range.test", "vrf_name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim_ssm_range.test", "group_list_1", "232.0.0.0/8"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim_ssm_range.test", "group_list_2", "233.0.0.0/8"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim_ssm_range.test", "group_list_3", "0.0.0.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim_ssm_range.test", "group_list_4", "0.0.0.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim_ssm_range.test", "prefix_list", ""))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim_ssm_range.test", "route_map", ""))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim_ssm_range.test", "ssm_none", "false"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,16 +53,7 @@ func TestAccNxosPIMSSMRange(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosPIMSSMRangePrerequisitesConfig + testAccNxosPIMSSMRangeConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_pim_ssm_range.test", "vrf_name", "default"),
-					resource.TestCheckResourceAttr("nxos_pim_ssm_range.test", "group_list_1", "232.0.0.0/8"),
-					resource.TestCheckResourceAttr("nxos_pim_ssm_range.test", "group_list_2", "233.0.0.0/8"),
-					resource.TestCheckResourceAttr("nxos_pim_ssm_range.test", "group_list_3", "0.0.0.0"),
-					resource.TestCheckResourceAttr("nxos_pim_ssm_range.test", "group_list_4", "0.0.0.0"),
-					resource.TestCheckResourceAttr("nxos_pim_ssm_range.test", "prefix_list", ""),
-					resource.TestCheckResourceAttr("nxos_pim_ssm_range.test", "route_map", ""),
-					resource.TestCheckResourceAttr("nxos_pim_ssm_range.test", "ssm_none", "false"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_pim_ssm_range.test",
@@ -129,31 +129,29 @@ resource "nxos_rest" "PreReq4" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosPIMSSMRangeConfig_minimum() string {
-	return `
-	resource "nxos_pim_ssm_range" "test" {
-		vrf_name = "default"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-	}
-	`
+	config := `resource "nxos_pim_ssm_range" "test" {` + "\n"
+	config += `	vrf_name = "default"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosPIMSSMRangeConfig_all() string {
-	return `
-	resource "nxos_pim_ssm_range" "test" {
-		vrf_name = "default"
-		group_list_1 = "232.0.0.0/8"
-		group_list_2 = "233.0.0.0/8"
-		group_list_3 = "0.0.0.0"
-		group_list_4 = "0.0.0.0"
-		prefix_list = ""
-		route_map = ""
-		ssm_none = false
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-	}
-	`
+	config := `resource "nxos_pim_ssm_range" "test" {` + "\n"
+	config += `	vrf_name = "default"` + "\n"
+	config += `	group_list_1 = "232.0.0.0/8"` + "\n"
+	config += `	group_list_2 = "233.0.0.0/8"` + "\n"
+	config += `	group_list_3 = "0.0.0.0"` + "\n"
+	config += `	group_list_4 = "0.0.0.0"` + "\n"
+	config += `	prefix_list = ""` + "\n"
+	config += `	route_map = ""` + "\n"
+	config += `	ssm_none = false` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

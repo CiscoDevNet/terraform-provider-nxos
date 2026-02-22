@@ -30,16 +30,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosBGPGracefulRestart(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_graceful_restart.test", "restart_interval", "240"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_graceful_restart.test", "stale_interval", "1800"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosBGPGracefulRestartPrerequisitesConfig + testAccDataSourceNxosBGPGracefulRestartConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_bgp_graceful_restart.test", "restart_interval", "240"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_graceful_restart.test", "stale_interval", "1800"),
-				),
+				Config: testAccDataSourceNxosBGPGracefulRestartPrerequisitesConfig + testAccDataSourceNxosBGPGracefulRestartConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -88,21 +88,23 @@ resource "nxos_rest" "PreReq3" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosBGPGracefulRestartConfig = `
+func testAccDataSourceNxosBGPGracefulRestartConfig() string {
+	config := `resource "nxos_bgp_graceful_restart" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	restart_interval = 240` + "\n"
+	config += `	stale_interval = 1800` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_bgp_graceful_restart" "test" {
-  asn = "65001"
-  vrf = "default"
-  restart_interval = 240
-  stale_interval = 1800
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-}
-
+	config += `
 data "nxos_bgp_graceful_restart" "test" {
-  asn = "65001"
-  vrf = "default"
-  depends_on = [nxos_bgp_graceful_restart.test]
+	asn = "65001"
+	vrf = "default"
+	depends_on = [nxos_bgp_graceful_restart.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

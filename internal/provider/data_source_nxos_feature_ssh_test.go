@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosFeatureSSH(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature_ssh.test", "admin_state", "enabled"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosFeatureSSHConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_feature_ssh.test", "admin_state", "enabled"),
-				),
+				Config: testAccDataSourceNxosFeatureSSHConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -51,15 +51,17 @@ func TestAccDataSourceNxosFeatureSSH(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosFeatureSSHConfig = `
+func testAccDataSourceNxosFeatureSSHConfig() string {
+	config := `resource "nxos_feature_ssh" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_feature_ssh" "test" {
-  admin_state = "enabled"
-}
-
+	config += `
 data "nxos_feature_ssh" "test" {
-  depends_on = [nxos_feature_ssh.test]
+	depends_on = [nxos_feature_ssh.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

@@ -34,6 +34,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosOSPFVRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "instance_name", "OSPF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "log_adjacency_changes", "brief"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "bandwidth_reference", "400000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "bandwidth_reference_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "distance", "110"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "router_id", "34.56.78.90"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "control", "bfd,default-passive"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,17 +54,7 @@ func TestAccNxosOSPFVRF(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosOSPFVRFPrerequisitesConfig + testAccNxosOSPFVRFConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "instance_name", "OSPF1"),
-					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "name", "VRF1"),
-					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "log_adjacency_changes", "brief"),
-					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "admin_state", "enabled"),
-					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "bandwidth_reference", "400000"),
-					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "bandwidth_reference_unit", "mbps"),
-					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "distance", "110"),
-					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "router_id", "34.56.78.90"),
-					resource.TestCheckResourceAttr("nxos_ospf_vrf.test", "control", "bfd,default-passive"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_ospf_vrf.test",
@@ -129,33 +129,31 @@ resource "nxos_rest" "PreReq3" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosOSPFVRFConfig_minimum() string {
-	return `
-	resource "nxos_ospf_vrf" "test" {
-		instance_name = "OSPF1"
-		name = "VRF1"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_ospf_vrf" "test" {` + "\n"
+	config += `	instance_name = "OSPF1"` + "\n"
+	config += `	name = "VRF1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosOSPFVRFConfig_all() string {
-	return `
-	resource "nxos_ospf_vrf" "test" {
-		instance_name = "OSPF1"
-		name = "VRF1"
-		log_adjacency_changes = "brief"
-		admin_state = "enabled"
-		bandwidth_reference = 400000
-		bandwidth_reference_unit = "mbps"
-		distance = 110
-		router_id = "34.56.78.90"
-		control = "bfd,default-passive"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_ospf_vrf" "test" {` + "\n"
+	config += `	instance_name = "OSPF1"` + "\n"
+	config += `	name = "VRF1"` + "\n"
+	config += `	log_adjacency_changes = "brief"` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	bandwidth_reference = 400000` + "\n"
+	config += `	bandwidth_reference_unit = "mbps"` + "\n"
+	config += `	distance = 110` + "\n"
+	config += `	router_id = "34.56.78.90"` + "\n"
+	config += `	control = "bfd,default-passive"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

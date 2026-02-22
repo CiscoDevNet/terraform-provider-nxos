@@ -34,6 +34,10 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosPIMAnycastRPPeer(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim_anycast_rp_peer.test", "vrf_name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim_anycast_rp_peer.test", "address", "10.1.1.1/32"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim_anycast_rp_peer.test", "rp_set_address", "20.1.1.1/32"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,11 +48,7 @@ func TestAccNxosPIMAnycastRPPeer(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosPIMAnycastRPPeerPrerequisitesConfig + testAccNxosPIMAnycastRPPeerConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_pim_anycast_rp_peer.test", "vrf_name", "default"),
-					resource.TestCheckResourceAttr("nxos_pim_anycast_rp_peer.test", "address", "10.1.1.1/32"),
-					resource.TestCheckResourceAttr("nxos_pim_anycast_rp_peer.test", "rp_set_address", "20.1.1.1/32"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_pim_anycast_rp_peer.test",
@@ -126,28 +126,26 @@ resource "nxos_rest" "PreReq4" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosPIMAnycastRPPeerConfig_minimum() string {
-	return `
-	resource "nxos_pim_anycast_rp_peer" "test" {
-		vrf_name = "default"
-		address = "10.1.1.1/32"
-		rp_set_address = "20.1.1.1/32"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-	}
-	`
+	config := `resource "nxos_pim_anycast_rp_peer" "test" {` + "\n"
+	config += `	vrf_name = "default"` + "\n"
+	config += `	address = "10.1.1.1/32"` + "\n"
+	config += `	rp_set_address = "20.1.1.1/32"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosPIMAnycastRPPeerConfig_all() string {
-	return `
-	resource "nxos_pim_anycast_rp_peer" "test" {
-		vrf_name = "default"
-		address = "10.1.1.1/32"
-		rp_set_address = "20.1.1.1/32"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-	}
-	`
+	config := `resource "nxos_pim_anycast_rp_peer" "test" {` + "\n"
+	config += `	vrf_name = "default"` + "\n"
+	config += `	address = "10.1.1.1/32"` + "\n"
+	config += `	rp_set_address = "20.1.1.1/32"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

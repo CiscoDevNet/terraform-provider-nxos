@@ -34,6 +34,9 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosEthernet(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ethernet.test", "mtu", "9216"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ethernet.test", "default_admin_status", "up"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,10 +47,7 @@ func TestAccNxosEthernet(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosEthernetConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ethernet.test", "mtu", "9216"),
-					resource.TestCheckResourceAttr("nxos_ethernet.test", "default_admin_status", "up"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_ethernet.test",
@@ -83,22 +83,20 @@ func nxosEthernetImportStateIdFunc(resourceName string) resource.ImportStateIdFu
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosEthernetConfig_minimum() string {
-	return `
-	resource "nxos_ethernet" "test" {
-	}
-	`
+	config := `resource "nxos_ethernet" "test" {` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosEthernetConfig_all() string {
-	return `
-	resource "nxos_ethernet" "test" {
-		mtu = 9216
-		default_admin_status = "up"
-	}
-	`
+	config := `resource "nxos_ethernet" "test" {` + "\n"
+	config += `	mtu = 9216` + "\n"
+	config += `	default_admin_status = "up"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

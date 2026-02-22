@@ -34,6 +34,8 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosVPCPeerlink(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_peerlink.test", "port_channel_id", "po1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,9 +46,7 @@ func TestAccNxosVPCPeerlink(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosVPCPeerlinkPrerequisitesConfig + testAccNxosVPCPeerlinkConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_vpc_peerlink.test", "port_channel_id", "po1"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_vpc_peerlink.test",
@@ -136,24 +136,22 @@ resource "nxos_rest" "PreReq5" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosVPCPeerlinkConfig_minimum() string {
-	return `
-	resource "nxos_vpc_peerlink" "test" {
-		port_channel_id = "po1"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]
-	}
-	`
+	config := `resource "nxos_vpc_peerlink" "test" {` + "\n"
+	config += `	port_channel_id = "po1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosVPCPeerlinkConfig_all() string {
-	return `
-	resource "nxos_vpc_peerlink" "test" {
-		port_channel_id = "po1"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]
-	}
-	`
+	config := `resource "nxos_vpc_peerlink" "test" {` + "\n"
+	config += `	port_channel_id = "po1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

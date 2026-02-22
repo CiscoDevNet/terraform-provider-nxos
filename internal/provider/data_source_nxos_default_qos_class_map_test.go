@@ -30,16 +30,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosDefaultQOSClassMap(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos_class_map.test", "name", "Voice"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos_class_map.test", "match_type", "match-any"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosDefaultQOSClassMapConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_default_qos_class_map.test", "name", "Voice"),
-					resource.TestCheckResourceAttr("data.nxos_default_qos_class_map.test", "match_type", "match-any"),
-				),
+				Config: testAccDataSourceNxosDefaultQOSClassMapConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -52,17 +52,19 @@ func TestAccDataSourceNxosDefaultQOSClassMap(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosDefaultQOSClassMapConfig = `
+func testAccDataSourceNxosDefaultQOSClassMapConfig() string {
+	config := `resource "nxos_default_qos_class_map" "test" {` + "\n"
+	config += `	name = "Voice"` + "\n"
+	config += `	match_type = "match-any"` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_default_qos_class_map" "test" {
-  name = "Voice"
-  match_type = "match-any"
-}
-
+	config += `
 data "nxos_default_qos_class_map" "test" {
-  name = "Voice"
-  depends_on = [nxos_default_qos_class_map.test]
+	name = "Voice"
+	depends_on = [nxos_default_qos_class_map.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

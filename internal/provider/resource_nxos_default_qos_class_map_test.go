@@ -34,6 +34,9 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosDefaultQOSClassMap(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_class_map.test", "name", "Voice"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_class_map.test", "match_type", "match-any"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,10 +47,7 @@ func TestAccNxosDefaultQOSClassMap(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosDefaultQOSClassMapConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_default_qos_class_map.test", "name", "Voice"),
-					resource.TestCheckResourceAttr("nxos_default_qos_class_map.test", "match_type", "match-any"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_default_qos_class_map.test",
@@ -85,23 +85,21 @@ func nxosDefaultQOSClassMapImportStateIdFunc(resourceName string) resource.Impor
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosDefaultQOSClassMapConfig_minimum() string {
-	return `
-	resource "nxos_default_qos_class_map" "test" {
-		name = "Voice"
-	}
-	`
+	config := `resource "nxos_default_qos_class_map" "test" {` + "\n"
+	config += `	name = "Voice"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosDefaultQOSClassMapConfig_all() string {
-	return `
-	resource "nxos_default_qos_class_map" "test" {
-		name = "Voice"
-		match_type = "match-any"
-	}
-	`
+	config := `resource "nxos_default_qos_class_map" "test" {` + "\n"
+	config += `	name = "Voice"` + "\n"
+	config += `	match_type = "match-any"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

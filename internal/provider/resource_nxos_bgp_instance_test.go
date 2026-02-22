@@ -34,6 +34,10 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosBGPInstance(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_instance.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_instance.test", "asn", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_instance.test", "enhanced_error_handling", "false"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,11 +48,7 @@ func TestAccNxosBGPInstance(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosBGPInstancePrerequisitesConfig + testAccNxosBGPInstanceConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_bgp_instance.test", "admin_state", "enabled"),
-					resource.TestCheckResourceAttr("nxos_bgp_instance.test", "asn", "65001"),
-					resource.TestCheckResourceAttr("nxos_bgp_instance.test", "enhanced_error_handling", "false"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_bgp_instance.test",
@@ -101,25 +101,23 @@ resource "nxos_rest" "PreReq1" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosBGPInstanceConfig_minimum() string {
-	return `
-	resource "nxos_bgp_instance" "test" {
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-	}
-	`
+	config := `resource "nxos_bgp_instance" "test" {` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosBGPInstanceConfig_all() string {
-	return `
-	resource "nxos_bgp_instance" "test" {
-		admin_state = "enabled"
-		asn = "65001"
-		enhanced_error_handling = false
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-	}
-	`
+	config := `resource "nxos_bgp_instance" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	enhanced_error_handling = false` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

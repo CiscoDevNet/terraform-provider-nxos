@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosPIMStaticRPPolicy(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim_static_rp_policy.test", "name", "RP"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosPIMStaticRPPolicyPrerequisitesConfig + testAccDataSourceNxosPIMStaticRPPolicyConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_pim_static_rp_policy.test", "name", "RP"),
-				),
+				Config: testAccDataSourceNxosPIMStaticRPPolicyPrerequisitesConfig + testAccDataSourceNxosPIMStaticRPPolicyConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -83,18 +83,20 @@ resource "nxos_rest" "PreReq3" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosPIMStaticRPPolicyConfig = `
+func testAccDataSourceNxosPIMStaticRPPolicyConfig() string {
+	config := `resource "nxos_pim_static_rp_policy" "test" {` + "\n"
+	config += `	vrf_name = "default"` + "\n"
+	config += `	name = "RP"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_pim_static_rp_policy" "test" {
-  vrf_name = "default"
-  name = "RP"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-}
-
+	config += `
 data "nxos_pim_static_rp_policy" "test" {
-  vrf_name = "default"
-  depends_on = [nxos_pim_static_rp_policy.test]
+	vrf_name = "default"
+	depends_on = [nxos_pim_static_rp_policy.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

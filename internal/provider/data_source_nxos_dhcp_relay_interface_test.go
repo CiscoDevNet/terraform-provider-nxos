@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosDHCPRelayInterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp_relay_interface.test", "interface_id", "eth1/10"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosDHCPRelayInterfacePrerequisitesConfig + testAccDataSourceNxosDHCPRelayInterfaceConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_dhcp_relay_interface.test", "interface_id", "eth1/10"),
-				),
+				Config: testAccDataSourceNxosDHCPRelayInterfacePrerequisitesConfig + testAccDataSourceNxosDHCPRelayInterfaceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -70,17 +70,19 @@ resource "nxos_rest" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosDHCPRelayInterfaceConfig = `
+func testAccDataSourceNxosDHCPRelayInterfaceConfig() string {
+	config := `resource "nxos_dhcp_relay_interface" "test" {` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_dhcp_relay_interface" "test" {
-  interface_id = "eth1/10"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-}
-
+	config += `
 data "nxos_dhcp_relay_interface" "test" {
-  interface_id = "eth1/10"
-  depends_on = [nxos_dhcp_relay_interface.test]
+	interface_id = "eth1/10"
+	depends_on = [nxos_dhcp_relay_interface.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

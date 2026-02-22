@@ -30,19 +30,19 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosBGPPeerTemplate(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer_template.test", "template_name", "SPINE-PEERS"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer_template.test", "remote_asn", "65002"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer_template.test", "description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer_template.test", "peer_type", "fabric-internal"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer_template.test", "source_interface", "lo0"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosBGPPeerTemplatePrerequisitesConfig + testAccDataSourceNxosBGPPeerTemplateConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer_template.test", "template_name", "SPINE-PEERS"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer_template.test", "remote_asn", "65002"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer_template.test", "description", "My Description"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer_template.test", "peer_type", "fabric-internal"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer_template.test", "source_interface", "lo0"),
-				),
+				Config: testAccDataSourceNxosBGPPeerTemplatePrerequisitesConfig + testAccDataSourceNxosBGPPeerTemplateConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -91,23 +91,25 @@ resource "nxos_rest" "PreReq3" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosBGPPeerTemplateConfig = `
+func testAccDataSourceNxosBGPPeerTemplateConfig() string {
+	config := `resource "nxos_bgp_peer_template" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	template_name = "SPINE-PEERS"` + "\n"
+	config += `	remote_asn = "65002"` + "\n"
+	config += `	description = "My Description"` + "\n"
+	config += `	peer_type = "fabric-internal"` + "\n"
+	config += `	source_interface = "lo0"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_bgp_peer_template" "test" {
-  asn = "65001"
-  template_name = "SPINE-PEERS"
-  remote_asn = "65002"
-  description = "My Description"
-  peer_type = "fabric-internal"
-  source_interface = "lo0"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-}
-
+	config += `
 data "nxos_bgp_peer_template" "test" {
-  asn = "65001"
-  template_name = "SPINE-PEERS"
-  depends_on = [nxos_bgp_peer_template.test]
+	asn = "65001"
+	template_name = "SPINE-PEERS"
+	depends_on = [nxos_bgp_peer_template.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

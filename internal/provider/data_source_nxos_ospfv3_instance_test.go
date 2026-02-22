@@ -30,16 +30,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosOSPFv3Instance(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3_instance.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3_instance.test", "name", "OSPFv3"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosOSPFv3InstancePrerequisitesConfig + testAccDataSourceNxosOSPFv3InstanceConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_ospfv3_instance.test", "admin_state", "enabled"),
-					resource.TestCheckResourceAttr("data.nxos_ospfv3_instance.test", "name", "OSPFv3"),
-				),
+				Config: testAccDataSourceNxosOSPFv3InstancePrerequisitesConfig + testAccDataSourceNxosOSPFv3InstanceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -69,18 +69,20 @@ resource "nxos_rest" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosOSPFv3InstanceConfig = `
+func testAccDataSourceNxosOSPFv3InstanceConfig() string {
+	config := `resource "nxos_ospfv3_instance" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	name = "OSPFv3"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_ospfv3_instance" "test" {
-  admin_state = "enabled"
-  name = "OSPFv3"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-}
-
+	config += `
 data "nxos_ospfv3_instance" "test" {
-  name = "OSPFv3"
-  depends_on = [nxos_ospfv3_instance.test]
+	name = "OSPFv3"
+	depends_on = [nxos_ospfv3_instance.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

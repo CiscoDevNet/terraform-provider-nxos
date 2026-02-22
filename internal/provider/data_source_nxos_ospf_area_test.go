@@ -30,18 +30,18 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosOSPFArea(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_area.test", "area_id", "0.0.0.10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_area.test", "authentication_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_area.test", "cost", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf_area.test", "type", "stub"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosOSPFAreaPrerequisitesConfig + testAccDataSourceNxosOSPFAreaConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_ospf_area.test", "area_id", "0.0.0.10"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_area.test", "authentication_type", "none"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_area.test", "cost", "10"),
-					resource.TestCheckResourceAttr("data.nxos_ospf_area.test", "type", "stub"),
-				),
+				Config: testAccDataSourceNxosOSPFAreaPrerequisitesConfig + testAccDataSourceNxosOSPFAreaConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -89,24 +89,26 @@ resource "nxos_rest" "PreReq3" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosOSPFAreaConfig = `
+func testAccDataSourceNxosOSPFAreaConfig() string {
+	config := `resource "nxos_ospf_area" "test" {` + "\n"
+	config += `	instance_name = "OSPF1"` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	area_id = "0.0.0.10"` + "\n"
+	config += `	authentication_type = "none"` + "\n"
+	config += `	cost = 10` + "\n"
+	config += `	type = "stub"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_ospf_area" "test" {
-  instance_name = "OSPF1"
-  vrf_name = "VRF1"
-  area_id = "0.0.0.10"
-  authentication_type = "none"
-  cost = 10
-  type = "stub"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-}
-
+	config += `
 data "nxos_ospf_area" "test" {
-  instance_name = "OSPF1"
-  vrf_name = "VRF1"
-  area_id = "0.0.0.10"
-  depends_on = [nxos_ospf_area.test]
+	instance_name = "OSPF1"
+	vrf_name = "VRF1"
+	area_id = "0.0.0.10"
+	depends_on = [nxos_ospf_area.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

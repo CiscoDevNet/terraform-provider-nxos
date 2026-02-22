@@ -34,6 +34,10 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosUser(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user.test", "name", "user1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user.test", "allow_expired", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user.test", "roles.0.name", "network-operator"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,11 +48,7 @@ func TestAccNxosUser(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosUserPrerequisitesConfig + testAccNxosUserConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_user.test", "name", "user1"),
-					resource.TestCheckResourceAttr("nxos_user.test", "allow_expired", "yes"),
-					resource.TestCheckResourceAttr("nxos_user.test", "roles.0.name", "network-operator"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_user.test",
@@ -93,28 +93,26 @@ resource "nxos_rest" "PreReq0" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosUserConfig_minimum() string {
-	return `
-	resource "nxos_user" "test" {
-		name = "user1"
-  		depends_on = [nxos_rest.PreReq0, ]
-	}
-	`
+	config := `resource "nxos_user" "test" {` + "\n"
+	config += `	name = "user1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosUserConfig_all() string {
-	return `
-	resource "nxos_user" "test" {
-		name = "user1"
-		allow_expired = "yes"
-		roles = [{
-			name = "network-operator"
-		}]
-  		depends_on = [nxos_rest.PreReq0, ]
-	}
-	`
+	config := `resource "nxos_user" "test" {` + "\n"
+	config += `	name = "user1"` + "\n"
+	config += `	allow_expired = "yes"` + "\n"
+	config += `	roles = [{` + "\n"
+	config += `		name = "network-operator"` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

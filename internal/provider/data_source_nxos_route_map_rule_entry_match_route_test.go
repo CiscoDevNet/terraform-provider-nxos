@@ -30,13 +30,14 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosRouteMapRuleEntryMatchRoute(t *testing.T) {
+	var checks []resource.TestCheckFunc
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosRouteMapRuleEntryMatchRoutePrerequisitesConfig + testAccDataSourceNxosRouteMapRuleEntryMatchRouteConfig,
-				Check:  resource.ComposeTestCheckFunc(),
+				Config: testAccDataSourceNxosRouteMapRuleEntryMatchRoutePrerequisitesConfig + testAccDataSourceNxosRouteMapRuleEntryMatchRouteConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -68,19 +69,21 @@ resource "nxos_rest" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosRouteMapRuleEntryMatchRouteConfig = `
+func testAccDataSourceNxosRouteMapRuleEntryMatchRouteConfig() string {
+	config := `resource "nxos_route_map_rule_entry_match_route" "test" {` + "\n"
+	config += `	rule_name = "RULE1"` + "\n"
+	config += `	order = 10` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_route_map_rule_entry_match_route" "test" {
-  rule_name = "RULE1"
-  order = 10
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-}
-
+	config += `
 data "nxos_route_map_rule_entry_match_route" "test" {
-  rule_name = "RULE1"
-  order = 10
-  depends_on = [nxos_route_map_rule_entry_match_route.test]
+	rule_name = "RULE1"
+	order = 10
+	depends_on = [nxos_route_map_rule_entry_match_route.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

@@ -30,27 +30,27 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosISISVRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "authentication_check_l1", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "authentication_check_l2", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "authentication_type_l1", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "authentication_type_l2", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "bandwidth_reference", "400000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "banwidth_reference_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "is_type", "l2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "metric_type", "wide"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "mtu", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "net", "49.0001.0000.0000.3333.00"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "passive_default", "l12"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosISISVRFPrerequisitesConfig + testAccDataSourceNxosISISVRFConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "name", "default"),
-					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "admin_state", "enabled"),
-					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "authentication_check_l1", "false"),
-					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "authentication_check_l2", "false"),
-					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "authentication_type_l1", "unknown"),
-					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "authentication_type_l2", "unknown"),
-					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "bandwidth_reference", "400000"),
-					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "banwidth_reference_unit", "mbps"),
-					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "is_type", "l2"),
-					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "metric_type", "wide"),
-					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "mtu", "2000"),
-					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "net", "49.0001.0000.0000.3333.00"),
-					resource.TestCheckResourceAttr("data.nxos_isis_vrf.test", "passive_default", "l12"),
-				),
+				Config: testAccDataSourceNxosISISVRFPrerequisitesConfig + testAccDataSourceNxosISISVRFConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -89,33 +89,35 @@ resource "nxos_rest" "PreReq2" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosISISVRFConfig = `
+func testAccDataSourceNxosISISVRFConfig() string {
+	config := `resource "nxos_isis_vrf" "test" {` + "\n"
+	config += `	instance_name = "ISIS1"` + "\n"
+	config += `	name = "default"` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	authentication_check_l1 = false` + "\n"
+	config += `	authentication_check_l2 = false` + "\n"
+	config += `	authentication_key_l1 = ""` + "\n"
+	config += `	authentication_key_l2 = ""` + "\n"
+	config += `	authentication_type_l1 = "unknown"` + "\n"
+	config += `	authentication_type_l2 = "unknown"` + "\n"
+	config += `	bandwidth_reference = 400000` + "\n"
+	config += `	banwidth_reference_unit = "mbps"` + "\n"
+	config += `	is_type = "l2"` + "\n"
+	config += `	metric_type = "wide"` + "\n"
+	config += `	mtu = 2000` + "\n"
+	config += `	net = "49.0001.0000.0000.3333.00"` + "\n"
+	config += `	passive_default = "l12"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_isis_vrf" "test" {
-  instance_name = "ISIS1"
-  name = "default"
-  admin_state = "enabled"
-  authentication_check_l1 = false
-  authentication_check_l2 = false
-  authentication_key_l1 = ""
-  authentication_key_l2 = ""
-  authentication_type_l1 = "unknown"
-  authentication_type_l2 = "unknown"
-  bandwidth_reference = 400000
-  banwidth_reference_unit = "mbps"
-  is_type = "l2"
-  metric_type = "wide"
-  mtu = 2000
-  net = "49.0001.0000.0000.3333.00"
-  passive_default = "l12"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-}
-
+	config += `
 data "nxos_isis_vrf" "test" {
-  instance_name = "ISIS1"
-  name = "default"
-  depends_on = [nxos_isis_vrf.test]
+	instance_name = "ISIS1"
+	name = "default"
+	depends_on = [nxos_isis_vrf.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

@@ -34,6 +34,9 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosPhysicalInterfaceVRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface_vrf.test", "interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interface_vrf.test", "vrf_dn", "sys/inst-default"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,10 +47,7 @@ func TestAccNxosPhysicalInterfaceVRF(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosPhysicalInterfaceVRFPrerequisitesConfig + testAccNxosPhysicalInterfaceVRFConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_physical_interface_vrf.test", "interface_id", "eth1/10"),
-					resource.TestCheckResourceAttr("nxos_physical_interface_vrf.test", "vrf_dn", "sys/inst-default"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_physical_interface_vrf.test",
@@ -96,26 +96,24 @@ resource "nxos_rest" "PreReq0" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosPhysicalInterfaceVRFConfig_minimum() string {
-	return `
-	resource "nxos_physical_interface_vrf" "test" {
-		interface_id = "eth1/10"
-		vrf_dn = "sys/inst-default"
-  		depends_on = [nxos_rest.PreReq0, ]
-	}
-	`
+	config := `resource "nxos_physical_interface_vrf" "test" {` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `	vrf_dn = "sys/inst-default"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosPhysicalInterfaceVRFConfig_all() string {
-	return `
-	resource "nxos_physical_interface_vrf" "test" {
-		interface_id = "eth1/10"
-		vrf_dn = "sys/inst-default"
-  		depends_on = [nxos_rest.PreReq0, ]
-	}
-	`
+	config := `resource "nxos_physical_interface_vrf" "test" {` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `	vrf_dn = "sys/inst-default"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

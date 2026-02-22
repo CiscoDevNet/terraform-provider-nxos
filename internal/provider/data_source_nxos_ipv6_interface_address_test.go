@@ -30,17 +30,17 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosIPv6InterfaceAddress(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6_interface_address.test", "address", "2001:db8:3333:4444:5555:6666:7777:8888"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6_interface_address.test", "type", "primary"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6_interface_address.test", "tag", "1234"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosIPv6InterfaceAddressPrerequisitesConfig + testAccDataSourceNxosIPv6InterfaceAddressConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_ipv6_interface_address.test", "address", "2001:db8:3333:4444:5555:6666:7777:8888"),
-					resource.TestCheckResourceAttr("data.nxos_ipv6_interface_address.test", "type", "primary"),
-					resource.TestCheckResourceAttr("data.nxos_ipv6_interface_address.test", "tag", "1234"),
-				),
+				Config: testAccDataSourceNxosIPv6InterfaceAddressPrerequisitesConfig + testAccDataSourceNxosIPv6InterfaceAddressConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -78,23 +78,25 @@ resource "nxos_rest" "PreReq2" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosIPv6InterfaceAddressConfig = `
+func testAccDataSourceNxosIPv6InterfaceAddressConfig() string {
+	config := `resource "nxos_ipv6_interface_address" "test" {` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `	address = "2001:db8:3333:4444:5555:6666:7777:8888"` + "\n"
+	config += `	type = "primary"` + "\n"
+	config += `	tag = 1234` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_ipv6_interface_address" "test" {
-  vrf = "default"
-  interface_id = "eth1/10"
-  address = "2001:db8:3333:4444:5555:6666:7777:8888"
-  type = "primary"
-  tag = 1234
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-}
-
+	config += `
 data "nxos_ipv6_interface_address" "test" {
-  vrf = "default"
-  interface_id = "eth1/10"
-  address = "2001:db8:3333:4444:5555:6666:7777:8888"
-  depends_on = [nxos_ipv6_interface_address.test]
+	vrf = "default"
+	interface_id = "eth1/10"
+	address = "2001:db8:3333:4444:5555:6666:7777:8888"
+	depends_on = [nxos_ipv6_interface_address.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

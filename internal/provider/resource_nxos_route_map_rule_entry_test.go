@@ -34,6 +34,10 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosRouteMapRuleEntry(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_map_rule_entry.test", "rule_name", "RULE1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_map_rule_entry.test", "order", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_map_rule_entry.test", "action", "permit"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,11 +48,7 @@ func TestAccNxosRouteMapRuleEntry(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosRouteMapRuleEntryPrerequisitesConfig + testAccNxosRouteMapRuleEntryConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_route_map_rule_entry.test", "rule_name", "RULE1"),
-					resource.TestCheckResourceAttr("nxos_route_map_rule_entry.test", "order", "10"),
-					resource.TestCheckResourceAttr("nxos_route_map_rule_entry.test", "action", "permit"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_route_map_rule_entry.test",
@@ -97,27 +97,25 @@ resource "nxos_rest" "PreReq0" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosRouteMapRuleEntryConfig_minimum() string {
-	return `
-	resource "nxos_route_map_rule_entry" "test" {
-		rule_name = "RULE1"
-		order = 10
-  		depends_on = [nxos_rest.PreReq0, ]
-	}
-	`
+	config := `resource "nxos_route_map_rule_entry" "test" {` + "\n"
+	config += `	rule_name = "RULE1"` + "\n"
+	config += `	order = 10` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosRouteMapRuleEntryConfig_all() string {
-	return `
-	resource "nxos_route_map_rule_entry" "test" {
-		rule_name = "RULE1"
-		order = 10
-		action = "permit"
-  		depends_on = [nxos_rest.PreReq0, ]
-	}
-	`
+	config := `resource "nxos_route_map_rule_entry" "test" {` + "\n"
+	config += `	rule_name = "RULE1"` + "\n"
+	config += `	order = 10` + "\n"
+	config += `	action = "permit"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

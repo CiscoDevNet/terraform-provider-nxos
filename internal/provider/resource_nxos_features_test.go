@@ -22,6 +22,7 @@ package provider
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
+	"os"
 	"testing"
 
 	goversion "github.com/hashicorp/go-version"
@@ -34,6 +35,41 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosFeatures(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "bash_shell", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "bfd", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "bgp", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "dhcp", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "evpn", "enabled"))
+	if os.Getenv("FEATURE_HMM") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "hmm", "enabled"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "hsrp", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "interface_vlan", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "isis", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "lacp", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "lldp", "enabled"))
+	if os.Getenv("MACSEC") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "macsec", "enabled"))
+	}
+	if os.Getenv("NETFLOW") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "netflow", "enabled"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "ngmvpn", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "ngoam", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "nv_overlay", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "ospf", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "ospfv3", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "pim", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "ptp", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "pvlan", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "sflow", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "ssh", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "tacacs", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "telnet", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "udld", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "vn_segment", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "vpc", "enabled"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,36 +80,7 @@ func TestAccNxosFeatures(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosFeaturesConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_features.test", "bash_shell", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "bfd", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "bgp", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "dhcp", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "evpn", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "hmm", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "hsrp", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "interface_vlan", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "isis", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "lacp", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "lldp", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "macsec", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "netflow", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "ngmvpn", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "ngoam", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "nv_overlay", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "ospf", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "ospfv3", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "pim", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "ptp", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "pvlan", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "sflow", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "ssh", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "tacacs", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "telnet", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "udld", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "vn_segment", "enabled"),
-					resource.TestCheckResourceAttr("nxos_features.test", "vpc", "enabled"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_features.test",
@@ -109,48 +116,52 @@ func nxosFeaturesImportStateIdFunc(resourceName string) resource.ImportStateIdFu
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosFeaturesConfig_minimum() string {
-	return `
-	resource "nxos_features" "test" {
-	}
-	`
+	config := `resource "nxos_features" "test" {` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosFeaturesConfig_all() string {
-	return `
-	resource "nxos_features" "test" {
-		bash_shell = "enabled"
-		bfd = "enabled"
-		bgp = "enabled"
-		dhcp = "enabled"
-		evpn = "enabled"
-		hmm = "enabled"
-		hsrp = "enabled"
-		interface_vlan = "enabled"
-		isis = "enabled"
-		lacp = "enabled"
-		lldp = "enabled"
-		macsec = "enabled"
-		netflow = "enabled"
-		ngmvpn = "enabled"
-		ngoam = "enabled"
-		nv_overlay = "enabled"
-		ospf = "enabled"
-		ospfv3 = "enabled"
-		pim = "enabled"
-		ptp = "enabled"
-		pvlan = "enabled"
-		sflow = "enabled"
-		ssh = "enabled"
-		tacacs = "enabled"
-		telnet = "enabled"
-		udld = "enabled"
-		vn_segment = "enabled"
-		vpc = "enabled"
+	config := `resource "nxos_features" "test" {` + "\n"
+	config += `	bash_shell = "enabled"` + "\n"
+	config += `	bfd = "enabled"` + "\n"
+	config += `	bgp = "enabled"` + "\n"
+	config += `	dhcp = "enabled"` + "\n"
+	config += `	evpn = "enabled"` + "\n"
+	if os.Getenv("FEATURE_HMM") != "" {
+		config += `	hmm = "enabled"` + "\n"
 	}
-	`
+	config += `	hsrp = "enabled"` + "\n"
+	config += `	interface_vlan = "enabled"` + "\n"
+	config += `	isis = "enabled"` + "\n"
+	config += `	lacp = "enabled"` + "\n"
+	config += `	lldp = "enabled"` + "\n"
+	if os.Getenv("MACSEC") != "" {
+		config += `	macsec = "enabled"` + "\n"
+	}
+	if os.Getenv("NETFLOW") != "" {
+		config += `	netflow = "enabled"` + "\n"
+	}
+	config += `	ngmvpn = "enabled"` + "\n"
+	config += `	ngoam = "enabled"` + "\n"
+	config += `	nv_overlay = "enabled"` + "\n"
+	config += `	ospf = "enabled"` + "\n"
+	config += `	ospfv3 = "enabled"` + "\n"
+	config += `	pim = "enabled"` + "\n"
+	config += `	ptp = "enabled"` + "\n"
+	config += `	pvlan = "enabled"` + "\n"
+	config += `	sflow = "enabled"` + "\n"
+	config += `	ssh = "enabled"` + "\n"
+	config += `	tacacs = "enabled"` + "\n"
+	config += `	telnet = "enabled"` + "\n"
+	config += `	udld = "enabled"` + "\n"
+	config += `	vn_segment = "enabled"` + "\n"
+	config += `	vpc = "enabled"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

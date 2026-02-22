@@ -34,6 +34,13 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosBGPPeerAddressFamilyRouteControl(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_peer_address_family_route_control.test", "asn", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_peer_address_family_route_control.test", "vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_peer_address_family_route_control.test", "address", "192.168.0.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_peer_address_family_route_control.test", "address_family", "ipv4-ucast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_peer_address_family_route_control.test", "direction", "in"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp_peer_address_family_route_control.test", "route_map_name", "ROUTE_MAP1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,14 +51,7 @@ func TestAccNxosBGPPeerAddressFamilyRouteControl(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosBGPPeerAddressFamilyRouteControlPrerequisitesConfig + testAccNxosBGPPeerAddressFamilyRouteControlConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_bgp_peer_address_family_route_control.test", "asn", "65001"),
-					resource.TestCheckResourceAttr("nxos_bgp_peer_address_family_route_control.test", "vrf", "default"),
-					resource.TestCheckResourceAttr("nxos_bgp_peer_address_family_route_control.test", "address", "192.168.0.1"),
-					resource.TestCheckResourceAttr("nxos_bgp_peer_address_family_route_control.test", "address_family", "ipv4-ucast"),
-					resource.TestCheckResourceAttr("nxos_bgp_peer_address_family_route_control.test", "direction", "in"),
-					resource.TestCheckResourceAttr("nxos_bgp_peer_address_family_route_control.test", "route_map_name", "ROUTE_MAP1"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_bgp_peer_address_family_route_control.test",
@@ -148,33 +148,31 @@ resource "nxos_rest" "PreReq5" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosBGPPeerAddressFamilyRouteControlConfig_minimum() string {
-	return `
-	resource "nxos_bgp_peer_address_family_route_control" "test" {
-		asn = "65001"
-		vrf = "default"
-		address = "192.168.0.1"
-		address_family = "ipv4-ucast"
-		direction = "in"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]
-	}
-	`
+	config := `resource "nxos_bgp_peer_address_family_route_control" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	address = "192.168.0.1"` + "\n"
+	config += `	address_family = "ipv4-ucast"` + "\n"
+	config += `	direction = "in"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosBGPPeerAddressFamilyRouteControlConfig_all() string {
-	return `
-	resource "nxos_bgp_peer_address_family_route_control" "test" {
-		asn = "65001"
-		vrf = "default"
-		address = "192.168.0.1"
-		address_family = "ipv4-ucast"
-		direction = "in"
-		route_map_name = "ROUTE_MAP1"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]
-	}
-	`
+	config := `resource "nxos_bgp_peer_address_family_route_control" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	address = "192.168.0.1"` + "\n"
+	config += `	address_family = "ipv4-ucast"` + "\n"
+	config += `	direction = "in"` + "\n"
+	config += `	route_map_name = "ROUTE_MAP1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

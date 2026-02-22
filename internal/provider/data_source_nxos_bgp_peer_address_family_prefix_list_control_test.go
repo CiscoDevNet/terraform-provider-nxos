@@ -30,16 +30,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosBGPPeerAddressFamilyPrefixListControl(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer_address_family_prefix_list_control.test", "direction", "in"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer_address_family_prefix_list_control.test", "list", "PREFIX_LIST1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosBGPPeerAddressFamilyPrefixListControlPrerequisitesConfig + testAccDataSourceNxosBGPPeerAddressFamilyPrefixListControlConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer_address_family_prefix_list_control.test", "direction", "in"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer_address_family_prefix_list_control.test", "list", "PREFIX_LIST1"),
-				),
+				Config: testAccDataSourceNxosBGPPeerAddressFamilyPrefixListControlPrerequisitesConfig + testAccDataSourceNxosBGPPeerAddressFamilyPrefixListControlConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -107,26 +107,28 @@ resource "nxos_rest" "PreReq5" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosBGPPeerAddressFamilyPrefixListControlConfig = `
+func testAccDataSourceNxosBGPPeerAddressFamilyPrefixListControlConfig() string {
+	config := `resource "nxos_bgp_peer_address_family_prefix_list_control" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	address = "192.168.0.1"` + "\n"
+	config += `	address_family = "ipv4-ucast"` + "\n"
+	config += `	direction = "in"` + "\n"
+	config += `	list = "PREFIX_LIST1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_bgp_peer_address_family_prefix_list_control" "test" {
-  asn = "65001"
-  vrf = "default"
-  address = "192.168.0.1"
-  address_family = "ipv4-ucast"
-  direction = "in"
-  list = "PREFIX_LIST1"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]
-}
-
+	config += `
 data "nxos_bgp_peer_address_family_prefix_list_control" "test" {
-  asn = "65001"
-  vrf = "default"
-  address = "192.168.0.1"
-  address_family = "ipv4-ucast"
-  direction = "in"
-  depends_on = [nxos_bgp_peer_address_family_prefix_list_control.test]
+	asn = "65001"
+	vrf = "default"
+	address = "192.168.0.1"
+	address_family = "ipv4-ucast"
+	direction = "in"
+	depends_on = [nxos_bgp_peer_address_family_prefix_list_control.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

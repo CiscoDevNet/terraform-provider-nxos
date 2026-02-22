@@ -34,6 +34,9 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosIPv4AccessListPolicyIngressInterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list_policy_ingress_interface.test", "interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_access_list_policy_ingress_interface.test", "access_list_name", "ACL1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,10 +47,7 @@ func TestAccNxosIPv4AccessListPolicyIngressInterface(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosIPv4AccessListPolicyIngressInterfaceConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list_policy_ingress_interface.test", "interface_id", "eth1/10"),
-					resource.TestCheckResourceAttr("nxos_ipv4_access_list_policy_ingress_interface.test", "access_list_name", "ACL1"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_ipv4_access_list_policy_ingress_interface.test",
@@ -85,23 +85,21 @@ func nxosIPv4AccessListPolicyIngressInterfaceImportStateIdFunc(resourceName stri
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosIPv4AccessListPolicyIngressInterfaceConfig_minimum() string {
-	return `
-	resource "nxos_ipv4_access_list_policy_ingress_interface" "test" {
-		interface_id = "eth1/10"
-	}
-	`
+	config := `resource "nxos_ipv4_access_list_policy_ingress_interface" "test" {` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosIPv4AccessListPolicyIngressInterfaceConfig_all() string {
-	return `
-	resource "nxos_ipv4_access_list_policy_ingress_interface" "test" {
-		interface_id = "eth1/10"
-		access_list_name = "ACL1"
-	}
-	`
+	config := `resource "nxos_ipv4_access_list_policy_ingress_interface" "test" {` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `	access_list_name = "ACL1"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

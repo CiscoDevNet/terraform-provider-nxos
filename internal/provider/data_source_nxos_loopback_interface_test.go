@@ -30,17 +30,17 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosLoopbackInterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_loopback_interface.test", "interface_id", "lo123"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_loopback_interface.test", "admin_state", "down"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_loopback_interface.test", "description", "My Description"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosLoopbackInterfaceConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_loopback_interface.test", "interface_id", "lo123"),
-					resource.TestCheckResourceAttr("data.nxos_loopback_interface.test", "admin_state", "down"),
-					resource.TestCheckResourceAttr("data.nxos_loopback_interface.test", "description", "My Description"),
-				),
+				Config: testAccDataSourceNxosLoopbackInterfaceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -53,18 +53,20 @@ func TestAccDataSourceNxosLoopbackInterface(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosLoopbackInterfaceConfig = `
+func testAccDataSourceNxosLoopbackInterfaceConfig() string {
+	config := `resource "nxos_loopback_interface" "test" {` + "\n"
+	config += `	interface_id = "lo123"` + "\n"
+	config += `	admin_state = "down"` + "\n"
+	config += `	description = "My Description"` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_loopback_interface" "test" {
-  interface_id = "lo123"
-  admin_state = "down"
-  description = "My Description"
-}
-
+	config += `
 data "nxos_loopback_interface" "test" {
-  interface_id = "lo123"
-  depends_on = [nxos_loopback_interface.test]
+	interface_id = "lo123"
+	depends_on = [nxos_loopback_interface.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

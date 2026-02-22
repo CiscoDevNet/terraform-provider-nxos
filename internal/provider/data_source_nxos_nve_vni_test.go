@@ -30,19 +30,19 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosNVEVNI(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nve_vni.test", "vni", "103100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nve_vni.test", "associate_vrf", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nve_vni.test", "multicast_group", "239.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nve_vni.test", "multisite_ingress_replication", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nve_vni.test", "suppress_arp", "off"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosNVEVNIPrerequisitesConfig + testAccDataSourceNxosNVEVNIConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_nve_vni.test", "vni", "103100"),
-					resource.TestCheckResourceAttr("data.nxos_nve_vni.test", "associate_vrf", "false"),
-					resource.TestCheckResourceAttr("data.nxos_nve_vni.test", "multicast_group", "239.1.1.1"),
-					resource.TestCheckResourceAttr("data.nxos_nve_vni.test", "multisite_ingress_replication", "disable"),
-					resource.TestCheckResourceAttr("data.nxos_nve_vni.test", "suppress_arp", "off"),
-				),
+				Config: testAccDataSourceNxosNVEVNIPrerequisitesConfig + testAccDataSourceNxosNVEVNIConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -92,21 +92,23 @@ resource "nxos_rest" "PreReq3" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosNVEVNIConfig = `
+func testAccDataSourceNxosNVEVNIConfig() string {
+	config := `resource "nxos_nve_vni" "test" {` + "\n"
+	config += `	vni = 103100` + "\n"
+	config += `	associate_vrf = false` + "\n"
+	config += `	multicast_group = "239.1.1.1"` + "\n"
+	config += `	multisite_ingress_replication = "disable"` + "\n"
+	config += `	suppress_arp = "off"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_nve_vni" "test" {
-  vni = 103100
-  associate_vrf = false
-  multicast_group = "239.1.1.1"
-  multisite_ingress_replication = "disable"
-  suppress_arp = "off"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-}
-
+	config += `
 data "nxos_nve_vni" "test" {
-  vni = 103100
-  depends_on = [nxos_nve_vni.test]
+	vni = 103100
+	depends_on = [nxos_nve_vni.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosRouteMapRuleEntrySetRegularCommunityItem(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_map_rule_entry_set_regular_community_item.test", "community", "regular:as2-nn2:65001:123"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosRouteMapRuleEntrySetRegularCommunityItemPrerequisitesConfig + testAccDataSourceNxosRouteMapRuleEntrySetRegularCommunityItemConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_route_map_rule_entry_set_regular_community_item.test", "community", "regular:as2-nn2:65001:123"),
-				),
+				Config: testAccDataSourceNxosRouteMapRuleEntrySetRegularCommunityItemPrerequisitesConfig + testAccDataSourceNxosRouteMapRuleEntrySetRegularCommunityItemConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -76,21 +76,23 @@ resource "nxos_rest" "PreReq2" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosRouteMapRuleEntrySetRegularCommunityItemConfig = `
+func testAccDataSourceNxosRouteMapRuleEntrySetRegularCommunityItemConfig() string {
+	config := `resource "nxos_route_map_rule_entry_set_regular_community_item" "test" {` + "\n"
+	config += `	rule_name = "RULE1"` + "\n"
+	config += `	order = 10` + "\n"
+	config += `	community = "regular:as2-nn2:65001:123"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_route_map_rule_entry_set_regular_community_item" "test" {
-  rule_name = "RULE1"
-  order = 10
-  community = "regular:as2-nn2:65001:123"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-}
-
+	config += `
 data "nxos_route_map_rule_entry_set_regular_community_item" "test" {
-  rule_name = "RULE1"
-  order = 10
-  community = "regular:as2-nn2:65001:123"
-  depends_on = [nxos_route_map_rule_entry_set_regular_community_item.test]
+	rule_name = "RULE1"
+	order = 10
+	community = "regular:as2-nn2:65001:123"
+	depends_on = [nxos_route_map_rule_entry_set_regular_community_item.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

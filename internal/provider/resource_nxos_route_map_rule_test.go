@@ -34,6 +34,8 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosRouteMapRule(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_map_rule.test", "name", "RULE1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,9 +46,7 @@ func TestAccNxosRouteMapRule(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosRouteMapRuleConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_route_map_rule.test", "name", "RULE1"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_route_map_rule.test",
@@ -84,22 +84,20 @@ func nxosRouteMapRuleImportStateIdFunc(resourceName string) resource.ImportState
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosRouteMapRuleConfig_minimum() string {
-	return `
-	resource "nxos_route_map_rule" "test" {
-		name = "RULE1"
-	}
-	`
+	config := `resource "nxos_route_map_rule" "test" {` + "\n"
+	config += `	name = "RULE1"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosRouteMapRuleConfig_all() string {
-	return `
-	resource "nxos_route_map_rule" "test" {
-		name = "RULE1"
-	}
-	`
+	config := `resource "nxos_route_map_rule" "test" {` + "\n"
+	config += `	name = "RULE1"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

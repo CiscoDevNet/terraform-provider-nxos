@@ -30,16 +30,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosBGPPeerAddressFamilyRouteControl(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer_address_family_route_control.test", "direction", "in"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp_peer_address_family_route_control.test", "route_map_name", "ROUTE_MAP1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosBGPPeerAddressFamilyRouteControlPrerequisitesConfig + testAccDataSourceNxosBGPPeerAddressFamilyRouteControlConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer_address_family_route_control.test", "direction", "in"),
-					resource.TestCheckResourceAttr("data.nxos_bgp_peer_address_family_route_control.test", "route_map_name", "ROUTE_MAP1"),
-				),
+				Config: testAccDataSourceNxosBGPPeerAddressFamilyRouteControlPrerequisitesConfig + testAccDataSourceNxosBGPPeerAddressFamilyRouteControlConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -107,26 +107,28 @@ resource "nxos_rest" "PreReq5" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosBGPPeerAddressFamilyRouteControlConfig = `
+func testAccDataSourceNxosBGPPeerAddressFamilyRouteControlConfig() string {
+	config := `resource "nxos_bgp_peer_address_family_route_control" "test" {` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	address = "192.168.0.1"` + "\n"
+	config += `	address_family = "ipv4-ucast"` + "\n"
+	config += `	direction = "in"` + "\n"
+	config += `	route_map_name = "ROUTE_MAP1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_bgp_peer_address_family_route_control" "test" {
-  asn = "65001"
-  vrf = "default"
-  address = "192.168.0.1"
-  address_family = "ipv4-ucast"
-  direction = "in"
-  route_map_name = "ROUTE_MAP1"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, ]
-}
-
+	config += `
 data "nxos_bgp_peer_address_family_route_control" "test" {
-  asn = "65001"
-  vrf = "default"
-  address = "192.168.0.1"
-  address_family = "ipv4-ucast"
-  direction = "in"
-  depends_on = [nxos_bgp_peer_address_family_route_control.test]
+	asn = "65001"
+	vrf = "default"
+	address = "192.168.0.1"
+	address_family = "ipv4-ucast"
+	direction = "in"
+	depends_on = [nxos_bgp_peer_address_family_route_control.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

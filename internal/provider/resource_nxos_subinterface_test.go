@@ -34,6 +34,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosSubinterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterface.test", "interface_id", "eth1/10.124"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterface.test", "admin_state", "down"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterface.test", "bandwidth", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterface.test", "delay", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterface.test", "description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterface.test", "encap", "vlan-124"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterface.test", "link_logging", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterface.test", "medium", "broadcast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterface.test", "mtu", "1500"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,17 +54,7 @@ func TestAccNxosSubinterface(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosSubinterfacePrerequisitesConfig + testAccNxosSubinterfaceConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_subinterface.test", "interface_id", "eth1/10.124"),
-					resource.TestCheckResourceAttr("nxos_subinterface.test", "admin_state", "down"),
-					resource.TestCheckResourceAttr("nxos_subinterface.test", "bandwidth", "1000"),
-					resource.TestCheckResourceAttr("nxos_subinterface.test", "delay", "10"),
-					resource.TestCheckResourceAttr("nxos_subinterface.test", "description", "My Description"),
-					resource.TestCheckResourceAttr("nxos_subinterface.test", "encap", "vlan-124"),
-					resource.TestCheckResourceAttr("nxos_subinterface.test", "link_logging", "enable"),
-					resource.TestCheckResourceAttr("nxos_subinterface.test", "medium", "broadcast"),
-					resource.TestCheckResourceAttr("nxos_subinterface.test", "mtu", "1500"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_subinterface.test",
@@ -103,32 +103,30 @@ resource "nxos_rest" "PreReq0" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosSubinterfaceConfig_minimum() string {
-	return `
-	resource "nxos_subinterface" "test" {
-		interface_id = "eth1/10.124"
-  		depends_on = [nxos_rest.PreReq0, ]
-	}
-	`
+	config := `resource "nxos_subinterface" "test" {` + "\n"
+	config += `	interface_id = "eth1/10.124"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosSubinterfaceConfig_all() string {
-	return `
-	resource "nxos_subinterface" "test" {
-		interface_id = "eth1/10.124"
-		admin_state = "down"
-		bandwidth = 1000
-		delay = 10
-		description = "My Description"
-		encap = "vlan-124"
-		link_logging = "enable"
-		medium = "broadcast"
-		mtu = 1500
-  		depends_on = [nxos_rest.PreReq0, ]
-	}
-	`
+	config := `resource "nxos_subinterface" "test" {` + "\n"
+	config += `	interface_id = "eth1/10.124"` + "\n"
+	config += `	admin_state = "down"` + "\n"
+	config += `	bandwidth = 1000` + "\n"
+	config += `	delay = 10` + "\n"
+	config += `	description = "My Description"` + "\n"
+	config += `	encap = "vlan-124"` + "\n"
+	config += `	link_logging = "enable"` + "\n"
+	config += `	medium = "broadcast"` + "\n"
+	config += `	mtu = 1500` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

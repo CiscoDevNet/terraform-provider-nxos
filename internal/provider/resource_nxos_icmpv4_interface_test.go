@@ -34,6 +34,10 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosICMPv4Interface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_icmpv4_interface.test", "vrf_name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_icmpv4_interface.test", "interface_id", "vlan10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_icmpv4_interface.test", "control", "port-unreachable"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,11 +48,7 @@ func TestAccNxosICMPv4Interface(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosICMPv4InterfacePrerequisitesConfig + testAccNxosICMPv4InterfaceConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_icmpv4_interface.test", "vrf_name", "VRF1"),
-					resource.TestCheckResourceAttr("nxos_icmpv4_interface.test", "interface_id", "vlan10"),
-					resource.TestCheckResourceAttr("nxos_icmpv4_interface.test", "control", "port-unreachable"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_icmpv4_interface.test",
@@ -136,27 +136,25 @@ resource "nxos_rest" "PreReq4" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosICMPv4InterfaceConfig_minimum() string {
-	return `
-	resource "nxos_icmpv4_interface" "test" {
-		vrf_name = "VRF1"
-		interface_id = "vlan10"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-	}
-	`
+	config := `resource "nxos_icmpv4_interface" "test" {` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	interface_id = "vlan10"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosICMPv4InterfaceConfig_all() string {
-	return `
-	resource "nxos_icmpv4_interface" "test" {
-		vrf_name = "VRF1"
-		interface_id = "vlan10"
-		control = "port-unreachable"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-	}
-	`
+	config := `resource "nxos_icmpv4_interface" "test" {` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	interface_id = "vlan10"` + "\n"
+	config += `	control = "port-unreachable"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

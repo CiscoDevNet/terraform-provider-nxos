@@ -142,6 +142,7 @@ type YamlConfigAttribute struct {
 	DeleteValue        string   `yaml:"delete_value"`
 	ExcludeTest        bool     `yaml:"exclude_test"`
 	RequiresReplace    bool     `yaml:"requires_replace"`
+	TestTags           []string `yaml:"test_tags"`
 }
 
 type YamlConfigChildClass struct {

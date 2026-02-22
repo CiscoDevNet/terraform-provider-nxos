@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosPortChannelInterfaceVRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface_vrf.test", "vrf_dn", "sys/inst-default"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosPortChannelInterfaceVRFPrerequisitesConfig + testAccDataSourceNxosPortChannelInterfaceVRFConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_port_channel_interface_vrf.test", "vrf_dn", "sys/inst-default"),
-				),
+				Config: testAccDataSourceNxosPortChannelInterfaceVRFPrerequisitesConfig + testAccDataSourceNxosPortChannelInterfaceVRFConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -62,18 +62,20 @@ resource "nxos_rest" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosPortChannelInterfaceVRFConfig = `
+func testAccDataSourceNxosPortChannelInterfaceVRFConfig() string {
+	config := `resource "nxos_port_channel_interface_vrf" "test" {` + "\n"
+	config += `	interface_id = "po1"` + "\n"
+	config += `	vrf_dn = "sys/inst-default"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_port_channel_interface_vrf" "test" {
-  interface_id = "po1"
-  vrf_dn = "sys/inst-default"
-  depends_on = [nxos_rest.PreReq0, ]
-}
-
+	config += `
 data "nxos_port_channel_interface_vrf" "test" {
-  interface_id = "po1"
-  depends_on = [nxos_port_channel_interface_vrf.test]
+	interface_id = "po1"
+	depends_on = [nxos_port_channel_interface_vrf.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

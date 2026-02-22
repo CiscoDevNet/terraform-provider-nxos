@@ -34,6 +34,17 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosOSPFv3Interface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_interface.test", "interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_interface.test", "advertise_secondaries", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_interface.test", "area", "0.0.0.10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_interface.test", "bfd", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_interface.test", "cost", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_interface.test", "dead_interval", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_interface.test", "hello_interval", "15"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_interface.test", "network_type", "p2p"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_interface.test", "passive", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_interface.test", "priority", "10"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,18 +55,7 @@ func TestAccNxosOSPFv3Interface(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosOSPFv3InterfacePrerequisitesConfig + testAccNxosOSPFv3InterfaceConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ospfv3_interface.test", "interface_id", "eth1/10"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_interface.test", "advertise_secondaries", "false"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_interface.test", "area", "0.0.0.10"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_interface.test", "bfd", "disabled"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_interface.test", "cost", "1000"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_interface.test", "dead_interval", "60"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_interface.test", "hello_interval", "15"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_interface.test", "network_type", "p2p"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_interface.test", "passive", "enabled"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_interface.test", "priority", "10"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_ospfv3_interface.test",
@@ -128,33 +128,31 @@ resource "nxos_rest" "PreReq3" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosOSPFv3InterfaceConfig_minimum() string {
-	return `
-	resource "nxos_ospfv3_interface" "test" {
-		interface_id = "eth1/10"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_ospfv3_interface" "test" {` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosOSPFv3InterfaceConfig_all() string {
-	return `
-	resource "nxos_ospfv3_interface" "test" {
-		interface_id = "eth1/10"
-		advertise_secondaries = false
-		area = "0.0.0.10"
-		bfd = "disabled"
-		cost = 1000
-		dead_interval = 60
-		hello_interval = 15
-		network_type = "p2p"
-		passive = "enabled"
-		priority = 10
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_ospfv3_interface" "test" {` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `	advertise_secondaries = false` + "\n"
+	config += `	area = "0.0.0.10"` + "\n"
+	config += `	bfd = "disabled"` + "\n"
+	config += `	cost = 1000` + "\n"
+	config += `	dead_interval = 60` + "\n"
+	config += `	hello_interval = 15` + "\n"
+	config += `	network_type = "p2p"` + "\n"
+	config += `	passive = "enabled"` + "\n"
+	config += `	priority = 10` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

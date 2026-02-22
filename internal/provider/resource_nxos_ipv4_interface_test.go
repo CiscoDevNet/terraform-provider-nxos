@@ -34,6 +34,13 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosIPv4Interface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "drop_glean", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "forward", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "unnumbered", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "urpf", "disabled"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,14 +51,7 @@ func TestAccNxosIPv4Interface(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosIPv4InterfacePrerequisitesConfig + testAccNxosIPv4InterfaceConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "vrf", "default"),
-					resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "interface_id", "eth1/10"),
-					resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "drop_glean", "disabled"),
-					resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "forward", "disabled"),
-					resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "unnumbered", "unspecified"),
-					resource.TestCheckResourceAttr("nxos_ipv4_interface.test", "urpf", "disabled"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_ipv4_interface.test",
@@ -97,30 +97,28 @@ resource "nxos_rest" "PreReq0" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosIPv4InterfaceConfig_minimum() string {
-	return `
-	resource "nxos_ipv4_interface" "test" {
-		vrf = "default"
-		interface_id = "eth1/10"
-  		depends_on = [nxos_rest.PreReq0, ]
-	}
-	`
+	config := `resource "nxos_ipv4_interface" "test" {` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosIPv4InterfaceConfig_all() string {
-	return `
-	resource "nxos_ipv4_interface" "test" {
-		vrf = "default"
-		interface_id = "eth1/10"
-		drop_glean = "disabled"
-		forward = "disabled"
-		unnumbered = "unspecified"
-		urpf = "disabled"
-  		depends_on = [nxos_rest.PreReq0, ]
-	}
-	`
+	config := `resource "nxos_ipv4_interface" "test" {` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `	drop_glean = "disabled"` + "\n"
+	config += `	forward = "disabled"` + "\n"
+	config += `	unnumbered = "unspecified"` + "\n"
+	config += `	urpf = "disabled"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

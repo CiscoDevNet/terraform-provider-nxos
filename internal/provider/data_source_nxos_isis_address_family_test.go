@@ -30,20 +30,20 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosISISAddressFamily(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_address_family.test", "vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_address_family.test", "address_family", "v4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_address_family.test", "segment_routing_mpls", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_address_family.test", "enable_bfd", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_address_family.test", "prefix_advertise_passive_l1", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_address_family.test", "prefix_advertise_passive_l2", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosISISAddressFamilyPrerequisitesConfig + testAccDataSourceNxosISISAddressFamilyConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_isis_address_family.test", "vrf", "default"),
-					resource.TestCheckResourceAttr("data.nxos_isis_address_family.test", "address_family", "v4"),
-					resource.TestCheckResourceAttr("data.nxos_isis_address_family.test", "segment_routing_mpls", "true"),
-					resource.TestCheckResourceAttr("data.nxos_isis_address_family.test", "enable_bfd", "false"),
-					resource.TestCheckResourceAttr("data.nxos_isis_address_family.test", "prefix_advertise_passive_l1", "true"),
-					resource.TestCheckResourceAttr("data.nxos_isis_address_family.test", "prefix_advertise_passive_l2", "true"),
-				),
+				Config: testAccDataSourceNxosISISAddressFamilyPrerequisitesConfig + testAccDataSourceNxosISISAddressFamilyConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -91,25 +91,27 @@ resource "nxos_rest" "PreReq3" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosISISAddressFamilyConfig = `
+func testAccDataSourceNxosISISAddressFamilyConfig() string {
+	config := `resource "nxos_isis_address_family" "test" {` + "\n"
+	config += `	instance_name = "ISIS1"` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	address_family = "v4"` + "\n"
+	config += `	segment_routing_mpls = true` + "\n"
+	config += `	enable_bfd = false` + "\n"
+	config += `	prefix_advertise_passive_l1 = true` + "\n"
+	config += `	prefix_advertise_passive_l2 = true` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_isis_address_family" "test" {
-  instance_name = "ISIS1"
-  vrf = "default"
-  address_family = "v4"
-  segment_routing_mpls = true
-  enable_bfd = false
-  prefix_advertise_passive_l1 = true
-  prefix_advertise_passive_l2 = true
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-}
-
+	config += `
 data "nxos_isis_address_family" "test" {
-  instance_name = "ISIS1"
-  vrf = "default"
-  address_family = "v4"
-  depends_on = [nxos_isis_address_family.test]
+	instance_name = "ISIS1"
+	vrf = "default"
+	address_family = "v4"
+	depends_on = [nxos_isis_address_family.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

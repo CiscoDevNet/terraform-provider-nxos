@@ -30,16 +30,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosISISInstance(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_instance.test", "name", "ISIS1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis_instance.test", "admin_state", "enabled"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosISISInstancePrerequisitesConfig + testAccDataSourceNxosISISInstanceConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_isis_instance.test", "name", "ISIS1"),
-					resource.TestCheckResourceAttr("data.nxos_isis_instance.test", "admin_state", "enabled"),
-				),
+				Config: testAccDataSourceNxosISISInstancePrerequisitesConfig + testAccDataSourceNxosISISInstanceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -69,18 +69,20 @@ resource "nxos_rest" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosISISInstanceConfig = `
+func testAccDataSourceNxosISISInstanceConfig() string {
+	config := `resource "nxos_isis_instance" "test" {` + "\n"
+	config += `	name = "ISIS1"` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_isis_instance" "test" {
-  name = "ISIS1"
-  admin_state = "enabled"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-}
-
+	config += `
 data "nxos_isis_instance" "test" {
-  name = "ISIS1"
-  depends_on = [nxos_isis_instance.test]
+	name = "ISIS1"
+	depends_on = [nxos_isis_instance.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

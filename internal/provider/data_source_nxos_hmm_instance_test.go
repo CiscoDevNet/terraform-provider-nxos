@@ -30,16 +30,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosHMMInstance(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm_instance.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm_instance.test", "anycast_mac", "20:20:00:00:10:10"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosHMMInstancePrerequisitesConfig + testAccDataSourceNxosHMMInstanceConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_hmm_instance.test", "admin_state", "enabled"),
-					resource.TestCheckResourceAttr("data.nxos_hmm_instance.test", "anycast_mac", "20:20:00:00:10:10"),
-				),
+				Config: testAccDataSourceNxosHMMInstancePrerequisitesConfig + testAccDataSourceNxosHMMInstanceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -78,17 +78,19 @@ resource "nxos_rest" "PreReq2" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosHMMInstanceConfig = `
+func testAccDataSourceNxosHMMInstanceConfig() string {
+	config := `resource "nxos_hmm_instance" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	anycast_mac = "20:20:00:00:10:10"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_hmm_instance" "test" {
-  admin_state = "enabled"
-  anycast_mac = "20:20:00:00:10:10"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-}
-
+	config += `
 data "nxos_hmm_instance" "test" {
-  depends_on = [nxos_hmm_instance.test]
+	depends_on = [nxos_hmm_instance.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

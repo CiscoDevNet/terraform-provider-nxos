@@ -34,6 +34,28 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosVPCDomain(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_domain.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_domain.test", "domain_id", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_domain.test", "auto_recovery", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_domain.test", "auto_recovery_interval", "480"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_domain.test", "delay_restore_orphan_port", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_domain.test", "delay_restore_svi", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_domain.test", "delay_restore_vpc", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_domain.test", "dscp", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_domain.test", "fast_convergence", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_domain.test", "graceful_consistency_check", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_domain.test", "l3_peer_router", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_domain.test", "l3_peer_router_syslog", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_domain.test", "l3_peer_router_syslog_interval", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_domain.test", "peer_gateway", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_domain.test", "peer_ip", "1.2.3.4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_domain.test", "peer_switch", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_domain.test", "role_priority", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_domain.test", "sys_mac", "01:01:01:01:01:01"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_domain.test", "system_priority", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_domain.test", "track", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_domain.test", "virtual_ip", "1.1.1.1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,29 +66,7 @@ func TestAccNxosVPCDomain(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosVPCDomainPrerequisitesConfig + testAccNxosVPCDomainConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_vpc_domain.test", "admin_state", "enabled"),
-					resource.TestCheckResourceAttr("nxos_vpc_domain.test", "domain_id", "100"),
-					resource.TestCheckResourceAttr("nxos_vpc_domain.test", "auto_recovery", "enabled"),
-					resource.TestCheckResourceAttr("nxos_vpc_domain.test", "auto_recovery_interval", "480"),
-					resource.TestCheckResourceAttr("nxos_vpc_domain.test", "delay_restore_orphan_port", "10"),
-					resource.TestCheckResourceAttr("nxos_vpc_domain.test", "delay_restore_svi", "20"),
-					resource.TestCheckResourceAttr("nxos_vpc_domain.test", "delay_restore_vpc", "60"),
-					resource.TestCheckResourceAttr("nxos_vpc_domain.test", "dscp", "0"),
-					resource.TestCheckResourceAttr("nxos_vpc_domain.test", "fast_convergence", "enabled"),
-					resource.TestCheckResourceAttr("nxos_vpc_domain.test", "graceful_consistency_check", "disabled"),
-					resource.TestCheckResourceAttr("nxos_vpc_domain.test", "l3_peer_router", "enabled"),
-					resource.TestCheckResourceAttr("nxos_vpc_domain.test", "l3_peer_router_syslog", "enabled"),
-					resource.TestCheckResourceAttr("nxos_vpc_domain.test", "l3_peer_router_syslog_interval", "3000"),
-					resource.TestCheckResourceAttr("nxos_vpc_domain.test", "peer_gateway", "enabled"),
-					resource.TestCheckResourceAttr("nxos_vpc_domain.test", "peer_ip", "1.2.3.4"),
-					resource.TestCheckResourceAttr("nxos_vpc_domain.test", "peer_switch", "enabled"),
-					resource.TestCheckResourceAttr("nxos_vpc_domain.test", "role_priority", "100"),
-					resource.TestCheckResourceAttr("nxos_vpc_domain.test", "sys_mac", "01:01:01:01:01:01"),
-					resource.TestCheckResourceAttr("nxos_vpc_domain.test", "system_priority", "100"),
-					resource.TestCheckResourceAttr("nxos_vpc_domain.test", "track", "10"),
-					resource.TestCheckResourceAttr("nxos_vpc_domain.test", "virtual_ip", "1.1.1.1"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_vpc_domain.test",
@@ -119,44 +119,42 @@ resource "nxos_rest" "PreReq1" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosVPCDomainConfig_minimum() string {
-	return `
-	resource "nxos_vpc_domain" "test" {
-		domain_id = 100
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-	}
-	`
+	config := `resource "nxos_vpc_domain" "test" {` + "\n"
+	config += `	domain_id = 100` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosVPCDomainConfig_all() string {
-	return `
-	resource "nxos_vpc_domain" "test" {
-		admin_state = "enabled"
-		domain_id = 100
-		auto_recovery = "enabled"
-		auto_recovery_interval = 480
-		delay_restore_orphan_port = 10
-		delay_restore_svi = 20
-		delay_restore_vpc = 60
-		dscp = 0
-		fast_convergence = "enabled"
-		graceful_consistency_check = "disabled"
-		l3_peer_router = "enabled"
-		l3_peer_router_syslog = "enabled"
-		l3_peer_router_syslog_interval = 3000
-		peer_gateway = "enabled"
-		peer_ip = "1.2.3.4"
-		peer_switch = "enabled"
-		role_priority = 100
-		sys_mac = "01:01:01:01:01:01"
-		system_priority = 100
-		track = 10
-		virtual_ip = "1.1.1.1"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-	}
-	`
+	config := `resource "nxos_vpc_domain" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	domain_id = 100` + "\n"
+	config += `	auto_recovery = "enabled"` + "\n"
+	config += `	auto_recovery_interval = 480` + "\n"
+	config += `	delay_restore_orphan_port = 10` + "\n"
+	config += `	delay_restore_svi = 20` + "\n"
+	config += `	delay_restore_vpc = 60` + "\n"
+	config += `	dscp = 0` + "\n"
+	config += `	fast_convergence = "enabled"` + "\n"
+	config += `	graceful_consistency_check = "disabled"` + "\n"
+	config += `	l3_peer_router = "enabled"` + "\n"
+	config += `	l3_peer_router_syslog = "enabled"` + "\n"
+	config += `	l3_peer_router_syslog_interval = 3000` + "\n"
+	config += `	peer_gateway = "enabled"` + "\n"
+	config += `	peer_ip = "1.2.3.4"` + "\n"
+	config += `	peer_switch = "enabled"` + "\n"
+	config += `	role_priority = 100` + "\n"
+	config += `	sys_mac = "01:01:01:01:01:01"` + "\n"
+	config += `	system_priority = 100` + "\n"
+	config += `	track = 10` + "\n"
+	config += `	virtual_ip = "1.1.1.1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

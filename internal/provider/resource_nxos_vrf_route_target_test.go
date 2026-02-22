@@ -34,6 +34,12 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosVRFRouteTarget(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf_route_target.test", "vrf", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf_route_target.test", "address_family", "ipv4-ucast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf_route_target.test", "route_target_address_family", "ipv4-ucast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf_route_target.test", "direction", "import"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf_route_target.test", "route_target", "route-target:as2-nn2:2:2"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,13 +50,7 @@ func TestAccNxosVRFRouteTarget(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosVRFRouteTargetPrerequisitesConfig + testAccNxosVRFRouteTargetConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_vrf_route_target.test", "vrf", "VRF1"),
-					resource.TestCheckResourceAttr("nxos_vrf_route_target.test", "address_family", "ipv4-ucast"),
-					resource.TestCheckResourceAttr("nxos_vrf_route_target.test", "route_target_address_family", "ipv4-ucast"),
-					resource.TestCheckResourceAttr("nxos_vrf_route_target.test", "direction", "import"),
-					resource.TestCheckResourceAttr("nxos_vrf_route_target.test", "route_target", "route-target:as2-nn2:2:2"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_vrf_route_target.test",
@@ -152,32 +152,30 @@ resource "nxos_rest" "PreReq6" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosVRFRouteTargetConfig_minimum() string {
-	return `
-	resource "nxos_vrf_route_target" "test" {
-		vrf = "VRF1"
-		address_family = "ipv4-ucast"
-		route_target_address_family = "ipv4-ucast"
-		direction = "import"
-		route_target = "route-target:as2-nn2:2:2"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, ]
-	}
-	`
+	config := `resource "nxos_vrf_route_target" "test" {` + "\n"
+	config += `	vrf = "VRF1"` + "\n"
+	config += `	address_family = "ipv4-ucast"` + "\n"
+	config += `	route_target_address_family = "ipv4-ucast"` + "\n"
+	config += `	direction = "import"` + "\n"
+	config += `	route_target = "route-target:as2-nn2:2:2"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosVRFRouteTargetConfig_all() string {
-	return `
-	resource "nxos_vrf_route_target" "test" {
-		vrf = "VRF1"
-		address_family = "ipv4-ucast"
-		route_target_address_family = "ipv4-ucast"
-		direction = "import"
-		route_target = "route-target:as2-nn2:2:2"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, ]
-	}
-	`
+	config := `resource "nxos_vrf_route_target" "test" {` + "\n"
+	config += `	vrf = "VRF1"` + "\n"
+	config += `	address_family = "ipv4-ucast"` + "\n"
+	config += `	route_target_address_family = "ipv4-ucast"` + "\n"
+	config += `	direction = "import"` + "\n"
+	config += `	route_target = "route-target:as2-nn2:2:2"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

@@ -34,6 +34,9 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosNVEVNIIngressReplication(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nve_vni_ingress_replication.test", "vni", "103100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nve_vni_ingress_replication.test", "protocol", "bgp"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,10 +47,7 @@ func TestAccNxosNVEVNIIngressReplication(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosNVEVNIIngressReplicationPrerequisitesConfig + testAccNxosNVEVNIIngressReplicationConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_nve_vni_ingress_replication.test", "vni", "103100"),
-					resource.TestCheckResourceAttr("nxos_nve_vni_ingress_replication.test", "protocol", "bgp"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_nve_vni_ingress_replication.test",
@@ -131,25 +131,23 @@ resource "nxos_rest" "PreReq4" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosNVEVNIIngressReplicationConfig_minimum() string {
-	return `
-	resource "nxos_nve_vni_ingress_replication" "test" {
-		vni = 103100
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-	}
-	`
+	config := `resource "nxos_nve_vni_ingress_replication" "test" {` + "\n"
+	config += `	vni = 103100` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosNVEVNIIngressReplicationConfig_all() string {
-	return `
-	resource "nxos_nve_vni_ingress_replication" "test" {
-		vni = 103100
-		protocol = "bgp"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]
-	}
-	`
+	config := `resource "nxos_nve_vni_ingress_replication" "test" {` + "\n"
+	config += `	vni = 103100` + "\n"
+	config += `	protocol = "bgp"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

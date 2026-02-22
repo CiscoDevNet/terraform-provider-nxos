@@ -30,19 +30,19 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosUser(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user.test", "name", "user1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user.test", "allow_expired", "yes"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_user.test", "roles.*", map[string]string{
+		"name": "network-operator",
+	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosUserPrerequisitesConfig + testAccDataSourceNxosUserConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_user.test", "name", "user1"),
-					resource.TestCheckResourceAttr("data.nxos_user.test", "allow_expired", "yes"),
-					resource.TestCheckTypeSetElemNestedAttrs("data.nxos_user.test", "roles.*", map[string]string{
-						"name": "network-operator",
-					}),
-				),
+				Config: testAccDataSourceNxosUserPrerequisitesConfig + testAccDataSourceNxosUserConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -62,21 +62,23 @@ resource "nxos_rest" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosUserConfig = `
+func testAccDataSourceNxosUserConfig() string {
+	config := `resource "nxos_user" "test" {` + "\n"
+	config += `	name = "user1"` + "\n"
+	config += `	allow_expired = "yes"` + "\n"
+	config += `	roles = [{` + "\n"
+	config += `		name = "network-operator"` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_user" "test" {
-  name = "user1"
-  allow_expired = "yes"
-  roles = [{
-    name = "network-operator"
-  }]
-  depends_on = [nxos_rest.PreReq0, ]
-}
-
+	config += `
 data "nxos_user" "test" {
-  name = "user1"
-  depends_on = [nxos_user.test]
+	name = "user1"
+	depends_on = [nxos_user.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

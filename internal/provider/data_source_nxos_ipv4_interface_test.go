@@ -30,19 +30,19 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosIPv4Interface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4_interface.test", "interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4_interface.test", "drop_glean", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4_interface.test", "forward", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4_interface.test", "unnumbered", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4_interface.test", "urpf", "disabled"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosIPv4InterfacePrerequisitesConfig + testAccDataSourceNxosIPv4InterfaceConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_ipv4_interface.test", "interface_id", "eth1/10"),
-					resource.TestCheckResourceAttr("data.nxos_ipv4_interface.test", "drop_glean", "disabled"),
-					resource.TestCheckResourceAttr("data.nxos_ipv4_interface.test", "forward", "disabled"),
-					resource.TestCheckResourceAttr("data.nxos_ipv4_interface.test", "unnumbered", "unspecified"),
-					resource.TestCheckResourceAttr("data.nxos_ipv4_interface.test", "urpf", "disabled"),
-				),
+				Config: testAccDataSourceNxosIPv4InterfacePrerequisitesConfig + testAccDataSourceNxosIPv4InterfaceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -62,23 +62,25 @@ resource "nxos_rest" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosIPv4InterfaceConfig = `
+func testAccDataSourceNxosIPv4InterfaceConfig() string {
+	config := `resource "nxos_ipv4_interface" "test" {` + "\n"
+	config += `	vrf = "default"` + "\n"
+	config += `	interface_id = "eth1/10"` + "\n"
+	config += `	drop_glean = "disabled"` + "\n"
+	config += `	forward = "disabled"` + "\n"
+	config += `	unnumbered = "unspecified"` + "\n"
+	config += `	urpf = "disabled"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_ipv4_interface" "test" {
-  vrf = "default"
-  interface_id = "eth1/10"
-  drop_glean = "disabled"
-  forward = "disabled"
-  unnumbered = "unspecified"
-  urpf = "disabled"
-  depends_on = [nxos_rest.PreReq0, ]
-}
-
+	config += `
 data "nxos_ipv4_interface" "test" {
-  vrf = "default"
-  interface_id = "eth1/10"
-  depends_on = [nxos_ipv4_interface.test]
+	vrf = "default"
+	interface_id = "eth1/10"
+	depends_on = [nxos_ipv4_interface.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

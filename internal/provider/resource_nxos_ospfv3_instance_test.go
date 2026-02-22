@@ -34,6 +34,9 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosOSPFv3Instance(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_instance.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3_instance.test", "name", "OSPFv3"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,10 +47,7 @@ func TestAccNxosOSPFv3Instance(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosOSPFv3InstancePrerequisitesConfig + testAccNxosOSPFv3InstanceConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ospfv3_instance.test", "admin_state", "enabled"),
-					resource.TestCheckResourceAttr("nxos_ospfv3_instance.test", "name", "OSPFv3"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_ospfv3_instance.test",
@@ -102,25 +102,23 @@ resource "nxos_rest" "PreReq1" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosOSPFv3InstanceConfig_minimum() string {
-	return `
-	resource "nxos_ospfv3_instance" "test" {
-		name = "OSPFv3"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-	}
-	`
+	config := `resource "nxos_ospfv3_instance" "test" {` + "\n"
+	config += `	name = "OSPFv3"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosOSPFv3InstanceConfig_all() string {
-	return `
-	resource "nxos_ospfv3_instance" "test" {
-		admin_state = "enabled"
-		name = "OSPFv3"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-	}
-	`
+	config := `resource "nxos_ospfv3_instance" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	name = "OSPFv3"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

@@ -34,6 +34,13 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosOSPFArea(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_area.test", "instance_name", "OSPF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_area.test", "vrf_name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_area.test", "area_id", "0.0.0.10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_area.test", "authentication_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_area.test", "cost", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf_area.test", "type", "stub"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,14 +51,7 @@ func TestAccNxosOSPFArea(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosOSPFAreaPrerequisitesConfig + testAccNxosOSPFAreaConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_ospf_area.test", "instance_name", "OSPF1"),
-					resource.TestCheckResourceAttr("nxos_ospf_area.test", "vrf_name", "VRF1"),
-					resource.TestCheckResourceAttr("nxos_ospf_area.test", "area_id", "0.0.0.10"),
-					resource.TestCheckResourceAttr("nxos_ospf_area.test", "authentication_type", "none"),
-					resource.TestCheckResourceAttr("nxos_ospf_area.test", "cost", "10"),
-					resource.TestCheckResourceAttr("nxos_ospf_area.test", "type", "stub"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_ospf_area.test",
@@ -126,31 +126,29 @@ resource "nxos_rest" "PreReq3" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosOSPFAreaConfig_minimum() string {
-	return `
-	resource "nxos_ospf_area" "test" {
-		instance_name = "OSPF1"
-		vrf_name = "VRF1"
-		area_id = "0.0.0.10"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_ospf_area" "test" {` + "\n"
+	config += `	instance_name = "OSPF1"` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	area_id = "0.0.0.10"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosOSPFAreaConfig_all() string {
-	return `
-	resource "nxos_ospf_area" "test" {
-		instance_name = "OSPF1"
-		vrf_name = "VRF1"
-		area_id = "0.0.0.10"
-		authentication_type = "none"
-		cost = 10
-		type = "stub"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]
-	}
-	`
+	config := `resource "nxos_ospf_area" "test" {` + "\n"
+	config += `	instance_name = "OSPF1"` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	area_id = "0.0.0.10"` + "\n"
+	config += `	authentication_type = "none"` + "\n"
+	config += `	cost = 10` + "\n"
+	config += `	type = "stub"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

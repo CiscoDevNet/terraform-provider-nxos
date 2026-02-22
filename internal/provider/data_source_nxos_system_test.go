@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosSystem(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "name", "LEAF1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosSystemConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_system.test", "name", "LEAF1"),
-				),
+				Config: testAccDataSourceNxosSystemConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -51,15 +51,17 @@ func TestAccDataSourceNxosSystem(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosSystemConfig = `
+func testAccDataSourceNxosSystemConfig() string {
+	config := `resource "nxos_system" "test" {` + "\n"
+	config += `	name = "LEAF1"` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_system" "test" {
-  name = "LEAF1"
-}
-
+	config += `
 data "nxos_system" "test" {
-  depends_on = [nxos_system.test]
+	depends_on = [nxos_system.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

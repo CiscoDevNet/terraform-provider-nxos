@@ -30,24 +30,24 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosIPv6StaticRoute(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6_static_route.test", "prefix", "2001:db8:3333:4444:5555:6666:102:304/128"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv6_static_route.test", "next_hops.*", map[string]string{
+		"interface_id": "unspecified",
+		"address":      "a:b::c:d/128",
+		"vrf_name":     "default",
+		"description":  "My Description",
+		"object":       "10",
+		"preference":   "123",
+		"tag":          "10",
+	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosIPv6StaticRoutePrerequisitesConfig + testAccDataSourceNxosIPv6StaticRouteConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_ipv6_static_route.test", "prefix", "2001:db8:3333:4444:5555:6666:102:304/128"),
-					resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv6_static_route.test", "next_hops.*", map[string]string{
-						"interface_id": "unspecified",
-						"address":      "a:b::c:d/128",
-						"vrf_name":     "default",
-						"description":  "My Description",
-						"object":       "10",
-						"preference":   "123",
-						"tag":          "10",
-					}),
-				),
+				Config: testAccDataSourceNxosIPv6StaticRoutePrerequisitesConfig + testAccDataSourceNxosIPv6StaticRouteConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -67,28 +67,30 @@ resource "nxos_rest" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosIPv6StaticRouteConfig = `
+func testAccDataSourceNxosIPv6StaticRouteConfig() string {
+	config := `resource "nxos_ipv6_static_route" "test" {` + "\n"
+	config += `	vrf_name = "default"` + "\n"
+	config += `	prefix = "2001:db8:3333:4444:5555:6666:102:304/128"` + "\n"
+	config += `	next_hops = [{` + "\n"
+	config += `		interface_id = "unspecified"` + "\n"
+	config += `		address = "a:b::c:d/128"` + "\n"
+	config += `		vrf_name = "default"` + "\n"
+	config += `		description = "My Description"` + "\n"
+	config += `		object = 10` + "\n"
+	config += `		preference = 123` + "\n"
+	config += `		tag = 10` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_ipv6_static_route" "test" {
-  vrf_name = "default"
-  prefix = "2001:db8:3333:4444:5555:6666:102:304/128"
-  next_hops = [{
-    interface_id = "unspecified"
-    address = "a:b::c:d/128"
-    vrf_name = "default"
-    description = "My Description"
-    object = 10
-    preference = 123
-    tag = 10
-  }]
-  depends_on = [nxos_rest.PreReq0, ]
-}
-
+	config += `
 data "nxos_ipv6_static_route" "test" {
-  vrf_name = "default"
-  prefix = "2001:db8:3333:4444:5555:6666:102:304/128"
-  depends_on = [nxos_ipv6_static_route.test]
+	vrf_name = "default"
+	prefix = "2001:db8:3333:4444:5555:6666:102:304/128"
+	depends_on = [nxos_ipv6_static_route.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

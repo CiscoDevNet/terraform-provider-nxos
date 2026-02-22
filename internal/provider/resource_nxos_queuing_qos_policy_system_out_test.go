@@ -34,6 +34,7 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosQueuingQOSPolicySystemOut(t *testing.T) {
+	var checks []resource.TestCheckFunc
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,7 +45,7 @@ func TestAccNxosQueuingQOSPolicySystemOut(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosQueuingQOSPolicySystemOutConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_queuing_qos_policy_system_out.test",
@@ -80,20 +81,18 @@ func nxosQueuingQOSPolicySystemOutImportStateIdFunc(resourceName string) resourc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosQueuingQOSPolicySystemOutConfig_minimum() string {
-	return `
-	resource "nxos_queuing_qos_policy_system_out" "test" {
-	}
-	`
+	config := `resource "nxos_queuing_qos_policy_system_out" "test" {` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosQueuingQOSPolicySystemOutConfig_all() string {
-	return `
-	resource "nxos_queuing_qos_policy_system_out" "test" {
-	}
-	`
+	config := `resource "nxos_queuing_qos_policy_system_out" "test" {` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

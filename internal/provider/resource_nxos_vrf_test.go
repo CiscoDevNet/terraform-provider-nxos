@@ -34,6 +34,10 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosVRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf.test", "name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf.test", "description", "My VRF1 Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf.test", "encap", "vxlan-103901"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,11 +48,7 @@ func TestAccNxosVRF(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosVRFConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_vrf.test", "name", "VRF1"),
-					resource.TestCheckResourceAttr("nxos_vrf.test", "description", "My VRF1 Description"),
-					resource.TestCheckResourceAttr("nxos_vrf.test", "encap", "vxlan-103901"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_vrf.test",
@@ -86,24 +86,22 @@ func nxosVRFImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosVRFConfig_minimum() string {
-	return `
-	resource "nxos_vrf" "test" {
-		name = "VRF1"
-	}
-	`
+	config := `resource "nxos_vrf" "test" {` + "\n"
+	config += `	name = "VRF1"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosVRFConfig_all() string {
-	return `
-	resource "nxos_vrf" "test" {
-		name = "VRF1"
-		description = "My VRF1 Description"
-		encap = "vxlan-103901"
-	}
-	`
+	config := `resource "nxos_vrf" "test" {` + "\n"
+	config += `	name = "VRF1"` + "\n"
+	config += `	description = "My VRF1 Description"` + "\n"
+	config += `	encap = "vxlan-103901"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

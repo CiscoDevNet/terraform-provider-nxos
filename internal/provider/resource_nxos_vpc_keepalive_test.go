@@ -34,6 +34,20 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosVPCKeepalive(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "destination_ip", "192.168.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "flush_timeout", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "interval", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "precedence_type", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "precedence_value", "6"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "source_ip", "192.168.1.2"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "timeout", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "type_of_service_byte", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "type_of_service_configuration_type", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "type_of_service_type", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "type_of_service_value", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "udp_port", "1234"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "vrf", "management"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -44,21 +58,7 @@ func TestAccNxosVPCKeepalive(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccNxosVPCKeepalivePrerequisitesConfig + testAccNxosVPCKeepaliveConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "destination_ip", "192.168.1.1"),
-					resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "flush_timeout", "3"),
-					resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "interval", "1000"),
-					resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "precedence_type", "0"),
-					resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "precedence_value", "6"),
-					resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "source_ip", "192.168.1.2"),
-					resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "timeout", "5"),
-					resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "type_of_service_byte", "0"),
-					resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "type_of_service_configuration_type", "0"),
-					resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "type_of_service_type", "0"),
-					resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "type_of_service_value", "0"),
-					resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "udp_port", "1234"),
-					resource.TestCheckResourceAttr("nxos_vpc_keepalive.test", "vrf", "management"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:      "nxos_vpc_keepalive.test",
@@ -120,37 +120,35 @@ resource "nxos_rest" "PreReq2" {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosVPCKeepaliveConfig_minimum() string {
-	return `
-	resource "nxos_vpc_keepalive" "test" {
-		destination_ip = "192.168.1.1"
-		source_ip = "192.168.1.2"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-	}
-	`
+	config := `resource "nxos_vpc_keepalive" "test" {` + "\n"
+	config += `	destination_ip = "192.168.1.1"` + "\n"
+	config += `	source_ip = "192.168.1.2"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosVPCKeepaliveConfig_all() string {
-	return `
-	resource "nxos_vpc_keepalive" "test" {
-		destination_ip = "192.168.1.1"
-		flush_timeout = 3
-		interval = 1000
-		precedence_type = 0
-		precedence_value = 6
-		source_ip = "192.168.1.2"
-		timeout = 5
-		type_of_service_byte = 0
-		type_of_service_configuration_type = 0
-		type_of_service_type = 0
-		type_of_service_value = 0
-		udp_port = 1234
-		vrf = "management"
-  		depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-	}
-	`
+	config := `resource "nxos_vpc_keepalive" "test" {` + "\n"
+	config += `	destination_ip = "192.168.1.1"` + "\n"
+	config += `	flush_timeout = 3` + "\n"
+	config += `	interval = 1000` + "\n"
+	config += `	precedence_type = 0` + "\n"
+	config += `	precedence_value = 6` + "\n"
+	config += `	source_ip = "192.168.1.2"` + "\n"
+	config += `	timeout = 5` + "\n"
+	config += `	type_of_service_byte = 0` + "\n"
+	config += `	type_of_service_configuration_type = 0` + "\n"
+	config += `	type_of_service_type = 0` + "\n"
+	config += `	type_of_service_value = 0` + "\n"
+	config += `	udp_port = 1234` + "\n"
+	config += `	vrf = "management"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 // End of section. //template:end testAccConfigAll

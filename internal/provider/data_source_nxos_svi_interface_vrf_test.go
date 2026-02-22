@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosSVIInterfaceVRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_svi_interface_vrf.test", "vrf_dn", "sys/inst-VRF123"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosSVIInterfaceVRFPrerequisitesConfig + testAccDataSourceNxosSVIInterfaceVRFConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_svi_interface_vrf.test", "vrf_dn", "sys/inst-VRF123"),
-				),
+				Config: testAccDataSourceNxosSVIInterfaceVRFPrerequisitesConfig + testAccDataSourceNxosSVIInterfaceVRFConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -71,18 +71,20 @@ resource "nxos_rest" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosSVIInterfaceVRFConfig = `
+func testAccDataSourceNxosSVIInterfaceVRFConfig() string {
+	config := `resource "nxos_svi_interface_vrf" "test" {` + "\n"
+	config += `	interface_id = "vlan293"` + "\n"
+	config += `	vrf_dn = "sys/inst-VRF123"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_svi_interface_vrf" "test" {
-  interface_id = "vlan293"
-  vrf_dn = "sys/inst-VRF123"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-}
-
+	config += `
 data "nxos_svi_interface_vrf" "test" {
-  interface_id = "vlan293"
-  depends_on = [nxos_svi_interface_vrf.test]
+	interface_id = "vlan293"
+	depends_on = [nxos_svi_interface_vrf.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

@@ -30,15 +30,15 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosKeychainKey(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain_key.test", "key_id", "1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosKeychainKeyPrerequisitesConfig + testAccDataSourceNxosKeychainKeyConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_keychain_key.test", "key_id", "1"),
-				),
+				Config: testAccDataSourceNxosKeychainKeyPrerequisitesConfig + testAccDataSourceNxosKeychainKeyConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -76,20 +76,22 @@ resource "nxos_rest" "PreReq2" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosKeychainKeyConfig = `
+func testAccDataSourceNxosKeychainKeyConfig() string {
+	config := `resource "nxos_keychain_key" "test" {` + "\n"
+	config += `	keychain = "KEYCHAIN1"` + "\n"
+	config += `	key_id = 1` + "\n"
+	config += `	key_string = "secret_password"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_keychain_key" "test" {
-  keychain = "KEYCHAIN1"
-  key_id = 1
-  key_string = "secret_password"
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]
-}
-
+	config += `
 data "nxos_keychain_key" "test" {
-  keychain = "KEYCHAIN1"
-  key_id = 1
-  depends_on = [nxos_keychain_key.test]
+	keychain = "KEYCHAIN1"
+	key_id = 1
+	depends_on = [nxos_keychain_key.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

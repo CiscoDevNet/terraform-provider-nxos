@@ -30,23 +30,23 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosSpanningTreeInterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "interface_id", "eth1/9"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "bpdu_filter", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "bpdu_guard", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "cost", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "guard", "root"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "link_type", "p2p"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "mode", "edge"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "priority", "200"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosSpanningTreeInterfaceConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "interface_id", "eth1/9"),
-					resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "admin_state", "enabled"),
-					resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "bpdu_filter", "enable"),
-					resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "bpdu_guard", "enable"),
-					resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "cost", "100"),
-					resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "guard", "root"),
-					resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "link_type", "p2p"),
-					resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "mode", "edge"),
-					resource.TestCheckResourceAttr("data.nxos_spanning_tree_interface.test", "priority", "200"),
-				),
+				Config: testAccDataSourceNxosSpanningTreeInterfaceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -59,24 +59,26 @@ func TestAccDataSourceNxosSpanningTreeInterface(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-const testAccDataSourceNxosSpanningTreeInterfaceConfig = `
+func testAccDataSourceNxosSpanningTreeInterfaceConfig() string {
+	config := `resource "nxos_spanning_tree_interface" "test" {` + "\n"
+	config += `	interface_id = "eth1/9"` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	bpdu_filter = "enable"` + "\n"
+	config += `	bpdu_guard = "enable"` + "\n"
+	config += `	cost = 100` + "\n"
+	config += `	guard = "root"` + "\n"
+	config += `	link_type = "p2p"` + "\n"
+	config += `	mode = "edge"` + "\n"
+	config += `	priority = 200` + "\n"
+	config += `}` + "\n"
 
-resource "nxos_spanning_tree_interface" "test" {
-  interface_id = "eth1/9"
-  admin_state = "enabled"
-  bpdu_filter = "enable"
-  bpdu_guard = "enable"
-  cost = 100
-  guard = "root"
-  link_type = "p2p"
-  mode = "edge"
-  priority = 200
-}
-
+	config += `
 data "nxos_spanning_tree_interface" "test" {
-  interface_id = "eth1/9"
-  depends_on = [nxos_spanning_tree_interface.test]
+	interface_id = "eth1/9"
+	depends_on = [nxos_spanning_tree_interface.test]
 }
-`
+	`
+	return config
+}
 
 // End of section. //template:end testAccDataSourceConfig

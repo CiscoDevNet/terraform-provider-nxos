@@ -91,16 +91,16 @@ func (data OSPFArea) getClassName() string {
 func (data OSPFArea) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.AreaId.IsUnknown() && !data.AreaId.IsNull()) || true {
+	if (!data.AreaId.IsUnknown() && !data.AreaId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.AreaId.ValueString())
 	}
-	if (!data.AuthenticationType.IsUnknown() && !data.AuthenticationType.IsNull()) || true {
+	if (!data.AuthenticationType.IsUnknown() && !data.AuthenticationType.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authType", data.AuthenticationType.ValueString())
 	}
-	if (!data.Cost.IsUnknown() && !data.Cost.IsNull()) || true {
+	if (!data.Cost.IsUnknown() && !data.Cost.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"cost", strconv.FormatInt(data.Cost.ValueInt64(), 10))
 	}
-	if (!data.Type.IsUnknown() && !data.Type.IsNull()) || true {
+	if (!data.Type.IsUnknown() && !data.Type.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.Type.ValueString())
 	}
 

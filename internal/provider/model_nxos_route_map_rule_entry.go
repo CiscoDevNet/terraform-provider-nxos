@@ -85,10 +85,10 @@ func (data RouteMapRuleEntry) getClassName() string {
 func (data RouteMapRuleEntry) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Order.IsUnknown() && !data.Order.IsNull()) || true {
+	if (!data.Order.IsUnknown() && !data.Order.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"order", strconv.FormatInt(data.Order.ValueInt64(), 10))
 	}
-	if (!data.Action.IsUnknown() && !data.Action.IsNull()) || true {
+	if (!data.Action.IsUnknown() && !data.Action.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"action", data.Action.ValueString())
 	}
 

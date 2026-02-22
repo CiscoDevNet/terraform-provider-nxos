@@ -105,58 +105,58 @@ func (data BGPAddressFamily) getClassName() string {
 func (data BGPAddressFamily) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.AddressFamily.IsUnknown() && !data.AddressFamily.IsNull()) || true {
+	if (!data.AddressFamily.IsUnknown() && !data.AddressFamily.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.AddressFamily.ValueString())
 	}
-	if (!data.CriticalNexthopTimeout.IsUnknown() && !data.CriticalNexthopTimeout.IsNull()) || true {
+	if (!data.CriticalNexthopTimeout.IsUnknown() && !data.CriticalNexthopTimeout.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"critNhTimeout", data.CriticalNexthopTimeout.ValueString())
 	}
-	if (!data.NonCriticalNexthopTimeout.IsUnknown() && !data.NonCriticalNexthopTimeout.IsNull()) || true {
+	if (!data.NonCriticalNexthopTimeout.IsUnknown() && !data.NonCriticalNexthopTimeout.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"nonCritNhTimeout", data.NonCriticalNexthopTimeout.ValueString())
 	}
-	if (!data.AdvertiseL2vpnEvpn.IsUnknown() && !data.AdvertiseL2vpnEvpn.IsNull()) || true {
+	if (!data.AdvertiseL2vpnEvpn.IsUnknown() && !data.AdvertiseL2vpnEvpn.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"advertL2vpnEvpn", data.AdvertiseL2vpnEvpn.ValueString())
 	}
-	if (!data.AdvertisePhysicalIpForType5Routes.IsUnknown() && !data.AdvertisePhysicalIpForType5Routes.IsNull()) || true {
+	if (!data.AdvertisePhysicalIpForType5Routes.IsUnknown() && !data.AdvertisePhysicalIpForType5Routes.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"advPip", data.AdvertisePhysicalIpForType5Routes.ValueString())
 	}
-	if (!data.MaxEcmpPaths.IsUnknown() && !data.MaxEcmpPaths.IsNull()) || true {
+	if (!data.MaxEcmpPaths.IsUnknown() && !data.MaxEcmpPaths.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxEcmp", strconv.FormatInt(data.MaxEcmpPaths.ValueInt64(), 10))
 	}
-	if (!data.MaxExternalEcmpPaths.IsUnknown() && !data.MaxExternalEcmpPaths.IsNull()) || true {
+	if (!data.MaxExternalEcmpPaths.IsUnknown() && !data.MaxExternalEcmpPaths.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxExtEcmp", strconv.FormatInt(data.MaxExternalEcmpPaths.ValueInt64(), 10))
 	}
-	if (!data.MaxExternalInternalEcmpPaths.IsUnknown() && !data.MaxExternalInternalEcmpPaths.IsNull()) || true {
+	if (!data.MaxExternalInternalEcmpPaths.IsUnknown() && !data.MaxExternalInternalEcmpPaths.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxExtIntEcmp", strconv.FormatInt(data.MaxExternalInternalEcmpPaths.ValueInt64(), 10))
 	}
-	if (!data.MaxLocalEcmpPaths.IsUnknown() && !data.MaxLocalEcmpPaths.IsNull()) || true {
+	if (!data.MaxLocalEcmpPaths.IsUnknown() && !data.MaxLocalEcmpPaths.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxLclEcmp", strconv.FormatInt(data.MaxLocalEcmpPaths.ValueInt64(), 10))
 	}
-	if (!data.MaxMixedEcmpPaths.IsUnknown() && !data.MaxMixedEcmpPaths.IsNull()) || true {
+	if (!data.MaxMixedEcmpPaths.IsUnknown() && !data.MaxMixedEcmpPaths.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxMxdEcmp", strconv.FormatInt(data.MaxMixedEcmpPaths.ValueInt64(), 10))
 	}
-	if (!data.DefaultInformationOriginate.IsUnknown() && !data.DefaultInformationOriginate.IsNull()) || true {
+	if (!data.DefaultInformationOriginate.IsUnknown() && !data.DefaultInformationOriginate.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"defInfOriginate", data.DefaultInformationOriginate.ValueString())
 	}
-	if (!data.NextHopRouteMapName.IsUnknown() && !data.NextHopRouteMapName.IsNull()) || true {
+	if (!data.NextHopRouteMapName.IsUnknown() && !data.NextHopRouteMapName.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"nhRtMap", data.NextHopRouteMapName.ValueString())
 	}
-	if (!data.PrefixPriority.IsUnknown() && !data.PrefixPriority.IsNull()) || true {
+	if (!data.PrefixPriority.IsUnknown() && !data.PrefixPriority.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"prfxPriority", data.PrefixPriority.ValueString())
 	}
-	if (!data.RetainRtAll.IsUnknown() && !data.RetainRtAll.IsNull()) || true {
+	if (!data.RetainRtAll.IsUnknown() && !data.RetainRtAll.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"retainRttAll", data.RetainRtAll.ValueString())
 	}
-	if (!data.AdvertiseOnlyActiveRoutes.IsUnknown() && !data.AdvertiseOnlyActiveRoutes.IsNull()) || true {
+	if (!data.AdvertiseOnlyActiveRoutes.IsUnknown() && !data.AdvertiseOnlyActiveRoutes.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"supprInactive", data.AdvertiseOnlyActiveRoutes.ValueString())
 	}
-	if (!data.TableMapRouteMapName.IsUnknown() && !data.TableMapRouteMapName.IsNull()) || true {
+	if (!data.TableMapRouteMapName.IsUnknown() && !data.TableMapRouteMapName.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"tblMap", data.TableMapRouteMapName.ValueString())
 	}
-	if (!data.VniEthernetTag.IsUnknown() && !data.VniEthernetTag.IsNull()) || true {
+	if (!data.VniEthernetTag.IsUnknown() && !data.VniEthernetTag.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"vniEthTag", data.VniEthernetTag.ValueString())
 	}
-	if (!data.WaitIgpConverged.IsUnknown() && !data.WaitIgpConverged.IsNull()) || true {
+	if (!data.WaitIgpConverged.IsUnknown() && !data.WaitIgpConverged.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"waitIgpConv", data.WaitIgpConverged.ValueString())
 	}
 

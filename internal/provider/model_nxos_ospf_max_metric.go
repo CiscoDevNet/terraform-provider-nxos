@@ -88,16 +88,16 @@ func (data OSPFMaxMetric) getClassName() string {
 func (data OSPFMaxMetric) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Control.IsUnknown() && !data.Control.IsNull()) || true {
+	if (!data.Control.IsUnknown() && !data.Control.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ctrl", data.Control.ValueString())
 	}
-	if (!data.ExternalLsa.IsUnknown() && !data.ExternalLsa.IsNull()) || true {
+	if (!data.ExternalLsa.IsUnknown() && !data.ExternalLsa.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxMetricExtLsa", strconv.FormatInt(data.ExternalLsa.ValueInt64(), 10))
 	}
-	if (!data.SummaryLsa.IsUnknown() && !data.SummaryLsa.IsNull()) || true {
+	if (!data.SummaryLsa.IsUnknown() && !data.SummaryLsa.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxMetricSummLsa", strconv.FormatInt(data.SummaryLsa.ValueInt64(), 10))
 	}
-	if (!data.StartupInterval.IsUnknown() && !data.StartupInterval.IsNull()) || true {
+	if (!data.StartupInterval.IsUnknown() && !data.StartupInterval.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"startupIntvl", strconv.FormatInt(data.StartupInterval.ValueInt64(), 10))
 	}
 

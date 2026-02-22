@@ -90,13 +90,13 @@ func (data IPv4InterfaceAddress) getClassName() string {
 func (data IPv4InterfaceAddress) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Address.IsUnknown() && !data.Address.IsNull()) || true {
+	if (!data.Address.IsUnknown() && !data.Address.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"addr", data.Address.ValueString())
 	}
-	if (!data.Type.IsUnknown() && !data.Type.IsNull()) || true {
+	if (!data.Type.IsUnknown() && !data.Type.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.Type.ValueString())
 	}
-	if (!data.Tag.IsUnknown() && !data.Tag.IsNull()) || true {
+	if (!data.Tag.IsUnknown() && !data.Tag.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"tag", strconv.FormatInt(data.Tag.ValueInt64(), 10))
 	}
 

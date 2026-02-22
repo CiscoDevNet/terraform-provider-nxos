@@ -80,7 +80,7 @@ func (data VRFRouting) getClassName() string {
 func (data VRFRouting) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.RouteDistinguisher.IsUnknown() && !data.RouteDistinguisher.IsNull()) || true {
+	if (!data.RouteDistinguisher.IsUnknown() && !data.RouteDistinguisher.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rd", data.RouteDistinguisher.ValueString())
 	}
 

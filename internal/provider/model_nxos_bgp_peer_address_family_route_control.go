@@ -96,10 +96,10 @@ func (data BGPPeerAddressFamilyRouteControl) getClassName() string {
 func (data BGPPeerAddressFamilyRouteControl) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Direction.IsUnknown() && !data.Direction.IsNull()) || true {
+	if (!data.Direction.IsUnknown() && !data.Direction.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"direction", data.Direction.ValueString())
 	}
-	if (!data.RouteMapName.IsUnknown() && !data.RouteMapName.IsNull()) || true {
+	if (!data.RouteMapName.IsUnknown() && !data.RouteMapName.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rtMap", data.RouteMapName.ValueString())
 	}
 

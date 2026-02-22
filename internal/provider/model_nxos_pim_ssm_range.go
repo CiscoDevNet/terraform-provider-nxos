@@ -88,25 +88,25 @@ func (data PIMSSMRange) getClassName() string {
 func (data PIMSSMRange) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.GroupList1.IsUnknown() && !data.GroupList1.IsNull()) || true {
+	if (!data.GroupList1.IsUnknown() && !data.GroupList1.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"grpList", data.GroupList1.ValueString())
 	}
-	if (!data.GroupList2.IsUnknown() && !data.GroupList2.IsNull()) || true {
+	if (!data.GroupList2.IsUnknown() && !data.GroupList2.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"grpList1", data.GroupList2.ValueString())
 	}
-	if (!data.GroupList3.IsUnknown() && !data.GroupList3.IsNull()) || true {
+	if (!data.GroupList3.IsUnknown() && !data.GroupList3.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"grpList2", data.GroupList3.ValueString())
 	}
-	if (!data.GroupList4.IsUnknown() && !data.GroupList4.IsNull()) || true {
+	if (!data.GroupList4.IsUnknown() && !data.GroupList4.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"grpList3", data.GroupList4.ValueString())
 	}
-	if (!data.PrefixList.IsUnknown() && !data.PrefixList.IsNull()) || true {
+	if (!data.PrefixList.IsUnknown() && !data.PrefixList.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pfxList", data.PrefixList.ValueString())
 	}
-	if (!data.RouteMap.IsUnknown() && !data.RouteMap.IsNull()) || true {
+	if (!data.RouteMap.IsUnknown() && !data.RouteMap.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rtMap", data.RouteMap.ValueString())
 	}
-	if (!data.SsmNone.IsUnknown() && !data.SsmNone.IsNull()) || true {
+	if (!data.SsmNone.IsUnknown() && !data.SsmNone.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ssmNone", strconv.FormatBool(data.SsmNone.ValueBool()))
 	}
 

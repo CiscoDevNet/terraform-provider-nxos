@@ -77,10 +77,10 @@ func (data Ethernet) getClassName() string {
 func (data Ethernet) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Mtu.IsUnknown() && !data.Mtu.IsNull()) || true {
+	if (!data.Mtu.IsUnknown() && !data.Mtu.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"systemJumboMtu", strconv.FormatInt(data.Mtu.ValueInt64(), 10))
 	}
-	if (!data.DefaultAdminStatus.IsUnknown() && !data.DefaultAdminStatus.IsNull()) || true {
+	if (!data.DefaultAdminStatus.IsUnknown() && !data.DefaultAdminStatus.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"systemDefaultAdminSt", data.DefaultAdminStatus.ValueString())
 	}
 

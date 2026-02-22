@@ -102,7 +102,6 @@ attributes:
     min_int: 1
     max_int: 65535
     example: 1234
-    omit_empty_value: true
   - nxos_name: vrf
     tf_name: vrf
     description: "vPC Keepalive VRF."

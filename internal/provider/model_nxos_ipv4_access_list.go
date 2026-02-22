@@ -135,19 +135,19 @@ func (data IPv4AccessList) getClassName() string {
 func (data IPv4AccessList) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
+	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}
 	var attrs string
 	for _, child := range data.Entries {
 		attrs = "{}"
-		if (!child.Sequence.IsUnknown() && !child.Sequence.IsNull()) || true {
+		if (!child.Sequence.IsUnknown() && !child.Sequence.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "seqNum", strconv.FormatInt(child.Sequence.ValueInt64(), 10))
 		}
-		if (!child.Ack.IsUnknown() && !child.Ack.IsNull()) || true {
+		if (!child.Ack.IsUnknown() && !child.Ack.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "ack", strconv.FormatBool(child.Ack.ValueBool()))
 		}
-		if (!child.Action.IsUnknown() && !child.Action.IsNull()) || true {
+		if (!child.Action.IsUnknown() && !child.Action.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "action", child.Action.ValueString())
 		}
 		if (!child.Dscp.IsUnknown() && !child.Dscp.IsNull()) || false {
@@ -168,7 +168,7 @@ func (data IPv4AccessList) toBody() nxos.Body {
 		if (!child.DestinationPortMask.IsUnknown() && !child.DestinationPortMask.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "dstPortMask", child.DestinationPortMask.ValueString())
 		}
-		if (!child.DestinationPortOperator.IsUnknown() && !child.DestinationPortOperator.IsNull()) || true {
+		if (!child.DestinationPortOperator.IsUnknown() && !child.DestinationPortOperator.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "dstPortOp", child.DestinationPortOperator.ValueString())
 		}
 		if (!child.DestinationPrefix.IsUnknown() && !child.DestinationPrefix.IsNull()) || false {
@@ -180,37 +180,37 @@ func (data IPv4AccessList) toBody() nxos.Body {
 		if (!child.DestinationPrefixMask.IsUnknown() && !child.DestinationPrefixMask.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "dstPrefixMask", child.DestinationPrefixMask.ValueString())
 		}
-		if (!child.Established.IsUnknown() && !child.Established.IsNull()) || true {
+		if (!child.Established.IsUnknown() && !child.Established.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "est", strconv.FormatBool(child.Established.ValueBool()))
 		}
-		if (!child.Fin.IsUnknown() && !child.Fin.IsNull()) || true {
+		if (!child.Fin.IsUnknown() && !child.Fin.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "fin", strconv.FormatBool(child.Fin.ValueBool()))
 		}
-		if (!child.Fragment.IsUnknown() && !child.Fragment.IsNull()) || true {
+		if (!child.Fragment.IsUnknown() && !child.Fragment.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "fragment", strconv.FormatBool(child.Fragment.ValueBool()))
 		}
-		if (!child.HttpOptionType.IsUnknown() && !child.HttpOptionType.IsNull()) || true {
+		if (!child.HttpOptionType.IsUnknown() && !child.HttpOptionType.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "httpOption", child.HttpOptionType.ValueString())
 		}
-		if (!child.IcmpCode.IsUnknown() && !child.IcmpCode.IsNull()) || true {
+		if (!child.IcmpCode.IsUnknown() && !child.IcmpCode.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "icmpCode", strconv.FormatInt(child.IcmpCode.ValueInt64(), 10))
 		}
-		if (!child.IcmpType.IsUnknown() && !child.IcmpType.IsNull()) || true {
+		if (!child.IcmpType.IsUnknown() && !child.IcmpType.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "icmpType", strconv.FormatInt(child.IcmpType.ValueInt64(), 10))
 		}
-		if (!child.Log.IsUnknown() && !child.Log.IsNull()) || true {
+		if (!child.Log.IsUnknown() && !child.Log.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "logging", strconv.FormatBool(child.Log.ValueBool()))
 		}
-		if (!child.PacketLength1.IsUnknown() && !child.PacketLength1.IsNull()) || true {
+		if (!child.PacketLength1.IsUnknown() && !child.PacketLength1.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "pktLen1", child.PacketLength1.ValueString())
 		}
-		if (!child.PacketLength2.IsUnknown() && !child.PacketLength2.IsNull()) || true {
+		if (!child.PacketLength2.IsUnknown() && !child.PacketLength2.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "pktLen2", child.PacketLength2.ValueString())
 		}
-		if (!child.PacketLengthOperator.IsUnknown() && !child.PacketLengthOperator.IsNull()) || true {
+		if (!child.PacketLengthOperator.IsUnknown() && !child.PacketLengthOperator.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "pktLenOp", child.PacketLengthOperator.ValueString())
 		}
-		if (!child.Precedence.IsUnknown() && !child.Precedence.IsNull()) || true {
+		if (!child.Precedence.IsUnknown() && !child.Precedence.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "precedence", child.Precedence.ValueString())
 		}
 		if (!child.Protocol.IsUnknown() && !child.Protocol.IsNull()) || false {
@@ -219,19 +219,19 @@ func (data IPv4AccessList) toBody() nxos.Body {
 		if (!child.ProtocolMask.IsUnknown() && !child.ProtocolMask.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "protocolMask", child.ProtocolMask.ValueString())
 		}
-		if (!child.Psh.IsUnknown() && !child.Psh.IsNull()) || true {
+		if (!child.Psh.IsUnknown() && !child.Psh.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "psh", strconv.FormatBool(child.Psh.ValueBool()))
 		}
-		if (!child.Redirect.IsUnknown() && !child.Redirect.IsNull()) || true {
+		if (!child.Redirect.IsUnknown() && !child.Redirect.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "redirect", child.Redirect.ValueString())
 		}
 		if (!child.Remark.IsUnknown() && !child.Remark.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "remark", child.Remark.ValueString())
 		}
-		if (!child.Rev.IsUnknown() && !child.Rev.IsNull()) || true {
+		if (!child.Rev.IsUnknown() && !child.Rev.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "rev", strconv.FormatBool(child.Rev.ValueBool()))
 		}
-		if (!child.Rst.IsUnknown() && !child.Rst.IsNull()) || true {
+		if (!child.Rst.IsUnknown() && !child.Rst.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "rst", strconv.FormatBool(child.Rst.ValueBool()))
 		}
 		if (!child.SourceAddressGroup.IsUnknown() && !child.SourceAddressGroup.IsNull()) || false {
@@ -249,7 +249,7 @@ func (data IPv4AccessList) toBody() nxos.Body {
 		if (!child.SourcePortMask.IsUnknown() && !child.SourcePortMask.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "srcPortMask", child.SourcePortMask.ValueString())
 		}
-		if (!child.SourcePortOperator.IsUnknown() && !child.SourcePortOperator.IsNull()) || true {
+		if (!child.SourcePortOperator.IsUnknown() && !child.SourcePortOperator.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "srcPortOp", child.SourcePortOperator.ValueString())
 		}
 		if (!child.SourcePrefix.IsUnknown() && !child.SourcePrefix.IsNull()) || false {
@@ -261,22 +261,22 @@ func (data IPv4AccessList) toBody() nxos.Body {
 		if (!child.SourcePrefixMask.IsUnknown() && !child.SourcePrefixMask.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "srcPrefixMask", child.SourcePrefixMask.ValueString())
 		}
-		if (!child.Syn.IsUnknown() && !child.Syn.IsNull()) || true {
+		if (!child.Syn.IsUnknown() && !child.Syn.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "syn", strconv.FormatBool(child.Syn.ValueBool()))
 		}
 		if (!child.TimeRange.IsUnknown() && !child.TimeRange.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "timeRange", child.TimeRange.ValueString())
 		}
-		if (!child.Ttl.IsUnknown() && !child.Ttl.IsNull()) || true {
+		if (!child.Ttl.IsUnknown() && !child.Ttl.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "ttl", strconv.FormatInt(child.Ttl.ValueInt64(), 10))
 		}
-		if (!child.Urg.IsUnknown() && !child.Urg.IsNull()) || true {
+		if (!child.Urg.IsUnknown() && !child.Urg.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "urg", strconv.FormatBool(child.Urg.ValueBool()))
 		}
-		if (!child.Vlan.IsUnknown() && !child.Vlan.IsNull()) || true {
+		if (!child.Vlan.IsUnknown() && !child.Vlan.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "vlan", strconv.FormatInt(child.Vlan.ValueInt64(), 10))
 		}
-		if (!child.Vni.IsUnknown() && !child.Vni.IsNull()) || true {
+		if (!child.Vni.IsUnknown() && !child.Vni.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "vni", child.Vni.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.ipv4aclACE.attributes", attrs)

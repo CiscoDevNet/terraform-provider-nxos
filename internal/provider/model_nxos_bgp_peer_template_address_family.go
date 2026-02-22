@@ -90,16 +90,16 @@ func (data BGPPeerTemplateAddressFamily) getClassName() string {
 func (data BGPPeerTemplateAddressFamily) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.AddressFamily.IsUnknown() && !data.AddressFamily.IsNull()) || true {
+	if (!data.AddressFamily.IsUnknown() && !data.AddressFamily.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.AddressFamily.ValueString())
 	}
-	if (!data.Control.IsUnknown() && !data.Control.IsNull()) || true {
+	if (!data.Control.IsUnknown() && !data.Control.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ctrl", data.Control.ValueString())
 	}
-	if (!data.SendCommunityExtended.IsUnknown() && !data.SendCommunityExtended.IsNull()) || true {
+	if (!data.SendCommunityExtended.IsUnknown() && !data.SendCommunityExtended.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"sendComExt", data.SendCommunityExtended.ValueString())
 	}
-	if (!data.SendCommunityStandard.IsUnknown() && !data.SendCommunityStandard.IsNull()) || true {
+	if (!data.SendCommunityStandard.IsUnknown() && !data.SendCommunityStandard.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"sendComStd", data.SendCommunityStandard.ValueString())
 	}
 

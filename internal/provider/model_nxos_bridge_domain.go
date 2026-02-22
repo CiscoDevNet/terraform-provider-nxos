@@ -81,13 +81,13 @@ func (data BridgeDomain) getClassName() string {
 func (data BridgeDomain) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.FabricEncap.IsUnknown() && !data.FabricEncap.IsNull()) || true {
+	if (!data.FabricEncap.IsUnknown() && !data.FabricEncap.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"fabEncap", data.FabricEncap.ValueString())
 	}
-	if (!data.AccessEncap.IsUnknown() && !data.AccessEncap.IsNull()) || true {
+	if (!data.AccessEncap.IsUnknown() && !data.AccessEncap.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"accEncap", data.AccessEncap.ValueString())
 	}
-	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
+	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}
 

@@ -88,43 +88,43 @@ func (data VPCKeepalive) getClassName() string {
 func (data VPCKeepalive) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.DestinationIp.IsUnknown() && !data.DestinationIp.IsNull()) || true {
+	if (!data.DestinationIp.IsUnknown() && !data.DestinationIp.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"destIp", data.DestinationIp.ValueString())
 	}
-	if (!data.FlushTimeout.IsUnknown() && !data.FlushTimeout.IsNull()) || true {
+	if (!data.FlushTimeout.IsUnknown() && !data.FlushTimeout.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"flushTout", strconv.FormatInt(data.FlushTimeout.ValueInt64(), 10))
 	}
-	if (!data.Interval.IsUnknown() && !data.Interval.IsNull()) || true {
+	if (!data.Interval.IsUnknown() && !data.Interval.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"interval", strconv.FormatInt(data.Interval.ValueInt64(), 10))
 	}
-	if (!data.PrecedenceType.IsUnknown() && !data.PrecedenceType.IsNull()) || true {
+	if (!data.PrecedenceType.IsUnknown() && !data.PrecedenceType.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"precType", strconv.FormatInt(data.PrecedenceType.ValueInt64(), 10))
 	}
-	if (!data.PrecedenceValue.IsUnknown() && !data.PrecedenceValue.IsNull()) || true {
+	if (!data.PrecedenceValue.IsUnknown() && !data.PrecedenceValue.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"precValue", strconv.FormatInt(data.PrecedenceValue.ValueInt64(), 10))
 	}
-	if (!data.SourceIp.IsUnknown() && !data.SourceIp.IsNull()) || true {
+	if (!data.SourceIp.IsUnknown() && !data.SourceIp.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"srcIp", data.SourceIp.ValueString())
 	}
-	if (!data.Timeout.IsUnknown() && !data.Timeout.IsNull()) || true {
+	if (!data.Timeout.IsUnknown() && !data.Timeout.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"timeout", strconv.FormatInt(data.Timeout.ValueInt64(), 10))
 	}
-	if (!data.TypeOfServiceByte.IsUnknown() && !data.TypeOfServiceByte.IsNull()) || true {
+	if (!data.TypeOfServiceByte.IsUnknown() && !data.TypeOfServiceByte.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"tosByte", strconv.FormatInt(data.TypeOfServiceByte.ValueInt64(), 10))
 	}
-	if (!data.TypeOfServiceConfigurationType.IsUnknown() && !data.TypeOfServiceConfigurationType.IsNull()) || true {
+	if (!data.TypeOfServiceConfigurationType.IsUnknown() && !data.TypeOfServiceConfigurationType.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"tosCfgType", strconv.FormatInt(data.TypeOfServiceConfigurationType.ValueInt64(), 10))
 	}
-	if (!data.TypeOfServiceType.IsUnknown() && !data.TypeOfServiceType.IsNull()) || true {
+	if (!data.TypeOfServiceType.IsUnknown() && !data.TypeOfServiceType.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"tosType", strconv.FormatInt(data.TypeOfServiceType.ValueInt64(), 10))
 	}
-	if (!data.TypeOfServiceValue.IsUnknown() && !data.TypeOfServiceValue.IsNull()) || true {
+	if (!data.TypeOfServiceValue.IsUnknown() && !data.TypeOfServiceValue.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"tosValue", strconv.FormatInt(data.TypeOfServiceValue.ValueInt64(), 10))
 	}
 	if (!data.UdpPort.IsUnknown() && !data.UdpPort.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"udpPort", strconv.FormatInt(data.UdpPort.ValueInt64(), 10))
 	}
-	if (!data.Vrf.IsUnknown() && !data.Vrf.IsNull()) || true {
+	if (!data.Vrf.IsUnknown() && !data.Vrf.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"vrf", data.Vrf.ValueString())
 	}
 

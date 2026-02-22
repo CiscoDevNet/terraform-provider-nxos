@@ -76,10 +76,10 @@ func (data HMMInstance) getClassName() string {
 func (data HMMInstance) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
-	if (!data.AnycastMac.IsUnknown() && !data.AnycastMac.IsNull()) || true {
+	if (!data.AnycastMac.IsUnknown() && !data.AnycastMac.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"amac", data.AnycastMac.ValueString())
 	}
 

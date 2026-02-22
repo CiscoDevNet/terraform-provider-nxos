@@ -85,22 +85,22 @@ func (data NTPServer) getClassName() string {
 func (data NTPServer) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
+	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}
-	if (!data.Vrf.IsUnknown() && !data.Vrf.IsNull()) || true {
+	if (!data.Vrf.IsUnknown() && !data.Vrf.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"vrf", data.Vrf.ValueString())
 	}
-	if (!data.Type.IsUnknown() && !data.Type.IsNull()) || true {
+	if (!data.Type.IsUnknown() && !data.Type.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"provT", data.Type.ValueString())
 	}
-	if (!data.KeyId.IsUnknown() && !data.KeyId.IsNull()) || true {
+	if (!data.KeyId.IsUnknown() && !data.KeyId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"keyId", strconv.FormatInt(data.KeyId.ValueInt64(), 10))
 	}
-	if (!data.MinPoll.IsUnknown() && !data.MinPoll.IsNull()) || true {
+	if (!data.MinPoll.IsUnknown() && !data.MinPoll.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"minPoll", strconv.FormatInt(data.MinPoll.ValueInt64(), 10))
 	}
-	if (!data.MaxPoll.IsUnknown() && !data.MaxPoll.IsNull()) || true {
+	if (!data.MaxPoll.IsUnknown() && !data.MaxPoll.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxPoll", strconv.FormatInt(data.MaxPoll.ValueInt64(), 10))
 	}
 

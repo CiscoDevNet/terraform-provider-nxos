@@ -99,40 +99,40 @@ func (data BGPPeer) getClassName() string {
 func (data BGPPeer) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Address.IsUnknown() && !data.Address.IsNull()) || true {
+	if (!data.Address.IsUnknown() && !data.Address.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"addr", data.Address.ValueString())
 	}
-	if (!data.RemoteAsn.IsUnknown() && !data.RemoteAsn.IsNull()) || true {
+	if (!data.RemoteAsn.IsUnknown() && !data.RemoteAsn.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"asn", data.RemoteAsn.ValueString())
 	}
-	if (!data.Description.IsUnknown() && !data.Description.IsNull()) || true {
+	if (!data.Description.IsUnknown() && !data.Description.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Description.ValueString())
 	}
-	if (!data.PeerTemplate.IsUnknown() && !data.PeerTemplate.IsNull()) || true {
+	if (!data.PeerTemplate.IsUnknown() && !data.PeerTemplate.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"peerImp", data.PeerTemplate.ValueString())
 	}
-	if (!data.PeerType.IsUnknown() && !data.PeerType.IsNull()) || true {
+	if (!data.PeerType.IsUnknown() && !data.PeerType.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"peerType", data.PeerType.ValueString())
 	}
-	if (!data.SourceInterface.IsUnknown() && !data.SourceInterface.IsNull()) || true {
+	if (!data.SourceInterface.IsUnknown() && !data.SourceInterface.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"srcIf", data.SourceInterface.ValueString())
 	}
-	if (!data.HoldTime.IsUnknown() && !data.HoldTime.IsNull()) || true {
+	if (!data.HoldTime.IsUnknown() && !data.HoldTime.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"holdIntvl", strconv.FormatInt(data.HoldTime.ValueInt64(), 10))
 	}
-	if (!data.Keepalive.IsUnknown() && !data.Keepalive.IsNull()) || true {
+	if (!data.Keepalive.IsUnknown() && !data.Keepalive.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"kaIntvl", strconv.FormatInt(data.Keepalive.ValueInt64(), 10))
 	}
 	if (!data.EbgpMultihopTtl.IsUnknown() && !data.EbgpMultihopTtl.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ttl", strconv.FormatInt(data.EbgpMultihopTtl.ValueInt64(), 10))
 	}
-	if (!data.PeerControl.IsUnknown() && !data.PeerControl.IsNull()) || true {
+	if (!data.PeerControl.IsUnknown() && !data.PeerControl.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ctrl", data.PeerControl.ValueString())
 	}
 	if (!data.PasswordType.IsUnknown() && !data.PasswordType.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"passwdType", data.PasswordType.ValueString())
 	}
-	if (!data.Password.IsUnknown() && !data.Password.IsNull()) || true {
+	if (!data.Password.IsUnknown() && !data.Password.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"password", data.Password.ValueString())
 	}
 

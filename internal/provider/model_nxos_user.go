@@ -92,10 +92,10 @@ func (data User) getClassName() string {
 func (data User) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
+	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}
-	if (!data.AllowExpired.IsUnknown() && !data.AllowExpired.IsNull()) || true {
+	if (!data.AllowExpired.IsUnknown() && !data.AllowExpired.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"allowExpired", data.AllowExpired.ValueString())
 	}
 	if (!data.Password.IsUnknown() && !data.Password.IsNull()) || false {
@@ -112,7 +112,7 @@ func (data User) toBody() nxos.Body {
 	body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".aaaUserDomain.attributes", attrs)
 	for _, nestedChild := range data.Roles {
 		attrs = "{}"
-		if (!nestedChild.Name.IsUnknown() && !nestedChild.Name.IsNull()) || true {
+		if (!nestedChild.Name.IsUnknown() && !nestedChild.Name.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "name", nestedChild.Name.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".aaaUserDomain.children.-1.aaaUserRole.attributes", attrs)

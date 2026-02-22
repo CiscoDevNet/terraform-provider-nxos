@@ -80,10 +80,10 @@ func (data EVPNVNI) getClassName() string {
 func (data EVPNVNI) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Encap.IsUnknown() && !data.Encap.IsNull()) || true {
+	if (!data.Encap.IsUnknown() && !data.Encap.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"encap", data.Encap.ValueString())
 	}
-	if (!data.RouteDistinguisher.IsUnknown() && !data.RouteDistinguisher.IsNull()) || true {
+	if (!data.RouteDistinguisher.IsUnknown() && !data.RouteDistinguisher.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rd", data.RouteDistinguisher.ValueString())
 	}
 

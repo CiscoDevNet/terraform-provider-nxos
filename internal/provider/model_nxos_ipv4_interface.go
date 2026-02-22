@@ -87,19 +87,19 @@ func (data IPv4Interface) getClassName() string {
 func (data IPv4Interface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
+	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.InterfaceId.ValueString())
 	}
-	if (!data.DropGlean.IsUnknown() && !data.DropGlean.IsNull()) || true {
+	if (!data.DropGlean.IsUnknown() && !data.DropGlean.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dropGlean", data.DropGlean.ValueString())
 	}
-	if (!data.Forward.IsUnknown() && !data.Forward.IsNull()) || true {
+	if (!data.Forward.IsUnknown() && !data.Forward.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"forward", data.Forward.ValueString())
 	}
-	if (!data.Unnumbered.IsUnknown() && !data.Unnumbered.IsNull()) || true {
+	if (!data.Unnumbered.IsUnknown() && !data.Unnumbered.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"unnumbered", data.Unnumbered.ValueString())
 	}
-	if (!data.Urpf.IsUnknown() && !data.Urpf.IsNull()) || true {
+	if (!data.Urpf.IsUnknown() && !data.Urpf.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"urpf", data.Urpf.ValueString())
 	}
 

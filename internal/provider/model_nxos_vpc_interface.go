@@ -81,12 +81,12 @@ func (data VPCInterface) getClassName() string {
 func (data VPCInterface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.VpcInterfaceId.IsUnknown() && !data.VpcInterfaceId.IsNull()) || true {
+	if (!data.VpcInterfaceId.IsUnknown() && !data.VpcInterfaceId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", strconv.FormatInt(data.VpcInterfaceId.ValueInt64(), 10))
 	}
 	var attrs string
 	attrs = "{}"
-	if (!data.PortChannelInterfaceDn.IsUnknown() && !data.PortChannelInterfaceDn.IsNull()) || true {
+	if (!data.PortChannelInterfaceDn.IsUnknown() && !data.PortChannelInterfaceDn.IsNull()) || false {
 		attrs, _ = sjson.Set(attrs, "tDn", data.PortChannelInterfaceDn.ValueString())
 	}
 	body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.vpcRsVpcConf.attributes", attrs)

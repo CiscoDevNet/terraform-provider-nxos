@@ -100,67 +100,67 @@ func (data PortChannelInterface) getClassName() string {
 func (data PortChannelInterface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
+	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.InterfaceId.ValueString())
 	}
-	if (!data.PortChannelMode.IsUnknown() && !data.PortChannelMode.IsNull()) || true {
+	if (!data.PortChannelMode.IsUnknown() && !data.PortChannelMode.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pcMode", data.PortChannelMode.ValueString())
 	}
-	if (!data.MinimumLinks.IsUnknown() && !data.MinimumLinks.IsNull()) || true {
+	if (!data.MinimumLinks.IsUnknown() && !data.MinimumLinks.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"minLinks", strconv.FormatInt(data.MinimumLinks.ValueInt64(), 10))
 	}
-	if (!data.MaximumLinks.IsUnknown() && !data.MaximumLinks.IsNull()) || true {
+	if (!data.MaximumLinks.IsUnknown() && !data.MaximumLinks.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxLinks", strconv.FormatInt(data.MaximumLinks.ValueInt64(), 10))
 	}
-	if (!data.SuspendIndividual.IsUnknown() && !data.SuspendIndividual.IsNull()) || true {
+	if (!data.SuspendIndividual.IsUnknown() && !data.SuspendIndividual.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"suspIndividual", data.SuspendIndividual.ValueString())
 	}
-	if (!data.AccessVlan.IsUnknown() && !data.AccessVlan.IsNull()) || true {
+	if (!data.AccessVlan.IsUnknown() && !data.AccessVlan.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"accessVlan", data.AccessVlan.ValueString())
 	}
-	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
-	if (!data.AutoNegotiation.IsUnknown() && !data.AutoNegotiation.IsNull()) || true {
+	if (!data.AutoNegotiation.IsUnknown() && !data.AutoNegotiation.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"autoNeg", data.AutoNegotiation.ValueString())
 	}
-	if (!data.Bandwidth.IsUnknown() && !data.Bandwidth.IsNull()) || true {
+	if (!data.Bandwidth.IsUnknown() && !data.Bandwidth.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bw", strconv.FormatInt(data.Bandwidth.ValueInt64(), 10))
 	}
-	if (!data.Delay.IsUnknown() && !data.Delay.IsNull()) || true {
+	if (!data.Delay.IsUnknown() && !data.Delay.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"delay", strconv.FormatInt(data.Delay.ValueInt64(), 10))
 	}
-	if (!data.Description.IsUnknown() && !data.Description.IsNull()) || true {
+	if (!data.Description.IsUnknown() && !data.Description.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"descr", data.Description.ValueString())
 	}
-	if (!data.Duplex.IsUnknown() && !data.Duplex.IsNull()) || true {
+	if (!data.Duplex.IsUnknown() && !data.Duplex.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"duplex", data.Duplex.ValueString())
 	}
-	if (!data.Layer.IsUnknown() && !data.Layer.IsNull()) || true {
+	if (!data.Layer.IsUnknown() && !data.Layer.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"layer", data.Layer.ValueString())
 	}
-	if (!data.LinkLogging.IsUnknown() && !data.LinkLogging.IsNull()) || true {
+	if (!data.LinkLogging.IsUnknown() && !data.LinkLogging.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkLog", data.LinkLogging.ValueString())
 	}
-	if (!data.Medium.IsUnknown() && !data.Medium.IsNull()) || true {
+	if (!data.Medium.IsUnknown() && !data.Medium.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"medium", data.Medium.ValueString())
 	}
-	if (!data.Mode.IsUnknown() && !data.Mode.IsNull()) || true {
+	if (!data.Mode.IsUnknown() && !data.Mode.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mode", data.Mode.ValueString())
 	}
-	if (!data.Mtu.IsUnknown() && !data.Mtu.IsNull()) || true {
+	if (!data.Mtu.IsUnknown() && !data.Mtu.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mtu", strconv.FormatInt(data.Mtu.ValueInt64(), 10))
 	}
-	if (!data.NativeVlan.IsUnknown() && !data.NativeVlan.IsNull()) || true {
+	if (!data.NativeVlan.IsUnknown() && !data.NativeVlan.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"nativeVlan", data.NativeVlan.ValueString())
 	}
-	if (!data.Speed.IsUnknown() && !data.Speed.IsNull()) || true {
+	if (!data.Speed.IsUnknown() && !data.Speed.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"speed", data.Speed.ValueString())
 	}
-	if (!data.TrunkVlans.IsUnknown() && !data.TrunkVlans.IsNull()) || true {
+	if (!data.TrunkVlans.IsUnknown() && !data.TrunkVlans.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"trunkVlans", data.TrunkVlans.ValueString())
 	}
-	if (!data.UserConfiguredFlags.IsUnknown() && !data.UserConfiguredFlags.IsNull()) || true {
+	if (!data.UserConfiguredFlags.IsUnknown() && !data.UserConfiguredFlags.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"userCfgdFlags", data.UserConfiguredFlags.ValueString())
 	}
 

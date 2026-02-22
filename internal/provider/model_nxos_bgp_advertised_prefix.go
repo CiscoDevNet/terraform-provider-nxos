@@ -93,13 +93,13 @@ func (data BGPAdvertisedPrefix) getClassName() string {
 func (data BGPAdvertisedPrefix) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Prefix.IsUnknown() && !data.Prefix.IsNull()) || true {
+	if (!data.Prefix.IsUnknown() && !data.Prefix.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"addr", data.Prefix.ValueString())
 	}
-	if (!data.RouteMap.IsUnknown() && !data.RouteMap.IsNull()) || true {
+	if (!data.RouteMap.IsUnknown() && !data.RouteMap.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rtMap", data.RouteMap.ValueString())
 	}
-	if (!data.Evpn.IsUnknown() && !data.Evpn.IsNull()) || true {
+	if (!data.Evpn.IsUnknown() && !data.Evpn.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"evpn", data.Evpn.ValueString())
 	}
 

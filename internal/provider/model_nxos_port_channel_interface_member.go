@@ -86,10 +86,10 @@ func (data PortChannelInterfaceMember) getClassName() string {
 func (data PortChannelInterfaceMember) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.InterfaceDn.IsUnknown() && !data.InterfaceDn.IsNull()) || true {
+	if (!data.InterfaceDn.IsUnknown() && !data.InterfaceDn.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"tDn", data.InterfaceDn.ValueString())
 	}
-	if (!data.Force.IsUnknown() && !data.Force.IsNull()) || true {
+	if (!data.Force.IsUnknown() && !data.Force.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"isMbrForce", strconv.FormatBool(data.Force.ValueBool()))
 	}
 

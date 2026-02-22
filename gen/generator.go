@@ -134,7 +134,7 @@ type YamlConfigAttribute struct {
 	Example            string   `yaml:"example"`
 	EnumValues         []string `yaml:"enum_values"`
 	AllowNonEnumValues bool     `yaml:"allow_non_enum_values"`
-	OmitEmptyValue     bool     `yaml:"omit_empty_value"`
+	AlwaysInclude      bool     `yaml:"always_include"`
 	MinInt             int      `yaml:"min_int"`
 	MaxInt             int      `yaml:"max_int"`
 	DefaultValue       string   `yaml:"default_value"`

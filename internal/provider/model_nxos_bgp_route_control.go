@@ -87,16 +87,16 @@ func (data BGPRouteControl) getClassName() string {
 func (data BGPRouteControl) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.EnforceFirstAs.IsUnknown() && !data.EnforceFirstAs.IsNull()) || true {
+	if (!data.EnforceFirstAs.IsUnknown() && !data.EnforceFirstAs.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"enforceFirstAs", data.EnforceFirstAs.ValueString())
 	}
-	if (!data.FibAccelerate.IsUnknown() && !data.FibAccelerate.IsNull()) || true {
+	if (!data.FibAccelerate.IsUnknown() && !data.FibAccelerate.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"fibAccelerate", data.FibAccelerate.ValueString())
 	}
-	if (!data.LogNeighborChanges.IsUnknown() && !data.LogNeighborChanges.IsNull()) || true {
+	if (!data.LogNeighborChanges.IsUnknown() && !data.LogNeighborChanges.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"logNeighborChanges", data.LogNeighborChanges.ValueString())
 	}
-	if (!data.SuppressRoutes.IsUnknown() && !data.SuppressRoutes.IsNull()) || true {
+	if (!data.SuppressRoutes.IsUnknown() && !data.SuppressRoutes.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"supprRt", data.SuppressRoutes.ValueString())
 	}
 

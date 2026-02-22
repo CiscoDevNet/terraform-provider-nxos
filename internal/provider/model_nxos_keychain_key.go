@@ -85,10 +85,10 @@ func (data KeychainKey) getClassName() string {
 func (data KeychainKey) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.KeyId.IsUnknown() && !data.KeyId.IsNull()) || true {
+	if (!data.KeyId.IsUnknown() && !data.KeyId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"keyId", strconv.FormatInt(data.KeyId.ValueInt64(), 10))
 	}
-	if (!data.KeyString.IsUnknown() && !data.KeyString.IsNull()) || true {
+	if (!data.KeyString.IsUnknown() && !data.KeyString.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"keyString", data.KeyString.ValueString())
 	}
 

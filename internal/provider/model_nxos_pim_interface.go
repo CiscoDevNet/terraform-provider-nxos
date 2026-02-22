@@ -90,22 +90,22 @@ func (data PIMInterface) getClassName() string {
 func (data PIMInterface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
+	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.InterfaceId.ValueString())
 	}
-	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
-	if (!data.Bfd.IsUnknown() && !data.Bfd.IsNull()) || true {
+	if (!data.Bfd.IsUnknown() && !data.Bfd.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bfdInst", data.Bfd.ValueString())
 	}
-	if (!data.DrPriority.IsUnknown() && !data.DrPriority.IsNull()) || true {
+	if (!data.DrPriority.IsUnknown() && !data.DrPriority.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"drPrio", strconv.FormatInt(data.DrPriority.ValueInt64(), 10))
 	}
-	if (!data.Passive.IsUnknown() && !data.Passive.IsNull()) || true {
+	if (!data.Passive.IsUnknown() && !data.Passive.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"passive", strconv.FormatBool(data.Passive.ValueBool()))
 	}
-	if (!data.SparseMode.IsUnknown() && !data.SparseMode.IsNull()) || true {
+	if (!data.SparseMode.IsUnknown() && !data.SparseMode.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pimSparseMode", strconv.FormatBool(data.SparseMode.ValueBool()))
 	}
 

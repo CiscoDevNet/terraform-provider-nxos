@@ -110,94 +110,94 @@ func (data ISISInterface) getClassName() string {
 func (data ISISInterface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
+	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.InterfaceId.ValueString())
 	}
-	if (!data.AuthenticationCheck.IsUnknown() && !data.AuthenticationCheck.IsNull()) || true {
+	if (!data.AuthenticationCheck.IsUnknown() && !data.AuthenticationCheck.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authCheck", strconv.FormatBool(data.AuthenticationCheck.ValueBool()))
 	}
-	if (!data.AuthenticationCheckL1.IsUnknown() && !data.AuthenticationCheckL1.IsNull()) || true {
+	if (!data.AuthenticationCheckL1.IsUnknown() && !data.AuthenticationCheckL1.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authCheckLvl1", strconv.FormatBool(data.AuthenticationCheckL1.ValueBool()))
 	}
-	if (!data.AuthenticationCheckL2.IsUnknown() && !data.AuthenticationCheckL2.IsNull()) || true {
+	if (!data.AuthenticationCheckL2.IsUnknown() && !data.AuthenticationCheckL2.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authCheckLvl2", strconv.FormatBool(data.AuthenticationCheckL2.ValueBool()))
 	}
-	if (!data.AuthenticationKey.IsUnknown() && !data.AuthenticationKey.IsNull()) || true {
+	if (!data.AuthenticationKey.IsUnknown() && !data.AuthenticationKey.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authKey", data.AuthenticationKey.ValueString())
 	}
-	if (!data.AuthenticationKeyL1.IsUnknown() && !data.AuthenticationKeyL1.IsNull()) || true {
+	if (!data.AuthenticationKeyL1.IsUnknown() && !data.AuthenticationKeyL1.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authKeyLvl1", data.AuthenticationKeyL1.ValueString())
 	}
-	if (!data.AuthenticationKeyL2.IsUnknown() && !data.AuthenticationKeyL2.IsNull()) || true {
+	if (!data.AuthenticationKeyL2.IsUnknown() && !data.AuthenticationKeyL2.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authKeyLvl2", data.AuthenticationKeyL2.ValueString())
 	}
-	if (!data.AuthenticationType.IsUnknown() && !data.AuthenticationType.IsNull()) || true {
+	if (!data.AuthenticationType.IsUnknown() && !data.AuthenticationType.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authType", data.AuthenticationType.ValueString())
 	}
-	if (!data.AuthenticationTypeL1.IsUnknown() && !data.AuthenticationTypeL1.IsNull()) || true {
+	if (!data.AuthenticationTypeL1.IsUnknown() && !data.AuthenticationTypeL1.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authTypeLvl1", data.AuthenticationTypeL1.ValueString())
 	}
-	if (!data.AuthenticationTypeL2.IsUnknown() && !data.AuthenticationTypeL2.IsNull()) || true {
+	if (!data.AuthenticationTypeL2.IsUnknown() && !data.AuthenticationTypeL2.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authTypeLvl2", data.AuthenticationTypeL2.ValueString())
 	}
-	if (!data.CircuitType.IsUnknown() && !data.CircuitType.IsNull()) || true {
+	if (!data.CircuitType.IsUnknown() && !data.CircuitType.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"cktT", data.CircuitType.ValueString())
 	}
-	if (!data.Vrf.IsUnknown() && !data.Vrf.IsNull()) || true {
+	if (!data.Vrf.IsUnknown() && !data.Vrf.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dom", data.Vrf.ValueString())
 	}
-	if (!data.HelloInterval.IsUnknown() && !data.HelloInterval.IsNull()) || true {
+	if (!data.HelloInterval.IsUnknown() && !data.HelloInterval.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"helloIntvl", strconv.FormatInt(data.HelloInterval.ValueInt64(), 10))
 	}
-	if (!data.HelloIntervalL1.IsUnknown() && !data.HelloIntervalL1.IsNull()) || true {
+	if (!data.HelloIntervalL1.IsUnknown() && !data.HelloIntervalL1.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"helloIntvlLvl1", strconv.FormatInt(data.HelloIntervalL1.ValueInt64(), 10))
 	}
-	if (!data.HelloIntervalL2.IsUnknown() && !data.HelloIntervalL2.IsNull()) || true {
+	if (!data.HelloIntervalL2.IsUnknown() && !data.HelloIntervalL2.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"helloIntvlLvl2", strconv.FormatInt(data.HelloIntervalL2.ValueInt64(), 10))
 	}
-	if (!data.HelloMultiplier.IsUnknown() && !data.HelloMultiplier.IsNull()) || true {
+	if (!data.HelloMultiplier.IsUnknown() && !data.HelloMultiplier.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"helloMult", strconv.FormatInt(data.HelloMultiplier.ValueInt64(), 10))
 	}
-	if (!data.HelloMultiplierL1.IsUnknown() && !data.HelloMultiplierL1.IsNull()) || true {
+	if (!data.HelloMultiplierL1.IsUnknown() && !data.HelloMultiplierL1.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"helloMultLvl1", strconv.FormatInt(data.HelloMultiplierL1.ValueInt64(), 10))
 	}
-	if (!data.HelloMultiplierL2.IsUnknown() && !data.HelloMultiplierL2.IsNull()) || true {
+	if (!data.HelloMultiplierL2.IsUnknown() && !data.HelloMultiplierL2.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"helloMultLvl2", strconv.FormatInt(data.HelloMultiplierL2.ValueInt64(), 10))
 	}
-	if (!data.HelloPadding.IsUnknown() && !data.HelloPadding.IsNull()) || true {
+	if (!data.HelloPadding.IsUnknown() && !data.HelloPadding.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"helloPad", data.HelloPadding.ValueString())
 	}
 	if (!data.InstanceName.IsUnknown() && !data.InstanceName.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"instance", data.InstanceName.ValueString())
 	}
-	if (!data.MetricL1.IsUnknown() && !data.MetricL1.IsNull()) || true {
+	if (!data.MetricL1.IsUnknown() && !data.MetricL1.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"metricLvl1", strconv.FormatInt(data.MetricL1.ValueInt64(), 10))
 	}
-	if (!data.MetricL2.IsUnknown() && !data.MetricL2.IsNull()) || true {
+	if (!data.MetricL2.IsUnknown() && !data.MetricL2.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"metricLvl2", strconv.FormatInt(data.MetricL2.ValueInt64(), 10))
 	}
-	if (!data.MtuCheck.IsUnknown() && !data.MtuCheck.IsNull()) || true {
+	if (!data.MtuCheck.IsUnknown() && !data.MtuCheck.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mtuCheck", strconv.FormatBool(data.MtuCheck.ValueBool()))
 	}
-	if (!data.MtuCheckL1.IsUnknown() && !data.MtuCheckL1.IsNull()) || true {
+	if (!data.MtuCheckL1.IsUnknown() && !data.MtuCheckL1.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mtuCheckLvl1", strconv.FormatBool(data.MtuCheckL1.ValueBool()))
 	}
-	if (!data.MtuCheckL2.IsUnknown() && !data.MtuCheckL2.IsNull()) || true {
+	if (!data.MtuCheckL2.IsUnknown() && !data.MtuCheckL2.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mtuCheckLvl2", strconv.FormatBool(data.MtuCheckL2.ValueBool()))
 	}
-	if (!data.NetworkTypeP2p.IsUnknown() && !data.NetworkTypeP2p.IsNull()) || true {
+	if (!data.NetworkTypeP2p.IsUnknown() && !data.NetworkTypeP2p.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"networkTypeP2P", data.NetworkTypeP2p.ValueString())
 	}
-	if (!data.Passive.IsUnknown() && !data.Passive.IsNull()) || true {
+	if (!data.Passive.IsUnknown() && !data.Passive.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"passive", data.Passive.ValueString())
 	}
-	if (!data.PriorityL1.IsUnknown() && !data.PriorityL1.IsNull()) || true {
+	if (!data.PriorityL1.IsUnknown() && !data.PriorityL1.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"priorityLvl1", strconv.FormatInt(data.PriorityL1.ValueInt64(), 10))
 	}
-	if (!data.PriorityL2.IsUnknown() && !data.PriorityL2.IsNull()) || true {
+	if (!data.PriorityL2.IsUnknown() && !data.PriorityL2.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"priorityLvl2", strconv.FormatInt(data.PriorityL2.ValueInt64(), 10))
 	}
-	if (!data.EnableIpv4.IsUnknown() && !data.EnableIpv4.IsNull()) || true {
+	if (!data.EnableIpv4.IsUnknown() && !data.EnableIpv4.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"v4enable", strconv.FormatBool(data.EnableIpv4.ValueBool()))
 	}
 

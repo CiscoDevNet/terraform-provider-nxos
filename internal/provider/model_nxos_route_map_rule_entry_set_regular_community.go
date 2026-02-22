@@ -86,13 +86,13 @@ func (data RouteMapRuleEntrySetRegularCommunity) getClassName() string {
 func (data RouteMapRuleEntrySetRegularCommunity) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Additive.IsUnknown() && !data.Additive.IsNull()) || true {
+	if (!data.Additive.IsUnknown() && !data.Additive.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"additive", data.Additive.ValueString())
 	}
-	if (!data.NoCommunity.IsUnknown() && !data.NoCommunity.IsNull()) || true {
+	if (!data.NoCommunity.IsUnknown() && !data.NoCommunity.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"noCommAttr", data.NoCommunity.ValueString())
 	}
-	if (!data.SetCriteria.IsUnknown() && !data.SetCriteria.IsNull()) || true {
+	if (!data.SetCriteria.IsUnknown() && !data.SetCriteria.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"setCriteria", data.SetCriteria.ValueString())
 	}
 

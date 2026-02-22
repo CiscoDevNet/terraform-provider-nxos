@@ -90,22 +90,22 @@ func (data OSPFv3VRF) getClassName() string {
 func (data OSPFv3VRF) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
+	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}
-	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
-	if (!data.BandwidthReference.IsUnknown() && !data.BandwidthReference.IsNull()) || true {
+	if (!data.BandwidthReference.IsUnknown() && !data.BandwidthReference.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bwRef", strconv.FormatInt(data.BandwidthReference.ValueInt64(), 10))
 	}
-	if (!data.BandwidthReferenceUnit.IsUnknown() && !data.BandwidthReferenceUnit.IsNull()) || true {
+	if (!data.BandwidthReferenceUnit.IsUnknown() && !data.BandwidthReferenceUnit.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bwRefUnit", data.BandwidthReferenceUnit.ValueString())
 	}
-	if (!data.RouterId.IsUnknown() && !data.RouterId.IsNull()) || true {
+	if (!data.RouterId.IsUnknown() && !data.RouterId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rtrId", data.RouterId.ValueString())
 	}
-	if (!data.BfdControl.IsUnknown() && !data.BfdControl.IsNull()) || true {
+	if (!data.BfdControl.IsUnknown() && !data.BfdControl.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bfdCtrl", strconv.FormatBool(data.BfdControl.ValueBool()))
 	}
 

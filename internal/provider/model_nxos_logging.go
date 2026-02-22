@@ -87,19 +87,19 @@ func (data Logging) getClassName() string {
 func (data Logging) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.All.IsUnknown() && !data.All.IsNull()) || true {
+	if (!data.All.IsUnknown() && !data.All.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"all", data.All.ValueString())
 	}
-	if (!data.Level.IsUnknown() && !data.Level.IsNull()) || true {
+	if (!data.Level.IsUnknown() && !data.Level.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"severityLevel", data.Level.ValueString())
 	}
 	var attrs string
 	for _, child := range data.Facilities {
 		attrs = "{}"
-		if (!child.Name.IsUnknown() && !child.Name.IsNull()) || true {
+		if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "facilityName", child.Name.ValueString())
 		}
-		if (!child.Level.IsUnknown() && !child.Level.IsNull()) || true {
+		if (!child.Level.IsUnknown() && !child.Level.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "severityLevel", child.Level.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.loggingFacility.attributes", attrs)

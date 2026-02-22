@@ -99,49 +99,49 @@ func (data ISISVRF) getClassName() string {
 func (data ISISVRF) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
+	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}
-	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
-	if (!data.AuthenticationCheckL1.IsUnknown() && !data.AuthenticationCheckL1.IsNull()) || true {
+	if (!data.AuthenticationCheckL1.IsUnknown() && !data.AuthenticationCheckL1.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authCheckLvl1", strconv.FormatBool(data.AuthenticationCheckL1.ValueBool()))
 	}
-	if (!data.AuthenticationCheckL2.IsUnknown() && !data.AuthenticationCheckL2.IsNull()) || true {
+	if (!data.AuthenticationCheckL2.IsUnknown() && !data.AuthenticationCheckL2.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authCheckLvl2", strconv.FormatBool(data.AuthenticationCheckL2.ValueBool()))
 	}
-	if (!data.AuthenticationKeyL1.IsUnknown() && !data.AuthenticationKeyL1.IsNull()) || true {
+	if (!data.AuthenticationKeyL1.IsUnknown() && !data.AuthenticationKeyL1.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authKeyLvl1", data.AuthenticationKeyL1.ValueString())
 	}
-	if (!data.AuthenticationKeyL2.IsUnknown() && !data.AuthenticationKeyL2.IsNull()) || true {
+	if (!data.AuthenticationKeyL2.IsUnknown() && !data.AuthenticationKeyL2.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authKeyLvl2", data.AuthenticationKeyL2.ValueString())
 	}
-	if (!data.AuthenticationTypeL1.IsUnknown() && !data.AuthenticationTypeL1.IsNull()) || true {
+	if (!data.AuthenticationTypeL1.IsUnknown() && !data.AuthenticationTypeL1.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authTypeLvl1", data.AuthenticationTypeL1.ValueString())
 	}
-	if (!data.AuthenticationTypeL2.IsUnknown() && !data.AuthenticationTypeL2.IsNull()) || true {
+	if (!data.AuthenticationTypeL2.IsUnknown() && !data.AuthenticationTypeL2.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authTypeLvl2", data.AuthenticationTypeL2.ValueString())
 	}
-	if (!data.BandwidthReference.IsUnknown() && !data.BandwidthReference.IsNull()) || true {
+	if (!data.BandwidthReference.IsUnknown() && !data.BandwidthReference.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bwRef", strconv.FormatInt(data.BandwidthReference.ValueInt64(), 10))
 	}
-	if (!data.BanwidthReferenceUnit.IsUnknown() && !data.BanwidthReferenceUnit.IsNull()) || true {
+	if (!data.BanwidthReferenceUnit.IsUnknown() && !data.BanwidthReferenceUnit.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bwRefUnit", data.BanwidthReferenceUnit.ValueString())
 	}
-	if (!data.IsType.IsUnknown() && !data.IsType.IsNull()) || true {
+	if (!data.IsType.IsUnknown() && !data.IsType.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"isType", data.IsType.ValueString())
 	}
-	if (!data.MetricType.IsUnknown() && !data.MetricType.IsNull()) || true {
+	if (!data.MetricType.IsUnknown() && !data.MetricType.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"metricStyle", data.MetricType.ValueString())
 	}
-	if (!data.Mtu.IsUnknown() && !data.Mtu.IsNull()) || true {
+	if (!data.Mtu.IsUnknown() && !data.Mtu.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mtu", strconv.FormatInt(data.Mtu.ValueInt64(), 10))
 	}
-	if (!data.Net.IsUnknown() && !data.Net.IsNull()) || true {
+	if (!data.Net.IsUnknown() && !data.Net.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"net", data.Net.ValueString())
 	}
-	if (!data.PassiveDefault.IsUnknown() && !data.PassiveDefault.IsNull()) || true {
+	if (!data.PassiveDefault.IsUnknown() && !data.PassiveDefault.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"passiveDflt", data.PassiveDefault.ValueString())
 	}
 

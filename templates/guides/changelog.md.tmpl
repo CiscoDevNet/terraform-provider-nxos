@@ -9,6 +9,7 @@ description: |-
 
 ## Unreleased
 
+- BREAKING CHANGE: Omit empty or null attribute values from API payload by default
 - Add `nxos_features` resource and data source
 
 ## 0.7.0

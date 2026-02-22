@@ -75,7 +75,7 @@ func (data VPCPeerlink) getClassName() string {
 func (data VPCPeerlink) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.PortChannelId.IsUnknown() && !data.PortChannelId.IsNull()) || true {
+	if (!data.PortChannelId.IsUnknown() && !data.PortChannelId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.PortChannelId.ValueString())
 	}
 

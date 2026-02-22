@@ -85,10 +85,10 @@ func (data BGPPeerLocalASN) getClassName() string {
 func (data BGPPeerLocalASN) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.AsnPropagation.IsUnknown() && !data.AsnPropagation.IsNull()) || true {
+	if (!data.AsnPropagation.IsUnknown() && !data.AsnPropagation.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"asnPropagate", data.AsnPropagation.ValueString())
 	}
-	if (!data.LocalAsn.IsUnknown() && !data.LocalAsn.IsNull()) || true {
+	if (!data.LocalAsn.IsUnknown() && !data.LocalAsn.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"localAsn", data.LocalAsn.ValueString())
 	}
 

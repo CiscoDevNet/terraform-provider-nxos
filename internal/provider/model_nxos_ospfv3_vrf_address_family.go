@@ -91,16 +91,16 @@ func (data OSPFv3VRFAddressFamily) getClassName() string {
 func (data OSPFv3VRFAddressFamily) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.AddressFamilyType.IsUnknown() && !data.AddressFamilyType.IsNull()) || true {
+	if (!data.AddressFamilyType.IsUnknown() && !data.AddressFamilyType.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.AddressFamilyType.ValueString())
 	}
-	if (!data.AdministrativeDistance.IsUnknown() && !data.AdministrativeDistance.IsNull()) || true {
+	if (!data.AdministrativeDistance.IsUnknown() && !data.AdministrativeDistance.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminDistance", data.AdministrativeDistance.ValueString())
 	}
-	if (!data.DefaultMetric.IsUnknown() && !data.DefaultMetric.IsNull()) || true {
+	if (!data.DefaultMetric.IsUnknown() && !data.DefaultMetric.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"defaultMetric", data.DefaultMetric.ValueString())
 	}
-	if (!data.MaxEcmpCost.IsUnknown() && !data.MaxEcmpCost.IsNull()) || true {
+	if (!data.MaxEcmpCost.IsUnknown() && !data.MaxEcmpCost.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxEcmp", strconv.FormatInt(data.MaxEcmpCost.ValueInt64(), 10))
 	}
 

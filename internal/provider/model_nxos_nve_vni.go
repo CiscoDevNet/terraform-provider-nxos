@@ -85,19 +85,19 @@ func (data NVEVNI) getClassName() string {
 func (data NVEVNI) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Vni.IsUnknown() && !data.Vni.IsNull()) || true {
+	if (!data.Vni.IsUnknown() && !data.Vni.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"vni", strconv.FormatInt(data.Vni.ValueInt64(), 10))
 	}
-	if (!data.AssociateVrf.IsUnknown() && !data.AssociateVrf.IsNull()) || true {
+	if (!data.AssociateVrf.IsUnknown() && !data.AssociateVrf.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"associateVrfFlag", strconv.FormatBool(data.AssociateVrf.ValueBool()))
 	}
-	if (!data.MulticastGroup.IsUnknown() && !data.MulticastGroup.IsNull()) || true {
+	if (!data.MulticastGroup.IsUnknown() && !data.MulticastGroup.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mcastGroup", data.MulticastGroup.ValueString())
 	}
-	if (!data.MultisiteIngressReplication.IsUnknown() && !data.MultisiteIngressReplication.IsNull()) || true {
+	if (!data.MultisiteIngressReplication.IsUnknown() && !data.MultisiteIngressReplication.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"multisiteIngRepl", data.MultisiteIngressReplication.ValueString())
 	}
-	if (!data.SuppressArp.IsUnknown() && !data.SuppressArp.IsNull()) || true {
+	if (!data.SuppressArp.IsUnknown() && !data.SuppressArp.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"suppressARP", data.SuppressArp.ValueString())
 	}
 

@@ -83,7 +83,7 @@ func (data PIMStaticRP) getClassName() string {
 func (data PIMStaticRP) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Address.IsUnknown() && !data.Address.IsNull()) || true {
+	if (!data.Address.IsUnknown() && !data.Address.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"addr", data.Address.ValueString())
 	}
 

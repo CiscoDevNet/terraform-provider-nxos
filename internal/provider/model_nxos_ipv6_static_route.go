@@ -99,31 +99,31 @@ func (data IPv6StaticRoute) getClassName() string {
 func (data IPv6StaticRoute) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Prefix.IsUnknown() && !data.Prefix.IsNull()) || true {
+	if (!data.Prefix.IsUnknown() && !data.Prefix.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"prefix", data.Prefix.ValueString())
 	}
 	var attrs string
 	for _, child := range data.NextHops {
 		attrs = "{}"
-		if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || true {
+		if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "nhIf", child.InterfaceId.ValueString())
 		}
-		if (!child.Address.IsUnknown() && !child.Address.IsNull()) || true {
+		if (!child.Address.IsUnknown() && !child.Address.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "nhAddr", child.Address.ValueString())
 		}
-		if (!child.VrfName.IsUnknown() && !child.VrfName.IsNull()) || true {
+		if (!child.VrfName.IsUnknown() && !child.VrfName.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "nhVrf", child.VrfName.ValueString())
 		}
-		if (!child.Description.IsUnknown() && !child.Description.IsNull()) || true {
+		if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 		}
-		if (!child.Object.IsUnknown() && !child.Object.IsNull()) || true {
+		if (!child.Object.IsUnknown() && !child.Object.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "object", strconv.FormatInt(child.Object.ValueInt64(), 10))
 		}
-		if (!child.Preference.IsUnknown() && !child.Preference.IsNull()) || true {
+		if (!child.Preference.IsUnknown() && !child.Preference.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "pref", strconv.FormatInt(child.Preference.ValueInt64(), 10))
 		}
-		if (!child.Tag.IsUnknown() && !child.Tag.IsNull()) || true {
+		if (!child.Tag.IsUnknown() && !child.Tag.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "tag", strconv.FormatInt(child.Tag.ValueInt64(), 10))
 		}
 		body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.ipv6Nexthop.attributes", attrs)

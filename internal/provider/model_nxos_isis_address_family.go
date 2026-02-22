@@ -93,22 +93,22 @@ func (data ISISAddressFamily) getClassName() string {
 func (data ISISAddressFamily) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Vrf.IsUnknown() && !data.Vrf.IsNull()) || true {
+	if (!data.Vrf.IsUnknown() && !data.Vrf.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Vrf.ValueString())
 	}
-	if (!data.AddressFamily.IsUnknown() && !data.AddressFamily.IsNull()) || true {
+	if (!data.AddressFamily.IsUnknown() && !data.AddressFamily.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.AddressFamily.ValueString())
 	}
-	if (!data.SegmentRoutingMpls.IsUnknown() && !data.SegmentRoutingMpls.IsNull()) || true {
+	if (!data.SegmentRoutingMpls.IsUnknown() && !data.SegmentRoutingMpls.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"srMpls", strconv.FormatBool(data.SegmentRoutingMpls.ValueBool()))
 	}
-	if (!data.EnableBfd.IsUnknown() && !data.EnableBfd.IsNull()) || true {
+	if (!data.EnableBfd.IsUnknown() && !data.EnableBfd.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"enableBfd", strconv.FormatBool(data.EnableBfd.ValueBool()))
 	}
-	if (!data.PrefixAdvertisePassiveL1.IsUnknown() && !data.PrefixAdvertisePassiveL1.IsNull()) || true {
+	if (!data.PrefixAdvertisePassiveL1.IsUnknown() && !data.PrefixAdvertisePassiveL1.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"advPassiveLvl1", strconv.FormatBool(data.PrefixAdvertisePassiveL1.ValueBool()))
 	}
-	if (!data.PrefixAdvertisePassiveL2.IsUnknown() && !data.PrefixAdvertisePassiveL2.IsNull()) || true {
+	if (!data.PrefixAdvertisePassiveL2.IsUnknown() && !data.PrefixAdvertisePassiveL2.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"advPassiveLvl2", strconv.FormatBool(data.PrefixAdvertisePassiveL2.ValueBool()))
 	}
 

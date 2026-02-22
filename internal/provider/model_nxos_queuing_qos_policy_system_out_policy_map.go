@@ -75,7 +75,7 @@ func (data QueuingQOSPolicySystemOutPolicyMap) getClassName() string {
 func (data QueuingQOSPolicySystemOutPolicyMap) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.PolicyMapName.IsUnknown() && !data.PolicyMapName.IsNull()) || true {
+	if (!data.PolicyMapName.IsUnknown() && !data.PolicyMapName.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.PolicyMapName.ValueString())
 	}
 

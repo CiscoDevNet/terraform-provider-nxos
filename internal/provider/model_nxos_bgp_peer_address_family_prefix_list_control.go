@@ -96,10 +96,10 @@ func (data BGPPeerAddressFamilyPrefixListControl) getClassName() string {
 func (data BGPPeerAddressFamilyPrefixListControl) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Direction.IsUnknown() && !data.Direction.IsNull()) || true {
+	if (!data.Direction.IsUnknown() && !data.Direction.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"direction", data.Direction.ValueString())
 	}
-	if (!data.List.IsUnknown() && !data.List.IsNull()) || true {
+	if (!data.List.IsUnknown() && !data.List.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"list", data.List.ValueString())
 	}
 

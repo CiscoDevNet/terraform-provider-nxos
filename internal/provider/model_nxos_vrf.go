@@ -81,13 +81,13 @@ func (data VRF) getClassName() string {
 func (data VRF) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || true {
+	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}
-	if (!data.Description.IsUnknown() && !data.Description.IsNull()) || true {
+	if (!data.Description.IsUnknown() && !data.Description.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"descr", data.Description.ValueString())
 	}
-	if (!data.Encap.IsUnknown() && !data.Encap.IsNull()) || true {
+	if (!data.Encap.IsUnknown() && !data.Encap.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"encap", data.Encap.ValueString())
 	}
 

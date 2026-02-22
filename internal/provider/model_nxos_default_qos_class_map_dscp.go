@@ -83,7 +83,7 @@ func (data DefaultQOSClassMapDSCP) getClassName() string {
 func (data DefaultQOSClassMapDSCP) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Value.IsUnknown() && !data.Value.IsNull()) || true {
+	if (!data.Value.IsUnknown() && !data.Value.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"val", data.Value.ValueString())
 	}
 

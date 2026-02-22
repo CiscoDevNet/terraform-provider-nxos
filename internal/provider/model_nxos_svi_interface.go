@@ -86,25 +86,25 @@ func (data SVIInterface) getClassName() string {
 func (data SVIInterface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
+	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.InterfaceId.ValueString())
 	}
-	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || true {
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
-	if (!data.Bandwidth.IsUnknown() && !data.Bandwidth.IsNull()) || true {
+	if (!data.Bandwidth.IsUnknown() && !data.Bandwidth.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bw", strconv.FormatInt(data.Bandwidth.ValueInt64(), 10))
 	}
-	if (!data.Delay.IsUnknown() && !data.Delay.IsNull()) || true {
+	if (!data.Delay.IsUnknown() && !data.Delay.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"delay", strconv.FormatInt(data.Delay.ValueInt64(), 10))
 	}
-	if (!data.Description.IsUnknown() && !data.Description.IsNull()) || true {
+	if (!data.Description.IsUnknown() && !data.Description.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"descr", data.Description.ValueString())
 	}
-	if (!data.Medium.IsUnknown() && !data.Medium.IsNull()) || true {
+	if (!data.Medium.IsUnknown() && !data.Medium.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"medium", data.Medium.ValueString())
 	}
-	if (!data.Mtu.IsUnknown() && !data.Mtu.IsNull()) || true {
+	if (!data.Mtu.IsUnknown() && !data.Mtu.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mtu", strconv.FormatInt(data.Mtu.ValueInt64(), 10))
 	}
 

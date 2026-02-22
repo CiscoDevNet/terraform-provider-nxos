@@ -83,7 +83,7 @@ func (data VRFAddressFamily) getClassName() string {
 func (data VRFAddressFamily) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.AddressFamily.IsUnknown() && !data.AddressFamily.IsNull()) || true {
+	if (!data.AddressFamily.IsUnknown() && !data.AddressFamily.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"type", data.AddressFamily.ValueString())
 	}
 

@@ -91,31 +91,31 @@ func (data IPv6Interface) getClassName() string {
 func (data IPv6Interface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
+	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.InterfaceId.ValueString())
 	}
-	if (!data.AutoConfiguration.IsUnknown() && !data.AutoConfiguration.IsNull()) || true {
+	if (!data.AutoConfiguration.IsUnknown() && !data.AutoConfiguration.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"autoconfig", data.AutoConfiguration.ValueString())
 	}
-	if (!data.DefaultRoute.IsUnknown() && !data.DefaultRoute.IsNull()) || true {
+	if (!data.DefaultRoute.IsUnknown() && !data.DefaultRoute.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"defaultRoute", data.DefaultRoute.ValueString())
 	}
-	if (!data.Ipv6Forward.IsUnknown() && !data.Ipv6Forward.IsNull()) || true {
+	if (!data.Ipv6Forward.IsUnknown() && !data.Ipv6Forward.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"forward", data.Ipv6Forward.ValueString())
 	}
-	if (!data.Forward.IsUnknown() && !data.Forward.IsNull()) || true {
+	if (!data.Forward.IsUnknown() && !data.Forward.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"forward", data.Forward.ValueString())
 	}
-	if (!data.LinkAddressUseBia.IsUnknown() && !data.LinkAddressUseBia.IsNull()) || true {
+	if (!data.LinkAddressUseBia.IsUnknown() && !data.LinkAddressUseBia.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"llAddrUseBia", data.LinkAddressUseBia.ValueString())
 	}
-	if (!data.UseLinkLocalAddress.IsUnknown() && !data.UseLinkLocalAddress.IsNull()) || true {
+	if (!data.UseLinkLocalAddress.IsUnknown() && !data.UseLinkLocalAddress.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"useLinkLocalAddr", data.UseLinkLocalAddress.ValueString())
 	}
-	if (!data.Urpf.IsUnknown() && !data.Urpf.IsNull()) || true {
+	if (!data.Urpf.IsUnknown() && !data.Urpf.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"urpf", data.Urpf.ValueString())
 	}
-	if (!data.LinkLocalAddress.IsUnknown() && !data.LinkLocalAddress.IsNull()) || true {
+	if (!data.LinkLocalAddress.IsUnknown() && !data.LinkLocalAddress.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"llAddr", data.LinkLocalAddress.ValueString())
 	}
 

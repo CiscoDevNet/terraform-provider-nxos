@@ -88,7 +88,7 @@ func (data RouteMapRuleEntryMatchTag) getClassName() string {
 func (data RouteMapRuleEntryMatchTag) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Tag.IsUnknown() && !data.Tag.IsNull()) || true {
+	if (!data.Tag.IsUnknown() && !data.Tag.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"tag", strconv.FormatInt(data.Tag.ValueInt64(), 10))
 	}
 

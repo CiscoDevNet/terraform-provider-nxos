@@ -98,13 +98,13 @@ func (data BGPRouteRedistribution) getClassName() string {
 func (data BGPRouteRedistribution) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Protocol.IsUnknown() && !data.Protocol.IsNull()) || true {
+	if (!data.Protocol.IsUnknown() && !data.Protocol.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"proto", data.Protocol.ValueString())
 	}
-	if (!data.ProtocolInstance.IsUnknown() && !data.ProtocolInstance.IsNull()) || true {
+	if (!data.ProtocolInstance.IsUnknown() && !data.ProtocolInstance.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"inst", data.ProtocolInstance.ValueString())
 	}
-	if (!data.RouteMap.IsUnknown() && !data.RouteMap.IsNull()) || true {
+	if (!data.RouteMap.IsUnknown() && !data.RouteMap.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rtMap", data.RouteMap.ValueString())
 	}
 	if (!data.Scope.IsUnknown() && !data.Scope.IsNull()) || false {

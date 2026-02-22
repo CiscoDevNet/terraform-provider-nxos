@@ -90,34 +90,34 @@ func (data OSPFv3Interface) getClassName() string {
 func (data OSPFv3Interface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || true {
+	if (!data.InterfaceId.IsUnknown() && !data.InterfaceId.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", data.InterfaceId.ValueString())
 	}
-	if (!data.AdvertiseSecondaries.IsUnknown() && !data.AdvertiseSecondaries.IsNull()) || true {
+	if (!data.AdvertiseSecondaries.IsUnknown() && !data.AdvertiseSecondaries.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"advSecondary", strconv.FormatBool(data.AdvertiseSecondaries.ValueBool()))
 	}
-	if (!data.Area.IsUnknown() && !data.Area.IsNull()) || true {
+	if (!data.Area.IsUnknown() && !data.Area.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"area", data.Area.ValueString())
 	}
-	if (!data.Bfd.IsUnknown() && !data.Bfd.IsNull()) || true {
+	if (!data.Bfd.IsUnknown() && !data.Bfd.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bfdCtrl", data.Bfd.ValueString())
 	}
-	if (!data.Cost.IsUnknown() && !data.Cost.IsNull()) || true {
+	if (!data.Cost.IsUnknown() && !data.Cost.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"cost", strconv.FormatInt(data.Cost.ValueInt64(), 10))
 	}
-	if (!data.DeadInterval.IsUnknown() && !data.DeadInterval.IsNull()) || true {
+	if (!data.DeadInterval.IsUnknown() && !data.DeadInterval.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"deadIntvl", strconv.FormatInt(data.DeadInterval.ValueInt64(), 10))
 	}
-	if (!data.HelloInterval.IsUnknown() && !data.HelloInterval.IsNull()) || true {
+	if (!data.HelloInterval.IsUnknown() && !data.HelloInterval.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"helloIntvl", strconv.FormatInt(data.HelloInterval.ValueInt64(), 10))
 	}
-	if (!data.NetworkType.IsUnknown() && !data.NetworkType.IsNull()) || true {
+	if (!data.NetworkType.IsUnknown() && !data.NetworkType.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"nwT", data.NetworkType.ValueString())
 	}
-	if (!data.Passive.IsUnknown() && !data.Passive.IsNull()) || true {
+	if (!data.Passive.IsUnknown() && !data.Passive.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"passive", data.Passive.ValueString())
 	}
-	if (!data.Priority.IsUnknown() && !data.Priority.IsNull()) || true {
+	if (!data.Priority.IsUnknown() && !data.Priority.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"prio", strconv.FormatInt(data.Priority.ValueInt64(), 10))
 	}
 

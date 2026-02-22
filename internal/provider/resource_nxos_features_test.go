@@ -35,6 +35,9 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosFeatures(t *testing.T) {
+	if os.Getenv("FEATURES") == "" {
+		t.Skip("skipping test, set environment variable FEATURES")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "bash_shell", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_features.test", "bfd", "enabled"))

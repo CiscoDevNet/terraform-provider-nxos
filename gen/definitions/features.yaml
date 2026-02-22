@@ -7,6 +7,7 @@ ds_description: This data source can read the feature configuration.
 res_description: This resource can manage the feature configuration.
 doc_path: Feature%20Management/fm:Entity/
 doc_category: Feature
+test_tags: [FEATURES]
 child_classes:
   - class_name: fmBashShell
     rn: bashshell

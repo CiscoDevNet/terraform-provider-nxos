@@ -2,6 +2,7 @@
 name: Feature sFlow
 class_name: fmSflow
 dn: sys/fm/sflow
+no_delete: true
 ds_description: This data source can read the sFlow feature configuration.
 res_description: This resource can manage the sFlow feature configuration.
 doc_path: Feature%20Management/fm:Sflow/

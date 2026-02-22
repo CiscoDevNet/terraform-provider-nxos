@@ -2,6 +2,7 @@
 name: Feature NV Overlay
 class_name: fmNvo
 dn: sys/fm/nvo
+no_delete: true
 ds_description: This data source can read the NV Overlay feature configuration.
 res_description: This resource can manage the NV Overlay feature configuration.
 doc_path: Feature%20Management/fm:Nvo/

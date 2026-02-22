@@ -2,6 +2,7 @@
 name: Feature MACsec
 class_name: fmMacsec
 dn: sys/fm/macsec
+no_delete: true
 test_tags: [MACSEC]
 ds_description: This data source can read the MACsec feature configuration.
 res_description: This resource can manage the MACsec feature configuration.

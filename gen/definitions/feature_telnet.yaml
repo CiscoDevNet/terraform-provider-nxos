@@ -2,6 +2,7 @@
 name: Feature Telnet
 class_name: fmTelnet
 dn: sys/fm/telnet
+no_delete: true
 ds_description: This data source can read the Telnet feature configuration.
 res_description: This resource can manage the Telnet feature configuration.
 doc_path: Feature%20Management/fm:Telnet/

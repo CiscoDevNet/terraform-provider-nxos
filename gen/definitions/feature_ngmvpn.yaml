@@ -2,6 +2,7 @@
 name: Feature ngMVPN
 class_name: fmNgmvpn
 dn: sys/fm/ngmvpn
+no_delete: true
 ds_description: This data source can read the Next Generation Multicast VPN Feature.
 res_description: This resource can manage the Next Generation Multicast VPN Feature.
 doc_path: Feature%20Management/fm:NgMvpn/

@@ -2,6 +2,7 @@
 name: Ethernet
 class_name: ethpmInst
 dn: sys/ethpm/inst
+no_delete: true
 ds_description: This data source can read global ethernet settings.
 res_description: This resource can manage global ethernet settings.
 doc_path: Interfaces/ethpm:Inst/

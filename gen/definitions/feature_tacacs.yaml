@@ -2,6 +2,7 @@
 name: Feature TACACS
 class_name: fmTacacsplus
 dn: sys/fm/tacacsplus
+no_delete: true
 ds_description: This data source can read the TACACS+ feature configuration.
 res_description: This resource can manage the TACACS+ feature configuration.
 doc_path: Feature%20Management/fm:Tacacsplus/

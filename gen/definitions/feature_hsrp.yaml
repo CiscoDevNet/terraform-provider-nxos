@@ -2,6 +2,7 @@
 name: Feature HSRP
 class_name: fmHsrp
 dn: sys/fm/hsrp
+no_delete: true
 ds_description: This data source can read the HSRP feature configuration.
 res_description: This resource can manage the HSRP feature configuration.
 doc_path: Feature%20Management/fm:Hsrp/

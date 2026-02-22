@@ -2,6 +2,7 @@
 name: Feature SSH
 class_name: fmSsh
 dn: sys/fm/ssh
+no_delete: true
 ds_description: This data source can read the SSH feature configuration.
 res_description: This resource can manage the SSH feature configuration.
 doc_path: Feature%20Management/fm:Ssh/

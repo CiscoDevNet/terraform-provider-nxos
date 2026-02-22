@@ -2,6 +2,7 @@
 name: Feature OSPF
 class_name: fmOspf
 dn: sys/fm/ospf
+no_delete: true
 ds_description: This data source can read the OSPF feature configuration.
 res_description: This resource can manage the OSPF feature configuration.
 doc_path: Feature%20Management/fm:Ospf/

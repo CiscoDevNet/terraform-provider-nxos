@@ -2,6 +2,7 @@
 name: Feature Netflow
 class_name: fmNetflow
 dn: sys/fm/netflow
+no_delete: true
 test_tags: [NETFLOW]
 ds_description: This data source can read the Netflow feature configuration.
 res_description: This resource can manage the Netflow feature configuration.

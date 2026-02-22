@@ -168,8 +168,8 @@ github.com/mitchellh/mapstructure v1.5.0/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RR
 github.com/mitchellh/reflectwalk v1.0.0/go.mod h1:mSTlrgnPZtwu0c4WaC2kGObEpuNDbx0jmZXqmk4esnw=
 github.com/mitchellh/reflectwalk v1.0.2 h1:G2LzWKi524PWgd3mLHV8Y5k7s6XUvT0Gef6zxSIeXaQ=
 github.com/mitchellh/reflectwalk v1.0.2/go.mod h1:mSTlrgnPZtwu0c4WaC2kGObEpuNDbx0jmZXqmk4esnw=
-github.com/netascode/go-nxos v0.5.0 h1:/yxFQ7bu+0J/mrCvd+6ZSFpZmNF6ULbMIsOo4p3tR6s=
-github.com/netascode/go-nxos v0.5.0/go.mod h1:07GVerj0sHdH1ZDe+a3Md3Th9eKoWoQDXSKiRbToCrY=
+github.com/netascode/go-nxos v0.5.1 h1:RqWF3dHvQOEVBQXjojJYa9zv6Jrl3w8o/Bu4ONIYEdk=
+github.com/netascode/go-nxos v0.5.1/go.mod h1:07GVerj0sHdH1ZDe+a3Md3Th9eKoWoQDXSKiRbToCrY=
 github.com/oklog/run v1.2.0 h1:O8x3yXwah4A73hJdlrwo/2X6J62gE5qTMusH0dvz60E=
 github.com/oklog/run v1.2.0/go.mod h1:mgDbKRSwPhJfesJ4PntqFUbKQRZ50NgmZTSPlFA0YFk=
 github.com/pjbgf/sha1cd v0.3.2 h1:a9wb0bp1oC2TGwStyn0Umc/IGKQnEgF0vVaZ8QF8eo4=

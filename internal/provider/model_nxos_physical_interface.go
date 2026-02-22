@@ -320,27 +320,69 @@ func (data *PhysicalInterface) updateFromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data PhysicalInterface) toDeleteBody() nxos.Body {
 	body := ""
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"FECMode", "auto")
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"accessVlan", "vlan-1")
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"autoNeg", "on")
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bw", strconv.FormatInt(0, 10))
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"delay", strconv.FormatInt(1, 10))
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"duplex", "auto")
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"layer", "Layer2")
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkLog", "default")
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkDebounce", strconv.FormatInt(100, 10))
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkDebounceLinkUp", strconv.FormatInt(0, 10))
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"medium", "broadcast")
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mode", "access")
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mtu", strconv.FormatInt(1500, 10))
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"nativeVlan", "vlan-1")
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"speed", "auto")
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"speedGroup", "auto")
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"trunkVlans", "1-4094")
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"uniDirectionalEthernet", "disable")
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"userCfgdFlags", "none")
+	if !data.FecMode.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"FECMode", "auto")
+	}
+	if !data.AccessVlan.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"accessVlan", "vlan-1")
+	}
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.AutoNegotiation.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"autoNeg", "on")
+	}
+	if !data.Bandwidth.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"bw", strconv.FormatInt(0, 10))
+	}
+	if !data.Delay.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"delay", strconv.FormatInt(1, 10))
+	}
+	if !data.Description.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.Duplex.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"duplex", "auto")
+	}
+	if !data.Layer.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"layer", "Layer2")
+	}
+	if !data.LinkLogging.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkLog", "default")
+	}
+	if !data.LinkDebounceDown.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkDebounce", strconv.FormatInt(100, 10))
+	}
+	if !data.LinkDebounceUp.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkDebounceLinkUp", strconv.FormatInt(0, 10))
+	}
+	if !data.Medium.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"medium", "broadcast")
+	}
+	if !data.Mode.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mode", "access")
+	}
+	if !data.Mtu.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mtu", strconv.FormatInt(1500, 10))
+	}
+	if !data.NativeVlan.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"nativeVlan", "vlan-1")
+	}
+	if !data.Speed.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"speed", "auto")
+	}
+	if !data.SpeedGroup.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"speedGroup", "auto")
+	}
+	if !data.TrunkVlans.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"trunkVlans", "1-4094")
+	}
+	if !data.UniDirectionalEthernet.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"uniDirectionalEthernet", "disable")
+	}
+	if !data.UserConfiguredFlags.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"userCfgdFlags", "none")
+	}
 
 	return nxos.Body{body}
 }

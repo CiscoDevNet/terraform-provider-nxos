@@ -105,7 +105,9 @@ func (data *FeatureUDLD) updateFromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data FeatureUDLD) toDeleteBody() nxos.Body {
 	body := ""
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "disabled")
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "disabled")
+	}
 
 	return nxos.Body{body}
 }

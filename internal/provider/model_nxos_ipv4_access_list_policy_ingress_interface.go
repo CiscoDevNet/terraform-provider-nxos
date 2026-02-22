@@ -88,7 +88,9 @@ func (data IPv4AccessListPolicyIngressInterface) toBody() nxos.Body {
 	if (!data.AccessListName.IsUnknown() && !data.AccessListName.IsNull()) || false {
 		attrs, _ = sjson.Set(attrs, "name", data.AccessListName.ValueString())
 	}
-	body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.aclInst.attributes", attrs)
+	if attrs != "{}" || false {
+		body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.aclInst.attributes", attrs)
+	}
 
 	return nxos.Body{body}
 }

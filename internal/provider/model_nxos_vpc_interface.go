@@ -89,7 +89,9 @@ func (data VPCInterface) toBody() nxos.Body {
 	if (!data.PortChannelInterfaceDn.IsUnknown() && !data.PortChannelInterfaceDn.IsNull()) || false {
 		attrs, _ = sjson.Set(attrs, "tDn", data.PortChannelInterfaceDn.ValueString())
 	}
-	body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.vpcRsVpcConf.attributes", attrs)
+	if attrs != "{}" || false {
+		body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.vpcRsVpcConf.attributes", attrs)
+	}
 
 	return nxos.Body{body}
 }

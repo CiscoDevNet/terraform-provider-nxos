@@ -116,8 +116,12 @@ func (data *Ethernet) updateFromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data Ethernet) toDeleteBody() nxos.Body {
 	body := ""
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"systemJumboMtu", strconv.FormatInt(9216, 10))
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"systemDefaultAdminSt", "DME_UNSET_PROPERTY_MARKER")
+	if !data.Mtu.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"systemJumboMtu", strconv.FormatInt(9216, 10))
+	}
+	if !data.DefaultAdminStatus.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"systemDefaultAdminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
 
 	return nxos.Body{body}
 }

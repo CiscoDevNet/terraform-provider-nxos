@@ -80,7 +80,9 @@ func (data KeychainManager) toBody() nxos.Body {
 	}
 	var attrs string
 	attrs = "{}"
-	body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.kcmgrKeychains.attributes", attrs)
+	if attrs != "{}" || true {
+		body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.kcmgrKeychains.attributes", attrs)
+	}
 
 	return nxos.Body{body}
 }

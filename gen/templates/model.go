@@ -230,6 +230,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 	{{- end}}
 	{{- range .ChildClasses}}
 	{{- $childClassName := .ClassName }}
+	{{- $childAlwaysInclude := .AlwaysInclude }}
 	{{- if eq .Type "single"}}
 	{{- if .ChildClasses}}
 	// Create child with attributes and nested children in one unified object
@@ -255,6 +256,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 	{{- range .ChildClasses}}
 	{{- $nestedChildClassName := .ClassName }}
 	{{- $nestedChildTfName := .TfName }}
+	{{- $nestedChildAlwaysInclude := .AlwaysInclude }}
 	{{- if eq .Type "single"}}
 	{{- if .ChildClasses}}
 	nestedChildIndex := len(gjson.Get(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.children").Array())
@@ -273,6 +275,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 	body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.children."+strconv.Itoa(nestedChildIndex)+".{{$nestedChildClassName}}.attributes", attrs)
 	{{- range .ChildClasses}}
 	{{- $deepNestedChildClassName := .ClassName }}
+	{{- $deepNestedChildAlwaysInclude := .AlwaysInclude }}
 	{{- if eq .Type "single"}}
 	attrs = "{}"
 	{{- range .Attributes}}
@@ -286,7 +289,9 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 		{{- end}}
 	}
 	{{- end}}
-	body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.children."+strconv.Itoa(nestedChildIndex)+".{{$nestedChildClassName}}.children.-1.{{$deepNestedChildClassName}}.attributes", attrs)
+	if attrs != "{}" || {{$deepNestedChildAlwaysInclude}} {
+		body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.children."+strconv.Itoa(nestedChildIndex)+".{{$nestedChildClassName}}.children.-1.{{$deepNestedChildClassName}}.attributes", attrs)
+	}
 	{{- else if eq .Type "list"}}
 	for _, deepNestedChild := range data.{{toGoName .TfName}} {
 		attrs = "{}"
@@ -318,7 +323,9 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 		{{- end}}
 	}
 	{{- end}}
-	body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.children.-1.{{$nestedChildClassName}}.attributes", attrs)
+	if attrs != "{}" || {{$nestedChildAlwaysInclude}} {
+		body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.children.-1.{{$nestedChildClassName}}.attributes", attrs)
+	}
 	{{- end}}
 	{{- else if eq .Type "list"}}
 	for _, nestedChild := range data.{{toGoName .TfName}} {
@@ -338,6 +345,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 
 		{{- range .ChildClasses}}
 		{{- $deepNestedChildClassName := .ClassName }}
+		{{- $deepNestedChildAlwaysInclude := .AlwaysInclude }}
 		{{- if eq .Type "single"}}
 		attrs = "{}"
 		{{- range .Attributes}}
@@ -351,7 +359,9 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 			{{- end}}
 		}
 		{{- end}}
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.children.-1.{{$nestedChildClassName}}.children.-1.{{$deepNestedChildClassName}}.attributes", attrs)
+		if attrs != "{}" || {{$deepNestedChildAlwaysInclude}} {
+			body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.children.-1.{{$nestedChildClassName}}.children.-1.{{$deepNestedChildClassName}}.attributes", attrs)
+		}
 		{{- else if eq .Type "list"}}
 		for _, deepNestedChild := range nestedChild.{{toGoName .TfName}} {
 			attrs = "{}"
@@ -391,7 +401,9 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 	}
 	{{- end}}
 	{{- end}}
-	body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.attributes", attrs)
+	if attrs != "{}" || {{$childAlwaysInclude}} {
+		body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.attributes", attrs)
+	}
 	{{- end}}
 	{{- else if eq .Type "list"}}
 	for _, child := range data.{{toGoName .TfName}} {
@@ -411,6 +423,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 
 		{{- range .ChildClasses}}
 		{{- $nestedChildClassName := .ClassName }}
+		{{- $nestedChildAlwaysInclude := .AlwaysInclude }}
 		{{- if eq .Type "single"}}
 		attrs = "{}"
 		{{- range .Attributes}}
@@ -424,10 +437,17 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 			{{- end}}
 		}
 		{{- end}}
+		{{- if not .ChildClasses}}
+		if attrs != "{}" || {{$nestedChildAlwaysInclude}} {
+		{{- end}}
 		body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.children.-1.{{$nestedChildClassName}}.attributes", attrs)
+		{{- if not .ChildClasses}}
+		}
+		{{- end}}
 
 		{{- range .ChildClasses}}
 		{{- $deepNestedChildClassName := .ClassName }}
+		{{- $deepNestedChildAlwaysInclude := .AlwaysInclude }}
 		{{- if eq .Type "single"}}
 		attrs = "{}"
 		{{- range .Attributes}}
@@ -441,7 +461,9 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 			{{- end}}
 		}
 		{{- end}}
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.children.-1.{{$nestedChildClassName}}.children.-1.{{$deepNestedChildClassName}}.attributes", attrs)
+		if attrs != "{}" || {{$deepNestedChildAlwaysInclude}} {
+			body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.children.-1.{{$nestedChildClassName}}.children.-1.{{$deepNestedChildClassName}}.attributes", attrs)
+		}
 		{{- else if eq .Type "list"}}
 		for _, deepNestedChild := range child.{{toGoName .TfName}} {
 			attrs = "{}"
@@ -478,6 +500,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 
 			{{- range .ChildClasses}}
 			{{- $deepNestedChildClassName := .ClassName }}
+			{{- $deepNestedChildAlwaysInclude := .AlwaysInclude }}
 			{{- if eq .Type "single"}}
 			attrs = "{}"
 			{{- range .Attributes}}
@@ -491,7 +514,9 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 				{{- end}}
 			}
 			{{- end}}
-			body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.children.-1.{{$nestedChildClassName}}.children.-1.{{$deepNestedChildClassName}}.attributes", attrs)
+			if attrs != "{}" || {{$deepNestedChildAlwaysInclude}} {
+				body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.children.-1.{{$nestedChildClassName}}.children.-1.{{$deepNestedChildClassName}}.attributes", attrs)
+			}
 			{{- else if eq .Type "list"}}
 			for _, deepNestedChild := range nestedChild.{{toGoName .TfName}} {
 				attrs = "{}"
@@ -1269,13 +1294,15 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 
 	{{- range .Attributes}}
 	{{- if and (not .ReferenceOnly) (.DeleteValue)}}
-	{{- if eq .Type "Int64"}}
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
-	{{- else if eq .Type "Bool"}}
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
-	{{- else if eq .Type "String"}}
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
-	{{- end}}
+	if !data.{{toGoName .TfName}}.IsNull() {
+		{{- if eq .Type "Int64"}}
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
+		{{- else if eq .Type "Bool"}}
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
+		{{- else if eq .Type "String"}}
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
+		{{- end}}
+	}
 	{{- end}}
 	{{- end}}
 
@@ -1284,13 +1311,15 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 	{{- $childClassName := .ClassName }}
 	{{- range .Attributes}}
 	{{- if and (not .ReferenceOnly) (.DeleteValue)}}
-	{{- if eq .Type "Int64"}}
-	body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
-	{{- else if eq .Type "Bool"}}
-	body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
-	{{- else if eq .Type "String"}}
-	body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
-	{{- end}}
+	if !data.{{toGoName .TfName}}.IsNull() {
+		{{- if eq .Type "Int64"}}
+		body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
+		{{- else if eq .Type "Bool"}}
+		body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
+		{{- else if eq .Type "String"}}
+		body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
+		{{- end}}
+	}
 	{{- end}}
 	{{- end}}
 	{{- range .ChildClasses}}
@@ -1298,13 +1327,15 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 	{{- $nestedChildClassName := .ClassName }}
 	{{- range .Attributes}}
 	{{- if and (not .ReferenceOnly) (.DeleteValue)}}
-	{{- if eq .Type "Int64"}}
-	body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
-	{{- else if eq .Type "Bool"}}
-	body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
-	{{- else if eq .Type "String"}}
-	body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
-	{{- end}}
+	if !data.{{toGoName .TfName}}.IsNull() {
+		{{- if eq .Type "Int64"}}
+		body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
+		{{- else if eq .Type "Bool"}}
+		body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
+		{{- else if eq .Type "String"}}
+		body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
+		{{- end}}
+	}
 	{{- end}}
 	{{- end}}
 	{{- range .ChildClasses}}
@@ -1312,13 +1343,15 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 	{{- $deepNestedChildClassName := .ClassName }}
 	{{- range .Attributes}}
 	{{- if and (not .ReferenceOnly) (.DeleteValue)}}
-	{{- if eq .Type "Int64"}}
-	body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".children.-1."+"{{$deepNestedChildClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
-	{{- else if eq .Type "Bool"}}
-	body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".children.-1."+"{{$deepNestedChildClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
-	{{- else if eq .Type "String"}}
-	body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".children.-1."+"{{$deepNestedChildClassName}}"+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
-	{{- end}}
+	if !data.{{toGoName .TfName}}.IsNull() {
+		{{- if eq .Type "Int64"}}
+		body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".children.-1."+"{{$deepNestedChildClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
+		{{- else if eq .Type "Bool"}}
+		body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".children.-1."+"{{$deepNestedChildClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
+		{{- else if eq .Type "String"}}
+		body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".children.-1."+"{{$deepNestedChildClassName}}"+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
+		{{- end}}
+	}
 	{{- end}}
 	{{- end}}
 	{{- end}}

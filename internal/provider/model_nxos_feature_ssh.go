@@ -105,7 +105,9 @@ func (data *FeatureSSH) updateFromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 func (data FeatureSSH) toDeleteBody() nxos.Body {
 	body := ""
-	body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "enabled")
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "enabled")
+	}
 
 	return nxos.Body{body}
 }

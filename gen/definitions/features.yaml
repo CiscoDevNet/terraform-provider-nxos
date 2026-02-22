@@ -378,7 +378,7 @@ child_classes:
           - enabled
           - disabled
         example: enabled
-        delete_value: disabled
+        delete_value: enabled
   - class_name: fmTacacsplus
     rn: tacacsplus
     type: single

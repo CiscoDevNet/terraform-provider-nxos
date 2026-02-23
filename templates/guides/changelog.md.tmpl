@@ -14,6 +14,7 @@ description: |-
 - BREAKING CHANGE: Remove `nxos_hmm_instance` resource and data source and `nxos_hmm_interface` resource and data source, HMM configuration is now managed as a single `nxos_hmm` resource and data source
 - BREAKING CHANGE: Remove `nxos_icmpv4_instance` resource and data source, `nxos_icmpv4_vrf` resource and data source, and `nxos_icmpv4_interface` resource and data source, ICMPv4 configuration is now managed as a single `nxos_icmpv4` resource and data source
 - BREAKING CHANGE: Remove `nxos_keychain_manager` resource and data source, `nxos_keychain` resource and data source, and `nxos_keychain_key` resource and data source, keychain configuration is now managed as a single `nxos_keychain` resource and data source
+- BREAKING CHANGE: Remove `nxos_vpc_instance` resource and data source, `nxos_vpc_domain` resource and data source, `nxos_vpc_keepalive` resource and data source, `nxos_vpc_peerlink` resource and data source, and `nxos_vpc_interface` resource and data source, vPC configuration is now managed as a single `nxos_vpc` resource and data source
 - Add `nxos_features` resource and data source
 
 ## 0.7.0

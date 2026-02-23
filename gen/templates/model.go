@@ -388,6 +388,36 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 {{- $parentVar := .ParentVar}}
 {{- range .Children}}
 {{- $childClassName := .ClassName}}
+{{- $childRn := .Rn}}
+{{- if eq .Type "single"}}
+						{
+						var r{{$childClassName}} gjson.Result
+						{{$valueVar}}.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								key := nestedV.Get("{{$childClassName}}.attributes.rn").String()
+								if key == "{{$childRn}}" {
+									r{{$childClassName}} = nestedV
+									return false
+								}
+								return true
+							},
+						)
+						{{- range .Attributes}}
+						{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+						{{- if eq .Type "Int64"}}
+						{{$parentVar}}.{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
+						{{- else if eq .Type "Bool"}}
+						{{$parentVar}}.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
+						{{- else if eq .Type "String"}}
+						{{$parentVar}}.{{toGoName .TfName}} = types.StringValue(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
+						{{- end}}
+						{{- end}}
+						{{- end}}
+						{{- if .ChildClasses}}
+						{{- template "fromBodyListChildrenTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ValueVar" (printf "r%s" $childClassName) "ParentVar" $parentVar)}}
+						{{- end}}
+						}
+{{- else if eq .Type "list"}}
 						{{$valueVar}}.Get("children").ForEach(
 							func(_, nestedV gjson.Result) bool {
 								nestedV.ForEach(
@@ -416,6 +446,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 								return true
 							},
 						)
+{{- end}}
 {{- end}}
 {{- end}}
 {{- /* ==================== end fromBodyListChildrenTemplate ==================== */}}

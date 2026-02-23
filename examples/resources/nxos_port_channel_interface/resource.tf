@@ -20,4 +20,9 @@ resource "nxos_port_channel_interface" "example" {
   speed                 = "auto"
   trunk_vlans           = "1-4094"
   user_configured_flags = "admin_layer,admin_mtu,admin_state"
+  vrf_dn                = "sys/inst-default"
+  members = [{
+    interface_dn = "sys/intf/phys-[eth1/11]"
+    force        = false
+  }]
 }

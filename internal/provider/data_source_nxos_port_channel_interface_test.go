@@ -56,6 +56,11 @@ func TestAccDataSourceNxosPortChannelInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "speed", "auto"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "trunk_vlans", "1-4094"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "user_configured_flags", "admin_layer,admin_mtu,admin_state"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "vrf_dn", "sys/inst-default"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_port_channel_interface.test", "members.*", map[string]string{
+		"interface_dn": "sys/intf/phys-[eth1/11]",
+		"force":        "false",
+	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -98,6 +103,11 @@ func testAccDataSourceNxosPortChannelInterfaceConfig() string {
 	config += `	speed = "auto"` + "\n"
 	config += `	trunk_vlans = "1-4094"` + "\n"
 	config += `	user_configured_flags = "admin_layer,admin_mtu,admin_state"` + "\n"
+	config += `	vrf_dn = "sys/inst-default"` + "\n"
+	config += `	members = [{` + "\n"
+	config += `		interface_dn = "sys/intf/phys-[eth1/11]"` + "\n"
+	config += `		force = false` + "\n"
+	config += `	}]` + "\n"
 	config += `}` + "\n"
 
 	config += `

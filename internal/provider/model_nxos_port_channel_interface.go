@@ -26,6 +26,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -37,29 +38,36 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type PortChannelInterface struct {
-	Device              types.String `tfsdk:"device"`
-	Dn                  types.String `tfsdk:"id"`
-	InterfaceId         types.String `tfsdk:"interface_id"`
-	PortChannelMode     types.String `tfsdk:"port_channel_mode"`
-	MinimumLinks        types.Int64  `tfsdk:"minimum_links"`
-	MaximumLinks        types.Int64  `tfsdk:"maximum_links"`
-	SuspendIndividual   types.String `tfsdk:"suspend_individual"`
-	AccessVlan          types.String `tfsdk:"access_vlan"`
-	AdminState          types.String `tfsdk:"admin_state"`
-	AutoNegotiation     types.String `tfsdk:"auto_negotiation"`
-	Bandwidth           types.Int64  `tfsdk:"bandwidth"`
-	Delay               types.Int64  `tfsdk:"delay"`
-	Description         types.String `tfsdk:"description"`
-	Duplex              types.String `tfsdk:"duplex"`
-	Layer               types.String `tfsdk:"layer"`
-	LinkLogging         types.String `tfsdk:"link_logging"`
-	Medium              types.String `tfsdk:"medium"`
-	Mode                types.String `tfsdk:"mode"`
-	Mtu                 types.Int64  `tfsdk:"mtu"`
-	NativeVlan          types.String `tfsdk:"native_vlan"`
-	Speed               types.String `tfsdk:"speed"`
-	TrunkVlans          types.String `tfsdk:"trunk_vlans"`
-	UserConfiguredFlags types.String `tfsdk:"user_configured_flags"`
+	Device              types.String                  `tfsdk:"device"`
+	Dn                  types.String                  `tfsdk:"id"`
+	InterfaceId         types.String                  `tfsdk:"interface_id"`
+	PortChannelMode     types.String                  `tfsdk:"port_channel_mode"`
+	MinimumLinks        types.Int64                   `tfsdk:"minimum_links"`
+	MaximumLinks        types.Int64                   `tfsdk:"maximum_links"`
+	SuspendIndividual   types.String                  `tfsdk:"suspend_individual"`
+	AccessVlan          types.String                  `tfsdk:"access_vlan"`
+	AdminState          types.String                  `tfsdk:"admin_state"`
+	AutoNegotiation     types.String                  `tfsdk:"auto_negotiation"`
+	Bandwidth           types.Int64                   `tfsdk:"bandwidth"`
+	Delay               types.Int64                   `tfsdk:"delay"`
+	Description         types.String                  `tfsdk:"description"`
+	Duplex              types.String                  `tfsdk:"duplex"`
+	Layer               types.String                  `tfsdk:"layer"`
+	LinkLogging         types.String                  `tfsdk:"link_logging"`
+	Medium              types.String                  `tfsdk:"medium"`
+	Mode                types.String                  `tfsdk:"mode"`
+	Mtu                 types.Int64                   `tfsdk:"mtu"`
+	NativeVlan          types.String                  `tfsdk:"native_vlan"`
+	Speed               types.String                  `tfsdk:"speed"`
+	TrunkVlans          types.String                  `tfsdk:"trunk_vlans"`
+	UserConfiguredFlags types.String                  `tfsdk:"user_configured_flags"`
+	VrfDn               types.String                  `tfsdk:"vrf_dn"`
+	Members             []PortChannelInterfaceMembers `tfsdk:"members"`
+}
+
+type PortChannelInterfaceMembers struct {
+	InterfaceDn types.String `tfsdk:"interface_dn"`
+	Force       types.Bool   `tfsdk:"force"`
 }
 
 type PortChannelInterfaceIdentity struct {
@@ -91,6 +99,10 @@ func (data *PortChannelInterface) fromIdentity(ctx context.Context, identity *Po
 
 func (data PortChannelInterface) getDn() string {
 	return fmt.Sprintf("sys/intf/aggr-[%s]", data.InterfaceId.ValueString())
+}
+
+func (data PortChannelInterfaceMembers) getRn() string {
+	return fmt.Sprintf("rsmbrIfs-[%s]", data.InterfaceDn.ValueString())
 }
 
 func (data PortChannelInterface) getClassName() string {
@@ -167,6 +179,25 @@ func (data PortChannelInterface) toBody() nxos.Body {
 	if (!data.UserConfiguredFlags.IsUnknown() && !data.UserConfiguredFlags.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"userCfgdFlags", data.UserConfiguredFlags.ValueString())
 	}
+	var attrs string
+	childrenPath := data.getClassName() + ".children"
+	attrs = "{}"
+	if (!data.VrfDn.IsUnknown() && !data.VrfDn.IsNull()) || false {
+		attrs, _ = sjson.Set(attrs, "tDn", data.VrfDn.ValueString())
+	}
+	if attrs != "{}" || false {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.nwRtVrfMbr.attributes", attrs)
+	}
+	for _, child := range data.Members {
+		attrs = "{}"
+		if (!child.InterfaceDn.IsUnknown() && !child.InterfaceDn.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "tDn", child.InterfaceDn.ValueString())
+		}
+		if (!child.Force.IsUnknown() && !child.Force.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "isMbrForce", strconv.FormatBool(child.Force.ValueBool()))
+		}
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.pcRsMbrIfs.attributes", attrs)
+	}
 
 	return nxos.Body{body}
 }
@@ -197,6 +228,34 @@ func (data *PortChannelInterface) fromBody(res gjson.Result) {
 	data.Speed = types.StringValue(res.Get(data.getClassName() + ".attributes.speed").String())
 	data.TrunkVlans = types.StringValue(res.Get(data.getClassName() + ".attributes.trunkVlans").String())
 	data.UserConfiguredFlags = types.StringValue(res.Get(data.getClassName() + ".attributes.userCfgdFlags").String())
+	var rnwRtVrfMbr gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("nwRtVrfMbr.attributes.rn").String()
+			if key == "rtvrfMbr" {
+				rnwRtVrfMbr = v
+				return false
+			}
+			return true
+		},
+	)
+	data.VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "pcRsMbrIfs" {
+						var child PortChannelInterfaceMembers
+						child.InterfaceDn = types.StringValue(value.Get("attributes.tDn").String())
+						child.Force = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.isMbrForce").String()))
+						data.Members = append(data.Members, child)
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
 }
 
 // End of section. //template:end fromBody
@@ -309,6 +368,45 @@ func (data *PortChannelInterface) updateFromBody(res gjson.Result) {
 	} else {
 		data.UserConfiguredFlags = types.StringNull()
 	}
+	var rnwRtVrfMbr gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("nwRtVrfMbr.attributes.rn").String()
+			if key == "rtvrfMbr" {
+				rnwRtVrfMbr = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.VrfDn.IsNull() {
+		data.VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
+	} else {
+		data.VrfDn = types.StringNull()
+	}
+	for c := range data.Members {
+		var rpcRsMbrIfs gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("pcRsMbrIfs.attributes.rn").String()
+				if key == data.Members[c].getRn() {
+					rpcRsMbrIfs = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.Members[c].InterfaceDn.IsNull() {
+			data.Members[c].InterfaceDn = types.StringValue(rpcRsMbrIfs.Get("pcRsMbrIfs.attributes.tDn").String())
+		} else {
+			data.Members[c].InterfaceDn = types.StringNull()
+		}
+		if !data.Members[c].Force.IsNull() {
+			data.Members[c].Force = types.BoolValue(helpers.ParseNxosBoolean(rpcRsMbrIfs.Get("pcRsMbrIfs.attributes.isMbrForce").String()))
+		} else {
+			data.Members[c].Force = types.BoolNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -335,5 +433,22 @@ func (data PortChannelInterface) getDeleteDns() []string {
 // End of section. //template:end getDeleteDns
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data PortChannelInterface) getDeletedItems(ctx context.Context, state PortChannelInterface) []string {
+	deletedItems := []string{}
+	for _, stateChild := range state.Members {
+		found := false
+		for _, planChild := range data.Members {
+			if stateChild.InterfaceDn == planChild.InterfaceDn {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, data.getDn()+"/"+stateChild.getRn())
+		}
+	}
+	return deletedItems
+}
 
 // End of section. //template:end getDeletedItems

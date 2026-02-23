@@ -5,8 +5,8 @@ subcategory: "Interface"
 description: |-
   This resource can manage a port-channel interface.
   API Documentation: pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/pc:AggrIf/
-  Child resources
-  nxos_port_channel_interface_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/port_channel_interface_vrfnxos_port_channel_interface_member https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/port_channel_interface_member
+  Additional API Documentation
+  nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/pc:RsMbrIfs/
 ---
 
 # nxos_port_channel_interface (Resource)
@@ -15,10 +15,10 @@ This resource can manage a port-channel interface.
 
 - API Documentation: [pcAggrIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/pc:AggrIf/)
 
-### Child resources
+### Additional API Documentation
 
-- [nxos_port_channel_interface_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/port_channel_interface_vrf)
-- [nxos_port_channel_interface_member](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/port_channel_interface_member)
+- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
+- [pcRsMbrIfs](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/pc:RsMbrIfs/)
 
 ## Example Usage
 
@@ -45,6 +45,11 @@ resource "nxos_port_channel_interface" "example" {
   speed                 = "auto"
   trunk_vlans           = "1-4094"
   user_configured_flags = "admin_layer,admin_mtu,admin_state"
+  vrf_dn                = "sys/inst-default"
+  members = [{
+    interface_dn = "sys/intf/phys-[eth1/11]"
+    force        = false
+  }]
 }
 ```
 
@@ -88,6 +93,7 @@ resource "nxos_port_channel_interface" "example" {
 - `medium` (String) The administrative port medium type.
   - Choices: `broadcast`, `p2p`
   - Default value: `broadcast`
+- `members` (Attributes List) List of port-channel member interfaces. (see [below for nested schema](#nestedatt--members))
 - `minimum_links` (Number) Minimum links.
   - Range: `1`-`32`
   - Default value: `1`
@@ -111,10 +117,22 @@ resource "nxos_port_channel_interface" "example" {
 - `trunk_vlans` (String) List of trunk VLANs.
   - Default value: `1-4094`
 - `user_configured_flags` (String) Port User Config Flags.
+- `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.
 
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--members"></a>
+### Nested Schema for `members`
+
+Required:
+
+- `interface_dn` (String) DN of interface. For example: `sys/intf/phys-[eth1/1]`.
+
+Optional:
+
+- `force` (Boolean) Channel group force.
 
 ## Import
 

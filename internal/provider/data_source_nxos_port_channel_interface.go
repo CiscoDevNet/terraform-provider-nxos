@@ -57,7 +57,7 @@ func (d *PortChannelInterfaceDataSource) Metadata(_ context.Context, req datasou
 func (d *PortChannelInterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the configuration of a port-channel interface.", "pcAggrIf", "Interfaces/pc:AggrIf/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the configuration of a port-channel interface.", "pcAggrIf", "Interfaces/pc:AggrIf/").AddAdditionalDocs([]string{"nwRtVrfMbr", "pcRsMbrIfs"}, []string{"Routing%20and%20Forwarding/nw:RtVrfMbr/", "Interfaces/pc:RsMbrIfs/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -152,6 +152,26 @@ func (d *PortChannelInterfaceDataSource) Schema(ctx context.Context, req datasou
 				MarkdownDescription: "Port User Config Flags.",
 				Computed:            true,
 			},
+			"vrf_dn": schema.StringAttribute{
+				MarkdownDescription: "DN of VRF. For example: `sys/inst-VRF1`.",
+				Computed:            true,
+			},
+			"members": schema.ListNestedAttribute{
+				MarkdownDescription: "List of port-channel member interfaces.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_dn": schema.StringAttribute{
+							MarkdownDescription: "DN of interface. For example: `sys/intf/phys-[eth1/1]`.",
+							Computed:            true,
+						},
+						"force": schema.BoolAttribute{
+							MarkdownDescription: "Channel group force.",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -186,6 +206,7 @@ func (d *PortChannelInterfaceDataSource) Read(ctx context.Context, req datasourc
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "children"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

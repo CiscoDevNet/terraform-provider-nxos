@@ -5,6 +5,8 @@ subcategory: "Interface"
 description: |-
   This data source can read the configuration of a port-channel interface.
   API Documentation: pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/pc:AggrIf/
+  Additional API Documentation
+  nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/pc:RsMbrIfs/
 ---
 
 # nxos_port_channel_interface (Data Source)
@@ -12,6 +14,11 @@ description: |-
 This data source can read the configuration of a port-channel interface.
 
 - API Documentation: [pcAggrIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/pc:AggrIf/)
+
+### Additional API Documentation
+
+- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
+- [pcRsMbrIfs](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/pc:RsMbrIfs/)
 
 ## Example Usage
 
@@ -46,6 +53,7 @@ data "nxos_port_channel_interface" "example" {
 - `link_logging` (String) Administrative link logging.
 - `maximum_links` (Number) Maximum links.
 - `medium` (String) The administrative port medium type.
+- `members` (Attributes List) List of port-channel member interfaces. (see [below for nested schema](#nestedatt--members))
 - `minimum_links` (Number) Minimum links.
 - `mode` (String) Administrative port mode.
 - `mtu` (Number) Administrative port MTU.
@@ -55,3 +63,12 @@ data "nxos_port_channel_interface" "example" {
 - `suspend_individual` (String) Suspend Individual Port.
 - `trunk_vlans` (String) List of trunk VLANs.
 - `user_configured_flags` (String) Port User Config Flags.
+- `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.
+
+<a id="nestedatt--members"></a>
+### Nested Schema for `members`
+
+Read-Only:
+
+- `force` (Boolean) Channel group force.
+- `interface_dn` (String) DN of interface. For example: `sys/intf/phys-[eth1/1]`.

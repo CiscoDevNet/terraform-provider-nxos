@@ -7,9 +7,6 @@ ds_description: This data source can read the configuration of a port-channel in
 res_description: This resource can manage a port-channel interface.
 doc_path: Interfaces/pc:AggrIf/
 doc_category: Interface
-children:
-  - Port Channel Interface VRF
-  - Port Channel Interface Member
 attributes:
   - nxos_name: id
     tf_name: interface_id
@@ -204,3 +201,32 @@ attributes:
     type: String
     description: "Port User Config Flags."
     example: "admin_layer,admin_mtu,admin_state"
+child_classes:
+  - class_name: nwRtVrfMbr
+    rn: rtvrfMbr
+    type: single
+    doc_path: Routing%20and%20Forwarding/nw:RtVrfMbr/
+    attributes:
+      - nxos_name: tDn
+        tf_name: vrf_dn
+        type: String
+        description: "DN of VRF. For example: `sys/inst-VRF1`."
+        example: sys/inst-default
+  - class_name: pcRsMbrIfs
+    rn: rsmbrIfs-[%s]
+    type: list
+    tf_name: members
+    description: "List of port-channel member interfaces."
+    doc_path: Interfaces/pc:RsMbrIfs/
+    attributes:
+      - nxos_name: tDn
+        tf_name: interface_dn
+        type: String
+        id: true
+        description: "DN of interface. For example: `sys/intf/phys-[eth1/1]`."
+        example: sys/intf/phys-[eth1/11]
+      - nxos_name: isMbrForce
+        tf_name: force
+        type: Bool
+        description: "Channel group force."
+        example: false

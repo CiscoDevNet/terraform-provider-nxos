@@ -65,7 +65,7 @@ func (r *PortChannelInterfaceResource) Metadata(ctx context.Context, req resourc
 func (r *PortChannelInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a port-channel interface.", "pcAggrIf", "Interfaces/pc:AggrIf/").AddChildren("port_channel_interface_vrf", "port_channel_interface_member").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a port-channel interface.", "pcAggrIf", "Interfaces/pc:AggrIf/").AddAdditionalDocs([]string{"nwRtVrfMbr", "pcRsMbrIfs"}, []string{"Routing%20and%20Forwarding/nw:RtVrfMbr/", "Interfaces/pc:RsMbrIfs/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -247,6 +247,29 @@ func (r *PortChannelInterfaceResource) Schema(ctx context.Context, req resource.
 				MarkdownDescription: helpers.NewAttributeDescription("Port User Config Flags.").String,
 				Optional:            true,
 			},
+			"vrf_dn": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DN of VRF. For example: `sys/inst-VRF1`.").String,
+				Optional:            true,
+			},
+			"members": schema.ListNestedAttribute{
+				MarkdownDescription: "List of port-channel member interfaces.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_dn": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("DN of interface. For example: `sys/intf/phys-[eth1/1]`.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"force": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Channel group force.").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -353,6 +376,7 @@ func (r *PortChannelInterfaceResource) Read(ctx context.Context, req resource.Re
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		queries = append(queries, nxos.Query("rsp-subtree", "children"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -395,6 +419,14 @@ func (r *PortChannelInterfaceResource) Update(ctx context.Context, req resource.
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	var state PortChannelInterface
+
+	// Read state
+	diags = req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
@@ -410,6 +442,19 @@ func (r *PortChannelInterfaceResource) Update(ctx context.Context, req resource.
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
+		}
+
+		deletedItems := plan.getDeletedItems(ctx, state)
+		tflog.Debug(ctx, fmt.Sprintf("%s: List items to delete: %v", plan.getDn(), deletedItems))
+		for _, dn := range deletedItems {
+			res, err := device.Client.DeleteDn(dn)
+			if err != nil {
+				errCode := res.Get("imdata.0.error.attributes.code").Str
+				if errCode != "1" && errCode != "107" {
+					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+					return
+				}
+			}
 		}
 	}
 

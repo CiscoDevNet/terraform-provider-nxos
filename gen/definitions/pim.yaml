@@ -263,6 +263,13 @@ child_classes:
                     description: 'RP set address.'
                     example: 20.1.1.1/32
 test_prerequisites:
+  - dn: sys/intf/phys-[eth1/10]
+    class_name: l1PhysIf
+    attributes:
+      - name: id
+        value: eth1/10
+      - name: layer
+        value: Layer3
   - dn: sys/fm/pim
     class_name: fmPim
     no_delete: true

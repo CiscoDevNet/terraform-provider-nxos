@@ -1,1 +1,0 @@
-terraform import nxos_bgp_instance.example ""

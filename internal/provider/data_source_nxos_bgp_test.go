@@ -32,6 +32,104 @@ import (
 func TestAccDataSourceNxosBGP(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "asn", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "enhanced_error_handling", "false"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*", map[string]string{
+		"name":      "default",
+		"router_id": "1.1.1.1",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*", map[string]string{
+		"route_control_enforce_first_as":     "disabled",
+		"route_control_fib_accelerate":       "enabled",
+		"route_control_log_neighbor_changes": "enabled",
+		"route_control_suppress_routes":      "disabled",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*", map[string]string{
+		"graceful_restart_interval":       "240",
+		"graceful_restart_stale_interval": "1800",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.address_families.*", map[string]string{
+		"address_family":                         "ipv4-ucast",
+		"critical_nexthop_timeout":               "2500",
+		"non_critical_nexthop_timeout":           "8000",
+		"advertise_l2vpn_evpn":                   "disabled",
+		"advertise_physical_ip_for_type5_routes": "disabled",
+		"max_ecmp_paths":                         "2",
+		"max_external_ecmp_paths":                "1",
+		"max_external_internal_ecmp_paths":       "1",
+		"max_local_ecmp_paths":                   "1",
+		"max_mixed_ecmp_paths":                   "1",
+		"default_information_originate":          "disabled",
+		"next_hop_route_map_name":                "ROUTEMAP1",
+		"prefix_priority":                        "none",
+		"retain_rt_all":                          "disabled",
+		"advertise_only_active_routes":           "disabled",
+		"table_map_route_map_name":               "ROUTE_MAP1",
+		"vni_ethernet_tag":                       "disabled",
+		"wait_igp_converged":                     "disabled",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.address_families.*.advertised_prefixes.*", map[string]string{
+		"prefix":    "192.168.1.0/24",
+		"route_map": "rt-map",
+		"evpn":      "enabled",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.address_families.*.redistributions.*", map[string]string{
+		"protocol":          "ospf",
+		"protocol_instance": "OSPF1",
+		"route_map":         "route_map_ospf_1",
+		"scope":             "inter",
+		"srv6_prefix_type":  "unspecified",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.peer_templates.*", map[string]string{
+		"name":             "SPINE-PEERS",
+		"remote_asn":       "65002",
+		"description":      "My Description",
+		"peer_type":        "fabric-internal",
+		"source_interface": "lo0",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.peer_templates.*.peer_template_address_families.*", map[string]string{
+		"address_family":          "ipv4-ucast",
+		"control":                 "nh-self,rr-client",
+		"send_community_extended": "enabled",
+		"send_community_standard": "enabled",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.peer_templates.*.peer_template_address_families.*", map[string]string{
+		"max_prefix_action":       "log",
+		"max_prefix_number":       "10000",
+		"max_prefix_restart_time": "0",
+		"max_prefix_threshold":    "30",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.peers.*", map[string]string{
+		"address":           "192.168.0.1",
+		"remote_asn":        "65002",
+		"description":       "My description",
+		"peer_template":     "SPINE-PEERS",
+		"peer_type":         "fabric-internal",
+		"source_interface":  "lo0",
+		"hold_time":         "45",
+		"keepalive":         "15",
+		"ebgp_multihop_ttl": "5",
+		"peer_control":      "bfd,dis-conn-check",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.peers.*", map[string]string{
+		"local_asn_propagation": "no-prepend",
+		"local_asn":             "65001",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.peers.*.peer_address_families.*", map[string]string{
+		"address_family":          "ipv4-ucast",
+		"control":                 "nh-self",
+		"send_community_extended": "enabled",
+		"send_community_standard": "enabled",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.peers.*.peer_address_families.*.route_controls.*", map[string]string{
+		"direction":      "in",
+		"route_map_name": "ROUTE_MAP1",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.peers.*.peer_address_families.*.prefix_list_controls.*", map[string]string{
+		"direction": "in",
+		"list":      "PREFIX_LIST1",
+	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -57,6 +155,16 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/fm/bfd"
+  class_name = "fmBfd"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -65,7 +173,98 @@ resource "nxos_rest" "PreReq0" {
 func testAccDataSourceNxosBGPConfig() string {
 	config := `resource "nxos_bgp" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	instance_admin_state = "enabled"` + "\n"
+	config += `	asn = "65001"` + "\n"
+	config += `	enhanced_error_handling = false` + "\n"
+	config += `	vrfs = [{` + "\n"
+	config += `		name = "default"` + "\n"
+	config += `		router_id = "1.1.1.1"` + "\n"
+	config += `		route_control_enforce_first_as = "disabled"` + "\n"
+	config += `		route_control_fib_accelerate = "enabled"` + "\n"
+	config += `		route_control_log_neighbor_changes = "enabled"` + "\n"
+	config += `		route_control_suppress_routes = "disabled"` + "\n"
+	config += `		graceful_restart_interval = 240` + "\n"
+	config += `		graceful_restart_stale_interval = 1800` + "\n"
+	config += `		address_families = [{` + "\n"
+	config += `			address_family = "ipv4-ucast"` + "\n"
+	config += `			critical_nexthop_timeout = "2500"` + "\n"
+	config += `			non_critical_nexthop_timeout = "8000"` + "\n"
+	config += `			advertise_l2vpn_evpn = "disabled"` + "\n"
+	config += `			advertise_physical_ip_for_type5_routes = "disabled"` + "\n"
+	config += `			max_ecmp_paths = 2` + "\n"
+	config += `			max_external_ecmp_paths = 1` + "\n"
+	config += `			max_external_internal_ecmp_paths = 1` + "\n"
+	config += `			max_local_ecmp_paths = 1` + "\n"
+	config += `			max_mixed_ecmp_paths = 1` + "\n"
+	config += `			default_information_originate = "disabled"` + "\n"
+	config += `			next_hop_route_map_name = "ROUTEMAP1"` + "\n"
+	config += `			prefix_priority = "none"` + "\n"
+	config += `			retain_rt_all = "disabled"` + "\n"
+	config += `			advertise_only_active_routes = "disabled"` + "\n"
+	config += `			table_map_route_map_name = "ROUTE_MAP1"` + "\n"
+	config += `			vni_ethernet_tag = "disabled"` + "\n"
+	config += `			wait_igp_converged = "disabled"` + "\n"
+	config += `			advertised_prefixes = [{` + "\n"
+	config += `				prefix = "192.168.1.0/24"` + "\n"
+	config += `				route_map = "rt-map"` + "\n"
+	config += `				evpn = "enabled"` + "\n"
+	config += `			}]` + "\n"
+	config += `			redistributions = [{` + "\n"
+	config += `				protocol = "ospf"` + "\n"
+	config += `				protocol_instance = "OSPF1"` + "\n"
+	config += `				route_map = "route_map_ospf_1"` + "\n"
+	config += `				scope = "inter"` + "\n"
+	config += `				srv6_prefix_type = "unspecified"` + "\n"
+	config += `			}]` + "\n"
+	config += `		}]` + "\n"
+	config += `		peer_templates = [{` + "\n"
+	config += `			name = "SPINE-PEERS"` + "\n"
+	config += `			remote_asn = "65002"` + "\n"
+	config += `			description = "My Description"` + "\n"
+	config += `			peer_type = "fabric-internal"` + "\n"
+	config += `			source_interface = "lo0"` + "\n"
+	config += `			peer_template_address_families = [{` + "\n"
+	config += `				address_family = "ipv4-ucast"` + "\n"
+	config += `				control = "nh-self,rr-client"` + "\n"
+	config += `				send_community_extended = "enabled"` + "\n"
+	config += `				send_community_standard = "enabled"` + "\n"
+	config += `				max_prefix_action = "log"` + "\n"
+	config += `				max_prefix_number = 10000` + "\n"
+	config += `				max_prefix_restart_time = 0` + "\n"
+	config += `				max_prefix_threshold = 30` + "\n"
+	config += `			}]` + "\n"
+	config += `		}]` + "\n"
+	config += `		peers = [{` + "\n"
+	config += `			address = "192.168.0.1"` + "\n"
+	config += `			remote_asn = "65002"` + "\n"
+	config += `			description = "My description"` + "\n"
+	config += `			peer_template = "SPINE-PEERS"` + "\n"
+	config += `			peer_type = "fabric-internal"` + "\n"
+	config += `			source_interface = "lo0"` + "\n"
+	config += `			hold_time = 45` + "\n"
+	config += `			keepalive = 15` + "\n"
+	config += `			ebgp_multihop_ttl = 5` + "\n"
+	config += `			peer_control = "bfd,dis-conn-check"` + "\n"
+	config += `			password = "secret_password"` + "\n"
+	config += `			local_asn_propagation = "no-prepend"` + "\n"
+	config += `			local_asn = "65001"` + "\n"
+	config += `			peer_address_families = [{` + "\n"
+	config += `				address_family = "ipv4-ucast"` + "\n"
+	config += `				control = "nh-self"` + "\n"
+	config += `				send_community_extended = "enabled"` + "\n"
+	config += `				send_community_standard = "enabled"` + "\n"
+	config += `				route_controls = [{` + "\n"
+	config += `					direction = "in"` + "\n"
+	config += `					route_map_name = "ROUTE_MAP1"` + "\n"
+	config += `				}]` + "\n"
+	config += `				prefix_list_controls = [{` + "\n"
+	config += `					direction = "in"` + "\n"
+	config += `					list = "PREFIX_LIST1"` + "\n"
+	config += `				}]` + "\n"
+	config += `			}]` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

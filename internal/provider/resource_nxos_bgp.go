@@ -26,11 +26,14 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -63,7 +66,7 @@ func (r *BGPResource) Metadata(ctx context.Context, req resource.MetadataRequest
 func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the global BGP configuration.", "bgpEntity", "Routing%20and%20Forwarding/bgp:Entity/").AddChildren("bgp_instance").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BGP configuration.", "bgpEntity", "Routing%20and%20Forwarding/bgp:Entity/").AddAdditionalDocs([]string{"bgpInst", "bgpDom", "bgpRtCtrl", "bgpGr", "bgpDomAf", "bgpAdvPrefix", "bgpInterLeakP", "bgpPeerCont", "bgpPeerAf", "bgpMaxPfxP", "bgpPeer", "bgpLocalAsn", "bgpPeerAf", "bgpRtCtrlP", "bgpPfxCtrlP"}, []string{"Routing%20and%20Forwarding/bgp:Inst/", "Routing%20and%20Forwarding/bgp:Dom/", "Routing%20and%20Forwarding/bgp:RtCtrl/", "Routing%20and%20Forwarding/bgp:Gr/", "Routing%20and%20Forwarding/bgp:DomAf/", "Routing%20and%20Forwarding/bgp:AdvPrefix/", "Routing%20and%20Forwarding/bgp:InterLeakP/", "Routing%20and%20Forwarding/bgp:PeerCont/", "Routing%20and%20Forwarding/bgp:PeerAf/", "Routing%20and%20Forwarding/bgp:MaxPfxP/", "Routing%20and%20Forwarding/bgp:Peer/", "Routing%20and%20Forwarding/bgp:localasn/", "Routing%20and%20Forwarding/bgp:PeerAf/", "Routing%20and%20Forwarding/bgp:RtCtrlP/", "Routing%20and%20Forwarding/bgp:PfxCtrlP/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -84,6 +87,619 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				Default:             stringdefault.StaticString("enabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"instance_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("enabled"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"asn": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Autonomous system number.").String,
+				Optional:            true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
+			"enhanced_error_handling": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable BGP Enhanced Error Handling.").AddDefaultValueDescription("true").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             booldefault.StaticBool(true),
+			},
+			"vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: "List of BGP VRFs.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"router_id": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Router ID.").String,
+							Optional:            true,
+						},
+						"route_control_enforce_first_as": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enforce First AS For Ebgp. Can be configured only for VRF default.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("enabled"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"route_control_fib_accelerate": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Accelerate the hardware updates for IP/IPv6 adjacencies for neighbor. Can be configured only for VRF default.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("disabled"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"route_control_log_neighbor_changes": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Log Neighbor Changes.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("disabled"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"route_control_suppress_routes": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Suppress Routes: Advertise only routes that are programmed in hardware to peers. Can be configured only for VRF default.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("enabled"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"graceful_restart_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The graceful restart interval.").AddIntegerRangeDescription(1, 3600).AddDefaultValueDescription("120").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(120),
+							Validators: []validator.Int64{
+								int64validator.Between(1, 3600),
+							},
+						},
+						"graceful_restart_stale_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The stale interval for routes advertised by the BGP peer.").AddIntegerRangeDescription(1, 3600).AddDefaultValueDescription("300").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(300),
+							Validators: []validator.Int64{
+								int64validator.Between(1, 3600),
+							},
+						},
+						"address_families": schema.ListNestedAttribute{
+							MarkdownDescription: "List of BGP address families.",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address_family": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Address Family.").AddStringEnumDescription("ipv4-ucast", "ipv4-mcast", "vpnv4-ucast", "ipv6-ucast", "ipv6-mcast", "vpnv6-ucast", "vpnv6-mcast", "l2vpn-evpn", "ipv4-lucast", "ipv6-lucast", "lnkstate", "ipv4-mvpn", "ipv6-mvpn", "l2vpn-vpls", "ipv4-mdt").AddDefaultValueDescription("ipv4-ucast").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("ipv4-ucast", "ipv4-mcast", "vpnv4-ucast", "ipv6-ucast", "ipv6-mcast", "vpnv6-ucast", "vpnv6-mcast", "l2vpn-evpn", "ipv4-lucast", "ipv6-lucast", "lnkstate", "ipv4-mvpn", "ipv6-mvpn", "l2vpn-vpls", "ipv4-mdt"),
+										},
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplace(),
+										},
+									},
+									"critical_nexthop_timeout": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("The next-hop address tracking delay timer for critical next-hop reachability routes.").AddDefaultValueDescription("crit").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("crit"),
+									},
+									"non_critical_nexthop_timeout": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("The next-hop address tracking delay timer for non-critical next-hop reachability routes.").AddDefaultValueDescription("noncrit").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("noncrit"),
+									},
+									"advertise_l2vpn_evpn": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Enable or disable the advertisement of L2VPN EVPN routes.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("disabled"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"advertise_physical_ip_for_type5_routes": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Advertise physical IP for type-5 routes").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("disabled"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"max_ecmp_paths": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Maximum number of ECMP paths.").AddIntegerRangeDescription(1, 128).AddDefaultValueDescription("1").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             int64default.StaticInt64(1),
+										Validators: []validator.Int64{
+											int64validator.Between(1, 128),
+										},
+									},
+									"max_external_ecmp_paths": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Maximum number of external ECMP paths.").AddIntegerRangeDescription(1, 128).AddDefaultValueDescription("1").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             int64default.StaticInt64(1),
+										Validators: []validator.Int64{
+											int64validator.Between(1, 128),
+										},
+									},
+									"max_external_internal_ecmp_paths": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Maximum number of external/internal ECMP paths.").AddIntegerRangeDescription(1, 128).AddDefaultValueDescription("1").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             int64default.StaticInt64(1),
+										Validators: []validator.Int64{
+											int64validator.Between(1, 128),
+										},
+									},
+									"max_local_ecmp_paths": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Maximum number of equal-cost multipath for local paths ECMP paths.").AddIntegerRangeDescription(1, 128).AddDefaultValueDescription("1").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             int64default.StaticInt64(1),
+										Validators: []validator.Int64{
+											int64validator.Between(1, 128),
+										},
+									},
+									"max_mixed_ecmp_paths": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Maximum mixed equal-cost multipath for local and remote ECMP paths.").AddIntegerRangeDescription(1, 128).AddDefaultValueDescription("1").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             int64default.StaticInt64(1),
+										Validators: []validator.Int64{
+											int64validator.Between(1, 128),
+										},
+									},
+									"default_information_originate": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Enable or disable the default-information originate.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("disabled"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"next_hop_route_map_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Next hope route map name").String,
+										Optional:            true,
+									},
+									"prefix_priority": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Enable prefix priority for AF").AddStringEnumDescription("none", "high").AddDefaultValueDescription("none").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("none"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("none", "high"),
+										},
+									},
+									"retain_rt_all": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Retain Route Target All").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("disabled"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"advertise_only_active_routes": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Advertise only active routes to peers").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("disabled"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"table_map_route_map_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Route Map name").String,
+										Optional:            true,
+									},
+									"vni_ethernet_tag": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Allow VNI in Ethernet Tag field in EVPN route").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("disabled"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"wait_igp_converged": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Delay initial bestpath until redistributed IGPs have converged").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("disabled"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"advertised_prefixes": schema.ListNestedAttribute{
+										MarkdownDescription: "List of BGP advertised prefixes.",
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"prefix": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("IP address of the network or prefix to advertise.").String,
+													Required:            true,
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplace(),
+													},
+												},
+												"route_map": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Route map to modify attributes.").String,
+													Optional:            true,
+												},
+												"evpn": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Advertise route towards evpn side.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             stringdefault.StaticString("disabled"),
+													Validators: []validator.String{
+														stringvalidator.OneOf("enabled", "disabled"),
+													},
+												},
+											},
+										},
+									},
+									"redistributions": schema.ListNestedAttribute{
+										MarkdownDescription: "List of BGP route redistributions.",
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"protocol": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("The list of protocols to match.").AddStringEnumDescription("unspecified", "static", "direct", "bgp", "isis", "ospf", "ospfv3", "eigrp", "host", "rip", "amt", "lisp", "hmm", "am", "srv6").AddDefaultValueDescription("unspecified").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.OneOf("unspecified", "static", "direct", "bgp", "isis", "ospf", "ospfv3", "eigrp", "host", "rip", "amt", "lisp", "hmm", "am", "srv6"),
+													},
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplace(),
+													},
+												},
+												"protocol_instance": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("The inter protocol route leak policy instance (Use `none` for `static` and `direct` protocols).").AddDefaultValueDescription("none").String,
+													Required:            true,
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplace(),
+													},
+												},
+												"route_map": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("The name of the default route leak policy route map. This route map name is used to control distribution.").String,
+													Optional:            true,
+												},
+												"scope": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("The domain applicable to the capability.").AddStringEnumDescription("intra", "inter", "defrt").AddDefaultValueDescription("inter").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             stringdefault.StaticString("inter"),
+													Validators: []validator.String{
+														stringvalidator.OneOf("intra", "inter", "defrt"),
+													},
+												},
+												"srv6_prefix_type": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("SRv6 Prefix Type; Valid only when proto is srv6.").AddStringEnumDescription("unspecified", "locator").AddDefaultValueDescription("unspecified").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             stringdefault.StaticString("unspecified"),
+													Validators: []validator.String{
+														stringvalidator.OneOf("unspecified", "locator"),
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"peer_templates": schema.ListNestedAttribute{
+							MarkdownDescription: "List of BGP peer templates.",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Peer template name.").String,
+										Required:            true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplace(),
+										},
+									},
+									"remote_asn": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Peer template autonomous system number.").String,
+										Optional:            true,
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Peer template description.").String,
+										Optional:            true,
+									},
+									"peer_type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Neighbor Fabric Type.").AddStringEnumDescription("fabric-internal", "fabric-external", "fabric-border-leaf").AddDefaultValueDescription("fabric-internal").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("fabric-internal"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("fabric-internal", "fabric-external", "fabric-border-leaf"),
+										},
+									},
+									"source_interface": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Source Interface. Must match first field in the output of `show intf brief`.").AddDefaultValueDescription("unspecified").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("unspecified"),
+									},
+									"peer_template_address_families": schema.ListNestedAttribute{
+										MarkdownDescription: "List of BGP peer template address families.",
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"address_family": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Address Family.").AddStringEnumDescription("ipv4-ucast", "vpnv4-ucast", "ipv6-ucast", "vpnv6-ucast", "l2vpn-evpn", "lnkstate").AddDefaultValueDescription("ipv4-ucast").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.OneOf("ipv4-ucast", "vpnv4-ucast", "ipv6-ucast", "vpnv6-ucast", "l2vpn-evpn", "lnkstate"),
+													},
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplace(),
+													},
+												},
+												"control": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:\n  - Single value. Example: `nh-self`\n  - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.").String,
+													Optional:            true,
+												},
+												"send_community_extended": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Send-community extended.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             stringdefault.StaticString("disabled"),
+													Validators: []validator.String{
+														stringvalidator.OneOf("enabled", "disabled"),
+													},
+												},
+												"send_community_standard": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Send-community standard.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             stringdefault.StaticString("disabled"),
+													Validators: []validator.String{
+														stringvalidator.OneOf("enabled", "disabled"),
+													},
+												},
+												"max_prefix_action": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Action to do when limit is exceeded.").AddStringEnumDescription("log", "shut", "restart").AddDefaultValueDescription("shut").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             stringdefault.StaticString("shut"),
+													Validators: []validator.String{
+														stringvalidator.OneOf("log", "shut", "restart"),
+													},
+												},
+												"max_prefix_number": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Maximum number of prefixes allowed from the peer.").AddIntegerRangeDescription(0, 4294967295).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(0, 4294967295),
+													},
+												},
+												"max_prefix_restart_time": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("The period of time in minutes before restarting the peer when the prefix limit is reached.").AddDefaultValueDescription("0").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             int64default.StaticInt64(0),
+												},
+												"max_prefix_threshold": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("The period of time in minutes before restarting the peer when the prefix limit is reached.").AddIntegerRangeDescription(0, 100).AddDefaultValueDescription("0").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             int64default.StaticInt64(0),
+													Validators: []validator.Int64{
+														int64validator.Between(0, 100),
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"peers": schema.ListNestedAttribute{
+							MarkdownDescription: "List of BGP peers.",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Peer address.").String,
+										Required:            true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplace(),
+										},
+									},
+									"remote_asn": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Peer autonomous system number.").String,
+										Optional:            true,
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Peer description.").String,
+										Optional:            true,
+									},
+									"peer_template": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Peer template name.").String,
+										Optional:            true,
+									},
+									"peer_type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Neighbor Fabric Type.").AddStringEnumDescription("fabric-internal", "fabric-external", "fabric-border-leaf").AddDefaultValueDescription("fabric-internal").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("fabric-internal"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("fabric-internal", "fabric-external", "fabric-border-leaf"),
+										},
+									},
+									"source_interface": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Source Interface. Must match first field in the output of `show intf brief`.").AddDefaultValueDescription("unspecified").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("unspecified"),
+									},
+									"hold_time": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("BGP Hold Timer in seconds. The value must be greater than the keepalive timer").AddIntegerRangeDescription(3, 3600).AddDefaultValueDescription("180").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             int64default.StaticInt64(180),
+										Validators: []validator.Int64{
+											int64validator.Between(3, 3600),
+										},
+									},
+									"keepalive": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("BGP Keepalive Timer in seconds").AddIntegerRangeDescription(0, 3600).AddDefaultValueDescription("60").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             int64default.StaticInt64(60),
+										Validators: []validator.Int64{
+											int64validator.Between(0, 3600),
+										},
+									},
+									"ebgp_multihop_ttl": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("eBGP Multihop TTL").AddIntegerRangeDescription(0, 255).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 255),
+										},
+									},
+									"peer_control": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Peer Controls. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.").String,
+										Optional:            true,
+									},
+									"password_type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Password Encryption Type.").AddStringEnumDescription("0", "3", "LINE", "7").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("0", "3", "LINE", "7"),
+										},
+									},
+									"password": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Password.").String,
+										Optional:            true,
+									},
+									"local_asn_propagation": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("ASN Propagation.").AddStringEnumDescription("none", "no-prepend", "replace-as", "dual-as").AddDefaultValueDescription("none").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("none"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("none", "no-prepend", "replace-as", "dual-as"),
+										},
+									},
+									"local_asn": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Local Autonomous system number.").String,
+										Required:            true,
+									},
+									"peer_address_families": schema.ListNestedAttribute{
+										MarkdownDescription: "List of BGP peer address families.",
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"address_family": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Address Family.").AddStringEnumDescription("ipv4-ucast", "ipv4-mvpn", "vpnv4-ucast", "ipv6-ucast", "vpnv6-ucast", "l2vpn-evpn", "lnkstate").AddDefaultValueDescription("ipv4-ucast").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.OneOf("ipv4-ucast", "ipv4-mvpn", "vpnv4-ucast", "ipv6-ucast", "vpnv6-ucast", "l2vpn-evpn", "lnkstate"),
+													},
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplace(),
+													},
+												},
+												"control": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:\n  - Single value. Example: `nh-self`\n  - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.").String,
+													Optional:            true,
+												},
+												"send_community_extended": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Send-community extended.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             stringdefault.StaticString("disabled"),
+													Validators: []validator.String{
+														stringvalidator.OneOf("enabled", "disabled"),
+													},
+												},
+												"send_community_standard": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Send-community standard.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             stringdefault.StaticString("disabled"),
+													Validators: []validator.String{
+														stringvalidator.OneOf("enabled", "disabled"),
+													},
+												},
+												"route_controls": schema.ListNestedAttribute{
+													MarkdownDescription: "List of BGP peer address family route controls.",
+													Optional:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"direction": schema.StringAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("Route Control direction.").AddStringEnumDescription("in", "out").AddDefaultValueDescription("in").String,
+																Required:            true,
+																Validators: []validator.String{
+																	stringvalidator.OneOf("in", "out"),
+																},
+																PlanModifiers: []planmodifier.String{
+																	stringplanmodifier.RequiresReplace(),
+																},
+															},
+															"route_map_name": schema.StringAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("Route Control Route-Map name.").String,
+																Optional:            true,
+															},
+														},
+													},
+												},
+												"prefix_list_controls": schema.ListNestedAttribute{
+													MarkdownDescription: "List of BGP peer address family prefix list controls.",
+													Optional:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"direction": schema.StringAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("Route Control direction.").AddStringEnumDescription("in", "out").AddDefaultValueDescription("in").String,
+																Required:            true,
+																Validators: []validator.String{
+																	stringvalidator.OneOf("in", "out"),
+																},
+																PlanModifiers: []planmodifier.String{
+																	stringplanmodifier.RequiresReplace(),
+																},
+															},
+															"list": schema.StringAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("Route Control Prefix-List name.").String,
+																Optional:            true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
@@ -188,6 +804,7 @@ func (r *BGPResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		queries = append(queries, nxos.Query("rsp-subtree", "full"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -230,6 +847,14 @@ func (r *BGPResource) Update(ctx context.Context, req resource.UpdateRequest, re
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	var state BGP
+
+	// Read state
+	diags = req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
@@ -245,6 +870,19 @@ func (r *BGPResource) Update(ctx context.Context, req resource.UpdateRequest, re
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
+		}
+
+		deletedItems := plan.getDeletedItems(ctx, state)
+		tflog.Debug(ctx, fmt.Sprintf("%s: List items to delete: %v", plan.getDn(), deletedItems))
+		for _, dn := range deletedItems {
+			res, err := device.Client.DeleteDn(dn)
+			if err != nil {
+				errCode := res.Get("imdata.0.error.attributes.code").Str
+				if errCode != "1" && errCode != "107" {
+					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+					return
+				}
+			}
 		}
 	}
 

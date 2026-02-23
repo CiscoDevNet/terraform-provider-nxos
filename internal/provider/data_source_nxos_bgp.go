@@ -57,7 +57,7 @@ func (d *BGPDataSource) Metadata(_ context.Context, req datasource.MetadataReque
 func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the global BGP configuration.", "bgpEntity", "Routing%20and%20Forwarding/bgp:Entity/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the BGP configuration.", "bgpEntity", "Routing%20and%20Forwarding/bgp:Entity/").AddAdditionalDocs([]string{"bgpInst", "bgpDom", "bgpRtCtrl", "bgpGr", "bgpDomAf", "bgpAdvPrefix", "bgpInterLeakP", "bgpPeerCont", "bgpPeerAf", "bgpMaxPfxP", "bgpPeer", "bgpLocalAsn", "bgpPeerAf", "bgpRtCtrlP", "bgpPfxCtrlP"}, []string{"Routing%20and%20Forwarding/bgp:Inst/", "Routing%20and%20Forwarding/bgp:Dom/", "Routing%20and%20Forwarding/bgp:RtCtrl/", "Routing%20and%20Forwarding/bgp:Gr/", "Routing%20and%20Forwarding/bgp:DomAf/", "Routing%20and%20Forwarding/bgp:AdvPrefix/", "Routing%20and%20Forwarding/bgp:InterLeakP/", "Routing%20and%20Forwarding/bgp:PeerCont/", "Routing%20and%20Forwarding/bgp:PeerAf/", "Routing%20and%20Forwarding/bgp:MaxPfxP/", "Routing%20and%20Forwarding/bgp:Peer/", "Routing%20and%20Forwarding/bgp:localasn/", "Routing%20and%20Forwarding/bgp:PeerAf/", "Routing%20and%20Forwarding/bgp:RtCtrlP/", "Routing%20and%20Forwarding/bgp:PfxCtrlP/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -71,6 +71,374 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 			"admin_state": schema.StringAttribute{
 				MarkdownDescription: "Administrative state.",
 				Computed:            true,
+			},
+			"instance_admin_state": schema.StringAttribute{
+				MarkdownDescription: "Administrative state.",
+				Computed:            true,
+			},
+			"asn": schema.StringAttribute{
+				MarkdownDescription: "Autonomous system number.",
+				Computed:            true,
+			},
+			"enhanced_error_handling": schema.BoolAttribute{
+				MarkdownDescription: "Enable BGP Enhanced Error Handling.",
+				Computed:            true,
+			},
+			"vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: "List of BGP VRFs.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "VRF name.",
+							Computed:            true,
+						},
+						"router_id": schema.StringAttribute{
+							MarkdownDescription: "Router ID.",
+							Computed:            true,
+						},
+						"route_control_enforce_first_as": schema.StringAttribute{
+							MarkdownDescription: "Enforce First AS For Ebgp. Can be configured only for VRF default.",
+							Computed:            true,
+						},
+						"route_control_fib_accelerate": schema.StringAttribute{
+							MarkdownDescription: "Accelerate the hardware updates for IP/IPv6 adjacencies for neighbor. Can be configured only for VRF default.",
+							Computed:            true,
+						},
+						"route_control_log_neighbor_changes": schema.StringAttribute{
+							MarkdownDescription: "Log Neighbor Changes.",
+							Computed:            true,
+						},
+						"route_control_suppress_routes": schema.StringAttribute{
+							MarkdownDescription: "Suppress Routes: Advertise only routes that are programmed in hardware to peers. Can be configured only for VRF default.",
+							Computed:            true,
+						},
+						"graceful_restart_interval": schema.Int64Attribute{
+							MarkdownDescription: "The graceful restart interval.",
+							Computed:            true,
+						},
+						"graceful_restart_stale_interval": schema.Int64Attribute{
+							MarkdownDescription: "The stale interval for routes advertised by the BGP peer.",
+							Computed:            true,
+						},
+						"address_families": schema.ListNestedAttribute{
+							MarkdownDescription: "List of BGP address families.",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address_family": schema.StringAttribute{
+										MarkdownDescription: "Address Family.",
+										Computed:            true,
+									},
+									"critical_nexthop_timeout": schema.StringAttribute{
+										MarkdownDescription: "The next-hop address tracking delay timer for critical next-hop reachability routes.",
+										Computed:            true,
+									},
+									"non_critical_nexthop_timeout": schema.StringAttribute{
+										MarkdownDescription: "The next-hop address tracking delay timer for non-critical next-hop reachability routes.",
+										Computed:            true,
+									},
+									"advertise_l2vpn_evpn": schema.StringAttribute{
+										MarkdownDescription: "Enable or disable the advertisement of L2VPN EVPN routes.",
+										Computed:            true,
+									},
+									"advertise_physical_ip_for_type5_routes": schema.StringAttribute{
+										MarkdownDescription: "Advertise physical IP for type-5 routes",
+										Computed:            true,
+									},
+									"max_ecmp_paths": schema.Int64Attribute{
+										MarkdownDescription: "Maximum number of ECMP paths.",
+										Computed:            true,
+									},
+									"max_external_ecmp_paths": schema.Int64Attribute{
+										MarkdownDescription: "Maximum number of external ECMP paths.",
+										Computed:            true,
+									},
+									"max_external_internal_ecmp_paths": schema.Int64Attribute{
+										MarkdownDescription: "Maximum number of external/internal ECMP paths.",
+										Computed:            true,
+									},
+									"max_local_ecmp_paths": schema.Int64Attribute{
+										MarkdownDescription: "Maximum number of equal-cost multipath for local paths ECMP paths.",
+										Computed:            true,
+									},
+									"max_mixed_ecmp_paths": schema.Int64Attribute{
+										MarkdownDescription: "Maximum mixed equal-cost multipath for local and remote ECMP paths.",
+										Computed:            true,
+									},
+									"default_information_originate": schema.StringAttribute{
+										MarkdownDescription: "Enable or disable the default-information originate.",
+										Computed:            true,
+									},
+									"next_hop_route_map_name": schema.StringAttribute{
+										MarkdownDescription: "Next hope route map name",
+										Computed:            true,
+									},
+									"prefix_priority": schema.StringAttribute{
+										MarkdownDescription: "Enable prefix priority for AF",
+										Computed:            true,
+									},
+									"retain_rt_all": schema.StringAttribute{
+										MarkdownDescription: "Retain Route Target All",
+										Computed:            true,
+									},
+									"advertise_only_active_routes": schema.StringAttribute{
+										MarkdownDescription: "Advertise only active routes to peers",
+										Computed:            true,
+									},
+									"table_map_route_map_name": schema.StringAttribute{
+										MarkdownDescription: "Route Map name",
+										Computed:            true,
+									},
+									"vni_ethernet_tag": schema.StringAttribute{
+										MarkdownDescription: "Allow VNI in Ethernet Tag field in EVPN route",
+										Computed:            true,
+									},
+									"wait_igp_converged": schema.StringAttribute{
+										MarkdownDescription: "Delay initial bestpath until redistributed IGPs have converged",
+										Computed:            true,
+									},
+									"advertised_prefixes": schema.ListNestedAttribute{
+										MarkdownDescription: "List of BGP advertised prefixes.",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"prefix": schema.StringAttribute{
+													MarkdownDescription: "IP address of the network or prefix to advertise.",
+													Computed:            true,
+												},
+												"route_map": schema.StringAttribute{
+													MarkdownDescription: "Route map to modify attributes.",
+													Computed:            true,
+												},
+												"evpn": schema.StringAttribute{
+													MarkdownDescription: "Advertise route towards evpn side.",
+													Computed:            true,
+												},
+											},
+										},
+									},
+									"redistributions": schema.ListNestedAttribute{
+										MarkdownDescription: "List of BGP route redistributions.",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"protocol": schema.StringAttribute{
+													MarkdownDescription: "The list of protocols to match.",
+													Computed:            true,
+												},
+												"protocol_instance": schema.StringAttribute{
+													MarkdownDescription: "The inter protocol route leak policy instance (Use `none` for `static` and `direct` protocols).",
+													Computed:            true,
+												},
+												"route_map": schema.StringAttribute{
+													MarkdownDescription: "The name of the default route leak policy route map. This route map name is used to control distribution.",
+													Computed:            true,
+												},
+												"scope": schema.StringAttribute{
+													MarkdownDescription: "The domain applicable to the capability.",
+													Computed:            true,
+												},
+												"srv6_prefix_type": schema.StringAttribute{
+													MarkdownDescription: "SRv6 Prefix Type; Valid only when proto is srv6.",
+													Computed:            true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"peer_templates": schema.ListNestedAttribute{
+							MarkdownDescription: "List of BGP peer templates.",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"name": schema.StringAttribute{
+										MarkdownDescription: "Peer template name.",
+										Computed:            true,
+									},
+									"remote_asn": schema.StringAttribute{
+										MarkdownDescription: "Peer template autonomous system number.",
+										Computed:            true,
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: "Peer template description.",
+										Computed:            true,
+									},
+									"peer_type": schema.StringAttribute{
+										MarkdownDescription: "Neighbor Fabric Type.",
+										Computed:            true,
+									},
+									"source_interface": schema.StringAttribute{
+										MarkdownDescription: "Source Interface. Must match first field in the output of `show intf brief`.",
+										Computed:            true,
+									},
+									"peer_template_address_families": schema.ListNestedAttribute{
+										MarkdownDescription: "List of BGP peer template address families.",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"address_family": schema.StringAttribute{
+													MarkdownDescription: "Address Family.",
+													Computed:            true,
+												},
+												"control": schema.StringAttribute{
+													MarkdownDescription: "Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:\n  - Single value. Example: `nh-self`\n  - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.",
+													Computed:            true,
+												},
+												"send_community_extended": schema.StringAttribute{
+													MarkdownDescription: "Send-community extended.",
+													Computed:            true,
+												},
+												"send_community_standard": schema.StringAttribute{
+													MarkdownDescription: "Send-community standard.",
+													Computed:            true,
+												},
+												"max_prefix_action": schema.StringAttribute{
+													MarkdownDescription: "Action to do when limit is exceeded.",
+													Computed:            true,
+												},
+												"max_prefix_number": schema.Int64Attribute{
+													MarkdownDescription: "Maximum number of prefixes allowed from the peer.",
+													Computed:            true,
+												},
+												"max_prefix_restart_time": schema.Int64Attribute{
+													MarkdownDescription: "The period of time in minutes before restarting the peer when the prefix limit is reached.",
+													Computed:            true,
+												},
+												"max_prefix_threshold": schema.Int64Attribute{
+													MarkdownDescription: "The period of time in minutes before restarting the peer when the prefix limit is reached.",
+													Computed:            true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"peers": schema.ListNestedAttribute{
+							MarkdownDescription: "List of BGP peers.",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address": schema.StringAttribute{
+										MarkdownDescription: "Peer address.",
+										Computed:            true,
+									},
+									"remote_asn": schema.StringAttribute{
+										MarkdownDescription: "Peer autonomous system number.",
+										Computed:            true,
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: "Peer description.",
+										Computed:            true,
+									},
+									"peer_template": schema.StringAttribute{
+										MarkdownDescription: "Peer template name.",
+										Computed:            true,
+									},
+									"peer_type": schema.StringAttribute{
+										MarkdownDescription: "Neighbor Fabric Type.",
+										Computed:            true,
+									},
+									"source_interface": schema.StringAttribute{
+										MarkdownDescription: "Source Interface. Must match first field in the output of `show intf brief`.",
+										Computed:            true,
+									},
+									"hold_time": schema.Int64Attribute{
+										MarkdownDescription: "BGP Hold Timer in seconds. The value must be greater than the keepalive timer",
+										Computed:            true,
+									},
+									"keepalive": schema.Int64Attribute{
+										MarkdownDescription: "BGP Keepalive Timer in seconds",
+										Computed:            true,
+									},
+									"ebgp_multihop_ttl": schema.Int64Attribute{
+										MarkdownDescription: "eBGP Multihop TTL",
+										Computed:            true,
+									},
+									"peer_control": schema.StringAttribute{
+										MarkdownDescription: "Peer Controls. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.",
+										Computed:            true,
+									},
+									"password_type": schema.StringAttribute{
+										MarkdownDescription: "Password Encryption Type.",
+										Computed:            true,
+									},
+									"password": schema.StringAttribute{
+										MarkdownDescription: "Password.",
+										Computed:            true,
+									},
+									"local_asn_propagation": schema.StringAttribute{
+										MarkdownDescription: "ASN Propagation.",
+										Computed:            true,
+									},
+									"local_asn": schema.StringAttribute{
+										MarkdownDescription: "Local Autonomous system number.",
+										Computed:            true,
+									},
+									"peer_address_families": schema.ListNestedAttribute{
+										MarkdownDescription: "List of BGP peer address families.",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"address_family": schema.StringAttribute{
+													MarkdownDescription: "Address Family.",
+													Computed:            true,
+												},
+												"control": schema.StringAttribute{
+													MarkdownDescription: "Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:\n  - Single value. Example: `nh-self`\n  - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.",
+													Computed:            true,
+												},
+												"send_community_extended": schema.StringAttribute{
+													MarkdownDescription: "Send-community extended.",
+													Computed:            true,
+												},
+												"send_community_standard": schema.StringAttribute{
+													MarkdownDescription: "Send-community standard.",
+													Computed:            true,
+												},
+												"route_controls": schema.ListNestedAttribute{
+													MarkdownDescription: "List of BGP peer address family route controls.",
+													Computed:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"direction": schema.StringAttribute{
+																MarkdownDescription: "Route Control direction.",
+																Computed:            true,
+															},
+															"route_map_name": schema.StringAttribute{
+																MarkdownDescription: "Route Control Route-Map name.",
+																Computed:            true,
+															},
+														},
+													},
+												},
+												"prefix_list_controls": schema.ListNestedAttribute{
+													MarkdownDescription: "List of BGP peer address family prefix list controls.",
+													Computed:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"direction": schema.StringAttribute{
+																MarkdownDescription: "Route Control direction.",
+																Computed:            true,
+															},
+															"list": schema.StringAttribute{
+																MarkdownDescription: "Route Control Prefix-List name.",
+																Computed:            true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	}
@@ -106,6 +474,7 @@ func (d *BGPDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "full"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

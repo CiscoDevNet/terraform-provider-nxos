@@ -63,7 +63,7 @@ func (r *ICMPv4InstanceResource) Metadata(ctx context.Context, req resource.Meta
 func (r *ICMPv4InstanceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the global ICMP Instance configuration.", "icmpv4Inst", "Routing%20and%20Forwarding/icmpv4:Instance/").AddParents("icmpv4").AddChildren("icmpv4_domain").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the global ICMP Instance configuration.", "icmpv4Inst", "Routing%20and%20Forwarding/icmpv4:Instance/").AddParents("icmpv4").AddChildren("icmpv4_vrf").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

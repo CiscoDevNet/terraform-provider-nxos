@@ -9,7 +9,7 @@ doc_category: ICMP
 parents:
   - ICMPv4
 children:
-  - ICMPv4 Domain
+  - ICMPv4 VRF
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state

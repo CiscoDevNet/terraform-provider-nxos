@@ -8,7 +8,7 @@ description: |-
   Parent resources
   nxos_icmpv4 https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/icmpv4
   Child resources
-  nxos_icmpv4_domain https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/icmpv4_domain
+  nxos_icmpv4_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/icmpv4_vrf
 ---
 
 # nxos_icmpv4_instance (Resource)
@@ -23,7 +23,7 @@ This resource can manage the global ICMP Instance configuration.
 
 ### Child resources
 
-- [nxos_icmpv4_domain](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/icmpv4_domain)
+- [nxos_icmpv4_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/icmpv4_vrf)
 
 ## Example Usage
 

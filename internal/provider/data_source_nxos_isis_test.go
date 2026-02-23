@@ -36,7 +36,7 @@ func TestAccDataSourceNxosISIS(t *testing.T) {
 		"name":        "ISIS1",
 		"admin_state": "enabled",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_isis.test", "instances.0.vrfs.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_isis.test", "instances.*.vrfs.*", map[string]string{
 		"name":                    "default",
 		"admin_state":             "enabled",
 		"authentication_check_l1": "false",
@@ -51,14 +51,16 @@ func TestAccDataSourceNxosISIS(t *testing.T) {
 		"net":                     "49.0001.0000.0000.3333.00",
 		"passive_default":         "l12",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_isis.test", "instances.0.vrfs.0.address_families.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_isis.test", "instances.*.vrfs.*.address_families.*", map[string]string{
 		"address_family":              "v4",
 		"segment_routing_mpls":        "true",
 		"enable_bfd":                  "false",
 		"prefix_advertise_passive_l1": "true",
 		"prefix_advertise_passive_l2": "true",
 	}))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.0.vrfs.0.overload_startup_time", "60"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_isis.test", "instances.*.vrfs.*", map[string]string{
+		"overload_startup_time": "60",
+	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_isis.test", "interfaces.*", map[string]string{
 		"interface_id":            "eth1/10",
 		"authentication_check":    "false",

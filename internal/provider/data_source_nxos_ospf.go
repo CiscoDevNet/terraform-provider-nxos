@@ -57,7 +57,7 @@ func (d *OSPFDataSource) Metadata(_ context.Context, req datasource.MetadataRequ
 func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the global OSPF configuration.", "ospfEntity", "Routing%20and%20Forwarding/ospf:Entity/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the OSPF configuration.", "ospfEntity", "Routing%20and%20Forwarding/ospf:Entity/").AddAdditionalDocs([]string{"ospfInst", "ospfDom", "ospfArea", "ospfMaxMetricLsaP", "ospfIf", "ospfAuthNewP"}, []string{"Routing%20and%20Forwarding/ospf:Inst/", "Routing%20and%20Forwarding/ospf:Dom/", "Routing%20and%20Forwarding/ospf:Area/", "Routing%20and%20Forwarding/ospf:maxmetriclsap/", "Routing%20and%20Forwarding/ospf:If/", "Routing%20and%20Forwarding/ospf:AuthNewP/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -71,6 +71,178 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 			"admin_state": schema.StringAttribute{
 				MarkdownDescription: "Administrative state.",
 				Computed:            true,
+			},
+			"instances": schema.ListNestedAttribute{
+				MarkdownDescription: "List of OSPF instances.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "OSPF instance name.",
+							Computed:            true,
+						},
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: "Administrative state.",
+							Computed:            true,
+						},
+						"vrfs": schema.ListNestedAttribute{
+							MarkdownDescription: "List of OSPF VRFs.",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"name": schema.StringAttribute{
+										MarkdownDescription: "VRF name.",
+										Computed:            true,
+									},
+									"log_adjacency_changes": schema.StringAttribute{
+										MarkdownDescription: "Log level for adjacency changes.",
+										Computed:            true,
+									},
+									"admin_state": schema.StringAttribute{
+										MarkdownDescription: "Administrative state.",
+										Computed:            true,
+									},
+									"bandwidth_reference": schema.Int64Attribute{
+										MarkdownDescription: "Bandwidth reference value.",
+										Computed:            true,
+									},
+									"bandwidth_reference_unit": schema.StringAttribute{
+										MarkdownDescription: "Bandwidth reference unit.",
+										Computed:            true,
+									},
+									"distance": schema.Int64Attribute{
+										MarkdownDescription: "Administrative distance preference.",
+										Computed:            true,
+									},
+									"router_id": schema.StringAttribute{
+										MarkdownDescription: "Router ID.",
+										Computed:            true,
+									},
+									"control": schema.StringAttribute{
+										MarkdownDescription: "Controls. Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,default-passive`. In this case values must be in alphabetical order.",
+										Computed:            true,
+									},
+									"areas": schema.ListNestedAttribute{
+										MarkdownDescription: "List of OSPF areas.",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"area_id": schema.StringAttribute{
+													MarkdownDescription: "Area identifier to which a network or interface belongs in IPv4 address format.",
+													Computed:            true,
+												},
+												"authentication_type": schema.StringAttribute{
+													MarkdownDescription: "Authentication type.",
+													Computed:            true,
+												},
+												"cost": schema.Int64Attribute{
+													MarkdownDescription: "Area cost, specifies cost for default summary LSAs. Used with nssa/stub area types.",
+													Computed:            true,
+												},
+												"type": schema.StringAttribute{
+													MarkdownDescription: "Area type.",
+													Computed:            true,
+												},
+											},
+										},
+									},
+									"max_metric_control": schema.StringAttribute{
+										MarkdownDescription: "Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:\n  - Single value. Example: `stub`\n  - Multiple values (comma-separated). Example: `stub,summary-lsa`. In this case values must be in alphabetical order.",
+										Computed:            true,
+									},
+									"max_metric_external_lsa": schema.Int64Attribute{
+										MarkdownDescription: "Maximum metric value for external LSAs.",
+										Computed:            true,
+									},
+									"max_metric_summary_lsa": schema.Int64Attribute{
+										MarkdownDescription: "Maximum metric value for summary LSAs.",
+										Computed:            true,
+									},
+									"max_metric_startup_interval": schema.Int64Attribute{
+										MarkdownDescription: "Time (in secs) for which max metric should be advertised at startup.",
+										Computed:            true,
+									},
+									"interfaces": schema.ListNestedAttribute{
+										MarkdownDescription: "List of OSPF interfaces.",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"interface_id": schema.StringAttribute{
+													MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
+													Computed:            true,
+												},
+												"advertise_secondaries": schema.BoolAttribute{
+													MarkdownDescription: "Advertise secondary IP addresses.",
+													Computed:            true,
+												},
+												"area": schema.StringAttribute{
+													MarkdownDescription: "Area identifier to which a network or interface belongs in IPv4 address format.",
+													Computed:            true,
+												},
+												"bfd": schema.StringAttribute{
+													MarkdownDescription: "Bidirectional Forwarding Detection (BFD).",
+													Computed:            true,
+												},
+												"cost": schema.Int64Attribute{
+													MarkdownDescription: "Specifies the cost of interface.",
+													Computed:            true,
+												},
+												"dead_interval": schema.Int64Attribute{
+													MarkdownDescription: "Dead interval, interval after which router declares that neighbor as down.",
+													Computed:            true,
+												},
+												"hello_interval": schema.Int64Attribute{
+													MarkdownDescription: "Hello interval, interval between hello packets that OSPF sends on the interface.",
+													Computed:            true,
+												},
+												"network_type": schema.StringAttribute{
+													MarkdownDescription: "Network type.",
+													Computed:            true,
+												},
+												"passive": schema.StringAttribute{
+													MarkdownDescription: "Passive interface control. Interface can be configured as passive or non-passive.",
+													Computed:            true,
+												},
+												"priority": schema.Int64Attribute{
+													MarkdownDescription: "Priority, used in determining the designated router on this network.",
+													Computed:            true,
+												},
+												"authentication_key": schema.StringAttribute{
+													MarkdownDescription: "Key used for authentication.",
+													Computed:            true,
+												},
+												"authentication_key_id": schema.Int64Attribute{
+													MarkdownDescription: "Key ID used for authentication.",
+													Computed:            true,
+												},
+												"authentication_key_secure_mode": schema.BoolAttribute{
+													MarkdownDescription: "Encrypted authentication key or plain text key.",
+													Computed:            true,
+												},
+												"authentication_keychain": schema.StringAttribute{
+													MarkdownDescription: "Authentication keychain.",
+													Computed:            true,
+												},
+												"authentication_md5_key": schema.StringAttribute{
+													MarkdownDescription: "Key used for md5 authentication.",
+													Computed:            true,
+												},
+												"authentication_md5_key_secure_mode": schema.BoolAttribute{
+													MarkdownDescription: "Encrypted authentication md5 key or plain text key.",
+													Computed:            true,
+												},
+												"authentication_type": schema.StringAttribute{
+													MarkdownDescription: "Authentication type.",
+													Computed:            true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	}
@@ -106,6 +278,7 @@ func (d *OSPFDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "full"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

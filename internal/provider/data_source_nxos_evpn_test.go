@@ -36,10 +36,10 @@ func TestAccDataSourceNxosEVPN(t *testing.T) {
 		"encap":               "vxlan-123456",
 		"route_distinguisher": "rd:unknown:0:0",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_evpn.test", "vnis.0.route_target_directions.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_evpn.test", "vnis.*.route_target_directions.*", map[string]string{
 		"direction": "import",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_evpn.test", "vnis.0.route_target_directions.0.route_targets.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_evpn.test", "vnis.*.route_target_directions.*.route_targets.*", map[string]string{
 		"route_target": "route-target:as2-nn2:2:2",
 	}))
 	resource.Test(t, resource.TestCase{

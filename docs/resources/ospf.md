@@ -3,27 +3,75 @@
 page_title: "nxos_ospf Resource - terraform-provider-nxos"
 subcategory: "OSPF"
 description: |-
-  This resource can manage the global OSPF configuration.
+  This resource can manage the OSPF configuration.
   API Documentation: ospfEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:Entity/
-  Child resources
-  nxos_ospf_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_instance
+  Additional API Documentation
+  ospfInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:Inst/ospfDom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:Dom/ospfArea https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:Area/ospfMaxMetricLsaP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:maxmetriclsap/ospfIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:If/ospfAuthNewP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:AuthNewP/
 ---
 
 # nxos_ospf (Resource)
 
-This resource can manage the global OSPF configuration.
+This resource can manage the OSPF configuration.
 
 - API Documentation: [ospfEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:Entity/)
 
-### Child resources
+### Additional API Documentation
 
-- [nxos_ospf_instance](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospf_instance)
+- [ospfInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:Inst/)
+- [ospfDom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:Dom/)
+- [ospfArea](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:Area/)
+- [ospfMaxMetricLsaP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:maxmetriclsap/)
+- [ospfIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:If/)
+- [ospfAuthNewP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:AuthNewP/)
 
 ## Example Usage
 
 ```terraform
 resource "nxos_ospf" "example" {
   admin_state = "enabled"
+  instances = [{
+    name        = "OSPF1"
+    admin_state = "enabled"
+    vrfs = [{
+      name                     = "VRF1"
+      log_adjacency_changes    = "brief"
+      admin_state              = "enabled"
+      bandwidth_reference      = 400000
+      bandwidth_reference_unit = "mbps"
+      distance                 = 110
+      router_id                = "34.56.78.90"
+      control                  = "bfd,default-passive"
+      areas = [{
+        area_id             = "0.0.0.10"
+        authentication_type = "none"
+        cost                = 10
+        type                = "stub"
+      }]
+      max_metric_control          = "external-lsa,startup,stub,summary-lsa"
+      max_metric_external_lsa     = 600
+      max_metric_summary_lsa      = 600
+      max_metric_startup_interval = 300
+      interfaces = [{
+        interface_id                       = "eth1/10"
+        advertise_secondaries              = false
+        area                               = "0.0.0.10"
+        bfd                                = "disabled"
+        cost                               = 1000
+        dead_interval                      = 60
+        hello_interval                     = 15
+        network_type                       = "p2p"
+        passive                            = "enabled"
+        priority                           = 10
+        authentication_key                 = "0 mykey"
+        authentication_key_id              = 1
+        authentication_key_secure_mode     = false
+        authentication_keychain            = "mykeychain"
+        authentication_md5_key             = "0 mymd5key"
+        authentication_md5_key_secure_mode = false
+        authentication_type                = "none"
+      }]
+    }]
+  }]
 }
 ```
 
@@ -36,10 +84,135 @@ resource "nxos_ospf" "example" {
   - Choices: `enabled`, `disabled`
   - Default value: `enabled`
 - `device` (String) A device name from the provider configuration.
+- `instances` (Attributes List) List of OSPF instances. (see [below for nested schema](#nestedatt--instances))
 
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--instances"></a>
+### Nested Schema for `instances`
+
+Required:
+
+- `name` (String) OSPF instance name.
+
+Optional:
+
+- `admin_state` (String) Administrative state.
+  - Choices: `enabled`, `disabled`
+  - Default value: `enabled`
+- `vrfs` (Attributes List) List of OSPF VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
+
+<a id="nestedatt--instances--vrfs"></a>
+### Nested Schema for `instances.vrfs`
+
+Required:
+
+- `name` (String) VRF name.
+
+Optional:
+
+- `admin_state` (String) Administrative state.
+  - Choices: `enabled`, `disabled`
+  - Default value: `enabled`
+- `areas` (Attributes List) List of OSPF areas. (see [below for nested schema](#nestedatt--instances--vrfs--areas))
+- `bandwidth_reference` (Number) Bandwidth reference value.
+  - Range: `0`-`4294967295`
+  - Default value: `40000`
+- `bandwidth_reference_unit` (String) Bandwidth reference unit.
+  - Choices: `mbps`, `gbps`
+  - Default value: `mbps`
+- `control` (String) Controls. Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`. Can be an empty string. Allowed formats:
+  - Single value. Example: `bfd`
+  - Multiple values (comma-separated). Example: `bfd,default-passive`. In this case values must be in alphabetical order.
+- `distance` (Number) Administrative distance preference.
+  - Range: `1`-`255`
+  - Default value: `110`
+- `interfaces` (Attributes List) List of OSPF interfaces. (see [below for nested schema](#nestedatt--instances--vrfs--interfaces))
+- `log_adjacency_changes` (String) Log level for adjacency changes.
+  - Choices: `none`, `brief`, `detail`
+  - Default value: `none`
+- `max_metric_control` (String) Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:
+  - Single value. Example: `stub`
+  - Multiple values (comma-separated). Example: `stub,summary-lsa`. In this case values must be in alphabetical order.
+- `max_metric_external_lsa` (Number) Maximum metric value for external LSAs.
+  - Range: `1`-`16777215`
+- `max_metric_startup_interval` (Number) Time (in secs) for which max metric should be advertised at startup.
+  - Range: `0`-`4294967295`
+- `max_metric_summary_lsa` (Number) Maximum metric value for summary LSAs.
+  - Range: `1`-`16777215`
+- `router_id` (String) Router ID.
+  - Default value: `0.0.0.0`
+
+<a id="nestedatt--instances--vrfs--areas"></a>
+### Nested Schema for `instances.vrfs.areas`
+
+Required:
+
+- `area_id` (String) Area identifier to which a network or interface belongs in IPv4 address format.
+  - Default value: `0.0.0.0`
+
+Optional:
+
+- `authentication_type` (String) Authentication type.
+  - Choices: `none`, `simple`, `md5`, `unspecified`
+  - Default value: `unspecified`
+- `cost` (Number) Area cost, specifies cost for default summary LSAs. Used with nssa/stub area types.
+  - Range: `0`-`16777215`
+  - Default value: `1`
+- `type` (String) Area type.
+  - Choices: `regular`, `stub`, `nssa`
+  - Default value: `regular`
+
+
+<a id="nestedatt--instances--vrfs--interfaces"></a>
+### Nested Schema for `instances.vrfs.interfaces`
+
+Required:
+
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+
+Optional:
+
+- `advertise_secondaries` (Boolean) Advertise secondary IP addresses.
+  - Default value: `true`
+- `area` (String) Area identifier to which a network or interface belongs in IPv4 address format.
+  - Default value: `0.0.0.0`
+- `authentication_key` (String) Key used for authentication.
+- `authentication_key_id` (Number) Key ID used for authentication.
+  - Range: `0`-`255`
+  - Default value: `0`
+- `authentication_key_secure_mode` (Boolean) Encrypted authentication key or plain text key.
+  - Default value: `false`
+- `authentication_keychain` (String) Authentication keychain.
+- `authentication_md5_key` (String) Key used for md5 authentication.
+- `authentication_md5_key_secure_mode` (Boolean) Encrypted authentication md5 key or plain text key.
+  - Default value: `false`
+- `authentication_type` (String) Authentication type.
+  - Choices: `none`, `simple`, `md5`, `unspecified`
+  - Default value: `unspecified`
+- `bfd` (String) Bidirectional Forwarding Detection (BFD).
+  - Choices: `unspecified`, `enabled`, `disabled`
+  - Default value: `unspecified`
+- `cost` (Number) Specifies the cost of interface.
+  - Range: `0`-`65535`
+  - Default value: `0`
+- `dead_interval` (Number) Dead interval, interval after which router declares that neighbor as down.
+  - Range: `0`-`65535`
+  - Default value: `0`
+- `hello_interval` (Number) Hello interval, interval between hello packets that OSPF sends on the interface.
+  - Range: `0`-`65535`
+  - Default value: `10`
+- `network_type` (String) Network type.
+  - Choices: `unspecified`, `p2p`, `bcast`
+  - Default value: `unspecified`
+- `passive` (String) Passive interface control. Interface can be configured as passive or non-passive.
+  - Choices: `unspecified`, `enabled`, `disabled`
+  - Default value: `unspecified`
+- `priority` (Number) Priority, used in determining the designated router on this network.
+  - Range: `0`-`255`
+  - Default value: `1`
 
 ## Import
 

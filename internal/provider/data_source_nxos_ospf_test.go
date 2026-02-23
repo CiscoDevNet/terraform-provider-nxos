@@ -32,6 +32,51 @@ import (
 func TestAccDataSourceNxosOSPF(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospf.test", "instances.*", map[string]string{
+		"name":        "OSPF1",
+		"admin_state": "enabled",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospf.test", "instances.*.vrfs.*", map[string]string{
+		"name":                     "VRF1",
+		"log_adjacency_changes":    "brief",
+		"admin_state":              "enabled",
+		"bandwidth_reference":      "400000",
+		"bandwidth_reference_unit": "mbps",
+		"distance":                 "110",
+		"router_id":                "34.56.78.90",
+		"control":                  "bfd,default-passive",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospf.test", "instances.*.vrfs.*.areas.*", map[string]string{
+		"area_id":             "0.0.0.10",
+		"authentication_type": "none",
+		"cost":                "10",
+		"type":                "stub",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospf.test", "instances.*.vrfs.*", map[string]string{
+		"max_metric_control":          "external-lsa,startup,stub,summary-lsa",
+		"max_metric_external_lsa":     "600",
+		"max_metric_summary_lsa":      "600",
+		"max_metric_startup_interval": "300",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospf.test", "instances.*.vrfs.*.interfaces.*", map[string]string{
+		"interface_id":          "eth1/10",
+		"advertise_secondaries": "false",
+		"area":                  "0.0.0.10",
+		"bfd":                   "disabled",
+		"cost":                  "1000",
+		"dead_interval":         "60",
+		"hello_interval":        "15",
+		"network_type":          "p2p",
+		"passive":               "enabled",
+		"priority":              "10",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospf.test", "instances.*.vrfs.*.interfaces.*", map[string]string{
+		"authentication_key_id":              "1",
+		"authentication_key_secure_mode":     "false",
+		"authentication_keychain":            "mykeychain",
+		"authentication_md5_key_secure_mode": "false",
+		"authentication_type":                "none",
+	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -57,6 +102,34 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/fm/bfd"
+  class_name = "fmBfd"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+resource "nxos_rest" "PreReq2" {
+  dn = "sys/intf/phys-[eth1/10]"
+  class_name = "l1PhysIf"
+  content = {
+      layer = "Layer3"
+  }
+  depends_on = [nxos_rest.PreReq1, ]
+}
+
+resource "nxos_rest" "PreReq3" {
+  dn = "sys/intf/phys-[eth1/10]/rtvrfMbr"
+  class_name = "nwRtVrfMbr"
+  content = {
+      tDn = "sys/inst-VRF1"
+  }
+  depends_on = [nxos_rest.PreReq2, ]
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -65,7 +138,50 @@ resource "nxos_rest" "PreReq0" {
 func testAccDataSourceNxosOSPFConfig() string {
 	config := `resource "nxos_ospf" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	instances = [{` + "\n"
+	config += `		name = "OSPF1"` + "\n"
+	config += `		admin_state = "enabled"` + "\n"
+	config += `		vrfs = [{` + "\n"
+	config += `			name = "VRF1"` + "\n"
+	config += `			log_adjacency_changes = "brief"` + "\n"
+	config += `			admin_state = "enabled"` + "\n"
+	config += `			bandwidth_reference = 400000` + "\n"
+	config += `			bandwidth_reference_unit = "mbps"` + "\n"
+	config += `			distance = 110` + "\n"
+	config += `			router_id = "34.56.78.90"` + "\n"
+	config += `			control = "bfd,default-passive"` + "\n"
+	config += `			areas = [{` + "\n"
+	config += `				area_id = "0.0.0.10"` + "\n"
+	config += `				authentication_type = "none"` + "\n"
+	config += `				cost = 10` + "\n"
+	config += `				type = "stub"` + "\n"
+	config += `			}]` + "\n"
+	config += `			max_metric_control = "external-lsa,startup,stub,summary-lsa"` + "\n"
+	config += `			max_metric_external_lsa = 600` + "\n"
+	config += `			max_metric_summary_lsa = 600` + "\n"
+	config += `			max_metric_startup_interval = 300` + "\n"
+	config += `			interfaces = [{` + "\n"
+	config += `				interface_id = "eth1/10"` + "\n"
+	config += `				advertise_secondaries = false` + "\n"
+	config += `				area = "0.0.0.10"` + "\n"
+	config += `				bfd = "disabled"` + "\n"
+	config += `				cost = 1000` + "\n"
+	config += `				dead_interval = 60` + "\n"
+	config += `				hello_interval = 15` + "\n"
+	config += `				network_type = "p2p"` + "\n"
+	config += `				passive = "enabled"` + "\n"
+	config += `				priority = 10` + "\n"
+	config += `				authentication_key = "0 mykey"` + "\n"
+	config += `				authentication_key_id = 1` + "\n"
+	config += `				authentication_key_secure_mode = false` + "\n"
+	config += `				authentication_keychain = "mykeychain"` + "\n"
+	config += `				authentication_md5_key = "0 mymd5key"` + "\n"
+	config += `				authentication_md5_key_secure_mode = false` + "\n"
+	config += `				authentication_type = "none"` + "\n"
+	config += `			}]` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

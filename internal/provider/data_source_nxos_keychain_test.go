@@ -35,7 +35,7 @@ func TestAccDataSourceNxosKeychain(t *testing.T) {
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_keychain.test", "keychains.*", map[string]string{
 		"name": "KEYCHAIN1",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_keychain.test", "keychains.0.keys.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_keychain.test", "keychains.*.keys.*", map[string]string{
 		"key_id": "1",
 	}))
 	resource.Test(t, resource.TestCase{

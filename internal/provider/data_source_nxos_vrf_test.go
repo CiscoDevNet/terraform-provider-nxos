@@ -38,13 +38,13 @@ func TestAccDataSourceNxosVRF(t *testing.T) {
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_vrf.test", "address_families.*", map[string]string{
 		"address_family": "ipv4-ucast",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_vrf.test", "address_families.0.route_target_address_families.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_vrf.test", "address_families.*.route_target_address_families.*", map[string]string{
 		"route_target_address_family": "ipv4-ucast",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_vrf.test", "address_families.0.route_target_address_families.0.route_target_directions.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_vrf.test", "address_families.*.route_target_address_families.*.route_target_directions.*", map[string]string{
 		"direction": "import",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_vrf.test", "address_families.0.route_target_address_families.0.route_target_directions.0.route_targets.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_vrf.test", "address_families.*.route_target_address_families.*.route_target_directions.*.route_targets.*", map[string]string{
 		"route_target": "route-target:as2-nn2:2:2",
 	}))
 	resource.Test(t, resource.TestCase{

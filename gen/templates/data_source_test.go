@@ -31,17 +31,35 @@ import (
 
 {{- /* ==================== dsTestChecksTemplate ====================
        Recursively emits test check calls for data source TfChildClasses.
-       Context: map with "Name" (string), "Children" ([]TfChildClass), "PathPrefix" (string)
-       - single: emit TestCheckResourceAttr for each attr, recurse
-       - list: emit TestCheckTypeSetElemNestedAttrs with map of attrs; for nested children
-               use TestCheckResourceAttr with explicit index "0" to build correct path
+       Context: map with "Name" (string), "Children" ([]TfChildClass), "PathPrefix" (string),
+                "InList" (bool) - true when PathPrefix already contains a ".*." segment,
+                "SetPath" (string) - the "list.*" path of the nearest enclosing list (used
+                                     when InList=true to emit single-child attrs into the
+                                     parent TestCheckTypeSetElemNestedAttrs).
+       - single (not in list): emit TestCheckResourceAttr for each attr, recurse
+       - single (in list):     emit TestCheckTypeSetElemNestedAttrs on SetPath with attrs as map
+       - list:                 emit TestCheckTypeSetElemNestedAttrs; recurse with InList=true
        ========================================================= */}}
 {{- define "dsTestChecksTemplate"}}
 {{- $name := .Name}}
 {{- $pathPrefix := .PathPrefix}}
+{{- $inList := .InList}}
+{{- $setPath := .SetPath}}
 {{- range .Children}}
 {{- $list := .TfName}}
 {{- if eq .Type "single"}}
+{{- if $inList}}
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_{{snakeCase $name}}.test", "{{$setPath}}", map[string]string{
+		{{- range .Attributes}}
+		{{- if and (not .ExcludeTest) (not .WriteOnly)}}
+		"{{.TfName}}": "{{.Example}}",
+		{{- end}}
+		{{- end}}
+	}))
+{{- if .TfChildClasses}}
+{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" $pathPrefix "InList" true "SetPath" $setPath)}}
+{{- end}}
+{{- else}}
 {{- range .Attributes}}
 {{- if not .ExcludeTest}}
 {{- if len .TestTags}}
@@ -54,10 +72,12 @@ import (
 {{- end}}
 {{- end}}
 {{- if .TfChildClasses}}
-{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" $pathPrefix)}}
+{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" $pathPrefix "InList" false "SetPath" "")}}
+{{- end}}
 {{- end}}
 {{- else if eq .Type "list"}}
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_{{snakeCase $name}}.test", "{{$pathPrefix}}{{$list}}.*", map[string]string{
+{{- $newSetPath := printf "%s%s.*" $pathPrefix $list}}
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_{{snakeCase $name}}.test", "{{$newSetPath}}", map[string]string{
 		{{- range .Attributes}}
 		{{- if and (not .ExcludeTest) (not .WriteOnly)}}
 		"{{.TfName}}": "{{.Example}}",
@@ -65,7 +85,7 @@ import (
 		{{- end}}
 	}))
 {{- if .TfChildClasses}}
-{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" (printf "%s%s.0." $pathPrefix $list))}}
+{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" (printf "%s%s.*." $pathPrefix $list) "InList" true "SetPath" $newSetPath)}}
 {{- end}}
 {{- end}}
 {{- end}}
@@ -92,7 +112,7 @@ func TestAccDataSourceNxos{{camelCase .Name}}(t *testing.T) {
 	{{- end}}
 	{{- end}}
 	{{- end}}
-	{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" "")}}
+	{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" "" "InList" false "SetPath" "")}}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,

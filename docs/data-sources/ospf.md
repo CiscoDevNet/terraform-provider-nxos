@@ -3,15 +3,26 @@
 page_title: "nxos_ospf Data Source - terraform-provider-nxos"
 subcategory: "OSPF"
 description: |-
-  This data source can read the global OSPF configuration.
+  This data source can read the OSPF configuration.
   API Documentation: ospfEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:Entity/
+  Additional API Documentation
+  ospfInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:Inst/ospfDom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:Dom/ospfArea https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:Area/ospfMaxMetricLsaP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:maxmetriclsap/ospfIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:If/ospfAuthNewP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:AuthNewP/
 ---
 
 # nxos_ospf (Data Source)
 
-This data source can read the global OSPF configuration.
+This data source can read the OSPF configuration.
 
 - API Documentation: [ospfEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:Entity/)
+
+### Additional API Documentation
+
+- [ospfInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:Inst/)
+- [ospfDom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:Dom/)
+- [ospfArea](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:Area/)
+- [ospfMaxMetricLsaP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:maxmetriclsap/)
+- [ospfIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:If/)
+- [ospfAuthNewP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospf:AuthNewP/)
 
 ## Example Usage
 
@@ -31,3 +42,71 @@ data "nxos_ospf" "example" {
 
 - `admin_state` (String) Administrative state.
 - `id` (String) The distinguished name of the object.
+- `instances` (Attributes List) List of OSPF instances. (see [below for nested schema](#nestedatt--instances))
+
+<a id="nestedatt--instances"></a>
+### Nested Schema for `instances`
+
+Read-Only:
+
+- `admin_state` (String) Administrative state.
+- `name` (String) OSPF instance name.
+- `vrfs` (Attributes List) List of OSPF VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
+
+<a id="nestedatt--instances--vrfs"></a>
+### Nested Schema for `instances.vrfs`
+
+Read-Only:
+
+- `admin_state` (String) Administrative state.
+- `areas` (Attributes List) List of OSPF areas. (see [below for nested schema](#nestedatt--instances--vrfs--areas))
+- `bandwidth_reference` (Number) Bandwidth reference value.
+- `bandwidth_reference_unit` (String) Bandwidth reference unit.
+- `control` (String) Controls. Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`. Can be an empty string. Allowed formats:
+  - Single value. Example: `bfd`
+  - Multiple values (comma-separated). Example: `bfd,default-passive`. In this case values must be in alphabetical order.
+- `distance` (Number) Administrative distance preference.
+- `interfaces` (Attributes List) List of OSPF interfaces. (see [below for nested schema](#nestedatt--instances--vrfs--interfaces))
+- `log_adjacency_changes` (String) Log level for adjacency changes.
+- `max_metric_control` (String) Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:
+  - Single value. Example: `stub`
+  - Multiple values (comma-separated). Example: `stub,summary-lsa`. In this case values must be in alphabetical order.
+- `max_metric_external_lsa` (Number) Maximum metric value for external LSAs.
+- `max_metric_startup_interval` (Number) Time (in secs) for which max metric should be advertised at startup.
+- `max_metric_summary_lsa` (Number) Maximum metric value for summary LSAs.
+- `name` (String) VRF name.
+- `router_id` (String) Router ID.
+
+<a id="nestedatt--instances--vrfs--areas"></a>
+### Nested Schema for `instances.vrfs.areas`
+
+Read-Only:
+
+- `area_id` (String) Area identifier to which a network or interface belongs in IPv4 address format.
+- `authentication_type` (String) Authentication type.
+- `cost` (Number) Area cost, specifies cost for default summary LSAs. Used with nssa/stub area types.
+- `type` (String) Area type.
+
+
+<a id="nestedatt--instances--vrfs--interfaces"></a>
+### Nested Schema for `instances.vrfs.interfaces`
+
+Read-Only:
+
+- `advertise_secondaries` (Boolean) Advertise secondary IP addresses.
+- `area` (String) Area identifier to which a network or interface belongs in IPv4 address format.
+- `authentication_key` (String) Key used for authentication.
+- `authentication_key_id` (Number) Key ID used for authentication.
+- `authentication_key_secure_mode` (Boolean) Encrypted authentication key or plain text key.
+- `authentication_keychain` (String) Authentication keychain.
+- `authentication_md5_key` (String) Key used for md5 authentication.
+- `authentication_md5_key_secure_mode` (Boolean) Encrypted authentication md5 key or plain text key.
+- `authentication_type` (String) Authentication type.
+- `bfd` (String) Bidirectional Forwarding Detection (BFD).
+- `cost` (Number) Specifies the cost of interface.
+- `dead_interval` (Number) Dead interval, interval after which router declares that neighbor as down.
+- `hello_interval` (Number) Hello interval, interval between hello packets that OSPF sends on the interface.
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `network_type` (String) Network type.
+- `passive` (String) Passive interface control. Interface can be configured as passive or non-passive.
+- `priority` (Number) Priority, used in determining the designated router on this network.

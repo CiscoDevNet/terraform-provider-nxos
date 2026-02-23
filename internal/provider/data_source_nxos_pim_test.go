@@ -38,7 +38,7 @@ func TestAccDataSourceNxosPIM(t *testing.T) {
 		"admin_state": "enabled",
 		"bfd":         "true",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_pim.test", "vrfs.0.interfaces.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_pim.test", "vrfs.*.interfaces.*", map[string]string{
 		"interface_id": "eth1/10",
 		"admin_state":  "enabled",
 		"bfd":          "enabled",
@@ -46,26 +46,34 @@ func TestAccDataSourceNxosPIM(t *testing.T) {
 		"passive":      "false",
 		"sparse_mode":  "true",
 	}))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.0.ssm_policy_name", "SSM"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.0.ssm_range_group_list_1", "232.0.0.0/8"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.0.ssm_range_group_list_2", "233.0.0.0/8"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.0.ssm_range_group_list_3", "0.0.0.0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.0.ssm_range_group_list_4", "0.0.0.0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.0.ssm_range_prefix_list", ""))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.0.ssm_range_route_map", ""))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.0.ssm_range_none", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.0.static_rp_policy_name", "RP"))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_pim.test", "vrfs.0.static_rps.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_pim.test", "vrfs.*", map[string]string{
+		"ssm_policy_name": "SSM",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_pim.test", "vrfs.*", map[string]string{
+		"ssm_range_group_list_1": "232.0.0.0/8",
+		"ssm_range_group_list_2": "233.0.0.0/8",
+		"ssm_range_group_list_3": "0.0.0.0",
+		"ssm_range_group_list_4": "0.0.0.0",
+		"ssm_range_prefix_list":  "",
+		"ssm_range_route_map":    "",
+		"ssm_range_none":         "false",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_pim.test", "vrfs.*", map[string]string{
+		"static_rp_policy_name": "RP",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_pim.test", "vrfs.*.static_rps.*", map[string]string{
 		"address": "1.2.3.4",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_pim.test", "vrfs.0.static_rps.0.group_lists.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_pim.test", "vrfs.*.static_rps.*.group_lists.*", map[string]string{
 		"address":  "224.0.0.0/4",
 		"bidir":    "true",
 		"override": "true",
 	}))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.0.anycast_rp_local_interface", "eth1/10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_pim.test", "vrfs.0.anycast_rp_source_interface", "eth1/10"))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_pim.test", "vrfs.0.anycast_rp_peers.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_pim.test", "vrfs.*", map[string]string{
+		"anycast_rp_local_interface":  "eth1/10",
+		"anycast_rp_source_interface": "eth1/10",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_pim.test", "vrfs.*.anycast_rp_peers.*", map[string]string{
 		"address":        "10.1.1.1/32",
 		"rp_set_address": "20.1.1.1/32",
 	}))

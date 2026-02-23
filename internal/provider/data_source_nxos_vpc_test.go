@@ -70,7 +70,9 @@ func TestAccDataSourceNxosVPC(t *testing.T) {
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_vpc.test", "interfaces.*", map[string]string{
 		"vpc_interface_id": "1",
 	}))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "interfaces.0.port_channel_interface_dn", "sys/intf/aggr-[po1]"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_vpc.test", "interfaces.*", map[string]string{
+		"port_channel_interface_dn": "sys/intf/aggr-[po1]",
+	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,

@@ -23,7 +23,10 @@ package provider
 
 import (
 	"context"
+	"fmt"
+	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -35,9 +38,60 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type OSPF struct {
-	Device     types.String `tfsdk:"device"`
-	Dn         types.String `tfsdk:"id"`
+	Device     types.String    `tfsdk:"device"`
+	Dn         types.String    `tfsdk:"id"`
+	AdminState types.String    `tfsdk:"admin_state"`
+	Instances  []OSPFInstances `tfsdk:"instances"`
+}
+
+type OSPFInstances struct {
+	Name       types.String `tfsdk:"name"`
 	AdminState types.String `tfsdk:"admin_state"`
+	Vrfs       []OSPFVrfs   `tfsdk:"vrfs"`
+}
+
+type OSPFVrfs struct {
+	Name                     types.String     `tfsdk:"name"`
+	LogAdjacencyChanges      types.String     `tfsdk:"log_adjacency_changes"`
+	AdminState               types.String     `tfsdk:"admin_state"`
+	BandwidthReference       types.Int64      `tfsdk:"bandwidth_reference"`
+	BandwidthReferenceUnit   types.String     `tfsdk:"bandwidth_reference_unit"`
+	Distance                 types.Int64      `tfsdk:"distance"`
+	RouterId                 types.String     `tfsdk:"router_id"`
+	Control                  types.String     `tfsdk:"control"`
+	Areas                    []OSPFAreas      `tfsdk:"areas"`
+	MaxMetricControl         types.String     `tfsdk:"max_metric_control"`
+	MaxMetricExternalLsa     types.Int64      `tfsdk:"max_metric_external_lsa"`
+	MaxMetricSummaryLsa      types.Int64      `tfsdk:"max_metric_summary_lsa"`
+	MaxMetricStartupInterval types.Int64      `tfsdk:"max_metric_startup_interval"`
+	Interfaces               []OSPFInterfaces `tfsdk:"interfaces"`
+}
+
+type OSPFAreas struct {
+	AreaId             types.String `tfsdk:"area_id"`
+	AuthenticationType types.String `tfsdk:"authentication_type"`
+	Cost               types.Int64  `tfsdk:"cost"`
+	Type               types.String `tfsdk:"type"`
+}
+
+type OSPFInterfaces struct {
+	InterfaceId                    types.String `tfsdk:"interface_id"`
+	AdvertiseSecondaries           types.Bool   `tfsdk:"advertise_secondaries"`
+	Area                           types.String `tfsdk:"area"`
+	Bfd                            types.String `tfsdk:"bfd"`
+	Cost                           types.Int64  `tfsdk:"cost"`
+	DeadInterval                   types.Int64  `tfsdk:"dead_interval"`
+	HelloInterval                  types.Int64  `tfsdk:"hello_interval"`
+	NetworkType                    types.String `tfsdk:"network_type"`
+	Passive                        types.String `tfsdk:"passive"`
+	Priority                       types.Int64  `tfsdk:"priority"`
+	AuthenticationKey              types.String `tfsdk:"authentication_key"`
+	AuthenticationKeyId            types.Int64  `tfsdk:"authentication_key_id"`
+	AuthenticationKeySecureMode    types.Bool   `tfsdk:"authentication_key_secure_mode"`
+	AuthenticationKeychain         types.String `tfsdk:"authentication_keychain"`
+	AuthenticationMd5Key           types.String `tfsdk:"authentication_md5_key"`
+	AuthenticationMd5KeySecureMode types.Bool   `tfsdk:"authentication_md5_key_secure_mode"`
+	AuthenticationType             types.String `tfsdk:"authentication_type"`
 }
 
 type OSPFIdentity struct {
@@ -68,6 +122,22 @@ func (data OSPF) getDn() string {
 	return "sys/ospf"
 }
 
+func (data OSPFInstances) getRn() string {
+	return fmt.Sprintf("inst-%s", data.Name.ValueString())
+}
+
+func (data OSPFVrfs) getRn() string {
+	return fmt.Sprintf("dom-%s", data.Name.ValueString())
+}
+
+func (data OSPFAreas) getRn() string {
+	return fmt.Sprintf("area-%s", data.AreaId.ValueString())
+}
+
+func (data OSPFInterfaces) getRn() string {
+	return fmt.Sprintf("if-[%s]", data.InterfaceId.ValueString())
+}
+
 func (data OSPF) getClassName() string {
 	return "ospfEntity"
 }
@@ -82,6 +152,149 @@ func (data OSPF) toBody() nxos.Body {
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
+	var attrs string
+	childrenPath := data.getClassName() + ".children"
+	for _, child := range data.Instances {
+		attrs = "{}"
+		if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
+		}
+		if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.ospfInst.attributes", attrs)
+		{
+			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
+			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".ospfInst.children"
+			for _, child := range child.Vrfs {
+				attrs = "{}"
+				if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
+				}
+				if (!child.LogAdjacencyChanges.IsUnknown() && !child.LogAdjacencyChanges.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "adjChangeLogLevel", child.LogAdjacencyChanges.ValueString())
+				}
+				if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
+				}
+				if (!child.BandwidthReference.IsUnknown() && !child.BandwidthReference.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "bwRef", strconv.FormatInt(child.BandwidthReference.ValueInt64(), 10))
+				}
+				if (!child.BandwidthReferenceUnit.IsUnknown() && !child.BandwidthReferenceUnit.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "bwRefUnit", child.BandwidthReferenceUnit.ValueString())
+				}
+				if (!child.Distance.IsUnknown() && !child.Distance.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "dist", strconv.FormatInt(child.Distance.ValueInt64(), 10))
+				}
+				if (!child.RouterId.IsUnknown() && !child.RouterId.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "rtrId", child.RouterId.ValueString())
+				}
+				if (!child.Control.IsUnknown() && !child.Control.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ospfDom.attributes", attrs)
+				{
+					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ospfDom.children"
+					for _, child := range child.Areas {
+						attrs = "{}"
+						if (!child.AreaId.IsUnknown() && !child.AreaId.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "id", child.AreaId.ValueString())
+						}
+						if (!child.AuthenticationType.IsUnknown() && !child.AuthenticationType.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "authType", child.AuthenticationType.ValueString())
+						}
+						if (!child.Cost.IsUnknown() && !child.Cost.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "cost", strconv.FormatInt(child.Cost.ValueInt64(), 10))
+						}
+						if (!child.Type.IsUnknown() && !child.Type.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "type", child.Type.ValueString())
+						}
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ospfArea.attributes", attrs)
+					}
+					attrs = "{}"
+					if (!child.MaxMetricControl.IsUnknown() && !child.MaxMetricControl.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "ctrl", child.MaxMetricControl.ValueString())
+					}
+					if (!child.MaxMetricExternalLsa.IsUnknown() && !child.MaxMetricExternalLsa.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "maxMetricExtLsa", strconv.FormatInt(child.MaxMetricExternalLsa.ValueInt64(), 10))
+					}
+					if (!child.MaxMetricSummaryLsa.IsUnknown() && !child.MaxMetricSummaryLsa.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "maxMetricSummLsa", strconv.FormatInt(child.MaxMetricSummaryLsa.ValueInt64(), 10))
+					}
+					if (!child.MaxMetricStartupInterval.IsUnknown() && !child.MaxMetricStartupInterval.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "startupIntvl", strconv.FormatInt(child.MaxMetricStartupInterval.ValueInt64(), 10))
+					}
+					if attrs != "{}" || false {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ospfMaxMetricLsaP.attributes", attrs)
+					}
+					for _, child := range child.Interfaces {
+						attrs = "{}"
+						if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "id", child.InterfaceId.ValueString())
+						}
+						if (!child.AdvertiseSecondaries.IsUnknown() && !child.AdvertiseSecondaries.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "advertiseSecondaries", strconv.FormatBool(child.AdvertiseSecondaries.ValueBool()))
+						}
+						if (!child.Area.IsUnknown() && !child.Area.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "area", child.Area.ValueString())
+						}
+						if (!child.Bfd.IsUnknown() && !child.Bfd.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "bfdCtrl", child.Bfd.ValueString())
+						}
+						if (!child.Cost.IsUnknown() && !child.Cost.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "cost", strconv.FormatInt(child.Cost.ValueInt64(), 10))
+						}
+						if (!child.DeadInterval.IsUnknown() && !child.DeadInterval.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "deadIntvl", strconv.FormatInt(child.DeadInterval.ValueInt64(), 10))
+						}
+						if (!child.HelloInterval.IsUnknown() && !child.HelloInterval.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "helloIntvl", strconv.FormatInt(child.HelloInterval.ValueInt64(), 10))
+						}
+						if (!child.NetworkType.IsUnknown() && !child.NetworkType.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "nwT", child.NetworkType.ValueString())
+						}
+						if (!child.Passive.IsUnknown() && !child.Passive.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "passiveCtrl", child.Passive.ValueString())
+						}
+						if (!child.Priority.IsUnknown() && !child.Priority.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "prio", strconv.FormatInt(child.Priority.ValueInt64(), 10))
+						}
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ospfIf.attributes", attrs)
+						{
+							nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+							nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ospfIf.children"
+							attrs = "{}"
+							if (!child.AuthenticationKey.IsUnknown() && !child.AuthenticationKey.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "key", child.AuthenticationKey.ValueString())
+							}
+							if (!child.AuthenticationKeyId.IsUnknown() && !child.AuthenticationKeyId.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "keyId", strconv.FormatInt(child.AuthenticationKeyId.ValueInt64(), 10))
+							}
+							if (!child.AuthenticationKeySecureMode.IsUnknown() && !child.AuthenticationKeySecureMode.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "keySecureMode", strconv.FormatBool(child.AuthenticationKeySecureMode.ValueBool()))
+							}
+							if (!child.AuthenticationKeychain.IsUnknown() && !child.AuthenticationKeychain.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "keychain", child.AuthenticationKeychain.ValueString())
+							}
+							if (!child.AuthenticationMd5Key.IsUnknown() && !child.AuthenticationMd5Key.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "md5key", child.AuthenticationMd5Key.ValueString())
+							}
+							if (!child.AuthenticationMd5KeySecureMode.IsUnknown() && !child.AuthenticationMd5KeySecureMode.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "md5keySecureMode", strconv.FormatBool(child.AuthenticationMd5KeySecureMode.ValueBool()))
+							}
+							if (!child.AuthenticationType.IsUnknown() && !child.AuthenticationType.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "type", child.AuthenticationType.ValueString())
+							}
+							if attrs != "{}" || false {
+								body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ospfAuthNewP.attributes", attrs)
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
 	return nxos.Body{body}
 }
@@ -92,6 +305,121 @@ func (data OSPF) toBody() nxos.Body {
 
 func (data *OSPF) fromBody(res gjson.Result) {
 	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "ospfInst" {
+						var child OSPFInstances
+						child.Name = types.StringValue(value.Get("attributes.name").String())
+						child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
+						value.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "ospfDom" {
+											var nestedChildospfDom OSPFVrfs
+											nestedChildospfDom.Name = types.StringValue(nestedValue.Get("attributes.name").String())
+											nestedChildospfDom.LogAdjacencyChanges = types.StringValue(nestedValue.Get("attributes.adjChangeLogLevel").String())
+											nestedChildospfDom.AdminState = types.StringValue(nestedValue.Get("attributes.adminSt").String())
+											nestedChildospfDom.BandwidthReference = types.Int64Value(nestedValue.Get("attributes.bwRef").Int())
+											nestedChildospfDom.BandwidthReferenceUnit = types.StringValue(nestedValue.Get("attributes.bwRefUnit").String())
+											nestedChildospfDom.Distance = types.Int64Value(nestedValue.Get("attributes.dist").Int())
+											nestedChildospfDom.RouterId = types.StringValue(nestedValue.Get("attributes.rtrId").String())
+											nestedChildospfDom.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
+											nestedValue.Get("children").ForEach(
+												func(_, nestedV gjson.Result) bool {
+													nestedV.ForEach(
+														func(nestedClassname, nestedValue gjson.Result) bool {
+															if nestedClassname.String() == "ospfArea" {
+																var nestedChildospfArea OSPFAreas
+																nestedChildospfArea.AreaId = types.StringValue(nestedValue.Get("attributes.id").String())
+																nestedChildospfArea.AuthenticationType = types.StringValue(nestedValue.Get("attributes.authType").String())
+																nestedChildospfArea.Cost = types.Int64Value(nestedValue.Get("attributes.cost").Int())
+																nestedChildospfArea.Type = types.StringValue(nestedValue.Get("attributes.type").String())
+																nestedChildospfDom.Areas = append(nestedChildospfDom.Areas, nestedChildospfArea)
+															}
+															return true
+														},
+													)
+													return true
+												},
+											)
+											{
+												var rospfMaxMetricLsaP gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														key := nestedV.Get("ospfMaxMetricLsaP.attributes.rn").String()
+														if key == "maxmetriclsap" {
+															rospfMaxMetricLsaP = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildospfDom.MaxMetricControl = types.StringValue(rospfMaxMetricLsaP.Get("ospfMaxMetricLsaP.attributes.ctrl").String())
+												nestedChildospfDom.MaxMetricExternalLsa = types.Int64Value(rospfMaxMetricLsaP.Get("ospfMaxMetricLsaP.attributes.maxMetricExtLsa").Int())
+												nestedChildospfDom.MaxMetricSummaryLsa = types.Int64Value(rospfMaxMetricLsaP.Get("ospfMaxMetricLsaP.attributes.maxMetricSummLsa").Int())
+												nestedChildospfDom.MaxMetricStartupInterval = types.Int64Value(rospfMaxMetricLsaP.Get("ospfMaxMetricLsaP.attributes.startupIntvl").Int())
+											}
+											nestedValue.Get("children").ForEach(
+												func(_, nestedV gjson.Result) bool {
+													nestedV.ForEach(
+														func(nestedClassname, nestedValue gjson.Result) bool {
+															if nestedClassname.String() == "ospfIf" {
+																var nestedChildospfIf OSPFInterfaces
+																nestedChildospfIf.InterfaceId = types.StringValue(nestedValue.Get("attributes.id").String())
+																nestedChildospfIf.AdvertiseSecondaries = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.advertiseSecondaries").String()))
+																nestedChildospfIf.Area = types.StringValue(nestedValue.Get("attributes.area").String())
+																nestedChildospfIf.Bfd = types.StringValue(nestedValue.Get("attributes.bfdCtrl").String())
+																nestedChildospfIf.Cost = types.Int64Value(nestedValue.Get("attributes.cost").Int())
+																nestedChildospfIf.DeadInterval = types.Int64Value(nestedValue.Get("attributes.deadIntvl").Int())
+																nestedChildospfIf.HelloInterval = types.Int64Value(nestedValue.Get("attributes.helloIntvl").Int())
+																nestedChildospfIf.NetworkType = types.StringValue(nestedValue.Get("attributes.nwT").String())
+																nestedChildospfIf.Passive = types.StringValue(nestedValue.Get("attributes.passiveCtrl").String())
+																nestedChildospfIf.Priority = types.Int64Value(nestedValue.Get("attributes.prio").Int())
+																{
+																	var rospfAuthNewP gjson.Result
+																	nestedValue.Get("children").ForEach(
+																		func(_, nestedV gjson.Result) bool {
+																			key := nestedV.Get("ospfAuthNewP.attributes.rn").String()
+																			if key == "authnew" {
+																				rospfAuthNewP = nestedV
+																				return false
+																			}
+																			return true
+																		},
+																	)
+																	nestedChildospfIf.AuthenticationKeyId = types.Int64Value(rospfAuthNewP.Get("ospfAuthNewP.attributes.keyId").Int())
+																	nestedChildospfIf.AuthenticationKeySecureMode = types.BoolValue(helpers.ParseNxosBoolean(rospfAuthNewP.Get("ospfAuthNewP.attributes.keySecureMode").String()))
+																	nestedChildospfIf.AuthenticationKeychain = types.StringValue(rospfAuthNewP.Get("ospfAuthNewP.attributes.keychain").String())
+																	nestedChildospfIf.AuthenticationMd5KeySecureMode = types.BoolValue(helpers.ParseNxosBoolean(rospfAuthNewP.Get("ospfAuthNewP.attributes.md5keySecureMode").String()))
+																	nestedChildospfIf.AuthenticationType = types.StringValue(rospfAuthNewP.Get("ospfAuthNewP.attributes.type").String())
+																}
+																nestedChildospfDom.Interfaces = append(nestedChildospfDom.Interfaces, nestedChildospfIf)
+															}
+															return true
+														},
+													)
+													return true
+												},
+											)
+											child.Vrfs = append(child.Vrfs, nestedChildospfDom)
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
+						data.Instances = append(data.Instances, child)
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
 }
 
 // End of section. //template:end fromBody
@@ -103,6 +431,249 @@ func (data *OSPF) updateFromBody(res gjson.Result) {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
 		data.AdminState = types.StringNull()
+	}
+	for c := range data.Instances {
+		var rospfInst gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("ospfInst.attributes.rn").String()
+				if key == data.Instances[c].getRn() {
+					rospfInst = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.Instances[c].Name.IsNull() {
+			data.Instances[c].Name = types.StringValue(rospfInst.Get("ospfInst.attributes.name").String())
+		} else {
+			data.Instances[c].Name = types.StringNull()
+		}
+		if !data.Instances[c].AdminState.IsNull() {
+			data.Instances[c].AdminState = types.StringValue(rospfInst.Get("ospfInst.attributes.adminSt").String())
+		} else {
+			data.Instances[c].AdminState = types.StringNull()
+		}
+		for nc := range data.Instances[c].Vrfs {
+			var rospfDom gjson.Result
+			rospfInst.Get("ospfInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("ospfDom.attributes.rn").String()
+					if key == data.Instances[c].Vrfs[nc].getRn() {
+						rospfDom = v
+						return false
+					}
+					return true
+				},
+			)
+			if !data.Instances[c].Vrfs[nc].Name.IsNull() {
+				data.Instances[c].Vrfs[nc].Name = types.StringValue(rospfDom.Get("ospfDom.attributes.name").String())
+			} else {
+				data.Instances[c].Vrfs[nc].Name = types.StringNull()
+			}
+			if !data.Instances[c].Vrfs[nc].LogAdjacencyChanges.IsNull() {
+				data.Instances[c].Vrfs[nc].LogAdjacencyChanges = types.StringValue(rospfDom.Get("ospfDom.attributes.adjChangeLogLevel").String())
+			} else {
+				data.Instances[c].Vrfs[nc].LogAdjacencyChanges = types.StringNull()
+			}
+			if !data.Instances[c].Vrfs[nc].AdminState.IsNull() {
+				data.Instances[c].Vrfs[nc].AdminState = types.StringValue(rospfDom.Get("ospfDom.attributes.adminSt").String())
+			} else {
+				data.Instances[c].Vrfs[nc].AdminState = types.StringNull()
+			}
+			if !data.Instances[c].Vrfs[nc].BandwidthReference.IsNull() {
+				data.Instances[c].Vrfs[nc].BandwidthReference = types.Int64Value(rospfDom.Get("ospfDom.attributes.bwRef").Int())
+			} else {
+				data.Instances[c].Vrfs[nc].BandwidthReference = types.Int64Null()
+			}
+			if !data.Instances[c].Vrfs[nc].BandwidthReferenceUnit.IsNull() {
+				data.Instances[c].Vrfs[nc].BandwidthReferenceUnit = types.StringValue(rospfDom.Get("ospfDom.attributes.bwRefUnit").String())
+			} else {
+				data.Instances[c].Vrfs[nc].BandwidthReferenceUnit = types.StringNull()
+			}
+			if !data.Instances[c].Vrfs[nc].Distance.IsNull() {
+				data.Instances[c].Vrfs[nc].Distance = types.Int64Value(rospfDom.Get("ospfDom.attributes.dist").Int())
+			} else {
+				data.Instances[c].Vrfs[nc].Distance = types.Int64Null()
+			}
+			if !data.Instances[c].Vrfs[nc].RouterId.IsNull() {
+				data.Instances[c].Vrfs[nc].RouterId = types.StringValue(rospfDom.Get("ospfDom.attributes.rtrId").String())
+			} else {
+				data.Instances[c].Vrfs[nc].RouterId = types.StringNull()
+			}
+			if !data.Instances[c].Vrfs[nc].Control.IsNull() {
+				data.Instances[c].Vrfs[nc].Control = types.StringValue(rospfDom.Get("ospfDom.attributes.ctrl").String())
+			} else {
+				data.Instances[c].Vrfs[nc].Control = types.StringNull()
+			}
+			for nc_ := range data.Instances[c].Vrfs[nc].Areas {
+				var rospfArea gjson.Result
+				rospfDom.Get("ospfDom.children").ForEach(
+					func(_, v gjson.Result) bool {
+						key := v.Get("ospfArea.attributes.rn").String()
+						if key == data.Instances[c].Vrfs[nc].Areas[nc_].getRn() {
+							rospfArea = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.Instances[c].Vrfs[nc].Areas[nc_].AreaId.IsNull() {
+					data.Instances[c].Vrfs[nc].Areas[nc_].AreaId = types.StringValue(rospfArea.Get("ospfArea.attributes.id").String())
+				} else {
+					data.Instances[c].Vrfs[nc].Areas[nc_].AreaId = types.StringNull()
+				}
+				if !data.Instances[c].Vrfs[nc].Areas[nc_].AuthenticationType.IsNull() {
+					data.Instances[c].Vrfs[nc].Areas[nc_].AuthenticationType = types.StringValue(rospfArea.Get("ospfArea.attributes.authType").String())
+				} else {
+					data.Instances[c].Vrfs[nc].Areas[nc_].AuthenticationType = types.StringNull()
+				}
+				if !data.Instances[c].Vrfs[nc].Areas[nc_].Cost.IsNull() {
+					data.Instances[c].Vrfs[nc].Areas[nc_].Cost = types.Int64Value(rospfArea.Get("ospfArea.attributes.cost").Int())
+				} else {
+					data.Instances[c].Vrfs[nc].Areas[nc_].Cost = types.Int64Null()
+				}
+				if !data.Instances[c].Vrfs[nc].Areas[nc_].Type.IsNull() {
+					data.Instances[c].Vrfs[nc].Areas[nc_].Type = types.StringValue(rospfArea.Get("ospfArea.attributes.type").String())
+				} else {
+					data.Instances[c].Vrfs[nc].Areas[nc_].Type = types.StringNull()
+				}
+			}
+			{
+				var rospfMaxMetricLsaP gjson.Result
+				rospfDom.Get("ospfDom.children").ForEach(
+					func(_, v gjson.Result) bool {
+						key := v.Get("ospfMaxMetricLsaP.attributes.rn").String()
+						if key == "maxmetriclsap" {
+							rospfMaxMetricLsaP = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.Instances[c].Vrfs[nc].MaxMetricControl.IsNull() {
+					data.Instances[c].Vrfs[nc].MaxMetricControl = types.StringValue(rospfMaxMetricLsaP.Get("ospfMaxMetricLsaP.attributes.ctrl").String())
+				} else {
+					data.Instances[c].Vrfs[nc].MaxMetricControl = types.StringNull()
+				}
+				if !data.Instances[c].Vrfs[nc].MaxMetricExternalLsa.IsNull() {
+					data.Instances[c].Vrfs[nc].MaxMetricExternalLsa = types.Int64Value(rospfMaxMetricLsaP.Get("ospfMaxMetricLsaP.attributes.maxMetricExtLsa").Int())
+				} else {
+					data.Instances[c].Vrfs[nc].MaxMetricExternalLsa = types.Int64Null()
+				}
+				if !data.Instances[c].Vrfs[nc].MaxMetricSummaryLsa.IsNull() {
+					data.Instances[c].Vrfs[nc].MaxMetricSummaryLsa = types.Int64Value(rospfMaxMetricLsaP.Get("ospfMaxMetricLsaP.attributes.maxMetricSummLsa").Int())
+				} else {
+					data.Instances[c].Vrfs[nc].MaxMetricSummaryLsa = types.Int64Null()
+				}
+				if !data.Instances[c].Vrfs[nc].MaxMetricStartupInterval.IsNull() {
+					data.Instances[c].Vrfs[nc].MaxMetricStartupInterval = types.Int64Value(rospfMaxMetricLsaP.Get("ospfMaxMetricLsaP.attributes.startupIntvl").Int())
+				} else {
+					data.Instances[c].Vrfs[nc].MaxMetricStartupInterval = types.Int64Null()
+				}
+			}
+			for nc_ := range data.Instances[c].Vrfs[nc].Interfaces {
+				var rospfIf gjson.Result
+				rospfDom.Get("ospfDom.children").ForEach(
+					func(_, v gjson.Result) bool {
+						key := v.Get("ospfIf.attributes.rn").String()
+						if key == data.Instances[c].Vrfs[nc].Interfaces[nc_].getRn() {
+							rospfIf = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].InterfaceId.IsNull() {
+					data.Instances[c].Vrfs[nc].Interfaces[nc_].InterfaceId = types.StringValue(rospfIf.Get("ospfIf.attributes.id").String())
+				} else {
+					data.Instances[c].Vrfs[nc].Interfaces[nc_].InterfaceId = types.StringNull()
+				}
+				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].AdvertiseSecondaries.IsNull() {
+					data.Instances[c].Vrfs[nc].Interfaces[nc_].AdvertiseSecondaries = types.BoolValue(helpers.ParseNxosBoolean(rospfIf.Get("ospfIf.attributes.advertiseSecondaries").String()))
+				} else {
+					data.Instances[c].Vrfs[nc].Interfaces[nc_].AdvertiseSecondaries = types.BoolNull()
+				}
+				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].Area.IsNull() {
+					data.Instances[c].Vrfs[nc].Interfaces[nc_].Area = types.StringValue(rospfIf.Get("ospfIf.attributes.area").String())
+				} else {
+					data.Instances[c].Vrfs[nc].Interfaces[nc_].Area = types.StringNull()
+				}
+				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].Bfd.IsNull() {
+					data.Instances[c].Vrfs[nc].Interfaces[nc_].Bfd = types.StringValue(rospfIf.Get("ospfIf.attributes.bfdCtrl").String())
+				} else {
+					data.Instances[c].Vrfs[nc].Interfaces[nc_].Bfd = types.StringNull()
+				}
+				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].Cost.IsNull() {
+					data.Instances[c].Vrfs[nc].Interfaces[nc_].Cost = types.Int64Value(rospfIf.Get("ospfIf.attributes.cost").Int())
+				} else {
+					data.Instances[c].Vrfs[nc].Interfaces[nc_].Cost = types.Int64Null()
+				}
+				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].DeadInterval.IsNull() {
+					data.Instances[c].Vrfs[nc].Interfaces[nc_].DeadInterval = types.Int64Value(rospfIf.Get("ospfIf.attributes.deadIntvl").Int())
+				} else {
+					data.Instances[c].Vrfs[nc].Interfaces[nc_].DeadInterval = types.Int64Null()
+				}
+				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].HelloInterval.IsNull() {
+					data.Instances[c].Vrfs[nc].Interfaces[nc_].HelloInterval = types.Int64Value(rospfIf.Get("ospfIf.attributes.helloIntvl").Int())
+				} else {
+					data.Instances[c].Vrfs[nc].Interfaces[nc_].HelloInterval = types.Int64Null()
+				}
+				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].NetworkType.IsNull() {
+					data.Instances[c].Vrfs[nc].Interfaces[nc_].NetworkType = types.StringValue(rospfIf.Get("ospfIf.attributes.nwT").String())
+				} else {
+					data.Instances[c].Vrfs[nc].Interfaces[nc_].NetworkType = types.StringNull()
+				}
+				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].Passive.IsNull() {
+					data.Instances[c].Vrfs[nc].Interfaces[nc_].Passive = types.StringValue(rospfIf.Get("ospfIf.attributes.passiveCtrl").String())
+				} else {
+					data.Instances[c].Vrfs[nc].Interfaces[nc_].Passive = types.StringNull()
+				}
+				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].Priority.IsNull() {
+					data.Instances[c].Vrfs[nc].Interfaces[nc_].Priority = types.Int64Value(rospfIf.Get("ospfIf.attributes.prio").Int())
+				} else {
+					data.Instances[c].Vrfs[nc].Interfaces[nc_].Priority = types.Int64Null()
+				}
+				{
+					var rospfAuthNewP gjson.Result
+					rospfIf.Get("ospfIf.children").ForEach(
+						func(_, v gjson.Result) bool {
+							key := v.Get("ospfAuthNewP.attributes.rn").String()
+							if key == "authnew" {
+								rospfAuthNewP = v
+								return false
+							}
+							return true
+						},
+					)
+					if !data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationKeyId.IsNull() {
+						data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationKeyId = types.Int64Value(rospfAuthNewP.Get("ospfAuthNewP.attributes.keyId").Int())
+					} else {
+						data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationKeyId = types.Int64Null()
+					}
+					if !data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationKeySecureMode.IsNull() {
+						data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationKeySecureMode = types.BoolValue(helpers.ParseNxosBoolean(rospfAuthNewP.Get("ospfAuthNewP.attributes.keySecureMode").String()))
+					} else {
+						data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationKeySecureMode = types.BoolNull()
+					}
+					if !data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationKeychain.IsNull() {
+						data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationKeychain = types.StringValue(rospfAuthNewP.Get("ospfAuthNewP.attributes.keychain").String())
+					} else {
+						data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationKeychain = types.StringNull()
+					}
+					if !data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationMd5KeySecureMode.IsNull() {
+						data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationMd5KeySecureMode = types.BoolValue(helpers.ParseNxosBoolean(rospfAuthNewP.Get("ospfAuthNewP.attributes.md5keySecureMode").String()))
+					} else {
+						data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationMd5KeySecureMode = types.BoolNull()
+					}
+					if !data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationType.IsNull() {
+						data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationType = types.StringValue(rospfAuthNewP.Get("ospfAuthNewP.attributes.type").String())
+					} else {
+						data.Instances[c].Vrfs[nc].Interfaces[nc_].AuthenticationType = types.StringNull()
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -130,5 +701,79 @@ func (data OSPF) getDeleteDns() []string {
 // End of section. //template:end getDeleteDns
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data OSPF) getDeletedItems(ctx context.Context, state OSPF) []string {
+	deletedItems := []string{}
+	for _, stateChild := range state.Instances {
+		found := false
+		for _, planChild := range data.Instances {
+			if stateChild.Name == planChild.Name {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, data.getDn()+"/"+stateChild.getRn())
+		}
+	}
+	for di := range state.Instances {
+		for pdi := range data.Instances {
+			if state.Instances[di].Name == data.Instances[pdi].Name {
+				for _, stateChild := range state.Instances[di].Vrfs {
+					found := false
+					for _, planChild := range data.Instances[pdi].Vrfs {
+						if stateChild.Name == planChild.Name {
+							found = true
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, data.getDn()+"/"+state.Instances[di].getRn()+"/"+stateChild.getRn())
+					}
+				}
+				for di_ := range state.Instances[di].Vrfs {
+					for pdi_ := range data.Instances[pdi].Vrfs {
+						if state.Instances[di].Vrfs[di_].Name == data.Instances[pdi].Vrfs[pdi_].Name {
+							for _, stateChild := range state.Instances[di].Vrfs[di_].Areas {
+								found := false
+								for _, planChild := range data.Instances[pdi].Vrfs[pdi_].Areas {
+									if stateChild.AreaId == planChild.AreaId {
+										found = true
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, data.getDn()+"/"+state.Instances[di].getRn()+"/"+state.Instances[di].Vrfs[di_].getRn()+"/"+stateChild.getRn())
+								}
+							}
+							for _, stateChild := range state.Instances[di].Vrfs[di_].Interfaces {
+								found := false
+								for _, planChild := range data.Instances[pdi].Vrfs[pdi_].Interfaces {
+									if stateChild.InterfaceId == planChild.InterfaceId {
+										found = true
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, data.getDn()+"/"+state.Instances[di].getRn()+"/"+state.Instances[di].Vrfs[di_].getRn()+"/"+stateChild.getRn())
+								}
+							}
+							for di__ := range state.Instances[di].Vrfs[di_].Interfaces {
+								for pdi__ := range data.Instances[pdi].Vrfs[pdi_].Interfaces {
+									if state.Instances[di].Vrfs[di_].Interfaces[di__].InterfaceId == data.Instances[pdi].Vrfs[pdi_].Interfaces[pdi__].InterfaceId {
+										break
+									}
+								}
+							}
+							break
+						}
+					}
+				}
+				break
+			}
+		}
+	}
+	return deletedItems
+}
 
 // End of section. //template:end getDeletedItems

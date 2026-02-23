@@ -36,16 +36,18 @@ func TestAccDataSourceNxosRouteMap(t *testing.T) {
 		"order":  "10",
 		"action": "permit",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_map.test", "entries.0.match_route_prefix_lists.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_map.test", "entries.*.match_route_prefix_lists.*", map[string]string{
 		"prefix_list_dn": "sys/rpm/pfxlistv4-[LIST1]",
 	}))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_map.test", "entries.0.additive", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_map.test", "entries.0.no_community", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_map.test", "entries.0.set_criteria", "none"))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_map.test", "entries.0.set_regular_community_items.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_map.test", "entries.*", map[string]string{
+		"additive":     "disabled",
+		"no_community": "disabled",
+		"set_criteria": "none",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_map.test", "entries.*.set_regular_community_items.*", map[string]string{
 		"community": "regular:as2-nn2:65001:123",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_map.test", "entries.0.match_tags.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_map.test", "entries.*.match_tags.*", map[string]string{
 		"tag": "12345",
 	}))
 	resource.Test(t, resource.TestCase{

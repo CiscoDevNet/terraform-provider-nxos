@@ -49,7 +49,9 @@ func TestAccDataSourceNxosNVEInterface(t *testing.T) {
 		"multisite_ingress_replication": "disable",
 		"suppress_arp":                  "off",
 	}))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nve_interface.test", "vnis.0.protocol", "bgp"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_nve_interface.test", "vnis.*", map[string]string{
+		"protocol": "bgp",
+	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,

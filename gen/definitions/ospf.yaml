@@ -2,12 +2,10 @@
 name: OSPF
 class_name: ospfEntity
 dn: sys/ospf
-ds_description: This data source can read the global OSPF configuration.
-res_description: This resource can manage the global OSPF configuration.
+ds_description: This data source can read the OSPF configuration.
+res_description: This resource can manage the OSPF configuration.
 doc_path: Routing%20and%20Forwarding/ospf:Entity/
 doc_category: OSPF
-children:
-  - OSPF Instance
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state
@@ -18,6 +16,318 @@ attributes:
       - disabled
     default_value: enabled
     example: enabled
+child_classes:
+  - class_name: ospfInst
+    doc_path: Routing%20and%20Forwarding/ospf:Inst/
+    rn: inst-%s
+    type: list
+    tf_name: instances
+    description: 'List of OSPF instances.'
+    attributes:
+      - nxos_name: name
+        tf_name: name
+        type: String
+        id: true
+        description: 'OSPF instance name.'
+        example: OSPF1
+      - nxos_name: adminSt
+        tf_name: admin_state
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        default_value: enabled
+        example: enabled
+    child_classes:
+      - class_name: ospfDom
+        doc_path: Routing%20and%20Forwarding/ospf:Dom/
+        rn: dom-%s
+        type: list
+        tf_name: vrfs
+        description: 'List of OSPF VRFs.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'VRF name.'
+            example: VRF1
+          - nxos_name: adjChangeLogLevel
+            tf_name: log_adjacency_changes
+            type: String
+            description: 'Log level for adjacency changes.'
+            enum_values:
+              - none
+              - brief
+              - detail
+            default_value: none
+            example: brief
+          - nxos_name: adminSt
+            tf_name: admin_state
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            default_value: enabled
+            example: enabled
+          - nxos_name: bwRef
+            tf_name: bandwidth_reference
+            type: Int64
+            min_int: 0
+            max_int: 4294967295
+            default_value: 40000
+            description: 'Bandwidth reference value.'
+            example: 400000
+          - nxos_name: bwRefUnit
+            tf_name: bandwidth_reference_unit
+            type: String
+            description: 'Bandwidth reference unit.'
+            enum_values:
+              - mbps
+              - gbps
+            default_value: mbps
+            example: mbps
+          - nxos_name: dist
+            tf_name: distance
+            type: Int64
+            min_int: 1
+            max_int: 255
+            default_value: 110
+            description: 'Administrative distance preference.'
+            example: 110
+          - nxos_name: rtrId
+            tf_name: router_id
+            type: String
+            description: 'Router ID.'
+            default_value: 0.0.0.0
+            example: 34.56.78.90
+          - nxos_name: ctrl
+            tf_name: control
+            type: String
+            description: 'Controls. Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,default-passive`. In this case values must be in alphabetical order.'
+            example: 'bfd,default-passive'
+        child_classes:
+          - class_name: ospfArea
+            doc_path: Routing%20and%20Forwarding/ospf:Area/
+            rn: area-%s
+            type: list
+            tf_name: areas
+            description: 'List of OSPF areas.'
+            attributes:
+              - nxos_name: id
+                tf_name: area_id
+                type: String
+                id: true
+                default_value: 0.0.0.0
+                description: 'Area identifier to which a network or interface belongs in IPv4 address format.'
+                example: 0.0.0.10
+              - nxos_name: authType
+                tf_name: authentication_type
+                type: String
+                description: 'Authentication type.'
+                enum_values:
+                  - none
+                  - simple
+                  - md5
+                  - unspecified
+                default_value: unspecified
+                example: none
+              - nxos_name: cost
+                tf_name: cost
+                type: Int64
+                min_int: 0
+                max_int: 16777215
+                default_value: 1
+                description: 'Area cost, specifies cost for default summary LSAs. Used with nssa/stub area types.'
+                example: 10
+              - nxos_name: type
+                tf_name: type
+                type: String
+                description: 'Area type.'
+                enum_values:
+                  - regular
+                  - stub
+                  - nssa
+                default_value: regular
+                example: stub
+          - class_name: ospfMaxMetricLsaP
+            doc_path: Routing%20and%20Forwarding/ospf:maxmetriclsap/
+            rn: maxmetriclsap
+            type: single
+            tf_name: max_metric
+            description: 'OSPF Max Metric Link State Advertisement configuration.'
+            attributes:
+              - nxos_name: ctrl
+                tf_name: max_metric_control
+                type: String
+                description: 'Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:\n  - Single value. Example: `stub`\n  - Multiple values (comma-separated). Example: `stub,summary-lsa`. In this case values must be in alphabetical order.'
+                example: 'external-lsa,startup,stub,summary-lsa'
+              - nxos_name: maxMetricExtLsa
+                tf_name: max_metric_external_lsa
+                type: Int64
+                min_int: 1
+                max_int: 16777215
+                description: 'Maximum metric value for external LSAs.'
+                example: 600
+              - nxos_name: maxMetricSummLsa
+                tf_name: max_metric_summary_lsa
+                type: Int64
+                min_int: 1
+                max_int: 16777215
+                description: 'Maximum metric value for summary LSAs.'
+                example: 600
+              - nxos_name: startupIntvl
+                tf_name: max_metric_startup_interval
+                type: Int64
+                min_int: 0
+                max_int: 4294967295
+                description: 'Time (in secs) for which max metric should be advertised at startup.'
+                example: 300
+          - class_name: ospfIf
+            doc_path: Routing%20and%20Forwarding/ospf:If/
+            rn: if-[%s]
+            type: list
+            tf_name: interfaces
+            description: 'List of OSPF interfaces.'
+            attributes:
+              - nxos_name: id
+                tf_name: interface_id
+                type: String
+                id: true
+                description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+                example: eth1/10
+              - nxos_name: advertiseSecondaries
+                tf_name: advertise_secondaries
+                type: Bool
+                description: 'Advertise secondary IP addresses.'
+                default_value: true
+                example: false
+              - nxos_name: area
+                tf_name: area
+                type: String
+                description: 'Area identifier to which a network or interface belongs in IPv4 address format.'
+                default_value: 0.0.0.0
+                example: 0.0.0.10
+              - nxos_name: bfdCtrl
+                tf_name: bfd
+                type: String
+                description: 'Bidirectional Forwarding Detection (BFD).'
+                enum_values:
+                  - unspecified
+                  - enabled
+                  - disabled
+                default_value: unspecified
+                example: disabled
+              - nxos_name: cost
+                tf_name: cost
+                type: Int64
+                min_int: 0
+                max_int: 65535
+                default_value: 0
+                description: 'Specifies the cost of interface.'
+                example: 1000
+              - nxos_name: deadIntvl
+                tf_name: dead_interval
+                type: Int64
+                min_int: 0
+                max_int: 65535
+                default_value: 0
+                description: 'Dead interval, interval after which router declares that neighbor as down.'
+                example: 60
+              - nxos_name: helloIntvl
+                tf_name: hello_interval
+                type: Int64
+                min_int: 0
+                max_int: 65535
+                default_value: 10
+                description: 'Hello interval, interval between hello packets that OSPF sends on the interface.'
+                example: 15
+              - nxos_name: nwT
+                tf_name: network_type
+                type: String
+                description: 'Network type.'
+                enum_values:
+                  - unspecified
+                  - p2p
+                  - bcast
+                default_value: unspecified
+                example: p2p
+              - nxos_name: passiveCtrl
+                tf_name: passive
+                type: String
+                description: 'Passive interface control. Interface can be configured as passive or non-passive.'
+                enum_values:
+                  - unspecified
+                  - enabled
+                  - disabled
+                default_value: unspecified
+                example: enabled
+              - nxos_name: prio
+                tf_name: priority
+                type: Int64
+                min_int: 0
+                max_int: 255
+                default_value: 1
+                description: 'Priority, used in determining the designated router on this network.'
+                example: 10
+            child_classes:
+              - class_name: ospfAuthNewP
+                doc_path: Routing%20and%20Forwarding/ospf:AuthNewP/
+                rn: authnew
+                type: single
+                tf_name: authentication
+                description: 'OSPF authentication configuration.'
+                attributes:
+                  - nxos_name: key
+                    tf_name: authentication_key
+                    type: String
+                    write_only: true
+                    description: 'Key used for authentication.'
+                    example: 0 mykey
+                  - nxos_name: keyId
+                    tf_name: authentication_key_id
+                    type: Int64
+                    min_int: 0
+                    max_int: 255
+                    default_value: 0
+                    description: 'Key ID used for authentication.'
+                    example: 1
+                  - nxos_name: keySecureMode
+                    tf_name: authentication_key_secure_mode
+                    type: Bool
+                    description: 'Encrypted authentication key or plain text key.'
+                    default_value: false
+                    example: false
+                  - nxos_name: keychain
+                    tf_name: authentication_keychain
+                    type: String
+                    description: 'Authentication keychain.'
+                    example: mykeychain
+                  - nxos_name: md5key
+                    tf_name: authentication_md5_key
+                    type: String
+                    write_only: true
+                    description: 'Key used for md5 authentication.'
+                    example: 0 mymd5key
+                  - nxos_name: md5keySecureMode
+                    tf_name: authentication_md5_key_secure_mode
+                    type: Bool
+                    description: 'Encrypted authentication md5 key or plain text key.'
+                    default_value: false
+                    example: false
+                  - nxos_name: type
+                    tf_name: authentication_type
+                    type: String
+                    description: 'Authentication type.'
+                    enum_values:
+                      - none
+                      - simple
+                      - md5
+                      - unspecified
+                    default_value: unspecified
+                    example: none
 test_prerequisites:
   - dn: sys/fm/ospf
     class_name: fmOspf
@@ -25,3 +335,22 @@ test_prerequisites:
     attributes:
       - name: adminSt
         value: enabled
+  - dn: sys/fm/bfd
+    class_name: fmBfd
+    dependencies: [0]
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/intf/phys-[eth1/10]
+    class_name: l1PhysIf
+    attributes:
+      - name: layer
+        value: Layer3
+    dependencies: [1]
+  - dn: sys/intf/phys-[eth1/10]/rtvrfMbr
+    class_name: nwRtVrfMbr
+    attributes:
+      - name: tDn
+        value: sys/inst-VRF1
+    dependencies: [2]

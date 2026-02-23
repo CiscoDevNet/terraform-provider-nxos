@@ -36,7 +36,7 @@ func TestAccDataSourceNxosICMPv4(t *testing.T) {
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_icmpv4.test", "vrfs.*", map[string]string{
 		"name": "VRF1",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_icmpv4.test", "vrfs.0.interfaces.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_icmpv4.test", "vrfs.*.interfaces.*", map[string]string{
 		"id":      "vlan10",
 		"control": "port-unreachable",
 	}))

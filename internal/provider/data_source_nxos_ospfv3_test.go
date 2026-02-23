@@ -36,7 +36,7 @@ func TestAccDataSourceNxosOSPFv3(t *testing.T) {
 		"name":        "OSPFv3",
 		"admin_state": "enabled",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospfv3.test", "instances.0.vrfs.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospfv3.test", "instances.*.vrfs.*", map[string]string{
 		"name":                     "VRF1",
 		"admin_state":              "enabled",
 		"bandwidth_reference":      "400000",
@@ -44,14 +44,14 @@ func TestAccDataSourceNxosOSPFv3(t *testing.T) {
 		"router_id":                "34.56.78.90",
 		"bfd_control":              "false",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospfv3.test", "instances.0.vrfs.0.areas.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospfv3.test", "instances.*.vrfs.*.areas.*", map[string]string{
 		"area_id":                  "0.0.0.10",
 		"redistribute":             "false",
 		"summary":                  "false",
 		"suppress_forward_address": "false",
 		"type":                     "regular",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospfv3.test", "instances.0.vrfs.0.address_families.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospfv3.test", "instances.*.vrfs.*.address_families.*", map[string]string{
 		"address_family_type":     "ipv6-ucast",
 		"administrative_distance": "10",
 		"default_metric":          "1024",

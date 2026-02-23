@@ -13,3 +13,35 @@ attributes:
     type: String
     description: 'The system name (hostname).'
     example: 'LEAF1'
+child_classes:
+  - class_name: ethpmEntity
+    doc_path: Interfaces/ethpm:Entity/
+    rn: ethpm
+    type: single
+    no_delete: true
+    child_classes:
+      - class_name: ethpmInst
+        doc_path: Interfaces/ethpm:Inst/
+        rn: inst
+        type: single
+        no_delete: true
+        attributes:
+          - nxos_name: systemJumboMtu
+            tf_name: mtu
+            type: Int64
+            description: 'System jumbo MTU.'
+            min_int: 576
+            max_int: 9216
+            default_value: 9216
+            example: 9216
+            delete_value: 9216
+          - nxos_name: systemDefaultAdminSt
+            tf_name: default_admin_status
+            type: String
+            description: "Default admin status"
+            enum_values:
+              - up
+              - down
+            default_value: up
+            example: up
+            delete_value: "DME_UNSET_PROPERTY_MARKER"

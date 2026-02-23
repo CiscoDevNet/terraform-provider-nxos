@@ -23,6 +23,7 @@ package provider
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -35,9 +36,11 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type System struct {
-	Device types.String `tfsdk:"device"`
-	Dn     types.String `tfsdk:"id"`
-	Name   types.String `tfsdk:"name"`
+	Device             types.String `tfsdk:"device"`
+	Dn                 types.String `tfsdk:"id"`
+	Name               types.String `tfsdk:"name"`
+	Mtu                types.Int64  `tfsdk:"mtu"`
+	DefaultAdminStatus types.String `tfsdk:"default_admin_status"`
 }
 
 type SystemIdentity struct {
@@ -82,6 +85,25 @@ func (data System) toBody() nxos.Body {
 	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}
+	var attrs string
+	childrenPath := data.getClassName() + ".children"
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ethpmEntity"
+		attrs = "{}"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		attrs = "{}"
+		if (!data.Mtu.IsUnknown() && !data.Mtu.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "systemJumboMtu", strconv.FormatInt(data.Mtu.ValueInt64(), 10))
+		}
+		if (!data.DefaultAdminStatus.IsUnknown() && !data.DefaultAdminStatus.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "systemDefaultAdminSt", data.DefaultAdminStatus.ValueString())
+		}
+		if attrs != "{}" || false {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ethpmInst.attributes", attrs)
+		}
+	}
 
 	return nxos.Body{body}
 }
@@ -92,6 +114,30 @@ func (data System) toBody() nxos.Body {
 
 func (data *System) fromBody(res gjson.Result) {
 	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	var rethpmEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("ethpmEntity.attributes.rn").String()
+			if key == "ethpm" {
+				rethpmEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	var rethpmInst gjson.Result
+	rethpmEntity.Get("ethpmEntity.children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("ethpmInst.attributes.rn").String()
+			if key == "inst" {
+				rethpmInst = v
+				return false
+			}
+			return true
+		},
+	)
+	data.Mtu = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.systemJumboMtu").Int())
+	data.DefaultAdminStatus = types.StringValue(rethpmInst.Get("ethpmInst.attributes.systemDefaultAdminSt").String())
 }
 
 // End of section. //template:end fromBody
@@ -104,6 +150,38 @@ func (data *System) updateFromBody(res gjson.Result) {
 	} else {
 		data.Name = types.StringNull()
 	}
+	var rethpmEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("ethpmEntity.attributes.rn").String()
+			if key == "ethpm" {
+				rethpmEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	var rethpmInst gjson.Result
+	rethpmEntity.Get("ethpmEntity.children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("ethpmInst.attributes.rn").String()
+			if key == "inst" {
+				rethpmInst = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.Mtu.IsNull() {
+		data.Mtu = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.systemJumboMtu").Int())
+	} else {
+		data.Mtu = types.Int64Null()
+	}
+	if !data.DefaultAdminStatus.IsNull() {
+		data.DefaultAdminStatus = types.StringValue(rethpmInst.Get("ethpmInst.attributes.systemDefaultAdminSt").String())
+	} else {
+		data.DefaultAdminStatus = types.StringNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -112,6 +190,12 @@ func (data *System) updateFromBody(res gjson.Result) {
 
 func (data System) toDeleteBody() nxos.Body {
 	body := ""
+	if !data.Mtu.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.ethpmEntity.children.0.ethpmInst"+".attributes."+"systemJumboMtu", strconv.FormatInt(9216, 10))
+	}
+	if !data.DefaultAdminStatus.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.ethpmEntity.children.0.ethpmInst"+".attributes."+"systemDefaultAdminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
 
 	return nxos.Body{body}
 }

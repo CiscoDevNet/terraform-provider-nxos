@@ -782,7 +782,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 {{- range .Children}}
 {{- if .NoDelete}}
 {{- $childClassName := .ClassName}}
-{{- $childSuffix := (printf "%s.children.-1.%s" $bodyPathSuffix $childClassName)}}
+{{- $childSuffix := (printf "%s.children.0.%s" $bodyPathSuffix $childClassName)}}
 {{- range .Attributes}}
 {{- if and (not .ReferenceOnly) (.DeleteValue)}}
 	if !data.{{toGoName .TfName}}.IsNull() {

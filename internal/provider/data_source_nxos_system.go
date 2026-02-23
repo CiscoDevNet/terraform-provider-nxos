@@ -57,7 +57,7 @@ func (d *SystemDataSource) Metadata(_ context.Context, req datasource.MetadataRe
 func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the system configuration.", "topSystem", "System/top:System/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the system configuration.", "topSystem", "System/top:System/").AddAdditionalDocs([]string{"ethpmEntity", "ethpmInst"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -70,6 +70,14 @@ func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 			},
 			"name": schema.StringAttribute{
 				MarkdownDescription: "The system name (hostname).",
+				Computed:            true,
+			},
+			"mtu": schema.Int64Attribute{
+				MarkdownDescription: "System jumbo MTU.",
+				Computed:            true,
+			},
+			"default_admin_status": schema.StringAttribute{
+				MarkdownDescription: "Default admin status",
 				Computed:            true,
 			},
 		},
@@ -106,6 +114,7 @@ func (d *SystemDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "full"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

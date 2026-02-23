@@ -1113,88 +1113,88 @@ func (data *Features) updateFromBody(res gjson.Result) {
 func (data Features) toDeleteBody() nxos.Body {
 	body := ""
 	if !data.BashShell.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmBashShell"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmBashShell"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Bfd.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmBfd"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmBfd"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Bgp.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmBgp"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmBgp"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Dhcp.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmDhcp"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmDhcp"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Evpn.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmEvpn"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmEvpn"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Hmm.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmHmm"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmHmm"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Hsrp.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmHsrp"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmHsrp"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.InterfaceVlan.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmInterfaceVlan"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmInterfaceVlan"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Isis.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmIsis"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmIsis"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Lacp.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmLacp"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmLacp"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Lldp.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmLldp"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmLldp"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Macsec.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmMacsec"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmMacsec"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Netflow.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmNetflow"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmNetflow"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Ngmvpn.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmNgmvpn"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmNgmvpn"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Ngoam.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmNgoam"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmNgoam"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.NvOverlay.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmNvo"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmNvo"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Ospf.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmOspf"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmOspf"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Ospfv3.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmOspfv3"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmOspfv3"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Pim.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmPim"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmPim"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Ptp.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmPtp"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmPtp"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Pvlan.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmPvlan"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmPvlan"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Sflow.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmSflow"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmSflow"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Ssh.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmSsh"+".attributes."+"adminSt", "enabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmSsh"+".attributes."+"adminSt", "enabled")
 	}
 	if !data.Tacacs.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmTacacsplus"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmTacacsplus"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Telnet.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmTelnet"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmTelnet"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Udld.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmUdld"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmUdld"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.VnSegment.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmVnSegment"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmVnSegment"+".attributes."+"adminSt", "disabled")
 	}
 	if !data.Vpc.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1.fmVpc"+".attributes."+"adminSt", "disabled")
+		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmVpc"+".attributes."+"adminSt", "disabled")
 	}
 
 	return nxos.Body{body}

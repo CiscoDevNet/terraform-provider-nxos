@@ -26,12 +26,17 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -60,7 +65,7 @@ func (r *SystemResource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration.", "topSystem", "System/top:System/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration.", "topSystem", "System/top:System/").AddAdditionalDocs([]string{"ethpmEntity", "ethpmInst"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -77,6 +82,24 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			"name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The system name (hostname).").String,
 				Optional:            true,
+			},
+			"mtu": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("System jumbo MTU.").AddIntegerRangeDescription(576, 9216).AddDefaultValueDescription("9216").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             int64default.StaticInt64(9216),
+				Validators: []validator.Int64{
+					int64validator.Between(576, 9216),
+				},
+			},
+			"default_admin_status": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Default admin status").AddStringEnumDescription("up", "down").AddDefaultValueDescription("up").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("up"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("up", "down"),
+				},
 			},
 		},
 	}
@@ -180,6 +203,7 @@ func (r *SystemResource) Read(ctx context.Context, req resource.ReadRequest, res
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		queries = append(queries, nxos.Query("rsp-subtree", "full"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

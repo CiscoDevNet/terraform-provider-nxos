@@ -5,6 +5,8 @@ subcategory: "System"
 description: |-
   This data source can read the system configuration.
   API Documentation: topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/top:System/
+  Additional API Documentation
+  ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/ethpm:Inst/
 ---
 
 # nxos_system (Data Source)
@@ -12,6 +14,11 @@ description: |-
 This data source can read the system configuration.
 
 - API Documentation: [topSystem](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/top:System/)
+
+### Additional API Documentation
+
+- [ethpmEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/ethpm:Entity/)
+- [ethpmInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/ethpm:Inst/)
 
 ## Example Usage
 
@@ -29,5 +36,7 @@ data "nxos_system" "example" {
 
 ### Read-Only
 
+- `default_admin_status` (String) Default admin status
 - `id` (String) The distinguished name of the object.
+- `mtu` (Number) System jumbo MTU.
 - `name` (String) The system name (hostname).

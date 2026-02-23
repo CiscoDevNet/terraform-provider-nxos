@@ -5,6 +5,8 @@ subcategory: "HMM"
 description: |-
   This data source can read the Host Mobility Manager (HMM) Entity configuration.
   API Documentation: hmmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Host%20Mobility/hmm:Entity/
+  Additional API Documentation
+  hmmFwdInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Host%20Mobility/hmm:FwdInst/hmmFwdIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Host%20Mobility/hmm:FwdIf/
 ---
 
 # nxos_hmm (Data Source)
@@ -12,6 +14,11 @@ description: |-
 This data source can read the Host Mobility Manager (HMM) Entity configuration.
 
 - API Documentation: [hmmEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Host%20Mobility/hmm:Entity/)
+
+### Additional API Documentation
+
+- [hmmFwdInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Host%20Mobility/hmm:FwdInst/)
+- [hmmFwdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Host%20Mobility/hmm:FwdIf/)
 
 ## Example Usage
 
@@ -30,4 +37,16 @@ data "nxos_hmm" "example" {
 ### Read-Only
 
 - `admin_state` (String) Administrative state.
+- `anycast_mac` (String) Anycast Gateway MAC address.
 - `id` (String) The distinguished name of the object.
+- `instance_admin_state` (String) Forwarding instance administrative state.
+- `interfaces` (Attributes List) List of HMM Fabric Forwarding interfaces. (see [below for nested schema](#nestedatt--interfaces))
+
+<a id="nestedatt--interfaces"></a>
+### Nested Schema for `interfaces`
+
+Read-Only:
+
+- `admin_state` (String) Administrative state.
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `vlan10`.
+- `mode` (String) HMM Fabric Forwarding mode information for the interface.

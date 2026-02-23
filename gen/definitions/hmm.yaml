@@ -6,8 +6,6 @@ ds_description: This data source can read the Host Mobility Manager (HMM) Entity
 res_description: This resource can manage the Host Mobility Manager (HMM) Entity configuration.
 doc_path: Host%20Mobility/hmm:Entity/
 doc_category: HMM
-children:
-  - HMM Instance
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state
@@ -18,7 +16,73 @@ attributes:
       - disabled
     default_value: enabled
     example: enabled
+child_classes:
+  - class_name: hmmFwdInst
+    rn: fwdinst
+    type: single
+    doc_path: Host%20Mobility/hmm:FwdInst/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: instance_admin_state
+        type: String
+        description: "Forwarding instance administrative state."
+        enum_values:
+          - enabled
+          - disabled
+        default_value: enabled
+        example: enabled
+      - nxos_name: amac
+        tf_name: anycast_mac
+        type: String
+        description: "Anycast Gateway MAC address."
+        default_value: enabled
+        example: "20:20:00:00:10:10"
+    child_classes:
+      - class_name: hmmFwdIf
+        rn: if-[%s]
+        type: list
+        tf_name: interfaces
+        description: 'List of HMM Fabric Forwarding interfaces.'
+        doc_path: Host%20Mobility/hmm:FwdIf/
+        attributes:
+          - nxos_name: id
+            tf_name: interface_id
+            type: String
+            id: true
+            description: "Must match first field in the output of `show intf brief`. Example: `vlan10`."
+            example: vlan10
+          - nxos_name: adminSt
+            tf_name: admin_state
+            type: String
+            description: "Administrative state."
+            enum_values:
+              - enabled
+              - disabled
+            default_value: enabled
+            example: enabled
+          - nxos_name: mode
+            tf_name: mode
+            type: String
+            description: "HMM Fabric Forwarding mode information for the interface."
+            enum_values:
+              - standard
+              - anycastGW
+              - proxyGW
+            default_value: standard
+            example: anycastGW
 test_prerequisites:
+  - dn: sys/fm/ifvlan
+    class_name: fmInterfaceVlan
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/intf/svi-[vlan10]
+    class_name: sviIf
+    attributes:
+      - name: id
+        value: vlan10
+    dependencies: [0]
   - dn: sys/fm/hmm
     class_name: fmHmm
     no_delete: true

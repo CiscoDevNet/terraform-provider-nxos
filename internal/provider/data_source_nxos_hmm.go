@@ -57,7 +57,7 @@ func (d *HMMDataSource) Metadata(_ context.Context, req datasource.MetadataReque
 func (d *HMMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the Host Mobility Manager (HMM) Entity configuration.", "hmmEntity", "Host%20Mobility/hmm:Entity/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the Host Mobility Manager (HMM) Entity configuration.", "hmmEntity", "Host%20Mobility/hmm:Entity/").AddAdditionalDocs([]string{"hmmFwdInst", "hmmFwdIf"}, []string{"Host%20Mobility/hmm:FwdInst/", "Host%20Mobility/hmm:FwdIf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -71,6 +71,34 @@ func (d *HMMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 			"admin_state": schema.StringAttribute{
 				MarkdownDescription: "Administrative state.",
 				Computed:            true,
+			},
+			"instance_admin_state": schema.StringAttribute{
+				MarkdownDescription: "Forwarding instance administrative state.",
+				Computed:            true,
+			},
+			"anycast_mac": schema.StringAttribute{
+				MarkdownDescription: "Anycast Gateway MAC address.",
+				Computed:            true,
+			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "List of HMM Fabric Forwarding interfaces.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_id": schema.StringAttribute{
+							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `vlan10`.",
+							Computed:            true,
+						},
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: "Administrative state.",
+							Computed:            true,
+						},
+						"mode": schema.StringAttribute{
+							MarkdownDescription: "HMM Fabric Forwarding mode information for the interface.",
+							Computed:            true,
+						},
+					},
+				},
 			},
 		},
 	}
@@ -106,6 +134,7 @@ func (d *HMMDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "full"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

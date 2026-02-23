@@ -32,6 +32,13 @@ import (
 func TestAccDataSourceNxosHMM(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_hmm.test", "anycast_mac", "20:20:00:00:10:10"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_hmm.test", "interfaces.*", map[string]string{
+		"interface_id": "vlan10",
+		"admin_state":  "enabled",
+		"mode":         "anycastGW",
+	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -49,6 +56,24 @@ func TestAccDataSourceNxosHMM(t *testing.T) {
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosHMMPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/ifvlan"
+  class_name = "fmInterfaceVlan"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/intf/svi-[vlan10]"
+  class_name = "sviIf"
+  content = {
+      id = "vlan10"
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+resource "nxos_rest" "PreReq2" {
   dn = "sys/fm/hmm"
   class_name = "fmHmm"
   delete = false
@@ -57,7 +82,7 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
-resource "nxos_rest" "PreReq1" {
+resource "nxos_rest" "PreReq3" {
   dn = "sys/fm/evpn"
   class_name = "fmEvpn"
   delete = false
@@ -74,7 +99,14 @@ resource "nxos_rest" "PreReq1" {
 func testAccDataSourceNxosHMMConfig() string {
 	config := `resource "nxos_hmm" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `	instance_admin_state = "enabled"` + "\n"
+	config += `	anycast_mac = "20:20:00:00:10:10"` + "\n"
+	config += `	interfaces = [{` + "\n"
+	config += `		interface_id = "vlan10"` + "\n"
+	config += `		admin_state = "enabled"` + "\n"
+	config += `		mode = "anycastGW"` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

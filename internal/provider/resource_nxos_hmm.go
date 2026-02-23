@@ -63,7 +63,7 @@ func (r *HMMResource) Metadata(ctx context.Context, req resource.MetadataRequest
 func (r *HMMResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Host Mobility Manager (HMM) Entity configuration.", "hmmEntity", "Host%20Mobility/hmm:Entity/").AddChildren("hmm_instance").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Host Mobility Manager (HMM) Entity configuration.", "hmmEntity", "Host%20Mobility/hmm:Entity/").AddAdditionalDocs([]string{"hmmFwdInst", "hmmFwdIf"}, []string{"Host%20Mobility/hmm:FwdInst/", "Host%20Mobility/hmm:FwdIf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -84,6 +84,54 @@ func (r *HMMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				Default:             stringdefault.StaticString("enabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"instance_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Forwarding instance administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("enabled"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"anycast_mac": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Anycast Gateway MAC address.").AddDefaultValueDescription("enabled").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("enabled"),
+			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "List of HMM Fabric Forwarding interfaces.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_id": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `vlan10`.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("enabled"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"mode": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("HMM Fabric Forwarding mode information for the interface.").AddStringEnumDescription("standard", "anycastGW", "proxyGW").AddDefaultValueDescription("standard").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("standard"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("standard", "anycastGW", "proxyGW"),
+							},
+						},
+					},
 				},
 			},
 		},
@@ -188,6 +236,7 @@ func (r *HMMResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		queries = append(queries, nxos.Query("rsp-subtree", "full"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -230,6 +279,14 @@ func (r *HMMResource) Update(ctx context.Context, req resource.UpdateRequest, re
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	var state HMM
+
+	// Read state
+	diags = req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
@@ -245,6 +302,19 @@ func (r *HMMResource) Update(ctx context.Context, req resource.UpdateRequest, re
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
+		}
+
+		deletedItems := plan.getDeletedItems(ctx, state)
+		tflog.Debug(ctx, fmt.Sprintf("%s: List items to delete: %v", plan.getDn(), deletedItems))
+		for _, dn := range deletedItems {
+			res, err := device.Client.DeleteDn(dn)
+			if err != nil {
+				errCode := res.Get("imdata.0.error.attributes.code").Str
+				if errCode != "1" && errCode != "107" {
+					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+					return
+				}
+			}
 		}
 	}
 

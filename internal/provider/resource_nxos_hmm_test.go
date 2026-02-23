@@ -36,6 +36,11 @@ import (
 func TestAccNxosHMM(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "anycast_mac", "20:20:00:00:10:10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "interfaces.0.interface_id", "vlan10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "interfaces.0.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "interfaces.0.mode", "anycastGW"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -79,6 +84,24 @@ func nxosHMMImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosHMMPrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/ifvlan"
+  class_name = "fmInterfaceVlan"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/intf/svi-[vlan10]"
+  class_name = "sviIf"
+  content = {
+      id = "vlan10"
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+resource "nxos_rest" "PreReq2" {
   dn = "sys/fm/hmm"
   class_name = "fmHmm"
   delete = false
@@ -87,7 +110,7 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
-resource "nxos_rest" "PreReq1" {
+resource "nxos_rest" "PreReq3" {
   dn = "sys/fm/evpn"
   class_name = "fmEvpn"
   delete = false
@@ -103,7 +126,7 @@ resource "nxos_rest" "PreReq1" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosHMMConfig_minimum() string {
 	config := `resource "nxos_hmm" "test" {` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -114,7 +137,14 @@ func testAccNxosHMMConfig_minimum() string {
 func testAccNxosHMMConfig_all() string {
 	config := `resource "nxos_hmm" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `	instance_admin_state = "enabled"` + "\n"
+	config += `	anycast_mac = "20:20:00:00:10:10"` + "\n"
+	config += `	interfaces = [{` + "\n"
+	config += `		interface_id = "vlan10"` + "\n"
+	config += `		admin_state = "enabled"` + "\n"
+	config += `		mode = "anycastGW"` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

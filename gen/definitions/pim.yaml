@@ -6,8 +6,6 @@ ds_description: This data source can read the global PIM configuration.
 res_description: This resource can manage the global PIM configuration.
 doc_path: Layer%203/pim:Entity/
 doc_category: PIM
-children:
-  - PIM Instance
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state
@@ -18,6 +16,252 @@ attributes:
       - disabled
     default_value: enabled
     example: enabled
+child_classes:
+  - class_name: pimInst
+    doc_path: Layer%203/pim:Inst/
+    rn: inst
+    type: single
+    attributes:
+      - nxos_name: adminSt
+        tf_name: instance_admin_state
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        default_value: enabled
+        example: enabled
+    child_classes:
+      - class_name: pimDom
+        doc_path: Layer%203/pim:Dom/
+        rn: dom-%s
+        type: list
+        tf_name: vrfs
+        description: 'List of PIM VRF configurations.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'VRF name.'
+            example: default
+          - nxos_name: adminSt
+            tf_name: admin_state
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            default_value: enabled
+            example: enabled
+          - nxos_name: bfd
+            tf_name: bfd
+            type: Bool
+            description: 'BFD.'
+            default_value: false
+            example: true
+        child_classes:
+          - class_name: pimIf
+            doc_path: Layer%203/pim:If/
+            rn: if-[%s]
+            type: list
+            tf_name: interfaces
+            description: 'List of PIM interface configurations.'
+            attributes:
+              - nxos_name: id
+                tf_name: interface_id
+                type: String
+                id: true
+                description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+                example: eth1/10
+              - nxos_name: adminSt
+                tf_name: admin_state
+                type: String
+                description: 'Administrative state.'
+                enum_values:
+                  - enabled
+                  - disabled
+                default_value: enabled
+                example: enabled
+              - nxos_name: bfdInst
+                tf_name: bfd
+                type: String
+                description: 'BFD.'
+                enum_values:
+                  - none
+                  - enabled
+                  - disabled
+                default_value: none
+                example: enabled
+              - nxos_name: drPrio
+                tf_name: dr_priority
+                type: Int64
+                min_int: 1
+                max_int: 4294967295
+                default_value: 1
+                description: 'Designated Router priority level.'
+                example: 10
+              - nxos_name: passive
+                tf_name: passive
+                type: Bool
+                description: 'Passive interface.'
+                default_value: false
+                example: false
+              - nxos_name: pimSparseMode
+                tf_name: sparse_mode
+                type: Bool
+                description: 'Sparse mode.'
+                default_value: false
+                example: true
+          - class_name: pimSSMPatP
+            doc_path: Layer%203/pim:SSMPatP/
+            rn: ssm
+            type: single
+            tf_name: ssm_policy
+            description: 'PIM SSM policy configuration.'
+            attributes:
+              - nxos_name: name
+                tf_name: ssm_policy_name
+                type: String
+                description: 'Policy name.'
+                example: SSM
+            child_classes:
+              - class_name: pimSSMRangeP
+                doc_path: Layer%203/pim:SSMRangeP/
+                rn: range
+                type: single
+                tf_name: ssm_range
+                description: 'PIM SSM range configuration.'
+                attributes:
+                  - nxos_name: grpList
+                    tf_name: ssm_range_group_list_1
+                    type: String
+                    description: 'Group list 1.'
+                    default_value: 0.0.0.0
+                    example: 232.0.0.0/8
+                  - nxos_name: grpList1
+                    tf_name: ssm_range_group_list_2
+                    type: String
+                    description: 'Group list 2.'
+                    default_value: 0.0.0.0
+                    example: 233.0.0.0/8
+                  - nxos_name: grpList2
+                    tf_name: ssm_range_group_list_3
+                    type: String
+                    description: 'Group list 3.'
+                    default_value: 0.0.0.0
+                    example: 0.0.0.0
+                  - nxos_name: grpList3
+                    tf_name: ssm_range_group_list_4
+                    type: String
+                    description: 'Group list 4.'
+                    default_value: 0.0.0.0
+                    example: 0.0.0.0
+                  - nxos_name: pfxList
+                    tf_name: ssm_range_prefix_list
+                    type: String
+                    description: 'Prefix list name.'
+                    example: ''
+                  - nxos_name: rtMap
+                    tf_name: ssm_range_route_map
+                    type: String
+                    description: 'Route map name.'
+                    example: ''
+                  - nxos_name: ssmNone
+                    tf_name: ssm_range_none
+                    type: Bool
+                    description: 'Exclude standard SSM range (232.0.0.0/8).'
+                    default_value: false
+                    example: false
+          - class_name: pimStaticRPP
+            doc_path: Layer%203/pim:StaticRPP/
+            rn: staticrp
+            type: single
+            tf_name: static_rp_policy
+            description: 'PIM Static RP policy configuration.'
+            attributes:
+              - nxos_name: name
+                tf_name: static_rp_policy_name
+                type: String
+                description: 'Policy name.'
+                example: RP
+            child_classes:
+              - class_name: pimStaticRP
+                doc_path: Layer%203/pim:StaticRP/
+                rn: rp-[%s]
+                type: list
+                tf_name: static_rps
+                description: 'List of PIM Static RP configurations.'
+                attributes:
+                  - nxos_name: addr
+                    tf_name: address
+                    type: String
+                    id: true
+                    description: 'Address.'
+                    example: 1.2.3.4
+                child_classes:
+                  - class_name: pimRPGrpList
+                    doc_path: Layer%203/pim:RPGrpList/
+                    rn: rpgrplist-[%s]
+                    type: list
+                    tf_name: group_lists
+                    description: 'List of PIM Static RP group list configurations.'
+                    attributes:
+                      - nxos_name: grpListName
+                        tf_name: address
+                        type: String
+                        id: true
+                        description: 'Group list address information.'
+                        example: 224.0.0.0/4
+                      - nxos_name: bidir
+                        tf_name: bidir
+                        type: Bool
+                        description: 'Flag to treat Group Ranges as BiDir.'
+                        default_value: false
+                        example: true
+                      - nxos_name: override
+                        tf_name: override
+                        type: Bool
+                        description: 'Flag to override RP preference to use Static over Dynamic RP.'
+                        default_value: false
+                        example: true
+          - class_name: pimAcastRPFuncP
+            doc_path: Layer%203/pim:AcastRPFuncP/
+            rn: acastrpfunc
+            type: single
+            tf_name: anycast_rp
+            description: 'PIM Anycast RP configuration.'
+            attributes:
+              - nxos_name: localIf
+                tf_name: anycast_rp_local_interface
+                type: String
+                description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+                example: eth1/10
+              - nxos_name: srcIf
+                tf_name: anycast_rp_source_interface
+                type: String
+                description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+                example: eth1/10
+            child_classes:
+              - class_name: pimAcastRPPeer
+                doc_path: Layer%203/pim:AcastRPPeer/
+                rn: peer-[%s]-peer-[%s]
+                type: list
+                tf_name: anycast_rp_peers
+                description: 'List of PIM Anycast RP peer configurations.'
+                attributes:
+                  - nxos_name: addr
+                    tf_name: address
+                    type: String
+                    id: true
+                    description: 'Anycast RP address.'
+                    example: 10.1.1.1/32
+                  - nxos_name: rpSetAddr
+                    tf_name: rp_set_address
+                    type: String
+                    id: true
+                    description: 'RP set address.'
+                    example: 20.1.1.1/32
 test_prerequisites:
   - dn: sys/fm/pim
     class_name: fmPim

@@ -57,7 +57,7 @@ func (d *PIMDataSource) Metadata(_ context.Context, req datasource.MetadataReque
 func (d *PIMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the global PIM configuration.", "pimEntity", "Layer%203/pim:Entity/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the global PIM configuration.", "pimEntity", "Layer%203/pim:Entity/").AddAdditionalDocs([]string{"pimInst", "pimDom", "pimIf", "pimSSMPatP", "pimSSMRangeP", "pimStaticRPP", "pimStaticRP", "pimRPGrpList", "pimAcastRPFuncP", "pimAcastRPPeer"}, []string{"Layer%203/pim:Inst/", "Layer%203/pim:Dom/", "Layer%203/pim:If/", "Layer%203/pim:SSMPatP/", "Layer%203/pim:SSMRangeP/", "Layer%203/pim:StaticRPP/", "Layer%203/pim:StaticRP/", "Layer%203/pim:RPGrpList/", "Layer%203/pim:AcastRPFuncP/", "Layer%203/pim:AcastRPPeer/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -71,6 +71,154 @@ func (d *PIMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 			"admin_state": schema.StringAttribute{
 				MarkdownDescription: "Administrative state.",
 				Computed:            true,
+			},
+			"instance_admin_state": schema.StringAttribute{
+				MarkdownDescription: "Administrative state.",
+				Computed:            true,
+			},
+			"vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: "List of PIM VRF configurations.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "VRF name.",
+							Computed:            true,
+						},
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: "Administrative state.",
+							Computed:            true,
+						},
+						"bfd": schema.BoolAttribute{
+							MarkdownDescription: "BFD.",
+							Computed:            true,
+						},
+						"interfaces": schema.ListNestedAttribute{
+							MarkdownDescription: "List of PIM interface configurations.",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"interface_id": schema.StringAttribute{
+										MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
+										Computed:            true,
+									},
+									"admin_state": schema.StringAttribute{
+										MarkdownDescription: "Administrative state.",
+										Computed:            true,
+									},
+									"bfd": schema.StringAttribute{
+										MarkdownDescription: "BFD.",
+										Computed:            true,
+									},
+									"dr_priority": schema.Int64Attribute{
+										MarkdownDescription: "Designated Router priority level.",
+										Computed:            true,
+									},
+									"passive": schema.BoolAttribute{
+										MarkdownDescription: "Passive interface.",
+										Computed:            true,
+									},
+									"sparse_mode": schema.BoolAttribute{
+										MarkdownDescription: "Sparse mode.",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"ssm_policy_name": schema.StringAttribute{
+							MarkdownDescription: "Policy name.",
+							Computed:            true,
+						},
+						"ssm_range_group_list_1": schema.StringAttribute{
+							MarkdownDescription: "Group list 1.",
+							Computed:            true,
+						},
+						"ssm_range_group_list_2": schema.StringAttribute{
+							MarkdownDescription: "Group list 2.",
+							Computed:            true,
+						},
+						"ssm_range_group_list_3": schema.StringAttribute{
+							MarkdownDescription: "Group list 3.",
+							Computed:            true,
+						},
+						"ssm_range_group_list_4": schema.StringAttribute{
+							MarkdownDescription: "Group list 4.",
+							Computed:            true,
+						},
+						"ssm_range_prefix_list": schema.StringAttribute{
+							MarkdownDescription: "Prefix list name.",
+							Computed:            true,
+						},
+						"ssm_range_route_map": schema.StringAttribute{
+							MarkdownDescription: "Route map name.",
+							Computed:            true,
+						},
+						"ssm_range_none": schema.BoolAttribute{
+							MarkdownDescription: "Exclude standard SSM range (232.0.0.0/8).",
+							Computed:            true,
+						},
+						"static_rp_policy_name": schema.StringAttribute{
+							MarkdownDescription: "Policy name.",
+							Computed:            true,
+						},
+						"static_rps": schema.ListNestedAttribute{
+							MarkdownDescription: "List of PIM Static RP configurations.",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address": schema.StringAttribute{
+										MarkdownDescription: "Address.",
+										Computed:            true,
+									},
+									"group_lists": schema.ListNestedAttribute{
+										MarkdownDescription: "List of PIM Static RP group list configurations.",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"address": schema.StringAttribute{
+													MarkdownDescription: "Group list address information.",
+													Computed:            true,
+												},
+												"bidir": schema.BoolAttribute{
+													MarkdownDescription: "Flag to treat Group Ranges as BiDir.",
+													Computed:            true,
+												},
+												"override": schema.BoolAttribute{
+													MarkdownDescription: "Flag to override RP preference to use Static over Dynamic RP.",
+													Computed:            true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"anycast_rp_local_interface": schema.StringAttribute{
+							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
+							Computed:            true,
+						},
+						"anycast_rp_source_interface": schema.StringAttribute{
+							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
+							Computed:            true,
+						},
+						"anycast_rp_peers": schema.ListNestedAttribute{
+							MarkdownDescription: "List of PIM Anycast RP peer configurations.",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address": schema.StringAttribute{
+										MarkdownDescription: "Anycast RP address.",
+										Computed:            true,
+									},
+									"rp_set_address": schema.StringAttribute{
+										MarkdownDescription: "RP set address.",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	}
@@ -106,6 +254,7 @@ func (d *PIMDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "full"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

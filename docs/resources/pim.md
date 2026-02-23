@@ -5,8 +5,8 @@ subcategory: "PIM"
 description: |-
   This resource can manage the global PIM configuration.
   API Documentation: pimEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:Entity/
-  Child resources
-  nxos_pim_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_instance
+  Additional API Documentation
+  pimInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:Inst/pimDom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:Dom/pimIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:If/pimSSMPatP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:SSMPatP/pimSSMRangeP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:SSMRangeP/pimStaticRPP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:StaticRPP/pimStaticRP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:StaticRP/pimRPGrpList https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:RPGrpList/pimAcastRPFuncP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:AcastRPFuncP/pimAcastRPPeer https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:AcastRPPeer/
 ---
 
 # nxos_pim (Resource)
@@ -15,15 +15,61 @@ This resource can manage the global PIM configuration.
 
 - API Documentation: [pimEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:Entity/)
 
-### Child resources
+### Additional API Documentation
 
-- [nxos_pim_instance](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/pim_instance)
+- [pimInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:Inst/)
+- [pimDom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:Dom/)
+- [pimIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:If/)
+- [pimSSMPatP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:SSMPatP/)
+- [pimSSMRangeP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:SSMRangeP/)
+- [pimStaticRPP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:StaticRPP/)
+- [pimStaticRP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:StaticRP/)
+- [pimRPGrpList](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:RPGrpList/)
+- [pimAcastRPFuncP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:AcastRPFuncP/)
+- [pimAcastRPPeer](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:AcastRPPeer/)
 
 ## Example Usage
 
 ```terraform
 resource "nxos_pim" "example" {
-  admin_state = "enabled"
+  admin_state          = "enabled"
+  instance_admin_state = "enabled"
+  vrfs = [{
+    name        = "default"
+    admin_state = "enabled"
+    bfd         = true
+    interfaces = [{
+      interface_id = "eth1/10"
+      admin_state  = "enabled"
+      bfd          = "enabled"
+      dr_priority  = 10
+      passive      = false
+      sparse_mode  = true
+    }]
+    ssm_policy_name        = "SSM"
+    ssm_range_group_list_1 = "232.0.0.0/8"
+    ssm_range_group_list_2 = "233.0.0.0/8"
+    ssm_range_group_list_3 = "0.0.0.0"
+    ssm_range_group_list_4 = "0.0.0.0"
+    ssm_range_prefix_list  = ""
+    ssm_range_route_map    = ""
+    ssm_range_none         = false
+    static_rp_policy_name  = "RP"
+    static_rps = [{
+      address = "1.2.3.4"
+      group_lists = [{
+        address  = "224.0.0.0/4"
+        bidir    = true
+        override = true
+      }]
+    }]
+    anycast_rp_local_interface  = "eth1/10"
+    anycast_rp_source_interface = "eth1/10"
+    anycast_rp_peers = [{
+      address        = "10.1.1.1/32"
+      rp_set_address = "20.1.1.1/32"
+    }]
+  }]
 }
 ```
 
@@ -36,10 +82,106 @@ resource "nxos_pim" "example" {
   - Choices: `enabled`, `disabled`
   - Default value: `enabled`
 - `device` (String) A device name from the provider configuration.
+- `instance_admin_state` (String) Administrative state.
+  - Choices: `enabled`, `disabled`
+  - Default value: `enabled`
+- `vrfs` (Attributes List) List of PIM VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
 
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--vrfs"></a>
+### Nested Schema for `vrfs`
+
+Required:
+
+- `name` (String) VRF name.
+
+Optional:
+
+- `admin_state` (String) Administrative state.
+  - Choices: `enabled`, `disabled`
+  - Default value: `enabled`
+- `anycast_rp_local_interface` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `anycast_rp_peers` (Attributes List) List of PIM Anycast RP peer configurations. (see [below for nested schema](#nestedatt--vrfs--anycast_rp_peers))
+- `anycast_rp_source_interface` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `bfd` (Boolean) BFD.
+  - Default value: `false`
+- `interfaces` (Attributes List) List of PIM interface configurations. (see [below for nested schema](#nestedatt--vrfs--interfaces))
+- `ssm_policy_name` (String) Policy name.
+- `ssm_range_group_list_1` (String) Group list 1.
+  - Default value: `0.0.0.0`
+- `ssm_range_group_list_2` (String) Group list 2.
+  - Default value: `0.0.0.0`
+- `ssm_range_group_list_3` (String) Group list 3.
+  - Default value: `0.0.0.0`
+- `ssm_range_group_list_4` (String) Group list 4.
+  - Default value: `0.0.0.0`
+- `ssm_range_none` (Boolean) Exclude standard SSM range (232.0.0.0/8).
+  - Default value: `false`
+- `ssm_range_prefix_list` (String) Prefix list name.
+- `ssm_range_route_map` (String) Route map name.
+- `static_rp_policy_name` (String) Policy name.
+- `static_rps` (Attributes List) List of PIM Static RP configurations. (see [below for nested schema](#nestedatt--vrfs--static_rps))
+
+<a id="nestedatt--vrfs--anycast_rp_peers"></a>
+### Nested Schema for `vrfs.anycast_rp_peers`
+
+Required:
+
+- `address` (String) Anycast RP address.
+- `rp_set_address` (String) RP set address.
+
+
+<a id="nestedatt--vrfs--interfaces"></a>
+### Nested Schema for `vrfs.interfaces`
+
+Required:
+
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+
+Optional:
+
+- `admin_state` (String) Administrative state.
+  - Choices: `enabled`, `disabled`
+  - Default value: `enabled`
+- `bfd` (String) BFD.
+  - Choices: `none`, `enabled`, `disabled`
+  - Default value: `none`
+- `dr_priority` (Number) Designated Router priority level.
+  - Range: `1`-`4294967295`
+  - Default value: `1`
+- `passive` (Boolean) Passive interface.
+  - Default value: `false`
+- `sparse_mode` (Boolean) Sparse mode.
+  - Default value: `false`
+
+
+<a id="nestedatt--vrfs--static_rps"></a>
+### Nested Schema for `vrfs.static_rps`
+
+Required:
+
+- `address` (String) Address.
+
+Optional:
+
+- `group_lists` (Attributes List) List of PIM Static RP group list configurations. (see [below for nested schema](#nestedatt--vrfs--static_rps--group_lists))
+
+<a id="nestedatt--vrfs--static_rps--group_lists"></a>
+### Nested Schema for `vrfs.static_rps.group_lists`
+
+Required:
+
+- `address` (String) Group list address information.
+
+Optional:
+
+- `bidir` (Boolean) Flag to treat Group Ranges as BiDir.
+  - Default value: `false`
+- `override` (Boolean) Flag to override RP preference to use Static over Dynamic RP.
+  - Default value: `false`
 
 ## Import
 

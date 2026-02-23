@@ -888,6 +888,7 @@ func (data {{camelCase .Name}}) getDeleteDns() []string {
 {{- $stateItemExpr := .StateItemExpr}}
 {{- $planItemExpr := .PlanItemExpr}}
 {{- $dnPrefix := .DnPrefix}}
+{{- $indexVar := .IndexVar}}
 {{- range .Children}}
 {{- if eq .Type "list"}}
 			for _, stateChild := range {{$stateItemExpr}}.{{toGoName .TfName}} {
@@ -903,11 +904,11 @@ func (data {{camelCase .Name}}) getDeleteDns() []string {
 				}
 			}
 {{- if .ChildClasses}}
-{{- template "getDeletedItemsSingleInListTemplate" (makeMap "Children" .ChildClasses "StateItemExpr" (printf "%s.%s" $stateItemExpr (toGoName .TfName)) "PlanItemExpr" (printf "%s.%s" $planItemExpr (toGoName .TfName)) "DnPrefix" (printf "%s+\"/\"+stateChild.getRn()" $dnPrefix))}}
+{{- template "getDeletedItemsListChildTemplate" (makeMap "Children" .ChildClasses "StateListExpr" (printf "%s.%s" $stateItemExpr (toGoName .TfName)) "PlanListExpr" (printf "%s.%s" $planItemExpr (toGoName .TfName)) "DnPrefix" $dnPrefix "IdAttributes" .Attributes "IndexVar" (printf "%s_" $indexVar))}}
 {{- end}}
 {{- else if eq .Type "single"}}
 {{- if .ChildClasses}}
-{{- template "getDeletedItemsSingleInListTemplate" (makeMap "Children" .ChildClasses "StateItemExpr" $stateItemExpr "PlanItemExpr" $planItemExpr "DnPrefix" (printf "%s+\"/%s\"" $dnPrefix .Rn))}}
+{{- template "getDeletedItemsSingleInListTemplate" (makeMap "Children" .ChildClasses "StateItemExpr" $stateItemExpr "PlanItemExpr" $planItemExpr "DnPrefix" (printf "%s+\"/%s\"" $dnPrefix .Rn) "IndexVar" $indexVar)}}
 {{- end}}
 {{- end}}
 {{- end}}
@@ -953,7 +954,7 @@ func (data {{camelCase .Name}}) getDeleteDns() []string {
 				{{- end}}
 				{{- else if eq .Type "single"}}
 				{{- if .ChildClasses}}
-				{{- template "getDeletedItemsSingleInListTemplate" (makeMap "Children" .ChildClasses "StateItemExpr" (printf "%s[%s]" $stateListExpr $indexVar) "PlanItemExpr" (printf "%s[p%s]" $planListExpr $indexVar) "DnPrefix" (printf "%s+\"/\"+%s[%s].getRn()+\"/%s\"" $dnPrefix $stateListExpr $indexVar .Rn))}}
+				{{- template "getDeletedItemsSingleInListTemplate" (makeMap "Children" .ChildClasses "StateItemExpr" (printf "%s[%s]" $stateListExpr $indexVar) "PlanItemExpr" (printf "%s[p%s]" $planListExpr $indexVar) "DnPrefix" (printf "%s+\"/\"+%s[%s].getRn()+\"/%s\"" $dnPrefix $stateListExpr $indexVar .Rn) "IndexVar" (printf "%s_" $indexVar))}}
 				{{- end}}
 				{{- end}}
 				{{- end}}

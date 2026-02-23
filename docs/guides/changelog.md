@@ -27,6 +27,7 @@ description: |-
 - BREAKING CHANGE: Remove `nxos_nve_vni_container` resource and data source, `nxos_nve_vni` resource and data source, and `nxos_nve_vni_ingress_replication` resource and data source, NVE configuration is now managed as a single `nxos_nve_interface` resource and data source
 - Add `nxos_features` resource and data source
 - BREAKING CHANGE: Remove `nxos_isis_instance` resource and data source, `nxos_isis_vrf` resource and data source, `nxos_isis_address_family` resource and data source, `nxos_isis_overload` resource and data source, and `nxos_isis_interface` resource and data source, IS-IS configuration is now managed as a single `nxos_isis` resource and data source
+- BREAKING CHANGE: Remove `nxos_pim_instance` resource and data source, `nxos_pim_vrf` resource and data source, `nxos_pim_interface` resource and data source, `nxos_pim_ssm_policy` resource and data source, `nxos_pim_ssm_range` resource and data source, `nxos_pim_static_rp_policy` resource and data source, `nxos_pim_static_rp` resource and data source, `nxos_pim_static_rp_group_list` resource and data source, `nxos_pim_anycast_rp` resource and data source, and `nxos_pim_anycast_rp_peer` resource and data source, PIM configuration is now managed as a single `nxos_pim` resource and data source
 
 ## 0.7.0
 

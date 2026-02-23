@@ -26,11 +26,14 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -63,7 +66,7 @@ func (r *PIMResource) Metadata(ctx context.Context, req resource.MetadataRequest
 func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the global PIM configuration.", "pimEntity", "Layer%203/pim:Entity/").AddChildren("pim_instance").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the global PIM configuration.", "pimEntity", "Layer%203/pim:Entity/").AddAdditionalDocs([]string{"pimInst", "pimDom", "pimIf", "pimSSMPatP", "pimSSMRangeP", "pimStaticRPP", "pimStaticRP", "pimRPGrpList", "pimAcastRPFuncP", "pimAcastRPPeer"}, []string{"Layer%203/pim:Inst/", "Layer%203/pim:Dom/", "Layer%203/pim:If/", "Layer%203/pim:SSMPatP/", "Layer%203/pim:SSMRangeP/", "Layer%203/pim:StaticRPP/", "Layer%203/pim:StaticRP/", "Layer%203/pim:RPGrpList/", "Layer%203/pim:AcastRPFuncP/", "Layer%203/pim:AcastRPPeer/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -84,6 +87,217 @@ func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				Default:             stringdefault.StaticString("enabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"instance_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("enabled"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: "List of PIM VRF configurations.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("enabled"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"bfd": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("BFD.").AddDefaultValueDescription("false").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             booldefault.StaticBool(false),
+						},
+						"interfaces": schema.ListNestedAttribute{
+							MarkdownDescription: "List of PIM interface configurations.",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"interface_id": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+										Required:            true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplace(),
+										},
+									},
+									"admin_state": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("enabled"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"bfd": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("BFD.").AddStringEnumDescription("none", "enabled", "disabled").AddDefaultValueDescription("none").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("none"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("none", "enabled", "disabled"),
+										},
+									},
+									"dr_priority": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Designated Router priority level.").AddIntegerRangeDescription(1, 4294967295).AddDefaultValueDescription("1").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             int64default.StaticInt64(1),
+										Validators: []validator.Int64{
+											int64validator.Between(1, 4294967295),
+										},
+									},
+									"passive": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Passive interface.").AddDefaultValueDescription("false").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             booldefault.StaticBool(false),
+									},
+									"sparse_mode": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Sparse mode.").AddDefaultValueDescription("false").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             booldefault.StaticBool(false),
+									},
+								},
+							},
+						},
+						"ssm_policy_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Policy name.").String,
+							Optional:            true,
+						},
+						"ssm_range_group_list_1": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Group list 1.").AddDefaultValueDescription("0.0.0.0").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("0.0.0.0"),
+						},
+						"ssm_range_group_list_2": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Group list 2.").AddDefaultValueDescription("0.0.0.0").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("0.0.0.0"),
+						},
+						"ssm_range_group_list_3": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Group list 3.").AddDefaultValueDescription("0.0.0.0").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("0.0.0.0"),
+						},
+						"ssm_range_group_list_4": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Group list 4.").AddDefaultValueDescription("0.0.0.0").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("0.0.0.0"),
+						},
+						"ssm_range_prefix_list": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prefix list name.").String,
+							Optional:            true,
+						},
+						"ssm_range_route_map": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route map name.").String,
+							Optional:            true,
+						},
+						"ssm_range_none": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Exclude standard SSM range (232.0.0.0/8).").AddDefaultValueDescription("false").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             booldefault.StaticBool(false),
+						},
+						"static_rp_policy_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Policy name.").String,
+							Optional:            true,
+						},
+						"static_rps": schema.ListNestedAttribute{
+							MarkdownDescription: "List of PIM Static RP configurations.",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Address.").String,
+										Required:            true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplace(),
+										},
+									},
+									"group_lists": schema.ListNestedAttribute{
+										MarkdownDescription: "List of PIM Static RP group list configurations.",
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"address": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Group list address information.").String,
+													Required:            true,
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplace(),
+													},
+												},
+												"bidir": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Flag to treat Group Ranges as BiDir.").AddDefaultValueDescription("false").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             booldefault.StaticBool(false),
+												},
+												"override": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Flag to override RP preference to use Static over Dynamic RP.").AddDefaultValueDescription("false").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             booldefault.StaticBool(false),
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"anycast_rp_local_interface": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+							Optional:            true,
+						},
+						"anycast_rp_source_interface": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+							Optional:            true,
+						},
+						"anycast_rp_peers": schema.ListNestedAttribute{
+							MarkdownDescription: "List of PIM Anycast RP peer configurations.",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Anycast RP address.").String,
+										Required:            true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplace(),
+										},
+									},
+									"rp_set_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("RP set address.").String,
+										Required:            true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplace(),
+										},
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
@@ -188,6 +402,7 @@ func (r *PIMResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		queries = append(queries, nxos.Query("rsp-subtree", "full"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -230,6 +445,14 @@ func (r *PIMResource) Update(ctx context.Context, req resource.UpdateRequest, re
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	var state PIM
+
+	// Read state
+	diags = req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
@@ -245,6 +468,19 @@ func (r *PIMResource) Update(ctx context.Context, req resource.UpdateRequest, re
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
+		}
+
+		deletedItems := plan.getDeletedItems(ctx, state)
+		tflog.Debug(ctx, fmt.Sprintf("%s: List items to delete: %v", plan.getDn(), deletedItems))
+		for _, dn := range deletedItems {
+			res, err := device.Client.DeleteDn(dn)
+			if err != nil {
+				errCode := res.Get("imdata.0.error.attributes.code").Str
+				if errCode != "1" && errCode != "107" {
+					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+					return
+				}
+			}
 		}
 	}
 

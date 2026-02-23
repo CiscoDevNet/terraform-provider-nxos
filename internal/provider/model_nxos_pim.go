@@ -23,7 +23,10 @@ package provider
 
 import (
 	"context"
+	"fmt"
+	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -35,9 +38,56 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type PIM struct {
-	Device     types.String `tfsdk:"device"`
-	Dn         types.String `tfsdk:"id"`
-	AdminState types.String `tfsdk:"admin_state"`
+	Device             types.String `tfsdk:"device"`
+	Dn                 types.String `tfsdk:"id"`
+	AdminState         types.String `tfsdk:"admin_state"`
+	InstanceAdminState types.String `tfsdk:"instance_admin_state"`
+	Vrfs               []PIMVrfs    `tfsdk:"vrfs"`
+}
+
+type PIMVrfs struct {
+	Name                     types.String        `tfsdk:"name"`
+	AdminState               types.String        `tfsdk:"admin_state"`
+	Bfd                      types.Bool          `tfsdk:"bfd"`
+	Interfaces               []PIMInterfaces     `tfsdk:"interfaces"`
+	SsmPolicyName            types.String        `tfsdk:"ssm_policy_name"`
+	SsmRangeGroupList1       types.String        `tfsdk:"ssm_range_group_list_1"`
+	SsmRangeGroupList2       types.String        `tfsdk:"ssm_range_group_list_2"`
+	SsmRangeGroupList3       types.String        `tfsdk:"ssm_range_group_list_3"`
+	SsmRangeGroupList4       types.String        `tfsdk:"ssm_range_group_list_4"`
+	SsmRangePrefixList       types.String        `tfsdk:"ssm_range_prefix_list"`
+	SsmRangeRouteMap         types.String        `tfsdk:"ssm_range_route_map"`
+	SsmRangeNone             types.Bool          `tfsdk:"ssm_range_none"`
+	StaticRpPolicyName       types.String        `tfsdk:"static_rp_policy_name"`
+	StaticRps                []PIMStaticRps      `tfsdk:"static_rps"`
+	AnycastRpLocalInterface  types.String        `tfsdk:"anycast_rp_local_interface"`
+	AnycastRpSourceInterface types.String        `tfsdk:"anycast_rp_source_interface"`
+	AnycastRpPeers           []PIMAnycastRpPeers `tfsdk:"anycast_rp_peers"`
+}
+
+type PIMInterfaces struct {
+	InterfaceId types.String `tfsdk:"interface_id"`
+	AdminState  types.String `tfsdk:"admin_state"`
+	Bfd         types.String `tfsdk:"bfd"`
+	DrPriority  types.Int64  `tfsdk:"dr_priority"`
+	Passive     types.Bool   `tfsdk:"passive"`
+	SparseMode  types.Bool   `tfsdk:"sparse_mode"`
+}
+
+type PIMStaticRps struct {
+	Address    types.String    `tfsdk:"address"`
+	GroupLists []PIMGroupLists `tfsdk:"group_lists"`
+}
+
+type PIMGroupLists struct {
+	Address  types.String `tfsdk:"address"`
+	Bidir    types.Bool   `tfsdk:"bidir"`
+	Override types.Bool   `tfsdk:"override"`
+}
+
+type PIMAnycastRpPeers struct {
+	Address      types.String `tfsdk:"address"`
+	RpSetAddress types.String `tfsdk:"rp_set_address"`
 }
 
 type PIMIdentity struct {
@@ -68,6 +118,26 @@ func (data PIM) getDn() string {
 	return "sys/pim"
 }
 
+func (data PIMVrfs) getRn() string {
+	return fmt.Sprintf("dom-%s", data.Name.ValueString())
+}
+
+func (data PIMInterfaces) getRn() string {
+	return fmt.Sprintf("if-[%s]", data.InterfaceId.ValueString())
+}
+
+func (data PIMStaticRps) getRn() string {
+	return fmt.Sprintf("rp-[%s]", data.Address.ValueString())
+}
+
+func (data PIMGroupLists) getRn() string {
+	return fmt.Sprintf("rpgrplist-[%s]", data.Address.ValueString())
+}
+
+func (data PIMAnycastRpPeers) getRn() string {
+	return fmt.Sprintf("peer-[%s]-peer-[%s]", data.Address.ValueString(), data.RpSetAddress.ValueString())
+}
+
 func (data PIM) getClassName() string {
 	return "pimEntity"
 }
@@ -82,6 +152,149 @@ func (data PIM) toBody() nxos.Body {
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
+	var attrs string
+	childrenPath := data.getClassName() + ".children"
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".pimInst"
+		attrs = "{}"
+		if (!data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		for _, child := range data.Vrfs {
+			attrs = "{}"
+			if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
+			}
+			if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
+			}
+			if (!child.Bfd.IsUnknown() && !child.Bfd.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "bfd", strconv.FormatBool(child.Bfd.ValueBool()))
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pimDom.attributes", attrs)
+			{
+				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".pimDom.children"
+				for _, child := range child.Interfaces {
+					attrs = "{}"
+					if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "id", child.InterfaceId.ValueString())
+					}
+					if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
+					}
+					if (!child.Bfd.IsUnknown() && !child.Bfd.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "bfdInst", child.Bfd.ValueString())
+					}
+					if (!child.DrPriority.IsUnknown() && !child.DrPriority.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "drPrio", strconv.FormatInt(child.DrPriority.ValueInt64(), 10))
+					}
+					if (!child.Passive.IsUnknown() && !child.Passive.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "passive", strconv.FormatBool(child.Passive.ValueBool()))
+					}
+					if (!child.SparseMode.IsUnknown() && !child.SparseMode.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "pimSparseMode", strconv.FormatBool(child.SparseMode.ValueBool()))
+					}
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pimIf.attributes", attrs)
+				}
+				{
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".pimSSMPatP"
+					attrs = "{}"
+					if (!child.SsmPolicyName.IsUnknown() && !child.SsmPolicyName.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "name", child.SsmPolicyName.ValueString())
+					}
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+					nestedChildrenPath := childBodyPath + ".children"
+					attrs = "{}"
+					if (!child.SsmRangeGroupList1.IsUnknown() && !child.SsmRangeGroupList1.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "grpList", child.SsmRangeGroupList1.ValueString())
+					}
+					if (!child.SsmRangeGroupList2.IsUnknown() && !child.SsmRangeGroupList2.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "grpList1", child.SsmRangeGroupList2.ValueString())
+					}
+					if (!child.SsmRangeGroupList3.IsUnknown() && !child.SsmRangeGroupList3.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "grpList2", child.SsmRangeGroupList3.ValueString())
+					}
+					if (!child.SsmRangeGroupList4.IsUnknown() && !child.SsmRangeGroupList4.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "grpList3", child.SsmRangeGroupList4.ValueString())
+					}
+					if (!child.SsmRangePrefixList.IsUnknown() && !child.SsmRangePrefixList.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "pfxList", child.SsmRangePrefixList.ValueString())
+					}
+					if (!child.SsmRangeRouteMap.IsUnknown() && !child.SsmRangeRouteMap.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "rtMap", child.SsmRangeRouteMap.ValueString())
+					}
+					if (!child.SsmRangeNone.IsUnknown() && !child.SsmRangeNone.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "ssmNone", strconv.FormatBool(child.SsmRangeNone.ValueBool()))
+					}
+					if attrs != "{}" || false {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pimSSMRangeP.attributes", attrs)
+					}
+				}
+				{
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".pimStaticRPP"
+					attrs = "{}"
+					if (!child.StaticRpPolicyName.IsUnknown() && !child.StaticRpPolicyName.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "name", child.StaticRpPolicyName.ValueString())
+					}
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+					nestedChildrenPath := childBodyPath + ".children"
+					for _, child := range child.StaticRps {
+						attrs = "{}"
+						if (!child.Address.IsUnknown() && !child.Address.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "addr", child.Address.ValueString())
+						}
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pimStaticRP.attributes", attrs)
+						{
+							nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+							nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".pimStaticRP.children"
+							for _, child := range child.GroupLists {
+								attrs = "{}"
+								if (!child.Address.IsUnknown() && !child.Address.IsNull()) || false {
+									attrs, _ = sjson.Set(attrs, "grpListName", child.Address.ValueString())
+								}
+								if (!child.Bidir.IsUnknown() && !child.Bidir.IsNull()) || false {
+									attrs, _ = sjson.Set(attrs, "bidir", strconv.FormatBool(child.Bidir.ValueBool()))
+								}
+								if (!child.Override.IsUnknown() && !child.Override.IsNull()) || false {
+									attrs, _ = sjson.Set(attrs, "override", strconv.FormatBool(child.Override.ValueBool()))
+								}
+								body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pimRPGrpList.attributes", attrs)
+							}
+						}
+					}
+				}
+				{
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".pimAcastRPFuncP"
+					attrs = "{}"
+					if (!child.AnycastRpLocalInterface.IsUnknown() && !child.AnycastRpLocalInterface.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "localIf", child.AnycastRpLocalInterface.ValueString())
+					}
+					if (!child.AnycastRpSourceInterface.IsUnknown() && !child.AnycastRpSourceInterface.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "srcIf", child.AnycastRpSourceInterface.ValueString())
+					}
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+					nestedChildrenPath := childBodyPath + ".children"
+					for _, child := range child.AnycastRpPeers {
+						attrs = "{}"
+						if (!child.Address.IsUnknown() && !child.Address.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "addr", child.Address.ValueString())
+						}
+						if (!child.RpSetAddress.IsUnknown() && !child.RpSetAddress.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "rpSetAddr", child.RpSetAddress.ValueString())
+						}
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pimAcastRPPeer.attributes", attrs)
+					}
+				}
+			}
+		}
+	}
 
 	return nxos.Body{body}
 }
@@ -92,6 +305,166 @@ func (data PIM) toBody() nxos.Body {
 
 func (data *PIM) fromBody(res gjson.Result) {
 	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	var rpimInst gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("pimInst.attributes.rn").String()
+			if key == "inst" {
+				rpimInst = v
+				return false
+			}
+			return true
+		},
+	)
+	data.InstanceAdminState = types.StringValue(rpimInst.Get("pimInst.attributes.adminSt").String())
+	rpimInst.Get("pimInst.children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "pimDom" {
+						var child PIMVrfs
+						child.Name = types.StringValue(value.Get("attributes.name").String())
+						child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
+						child.Bfd = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.bfd").String()))
+						value.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "pimIf" {
+											var nestedChildpimIf PIMInterfaces
+											nestedChildpimIf.InterfaceId = types.StringValue(nestedValue.Get("attributes.id").String())
+											nestedChildpimIf.AdminState = types.StringValue(nestedValue.Get("attributes.adminSt").String())
+											nestedChildpimIf.Bfd = types.StringValue(nestedValue.Get("attributes.bfdInst").String())
+											nestedChildpimIf.DrPriority = types.Int64Value(nestedValue.Get("attributes.drPrio").Int())
+											nestedChildpimIf.Passive = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.passive").String()))
+											nestedChildpimIf.SparseMode = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.pimSparseMode").String()))
+											child.Interfaces = append(child.Interfaces, nestedChildpimIf)
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
+						{
+							var rpimSSMPatP gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									key := nestedV.Get("pimSSMPatP.attributes.rn").String()
+									if key == "ssm" {
+										rpimSSMPatP = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.SsmPolicyName = types.StringValue(rpimSSMPatP.Get("pimSSMPatP.attributes.name").String())
+							{
+								var rpimSSMRangeP gjson.Result
+								rpimSSMPatP.Get("pimSSMPatP").Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										key := nestedV.Get("pimSSMRangeP.attributes.rn").String()
+										if key == "range" {
+											rpimSSMRangeP = nestedV
+											return false
+										}
+										return true
+									},
+								)
+								child.SsmRangeGroupList1 = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.grpList").String())
+								child.SsmRangeGroupList2 = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.grpList1").String())
+								child.SsmRangeGroupList3 = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.grpList2").String())
+								child.SsmRangeGroupList4 = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.grpList3").String())
+								child.SsmRangePrefixList = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.pfxList").String())
+								child.SsmRangeRouteMap = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.rtMap").String())
+								child.SsmRangeNone = types.BoolValue(helpers.ParseNxosBoolean(rpimSSMRangeP.Get("pimSSMRangeP.attributes.ssmNone").String()))
+							}
+						}
+						{
+							var rpimStaticRPP gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									key := nestedV.Get("pimStaticRPP.attributes.rn").String()
+									if key == "staticrp" {
+										rpimStaticRPP = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.StaticRpPolicyName = types.StringValue(rpimStaticRPP.Get("pimStaticRPP.attributes.name").String())
+							rpimStaticRPP.Get("pimStaticRPP").Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "pimStaticRP" {
+												var nestedChildpimStaticRP PIMStaticRps
+												nestedChildpimStaticRP.Address = types.StringValue(nestedValue.Get("attributes.addr").String())
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														nestedV.ForEach(
+															func(nestedClassname, nestedValue gjson.Result) bool {
+																if nestedClassname.String() == "pimRPGrpList" {
+																	var nestedChildpimRPGrpList PIMGroupLists
+																	nestedChildpimRPGrpList.Address = types.StringValue(nestedValue.Get("attributes.grpListName").String())
+																	nestedChildpimRPGrpList.Bidir = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.bidir").String()))
+																	nestedChildpimRPGrpList.Override = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.override").String()))
+																	nestedChildpimStaticRP.GroupLists = append(nestedChildpimStaticRP.GroupLists, nestedChildpimRPGrpList)
+																}
+																return true
+															},
+														)
+														return true
+													},
+												)
+												child.StaticRps = append(child.StaticRps, nestedChildpimStaticRP)
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+						}
+						{
+							var rpimAcastRPFuncP gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									key := nestedV.Get("pimAcastRPFuncP.attributes.rn").String()
+									if key == "acastrpfunc" {
+										rpimAcastRPFuncP = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.AnycastRpLocalInterface = types.StringValue(rpimAcastRPFuncP.Get("pimAcastRPFuncP.attributes.localIf").String())
+							child.AnycastRpSourceInterface = types.StringValue(rpimAcastRPFuncP.Get("pimAcastRPFuncP.attributes.srcIf").String())
+							rpimAcastRPFuncP.Get("pimAcastRPFuncP").Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "pimAcastRPPeer" {
+												var nestedChildpimAcastRPPeer PIMAnycastRpPeers
+												nestedChildpimAcastRPPeer.Address = types.StringValue(nestedValue.Get("attributes.addr").String())
+												nestedChildpimAcastRPPeer.RpSetAddress = types.StringValue(nestedValue.Get("attributes.rpSetAddr").String())
+												child.AnycastRpPeers = append(child.AnycastRpPeers, nestedChildpimAcastRPPeer)
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+						}
+						data.Vrfs = append(data.Vrfs, child)
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
 }
 
 // End of section. //template:end fromBody
@@ -103,6 +476,269 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
 		data.AdminState = types.StringNull()
+	}
+	var rpimInst gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("pimInst.attributes.rn").String()
+			if key == "inst" {
+				rpimInst = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.InstanceAdminState.IsNull() {
+		data.InstanceAdminState = types.StringValue(rpimInst.Get("pimInst.attributes.adminSt").String())
+	} else {
+		data.InstanceAdminState = types.StringNull()
+	}
+	for c := range data.Vrfs {
+		var rpimDom gjson.Result
+		rpimInst.Get("pimInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("pimDom.attributes.rn").String()
+				if key == data.Vrfs[c].getRn() {
+					rpimDom = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.Vrfs[c].Name.IsNull() {
+			data.Vrfs[c].Name = types.StringValue(rpimDom.Get("pimDom.attributes.name").String())
+		} else {
+			data.Vrfs[c].Name = types.StringNull()
+		}
+		if !data.Vrfs[c].AdminState.IsNull() {
+			data.Vrfs[c].AdminState = types.StringValue(rpimDom.Get("pimDom.attributes.adminSt").String())
+		} else {
+			data.Vrfs[c].AdminState = types.StringNull()
+		}
+		if !data.Vrfs[c].Bfd.IsNull() {
+			data.Vrfs[c].Bfd = types.BoolValue(helpers.ParseNxosBoolean(rpimDom.Get("pimDom.attributes.bfd").String()))
+		} else {
+			data.Vrfs[c].Bfd = types.BoolNull()
+		}
+		for nc := range data.Vrfs[c].Interfaces {
+			var rpimIf gjson.Result
+			rpimDom.Get("pimDom.children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("pimIf.attributes.rn").String()
+					if key == data.Vrfs[c].Interfaces[nc].getRn() {
+						rpimIf = v
+						return false
+					}
+					return true
+				},
+			)
+			if !data.Vrfs[c].Interfaces[nc].InterfaceId.IsNull() {
+				data.Vrfs[c].Interfaces[nc].InterfaceId = types.StringValue(rpimIf.Get("pimIf.attributes.id").String())
+			} else {
+				data.Vrfs[c].Interfaces[nc].InterfaceId = types.StringNull()
+			}
+			if !data.Vrfs[c].Interfaces[nc].AdminState.IsNull() {
+				data.Vrfs[c].Interfaces[nc].AdminState = types.StringValue(rpimIf.Get("pimIf.attributes.adminSt").String())
+			} else {
+				data.Vrfs[c].Interfaces[nc].AdminState = types.StringNull()
+			}
+			if !data.Vrfs[c].Interfaces[nc].Bfd.IsNull() {
+				data.Vrfs[c].Interfaces[nc].Bfd = types.StringValue(rpimIf.Get("pimIf.attributes.bfdInst").String())
+			} else {
+				data.Vrfs[c].Interfaces[nc].Bfd = types.StringNull()
+			}
+			if !data.Vrfs[c].Interfaces[nc].DrPriority.IsNull() {
+				data.Vrfs[c].Interfaces[nc].DrPriority = types.Int64Value(rpimIf.Get("pimIf.attributes.drPrio").Int())
+			} else {
+				data.Vrfs[c].Interfaces[nc].DrPriority = types.Int64Null()
+			}
+			if !data.Vrfs[c].Interfaces[nc].Passive.IsNull() {
+				data.Vrfs[c].Interfaces[nc].Passive = types.BoolValue(helpers.ParseNxosBoolean(rpimIf.Get("pimIf.attributes.passive").String()))
+			} else {
+				data.Vrfs[c].Interfaces[nc].Passive = types.BoolNull()
+			}
+			if !data.Vrfs[c].Interfaces[nc].SparseMode.IsNull() {
+				data.Vrfs[c].Interfaces[nc].SparseMode = types.BoolValue(helpers.ParseNxosBoolean(rpimIf.Get("pimIf.attributes.pimSparseMode").String()))
+			} else {
+				data.Vrfs[c].Interfaces[nc].SparseMode = types.BoolNull()
+			}
+		}
+		{
+			var rpimSSMPatP gjson.Result
+			rpimDom.Get("pimDom.children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("pimSSMPatP.attributes.rn").String()
+					if key == "ssm" {
+						rpimSSMPatP = v
+						return false
+					}
+					return true
+				},
+			)
+			if !data.Vrfs[c].SsmPolicyName.IsNull() {
+				data.Vrfs[c].SsmPolicyName = types.StringValue(rpimSSMPatP.Get("pimSSMPatP.attributes.name").String())
+			} else {
+				data.Vrfs[c].SsmPolicyName = types.StringNull()
+			}
+			{
+				var rpimSSMRangeP gjson.Result
+				rpimSSMPatP.Get("pimSSMPatP.children").ForEach(
+					func(_, v gjson.Result) bool {
+						key := v.Get("pimSSMRangeP.attributes.rn").String()
+						if key == "range" {
+							rpimSSMRangeP = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.Vrfs[c].SsmRangeGroupList1.IsNull() {
+					data.Vrfs[c].SsmRangeGroupList1 = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.grpList").String())
+				} else {
+					data.Vrfs[c].SsmRangeGroupList1 = types.StringNull()
+				}
+				if !data.Vrfs[c].SsmRangeGroupList2.IsNull() {
+					data.Vrfs[c].SsmRangeGroupList2 = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.grpList1").String())
+				} else {
+					data.Vrfs[c].SsmRangeGroupList2 = types.StringNull()
+				}
+				if !data.Vrfs[c].SsmRangeGroupList3.IsNull() {
+					data.Vrfs[c].SsmRangeGroupList3 = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.grpList2").String())
+				} else {
+					data.Vrfs[c].SsmRangeGroupList3 = types.StringNull()
+				}
+				if !data.Vrfs[c].SsmRangeGroupList4.IsNull() {
+					data.Vrfs[c].SsmRangeGroupList4 = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.grpList3").String())
+				} else {
+					data.Vrfs[c].SsmRangeGroupList4 = types.StringNull()
+				}
+				if !data.Vrfs[c].SsmRangePrefixList.IsNull() {
+					data.Vrfs[c].SsmRangePrefixList = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.pfxList").String())
+				} else {
+					data.Vrfs[c].SsmRangePrefixList = types.StringNull()
+				}
+				if !data.Vrfs[c].SsmRangeRouteMap.IsNull() {
+					data.Vrfs[c].SsmRangeRouteMap = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.rtMap").String())
+				} else {
+					data.Vrfs[c].SsmRangeRouteMap = types.StringNull()
+				}
+				if !data.Vrfs[c].SsmRangeNone.IsNull() {
+					data.Vrfs[c].SsmRangeNone = types.BoolValue(helpers.ParseNxosBoolean(rpimSSMRangeP.Get("pimSSMRangeP.attributes.ssmNone").String()))
+				} else {
+					data.Vrfs[c].SsmRangeNone = types.BoolNull()
+				}
+			}
+		}
+		{
+			var rpimStaticRPP gjson.Result
+			rpimDom.Get("pimDom.children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("pimStaticRPP.attributes.rn").String()
+					if key == "staticrp" {
+						rpimStaticRPP = v
+						return false
+					}
+					return true
+				},
+			)
+			if !data.Vrfs[c].StaticRpPolicyName.IsNull() {
+				data.Vrfs[c].StaticRpPolicyName = types.StringValue(rpimStaticRPP.Get("pimStaticRPP.attributes.name").String())
+			} else {
+				data.Vrfs[c].StaticRpPolicyName = types.StringNull()
+			}
+			for nc := range data.Vrfs[c].StaticRps {
+				var rpimStaticRP gjson.Result
+				rpimStaticRPP.Get("pimStaticRPP.children").ForEach(
+					func(_, v gjson.Result) bool {
+						key := v.Get("pimStaticRP.attributes.rn").String()
+						if key == data.Vrfs[c].StaticRps[nc].getRn() {
+							rpimStaticRP = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.Vrfs[c].StaticRps[nc].Address.IsNull() {
+					data.Vrfs[c].StaticRps[nc].Address = types.StringValue(rpimStaticRP.Get("pimStaticRP.attributes.addr").String())
+				} else {
+					data.Vrfs[c].StaticRps[nc].Address = types.StringNull()
+				}
+				for nc_ := range data.Vrfs[c].StaticRps[nc].GroupLists {
+					var rpimRPGrpList gjson.Result
+					rpimStaticRP.Get("pimStaticRP.children").ForEach(
+						func(_, v gjson.Result) bool {
+							key := v.Get("pimRPGrpList.attributes.rn").String()
+							if key == data.Vrfs[c].StaticRps[nc].GroupLists[nc_].getRn() {
+								rpimRPGrpList = v
+								return false
+							}
+							return true
+						},
+					)
+					if !data.Vrfs[c].StaticRps[nc].GroupLists[nc_].Address.IsNull() {
+						data.Vrfs[c].StaticRps[nc].GroupLists[nc_].Address = types.StringValue(rpimRPGrpList.Get("pimRPGrpList.attributes.grpListName").String())
+					} else {
+						data.Vrfs[c].StaticRps[nc].GroupLists[nc_].Address = types.StringNull()
+					}
+					if !data.Vrfs[c].StaticRps[nc].GroupLists[nc_].Bidir.IsNull() {
+						data.Vrfs[c].StaticRps[nc].GroupLists[nc_].Bidir = types.BoolValue(helpers.ParseNxosBoolean(rpimRPGrpList.Get("pimRPGrpList.attributes.bidir").String()))
+					} else {
+						data.Vrfs[c].StaticRps[nc].GroupLists[nc_].Bidir = types.BoolNull()
+					}
+					if !data.Vrfs[c].StaticRps[nc].GroupLists[nc_].Override.IsNull() {
+						data.Vrfs[c].StaticRps[nc].GroupLists[nc_].Override = types.BoolValue(helpers.ParseNxosBoolean(rpimRPGrpList.Get("pimRPGrpList.attributes.override").String()))
+					} else {
+						data.Vrfs[c].StaticRps[nc].GroupLists[nc_].Override = types.BoolNull()
+					}
+				}
+			}
+		}
+		{
+			var rpimAcastRPFuncP gjson.Result
+			rpimDom.Get("pimDom.children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("pimAcastRPFuncP.attributes.rn").String()
+					if key == "acastrpfunc" {
+						rpimAcastRPFuncP = v
+						return false
+					}
+					return true
+				},
+			)
+			if !data.Vrfs[c].AnycastRpLocalInterface.IsNull() {
+				data.Vrfs[c].AnycastRpLocalInterface = types.StringValue(rpimAcastRPFuncP.Get("pimAcastRPFuncP.attributes.localIf").String())
+			} else {
+				data.Vrfs[c].AnycastRpLocalInterface = types.StringNull()
+			}
+			if !data.Vrfs[c].AnycastRpSourceInterface.IsNull() {
+				data.Vrfs[c].AnycastRpSourceInterface = types.StringValue(rpimAcastRPFuncP.Get("pimAcastRPFuncP.attributes.srcIf").String())
+			} else {
+				data.Vrfs[c].AnycastRpSourceInterface = types.StringNull()
+			}
+			for nc := range data.Vrfs[c].AnycastRpPeers {
+				var rpimAcastRPPeer gjson.Result
+				rpimAcastRPFuncP.Get("pimAcastRPFuncP.children").ForEach(
+					func(_, v gjson.Result) bool {
+						key := v.Get("pimAcastRPPeer.attributes.rn").String()
+						if key == data.Vrfs[c].AnycastRpPeers[nc].getRn() {
+							rpimAcastRPPeer = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.Vrfs[c].AnycastRpPeers[nc].Address.IsNull() {
+					data.Vrfs[c].AnycastRpPeers[nc].Address = types.StringValue(rpimAcastRPPeer.Get("pimAcastRPPeer.attributes.addr").String())
+				} else {
+					data.Vrfs[c].AnycastRpPeers[nc].Address = types.StringNull()
+				}
+				if !data.Vrfs[c].AnycastRpPeers[nc].RpSetAddress.IsNull() {
+					data.Vrfs[c].AnycastRpPeers[nc].RpSetAddress = types.StringValue(rpimAcastRPPeer.Get("pimAcastRPPeer.attributes.rpSetAddr").String())
+				} else {
+					data.Vrfs[c].AnycastRpPeers[nc].RpSetAddress = types.StringNull()
+				}
+			}
+		}
 	}
 }
 
@@ -130,5 +766,84 @@ func (data PIM) getDeleteDns() []string {
 // End of section. //template:end getDeleteDns
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data PIM) getDeletedItems(ctx context.Context, state PIM) []string {
+	deletedItems := []string{}
+	for _, stateChild := range state.Vrfs {
+		found := false
+		for _, planChild := range data.Vrfs {
+			if stateChild.Name == planChild.Name {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+stateChild.getRn())
+		}
+	}
+	for di := range state.Vrfs {
+		for pdi := range data.Vrfs {
+			if state.Vrfs[di].Name == data.Vrfs[pdi].Name {
+				for _, stateChild := range state.Vrfs[di].Interfaces {
+					found := false
+					for _, planChild := range data.Vrfs[pdi].Interfaces {
+						if stateChild.InterfaceId == planChild.InterfaceId {
+							found = true
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+state.Vrfs[di].getRn()+"/"+stateChild.getRn())
+					}
+				}
+				for _, stateChild := range state.Vrfs[di].StaticRps {
+					found := false
+					for _, planChild := range data.Vrfs[pdi].StaticRps {
+						if stateChild.Address == planChild.Address {
+							found = true
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+state.Vrfs[di].getRn()+"/staticrp"+"/"+stateChild.getRn())
+					}
+				}
+				for di__ := range state.Vrfs[di].StaticRps {
+					for pdi__ := range data.Vrfs[pdi].StaticRps {
+						if state.Vrfs[di].StaticRps[di__].Address == data.Vrfs[pdi].StaticRps[pdi__].Address {
+							for _, stateChild := range state.Vrfs[di].StaticRps[di__].GroupLists {
+								found := false
+								for _, planChild := range data.Vrfs[pdi].StaticRps[pdi__].GroupLists {
+									if stateChild.Address == planChild.Address {
+										found = true
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+state.Vrfs[di].getRn()+"/staticrp"+"/"+state.Vrfs[di].StaticRps[di__].getRn()+"/"+stateChild.getRn())
+								}
+							}
+							break
+						}
+					}
+				}
+				for _, stateChild := range state.Vrfs[di].AnycastRpPeers {
+					found := false
+					for _, planChild := range data.Vrfs[pdi].AnycastRpPeers {
+						if stateChild.Address == planChild.Address && stateChild.RpSetAddress == planChild.RpSetAddress {
+							found = true
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+state.Vrfs[di].getRn()+"/acastrpfunc"+"/"+stateChild.getRn())
+					}
+				}
+				break
+			}
+		}
+	}
+	return deletedItems
+}
 
 // End of section. //template:end getDeletedItems

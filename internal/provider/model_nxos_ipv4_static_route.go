@@ -177,49 +177,49 @@ func (data *IPv4StaticRoute) updateFromBody(res gjson.Result) {
 		data.Prefix = types.StringNull()
 	}
 	for c := range data.NextHops {
-		var r gjson.Result
+		var ripv4Nexthop gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
 				key := v.Get("ipv4Nexthop.attributes.rn").String()
 				if key == data.NextHops[c].getRn() {
-					r = v
+					ripv4Nexthop = v
 					return false
 				}
 				return true
 			},
 		)
 		if !data.NextHops[c].InterfaceId.IsNull() {
-			data.NextHops[c].InterfaceId = types.StringValue(r.Get("ipv4Nexthop.attributes.nhIf").String())
+			data.NextHops[c].InterfaceId = types.StringValue(ripv4Nexthop.Get("ipv4Nexthop.attributes.nhIf").String())
 		} else {
 			data.NextHops[c].InterfaceId = types.StringNull()
 		}
 		if !data.NextHops[c].Address.IsNull() {
-			data.NextHops[c].Address = types.StringValue(r.Get("ipv4Nexthop.attributes.nhAddr").String())
+			data.NextHops[c].Address = types.StringValue(ripv4Nexthop.Get("ipv4Nexthop.attributes.nhAddr").String())
 		} else {
 			data.NextHops[c].Address = types.StringNull()
 		}
 		if !data.NextHops[c].VrfName.IsNull() {
-			data.NextHops[c].VrfName = types.StringValue(r.Get("ipv4Nexthop.attributes.nhVrf").String())
+			data.NextHops[c].VrfName = types.StringValue(ripv4Nexthop.Get("ipv4Nexthop.attributes.nhVrf").String())
 		} else {
 			data.NextHops[c].VrfName = types.StringNull()
 		}
 		if !data.NextHops[c].Description.IsNull() {
-			data.NextHops[c].Description = types.StringValue(r.Get("ipv4Nexthop.attributes.descr").String())
+			data.NextHops[c].Description = types.StringValue(ripv4Nexthop.Get("ipv4Nexthop.attributes.descr").String())
 		} else {
 			data.NextHops[c].Description = types.StringNull()
 		}
 		if !data.NextHops[c].Object.IsNull() {
-			data.NextHops[c].Object = types.Int64Value(r.Get("ipv4Nexthop.attributes.object").Int())
+			data.NextHops[c].Object = types.Int64Value(ripv4Nexthop.Get("ipv4Nexthop.attributes.object").Int())
 		} else {
 			data.NextHops[c].Object = types.Int64Null()
 		}
 		if !data.NextHops[c].Preference.IsNull() {
-			data.NextHops[c].Preference = types.Int64Value(r.Get("ipv4Nexthop.attributes.pref").Int())
+			data.NextHops[c].Preference = types.Int64Value(ripv4Nexthop.Get("ipv4Nexthop.attributes.pref").Int())
 		} else {
 			data.NextHops[c].Preference = types.Int64Null()
 		}
 		if !data.NextHops[c].Tag.IsNull() {
-			data.NextHops[c].Tag = types.Int64Value(r.Get("ipv4Nexthop.attributes.tag").Int())
+			data.NextHops[c].Tag = types.Int64Value(ripv4Nexthop.Get("ipv4Nexthop.attributes.tag").Int())
 		} else {
 			data.NextHops[c].Tag = types.Int64Null()
 		}

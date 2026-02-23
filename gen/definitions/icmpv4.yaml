@@ -6,8 +6,6 @@ ds_description: This data source can read the global ICMP configuration.
 res_description: This resource can manage the global ICMP configuration.
 doc_path: Routing%20and%20Forwarding/icmpv4:Entity/
 doc_category: ICMP
-children:
-  - ICMPv4 Instance
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state
@@ -18,3 +16,65 @@ attributes:
       - disabled
     default_value: enabled
     example: enabled
+child_classes:
+  - class_name: icmpv4Inst
+    rn: inst
+    type: single
+    doc_path: Routing%20and%20Forwarding/icmpv4:Instance/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: instance_admin_state
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        default_value: enabled
+        example: enabled
+    child_classes:
+      - class_name: icmpv4Dom
+        rn: dom-%s
+        type: list
+        tf_name: vrfs
+        description: 'List of ICMPv4 VRF configurations.'
+        doc_path: Routing%20and%20Forwarding/icmpv4:Dom/
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'VRF name.'
+            example: VRF1
+        child_classes:
+          - class_name: icmpv4If
+            rn: if-[%s]
+            type: list
+            tf_name: interfaces
+            description: 'List of ICMPv4 interface configurations.'
+            doc_path: Routing%20and%20Forwarding/icmpv4:If/
+            attributes:
+              - nxos_name: id
+                tf_name: id
+                type: String
+                id: true
+                description: 'Must match first field in the output of `show intf brief`. Example: `vlan100`.'
+                example: vlan10
+              - nxos_name: ctrl
+                tf_name: control
+                type: String
+                description: 'ICMP interface control. Choices: `redirect`, `unreachable`, `port-unreachable`. Can be an empty string. Allowed formats:\n  - Single value. Example: `unreachable`\n  - Multiple values (comma-separated). Example: `redirect,unreachable`. In this case values must be in alphabetical order.'
+                default_value: unreachable
+                example: port-unreachable
+test_prerequisites:
+  - dn: sys/fm/ifvlan
+    class_name: fmInterfaceVlan
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/intf/svi-[vlan10]
+    class_name: sviIf
+    attributes:
+      - name: id
+        value: vlan10
+    dependencies: [0]

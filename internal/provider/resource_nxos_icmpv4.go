@@ -63,7 +63,7 @@ func (r *ICMPv4Resource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *ICMPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the global ICMP configuration.", "icmpv4Entity", "Routing%20and%20Forwarding/icmpv4:Entity/").AddChildren("icmpv4_instance").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the global ICMP configuration.", "icmpv4Entity", "Routing%20and%20Forwarding/icmpv4:Entity/").AddAdditionalDocs([]string{"icmpv4Inst", "icmpv4Dom", "icmpv4If"}, []string{"Routing%20and%20Forwarding/icmpv4:Instance/", "Routing%20and%20Forwarding/icmpv4:Dom/", "Routing%20and%20Forwarding/icmpv4:If/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -84,6 +84,51 @@ func (r *ICMPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Default:             stringdefault.StaticString("enabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"instance_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("enabled"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: "List of ICMPv4 VRF configurations.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"interfaces": schema.ListNestedAttribute{
+							MarkdownDescription: "List of ICMPv4 interface configurations.",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"id": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `vlan100`.").String,
+										Required:            true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplace(),
+										},
+									},
+									"control": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("ICMP interface control. Choices: `redirect`, `unreachable`, `port-unreachable`. Can be an empty string. Allowed formats:\n  - Single value. Example: `unreachable`\n  - Multiple values (comma-separated). Example: `redirect,unreachable`. In this case values must be in alphabetical order.").AddDefaultValueDescription("unreachable").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("unreachable"),
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
@@ -188,6 +233,7 @@ func (r *ICMPv4Resource) Read(ctx context.Context, req resource.ReadRequest, res
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		queries = append(queries, nxos.Query("rsp-subtree", "full"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -230,6 +276,14 @@ func (r *ICMPv4Resource) Update(ctx context.Context, req resource.UpdateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	var state ICMPv4
+
+	// Read state
+	diags = req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
@@ -245,6 +299,19 @@ func (r *ICMPv4Resource) Update(ctx context.Context, req resource.UpdateRequest,
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
+		}
+
+		deletedItems := plan.getDeletedItems(ctx, state)
+		tflog.Debug(ctx, fmt.Sprintf("%s: List items to delete: %v", plan.getDn(), deletedItems))
+		for _, dn := range deletedItems {
+			res, err := device.Client.DeleteDn(dn)
+			if err != nil {
+				errCode := res.Get("imdata.0.error.attributes.code").Str
+				if errCode != "1" && errCode != "107" {
+					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+					return
+				}
+			}
 		}
 	}
 

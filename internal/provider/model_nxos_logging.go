@@ -142,24 +142,24 @@ func (data *Logging) fromBody(res gjson.Result) {
 
 func (data *Logging) updateFromBody(res gjson.Result) {
 	for c := range data.Facilities {
-		var r gjson.Result
+		var rloggingFacility gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
 				key := v.Get("loggingFacility.attributes.rn").String()
 				if key == data.Facilities[c].getRn() {
-					r = v
+					rloggingFacility = v
 					return false
 				}
 				return true
 			},
 		)
 		if !data.Facilities[c].Name.IsNull() {
-			data.Facilities[c].Name = types.StringValue(r.Get("loggingFacility.attributes.facilityName").String())
+			data.Facilities[c].Name = types.StringValue(rloggingFacility.Get("loggingFacility.attributes.facilityName").String())
 		} else {
 			data.Facilities[c].Name = types.StringNull()
 		}
 		if !data.Facilities[c].Level.IsNull() {
-			data.Facilities[c].Level = types.StringValue(r.Get("loggingFacility.attributes.severityLevel").String())
+			data.Facilities[c].Level = types.StringValue(rloggingFacility.Get("loggingFacility.attributes.severityLevel").String())
 		} else {
 			data.Facilities[c].Level = types.StringNull()
 		}

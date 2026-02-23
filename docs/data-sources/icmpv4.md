@@ -5,6 +5,8 @@ subcategory: "ICMP"
 description: |-
   This data source can read the global ICMP configuration.
   API Documentation: icmpv4Entity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/icmpv4:Entity/
+  Additional API Documentation
+  icmpv4Inst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/icmpv4:Instance/icmpv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/icmpv4:Dom/icmpv4If https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/icmpv4:If/
 ---
 
 # nxos_icmpv4 (Data Source)
@@ -12,6 +14,12 @@ description: |-
 This data source can read the global ICMP configuration.
 
 - API Documentation: [icmpv4Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/icmpv4:Entity/)
+
+### Additional API Documentation
+
+- [icmpv4Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/icmpv4:Instance/)
+- [icmpv4Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/icmpv4:Dom/)
+- [icmpv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/icmpv4:If/)
 
 ## Example Usage
 
@@ -31,3 +39,23 @@ data "nxos_icmpv4" "example" {
 
 - `admin_state` (String) Administrative state.
 - `id` (String) The distinguished name of the object.
+- `instance_admin_state` (String) Administrative state.
+- `vrfs` (Attributes List) List of ICMPv4 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
+
+<a id="nestedatt--vrfs"></a>
+### Nested Schema for `vrfs`
+
+Read-Only:
+
+- `interfaces` (Attributes List) List of ICMPv4 interface configurations. (see [below for nested schema](#nestedatt--vrfs--interfaces))
+- `name` (String) VRF name.
+
+<a id="nestedatt--vrfs--interfaces"></a>
+### Nested Schema for `vrfs.interfaces`
+
+Read-Only:
+
+- `control` (String) ICMP interface control. Choices: `redirect`, `unreachable`, `port-unreachable`. Can be an empty string. Allowed formats:
+  - Single value. Example: `unreachable`
+  - Multiple values (comma-separated). Example: `redirect,unreachable`. In this case values must be in alphabetical order.
+- `id` (String) Must match first field in the output of `show intf brief`. Example: `vlan100`.

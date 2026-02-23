@@ -251,7 +251,8 @@ func (data {{camelCase .Name}}) getClassName() string {
 		body, _ = sjson.SetRaw(body, {{$childrenPathVar}}+".-1.{{$childClassName}}.attributes", attrs)
 		{{- if .ChildClasses}}
 		{
-		nestedChildrenPath := {{$childrenPathVar}} + ".-1.{{$childClassName}}.children"
+		nestedIndex := len(gjson.Get(body, {{$childrenPathVar}}).Array()) - 1
+		nestedChildrenPath := {{$childrenPathVar}} + "." + strconv.Itoa(nestedIndex) + ".{{$childClassName}}.children"
 		{{- template "toBodyChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" "child" "ChildrenPathVar" "nestedChildrenPath")}}
 		}
 		{{- end}}
@@ -494,12 +495,12 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 {{- end}}
 {{- else if eq .Type "list"}}
 	for c := range {{$dataAccessor}}.{{$list}} {
-		var r gjson.Result
+		var r{{$childClassName}} gjson.Result
 		{{$resExpr}}.ForEach(
 			func(_, v gjson.Result) bool {
 				key := v.Get("{{$childClassName}}.attributes.rn").String()
 				if key == {{$dataAccessor}}.{{$list}}[c].getRn() {
-					r = v
+					r{{$childClassName}} = v
 					return false
 				}
 				return true
@@ -509,11 +510,11 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
 		if !{{$dataAccessor}}.{{$list}}[c].{{toGoName .TfName}}.IsNull() {
 			{{- if eq .Type "Int64"}}
-			{{$dataAccessor}}.{{$list}}[c].{{toGoName .TfName}} = types.Int64Value(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
+			{{$dataAccessor}}.{{$list}}[c].{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
 			{{- else if eq .Type "Bool"}}
-			{{$dataAccessor}}.{{$list}}[c].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
+			{{$dataAccessor}}.{{$list}}[c].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
 			{{- else if eq .Type "String"}}
-			{{$dataAccessor}}.{{$list}}[c].{{toGoName .TfName}} = types.StringValue(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
+			{{$dataAccessor}}.{{$list}}[c].{{toGoName .TfName}} = types.StringValue(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
 			{{- end}}
 		} else {
 			{{$dataAccessor}}.{{$list}}[c].{{toGoName .TfName}} = types.{{.Type}}Null()
@@ -521,7 +522,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 		{{- end}}
 		{{- end}}
 		{{- if .ChildClasses}}
-		{{- template "updateFromBodyListChildTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ResExpr" (printf "r.Get(\"%s.children\")" $childClassName) "DataListExpr" (printf "%s.%s[c]" $dataAccessor $list) "IndexVar" "nc")}}
+		{{- template "updateFromBodyListChildTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ResExpr" (printf "r%s.Get(\"%s.children\")" $childClassName $childClassName) "DataListExpr" (printf "%s.%s[c]" $dataAccessor $list) "IndexVar" "nc")}}
 		{{- end}}
 	}
 {{- end}}
@@ -581,12 +582,12 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 	}
 {{- else if eq .Type "list"}}
 	for {{$indexVar}} := range {{$dataListExpr}}.{{$list}} {
-		var r gjson.Result
+		var r{{$childClassName}} gjson.Result
 		{{$resExpr}}.ForEach(
 			func(_, v gjson.Result) bool {
 				key := v.Get("{{$childClassName}}.attributes.rn").String()
 				if key == {{$dataListExpr}}.{{$list}}[{{$indexVar}}].getRn() {
-					r = v
+					r{{$childClassName}} = v
 					return false
 				}
 				return true
@@ -596,11 +597,11 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
 		if !{{$dataListExpr}}.{{$list}}[{{$indexVar}}].{{toGoName .TfName}}.IsNull() {
 			{{- if eq .Type "Int64"}}
-			{{$dataListExpr}}.{{$list}}[{{$indexVar}}].{{toGoName .TfName}} = types.Int64Value(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
+			{{$dataListExpr}}.{{$list}}[{{$indexVar}}].{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
 			{{- else if eq .Type "Bool"}}
-			{{$dataListExpr}}.{{$list}}[{{$indexVar}}].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
+			{{$dataListExpr}}.{{$list}}[{{$indexVar}}].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
 			{{- else if eq .Type "String"}}
-			{{$dataListExpr}}.{{$list}}[{{$indexVar}}].{{toGoName .TfName}} = types.StringValue(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
+			{{$dataListExpr}}.{{$list}}[{{$indexVar}}].{{toGoName .TfName}} = types.StringValue(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
 			{{- end}}
 		} else {
 			{{$dataListExpr}}.{{$list}}[{{$indexVar}}].{{toGoName .TfName}} = types.{{.Type}}Null()
@@ -608,7 +609,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 		{{- end}}
 		{{- end}}
 		{{- if .ChildClasses}}
-		{{- template "updateFromBodyListChildTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ResExpr" (printf "r.Get(\"%s.children\")" $childClassName) "DataListExpr" (printf "%s.%s[%s]" $dataListExpr $list $indexVar) "IndexVar" (printf "%s_" $indexVar))}}
+		{{- template "updateFromBodyListChildTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ResExpr" (printf "r%s.Get(\"%s.children\")" $childClassName $childClassName) "DataListExpr" (printf "%s.%s[%s]" $dataListExpr $list $indexVar) "IndexVar" (printf "%s_" $indexVar))}}
 		{{- end}}
 	}
 {{- end}}
@@ -675,12 +676,12 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 	{{- end}}
 	{{- else if eq .Type "list"}}
 	for c := range data.{{toGoName .TfName}} {
-		var r gjson.Result
+		var r{{$childClassName}} gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
 				key := v.Get("{{$childClassName}}.attributes.rn").String()
 				if key == data.{{$list}}[c].getRn() {
-					r = v
+					r{{$childClassName}} = v
 					return false
 				}
 				return true
@@ -690,11 +691,11 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
 		if !data.{{$list}}[c].{{toGoName .TfName}}.IsNull() {
 			{{- if eq .Type "Int64"}}
-			data.{{$list}}[c].{{toGoName .TfName}} = types.Int64Value(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
+			data.{{$list}}[c].{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
 			{{- else if eq .Type "Bool"}}
-			data.{{$list}}[c].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
+			data.{{$list}}[c].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
 			{{- else if eq .Type "String"}}
-			data.{{$list}}[c].{{toGoName .TfName}} = types.StringValue(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
+			data.{{$list}}[c].{{toGoName .TfName}} = types.StringValue(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
 			{{- end}}
 		} else {
 			data.{{$list}}[c].{{toGoName .TfName}} = types.{{.Type}}Null()
@@ -702,7 +703,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 		{{- end}}
 		{{- end}}
 		{{- if .ChildClasses}}
-		{{- template "updateFromBodyListChildTemplate" (makeMap "TypePrefix" $name "Children" .ChildClasses "ResExpr" (printf "r.Get(\"%s.children\")" $childClassName) "DataListExpr" (printf "data.%s[c]" $list) "IndexVar" "nc")}}
+		{{- template "updateFromBodyListChildTemplate" (makeMap "TypePrefix" $name "Children" .ChildClasses "ResExpr" (printf "r%s.Get(\"%s.children\")" $childClassName $childClassName) "DataListExpr" (printf "data.%s[c]" $list) "IndexVar" "nc")}}
 		{{- end}}
 	}
 	{{- end}}

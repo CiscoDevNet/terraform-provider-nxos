@@ -57,7 +57,7 @@ func (d *ICMPv4DataSource) Metadata(_ context.Context, req datasource.MetadataRe
 func (d *ICMPv4DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the global ICMP configuration.", "icmpv4Entity", "Routing%20and%20Forwarding/icmpv4:Entity/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the global ICMP configuration.", "icmpv4Entity", "Routing%20and%20Forwarding/icmpv4:Entity/").AddAdditionalDocs([]string{"icmpv4Inst", "icmpv4Dom", "icmpv4If"}, []string{"Routing%20and%20Forwarding/icmpv4:Instance/", "Routing%20and%20Forwarding/icmpv4:Dom/", "Routing%20and%20Forwarding/icmpv4:If/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -71,6 +71,38 @@ func (d *ICMPv4DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 			"admin_state": schema.StringAttribute{
 				MarkdownDescription: "Administrative state.",
 				Computed:            true,
+			},
+			"instance_admin_state": schema.StringAttribute{
+				MarkdownDescription: "Administrative state.",
+				Computed:            true,
+			},
+			"vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: "List of ICMPv4 VRF configurations.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "VRF name.",
+							Computed:            true,
+						},
+						"interfaces": schema.ListNestedAttribute{
+							MarkdownDescription: "List of ICMPv4 interface configurations.",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"id": schema.StringAttribute{
+										MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `vlan100`.",
+										Computed:            true,
+									},
+									"control": schema.StringAttribute{
+										MarkdownDescription: "ICMP interface control. Choices: `redirect`, `unreachable`, `port-unreachable`. Can be an empty string. Allowed formats:\n  - Single value. Example: `unreachable`\n  - Multiple values (comma-separated). Example: `redirect,unreachable`. In this case values must be in alphabetical order.",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	}
@@ -106,6 +138,7 @@ func (d *ICMPv4DataSource) Read(ctx context.Context, req datasource.ReadRequest,
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "full"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

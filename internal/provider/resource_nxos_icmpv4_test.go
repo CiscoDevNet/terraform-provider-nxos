@@ -36,6 +36,10 @@ import (
 func TestAccNxosICMPv4(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_icmpv4.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_icmpv4.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_icmpv4.test", "vrfs.0.name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_icmpv4.test", "vrfs.0.interfaces.0.id", "vlan10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_icmpv4.test", "vrfs.0.interfaces.0.control", "port-unreachable"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -45,7 +49,7 @@ func TestAccNxosICMPv4(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosICMPv4Config_all(),
+				Config: testAccNxosICMPv4PrerequisitesConfig + testAccNxosICMPv4Config_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -77,12 +81,33 @@ func nxosICMPv4ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccNxosICMPv4PrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/ifvlan"
+  class_name = "fmInterfaceVlan"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/intf/svi-[vlan10]"
+  class_name = "sviIf"
+  content = {
+      id = "vlan10"
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosICMPv4Config_minimum() string {
 	config := `resource "nxos_icmpv4" "test" {` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -93,6 +118,15 @@ func testAccNxosICMPv4Config_minimum() string {
 func testAccNxosICMPv4Config_all() string {
 	config := `resource "nxos_icmpv4" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
+	config += `	instance_admin_state = "enabled"` + "\n"
+	config += `	vrfs = [{` + "\n"
+	config += `		name = "VRF1"` + "\n"
+	config += `		interfaces = [{` + "\n"
+	config += `			id = "vlan10"` + "\n"
+	config += `			control = "port-unreachable"` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -23,6 +23,8 @@ package provider
 
 import (
 	"context"
+	"fmt"
+	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -35,9 +37,21 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type ICMPv4 struct {
-	Device     types.String `tfsdk:"device"`
-	Dn         types.String `tfsdk:"id"`
-	AdminState types.String `tfsdk:"admin_state"`
+	Device             types.String `tfsdk:"device"`
+	Dn                 types.String `tfsdk:"id"`
+	AdminState         types.String `tfsdk:"admin_state"`
+	InstanceAdminState types.String `tfsdk:"instance_admin_state"`
+	Vrfs               []ICMPv4Vrfs `tfsdk:"vrfs"`
+}
+
+type ICMPv4Vrfs struct {
+	Name       types.String       `tfsdk:"name"`
+	Interfaces []ICMPv4Interfaces `tfsdk:"interfaces"`
+}
+
+type ICMPv4Interfaces struct {
+	Id      types.String `tfsdk:"id"`
+	Control types.String `tfsdk:"control"`
 }
 
 type ICMPv4Identity struct {
@@ -68,6 +82,14 @@ func (data ICMPv4) getDn() string {
 	return "sys/icmpv4"
 }
 
+func (data ICMPv4Vrfs) getRn() string {
+	return fmt.Sprintf("dom-%s", data.Name.ValueString())
+}
+
+func (data ICMPv4Interfaces) getRn() string {
+	return fmt.Sprintf("if-[%s]", data.Id.ValueString())
+}
+
 func (data ICMPv4) getClassName() string {
 	return "icmpv4Entity"
 }
@@ -82,6 +104,39 @@ func (data ICMPv4) toBody() nxos.Body {
 	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
+	var attrs string
+	childrenPath := data.getClassName() + ".children"
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".icmpv4Inst"
+		attrs = "{}"
+		if (!data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		for _, child := range data.Vrfs {
+			attrs = "{}"
+			if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.icmpv4Dom.attributes", attrs)
+			{
+				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".icmpv4Dom.children"
+				for _, child := range child.Interfaces {
+					attrs = "{}"
+					if (!child.Id.IsUnknown() && !child.Id.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "id", child.Id.ValueString())
+					}
+					if (!child.Control.IsUnknown() && !child.Control.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
+					}
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.icmpv4If.attributes", attrs)
+				}
+			}
+		}
+	}
 
 	return nxos.Body{body}
 }
@@ -92,6 +147,49 @@ func (data ICMPv4) toBody() nxos.Body {
 
 func (data *ICMPv4) fromBody(res gjson.Result) {
 	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	var ricmpv4Inst gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("icmpv4Inst.attributes.rn").String()
+			if key == "inst" {
+				ricmpv4Inst = v
+				return false
+			}
+			return true
+		},
+	)
+	data.InstanceAdminState = types.StringValue(ricmpv4Inst.Get("icmpv4Inst.attributes.adminSt").String())
+	ricmpv4Inst.Get("icmpv4Inst.children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "icmpv4Dom" {
+						var child ICMPv4Vrfs
+						child.Name = types.StringValue(value.Get("attributes.name").String())
+						value.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "icmpv4If" {
+											var nestedChild ICMPv4Interfaces
+											nestedChild.Id = types.StringValue(nestedValue.Get("attributes.id").String())
+											nestedChild.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
+											child.Interfaces = append(child.Interfaces, nestedChild)
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
+						data.Vrfs = append(data.Vrfs, child)
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
 }
 
 // End of section. //template:end fromBody
@@ -103,6 +201,63 @@ func (data *ICMPv4) updateFromBody(res gjson.Result) {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
 		data.AdminState = types.StringNull()
+	}
+	var ricmpv4Inst gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("icmpv4Inst.attributes.rn").String()
+			if key == "inst" {
+				ricmpv4Inst = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.InstanceAdminState.IsNull() {
+		data.InstanceAdminState = types.StringValue(ricmpv4Inst.Get("icmpv4Inst.attributes.adminSt").String())
+	} else {
+		data.InstanceAdminState = types.StringNull()
+	}
+	for c := range data.Vrfs {
+		var ricmpv4Dom gjson.Result
+		ricmpv4Inst.Get("icmpv4Inst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("icmpv4Dom.attributes.rn").String()
+				if key == data.Vrfs[c].getRn() {
+					ricmpv4Dom = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.Vrfs[c].Name.IsNull() {
+			data.Vrfs[c].Name = types.StringValue(ricmpv4Dom.Get("icmpv4Dom.attributes.name").String())
+		} else {
+			data.Vrfs[c].Name = types.StringNull()
+		}
+		for nc := range data.Vrfs[c].Interfaces {
+			var ricmpv4If gjson.Result
+			ricmpv4Dom.Get("icmpv4Dom.children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("icmpv4If.attributes.rn").String()
+					if key == data.Vrfs[c].Interfaces[nc].getRn() {
+						ricmpv4If = v
+						return false
+					}
+					return true
+				},
+			)
+			if !data.Vrfs[c].Interfaces[nc].Id.IsNull() {
+				data.Vrfs[c].Interfaces[nc].Id = types.StringValue(ricmpv4If.Get("icmpv4If.attributes.id").String())
+			} else {
+				data.Vrfs[c].Interfaces[nc].Id = types.StringNull()
+			}
+			if !data.Vrfs[c].Interfaces[nc].Control.IsNull() {
+				data.Vrfs[c].Interfaces[nc].Control = types.StringValue(ricmpv4If.Get("icmpv4If.attributes.ctrl").String())
+			} else {
+				data.Vrfs[c].Interfaces[nc].Control = types.StringNull()
+			}
+		}
 	}
 }
 
@@ -130,5 +285,41 @@ func (data ICMPv4) getDeleteDns() []string {
 // End of section. //template:end getDeleteDns
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data ICMPv4) getDeletedItems(ctx context.Context, state ICMPv4) []string {
+	deletedItems := []string{}
+	for _, stateChild := range state.Vrfs {
+		found := false
+		for _, planChild := range data.Vrfs {
+			if stateChild.Name == planChild.Name {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+stateChild.getRn())
+		}
+	}
+	for di := range state.Vrfs {
+		for pdi := range data.Vrfs {
+			if state.Vrfs[di].Name == data.Vrfs[pdi].Name {
+				for _, stateChild := range state.Vrfs[di].Interfaces {
+					found := false
+					for _, planChild := range data.Vrfs[pdi].Interfaces {
+						if stateChild.Id == planChild.Id {
+							found = true
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+state.Vrfs[di].getRn()+"/"+stateChild.getRn())
+					}
+				}
+				break
+			}
+		}
+	}
+	return deletedItems
+}
 
 // End of section. //template:end getDeletedItems

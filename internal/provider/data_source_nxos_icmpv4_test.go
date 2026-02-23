@@ -32,12 +32,20 @@ import (
 func TestAccDataSourceNxosICMPv4(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_icmpv4.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_icmpv4.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_icmpv4.test", "vrfs.*", map[string]string{
+		"name": "VRF1",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_icmpv4.test", "vrfs.0.interfaces.*", map[string]string{
+		"id":      "vlan10",
+		"control": "port-unreachable",
+	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosICMPv4Config(),
+				Config: testAccDataSourceNxosICMPv4PrerequisitesConfig + testAccDataSourceNxosICMPv4Config(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -47,6 +55,26 @@ func TestAccDataSourceNxosICMPv4(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccDataSourceNxosICMPv4PrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/ifvlan"
+  class_name = "fmInterfaceVlan"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/intf/svi-[vlan10]"
+  class_name = "sviIf"
+  content = {
+      id = "vlan10"
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -54,6 +82,15 @@ func TestAccDataSourceNxosICMPv4(t *testing.T) {
 func testAccDataSourceNxosICMPv4Config() string {
 	config := `resource "nxos_icmpv4" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
+	config += `	instance_admin_state = "enabled"` + "\n"
+	config += `	vrfs = [{` + "\n"
+	config += `		name = "VRF1"` + "\n"
+	config += `		interfaces = [{` + "\n"
+	config += `			id = "vlan10"` + "\n"
+	config += `			control = "port-unreachable"` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

@@ -152,19 +152,19 @@ func (data *DefaultQOSClassMap) updateFromBody(res gjson.Result) {
 		data.MatchType = types.StringNull()
 	}
 	for c := range data.DscpValues {
-		var r gjson.Result
+		var ripqosDscp gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
 				key := v.Get("ipqosDscp.attributes.rn").String()
 				if key == data.DscpValues[c].getRn() {
-					r = v
+					ripqosDscp = v
 					return false
 				}
 				return true
 			},
 		)
 		if !data.DscpValues[c].Value.IsNull() {
-			data.DscpValues[c].Value = types.StringValue(r.Get("ipqosDscp.attributes.val").String())
+			data.DscpValues[c].Value = types.StringValue(ripqosDscp.Get("ipqosDscp.attributes.val").String())
 		} else {
 			data.DscpValues[c].Value = types.StringNull()
 		}

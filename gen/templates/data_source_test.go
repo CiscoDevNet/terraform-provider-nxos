@@ -31,12 +31,14 @@ import (
 
 {{- /* ==================== dsTestChecksTemplate ====================
        Recursively emits test check calls for data source TfChildClasses.
-       Context: map with "Name" (string), "Children" ([]TfChildClass)
+       Context: map with "Name" (string), "Children" ([]TfChildClass), "PathPrefix" (string)
        - single: emit TestCheckResourceAttr for each attr, recurse
-       - list: emit TestCheckTypeSetElemNestedAttrs with map of attrs
+       - list: emit TestCheckTypeSetElemNestedAttrs with map of attrs; for nested children
+               use TestCheckResourceAttr with explicit index "0" to build correct path
        ========================================================= */}}
 {{- define "dsTestChecksTemplate"}}
 {{- $name := .Name}}
+{{- $pathPrefix := .PathPrefix}}
 {{- range .Children}}
 {{- $list := .TfName}}
 {{- if eq .Type "single"}}
@@ -44,18 +46,18 @@ import (
 {{- if not .ExcludeTest}}
 {{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
-		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{$pathPrefix}}{{.TfName}}", "{{.Example}}"))
 	}
 {{- else}}
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{$pathPrefix}}{{.TfName}}", "{{.Example}}"))
 {{- end}}
 {{- end}}
 {{- end}}
 {{- if .TfChildClasses}}
-{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses)}}
+{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" $pathPrefix)}}
 {{- end}}
 {{- else if eq .Type "list"}}
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_{{snakeCase $name}}.test", "{{$list}}.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_{{snakeCase $name}}.test", "{{$pathPrefix}}{{$list}}.*", map[string]string{
 		{{- range .Attributes}}
 		{{- if not .ExcludeTest}}
 		"{{.TfName}}": "{{.Example}}",
@@ -63,7 +65,7 @@ import (
 		{{- end}}
 	}))
 {{- if .TfChildClasses}}
-{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses)}}
+{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" (printf "%s%s.0." $pathPrefix $list))}}
 {{- end}}
 {{- end}}
 {{- end}}
@@ -90,7 +92,7 @@ func TestAccDataSourceNxos{{camelCase .Name}}(t *testing.T) {
 	{{- end}}
 	{{- end}}
 	{{- end}}
-	{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses)}}
+	{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" "")}}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,

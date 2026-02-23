@@ -5,8 +5,8 @@ subcategory: "ICMP"
 description: |-
   This resource can manage the global ICMP configuration.
   API Documentation: icmpv4Entity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/icmpv4:Entity/
-  Child resources
-  nxos_icmpv4_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/icmpv4_instance
+  Additional API Documentation
+  icmpv4Inst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/icmpv4:Instance/icmpv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/icmpv4:Dom/icmpv4If https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/icmpv4:If/
 ---
 
 # nxos_icmpv4 (Resource)
@@ -15,15 +15,25 @@ This resource can manage the global ICMP configuration.
 
 - API Documentation: [icmpv4Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/icmpv4:Entity/)
 
-### Child resources
+### Additional API Documentation
 
-- [nxos_icmpv4_instance](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/icmpv4_instance)
+- [icmpv4Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/icmpv4:Instance/)
+- [icmpv4Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/icmpv4:Dom/)
+- [icmpv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/icmpv4:If/)
 
 ## Example Usage
 
 ```terraform
 resource "nxos_icmpv4" "example" {
-  admin_state = "enabled"
+  admin_state          = "enabled"
+  instance_admin_state = "enabled"
+  vrfs = [{
+    name = "VRF1"
+    interfaces = [{
+      id      = "vlan10"
+      control = "port-unreachable"
+    }]
+  }]
 }
 ```
 
@@ -36,10 +46,39 @@ resource "nxos_icmpv4" "example" {
   - Choices: `enabled`, `disabled`
   - Default value: `enabled`
 - `device` (String) A device name from the provider configuration.
+- `instance_admin_state` (String) Administrative state.
+  - Choices: `enabled`, `disabled`
+  - Default value: `enabled`
+- `vrfs` (Attributes List) List of ICMPv4 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
 
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--vrfs"></a>
+### Nested Schema for `vrfs`
+
+Required:
+
+- `name` (String) VRF name.
+
+Optional:
+
+- `interfaces` (Attributes List) List of ICMPv4 interface configurations. (see [below for nested schema](#nestedatt--vrfs--interfaces))
+
+<a id="nestedatt--vrfs--interfaces"></a>
+### Nested Schema for `vrfs.interfaces`
+
+Required:
+
+- `id` (String) Must match first field in the output of `show intf brief`. Example: `vlan100`.
+
+Optional:
+
+- `control` (String) ICMP interface control. Choices: `redirect`, `unreachable`, `port-unreachable`. Can be an empty string. Allowed formats:
+  - Single value. Example: `unreachable`
+  - Multiple values (comma-separated). Example: `redirect,unreachable`. In this case values must be in alphabetical order.
+  - Default value: `unreachable`
 
 ## Import
 

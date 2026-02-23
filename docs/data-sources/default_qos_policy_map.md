@@ -5,6 +5,8 @@ subcategory: "QoS"
 description: |-
   This data source can read the default QoS policy map configuration.
   API Documentation: ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:PMapInst/
+  Additional API Documentation
+  ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:MatchCMap/ipqosSetQoSGrp https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:SetQoSGrp/ipqosPolice https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Police/
 ---
 
 # nxos_default_qos_policy_map (Data Source)
@@ -12,6 +14,12 @@ description: |-
 This data source can read the default QoS policy map configuration.
 
 - API Documentation: [ipqosPMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:PMapInst/)
+
+### Additional API Documentation
+
+- [ipqosMatchCMap](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:MatchCMap/)
+- [ipqosSetQoSGrp](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:SetQoSGrp/)
+- [ipqosPolice](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Police/)
 
 ## Example Usage
 
@@ -35,4 +43,36 @@ data "nxos_default_qos_policy_map" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+- `match_class_maps` (Attributes List) List of match class maps. (see [below for nested schema](#nestedatt--match_class_maps))
 - `match_type` (String) Match type.
+
+<a id="nestedatt--match_class_maps"></a>
+### Nested Schema for `match_class_maps`
+
+Read-Only:
+
+- `bc_rate` (Number) CIR burst rate.
+- `bc_unit` (String) CIR burst rate unit.
+- `be_rate` (Number) PIR burst rate.
+- `be_unit` (String) PIR burst rate unit.
+- `cir_rate` (Number) CIR rate.
+- `cir_unit` (String) CIR rate unit.
+- `conform_action` (String) Conform action.
+- `conform_set_cos` (Number) Set CoS for conforming traffic.
+- `conform_set_dscp` (Number) Set DSCP for conforming traffic.
+- `conform_set_precedence` (String) Set precedence for conforming traffic.
+- `conform_set_qos_group` (Number) Set qos-group for conforming traffic.
+- `exceed_action` (String) Exceed action.
+- `exceed_set_cos` (Number) Set CoS for exceeding traffic.
+- `exceed_set_dscp` (Number) Set DSCP for exceeding traffic.
+- `exceed_set_precedence` (String) Set precedence for exceeding traffic.
+- `exceed_set_qos_group` (Number) Set qos-group for exceeding traffic.
+- `name` (String) Class map name.
+- `pir_rate` (Number) PIR rate.
+- `pir_unit` (String) PIR rate unit.
+- `qos_group_id` (Number) QoS group ID.
+- `violate_action` (String) Violate action.
+- `violate_set_cos` (Number) Set CoS for violating traffic.
+- `violate_set_dscp` (Number) Set DSCP for violating traffic.
+- `violate_set_precedence` (String) Set precedence for violating traffic.
+- `violate_set_qos_group` (Number) Set qos-group for violating traffic.

@@ -57,7 +57,7 @@ func (d *DefaultQOSPolicyMapDataSource) Metadata(_ context.Context, req datasour
 func (d *DefaultQOSPolicyMapDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the default QoS policy map configuration.", "ipqosPMapInst", "Qos/ipqos:PMapInst/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the default QoS policy map configuration.", "ipqosPMapInst", "Qos/ipqos:PMapInst/").AddAdditionalDocs([]string{"ipqosMatchCMap", "ipqosSetQoSGrp", "ipqosPolice"}, []string{"Qos/ipqos:MatchCMap/", "Qos/ipqos:SetQoSGrp/", "Qos/ipqos:Police/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -75,6 +75,114 @@ func (d *DefaultQOSPolicyMapDataSource) Schema(ctx context.Context, req datasour
 			"match_type": schema.StringAttribute{
 				MarkdownDescription: "Match type.",
 				Computed:            true,
+			},
+			"match_class_maps": schema.ListNestedAttribute{
+				MarkdownDescription: "List of match class maps.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Class map name.",
+							Computed:            true,
+						},
+						"qos_group_id": schema.Int64Attribute{
+							MarkdownDescription: "QoS group ID.",
+							Computed:            true,
+						},
+						"bc_rate": schema.Int64Attribute{
+							MarkdownDescription: "CIR burst rate.",
+							Computed:            true,
+						},
+						"bc_unit": schema.StringAttribute{
+							MarkdownDescription: "CIR burst rate unit.",
+							Computed:            true,
+						},
+						"be_rate": schema.Int64Attribute{
+							MarkdownDescription: "PIR burst rate.",
+							Computed:            true,
+						},
+						"be_unit": schema.StringAttribute{
+							MarkdownDescription: "PIR burst rate unit.",
+							Computed:            true,
+						},
+						"cir_rate": schema.Int64Attribute{
+							MarkdownDescription: "CIR rate.",
+							Computed:            true,
+						},
+						"cir_unit": schema.StringAttribute{
+							MarkdownDescription: "CIR rate unit.",
+							Computed:            true,
+						},
+						"conform_action": schema.StringAttribute{
+							MarkdownDescription: "Conform action.",
+							Computed:            true,
+						},
+						"conform_set_cos": schema.Int64Attribute{
+							MarkdownDescription: "Set CoS for conforming traffic.",
+							Computed:            true,
+						},
+						"conform_set_dscp": schema.Int64Attribute{
+							MarkdownDescription: "Set DSCP for conforming traffic.",
+							Computed:            true,
+						},
+						"conform_set_precedence": schema.StringAttribute{
+							MarkdownDescription: "Set precedence for conforming traffic.",
+							Computed:            true,
+						},
+						"conform_set_qos_group": schema.Int64Attribute{
+							MarkdownDescription: "Set qos-group for conforming traffic.",
+							Computed:            true,
+						},
+						"exceed_action": schema.StringAttribute{
+							MarkdownDescription: "Exceed action.",
+							Computed:            true,
+						},
+						"exceed_set_cos": schema.Int64Attribute{
+							MarkdownDescription: "Set CoS for exceeding traffic.",
+							Computed:            true,
+						},
+						"exceed_set_dscp": schema.Int64Attribute{
+							MarkdownDescription: "Set DSCP for exceeding traffic.",
+							Computed:            true,
+						},
+						"exceed_set_precedence": schema.StringAttribute{
+							MarkdownDescription: "Set precedence for exceeding traffic.",
+							Computed:            true,
+						},
+						"exceed_set_qos_group": schema.Int64Attribute{
+							MarkdownDescription: "Set qos-group for exceeding traffic.",
+							Computed:            true,
+						},
+						"pir_rate": schema.Int64Attribute{
+							MarkdownDescription: "PIR rate.",
+							Computed:            true,
+						},
+						"pir_unit": schema.StringAttribute{
+							MarkdownDescription: "PIR rate unit.",
+							Computed:            true,
+						},
+						"violate_action": schema.StringAttribute{
+							MarkdownDescription: "Violate action.",
+							Computed:            true,
+						},
+						"violate_set_cos": schema.Int64Attribute{
+							MarkdownDescription: "Set CoS for violating traffic.",
+							Computed:            true,
+						},
+						"violate_set_dscp": schema.Int64Attribute{
+							MarkdownDescription: "Set DSCP for violating traffic.",
+							Computed:            true,
+						},
+						"violate_set_precedence": schema.StringAttribute{
+							MarkdownDescription: "Set precedence for violating traffic.",
+							Computed:            true,
+						},
+						"violate_set_qos_group": schema.Int64Attribute{
+							MarkdownDescription: "Set qos-group for violating traffic.",
+							Computed:            true,
+						},
+					},
+				},
 			},
 		},
 	}
@@ -110,6 +218,7 @@ func (d *DefaultQOSPolicyMapDataSource) Read(ctx context.Context, req datasource
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "full"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

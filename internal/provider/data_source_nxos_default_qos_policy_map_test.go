@@ -33,12 +33,43 @@ func TestAccDataSourceNxosDefaultQOSPolicyMap(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos_policy_map.test", "name", "PM1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos_policy_map.test", "match_type", "match-any"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_default_qos_policy_map.test", "match_class_maps.*", map[string]string{
+		"name": "Voice",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_default_qos_policy_map.test", "match_class_maps.*", map[string]string{
+		"qos_group_id": "1",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_default_qos_policy_map.test", "match_class_maps.*", map[string]string{
+		"bc_rate":                "200",
+		"bc_unit":                "mbytes",
+		"be_rate":                "200",
+		"be_unit":                "mbytes",
+		"cir_rate":               "10000",
+		"cir_unit":               "mbps",
+		"conform_action":         "transmit",
+		"conform_set_cos":        "0",
+		"conform_set_dscp":       "0",
+		"conform_set_precedence": "routine",
+		"conform_set_qos_group":  "0",
+		"exceed_action":          "transmit",
+		"exceed_set_cos":         "0",
+		"exceed_set_dscp":        "0",
+		"exceed_set_precedence":  "routine",
+		"exceed_set_qos_group":   "0",
+		"pir_rate":               "10000",
+		"pir_unit":               "mbps",
+		"violate_action":         "drop",
+		"violate_set_cos":        "0",
+		"violate_set_dscp":       "0",
+		"violate_set_precedence": "routine",
+		"violate_set_qos_group":  "0",
+	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosDefaultQOSPolicyMapConfig(),
+				Config: testAccDataSourceNxosDefaultQOSPolicyMapPrerequisitesConfig + testAccDataSourceNxosDefaultQOSPolicyMapConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -48,6 +79,16 @@ func TestAccDataSourceNxosDefaultQOSPolicyMap(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccDataSourceNxosDefaultQOSPolicyMapPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/ipqos/dflt/c/name-[Voice]"
+  class_name = "ipqosCMapInst"
+  content = {
+      name = "Voice"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -56,6 +97,34 @@ func testAccDataSourceNxosDefaultQOSPolicyMapConfig() string {
 	config := `resource "nxos_default_qos_policy_map" "test" {` + "\n"
 	config += `	name = "PM1"` + "\n"
 	config += `	match_type = "match-any"` + "\n"
+	config += `	match_class_maps = [{` + "\n"
+	config += `		name = "Voice"` + "\n"
+	config += `		qos_group_id = 1` + "\n"
+	config += `		bc_rate = 200` + "\n"
+	config += `		bc_unit = "mbytes"` + "\n"
+	config += `		be_rate = 200` + "\n"
+	config += `		be_unit = "mbytes"` + "\n"
+	config += `		cir_rate = 10000` + "\n"
+	config += `		cir_unit = "mbps"` + "\n"
+	config += `		conform_action = "transmit"` + "\n"
+	config += `		conform_set_cos = 0` + "\n"
+	config += `		conform_set_dscp = 0` + "\n"
+	config += `		conform_set_precedence = "routine"` + "\n"
+	config += `		conform_set_qos_group = 0` + "\n"
+	config += `		exceed_action = "transmit"` + "\n"
+	config += `		exceed_set_cos = 0` + "\n"
+	config += `		exceed_set_dscp = 0` + "\n"
+	config += `		exceed_set_precedence = "routine"` + "\n"
+	config += `		exceed_set_qos_group = 0` + "\n"
+	config += `		pir_rate = 10000` + "\n"
+	config += `		pir_unit = "mbps"` + "\n"
+	config += `		violate_action = "drop"` + "\n"
+	config += `		violate_set_cos = 0` + "\n"
+	config += `		violate_set_dscp = 0` + "\n"
+	config += `		violate_set_precedence = "routine"` + "\n"
+	config += `		violate_set_qos_group = 0` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

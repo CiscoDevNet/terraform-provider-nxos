@@ -6,8 +6,6 @@ ds_description: This data source can read the default QoS policy map configurati
 res_description: This resource can manage the default QoS policy map configuration.
 doc_path: Qos/ipqos:PMapInst/
 doc_category: QoS
-children:
-  - Default QOS Policy Map Match Class Map
 attributes:
   - nxos_name: name
     tf_name: name
@@ -25,3 +23,294 @@ attributes:
       - match-first
     default_value: match-all
     example: match-any
+child_classes:
+  - class_name: ipqosMatchCMap
+    doc_path: Qos/ipqos:MatchCMap/
+    rn: cmap-%s
+    type: list
+    tf_name: match_class_maps
+    description: 'List of match class maps.'
+    attributes:
+      - nxos_name: name
+        tf_name: name
+        type: String
+        id: true
+        description: 'Class map name.'
+        example: Voice
+    child_classes:
+      - class_name: ipqosSetQoSGrp
+        doc_path: Qos/ipqos:SetQoSGrp/
+        rn: setGrp
+        type: single
+        tf_name: set_qos_group
+        description: 'Set QoS group configuration.'
+        attributes:
+          - nxos_name: id
+            tf_name: qos_group_id
+            type: Int64
+            description: 'QoS group ID.'
+            min_int: 0
+            max_int: 7
+            default_value: 0
+            example: 1
+      - class_name: ipqosPolice
+        doc_path: Qos/ipqos:Police/
+        rn: police
+        type: single
+        tf_name: police
+        description: 'Police configuration.'
+        attributes:
+          - nxos_name: bcRate
+            tf_name: bc_rate
+            type: Int64
+            description: 'CIR burst rate.'
+            min_int: 0
+            max_int: 536870912
+            default_value: 200
+            example: 200
+          - nxos_name: bcUnit
+            tf_name: bc_unit
+            type: String
+            description: 'CIR burst rate unit.'
+            enum_values:
+              - unspecified
+              - bytes
+              - kbytes
+              - mbytes
+              - ms
+              - us
+              - packets
+            default_value: ms
+            example: mbytes
+          - nxos_name: beRate
+            tf_name: be_rate
+            type: Int64
+            description: 'PIR burst rate.'
+            min_int: 0
+            max_int: 536870912
+            default_value: 0
+            example: 200
+          - nxos_name: beUnit
+            tf_name: be_unit
+            type: String
+            description: 'PIR burst rate unit.'
+            enum_values:
+              - unspecified
+              - bytes
+              - kbytes
+              - mbytes
+              - ms
+              - us
+              - packets
+            default_value: unspecified
+            example: mbytes
+          - nxos_name: cirRate
+            tf_name: cir_rate
+            type: Int64
+            mandatory: true
+            description: 'CIR rate.'
+            min_int: 0
+            max_int: 100000000000
+            default_value: 0
+            example: 10000
+          - nxos_name: cirUnit
+            tf_name: cir_unit
+            type: String
+            description: 'CIR rate unit.'
+            enum_values:
+              - unspecified
+              - bps
+              - kbps
+              - mbps
+              - gbps
+              - pps
+              - pct
+            default_value: bps
+            example: mbps
+          - nxos_name: conformAction
+            tf_name: conform_action
+            type: String
+            description: 'Conform action.'
+            enum_values:
+              - unspecified
+              - transmit
+              - drop
+              - set-cos-transmit
+              - set-dscp-transmit
+              - set-prec-transmit
+              - set-qos-transmit
+            default_value: transmit
+            example: transmit
+          - nxos_name: conformSetCosTransmit
+            tf_name: conform_set_cos
+            type: Int64
+            description: 'Set CoS for conforming traffic.'
+            min_int: 0
+            max_int: 7
+            default_value: 0
+            example: 0
+          - nxos_name: conformSetDscpTransmit
+            tf_name: conform_set_dscp
+            type: Int64
+            description: 'Set DSCP for conforming traffic.'
+            min_int: 0
+            max_int: 63
+            default_value: 0
+            example: 0
+          - nxos_name: conformSetPrecTransmit
+            tf_name: conform_set_precedence
+            type: String
+            description: 'Set precedence for conforming traffic.'
+            enum_values:
+              - routine
+              - priority
+              - immediate
+              - flash
+              - flash-override
+              - critical
+              - internet
+              - network
+            default_value: routine
+            example: routine
+          - nxos_name: conformSetQosGrpTransmit
+            tf_name: conform_set_qos_group
+            type: Int64
+            description: 'Set qos-group for conforming traffic.'
+            min_int: 0
+            max_int: 7
+            default_value: 0
+            example: 0
+          - nxos_name: exceedAction
+            tf_name: exceed_action
+            type: String
+            description: 'Exceed action.'
+            enum_values:
+              - unspecified
+              - transmit
+              - drop
+              - set-cos-transmit
+              - set-dscp-transmit
+              - set-prec-transmit
+              - set-qos-transmit
+            default_value: unspecified
+            example: transmit
+          - nxos_name: exceedSetCosTransmit
+            tf_name: exceed_set_cos
+            type: Int64
+            description: 'Set CoS for exceeding traffic.'
+            min_int: 0
+            max_int: 7
+            default_value: 0
+            example: 0
+          - nxos_name: exceedSetDscpTransmit
+            tf_name: exceed_set_dscp
+            type: Int64
+            description: 'Set DSCP for exceeding traffic.'
+            min_int: 0
+            max_int: 63
+            default_value: 0
+            example: 0
+          - nxos_name: exceedSetPrecTransmit
+            tf_name: exceed_set_precedence
+            type: String
+            description: 'Set precedence for exceeding traffic.'
+            enum_values:
+              - routine
+              - priority
+              - immediate
+              - flash
+              - flash-override
+              - critical
+              - internet
+              - network
+            default_value: routine
+            example: routine
+          - nxos_name: exceedSetQosGrpTransmit
+            tf_name: exceed_set_qos_group
+            type: Int64
+            description: 'Set qos-group for exceeding traffic.'
+            min_int: 0
+            max_int: 7
+            default_value: 0
+            example: 0
+          - nxos_name: pirRate
+            tf_name: pir_rate
+            type: Int64
+            description: 'PIR rate.'
+            min_int: 0
+            max_int: 100000000000
+            default_value: 0
+            example: 10000
+          - nxos_name: pirUnit
+            tf_name: pir_unit
+            type: String
+            description: 'PIR rate unit.'
+            enum_values:
+              - unspecified
+              - bps
+              - kbps
+              - mbps
+              - gbps
+              - pps
+              - pct
+            default_value: unspecified
+            example: mbps
+          - nxos_name: violateAction
+            tf_name: violate_action
+            type: String
+            description: 'Violate action.'
+            enum_values:
+              - unspecified
+              - transmit
+              - drop
+              - set-cos-transmit
+              - set-dscp-transmit
+              - set-prec-transmit
+              - set-qos-transmit
+            default_value: drop
+            example: drop
+          - nxos_name: violateSetCosTransmit
+            tf_name: violate_set_cos
+            type: Int64
+            description: 'Set CoS for violating traffic.'
+            min_int: 0
+            max_int: 7
+            default_value: 0
+            example: 0
+          - nxos_name: violateSetDscpTransmit
+            tf_name: violate_set_dscp
+            type: Int64
+            description: 'Set DSCP for violating traffic.'
+            min_int: 0
+            max_int: 63
+            default_value: 0
+            example: 0
+          - nxos_name: violateSetPrecTransmit
+            tf_name: violate_set_precedence
+            type: String
+            description: 'Set precedence for violating traffic.'
+            enum_values:
+              - routine
+              - priority
+              - immediate
+              - flash
+              - flash-override
+              - critical
+              - internet
+              - network
+            default_value: routine
+            example: routine
+          - nxos_name: violateSetQosGrpTransmit
+            tf_name: violate_set_qos_group
+            type: Int64
+            description: 'Set qos-group for violating traffic.'
+            min_int: 0
+            max_int: 7
+            default_value: 0
+            example: 0
+test_prerequisites:
+  - dn: sys/ipqos/dflt/c/name-[Voice]
+    class_name: ipqosCMapInst
+    attributes:
+      - name: name
+        value: Voice

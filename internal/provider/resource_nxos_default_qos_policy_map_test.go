@@ -37,6 +37,31 @@ func TestAccNxosDefaultQOSPolicyMap(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "name", "PM1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_type", "match-any"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.name", "Voice"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.qos_group_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.bc_rate", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.bc_unit", "mbytes"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.be_rate", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.be_unit", "mbytes"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.cir_rate", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.cir_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.conform_action", "transmit"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.conform_set_cos", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.conform_set_dscp", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.conform_set_precedence", "routine"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.conform_set_qos_group", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.exceed_action", "transmit"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.exceed_set_cos", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.exceed_set_dscp", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.exceed_set_precedence", "routine"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.exceed_set_qos_group", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.pir_rate", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.pir_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.violate_action", "drop"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.violate_set_cos", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.violate_set_dscp", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.violate_set_precedence", "routine"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos_policy_map.test", "match_class_maps.0.violate_set_qos_group", "0"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -46,7 +71,7 @@ func TestAccNxosDefaultQOSPolicyMap(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosDefaultQOSPolicyMapConfig_all(),
+				Config: testAccNxosDefaultQOSPolicyMapPrerequisitesConfig + testAccNxosDefaultQOSPolicyMapConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -80,6 +105,16 @@ func nxosDefaultQOSPolicyMapImportStateIdFunc(resourceName string) resource.Impo
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccNxosDefaultQOSPolicyMapPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/ipqos/dflt/c/name-[Voice]"
+  class_name = "ipqosCMapInst"
+  content = {
+      name = "Voice"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -87,6 +122,7 @@ func nxosDefaultQOSPolicyMapImportStateIdFunc(resourceName string) resource.Impo
 func testAccNxosDefaultQOSPolicyMapConfig_minimum() string {
 	config := `resource "nxos_default_qos_policy_map" "test" {` + "\n"
 	config += `	name = "PM1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -98,6 +134,34 @@ func testAccNxosDefaultQOSPolicyMapConfig_all() string {
 	config := `resource "nxos_default_qos_policy_map" "test" {` + "\n"
 	config += `	name = "PM1"` + "\n"
 	config += `	match_type = "match-any"` + "\n"
+	config += `	match_class_maps = [{` + "\n"
+	config += `		name = "Voice"` + "\n"
+	config += `		qos_group_id = 1` + "\n"
+	config += `		bc_rate = 200` + "\n"
+	config += `		bc_unit = "mbytes"` + "\n"
+	config += `		be_rate = 200` + "\n"
+	config += `		be_unit = "mbytes"` + "\n"
+	config += `		cir_rate = 10000` + "\n"
+	config += `		cir_unit = "mbps"` + "\n"
+	config += `		conform_action = "transmit"` + "\n"
+	config += `		conform_set_cos = 0` + "\n"
+	config += `		conform_set_dscp = 0` + "\n"
+	config += `		conform_set_precedence = "routine"` + "\n"
+	config += `		conform_set_qos_group = 0` + "\n"
+	config += `		exceed_action = "transmit"` + "\n"
+	config += `		exceed_set_cos = 0` + "\n"
+	config += `		exceed_set_dscp = 0` + "\n"
+	config += `		exceed_set_precedence = "routine"` + "\n"
+	config += `		exceed_set_qos_group = 0` + "\n"
+	config += `		pir_rate = 10000` + "\n"
+	config += `		pir_unit = "mbps"` + "\n"
+	config += `		violate_action = "drop"` + "\n"
+	config += `		violate_set_cos = 0` + "\n"
+	config += `		violate_set_dscp = 0` + "\n"
+	config += `		violate_set_precedence = "routine"` + "\n"
+	config += `		violate_set_qos_group = 0` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

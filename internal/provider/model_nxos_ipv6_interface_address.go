@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"fmt"
@@ -34,6 +35,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type IPv6InterfaceAddress struct {
 	Device      types.String `tfsdk:"device"`
 	Dn          types.String `tfsdk:"id"`
@@ -76,6 +78,7 @@ func (data *IPv6InterfaceAddress) fromIdentity(ctx context.Context, identity *IP
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data IPv6InterfaceAddress) getDn() string {
 	return fmt.Sprintf("sys/ipv6/inst/dom-[%s]/if-[%s]/addr-[%s]", data.Vrf.ValueString(), data.InterfaceId.ValueString(), data.Address.ValueString())
 }
@@ -87,6 +90,7 @@ func (data IPv6InterfaceAddress) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data IPv6InterfaceAddress) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -106,6 +110,7 @@ func (data IPv6InterfaceAddress) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *IPv6InterfaceAddress) fromBody(res gjson.Result) {
 	data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.addr").String())
 	data.Type = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
@@ -115,6 +120,7 @@ func (data *IPv6InterfaceAddress) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *IPv6InterfaceAddress) updateFromBody(res gjson.Result) {
 	if !data.Address.IsNull() {
 		data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.addr").String())
@@ -136,6 +142,7 @@ func (data *IPv6InterfaceAddress) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data IPv6InterfaceAddress) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -145,6 +152,7 @@ func (data IPv6InterfaceAddress) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data IPv6InterfaceAddress) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())

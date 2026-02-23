@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 
@@ -32,6 +33,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type System struct {
 	Device types.String `tfsdk:"device"`
 	Dn     types.String `tfsdk:"id"`
@@ -61,6 +63,7 @@ func (data *System) fromIdentity(ctx context.Context, identity *SystemIdentity) 
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data System) getDn() string {
 	return "sys"
 }
@@ -72,6 +75,7 @@ func (data System) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data System) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -85,6 +89,7 @@ func (data System) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *System) fromBody(res gjson.Result) {
 	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 }
@@ -92,6 +97,7 @@ func (data *System) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *System) updateFromBody(res gjson.Result) {
 	if !data.Name.IsNull() {
 		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
@@ -103,6 +109,7 @@ func (data *System) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data System) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -112,6 +119,7 @@ func (data System) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data System) getDeleteDns() []string {
 	dns := []string{}
 

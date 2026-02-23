@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"fmt"
@@ -34,6 +35,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type DefaultQOSPolicyMapMatchClassMapPolice struct {
 	Device               types.String `tfsdk:"device"`
 	Dn                   types.String `tfsdk:"id"`
@@ -93,6 +95,7 @@ func (data *DefaultQOSPolicyMapMatchClassMapPolice) fromIdentity(ctx context.Con
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data DefaultQOSPolicyMapMatchClassMapPolice) getDn() string {
 	return fmt.Sprintf("sys/ipqos/dflt/p/name-[%s]/cmap-[%s]/police", data.PolicyMapName.ValueString(), data.ClassMapName.ValueString())
 }
@@ -104,6 +107,7 @@ func (data DefaultQOSPolicyMapMatchClassMapPolice) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data DefaultQOSPolicyMapMatchClassMapPolice) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -183,6 +187,7 @@ func (data DefaultQOSPolicyMapMatchClassMapPolice) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *DefaultQOSPolicyMapMatchClassMapPolice) fromBody(res gjson.Result) {
 	data.BcRate = types.Int64Value(res.Get(data.getClassName() + ".attributes.bcRate").Int())
 	data.BcUnit = types.StringValue(res.Get(data.getClassName() + ".attributes.bcUnit").String())
@@ -212,6 +217,7 @@ func (data *DefaultQOSPolicyMapMatchClassMapPolice) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *DefaultQOSPolicyMapMatchClassMapPolice) updateFromBody(res gjson.Result) {
 	if !data.BcRate.IsNull() {
 		data.BcRate = types.Int64Value(res.Get(data.getClassName() + ".attributes.bcRate").Int())
@@ -333,6 +339,7 @@ func (data *DefaultQOSPolicyMapMatchClassMapPolice) updateFromBody(res gjson.Res
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data DefaultQOSPolicyMapMatchClassMapPolice) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -342,6 +349,7 @@ func (data DefaultQOSPolicyMapMatchClassMapPolice) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data DefaultQOSPolicyMapMatchClassMapPolice) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())

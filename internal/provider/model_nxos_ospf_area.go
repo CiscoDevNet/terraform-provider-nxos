@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"fmt"
@@ -34,6 +35,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type OSPFArea struct {
 	Device             types.String `tfsdk:"device"`
 	Dn                 types.String `tfsdk:"id"`
@@ -77,6 +79,7 @@ func (data *OSPFArea) fromIdentity(ctx context.Context, identity *OSPFAreaIdenti
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data OSPFArea) getDn() string {
 	return fmt.Sprintf("sys/ospf/inst-[%s]/dom-[%s]/area-[%s]", data.InstanceName.ValueString(), data.VrfName.ValueString(), data.AreaId.ValueString())
 }
@@ -88,6 +91,7 @@ func (data OSPFArea) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data OSPFArea) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -110,6 +114,7 @@ func (data OSPFArea) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *OSPFArea) fromBody(res gjson.Result) {
 	data.AreaId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	data.AuthenticationType = types.StringValue(res.Get(data.getClassName() + ".attributes.authType").String())
@@ -120,6 +125,7 @@ func (data *OSPFArea) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *OSPFArea) updateFromBody(res gjson.Result) {
 	if !data.AreaId.IsNull() {
 		data.AreaId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
@@ -146,6 +152,7 @@ func (data *OSPFArea) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data OSPFArea) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -155,6 +162,7 @@ func (data OSPFArea) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data OSPFArea) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())

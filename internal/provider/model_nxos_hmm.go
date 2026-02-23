@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"fmt"
@@ -34,6 +35,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type HMM struct {
 	Device             types.String    `tfsdk:"device"`
 	Dn                 types.String    `tfsdk:"id"`
@@ -72,6 +74,7 @@ func (data *HMM) fromIdentity(ctx context.Context, identity *HMMIdentity) {
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data HMM) getDn() string {
 	return "sys/hmm"
 }
@@ -87,6 +90,7 @@ func (data HMM) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data HMM) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -94,28 +98,32 @@ func (data HMM) toBody() nxos.Body {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
 	var attrs string
-	// Create child with attributes and nested children in one unified object
-	childIndex := len(gjson.Get(body, data.getClassName()+".children").Array())
-	attrs = "{}"
-	if (!data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull()) || false {
-		attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
-	}
-	if (!data.AnycastMac.IsUnknown() && !data.AnycastMac.IsNull()) || false {
-		attrs, _ = sjson.Set(attrs, "amac", data.AnycastMac.ValueString())
-	}
-	body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".hmmFwdInst.attributes", attrs)
-	for _, nestedChild := range data.Interfaces {
+	childrenPath := data.getClassName() + ".children"
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".hmmFwdInst"
 		attrs = "{}"
-		if (!nestedChild.InterfaceId.IsUnknown() && !nestedChild.InterfaceId.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "id", nestedChild.InterfaceId.ValueString())
+		if (!data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
 		}
-		if (!nestedChild.AdminState.IsUnknown() && !nestedChild.AdminState.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "adminSt", nestedChild.AdminState.ValueString())
+		if (!data.AnycastMac.IsUnknown() && !data.AnycastMac.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "amac", data.AnycastMac.ValueString())
 		}
-		if (!nestedChild.Mode.IsUnknown() && !nestedChild.Mode.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "mode", nestedChild.Mode.ValueString())
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		for _, child := range data.Interfaces {
+			attrs = "{}"
+			if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "id", child.InterfaceId.ValueString())
+			}
+			if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
+			}
+			if (!child.Mode.IsUnknown() && !child.Mode.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "mode", child.Mode.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.hmmFwdIf.attributes", attrs)
 		}
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".hmmFwdInst.children.-1.hmmFwdIf.attributes", attrs)
 	}
 
 	return nxos.Body{body}
@@ -124,6 +132,7 @@ func (data HMM) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *HMM) fromBody(res gjson.Result) {
 	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	var rhmmFwdInst gjson.Result
@@ -142,13 +151,13 @@ func (data *HMM) fromBody(res gjson.Result) {
 	rhmmFwdInst.Get("hmmFwdInst.children").ForEach(
 		func(_, v gjson.Result) bool {
 			v.ForEach(
-				func(nestedClassname, nestedValue gjson.Result) bool {
-					if nestedClassname.String() == "hmmFwdIf" {
-						var nestedChild HMMInterfaces
-						nestedChild.InterfaceId = types.StringValue(nestedValue.Get("attributes.id").String())
-						nestedChild.AdminState = types.StringValue(nestedValue.Get("attributes.adminSt").String())
-						nestedChild.Mode = types.StringValue(nestedValue.Get("attributes.mode").String())
-						data.Interfaces = append(data.Interfaces, nestedChild)
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "hmmFwdIf" {
+						var child HMMInterfaces
+						child.InterfaceId = types.StringValue(value.Get("attributes.id").String())
+						child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
+						child.Mode = types.StringValue(value.Get("attributes.mode").String())
+						data.Interfaces = append(data.Interfaces, child)
 					}
 					return true
 				},
@@ -161,6 +170,7 @@ func (data *HMM) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *HMM) updateFromBody(res gjson.Result) {
 	if !data.AdminState.IsNull() {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
@@ -188,32 +198,32 @@ func (data *HMM) updateFromBody(res gjson.Result) {
 	} else {
 		data.AnycastMac = types.StringNull()
 	}
-	for nc := range data.Interfaces {
-		var nestedR gjson.Result
+	for c := range data.Interfaces {
+		var r gjson.Result
 		rhmmFwdInst.Get("hmmFwdInst.children").ForEach(
 			func(_, v gjson.Result) bool {
 				key := v.Get("hmmFwdIf.attributes.rn").String()
-				if key == data.Interfaces[nc].getRn() {
-					nestedR = v
+				if key == data.Interfaces[c].getRn() {
+					r = v
 					return false
 				}
 				return true
 			},
 		)
-		if !data.Interfaces[nc].InterfaceId.IsNull() {
-			data.Interfaces[nc].InterfaceId = types.StringValue(nestedR.Get("hmmFwdIf.attributes.id").String())
+		if !data.Interfaces[c].InterfaceId.IsNull() {
+			data.Interfaces[c].InterfaceId = types.StringValue(r.Get("hmmFwdIf.attributes.id").String())
 		} else {
-			data.Interfaces[nc].InterfaceId = types.StringNull()
+			data.Interfaces[c].InterfaceId = types.StringNull()
 		}
-		if !data.Interfaces[nc].AdminState.IsNull() {
-			data.Interfaces[nc].AdminState = types.StringValue(nestedR.Get("hmmFwdIf.attributes.adminSt").String())
+		if !data.Interfaces[c].AdminState.IsNull() {
+			data.Interfaces[c].AdminState = types.StringValue(r.Get("hmmFwdIf.attributes.adminSt").String())
 		} else {
-			data.Interfaces[nc].AdminState = types.StringNull()
+			data.Interfaces[c].AdminState = types.StringNull()
 		}
-		if !data.Interfaces[nc].Mode.IsNull() {
-			data.Interfaces[nc].Mode = types.StringValue(nestedR.Get("hmmFwdIf.attributes.mode").String())
+		if !data.Interfaces[c].Mode.IsNull() {
+			data.Interfaces[c].Mode = types.StringValue(r.Get("hmmFwdIf.attributes.mode").String())
 		} else {
-			data.Interfaces[nc].Mode = types.StringNull()
+			data.Interfaces[c].Mode = types.StringNull()
 		}
 	}
 }
@@ -221,6 +231,7 @@ func (data *HMM) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data HMM) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -230,6 +241,7 @@ func (data HMM) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data HMM) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
@@ -252,7 +264,7 @@ func (data HMM) getDeletedItems(ctx context.Context, state HMM) []string {
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/fwdinst/"+stateChild.getRn())
+			deletedItems = append(deletedItems, data.getDn()+"/fwdinst"+"/"+stateChild.getRn())
 		}
 	}
 	return deletedItems

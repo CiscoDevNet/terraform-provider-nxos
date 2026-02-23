@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"fmt"
@@ -34,6 +35,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type IPv6StaticRoute struct {
 	Device   types.String              `tfsdk:"device"`
 	Dn       types.String              `tfsdk:"id"`
@@ -81,6 +83,7 @@ func (data *IPv6StaticRoute) fromIdentity(ctx context.Context, identity *IPv6Sta
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data IPv6StaticRoute) getDn() string {
 	return fmt.Sprintf("sys/ipv6/inst/dom-[%s]/rt-[%s]", data.VrfName.ValueString(), data.Prefix.ValueString())
 }
@@ -96,6 +99,7 @@ func (data IPv6StaticRoute) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data IPv6StaticRoute) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -103,6 +107,7 @@ func (data IPv6StaticRoute) toBody() nxos.Body {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"prefix", data.Prefix.ValueString())
 	}
 	var attrs string
+	childrenPath := data.getClassName() + ".children"
 	for _, child := range data.NextHops {
 		attrs = "{}"
 		if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || false {
@@ -126,7 +131,7 @@ func (data IPv6StaticRoute) toBody() nxos.Body {
 		if (!child.Tag.IsUnknown() && !child.Tag.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "tag", strconv.FormatInt(child.Tag.ValueInt64(), 10))
 		}
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.ipv6Nexthop.attributes", attrs)
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.ipv6Nexthop.attributes", attrs)
 	}
 
 	return nxos.Body{body}
@@ -135,6 +140,7 @@ func (data IPv6StaticRoute) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *IPv6StaticRoute) fromBody(res gjson.Result) {
 	data.Prefix = types.StringValue(res.Get(data.getClassName() + ".attributes.prefix").String())
 	res.Get(data.getClassName() + ".children").ForEach(
@@ -163,6 +169,7 @@ func (data *IPv6StaticRoute) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *IPv6StaticRoute) updateFromBody(res gjson.Result) {
 	if !data.Prefix.IsNull() {
 		data.Prefix = types.StringValue(res.Get(data.getClassName() + ".attributes.prefix").String())
@@ -222,6 +229,7 @@ func (data *IPv6StaticRoute) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data IPv6StaticRoute) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -231,6 +239,7 @@ func (data IPv6StaticRoute) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data IPv6StaticRoute) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())

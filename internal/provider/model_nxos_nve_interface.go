@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"strconv"
@@ -34,6 +35,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type NVEInterface struct {
 	Device                        types.String `tfsdk:"device"`
 	Dn                            types.String `tfsdk:"id"`
@@ -73,6 +75,7 @@ func (data *NVEInterface) fromIdentity(ctx context.Context, identity *NVEInterfa
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data NVEInterface) getDn() string {
 	return "sys/eps/epId-[1]"
 }
@@ -84,6 +87,7 @@ func (data NVEInterface) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data NVEInterface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -127,6 +131,7 @@ func (data NVEInterface) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *NVEInterface) fromBody(res gjson.Result) {
 	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	data.AdvertiseVirtualMac = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.advertiseVmac").String()))
@@ -144,6 +149,7 @@ func (data *NVEInterface) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *NVEInterface) updateFromBody(res gjson.Result) {
 	if !data.AdminState.IsNull() {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
@@ -205,6 +211,7 @@ func (data *NVEInterface) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data NVEInterface) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -214,6 +221,7 @@ func (data NVEInterface) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data NVEInterface) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())

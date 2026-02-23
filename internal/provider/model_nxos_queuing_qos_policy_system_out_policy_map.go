@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 
@@ -32,6 +33,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type QueuingQOSPolicySystemOutPolicyMap struct {
 	Device        types.String `tfsdk:"device"`
 	Dn            types.String `tfsdk:"id"`
@@ -61,6 +63,7 @@ func (data *QueuingQOSPolicySystemOutPolicyMap) fromIdentity(ctx context.Context
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data QueuingQOSPolicySystemOutPolicyMap) getDn() string {
 	return "sys/ipqos/queuing/policy/out/sys/pmap"
 }
@@ -72,6 +75,7 @@ func (data QueuingQOSPolicySystemOutPolicyMap) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data QueuingQOSPolicySystemOutPolicyMap) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -85,6 +89,7 @@ func (data QueuingQOSPolicySystemOutPolicyMap) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *QueuingQOSPolicySystemOutPolicyMap) fromBody(res gjson.Result) {
 	data.PolicyMapName = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 }
@@ -92,6 +97,7 @@ func (data *QueuingQOSPolicySystemOutPolicyMap) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *QueuingQOSPolicySystemOutPolicyMap) updateFromBody(res gjson.Result) {
 	if !data.PolicyMapName.IsNull() {
 		data.PolicyMapName = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
@@ -103,6 +109,7 @@ func (data *QueuingQOSPolicySystemOutPolicyMap) updateFromBody(res gjson.Result)
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data QueuingQOSPolicySystemOutPolicyMap) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -112,6 +119,7 @@ func (data QueuingQOSPolicySystemOutPolicyMap) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data QueuingQOSPolicySystemOutPolicyMap) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())

@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"fmt"
@@ -35,6 +36,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type IPv4AccessList struct {
 	Device  types.String            `tfsdk:"device"`
 	Dn      types.String            `tfsdk:"id"`
@@ -117,6 +119,7 @@ func (data *IPv4AccessList) fromIdentity(ctx context.Context, identity *IPv4Acce
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data IPv4AccessList) getDn() string {
 	return fmt.Sprintf("sys/acl/ipv4/name-[%s]", data.Name.ValueString())
 }
@@ -132,6 +135,7 @@ func (data IPv4AccessList) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data IPv4AccessList) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -139,6 +143,7 @@ func (data IPv4AccessList) toBody() nxos.Body {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}
 	var attrs string
+	childrenPath := data.getClassName() + ".children"
 	for _, child := range data.Entries {
 		attrs = "{}"
 		if (!child.Sequence.IsUnknown() && !child.Sequence.IsNull()) || false {
@@ -279,7 +284,7 @@ func (data IPv4AccessList) toBody() nxos.Body {
 		if (!child.Vni.IsUnknown() && !child.Vni.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "vni", child.Vni.ValueString())
 		}
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.ipv4aclACE.attributes", attrs)
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.ipv4aclACE.attributes", attrs)
 	}
 
 	return nxos.Body{body}
@@ -288,6 +293,7 @@ func (data IPv4AccessList) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *IPv4AccessList) fromBody(res gjson.Result) {
 	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	res.Get(data.getClassName() + ".children").ForEach(
@@ -355,6 +361,7 @@ func (data *IPv4AccessList) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *IPv4AccessList) updateFromBody(res gjson.Result) {
 	if !data.Name.IsNull() {
 		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
@@ -609,6 +616,7 @@ func (data *IPv4AccessList) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data IPv4AccessList) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -618,6 +626,7 @@ func (data IPv4AccessList) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data IPv4AccessList) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())

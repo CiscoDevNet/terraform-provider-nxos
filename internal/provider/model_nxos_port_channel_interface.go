@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"fmt"
@@ -34,6 +35,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type PortChannelInterface struct {
 	Device              types.String `tfsdk:"device"`
 	Dn                  types.String `tfsdk:"id"`
@@ -86,6 +88,7 @@ func (data *PortChannelInterface) fromIdentity(ctx context.Context, identity *Po
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data PortChannelInterface) getDn() string {
 	return fmt.Sprintf("sys/intf/aggr-[%s]", data.InterfaceId.ValueString())
 }
@@ -97,6 +100,7 @@ func (data PortChannelInterface) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data PortChannelInterface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -170,6 +174,7 @@ func (data PortChannelInterface) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *PortChannelInterface) fromBody(res gjson.Result) {
 	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	data.PortChannelMode = types.StringValue(res.Get(data.getClassName() + ".attributes.pcMode").String())
@@ -197,6 +202,7 @@ func (data *PortChannelInterface) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *PortChannelInterface) updateFromBody(res gjson.Result) {
 	if !data.InterfaceId.IsNull() {
 		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
@@ -308,6 +314,7 @@ func (data *PortChannelInterface) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data PortChannelInterface) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -317,6 +324,7 @@ func (data PortChannelInterface) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data PortChannelInterface) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())

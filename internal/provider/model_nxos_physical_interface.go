@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"fmt"
@@ -34,6 +35,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type PhysicalInterface struct {
 	Device                 types.String `tfsdk:"device"`
 	Dn                     types.String `tfsdk:"id"`
@@ -87,6 +89,7 @@ func (data *PhysicalInterface) fromIdentity(ctx context.Context, identity *Physi
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data PhysicalInterface) getDn() string {
 	return fmt.Sprintf("sys/intf/phys-[%s]", data.InterfaceId.ValueString())
 }
@@ -98,6 +101,7 @@ func (data PhysicalInterface) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data PhysicalInterface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -174,6 +178,7 @@ func (data PhysicalInterface) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *PhysicalInterface) fromBody(res gjson.Result) {
 	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	data.FecMode = types.StringValue(res.Get(data.getClassName() + ".attributes.FECMode").String())
@@ -202,6 +207,7 @@ func (data *PhysicalInterface) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *PhysicalInterface) updateFromBody(res gjson.Result) {
 	if !data.InterfaceId.IsNull() {
 		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
@@ -318,6 +324,7 @@ func (data *PhysicalInterface) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data PhysicalInterface) toDeleteBody() nxos.Body {
 	body := ""
 	if !data.FecMode.IsNull() {
@@ -390,6 +397,7 @@ func (data PhysicalInterface) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data PhysicalInterface) getDeleteDns() []string {
 	dns := []string{}
 

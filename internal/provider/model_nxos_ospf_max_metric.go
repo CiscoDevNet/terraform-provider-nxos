@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"fmt"
@@ -34,6 +35,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type OSPFMaxMetric struct {
 	Device          types.String `tfsdk:"device"`
 	Dn              types.String `tfsdk:"id"`
@@ -74,6 +76,7 @@ func (data *OSPFMaxMetric) fromIdentity(ctx context.Context, identity *OSPFMaxMe
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data OSPFMaxMetric) getDn() string {
 	return fmt.Sprintf("sys/ospf/inst-[%s]/dom-[%s]/maxmetriclsap", data.InstanceName.ValueString(), data.VrfName.ValueString())
 }
@@ -85,6 +88,7 @@ func (data OSPFMaxMetric) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data OSPFMaxMetric) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -107,6 +111,7 @@ func (data OSPFMaxMetric) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *OSPFMaxMetric) fromBody(res gjson.Result) {
 	data.Control = types.StringValue(res.Get(data.getClassName() + ".attributes.ctrl").String())
 	data.ExternalLsa = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxMetricExtLsa").Int())
@@ -117,6 +122,7 @@ func (data *OSPFMaxMetric) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *OSPFMaxMetric) updateFromBody(res gjson.Result) {
 	if !data.Control.IsNull() {
 		data.Control = types.StringValue(res.Get(data.getClassName() + ".attributes.ctrl").String())
@@ -143,6 +149,7 @@ func (data *OSPFMaxMetric) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data OSPFMaxMetric) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -152,6 +159,7 @@ func (data OSPFMaxMetric) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data OSPFMaxMetric) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())

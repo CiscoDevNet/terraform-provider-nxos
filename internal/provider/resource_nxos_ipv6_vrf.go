@@ -26,12 +26,17 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -60,7 +65,7 @@ func (r *IPv6VRFResource) Metadata(ctx context.Context, req resource.MetadataReq
 func (r *IPv6VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IPv6 VRF information.", "ipv6Dom", "Layer%203/ipv6:Dom/").AddChildren("ipv6_interface", "ipv6_static_route").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IPv6 VRF information.", "ipv6Dom", "Layer%203/ipv6:Dom/").AddAdditionalDocs([]string{"ipv6Route", "ipv6Nexthop", "ipv6If", "ipv6Addr"}, []string{"Layer%203/ipv6:Route/", "Layer%203/ipv6:Nexthop/", "Layer%203/ipv6:If/", "Layer%203/ipv6:Addr/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -79,6 +84,178 @@ func (r *IPv6VRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Required:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
+				},
+			},
+			"static_routes": schema.ListNestedAttribute{
+				MarkdownDescription: "List of IPv6 static routes.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"prefix": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prefix.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"next_hops": schema.ListNestedAttribute{
+							MarkdownDescription: "List of next hops.",
+							Required:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"interface_id": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.").String,
+										Required:            true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplace(),
+										},
+									},
+									"address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Nexthop address.").String,
+										Required:            true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplace(),
+										},
+									},
+									"vrf_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Nexthop VRF.").String,
+										Required:            true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplace(),
+										},
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
+										Optional:            true,
+									},
+									"object": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Object to be tracked.").AddIntegerRangeDescription(0, 4294967295).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 4294967295),
+										},
+									},
+									"preference": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Route preference.").AddIntegerRangeDescription(0, 255).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 255),
+										},
+									},
+									"tag": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Tag value.").AddIntegerRangeDescription(0, 4294967295).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 4294967295),
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "List of IPv6 interfaces.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_id": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"auto_configuration": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv6 Stateless address auto configuration.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("disabled"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"default_route": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Default Route Addition with Nexthop as RA Source Address").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("disabled"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"forward": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ip forward enabled/disabled.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("disabled"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"link_address_use_bia": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv6 Link Local Use BIA").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("disabled"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"use_link_local_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv6 Address Use Link Local Address").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("disabled"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"urpf": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("URPF (unicast Reverse Path Forwarding).").AddStringEnumDescription("disabled", "strict", "loose", "loose-allow-default", "strict-allow-vni-hosts").AddDefaultValueDescription("disabled").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("disabled"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("disabled", "strict", "loose", "loose-allow-default", "strict-allow-vni-hosts"),
+							},
+						},
+						"link_local_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv6 address.").String,
+							Optional:            true,
+						},
+						"addresses": schema.ListNestedAttribute{
+							MarkdownDescription: "List of IPv6 interface addresses.",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IPv6 address.").String,
+										Required:            true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplace(),
+										},
+									},
+									"type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Address type.").AddStringEnumDescription("primary", "secondary").AddDefaultValueDescription("primary").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("primary"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("primary", "secondary"),
+										},
+									},
+									"tag": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Route Tag").AddDefaultValueDescription("0").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             int64default.StaticInt64(0),
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
@@ -187,6 +364,7 @@ func (r *IPv6VRFResource) Read(ctx context.Context, req resource.ReadRequest, re
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		queries = append(queries, nxos.Query("rsp-subtree", "full"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -229,6 +407,14 @@ func (r *IPv6VRFResource) Update(ctx context.Context, req resource.UpdateRequest
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	var state IPv6VRF
+
+	// Read state
+	diags = req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
@@ -244,6 +430,19 @@ func (r *IPv6VRFResource) Update(ctx context.Context, req resource.UpdateRequest
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
+		}
+
+		deletedItems := plan.getDeletedItems(ctx, state)
+		tflog.Debug(ctx, fmt.Sprintf("%s: List items to delete: %v", plan.getDn(), deletedItems))
+		for _, dn := range deletedItems {
+			res, err := device.Client.DeleteDn(dn)
+			if err != nil {
+				errCode := res.Get("imdata.0.error.attributes.code").Str
+				if errCode != "1" && errCode != "107" {
+					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+					return
+				}
+			}
 		}
 	}
 

@@ -57,7 +57,7 @@ func (d *IPv6VRFDataSource) Metadata(_ context.Context, req datasource.MetadataR
 func (d *IPv6VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the IPv6 VRF information.", "ipv6Dom", "Layer%203/ipv6:Dom/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the IPv6 VRF information.", "ipv6Dom", "Layer%203/ipv6:Dom/").AddAdditionalDocs([]string{"ipv6Route", "ipv6Nexthop", "ipv6If", "ipv6Addr"}, []string{"Layer%203/ipv6:Route/", "Layer%203/ipv6:Nexthop/", "Layer%203/ipv6:If/", "Layer%203/ipv6:Addr/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -71,6 +71,114 @@ func (d *IPv6VRFDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 			"name": schema.StringAttribute{
 				MarkdownDescription: "VRF name.",
 				Required:            true,
+			},
+			"static_routes": schema.ListNestedAttribute{
+				MarkdownDescription: "List of IPv6 static routes.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"prefix": schema.StringAttribute{
+							MarkdownDescription: "Prefix.",
+							Computed:            true,
+						},
+						"next_hops": schema.ListNestedAttribute{
+							MarkdownDescription: "List of next hops.",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"interface_id": schema.StringAttribute{
+										MarkdownDescription: "Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.",
+										Computed:            true,
+									},
+									"address": schema.StringAttribute{
+										MarkdownDescription: "Nexthop address.",
+										Computed:            true,
+									},
+									"vrf_name": schema.StringAttribute{
+										MarkdownDescription: "Nexthop VRF.",
+										Computed:            true,
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: "Description.",
+										Computed:            true,
+									},
+									"object": schema.Int64Attribute{
+										MarkdownDescription: "Object to be tracked.",
+										Computed:            true,
+									},
+									"preference": schema.Int64Attribute{
+										MarkdownDescription: "Route preference.",
+										Computed:            true,
+									},
+									"tag": schema.Int64Attribute{
+										MarkdownDescription: "Tag value.",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "List of IPv6 interfaces.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_id": schema.StringAttribute{
+							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
+							Computed:            true,
+						},
+						"auto_configuration": schema.StringAttribute{
+							MarkdownDescription: "IPv6 Stateless address auto configuration.",
+							Computed:            true,
+						},
+						"default_route": schema.StringAttribute{
+							MarkdownDescription: "Default Route Addition with Nexthop as RA Source Address",
+							Computed:            true,
+						},
+						"forward": schema.StringAttribute{
+							MarkdownDescription: "ip forward enabled/disabled.",
+							Computed:            true,
+						},
+						"link_address_use_bia": schema.StringAttribute{
+							MarkdownDescription: "IPv6 Link Local Use BIA",
+							Computed:            true,
+						},
+						"use_link_local_address": schema.StringAttribute{
+							MarkdownDescription: "IPv6 Address Use Link Local Address",
+							Computed:            true,
+						},
+						"urpf": schema.StringAttribute{
+							MarkdownDescription: "URPF (unicast Reverse Path Forwarding).",
+							Computed:            true,
+						},
+						"link_local_address": schema.StringAttribute{
+							MarkdownDescription: "IPv6 address.",
+							Computed:            true,
+						},
+						"addresses": schema.ListNestedAttribute{
+							MarkdownDescription: "List of IPv6 interface addresses.",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address": schema.StringAttribute{
+										MarkdownDescription: "IPv6 address.",
+										Computed:            true,
+									},
+									"type": schema.StringAttribute{
+										MarkdownDescription: "Address type.",
+										Computed:            true,
+									},
+									"tag": schema.Int64Attribute{
+										MarkdownDescription: "Route Tag",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	}
@@ -106,6 +214,7 @@ func (d *IPv6VRFDataSource) Read(ctx context.Context, req datasource.ReadRequest
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "full"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

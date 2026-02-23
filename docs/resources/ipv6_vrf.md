@@ -5,8 +5,8 @@ subcategory: "IPv6"
 description: |-
   This resource can manage the IPv6 VRF information.
   API Documentation: ipv6Dom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Dom/
-  Child resources
-  nxos_ipv6_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv6_interfacenxos_ipv6_static_route https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv6_static_route
+  Additional API Documentation
+  ipv6Route https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Route/ipv6Nexthop https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Nexthop/ipv6If https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:If/ipv6Addr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Addr/
 ---
 
 # nxos_ipv6_vrf (Resource)
@@ -15,16 +15,45 @@ This resource can manage the IPv6 VRF information.
 
 - API Documentation: [ipv6Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Dom/)
 
-### Child resources
+### Additional API Documentation
 
-- [nxos_ipv6_interface](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv6_interface)
-- [nxos_ipv6_static_route](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv6_static_route)
+- [ipv6Route](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Route/)
+- [ipv6Nexthop](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Nexthop/)
+- [ipv6If](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:If/)
+- [ipv6Addr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Addr/)
 
 ## Example Usage
 
 ```terraform
 resource "nxos_ipv6_vrf" "example" {
   name = "VRF1"
+  static_routes = [{
+    prefix = "2001:db8:3333:4444:5555:6666:102:304/128"
+    next_hops = [{
+      interface_id = "unspecified"
+      address      = "a:b::c:d/128"
+      vrf_name     = "default"
+      description  = "My Description"
+      object       = 10
+      preference   = 123
+      tag          = 10
+    }]
+  }]
+  interfaces = [{
+    interface_id           = "eth1/10"
+    auto_configuration     = "disabled"
+    default_route          = "disabled"
+    forward                = "disabled"
+    link_address_use_bia   = "disabled"
+    use_link_local_address = "disabled"
+    urpf                   = "disabled"
+    link_local_address     = "2001:db8:3333:4444:5555:6666:7777:8888"
+    addresses = [{
+      address = "2001:db8:3333:4444:5555:6666:7777:8888"
+      type    = "primary"
+      tag     = 1234
+    }]
+  }]
 }
 ```
 
@@ -38,10 +67,86 @@ resource "nxos_ipv6_vrf" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
+- `interfaces` (Attributes List) List of IPv6 interfaces. (see [below for nested schema](#nestedatt--interfaces))
+- `static_routes` (Attributes List) List of IPv6 static routes. (see [below for nested schema](#nestedatt--static_routes))
 
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--interfaces"></a>
+### Nested Schema for `interfaces`
+
+Required:
+
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+
+Optional:
+
+- `addresses` (Attributes List) List of IPv6 interface addresses. (see [below for nested schema](#nestedatt--interfaces--addresses))
+- `auto_configuration` (String) IPv6 Stateless address auto configuration.
+  - Choices: `enabled`, `disabled`
+  - Default value: `disabled`
+- `default_route` (String) Default Route Addition with Nexthop as RA Source Address
+  - Choices: `enabled`, `disabled`
+  - Default value: `disabled`
+- `forward` (String) ip forward enabled/disabled.
+  - Choices: `enabled`, `disabled`
+  - Default value: `disabled`
+- `link_address_use_bia` (String) IPv6 Link Local Use BIA
+  - Choices: `enabled`, `disabled`
+  - Default value: `disabled`
+- `link_local_address` (String) IPv6 address.
+- `urpf` (String) URPF (unicast Reverse Path Forwarding).
+  - Choices: `disabled`, `strict`, `loose`, `loose-allow-default`, `strict-allow-vni-hosts`
+  - Default value: `disabled`
+- `use_link_local_address` (String) IPv6 Address Use Link Local Address
+  - Choices: `enabled`, `disabled`
+  - Default value: `disabled`
+
+<a id="nestedatt--interfaces--addresses"></a>
+### Nested Schema for `interfaces.addresses`
+
+Required:
+
+- `address` (String) IPv6 address.
+
+Optional:
+
+- `tag` (Number) Route Tag
+  - Default value: `0`
+- `type` (String) Address type.
+  - Choices: `primary`, `secondary`
+  - Default value: `primary`
+
+
+
+<a id="nestedatt--static_routes"></a>
+### Nested Schema for `static_routes`
+
+Required:
+
+- `next_hops` (Attributes List) List of next hops. (see [below for nested schema](#nestedatt--static_routes--next_hops))
+- `prefix` (String) Prefix.
+
+<a id="nestedatt--static_routes--next_hops"></a>
+### Nested Schema for `static_routes.next_hops`
+
+Required:
+
+- `address` (String) Nexthop address.
+- `interface_id` (String) Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.
+- `vrf_name` (String) Nexthop VRF.
+
+Optional:
+
+- `description` (String) Description.
+- `object` (Number) Object to be tracked.
+  - Range: `0`-`4294967295`
+- `preference` (Number) Route preference.
+  - Range: `0`-`255`
+- `tag` (Number) Tag value.
+  - Range: `0`-`4294967295`
 
 ## Import
 

@@ -36,6 +36,25 @@ import (
 func TestAccNxosIPv6VRF(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrf.test", "name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrf.test", "static_routes.0.prefix", "2001:db8:3333:4444:5555:6666:102:304/128"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrf.test", "static_routes.0.next_hops.0.interface_id", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrf.test", "static_routes.0.next_hops.0.address", "a:b::c:d/128"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrf.test", "static_routes.0.next_hops.0.vrf_name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrf.test", "static_routes.0.next_hops.0.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrf.test", "static_routes.0.next_hops.0.object", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrf.test", "static_routes.0.next_hops.0.preference", "123"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrf.test", "static_routes.0.next_hops.0.tag", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrf.test", "interfaces.0.interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrf.test", "interfaces.0.auto_configuration", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrf.test", "interfaces.0.default_route", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrf.test", "interfaces.0.forward", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrf.test", "interfaces.0.link_address_use_bia", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrf.test", "interfaces.0.use_link_local_address", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrf.test", "interfaces.0.urpf", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrf.test", "interfaces.0.link_local_address", "2001:db8:3333:4444:5555:6666:7777:8888"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrf.test", "interfaces.0.addresses.0.address", "2001:db8:3333:4444:5555:6666:7777:8888"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrf.test", "interfaces.0.addresses.0.type", "primary"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrf.test", "interfaces.0.addresses.0.tag", "1234"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -96,6 +115,33 @@ func testAccNxosIPv6VRFConfig_minimum() string {
 func testAccNxosIPv6VRFConfig_all() string {
 	config := `resource "nxos_ipv6_vrf" "test" {` + "\n"
 	config += `	name = "VRF1"` + "\n"
+	config += `	static_routes = [{` + "\n"
+	config += `		prefix = "2001:db8:3333:4444:5555:6666:102:304/128"` + "\n"
+	config += `		next_hops = [{` + "\n"
+	config += `			interface_id = "unspecified"` + "\n"
+	config += `			address = "a:b::c:d/128"` + "\n"
+	config += `			vrf_name = "default"` + "\n"
+	config += `			description = "My Description"` + "\n"
+	config += `			object = 10` + "\n"
+	config += `			preference = 123` + "\n"
+	config += `			tag = 10` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `	interfaces = [{` + "\n"
+	config += `		interface_id = "eth1/10"` + "\n"
+	config += `		auto_configuration = "disabled"` + "\n"
+	config += `		default_route = "disabled"` + "\n"
+	config += `		forward = "disabled"` + "\n"
+	config += `		link_address_use_bia = "disabled"` + "\n"
+	config += `		use_link_local_address = "disabled"` + "\n"
+	config += `		urpf = "disabled"` + "\n"
+	config += `		link_local_address = "2001:db8:3333:4444:5555:6666:7777:8888"` + "\n"
+	config += `		addresses = [{` + "\n"
+	config += `			address = "2001:db8:3333:4444:5555:6666:7777:8888"` + "\n"
+	config += `			type = "primary"` + "\n"
+	config += `			tag = 1234` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

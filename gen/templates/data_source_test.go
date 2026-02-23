@@ -62,6 +62,9 @@ import (
 		{{- end}}
 		{{- end}}
 	}))
+{{- if .TfChildClasses}}
+{{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses)}}
+{{- end}}
 {{- end}}
 {{- end}}
 {{- end}}

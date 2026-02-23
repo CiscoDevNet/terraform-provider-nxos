@@ -818,6 +818,56 @@ func (data {{camelCase .Name}}) getDeleteDns() []string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
+{{- /* ==================== getDeletedItemsListChildTemplate ====================
+       Recursively detects deleted items within matched list-item pairs.
+       Used when a list child itself has nested children that may be deleted.
+       Context: map with:
+         "Children" ([]YamlConfigChildClass)
+         "StateListExpr" (string) - Go expression for state list
+         "PlanListExpr" (string) - Go expression for plan list
+         "DnPrefix" (string) - Go expression prefix for DN paths
+         "IdAttributes" ([]Attribute) - Attributes used to match items by ID
+         "IndexVar" (string) - Loop index variable name
+       ========================================================= */}}
+{{- define "getDeletedItemsListChildTemplate"}}
+{{- $stateListExpr := .StateListExpr}}
+{{- $planListExpr := .PlanListExpr}}
+{{- $dnPrefix := .DnPrefix}}
+{{- $idAttributes := .IdAttributes}}
+{{- $indexVar := .IndexVar}}
+	for {{$indexVar}} := range {{$stateListExpr}} {
+		for p{{$indexVar}} := range {{$planListExpr}} {
+			if {{range $i, $a := $idAttributes}}{{if $a.Id}}{{if $i}} && {{end}}{{$stateListExpr}}[{{$indexVar}}].{{toGoName $a.TfName}} == {{$planListExpr}}[p{{$indexVar}}].{{toGoName $a.TfName}}{{end}}{{end}} {
+				{{- range .Children}}
+				{{- if eq .Type "list"}}
+				for _, stateChild := range {{$stateListExpr}}[{{$indexVar}}].{{toGoName .TfName}} {
+					found := false
+					for _, planChild := range {{$planListExpr}}[p{{$indexVar}}].{{toGoName .TfName}} {
+						if {{range $i, $a := .Attributes}}{{if $a.Id}}{{if $i}} && {{end}}stateChild.{{toGoName $a.TfName}} == planChild.{{toGoName $a.TfName}}{{end}}{{end}} {
+							found = true
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, {{$dnPrefix}}+"/"+{{$stateListExpr}}[{{$indexVar}}].getRn()+"/"+stateChild.getRn())
+					}
+				}
+				{{- if .ChildClasses}}
+				{{- template "getDeletedItemsListChildTemplate" (makeMap "Children" .ChildClasses "StateListExpr" (printf "%s[%s].%s" $stateListExpr $indexVar (toGoName .TfName)) "PlanListExpr" (printf "%s[p%s].%s" $planListExpr $indexVar (toGoName .TfName)) "DnPrefix" (printf "%s+\"/\"+%s[%s].getRn()" $dnPrefix $stateListExpr $indexVar) "IdAttributes" .Attributes "IndexVar" (printf "%s_" $indexVar))}}
+				{{- end}}
+				{{- else if eq .Type "single"}}
+				{{- if .ChildClasses}}
+				{{- template "getDeletedItemsListChildTemplate" (makeMap "Children" .ChildClasses "StateListExpr" (printf "%s[%s]" $stateListExpr $indexVar) "PlanListExpr" (printf "%s[p%s]" $planListExpr $indexVar) "DnPrefix" (printf "%s+\"/\"+%s[%s].getRn()+\"/%s\"" $dnPrefix $stateListExpr $indexVar .Rn) "IdAttributes" .Attributes "IndexVar" $indexVar)}}
+				{{- end}}
+				{{- end}}
+				{{- end}}
+				break
+			}
+		}
+	}
+{{- end}}
+{{- /* ==================== end getDeletedItemsListChildTemplate ==================== */}}
+
 {{- /* ==================== getDeletedItemsTemplate ====================
        Recursively generates deleted-item detection for list children.
        Context: map with:
@@ -840,6 +890,9 @@ func (data {{camelCase .Name}}) getDeleteDns() []string {
 			deletedItems = append(deletedItems, {{$dnPrefix}}+"/"+stateChild.getRn())
 		}
 	}
+	{{- if .ChildClasses}}
+	{{- template "getDeletedItemsListChildTemplate" (makeMap "Children" .ChildClasses "StateListExpr" (printf "state.%s" (toGoName .TfName)) "PlanListExpr" (printf "data.%s" (toGoName .TfName)) "DnPrefix" $dnPrefix "IdAttributes" .Attributes "IndexVar" "di")}}
+	{{- end}}
 {{- else if eq .Type "single"}}
 {{- if .ChildClasses}}
 {{- template "getDeletedItemsTemplate" (makeMap "Children" .ChildClasses "DnPrefix" (printf "%s+\"/%s\"" $dnPrefix .Rn))}}

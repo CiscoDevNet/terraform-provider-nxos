@@ -57,7 +57,7 @@ func (d *ISISDataSource) Metadata(_ context.Context, req datasource.MetadataRequ
 func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the global IS-IS configuration.", "isisEntity", "Routing%20and%20Forwarding/isis:Entity/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the IS-IS configuration.", "isisEntity", "Routing%20and%20Forwarding/isis:Entity/").AddAdditionalDocs([]string{"isisInst", "isisDom", "isisDomAf", "isisOverload", "isisInternalIf"}, []string{"Routing%20and%20Forwarding/isis:Inst/", "Routing%20and%20Forwarding/isis:Dom/", "Routing%20and%20Forwarding/isis:DomAf/", "Routing%20and%20Forwarding/isis:Overload/", "Routing%20and%20Forwarding/isis:InternalIf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -71,6 +71,250 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 			"admin_state": schema.StringAttribute{
 				MarkdownDescription: "Administrative state.",
 				Computed:            true,
+			},
+			"instances": schema.ListNestedAttribute{
+				MarkdownDescription: "List of IS-IS instances.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "IS-IS instance name.",
+							Computed:            true,
+						},
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: "Administrative state.",
+							Computed:            true,
+						},
+						"vrfs": schema.ListNestedAttribute{
+							MarkdownDescription: "List of IS-IS VRFs.",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"name": schema.StringAttribute{
+										MarkdownDescription: "VRF name.",
+										Computed:            true,
+									},
+									"admin_state": schema.StringAttribute{
+										MarkdownDescription: "Administrative state.",
+										Computed:            true,
+									},
+									"authentication_check_l1": schema.BoolAttribute{
+										MarkdownDescription: "Authentication Check for ISIS on Level-1.",
+										Computed:            true,
+									},
+									"authentication_check_l2": schema.BoolAttribute{
+										MarkdownDescription: "Authentication Check for ISIS on Level-2.",
+										Computed:            true,
+									},
+									"authentication_key_l1": schema.StringAttribute{
+										MarkdownDescription: "Authentication Key for IS-IS on Level-1.",
+										Computed:            true,
+									},
+									"authentication_key_l2": schema.StringAttribute{
+										MarkdownDescription: "Authentication Key for IS-IS on Level-2.",
+										Computed:            true,
+									},
+									"authentication_type_l1": schema.StringAttribute{
+										MarkdownDescription: "IS-IS Authentication-Type for Level-1.",
+										Computed:            true,
+									},
+									"authentication_type_l2": schema.StringAttribute{
+										MarkdownDescription: "IS-IS Authentication-Type for Level-2.",
+										Computed:            true,
+									},
+									"bandwidth_reference": schema.Int64Attribute{
+										MarkdownDescription: "The IS-IS domain bandwidth reference. This sets the default reference bandwidth used for calculating the IS-IS cost metric.",
+										Computed:            true,
+									},
+									"banwidth_reference_unit": schema.StringAttribute{
+										MarkdownDescription: "Bandwidth reference unit.",
+										Computed:            true,
+									},
+									"is_type": schema.StringAttribute{
+										MarkdownDescription: "IS-IS domain type.",
+										Computed:            true,
+									},
+									"metric_type": schema.StringAttribute{
+										MarkdownDescription: "IS-IS metric type.",
+										Computed:            true,
+									},
+									"mtu": schema.Int64Attribute{
+										MarkdownDescription: "The configuration of link-state packet (LSP) maximum transmission units (MTU) is supported. You can enable up to 4352 bytes.",
+										Computed:            true,
+									},
+									"net": schema.StringAttribute{
+										MarkdownDescription: "Holds IS-IS domain NET (address) value.",
+										Computed:            true,
+									},
+									"passive_default": schema.StringAttribute{
+										MarkdownDescription: "IS-IS Domain passive-interface default level.",
+										Computed:            true,
+									},
+									"address_families": schema.ListNestedAttribute{
+										MarkdownDescription: "List of IS-IS address families.",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"address_family": schema.StringAttribute{
+													MarkdownDescription: "Address family type.",
+													Computed:            true,
+												},
+												"segment_routing_mpls": schema.BoolAttribute{
+													MarkdownDescription: "Segment routing for MPLS",
+													Computed:            true,
+												},
+												"enable_bfd": schema.BoolAttribute{
+													MarkdownDescription: "Enabling BFD on all ISIS domain interfaces.",
+													Computed:            true,
+												},
+												"prefix_advertise_passive_l1": schema.BoolAttribute{
+													MarkdownDescription: "Prefix advertise passive only for level-1",
+													Computed:            true,
+												},
+												"prefix_advertise_passive_l2": schema.BoolAttribute{
+													MarkdownDescription: "Prefix advertise passive only level-2",
+													Computed:            true,
+												},
+											},
+										},
+									},
+									"overload_startup_time": schema.Int64Attribute{
+										MarkdownDescription: "The overload startup time. The overload state begins when the switch boots up and ends at the time specified as the overload startup time.",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "List of IS-IS interfaces.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_id": schema.StringAttribute{
+							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
+							Computed:            true,
+						},
+						"authentication_check": schema.BoolAttribute{
+							MarkdownDescription: "Authentication Check for ISIS without specific level.",
+							Computed:            true,
+						},
+						"authentication_check_l1": schema.BoolAttribute{
+							MarkdownDescription: "Authentication Check for ISIS on Level-1.",
+							Computed:            true,
+						},
+						"authentication_check_l2": schema.BoolAttribute{
+							MarkdownDescription: "Authentication Check for ISIS on Level-2.",
+							Computed:            true,
+						},
+						"authentication_key": schema.StringAttribute{
+							MarkdownDescription: "Authentication Key for IS-IS without specific level.",
+							Computed:            true,
+						},
+						"authentication_key_l1": schema.StringAttribute{
+							MarkdownDescription: "Authentication Key for IS-IS on Level-1.",
+							Computed:            true,
+						},
+						"authentication_key_l2": schema.StringAttribute{
+							MarkdownDescription: "Authentication Key for IS-IS on Level-2.",
+							Computed:            true,
+						},
+						"authentication_type": schema.StringAttribute{
+							MarkdownDescription: "IS-IS Authentication-Type without specific level.",
+							Computed:            true,
+						},
+						"authentication_type_l1": schema.StringAttribute{
+							MarkdownDescription: "IS-IS Authentication-Type for Level-1.",
+							Computed:            true,
+						},
+						"authentication_type_l2": schema.StringAttribute{
+							MarkdownDescription: "IS-IS Authentication-Type for Level-2.",
+							Computed:            true,
+						},
+						"circuit_type": schema.StringAttribute{
+							MarkdownDescription: "Circuit type.",
+							Computed:            true,
+						},
+						"vrf": schema.StringAttribute{
+							MarkdownDescription: "VRF.",
+							Computed:            true,
+						},
+						"hello_interval": schema.Int64Attribute{
+							MarkdownDescription: "Hello interval.",
+							Computed:            true,
+						},
+						"hello_interval_l1": schema.Int64Attribute{
+							MarkdownDescription: "Hello interval Level-1.",
+							Computed:            true,
+						},
+						"hello_interval_l2": schema.Int64Attribute{
+							MarkdownDescription: "Hello interval Level-2.",
+							Computed:            true,
+						},
+						"hello_multiplier": schema.Int64Attribute{
+							MarkdownDescription: "Hello multiplier.",
+							Computed:            true,
+						},
+						"hello_multiplier_l1": schema.Int64Attribute{
+							MarkdownDescription: "Hello multiplier Level-1.",
+							Computed:            true,
+						},
+						"hello_multiplier_l2": schema.Int64Attribute{
+							MarkdownDescription: "Hello multiplier Level-2.",
+							Computed:            true,
+						},
+						"hello_padding": schema.StringAttribute{
+							MarkdownDescription: "Hello padding.",
+							Computed:            true,
+						},
+						"instance_name": schema.StringAttribute{
+							MarkdownDescription: "Instance to which the interface belongs to.",
+							Computed:            true,
+						},
+						"metric_l1": schema.Int64Attribute{
+							MarkdownDescription: "Interface metric Level-1.",
+							Computed:            true,
+						},
+						"metric_l2": schema.Int64Attribute{
+							MarkdownDescription: "Interface metric Level-2.",
+							Computed:            true,
+						},
+						"mtu_check": schema.BoolAttribute{
+							MarkdownDescription: "MTU Check for IS-IS without specific level.",
+							Computed:            true,
+						},
+						"mtu_check_l1": schema.BoolAttribute{
+							MarkdownDescription: "MTU Check for IS-IS on Level-1.",
+							Computed:            true,
+						},
+						"mtu_check_l2": schema.BoolAttribute{
+							MarkdownDescription: "MTU Check for IS-IS on Level-2.",
+							Computed:            true,
+						},
+						"network_type_p2p": schema.StringAttribute{
+							MarkdownDescription: "Enabling Point-to-Point Network Type on IS-IS Interface.",
+							Computed:            true,
+						},
+						"passive": schema.StringAttribute{
+							MarkdownDescription: "IS-IS Passive Interface Info.",
+							Computed:            true,
+						},
+						"priority_l1": schema.Int64Attribute{
+							MarkdownDescription: "Circuit priority.",
+							Computed:            true,
+						},
+						"priority_l2": schema.Int64Attribute{
+							MarkdownDescription: "Circuit priority.",
+							Computed:            true,
+						},
+						"enable_ipv4": schema.BoolAttribute{
+							MarkdownDescription: "Enabling ISIS router tag on Interface's IPV4 family.",
+							Computed:            true,
+						},
+					},
+				},
 			},
 		},
 	}
@@ -106,6 +350,7 @@ func (d *ISISDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "full"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

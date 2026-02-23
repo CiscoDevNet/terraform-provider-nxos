@@ -26,11 +26,14 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -63,7 +66,7 @@ func (r *ISISResource) Metadata(ctx context.Context, req resource.MetadataReques
 func (r *ISISResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the global IS-IS configuration.", "isisEntity", "Routing%20and%20Forwarding/isis:Entity/").AddChildren("isis_instance", "isis_interface").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IS-IS configuration.", "isisEntity", "Routing%20and%20Forwarding/isis:Entity/").AddAdditionalDocs([]string{"isisInst", "isisDom", "isisDomAf", "isisOverload", "isisInternalIf"}, []string{"Routing%20and%20Forwarding/isis:Inst/", "Routing%20and%20Forwarding/isis:Dom/", "Routing%20and%20Forwarding/isis:DomAf/", "Routing%20and%20Forwarding/isis:Overload/", "Routing%20and%20Forwarding/isis:InternalIf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -84,6 +87,431 @@ func (r *ISISResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Default:             stringdefault.StaticString("enabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"instances": schema.ListNestedAttribute{
+				MarkdownDescription: "List of IS-IS instances.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IS-IS instance name.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("enabled"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"vrfs": schema.ListNestedAttribute{
+							MarkdownDescription: "List of IS-IS VRFs.",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
+										Required:            true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplace(),
+										},
+									},
+									"admin_state": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("enabled"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"authentication_check_l1": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Authentication Check for ISIS on Level-1.").AddDefaultValueDescription("true").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             booldefault.StaticBool(true),
+									},
+									"authentication_check_l2": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Authentication Check for ISIS on Level-2.").AddDefaultValueDescription("true").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             booldefault.StaticBool(true),
+									},
+									"authentication_key_l1": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Authentication Key for IS-IS on Level-1.").String,
+										Optional:            true,
+									},
+									"authentication_key_l2": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Authentication Key for IS-IS on Level-2.").String,
+										Optional:            true,
+									},
+									"authentication_type_l1": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type for Level-1.").AddStringEnumDescription("clear", "md5", "unknown").AddDefaultValueDescription("unknown").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("unknown"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("clear", "md5", "unknown"),
+										},
+									},
+									"authentication_type_l2": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type for Level-2.").AddStringEnumDescription("clear", "md5", "unknown").AddDefaultValueDescription("unknown").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("unknown"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("clear", "md5", "unknown"),
+										},
+									},
+									"bandwidth_reference": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("The IS-IS domain bandwidth reference. This sets the default reference bandwidth used for calculating the IS-IS cost metric.").AddIntegerRangeDescription(0, 4294967295).AddDefaultValueDescription("40000").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             int64default.StaticInt64(40000),
+										Validators: []validator.Int64{
+											int64validator.Between(0, 4294967295),
+										},
+									},
+									"banwidth_reference_unit": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Bandwidth reference unit.").AddStringEnumDescription("mbps", "gbps").AddDefaultValueDescription("mbps").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("mbps"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("mbps", "gbps"),
+										},
+									},
+									"is_type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IS-IS domain type.").AddStringEnumDescription("l1", "l2", "l12").AddDefaultValueDescription("l12").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("l12"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("l1", "l2", "l12"),
+										},
+									},
+									"metric_type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IS-IS metric type.").AddStringEnumDescription("narrow", "wide", "transition").AddDefaultValueDescription("wide").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("wide"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("narrow", "wide", "transition"),
+										},
+									},
+									"mtu": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("The configuration of link-state packet (LSP) maximum transmission units (MTU) is supported. You can enable up to 4352 bytes.").AddIntegerRangeDescription(256, 4352).AddDefaultValueDescription("1492").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             int64default.StaticInt64(1492),
+										Validators: []validator.Int64{
+											int64validator.Between(256, 4352),
+										},
+									},
+									"net": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Holds IS-IS domain NET (address) value.").String,
+										Optional:            true,
+									},
+									"passive_default": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IS-IS Domain passive-interface default level.").AddStringEnumDescription("l1", "l2", "l12", "unknown").AddDefaultValueDescription("unknown").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("unknown"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("l1", "l2", "l12", "unknown"),
+										},
+									},
+									"address_families": schema.ListNestedAttribute{
+										MarkdownDescription: "List of IS-IS address families.",
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"address_family": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Address family type.").AddStringEnumDescription("v4", "v6").AddDefaultValueDescription("v4").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.OneOf("v4", "v6"),
+													},
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplace(),
+													},
+												},
+												"segment_routing_mpls": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Segment routing for MPLS").AddDefaultValueDescription("false").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             booldefault.StaticBool(false),
+												},
+												"enable_bfd": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Enabling BFD on all ISIS domain interfaces.").AddDefaultValueDescription("false").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             booldefault.StaticBool(false),
+												},
+												"prefix_advertise_passive_l1": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Prefix advertise passive only for level-1").AddDefaultValueDescription("false").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             booldefault.StaticBool(false),
+												},
+												"prefix_advertise_passive_l2": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Prefix advertise passive only level-2").AddDefaultValueDescription("false").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             booldefault.StaticBool(false),
+												},
+											},
+										},
+									},
+									"overload_startup_time": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("The overload startup time. The overload state begins when the switch boots up and ends at the time specified as the overload startup time.").AddIntegerRangeDescription(5, 86400).AddDefaultValueDescription("60").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             int64default.StaticInt64(60),
+										Validators: []validator.Int64{
+											int64validator.Between(5, 86400),
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "List of IS-IS interfaces.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_id": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"authentication_check": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Authentication Check for ISIS without specific level.").AddDefaultValueDescription("true").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             booldefault.StaticBool(true),
+						},
+						"authentication_check_l1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Authentication Check for ISIS on Level-1.").AddDefaultValueDescription("true").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             booldefault.StaticBool(true),
+						},
+						"authentication_check_l2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Authentication Check for ISIS on Level-2.").AddDefaultValueDescription("true").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             booldefault.StaticBool(true),
+						},
+						"authentication_key": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Authentication Key for IS-IS without specific level.").String,
+							Optional:            true,
+						},
+						"authentication_key_l1": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Authentication Key for IS-IS on Level-1.").String,
+							Optional:            true,
+						},
+						"authentication_key_l2": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Authentication Key for IS-IS on Level-2.").String,
+							Optional:            true,
+						},
+						"authentication_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type without specific level.").AddStringEnumDescription("clear", "md5", "unknown").AddDefaultValueDescription("unknown").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("unknown"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("clear", "md5", "unknown"),
+							},
+						},
+						"authentication_type_l1": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type for Level-1.").AddStringEnumDescription("clear", "md5", "unknown").AddDefaultValueDescription("unknown").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("unknown"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("clear", "md5", "unknown"),
+							},
+						},
+						"authentication_type_l2": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IS-IS Authentication-Type for Level-2.").AddStringEnumDescription("clear", "md5", "unknown").AddDefaultValueDescription("unknown").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("unknown"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("clear", "md5", "unknown"),
+							},
+						},
+						"circuit_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Circuit type.").AddStringEnumDescription("l1", "l2", "l12").AddDefaultValueDescription("l12").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("l12"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("l1", "l2", "l12"),
+							},
+						},
+						"vrf": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("VRF.").String,
+							Optional:            true,
+						},
+						"hello_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Hello interval.").AddIntegerRangeDescription(1, 65535).AddDefaultValueDescription("10").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(10),
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"hello_interval_l1": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Hello interval Level-1.").AddIntegerRangeDescription(1, 65535).AddDefaultValueDescription("10").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(10),
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"hello_interval_l2": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Hello interval Level-2.").AddIntegerRangeDescription(1, 65535).AddDefaultValueDescription("10").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(10),
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"hello_multiplier": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Hello multiplier.").AddIntegerRangeDescription(3, 1000).AddDefaultValueDescription("3").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(3),
+							Validators: []validator.Int64{
+								int64validator.Between(3, 1000),
+							},
+						},
+						"hello_multiplier_l1": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Hello multiplier Level-1.").AddIntegerRangeDescription(3, 1000).AddDefaultValueDescription("3").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(3),
+							Validators: []validator.Int64{
+								int64validator.Between(3, 1000),
+							},
+						},
+						"hello_multiplier_l2": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Hello multiplier Level-2.").AddIntegerRangeDescription(3, 1000).AddDefaultValueDescription("3").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(3),
+							Validators: []validator.Int64{
+								int64validator.Between(3, 1000),
+							},
+						},
+						"hello_padding": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Hello padding.").AddStringEnumDescription("always", "transient", "never").AddDefaultValueDescription("always").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("always"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("always", "transient", "never"),
+							},
+						},
+						"instance_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Instance to which the interface belongs to.").String,
+							Optional:            true,
+						},
+						"metric_l1": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Interface metric Level-1.").AddIntegerRangeDescription(0, 16777216).AddDefaultValueDescription("16777216").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(16777216),
+							Validators: []validator.Int64{
+								int64validator.Between(0, 16777216),
+							},
+						},
+						"metric_l2": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Interface metric Level-2.").AddIntegerRangeDescription(0, 16777216).AddDefaultValueDescription("16777216").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(16777216),
+							Validators: []validator.Int64{
+								int64validator.Between(0, 16777216),
+							},
+						},
+						"mtu_check": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MTU Check for IS-IS without specific level.").AddDefaultValueDescription("false").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             booldefault.StaticBool(false),
+						},
+						"mtu_check_l1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MTU Check for IS-IS on Level-1.").AddDefaultValueDescription("false").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             booldefault.StaticBool(false),
+						},
+						"mtu_check_l2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MTU Check for IS-IS on Level-2.").AddDefaultValueDescription("false").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             booldefault.StaticBool(false),
+						},
+						"network_type_p2p": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enabling Point-to-Point Network Type on IS-IS Interface.").AddStringEnumDescription("off", "on", "useAllISMac").AddDefaultValueDescription("off").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("off"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("off", "on", "useAllISMac"),
+							},
+						},
+						"passive": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IS-IS Passive Interface Info.").AddStringEnumDescription("l1", "l2", "l12", "noL1", "noL2", "noL12", "inheritDef").AddDefaultValueDescription("inheritDef").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("inheritDef"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("l1", "l2", "l12", "noL1", "noL2", "noL12", "inheritDef"),
+							},
+						},
+						"priority_l1": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Circuit priority.").AddIntegerRangeDescription(0, 127).AddDefaultValueDescription("64").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(64),
+							Validators: []validator.Int64{
+								int64validator.Between(0, 127),
+							},
+						},
+						"priority_l2": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Circuit priority.").AddIntegerRangeDescription(0, 127).AddDefaultValueDescription("64").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(64),
+							Validators: []validator.Int64{
+								int64validator.Between(0, 127),
+							},
+						},
+						"enable_ipv4": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enabling ISIS router tag on Interface's IPV4 family.").AddDefaultValueDescription("false").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             booldefault.StaticBool(false),
+						},
+					},
 				},
 			},
 		},
@@ -188,6 +616,7 @@ func (r *ISISResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		queries = append(queries, nxos.Query("rsp-subtree", "full"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -230,6 +659,14 @@ func (r *ISISResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	var state ISIS
+
+	// Read state
+	diags = req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
@@ -245,6 +682,19 @@ func (r *ISISResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
+		}
+
+		deletedItems := plan.getDeletedItems(ctx, state)
+		tflog.Debug(ctx, fmt.Sprintf("%s: List items to delete: %v", plan.getDn(), deletedItems))
+		for _, dn := range deletedItems {
+			res, err := device.Client.DeleteDn(dn)
+			if err != nil {
+				errCode := res.Get("imdata.0.error.attributes.code").Str
+				if errCode != "1" && errCode != "107" {
+					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+					return
+				}
+			}
 		}
 	}
 

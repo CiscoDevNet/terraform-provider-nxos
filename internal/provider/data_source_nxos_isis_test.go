@@ -32,6 +32,62 @@ import (
 func TestAccDataSourceNxosISIS(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_isis.test", "instances.*", map[string]string{
+		"name":        "ISIS1",
+		"admin_state": "enabled",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_isis.test", "instances.0.vrfs.*", map[string]string{
+		"name":                    "default",
+		"admin_state":             "enabled",
+		"authentication_check_l1": "false",
+		"authentication_check_l2": "false",
+		"authentication_type_l1":  "unknown",
+		"authentication_type_l2":  "unknown",
+		"bandwidth_reference":     "400000",
+		"banwidth_reference_unit": "mbps",
+		"is_type":                 "l2",
+		"metric_type":             "wide",
+		"mtu":                     "2000",
+		"net":                     "49.0001.0000.0000.3333.00",
+		"passive_default":         "l12",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_isis.test", "instances.0.vrfs.0.address_families.*", map[string]string{
+		"address_family":              "v4",
+		"segment_routing_mpls":        "true",
+		"enable_bfd":                  "false",
+		"prefix_advertise_passive_l1": "true",
+		"prefix_advertise_passive_l2": "true",
+	}))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.0.vrfs.0.overload_startup_time", "60"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_isis.test", "interfaces.*", map[string]string{
+		"interface_id":            "eth1/10",
+		"authentication_check":    "false",
+		"authentication_check_l1": "false",
+		"authentication_check_l2": "false",
+		"authentication_type":     "unknown",
+		"authentication_type_l1":  "unknown",
+		"authentication_type_l2":  "unknown",
+		"circuit_type":            "l2",
+		"vrf":                     "default",
+		"hello_interval":          "20",
+		"hello_interval_l1":       "20",
+		"hello_interval_l2":       "20",
+		"hello_multiplier":        "4",
+		"hello_multiplier_l1":     "4",
+		"hello_multiplier_l2":     "4",
+		"hello_padding":           "never",
+		"instance_name":           "ISIS1",
+		"metric_l1":               "1000",
+		"metric_l2":               "1000",
+		"mtu_check":               "true",
+		"mtu_check_l1":            "true",
+		"mtu_check_l2":            "true",
+		"network_type_p2p":        "on",
+		"passive":                 "l1",
+		"priority_l1":             "80",
+		"priority_l2":             "80",
+		"enable_ipv4":             "true",
+	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -65,6 +121,67 @@ resource "nxos_rest" "PreReq0" {
 func testAccDataSourceNxosISISConfig() string {
 	config := `resource "nxos_isis" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
+	config += `	instances = [{` + "\n"
+	config += `		name = "ISIS1"` + "\n"
+	config += `		admin_state = "enabled"` + "\n"
+	config += `		vrfs = [{` + "\n"
+	config += `			name = "default"` + "\n"
+	config += `			admin_state = "enabled"` + "\n"
+	config += `			authentication_check_l1 = false` + "\n"
+	config += `			authentication_check_l2 = false` + "\n"
+	config += `			authentication_key_l1 = ""` + "\n"
+	config += `			authentication_key_l2 = ""` + "\n"
+	config += `			authentication_type_l1 = "unknown"` + "\n"
+	config += `			authentication_type_l2 = "unknown"` + "\n"
+	config += `			bandwidth_reference = 400000` + "\n"
+	config += `			banwidth_reference_unit = "mbps"` + "\n"
+	config += `			is_type = "l2"` + "\n"
+	config += `			metric_type = "wide"` + "\n"
+	config += `			mtu = 2000` + "\n"
+	config += `			net = "49.0001.0000.0000.3333.00"` + "\n"
+	config += `			passive_default = "l12"` + "\n"
+	config += `			address_families = [{` + "\n"
+	config += `				address_family = "v4"` + "\n"
+	config += `				segment_routing_mpls = true` + "\n"
+	config += `				enable_bfd = false` + "\n"
+	config += `				prefix_advertise_passive_l1 = true` + "\n"
+	config += `				prefix_advertise_passive_l2 = true` + "\n"
+	config += `			}]` + "\n"
+	config += `			overload_startup_time = 60` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `	interfaces = [{` + "\n"
+	config += `		interface_id = "eth1/10"` + "\n"
+	config += `		authentication_check = false` + "\n"
+	config += `		authentication_check_l1 = false` + "\n"
+	config += `		authentication_check_l2 = false` + "\n"
+	config += `		authentication_key = ""` + "\n"
+	config += `		authentication_key_l1 = ""` + "\n"
+	config += `		authentication_key_l2 = ""` + "\n"
+	config += `		authentication_type = "unknown"` + "\n"
+	config += `		authentication_type_l1 = "unknown"` + "\n"
+	config += `		authentication_type_l2 = "unknown"` + "\n"
+	config += `		circuit_type = "l2"` + "\n"
+	config += `		vrf = "default"` + "\n"
+	config += `		hello_interval = 20` + "\n"
+	config += `		hello_interval_l1 = 20` + "\n"
+	config += `		hello_interval_l2 = 20` + "\n"
+	config += `		hello_multiplier = 4` + "\n"
+	config += `		hello_multiplier_l1 = 4` + "\n"
+	config += `		hello_multiplier_l2 = 4` + "\n"
+	config += `		hello_padding = "never"` + "\n"
+	config += `		instance_name = "ISIS1"` + "\n"
+	config += `		metric_l1 = 1000` + "\n"
+	config += `		metric_l2 = 1000` + "\n"
+	config += `		mtu_check = true` + "\n"
+	config += `		mtu_check_l1 = true` + "\n"
+	config += `		mtu_check_l2 = true` + "\n"
+	config += `		network_type_p2p = "on"` + "\n"
+	config += `		passive = "l1"` + "\n"
+	config += `		priority_l1 = 80` + "\n"
+	config += `		priority_l2 = 80` + "\n"
+	config += `		enable_ipv4 = true` + "\n"
+	config += `	}]` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 

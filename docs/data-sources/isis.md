@@ -3,15 +3,25 @@
 page_title: "nxos_isis Data Source - terraform-provider-nxos"
 subcategory: "ISIS"
 description: |-
-  This data source can read the global IS-IS configuration.
+  This data source can read the IS-IS configuration.
   API Documentation: isisEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Entity/
+  Additional API Documentation
+  isisInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Inst/isisDom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Dom/isisDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:DomAf/isisOverload https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Overload/isisInternalIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:InternalIf/
 ---
 
 # nxos_isis (Data Source)
 
-This data source can read the global IS-IS configuration.
+This data source can read the IS-IS configuration.
 
 - API Documentation: [isisEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Entity/)
+
+### Additional API Documentation
+
+- [isisInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Inst/)
+- [isisDom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Dom/)
+- [isisDomAf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:DomAf/)
+- [isisOverload](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Overload/)
+- [isisInternalIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:InternalIf/)
 
 ## Example Usage
 
@@ -31,3 +41,87 @@ data "nxos_isis" "example" {
 
 - `admin_state` (String) Administrative state.
 - `id` (String) The distinguished name of the object.
+- `instances` (Attributes List) List of IS-IS instances. (see [below for nested schema](#nestedatt--instances))
+- `interfaces` (Attributes List) List of IS-IS interfaces. (see [below for nested schema](#nestedatt--interfaces))
+
+<a id="nestedatt--instances"></a>
+### Nested Schema for `instances`
+
+Read-Only:
+
+- `admin_state` (String) Administrative state.
+- `name` (String) IS-IS instance name.
+- `vrfs` (Attributes List) List of IS-IS VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
+
+<a id="nestedatt--instances--vrfs"></a>
+### Nested Schema for `instances.vrfs`
+
+Read-Only:
+
+- `address_families` (Attributes List) List of IS-IS address families. (see [below for nested schema](#nestedatt--instances--vrfs--address_families))
+- `admin_state` (String) Administrative state.
+- `authentication_check_l1` (Boolean) Authentication Check for ISIS on Level-1.
+- `authentication_check_l2` (Boolean) Authentication Check for ISIS on Level-2.
+- `authentication_key_l1` (String) Authentication Key for IS-IS on Level-1.
+- `authentication_key_l2` (String) Authentication Key for IS-IS on Level-2.
+- `authentication_type_l1` (String) IS-IS Authentication-Type for Level-1.
+- `authentication_type_l2` (String) IS-IS Authentication-Type for Level-2.
+- `bandwidth_reference` (Number) The IS-IS domain bandwidth reference. This sets the default reference bandwidth used for calculating the IS-IS cost metric.
+- `banwidth_reference_unit` (String) Bandwidth reference unit.
+- `is_type` (String) IS-IS domain type.
+- `metric_type` (String) IS-IS metric type.
+- `mtu` (Number) The configuration of link-state packet (LSP) maximum transmission units (MTU) is supported. You can enable up to 4352 bytes.
+- `name` (String) VRF name.
+- `net` (String) Holds IS-IS domain NET (address) value.
+- `overload_startup_time` (Number) The overload startup time. The overload state begins when the switch boots up and ends at the time specified as the overload startup time.
+- `passive_default` (String) IS-IS Domain passive-interface default level.
+
+<a id="nestedatt--instances--vrfs--address_families"></a>
+### Nested Schema for `instances.vrfs.address_families`
+
+Read-Only:
+
+- `address_family` (String) Address family type.
+- `enable_bfd` (Boolean) Enabling BFD on all ISIS domain interfaces.
+- `prefix_advertise_passive_l1` (Boolean) Prefix advertise passive only for level-1
+- `prefix_advertise_passive_l2` (Boolean) Prefix advertise passive only level-2
+- `segment_routing_mpls` (Boolean) Segment routing for MPLS
+
+
+
+
+<a id="nestedatt--interfaces"></a>
+### Nested Schema for `interfaces`
+
+Read-Only:
+
+- `authentication_check` (Boolean) Authentication Check for ISIS without specific level.
+- `authentication_check_l1` (Boolean) Authentication Check for ISIS on Level-1.
+- `authentication_check_l2` (Boolean) Authentication Check for ISIS on Level-2.
+- `authentication_key` (String) Authentication Key for IS-IS without specific level.
+- `authentication_key_l1` (String) Authentication Key for IS-IS on Level-1.
+- `authentication_key_l2` (String) Authentication Key for IS-IS on Level-2.
+- `authentication_type` (String) IS-IS Authentication-Type without specific level.
+- `authentication_type_l1` (String) IS-IS Authentication-Type for Level-1.
+- `authentication_type_l2` (String) IS-IS Authentication-Type for Level-2.
+- `circuit_type` (String) Circuit type.
+- `enable_ipv4` (Boolean) Enabling ISIS router tag on Interface's IPV4 family.
+- `hello_interval` (Number) Hello interval.
+- `hello_interval_l1` (Number) Hello interval Level-1.
+- `hello_interval_l2` (Number) Hello interval Level-2.
+- `hello_multiplier` (Number) Hello multiplier.
+- `hello_multiplier_l1` (Number) Hello multiplier Level-1.
+- `hello_multiplier_l2` (Number) Hello multiplier Level-2.
+- `hello_padding` (String) Hello padding.
+- `instance_name` (String) Instance to which the interface belongs to.
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `metric_l1` (Number) Interface metric Level-1.
+- `metric_l2` (Number) Interface metric Level-2.
+- `mtu_check` (Boolean) MTU Check for IS-IS without specific level.
+- `mtu_check_l1` (Boolean) MTU Check for IS-IS on Level-1.
+- `mtu_check_l2` (Boolean) MTU Check for IS-IS on Level-2.
+- `network_type_p2p` (String) Enabling Point-to-Point Network Type on IS-IS Interface.
+- `passive` (String) IS-IS Passive Interface Info.
+- `priority_l1` (Number) Circuit priority.
+- `priority_l2` (Number) Circuit priority.
+- `vrf` (String) VRF.

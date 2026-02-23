@@ -3,28 +3,92 @@
 page_title: "nxos_isis Resource - terraform-provider-nxos"
 subcategory: "ISIS"
 description: |-
-  This resource can manage the global IS-IS configuration.
+  This resource can manage the IS-IS configuration.
   API Documentation: isisEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Entity/
-  Child resources
-  nxos_isis_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/isis_instancenxos_isis_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/isis_interface
+  Additional API Documentation
+  isisInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Inst/isisDom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Dom/isisDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:DomAf/isisOverload https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Overload/isisInternalIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:InternalIf/
 ---
 
 # nxos_isis (Resource)
 
-This resource can manage the global IS-IS configuration.
+This resource can manage the IS-IS configuration.
 
 - API Documentation: [isisEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Entity/)
 
-### Child resources
+### Additional API Documentation
 
-- [nxos_isis_instance](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/isis_instance)
-- [nxos_isis_interface](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/isis_interface)
+- [isisInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Inst/)
+- [isisDom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Dom/)
+- [isisDomAf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:DomAf/)
+- [isisOverload](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:Overload/)
+- [isisInternalIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/isis:InternalIf/)
 
 ## Example Usage
 
 ```terraform
 resource "nxos_isis" "example" {
   admin_state = "enabled"
+  instances = [{
+    name        = "ISIS1"
+    admin_state = "enabled"
+    vrfs = [{
+      name                    = "default"
+      admin_state             = "enabled"
+      authentication_check_l1 = false
+      authentication_check_l2 = false
+      authentication_key_l1   = ""
+      authentication_key_l2   = ""
+      authentication_type_l1  = "unknown"
+      authentication_type_l2  = "unknown"
+      bandwidth_reference     = 400000
+      banwidth_reference_unit = "mbps"
+      is_type                 = "l2"
+      metric_type             = "wide"
+      mtu                     = 2000
+      net                     = "49.0001.0000.0000.3333.00"
+      passive_default         = "l12"
+      address_families = [{
+        address_family              = "v4"
+        segment_routing_mpls        = true
+        enable_bfd                  = false
+        prefix_advertise_passive_l1 = true
+        prefix_advertise_passive_l2 = true
+      }]
+      overload_startup_time = 60
+    }]
+  }]
+  interfaces = [{
+    interface_id            = "eth1/10"
+    authentication_check    = false
+    authentication_check_l1 = false
+    authentication_check_l2 = false
+    authentication_key      = ""
+    authentication_key_l1   = ""
+    authentication_key_l2   = ""
+    authentication_type     = "unknown"
+    authentication_type_l1  = "unknown"
+    authentication_type_l2  = "unknown"
+    circuit_type            = "l2"
+    vrf                     = "default"
+    hello_interval          = 20
+    hello_interval_l1       = 20
+    hello_interval_l2       = 20
+    hello_multiplier        = 4
+    hello_multiplier_l1     = 4
+    hello_multiplier_l2     = 4
+    hello_padding           = "never"
+    instance_name           = "ISIS1"
+    metric_l1               = 1000
+    metric_l2               = 1000
+    mtu_check               = true
+    mtu_check_l1            = true
+    mtu_check_l2            = true
+    network_type_p2p        = "on"
+    passive                 = "l1"
+    priority_l1             = 80
+    priority_l2             = 80
+    enable_ipv4             = true
+  }]
 }
 ```
 
@@ -37,10 +101,177 @@ resource "nxos_isis" "example" {
   - Choices: `enabled`, `disabled`
   - Default value: `enabled`
 - `device` (String) A device name from the provider configuration.
+- `instances` (Attributes List) List of IS-IS instances. (see [below for nested schema](#nestedatt--instances))
+- `interfaces` (Attributes List) List of IS-IS interfaces. (see [below for nested schema](#nestedatt--interfaces))
 
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--instances"></a>
+### Nested Schema for `instances`
+
+Required:
+
+- `name` (String) IS-IS instance name.
+
+Optional:
+
+- `admin_state` (String) Administrative state.
+  - Choices: `enabled`, `disabled`
+  - Default value: `enabled`
+- `vrfs` (Attributes List) List of IS-IS VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
+
+<a id="nestedatt--instances--vrfs"></a>
+### Nested Schema for `instances.vrfs`
+
+Required:
+
+- `name` (String) VRF name.
+
+Optional:
+
+- `address_families` (Attributes List) List of IS-IS address families. (see [below for nested schema](#nestedatt--instances--vrfs--address_families))
+- `admin_state` (String) Administrative state.
+  - Choices: `enabled`, `disabled`
+  - Default value: `enabled`
+- `authentication_check_l1` (Boolean) Authentication Check for ISIS on Level-1.
+  - Default value: `true`
+- `authentication_check_l2` (Boolean) Authentication Check for ISIS on Level-2.
+  - Default value: `true`
+- `authentication_key_l1` (String) Authentication Key for IS-IS on Level-1.
+- `authentication_key_l2` (String) Authentication Key for IS-IS on Level-2.
+- `authentication_type_l1` (String) IS-IS Authentication-Type for Level-1.
+  - Choices: `clear`, `md5`, `unknown`
+  - Default value: `unknown`
+- `authentication_type_l2` (String) IS-IS Authentication-Type for Level-2.
+  - Choices: `clear`, `md5`, `unknown`
+  - Default value: `unknown`
+- `bandwidth_reference` (Number) The IS-IS domain bandwidth reference. This sets the default reference bandwidth used for calculating the IS-IS cost metric.
+  - Range: `0`-`4294967295`
+  - Default value: `40000`
+- `banwidth_reference_unit` (String) Bandwidth reference unit.
+  - Choices: `mbps`, `gbps`
+  - Default value: `mbps`
+- `is_type` (String) IS-IS domain type.
+  - Choices: `l1`, `l2`, `l12`
+  - Default value: `l12`
+- `metric_type` (String) IS-IS metric type.
+  - Choices: `narrow`, `wide`, `transition`
+  - Default value: `wide`
+- `mtu` (Number) The configuration of link-state packet (LSP) maximum transmission units (MTU) is supported. You can enable up to 4352 bytes.
+  - Range: `256`-`4352`
+  - Default value: `1492`
+- `net` (String) Holds IS-IS domain NET (address) value.
+- `overload_startup_time` (Number) The overload startup time. The overload state begins when the switch boots up and ends at the time specified as the overload startup time.
+  - Range: `5`-`86400`
+  - Default value: `60`
+- `passive_default` (String) IS-IS Domain passive-interface default level.
+  - Choices: `l1`, `l2`, `l12`, `unknown`
+  - Default value: `unknown`
+
+<a id="nestedatt--instances--vrfs--address_families"></a>
+### Nested Schema for `instances.vrfs.address_families`
+
+Required:
+
+- `address_family` (String) Address family type.
+  - Choices: `v4`, `v6`
+  - Default value: `v4`
+
+Optional:
+
+- `enable_bfd` (Boolean) Enabling BFD on all ISIS domain interfaces.
+  - Default value: `false`
+- `prefix_advertise_passive_l1` (Boolean) Prefix advertise passive only for level-1
+  - Default value: `false`
+- `prefix_advertise_passive_l2` (Boolean) Prefix advertise passive only level-2
+  - Default value: `false`
+- `segment_routing_mpls` (Boolean) Segment routing for MPLS
+  - Default value: `false`
+
+
+
+
+<a id="nestedatt--interfaces"></a>
+### Nested Schema for `interfaces`
+
+Required:
+
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+
+Optional:
+
+- `authentication_check` (Boolean) Authentication Check for ISIS without specific level.
+  - Default value: `true`
+- `authentication_check_l1` (Boolean) Authentication Check for ISIS on Level-1.
+  - Default value: `true`
+- `authentication_check_l2` (Boolean) Authentication Check for ISIS on Level-2.
+  - Default value: `true`
+- `authentication_key` (String) Authentication Key for IS-IS without specific level.
+- `authentication_key_l1` (String) Authentication Key for IS-IS on Level-1.
+- `authentication_key_l2` (String) Authentication Key for IS-IS on Level-2.
+- `authentication_type` (String) IS-IS Authentication-Type without specific level.
+  - Choices: `clear`, `md5`, `unknown`
+  - Default value: `unknown`
+- `authentication_type_l1` (String) IS-IS Authentication-Type for Level-1.
+  - Choices: `clear`, `md5`, `unknown`
+  - Default value: `unknown`
+- `authentication_type_l2` (String) IS-IS Authentication-Type for Level-2.
+  - Choices: `clear`, `md5`, `unknown`
+  - Default value: `unknown`
+- `circuit_type` (String) Circuit type.
+  - Choices: `l1`, `l2`, `l12`
+  - Default value: `l12`
+- `enable_ipv4` (Boolean) Enabling ISIS router tag on Interface's IPV4 family.
+  - Default value: `false`
+- `hello_interval` (Number) Hello interval.
+  - Range: `1`-`65535`
+  - Default value: `10`
+- `hello_interval_l1` (Number) Hello interval Level-1.
+  - Range: `1`-`65535`
+  - Default value: `10`
+- `hello_interval_l2` (Number) Hello interval Level-2.
+  - Range: `1`-`65535`
+  - Default value: `10`
+- `hello_multiplier` (Number) Hello multiplier.
+  - Range: `3`-`1000`
+  - Default value: `3`
+- `hello_multiplier_l1` (Number) Hello multiplier Level-1.
+  - Range: `3`-`1000`
+  - Default value: `3`
+- `hello_multiplier_l2` (Number) Hello multiplier Level-2.
+  - Range: `3`-`1000`
+  - Default value: `3`
+- `hello_padding` (String) Hello padding.
+  - Choices: `always`, `transient`, `never`
+  - Default value: `always`
+- `instance_name` (String) Instance to which the interface belongs to.
+- `metric_l1` (Number) Interface metric Level-1.
+  - Range: `0`-`16777216`
+  - Default value: `16777216`
+- `metric_l2` (Number) Interface metric Level-2.
+  - Range: `0`-`16777216`
+  - Default value: `16777216`
+- `mtu_check` (Boolean) MTU Check for IS-IS without specific level.
+  - Default value: `false`
+- `mtu_check_l1` (Boolean) MTU Check for IS-IS on Level-1.
+  - Default value: `false`
+- `mtu_check_l2` (Boolean) MTU Check for IS-IS on Level-2.
+  - Default value: `false`
+- `network_type_p2p` (String) Enabling Point-to-Point Network Type on IS-IS Interface.
+  - Choices: `off`, `on`, `useAllISMac`
+  - Default value: `off`
+- `passive` (String) IS-IS Passive Interface Info.
+  - Choices: `l1`, `l2`, `l12`, `noL1`, `noL2`, `noL12`, `inheritDef`
+  - Default value: `inheritDef`
+- `priority_l1` (Number) Circuit priority.
+  - Range: `0`-`127`
+  - Default value: `64`
+- `priority_l2` (Number) Circuit priority.
+  - Range: `0`-`127`
+  - Default value: `64`
+- `vrf` (String) VRF.
 
 ## Import
 

@@ -36,6 +36,59 @@ import (
 func TestAccNxosISIS(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.name", "ISIS1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.authentication_check_l1", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.authentication_check_l2", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.authentication_key_l1", ""))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.authentication_key_l2", ""))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.authentication_type_l1", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.authentication_type_l2", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.bandwidth_reference", "400000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.banwidth_reference_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.is_type", "l2"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.metric_type", "wide"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.mtu", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.net", "49.0001.0000.0000.3333.00"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.passive_default", "l12"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.address_family", "v4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.segment_routing_mpls", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.enable_bfd", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.prefix_advertise_passive_l1", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.prefix_advertise_passive_l2", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.overload_startup_time", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.authentication_check", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.authentication_check_l1", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.authentication_check_l2", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.authentication_key", ""))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.authentication_key_l1", ""))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.authentication_key_l2", ""))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.authentication_type", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.authentication_type_l1", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.authentication_type_l2", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.circuit_type", "l2"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.hello_interval", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.hello_interval_l1", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.hello_interval_l2", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.hello_multiplier", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.hello_multiplier_l1", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.hello_multiplier_l2", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.hello_padding", "never"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.instance_name", "ISIS1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.metric_l1", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.metric_l2", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.mtu_check", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.mtu_check_l1", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.mtu_check_l2", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.network_type_p2p", "on"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.passive", "l1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.priority_l1", "80"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.priority_l2", "80"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.enable_ipv4", "true"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -105,6 +158,67 @@ func testAccNxosISISConfig_minimum() string {
 func testAccNxosISISConfig_all() string {
 	config := `resource "nxos_isis" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
+	config += `	instances = [{` + "\n"
+	config += `		name = "ISIS1"` + "\n"
+	config += `		admin_state = "enabled"` + "\n"
+	config += `		vrfs = [{` + "\n"
+	config += `			name = "default"` + "\n"
+	config += `			admin_state = "enabled"` + "\n"
+	config += `			authentication_check_l1 = false` + "\n"
+	config += `			authentication_check_l2 = false` + "\n"
+	config += `			authentication_key_l1 = ""` + "\n"
+	config += `			authentication_key_l2 = ""` + "\n"
+	config += `			authentication_type_l1 = "unknown"` + "\n"
+	config += `			authentication_type_l2 = "unknown"` + "\n"
+	config += `			bandwidth_reference = 400000` + "\n"
+	config += `			banwidth_reference_unit = "mbps"` + "\n"
+	config += `			is_type = "l2"` + "\n"
+	config += `			metric_type = "wide"` + "\n"
+	config += `			mtu = 2000` + "\n"
+	config += `			net = "49.0001.0000.0000.3333.00"` + "\n"
+	config += `			passive_default = "l12"` + "\n"
+	config += `			address_families = [{` + "\n"
+	config += `				address_family = "v4"` + "\n"
+	config += `				segment_routing_mpls = true` + "\n"
+	config += `				enable_bfd = false` + "\n"
+	config += `				prefix_advertise_passive_l1 = true` + "\n"
+	config += `				prefix_advertise_passive_l2 = true` + "\n"
+	config += `			}]` + "\n"
+	config += `			overload_startup_time = 60` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `	interfaces = [{` + "\n"
+	config += `		interface_id = "eth1/10"` + "\n"
+	config += `		authentication_check = false` + "\n"
+	config += `		authentication_check_l1 = false` + "\n"
+	config += `		authentication_check_l2 = false` + "\n"
+	config += `		authentication_key = ""` + "\n"
+	config += `		authentication_key_l1 = ""` + "\n"
+	config += `		authentication_key_l2 = ""` + "\n"
+	config += `		authentication_type = "unknown"` + "\n"
+	config += `		authentication_type_l1 = "unknown"` + "\n"
+	config += `		authentication_type_l2 = "unknown"` + "\n"
+	config += `		circuit_type = "l2"` + "\n"
+	config += `		vrf = "default"` + "\n"
+	config += `		hello_interval = 20` + "\n"
+	config += `		hello_interval_l1 = 20` + "\n"
+	config += `		hello_interval_l2 = 20` + "\n"
+	config += `		hello_multiplier = 4` + "\n"
+	config += `		hello_multiplier_l1 = 4` + "\n"
+	config += `		hello_multiplier_l2 = 4` + "\n"
+	config += `		hello_padding = "never"` + "\n"
+	config += `		instance_name = "ISIS1"` + "\n"
+	config += `		metric_l1 = 1000` + "\n"
+	config += `		metric_l2 = 1000` + "\n"
+	config += `		mtu_check = true` + "\n"
+	config += `		mtu_check_l1 = true` + "\n"
+	config += `		mtu_check_l2 = true` + "\n"
+	config += `		network_type_p2p = "on"` + "\n"
+	config += `		passive = "l1"` + "\n"
+	config += `		priority_l1 = 80` + "\n"
+	config += `		priority_l2 = 80` + "\n"
+	config += `		enable_ipv4 = true` + "\n"
+	config += `	}]` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

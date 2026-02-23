@@ -26,11 +26,14 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -63,7 +66,7 @@ func (r *OSPFv3Resource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *OSPFv3Resource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the global OSPFv3 configuration.", "ospfv3Entity", "Routing%20and%20Forwarding/ospfv3:Entity/").AddChildren("ospfv3_instance").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the global OSPFv3 configuration.", "ospfv3Entity", "Routing%20and%20Forwarding/ospfv3:Entity/").AddAdditionalDocs([]string{"ospfv3Inst", "ospfv3Dom", "ospfv3Area", "ospfv3DomAf", "ospfv3If"}, []string{"Routing%20and%20Forwarding/ospfv3:Inst/", "Routing%20and%20Forwarding/ospfv3:Dom/", "Routing%20and%20Forwarding/ospfv3:Area/", "Routing%20and%20Forwarding/ospfv3:DomAf/", "Routing%20and%20Forwarding/ospfv3:If/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -84,6 +87,255 @@ func (r *OSPFv3Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Default:             stringdefault.StaticString("enabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"instances": schema.ListNestedAttribute{
+				MarkdownDescription: "List of OSPFv3 instances.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("OSPFv3 instance name.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("enabled"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"vrfs": schema.ListNestedAttribute{
+							MarkdownDescription: "List of OSPFv3 VRFs.",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
+										Required:            true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplace(),
+										},
+									},
+									"admin_state": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("enabled"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"bandwidth_reference": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Bandwidth reference value").AddIntegerRangeDescription(0, 4294967295).AddDefaultValueDescription("40000").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             int64default.StaticInt64(40000),
+										Validators: []validator.Int64{
+											int64validator.Between(0, 4294967295),
+										},
+									},
+									"bandwidth_reference_unit": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Bandwidth reference unit").AddStringEnumDescription("mbps", "gbps").AddDefaultValueDescription("mbps").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("mbps"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("mbps", "gbps"),
+										},
+									},
+									"router_id": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Router ID").AddDefaultValueDescription("0.0.0.0").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("0.0.0.0"),
+									},
+									"bfd_control": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Holds the controls for bfd").AddDefaultValueDescription("true").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             booldefault.StaticBool(true),
+									},
+									"areas": schema.ListNestedAttribute{
+										MarkdownDescription: "List of OSPFv3 areas.",
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"area_id": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Area identifier to which a network or interface belongs in IPv4 address format.").AddDefaultValueDescription("0.0.0.0").String,
+													Required:            true,
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplace(),
+													},
+												},
+												"redistribute": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Send redistributed LSAs into NSSA area").AddDefaultValueDescription("true").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             booldefault.StaticBool(true),
+												},
+												"summary": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Originate summary LSA into other areas").AddDefaultValueDescription("true").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             booldefault.StaticBool(true),
+												},
+												"suppress_forward_address": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Originate summary LSA into other areas").AddDefaultValueDescription("false").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             booldefault.StaticBool(false),
+												},
+												"type": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Configure area type as NSSA or stub").AddStringEnumDescription("regular", "stub", "nssa").AddDefaultValueDescription("regular").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             stringdefault.StaticString("regular"),
+													Validators: []validator.String{
+														stringvalidator.OneOf("regular", "stub", "nssa"),
+													},
+												},
+											},
+										},
+									},
+									"address_families": schema.ListNestedAttribute{
+										MarkdownDescription: "List of OSPFv3 address families.",
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"address_family_type": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("IPv6 unicast address family type").AddStringEnumDescription("ipv6-ucast").AddDefaultValueDescription("ipv6-ucast").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.OneOf("ipv6-ucast"),
+													},
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplace(),
+													},
+												},
+												"administrative_distance": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Adminitrative distance. Value must be an integer range [1,255] or keyword: unspecified").AddDefaultValueDescription("unspecified").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             stringdefault.StaticString("unspecified"),
+												},
+												"default_metric": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Default metric for redistributed routes. Value must be an integer range [0,16777214] or keyword: unspecified").AddDefaultValueDescription("unspecified").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             stringdefault.StaticString("unspecified"),
+												},
+												"max_ecmp_cost": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Maximum Equal Cost Multi Path(ECMP)").AddIntegerRangeDescription(1, 64).AddDefaultValueDescription("8").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             int64default.StaticInt64(8),
+													Validators: []validator.Int64{
+														int64validator.Between(1, 64),
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "List of OSPFv3 interface configurations.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_id": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"advertise_secondaries": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Advertise secondary IPv6 addresses").AddDefaultValueDescription("true").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             booldefault.StaticBool(true),
+						},
+						"area": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Area identifier to which a network or interface belongs in IPv4 address format.").AddDefaultValueDescription("0.0.0.0").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("0.0.0.0"),
+						},
+						"bfd": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bidirectional Forwarding Detection (BFD).").AddStringEnumDescription("unspecified", "enabled", "disabled").AddDefaultValueDescription("unspecified").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("unspecified"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("unspecified", "enabled", "disabled"),
+							},
+						},
+						"cost": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies the cost of interface.").AddIntegerRangeDescription(0, 65535).AddDefaultValueDescription("0").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(0),
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"dead_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Dead interval, interval after which router declares that neighbor as down.").AddIntegerRangeDescription(0, 65535).AddDefaultValueDescription("0").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(0),
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"hello_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Hello interval, interval between hello packets that OSPF sends on the interface.").AddIntegerRangeDescription(0, 65535).AddDefaultValueDescription("10").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(10),
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"network_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Network type.").AddStringEnumDescription("none", "p2p", "bcast").AddDefaultValueDescription("none").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("none"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("none", "p2p", "bcast"),
+							},
+						},
+						"passive": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Passive interface control. Interface can be configured as passive or non-passive.").AddStringEnumDescription("none", "enabled", "disabled").AddDefaultValueDescription("none").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("none"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("none", "enabled", "disabled"),
+							},
+						},
+						"priority": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Priority, used in determining the designated router on this network.").AddIntegerRangeDescription(0, 255).AddDefaultValueDescription("1").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(1),
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+					},
 				},
 			},
 		},
@@ -188,6 +440,7 @@ func (r *OSPFv3Resource) Read(ctx context.Context, req resource.ReadRequest, res
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		queries = append(queries, nxos.Query("rsp-subtree", "full"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -230,6 +483,14 @@ func (r *OSPFv3Resource) Update(ctx context.Context, req resource.UpdateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	var state OSPFv3
+
+	// Read state
+	diags = req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
@@ -245,6 +506,19 @@ func (r *OSPFv3Resource) Update(ctx context.Context, req resource.UpdateRequest,
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
+		}
+
+		deletedItems := plan.getDeletedItems(ctx, state)
+		tflog.Debug(ctx, fmt.Sprintf("%s: List items to delete: %v", plan.getDn(), deletedItems))
+		for _, dn := range deletedItems {
+			res, err := device.Client.DeleteDn(dn)
+			if err != nil {
+				errCode := res.Get("imdata.0.error.attributes.code").Str
+				if errCode != "1" && errCode != "107" {
+					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+					return
+				}
+			}
 		}
 	}
 

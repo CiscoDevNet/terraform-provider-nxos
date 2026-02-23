@@ -5,8 +5,8 @@ subcategory: "OSPFv3"
 description: |-
   This resource can manage the global OSPFv3 configuration.
   API Documentation: ospfv3Entity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:Entity/
-  Child resources
-  nxos_ospfv3_instance https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospfv3_instance
+  Additional API Documentation
+  ospfv3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:Inst/ospfv3Dom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:Dom/ospfv3Area https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:Area/ospfv3DomAf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:DomAf/ospfv3If https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:If/
 ---
 
 # nxos_ospfv3 (Resource)
@@ -15,15 +15,56 @@ This resource can manage the global OSPFv3 configuration.
 
 - API Documentation: [ospfv3Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:Entity/)
 
-### Child resources
+### Additional API Documentation
 
-- [nxos_ospfv3_instance](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ospfv3_instance)
+- [ospfv3Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:Inst/)
+- [ospfv3Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:Dom/)
+- [ospfv3Area](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:Area/)
+- [ospfv3DomAf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:DomAf/)
+- [ospfv3If](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:If/)
 
 ## Example Usage
 
 ```terraform
 resource "nxos_ospfv3" "example" {
   admin_state = "enabled"
+  instances = [{
+    name        = "OSPFv3"
+    admin_state = "enabled"
+    vrfs = [{
+      name                     = "VRF1"
+      admin_state              = "enabled"
+      bandwidth_reference      = 400000
+      bandwidth_reference_unit = "mbps"
+      router_id                = "34.56.78.90"
+      bfd_control              = false
+      areas = [{
+        area_id                  = "0.0.0.10"
+        redistribute             = false
+        summary                  = false
+        suppress_forward_address = false
+        type                     = "regular"
+      }]
+      address_families = [{
+        address_family_type     = "ipv6-ucast"
+        administrative_distance = "10"
+        default_metric          = "1024"
+        max_ecmp_cost           = 16
+      }]
+    }]
+  }]
+  interfaces = [{
+    interface_id          = "eth1/10"
+    advertise_secondaries = false
+    area                  = "0.0.0.10"
+    bfd                   = "disabled"
+    cost                  = 1000
+    dead_interval         = 60
+    hello_interval        = 15
+    network_type          = "p2p"
+    passive               = "enabled"
+    priority              = 10
+  }]
 }
 ```
 
@@ -36,10 +77,129 @@ resource "nxos_ospfv3" "example" {
   - Choices: `enabled`, `disabled`
   - Default value: `enabled`
 - `device` (String) A device name from the provider configuration.
+- `instances` (Attributes List) List of OSPFv3 instances. (see [below for nested schema](#nestedatt--instances))
+- `interfaces` (Attributes List) List of OSPFv3 interface configurations. (see [below for nested schema](#nestedatt--interfaces))
 
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--instances"></a>
+### Nested Schema for `instances`
+
+Required:
+
+- `name` (String) OSPFv3 instance name.
+
+Optional:
+
+- `admin_state` (String) Administrative state.
+  - Choices: `enabled`, `disabled`
+  - Default value: `enabled`
+- `vrfs` (Attributes List) List of OSPFv3 VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
+
+<a id="nestedatt--instances--vrfs"></a>
+### Nested Schema for `instances.vrfs`
+
+Required:
+
+- `name` (String) VRF name.
+
+Optional:
+
+- `address_families` (Attributes List) List of OSPFv3 address families. (see [below for nested schema](#nestedatt--instances--vrfs--address_families))
+- `admin_state` (String) Administrative state.
+  - Choices: `enabled`, `disabled`
+  - Default value: `enabled`
+- `areas` (Attributes List) List of OSPFv3 areas. (see [below for nested schema](#nestedatt--instances--vrfs--areas))
+- `bandwidth_reference` (Number) Bandwidth reference value
+  - Range: `0`-`4294967295`
+  - Default value: `40000`
+- `bandwidth_reference_unit` (String) Bandwidth reference unit
+  - Choices: `mbps`, `gbps`
+  - Default value: `mbps`
+- `bfd_control` (Boolean) Holds the controls for bfd
+  - Default value: `true`
+- `router_id` (String) Router ID
+  - Default value: `0.0.0.0`
+
+<a id="nestedatt--instances--vrfs--address_families"></a>
+### Nested Schema for `instances.vrfs.address_families`
+
+Required:
+
+- `address_family_type` (String) IPv6 unicast address family type
+  - Choices: `ipv6-ucast`
+  - Default value: `ipv6-ucast`
+
+Optional:
+
+- `administrative_distance` (String) Adminitrative distance. Value must be an integer range [1,255] or keyword: unspecified
+  - Default value: `unspecified`
+- `default_metric` (String) Default metric for redistributed routes. Value must be an integer range [0,16777214] or keyword: unspecified
+  - Default value: `unspecified`
+- `max_ecmp_cost` (Number) Maximum Equal Cost Multi Path(ECMP)
+  - Range: `1`-`64`
+  - Default value: `8`
+
+
+<a id="nestedatt--instances--vrfs--areas"></a>
+### Nested Schema for `instances.vrfs.areas`
+
+Required:
+
+- `area_id` (String) Area identifier to which a network or interface belongs in IPv4 address format.
+  - Default value: `0.0.0.0`
+
+Optional:
+
+- `redistribute` (Boolean) Send redistributed LSAs into NSSA area
+  - Default value: `true`
+- `summary` (Boolean) Originate summary LSA into other areas
+  - Default value: `true`
+- `suppress_forward_address` (Boolean) Originate summary LSA into other areas
+  - Default value: `false`
+- `type` (String) Configure area type as NSSA or stub
+  - Choices: `regular`, `stub`, `nssa`
+  - Default value: `regular`
+
+
+
+
+<a id="nestedatt--interfaces"></a>
+### Nested Schema for `interfaces`
+
+Required:
+
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+
+Optional:
+
+- `advertise_secondaries` (Boolean) Advertise secondary IPv6 addresses
+  - Default value: `true`
+- `area` (String) Area identifier to which a network or interface belongs in IPv4 address format.
+  - Default value: `0.0.0.0`
+- `bfd` (String) Bidirectional Forwarding Detection (BFD).
+  - Choices: `unspecified`, `enabled`, `disabled`
+  - Default value: `unspecified`
+- `cost` (Number) Specifies the cost of interface.
+  - Range: `0`-`65535`
+  - Default value: `0`
+- `dead_interval` (Number) Dead interval, interval after which router declares that neighbor as down.
+  - Range: `0`-`65535`
+  - Default value: `0`
+- `hello_interval` (Number) Hello interval, interval between hello packets that OSPF sends on the interface.
+  - Range: `0`-`65535`
+  - Default value: `10`
+- `network_type` (String) Network type.
+  - Choices: `none`, `p2p`, `bcast`
+  - Default value: `none`
+- `passive` (String) Passive interface control. Interface can be configured as passive or non-passive.
+  - Choices: `none`, `enabled`, `disabled`
+  - Default value: `none`
+- `priority` (Number) Priority, used in determining the designated router on this network.
+  - Range: `0`-`255`
+  - Default value: `1`
 
 ## Import
 

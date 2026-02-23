@@ -6,8 +6,6 @@ ds_description: This data source can read the global OSPFv3 configuration.
 res_description: This resource can manage the global OSPFv3 configuration.
 doc_path: Routing%20and%20Forwarding/ospfv3:Entity/
 doc_category: OSPFv3
-children:
-  - OSPFv3 Instance
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state
@@ -18,6 +16,247 @@ attributes:
       - disabled
     default_value: enabled
     example: enabled
+child_classes:
+  - class_name: ospfv3Inst
+    doc_path: Routing%20and%20Forwarding/ospfv3:Inst/
+    rn: inst-%s
+    type: list
+    tf_name: instances
+    description: 'List of OSPFv3 instances.'
+    attributes:
+      - nxos_name: name
+        tf_name: name
+        type: String
+        id: true
+        description: 'OSPFv3 instance name.'
+        example: OSPFv3
+      - nxos_name: adminSt
+        tf_name: admin_state
+        type: String
+        description: 'Administrative state.'
+        enum_values:
+          - enabled
+          - disabled
+        default_value: enabled
+        example: enabled
+    child_classes:
+      - class_name: ospfv3Dom
+        doc_path: Routing%20and%20Forwarding/ospfv3:Dom/
+        rn: dom-%s
+        type: list
+        tf_name: vrfs
+        description: 'List of OSPFv3 VRFs.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'VRF name.'
+            example: VRF1
+          - nxos_name: adminSt
+            tf_name: admin_state
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            default_value: enabled
+            example: enabled
+          - nxos_name: bwRef
+            tf_name: bandwidth_reference
+            type: Int64
+            min_int: 0
+            max_int: 4294967295
+            default_value: 40000
+            description: 'Bandwidth reference value'
+            example: 400000
+          - nxos_name: bwRefUnit
+            tf_name: bandwidth_reference_unit
+            type: String
+            description: 'Bandwidth reference unit'
+            enum_values:
+              - mbps
+              - gbps
+            default_value: mbps
+            example: mbps
+          - nxos_name: rtrId
+            tf_name: router_id
+            type: String
+            description: 'Router ID'
+            default_value: 0.0.0.0
+            example: 34.56.78.90
+          - nxos_name: bfdCtrl
+            tf_name: bfd_control
+            type: Bool
+            description: 'Holds the controls for bfd'
+            default_value: true
+            example: false
+        child_classes:
+          - class_name: ospfv3Area
+            doc_path: Routing%20and%20Forwarding/ospfv3:Area/
+            rn: area-%s
+            type: list
+            tf_name: areas
+            description: 'List of OSPFv3 areas.'
+            attributes:
+              - nxos_name: id
+                tf_name: area_id
+                type: String
+                id: true
+                description: 'Area identifier to which a network or interface belongs in IPv4 address format.'
+                example: 0.0.0.10
+                default_value: 0.0.0.0
+              - nxos_name: redistribute
+                tf_name: redistribute
+                type: Bool
+                description: 'Send redistributed LSAs into NSSA area'
+                default_value: true
+                example: false
+              - nxos_name: summary
+                tf_name: summary
+                type: Bool
+                description: 'Originate summary LSA into other areas'
+                default_value: true
+                example: false
+              - nxos_name: supressFa
+                tf_name: suppress_forward_address
+                type: Bool
+                description: 'Originate summary LSA into other areas'
+                default_value: false
+                example: false
+              - nxos_name: type
+                tf_name: type
+                type: String
+                description: 'Configure area type as NSSA or stub'
+                enum_values:
+                  - regular
+                  - stub
+                  - nssa
+                default_value: regular
+                example: regular
+          - class_name: ospfv3DomAf
+            doc_path: Routing%20and%20Forwarding/ospfv3:DomAf/
+            rn: af-%s
+            type: list
+            tf_name: address_families
+            description: 'List of OSPFv3 address families.'
+            attributes:
+              - nxos_name: type
+                tf_name: address_family_type
+                type: String
+                id: true
+                description: 'IPv6 unicast address family type'
+                enum_values:
+                  - ipv6-ucast
+                default_value: ipv6-ucast
+                example: ipv6-ucast
+              - nxos_name: adminDistance
+                tf_name: administrative_distance
+                type: String
+                default_value: unspecified
+                description: 'Adminitrative distance. Value must be an integer range [1,255] or keyword: unspecified'
+                example: 10
+              - nxos_name: defaultMetric
+                tf_name: default_metric
+                type: String
+                default_value: unspecified
+                description: 'Default metric for redistributed routes. Value must be an integer range [0,16777214] or keyword: unspecified'
+                example: 1024
+              - nxos_name: maxEcmp
+                tf_name: max_ecmp_cost
+                type: Int64
+                min_int: 1
+                max_int: 64
+                default_value: 8
+                description: 'Maximum Equal Cost Multi Path(ECMP)'
+                example: 16
+  - class_name: ospfv3If
+    doc_path: Routing%20and%20Forwarding/ospfv3:If/
+    rn: if-[%s]
+    type: list
+    tf_name: interfaces
+    description: 'List of OSPFv3 interface configurations.'
+    attributes:
+      - nxos_name: id
+        tf_name: interface_id
+        type: String
+        id: true
+        description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+        example: eth1/10
+      - nxos_name: advSecondary
+        tf_name: advertise_secondaries
+        type: Bool
+        description: 'Advertise secondary IPv6 addresses'
+        default_value: true
+        example: false
+      - nxos_name: area
+        tf_name: area
+        type: String
+        description: 'Area identifier to which a network or interface belongs in IPv4 address format.'
+        default_value: 0.0.0.0
+        example: 0.0.0.10
+      - nxos_name: bfdCtrl
+        tf_name: bfd
+        type: String
+        description: 'Bidirectional Forwarding Detection (BFD).'
+        enum_values:
+          - unspecified
+          - enabled
+          - disabled
+        default_value: unspecified
+        example: disabled
+      - nxos_name: cost
+        tf_name: cost
+        type: Int64
+        min_int: 0
+        max_int: 65535
+        default_value: 0
+        description: 'Specifies the cost of interface.'
+        example: 1000
+      - nxos_name: deadIntvl
+        tf_name: dead_interval
+        type: Int64
+        min_int: 0
+        max_int: 65535
+        default_value: 0
+        description: 'Dead interval, interval after which router declares that neighbor as down.'
+        example: 60
+      - nxos_name: helloIntvl
+        tf_name: hello_interval
+        type: Int64
+        min_int: 0
+        max_int: 65535
+        default_value: 10
+        description: 'Hello interval, interval between hello packets that OSPF sends on the interface.'
+        example: 15
+      - nxos_name: nwT
+        tf_name: network_type
+        type: String
+        description: 'Network type.'
+        enum_values:
+          - none
+          - p2p
+          - bcast
+        default_value: none
+        example: p2p
+      - nxos_name: passive
+        tf_name: passive
+        type: String
+        description: 'Passive interface control. Interface can be configured as passive or non-passive.'
+        enum_values:
+          - none
+          - enabled
+          - disabled
+        default_value: none
+        example: enabled
+      - nxos_name: prio
+        tf_name: priority
+        type: Int64
+        min_int: 0
+        max_int: 255
+        default_value: 1
+        description: 'Priority, used in determining the designated router on this network.'
+        example: 10
 test_prerequisites:
   - dn: sys/fm/ospfv3
     class_name: fmOspfv3
@@ -25,3 +264,16 @@ test_prerequisites:
     attributes:
       - name: adminSt
         value: enabled
+  - dn: sys/fm/bfd
+    class_name: fmBfd
+    dependencies: [0]
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/intf/phys-[eth1/4]
+    class_name: l1PhysIf
+    attributes:
+      - name: layer
+        value: Layer3
+    dependencies: [1]

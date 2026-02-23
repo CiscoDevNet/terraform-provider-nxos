@@ -5,6 +5,8 @@ subcategory: "OSPFv3"
 description: |-
   This data source can read the global OSPFv3 configuration.
   API Documentation: ospfv3Entity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:Entity/
+  Additional API Documentation
+  ospfv3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:Inst/ospfv3Dom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:Dom/ospfv3Area https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:Area/ospfv3DomAf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:DomAf/ospfv3If https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:If/
 ---
 
 # nxos_ospfv3 (Data Source)
@@ -12,6 +14,14 @@ description: |-
 This data source can read the global OSPFv3 configuration.
 
 - API Documentation: [ospfv3Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:Entity/)
+
+### Additional API Documentation
+
+- [ospfv3Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:Inst/)
+- [ospfv3Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:Dom/)
+- [ospfv3Area](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:Area/)
+- [ospfv3DomAf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:DomAf/)
+- [ospfv3If](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/ospfv3:If/)
 
 ## Example Usage
 
@@ -31,3 +41,69 @@ data "nxos_ospfv3" "example" {
 
 - `admin_state` (String) Administrative state
 - `id` (String) The distinguished name of the object.
+- `instances` (Attributes List) List of OSPFv3 instances. (see [below for nested schema](#nestedatt--instances))
+- `interfaces` (Attributes List) List of OSPFv3 interface configurations. (see [below for nested schema](#nestedatt--interfaces))
+
+<a id="nestedatt--instances"></a>
+### Nested Schema for `instances`
+
+Read-Only:
+
+- `admin_state` (String) Administrative state.
+- `name` (String) OSPFv3 instance name.
+- `vrfs` (Attributes List) List of OSPFv3 VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
+
+<a id="nestedatt--instances--vrfs"></a>
+### Nested Schema for `instances.vrfs`
+
+Read-Only:
+
+- `address_families` (Attributes List) List of OSPFv3 address families. (see [below for nested schema](#nestedatt--instances--vrfs--address_families))
+- `admin_state` (String) Administrative state.
+- `areas` (Attributes List) List of OSPFv3 areas. (see [below for nested schema](#nestedatt--instances--vrfs--areas))
+- `bandwidth_reference` (Number) Bandwidth reference value
+- `bandwidth_reference_unit` (String) Bandwidth reference unit
+- `bfd_control` (Boolean) Holds the controls for bfd
+- `name` (String) VRF name.
+- `router_id` (String) Router ID
+
+<a id="nestedatt--instances--vrfs--address_families"></a>
+### Nested Schema for `instances.vrfs.address_families`
+
+Read-Only:
+
+- `address_family_type` (String) IPv6 unicast address family type
+- `administrative_distance` (String) Adminitrative distance. Value must be an integer range [1,255] or keyword: unspecified
+- `default_metric` (String) Default metric for redistributed routes. Value must be an integer range [0,16777214] or keyword: unspecified
+- `max_ecmp_cost` (Number) Maximum Equal Cost Multi Path(ECMP)
+
+
+<a id="nestedatt--instances--vrfs--areas"></a>
+### Nested Schema for `instances.vrfs.areas`
+
+Read-Only:
+
+- `area_id` (String) Area identifier to which a network or interface belongs in IPv4 address format.
+- `redistribute` (Boolean) Send redistributed LSAs into NSSA area
+- `summary` (Boolean) Originate summary LSA into other areas
+- `suppress_forward_address` (Boolean) Originate summary LSA into other areas
+- `type` (String) Configure area type as NSSA or stub
+
+
+
+
+<a id="nestedatt--interfaces"></a>
+### Nested Schema for `interfaces`
+
+Read-Only:
+
+- `advertise_secondaries` (Boolean) Advertise secondary IPv6 addresses
+- `area` (String) Area identifier to which a network or interface belongs in IPv4 address format.
+- `bfd` (String) Bidirectional Forwarding Detection (BFD).
+- `cost` (Number) Specifies the cost of interface.
+- `dead_interval` (Number) Dead interval, interval after which router declares that neighbor as down.
+- `hello_interval` (Number) Hello interval, interval between hello packets that OSPF sends on the interface.
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `network_type` (String) Network type.
+- `passive` (String) Passive interface control. Interface can be configured as passive or non-passive.
+- `priority` (Number) Priority, used in determining the designated router on this network.

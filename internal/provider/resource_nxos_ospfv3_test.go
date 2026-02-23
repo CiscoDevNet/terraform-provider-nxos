@@ -36,6 +36,33 @@ import (
 func TestAccNxosOSPFv3(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.name", "OSPFv3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.bandwidth_reference", "400000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.bandwidth_reference_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.router_id", "34.56.78.90"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.bfd_control", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.areas.0.area_id", "0.0.0.10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.areas.0.redistribute", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.areas.0.summary", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.areas.0.suppress_forward_address", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.areas.0.type", "regular"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.address_families.0.address_family_type", "ipv6-ucast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.address_families.0.administrative_distance", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.address_families.0.default_metric", "1024"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.address_families.0.max_ecmp_cost", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.advertise_secondaries", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.area", "0.0.0.10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.bfd", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.cost", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.dead_interval", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.hello_interval", "15"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.network_type", "p2p"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.passive", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.priority", "10"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -87,6 +114,25 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/fm/bfd"
+  class_name = "fmBfd"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+  depends_on = [nxos_rest.PreReq0, ]
+}
+
+resource "nxos_rest" "PreReq2" {
+  dn = "sys/intf/phys-[eth1/4]"
+  class_name = "l1PhysIf"
+  content = {
+      layer = "Layer3"
+  }
+  depends_on = [nxos_rest.PreReq1, ]
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -94,7 +140,7 @@ resource "nxos_rest" "PreReq0" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosOSPFv3Config_minimum() string {
 	config := `resource "nxos_ospfv3" "test" {` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -105,7 +151,44 @@ func testAccNxosOSPFv3Config_minimum() string {
 func testAccNxosOSPFv3Config_all() string {
 	config := `resource "nxos_ospfv3" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	instances = [{` + "\n"
+	config += `		name = "OSPFv3"` + "\n"
+	config += `		admin_state = "enabled"` + "\n"
+	config += `		vrfs = [{` + "\n"
+	config += `			name = "VRF1"` + "\n"
+	config += `			admin_state = "enabled"` + "\n"
+	config += `			bandwidth_reference = 400000` + "\n"
+	config += `			bandwidth_reference_unit = "mbps"` + "\n"
+	config += `			router_id = "34.56.78.90"` + "\n"
+	config += `			bfd_control = false` + "\n"
+	config += `			areas = [{` + "\n"
+	config += `				area_id = "0.0.0.10"` + "\n"
+	config += `				redistribute = false` + "\n"
+	config += `				summary = false` + "\n"
+	config += `				suppress_forward_address = false` + "\n"
+	config += `				type = "regular"` + "\n"
+	config += `			}]` + "\n"
+	config += `			address_families = [{` + "\n"
+	config += `				address_family_type = "ipv6-ucast"` + "\n"
+	config += `				administrative_distance = "10"` + "\n"
+	config += `				default_metric = "1024"` + "\n"
+	config += `				max_ecmp_cost = 16` + "\n"
+	config += `			}]` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `	interfaces = [{` + "\n"
+	config += `		interface_id = "eth1/10"` + "\n"
+	config += `		advertise_secondaries = false` + "\n"
+	config += `		area = "0.0.0.10"` + "\n"
+	config += `		bfd = "disabled"` + "\n"
+	config += `		cost = 1000` + "\n"
+	config += `		dead_interval = 60` + "\n"
+	config += `		hello_interval = 15` + "\n"
+	config += `		network_type = "p2p"` + "\n"
+	config += `		passive = "enabled"` + "\n"
+	config += `		priority = 10` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"fmt"
@@ -33,6 +34,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type RouteMapRuleEntryMatchRoute struct {
 	Device   types.String `tfsdk:"device"`
 	Dn       types.String `tfsdk:"id"`
@@ -69,6 +71,7 @@ func (data *RouteMapRuleEntryMatchRoute) fromIdentity(ctx context.Context, ident
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data RouteMapRuleEntryMatchRoute) getDn() string {
 	return fmt.Sprintf("sys/rpm/rtmap-[%s]/ent-[%v]/mrtdst", data.RuleName.ValueString(), data.Order.ValueInt64())
 }
@@ -80,6 +83,7 @@ func (data RouteMapRuleEntryMatchRoute) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data RouteMapRuleEntryMatchRoute) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -90,18 +94,21 @@ func (data RouteMapRuleEntryMatchRoute) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *RouteMapRuleEntryMatchRoute) fromBody(res gjson.Result) {
 }
 
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *RouteMapRuleEntryMatchRoute) updateFromBody(res gjson.Result) {
 }
 
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data RouteMapRuleEntryMatchRoute) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -111,6 +118,7 @@ func (data RouteMapRuleEntryMatchRoute) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data RouteMapRuleEntryMatchRoute) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())

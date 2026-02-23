@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"fmt"
@@ -35,6 +36,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type ISISVRF struct {
 	Device                types.String `tfsdk:"device"`
 	Dn                    types.String `tfsdk:"id"`
@@ -85,6 +87,7 @@ func (data *ISISVRF) fromIdentity(ctx context.Context, identity *ISISVRFIdentity
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data ISISVRF) getDn() string {
 	return fmt.Sprintf("sys/isis/inst-[%s]/dom-[%s]", data.InstanceName.ValueString(), data.Name.ValueString())
 }
@@ -96,6 +99,7 @@ func (data ISISVRF) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data ISISVRF) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -151,6 +155,7 @@ func (data ISISVRF) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *ISISVRF) fromBody(res gjson.Result) {
 	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
@@ -170,6 +175,7 @@ func (data *ISISVRF) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *ISISVRF) updateFromBody(res gjson.Result) {
 	if !data.Name.IsNull() {
 		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
@@ -241,6 +247,7 @@ func (data *ISISVRF) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data ISISVRF) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -250,6 +257,7 @@ func (data ISISVRF) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data ISISVRF) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())

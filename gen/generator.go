@@ -330,6 +330,15 @@ func HasListChildClasses(children []YamlConfigChildClass) bool {
 	return false
 }
 
+// Templating helper function to create a map from key-value pairs for passing multiple values to {{template}}
+func MakeMap(pairs ...interface{}) map[string]interface{} {
+	m := make(map[string]interface{})
+	for i := 0; i < len(pairs); i += 2 {
+		m[pairs[i].(string)] = pairs[i+1]
+	}
+	return m
+}
+
 // Map of templating functions
 var functions = template.FuncMap{
 	"toGoName":           ToGoName,
@@ -348,6 +357,7 @@ var functions = template.FuncMap{
 	"importAttributes":   ImportAttributes,
 	"hasDeleteValue":      HasDeleteValue,
 	"hasListChildClasses": HasListChildClasses,
+	"makeMap":             MakeMap,
 }
 
 // buildTfChildClasses builds the TfChildClasses list by promoting children

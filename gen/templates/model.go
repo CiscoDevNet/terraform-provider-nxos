@@ -21,6 +21,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"fmt"
@@ -38,7 +39,8 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
-{{- $name := camelCase .Name}}
+
+{{ $name := camelCase .Name}}
 type {{camelCase .Name}} struct {
 	Device types.String `tfsdk:"device"`
 	Dn types.String `tfsdk:"id"`
@@ -159,6 +161,7 @@ func (data *{{camelCase .Name}}) fromIdentity(ctx context.Context, identity *{{c
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data {{camelCase .Name}}) getDn() string {
 {{- if hasId .Attributes}}
 	return fmt.Sprintf("{{.Dn}}"{{range .Attributes}}{{if .Id}}, data.{{toGoName .TfName}}.Value{{.Type}}(){{end}}{{end}})
@@ -167,39 +170,31 @@ func (data {{camelCase .Name}}) getDn() string {
 {{- end}}
 }
 
-{{range .ChildClasses}}
-{{if eq .Type "list"}}
-func (data {{$name}}{{toGoName .TfName}}) getRn() string {
-{{- if hasId .Attributes}}
-	return fmt.Sprintf("{{.Rn}}"{{range .Attributes}}{{if .Id}}, data.{{toGoName .TfName}}.Value{{.Type}}(){{end}}{{end}})
-{{- else}}
-	return "{{.Rn}}"
-{{- end}}
-}
-{{end}}
-{{- range .ChildClasses}}
+{{- /* ==================== getRnTemplate ====================
+       Recursively generates getRn() methods for all list-type child classes.
+       Context: map with "TypePrefix" (string) and "Children" ([]YamlConfigChildClass)
+       ========================================================= */}}
+{{- define "getRnTemplate"}}
+{{- $typePrefix := .TypePrefix}}
+{{- range .Children}}
 {{- if eq .Type "list"}}
-func (data {{$name}}{{toGoName .TfName}}) getRn() string {
+
+func (data {{$typePrefix}}{{toGoName .TfName}}) getRn() string {
 {{- if hasId .Attributes}}
 	return fmt.Sprintf("{{.Rn}}"{{range .Attributes}}{{if .Id}}, data.{{toGoName .TfName}}.Value{{.Type}}(){{end}}{{end}})
 {{- else}}
 	return "{{.Rn}}"
 {{- end}}
 }
-{{end}}
-{{- range .ChildClasses}}
-{{- if eq .Type "list"}}
-func (data {{$name}}{{toGoName .TfName}}) getRn() string {
-{{- if hasId .Attributes}}
-	return fmt.Sprintf("{{.Rn}}"{{range .Attributes}}{{if .Id}}, data.{{toGoName .TfName}}.Value{{.Type}}(){{end}}{{end}})
-{{- else}}
-	return "{{.Rn}}"
 {{- end}}
-}
-{{end}}
+{{- if .ChildClasses}}
+{{- template "getRnTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses)}}
 {{- end}}
 {{- end}}
-{{end}}
+{{- end}}
+{{- /* ==================== end getRnTemplate ==================== */}}
+
+{{- template "getRnTemplate" (makeMap "TypePrefix" $name "Children" .ChildClasses)}}
 
 func (data {{camelCase .Name}}) getClassName() string {
 	return "{{.ClassName}}"
@@ -208,6 +203,93 @@ func (data {{camelCase .Name}}) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
+{{- /* ==================== toBodyChildrenTemplate ====================
+       Recursively generates sjson body-building code for child classes.
+       Context: map with:
+         "Children" ([]YamlConfigChildClass)
+         "DataVar" (string) - Go variable holding data (e.g. "data", "child")
+         "ChildrenPathVar" (string) - Go variable name holding the sjson path to the children array
+       ========================================================= */}}
+{{- define "toBodyChildrenTemplate"}}
+{{- $dataVar := .DataVar}}
+{{- $childrenPathVar := .ChildrenPathVar}}
+{{- range .Children}}
+{{- $childClassName := .ClassName}}
+{{- $childAlwaysInclude := .AlwaysInclude}}
+{{- if eq .Type "single"}}
+{{- if .ChildClasses}}
+	{
+	childIndex := len(gjson.Get(body, {{$childrenPathVar}}).Array())
+	childBodyPath := {{$childrenPathVar}} + "." + strconv.Itoa(childIndex) + ".{{$childClassName}}"
+	attrs = "{}"
+	{{- range .Attributes}}
+	{{- if .Value}}
+	attrs, _ = sjson.Set(attrs, "{{.NxosName}}", "{{.Value}}")
+	{{- else if not .ReferenceOnly}}
+	if (!{{$dataVar}}.{{toGoName .TfName}}.IsUnknown() && !{{$dataVar}}.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
+		{{- if eq .Type "Int64"}}
+		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt({{$dataVar}}.{{toGoName .TfName}}.ValueInt64(), 10))
+		{{- else if eq .Type "Bool"}}
+		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatBool({{$dataVar}}.{{toGoName .TfName}}.ValueBool()))
+		{{- else if eq .Type "String"}}
+		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", {{$dataVar}}.{{toGoName .TfName}}.ValueString())
+		{{- end}}
+	}
+	{{- end}}
+	{{- end}}
+	body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+	nestedChildrenPath := childBodyPath + ".children"
+	{{- template "toBodyChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" $dataVar "ChildrenPathVar" "nestedChildrenPath")}}
+	}
+{{- else}}
+	attrs = "{}"
+	{{- range .Attributes}}
+	{{- if .Value}}
+	attrs, _ = sjson.Set(attrs, "{{.NxosName}}", "{{.Value}}")
+	{{- else if not .ReferenceOnly}}
+	if (!{{$dataVar}}.{{toGoName .TfName}}.IsUnknown() && !{{$dataVar}}.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
+		{{- if eq .Type "Int64"}}
+		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt({{$dataVar}}.{{toGoName .TfName}}.ValueInt64(), 10))
+		{{- else if eq .Type "Bool"}}
+		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatBool({{$dataVar}}.{{toGoName .TfName}}.ValueBool()))
+		{{- else if eq .Type "String"}}
+		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", {{$dataVar}}.{{toGoName .TfName}}.ValueString())
+		{{- end}}
+	}
+	{{- end}}
+	{{- end}}
+	if attrs != "{}" || {{$childAlwaysInclude}} {
+		body, _ = sjson.SetRaw(body, {{$childrenPathVar}}+".-1.{{$childClassName}}.attributes", attrs)
+	}
+{{- end}}
+{{- else if eq .Type "list"}}
+	for _, child := range {{$dataVar}}.{{toGoName .TfName}} {
+		attrs = "{}"
+		{{- range .Attributes}}
+		if (!child.{{toGoName .TfName}}.IsUnknown() && !child.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
+			{{- if eq .Type "Int64"}}
+			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(child.{{toGoName .TfName}}.ValueInt64(), 10))
+			{{- else if eq .Type "Bool"}}
+			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatBool(child.{{toGoName .TfName}}.ValueBool()))
+			{{- else if eq .Type "String"}}
+			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", child.{{toGoName .TfName}}.ValueString())
+			{{- end}}
+		}
+		{{- end}}
+		body, _ = sjson.SetRaw(body, {{$childrenPathVar}}+".-1.{{$childClassName}}.attributes", attrs)
+		{{- if .ChildClasses}}
+		{
+		nestedChildrenPath := {{$childrenPathVar}} + ".-1.{{$childClassName}}.children"
+		{{- template "toBodyChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" "child" "ChildrenPathVar" "nestedChildrenPath")}}
+		}
+		{{- end}}
+	}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- /* ==================== end toBodyChildrenTemplate ==================== */}}
+
 func (data {{camelCase .Name}}) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -227,319 +309,8 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 
 	{{- if .ChildClasses}}
 	var attrs string
-	{{- end}}
-	{{- range .ChildClasses}}
-	{{- $childClassName := .ClassName }}
-	{{- $childAlwaysInclude := .AlwaysInclude }}
-	{{- if eq .Type "single"}}
-	{{- if .ChildClasses}}
-	// Create child with attributes and nested children in one unified object
-	childIndex := len(gjson.Get(body, data.getClassName()+".children").Array())
-	attrs = "{}"
-	{{- range .Attributes}}
-	{{- if .Value}}
-	attrs, _ = sjson.Set(attrs, "{{.NxosName}}", "{{.Value}}")
-	{{- else if not .ReferenceOnly}}
-	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
-		{{- if eq .Type "Int64"}}
-		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
-		{{- else if eq .Type "Bool"}}
-		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatBool(data.{{toGoName .TfName}}.ValueBool()))
-		{{- else if eq .Type "String"}}
-		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", data.{{toGoName .TfName}}.ValueString())
-		{{- end}}
-	}
-	{{- end}}
-	{{- end}}
-	body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.attributes", attrs)
-
-	{{- range .ChildClasses}}
-	{{- $nestedChildClassName := .ClassName }}
-	{{- $nestedChildTfName := .TfName }}
-	{{- $nestedChildAlwaysInclude := .AlwaysInclude }}
-	{{- if eq .Type "single"}}
-	{{- if .ChildClasses}}
-	nestedChildIndex := len(gjson.Get(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.children").Array())
-	attrs = "{}"
-	{{- range .Attributes}}
-	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
-		{{- if eq .Type "Int64"}}
-		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
-		{{- else if eq .Type "Bool"}}
-		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatBool(data.{{toGoName .TfName}}.ValueBool()))
-		{{- else if eq .Type "String"}}
-		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", data.{{toGoName .TfName}}.ValueString())
-		{{- end}}
-	}
-	{{- end}}
-	body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.children."+strconv.Itoa(nestedChildIndex)+".{{$nestedChildClassName}}.attributes", attrs)
-	{{- range .ChildClasses}}
-	{{- $deepNestedChildClassName := .ClassName }}
-	{{- $deepNestedChildAlwaysInclude := .AlwaysInclude }}
-	{{- if eq .Type "single"}}
-	attrs = "{}"
-	{{- range .Attributes}}
-	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
-		{{- if eq .Type "Int64"}}
-		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
-		{{- else if eq .Type "Bool"}}
-		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatBool(data.{{toGoName .TfName}}.ValueBool()))
-		{{- else if eq .Type "String"}}
-		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", data.{{toGoName .TfName}}.ValueString())
-		{{- end}}
-	}
-	{{- end}}
-	if attrs != "{}" || {{$deepNestedChildAlwaysInclude}} {
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.children."+strconv.Itoa(nestedChildIndex)+".{{$nestedChildClassName}}.children.-1.{{$deepNestedChildClassName}}.attributes", attrs)
-	}
-	{{- else if eq .Type "list"}}
-	for _, deepNestedChild := range data.{{toGoName .TfName}} {
-		attrs = "{}"
-		{{- range .Attributes}}
-		if (!deepNestedChild.{{toGoName .TfName}}.IsUnknown() && !deepNestedChild.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
-			{{- if eq .Type "Int64"}}
-			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(deepNestedChild.{{toGoName .TfName}}.ValueInt64(), 10))
-			{{- else if eq .Type "Bool"}}
-			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatBool(deepNestedChild.{{toGoName .TfName}}.ValueBool()))
-			{{- else if eq .Type "String"}}
-			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", deepNestedChild.{{toGoName .TfName}}.ValueString())
-			{{- end}}
-		}
-		{{- end}}
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.children."+strconv.Itoa(nestedChildIndex)+".{{$nestedChildClassName}}.children.-1.{{$deepNestedChildClassName}}.attributes", attrs)
-	}
-	{{- end}}
-	{{- end}}
-	{{- else}}
-	attrs = "{}"
-	{{- range .Attributes}}
-	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
-		{{- if eq .Type "Int64"}}
-		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
-		{{- else if eq .Type "Bool"}}
-		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatBool(data.{{toGoName .TfName}}.ValueBool()))
-		{{- else if eq .Type "String"}}
-		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", data.{{toGoName .TfName}}.ValueString())
-		{{- end}}
-	}
-	{{- end}}
-	if attrs != "{}" || {{$nestedChildAlwaysInclude}} {
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.children.-1.{{$nestedChildClassName}}.attributes", attrs)
-	}
-	{{- end}}
-	{{- else if eq .Type "list"}}
-	for _, nestedChild := range data.{{toGoName .TfName}} {
-		attrs = "{}"
-		{{- range .Attributes}}
-		if (!nestedChild.{{toGoName .TfName}}.IsUnknown() && !nestedChild.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
-			{{- if eq .Type "Int64"}}
-			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(nestedChild.{{toGoName .TfName}}.ValueInt64(), 10))
-			{{- else if eq .Type "Bool"}}
-			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatBool(nestedChild.{{toGoName .TfName}}.ValueBool()))
-			{{- else if eq .Type "String"}}
-			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", nestedChild.{{toGoName .TfName}}.ValueString())
-			{{- end}}
-		}
-		{{- end}}
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.children.-1.{{$nestedChildClassName}}.attributes", attrs)
-
-		{{- range .ChildClasses}}
-		{{- $deepNestedChildClassName := .ClassName }}
-		{{- $deepNestedChildAlwaysInclude := .AlwaysInclude }}
-		{{- if eq .Type "single"}}
-		attrs = "{}"
-		{{- range .Attributes}}
-		if (!nestedChild.{{toGoName .TfName}}.IsUnknown() && !nestedChild.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
-			{{- if eq .Type "Int64"}}
-			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(nestedChild.{{toGoName .TfName}}.ValueInt64(), 10))
-			{{- else if eq .Type "Bool"}}
-			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatBool(nestedChild.{{toGoName .TfName}}.ValueBool()))
-			{{- else if eq .Type "String"}}
-			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", nestedChild.{{toGoName .TfName}}.ValueString())
-			{{- end}}
-		}
-		{{- end}}
-		if attrs != "{}" || {{$deepNestedChildAlwaysInclude}} {
-			body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.children.-1.{{$nestedChildClassName}}.children.-1.{{$deepNestedChildClassName}}.attributes", attrs)
-		}
-		{{- else if eq .Type "list"}}
-		for _, deepNestedChild := range nestedChild.{{toGoName .TfName}} {
-			attrs = "{}"
-			{{- range .Attributes}}
-			if (!deepNestedChild.{{toGoName .TfName}}.IsUnknown() && !deepNestedChild.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
-				{{- if eq .Type "Int64"}}
-				attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(deepNestedChild.{{toGoName .TfName}}.ValueInt64(), 10))
-				{{- else if eq .Type "Bool"}}
-				attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatBool(deepNestedChild.{{toGoName .TfName}}.ValueBool()))
-				{{- else if eq .Type "String"}}
-				attrs, _ = sjson.Set(attrs, "{{.NxosName}}", deepNestedChild.{{toGoName .TfName}}.ValueString())
-				{{- end}}
-			}
-			{{- end}}
-			body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".{{$childClassName}}.children.-1.{{$nestedChildClassName}}.children.-1.{{$deepNestedChildClassName}}.attributes", attrs)
-		}
-		{{- end}}
-		{{- end}}
-	}
-	{{- end}}
-	{{- end}}
-
-	{{- else}}
-	attrs = "{}"
-	{{- range .Attributes}}
-	{{- if .Value}}
-	attrs, _ = sjson.Set(attrs, "{{.NxosName}}", "{{.Value}}")
-	{{- else if not .ReferenceOnly}}
-	if (!data.{{toGoName .TfName}}.IsUnknown() && !data.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
-		{{- if eq .Type "Int64"}}
-		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
-		{{- else if eq .Type "Bool"}}
-		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatBool(data.{{toGoName .TfName}}.ValueBool()))
-		{{- else if eq .Type "String"}}
-		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", data.{{toGoName .TfName}}.ValueString())
-		{{- end}}
-	}
-	{{- end}}
-	{{- end}}
-	if attrs != "{}" || {{$childAlwaysInclude}} {
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.attributes", attrs)
-	}
-	{{- end}}
-	{{- else if eq .Type "list"}}
-	for _, child := range data.{{toGoName .TfName}} {
-		attrs = "{}"
-		{{- range .Attributes}}
-		if (!child.{{toGoName .TfName}}.IsUnknown() && !child.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
-			{{- if eq .Type "Int64"}}
-			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(child.{{toGoName .TfName}}.ValueInt64(), 10))
-			{{- else if eq .Type "Bool"}}
-			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatBool(child.{{toGoName .TfName}}.ValueBool()))
-			{{- else if eq .Type "String"}}
-			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", child.{{toGoName .TfName}}.ValueString())
-			{{- end}}
-		}
-		{{- end}}
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.attributes", attrs)
-
-		{{- range .ChildClasses}}
-		{{- $nestedChildClassName := .ClassName }}
-		{{- $nestedChildAlwaysInclude := .AlwaysInclude }}
-		{{- if eq .Type "single"}}
-		attrs = "{}"
-		{{- range .Attributes}}
-		if (!child.{{toGoName .TfName}}.IsUnknown() && !child.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
-			{{- if eq .Type "Int64"}}
-			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(child.{{toGoName .TfName}}.ValueInt64(), 10))
-			{{- else if eq .Type "Bool"}}
-			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatBool(child.{{toGoName .TfName}}.ValueBool()))
-			{{- else if eq .Type "String"}}
-			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", child.{{toGoName .TfName}}.ValueString())
-			{{- end}}
-		}
-		{{- end}}
-		{{- if not .ChildClasses}}
-		if attrs != "{}" || {{$nestedChildAlwaysInclude}} {
-		{{- end}}
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.children.-1.{{$nestedChildClassName}}.attributes", attrs)
-		{{- if not .ChildClasses}}
-		}
-		{{- end}}
-
-		{{- range .ChildClasses}}
-		{{- $deepNestedChildClassName := .ClassName }}
-		{{- $deepNestedChildAlwaysInclude := .AlwaysInclude }}
-		{{- if eq .Type "single"}}
-		attrs = "{}"
-		{{- range .Attributes}}
-		if (!child.{{toGoName .TfName}}.IsUnknown() && !child.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
-			{{- if eq .Type "Int64"}}
-			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(child.{{toGoName .TfName}}.ValueInt64(), 10))
-			{{- else if eq .Type "Bool"}}
-			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatBool(child.{{toGoName .TfName}}.ValueBool()))
-			{{- else if eq .Type "String"}}
-			attrs, _ = sjson.Set(attrs, "{{.NxosName}}", child.{{toGoName .TfName}}.ValueString())
-			{{- end}}
-		}
-		{{- end}}
-		if attrs != "{}" || {{$deepNestedChildAlwaysInclude}} {
-			body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.children.-1.{{$nestedChildClassName}}.children.-1.{{$deepNestedChildClassName}}.attributes", attrs)
-		}
-		{{- else if eq .Type "list"}}
-		for _, deepNestedChild := range child.{{toGoName .TfName}} {
-			attrs = "{}"
-			{{- range .Attributes}}
-			if (!deepNestedChild.{{toGoName .TfName}}.IsUnknown() && !deepNestedChild.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
-				{{- if eq .Type "Int64"}}
-				attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(deepNestedChild.{{toGoName .TfName}}.ValueInt64(), 10))
-				{{- else if eq .Type "Bool"}}
-				attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatBool(deepNestedChild.{{toGoName .TfName}}.ValueBool()))
-				{{- else if eq .Type "String"}}
-				attrs, _ = sjson.Set(attrs, "{{.NxosName}}", deepNestedChild.{{toGoName .TfName}}.ValueString())
-				{{- end}}
-			}
-			{{- end}}
-			body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.children.-1.{{$nestedChildClassName}}.children.-1.{{$deepNestedChildClassName}}.attributes", attrs)
-		}
-		{{- end}}
-		{{- end}}
-		{{- else if eq .Type "list"}}
-		for _, nestedChild := range child.{{toGoName .TfName}} {
-			attrs = "{}"
-			{{- range .Attributes}}
-			if (!nestedChild.{{toGoName .TfName}}.IsUnknown() && !nestedChild.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
-				{{- if eq .Type "Int64"}}
-				attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(nestedChild.{{toGoName .TfName}}.ValueInt64(), 10))
-				{{- else if eq .Type "Bool"}}
-				attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatBool(nestedChild.{{toGoName .TfName}}.ValueBool()))
-				{{- else if eq .Type "String"}}
-				attrs, _ = sjson.Set(attrs, "{{.NxosName}}", nestedChild.{{toGoName .TfName}}.ValueString())
-				{{- end}}
-			}
-			{{- end}}
-			body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.children.-1.{{$nestedChildClassName}}.attributes", attrs)
-
-			{{- range .ChildClasses}}
-			{{- $deepNestedChildClassName := .ClassName }}
-			{{- $deepNestedChildAlwaysInclude := .AlwaysInclude }}
-			{{- if eq .Type "single"}}
-			attrs = "{}"
-			{{- range .Attributes}}
-			if (!nestedChild.{{toGoName .TfName}}.IsUnknown() && !nestedChild.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
-				{{- if eq .Type "Int64"}}
-				attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(nestedChild.{{toGoName .TfName}}.ValueInt64(), 10))
-				{{- else if eq .Type "Bool"}}
-				attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatBool(nestedChild.{{toGoName .TfName}}.ValueBool()))
-				{{- else if eq .Type "String"}}
-				attrs, _ = sjson.Set(attrs, "{{.NxosName}}", nestedChild.{{toGoName .TfName}}.ValueString())
-				{{- end}}
-			}
-			{{- end}}
-			if attrs != "{}" || {{$deepNestedChildAlwaysInclude}} {
-				body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.children.-1.{{$nestedChildClassName}}.children.-1.{{$deepNestedChildClassName}}.attributes", attrs)
-			}
-			{{- else if eq .Type "list"}}
-			for _, deepNestedChild := range nestedChild.{{toGoName .TfName}} {
-				attrs = "{}"
-				{{- range .Attributes}}
-				if (!deepNestedChild.{{toGoName .TfName}}.IsUnknown() && !deepNestedChild.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
-					{{- if eq .Type "Int64"}}
-					attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt(deepNestedChild.{{toGoName .TfName}}.ValueInt64(), 10))
-					{{- else if eq .Type "Bool"}}
-					attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatBool(deepNestedChild.{{toGoName .TfName}}.ValueBool()))
-					{{- else if eq .Type "String"}}
-					attrs, _ = sjson.Set(attrs, "{{.NxosName}}", deepNestedChild.{{toGoName .TfName}}.ValueString())
-					{{- end}}
-				}
-				{{- end}}
-				body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.{{$childClassName}}.children.-1.{{$nestedChildClassName}}.children.-1.{{$deepNestedChildClassName}}.attributes", attrs)
-			}
-			{{- end}}
-			{{- end}}
-		}
-		{{- end}}
-		{{- end}}
-	}
-	{{- end}}
+	childrenPath := data.getClassName() + ".children"
+	{{- template "toBodyChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" "data" "ChildrenPathVar" "childrenPath")}}
 	{{- end}}
 
 	return nxos.Body{body}
@@ -548,6 +319,135 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+{{- /* ==================== fromBodyChildrenTemplate ====================
+       Recursively generates gjson parsing code for child classes in fromBody.
+       Context: map with:
+         "TypePrefix" (string) - Go type prefix for struct names
+         "Children" ([]YamlConfigChildClass)
+         "ResExpr" (string) - Go expression for the parent gjson result
+         "DataVar" (string) - Go expression for data accessor (e.g. "data", "child")
+       ========================================================= */}}
+{{- define "fromBodyChildrenTemplate"}}
+{{- $typePrefix := .TypePrefix}}
+{{- $resExpr := .ResExpr}}
+{{- $dataVar := .DataVar}}
+{{- range .Children}}
+{{- $childClassName := .ClassName}}
+{{- $childRn := .Rn}}
+{{- if len .Attributes}}
+{{- if eq .Type "single"}}
+{{- $hasNonRefAttribs := false}}
+{{- range .Attributes}}{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}{{$hasNonRefAttribs = true}}{{end}}{{end}}
+{{- if or $hasNonRefAttribs .ChildClasses}}
+	var r{{$childClassName}} gjson.Result
+	{{$resExpr}}.ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("{{$childClassName}}.attributes.rn").String()
+			if key == "{{$childRn}}" {
+				r{{$childClassName}} = v
+				return false
+			}
+			return true
+		},
+	)
+{{- end}}
+{{- range .Attributes}}
+{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+{{- if eq .Type "Int64"}}
+	{{$dataVar}}.{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
+{{- else if eq .Type "Bool"}}
+	{{$dataVar}}.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
+{{- else if eq .Type "String"}}
+	{{$dataVar}}.{{toGoName .TfName}} = types.StringValue(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
+{{- end}}
+{{- end}}
+{{- end}}
+{{- if .ChildClasses}}
+	{{- template "fromBodyChildrenTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ResExpr" (printf "r%s.Get(\"%s.children\")" $childClassName $childClassName) "DataVar" $dataVar)}}
+{{- end}}
+{{- else if eq .Type "list"}}
+	{{$resExpr}}.ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "{{$childClassName}}" {
+						var child {{$typePrefix}}{{toGoName .TfName}}
+						{{- range .Attributes}}
+						{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+						{{- if eq .Type "Int64"}}
+						child.{{toGoName .TfName}} = types.Int64Value(value.Get("attributes.{{.NxosName}}").Int())
+						{{- else if eq .Type "Bool"}}
+						child.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.{{.NxosName}}").String()))
+						{{- else if eq .Type "String"}}
+						child.{{toGoName .TfName}} = types.StringValue(value.Get("attributes.{{.NxosName}}").String())
+						{{- end}}
+						{{- end}}
+						{{- end}}
+						{{- if .ChildClasses}}
+						{{- template "fromBodyListChildrenTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ValueVar" "value" "ParentVar" "child")}}
+						{{- end}}
+						{{$dataVar}}.{{toGoName .TfName}} = append({{$dataVar}}.{{toGoName .TfName}}, child)
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
+{{- end}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- /* ==================== end fromBodyChildrenTemplate ==================== */}}
+
+{{- /* ==================== fromBodyListChildrenTemplate ====================
+       Recursively generates gjson parsing code for children of list-type parents
+       in fromBody. Inside a ForEach callback, the value variable is unwrapped.
+       Context: map with:
+         "TypePrefix" (string) - Go type prefix for struct names
+         "Children" ([]YamlConfigChildClass)
+         "ValueVar" (string) - Go variable for parent's gjson value
+         "ParentVar" (string) - Go variable for the parent struct being built
+       ========================================================= */}}
+{{- define "fromBodyListChildrenTemplate"}}
+{{- $typePrefix := .TypePrefix}}
+{{- $valueVar := .ValueVar}}
+{{- $parentVar := .ParentVar}}
+{{- range .Children}}
+{{- $childClassName := .ClassName}}
+						{{$valueVar}}.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "{{$childClassName}}" {
+											var nestedChild {{$typePrefix}}{{toGoName .TfName}}
+											{{- range .Attributes}}
+											{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+											{{- if eq .Type "Int64"}}
+											nestedChild.{{toGoName .TfName}} = types.Int64Value(nestedValue.Get("attributes.{{.NxosName}}").Int())
+											{{- else if eq .Type "Bool"}}
+											nestedChild.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.{{.NxosName}}").String()))
+											{{- else if eq .Type "String"}}
+											nestedChild.{{toGoName .TfName}} = types.StringValue(nestedValue.Get("attributes.{{.NxosName}}").String())
+											{{- end}}
+											{{- end}}
+											{{- end}}
+											{{- if .ChildClasses}}
+											{{- template "fromBodyListChildrenTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ValueVar" "nestedValue" "ParentVar" "nestedChild")}}
+											{{- end}}
+											{{$parentVar}}.{{toGoName .TfName}} = append({{$parentVar}}.{{toGoName .TfName}}, nestedChild)
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
+{{- end}}
+{{- end}}
+{{- /* ==================== end fromBodyListChildrenTemplate ==================== */}}
+
 func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 	{{- range .Attributes}}
 	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
@@ -560,18 +460,39 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 	{{- end}}
 	{{- end}}
 	{{- end}}
+	{{- if .ChildClasses}}
+	{{- template "fromBodyChildrenTemplate" (makeMap "TypePrefix" $name "Children" .ChildClasses "ResExpr" (printf "res.Get(data.getClassName() + \".children\")") "DataVar" "data")}}
+	{{- end}}
+}
 
-	{{- range .ChildClasses}}
-	{{- $childClassName := .ClassName }}
-	{{- $childRn := .Rn }}
-	{{- $list := (toGoName .TfName)}}
-	{{- if len .Attributes }}
-	{{- if eq .Type "single"}}
-	{{- $hasNonRefAttribs := false}}
-	{{- range .Attributes}}{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}{{$hasNonRefAttribs = true}}{{end}}{{end}}
-	{{- if or $hasNonRefAttribs .ChildClasses}}
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
+{{- /* ==================== updateFromBodySingleChildTemplate ====================
+       Recursively generates update code for single-type children in updateFromBody.
+       Context: map with:
+         "TypePrefix" (string) - Go type prefix for struct names
+         "Children" ([]YamlConfigChildClass)
+         "ResExpr" (string) - Go expression for parent result's children
+         "DataAccessor" (string) - Go expression prefix for data access
+       ========================================================= */}}
+{{- define "updateFromBodySingleChildTemplate"}}
+{{- $typePrefix := .TypePrefix}}
+{{- $resExpr := .ResExpr}}
+{{- $dataAccessor := .DataAccessor}}
+{{- range .Children}}
+{{- $childClassName := .ClassName}}
+{{- $childRn := .Rn}}
+{{- $list := (toGoName .TfName)}}
+{{- if eq .Type "single"}}
+{{- $hasNonRefAttribs := false}}
+{{- range .Attributes}}{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}{{$hasNonRefAttribs = true}}{{end}}{{end}}
+{{- $hasChildren := false}}
+{{- if .ChildClasses}}{{$hasChildren = true}}{{end}}
+{{- if or $hasNonRefAttribs $hasChildren}}
 	var r{{$childClassName}} gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
+	{{$resExpr}}.ForEach(
 		func(_, v gjson.Result) bool {
 			key := v.Get("{{$childClassName}}.attributes.rn").String()
 			if key == "{{$childRn}}" {
@@ -581,272 +502,149 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 			return true
 		},
 	)
-	{{- end}}
+{{- end}}
+{{- range .Attributes}}
+{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+	if !{{$dataAccessor}}.{{toGoName .TfName}}.IsNull() {
+		{{- if eq .Type "Int64"}}
+		{{$dataAccessor}}.{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
+		{{- else if eq .Type "Bool"}}
+		{{$dataAccessor}}.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
+		{{- else if eq .Type "String"}}
+		{{$dataAccessor}}.{{toGoName .TfName}} = types.StringValue(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
+		{{- end}}
+	} else {
+		{{$dataAccessor}}.{{toGoName .TfName}} = types.{{.Type}}Null()
+	}
+{{- end}}
+{{- end}}
+{{- if .ChildClasses}}
+	{{- template "updateFromBodySingleChildTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ResExpr" (printf "r%s.Get(\"%s.children\")" $childClassName $childClassName) "DataAccessor" $dataAccessor)}}
+{{- end}}
+{{- else if eq .Type "list"}}
+	for c := range {{$dataAccessor}}.{{$list}} {
+		var r gjson.Result
+		{{$resExpr}}.ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("{{$childClassName}}.attributes.rn").String()
+				if key == {{$dataAccessor}}.{{$list}}[c].getRn() {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		{{- range .Attributes}}
+		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+		if !{{$dataAccessor}}.{{$list}}[c].{{toGoName .TfName}}.IsNull() {
+			{{- if eq .Type "Int64"}}
+			{{$dataAccessor}}.{{$list}}[c].{{toGoName .TfName}} = types.Int64Value(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
+			{{- else if eq .Type "Bool"}}
+			{{$dataAccessor}}.{{$list}}[c].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
+			{{- else if eq .Type "String"}}
+			{{$dataAccessor}}.{{$list}}[c].{{toGoName .TfName}} = types.StringValue(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
+			{{- end}}
+		} else {
+			{{$dataAccessor}}.{{$list}}[c].{{toGoName .TfName}} = types.{{.Type}}Null()
+		}
+		{{- end}}
+		{{- end}}
+		{{- if .ChildClasses}}
+		{{- template "updateFromBodyListChildTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ResExpr" (printf "r.Get(\"%s.children\")" $childClassName) "DataListExpr" (printf "%s.%s[c]" $dataAccessor $list) "IndexVar" "nc")}}
+		{{- end}}
+	}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- /* ==================== end updateFromBodySingleChildTemplate ==================== */}}
+
+{{- /* ==================== updateFromBodyListChildTemplate ====================
+       Recursively generates update code for list-type children in updateFromBody.
+       Context: map with:
+         "TypePrefix" (string) - Go type prefix
+         "Children" ([]YamlConfigChildClass)
+         "ResExpr" (string) - Go expression for parent result's children
+         "DataListExpr" (string) - Go expression for data list (e.g. "data.Interfaces")
+         "IndexVar" (string) - Loop index variable name
+       ========================================================= */}}
+{{- define "updateFromBodyListChildTemplate"}}
+{{- $typePrefix := .TypePrefix}}
+{{- $resExpr := .ResExpr}}
+{{- $dataListExpr := .DataListExpr}}
+{{- $indexVar := .IndexVar}}
+{{- range .Children}}
+{{- $childClassName := .ClassName}}
+{{- $childRn := .Rn}}
+{{- $list := (toGoName .TfName)}}
+{{- if eq .Type "single"}}
+	{
+	var r{{$childClassName}} gjson.Result
+	{{$resExpr}}.ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("{{$childClassName}}.attributes.rn").String()
+			if key == "{{$childRn}}" {
+				r{{$childClassName}} = v
+				return false
+			}
+			return true
+		},
+	)
 	{{- range .Attributes}}
 	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-	{{- if eq .Type "Int64"}}
-	data.{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
-	{{- else if eq .Type "Bool"}}
-	data.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
-	{{- else if eq .Type "String"}}
-	data.{{toGoName .TfName}} = types.StringValue(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
+	if !{{$dataListExpr}}.{{toGoName .TfName}}.IsNull() {
+		{{- if eq .Type "Int64"}}
+		{{$dataListExpr}}.{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
+		{{- else if eq .Type "Bool"}}
+		{{$dataListExpr}}.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
+		{{- else if eq .Type "String"}}
+		{{$dataListExpr}}.{{toGoName .TfName}} = types.StringValue(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
+		{{- end}}
+	} else {
+		{{$dataListExpr}}.{{toGoName .TfName}} = types.{{.Type}}Null()
+	}
 	{{- end}}
 	{{- end}}
-	{{- end}}
-
-	{{- range .ChildClasses}}
-	{{- $nestedChildClassName := .ClassName }}
-	{{- $nestedChildRn := .Rn }}
-	{{- $nestedChildTfName := .TfName }}
-	{{- if eq .Type "single"}}
 	{{- if .ChildClasses}}
-	var r{{$nestedChildClassName}} gjson.Result
-	r{{$childClassName}}.Get("{{$childClassName}}.children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("{{$nestedChildClassName}}.attributes.rn").String()
-			if key == "{{$nestedChildRn}}" {
-				r{{$nestedChildClassName}} = v
-				return false
-			}
-			return true
-		},
-	)
-	{{- range .Attributes}}
-	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-	{{- if eq .Type "Int64"}}
-	data.{{toGoName .TfName}} = types.Int64Value(r{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").Int())
-	{{- else if eq .Type "Bool"}}
-	data.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String()))
-	{{- else if eq .Type "String"}}
-	data.{{toGoName .TfName}} = types.StringValue(r{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String())
+	{{- template "updateFromBodyListChildTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ResExpr" (printf "r%s.Get(\"%s.children\")" $childClassName $childClassName) "DataListExpr" $dataListExpr "IndexVar" $indexVar)}}
 	{{- end}}
-	{{- end}}
-	{{- end}}
+	}
+{{- else if eq .Type "list"}}
+	for {{$indexVar}} := range {{$dataListExpr}}.{{$list}} {
+		var r gjson.Result
+		{{$resExpr}}.ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("{{$childClassName}}.attributes.rn").String()
+				if key == {{$dataListExpr}}.{{$list}}[{{$indexVar}}].getRn() {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		{{- range .Attributes}}
+		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+		if !{{$dataListExpr}}.{{$list}}[{{$indexVar}}].{{toGoName .TfName}}.IsNull() {
+			{{- if eq .Type "Int64"}}
+			{{$dataListExpr}}.{{$list}}[{{$indexVar}}].{{toGoName .TfName}} = types.Int64Value(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
+			{{- else if eq .Type "Bool"}}
+			{{$dataListExpr}}.{{$list}}[{{$indexVar}}].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
+			{{- else if eq .Type "String"}}
+			{{$dataListExpr}}.{{$list}}[{{$indexVar}}].{{toGoName .TfName}} = types.StringValue(r.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
+			{{- end}}
+		} else {
+			{{$dataListExpr}}.{{$list}}[{{$indexVar}}].{{toGoName .TfName}} = types.{{.Type}}Null()
+		}
+		{{- end}}
+		{{- end}}
+		{{- if .ChildClasses}}
+		{{- template "updateFromBodyListChildTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ResExpr" (printf "r.Get(\"%s.children\")" $childClassName) "DataListExpr" (printf "%s.%s[%s]" $dataListExpr $list $indexVar) "IndexVar" (printf "%s_" $indexVar))}}
+		{{- end}}
+	}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- /* ==================== end updateFromBodyListChildTemplate ==================== */}}
 
-	{{- range .ChildClasses}}
-	{{- $deepNestedChildClassName := .ClassName }}
-	{{- $deepNestedChildRn := .Rn }}
-	{{- if eq .Type "single"}}
-	var r{{$deepNestedChildClassName}} gjson.Result
-	r{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("{{$deepNestedChildClassName}}.attributes.rn").String()
-			if key == "{{$deepNestedChildRn}}" {
-				r{{$deepNestedChildClassName}} = v
-				return false
-			}
-			return true
-		},
-	)
-	{{- range .Attributes}}
-	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-	{{- if eq .Type "Int64"}}
-	data.{{toGoName .TfName}} = types.Int64Value(r{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").Int())
-	{{- else if eq .Type "Bool"}}
-	data.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String()))
-	{{- else if eq .Type "String"}}
-	data.{{toGoName .TfName}} = types.StringValue(r{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String())
-	{{- end}}
-	{{- end}}
-	{{- end}}
-	{{- else if eq .Type "list"}}
-	r{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.children").ForEach(
-		func(_, v gjson.Result) bool {
-			v.ForEach(
-				func(deepNestedClassname, deepNestedValue gjson.Result) bool {
-					if deepNestedClassname.String() == "{{$deepNestedChildClassName}}" {
-						var deepNestedChild {{$name}}{{toGoName .TfName}}
-						{{- range .Attributes}}
-						{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-						{{- if eq .Type "Int64"}}
-						deepNestedChild.{{toGoName .TfName}} = types.Int64Value(deepNestedValue.Get("attributes.{{.NxosName}}").Int())
-						{{- else if eq .Type "Bool"}}
-						deepNestedChild.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(deepNestedValue.Get("attributes.{{.NxosName}}").String()))
-						{{- else if eq .Type "String"}}
-						deepNestedChild.{{toGoName .TfName}} = types.StringValue(deepNestedValue.Get("attributes.{{.NxosName}}").String())
-						{{- end}}
-						{{- end}}
-						{{- end}}
-						data.{{toGoName .TfName}} = append(data.{{toGoName .TfName}}, deepNestedChild)
-					}
-					return true
-				},
-			)
-			return true
-		},
-	)
-	{{- end}}
-	{{- end}}
-	{{- else}}
-	var nestedR gjson.Result
-	r{{$childClassName}}.Get("{{$childClassName}}.children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("{{$nestedChildClassName}}.attributes.rn").String()
-			if key == "{{$nestedChildRn}}" {
-				nestedR = v
-				return false
-			}
-			return true
-		},
-	)
-	{{- range .Attributes}}
-	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-	{{- if eq .Type "Int64"}}
-	data.{{toGoName .TfName}} = types.Int64Value(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").Int())
-	{{- else if eq .Type "Bool"}}
-	data.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String()))
-	{{- else if eq .Type "String"}}
-	data.{{toGoName .TfName}} = types.StringValue(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String())
-	{{- end}}
-	{{- end}}
-	{{- end}}
-	{{- end}}
-	{{- else if eq .Type "list"}}
-	r{{$childClassName}}.Get("{{$childClassName}}.children").ForEach(
-		func(_, v gjson.Result) bool {
-			v.ForEach(
-				func(nestedClassname, nestedValue gjson.Result) bool {
-					if nestedClassname.String() == "{{$nestedChildClassName}}" {
-						var nestedChild {{$name}}{{toGoName .TfName}}
-						{{- range .Attributes}}
-						{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-						{{- if eq .Type "Int64"}}
-						nestedChild.{{toGoName .TfName}} = types.Int64Value(nestedValue.Get("attributes.{{.NxosName}}").Int())
-						{{- else if eq .Type "Bool"}}
-						nestedChild.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.{{.NxosName}}").String()))
-						{{- else if eq .Type "String"}}
-						nestedChild.{{toGoName .TfName}} = types.StringValue(nestedValue.Get("attributes.{{.NxosName}}").String())
-						{{- end}}
-						{{- end}}
-						{{- end}}
-
-						{{- range .ChildClasses}}
-						nestedValue.Get("children").ForEach(
-							func(_, deepNestedV gjson.Result) bool {
-								deepNestedV.ForEach(
-									func(deepNestedClassname, deepNestedValue gjson.Result) bool {
-										if deepNestedClassname.String() == "{{.ClassName}}" {
-											var deepNestedChild {{$name}}{{toGoName .TfName}}
-											{{- range .Attributes}}
-											{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-											{{- if eq .Type "Int64"}}
-											deepNestedChild.{{toGoName .TfName}} = types.Int64Value(deepNestedValue.Get("attributes.{{.NxosName}}").Int())
-											{{- else if eq .Type "Bool"}}
-											deepNestedChild.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(deepNestedValue.Get("attributes.{{.NxosName}}").String()))
-											{{- else if eq .Type "String"}}
-											deepNestedChild.{{toGoName .TfName}} = types.StringValue(deepNestedValue.Get("attributes.{{.NxosName}}").String())
-											{{- end}}
-											{{- end}}
-											{{- end}}
-											nestedChild.{{toGoName .TfName}} = append(nestedChild.{{toGoName .TfName}}, deepNestedChild)
-										}
-										return true
-									},
-								)
-								return true
-							},
-						)
-						{{- end}}
-						data.{{toGoName .TfName}} = append(data.{{toGoName .TfName}}, nestedChild)
-					}
-					return true
-				},
-			)
-			return true
-		},
-	)
-	{{- end}}
-	{{- end}}
-	{{- else if eq .Type "list"}}
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			v.ForEach(
-				func(classname, value gjson.Result) bool {
-					if classname.String() == "{{$childClassName}}" {
-						var child {{$name}}{{toGoName .TfName}}
-						{{- range .Attributes}}
-						{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-						{{- if eq .Type "Int64"}}
-						child.{{toGoName .TfName}} = types.Int64Value(value.Get("attributes.{{.NxosName}}").Int())
-						{{- else if eq .Type "Bool"}}
-						child.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.{{.NxosName}}").String()))
-						{{- else if eq .Type "String"}}
-						child.{{toGoName .TfName}} = types.StringValue(value.Get("attributes.{{.NxosName}}").String())
-						{{- end}}
-						{{- end}}
-						{{- end}}
-
-						{{- range .ChildClasses}}
-						value.Get("children").ForEach(
-							func(_, nestedV gjson.Result) bool {
-								nestedV.ForEach(
-									func(nestedClassname, nestedValue gjson.Result) bool {
-										if nestedClassname.String() == "{{.ClassName}}" {
-											var nestedChild {{$name}}{{toGoName .TfName}}
-											{{- range .Attributes}}
-											{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-											{{- if eq .Type "Int64"}}
-											nestedChild.{{toGoName .TfName}} = types.Int64Value(nestedValue.Get("attributes.{{.NxosName}}").Int())
-											{{- else if eq .Type "Bool"}}
-											nestedChild.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.{{.NxosName}}").String()))
-											{{- else if eq .Type "String"}}
-											nestedChild.{{toGoName .TfName}} = types.StringValue(nestedValue.Get("attributes.{{.NxosName}}").String())
-											{{- end}}
-											{{- end}}
-											{{- end}}
-
-											{{- range .ChildClasses}}
-											nestedValue.Get("children").ForEach(
-												func(_, deepNestedV gjson.Result) bool {
-													deepNestedV.ForEach(
-														func(deepNestedClassname, deepNestedValue gjson.Result) bool {
-															if deepNestedClassname.String() == "{{.ClassName}}" {
-																var deepNestedChild {{$name}}{{toGoName .TfName}}
-																{{- range .Attributes}}
-																{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-																{{- if eq .Type "Int64"}}
-																deepNestedChild.{{toGoName .TfName}} = types.Int64Value(deepNestedValue.Get("attributes.{{.NxosName}}").Int())
-																{{- else if eq .Type "Bool"}}
-																deepNestedChild.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(deepNestedValue.Get("attributes.{{.NxosName}}").String()))
-																{{- else if eq .Type "String"}}
-																deepNestedChild.{{toGoName .TfName}} = types.StringValue(deepNestedValue.Get("attributes.{{.NxosName}}").String())
-																{{- end}}
-																{{- end}}
-																{{- end}}
-																nestedChild.{{toGoName .TfName}} = append(nestedChild.{{toGoName .TfName}}, deepNestedChild)
-															}
-															return true
-														},
-													)
-													return true
-												},
-											)
-											{{- end}}
-											child.{{toGoName .TfName}} = append(child.{{toGoName .TfName}}, nestedChild)
-										}
-										return true
-									},
-								)
-								return true
-							},
-						)
-						{{- end}}
-						data.{{$list}} = append(data.{{$list}}, child)
-					}
-					return true
-				},
-			)
-			return true
-		},
-	)
-	{{- end}}
-	{{- end}}
-	{{- end}}
-}
-
-// End of section. //template:end fromBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 	{{- range .Attributes}}
 	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
@@ -863,12 +661,11 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 	}
 	{{- end}}
 	{{- end}}
-
+	{{- if .ChildClasses}}
 	{{- range .ChildClasses}}
-	{{- $childClassName := .ClassName }}
-	{{- $childRn := .Rn }}
+	{{- $childClassName := .ClassName}}
+	{{- $childRn := .Rn}}
 	{{- $list := (toGoName .TfName)}}
-	{{- if len .Attributes }}
 	{{- if eq .Type "single"}}
 	{{- $hasNonRefAttribs := false}}
 	{{- range .Attributes}}{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}{{$hasNonRefAttribs = true}}{{end}}{{end}}
@@ -902,166 +699,8 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 	}
 	{{- end}}
 	{{- end}}
-
-	{{- range .ChildClasses}}
-	{{- $nestedChildClassName := .ClassName }}
-	{{- $nestedChildRn := .Rn }}
-	{{- $nestedChildTfName := .TfName }}
-	{{- if eq .Type "single"}}
 	{{- if .ChildClasses}}
-	{{- $nestedHasChildren := false}}
-	{{- if .ChildClasses}}{{$nestedHasChildren = true}}{{end}}
-	{{- $nestedHasNonRefAttribs := false}}
-	{{- range .Attributes}}{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}{{$nestedHasNonRefAttribs = true}}{{end}}{{end}}
-	{{- if or $nestedHasNonRefAttribs $nestedHasChildren}}
-	var r{{$nestedChildClassName}} gjson.Result
-	r{{$childClassName}}.Get("{{$childClassName}}.children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("{{$nestedChildClassName}}.attributes.rn").String()
-			if key == "{{$nestedChildRn}}" {
-				r{{$nestedChildClassName}} = v
-				return false
-			}
-			return true
-		},
-	)
-	{{- end}}
-	{{- range .Attributes}}
-	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-	if !data.{{toGoName .TfName}}.IsNull() {
-		{{- if eq .Type "Int64"}}
-		data.{{toGoName .TfName}} = types.Int64Value(r{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").Int())
-		{{- else if eq .Type "Bool"}}
-		data.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String()))
-		{{- else if eq .Type "String"}}
-		data.{{toGoName .TfName}} = types.StringValue(r{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String())
-		{{- end}}
-	} else {
-		data.{{toGoName .TfName}} = types.{{.Type}}Null()
-	}
-	{{- end}}
-	{{- end}}
-
-	{{- range .ChildClasses}}
-	{{- $deepNestedChildClassName := .ClassName }}
-	{{- $deepNestedChildRn := .Rn }}
-	{{- $deepNestedList := (toGoName .TfName)}}
-	{{- if eq .Type "single"}}
-	var r{{$deepNestedChildClassName}} gjson.Result
-	r{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("{{$deepNestedChildClassName}}.attributes.rn").String()
-			if key == "{{$deepNestedChildRn}}" {
-				r{{$deepNestedChildClassName}} = v
-				return false
-			}
-			return true
-		},
-	)
-	{{- range .Attributes}}
-	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-	if !data.{{toGoName .TfName}}.IsNull() {
-		{{- if eq .Type "Int64"}}
-		data.{{toGoName .TfName}} = types.Int64Value(r{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").Int())
-		{{- else if eq .Type "Bool"}}
-		data.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String()))
-		{{- else if eq .Type "String"}}
-		data.{{toGoName .TfName}} = types.StringValue(r{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String())
-		{{- end}}
-	} else {
-		data.{{toGoName .TfName}} = types.{{.Type}}Null()
-	}
-	{{- end}}
-	{{- end}}
-	{{- else if eq .Type "list"}}
-	for dnc := range data.{{toGoName .TfName}} {
-		var deepNestedR gjson.Result
-		r{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.children").ForEach(
-			func(_, v gjson.Result) bool {
-				key := v.Get("{{$deepNestedChildClassName}}.attributes.rn").String()
-				if key == data.{{$deepNestedList}}[dnc].getRn() {
-					deepNestedR = v
-					return false
-				}
-				return true
-			},
-		)
-		{{- range .Attributes}}
-		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-		if !data.{{$deepNestedList}}[dnc].{{toGoName .TfName}}.IsNull() {
-			{{- if eq .Type "Int64"}}
-			data.{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.Int64Value(deepNestedR.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").Int())
-			{{- else if eq .Type "Bool"}}
-			data.{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(deepNestedR.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String()))
-			{{- else if eq .Type "String"}}
-			data.{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.StringValue(deepNestedR.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String())
-			{{- end}}
-		} else {
-			data.{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.{{.Type}}Null()
-		}
-		{{- end}}
-		{{- end}}
-	}
-	{{- end}}
-	{{- end}}
-	{{- else}}
-	var nestedR gjson.Result
-	r{{$childClassName}}.Get("{{$childClassName}}.children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("{{$nestedChildClassName}}.attributes.rn").String()
-			if key == "{{$nestedChildRn}}" {
-				nestedR = v
-				return false
-			}
-			return true
-		},
-	)
-	{{- range .Attributes}}
-	{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-	if !data.{{toGoName .TfName}}.IsNull() {
-		{{- if eq .Type "Int64"}}
-		data.{{toGoName .TfName}} = types.Int64Value(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").Int())
-		{{- else if eq .Type "Bool"}}
-		data.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String()))
-		{{- else if eq .Type "String"}}
-		data.{{toGoName .TfName}} = types.StringValue(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String())
-		{{- end}}
-	} else {
-		data.{{toGoName .TfName}} = types.{{.Type}}Null()
-	}
-	{{- end}}
-	{{- end}}
-	{{- end}}
-	{{- else if eq .Type "list"}}
-	for nc := range data.{{toGoName .TfName}} {
-		var nestedR gjson.Result
-		r{{$childClassName}}.Get("{{$childClassName}}.children").ForEach(
-			func(_, v gjson.Result) bool {
-				key := v.Get("{{$nestedChildClassName}}.attributes.rn").String()
-				if key == data.{{(toGoName .TfName)}}[nc].getRn() {
-					nestedR = v
-					return false
-				}
-				return true
-			},
-		)
-		{{- range .Attributes}}
-		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-		if !data.{{(toGoName $nestedChildTfName)}}[nc].{{toGoName .TfName}}.IsNull() {
-			{{- if eq .Type "Int64"}}
-			data.{{(toGoName $nestedChildTfName)}}[nc].{{toGoName .TfName}} = types.Int64Value(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").Int())
-			{{- else if eq .Type "Bool"}}
-			data.{{(toGoName $nestedChildTfName)}}[nc].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String()))
-			{{- else if eq .Type "String"}}
-			data.{{(toGoName $nestedChildTfName)}}[nc].{{toGoName .TfName}} = types.StringValue(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String())
-			{{- end}}
-		} else {
-			data.{{(toGoName $nestedChildTfName)}}[nc].{{toGoName .TfName}} = types.{{.Type}}Null()
-		}
-		{{- end}}
-		{{- end}}
-	}
-	{{- end}}
+	{{- template "updateFromBodySingleChildTemplate" (makeMap "TypePrefix" $name "Children" .ChildClasses "ResExpr" (printf "r%s.Get(\"%s.children\")" $childClassName $childClassName) "DataAccessor" "data")}}
 	{{- end}}
 	{{- else if eq .Type "list"}}
 	for c := range data.{{toGoName .TfName}} {
@@ -1091,194 +730,8 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 		}
 		{{- end}}
 		{{- end}}
-
-		{{- range .ChildClasses}}
-		{{- $nestedChildClassName := .ClassName }}
-		{{- $nestedChildRn := .Rn }}
-		{{- $nestedList := (toGoName .TfName)}}
-		{{- if eq .Type "single"}}
-		var nestedR{{$nestedChildClassName}} gjson.Result
-		r.Get("{{$childClassName}}.children").ForEach(
-			func(_, v gjson.Result) bool {
-				key := v.Get("{{$nestedChildClassName}}.attributes.rn").String()
-				if key == "{{$nestedChildRn}}" {
-					nestedR{{$nestedChildClassName}} = v
-					return false
-				}
-				return true
-			},
-		)
-		{{- range .Attributes}}
-		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-		if !data.{{$list}}[c].{{toGoName .TfName}}.IsNull() {
-			{{- if eq .Type "Int64"}}
-			data.{{$list}}[c].{{toGoName .TfName}} = types.Int64Value(nestedR{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").Int())
-			{{- else if eq .Type "Bool"}}
-			data.{{$list}}[c].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(nestedR{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String()))
-			{{- else if eq .Type "String"}}
-			data.{{$list}}[c].{{toGoName .TfName}} = types.StringValue(nestedR{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String())
-			{{- end}}
-		} else {
-			data.{{$list}}[c].{{toGoName .TfName}} = types.{{.Type}}Null()
-		}
-		{{- end}}
-		{{- end}}
-
-		{{- range .ChildClasses}}
-		{{- $deepNestedChildClassName := .ClassName }}
-		{{- $deepNestedChildRn := .Rn }}
-		{{- $deepNestedList := (toGoName .TfName)}}
-		{{- if eq .Type "single"}}
-		var deepNestedR{{$deepNestedChildClassName}} gjson.Result
-		nestedR{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.children").ForEach(
-			func(_, v gjson.Result) bool {
-				key := v.Get("{{$deepNestedChildClassName}}.attributes.rn").String()
-				if key == "{{$deepNestedChildRn}}" {
-					deepNestedR{{$deepNestedChildClassName}} = v
-					return false
-				}
-				return true
-			},
-		)
-		{{- range .Attributes}}
-		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-		if !data.{{$list}}[c].{{toGoName .TfName}}.IsNull() {
-			{{- if eq .Type "Int64"}}
-			data.{{$list}}[c].{{toGoName .TfName}} = types.Int64Value(deepNestedR{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").Int())
-			{{- else if eq .Type "Bool"}}
-			data.{{$list}}[c].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(deepNestedR{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String()))
-			{{- else if eq .Type "String"}}
-			data.{{$list}}[c].{{toGoName .TfName}} = types.StringValue(deepNestedR{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String())
-			{{- end}}
-		} else {
-			data.{{$list}}[c].{{toGoName .TfName}} = types.{{.Type}}Null()
-		}
-		{{- end}}
-		{{- end}}
-		{{- else if eq .Type "list"}}
-		for dnc := range data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} {
-			var deepNestedR gjson.Result
-			nestedR{{$nestedChildClassName}}.Get("{{$nestedChildClassName}}.children").ForEach(
-				func(_, v gjson.Result) bool {
-					key := v.Get("{{$deepNestedChildClassName}}.attributes.rn").String()
-					if key == data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].getRn() {
-						deepNestedR = v
-						return false
-					}
-					return true
-				},
-			)
-			{{- range .Attributes}}
-			{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-			if !data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}}.IsNull() {
-				{{- if eq .Type "Int64"}}
-				data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.Int64Value(deepNestedR.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").Int())
-				{{- else if eq .Type "Bool"}}
-				data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(deepNestedR.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String()))
-				{{- else if eq .Type "String"}}
-				data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.StringValue(deepNestedR.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String())
-				{{- end}}
-			} else {
-				data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.{{.Type}}Null()
-			}
-			{{- end}}
-			{{- end}}
-		}
-		{{- end}}
-		{{- end}}
-		{{- else if eq .Type "list"}}
-		for nc := range data.{{$list}}[c].{{toGoName .TfName}} {
-			var nestedR gjson.Result
-			r.Get("{{$childClassName}}.children").ForEach(
-				func(_, v gjson.Result) bool {
-					key := v.Get("{{$nestedChildClassName}}.attributes.rn").String()
-					if key == data.{{$list}}[c].{{$nestedList}}[nc].getRn() {
-						nestedR = v
-						return false
-					}
-					return true
-				},
-			)
-			{{- range .Attributes}}
-			{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-			if !data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}}.IsNull() {
-				{{- if eq .Type "Int64"}}
-				data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.Int64Value(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").Int())
-				{{- else if eq .Type "Bool"}}
-				data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String()))
-				{{- else if eq .Type "String"}}
-				data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.StringValue(nestedR.Get("{{$nestedChildClassName}}.attributes.{{.NxosName}}").String())
-				{{- end}}
-			} else {
-				data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.{{.Type}}Null()
-			}
-			{{- end}}
-			{{- end}}
-
-			{{- range .ChildClasses}}
-			{{- $deepNestedChildClassName := .ClassName }}
-			{{- $deepNestedChildRn := .Rn }}
-			{{- $deepNestedList := (toGoName .TfName)}}
-			{{- if eq .Type "single"}}
-			var deepNestedR{{$deepNestedChildClassName}} gjson.Result
-			nestedR.Get("{{$nestedChildClassName}}.children").ForEach(
-				func(_, v gjson.Result) bool {
-					key := v.Get("{{$deepNestedChildClassName}}.attributes.rn").String()
-					if key == "{{$deepNestedChildRn}}" {
-						deepNestedR{{$deepNestedChildClassName}} = v
-						return false
-					}
-					return true
-				},
-			)
-			{{- range .Attributes}}
-			{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-			if !data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}}.IsNull() {
-				{{- if eq .Type "Int64"}}
-				data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.Int64Value(deepNestedR{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").Int())
-				{{- else if eq .Type "Bool"}}
-				data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(deepNestedR{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String()))
-				{{- else if eq .Type "String"}}
-				data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.StringValue(deepNestedR{{$deepNestedChildClassName}}.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String())
-				{{- end}}
-			} else {
-				data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} = types.{{.Type}}Null()
-			}
-			{{- end}}
-			{{- end}}
-			{{- else if eq .Type "list"}}
-			for dnc := range data.{{$list}}[c].{{$nestedList}}[nc].{{toGoName .TfName}} {
-				var deepNestedR gjson.Result
-				nestedR.Get("{{$nestedChildClassName}}.children").ForEach(
-					func(_, v gjson.Result) bool {
-						key := v.Get("{{$deepNestedChildClassName}}.attributes.rn").String()
-						if key == data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].getRn() {
-							deepNestedR = v
-							return false
-						}
-						return true
-					},
-				)
-				{{- range .Attributes}}
-				{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-				if !data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}}.IsNull() {
-					{{- if eq .Type "Int64"}}
-					data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.Int64Value(deepNestedR.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").Int())
-					{{- else if eq .Type "Bool"}}
-					data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(deepNestedR.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String()))
-					{{- else if eq .Type "String"}}
-					data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.StringValue(deepNestedR.Get("{{$deepNestedChildClassName}}.attributes.{{.NxosName}}").String())
-					{{- end}}
-				} else {
-					data.{{$list}}[c].{{$nestedList}}[nc].{{$deepNestedList}}[dnc].{{toGoName .TfName}} = types.{{.Type}}Null()
-				}
-				{{- end}}
-				{{- end}}
-			}
-			{{- end}}
-			{{- end}}
-		}
-		{{- end}}
+		{{- if .ChildClasses}}
+		{{- template "updateFromBodyListChildTemplate" (makeMap "TypePrefix" $name "Children" .ChildClasses "ResExpr" (printf "r.Get(\"%s.children\")" $childClassName) "DataListExpr" (printf "data.%s[c]" $list) "IndexVar" "nc")}}
 		{{- end}}
 	}
 	{{- end}}
@@ -1289,6 +742,40 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
+{{- /* ==================== toDeleteBodyChildrenTemplate ====================
+       Recursively generates sjson body-building code for NoDelete children with DeleteValue attrs.
+       Context: map with:
+         "Children" ([]YamlConfigChildClass)
+         "BodyPathSuffix" (string) - static sjson path suffix after getClassName()
+       ========================================================= */}}
+{{- define "toDeleteBodyChildrenTemplate"}}
+{{- $bodyPathSuffix := .BodyPathSuffix}}
+{{- range .Children}}
+{{- if .NoDelete}}
+{{- $childClassName := .ClassName}}
+{{- $childSuffix := (printf "%s.children.-1.%s" $bodyPathSuffix $childClassName)}}
+{{- range .Attributes}}
+{{- if and (not .ReferenceOnly) (.DeleteValue)}}
+	if !data.{{toGoName .TfName}}.IsNull() {
+		{{- if eq .Type "Int64"}}
+		body, _ = sjson.Set(body, data.getClassName()+"{{$childSuffix}}"+".attributes."+"{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
+		{{- else if eq .Type "Bool"}}
+		body, _ = sjson.Set(body, data.getClassName()+"{{$childSuffix}}"+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
+		{{- else if eq .Type "String"}}
+		body, _ = sjson.Set(body, data.getClassName()+"{{$childSuffix}}"+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
+		{{- end}}
+	}
+{{- end}}
+{{- end}}
+{{- if .ChildClasses}}
+{{- template "toDeleteBodyChildrenTemplate" (makeMap "Children" .ChildClasses "BodyPathSuffix" $childSuffix)}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- /* ==================== end toDeleteBodyChildrenTemplate ==================== */}}
+
 func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -1305,60 +792,8 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 	}
 	{{- end}}
 	{{- end}}
-
-	{{- range .ChildClasses}}
-	{{- if .NoDelete}}
-	{{- $childClassName := .ClassName }}
-	{{- range .Attributes}}
-	{{- if and (not .ReferenceOnly) (.DeleteValue)}}
-	if !data.{{toGoName .TfName}}.IsNull() {
-		{{- if eq .Type "Int64"}}
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
-		{{- else if eq .Type "Bool"}}
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
-		{{- else if eq .Type "String"}}
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
-		{{- end}}
-	}
-	{{- end}}
-	{{- end}}
-	{{- range .ChildClasses}}
-	{{- if .NoDelete}}
-	{{- $nestedChildClassName := .ClassName }}
-	{{- range .Attributes}}
-	{{- if and (not .ReferenceOnly) (.DeleteValue)}}
-	if !data.{{toGoName .TfName}}.IsNull() {
-		{{- if eq .Type "Int64"}}
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
-		{{- else if eq .Type "Bool"}}
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
-		{{- else if eq .Type "String"}}
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
-		{{- end}}
-	}
-	{{- end}}
-	{{- end}}
-	{{- range .ChildClasses}}
-	{{- if .NoDelete}}
-	{{- $deepNestedChildClassName := .ClassName }}
-	{{- range .Attributes}}
-	{{- if and (not .ReferenceOnly) (.DeleteValue)}}
-	if !data.{{toGoName .TfName}}.IsNull() {
-		{{- if eq .Type "Int64"}}
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".children.-1."+"{{$deepNestedChildClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
-		{{- else if eq .Type "Bool"}}
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".children.-1."+"{{$deepNestedChildClassName}}"+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
-		{{- else if eq .Type "String"}}
-		body, _ = sjson.Set(body, data.getClassName()+".children.-1."+"{{$childClassName}}"+".children.-1."+"{{$nestedChildClassName}}"+".children.-1."+"{{$deepNestedChildClassName}}"+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
-		{{- end}}
-	}
-	{{- end}}
-	{{- end}}
-	{{- end}}
-	{{- end}}
-	{{- end}}
-	{{- end}}
-	{{- end}}
+	{{- if .ChildClasses}}
+	{{- template "toDeleteBodyChildrenTemplate" (makeMap "Children" .ChildClasses "BodyPathSuffix" "")}}
 	{{- end}}
 
 	return nxos.Body{body}
@@ -1367,51 +802,42 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
+{{- /* ==================== getDeleteDnsTemplate ====================
+       Recursively generates DN collection for deletable children.
+       Context: map with:
+         "Children" ([]YamlConfigChildClass)
+         "DnPrefix" (string) - Go expression prefix for building DN paths
+       ========================================================= */}}
+{{- define "getDeleteDnsTemplate"}}
+{{- $dnPrefix := .DnPrefix}}
+{{- range .Children}}
+{{- if not .NoDelete}}
+{{- if eq .Type "single"}}
+	dns = append(dns, {{$dnPrefix}}+"/{{.Rn}}")
+{{- else if eq .Type "list"}}
+	for _, child := range data.{{toGoName .TfName}} {
+		dns = append(dns, {{$dnPrefix}}+"/"+child.getRn())
+	}
+{{- end}}
+{{- else}}
+{{- if .ChildClasses}}
+{{- if eq .Type "single"}}
+{{- template "getDeleteDnsTemplate" (makeMap "Children" .ChildClasses "DnPrefix" (printf "%s+\"/%s\"" $dnPrefix .Rn))}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- /* ==================== end getDeleteDnsTemplate ==================== */}}
+
 func (data {{camelCase .Name}}) getDeleteDns() []string {
 	dns := []string{}
 
 	{{- if not .NoDelete}}
 	dns = append(dns, data.getDn())
 	{{- else}}
-	{{- range .ChildClasses}}
-	{{- $l1Rn := .Rn}}
-	{{- if not .NoDelete}}
-	{{- if eq .Type "single"}}
-	dns = append(dns, data.getDn()+"/{{.Rn}}")
-	{{- else if eq .Type "list"}}
-	for _, child := range data.{{toGoName .TfName}} {
-		dns = append(dns, data.getDn()+"/"+child.getRn())
-	}
-	{{- end}}
-	{{- else}}
-	{{- /* no_delete child at level 1: check level 2 */}}
-	{{- range .ChildClasses}}
-	{{- $l2Rn := .Rn}}
-	{{- if not .NoDelete}}
-	{{- if eq .Type "single"}}
-	dns = append(dns, data.getDn()+"/{{$l1Rn}}/{{.Rn}}")
-	{{- else if eq .Type "list"}}
-	for _, child := range data.{{toGoName .TfName}} {
-		dns = append(dns, data.getDn()+"/{{$l1Rn}}/"+child.getRn())
-	}
-	{{- end}}
-	{{- else}}
-	{{- /* no_delete child at level 2: check level 3 */}}
-	{{- range .ChildClasses}}
-	{{- if not .NoDelete}}
-	{{- if eq .Type "single"}}
-	dns = append(dns, data.getDn()+"/{{$l1Rn}}/{{$l2Rn}}/{{.Rn}}")
-	{{- else if eq .Type "list"}}
-	for _, child := range data.{{toGoName .TfName}} {
-		dns = append(dns, data.getDn()+"/{{$l1Rn}}/{{$l2Rn}}/"+child.getRn())
-	}
-	{{- end}}
-	{{- end}}
-	{{- end}}
-	{{- end}}
-	{{- end}}
-	{{- end}}
-	{{- end}}
+	{{- template "getDeleteDnsTemplate" (makeMap "Children" .ChildClasses "DnPrefix" "data.getDn()")}}
 	{{- end}}
 
 	return dns
@@ -1420,62 +846,43 @@ func (data {{camelCase .Name}}) getDeleteDns() []string {
 // End of section. //template:end getDeleteDns
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+{{- /* ==================== getDeletedItemsTemplate ====================
+       Recursively generates deleted-item detection for list children.
+       Context: map with:
+         "Children" ([]YamlConfigChildClass)
+         "DnPrefix" (string) - Go expression prefix for DN paths
+       ========================================================= */}}
+{{- define "getDeletedItemsTemplate"}}
+{{- $dnPrefix := .DnPrefix}}
+{{- range .Children}}
+{{- if eq .Type "list"}}
+	for _, stateChild := range state.{{toGoName .TfName}} {
+		found := false
+		for _, planChild := range data.{{toGoName .TfName}} {
+			if {{range $i, $a := .Attributes}}{{if $a.Id}}{{if $i}} && {{end}}stateChild.{{toGoName $a.TfName}} == planChild.{{toGoName $a.TfName}}{{end}}{{end}} {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, {{$dnPrefix}}+"/"+stateChild.getRn())
+		}
+	}
+{{- else if eq .Type "single"}}
+{{- if .ChildClasses}}
+{{- template "getDeletedItemsTemplate" (makeMap "Children" .ChildClasses "DnPrefix" (printf "%s+\"/%s\"" $dnPrefix .Rn))}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- /* ==================== end getDeletedItemsTemplate ==================== */}}
+
 {{- if hasListChildClasses .ChildClasses}}
 
 func (data {{camelCase .Name}}) getDeletedItems(ctx context.Context, state {{camelCase .Name}}) []string {
 	deletedItems := []string{}
-	{{- range .ChildClasses}}
-	{{- $l1Rn := .Rn}}
-	{{- if eq .Type "list"}}
-	for _, stateChild := range state.{{toGoName .TfName}} {
-		found := false
-		for _, planChild := range data.{{toGoName .TfName}} {
-			if {{range $i, $a := .Attributes}}{{if $a.Id}}{{if $i}} && {{end}}stateChild.{{toGoName $a.TfName}} == planChild.{{toGoName $a.TfName}}{{end}}{{end}} {
-				found = true
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/"+stateChild.getRn())
-		}
-	}
-	{{- else if eq .Type "single"}}
-	{{- range .ChildClasses}}
-	{{- $l2Rn := .Rn}}
-	{{- if eq .Type "list"}}
-	for _, stateChild := range state.{{toGoName .TfName}} {
-		found := false
-		for _, planChild := range data.{{toGoName .TfName}} {
-			if {{range $i, $a := .Attributes}}{{if $a.Id}}{{if $i}} && {{end}}stateChild.{{toGoName $a.TfName}} == planChild.{{toGoName $a.TfName}}{{end}}{{end}} {
-				found = true
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/{{$l1Rn}}/"+stateChild.getRn())
-		}
-	}
-	{{- else if eq .Type "single"}}
-	{{- range .ChildClasses}}
-	{{- if eq .Type "list"}}
-	for _, stateChild := range state.{{toGoName .TfName}} {
-		found := false
-		for _, planChild := range data.{{toGoName .TfName}} {
-			if {{range $i, $a := .Attributes}}{{if $a.Id}}{{if $i}} && {{end}}stateChild.{{toGoName $a.TfName}} == planChild.{{toGoName $a.TfName}}{{end}}{{end}} {
-				found = true
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/{{$l1Rn}}/{{$l2Rn}}/"+stateChild.getRn())
-		}
-	}
-	{{- end}}
-	{{- end}}
-	{{- end}}
-	{{- end}}
-	{{- end}}
-	{{- end}}
+	{{- template "getDeletedItemsTemplate" (makeMap "Children" .ChildClasses "DnPrefix" "data.getDn()")}}
 	return deletedItems
 }
 {{- end}}

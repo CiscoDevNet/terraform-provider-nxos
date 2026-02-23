@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"fmt"
@@ -33,6 +34,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type NVEVNIIngressReplication struct {
 	Device   types.String `tfsdk:"device"`
 	Dn       types.String `tfsdk:"id"`
@@ -66,6 +68,7 @@ func (data *NVEVNIIngressReplication) fromIdentity(ctx context.Context, identity
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data NVEVNIIngressReplication) getDn() string {
 	return fmt.Sprintf("sys/eps/epId-[1]/nws/vni-[%v]/IngRepl", data.Vni.ValueInt64())
 }
@@ -77,6 +80,7 @@ func (data NVEVNIIngressReplication) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data NVEVNIIngressReplication) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -90,6 +94,7 @@ func (data NVEVNIIngressReplication) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *NVEVNIIngressReplication) fromBody(res gjson.Result) {
 	data.Protocol = types.StringValue(res.Get(data.getClassName() + ".attributes.proto").String())
 }
@@ -97,6 +102,7 @@ func (data *NVEVNIIngressReplication) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *NVEVNIIngressReplication) updateFromBody(res gjson.Result) {
 	if !data.Protocol.IsNull() {
 		data.Protocol = types.StringValue(res.Get(data.getClassName() + ".attributes.proto").String())
@@ -108,6 +114,7 @@ func (data *NVEVNIIngressReplication) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data NVEVNIIngressReplication) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -117,6 +124,7 @@ func (data NVEVNIIngressReplication) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data NVEVNIIngressReplication) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())

@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"fmt"
@@ -34,6 +35,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type SpanningTreeInterface struct {
 	Device      types.String `tfsdk:"device"`
 	Dn          types.String `tfsdk:"id"`
@@ -74,6 +76,7 @@ func (data *SpanningTreeInterface) fromIdentity(ctx context.Context, identity *S
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data SpanningTreeInterface) getDn() string {
 	return fmt.Sprintf("sys/stp/inst/if-[%s]", data.InterfaceId.ValueString())
 }
@@ -85,6 +88,7 @@ func (data SpanningTreeInterface) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data SpanningTreeInterface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -122,6 +126,7 @@ func (data SpanningTreeInterface) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *SpanningTreeInterface) fromBody(res gjson.Result) {
 	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
@@ -137,6 +142,7 @@ func (data *SpanningTreeInterface) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *SpanningTreeInterface) updateFromBody(res gjson.Result) {
 	if !data.InterfaceId.IsNull() {
 		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
@@ -188,6 +194,7 @@ func (data *SpanningTreeInterface) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data SpanningTreeInterface) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -197,6 +204,7 @@ func (data SpanningTreeInterface) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data SpanningTreeInterface) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())

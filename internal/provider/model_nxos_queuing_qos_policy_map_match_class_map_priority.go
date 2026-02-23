@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"fmt"
@@ -34,6 +35,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type QueuingQOSPolicyMapMatchClassMapPriority struct {
 	Device        types.String `tfsdk:"device"`
 	Dn            types.String `tfsdk:"id"`
@@ -71,6 +73,7 @@ func (data *QueuingQOSPolicyMapMatchClassMapPriority) fromIdentity(ctx context.C
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data QueuingQOSPolicyMapMatchClassMapPriority) getDn() string {
 	return fmt.Sprintf("sys/ipqos/queuing/p/name-[%s]/cmap-[%s]/prio", data.PolicyMapName.ValueString(), data.ClassMapName.ValueString())
 }
@@ -82,6 +85,7 @@ func (data QueuingQOSPolicyMapMatchClassMapPriority) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data QueuingQOSPolicyMapMatchClassMapPriority) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -95,6 +99,7 @@ func (data QueuingQOSPolicyMapMatchClassMapPriority) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *QueuingQOSPolicyMapMatchClassMapPriority) fromBody(res gjson.Result) {
 	data.Level = types.Int64Value(res.Get(data.getClassName() + ".attributes.level").Int())
 }
@@ -102,6 +107,7 @@ func (data *QueuingQOSPolicyMapMatchClassMapPriority) fromBody(res gjson.Result)
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *QueuingQOSPolicyMapMatchClassMapPriority) updateFromBody(res gjson.Result) {
 	if !data.Level.IsNull() {
 		data.Level = types.Int64Value(res.Get(data.getClassName() + ".attributes.level").Int())
@@ -113,6 +119,7 @@ func (data *QueuingQOSPolicyMapMatchClassMapPriority) updateFromBody(res gjson.R
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data QueuingQOSPolicyMapMatchClassMapPriority) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -122,6 +129,7 @@ func (data QueuingQOSPolicyMapMatchClassMapPriority) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data QueuingQOSPolicyMapMatchClassMapPriority) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())

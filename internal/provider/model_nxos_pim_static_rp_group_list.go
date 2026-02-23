@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"fmt"
@@ -35,6 +36,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type PIMStaticRPGroupList struct {
 	Device    types.String `tfsdk:"device"`
 	Dn        types.String `tfsdk:"id"`
@@ -77,6 +79,7 @@ func (data *PIMStaticRPGroupList) fromIdentity(ctx context.Context, identity *PI
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data PIMStaticRPGroupList) getDn() string {
 	return fmt.Sprintf("sys/pim/inst/dom-[%s]/staticrp/rp-[%s]/rpgrplist-[%s]", data.VrfName.ValueString(), data.RpAddress.ValueString(), data.Address.ValueString())
 }
@@ -88,6 +91,7 @@ func (data PIMStaticRPGroupList) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data PIMStaticRPGroupList) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -107,6 +111,7 @@ func (data PIMStaticRPGroupList) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *PIMStaticRPGroupList) fromBody(res gjson.Result) {
 	data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.grpListName").String())
 	data.Bidir = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.bidir").String()))
@@ -116,6 +121,7 @@ func (data *PIMStaticRPGroupList) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *PIMStaticRPGroupList) updateFromBody(res gjson.Result) {
 	if !data.Address.IsNull() {
 		data.Address = types.StringValue(res.Get(data.getClassName() + ".attributes.grpListName").String())
@@ -137,6 +143,7 @@ func (data *PIMStaticRPGroupList) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data PIMStaticRPGroupList) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -146,6 +153,7 @@ func (data PIMStaticRPGroupList) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data PIMStaticRPGroupList) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())

@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 
@@ -32,6 +33,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type KeychainManager struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
@@ -61,6 +63,7 @@ func (data *KeychainManager) fromIdentity(ctx context.Context, identity *Keychai
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data KeychainManager) getDn() string {
 	return "sys/kcmgr"
 }
@@ -72,6 +75,7 @@ func (data KeychainManager) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data KeychainManager) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -79,9 +83,10 @@ func (data KeychainManager) toBody() nxos.Body {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
 	var attrs string
+	childrenPath := data.getClassName() + ".children"
 	attrs = "{}"
 	if attrs != "{}" || true {
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.kcmgrKeychains.attributes", attrs)
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.kcmgrKeychains.attributes", attrs)
 	}
 
 	return nxos.Body{body}
@@ -90,6 +95,7 @@ func (data KeychainManager) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *KeychainManager) fromBody(res gjson.Result) {
 	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 }
@@ -97,6 +103,7 @@ func (data *KeychainManager) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *KeychainManager) updateFromBody(res gjson.Result) {
 	if !data.AdminState.IsNull() {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
@@ -108,6 +115,7 @@ func (data *KeychainManager) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data KeychainManager) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -117,6 +125,7 @@ func (data KeychainManager) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data KeychainManager) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())

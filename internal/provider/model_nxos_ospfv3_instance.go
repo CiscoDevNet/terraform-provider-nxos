@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"fmt"
@@ -33,6 +34,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type OSPFv3Instance struct {
 	Device     types.String `tfsdk:"device"`
 	Dn         types.String `tfsdk:"id"`
@@ -66,6 +68,7 @@ func (data *OSPFv3Instance) fromIdentity(ctx context.Context, identity *OSPFv3In
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data OSPFv3Instance) getDn() string {
 	return fmt.Sprintf("sys/ospfv3/inst-[%s]", data.Name.ValueString())
 }
@@ -77,6 +80,7 @@ func (data OSPFv3Instance) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data OSPFv3Instance) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -93,6 +97,7 @@ func (data OSPFv3Instance) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *OSPFv3Instance) fromBody(res gjson.Result) {
 	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
@@ -101,6 +106,7 @@ func (data *OSPFv3Instance) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *OSPFv3Instance) updateFromBody(res gjson.Result) {
 	if !data.AdminState.IsNull() {
 		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
@@ -117,6 +123,7 @@ func (data *OSPFv3Instance) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data OSPFv3Instance) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -126,6 +133,7 @@ func (data OSPFv3Instance) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data OSPFv3Instance) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())

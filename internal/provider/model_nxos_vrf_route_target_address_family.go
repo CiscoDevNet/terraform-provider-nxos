@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"fmt"
@@ -33,6 +34,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type VRFRouteTargetAddressFamily struct {
 	Device                   types.String `tfsdk:"device"`
 	Dn                       types.String `tfsdk:"id"`
@@ -73,6 +75,7 @@ func (data *VRFRouteTargetAddressFamily) fromIdentity(ctx context.Context, ident
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data VRFRouteTargetAddressFamily) getDn() string {
 	return fmt.Sprintf("sys/inst-[%s]/dom-[%[1]s]/af-[%s]/ctrl-[%s]", data.Vrf.ValueString(), data.AddressFamily.ValueString(), data.RouteTargetAddressFamily.ValueString())
 }
@@ -84,6 +87,7 @@ func (data VRFRouteTargetAddressFamily) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data VRFRouteTargetAddressFamily) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -97,6 +101,7 @@ func (data VRFRouteTargetAddressFamily) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *VRFRouteTargetAddressFamily) fromBody(res gjson.Result) {
 	data.RouteTargetAddressFamily = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
 }
@@ -104,6 +109,7 @@ func (data *VRFRouteTargetAddressFamily) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *VRFRouteTargetAddressFamily) updateFromBody(res gjson.Result) {
 	if !data.RouteTargetAddressFamily.IsNull() {
 		data.RouteTargetAddressFamily = types.StringValue(res.Get(data.getClassName() + ".attributes.type").String())
@@ -115,6 +121,7 @@ func (data *VRFRouteTargetAddressFamily) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data VRFRouteTargetAddressFamily) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -124,6 +131,7 @@ func (data VRFRouteTargetAddressFamily) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data VRFRouteTargetAddressFamily) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())

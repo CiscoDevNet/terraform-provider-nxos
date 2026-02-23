@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"fmt"
@@ -34,6 +35,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type User struct {
 	Device                 types.String `tfsdk:"device"`
 	Dn                     types.String `tfsdk:"id"`
@@ -74,6 +76,7 @@ func (data *User) fromIdentity(ctx context.Context, identity *UserIdentity) {
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data User) getDn() string {
 	return fmt.Sprintf("sys/userext/user-[%s]", data.Name.ValueString())
 }
@@ -89,6 +92,7 @@ func (data User) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data User) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -105,17 +109,21 @@ func (data User) toBody() nxos.Body {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdEncryptType", data.PasswordEncryptionType.ValueString())
 	}
 	var attrs string
-	// Create child with attributes and nested children in one unified object
-	childIndex := len(gjson.Get(body, data.getClassName()+".children").Array())
-	attrs = "{}"
-	attrs, _ = sjson.Set(attrs, "name", "all")
-	body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".aaaUserDomain.attributes", attrs)
-	for _, nestedChild := range data.Roles {
+	childrenPath := data.getClassName() + ".children"
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaUserDomain"
 		attrs = "{}"
-		if (!nestedChild.Name.IsUnknown() && !nestedChild.Name.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "name", nestedChild.Name.ValueString())
+		attrs, _ = sjson.Set(attrs, "name", "all")
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		for _, child := range data.Roles {
+			attrs = "{}"
+			if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaUserRole.attributes", attrs)
 		}
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children."+strconv.Itoa(childIndex)+".aaaUserDomain.children.-1.aaaUserRole.attributes", attrs)
 	}
 
 	return nxos.Body{body}
@@ -124,6 +132,7 @@ func (data User) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *User) fromBody(res gjson.Result) {
 	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	data.AllowExpired = types.StringValue(res.Get(data.getClassName() + ".attributes.allowExpired").String())
@@ -141,11 +150,11 @@ func (data *User) fromBody(res gjson.Result) {
 	raaaUserDomain.Get("aaaUserDomain.children").ForEach(
 		func(_, v gjson.Result) bool {
 			v.ForEach(
-				func(nestedClassname, nestedValue gjson.Result) bool {
-					if nestedClassname.String() == "aaaUserRole" {
-						var nestedChild UserRoles
-						nestedChild.Name = types.StringValue(nestedValue.Get("attributes.name").String())
-						data.Roles = append(data.Roles, nestedChild)
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "aaaUserRole" {
+						var child UserRoles
+						child.Name = types.StringValue(value.Get("attributes.name").String())
+						data.Roles = append(data.Roles, child)
 					}
 					return true
 				},
@@ -158,6 +167,7 @@ func (data *User) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *User) updateFromBody(res gjson.Result) {
 	if !data.Name.IsNull() {
 		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
@@ -180,22 +190,22 @@ func (data *User) updateFromBody(res gjson.Result) {
 			return true
 		},
 	)
-	for nc := range data.Roles {
-		var nestedR gjson.Result
+	for c := range data.Roles {
+		var r gjson.Result
 		raaaUserDomain.Get("aaaUserDomain.children").ForEach(
 			func(_, v gjson.Result) bool {
 				key := v.Get("aaaUserRole.attributes.rn").String()
-				if key == data.Roles[nc].getRn() {
-					nestedR = v
+				if key == data.Roles[c].getRn() {
+					r = v
 					return false
 				}
 				return true
 			},
 		)
-		if !data.Roles[nc].Name.IsNull() {
-			data.Roles[nc].Name = types.StringValue(nestedR.Get("aaaUserRole.attributes.name").String())
+		if !data.Roles[c].Name.IsNull() {
+			data.Roles[c].Name = types.StringValue(r.Get("aaaUserRole.attributes.name").String())
 		} else {
-			data.Roles[nc].Name = types.StringNull()
+			data.Roles[c].Name = types.StringNull()
 		}
 	}
 }
@@ -203,6 +213,7 @@ func (data *User) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data User) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -212,6 +223,7 @@ func (data User) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data User) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())
@@ -234,7 +246,7 @@ func (data User) getDeletedItems(ctx context.Context, state User) []string {
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/userdomain-[all]/"+stateChild.getRn())
+			deletedItems = append(deletedItems, data.getDn()+"/userdomain-[all]"+"/"+stateChild.getRn())
 		}
 	}
 	return deletedItems

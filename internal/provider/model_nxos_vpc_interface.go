@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"fmt"
@@ -34,6 +35,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type VPCInterface struct {
 	Device                 types.String `tfsdk:"device"`
 	Dn                     types.String `tfsdk:"id"`
@@ -67,6 +69,7 @@ func (data *VPCInterface) fromIdentity(ctx context.Context, identity *VPCInterfa
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data VPCInterface) getDn() string {
 	return fmt.Sprintf("sys/vpc/inst/dom/if-[%v]", data.VpcInterfaceId.ValueInt64())
 }
@@ -78,6 +81,7 @@ func (data VPCInterface) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data VPCInterface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -85,12 +89,13 @@ func (data VPCInterface) toBody() nxos.Body {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"id", strconv.FormatInt(data.VpcInterfaceId.ValueInt64(), 10))
 	}
 	var attrs string
+	childrenPath := data.getClassName() + ".children"
 	attrs = "{}"
 	if (!data.PortChannelInterfaceDn.IsUnknown() && !data.PortChannelInterfaceDn.IsNull()) || false {
 		attrs, _ = sjson.Set(attrs, "tDn", data.PortChannelInterfaceDn.ValueString())
 	}
 	if attrs != "{}" || false {
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children.-1.vpcRsVpcConf.attributes", attrs)
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.vpcRsVpcConf.attributes", attrs)
 	}
 
 	return nxos.Body{body}
@@ -99,6 +104,7 @@ func (data VPCInterface) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *VPCInterface) fromBody(res gjson.Result) {
 	data.VpcInterfaceId = types.Int64Value(res.Get(data.getClassName() + ".attributes.id").Int())
 	var rvpcRsVpcConf gjson.Result
@@ -118,6 +124,7 @@ func (data *VPCInterface) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *VPCInterface) updateFromBody(res gjson.Result) {
 	if !data.VpcInterfaceId.IsNull() {
 		data.VpcInterfaceId = types.Int64Value(res.Get(data.getClassName() + ".attributes.id").Int())
@@ -145,6 +152,7 @@ func (data *VPCInterface) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data VPCInterface) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -154,6 +162,7 @@ func (data VPCInterface) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data VPCInterface) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())

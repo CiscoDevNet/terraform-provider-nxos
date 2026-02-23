@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"strconv"
@@ -33,6 +34,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type Ethernet struct {
 	Device             types.String `tfsdk:"device"`
 	Dn                 types.String `tfsdk:"id"`
@@ -63,6 +65,7 @@ func (data *Ethernet) fromIdentity(ctx context.Context, identity *EthernetIdenti
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data Ethernet) getDn() string {
 	return "sys/ethpm/inst"
 }
@@ -74,6 +77,7 @@ func (data Ethernet) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data Ethernet) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -90,6 +94,7 @@ func (data Ethernet) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *Ethernet) fromBody(res gjson.Result) {
 	data.Mtu = types.Int64Value(res.Get(data.getClassName() + ".attributes.systemJumboMtu").Int())
 	data.DefaultAdminStatus = types.StringValue(res.Get(data.getClassName() + ".attributes.systemDefaultAdminSt").String())
@@ -98,6 +103,7 @@ func (data *Ethernet) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *Ethernet) updateFromBody(res gjson.Result) {
 	if !data.Mtu.IsNull() {
 		data.Mtu = types.Int64Value(res.Get(data.getClassName() + ".attributes.systemJumboMtu").Int())
@@ -114,6 +120,7 @@ func (data *Ethernet) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data Ethernet) toDeleteBody() nxos.Body {
 	body := ""
 	if !data.Mtu.IsNull() {
@@ -129,6 +136,7 @@ func (data Ethernet) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data Ethernet) getDeleteDns() []string {
 	dns := []string{}
 

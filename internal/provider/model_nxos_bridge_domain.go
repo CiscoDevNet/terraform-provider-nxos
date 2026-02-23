@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"fmt"
@@ -33,6 +34,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type BridgeDomain struct {
 	Device      types.String `tfsdk:"device"`
 	Dn          types.String `tfsdk:"id"`
@@ -67,6 +69,7 @@ func (data *BridgeDomain) fromIdentity(ctx context.Context, identity *BridgeDoma
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data BridgeDomain) getDn() string {
 	return fmt.Sprintf("sys/bd/bd-[%s]", data.FabricEncap.ValueString())
 }
@@ -78,6 +81,7 @@ func (data BridgeDomain) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data BridgeDomain) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -97,6 +101,7 @@ func (data BridgeDomain) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *BridgeDomain) fromBody(res gjson.Result) {
 	data.FabricEncap = types.StringValue(res.Get(data.getClassName() + ".attributes.fabEncap").String())
 	data.AccessEncap = types.StringValue(res.Get(data.getClassName() + ".attributes.accEncap").String())
@@ -106,6 +111,7 @@ func (data *BridgeDomain) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *BridgeDomain) updateFromBody(res gjson.Result) {
 	if !data.FabricEncap.IsNull() {
 		data.FabricEncap = types.StringValue(res.Get(data.getClassName() + ".attributes.fabEncap").String())
@@ -127,6 +133,7 @@ func (data *BridgeDomain) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data BridgeDomain) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -136,6 +143,7 @@ func (data BridgeDomain) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data BridgeDomain) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())

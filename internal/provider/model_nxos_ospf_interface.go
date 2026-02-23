@@ -20,6 +20,7 @@
 package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
+
 import (
 	"context"
 	"fmt"
@@ -35,6 +36,7 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
+
 type OSPFInterface struct {
 	Device               types.String `tfsdk:"device"`
 	Dn                   types.String `tfsdk:"id"`
@@ -84,6 +86,7 @@ func (data *OSPFInterface) fromIdentity(ctx context.Context, identity *OSPFInter
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data OSPFInterface) getDn() string {
 	return fmt.Sprintf("sys/ospf/inst-[%s]/dom-[%s]/if-[%s]", data.InstanceName.ValueString(), data.VrfName.ValueString(), data.InterfaceId.ValueString())
 }
@@ -95,6 +98,7 @@ func (data OSPFInterface) getClassName() string {
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
 func (data OSPFInterface) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
@@ -135,6 +139,7 @@ func (data OSPFInterface) toBody() nxos.Body {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *OSPFInterface) fromBody(res gjson.Result) {
 	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	data.AdvertiseSecondaries = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.advertiseSecondaries").String()))
@@ -151,6 +156,7 @@ func (data *OSPFInterface) fromBody(res gjson.Result) {
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *OSPFInterface) updateFromBody(res gjson.Result) {
 	if !data.InterfaceId.IsNull() {
 		data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
@@ -207,6 +213,7 @@ func (data *OSPFInterface) updateFromBody(res gjson.Result) {
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
 func (data OSPFInterface) toDeleteBody() nxos.Body {
 	body := ""
 
@@ -216,6 +223,7 @@ func (data OSPFInterface) toDeleteBody() nxos.Body {
 // End of section. //template:end toDeleteBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
+
 func (data OSPFInterface) getDeleteDns() []string {
 	dns := []string{}
 	dns = append(dns, data.getDn())

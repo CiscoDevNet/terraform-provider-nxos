@@ -414,7 +414,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 						{{- end}}
 						{{- end}}
 						{{- if .ChildClasses}}
-						{{- template "fromBodyListChildrenTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ValueVar" (printf "r%s" $childClassName) "ParentVar" $parentVar)}}
+						{{- template "fromBodyListChildrenTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ValueVar" (printf "r%s.Get(\"%s\")" $childClassName $childClassName) "ParentVar" $parentVar)}}
 						{{- end}}
 						}
 {{- else if eq .Type "list"}}
@@ -850,6 +850,45 @@ func (data {{camelCase .Name}}) getDeleteDns() []string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
+{{- /* ==================== getDeletedItemsSingleInListTemplate ====================
+       Detects deleted items within single-type children of matched list-item pairs.
+       Used when a single child (no loop needed) has its own list children to track.
+       Context: map with:
+         "Children" ([]YamlConfigChildClass)
+         "StateItemExpr" (string) - Go expression for a single state item (e.g. "state.Entries[di]")
+         "PlanItemExpr" (string) - Go expression for a single plan item
+         "DnPrefix" (string) - Go expression prefix for DN paths
+       ========================================================= */}}
+{{- define "getDeletedItemsSingleInListTemplate"}}
+{{- $stateItemExpr := .StateItemExpr}}
+{{- $planItemExpr := .PlanItemExpr}}
+{{- $dnPrefix := .DnPrefix}}
+{{- range .Children}}
+{{- if eq .Type "list"}}
+			for _, stateChild := range {{$stateItemExpr}}.{{toGoName .TfName}} {
+				found := false
+				for _, planChild := range {{$planItemExpr}}.{{toGoName .TfName}} {
+					if {{range $i, $a := .Attributes}}{{if $a.Id}}{{if $i}} && {{end}}stateChild.{{toGoName $a.TfName}} == planChild.{{toGoName $a.TfName}}{{end}}{{end}} {
+						found = true
+						break
+					}
+				}
+				if !found {
+					deletedItems = append(deletedItems, {{$dnPrefix}}+"/"+stateChild.getRn())
+				}
+			}
+{{- if .ChildClasses}}
+{{- template "getDeletedItemsSingleInListTemplate" (makeMap "Children" .ChildClasses "StateItemExpr" (printf "%s.%s" $stateItemExpr (toGoName .TfName)) "PlanItemExpr" (printf "%s.%s" $planItemExpr (toGoName .TfName)) "DnPrefix" (printf "%s+\"/\"+stateChild.getRn()" $dnPrefix))}}
+{{- end}}
+{{- else if eq .Type "single"}}
+{{- if .ChildClasses}}
+{{- template "getDeletedItemsSingleInListTemplate" (makeMap "Children" .ChildClasses "StateItemExpr" $stateItemExpr "PlanItemExpr" $planItemExpr "DnPrefix" (printf "%s+\"/%s\"" $dnPrefix .Rn))}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- /* ==================== end getDeletedItemsSingleInListTemplate ==================== */}}
+
 {{- /* ==================== getDeletedItemsListChildTemplate ====================
        Recursively detects deleted items within matched list-item pairs.
        Used when a list child itself has nested children that may be deleted.
@@ -889,7 +928,7 @@ func (data {{camelCase .Name}}) getDeleteDns() []string {
 				{{- end}}
 				{{- else if eq .Type "single"}}
 				{{- if .ChildClasses}}
-				{{- template "getDeletedItemsListChildTemplate" (makeMap "Children" .ChildClasses "StateListExpr" (printf "%s[%s]" $stateListExpr $indexVar) "PlanListExpr" (printf "%s[p%s]" $planListExpr $indexVar) "DnPrefix" (printf "%s+\"/\"+%s[%s].getRn()+\"/%s\"" $dnPrefix $stateListExpr $indexVar .Rn) "IdAttributes" .Attributes "IndexVar" $indexVar)}}
+				{{- template "getDeletedItemsSingleInListTemplate" (makeMap "Children" .ChildClasses "StateItemExpr" (printf "%s[%s]" $stateListExpr $indexVar) "PlanItemExpr" (printf "%s[p%s]" $planListExpr $indexVar) "DnPrefix" (printf "%s+\"/\"+%s[%s].getRn()+\"/%s\"" $dnPrefix $stateListExpr $indexVar .Rn))}}
 				{{- end}}
 				{{- end}}
 				{{- end}}

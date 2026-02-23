@@ -9,6 +9,7 @@ description: |-
 
 ## Unreleased
 
+- BREAKING CHANGE: Remove `nxos_route_map_rule` resource and data source, `nxos_route_map_rule_entry` resource and data source, `nxos_route_map_rule_entry_match_route` resource and data source, `nxos_route_map_rule_entry_match_route_prefix_list` resource and data source, `nxos_route_map_rule_entry_match_tag` resource and data source, `nxos_route_map_rule_entry_set_regular_community` resource and data source, and `nxos_route_map_rule_entry_set_regular_community_item` resource and data source, route map configuration is now managed as a single `nxos_route_map` resource and data source
 - BREAKING CHANGE: Remove `nxos_loopback_interface_vrf` resource and data source, loopback interface VRF association is now managed as part of `nxos_loopback_interface` resource and data source
 - BREAKING CHANGE: Remove `nxos_physical_interface_vrf` resource and data source, physical interface VRF association is now managed as part of `nxos_physical_interface` resource and data source
 - BREAKING CHANGE: Remove `nxos_port_channel_interface_member` resource and data source and `nxos_port_channel_interface_vrf` resource and data source, port-channel interface members and VRF association are now managed as part of `nxos_port_channel_interface` resource and data source

@@ -1,0 +1,128 @@
+---
+name: Route Map
+class_name: rtmapRule
+dn: sys/rpm/rtmap-[%s]
+ds_description: This data source can read a Route-Map Rule configuration.
+res_description: This resource can manage a Route-Map Rule configuration.
+doc_path: Routing%20and%20Forwarding/rtmap:Rule/
+doc_category: Routing
+attributes:
+  - nxos_name: name
+    tf_name: name
+    type: String
+    description: 'Route-Map Rule name.'
+    id: true
+    example: RULE1
+child_classes:
+  - class_name: rtmapEntry
+    doc_path: Routing%20and%20Forwarding/rtmap:Entry/
+    rn: ent-%v
+    type: list
+    tf_name: entries
+    description: 'List of Route-Map Rule Entries.'
+    attributes:
+      - nxos_name: order
+        tf_name: order
+        type: Int64
+        description: 'Route-Map Rule Entry order.'
+        min_int: 0
+        max_int: 65535
+        example: 10
+        id: true
+      - nxos_name: action
+        tf_name: action
+        type: String
+        description: 'Route-Map Rule Entry action.'
+        enum_values:
+          - deny
+          - permit
+        default_value: permit
+        example: permit
+    child_classes:
+      - class_name: rtmapMatchRtDst
+        doc_path: Routing%20and%20Forwarding/rtmap:MatchRtDst/
+        rn: mrtdst
+        type: single
+        tf_name: match_route
+        description: 'Match Route configuration.'
+        child_classes:
+          - class_name: rtmapRsRtDstAtt
+            doc_path: Routing%20and%20Forwarding/rtmap:RsRtDstAtt/
+            rn: rsrtDstAtt-[%s]
+            type: list
+            tf_name: match_route_prefix_lists
+            description: 'List of Match Route Prefix Lists.'
+            attributes:
+              - nxos_name: tDn
+                tf_name: prefix_list_dn
+                type: String
+                description: "DN of Prefix List. For example: `sys/rpm/pfxlistv4-[LIST1]`"
+                example: sys/rpm/pfxlistv4-[LIST1]
+                id: true
+      - class_name: rtmapSetRegComm
+        doc_path: Routing%20and%20Forwarding/rtmap:SetRegComm/
+        rn: sregcomm
+        type: single
+        tf_name: set_regular_community
+        description: 'Set Community configuration.'
+        attributes:
+          - nxos_name: additive
+            tf_name: additive
+            type: String
+            description: "Option to add to an existing community."
+            enum_values:
+              - enabled
+              - disabled
+            default_value: disabled
+            example: disabled
+          - nxos_name: noCommAttr
+            tf_name: no_community
+            type: String
+            description: "Option to have no community attribute."
+            enum_values:
+              - enabled
+              - disabled
+            default_value: disabled
+            example: disabled
+          - nxos_name: setCriteria
+            tf_name: set_criteria
+            type: String
+            description: "Operation on the current community."
+            enum_values:
+              - none
+              - append
+              - replace
+              - igp
+              - pre-bestpath
+            default_value: none
+            example: none
+        child_classes:
+          - class_name: rtregcomItem
+            doc_path: Routing%20and%20Forwarding/rtregcom:Item/
+            rn: item-%s
+            type: list
+            tf_name: set_regular_community_items
+            description: 'List of Set Community Items.'
+            attributes:
+              - nxos_name: community
+                tf_name: community
+                type: String
+                description: "Set Community."
+                example: regular:as2-nn2:65001:123
+                id: true
+      - class_name: rtmapMatchRtTag
+        doc_path: Routing%20and%20Forwarding/rtmap:MatchRtTag/
+        rn: mrttag-%v
+        type: list
+        tf_name: match_tags
+        description: 'List of Match Tags.'
+        attributes:
+          - nxos_name: tag
+            tf_name: tag
+            type: Int64
+            min_int: 0
+            max_int: 4294967295
+            description: "Route Map Tag Value"
+            id: true
+            example: 12345
+test_prerequisites:

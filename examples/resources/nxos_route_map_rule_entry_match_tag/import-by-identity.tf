@@ -1,8 +1,0 @@
-import {
-  to = nxos_route_map_rule_entry_match_tag.example
-  identity = {
-    "rule_name" : "<rule_name>"
-    "order" : "<order>"
-    "tag" : "<tag>"
-  }
-}

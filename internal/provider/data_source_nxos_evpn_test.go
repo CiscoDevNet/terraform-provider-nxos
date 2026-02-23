@@ -32,6 +32,16 @@ import (
 func TestAccDataSourceNxosEVPN(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_evpn.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_evpn.test", "vnis.*", map[string]string{
+		"encap":               "vxlan-123456",
+		"route_distinguisher": "rd:unknown:0:0",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_evpn.test", "vnis.0.route_target_directions.*", map[string]string{
+		"direction": "import",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_evpn.test", "vnis.0.route_target_directions.0.route_targets.*", map[string]string{
+		"route_target": "route-target:as2-nn2:2:2",
+	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -75,6 +85,16 @@ resource "nxos_rest" "PreReq1" {
 func testAccDataSourceNxosEVPNConfig() string {
 	config := `resource "nxos_evpn" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
+	config += `	vnis = [{` + "\n"
+	config += `		encap = "vxlan-123456"` + "\n"
+	config += `		route_distinguisher = "rd:unknown:0:0"` + "\n"
+	config += `		route_target_directions = [{` + "\n"
+	config += `			direction = "import"` + "\n"
+	config += `			route_targets = [{` + "\n"
+	config += `				route_target = "route-target:as2-nn2:2:2"` + "\n"
+	config += `			}]` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 

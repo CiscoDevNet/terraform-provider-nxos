@@ -57,7 +57,7 @@ func (d *EVPNDataSource) Metadata(_ context.Context, req datasource.MetadataRequ
 func (d *EVPNDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read a global EVPN configuration.", "rtctrlL2Evpn", "Routing%20and%20Forwarding/rtctrl:L2Evpn/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read a global EVPN configuration.", "rtctrlL2Evpn", "Routing%20and%20Forwarding/rtctrl:L2Evpn/").AddAdditionalDocs([]string{"rtctrlBDEvi", "rtctrlRttP", "rtctrlRttEntry"}, []string{"Routing%20and%20Forwarding/rtctrl:BDEvi/", "Routing%20and%20Forwarding/rtctrl:RttP/", "Routing%20and%20Forwarding/rtctrl:RttEntry/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -71,6 +71,46 @@ func (d *EVPNDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 			"admin_state": schema.StringAttribute{
 				MarkdownDescription: "Administrative state.",
 				Computed:            true,
+			},
+			"vnis": schema.ListNestedAttribute{
+				MarkdownDescription: "List of EVPN VNIs.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"encap": schema.StringAttribute{
+							MarkdownDescription: "Encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.",
+							Computed:            true,
+						},
+						"route_distinguisher": schema.StringAttribute{
+							MarkdownDescription: "Route Distinguisher value in NX-OS DME format.",
+							Computed:            true,
+						},
+						"route_target_directions": schema.ListNestedAttribute{
+							MarkdownDescription: "List of EVPN VNI route target directions.",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"direction": schema.StringAttribute{
+										MarkdownDescription: "Route Target direction.",
+										Computed:            true,
+									},
+									"route_targets": schema.ListNestedAttribute{
+										MarkdownDescription: "List of EVPN VNI route target entries.",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"route_target": schema.StringAttribute{
+													MarkdownDescription: "Route Target in NX-OS DME format.",
+													Computed:            true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	}
@@ -106,6 +146,7 @@ func (d *EVPNDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "full"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

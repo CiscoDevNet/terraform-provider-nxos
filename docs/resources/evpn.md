@@ -5,8 +5,8 @@ subcategory: "EVPN"
 description: |-
   This resource can manage a global EVPN configuration.
   API Documentation: rtctrlL2Evpn https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:L2Evpn/
-  Child resources
-  nxos_evpn_vni https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/evpn_vni
+  Additional API Documentation
+  rtctrlBDEvi https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:BDEvi/rtctrlRttP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttP/rtctrlRttEntry https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/
 ---
 
 # nxos_evpn (Resource)
@@ -15,15 +15,27 @@ This resource can manage a global EVPN configuration.
 
 - API Documentation: [rtctrlL2Evpn](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:L2Evpn/)
 
-### Child resources
+### Additional API Documentation
 
-- [nxos_evpn_vni](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/evpn_vni)
+- [rtctrlBDEvi](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:BDEvi/)
+- [rtctrlRttP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttP/)
+- [rtctrlRttEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/)
 
 ## Example Usage
 
 ```terraform
 resource "nxos_evpn" "example" {
   admin_state = "enabled"
+  vnis = [{
+    encap               = "vxlan-123456"
+    route_distinguisher = "rd:unknown:0:0"
+    route_target_directions = [{
+      direction = "import"
+      route_targets = [{
+        route_target = "route-target:as2-nn2:2:2"
+      }]
+    }]
+  }]
 }
 ```
 
@@ -36,10 +48,43 @@ resource "nxos_evpn" "example" {
   - Choices: `enabled`, `disabled`
   - Default value: `enabled`
 - `device` (String) A device name from the provider configuration.
+- `vnis` (Attributes List) List of EVPN VNIs. (see [below for nested schema](#nestedatt--vnis))
 
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--vnis"></a>
+### Nested Schema for `vnis`
+
+Required:
+
+- `encap` (String) Encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+
+Optional:
+
+- `route_distinguisher` (String) Route Distinguisher value in NX-OS DME format.
+  - Default value: `unknown:unknown:0:0`
+- `route_target_directions` (Attributes List) List of EVPN VNI route target directions. (see [below for nested schema](#nestedatt--vnis--route_target_directions))
+
+<a id="nestedatt--vnis--route_target_directions"></a>
+### Nested Schema for `vnis.route_target_directions`
+
+Required:
+
+- `direction` (String) Route Target direction.
+  - Choices: `import`, `export`
+
+Optional:
+
+- `route_targets` (Attributes List) List of EVPN VNI route target entries. (see [below for nested schema](#nestedatt--vnis--route_target_directions--route_targets))
+
+<a id="nestedatt--vnis--route_target_directions--route_targets"></a>
+### Nested Schema for `vnis.route_target_directions.route_targets`
+
+Required:
+
+- `route_target` (String) Route Target in NX-OS DME format.
 
 ## Import
 

@@ -63,7 +63,7 @@ func (r *EVPNResource) Metadata(ctx context.Context, req resource.MetadataReques
 func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a global EVPN configuration.", "rtctrlL2Evpn", "Routing%20and%20Forwarding/rtctrl:L2Evpn/").AddChildren("evpn_vni").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a global EVPN configuration.", "rtctrlL2Evpn", "Routing%20and%20Forwarding/rtctrl:L2Evpn/").AddAdditionalDocs([]string{"rtctrlBDEvi", "rtctrlRttP", "rtctrlRttEntry"}, []string{"Routing%20and%20Forwarding/rtctrl:BDEvi/", "Routing%20and%20Forwarding/rtctrl:RttP/", "Routing%20and%20Forwarding/rtctrl:RttEntry/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -84,6 +84,60 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Default:             stringdefault.StaticString("enabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"vnis": schema.ListNestedAttribute{
+				MarkdownDescription: "List of EVPN VNIs.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"encap": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"route_distinguisher": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route Distinguisher value in NX-OS DME format.").AddDefaultValueDescription("unknown:unknown:0:0").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("unknown:unknown:0:0"),
+						},
+						"route_target_directions": schema.ListNestedAttribute{
+							MarkdownDescription: "List of EVPN VNI route target directions.",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"direction": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Route Target direction.").AddStringEnumDescription("import", "export").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("import", "export"),
+										},
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplace(),
+										},
+									},
+									"route_targets": schema.ListNestedAttribute{
+										MarkdownDescription: "List of EVPN VNI route target entries.",
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"route_target": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Route Target in NX-OS DME format.").String,
+													Required:            true,
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplace(),
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
@@ -188,6 +242,7 @@ func (r *EVPNResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		queries = append(queries, nxos.Query("rsp-subtree", "full"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -230,6 +285,14 @@ func (r *EVPNResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	var state EVPN
+
+	// Read state
+	diags = req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
@@ -245,6 +308,19 @@ func (r *EVPNResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
+		}
+
+		deletedItems := plan.getDeletedItems(ctx, state)
+		tflog.Debug(ctx, fmt.Sprintf("%s: List items to delete: %v", plan.getDn(), deletedItems))
+		for _, dn := range deletedItems {
+			res, err := device.Client.DeleteDn(dn)
+			if err != nil {
+				errCode := res.Get("imdata.0.error.attributes.code").Str
+				if errCode != "1" && errCode != "107" {
+					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+					return
+				}
+			}
 		}
 	}
 

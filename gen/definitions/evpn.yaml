@@ -6,8 +6,6 @@ ds_description: This data source can read a global EVPN configuration.
 res_description: This resource can manage a global EVPN configuration.
 doc_path: Routing%20and%20Forwarding/rtctrl:L2Evpn/
 doc_category: EVPN
-children:
-  - EVPN VNI
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state
@@ -18,6 +16,57 @@ attributes:
       - disabled
     default_value: enabled
     example: enabled
+child_classes:
+  - class_name: rtctrlBDEvi
+    doc_path: Routing%20and%20Forwarding/rtctrl:BDEvi/
+    rn: bdevi-[%s]
+    type: list
+    tf_name: vnis
+    description: 'List of EVPN VNIs.'
+    attributes:
+      - nxos_name: encap
+        tf_name: encap
+        type: String
+        id: true
+        description: 'Encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
+        example: vxlan-123456
+      - nxos_name: rd
+        tf_name: route_distinguisher
+        type: String
+        description: 'Route Distinguisher value in NX-OS DME format.'
+        default_value: 'unknown:unknown:0:0'
+        example: 'rd:unknown:0:0'
+    child_classes:
+      - class_name: rtctrlRttP
+        doc_path: Routing%20and%20Forwarding/rtctrl:RttP/
+        rn: rttp-%s
+        type: list
+        tf_name: route_target_directions
+        description: 'List of EVPN VNI route target directions.'
+        attributes:
+          - nxos_name: type
+            tf_name: direction
+            type: String
+            id: true
+            description: 'Route Target direction.'
+            enum_values:
+              - import
+              - export
+            example: import
+        child_classes:
+          - class_name: rtctrlRttEntry
+            doc_path: Routing%20and%20Forwarding/rtctrl:RttEntry/
+            rn: ent-[%s]
+            type: list
+            tf_name: route_targets
+            description: 'List of EVPN VNI route target entries.'
+            attributes:
+              - nxos_name: rtt
+                tf_name: route_target
+                type: String
+                id: true
+                description: 'Route Target in NX-OS DME format.'
+                example: route-target:as2-nn2:2:2
 test_prerequisites:
   - dn: sys/fm/nvo
     class_name: fmNvo

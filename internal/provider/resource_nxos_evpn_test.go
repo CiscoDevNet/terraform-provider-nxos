@@ -36,6 +36,10 @@ import (
 func TestAccNxosEVPN(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_evpn.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_evpn.test", "vnis.0.encap", "vxlan-123456"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_evpn.test", "vnis.0.route_distinguisher", "rd:unknown:0:0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_evpn.test", "vnis.0.route_target_directions.0.direction", "import"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_evpn.test", "vnis.0.route_target_directions.0.route_targets.0.route_target", "route-target:as2-nn2:2:2"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -115,6 +119,16 @@ func testAccNxosEVPNConfig_minimum() string {
 func testAccNxosEVPNConfig_all() string {
 	config := `resource "nxos_evpn" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
+	config += `	vnis = [{` + "\n"
+	config += `		encap = "vxlan-123456"` + "\n"
+	config += `		route_distinguisher = "rd:unknown:0:0"` + "\n"
+	config += `		route_target_directions = [{` + "\n"
+	config += `			direction = "import"` + "\n"
+	config += `			route_targets = [{` + "\n"
+	config += `				route_target = "route-target:as2-nn2:2:2"` + "\n"
+	config += `			}]` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config

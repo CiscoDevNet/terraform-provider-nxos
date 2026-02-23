@@ -5,6 +5,8 @@ subcategory: "EVPN"
 description: |-
   This data source can read a global EVPN configuration.
   API Documentation: rtctrlL2Evpn https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:L2Evpn/
+  Additional API Documentation
+  rtctrlBDEvi https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:BDEvi/rtctrlRttP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttP/rtctrlRttEntry https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/
 ---
 
 # nxos_evpn (Data Source)
@@ -12,6 +14,12 @@ description: |-
 This data source can read a global EVPN configuration.
 
 - API Documentation: [rtctrlL2Evpn](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:L2Evpn/)
+
+### Additional API Documentation
+
+- [rtctrlBDEvi](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:BDEvi/)
+- [rtctrlRttP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttP/)
+- [rtctrlRttEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/)
 
 ## Example Usage
 
@@ -31,3 +39,28 @@ data "nxos_evpn" "example" {
 
 - `admin_state` (String) Administrative state.
 - `id` (String) The distinguished name of the object.
+- `vnis` (Attributes List) List of EVPN VNIs. (see [below for nested schema](#nestedatt--vnis))
+
+<a id="nestedatt--vnis"></a>
+### Nested Schema for `vnis`
+
+Read-Only:
+
+- `encap` (String) Encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `route_distinguisher` (String) Route Distinguisher value in NX-OS DME format.
+- `route_target_directions` (Attributes List) List of EVPN VNI route target directions. (see [below for nested schema](#nestedatt--vnis--route_target_directions))
+
+<a id="nestedatt--vnis--route_target_directions"></a>
+### Nested Schema for `vnis.route_target_directions`
+
+Read-Only:
+
+- `direction` (String) Route Target direction.
+- `route_targets` (Attributes List) List of EVPN VNI route target entries. (see [below for nested schema](#nestedatt--vnis--route_target_directions--route_targets))
+
+<a id="nestedatt--vnis--route_target_directions--route_targets"></a>
+### Nested Schema for `vnis.route_target_directions.route_targets`
+
+Read-Only:
+
+- `route_target` (String) Route Target in NX-OS DME format.

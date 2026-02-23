@@ -6,8 +6,6 @@ ds_description: This data source can read the queuing QoS policy map configurati
 res_description: This resource can manage the queuing QoS policy map configuration.
 doc_path: Qos/ipqos:PMapInst/
 doc_category: QoS
-children:
-  - Queuing QOS Policy Map Match Class Map
 attributes:
   - nxos_name: name
     tf_name: name
@@ -25,3 +23,47 @@ attributes:
       - match-first
     default_value: match-all
     example: match-any
+child_classes:
+  - class_name: ipqosMatchCMap
+    doc_path: Qos/ipqos:MatchCMap/
+    rn: cmap-%s
+    type: list
+    tf_name: match_class_maps
+    description: 'List of match class maps.'
+    attributes:
+      - nxos_name: name
+        tf_name: name
+        type: String
+        id: true
+        description: 'Class map name.'
+        example: c-out-q1
+    child_classes:
+      - class_name: ipqosPriority
+        doc_path: Qos/ipqos:Priority/
+        rn: prio
+        type: single
+        tf_name: priority
+        description: 'Priority configuration.'
+        attributes:
+          - nxos_name: level
+            tf_name: priority
+            type: Int64
+            description: 'Priority level.'
+            min_int: 1
+            max_int: 8
+            example: 1
+      - class_name: ipqosSetRemBW
+        doc_path: Qos/ipqos:SetRemBW/
+        rn: setRemBW
+        type: single
+        tf_name: remaining_bandwidth
+        description: 'Remaining bandwidth configuration.'
+        attributes:
+          - nxos_name: val
+            tf_name: remaining_bandwidth
+            type: Int64
+            description: 'Remaining bandwidth percent.'
+            min_int: 0
+            max_int: 100
+            example: 10
+            exclude_test: true

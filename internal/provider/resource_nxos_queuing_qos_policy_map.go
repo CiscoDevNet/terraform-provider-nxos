@@ -26,6 +26,7 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -63,7 +64,7 @@ func (r *QueuingQOSPolicyMapResource) Metadata(ctx context.Context, req resource
 func (r *QueuingQOSPolicyMapResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the queuing QoS policy map configuration.", "ipqosPMapInst", "Qos/ipqos:PMapInst/").AddChildren("queuing_qos_policy_map_match_class_map").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the queuing QoS policy map configuration.", "ipqosPMapInst", "Qos/ipqos:PMapInst/").AddAdditionalDocs([]string{"ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW"}, []string{"Qos/ipqos:MatchCMap/", "Qos/ipqos:Priority/", "Qos/ipqos:SetRemBW/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -91,6 +92,35 @@ func (r *QueuingQOSPolicyMapResource) Schema(ctx context.Context, req resource.S
 				Default:             stringdefault.StaticString("match-all"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("match-any", "match-all", "match-first"),
+				},
+			},
+			"match_class_maps": schema.ListNestedAttribute{
+				MarkdownDescription: "List of match class maps.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Class map name.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"priority": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Priority level.").AddIntegerRangeDescription(1, 8).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 8),
+							},
+						},
+						"remaining_bandwidth": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Remaining bandwidth percent.").AddIntegerRangeDescription(0, 100).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 100),
+							},
+						},
+					},
 				},
 			},
 		},
@@ -199,6 +229,7 @@ func (r *QueuingQOSPolicyMapResource) Read(ctx context.Context, req resource.Rea
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		queries = append(queries, nxos.Query("rsp-subtree", "full"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -241,6 +272,14 @@ func (r *QueuingQOSPolicyMapResource) Update(ctx context.Context, req resource.U
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	var state QueuingQOSPolicyMap
+
+	// Read state
+	diags = req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
@@ -256,6 +295,19 @@ func (r *QueuingQOSPolicyMapResource) Update(ctx context.Context, req resource.U
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
+		}
+
+		deletedItems := plan.getDeletedItems(ctx, state)
+		tflog.Debug(ctx, fmt.Sprintf("%s: List items to delete: %v", plan.getDn(), deletedItems))
+		for _, dn := range deletedItems {
+			res, err := device.Client.DeleteDn(dn)
+			if err != nil {
+				errCode := res.Get("imdata.0.error.attributes.code").Str
+				if errCode != "1" && errCode != "107" {
+					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+					return
+				}
+			}
 		}
 	}
 

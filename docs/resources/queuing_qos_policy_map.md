@@ -5,8 +5,8 @@ subcategory: "QoS"
 description: |-
   This resource can manage the queuing QoS policy map configuration.
   API Documentation: ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:PMapInst/
-  Child resources
-  nxos_queuing_qos_policy_map_match_class_map https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/queuing_qos_policy_map_match_class_map
+  Additional API Documentation
+  ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:MatchCMap/ipqosPriority https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Priority/ipqosSetRemBW https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:SetRemBW/
 ---
 
 # nxos_queuing_qos_policy_map (Resource)
@@ -15,9 +15,11 @@ This resource can manage the queuing QoS policy map configuration.
 
 - API Documentation: [ipqosPMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:PMapInst/)
 
-### Child resources
+### Additional API Documentation
 
-- [nxos_queuing_qos_policy_map_match_class_map](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/queuing_qos_policy_map_match_class_map)
+- [ipqosMatchCMap](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:MatchCMap/)
+- [ipqosPriority](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Priority/)
+- [ipqosSetRemBW](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:SetRemBW/)
 
 ## Example Usage
 
@@ -25,6 +27,11 @@ This resource can manage the queuing QoS policy map configuration.
 resource "nxos_queuing_qos_policy_map" "example" {
   name       = "PM1"
   match_type = "match-any"
+  match_class_maps = [{
+    name                = "c-out-q1"
+    priority            = 1
+    remaining_bandwidth = 10
+  }]
 }
 ```
 
@@ -38,6 +45,7 @@ resource "nxos_queuing_qos_policy_map" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
+- `match_class_maps` (Attributes List) List of match class maps. (see [below for nested schema](#nestedatt--match_class_maps))
 - `match_type` (String) Match type.
   - Choices: `match-any`, `match-all`, `match-first`
   - Default value: `match-all`
@@ -45,6 +53,20 @@ resource "nxos_queuing_qos_policy_map" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--match_class_maps"></a>
+### Nested Schema for `match_class_maps`
+
+Required:
+
+- `name` (String) Class map name.
+
+Optional:
+
+- `priority` (Number) Priority level.
+  - Range: `1`-`8`
+- `remaining_bandwidth` (Number) Remaining bandwidth percent.
+  - Range: `0`-`100`
 
 ## Import
 

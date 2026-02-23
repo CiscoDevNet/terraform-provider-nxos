@@ -37,6 +37,8 @@ func TestAccNxosQueuingQOSPolicyMap(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos_policy_map.test", "name", "PM1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos_policy_map.test", "match_type", "match-any"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos_policy_map.test", "match_class_maps.0.name", "c-out-q1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos_policy_map.test", "match_class_maps.0.priority", "1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -98,6 +100,10 @@ func testAccNxosQueuingQOSPolicyMapConfig_all() string {
 	config := `resource "nxos_queuing_qos_policy_map" "test" {` + "\n"
 	config += `	name = "PM1"` + "\n"
 	config += `	match_type = "match-any"` + "\n"
+	config += `	match_class_maps = [{` + "\n"
+	config += `		name = "c-out-q1"` + "\n"
+	config += `		priority = 1` + "\n"
+	config += `	}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

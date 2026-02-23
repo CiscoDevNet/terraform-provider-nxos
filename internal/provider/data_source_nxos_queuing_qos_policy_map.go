@@ -57,7 +57,7 @@ func (d *QueuingQOSPolicyMapDataSource) Metadata(_ context.Context, req datasour
 func (d *QueuingQOSPolicyMapDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the queuing QoS policy map configuration.", "ipqosPMapInst", "Qos/ipqos:PMapInst/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the queuing QoS policy map configuration.", "ipqosPMapInst", "Qos/ipqos:PMapInst/").AddAdditionalDocs([]string{"ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW"}, []string{"Qos/ipqos:MatchCMap/", "Qos/ipqos:Priority/", "Qos/ipqos:SetRemBW/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -75,6 +75,26 @@ func (d *QueuingQOSPolicyMapDataSource) Schema(ctx context.Context, req datasour
 			"match_type": schema.StringAttribute{
 				MarkdownDescription: "Match type.",
 				Computed:            true,
+			},
+			"match_class_maps": schema.ListNestedAttribute{
+				MarkdownDescription: "List of match class maps.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Class map name.",
+							Computed:            true,
+						},
+						"priority": schema.Int64Attribute{
+							MarkdownDescription: "Priority level.",
+							Computed:            true,
+						},
+						"remaining_bandwidth": schema.Int64Attribute{
+							MarkdownDescription: "Remaining bandwidth percent.",
+							Computed:            true,
+						},
+					},
+				},
 			},
 		},
 	}
@@ -110,6 +130,7 @@ func (d *QueuingQOSPolicyMapDataSource) Read(ctx context.Context, req datasource
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "full"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

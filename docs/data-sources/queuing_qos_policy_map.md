@@ -5,6 +5,8 @@ subcategory: "QoS"
 description: |-
   This data source can read the queuing QoS policy map configuration.
   API Documentation: ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:PMapInst/
+  Additional API Documentation
+  ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:MatchCMap/ipqosPriority https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Priority/ipqosSetRemBW https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:SetRemBW/
 ---
 
 # nxos_queuing_qos_policy_map (Data Source)
@@ -12,6 +14,12 @@ description: |-
 This data source can read the queuing QoS policy map configuration.
 
 - API Documentation: [ipqosPMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:PMapInst/)
+
+### Additional API Documentation
+
+- [ipqosMatchCMap](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:MatchCMap/)
+- [ipqosPriority](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Priority/)
+- [ipqosSetRemBW](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:SetRemBW/)
 
 ## Example Usage
 
@@ -35,4 +43,14 @@ data "nxos_queuing_qos_policy_map" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+- `match_class_maps` (Attributes List) List of match class maps. (see [below for nested schema](#nestedatt--match_class_maps))
 - `match_type` (String) Match type.
+
+<a id="nestedatt--match_class_maps"></a>
+### Nested Schema for `match_class_maps`
+
+Read-Only:
+
+- `name` (String) Class map name.
+- `priority` (Number) Priority level.
+- `remaining_bandwidth` (Number) Remaining bandwidth percent.

@@ -38,26 +38,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &NTPServerDataSource{}
-	_ datasource.DataSourceWithConfigure = &NTPServerDataSource{}
+	_ datasource.DataSource              = &NTPDataSource{}
+	_ datasource.DataSourceWithConfigure = &NTPDataSource{}
 )
 
-func NewNTPServerDataSource() datasource.DataSource {
-	return &NTPServerDataSource{}
+func NewNTPDataSource() datasource.DataSource {
+	return &NTPDataSource{}
 }
 
-type NTPServerDataSource struct {
+type NTPDataSource struct {
 	data *NxosProviderData
 }
 
-func (d *NTPServerDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_ntp_server"
+func (d *NTPDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_ntp"
 }
 
-func (d *NTPServerDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read an ntp server or peer.", "datetimeNtpProvider", "System/datetime:NtpProvider/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the NTP configuration.", "datetimeClkPol", "System/datetime:ClkPol/").AddAdditionalDocs([]string{"datetimeNtpProvider"}, []string{"System/datetime:NtpProvider/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -68,35 +68,43 @@ func (d *NTPServerDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
-			"name": schema.StringAttribute{
-				MarkdownDescription: "NTP server.",
-				Required:            true,
-			},
-			"vrf": schema.StringAttribute{
-				MarkdownDescription: "Identifies the VRF for the NTP providers.",
+			"servers": schema.ListNestedAttribute{
+				MarkdownDescription: "List of NTP servers or peers.",
 				Computed:            true,
-			},
-			"type": schema.StringAttribute{
-				MarkdownDescription: "NTP provider type. Possible values are `server` or `peer`.",
-				Computed:            true,
-			},
-			"key_id": schema.Int64Attribute{
-				MarkdownDescription: "NTP provider key ID. Possible range is from `1` to `65535`.",
-				Computed:            true,
-			},
-			"min_poll": schema.Int64Attribute{
-				MarkdownDescription: "NTP minimum interval default in seconds. Possible range is from `4` to `16`.",
-				Computed:            true,
-			},
-			"max_poll": schema.Int64Attribute{
-				MarkdownDescription: "NTP maximum interval default in seconds. Possible range is from `4` to `16`.",
-				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "NTP server or peer address.",
+							Computed:            true,
+						},
+						"vrf": schema.StringAttribute{
+							MarkdownDescription: "Identifies the VRF for the NTP provider.",
+							Computed:            true,
+						},
+						"type": schema.StringAttribute{
+							MarkdownDescription: "NTP provider type. Possible values are `server` or `peer`.",
+							Computed:            true,
+						},
+						"key_id": schema.Int64Attribute{
+							MarkdownDescription: "NTP provider key ID. Possible range is from `1` to `65535`.",
+							Computed:            true,
+						},
+						"min_poll": schema.Int64Attribute{
+							MarkdownDescription: "NTP minimum interval default in seconds. Possible range is from `4` to `16`.",
+							Computed:            true,
+						},
+						"max_poll": schema.Int64Attribute{
+							MarkdownDescription: "NTP maximum interval default in seconds. Possible range is from `4` to `16`.",
+							Computed:            true,
+						},
+					},
+				},
 			},
 		},
 	}
 }
 
-func (d *NTPServerDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *NTPDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -107,8 +115,8 @@ func (d *NTPServerDataSource) Configure(_ context.Context, req datasource.Config
 // End of section. //template:end model
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-func (d *NTPServerDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config NTPServer
+func (d *NTPDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config NTP
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)
@@ -126,6 +134,7 @@ func (d *NTPServerDataSource) Read(ctx context.Context, req datasource.ReadReque
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "children"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

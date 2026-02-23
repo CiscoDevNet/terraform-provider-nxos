@@ -1,0 +1,60 @@
+---
+name: NTP
+class_name: datetimeClkPol
+dn: sys/time
+no_delete: true
+ds_description: This data source can read the NTP configuration.
+res_description: This resource can manage the NTP configuration.
+doc_path: System/datetime:ClkPol/
+doc_category: System
+child_classes:
+  - class_name: datetimeNtpProvider
+    rn: prov-[%s]
+    type: list
+    tf_name: servers
+    description: 'List of NTP servers or peers.'
+    doc_path: System/datetime:NtpProvider/
+    attributes:
+      - nxos_name: name
+        tf_name: name
+        type: String
+        id: true
+        description: 'NTP server or peer address.'
+        example: 1.2.3.4
+      - nxos_name: vrf
+        tf_name: vrf
+        type: String
+        description: 'Identifies the VRF for the NTP provider.'
+        default_value: default
+        example: management
+      - nxos_name: provT
+        tf_name: type
+        type: String
+        description: 'NTP provider type. Possible values are `server` or `peer`.'
+        enum_values:
+          - server
+          - peer
+        example: server
+      - nxos_name: keyId
+        tf_name: key_id
+        type: Int64
+        description: 'NTP provider key ID. Possible range is from `1` to `65535`.'
+        min_int: 1
+        max_int: 65535
+        example: 10
+      - nxos_name: minPoll
+        tf_name: min_poll
+        type: Int64
+        description: 'NTP minimum interval default in seconds. Possible range is from `4` to `16`.'
+        default_value: 4
+        min_int: 4
+        max_int: 16
+        example: 4
+      - nxos_name: maxPoll
+        tf_name: max_poll
+        type: Int64
+        description: 'NTP maximum interval default in seconds. Possible range is from `4` to `16`.'
+        default_value: 6
+        min_int: 4
+        max_int: 16
+        example: 6

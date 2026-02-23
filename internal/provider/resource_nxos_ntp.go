@@ -47,25 +47,25 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &NTPServerResource{}
-var _ resource.ResourceWithIdentity = &NTPServerResource{}
+var _ resource.Resource = &NTPResource{}
+var _ resource.ResourceWithIdentity = &NTPResource{}
 
-func NewNTPServerResource() resource.Resource {
-	return &NTPServerResource{}
+func NewNTPResource() resource.Resource {
+	return &NTPResource{}
 }
 
-type NTPServerResource struct {
+type NTPResource struct {
 	data *NxosProviderData
 }
 
-func (r *NTPServerResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_ntp_server"
+func (r *NTPResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_ntp"
 }
 
-func (r *NTPServerResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *NTPResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage an ntp server or peer.", "datetimeNtpProvider", "System/datetime:NtpProvider/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the NTP configuration.", "datetimeClkPol", "System/datetime:ClkPol/").AddAdditionalDocs([]string{"datetimeNtpProvider"}, []string{"System/datetime:NtpProvider/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -79,71 +79,75 @@ func (r *NTPServerResource) Schema(ctx context.Context, req resource.SchemaReque
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("NTP server.").String,
-				Required:            true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
-				},
-			},
-			"vrf": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Identifies the VRF for the NTP providers.").AddDefaultValueDescription("default").String,
+			"servers": schema.ListNestedAttribute{
+				MarkdownDescription: "List of NTP servers or peers.",
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("default"),
-			},
-			"type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("NTP provider type. Possible values are `server` or `peer`.").AddStringEnumDescription("server", "peer").String,
-				Required:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("server", "peer"),
-				},
-			},
-			"key_id": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("NTP provider key ID. Possible range is from `1` to `65535`.").AddIntegerRangeDescription(1, 65535).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(1, 65535),
-				},
-			},
-			"min_poll": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("NTP minimum interval default in seconds. Possible range is from `4` to `16`.").AddIntegerRangeDescription(4, 16).AddDefaultValueDescription("4").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(4),
-				Validators: []validator.Int64{
-					int64validator.Between(4, 16),
-				},
-			},
-			"max_poll": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("NTP maximum interval default in seconds. Possible range is from `4` to `16`.").AddIntegerRangeDescription(4, 16).AddDefaultValueDescription("6").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(6),
-				Validators: []validator.Int64{
-					int64validator.Between(4, 16),
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("NTP server or peer address.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"vrf": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Identifies the VRF for the NTP provider.").AddDefaultValueDescription("default").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("default"),
+						},
+						"type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("NTP provider type. Possible values are `server` or `peer`.").AddStringEnumDescription("server", "peer").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("server", "peer"),
+							},
+						},
+						"key_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("NTP provider key ID. Possible range is from `1` to `65535`.").AddIntegerRangeDescription(1, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"min_poll": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("NTP minimum interval default in seconds. Possible range is from `4` to `16`.").AddIntegerRangeDescription(4, 16).AddDefaultValueDescription("4").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(4),
+							Validators: []validator.Int64{
+								int64validator.Between(4, 16),
+							},
+						},
+						"max_poll": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("NTP maximum interval default in seconds. Possible range is from `4` to `16`.").AddIntegerRangeDescription(4, 16).AddDefaultValueDescription("6").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(6),
+							Validators: []validator.Int64{
+								int64validator.Between(4, 16),
+							},
+						},
+					},
 				},
 			},
 		},
 	}
 }
 
-func (r *NTPServerResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+func (r *NTPResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
 	resp.IdentitySchema = identityschema.Schema{
 		Attributes: map[string]identityschema.Attribute{
 			"device": identityschema.StringAttribute{
 				Description:       "A device name from the provider configuration.",
 				OptionalForImport: true,
 			},
-			"name": identityschema.StringAttribute{
-				Description:       helpers.NewAttributeDescription("NTP server.").String,
-				RequiredForImport: true,
-			},
 		},
 	}
 }
 
-func (r *NTPServerResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *NTPResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -155,8 +159,8 @@ func (r *NTPServerResource) Configure(ctx context.Context, req resource.Configur
 // End of section. //template:end model
 
 // Section below is generated&owned by "gen/generator.go". //template:begin create
-func (r *NTPServerResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan NTPServer
+func (r *NTPResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan NTP
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -184,7 +188,7 @@ func (r *NTPServerResource) Create(ctx context.Context, req resource.CreateReque
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity NTPServerIdentity
+	var identity NTPIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -200,8 +204,8 @@ func (r *NTPServerResource) Create(ctx context.Context, req resource.CreateReque
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-func (r *NTPServerResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state NTPServer
+func (r *NTPResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state NTP
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -212,7 +216,7 @@ func (r *NTPServerResource) Read(ctx context.Context, req resource.ReadRequest, 
 
 	// Read identity if available (requires Terraform >= 1.12.0)
 	if req.Identity != nil && !req.Identity.Raw.IsNull() {
-		var identity NTPServerIdentity
+		var identity NTPIdentity
 		diags = req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
@@ -230,6 +234,7 @@ func (r *NTPServerResource) Read(ctx context.Context, req resource.ReadRequest, 
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		queries = append(queries, nxos.Query("rsp-subtree", "children"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -247,7 +252,7 @@ func (r *NTPServerResource) Read(ctx context.Context, req resource.ReadRequest, 
 		}
 	}
 
-	var identity NTPServerIdentity
+	var identity NTPIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
@@ -263,11 +268,19 @@ func (r *NTPServerResource) Read(ctx context.Context, req resource.ReadRequest, 
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-func (r *NTPServerResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan NTPServer
+func (r *NTPResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan NTP
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	var state NTP
+
+	// Read state
+	diags = req.State.Get(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -288,10 +301,23 @@ func (r *NTPServerResource) Update(ctx context.Context, req resource.UpdateReque
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
 		}
+
+		deletedItems := plan.getDeletedItems(ctx, state)
+		tflog.Debug(ctx, fmt.Sprintf("%s: List items to delete: %v", plan.getDn(), deletedItems))
+		for _, dn := range deletedItems {
+			res, err := device.Client.DeleteDn(dn)
+			if err != nil {
+				errCode := res.Get("imdata.0.error.attributes.code").Str
+				if errCode != "1" && errCode != "107" {
+					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+					return
+				}
+			}
+		}
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity NTPServerIdentity
+	var identity NTPIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
@@ -305,8 +331,8 @@ func (r *NTPServerResource) Update(ctx context.Context, req resource.UpdateReque
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-func (r *NTPServerResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state NTPServer
+func (r *NTPResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state NTP
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -354,44 +380,36 @@ func (r *NTPServerResource) Delete(ctx context.Context, req resource.DeleteReque
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-func (r *NTPServerResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *NTPResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	if req.ID != "" || req.Identity == nil || req.Identity.Raw.IsNull() {
 		idParts := strings.Split(req.ID, ",")
 		idParts = helpers.RemoveEmptyStrings(idParts)
 
-		if len(idParts) != 1 && len(idParts) != 2 {
-			expectedIdentifier := "Expected import identifier with format: '<name>'"
-			expectedIdentifier += " or '<name>,<device>'"
+		if len(idParts) != 0 && len(idParts) != 1 {
+			expectedIdentifier := "Expected import identifier with format: ''"
+			expectedIdentifier += " or '<device>'"
 			resp.Diagnostics.AddError(
 				"Unexpected Import Identifier",
 				fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
 			)
 			return
 		}
-		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("name"), idParts[0])...)
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), idParts[0])...)
-		if len(idParts) == 2 {
+		if len(idParts) == 1 {
 			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 		}
 	} else {
-		var identity NTPServerIdentity
+		var identity NTPIdentity
 		diags := req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
 		}
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), identity.Name.ValueString())...)
 		if !identity.Device.IsNull() && !identity.Device.IsUnknown() {
 			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), identity.Device.ValueString())...)
 		}
 	}
 
-	var state NTPServer
-	diags := resp.State.Get(ctx, &state)
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
+	var state NTP
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getDn())...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

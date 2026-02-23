@@ -40,6 +40,54 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
+{{- /* ==================== structFieldsTemplate ====================
+       Recursively emits struct fields for TfChildClasses.
+       - single: flatten attributes into parent struct, recurse
+       - list: emit slice field, recurse
+       Context: map with "TypePrefix" (string) and "Children" ([]TfChildClass)
+       ========================================================= */}}
+{{- define "structFieldsTemplate"}}
+{{- $typePrefix := .TypePrefix}}
+{{- range .Children}}
+{{- if eq .Type "single"}}
+{{- range .Attributes}}
+    {{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
+{{- end}}
+{{- if .TfChildClasses}}
+{{- template "structFieldsTemplate" (makeMap "TypePrefix" $typePrefix "Children" .TfChildClasses)}}
+{{- end}}
+{{- else if eq .Type "list"}}
+	{{toGoName .TfName}} []{{$typePrefix}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
+{{- end}}
+{{- end}}
+{{- end}}
+{{- /* ==================== end structFieldsTemplate ==================== */}}
+
+{{- /* ==================== childStructTypesTemplate ====================
+       Recursively declares struct types for list-type TfChildClasses.
+       Context: map with "TypePrefix" (string) and "Children" ([]TfChildClass)
+       ========================================================= */}}
+{{- define "childStructTypesTemplate"}}
+{{- $typePrefix := .TypePrefix}}
+{{- range .Children}}
+{{- if eq .Type "list"}}
+
+type {{$typePrefix}}{{toGoName .TfName}} struct {
+{{- range .Attributes}}
+	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
+{{- end}}
+{{- if .TfChildClasses}}
+{{- template "structFieldsTemplate" (makeMap "TypePrefix" $typePrefix "Children" .TfChildClasses)}}
+{{- end}}
+}
+{{- end}}
+{{- if .TfChildClasses}}
+{{- template "childStructTypesTemplate" (makeMap "TypePrefix" $typePrefix "Children" .TfChildClasses)}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- /* ==================== end childStructTypesTemplate ==================== */}}
+
 {{ $name := camelCase .Name}}
 type {{camelCase .Name}} struct {
 	Device types.String `tfsdk:"device"`
@@ -47,86 +95,9 @@ type {{camelCase .Name}} struct {
 {{- range .Attributes}}
 	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
 {{- end}}
-{{- range .TfChildClasses}}
-{{- if eq .Type "single"}}
-{{- range .Attributes}}
-    {{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
-{{- end}}
-{{- end}}
-{{- if .TfChildClasses}}
-{{- range .TfChildClasses}}
-{{- if eq .Type "single"}}
-{{- range .Attributes}}
-    {{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
-{{- end}}
-{{- if .TfChildClasses}}
-{{- range .TfChildClasses}}
-{{- if eq .Type "single"}}
-{{- range .Attributes}}
-    {{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
-{{- end}}
-{{- else if eq .Type "list"}}
-	{{toGoName .TfName}} []{{$name}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
-{{- end}}
-{{- end}}
-{{- end}}
-{{- else if eq .Type "list"}}
-	{{toGoName .TfName}} []{{$name}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
-{{- end}}
-{{- end}}
-{{- else if eq .Type "list"}}
-	{{toGoName .TfName}} []{{$name}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
-{{- end}}
-{{- end}}
+{{- template "structFieldsTemplate" (makeMap "TypePrefix" $name "Children" .TfChildClasses)}}
 }
-
-{{range .TfChildClasses}}
-{{if eq .Type "list"}}
-type {{$name}}{{toGoName .TfName}} struct {
-{{- range .Attributes}}
-	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
-{{- end}}
-{{- range .TfChildClasses}}
-{{- if eq .Type "single"}}
-{{- range .Attributes}}
-    {{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
-{{- end}}
-{{- if .TfChildClasses}}
-{{- range .TfChildClasses}}
-{{- if eq .Type "single"}}
-{{- range .Attributes}}
-    {{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
-{{- end}}
-{{- else if eq .Type "list"}}
-	{{toGoName .TfName}} []{{$name}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
-{{- end}}
-{{- end}}
-{{- end}}
-{{- else if eq .Type "list"}}
-	{{toGoName .TfName}} []{{$name}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
-{{- end}}
-{{- end}}
-}
-{{end}}
-{{- range .TfChildClasses}}
-{{- if eq .Type "list"}}
-type {{$name}}{{toGoName .TfName}} struct {
-{{- range .Attributes}}
-	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
-{{- end}}
-{{- range .TfChildClasses}}
-{{- if eq .Type "single"}}
-{{- range .Attributes}}
-    {{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
-{{- end}}
-{{- else if eq .Type "list"}}
-	{{toGoName .TfName}} []{{$name}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
-{{- end}}
-{{- end}}
-}
-{{end}}
-{{- end}}
-{{end}}
+{{- template "childStructTypesTemplate" (makeMap "TypePrefix" $name "Children" .TfChildClasses)}}
 
 
 type {{camelCase .Name}}Identity struct {

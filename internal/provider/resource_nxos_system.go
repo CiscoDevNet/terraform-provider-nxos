@@ -65,7 +65,7 @@ func (r *SystemResource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration.", "topSystem", "System/top:System/").AddAdditionalDocs([]string{"ethpmEntity", "ethpmInst"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration.", "topSystem", "System/top:System/").AddAdditionalDocs([]string{"ipqosEntity", "ipqosDefaultQoS", "ipqosServPol", "ipqosIngress", "ipqosIf", "ipqosInst", "ethpmEntity", "ethpmInst"}, []string{"Qos/ipqos:Entity/", "Qos/ipqos:DefaultQoS/", "Qos/ipqos:ServPol/", "Qos/ipqos:Ingress/", "Qos/ipqos:If/", "Qos/ipqos:Inst/", "Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -82,6 +82,25 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			"name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The system name (hostname).").String,
 				Optional:            true,
+			},
+			"default_qos_policy_interface_in": schema.ListNestedAttribute{
+				MarkdownDescription: "List of interfaces with ingress QoS policy assignments.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_id": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"policy_map_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Policy map name.").String,
+							Required:            true,
+						},
+					},
+				},
 			},
 			"mtu": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("System jumbo MTU.").AddIntegerRangeDescription(576, 9216).AddDefaultValueDescription("9216").String,
@@ -246,6 +265,14 @@ func (r *SystemResource) Update(ctx context.Context, req resource.UpdateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	var state System
+
+	// Read state
+	diags = req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
@@ -261,6 +288,19 @@ func (r *SystemResource) Update(ctx context.Context, req resource.UpdateRequest,
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
+		}
+
+		deletedItems := plan.getDeletedItems(ctx, state)
+		tflog.Debug(ctx, fmt.Sprintf("%s: List items to delete: %v", plan.getDn(), deletedItems))
+		for _, dn := range deletedItems {
+			res, err := device.Client.DeleteDn(dn)
+			if err != nil {
+				errCode := res.Get("imdata.0.error.attributes.code").Str
+				if errCode != "1" && errCode != "107" {
+					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+					return
+				}
+			}
 		}
 	}
 

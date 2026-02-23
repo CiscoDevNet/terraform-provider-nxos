@@ -23,6 +23,7 @@ package provider
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -36,11 +37,17 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type System struct {
-	Device             types.String `tfsdk:"device"`
-	Dn                 types.String `tfsdk:"id"`
-	Name               types.String `tfsdk:"name"`
-	Mtu                types.Int64  `tfsdk:"mtu"`
-	DefaultAdminStatus types.String `tfsdk:"default_admin_status"`
+	Device                      types.String                        `tfsdk:"device"`
+	Dn                          types.String                        `tfsdk:"id"`
+	Name                        types.String                        `tfsdk:"name"`
+	DefaultQosPolicyInterfaceIn []SystemDefaultQosPolicyInterfaceIn `tfsdk:"default_qos_policy_interface_in"`
+	Mtu                         types.Int64                         `tfsdk:"mtu"`
+	DefaultAdminStatus          types.String                        `tfsdk:"default_admin_status"`
+}
+
+type SystemDefaultQosPolicyInterfaceIn struct {
+	InterfaceId   types.String `tfsdk:"interface_id"`
+	PolicyMapName types.String `tfsdk:"policy_map_name"`
 }
 
 type SystemIdentity struct {
@@ -71,6 +78,10 @@ func (data System) getDn() string {
 	return "sys"
 }
 
+func (data SystemDefaultQosPolicyInterfaceIn) getRn() string {
+	return fmt.Sprintf("intf-[%s]", data.InterfaceId.ValueString())
+}
+
 func (data System) getClassName() string {
 	return "topSystem"
 }
@@ -87,6 +98,52 @@ func (data System) toBody() nxos.Body {
 	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipqosEntity"
+		attrs = "{}"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosDefaultQoS"
+			attrs = "{}"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+			nestedChildrenPath := childBodyPath + ".children"
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosServPol"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				{
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosIngress"
+					attrs = "{}"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+					nestedChildrenPath := childBodyPath + ".children"
+					for _, child := range data.DefaultQosPolicyInterfaceIn {
+						attrs = "{}"
+						if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "name", child.InterfaceId.ValueString())
+						}
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosIf.attributes", attrs)
+						{
+							nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+							nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipqosIf.children"
+							attrs = "{}"
+							if (!child.PolicyMapName.IsUnknown() && !child.PolicyMapName.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "name", child.PolicyMapName.ValueString())
+							}
+							if attrs != "{}" || false {
+								body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosInst.attributes", attrs)
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 	{
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ethpmEntity"
@@ -114,6 +171,79 @@ func (data System) toBody() nxos.Body {
 
 func (data *System) fromBody(res gjson.Result) {
 	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	var ripqosEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("ipqosEntity.attributes.rn").String()
+			if key == "ipqos" {
+				ripqosEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	var ripqosDefaultQoS gjson.Result
+	ripqosEntity.Get("ipqosEntity.children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("ipqosDefaultQoS.attributes.rn").String()
+			if key == "dflt" {
+				ripqosDefaultQoS = v
+				return false
+			}
+			return true
+		},
+	)
+	var ripqosServPol gjson.Result
+	ripqosDefaultQoS.Get("ipqosDefaultQoS.children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("ipqosServPol.attributes.rn").String()
+			if key == "policy" {
+				ripqosServPol = v
+				return false
+			}
+			return true
+		},
+	)
+	var ripqosIngress gjson.Result
+	ripqosServPol.Get("ipqosServPol.children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("ipqosIngress.attributes.rn").String()
+			if key == "in" {
+				ripqosIngress = v
+				return false
+			}
+			return true
+		},
+	)
+	ripqosIngress.Get("ipqosIngress.children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "ipqosIf" {
+						var child SystemDefaultQosPolicyInterfaceIn
+						child.InterfaceId = types.StringValue(value.Get("attributes.name").String())
+						{
+							var ripqosInst gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									key := nestedV.Get("ipqosInst.attributes.rn").String()
+									if key == "pmap" {
+										ripqosInst = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.PolicyMapName = types.StringValue(ripqosInst.Get("ipqosInst.attributes.name").String())
+						}
+						data.DefaultQosPolicyInterfaceIn = append(data.DefaultQosPolicyInterfaceIn, child)
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
 	var rethpmEntity gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -149,6 +279,86 @@ func (data *System) updateFromBody(res gjson.Result) {
 		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
 		data.Name = types.StringNull()
+	}
+	var ripqosEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("ipqosEntity.attributes.rn").String()
+			if key == "ipqos" {
+				ripqosEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	var ripqosDefaultQoS gjson.Result
+	ripqosEntity.Get("ipqosEntity.children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("ipqosDefaultQoS.attributes.rn").String()
+			if key == "dflt" {
+				ripqosDefaultQoS = v
+				return false
+			}
+			return true
+		},
+	)
+	var ripqosServPol gjson.Result
+	ripqosDefaultQoS.Get("ipqosDefaultQoS.children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("ipqosServPol.attributes.rn").String()
+			if key == "policy" {
+				ripqosServPol = v
+				return false
+			}
+			return true
+		},
+	)
+	var ripqosIngress gjson.Result
+	ripqosServPol.Get("ipqosServPol.children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("ipqosIngress.attributes.rn").String()
+			if key == "in" {
+				ripqosIngress = v
+				return false
+			}
+			return true
+		},
+	)
+	for c := range data.DefaultQosPolicyInterfaceIn {
+		var ripqosIf gjson.Result
+		ripqosIngress.Get("ipqosIngress.children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("ipqosIf.attributes.rn").String()
+				if key == data.DefaultQosPolicyInterfaceIn[c].getRn() {
+					ripqosIf = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.DefaultQosPolicyInterfaceIn[c].InterfaceId.IsNull() {
+			data.DefaultQosPolicyInterfaceIn[c].InterfaceId = types.StringValue(ripqosIf.Get("ipqosIf.attributes.name").String())
+		} else {
+			data.DefaultQosPolicyInterfaceIn[c].InterfaceId = types.StringNull()
+		}
+		{
+			var ripqosInst gjson.Result
+			ripqosIf.Get("ipqosIf.children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("ipqosInst.attributes.rn").String()
+					if key == "pmap" {
+						ripqosInst = v
+						return false
+					}
+					return true
+				},
+			)
+			if !data.DefaultQosPolicyInterfaceIn[c].PolicyMapName.IsNull() {
+				data.DefaultQosPolicyInterfaceIn[c].PolicyMapName = types.StringValue(ripqosInst.Get("ipqosInst.attributes.name").String())
+			} else {
+				data.DefaultQosPolicyInterfaceIn[c].PolicyMapName = types.StringNull()
+			}
+		}
 	}
 	var rethpmEntity gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
@@ -206,6 +416,9 @@ func (data System) toDeleteBody() nxos.Body {
 
 func (data System) getDeleteDns() []string {
 	dns := []string{}
+	for _, child := range data.DefaultQosPolicyInterfaceIn {
+		dns = append(dns, data.getDn()+"/ipqos"+"/dflt"+"/policy"+"/in"+"/"+child.getRn())
+	}
 
 	return dns
 }
@@ -213,5 +426,29 @@ func (data System) getDeleteDns() []string {
 // End of section. //template:end getDeleteDns
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data System) getDeletedItems(ctx context.Context, state System) []string {
+	deletedItems := []string{}
+	for _, stateChild := range state.DefaultQosPolicyInterfaceIn {
+		found := false
+		for _, planChild := range data.DefaultQosPolicyInterfaceIn {
+			if stateChild.InterfaceId == planChild.InterfaceId {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, data.getDn()+"/ipqos"+"/dflt"+"/policy"+"/in"+"/"+stateChild.getRn())
+		}
+	}
+	for di := range state.DefaultQosPolicyInterfaceIn {
+		for pdi := range data.DefaultQosPolicyInterfaceIn {
+			if state.DefaultQosPolicyInterfaceIn[di].InterfaceId == data.DefaultQosPolicyInterfaceIn[pdi].InterfaceId {
+				break
+			}
+		}
+	}
+	return deletedItems
+}
 
 // End of section. //template:end getDeletedItems

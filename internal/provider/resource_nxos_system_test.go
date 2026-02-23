@@ -36,6 +36,8 @@ import (
 func TestAccNxosSystem(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "name", "LEAF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "default_qos_policy_interface_in.0.interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "default_qos_policy_interface_in.0.policy_map_name", "PM1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "mtu", "9216"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "default_admin_status", "up"))
 	var tfVersion *goversion.Version
@@ -47,7 +49,7 @@ func TestAccNxosSystem(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosSystemConfig_all(),
+				Config: testAccNxosSystemPrerequisitesConfig + testAccNxosSystemConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -79,12 +81,23 @@ func nxosSystemImportStateIdFunc(resourceName string) resource.ImportStateIdFunc
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccNxosSystemPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/ipqos/dflt/p/name-[PM1]"
+  class_name = "ipqosPMapInst"
+  content = {
+      name = "PM1"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosSystemConfig_minimum() string {
 	config := `resource "nxos_system" "test" {` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -95,8 +108,13 @@ func testAccNxosSystemConfig_minimum() string {
 func testAccNxosSystemConfig_all() string {
 	config := `resource "nxos_system" "test" {` + "\n"
 	config += `	name = "LEAF1"` + "\n"
+	config += `	default_qos_policy_interface_in = [{` + "\n"
+	config += `		interface_id = "eth1/10"` + "\n"
+	config += `		policy_map_name = "PM1"` + "\n"
+	config += `	}]` + "\n"
 	config += `	mtu = 9216` + "\n"
 	config += `	default_admin_status = "up"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

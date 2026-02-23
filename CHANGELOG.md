@@ -29,6 +29,7 @@
 - BREAKING CHANGE: Remove `nxos_ipv4_static_route` resource and data source, `nxos_ipv4_interface` resource and data source, and `nxos_ipv4_interface_address` resource and data source, IPv4 configuration is now managed as a single `nxos_ipv4_vrf` resource and data source
 - BREAKING CHANGE: Remove `nxos_ipv6_static_route` resource and data source, `nxos_ipv6_interface` resource and data source, and `nxos_ipv6_interface_address` resource and data source, IPv6 configuration is now managed as a single `nxos_ipv6_vrf` resource and data source
 - BREAKING CHANGE: Remove `nxos_default_qos_policy_map_match_class_map` resource and data source, `nxos_default_qos_policy_map_match_class_map_set_qos_group` resource and data source, and `nxos_default_qos_policy_map_match_class_map_police` resource and data source, default QoS policy map configuration is now managed as a single `nxos_default_qos_policy_map` resource and data source
+- BREAKING CHANGE: Remove `nxos_default_qos_policy_interface_in` resource and data source and `nxos_default_qos_policy_interface_in_policy_map` resource and data source, default QoS policy interface in configuration is now managed as part of `nxos_system` resource and data source
 
 ## 0.7.0
 

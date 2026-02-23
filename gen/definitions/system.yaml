@@ -14,6 +14,57 @@ attributes:
     description: 'The system name (hostname).'
     example: 'LEAF1'
 child_classes:
+  - class_name: ipqosEntity
+    doc_path: Qos/ipqos:Entity/
+    rn: ipqos
+    type: single
+    no_delete: true
+    child_classes:
+      - class_name: ipqosDefaultQoS
+        doc_path: Qos/ipqos:DefaultQoS/
+        rn: dflt
+        type: single
+        no_delete: true
+        child_classes:
+          - class_name: ipqosServPol
+            doc_path: Qos/ipqos:ServPol/
+            rn: policy
+            type: single
+            no_delete: true
+            child_classes:
+              - class_name: ipqosIngress
+                doc_path: Qos/ipqos:Ingress/
+                rn: in
+                type: single
+                no_delete: true
+                child_classes:
+                  - class_name: ipqosIf
+                    doc_path: Qos/ipqos:If/
+                    rn: intf-[%s]
+                    type: list
+                    tf_name: default_qos_policy_interface_in
+                    description: 'List of interfaces with ingress QoS policy assignments.'
+                    attributes:
+                      - nxos_name: name
+                        tf_name: interface_id
+                        type: String
+                        id: true
+                        description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+                        example: eth1/10
+                    child_classes:
+                      - class_name: ipqosInst
+                        doc_path: Qos/ipqos:Inst/
+                        rn: pmap
+                        type: single
+                        tf_name: policy_map
+                        description: 'Ingress QoS policy map assignment.'
+                        attributes:
+                          - nxos_name: name
+                            tf_name: policy_map_name
+                            type: String
+                            mandatory: true
+                            description: 'Policy map name.'
+                            example: PM1
   - class_name: ethpmEntity
     doc_path: Interfaces/ethpm:Entity/
     rn: ethpm
@@ -45,3 +96,9 @@ child_classes:
             default_value: up
             example: up
             delete_value: "DME_UNSET_PROPERTY_MARKER"
+test_prerequisites:
+  - dn: sys/ipqos/dflt/p/name-[PM1]
+    class_name: ipqosPMapInst
+    attributes:
+      - name: name
+        value: PM1

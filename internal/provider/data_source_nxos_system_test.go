@@ -32,6 +32,12 @@ import (
 func TestAccDataSourceNxosSystem(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "name", "LEAF1"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_system.test", "default_qos_policy_interface_in.*", map[string]string{
+		"interface_id": "eth1/10",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_system.test", "default_qos_policy_interface_in.*", map[string]string{
+		"policy_map_name": "PM1",
+	}))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "mtu", "9216"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "default_admin_status", "up"))
 	resource.Test(t, resource.TestCase{
@@ -39,7 +45,7 @@ func TestAccDataSourceNxosSystem(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosSystemConfig(),
+				Config: testAccDataSourceNxosSystemPrerequisitesConfig + testAccDataSourceNxosSystemConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -49,6 +55,16 @@ func TestAccDataSourceNxosSystem(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccDataSourceNxosSystemPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/ipqos/dflt/p/name-[PM1]"
+  class_name = "ipqosPMapInst"
+  content = {
+      name = "PM1"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -56,8 +72,13 @@ func TestAccDataSourceNxosSystem(t *testing.T) {
 func testAccDataSourceNxosSystemConfig() string {
 	config := `resource "nxos_system" "test" {` + "\n"
 	config += `	name = "LEAF1"` + "\n"
+	config += `	default_qos_policy_interface_in = [{` + "\n"
+	config += `		interface_id = "eth1/10"` + "\n"
+	config += `		policy_map_name = "PM1"` + "\n"
+	config += `	}]` + "\n"
 	config += `	mtu = 9216` + "\n"
 	config += `	default_admin_status = "up"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

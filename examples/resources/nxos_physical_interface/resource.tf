@@ -2,7 +2,7 @@ resource "nxos_physical_interface" "example" {
   interface_id             = "eth1/10"
   fec_mode                 = "auto"
   access_vlan              = "unknown"
-  admin_state              = "up"
+  admin_state              = "down"
   auto_negotiation         = "on"
   bandwidth                = 1000
   delay                    = 10
@@ -21,4 +21,5 @@ resource "nxos_physical_interface" "example" {
   trunk_vlans              = "1-4094"
   uni_directional_ethernet = "disable"
   user_configured_flags    = "admin_layer,admin_mtu,admin_state"
+  vrf_dn                   = "sys/inst-default"
 }

@@ -5,6 +5,8 @@ subcategory: "Interface"
 description: |-
   This data source can read the configuration of a physical interface.
   API Documentation: l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/l1:PhysIf/
+  Additional API Documentation
+  nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
 ---
 
 # nxos_physical_interface (Data Source)
@@ -12,6 +14,10 @@ description: |-
 This data source can read the configuration of a physical interface.
 
 - API Documentation: [l1PhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/l1:PhysIf/)
+
+### Additional API Documentation
+
+- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 
 ## Example Usage
 
@@ -56,3 +62,4 @@ data "nxos_physical_interface" "example" {
 - `trunk_vlans` (String) List of trunk VLANs.
 - `uni_directional_ethernet` (String) UDE (Uni-Directional Ethernet).
 - `user_configured_flags` (String) Port User Config Flags.
+- `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.

@@ -61,6 +61,7 @@ type PhysicalInterface struct {
 	TrunkVlans             types.String `tfsdk:"trunk_vlans"`
 	UniDirectionalEthernet types.String `tfsdk:"uni_directional_ethernet"`
 	UserConfiguredFlags    types.String `tfsdk:"user_configured_flags"`
+	VrfDn                  types.String `tfsdk:"vrf_dn"`
 }
 
 type PhysicalInterfaceIdentity struct {
@@ -171,6 +172,15 @@ func (data PhysicalInterface) toBody() nxos.Body {
 	if (!data.UserConfiguredFlags.IsUnknown() && !data.UserConfiguredFlags.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"userCfgdFlags", data.UserConfiguredFlags.ValueString())
 	}
+	var attrs string
+	childrenPath := data.getClassName() + ".children"
+	attrs = "{}"
+	if (!data.VrfDn.IsUnknown() && !data.VrfDn.IsNull()) || false {
+		attrs, _ = sjson.Set(attrs, "tDn", data.VrfDn.ValueString())
+	}
+	if attrs != "{}" || false {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.nwRtVrfMbr.attributes", attrs)
+	}
 
 	return nxos.Body{body}
 }
@@ -202,6 +212,18 @@ func (data *PhysicalInterface) fromBody(res gjson.Result) {
 	data.TrunkVlans = types.StringValue(res.Get(data.getClassName() + ".attributes.trunkVlans").String())
 	data.UniDirectionalEthernet = types.StringValue(res.Get(data.getClassName() + ".attributes.uniDirectionalEthernet").String())
 	data.UserConfiguredFlags = types.StringValue(res.Get(data.getClassName() + ".attributes.userCfgdFlags").String())
+	var rnwRtVrfMbr gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("nwRtVrfMbr.attributes.rn").String()
+			if key == "rtvrfMbr" {
+				rnwRtVrfMbr = v
+				return false
+			}
+			return true
+		},
+	)
+	data.VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
 }
 
 // End of section. //template:end fromBody
@@ -319,6 +341,22 @@ func (data *PhysicalInterface) updateFromBody(res gjson.Result) {
 	} else {
 		data.UserConfiguredFlags = types.StringNull()
 	}
+	var rnwRtVrfMbr gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("nwRtVrfMbr.attributes.rn").String()
+			if key == "rtvrfMbr" {
+				rnwRtVrfMbr = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.VrfDn.IsNull() {
+		data.VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
+	} else {
+		data.VrfDn = types.StringNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -400,6 +438,7 @@ func (data PhysicalInterface) toDeleteBody() nxos.Body {
 
 func (data PhysicalInterface) getDeleteDns() []string {
 	dns := []string{}
+	dns = append(dns, data.getDn()+"/rtvrfMbr")
 
 	return dns
 }

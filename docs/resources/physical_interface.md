@@ -5,8 +5,8 @@ subcategory: "Interface"
 description: |-
   This resource can manage a physical interface.
   API Documentation: l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/l1:PhysIf/
-  Child resources
-  nxos_physical_interface_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/physical_interface_vrf
+  Additional API Documentation
+  nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
 ---
 
 # nxos_physical_interface (Resource)
@@ -15,9 +15,9 @@ This resource can manage a physical interface.
 
 - API Documentation: [l1PhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/l1:PhysIf/)
 
-### Child resources
+### Additional API Documentation
 
-- [nxos_physical_interface_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/physical_interface_vrf)
+- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 
 ## Example Usage
 
@@ -26,7 +26,7 @@ resource "nxos_physical_interface" "example" {
   interface_id             = "eth1/10"
   fec_mode                 = "auto"
   access_vlan              = "unknown"
-  admin_state              = "up"
+  admin_state              = "down"
   auto_negotiation         = "on"
   bandwidth                = 1000
   delay                    = 10
@@ -45,6 +45,7 @@ resource "nxos_physical_interface" "example" {
   trunk_vlans              = "1-4094"
   uni_directional_ethernet = "disable"
   user_configured_flags    = "admin_layer,admin_mtu,admin_state"
+  vrf_dn                   = "sys/inst-default"
 }
 ```
 
@@ -114,6 +115,7 @@ resource "nxos_physical_interface" "example" {
   - Choices: `disable`, `send-only`, `receive-only`
   - Default value: `disable`
 - `user_configured_flags` (String) Port User Config Flags.
+- `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.
 
 ### Read-Only
 

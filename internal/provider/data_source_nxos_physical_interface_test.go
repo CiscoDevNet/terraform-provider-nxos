@@ -34,7 +34,7 @@ func TestAccDataSourceNxosPhysicalInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "interface_id", "eth1/10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "fec_mode", "auto"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "access_vlan", "unknown"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "admin_state", "up"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "admin_state", "down"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "auto_negotiation", "on"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "bandwidth", "1000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "delay", "10"))
@@ -53,6 +53,7 @@ func TestAccDataSourceNxosPhysicalInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "trunk_vlans", "1-4094"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "uni_directional_ethernet", "disable"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "user_configured_flags", "admin_layer,admin_mtu,admin_state"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_physical_interface.test", "vrf_dn", "sys/inst-default"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -77,7 +78,7 @@ func testAccDataSourceNxosPhysicalInterfaceConfig() string {
 	config += `	interface_id = "eth1/10"` + "\n"
 	config += `	fec_mode = "auto"` + "\n"
 	config += `	access_vlan = "unknown"` + "\n"
-	config += `	admin_state = "up"` + "\n"
+	config += `	admin_state = "down"` + "\n"
 	config += `	auto_negotiation = "on"` + "\n"
 	config += `	bandwidth = 1000` + "\n"
 	config += `	delay = 10` + "\n"
@@ -96,6 +97,7 @@ func testAccDataSourceNxosPhysicalInterfaceConfig() string {
 	config += `	trunk_vlans = "1-4094"` + "\n"
 	config += `	uni_directional_ethernet = "disable"` + "\n"
 	config += `	user_configured_flags = "admin_layer,admin_mtu,admin_state"` + "\n"
+	config += `	vrf_dn = "sys/inst-default"` + "\n"
 	config += `}` + "\n"
 
 	config += `

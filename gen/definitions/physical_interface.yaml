@@ -7,8 +7,6 @@ ds_description: This data source can read the configuration of a physical interf
 res_description: This resource can manage a physical interface.
 doc_path: System/l1:PhysIf/
 doc_category: Interface
-children:
-  - Physical Interface VRF
 attributes:
   - nxos_name: id
     tf_name: interface_id
@@ -46,7 +44,7 @@ attributes:
       - up
       - down
     default_value: up
-    example: up
+    example: down
     delete_value: DME_UNSET_PROPERTY_MARKER
   - nxos_name: autoNeg
     tf_name: auto_negotiation
@@ -240,3 +238,14 @@ attributes:
     description: 'Port User Config Flags.'
     example: 'admin_layer,admin_mtu,admin_state'
     delete_value: none
+child_classes:
+  - class_name: nwRtVrfMbr
+    rn: rtvrfMbr
+    type: single
+    doc_path: Routing%20and%20Forwarding/nw:RtVrfMbr/
+    attributes:
+      - nxos_name: tDn
+        tf_name: vrf_dn
+        type: String
+        description: 'DN of VRF. For example: `sys/inst-VRF1`.'
+        example: sys/inst-default

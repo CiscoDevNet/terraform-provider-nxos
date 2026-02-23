@@ -307,6 +307,16 @@ func ImportAttributes(config YamlConfig) []YamlConfigAttribute {
 	return attributes
 }
 
+// Templating helper function to check if any attribute is testable (not excluded and not write-only)
+func HasTestAttrs(attributes []YamlConfigAttribute) bool {
+	for _, attr := range attributes {
+		if !attr.ExcludeTest && !attr.WriteOnly {
+			return true
+		}
+	}
+	return false
+}
+
 // Templating helper function to check if any attribute has a delete_value
 func HasDeleteValue(attributes []YamlConfigAttribute) bool {
 	for _, attr := range attributes {
@@ -383,6 +393,7 @@ var functions = template.FuncMap{
 	"importAttributes":   ImportAttributes,
 	"hasDeleteValue":      HasDeleteValue,
 	"hasListChildClasses": HasListChildClasses,
+	"hasTestAttrs":        HasTestAttrs,
 	"makeMap":             MakeMap,
 	"rnHasDynamicSegment": RnHasDynamicSegment,
 	"rnFormatArgs":        RnFormatArgs,

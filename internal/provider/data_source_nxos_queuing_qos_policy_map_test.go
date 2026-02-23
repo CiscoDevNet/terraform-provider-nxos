@@ -39,7 +39,6 @@ func TestAccDataSourceNxosQueuingQOSPolicyMap(t *testing.T) {
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_queuing_qos_policy_map.test", "match_class_maps.*", map[string]string{
 		"priority": "1",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_queuing_qos_policy_map.test", "match_class_maps.*", map[string]string{}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,

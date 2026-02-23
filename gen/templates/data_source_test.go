@@ -49,6 +49,7 @@ import (
 {{- $list := .TfName}}
 {{- if eq .Type "single"}}
 {{- if $inList}}
+{{- if hasTestAttrs .Attributes}}
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_{{snakeCase $name}}.test", "{{$setPath}}", map[string]string{
 		{{- range .Attributes}}
 		{{- if and (not .ExcludeTest) (not .WriteOnly)}}
@@ -56,6 +57,7 @@ import (
 		{{- end}}
 		{{- end}}
 	}))
+{{- end}}
 {{- if .TfChildClasses}}
 {{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" $pathPrefix "InList" true "SetPath" $setPath)}}
 {{- end}}

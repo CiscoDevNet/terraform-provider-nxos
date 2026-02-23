@@ -38,26 +38,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &SpanningTreeInterfaceDataSource{}
-	_ datasource.DataSourceWithConfigure = &SpanningTreeInterfaceDataSource{}
+	_ datasource.DataSource              = &SpanningTreeDataSource{}
+	_ datasource.DataSourceWithConfigure = &SpanningTreeDataSource{}
 )
 
-func NewSpanningTreeInterfaceDataSource() datasource.DataSource {
-	return &SpanningTreeInterfaceDataSource{}
+func NewSpanningTreeDataSource() datasource.DataSource {
+	return &SpanningTreeDataSource{}
 }
 
-type SpanningTreeInterfaceDataSource struct {
+type SpanningTreeDataSource struct {
 	data *NxosProviderData
 }
 
-func (d *SpanningTreeInterfaceDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_spanning_tree_interface"
+func (d *SpanningTreeDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_spanning_tree"
 }
 
-func (d *SpanningTreeInterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *SpanningTreeDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the Spanning Tree interface configuration.", "stpIf", "Discovery%20Protocols/stp:If/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the Spanning Tree configuration.", "stpEntity", "Discovery%20Protocols/stp:Entity/").AddAdditionalDocs([]string{"stpInst", "stpIf"}, []string{"Discovery%20Protocols/stp:Inst/", "Discovery%20Protocols/stp:If/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -68,47 +68,55 @@ func (d *SpanningTreeInterfaceDataSource) Schema(ctx context.Context, req dataso
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
-			"interface_id": schema.StringAttribute{
-				MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
-				Required:            true,
-			},
-			"admin_state": schema.StringAttribute{
-				MarkdownDescription: "The administrative state of the object or policy.",
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "List of Spanning Tree interfaces.",
 				Computed:            true,
-			},
-			"bpdu_filter": schema.StringAttribute{
-				MarkdownDescription: "BPDU filter mode.",
-				Computed:            true,
-			},
-			"bpdu_guard": schema.StringAttribute{
-				MarkdownDescription: "BPDU guard mode.",
-				Computed:            true,
-			},
-			"cost": schema.Int64Attribute{
-				MarkdownDescription: "Port path cost.",
-				Computed:            true,
-			},
-			"guard": schema.StringAttribute{
-				MarkdownDescription: "Guard mode.",
-				Computed:            true,
-			},
-			"link_type": schema.StringAttribute{
-				MarkdownDescription: "Link type.",
-				Computed:            true,
-			},
-			"mode": schema.StringAttribute{
-				MarkdownDescription: "Port mode.",
-				Computed:            true,
-			},
-			"priority": schema.Int64Attribute{
-				MarkdownDescription: "Port priority.",
-				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_id": schema.StringAttribute{
+							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
+							Computed:            true,
+						},
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: "The administrative state of the object or policy.",
+							Computed:            true,
+						},
+						"bpdu_filter": schema.StringAttribute{
+							MarkdownDescription: "BPDU filter mode.",
+							Computed:            true,
+						},
+						"bpdu_guard": schema.StringAttribute{
+							MarkdownDescription: "BPDU guard mode.",
+							Computed:            true,
+						},
+						"cost": schema.Int64Attribute{
+							MarkdownDescription: "Port path cost.",
+							Computed:            true,
+						},
+						"guard": schema.StringAttribute{
+							MarkdownDescription: "Guard mode.",
+							Computed:            true,
+						},
+						"link_type": schema.StringAttribute{
+							MarkdownDescription: "Link type.",
+							Computed:            true,
+						},
+						"mode": schema.StringAttribute{
+							MarkdownDescription: "Port mode.",
+							Computed:            true,
+						},
+						"priority": schema.Int64Attribute{
+							MarkdownDescription: "Port priority.",
+							Computed:            true,
+						},
+					},
+				},
 			},
 		},
 	}
 }
 
-func (d *SpanningTreeInterfaceDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *SpanningTreeDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -119,8 +127,8 @@ func (d *SpanningTreeInterfaceDataSource) Configure(_ context.Context, req datas
 // End of section. //template:end model
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-func (d *SpanningTreeInterfaceDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config SpanningTreeInterface
+func (d *SpanningTreeDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config SpanningTree
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)
@@ -138,6 +146,7 @@ func (d *SpanningTreeInterfaceDataSource) Read(ctx context.Context, req datasour
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "full"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

@@ -1,0 +1,108 @@
+---
+name: Spanning Tree
+class_name: stpEntity
+dn: sys/stp
+no_delete: true
+ds_description: This data source can read the Spanning Tree configuration.
+res_description: This resource can manage the Spanning Tree configuration.
+doc_path: Discovery%20Protocols/stp:Entity/
+doc_category: Switching
+child_classes:
+  - class_name: stpInst
+    rn: inst
+    type: single
+    no_delete: true
+    description: 'Spanning Tree instance configuration.'
+    doc_path: Discovery%20Protocols/stp:Inst/
+    child_classes:
+      - class_name: stpIf
+        rn: if-[%s]
+        type: list
+        tf_name: interfaces
+        description: 'List of Spanning Tree interfaces.'
+        doc_path: Discovery%20Protocols/stp:If/
+        attributes:
+          - nxos_name: id
+            tf_name: interface_id
+            type: String
+            id: true
+            description: "Must match first field in the output of `show intf brief`. Example: `eth1/1`."
+            example: eth1/9
+          - nxos_name: adminSt
+            tf_name: admin_state
+            type: String
+            enum_values:
+              - enabled
+              - disabled
+            default_value: enabled
+            description: "The administrative state of the object or policy."
+            example: enabled
+          - nxos_name: bpdufilter
+            tf_name: bpdu_filter
+            type: String
+            enum_values:
+              - default
+              - enable
+              - disable
+            default_value: default
+            description: "BPDU filter mode."
+            example: enable
+          - nxos_name: bpduguard
+            tf_name: bpdu_guard
+            type: String
+            enum_values:
+              - default
+              - enable
+              - disable
+            default_value: default
+            description: "BPDU guard mode."
+            example: enable
+          - nxos_name: cost
+            tf_name: cost
+            type: Int64
+            min_int: 0
+            max_int: 200000000
+            default_value: 0
+            description: "Port path cost."
+            example: 100
+          - nxos_name: guard
+            tf_name: guard
+            type: String
+            enum_values:
+              - default
+              - root
+              - loop
+              - none
+            default_value: default
+            description: "Guard mode."
+            example: root
+          - nxos_name: linkType
+            tf_name: link_type
+            type: String
+            enum_values:
+              - auto
+              - p2p
+              - shared
+            default_value: auto
+            description: "Link type."
+            example: p2p
+          - nxos_name: mode
+            tf_name: mode
+            type: String
+            enum_values:
+              - default
+              - edge
+              - network
+              - normal
+              - trunk
+            default_value: default
+            description: "Port mode."
+            example: edge
+          - nxos_name: priority
+            tf_name: priority
+            type: Int64
+            min_int: 0
+            max_int: 224
+            default_value: 128
+            description: "Port priority."
+            example: 200

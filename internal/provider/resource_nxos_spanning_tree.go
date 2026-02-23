@@ -47,25 +47,25 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &SpanningTreeInterfaceResource{}
-var _ resource.ResourceWithIdentity = &SpanningTreeInterfaceResource{}
+var _ resource.Resource = &SpanningTreeResource{}
+var _ resource.ResourceWithIdentity = &SpanningTreeResource{}
 
-func NewSpanningTreeInterfaceResource() resource.Resource {
-	return &SpanningTreeInterfaceResource{}
+func NewSpanningTreeResource() resource.Resource {
+	return &SpanningTreeResource{}
 }
 
-type SpanningTreeInterfaceResource struct {
+type SpanningTreeResource struct {
 	data *NxosProviderData
 }
 
-func (r *SpanningTreeInterfaceResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_spanning_tree_interface"
+func (r *SpanningTreeResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_spanning_tree"
 }
 
-func (r *SpanningTreeInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *SpanningTreeResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Spanning Tree interface configuration.", "stpIf", "Discovery%20Protocols/stp:If/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Spanning Tree configuration.", "stpEntity", "Discovery%20Protocols/stp:Entity/").AddAdditionalDocs([]string{"stpInst", "stpIf"}, []string{"Discovery%20Protocols/stp:Inst/", "Discovery%20Protocols/stp:If/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -79,105 +79,109 @@ func (r *SpanningTreeInterfaceResource) Schema(ctx context.Context, req resource
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"interface_id": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
-				Required:            true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
-				},
-			},
-			"admin_state": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "List of Spanning Tree interfaces.",
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("enabled"),
-				Validators: []validator.String{
-					stringvalidator.OneOf("enabled", "disabled"),
-				},
-			},
-			"bpdu_filter": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("BPDU filter mode.").AddStringEnumDescription("default", "enable", "disable").AddDefaultValueDescription("default").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("default"),
-				Validators: []validator.String{
-					stringvalidator.OneOf("default", "enable", "disable"),
-				},
-			},
-			"bpdu_guard": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("BPDU guard mode.").AddStringEnumDescription("default", "enable", "disable").AddDefaultValueDescription("default").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("default"),
-				Validators: []validator.String{
-					stringvalidator.OneOf("default", "enable", "disable"),
-				},
-			},
-			"cost": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Port path cost.").AddIntegerRangeDescription(0, 200000000).AddDefaultValueDescription("0").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(0),
-				Validators: []validator.Int64{
-					int64validator.Between(0, 200000000),
-				},
-			},
-			"guard": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Guard mode.").AddStringEnumDescription("default", "root", "loop", "none").AddDefaultValueDescription("default").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("default"),
-				Validators: []validator.String{
-					stringvalidator.OneOf("default", "root", "loop", "none"),
-				},
-			},
-			"link_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Link type.").AddStringEnumDescription("auto", "p2p", "shared").AddDefaultValueDescription("auto").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("auto"),
-				Validators: []validator.String{
-					stringvalidator.OneOf("auto", "p2p", "shared"),
-				},
-			},
-			"mode": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Port mode.").AddStringEnumDescription("default", "edge", "network", "normal", "trunk").AddDefaultValueDescription("default").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("default"),
-				Validators: []validator.String{
-					stringvalidator.OneOf("default", "edge", "network", "normal", "trunk"),
-				},
-			},
-			"priority": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Port priority.").AddIntegerRangeDescription(0, 224).AddDefaultValueDescription("128").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(128),
-				Validators: []validator.Int64{
-					int64validator.Between(0, 224),
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_id": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("enabled"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"bpdu_filter": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("BPDU filter mode.").AddStringEnumDescription("default", "enable", "disable").AddDefaultValueDescription("default").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("default"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("default", "enable", "disable"),
+							},
+						},
+						"bpdu_guard": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("BPDU guard mode.").AddStringEnumDescription("default", "enable", "disable").AddDefaultValueDescription("default").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("default"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("default", "enable", "disable"),
+							},
+						},
+						"cost": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Port path cost.").AddIntegerRangeDescription(0, 200000000).AddDefaultValueDescription("0").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(0),
+							Validators: []validator.Int64{
+								int64validator.Between(0, 200000000),
+							},
+						},
+						"guard": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Guard mode.").AddStringEnumDescription("default", "root", "loop", "none").AddDefaultValueDescription("default").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("default"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("default", "root", "loop", "none"),
+							},
+						},
+						"link_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Link type.").AddStringEnumDescription("auto", "p2p", "shared").AddDefaultValueDescription("auto").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("auto"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("auto", "p2p", "shared"),
+							},
+						},
+						"mode": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Port mode.").AddStringEnumDescription("default", "edge", "network", "normal", "trunk").AddDefaultValueDescription("default").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("default"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("default", "edge", "network", "normal", "trunk"),
+							},
+						},
+						"priority": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Port priority.").AddIntegerRangeDescription(0, 224).AddDefaultValueDescription("128").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(128),
+							Validators: []validator.Int64{
+								int64validator.Between(0, 224),
+							},
+						},
+					},
 				},
 			},
 		},
 	}
 }
 
-func (r *SpanningTreeInterfaceResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+func (r *SpanningTreeResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
 	resp.IdentitySchema = identityschema.Schema{
 		Attributes: map[string]identityschema.Attribute{
 			"device": identityschema.StringAttribute{
 				Description:       "A device name from the provider configuration.",
 				OptionalForImport: true,
 			},
-			"interface_id": identityschema.StringAttribute{
-				Description:       helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
-				RequiredForImport: true,
-			},
 		},
 	}
 }
 
-func (r *SpanningTreeInterfaceResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *SpanningTreeResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -189,8 +193,8 @@ func (r *SpanningTreeInterfaceResource) Configure(ctx context.Context, req resou
 // End of section. //template:end model
 
 // Section below is generated&owned by "gen/generator.go". //template:begin create
-func (r *SpanningTreeInterfaceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan SpanningTreeInterface
+func (r *SpanningTreeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan SpanningTree
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -218,7 +222,7 @@ func (r *SpanningTreeInterfaceResource) Create(ctx context.Context, req resource
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity SpanningTreeInterfaceIdentity
+	var identity SpanningTreeIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -234,8 +238,8 @@ func (r *SpanningTreeInterfaceResource) Create(ctx context.Context, req resource
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-func (r *SpanningTreeInterfaceResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state SpanningTreeInterface
+func (r *SpanningTreeResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state SpanningTree
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -246,7 +250,7 @@ func (r *SpanningTreeInterfaceResource) Read(ctx context.Context, req resource.R
 
 	// Read identity if available (requires Terraform >= 1.12.0)
 	if req.Identity != nil && !req.Identity.Raw.IsNull() {
-		var identity SpanningTreeInterfaceIdentity
+		var identity SpanningTreeIdentity
 		diags = req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
@@ -264,6 +268,7 @@ func (r *SpanningTreeInterfaceResource) Read(ctx context.Context, req resource.R
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		queries = append(queries, nxos.Query("rsp-subtree", "full"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -281,7 +286,7 @@ func (r *SpanningTreeInterfaceResource) Read(ctx context.Context, req resource.R
 		}
 	}
 
-	var identity SpanningTreeInterfaceIdentity
+	var identity SpanningTreeIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
@@ -297,11 +302,19 @@ func (r *SpanningTreeInterfaceResource) Read(ctx context.Context, req resource.R
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-func (r *SpanningTreeInterfaceResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan SpanningTreeInterface
+func (r *SpanningTreeResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan SpanningTree
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	var state SpanningTree
+
+	// Read state
+	diags = req.State.Get(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -322,10 +335,23 @@ func (r *SpanningTreeInterfaceResource) Update(ctx context.Context, req resource
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
 		}
+
+		deletedItems := plan.getDeletedItems(ctx, state)
+		tflog.Debug(ctx, fmt.Sprintf("%s: List items to delete: %v", plan.getDn(), deletedItems))
+		for _, dn := range deletedItems {
+			res, err := device.Client.DeleteDn(dn)
+			if err != nil {
+				errCode := res.Get("imdata.0.error.attributes.code").Str
+				if errCode != "1" && errCode != "107" {
+					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+					return
+				}
+			}
+		}
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity SpanningTreeInterfaceIdentity
+	var identity SpanningTreeIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
@@ -339,8 +365,8 @@ func (r *SpanningTreeInterfaceResource) Update(ctx context.Context, req resource
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-func (r *SpanningTreeInterfaceResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state SpanningTreeInterface
+func (r *SpanningTreeResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state SpanningTree
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -388,44 +414,36 @@ func (r *SpanningTreeInterfaceResource) Delete(ctx context.Context, req resource
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-func (r *SpanningTreeInterfaceResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *SpanningTreeResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	if req.ID != "" || req.Identity == nil || req.Identity.Raw.IsNull() {
 		idParts := strings.Split(req.ID, ",")
 		idParts = helpers.RemoveEmptyStrings(idParts)
 
-		if len(idParts) != 1 && len(idParts) != 2 {
-			expectedIdentifier := "Expected import identifier with format: '<interface_id>'"
-			expectedIdentifier += " or '<interface_id>,<device>'"
+		if len(idParts) != 0 && len(idParts) != 1 {
+			expectedIdentifier := "Expected import identifier with format: ''"
+			expectedIdentifier += " or '<device>'"
 			resp.Diagnostics.AddError(
 				"Unexpected Import Identifier",
 				fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
 			)
 			return
 		}
-		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("interface_id"), idParts[0])...)
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_id"), idParts[0])...)
-		if len(idParts) == 2 {
+		if len(idParts) == 1 {
 			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 		}
 	} else {
-		var identity SpanningTreeInterfaceIdentity
+		var identity SpanningTreeIdentity
 		diags := req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
 		}
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_id"), identity.InterfaceId.ValueString())...)
 		if !identity.Device.IsNull() && !identity.Device.IsUnknown() {
 			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), identity.Device.ValueString())...)
 		}
 	}
 
-	var state SpanningTreeInterface
-	diags := resp.State.Get(ctx, &state)
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
+	var state SpanningTree
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getDn())...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

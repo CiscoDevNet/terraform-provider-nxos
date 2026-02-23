@@ -33,17 +33,17 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosSpanningTreeInterface(t *testing.T) {
+func TestAccNxosSpanningTree(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "interface_id", "eth1/9"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "bpdu_filter", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "bpdu_guard", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "cost", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "guard", "root"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "link_type", "p2p"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "mode", "edge"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree_interface.test", "priority", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.interface_id", "eth1/9"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.bpdu_filter", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.bpdu_guard", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.cost", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.guard", "root"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.link_type", "p2p"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.mode", "edge"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.priority", "200"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -53,16 +53,16 @@ func TestAccNxosSpanningTreeInterface(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosSpanningTreeInterfaceConfig_all(),
+				Config: testAccNxosSpanningTreeConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
-				ResourceName:      "nxos_spanning_tree_interface.test",
+				ResourceName:      "nxos_spanning_tree.test",
 				ImportState:       true,
-				ImportStateIdFunc: nxosSpanningTreeInterfaceImportStateIdFunc("nxos_spanning_tree_interface.test"),
+				ImportStateIdFunc: nxosSpanningTreeImportStateIdFunc("nxos_spanning_tree.test"),
 			},
 			{
-				ResourceName:       "nxos_spanning_tree_interface.test",
+				ResourceName:       "nxos_spanning_tree.test",
 				ImportState:        true,
 				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
 				ExpectNonEmptyPlan: true,
@@ -75,12 +75,10 @@ func TestAccNxosSpanningTreeInterface(t *testing.T) {
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosSpanningTreeInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func nxosSpanningTreeImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
-		primary := s.RootModule().Resources[resourceName].Primary
-		InterfaceId := primary.Attributes["interface_id"]
 
-		return fmt.Sprintf("%s", InterfaceId), nil
+		return fmt.Sprintf(""), nil
 	}
 }
 
@@ -91,9 +89,8 @@ func nxosSpanningTreeInterfaceImportStateIdFunc(resourceName string) resource.Im
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosSpanningTreeInterfaceConfig_minimum() string {
-	config := `resource "nxos_spanning_tree_interface" "test" {` + "\n"
-	config += `	interface_id = "eth1/9"` + "\n"
+func testAccNxosSpanningTreeConfig_minimum() string {
+	config := `resource "nxos_spanning_tree" "test" {` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -101,17 +98,19 @@ func testAccNxosSpanningTreeInterfaceConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosSpanningTreeInterfaceConfig_all() string {
-	config := `resource "nxos_spanning_tree_interface" "test" {` + "\n"
-	config += `	interface_id = "eth1/9"` + "\n"
-	config += `	admin_state = "enabled"` + "\n"
-	config += `	bpdu_filter = "enable"` + "\n"
-	config += `	bpdu_guard = "enable"` + "\n"
-	config += `	cost = 100` + "\n"
-	config += `	guard = "root"` + "\n"
-	config += `	link_type = "p2p"` + "\n"
-	config += `	mode = "edge"` + "\n"
-	config += `	priority = 200` + "\n"
+func testAccNxosSpanningTreeConfig_all() string {
+	config := `resource "nxos_spanning_tree" "test" {` + "\n"
+	config += `	interfaces = [{` + "\n"
+	config += `		interface_id = "eth1/9"` + "\n"
+	config += `		admin_state = "enabled"` + "\n"
+	config += `		bpdu_filter = "enable"` + "\n"
+	config += `		bpdu_guard = "enable"` + "\n"
+	config += `		cost = 100` + "\n"
+	config += `		guard = "root"` + "\n"
+	config += `		link_type = "p2p"` + "\n"
+	config += `		mode = "edge"` + "\n"
+	config += `		priority = 200` + "\n"
+	config += `	}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

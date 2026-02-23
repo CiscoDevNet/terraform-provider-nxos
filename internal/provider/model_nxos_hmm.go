@@ -199,29 +199,29 @@ func (data *HMM) updateFromBody(res gjson.Result) {
 		data.AnycastMac = types.StringNull()
 	}
 	for c := range data.Interfaces {
-		var r gjson.Result
+		var rhmmFwdIf gjson.Result
 		rhmmFwdInst.Get("hmmFwdInst.children").ForEach(
 			func(_, v gjson.Result) bool {
 				key := v.Get("hmmFwdIf.attributes.rn").String()
 				if key == data.Interfaces[c].getRn() {
-					r = v
+					rhmmFwdIf = v
 					return false
 				}
 				return true
 			},
 		)
 		if !data.Interfaces[c].InterfaceId.IsNull() {
-			data.Interfaces[c].InterfaceId = types.StringValue(r.Get("hmmFwdIf.attributes.id").String())
+			data.Interfaces[c].InterfaceId = types.StringValue(rhmmFwdIf.Get("hmmFwdIf.attributes.id").String())
 		} else {
 			data.Interfaces[c].InterfaceId = types.StringNull()
 		}
 		if !data.Interfaces[c].AdminState.IsNull() {
-			data.Interfaces[c].AdminState = types.StringValue(r.Get("hmmFwdIf.attributes.adminSt").String())
+			data.Interfaces[c].AdminState = types.StringValue(rhmmFwdIf.Get("hmmFwdIf.attributes.adminSt").String())
 		} else {
 			data.Interfaces[c].AdminState = types.StringNull()
 		}
 		if !data.Interfaces[c].Mode.IsNull() {
-			data.Interfaces[c].Mode = types.StringValue(r.Get("hmmFwdIf.attributes.mode").String())
+			data.Interfaces[c].Mode = types.StringValue(rhmmFwdIf.Get("hmmFwdIf.attributes.mode").String())
 		} else {
 			data.Interfaces[c].Mode = types.StringNull()
 		}

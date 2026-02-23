@@ -191,19 +191,19 @@ func (data *User) updateFromBody(res gjson.Result) {
 		},
 	)
 	for c := range data.Roles {
-		var r gjson.Result
+		var raaaUserRole gjson.Result
 		raaaUserDomain.Get("aaaUserDomain.children").ForEach(
 			func(_, v gjson.Result) bool {
 				key := v.Get("aaaUserRole.attributes.rn").String()
 				if key == data.Roles[c].getRn() {
-					r = v
+					raaaUserRole = v
 					return false
 				}
 				return true
 			},
 		)
 		if !data.Roles[c].Name.IsNull() {
-			data.Roles[c].Name = types.StringValue(r.Get("aaaUserRole.attributes.name").String())
+			data.Roles[c].Name = types.StringValue(raaaUserRole.Get("aaaUserRole.attributes.name").String())
 		} else {
 			data.Roles[c].Name = types.StringNull()
 		}

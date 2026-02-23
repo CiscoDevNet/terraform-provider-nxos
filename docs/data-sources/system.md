@@ -6,7 +6,7 @@ description: |-
   This data source can read the system configuration.
   API Documentation: topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/top:System/
   Additional API Documentation
-  ipqosEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Entity/ipqosDefaultQoS https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:DefaultQoS/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:ServPol/ipqosIngress https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Ingress/ipqosIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:If/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Inst/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/ethpm:Inst/
+  ipqosEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Entity/ipqosDefaultQoS https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:DefaultQoS/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:ServPol/ipqosIngress https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Ingress/ipqosIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:If/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Inst/ipqosQueuing https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Queuing/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:ServPol/ipqosEgress https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Egress/ipqosSystem https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:System/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Inst/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/ethpm:Inst/
 ---
 
 # nxos_system (Data Source)
@@ -22,6 +22,11 @@ This data source can read the system configuration.
 - [ipqosServPol](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:ServPol/)
 - [ipqosIngress](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Ingress/)
 - [ipqosIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:If/)
+- [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Inst/)
+- [ipqosQueuing](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Queuing/)
+- [ipqosServPol](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:ServPol/)
+- [ipqosEgress](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Egress/)
+- [ipqosSystem](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:System/)
 - [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Inst/)
 - [ethpmEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/ethpm:Entity/)
 - [ethpmInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/ethpm:Inst/)
@@ -47,6 +52,7 @@ data "nxos_system" "example" {
 - `id` (String) The distinguished name of the object.
 - `mtu` (Number) System jumbo MTU.
 - `name` (String) The system name (hostname).
+- `policy_map_name` (String) Policy map name.
 
 <a id="nestedatt--default_qos_policy_interface_in"></a>
 ### Nested Schema for `default_qos_policy_interface_in`

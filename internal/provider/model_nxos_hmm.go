@@ -135,36 +135,38 @@ func (data HMM) toBody() nxos.Body {
 
 func (data *HMM) fromBody(res gjson.Result) {
 	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
-	var rhmmFwdInst gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("hmmFwdInst.attributes.rn").String()
-			if key == "fwdinst" {
-				rhmmFwdInst = v
-				return false
-			}
-			return true
-		},
-	)
-	data.InstanceAdminState = types.StringValue(rhmmFwdInst.Get("hmmFwdInst.attributes.adminSt").String())
-	data.AnycastMac = types.StringValue(rhmmFwdInst.Get("hmmFwdInst.attributes.amac").String())
-	rhmmFwdInst.Get("hmmFwdInst.children").ForEach(
-		func(_, v gjson.Result) bool {
-			v.ForEach(
-				func(classname, value gjson.Result) bool {
-					if classname.String() == "hmmFwdIf" {
-						var child HMMInterfaces
-						child.InterfaceId = types.StringValue(value.Get("attributes.id").String())
-						child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
-						child.Mode = types.StringValue(value.Get("attributes.mode").String())
-						data.Interfaces = append(data.Interfaces, child)
-					}
-					return true
-				},
-			)
-			return true
-		},
-	)
+	{
+		var rhmmFwdInst gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("hmmFwdInst.attributes.rn").String()
+				if key == "fwdinst" {
+					rhmmFwdInst = v
+					return false
+				}
+				return true
+			},
+		)
+		data.InstanceAdminState = types.StringValue(rhmmFwdInst.Get("hmmFwdInst.attributes.adminSt").String())
+		data.AnycastMac = types.StringValue(rhmmFwdInst.Get("hmmFwdInst.attributes.amac").String())
+		rhmmFwdInst.Get("hmmFwdInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "hmmFwdIf" {
+							var child HMMInterfaces
+							child.InterfaceId = types.StringValue(value.Get("attributes.id").String())
+							child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
+							child.Mode = types.StringValue(value.Get("attributes.mode").String())
+							data.Interfaces = append(data.Interfaces, child)
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+	}
 }
 
 // End of section. //template:end fromBody

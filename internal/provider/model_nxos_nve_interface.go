@@ -198,50 +198,52 @@ func (data *NVEInterface) fromBody(res gjson.Result) {
 	data.SourceInterface = types.StringValue(res.Get(data.getClassName() + ".attributes.sourceInterface").String())
 	data.SuppressArp = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.suppressARP").String()))
 	data.SuppressMacRoute = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.suppressMacRoute").String()))
-	var rnvoNws gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("nvoNws.attributes.rn").String()
-			if key == "nws" {
-				rnvoNws = v
-				return false
-			}
-			return true
-		},
-	)
-	rnvoNws.Get("nvoNws.children").ForEach(
-		func(_, v gjson.Result) bool {
-			v.ForEach(
-				func(classname, value gjson.Result) bool {
-					if classname.String() == "nvoNw" {
-						var child NVEInterfaceVnis
-						child.Vni = types.Int64Value(value.Get("attributes.vni").Int())
-						child.AssociateVrf = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.associateVrfFlag").String()))
-						child.MulticastGroup = types.StringValue(value.Get("attributes.mcastGroup").String())
-						child.MultisiteIngressReplication = types.StringValue(value.Get("attributes.multisiteIngRepl").String())
-						child.SuppressArp = types.StringValue(value.Get("attributes.suppressARP").String())
-						{
-							var rnvoIngRepl gjson.Result
-							value.Get("children").ForEach(
-								func(_, nestedV gjson.Result) bool {
-									key := nestedV.Get("nvoIngRepl.attributes.rn").String()
-									if key == "IngRepl" {
-										rnvoIngRepl = nestedV
-										return false
-									}
-									return true
-								},
-							)
-							child.Protocol = types.StringValue(rnvoIngRepl.Get("nvoIngRepl.attributes.proto").String())
+	{
+		var rnvoNws gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("nvoNws.attributes.rn").String()
+				if key == "nws" {
+					rnvoNws = v
+					return false
+				}
+				return true
+			},
+		)
+		rnvoNws.Get("nvoNws.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "nvoNw" {
+							var child NVEInterfaceVnis
+							child.Vni = types.Int64Value(value.Get("attributes.vni").Int())
+							child.AssociateVrf = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.associateVrfFlag").String()))
+							child.MulticastGroup = types.StringValue(value.Get("attributes.mcastGroup").String())
+							child.MultisiteIngressReplication = types.StringValue(value.Get("attributes.multisiteIngRepl").String())
+							child.SuppressArp = types.StringValue(value.Get("attributes.suppressARP").String())
+							{
+								var rnvoIngRepl gjson.Result
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										key := nestedV.Get("nvoIngRepl.attributes.rn").String()
+										if key == "IngRepl" {
+											rnvoIngRepl = nestedV
+											return false
+										}
+										return true
+									},
+								)
+								child.Protocol = types.StringValue(rnvoIngRepl.Get("nvoIngRepl.attributes.proto").String())
+							}
+							data.Vnis = append(data.Vnis, child)
 						}
-						data.Vnis = append(data.Vnis, child)
-					}
-					return true
-				},
-			)
-			return true
-		},
-	)
+						return true
+					},
+				)
+				return true
+			},
+		)
+	}
 }
 
 // End of section. //template:end fromBody

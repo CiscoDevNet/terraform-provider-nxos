@@ -4,6 +4,7 @@ resource "nxos_system" "example" {
     interface_id    = "eth1/10"
     policy_map_name = "PM1"
   }]
+  policy_map_name      = "PM1"
   mtu                  = 9216
   default_admin_status = "up"
 }

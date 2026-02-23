@@ -282,103 +282,109 @@ func (data VPC) toBody() nxos.Body {
 
 func (data *VPC) fromBody(res gjson.Result) {
 	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
-	var rvpcDom gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("vpcDom.attributes.rn").String()
-			if key == "dom" {
-				rvpcDom = v
-				return false
-			}
-			return true
-		},
-	)
-	data.DomainAdminState = types.StringValue(rvpcDom.Get("vpcDom.attributes.adminSt").String())
-	data.DomainId = types.Int64Value(rvpcDom.Get("vpcDom.attributes.id").Int())
-	data.AutoRecovery = types.StringValue(rvpcDom.Get("vpcDom.attributes.autoRecovery").String())
-	data.AutoRecoveryInterval = types.Int64Value(rvpcDom.Get("vpcDom.attributes.autoRecoveryIntvl").Int())
-	data.DelayRestoreOrphanPort = types.Int64Value(rvpcDom.Get("vpcDom.attributes.delayRestoreOrphanPort").Int())
-	data.DelayRestoreSvi = types.Int64Value(rvpcDom.Get("vpcDom.attributes.delayRestoreSVI").Int())
-	data.DelayRestoreVpc = types.Int64Value(rvpcDom.Get("vpcDom.attributes.delayRestoreVPC").Int())
-	data.Dscp = types.Int64Value(rvpcDom.Get("vpcDom.attributes.dscp").Int())
-	data.FastConvergence = types.StringValue(rvpcDom.Get("vpcDom.attributes.fastConvergence").String())
-	data.GracefulConsistencyCheck = types.StringValue(rvpcDom.Get("vpcDom.attributes.grcflCnstncyChck").String())
-	data.L3PeerRouter = types.StringValue(rvpcDom.Get("vpcDom.attributes.l3PeerRouter").String())
-	data.L3PeerRouterSyslog = types.StringValue(rvpcDom.Get("vpcDom.attributes.l3PeerRouterSyslog").String())
-	data.L3PeerRouterSyslogInterval = types.Int64Value(rvpcDom.Get("vpcDom.attributes.l3PeerRouterSyslogInterval").Int())
-	data.PeerGateway = types.StringValue(rvpcDom.Get("vpcDom.attributes.peerGw").String())
-	data.PeerIp = types.StringValue(rvpcDom.Get("vpcDom.attributes.peerIp").String())
-	data.PeerSwitch = types.StringValue(rvpcDom.Get("vpcDom.attributes.peerSwitch").String())
-	data.RolePriority = types.Int64Value(rvpcDom.Get("vpcDom.attributes.rolePrio").Int())
-	data.SysMac = types.StringValue(rvpcDom.Get("vpcDom.attributes.sysMac").String())
-	data.SystemPriority = types.Int64Value(rvpcDom.Get("vpcDom.attributes.sysPrio").Int())
-	data.Track = types.Int64Value(rvpcDom.Get("vpcDom.attributes.track").Int())
-	data.VirtualIp = types.StringValue(rvpcDom.Get("vpcDom.attributes.virtualIp").String())
-	var rvpcKeepalive gjson.Result
-	rvpcDom.Get("vpcDom.children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("vpcKeepalive.attributes.rn").String()
-			if key == "keepalive" {
-				rvpcKeepalive = v
-				return false
-			}
-			return true
-		},
-	)
-	data.KeepaliveDestinationIp = types.StringValue(rvpcKeepalive.Get("vpcKeepalive.attributes.destIp").String())
-	data.KeepaliveFlushTimeout = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.flushTout").Int())
-	data.KeepaliveInterval = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.interval").Int())
-	data.KeepalivePrecedenceType = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.precType").Int())
-	data.KeepalivePrecedenceValue = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.precValue").Int())
-	data.KeepaliveSourceIp = types.StringValue(rvpcKeepalive.Get("vpcKeepalive.attributes.srcIp").String())
-	data.KeepaliveTimeout = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.timeout").Int())
-	data.KeepaliveTypeOfServiceByte = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosByte").Int())
-	data.KeepaliveTypeOfServiceConfigurationType = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosCfgType").Int())
-	data.KeepaliveTypeOfServiceType = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosType").Int())
-	data.KeepaliveTypeOfServiceValue = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosValue").Int())
-	data.KeepaliveUdpPort = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.udpPort").Int())
-	data.KeepaliveVrf = types.StringValue(rvpcKeepalive.Get("vpcKeepalive.attributes.vrf").String())
-	var rvpcPeerLink gjson.Result
-	rvpcKeepalive.Get("vpcKeepalive.children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("vpcPeerLink.attributes.rn").String()
-			if key == "peerlink" {
-				rvpcPeerLink = v
-				return false
-			}
-			return true
-		},
-	)
-	data.PeerlinkPortChannelId = types.StringValue(rvpcPeerLink.Get("vpcPeerLink.attributes.id").String())
-	rvpcDom.Get("vpcDom.children").ForEach(
-		func(_, v gjson.Result) bool {
-			v.ForEach(
-				func(classname, value gjson.Result) bool {
-					if classname.String() == "vpcIf" {
-						var child VPCInterfaces
-						child.VpcInterfaceId = types.Int64Value(value.Get("attributes.id").Int())
-						{
-							var rvpcRsVpcConf gjson.Result
-							value.Get("children").ForEach(
-								func(_, nestedV gjson.Result) bool {
-									key := nestedV.Get("vpcRsVpcConf.attributes.rn").String()
-									if key == "rsvpcConf" {
-										rvpcRsVpcConf = nestedV
-										return false
-									}
-									return true
-								},
-							)
-							child.PortChannelInterfaceDn = types.StringValue(rvpcRsVpcConf.Get("vpcRsVpcConf.attributes.tDn").String())
-						}
-						data.Interfaces = append(data.Interfaces, child)
+	{
+		var rvpcDom gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("vpcDom.attributes.rn").String()
+				if key == "dom" {
+					rvpcDom = v
+					return false
+				}
+				return true
+			},
+		)
+		data.DomainAdminState = types.StringValue(rvpcDom.Get("vpcDom.attributes.adminSt").String())
+		data.DomainId = types.Int64Value(rvpcDom.Get("vpcDom.attributes.id").Int())
+		data.AutoRecovery = types.StringValue(rvpcDom.Get("vpcDom.attributes.autoRecovery").String())
+		data.AutoRecoveryInterval = types.Int64Value(rvpcDom.Get("vpcDom.attributes.autoRecoveryIntvl").Int())
+		data.DelayRestoreOrphanPort = types.Int64Value(rvpcDom.Get("vpcDom.attributes.delayRestoreOrphanPort").Int())
+		data.DelayRestoreSvi = types.Int64Value(rvpcDom.Get("vpcDom.attributes.delayRestoreSVI").Int())
+		data.DelayRestoreVpc = types.Int64Value(rvpcDom.Get("vpcDom.attributes.delayRestoreVPC").Int())
+		data.Dscp = types.Int64Value(rvpcDom.Get("vpcDom.attributes.dscp").Int())
+		data.FastConvergence = types.StringValue(rvpcDom.Get("vpcDom.attributes.fastConvergence").String())
+		data.GracefulConsistencyCheck = types.StringValue(rvpcDom.Get("vpcDom.attributes.grcflCnstncyChck").String())
+		data.L3PeerRouter = types.StringValue(rvpcDom.Get("vpcDom.attributes.l3PeerRouter").String())
+		data.L3PeerRouterSyslog = types.StringValue(rvpcDom.Get("vpcDom.attributes.l3PeerRouterSyslog").String())
+		data.L3PeerRouterSyslogInterval = types.Int64Value(rvpcDom.Get("vpcDom.attributes.l3PeerRouterSyslogInterval").Int())
+		data.PeerGateway = types.StringValue(rvpcDom.Get("vpcDom.attributes.peerGw").String())
+		data.PeerIp = types.StringValue(rvpcDom.Get("vpcDom.attributes.peerIp").String())
+		data.PeerSwitch = types.StringValue(rvpcDom.Get("vpcDom.attributes.peerSwitch").String())
+		data.RolePriority = types.Int64Value(rvpcDom.Get("vpcDom.attributes.rolePrio").Int())
+		data.SysMac = types.StringValue(rvpcDom.Get("vpcDom.attributes.sysMac").String())
+		data.SystemPriority = types.Int64Value(rvpcDom.Get("vpcDom.attributes.sysPrio").Int())
+		data.Track = types.Int64Value(rvpcDom.Get("vpcDom.attributes.track").Int())
+		data.VirtualIp = types.StringValue(rvpcDom.Get("vpcDom.attributes.virtualIp").String())
+		{
+			var rvpcKeepalive gjson.Result
+			rvpcDom.Get("vpcDom.children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("vpcKeepalive.attributes.rn").String()
+					if key == "keepalive" {
+						rvpcKeepalive = v
+						return false
 					}
 					return true
 				},
 			)
-			return true
-		},
-	)
+			data.KeepaliveDestinationIp = types.StringValue(rvpcKeepalive.Get("vpcKeepalive.attributes.destIp").String())
+			data.KeepaliveFlushTimeout = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.flushTout").Int())
+			data.KeepaliveInterval = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.interval").Int())
+			data.KeepalivePrecedenceType = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.precType").Int())
+			data.KeepalivePrecedenceValue = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.precValue").Int())
+			data.KeepaliveSourceIp = types.StringValue(rvpcKeepalive.Get("vpcKeepalive.attributes.srcIp").String())
+			data.KeepaliveTimeout = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.timeout").Int())
+			data.KeepaliveTypeOfServiceByte = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosByte").Int())
+			data.KeepaliveTypeOfServiceConfigurationType = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosCfgType").Int())
+			data.KeepaliveTypeOfServiceType = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosType").Int())
+			data.KeepaliveTypeOfServiceValue = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosValue").Int())
+			data.KeepaliveUdpPort = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.udpPort").Int())
+			data.KeepaliveVrf = types.StringValue(rvpcKeepalive.Get("vpcKeepalive.attributes.vrf").String())
+			{
+				var rvpcPeerLink gjson.Result
+				rvpcKeepalive.Get("vpcKeepalive.children").ForEach(
+					func(_, v gjson.Result) bool {
+						key := v.Get("vpcPeerLink.attributes.rn").String()
+						if key == "peerlink" {
+							rvpcPeerLink = v
+							return false
+						}
+						return true
+					},
+				)
+				data.PeerlinkPortChannelId = types.StringValue(rvpcPeerLink.Get("vpcPeerLink.attributes.id").String())
+			}
+		}
+		rvpcDom.Get("vpcDom.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "vpcIf" {
+							var child VPCInterfaces
+							child.VpcInterfaceId = types.Int64Value(value.Get("attributes.id").Int())
+							{
+								var rvpcRsVpcConf gjson.Result
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										key := nestedV.Get("vpcRsVpcConf.attributes.rn").String()
+										if key == "rsvpcConf" {
+											rvpcRsVpcConf = nestedV
+											return false
+										}
+										return true
+									},
+								)
+								child.PortChannelInterfaceDn = types.StringValue(rvpcRsVpcConf.Get("vpcRsVpcConf.attributes.tDn").String())
+							}
+							data.Interfaces = append(data.Interfaces, child)
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+	}
 }
 
 // End of section. //template:end fromBody
@@ -507,97 +513,101 @@ func (data *VPC) updateFromBody(res gjson.Result) {
 	} else {
 		data.VirtualIp = types.StringNull()
 	}
-	var rvpcKeepalive gjson.Result
-	rvpcDom.Get("vpcDom.children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("vpcKeepalive.attributes.rn").String()
-			if key == "keepalive" {
-				rvpcKeepalive = v
-				return false
+	{
+		var rvpcKeepalive gjson.Result
+		rvpcDom.Get("vpcDom.children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("vpcKeepalive.attributes.rn").String()
+				if key == "keepalive" {
+					rvpcKeepalive = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.KeepaliveDestinationIp.IsNull() {
+			data.KeepaliveDestinationIp = types.StringValue(rvpcKeepalive.Get("vpcKeepalive.attributes.destIp").String())
+		} else {
+			data.KeepaliveDestinationIp = types.StringNull()
+		}
+		if !data.KeepaliveFlushTimeout.IsNull() {
+			data.KeepaliveFlushTimeout = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.flushTout").Int())
+		} else {
+			data.KeepaliveFlushTimeout = types.Int64Null()
+		}
+		if !data.KeepaliveInterval.IsNull() {
+			data.KeepaliveInterval = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.interval").Int())
+		} else {
+			data.KeepaliveInterval = types.Int64Null()
+		}
+		if !data.KeepalivePrecedenceType.IsNull() {
+			data.KeepalivePrecedenceType = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.precType").Int())
+		} else {
+			data.KeepalivePrecedenceType = types.Int64Null()
+		}
+		if !data.KeepalivePrecedenceValue.IsNull() {
+			data.KeepalivePrecedenceValue = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.precValue").Int())
+		} else {
+			data.KeepalivePrecedenceValue = types.Int64Null()
+		}
+		if !data.KeepaliveSourceIp.IsNull() {
+			data.KeepaliveSourceIp = types.StringValue(rvpcKeepalive.Get("vpcKeepalive.attributes.srcIp").String())
+		} else {
+			data.KeepaliveSourceIp = types.StringNull()
+		}
+		if !data.KeepaliveTimeout.IsNull() {
+			data.KeepaliveTimeout = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.timeout").Int())
+		} else {
+			data.KeepaliveTimeout = types.Int64Null()
+		}
+		if !data.KeepaliveTypeOfServiceByte.IsNull() {
+			data.KeepaliveTypeOfServiceByte = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosByte").Int())
+		} else {
+			data.KeepaliveTypeOfServiceByte = types.Int64Null()
+		}
+		if !data.KeepaliveTypeOfServiceConfigurationType.IsNull() {
+			data.KeepaliveTypeOfServiceConfigurationType = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosCfgType").Int())
+		} else {
+			data.KeepaliveTypeOfServiceConfigurationType = types.Int64Null()
+		}
+		if !data.KeepaliveTypeOfServiceType.IsNull() {
+			data.KeepaliveTypeOfServiceType = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosType").Int())
+		} else {
+			data.KeepaliveTypeOfServiceType = types.Int64Null()
+		}
+		if !data.KeepaliveTypeOfServiceValue.IsNull() {
+			data.KeepaliveTypeOfServiceValue = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosValue").Int())
+		} else {
+			data.KeepaliveTypeOfServiceValue = types.Int64Null()
+		}
+		if !data.KeepaliveUdpPort.IsNull() {
+			data.KeepaliveUdpPort = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.udpPort").Int())
+		} else {
+			data.KeepaliveUdpPort = types.Int64Null()
+		}
+		if !data.KeepaliveVrf.IsNull() {
+			data.KeepaliveVrf = types.StringValue(rvpcKeepalive.Get("vpcKeepalive.attributes.vrf").String())
+		} else {
+			data.KeepaliveVrf = types.StringNull()
+		}
+		{
+			var rvpcPeerLink gjson.Result
+			rvpcKeepalive.Get("vpcKeepalive.children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("vpcPeerLink.attributes.rn").String()
+					if key == "peerlink" {
+						rvpcPeerLink = v
+						return false
+					}
+					return true
+				},
+			)
+			if !data.PeerlinkPortChannelId.IsNull() {
+				data.PeerlinkPortChannelId = types.StringValue(rvpcPeerLink.Get("vpcPeerLink.attributes.id").String())
+			} else {
+				data.PeerlinkPortChannelId = types.StringNull()
 			}
-			return true
-		},
-	)
-	if !data.KeepaliveDestinationIp.IsNull() {
-		data.KeepaliveDestinationIp = types.StringValue(rvpcKeepalive.Get("vpcKeepalive.attributes.destIp").String())
-	} else {
-		data.KeepaliveDestinationIp = types.StringNull()
-	}
-	if !data.KeepaliveFlushTimeout.IsNull() {
-		data.KeepaliveFlushTimeout = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.flushTout").Int())
-	} else {
-		data.KeepaliveFlushTimeout = types.Int64Null()
-	}
-	if !data.KeepaliveInterval.IsNull() {
-		data.KeepaliveInterval = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.interval").Int())
-	} else {
-		data.KeepaliveInterval = types.Int64Null()
-	}
-	if !data.KeepalivePrecedenceType.IsNull() {
-		data.KeepalivePrecedenceType = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.precType").Int())
-	} else {
-		data.KeepalivePrecedenceType = types.Int64Null()
-	}
-	if !data.KeepalivePrecedenceValue.IsNull() {
-		data.KeepalivePrecedenceValue = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.precValue").Int())
-	} else {
-		data.KeepalivePrecedenceValue = types.Int64Null()
-	}
-	if !data.KeepaliveSourceIp.IsNull() {
-		data.KeepaliveSourceIp = types.StringValue(rvpcKeepalive.Get("vpcKeepalive.attributes.srcIp").String())
-	} else {
-		data.KeepaliveSourceIp = types.StringNull()
-	}
-	if !data.KeepaliveTimeout.IsNull() {
-		data.KeepaliveTimeout = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.timeout").Int())
-	} else {
-		data.KeepaliveTimeout = types.Int64Null()
-	}
-	if !data.KeepaliveTypeOfServiceByte.IsNull() {
-		data.KeepaliveTypeOfServiceByte = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosByte").Int())
-	} else {
-		data.KeepaliveTypeOfServiceByte = types.Int64Null()
-	}
-	if !data.KeepaliveTypeOfServiceConfigurationType.IsNull() {
-		data.KeepaliveTypeOfServiceConfigurationType = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosCfgType").Int())
-	} else {
-		data.KeepaliveTypeOfServiceConfigurationType = types.Int64Null()
-	}
-	if !data.KeepaliveTypeOfServiceType.IsNull() {
-		data.KeepaliveTypeOfServiceType = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosType").Int())
-	} else {
-		data.KeepaliveTypeOfServiceType = types.Int64Null()
-	}
-	if !data.KeepaliveTypeOfServiceValue.IsNull() {
-		data.KeepaliveTypeOfServiceValue = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosValue").Int())
-	} else {
-		data.KeepaliveTypeOfServiceValue = types.Int64Null()
-	}
-	if !data.KeepaliveUdpPort.IsNull() {
-		data.KeepaliveUdpPort = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.udpPort").Int())
-	} else {
-		data.KeepaliveUdpPort = types.Int64Null()
-	}
-	if !data.KeepaliveVrf.IsNull() {
-		data.KeepaliveVrf = types.StringValue(rvpcKeepalive.Get("vpcKeepalive.attributes.vrf").String())
-	} else {
-		data.KeepaliveVrf = types.StringNull()
-	}
-	var rvpcPeerLink gjson.Result
-	rvpcKeepalive.Get("vpcKeepalive.children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("vpcPeerLink.attributes.rn").String()
-			if key == "peerlink" {
-				rvpcPeerLink = v
-				return false
-			}
-			return true
-		},
-	)
-	if !data.PeerlinkPortChannelId.IsNull() {
-		data.PeerlinkPortChannelId = types.StringValue(rvpcPeerLink.Get("vpcPeerLink.attributes.id").String())
-	} else {
-		data.PeerlinkPortChannelId = types.StringNull()
+		}
 	}
 	for c := range data.Interfaces {
 		var rvpcIf gjson.Result

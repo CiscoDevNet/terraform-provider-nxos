@@ -323,6 +323,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 {{- $hasNonRefAttribs := false}}
 {{- range .Attributes}}{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}{{$hasNonRefAttribs = true}}{{end}}{{end}}
 {{- if or $hasNonRefAttribs .ChildClasses}}
+	{
 	var r{{$childClassName}} gjson.Result
 	{{$resExpr}}.ForEach(
 		func(_, v gjson.Result) bool {
@@ -353,6 +354,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 {{- if .ChildClasses}}
 	{{- template "fromBodyChildrenTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ResExpr" (printf "r%s.Get(\"%s.children\")" $childClassName $childClassName) "DataVar" $dataVar "RnArgs" $rnArgs)}}
 {{- end}}
+	}
 {{- else if eq .Type "list"}}
 	{{$resExpr}}.ForEach(
 		func(_, v gjson.Result) bool {
@@ -511,6 +513,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 {{- $hasChildren := false}}
 {{- if .ChildClasses}}{{$hasChildren = true}}{{end}}
 {{- if or $hasNonRefAttribs $hasChildren}}
+	{
 	var r{{$childClassName}} gjson.Result
 	{{$resExpr}}.ForEach(
 		func(_, v gjson.Result) bool {
@@ -544,6 +547,9 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 {{- end}}
 {{- if .ChildClasses}}
 	{{- template "updateFromBodySingleChildTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ResExpr" (printf "r%s.Get(\"%s.children\")" $childClassName $childClassName) "DataAccessor" $dataAccessor "RnArgs" $rnArgs)}}
+{{- end}}
+{{- if or $hasNonRefAttribs $hasChildren}}
+	}
 {{- end}}
 {{- else if eq .Type "list"}}
 	for c := range {{$dataAccessor}}.{{$list}} {

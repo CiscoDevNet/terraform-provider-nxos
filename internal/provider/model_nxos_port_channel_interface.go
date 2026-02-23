@@ -228,18 +228,20 @@ func (data *PortChannelInterface) fromBody(res gjson.Result) {
 	data.Speed = types.StringValue(res.Get(data.getClassName() + ".attributes.speed").String())
 	data.TrunkVlans = types.StringValue(res.Get(data.getClassName() + ".attributes.trunkVlans").String())
 	data.UserConfiguredFlags = types.StringValue(res.Get(data.getClassName() + ".attributes.userCfgdFlags").String())
-	var rnwRtVrfMbr gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("nwRtVrfMbr.attributes.rn").String()
-			if key == "rtvrfMbr" {
-				rnwRtVrfMbr = v
-				return false
-			}
-			return true
-		},
-	)
-	data.VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
+	{
+		var rnwRtVrfMbr gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("nwRtVrfMbr.attributes.rn").String()
+				if key == "rtvrfMbr" {
+					rnwRtVrfMbr = v
+					return false
+				}
+				return true
+			},
+		)
+		data.VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
+	}
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
 			v.ForEach(

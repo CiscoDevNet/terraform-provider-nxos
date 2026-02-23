@@ -106,18 +106,20 @@ func (data IPv4AccessListPolicyEgressInterface) toBody() nxos.Body {
 
 func (data *IPv4AccessListPolicyEgressInterface) fromBody(res gjson.Result) {
 	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
-	var raclInst gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("aclInst.attributes.rn").String()
-			if key == "acl" {
-				raclInst = v
-				return false
-			}
-			return true
-		},
-	)
-	data.AccessListName = types.StringValue(raclInst.Get("aclInst.attributes.name").String())
+	{
+		var raclInst gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("aclInst.attributes.rn").String()
+				if key == "acl" {
+					raclInst = v
+					return false
+				}
+				return true
+			},
+		)
+		data.AccessListName = types.StringValue(raclInst.Get("aclInst.attributes.name").String())
+	}
 }
 
 // End of section. //template:end fromBody

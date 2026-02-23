@@ -38,6 +38,7 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "name", "LEAF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "default_qos_policy_interface_in.0.interface_id", "eth1/10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "default_qos_policy_interface_in.0.policy_map_name", "PM1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "policy_map_name", "PM1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "mtu", "9216"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "default_admin_status", "up"))
 	var tfVersion *goversion.Version
@@ -90,6 +91,90 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/ipqos/queuing/p/name-[PM1]"
+  class_name = "ipqosPMapInst"
+  content = {
+      name = "PM1"
+  }
+}
+
+resource "nxos_rest" "PreReq2" {
+  dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q1]"
+  class_name = "ipqosMatchCMap"
+  content = {
+      name = "c-out-q1"
+  }
+  depends_on = [nxos_rest.PreReq1, ]
+}
+
+resource "nxos_rest" "PreReq3" {
+  dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q1]/prio"
+  class_name = "ipqosPriority"
+  delete = false
+  content = {
+      level = "1"
+  }
+  depends_on = [nxos_rest.PreReq2, ]
+}
+
+resource "nxos_rest" "PreReq4" {
+  dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q2]"
+  class_name = "ipqosMatchCMap"
+  content = {
+      name = "c-out-q2"
+  }
+  depends_on = [nxos_rest.PreReq1, ]
+}
+
+resource "nxos_rest" "PreReq5" {
+  dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q2]/setRemBW"
+  class_name = "ipqosSetRemBW"
+  delete = false
+  content = {
+      val = "10"
+  }
+  depends_on = [nxos_rest.PreReq4, ]
+}
+
+resource "nxos_rest" "PreReq6" {
+  dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q3]"
+  class_name = "ipqosMatchCMap"
+  content = {
+      name = "c-out-q3"
+  }
+  depends_on = [nxos_rest.PreReq1, ]
+}
+
+resource "nxos_rest" "PreReq7" {
+  dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q3]/setRemBW"
+  class_name = "ipqosSetRemBW"
+  delete = false
+  content = {
+      val = "10"
+  }
+  depends_on = [nxos_rest.PreReq6, ]
+}
+
+resource "nxos_rest" "PreReq8" {
+  dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q-default]"
+  class_name = "ipqosMatchCMap"
+  content = {
+      name = "c-out-q-default"
+  }
+  depends_on = [nxos_rest.PreReq1, ]
+}
+
+resource "nxos_rest" "PreReq9" {
+  dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q-default]/setRemBW"
+  class_name = "ipqosSetRemBW"
+  delete = false
+  content = {
+      val = "10"
+  }
+  depends_on = [nxos_rest.PreReq8, ]
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -97,7 +182,7 @@ resource "nxos_rest" "PreReq0" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosSystemConfig_minimum() string {
 	config := `resource "nxos_system" "test" {` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, nxos_rest.PreReq7, nxos_rest.PreReq8, nxos_rest.PreReq9, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -112,9 +197,10 @@ func testAccNxosSystemConfig_all() string {
 	config += `		interface_id = "eth1/10"` + "\n"
 	config += `		policy_map_name = "PM1"` + "\n"
 	config += `	}]` + "\n"
+	config += `	policy_map_name = "PM1"` + "\n"
 	config += `	mtu = 9216` + "\n"
 	config += `	default_admin_status = "up"` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, nxos_rest.PreReq7, nxos_rest.PreReq8, nxos_rest.PreReq9, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

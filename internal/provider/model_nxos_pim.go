@@ -305,166 +305,168 @@ func (data PIM) toBody() nxos.Body {
 
 func (data *PIM) fromBody(res gjson.Result) {
 	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
-	var rpimInst gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("pimInst.attributes.rn").String()
-			if key == "inst" {
-				rpimInst = v
-				return false
-			}
-			return true
-		},
-	)
-	data.InstanceAdminState = types.StringValue(rpimInst.Get("pimInst.attributes.adminSt").String())
-	rpimInst.Get("pimInst.children").ForEach(
-		func(_, v gjson.Result) bool {
-			v.ForEach(
-				func(classname, value gjson.Result) bool {
-					if classname.String() == "pimDom" {
-						var child PIMVrfs
-						child.Name = types.StringValue(value.Get("attributes.name").String())
-						child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
-						child.Bfd = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.bfd").String()))
-						value.Get("children").ForEach(
-							func(_, nestedV gjson.Result) bool {
-								nestedV.ForEach(
-									func(nestedClassname, nestedValue gjson.Result) bool {
-										if nestedClassname.String() == "pimIf" {
-											var nestedChildpimIf PIMInterfaces
-											nestedChildpimIf.InterfaceId = types.StringValue(nestedValue.Get("attributes.id").String())
-											nestedChildpimIf.AdminState = types.StringValue(nestedValue.Get("attributes.adminSt").String())
-											nestedChildpimIf.Bfd = types.StringValue(nestedValue.Get("attributes.bfdInst").String())
-											nestedChildpimIf.DrPriority = types.Int64Value(nestedValue.Get("attributes.drPrio").Int())
-											nestedChildpimIf.Passive = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.passive").String()))
-											nestedChildpimIf.SparseMode = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.pimSparseMode").String()))
-											child.Interfaces = append(child.Interfaces, nestedChildpimIf)
-										}
-										return true
-									},
-								)
-								return true
-							},
-						)
-						{
-							var rpimSSMPatP gjson.Result
+	{
+		var rpimInst gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("pimInst.attributes.rn").String()
+				if key == "inst" {
+					rpimInst = v
+					return false
+				}
+				return true
+			},
+		)
+		data.InstanceAdminState = types.StringValue(rpimInst.Get("pimInst.attributes.adminSt").String())
+		rpimInst.Get("pimInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "pimDom" {
+							var child PIMVrfs
+							child.Name = types.StringValue(value.Get("attributes.name").String())
+							child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
+							child.Bfd = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.bfd").String()))
 							value.Get("children").ForEach(
 								func(_, nestedV gjson.Result) bool {
-									key := nestedV.Get("pimSSMPatP.attributes.rn").String()
-									if key == "ssm" {
-										rpimSSMPatP = nestedV
-										return false
-									}
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "pimIf" {
+												var nestedChildpimIf PIMInterfaces
+												nestedChildpimIf.InterfaceId = types.StringValue(nestedValue.Get("attributes.id").String())
+												nestedChildpimIf.AdminState = types.StringValue(nestedValue.Get("attributes.adminSt").String())
+												nestedChildpimIf.Bfd = types.StringValue(nestedValue.Get("attributes.bfdInst").String())
+												nestedChildpimIf.DrPriority = types.Int64Value(nestedValue.Get("attributes.drPrio").Int())
+												nestedChildpimIf.Passive = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.passive").String()))
+												nestedChildpimIf.SparseMode = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.pimSparseMode").String()))
+												child.Interfaces = append(child.Interfaces, nestedChildpimIf)
+											}
+											return true
+										},
+									)
 									return true
 								},
 							)
-							child.SsmPolicyName = types.StringValue(rpimSSMPatP.Get("pimSSMPatP.attributes.name").String())
 							{
-								var rpimSSMRangeP gjson.Result
-								rpimSSMPatP.Get("pimSSMPatP").Get("children").ForEach(
+								var rpimSSMPatP gjson.Result
+								value.Get("children").ForEach(
 									func(_, nestedV gjson.Result) bool {
-										key := nestedV.Get("pimSSMRangeP.attributes.rn").String()
-										if key == "range" {
-											rpimSSMRangeP = nestedV
+										key := nestedV.Get("pimSSMPatP.attributes.rn").String()
+										if key == "ssm" {
+											rpimSSMPatP = nestedV
 											return false
 										}
 										return true
 									},
 								)
-								child.SsmRangeGroupList1 = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.grpList").String())
-								child.SsmRangeGroupList2 = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.grpList1").String())
-								child.SsmRangeGroupList3 = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.grpList2").String())
-								child.SsmRangeGroupList4 = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.grpList3").String())
-								child.SsmRangePrefixList = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.pfxList").String())
-								child.SsmRangeRouteMap = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.rtMap").String())
-								child.SsmRangeNone = types.BoolValue(helpers.ParseNxosBoolean(rpimSSMRangeP.Get("pimSSMRangeP.attributes.ssmNone").String()))
+								child.SsmPolicyName = types.StringValue(rpimSSMPatP.Get("pimSSMPatP.attributes.name").String())
+								{
+									var rpimSSMRangeP gjson.Result
+									rpimSSMPatP.Get("pimSSMPatP").Get("children").ForEach(
+										func(_, nestedV gjson.Result) bool {
+											key := nestedV.Get("pimSSMRangeP.attributes.rn").String()
+											if key == "range" {
+												rpimSSMRangeP = nestedV
+												return false
+											}
+											return true
+										},
+									)
+									child.SsmRangeGroupList1 = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.grpList").String())
+									child.SsmRangeGroupList2 = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.grpList1").String())
+									child.SsmRangeGroupList3 = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.grpList2").String())
+									child.SsmRangeGroupList4 = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.grpList3").String())
+									child.SsmRangePrefixList = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.pfxList").String())
+									child.SsmRangeRouteMap = types.StringValue(rpimSSMRangeP.Get("pimSSMRangeP.attributes.rtMap").String())
+									child.SsmRangeNone = types.BoolValue(helpers.ParseNxosBoolean(rpimSSMRangeP.Get("pimSSMRangeP.attributes.ssmNone").String()))
+								}
 							}
+							{
+								var rpimStaticRPP gjson.Result
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										key := nestedV.Get("pimStaticRPP.attributes.rn").String()
+										if key == "staticrp" {
+											rpimStaticRPP = nestedV
+											return false
+										}
+										return true
+									},
+								)
+								child.StaticRpPolicyName = types.StringValue(rpimStaticRPP.Get("pimStaticRPP.attributes.name").String())
+								rpimStaticRPP.Get("pimStaticRPP").Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										nestedV.ForEach(
+											func(nestedClassname, nestedValue gjson.Result) bool {
+												if nestedClassname.String() == "pimStaticRP" {
+													var nestedChildpimStaticRP PIMStaticRps
+													nestedChildpimStaticRP.Address = types.StringValue(nestedValue.Get("attributes.addr").String())
+													nestedValue.Get("children").ForEach(
+														func(_, nestedV gjson.Result) bool {
+															nestedV.ForEach(
+																func(nestedClassname, nestedValue gjson.Result) bool {
+																	if nestedClassname.String() == "pimRPGrpList" {
+																		var nestedChildpimRPGrpList PIMGroupLists
+																		nestedChildpimRPGrpList.Address = types.StringValue(nestedValue.Get("attributes.grpListName").String())
+																		nestedChildpimRPGrpList.Bidir = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.bidir").String()))
+																		nestedChildpimRPGrpList.Override = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.override").String()))
+																		nestedChildpimStaticRP.GroupLists = append(nestedChildpimStaticRP.GroupLists, nestedChildpimRPGrpList)
+																	}
+																	return true
+																},
+															)
+															return true
+														},
+													)
+													child.StaticRps = append(child.StaticRps, nestedChildpimStaticRP)
+												}
+												return true
+											},
+										)
+										return true
+									},
+								)
+							}
+							{
+								var rpimAcastRPFuncP gjson.Result
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										key := nestedV.Get("pimAcastRPFuncP.attributes.rn").String()
+										if key == "acastrpfunc" {
+											rpimAcastRPFuncP = nestedV
+											return false
+										}
+										return true
+									},
+								)
+								child.AnycastRpLocalInterface = types.StringValue(rpimAcastRPFuncP.Get("pimAcastRPFuncP.attributes.localIf").String())
+								child.AnycastRpSourceInterface = types.StringValue(rpimAcastRPFuncP.Get("pimAcastRPFuncP.attributes.srcIf").String())
+								rpimAcastRPFuncP.Get("pimAcastRPFuncP").Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										nestedV.ForEach(
+											func(nestedClassname, nestedValue gjson.Result) bool {
+												if nestedClassname.String() == "pimAcastRPPeer" {
+													var nestedChildpimAcastRPPeer PIMAnycastRpPeers
+													nestedChildpimAcastRPPeer.Address = types.StringValue(nestedValue.Get("attributes.addr").String())
+													nestedChildpimAcastRPPeer.RpSetAddress = types.StringValue(nestedValue.Get("attributes.rpSetAddr").String())
+													child.AnycastRpPeers = append(child.AnycastRpPeers, nestedChildpimAcastRPPeer)
+												}
+												return true
+											},
+										)
+										return true
+									},
+								)
+							}
+							data.Vrfs = append(data.Vrfs, child)
 						}
-						{
-							var rpimStaticRPP gjson.Result
-							value.Get("children").ForEach(
-								func(_, nestedV gjson.Result) bool {
-									key := nestedV.Get("pimStaticRPP.attributes.rn").String()
-									if key == "staticrp" {
-										rpimStaticRPP = nestedV
-										return false
-									}
-									return true
-								},
-							)
-							child.StaticRpPolicyName = types.StringValue(rpimStaticRPP.Get("pimStaticRPP.attributes.name").String())
-							rpimStaticRPP.Get("pimStaticRPP").Get("children").ForEach(
-								func(_, nestedV gjson.Result) bool {
-									nestedV.ForEach(
-										func(nestedClassname, nestedValue gjson.Result) bool {
-											if nestedClassname.String() == "pimStaticRP" {
-												var nestedChildpimStaticRP PIMStaticRps
-												nestedChildpimStaticRP.Address = types.StringValue(nestedValue.Get("attributes.addr").String())
-												nestedValue.Get("children").ForEach(
-													func(_, nestedV gjson.Result) bool {
-														nestedV.ForEach(
-															func(nestedClassname, nestedValue gjson.Result) bool {
-																if nestedClassname.String() == "pimRPGrpList" {
-																	var nestedChildpimRPGrpList PIMGroupLists
-																	nestedChildpimRPGrpList.Address = types.StringValue(nestedValue.Get("attributes.grpListName").String())
-																	nestedChildpimRPGrpList.Bidir = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.bidir").String()))
-																	nestedChildpimRPGrpList.Override = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.override").String()))
-																	nestedChildpimStaticRP.GroupLists = append(nestedChildpimStaticRP.GroupLists, nestedChildpimRPGrpList)
-																}
-																return true
-															},
-														)
-														return true
-													},
-												)
-												child.StaticRps = append(child.StaticRps, nestedChildpimStaticRP)
-											}
-											return true
-										},
-									)
-									return true
-								},
-							)
-						}
-						{
-							var rpimAcastRPFuncP gjson.Result
-							value.Get("children").ForEach(
-								func(_, nestedV gjson.Result) bool {
-									key := nestedV.Get("pimAcastRPFuncP.attributes.rn").String()
-									if key == "acastrpfunc" {
-										rpimAcastRPFuncP = nestedV
-										return false
-									}
-									return true
-								},
-							)
-							child.AnycastRpLocalInterface = types.StringValue(rpimAcastRPFuncP.Get("pimAcastRPFuncP.attributes.localIf").String())
-							child.AnycastRpSourceInterface = types.StringValue(rpimAcastRPFuncP.Get("pimAcastRPFuncP.attributes.srcIf").String())
-							rpimAcastRPFuncP.Get("pimAcastRPFuncP").Get("children").ForEach(
-								func(_, nestedV gjson.Result) bool {
-									nestedV.ForEach(
-										func(nestedClassname, nestedValue gjson.Result) bool {
-											if nestedClassname.String() == "pimAcastRPPeer" {
-												var nestedChildpimAcastRPPeer PIMAnycastRpPeers
-												nestedChildpimAcastRPPeer.Address = types.StringValue(nestedValue.Get("attributes.addr").String())
-												nestedChildpimAcastRPPeer.RpSetAddress = types.StringValue(nestedValue.Get("attributes.rpSetAddr").String())
-												child.AnycastRpPeers = append(child.AnycastRpPeers, nestedChildpimAcastRPPeer)
-											}
-											return true
-										},
-									)
-									return true
-								},
-							)
-						}
-						data.Vrfs = append(data.Vrfs, child)
-					}
-					return true
-				},
-			)
-			return true
-		},
-	)
+						return true
+					},
+				)
+				return true
+			},
+		)
+	}
 }
 
 // End of section. //template:end fromBody

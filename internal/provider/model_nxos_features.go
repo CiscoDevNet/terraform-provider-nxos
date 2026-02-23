@@ -313,342 +313,398 @@ func (data Features) toBody() nxos.Body {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *Features) fromBody(res gjson.Result) {
-	var rfmBashShell gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmBashShell.attributes.rn").String()
-			if key == "bashshell" {
-				rfmBashShell = v
-				return false
-			}
-			return true
-		},
-	)
-	data.BashShell = types.StringValue(rfmBashShell.Get("fmBashShell.attributes.adminSt").String())
-	var rfmBfd gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmBfd.attributes.rn").String()
-			if key == "bfd" {
-				rfmBfd = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Bfd = types.StringValue(rfmBfd.Get("fmBfd.attributes.adminSt").String())
-	var rfmBgp gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmBgp.attributes.rn").String()
-			if key == "bgp" {
-				rfmBgp = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Bgp = types.StringValue(rfmBgp.Get("fmBgp.attributes.adminSt").String())
-	var rfmDhcp gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmDhcp.attributes.rn").String()
-			if key == "dhcp" {
-				rfmDhcp = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Dhcp = types.StringValue(rfmDhcp.Get("fmDhcp.attributes.adminSt").String())
-	var rfmEvpn gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmEvpn.attributes.rn").String()
-			if key == "evpn" {
-				rfmEvpn = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Evpn = types.StringValue(rfmEvpn.Get("fmEvpn.attributes.adminSt").String())
-	var rfmHmm gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmHmm.attributes.rn").String()
-			if key == "hmm" {
-				rfmHmm = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Hmm = types.StringValue(rfmHmm.Get("fmHmm.attributes.adminSt").String())
-	var rfmHsrp gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmHsrp.attributes.rn").String()
-			if key == "hsrp" {
-				rfmHsrp = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Hsrp = types.StringValue(rfmHsrp.Get("fmHsrp.attributes.adminSt").String())
-	var rfmInterfaceVlan gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmInterfaceVlan.attributes.rn").String()
-			if key == "ifvlan" {
-				rfmInterfaceVlan = v
-				return false
-			}
-			return true
-		},
-	)
-	data.InterfaceVlan = types.StringValue(rfmInterfaceVlan.Get("fmInterfaceVlan.attributes.adminSt").String())
-	var rfmIsis gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmIsis.attributes.rn").String()
-			if key == "isis" {
-				rfmIsis = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Isis = types.StringValue(rfmIsis.Get("fmIsis.attributes.adminSt").String())
-	var rfmLacp gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmLacp.attributes.rn").String()
-			if key == "lacp" {
-				rfmLacp = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Lacp = types.StringValue(rfmLacp.Get("fmLacp.attributes.adminSt").String())
-	var rfmLldp gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmLldp.attributes.rn").String()
-			if key == "lldp" {
-				rfmLldp = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Lldp = types.StringValue(rfmLldp.Get("fmLldp.attributes.adminSt").String())
-	var rfmMacsec gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmMacsec.attributes.rn").String()
-			if key == "macsec" {
-				rfmMacsec = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Macsec = types.StringValue(rfmMacsec.Get("fmMacsec.attributes.adminSt").String())
-	var rfmNetflow gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmNetflow.attributes.rn").String()
-			if key == "netflow" {
-				rfmNetflow = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Netflow = types.StringValue(rfmNetflow.Get("fmNetflow.attributes.adminSt").String())
-	var rfmNgmvpn gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmNgmvpn.attributes.rn").String()
-			if key == "ngmvpn" {
-				rfmNgmvpn = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Ngmvpn = types.StringValue(rfmNgmvpn.Get("fmNgmvpn.attributes.adminSt").String())
-	var rfmNgoam gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmNgoam.attributes.rn").String()
-			if key == "ngoam" {
-				rfmNgoam = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Ngoam = types.StringValue(rfmNgoam.Get("fmNgoam.attributes.adminSt").String())
-	var rfmNvo gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmNvo.attributes.rn").String()
-			if key == "nvo" {
-				rfmNvo = v
-				return false
-			}
-			return true
-		},
-	)
-	data.NvOverlay = types.StringValue(rfmNvo.Get("fmNvo.attributes.adminSt").String())
-	var rfmOspf gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmOspf.attributes.rn").String()
-			if key == "ospf" {
-				rfmOspf = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Ospf = types.StringValue(rfmOspf.Get("fmOspf.attributes.adminSt").String())
-	var rfmOspfv3 gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmOspfv3.attributes.rn").String()
-			if key == "ospfv3" {
-				rfmOspfv3 = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Ospfv3 = types.StringValue(rfmOspfv3.Get("fmOspfv3.attributes.adminSt").String())
-	var rfmPim gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmPim.attributes.rn").String()
-			if key == "pim" {
-				rfmPim = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Pim = types.StringValue(rfmPim.Get("fmPim.attributes.adminSt").String())
-	var rfmPtp gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmPtp.attributes.rn").String()
-			if key == "ptp" {
-				rfmPtp = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Ptp = types.StringValue(rfmPtp.Get("fmPtp.attributes.adminSt").String())
-	var rfmPvlan gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmPvlan.attributes.rn").String()
-			if key == "pvlan" {
-				rfmPvlan = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Pvlan = types.StringValue(rfmPvlan.Get("fmPvlan.attributes.adminSt").String())
-	var rfmSflow gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmSflow.attributes.rn").String()
-			if key == "sflow" {
-				rfmSflow = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Sflow = types.StringValue(rfmSflow.Get("fmSflow.attributes.adminSt").String())
-	var rfmSsh gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmSsh.attributes.rn").String()
-			if key == "ssh" {
-				rfmSsh = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Ssh = types.StringValue(rfmSsh.Get("fmSsh.attributes.adminSt").String())
-	var rfmTacacsplus gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmTacacsplus.attributes.rn").String()
-			if key == "tacacsplus" {
-				rfmTacacsplus = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Tacacs = types.StringValue(rfmTacacsplus.Get("fmTacacsplus.attributes.adminSt").String())
-	var rfmTelnet gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmTelnet.attributes.rn").String()
-			if key == "telnet" {
-				rfmTelnet = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Telnet = types.StringValue(rfmTelnet.Get("fmTelnet.attributes.adminSt").String())
-	var rfmUdld gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmUdld.attributes.rn").String()
-			if key == "udld" {
-				rfmUdld = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Udld = types.StringValue(rfmUdld.Get("fmUdld.attributes.adminSt").String())
-	var rfmVnSegment gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmVnSegment.attributes.rn").String()
-			if key == "vnsegment" {
-				rfmVnSegment = v
-				return false
-			}
-			return true
-		},
-	)
-	data.VnSegment = types.StringValue(rfmVnSegment.Get("fmVnSegment.attributes.adminSt").String())
-	var rfmVpc gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("fmVpc.attributes.rn").String()
-			if key == "vpc" {
-				rfmVpc = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Vpc = types.StringValue(rfmVpc.Get("fmVpc.attributes.adminSt").String())
+	{
+		var rfmBashShell gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmBashShell.attributes.rn").String()
+				if key == "bashshell" {
+					rfmBashShell = v
+					return false
+				}
+				return true
+			},
+		)
+		data.BashShell = types.StringValue(rfmBashShell.Get("fmBashShell.attributes.adminSt").String())
+	}
+	{
+		var rfmBfd gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmBfd.attributes.rn").String()
+				if key == "bfd" {
+					rfmBfd = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Bfd = types.StringValue(rfmBfd.Get("fmBfd.attributes.adminSt").String())
+	}
+	{
+		var rfmBgp gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmBgp.attributes.rn").String()
+				if key == "bgp" {
+					rfmBgp = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Bgp = types.StringValue(rfmBgp.Get("fmBgp.attributes.adminSt").String())
+	}
+	{
+		var rfmDhcp gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmDhcp.attributes.rn").String()
+				if key == "dhcp" {
+					rfmDhcp = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Dhcp = types.StringValue(rfmDhcp.Get("fmDhcp.attributes.adminSt").String())
+	}
+	{
+		var rfmEvpn gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmEvpn.attributes.rn").String()
+				if key == "evpn" {
+					rfmEvpn = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Evpn = types.StringValue(rfmEvpn.Get("fmEvpn.attributes.adminSt").String())
+	}
+	{
+		var rfmHmm gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmHmm.attributes.rn").String()
+				if key == "hmm" {
+					rfmHmm = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Hmm = types.StringValue(rfmHmm.Get("fmHmm.attributes.adminSt").String())
+	}
+	{
+		var rfmHsrp gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmHsrp.attributes.rn").String()
+				if key == "hsrp" {
+					rfmHsrp = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Hsrp = types.StringValue(rfmHsrp.Get("fmHsrp.attributes.adminSt").String())
+	}
+	{
+		var rfmInterfaceVlan gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmInterfaceVlan.attributes.rn").String()
+				if key == "ifvlan" {
+					rfmInterfaceVlan = v
+					return false
+				}
+				return true
+			},
+		)
+		data.InterfaceVlan = types.StringValue(rfmInterfaceVlan.Get("fmInterfaceVlan.attributes.adminSt").String())
+	}
+	{
+		var rfmIsis gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmIsis.attributes.rn").String()
+				if key == "isis" {
+					rfmIsis = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Isis = types.StringValue(rfmIsis.Get("fmIsis.attributes.adminSt").String())
+	}
+	{
+		var rfmLacp gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmLacp.attributes.rn").String()
+				if key == "lacp" {
+					rfmLacp = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Lacp = types.StringValue(rfmLacp.Get("fmLacp.attributes.adminSt").String())
+	}
+	{
+		var rfmLldp gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmLldp.attributes.rn").String()
+				if key == "lldp" {
+					rfmLldp = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Lldp = types.StringValue(rfmLldp.Get("fmLldp.attributes.adminSt").String())
+	}
+	{
+		var rfmMacsec gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmMacsec.attributes.rn").String()
+				if key == "macsec" {
+					rfmMacsec = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Macsec = types.StringValue(rfmMacsec.Get("fmMacsec.attributes.adminSt").String())
+	}
+	{
+		var rfmNetflow gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmNetflow.attributes.rn").String()
+				if key == "netflow" {
+					rfmNetflow = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Netflow = types.StringValue(rfmNetflow.Get("fmNetflow.attributes.adminSt").String())
+	}
+	{
+		var rfmNgmvpn gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmNgmvpn.attributes.rn").String()
+				if key == "ngmvpn" {
+					rfmNgmvpn = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Ngmvpn = types.StringValue(rfmNgmvpn.Get("fmNgmvpn.attributes.adminSt").String())
+	}
+	{
+		var rfmNgoam gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmNgoam.attributes.rn").String()
+				if key == "ngoam" {
+					rfmNgoam = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Ngoam = types.StringValue(rfmNgoam.Get("fmNgoam.attributes.adminSt").String())
+	}
+	{
+		var rfmNvo gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmNvo.attributes.rn").String()
+				if key == "nvo" {
+					rfmNvo = v
+					return false
+				}
+				return true
+			},
+		)
+		data.NvOverlay = types.StringValue(rfmNvo.Get("fmNvo.attributes.adminSt").String())
+	}
+	{
+		var rfmOspf gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmOspf.attributes.rn").String()
+				if key == "ospf" {
+					rfmOspf = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Ospf = types.StringValue(rfmOspf.Get("fmOspf.attributes.adminSt").String())
+	}
+	{
+		var rfmOspfv3 gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmOspfv3.attributes.rn").String()
+				if key == "ospfv3" {
+					rfmOspfv3 = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Ospfv3 = types.StringValue(rfmOspfv3.Get("fmOspfv3.attributes.adminSt").String())
+	}
+	{
+		var rfmPim gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmPim.attributes.rn").String()
+				if key == "pim" {
+					rfmPim = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Pim = types.StringValue(rfmPim.Get("fmPim.attributes.adminSt").String())
+	}
+	{
+		var rfmPtp gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmPtp.attributes.rn").String()
+				if key == "ptp" {
+					rfmPtp = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Ptp = types.StringValue(rfmPtp.Get("fmPtp.attributes.adminSt").String())
+	}
+	{
+		var rfmPvlan gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmPvlan.attributes.rn").String()
+				if key == "pvlan" {
+					rfmPvlan = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Pvlan = types.StringValue(rfmPvlan.Get("fmPvlan.attributes.adminSt").String())
+	}
+	{
+		var rfmSflow gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmSflow.attributes.rn").String()
+				if key == "sflow" {
+					rfmSflow = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Sflow = types.StringValue(rfmSflow.Get("fmSflow.attributes.adminSt").String())
+	}
+	{
+		var rfmSsh gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmSsh.attributes.rn").String()
+				if key == "ssh" {
+					rfmSsh = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Ssh = types.StringValue(rfmSsh.Get("fmSsh.attributes.adminSt").String())
+	}
+	{
+		var rfmTacacsplus gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmTacacsplus.attributes.rn").String()
+				if key == "tacacsplus" {
+					rfmTacacsplus = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Tacacs = types.StringValue(rfmTacacsplus.Get("fmTacacsplus.attributes.adminSt").String())
+	}
+	{
+		var rfmTelnet gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmTelnet.attributes.rn").String()
+				if key == "telnet" {
+					rfmTelnet = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Telnet = types.StringValue(rfmTelnet.Get("fmTelnet.attributes.adminSt").String())
+	}
+	{
+		var rfmUdld gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmUdld.attributes.rn").String()
+				if key == "udld" {
+					rfmUdld = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Udld = types.StringValue(rfmUdld.Get("fmUdld.attributes.adminSt").String())
+	}
+	{
+		var rfmVnSegment gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmVnSegment.attributes.rn").String()
+				if key == "vnsegment" {
+					rfmVnSegment = v
+					return false
+				}
+				return true
+			},
+		)
+		data.VnSegment = types.StringValue(rfmVnSegment.Get("fmVnSegment.attributes.adminSt").String())
+	}
+	{
+		var rfmVpc gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("fmVpc.attributes.rn").String()
+				if key == "vpc" {
+					rfmVpc = v
+					return false
+				}
+				return true
+			},
+		)
+		data.Vpc = types.StringValue(rfmVpc.Get("fmVpc.attributes.adminSt").String())
+	}
 }
 
 // End of section. //template:end fromBody

@@ -197,78 +197,80 @@ func (data *VRF) fromBody(res gjson.Result) {
 	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	data.Description = types.StringValue(res.Get(data.getClassName() + ".attributes.descr").String())
 	data.Encap = types.StringValue(res.Get(data.getClassName() + ".attributes.encap").String())
-	var rrtctrlDom gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("rtctrlDom.attributes.rn").String()
-			if key == fmt.Sprintf("dom-%[1]s", data.Name.ValueString()) {
-				rrtctrlDom = v
-				return false
-			}
-			return true
-		},
-	)
-	data.RouteDistinguisher = types.StringValue(rrtctrlDom.Get("rtctrlDom.attributes.rd").String())
-	rrtctrlDom.Get("rtctrlDom.children").ForEach(
-		func(_, v gjson.Result) bool {
-			v.ForEach(
-				func(classname, value gjson.Result) bool {
-					if classname.String() == "rtctrlDomAf" {
-						var child VRFAddressFamilies
-						child.AddressFamily = types.StringValue(value.Get("attributes.type").String())
-						value.Get("children").ForEach(
-							func(_, nestedV gjson.Result) bool {
-								nestedV.ForEach(
-									func(nestedClassname, nestedValue gjson.Result) bool {
-										if nestedClassname.String() == "rtctrlAfCtrl" {
-											var nestedChildrtctrlAfCtrl VRFRouteTargetAddressFamilies
-											nestedChildrtctrlAfCtrl.RouteTargetAddressFamily = types.StringValue(nestedValue.Get("attributes.type").String())
-											nestedValue.Get("children").ForEach(
-												func(_, nestedV gjson.Result) bool {
-													nestedV.ForEach(
-														func(nestedClassname, nestedValue gjson.Result) bool {
-															if nestedClassname.String() == "rtctrlRttP" {
-																var nestedChildrtctrlRttP VRFRouteTargetDirections
-																nestedChildrtctrlRttP.Direction = types.StringValue(nestedValue.Get("attributes.type").String())
-																nestedValue.Get("children").ForEach(
-																	func(_, nestedV gjson.Result) bool {
-																		nestedV.ForEach(
-																			func(nestedClassname, nestedValue gjson.Result) bool {
-																				if nestedClassname.String() == "rtctrlRttEntry" {
-																					var nestedChildrtctrlRttEntry VRFRouteTargets
-																					nestedChildrtctrlRttEntry.RouteTarget = types.StringValue(nestedValue.Get("attributes.rtt").String())
-																					nestedChildrtctrlRttP.RouteTargets = append(nestedChildrtctrlRttP.RouteTargets, nestedChildrtctrlRttEntry)
-																				}
-																				return true
-																			},
-																		)
-																		return true
-																	},
-																)
-																nestedChildrtctrlAfCtrl.RouteTargetDirections = append(nestedChildrtctrlAfCtrl.RouteTargetDirections, nestedChildrtctrlRttP)
-															}
-															return true
-														},
-													)
-													return true
-												},
-											)
-											child.RouteTargetAddressFamilies = append(child.RouteTargetAddressFamilies, nestedChildrtctrlAfCtrl)
-										}
-										return true
-									},
-								)
-								return true
-							},
-						)
-						data.AddressFamilies = append(data.AddressFamilies, child)
-					}
-					return true
-				},
-			)
-			return true
-		},
-	)
+	{
+		var rrtctrlDom gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("rtctrlDom.attributes.rn").String()
+				if key == fmt.Sprintf("dom-%[1]s", data.Name.ValueString()) {
+					rrtctrlDom = v
+					return false
+				}
+				return true
+			},
+		)
+		data.RouteDistinguisher = types.StringValue(rrtctrlDom.Get("rtctrlDom.attributes.rd").String())
+		rrtctrlDom.Get("rtctrlDom.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "rtctrlDomAf" {
+							var child VRFAddressFamilies
+							child.AddressFamily = types.StringValue(value.Get("attributes.type").String())
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "rtctrlAfCtrl" {
+												var nestedChildrtctrlAfCtrl VRFRouteTargetAddressFamilies
+												nestedChildrtctrlAfCtrl.RouteTargetAddressFamily = types.StringValue(nestedValue.Get("attributes.type").String())
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														nestedV.ForEach(
+															func(nestedClassname, nestedValue gjson.Result) bool {
+																if nestedClassname.String() == "rtctrlRttP" {
+																	var nestedChildrtctrlRttP VRFRouteTargetDirections
+																	nestedChildrtctrlRttP.Direction = types.StringValue(nestedValue.Get("attributes.type").String())
+																	nestedValue.Get("children").ForEach(
+																		func(_, nestedV gjson.Result) bool {
+																			nestedV.ForEach(
+																				func(nestedClassname, nestedValue gjson.Result) bool {
+																					if nestedClassname.String() == "rtctrlRttEntry" {
+																						var nestedChildrtctrlRttEntry VRFRouteTargets
+																						nestedChildrtctrlRttEntry.RouteTarget = types.StringValue(nestedValue.Get("attributes.rtt").String())
+																						nestedChildrtctrlRttP.RouteTargets = append(nestedChildrtctrlRttP.RouteTargets, nestedChildrtctrlRttEntry)
+																					}
+																					return true
+																				},
+																			)
+																			return true
+																		},
+																	)
+																	nestedChildrtctrlAfCtrl.RouteTargetDirections = append(nestedChildrtctrlAfCtrl.RouteTargetDirections, nestedChildrtctrlRttP)
+																}
+																return true
+															},
+														)
+														return true
+													},
+												)
+												child.RouteTargetAddressFamilies = append(child.RouteTargetAddressFamilies, nestedChildrtctrlAfCtrl)
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							data.AddressFamilies = append(data.AddressFamilies, child)
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+	}
 }
 
 // End of section. //template:end fromBody

@@ -143,47 +143,49 @@ func (data Keychain) toBody() nxos.Body {
 
 func (data *Keychain) fromBody(res gjson.Result) {
 	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
-	var rkcmgrKeychains gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("kcmgrKeychains.attributes.rn").String()
-			if key == "keychains" {
-				rkcmgrKeychains = v
-				return false
-			}
-			return true
-		},
-	)
-	rkcmgrKeychains.Get("kcmgrKeychains.children").ForEach(
-		func(_, v gjson.Result) bool {
-			v.ForEach(
-				func(classname, value gjson.Result) bool {
-					if classname.String() == "kcmgrClassicKeychain" {
-						var child KeychainKeychains
-						child.Name = types.StringValue(value.Get("attributes.keychainName").String())
-						value.Get("children").ForEach(
-							func(_, nestedV gjson.Result) bool {
-								nestedV.ForEach(
-									func(nestedClassname, nestedValue gjson.Result) bool {
-										if nestedClassname.String() == "kcmgrKey" {
-											var nestedChildkcmgrKey KeychainKeys
-											nestedChildkcmgrKey.KeyId = types.Int64Value(nestedValue.Get("attributes.keyId").Int())
-											child.Keys = append(child.Keys, nestedChildkcmgrKey)
-										}
-										return true
-									},
-								)
-								return true
-							},
-						)
-						data.Keychains = append(data.Keychains, child)
-					}
-					return true
-				},
-			)
-			return true
-		},
-	)
+	{
+		var rkcmgrKeychains gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("kcmgrKeychains.attributes.rn").String()
+				if key == "keychains" {
+					rkcmgrKeychains = v
+					return false
+				}
+				return true
+			},
+		)
+		rkcmgrKeychains.Get("kcmgrKeychains.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "kcmgrClassicKeychain" {
+							var child KeychainKeychains
+							child.Name = types.StringValue(value.Get("attributes.keychainName").String())
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "kcmgrKey" {
+												var nestedChildkcmgrKey KeychainKeys
+												nestedChildkcmgrKey.KeyId = types.Int64Value(nestedValue.Get("attributes.keyId").Int())
+												child.Keys = append(child.Keys, nestedChildkcmgrKey)
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							data.Keychains = append(data.Keychains, child)
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+	}
 }
 
 // End of section. //template:end fromBody

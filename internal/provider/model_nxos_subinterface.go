@@ -147,18 +147,20 @@ func (data *Subinterface) fromBody(res gjson.Result) {
 	data.LinkLogging = types.StringValue(res.Get(data.getClassName() + ".attributes.linkLog").String())
 	data.Medium = types.StringValue(res.Get(data.getClassName() + ".attributes.mediumType").String())
 	data.Mtu = types.Int64Value(res.Get(data.getClassName() + ".attributes.mtu").Int())
-	var rnwRtVrfMbr gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("nwRtVrfMbr.attributes.rn").String()
-			if key == "rtvrfMbr" {
-				rnwRtVrfMbr = v
-				return false
-			}
-			return true
-		},
-	)
-	data.VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
+	{
+		var rnwRtVrfMbr gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("nwRtVrfMbr.attributes.rn").String()
+				if key == "rtvrfMbr" {
+					rnwRtVrfMbr = v
+					return false
+				}
+				return true
+			},
+		)
+		data.VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
+	}
 }
 
 // End of section. //template:end fromBody

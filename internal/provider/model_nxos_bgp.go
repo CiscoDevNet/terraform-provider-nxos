@@ -552,280 +552,282 @@ func (data BGP) toBody() nxos.Body {
 
 func (data *BGP) fromBody(res gjson.Result) {
 	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
-	var rbgpInst gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("bgpInst.attributes.rn").String()
-			if key == "inst" {
-				rbgpInst = v
-				return false
-			}
-			return true
-		},
-	)
-	data.InstanceAdminState = types.StringValue(rbgpInst.Get("bgpInst.attributes.adminSt").String())
-	data.Asn = types.StringValue(rbgpInst.Get("bgpInst.attributes.asn").String())
-	data.EnhancedErrorHandling = types.BoolValue(helpers.ParseNxosBoolean(rbgpInst.Get("bgpInst.attributes.enhancedErr").String()))
-	rbgpInst.Get("bgpInst.children").ForEach(
-		func(_, v gjson.Result) bool {
-			v.ForEach(
-				func(classname, value gjson.Result) bool {
-					if classname.String() == "bgpDom" {
-						var child BGPVrfs
-						child.Name = types.StringValue(value.Get("attributes.name").String())
-						child.RouterId = types.StringValue(value.Get("attributes.rtrId").String())
-						{
-							var rbgpRtCtrl gjson.Result
-							value.Get("children").ForEach(
-								func(_, nestedV gjson.Result) bool {
-									key := nestedV.Get("bgpRtCtrl.attributes.rn").String()
-									if key == "rtctrl" {
-										rbgpRtCtrl = nestedV
-										return false
-									}
-									return true
-								},
-							)
-							child.RouteControlEnforceFirstAs = types.StringValue(rbgpRtCtrl.Get("bgpRtCtrl.attributes.enforceFirstAs").String())
-							child.RouteControlFibAccelerate = types.StringValue(rbgpRtCtrl.Get("bgpRtCtrl.attributes.fibAccelerate").String())
-							child.RouteControlLogNeighborChanges = types.StringValue(rbgpRtCtrl.Get("bgpRtCtrl.attributes.logNeighborChanges").String())
-							child.RouteControlSuppressRoutes = types.StringValue(rbgpRtCtrl.Get("bgpRtCtrl.attributes.supprRt").String())
-						}
-						{
-							var rbgpGr gjson.Result
-							value.Get("children").ForEach(
-								func(_, nestedV gjson.Result) bool {
-									key := nestedV.Get("bgpGr.attributes.rn").String()
-									if key == "gr" {
-										rbgpGr = nestedV
-										return false
-									}
-									return true
-								},
-							)
-							child.GracefulRestartInterval = types.Int64Value(rbgpGr.Get("bgpGr.attributes.restartIntvl").Int())
-							child.GracefulRestartStaleInterval = types.Int64Value(rbgpGr.Get("bgpGr.attributes.staleIntvl").Int())
-						}
-						value.Get("children").ForEach(
-							func(_, nestedV gjson.Result) bool {
-								nestedV.ForEach(
-									func(nestedClassname, nestedValue gjson.Result) bool {
-										if nestedClassname.String() == "bgpDomAf" {
-											var nestedChildbgpDomAf BGPAddressFamilies
-											nestedChildbgpDomAf.AddressFamily = types.StringValue(nestedValue.Get("attributes.type").String())
-											nestedChildbgpDomAf.CriticalNexthopTimeout = types.StringValue(nestedValue.Get("attributes.critNhTimeout").String())
-											nestedChildbgpDomAf.NonCriticalNexthopTimeout = types.StringValue(nestedValue.Get("attributes.nonCritNhTimeout").String())
-											nestedChildbgpDomAf.AdvertiseL2vpnEvpn = types.StringValue(nestedValue.Get("attributes.advertL2vpnEvpn").String())
-											nestedChildbgpDomAf.AdvertisePhysicalIpForType5Routes = types.StringValue(nestedValue.Get("attributes.advPip").String())
-											nestedChildbgpDomAf.MaxEcmpPaths = types.Int64Value(nestedValue.Get("attributes.maxEcmp").Int())
-											nestedChildbgpDomAf.MaxExternalEcmpPaths = types.Int64Value(nestedValue.Get("attributes.maxExtEcmp").Int())
-											nestedChildbgpDomAf.MaxExternalInternalEcmpPaths = types.Int64Value(nestedValue.Get("attributes.maxExtIntEcmp").Int())
-											nestedChildbgpDomAf.MaxLocalEcmpPaths = types.Int64Value(nestedValue.Get("attributes.maxLclEcmp").Int())
-											nestedChildbgpDomAf.MaxMixedEcmpPaths = types.Int64Value(nestedValue.Get("attributes.maxMxdEcmp").Int())
-											nestedChildbgpDomAf.DefaultInformationOriginate = types.StringValue(nestedValue.Get("attributes.defInfOriginate").String())
-											nestedChildbgpDomAf.NextHopRouteMapName = types.StringValue(nestedValue.Get("attributes.nhRtMap").String())
-											nestedChildbgpDomAf.PrefixPriority = types.StringValue(nestedValue.Get("attributes.prfxPriority").String())
-											nestedChildbgpDomAf.RetainRtAll = types.StringValue(nestedValue.Get("attributes.retainRttAll").String())
-											nestedChildbgpDomAf.AdvertiseOnlyActiveRoutes = types.StringValue(nestedValue.Get("attributes.supprInactive").String())
-											nestedChildbgpDomAf.TableMapRouteMapName = types.StringValue(nestedValue.Get("attributes.tblMap").String())
-											nestedChildbgpDomAf.VniEthernetTag = types.StringValue(nestedValue.Get("attributes.vniEthTag").String())
-											nestedChildbgpDomAf.WaitIgpConverged = types.StringValue(nestedValue.Get("attributes.waitIgpConv").String())
-											nestedValue.Get("children").ForEach(
-												func(_, nestedV gjson.Result) bool {
-													nestedV.ForEach(
-														func(nestedClassname, nestedValue gjson.Result) bool {
-															if nestedClassname.String() == "bgpAdvPrefix" {
-																var nestedChildbgpAdvPrefix BGPAdvertisedPrefixes
-																nestedChildbgpAdvPrefix.Prefix = types.StringValue(nestedValue.Get("attributes.addr").String())
-																nestedChildbgpAdvPrefix.RouteMap = types.StringValue(nestedValue.Get("attributes.rtMap").String())
-																nestedChildbgpAdvPrefix.Evpn = types.StringValue(nestedValue.Get("attributes.evpn").String())
-																nestedChildbgpDomAf.AdvertisedPrefixes = append(nestedChildbgpDomAf.AdvertisedPrefixes, nestedChildbgpAdvPrefix)
-															}
-															return true
-														},
-													)
-													return true
-												},
-											)
-											nestedValue.Get("children").ForEach(
-												func(_, nestedV gjson.Result) bool {
-													nestedV.ForEach(
-														func(nestedClassname, nestedValue gjson.Result) bool {
-															if nestedClassname.String() == "bgpInterLeakP" {
-																var nestedChildbgpInterLeakP BGPRedistributions
-																nestedChildbgpInterLeakP.Protocol = types.StringValue(nestedValue.Get("attributes.proto").String())
-																nestedChildbgpInterLeakP.ProtocolInstance = types.StringValue(nestedValue.Get("attributes.inst").String())
-																nestedChildbgpInterLeakP.RouteMap = types.StringValue(nestedValue.Get("attributes.rtMap").String())
-																nestedChildbgpInterLeakP.Scope = types.StringValue(nestedValue.Get("attributes.scope").String())
-																nestedChildbgpInterLeakP.Srv6PrefixType = types.StringValue(nestedValue.Get("attributes.srv6PrefixType").String())
-																nestedChildbgpDomAf.Redistributions = append(nestedChildbgpDomAf.Redistributions, nestedChildbgpInterLeakP)
-															}
-															return true
-														},
-													)
-													return true
-												},
-											)
-											child.AddressFamilies = append(child.AddressFamilies, nestedChildbgpDomAf)
+	{
+		var rbgpInst gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("bgpInst.attributes.rn").String()
+				if key == "inst" {
+					rbgpInst = v
+					return false
+				}
+				return true
+			},
+		)
+		data.InstanceAdminState = types.StringValue(rbgpInst.Get("bgpInst.attributes.adminSt").String())
+		data.Asn = types.StringValue(rbgpInst.Get("bgpInst.attributes.asn").String())
+		data.EnhancedErrorHandling = types.BoolValue(helpers.ParseNxosBoolean(rbgpInst.Get("bgpInst.attributes.enhancedErr").String()))
+		rbgpInst.Get("bgpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "bgpDom" {
+							var child BGPVrfs
+							child.Name = types.StringValue(value.Get("attributes.name").String())
+							child.RouterId = types.StringValue(value.Get("attributes.rtrId").String())
+							{
+								var rbgpRtCtrl gjson.Result
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										key := nestedV.Get("bgpRtCtrl.attributes.rn").String()
+										if key == "rtctrl" {
+											rbgpRtCtrl = nestedV
+											return false
 										}
 										return true
 									},
 								)
-								return true
-							},
-						)
-						value.Get("children").ForEach(
-							func(_, nestedV gjson.Result) bool {
-								nestedV.ForEach(
-									func(nestedClassname, nestedValue gjson.Result) bool {
-										if nestedClassname.String() == "bgpPeerCont" {
-											var nestedChildbgpPeerCont BGPPeerTemplates
-											nestedChildbgpPeerCont.Name = types.StringValue(nestedValue.Get("attributes.name").String())
-											nestedChildbgpPeerCont.RemoteAsn = types.StringValue(nestedValue.Get("attributes.asn").String())
-											nestedChildbgpPeerCont.Description = types.StringValue(nestedValue.Get("attributes.desc").String())
-											nestedChildbgpPeerCont.PeerType = types.StringValue(nestedValue.Get("attributes.peerType").String())
-											nestedChildbgpPeerCont.SourceInterface = types.StringValue(nestedValue.Get("attributes.srcIf").String())
-											nestedValue.Get("children").ForEach(
-												func(_, nestedV gjson.Result) bool {
-													nestedV.ForEach(
-														func(nestedClassname, nestedValue gjson.Result) bool {
-															if nestedClassname.String() == "bgpPeerAf" {
-																var nestedChildbgpPeerAf BGPPeerTemplateAddressFamilies
-																nestedChildbgpPeerAf.AddressFamily = types.StringValue(nestedValue.Get("attributes.type").String())
-																nestedChildbgpPeerAf.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
-																nestedChildbgpPeerAf.SendCommunityExtended = types.StringValue(nestedValue.Get("attributes.sendComExt").String())
-																nestedChildbgpPeerAf.SendCommunityStandard = types.StringValue(nestedValue.Get("attributes.sendComStd").String())
-																{
-																	var rbgpMaxPfxP gjson.Result
-																	nestedValue.Get("children").ForEach(
-																		func(_, nestedV gjson.Result) bool {
-																			key := nestedV.Get("bgpMaxPfxP.attributes.rn").String()
-																			if key == "maxpfxp" {
-																				rbgpMaxPfxP = nestedV
-																				return false
-																			}
-																			return true
-																		},
-																	)
-																	nestedChildbgpPeerAf.MaxPrefixAction = types.StringValue(rbgpMaxPfxP.Get("bgpMaxPfxP.attributes.action").String())
-																	nestedChildbgpPeerAf.MaxPrefixNumber = types.Int64Value(rbgpMaxPfxP.Get("bgpMaxPfxP.attributes.maxPfx").Int())
-																	nestedChildbgpPeerAf.MaxPrefixRestartTime = types.Int64Value(rbgpMaxPfxP.Get("bgpMaxPfxP.attributes.restartTime").Int())
-																	nestedChildbgpPeerAf.MaxPrefixThreshold = types.Int64Value(rbgpMaxPfxP.Get("bgpMaxPfxP.attributes.thresh").Int())
-																}
-																nestedChildbgpPeerCont.PeerTemplateAddressFamilies = append(nestedChildbgpPeerCont.PeerTemplateAddressFamilies, nestedChildbgpPeerAf)
-															}
-															return true
-														},
-													)
-													return true
-												},
-											)
-											child.PeerTemplates = append(child.PeerTemplates, nestedChildbgpPeerCont)
+								child.RouteControlEnforceFirstAs = types.StringValue(rbgpRtCtrl.Get("bgpRtCtrl.attributes.enforceFirstAs").String())
+								child.RouteControlFibAccelerate = types.StringValue(rbgpRtCtrl.Get("bgpRtCtrl.attributes.fibAccelerate").String())
+								child.RouteControlLogNeighborChanges = types.StringValue(rbgpRtCtrl.Get("bgpRtCtrl.attributes.logNeighborChanges").String())
+								child.RouteControlSuppressRoutes = types.StringValue(rbgpRtCtrl.Get("bgpRtCtrl.attributes.supprRt").String())
+							}
+							{
+								var rbgpGr gjson.Result
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										key := nestedV.Get("bgpGr.attributes.rn").String()
+										if key == "gr" {
+											rbgpGr = nestedV
+											return false
 										}
 										return true
 									},
 								)
-								return true
-							},
-						)
-						value.Get("children").ForEach(
-							func(_, nestedV gjson.Result) bool {
-								nestedV.ForEach(
-									func(nestedClassname, nestedValue gjson.Result) bool {
-										if nestedClassname.String() == "bgpPeer" {
-											var nestedChildbgpPeer BGPPeers
-											nestedChildbgpPeer.Address = types.StringValue(nestedValue.Get("attributes.addr").String())
-											nestedChildbgpPeer.RemoteAsn = types.StringValue(nestedValue.Get("attributes.asn").String())
-											nestedChildbgpPeer.Description = types.StringValue(nestedValue.Get("attributes.name").String())
-											nestedChildbgpPeer.PeerTemplate = types.StringValue(nestedValue.Get("attributes.peerImp").String())
-											nestedChildbgpPeer.PeerType = types.StringValue(nestedValue.Get("attributes.peerType").String())
-											nestedChildbgpPeer.SourceInterface = types.StringValue(nestedValue.Get("attributes.srcIf").String())
-											nestedChildbgpPeer.HoldTime = types.Int64Value(nestedValue.Get("attributes.holdIntvl").Int())
-											nestedChildbgpPeer.Keepalive = types.Int64Value(nestedValue.Get("attributes.kaIntvl").Int())
-											nestedChildbgpPeer.EbgpMultihopTtl = types.Int64Value(nestedValue.Get("attributes.ttl").Int())
-											nestedChildbgpPeer.PeerControl = types.StringValue(nestedValue.Get("attributes.ctrl").String())
-											nestedChildbgpPeer.PasswordType = types.StringValue(nestedValue.Get("attributes.passwdType").String())
-											{
-												var rbgpLocalAsn gjson.Result
+								child.GracefulRestartInterval = types.Int64Value(rbgpGr.Get("bgpGr.attributes.restartIntvl").Int())
+								child.GracefulRestartStaleInterval = types.Int64Value(rbgpGr.Get("bgpGr.attributes.staleIntvl").Int())
+							}
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "bgpDomAf" {
+												var nestedChildbgpDomAf BGPAddressFamilies
+												nestedChildbgpDomAf.AddressFamily = types.StringValue(nestedValue.Get("attributes.type").String())
+												nestedChildbgpDomAf.CriticalNexthopTimeout = types.StringValue(nestedValue.Get("attributes.critNhTimeout").String())
+												nestedChildbgpDomAf.NonCriticalNexthopTimeout = types.StringValue(nestedValue.Get("attributes.nonCritNhTimeout").String())
+												nestedChildbgpDomAf.AdvertiseL2vpnEvpn = types.StringValue(nestedValue.Get("attributes.advertL2vpnEvpn").String())
+												nestedChildbgpDomAf.AdvertisePhysicalIpForType5Routes = types.StringValue(nestedValue.Get("attributes.advPip").String())
+												nestedChildbgpDomAf.MaxEcmpPaths = types.Int64Value(nestedValue.Get("attributes.maxEcmp").Int())
+												nestedChildbgpDomAf.MaxExternalEcmpPaths = types.Int64Value(nestedValue.Get("attributes.maxExtEcmp").Int())
+												nestedChildbgpDomAf.MaxExternalInternalEcmpPaths = types.Int64Value(nestedValue.Get("attributes.maxExtIntEcmp").Int())
+												nestedChildbgpDomAf.MaxLocalEcmpPaths = types.Int64Value(nestedValue.Get("attributes.maxLclEcmp").Int())
+												nestedChildbgpDomAf.MaxMixedEcmpPaths = types.Int64Value(nestedValue.Get("attributes.maxMxdEcmp").Int())
+												nestedChildbgpDomAf.DefaultInformationOriginate = types.StringValue(nestedValue.Get("attributes.defInfOriginate").String())
+												nestedChildbgpDomAf.NextHopRouteMapName = types.StringValue(nestedValue.Get("attributes.nhRtMap").String())
+												nestedChildbgpDomAf.PrefixPriority = types.StringValue(nestedValue.Get("attributes.prfxPriority").String())
+												nestedChildbgpDomAf.RetainRtAll = types.StringValue(nestedValue.Get("attributes.retainRttAll").String())
+												nestedChildbgpDomAf.AdvertiseOnlyActiveRoutes = types.StringValue(nestedValue.Get("attributes.supprInactive").String())
+												nestedChildbgpDomAf.TableMapRouteMapName = types.StringValue(nestedValue.Get("attributes.tblMap").String())
+												nestedChildbgpDomAf.VniEthernetTag = types.StringValue(nestedValue.Get("attributes.vniEthTag").String())
+												nestedChildbgpDomAf.WaitIgpConverged = types.StringValue(nestedValue.Get("attributes.waitIgpConv").String())
 												nestedValue.Get("children").ForEach(
 													func(_, nestedV gjson.Result) bool {
-														key := nestedV.Get("bgpLocalAsn.attributes.rn").String()
-														if key == "localasn" {
-															rbgpLocalAsn = nestedV
-															return false
-														}
+														nestedV.ForEach(
+															func(nestedClassname, nestedValue gjson.Result) bool {
+																if nestedClassname.String() == "bgpAdvPrefix" {
+																	var nestedChildbgpAdvPrefix BGPAdvertisedPrefixes
+																	nestedChildbgpAdvPrefix.Prefix = types.StringValue(nestedValue.Get("attributes.addr").String())
+																	nestedChildbgpAdvPrefix.RouteMap = types.StringValue(nestedValue.Get("attributes.rtMap").String())
+																	nestedChildbgpAdvPrefix.Evpn = types.StringValue(nestedValue.Get("attributes.evpn").String())
+																	nestedChildbgpDomAf.AdvertisedPrefixes = append(nestedChildbgpDomAf.AdvertisedPrefixes, nestedChildbgpAdvPrefix)
+																}
+																return true
+															},
+														)
 														return true
 													},
 												)
-												nestedChildbgpPeer.LocalAsnPropagation = types.StringValue(rbgpLocalAsn.Get("bgpLocalAsn.attributes.asnPropagate").String())
-												nestedChildbgpPeer.LocalAsn = types.StringValue(rbgpLocalAsn.Get("bgpLocalAsn.attributes.localAsn").String())
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														nestedV.ForEach(
+															func(nestedClassname, nestedValue gjson.Result) bool {
+																if nestedClassname.String() == "bgpInterLeakP" {
+																	var nestedChildbgpInterLeakP BGPRedistributions
+																	nestedChildbgpInterLeakP.Protocol = types.StringValue(nestedValue.Get("attributes.proto").String())
+																	nestedChildbgpInterLeakP.ProtocolInstance = types.StringValue(nestedValue.Get("attributes.inst").String())
+																	nestedChildbgpInterLeakP.RouteMap = types.StringValue(nestedValue.Get("attributes.rtMap").String())
+																	nestedChildbgpInterLeakP.Scope = types.StringValue(nestedValue.Get("attributes.scope").String())
+																	nestedChildbgpInterLeakP.Srv6PrefixType = types.StringValue(nestedValue.Get("attributes.srv6PrefixType").String())
+																	nestedChildbgpDomAf.Redistributions = append(nestedChildbgpDomAf.Redistributions, nestedChildbgpInterLeakP)
+																}
+																return true
+															},
+														)
+														return true
+													},
+												)
+												child.AddressFamilies = append(child.AddressFamilies, nestedChildbgpDomAf)
 											}
-											nestedValue.Get("children").ForEach(
-												func(_, nestedV gjson.Result) bool {
-													nestedV.ForEach(
-														func(nestedClassname, nestedValue gjson.Result) bool {
-															if nestedClassname.String() == "bgpPeerAf" {
-																var nestedChildbgpPeerAf BGPPeerAddressFamilies
-																nestedChildbgpPeerAf.AddressFamily = types.StringValue(nestedValue.Get("attributes.type").String())
-																nestedChildbgpPeerAf.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
-																nestedChildbgpPeerAf.SendCommunityExtended = types.StringValue(nestedValue.Get("attributes.sendComExt").String())
-																nestedChildbgpPeerAf.SendCommunityStandard = types.StringValue(nestedValue.Get("attributes.sendComStd").String())
-																nestedValue.Get("children").ForEach(
-																	func(_, nestedV gjson.Result) bool {
-																		nestedV.ForEach(
-																			func(nestedClassname, nestedValue gjson.Result) bool {
-																				if nestedClassname.String() == "bgpRtCtrlP" {
-																					var nestedChildbgpRtCtrlP BGPRouteControls
-																					nestedChildbgpRtCtrlP.Direction = types.StringValue(nestedValue.Get("attributes.direction").String())
-																					nestedChildbgpRtCtrlP.RouteMapName = types.StringValue(nestedValue.Get("attributes.rtMap").String())
-																					nestedChildbgpPeerAf.RouteControls = append(nestedChildbgpPeerAf.RouteControls, nestedChildbgpRtCtrlP)
+											return true
+										},
+									)
+									return true
+								},
+							)
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "bgpPeerCont" {
+												var nestedChildbgpPeerCont BGPPeerTemplates
+												nestedChildbgpPeerCont.Name = types.StringValue(nestedValue.Get("attributes.name").String())
+												nestedChildbgpPeerCont.RemoteAsn = types.StringValue(nestedValue.Get("attributes.asn").String())
+												nestedChildbgpPeerCont.Description = types.StringValue(nestedValue.Get("attributes.desc").String())
+												nestedChildbgpPeerCont.PeerType = types.StringValue(nestedValue.Get("attributes.peerType").String())
+												nestedChildbgpPeerCont.SourceInterface = types.StringValue(nestedValue.Get("attributes.srcIf").String())
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														nestedV.ForEach(
+															func(nestedClassname, nestedValue gjson.Result) bool {
+																if nestedClassname.String() == "bgpPeerAf" {
+																	var nestedChildbgpPeerAf BGPPeerTemplateAddressFamilies
+																	nestedChildbgpPeerAf.AddressFamily = types.StringValue(nestedValue.Get("attributes.type").String())
+																	nestedChildbgpPeerAf.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
+																	nestedChildbgpPeerAf.SendCommunityExtended = types.StringValue(nestedValue.Get("attributes.sendComExt").String())
+																	nestedChildbgpPeerAf.SendCommunityStandard = types.StringValue(nestedValue.Get("attributes.sendComStd").String())
+																	{
+																		var rbgpMaxPfxP gjson.Result
+																		nestedValue.Get("children").ForEach(
+																			func(_, nestedV gjson.Result) bool {
+																				key := nestedV.Get("bgpMaxPfxP.attributes.rn").String()
+																				if key == "maxpfxp" {
+																					rbgpMaxPfxP = nestedV
+																					return false
 																				}
 																				return true
 																			},
 																		)
-																		return true
-																	},
-																)
-																nestedValue.Get("children").ForEach(
-																	func(_, nestedV gjson.Result) bool {
-																		nestedV.ForEach(
-																			func(nestedClassname, nestedValue gjson.Result) bool {
-																				if nestedClassname.String() == "bgpPfxCtrlP" {
-																					var nestedChildbgpPfxCtrlP BGPPrefixListControls
-																					nestedChildbgpPfxCtrlP.Direction = types.StringValue(nestedValue.Get("attributes.direction").String())
-																					nestedChildbgpPfxCtrlP.List = types.StringValue(nestedValue.Get("attributes.list").String())
-																					nestedChildbgpPeerAf.PrefixListControls = append(nestedChildbgpPeerAf.PrefixListControls, nestedChildbgpPfxCtrlP)
-																				}
-																				return true
-																			},
-																		)
-																		return true
-																	},
-																)
-																nestedChildbgpPeer.PeerAddressFamilies = append(nestedChildbgpPeer.PeerAddressFamilies, nestedChildbgpPeerAf)
+																		nestedChildbgpPeerAf.MaxPrefixAction = types.StringValue(rbgpMaxPfxP.Get("bgpMaxPfxP.attributes.action").String())
+																		nestedChildbgpPeerAf.MaxPrefixNumber = types.Int64Value(rbgpMaxPfxP.Get("bgpMaxPfxP.attributes.maxPfx").Int())
+																		nestedChildbgpPeerAf.MaxPrefixRestartTime = types.Int64Value(rbgpMaxPfxP.Get("bgpMaxPfxP.attributes.restartTime").Int())
+																		nestedChildbgpPeerAf.MaxPrefixThreshold = types.Int64Value(rbgpMaxPfxP.Get("bgpMaxPfxP.attributes.thresh").Int())
+																	}
+																	nestedChildbgpPeerCont.PeerTemplateAddressFamilies = append(nestedChildbgpPeerCont.PeerTemplateAddressFamilies, nestedChildbgpPeerAf)
+																}
+																return true
+															},
+														)
+														return true
+													},
+												)
+												child.PeerTemplates = append(child.PeerTemplates, nestedChildbgpPeerCont)
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "bgpPeer" {
+												var nestedChildbgpPeer BGPPeers
+												nestedChildbgpPeer.Address = types.StringValue(nestedValue.Get("attributes.addr").String())
+												nestedChildbgpPeer.RemoteAsn = types.StringValue(nestedValue.Get("attributes.asn").String())
+												nestedChildbgpPeer.Description = types.StringValue(nestedValue.Get("attributes.name").String())
+												nestedChildbgpPeer.PeerTemplate = types.StringValue(nestedValue.Get("attributes.peerImp").String())
+												nestedChildbgpPeer.PeerType = types.StringValue(nestedValue.Get("attributes.peerType").String())
+												nestedChildbgpPeer.SourceInterface = types.StringValue(nestedValue.Get("attributes.srcIf").String())
+												nestedChildbgpPeer.HoldTime = types.Int64Value(nestedValue.Get("attributes.holdIntvl").Int())
+												nestedChildbgpPeer.Keepalive = types.Int64Value(nestedValue.Get("attributes.kaIntvl").Int())
+												nestedChildbgpPeer.EbgpMultihopTtl = types.Int64Value(nestedValue.Get("attributes.ttl").Int())
+												nestedChildbgpPeer.PeerControl = types.StringValue(nestedValue.Get("attributes.ctrl").String())
+												nestedChildbgpPeer.PasswordType = types.StringValue(nestedValue.Get("attributes.passwdType").String())
+												{
+													var rbgpLocalAsn gjson.Result
+													nestedValue.Get("children").ForEach(
+														func(_, nestedV gjson.Result) bool {
+															key := nestedV.Get("bgpLocalAsn.attributes.rn").String()
+															if key == "localasn" {
+																rbgpLocalAsn = nestedV
+																return false
 															}
 															return true
 														},
 													)
-													return true
-												},
-											)
-											child.Peers = append(child.Peers, nestedChildbgpPeer)
-										}
-										return true
-									},
-								)
-								return true
-							},
-						)
-						data.Vrfs = append(data.Vrfs, child)
-					}
-					return true
-				},
-			)
-			return true
-		},
-	)
+													nestedChildbgpPeer.LocalAsnPropagation = types.StringValue(rbgpLocalAsn.Get("bgpLocalAsn.attributes.asnPropagate").String())
+													nestedChildbgpPeer.LocalAsn = types.StringValue(rbgpLocalAsn.Get("bgpLocalAsn.attributes.localAsn").String())
+												}
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														nestedV.ForEach(
+															func(nestedClassname, nestedValue gjson.Result) bool {
+																if nestedClassname.String() == "bgpPeerAf" {
+																	var nestedChildbgpPeerAf BGPPeerAddressFamilies
+																	nestedChildbgpPeerAf.AddressFamily = types.StringValue(nestedValue.Get("attributes.type").String())
+																	nestedChildbgpPeerAf.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
+																	nestedChildbgpPeerAf.SendCommunityExtended = types.StringValue(nestedValue.Get("attributes.sendComExt").String())
+																	nestedChildbgpPeerAf.SendCommunityStandard = types.StringValue(nestedValue.Get("attributes.sendComStd").String())
+																	nestedValue.Get("children").ForEach(
+																		func(_, nestedV gjson.Result) bool {
+																			nestedV.ForEach(
+																				func(nestedClassname, nestedValue gjson.Result) bool {
+																					if nestedClassname.String() == "bgpRtCtrlP" {
+																						var nestedChildbgpRtCtrlP BGPRouteControls
+																						nestedChildbgpRtCtrlP.Direction = types.StringValue(nestedValue.Get("attributes.direction").String())
+																						nestedChildbgpRtCtrlP.RouteMapName = types.StringValue(nestedValue.Get("attributes.rtMap").String())
+																						nestedChildbgpPeerAf.RouteControls = append(nestedChildbgpPeerAf.RouteControls, nestedChildbgpRtCtrlP)
+																					}
+																					return true
+																				},
+																			)
+																			return true
+																		},
+																	)
+																	nestedValue.Get("children").ForEach(
+																		func(_, nestedV gjson.Result) bool {
+																			nestedV.ForEach(
+																				func(nestedClassname, nestedValue gjson.Result) bool {
+																					if nestedClassname.String() == "bgpPfxCtrlP" {
+																						var nestedChildbgpPfxCtrlP BGPPrefixListControls
+																						nestedChildbgpPfxCtrlP.Direction = types.StringValue(nestedValue.Get("attributes.direction").String())
+																						nestedChildbgpPfxCtrlP.List = types.StringValue(nestedValue.Get("attributes.list").String())
+																						nestedChildbgpPeerAf.PrefixListControls = append(nestedChildbgpPeerAf.PrefixListControls, nestedChildbgpPfxCtrlP)
+																					}
+																					return true
+																				},
+																			)
+																			return true
+																		},
+																	)
+																	nestedChildbgpPeer.PeerAddressFamilies = append(nestedChildbgpPeer.PeerAddressFamilies, nestedChildbgpPeerAf)
+																}
+																return true
+															},
+														)
+														return true
+													},
+												)
+												child.Peers = append(child.Peers, nestedChildbgpPeer)
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							data.Vrfs = append(data.Vrfs, child)
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+	}
 }
 
 // End of section. //template:end fromBody

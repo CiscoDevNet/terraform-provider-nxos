@@ -147,49 +147,51 @@ func (data ICMPv4) toBody() nxos.Body {
 
 func (data *ICMPv4) fromBody(res gjson.Result) {
 	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
-	var ricmpv4Inst gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("icmpv4Inst.attributes.rn").String()
-			if key == "inst" {
-				ricmpv4Inst = v
-				return false
-			}
-			return true
-		},
-	)
-	data.InstanceAdminState = types.StringValue(ricmpv4Inst.Get("icmpv4Inst.attributes.adminSt").String())
-	ricmpv4Inst.Get("icmpv4Inst.children").ForEach(
-		func(_, v gjson.Result) bool {
-			v.ForEach(
-				func(classname, value gjson.Result) bool {
-					if classname.String() == "icmpv4Dom" {
-						var child ICMPv4Vrfs
-						child.Name = types.StringValue(value.Get("attributes.name").String())
-						value.Get("children").ForEach(
-							func(_, nestedV gjson.Result) bool {
-								nestedV.ForEach(
-									func(nestedClassname, nestedValue gjson.Result) bool {
-										if nestedClassname.String() == "icmpv4If" {
-											var nestedChildicmpv4If ICMPv4Interfaces
-											nestedChildicmpv4If.Id = types.StringValue(nestedValue.Get("attributes.id").String())
-											nestedChildicmpv4If.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
-											child.Interfaces = append(child.Interfaces, nestedChildicmpv4If)
-										}
-										return true
-									},
-								)
-								return true
-							},
-						)
-						data.Vrfs = append(data.Vrfs, child)
-					}
-					return true
-				},
-			)
-			return true
-		},
-	)
+	{
+		var ricmpv4Inst gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("icmpv4Inst.attributes.rn").String()
+				if key == "inst" {
+					ricmpv4Inst = v
+					return false
+				}
+				return true
+			},
+		)
+		data.InstanceAdminState = types.StringValue(ricmpv4Inst.Get("icmpv4Inst.attributes.adminSt").String())
+		ricmpv4Inst.Get("icmpv4Inst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "icmpv4Dom" {
+							var child ICMPv4Vrfs
+							child.Name = types.StringValue(value.Get("attributes.name").String())
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "icmpv4If" {
+												var nestedChildicmpv4If ICMPv4Interfaces
+												nestedChildicmpv4If.Id = types.StringValue(nestedValue.Get("attributes.id").String())
+												nestedChildicmpv4If.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
+												child.Interfaces = append(child.Interfaces, nestedChildicmpv4If)
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							data.Vrfs = append(data.Vrfs, child)
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+	}
 }
 
 // End of section. //template:end fromBody

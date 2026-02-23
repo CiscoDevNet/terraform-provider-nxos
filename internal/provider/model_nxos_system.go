@@ -41,6 +41,7 @@ type System struct {
 	Dn                          types.String                        `tfsdk:"id"`
 	Name                        types.String                        `tfsdk:"name"`
 	DefaultQosPolicyInterfaceIn []SystemDefaultQosPolicyInterfaceIn `tfsdk:"default_qos_policy_interface_in"`
+	PolicyMapName               types.String                        `tfsdk:"policy_map_name"`
 	Mtu                         types.Int64                         `tfsdk:"mtu"`
 	DefaultAdminStatus          types.String                        `tfsdk:"default_admin_status"`
 }
@@ -143,6 +144,41 @@ func (data System) toBody() nxos.Body {
 				}
 			}
 		}
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosQueuing"
+			attrs = "{}"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+			nestedChildrenPath := childBodyPath + ".children"
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosServPol"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				{
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosEgress"
+					attrs = "{}"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+					nestedChildrenPath := childBodyPath + ".children"
+					{
+						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosSystem"
+						attrs = "{}"
+						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+						nestedChildrenPath := childBodyPath + ".children"
+						attrs = "{}"
+						if (!data.PolicyMapName.IsUnknown() && !data.PolicyMapName.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "name", data.PolicyMapName.ValueString())
+						}
+						if attrs != "{}" || false {
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosInst.attributes", attrs)
+						}
+					}
+				}
+			}
+		}
 	}
 	{
 		childIndex := len(gjson.Get(body, childrenPath).Array())
@@ -171,103 +207,181 @@ func (data System) toBody() nxos.Body {
 
 func (data *System) fromBody(res gjson.Result) {
 	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
-	var ripqosEntity gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("ipqosEntity.attributes.rn").String()
-			if key == "ipqos" {
-				ripqosEntity = v
-				return false
+	{
+		var ripqosEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("ipqosEntity.attributes.rn").String()
+				if key == "ipqos" {
+					ripqosEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var ripqosDefaultQoS gjson.Result
+			ripqosEntity.Get("ipqosEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("ipqosDefaultQoS.attributes.rn").String()
+					if key == "dflt" {
+						ripqosDefaultQoS = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var ripqosServPol gjson.Result
+				ripqosDefaultQoS.Get("ipqosDefaultQoS.children").ForEach(
+					func(_, v gjson.Result) bool {
+						key := v.Get("ipqosServPol.attributes.rn").String()
+						if key == "policy" {
+							ripqosServPol = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var ripqosIngress gjson.Result
+					ripqosServPol.Get("ipqosServPol.children").ForEach(
+						func(_, v gjson.Result) bool {
+							key := v.Get("ipqosIngress.attributes.rn").String()
+							if key == "in" {
+								ripqosIngress = v
+								return false
+							}
+							return true
+						},
+					)
+					ripqosIngress.Get("ipqosIngress.children").ForEach(
+						func(_, v gjson.Result) bool {
+							v.ForEach(
+								func(classname, value gjson.Result) bool {
+									if classname.String() == "ipqosIf" {
+										var child SystemDefaultQosPolicyInterfaceIn
+										child.InterfaceId = types.StringValue(value.Get("attributes.name").String())
+										{
+											var ripqosInst gjson.Result
+											value.Get("children").ForEach(
+												func(_, nestedV gjson.Result) bool {
+													key := nestedV.Get("ipqosInst.attributes.rn").String()
+													if key == "pmap" {
+														ripqosInst = nestedV
+														return false
+													}
+													return true
+												},
+											)
+											child.PolicyMapName = types.StringValue(ripqosInst.Get("ipqosInst.attributes.name").String())
+										}
+										data.DefaultQosPolicyInterfaceIn = append(data.DefaultQosPolicyInterfaceIn, child)
+									}
+									return true
+								},
+							)
+							return true
+						},
+					)
+				}
 			}
-			return true
-		},
-	)
-	var ripqosDefaultQoS gjson.Result
-	ripqosEntity.Get("ipqosEntity.children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("ipqosDefaultQoS.attributes.rn").String()
-			if key == "dflt" {
-				ripqosDefaultQoS = v
-				return false
-			}
-			return true
-		},
-	)
-	var ripqosServPol gjson.Result
-	ripqosDefaultQoS.Get("ipqosDefaultQoS.children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("ipqosServPol.attributes.rn").String()
-			if key == "policy" {
-				ripqosServPol = v
-				return false
-			}
-			return true
-		},
-	)
-	var ripqosIngress gjson.Result
-	ripqosServPol.Get("ipqosServPol.children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("ipqosIngress.attributes.rn").String()
-			if key == "in" {
-				ripqosIngress = v
-				return false
-			}
-			return true
-		},
-	)
-	ripqosIngress.Get("ipqosIngress.children").ForEach(
-		func(_, v gjson.Result) bool {
-			v.ForEach(
-				func(classname, value gjson.Result) bool {
-					if classname.String() == "ipqosIf" {
-						var child SystemDefaultQosPolicyInterfaceIn
-						child.InterfaceId = types.StringValue(value.Get("attributes.name").String())
+		}
+		{
+			var ripqosQueuing gjson.Result
+			ripqosEntity.Get("ipqosEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("ipqosQueuing.attributes.rn").String()
+					if key == "queuing" {
+						ripqosQueuing = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var ripqosServPol gjson.Result
+				ripqosQueuing.Get("ipqosQueuing.children").ForEach(
+					func(_, v gjson.Result) bool {
+						key := v.Get("ipqosServPol.attributes.rn").String()
+						if key == "policy" {
+							ripqosServPol = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var ripqosEgress gjson.Result
+					ripqosServPol.Get("ipqosServPol.children").ForEach(
+						func(_, v gjson.Result) bool {
+							key := v.Get("ipqosEgress.attributes.rn").String()
+							if key == "out" {
+								ripqosEgress = v
+								return false
+							}
+							return true
+						},
+					)
+					{
+						var ripqosSystem gjson.Result
+						ripqosEgress.Get("ipqosEgress.children").ForEach(
+							func(_, v gjson.Result) bool {
+								key := v.Get("ipqosSystem.attributes.rn").String()
+								if key == "sys" {
+									ripqosSystem = v
+									return false
+								}
+								return true
+							},
+						)
 						{
 							var ripqosInst gjson.Result
-							value.Get("children").ForEach(
-								func(_, nestedV gjson.Result) bool {
-									key := nestedV.Get("ipqosInst.attributes.rn").String()
+							ripqosSystem.Get("ipqosSystem.children").ForEach(
+								func(_, v gjson.Result) bool {
+									key := v.Get("ipqosInst.attributes.rn").String()
 									if key == "pmap" {
-										ripqosInst = nestedV
+										ripqosInst = v
 										return false
 									}
 									return true
 								},
 							)
-							child.PolicyMapName = types.StringValue(ripqosInst.Get("ipqosInst.attributes.name").String())
+							data.PolicyMapName = types.StringValue(ripqosInst.Get("ipqosInst.attributes.name").String())
 						}
-						data.DefaultQosPolicyInterfaceIn = append(data.DefaultQosPolicyInterfaceIn, child)
+					}
+				}
+			}
+		}
+	}
+	{
+		var rethpmEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("ethpmEntity.attributes.rn").String()
+				if key == "ethpm" {
+					rethpmEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var rethpmInst gjson.Result
+			rethpmEntity.Get("ethpmEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("ethpmInst.attributes.rn").String()
+					if key == "inst" {
+						rethpmInst = v
+						return false
 					}
 					return true
 				},
 			)
-			return true
-		},
-	)
-	var rethpmEntity gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("ethpmEntity.attributes.rn").String()
-			if key == "ethpm" {
-				rethpmEntity = v
-				return false
-			}
-			return true
-		},
-	)
-	var rethpmInst gjson.Result
-	rethpmEntity.Get("ethpmEntity.children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("ethpmInst.attributes.rn").String()
-			if key == "inst" {
-				rethpmInst = v
-				return false
-			}
-			return true
-		},
-	)
-	data.Mtu = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.systemJumboMtu").Int())
-	data.DefaultAdminStatus = types.StringValue(rethpmInst.Get("ethpmInst.attributes.systemDefaultAdminSt").String())
+			data.Mtu = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.systemJumboMtu").Int())
+			data.DefaultAdminStatus = types.StringValue(rethpmInst.Get("ethpmInst.attributes.systemDefaultAdminSt").String())
+		}
+	}
 }
 
 // End of section. //template:end fromBody
@@ -291,72 +405,148 @@ func (data *System) updateFromBody(res gjson.Result) {
 			return true
 		},
 	)
-	var ripqosDefaultQoS gjson.Result
-	ripqosEntity.Get("ipqosEntity.children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("ipqosDefaultQoS.attributes.rn").String()
-			if key == "dflt" {
-				ripqosDefaultQoS = v
-				return false
-			}
-			return true
-		},
-	)
-	var ripqosServPol gjson.Result
-	ripqosDefaultQoS.Get("ipqosDefaultQoS.children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("ipqosServPol.attributes.rn").String()
-			if key == "policy" {
-				ripqosServPol = v
-				return false
-			}
-			return true
-		},
-	)
-	var ripqosIngress gjson.Result
-	ripqosServPol.Get("ipqosServPol.children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("ipqosIngress.attributes.rn").String()
-			if key == "in" {
-				ripqosIngress = v
-				return false
-			}
-			return true
-		},
-	)
-	for c := range data.DefaultQosPolicyInterfaceIn {
-		var ripqosIf gjson.Result
-		ripqosIngress.Get("ipqosIngress.children").ForEach(
+	{
+		var ripqosDefaultQoS gjson.Result
+		ripqosEntity.Get("ipqosEntity.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("ipqosIf.attributes.rn").String()
-				if key == data.DefaultQosPolicyInterfaceIn[c].getRn() {
-					ripqosIf = v
+				key := v.Get("ipqosDefaultQoS.attributes.rn").String()
+				if key == "dflt" {
+					ripqosDefaultQoS = v
 					return false
 				}
 				return true
 			},
 		)
-		if !data.DefaultQosPolicyInterfaceIn[c].InterfaceId.IsNull() {
-			data.DefaultQosPolicyInterfaceIn[c].InterfaceId = types.StringValue(ripqosIf.Get("ipqosIf.attributes.name").String())
-		} else {
-			data.DefaultQosPolicyInterfaceIn[c].InterfaceId = types.StringNull()
-		}
 		{
-			var ripqosInst gjson.Result
-			ripqosIf.Get("ipqosIf.children").ForEach(
+			var ripqosServPol gjson.Result
+			ripqosDefaultQoS.Get("ipqosDefaultQoS.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("ipqosInst.attributes.rn").String()
-					if key == "pmap" {
-						ripqosInst = v
+					key := v.Get("ipqosServPol.attributes.rn").String()
+					if key == "policy" {
+						ripqosServPol = v
 						return false
 					}
 					return true
 				},
 			)
-			if !data.DefaultQosPolicyInterfaceIn[c].PolicyMapName.IsNull() {
-				data.DefaultQosPolicyInterfaceIn[c].PolicyMapName = types.StringValue(ripqosInst.Get("ipqosInst.attributes.name").String())
-			} else {
-				data.DefaultQosPolicyInterfaceIn[c].PolicyMapName = types.StringNull()
+			{
+				var ripqosIngress gjson.Result
+				ripqosServPol.Get("ipqosServPol.children").ForEach(
+					func(_, v gjson.Result) bool {
+						key := v.Get("ipqosIngress.attributes.rn").String()
+						if key == "in" {
+							ripqosIngress = v
+							return false
+						}
+						return true
+					},
+				)
+				for c := range data.DefaultQosPolicyInterfaceIn {
+					var ripqosIf gjson.Result
+					ripqosIngress.Get("ipqosIngress.children").ForEach(
+						func(_, v gjson.Result) bool {
+							key := v.Get("ipqosIf.attributes.rn").String()
+							if key == data.DefaultQosPolicyInterfaceIn[c].getRn() {
+								ripqosIf = v
+								return false
+							}
+							return true
+						},
+					)
+					if !data.DefaultQosPolicyInterfaceIn[c].InterfaceId.IsNull() {
+						data.DefaultQosPolicyInterfaceIn[c].InterfaceId = types.StringValue(ripqosIf.Get("ipqosIf.attributes.name").String())
+					} else {
+						data.DefaultQosPolicyInterfaceIn[c].InterfaceId = types.StringNull()
+					}
+					{
+						var ripqosInst gjson.Result
+						ripqosIf.Get("ipqosIf.children").ForEach(
+							func(_, v gjson.Result) bool {
+								key := v.Get("ipqosInst.attributes.rn").String()
+								if key == "pmap" {
+									ripqosInst = v
+									return false
+								}
+								return true
+							},
+						)
+						if !data.DefaultQosPolicyInterfaceIn[c].PolicyMapName.IsNull() {
+							data.DefaultQosPolicyInterfaceIn[c].PolicyMapName = types.StringValue(ripqosInst.Get("ipqosInst.attributes.name").String())
+						} else {
+							data.DefaultQosPolicyInterfaceIn[c].PolicyMapName = types.StringNull()
+						}
+					}
+				}
+			}
+		}
+	}
+	{
+		var ripqosQueuing gjson.Result
+		ripqosEntity.Get("ipqosEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("ipqosQueuing.attributes.rn").String()
+				if key == "queuing" {
+					ripqosQueuing = v
+					return false
+				}
+				return true
+			},
+		)
+		{
+			var ripqosServPol gjson.Result
+			ripqosQueuing.Get("ipqosQueuing.children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("ipqosServPol.attributes.rn").String()
+					if key == "policy" {
+						ripqosServPol = v
+						return false
+					}
+					return true
+				},
+			)
+			{
+				var ripqosEgress gjson.Result
+				ripqosServPol.Get("ipqosServPol.children").ForEach(
+					func(_, v gjson.Result) bool {
+						key := v.Get("ipqosEgress.attributes.rn").String()
+						if key == "out" {
+							ripqosEgress = v
+							return false
+						}
+						return true
+					},
+				)
+				{
+					var ripqosSystem gjson.Result
+					ripqosEgress.Get("ipqosEgress.children").ForEach(
+						func(_, v gjson.Result) bool {
+							key := v.Get("ipqosSystem.attributes.rn").String()
+							if key == "sys" {
+								ripqosSystem = v
+								return false
+							}
+							return true
+						},
+					)
+					{
+						var ripqosInst gjson.Result
+						ripqosSystem.Get("ipqosSystem.children").ForEach(
+							func(_, v gjson.Result) bool {
+								key := v.Get("ipqosInst.attributes.rn").String()
+								if key == "pmap" {
+									ripqosInst = v
+									return false
+								}
+								return true
+							},
+						)
+						if !data.PolicyMapName.IsNull() {
+							data.PolicyMapName = types.StringValue(ripqosInst.Get("ipqosInst.attributes.name").String())
+						} else {
+							data.PolicyMapName = types.StringNull()
+						}
+					}
+				}
 			}
 		}
 	}
@@ -371,26 +561,28 @@ func (data *System) updateFromBody(res gjson.Result) {
 			return true
 		},
 	)
-	var rethpmInst gjson.Result
-	rethpmEntity.Get("ethpmEntity.children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("ethpmInst.attributes.rn").String()
-			if key == "inst" {
-				rethpmInst = v
-				return false
-			}
-			return true
-		},
-	)
-	if !data.Mtu.IsNull() {
-		data.Mtu = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.systemJumboMtu").Int())
-	} else {
-		data.Mtu = types.Int64Null()
-	}
-	if !data.DefaultAdminStatus.IsNull() {
-		data.DefaultAdminStatus = types.StringValue(rethpmInst.Get("ethpmInst.attributes.systemDefaultAdminSt").String())
-	} else {
-		data.DefaultAdminStatus = types.StringNull()
+	{
+		var rethpmInst gjson.Result
+		rethpmEntity.Get("ethpmEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("ethpmInst.attributes.rn").String()
+				if key == "inst" {
+					rethpmInst = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.Mtu.IsNull() {
+			data.Mtu = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.systemJumboMtu").Int())
+		} else {
+			data.Mtu = types.Int64Null()
+		}
+		if !data.DefaultAdminStatus.IsNull() {
+			data.DefaultAdminStatus = types.StringValue(rethpmInst.Get("ethpmInst.attributes.systemDefaultAdminSt").String())
+		} else {
+			data.DefaultAdminStatus = types.StringNull()
+		}
 	}
 }
 
@@ -419,6 +611,7 @@ func (data System) getDeleteDns() []string {
 	for _, child := range data.DefaultQosPolicyInterfaceIn {
 		dns = append(dns, data.getDn()+"/ipqos"+"/dflt"+"/policy"+"/in"+"/"+child.getRn())
 	}
+	dns = append(dns, data.getDn()+"/ipqos"+"/queuing"+"/policy"+"/out"+"/sys")
 
 	return dns
 }

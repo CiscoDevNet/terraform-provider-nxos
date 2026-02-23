@@ -116,18 +116,20 @@ func (data *LoopbackInterface) fromBody(res gjson.Result) {
 	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	data.Description = types.StringValue(res.Get(data.getClassName() + ".attributes.descr").String())
-	var rnwRtVrfMbr gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("nwRtVrfMbr.attributes.rn").String()
-			if key == "rtvrfMbr" {
-				rnwRtVrfMbr = v
-				return false
-			}
-			return true
-		},
-	)
-	data.VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
+	{
+		var rnwRtVrfMbr gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("nwRtVrfMbr.attributes.rn").String()
+				if key == "rtvrfMbr" {
+					rnwRtVrfMbr = v
+					return false
+				}
+				return true
+			},
+		)
+		data.VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
+	}
 }
 
 // End of section. //template:end fromBody

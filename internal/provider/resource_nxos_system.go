@@ -65,7 +65,7 @@ func (r *SystemResource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration.", "topSystem", "System/top:System/").AddAdditionalDocs([]string{"ipqosEntity", "ipqosDefaultQoS", "ipqosServPol", "ipqosIngress", "ipqosIf", "ipqosInst", "ethpmEntity", "ethpmInst"}, []string{"Qos/ipqos:Entity/", "Qos/ipqos:DefaultQoS/", "Qos/ipqos:ServPol/", "Qos/ipqos:Ingress/", "Qos/ipqos:If/", "Qos/ipqos:Inst/", "Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration.", "topSystem", "System/top:System/").AddAdditionalDocs([]string{"ipqosEntity", "ipqosDefaultQoS", "ipqosServPol", "ipqosIngress", "ipqosIf", "ipqosInst", "ipqosQueuing", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst", "ethpmEntity", "ethpmInst"}, []string{"Qos/ipqos:Entity/", "Qos/ipqos:DefaultQoS/", "Qos/ipqos:ServPol/", "Qos/ipqos:Ingress/", "Qos/ipqos:If/", "Qos/ipqos:Inst/", "Qos/ipqos:Queuing/", "Qos/ipqos:ServPol/", "Qos/ipqos:Egress/", "Qos/ipqos:System/", "Qos/ipqos:Inst/", "Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -101,6 +101,10 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 				},
+			},
+			"policy_map_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Policy map name.").String,
+				Required:            true,
 			},
 			"mtu": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("System jumbo MTU.").AddIntegerRangeDescription(576, 9216).AddDefaultValueDescription("9216").String,

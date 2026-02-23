@@ -136,32 +136,34 @@ func (data User) toBody() nxos.Body {
 func (data *User) fromBody(res gjson.Result) {
 	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	data.AllowExpired = types.StringValue(res.Get(data.getClassName() + ".attributes.allowExpired").String())
-	var raaaUserDomain gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("aaaUserDomain.attributes.rn").String()
-			if key == "userdomain-[all]" {
-				raaaUserDomain = v
-				return false
-			}
-			return true
-		},
-	)
-	raaaUserDomain.Get("aaaUserDomain.children").ForEach(
-		func(_, v gjson.Result) bool {
-			v.ForEach(
-				func(classname, value gjson.Result) bool {
-					if classname.String() == "aaaUserRole" {
-						var child UserRoles
-						child.Name = types.StringValue(value.Get("attributes.name").String())
-						data.Roles = append(data.Roles, child)
-					}
-					return true
-				},
-			)
-			return true
-		},
-	)
+	{
+		var raaaUserDomain gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("aaaUserDomain.attributes.rn").String()
+				if key == "userdomain-[all]" {
+					raaaUserDomain = v
+					return false
+				}
+				return true
+			},
+		)
+		raaaUserDomain.Get("aaaUserDomain.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "aaaUserRole" {
+							var child UserRoles
+							child.Name = types.StringValue(value.Get("attributes.name").String())
+							data.Roles = append(data.Roles, child)
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+	}
 }
 
 // End of section. //template:end fromBody

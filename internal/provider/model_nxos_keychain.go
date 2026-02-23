@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -36,14 +37,24 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type Keychain struct {
-	Device types.String `tfsdk:"device"`
-	Dn     types.String `tfsdk:"id"`
-	Name   types.String `tfsdk:"name"`
+	Device     types.String        `tfsdk:"device"`
+	Dn         types.String        `tfsdk:"id"`
+	AdminState types.String        `tfsdk:"admin_state"`
+	Keychains  []KeychainKeychains `tfsdk:"keychains"`
+}
+
+type KeychainKeychains struct {
+	Name types.String   `tfsdk:"name"`
+	Keys []KeychainKeys `tfsdk:"keys"`
+}
+
+type KeychainKeys struct {
+	KeyId     types.Int64  `tfsdk:"key_id"`
+	KeyString types.String `tfsdk:"key_string"`
 }
 
 type KeychainIdentity struct {
 	Device types.String `tfsdk:"device"`
-	Name   types.String `tfsdk:"name"`
 }
 
 func (data *KeychainIdentity) toIdentity(ctx context.Context, plan *Keychain) {
@@ -52,7 +63,6 @@ func (data *KeychainIdentity) toIdentity(ctx context.Context, plan *Keychain) {
 	} else {
 		data.Device = plan.Device
 	}
-	data.Name = plan.Name
 }
 
 func (data *Keychain) fromIdentity(ctx context.Context, identity *KeychainIdentity) {
@@ -61,7 +71,6 @@ func (data *Keychain) fromIdentity(ctx context.Context, identity *KeychainIdenti
 	} else {
 		data.Device = identity.Device
 	}
-	data.Name = identity.Name
 }
 
 // End of section. //template:end types
@@ -69,11 +78,19 @@ func (data *Keychain) fromIdentity(ctx context.Context, identity *KeychainIdenti
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
 
 func (data Keychain) getDn() string {
-	return fmt.Sprintf("sys/kcmgr/keychains/classickeychain-[%s]", data.Name.ValueString())
+	return "sys/kcmgr"
+}
+
+func (data KeychainKeychains) getRn() string {
+	return fmt.Sprintf("classickeychain-[%s]", data.Name.ValueString())
+}
+
+func (data KeychainKeys) getRn() string {
+	return fmt.Sprintf("classickeyid-%v", data.KeyId.ValueInt64())
 }
 
 func (data Keychain) getClassName() string {
-	return "kcmgrClassicKeychain"
+	return "kcmgrEntity"
 }
 
 // End of section. //template:end getPath
@@ -83,8 +100,38 @@ func (data Keychain) getClassName() string {
 func (data Keychain) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || false {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"keychainName", data.Name.ValueString())
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
+	}
+	var attrs string
+	childrenPath := data.getClassName() + ".children"
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".kcmgrKeychains"
+		attrs = "{}"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		for _, child := range data.Keychains {
+			attrs = "{}"
+			if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "keychainName", child.Name.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.kcmgrClassicKeychain.attributes", attrs)
+			{
+				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".kcmgrClassicKeychain.children"
+				for _, child := range child.Keys {
+					attrs = "{}"
+					if (!child.KeyId.IsUnknown() && !child.KeyId.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "keyId", strconv.FormatInt(child.KeyId.ValueInt64(), 10))
+					}
+					if (!child.KeyString.IsUnknown() && !child.KeyString.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "keyString", child.KeyString.ValueString())
+					}
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.kcmgrKey.attributes", attrs)
+				}
+			}
+		}
 	}
 
 	return nxos.Body{body}
@@ -95,7 +142,48 @@ func (data Keychain) toBody() nxos.Body {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *Keychain) fromBody(res gjson.Result) {
-	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.keychainName").String())
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	var rkcmgrKeychains gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("kcmgrKeychains.attributes.rn").String()
+			if key == "keychains" {
+				rkcmgrKeychains = v
+				return false
+			}
+			return true
+		},
+	)
+	rkcmgrKeychains.Get("kcmgrKeychains.children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "kcmgrClassicKeychain" {
+						var child KeychainKeychains
+						child.Name = types.StringValue(value.Get("attributes.keychainName").String())
+						value.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "kcmgrKey" {
+											var nestedChild KeychainKeys
+											nestedChild.KeyId = types.Int64Value(nestedValue.Get("attributes.keyId").Int())
+											child.Keys = append(child.Keys, nestedChild)
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
+						data.Keychains = append(data.Keychains, child)
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
 }
 
 // End of section. //template:end fromBody
@@ -103,10 +191,57 @@ func (data *Keychain) fromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *Keychain) updateFromBody(res gjson.Result) {
-	if !data.Name.IsNull() {
-		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.keychainName").String())
+	if !data.AdminState.IsNull() {
+		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
-		data.Name = types.StringNull()
+		data.AdminState = types.StringNull()
+	}
+	var rkcmgrKeychains gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("kcmgrKeychains.attributes.rn").String()
+			if key == "keychains" {
+				rkcmgrKeychains = v
+				return false
+			}
+			return true
+		},
+	)
+	for c := range data.Keychains {
+		var rkcmgrClassicKeychain gjson.Result
+		rkcmgrKeychains.Get("kcmgrKeychains.children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("kcmgrClassicKeychain.attributes.rn").String()
+				if key == data.Keychains[c].getRn() {
+					rkcmgrClassicKeychain = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.Keychains[c].Name.IsNull() {
+			data.Keychains[c].Name = types.StringValue(rkcmgrClassicKeychain.Get("kcmgrClassicKeychain.attributes.keychainName").String())
+		} else {
+			data.Keychains[c].Name = types.StringNull()
+		}
+		for nc := range data.Keychains[c].Keys {
+			var rkcmgrKey gjson.Result
+			rkcmgrClassicKeychain.Get("kcmgrClassicKeychain.children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("kcmgrKey.attributes.rn").String()
+					if key == data.Keychains[c].Keys[nc].getRn() {
+						rkcmgrKey = v
+						return false
+					}
+					return true
+				},
+			)
+			if !data.Keychains[c].Keys[nc].KeyId.IsNull() {
+				data.Keychains[c].Keys[nc].KeyId = types.Int64Value(rkcmgrKey.Get("kcmgrKey.attributes.keyId").Int())
+			} else {
+				data.Keychains[c].Keys[nc].KeyId = types.Int64Null()
+			}
+		}
 	}
 }
 
@@ -134,5 +269,41 @@ func (data Keychain) getDeleteDns() []string {
 // End of section. //template:end getDeleteDns
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data Keychain) getDeletedItems(ctx context.Context, state Keychain) []string {
+	deletedItems := []string{}
+	for _, stateChild := range state.Keychains {
+		found := false
+		for _, planChild := range data.Keychains {
+			if stateChild.Name == planChild.Name {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, data.getDn()+"/keychains"+"/"+stateChild.getRn())
+		}
+	}
+	for di := range state.Keychains {
+		for pdi := range data.Keychains {
+			if state.Keychains[di].Name == data.Keychains[pdi].Name {
+				for _, stateChild := range state.Keychains[di].Keys {
+					found := false
+					for _, planChild := range data.Keychains[pdi].Keys {
+						if stateChild.KeyId == planChild.KeyId {
+							found = true
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, data.getDn()+"/keychains"+"/"+state.Keychains[di].getRn()+"/"+stateChild.getRn())
+					}
+				}
+				break
+			}
+		}
+	}
+	return deletedItems
+}
 
 // End of section. //template:end getDeletedItems

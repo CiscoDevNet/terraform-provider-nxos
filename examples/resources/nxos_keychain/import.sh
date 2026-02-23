@@ -1,1 +1,1 @@
-terraform import nxos_keychain.example "<name>"
+terraform import nxos_keychain.example ""

@@ -307,7 +307,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 {{- range .Children}}
 {{- $childClassName := .ClassName}}
 {{- $childRn := .Rn}}
-{{- if len .Attributes}}
+{{- if or (len .Attributes) .ChildClasses}}
 {{- if eq .Type "single"}}
 {{- $hasNonRefAttribs := false}}
 {{- range .Attributes}}{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}{{$hasNonRefAttribs = true}}{{end}}{{end}}

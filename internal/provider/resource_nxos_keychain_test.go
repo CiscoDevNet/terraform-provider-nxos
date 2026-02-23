@@ -35,7 +35,10 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosKeychain(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "name", "Keychain1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.0.name", "KEYCHAIN1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.0.keys.0.key_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.0.keys.0.key_string", "secret_password"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -45,7 +48,7 @@ func TestAccNxosKeychain(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosKeychainPrerequisitesConfig + testAccNxosKeychainConfig_all(),
+				Config: testAccNxosKeychainConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -69,40 +72,20 @@ func TestAccNxosKeychain(t *testing.T) {
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxosKeychainImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
-		primary := s.RootModule().Resources[resourceName].Primary
-		Name := primary.Attributes["name"]
 
-		return fmt.Sprintf("%s", Name), nil
+		return fmt.Sprintf(""), nil
 	}
 }
 
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosKeychainPrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
-  dn = "sys/kcmgr"
-  class_name = "kcmgrEntity"
-  content = {
-      adminSt = "enabled"
-  }
-}
-
-resource "nxos_rest" "PreReq1" {
-  dn = "sys/kcmgr/keychains"
-  class_name = "kcmgrKeychains"
-  depends_on = [nxos_rest.PreReq0, ]
-}
-
-`
 
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosKeychainConfig_minimum() string {
 	config := `resource "nxos_keychain" "test" {` + "\n"
-	config += `	name = "Keychain1"` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -112,8 +95,14 @@ func testAccNxosKeychainConfig_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosKeychainConfig_all() string {
 	config := `resource "nxos_keychain" "test" {` + "\n"
-	config += `	name = "Keychain1"` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	keychains = [{` + "\n"
+	config += `		name = "KEYCHAIN1"` + "\n"
+	config += `		keys = [{` + "\n"
+	config += `			key_id = 1` + "\n"
+	config += `			key_string = "secret_password"` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

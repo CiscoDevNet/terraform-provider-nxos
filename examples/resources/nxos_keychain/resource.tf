@@ -1,3 +1,10 @@
 resource "nxos_keychain" "example" {
-  name = "Keychain1"
+  admin_state = "enabled"
+  keychains = [{
+    name = "KEYCHAIN1"
+    keys = [{
+      key_id     = 1
+      key_string = "secret_password"
+    }]
+  }]
 }

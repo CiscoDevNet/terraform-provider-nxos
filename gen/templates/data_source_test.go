@@ -59,7 +59,7 @@ import (
 {{- else if eq .Type "list"}}
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_{{snakeCase $name}}.test", "{{$pathPrefix}}{{$list}}.*", map[string]string{
 		{{- range .Attributes}}
-		{{- if not .ExcludeTest}}
+		{{- if and (not .ExcludeTest) (not .WriteOnly)}}
 		"{{.TfName}}": "{{.Example}}",
 		{{- end}}
 		{{- end}}

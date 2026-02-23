@@ -57,7 +57,7 @@ func (d *KeychainDataSource) Metadata(_ context.Context, req datasource.Metadata
 func (d *KeychainDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the keychain configuration.", "kcmgrClassicKeychain", "Security%20and%20Policing/kcmgr:ClassicKeychain/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the keychain configuration.", "kcmgrEntity", "Security%20and%20Policing/kcmgr:Entity/").AddAdditionalDocs([]string{"kcmgrKeychains", "kcmgrClassicKeychain", "kcmgrKey"}, []string{"Security%20and%20Policing/kcmgr:Keychains/", "Security%20and%20Policing/kcmgr:ClassicKeychain/", "Security%20and%20Policing/kcmgr:kcmgrKey/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -68,9 +68,37 @@ func (d *KeychainDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
-			"name": schema.StringAttribute{
-				MarkdownDescription: "Keychain name of classic keychain.",
-				Required:            true,
+			"admin_state": schema.StringAttribute{
+				MarkdownDescription: "Administrative state.",
+				Computed:            true,
+			},
+			"keychains": schema.ListNestedAttribute{
+				MarkdownDescription: "List of keychains.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Keychain name.",
+							Computed:            true,
+						},
+						"keys": schema.ListNestedAttribute{
+							MarkdownDescription: "List of keys.",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"key_id": schema.Int64Attribute{
+										MarkdownDescription: "Key ID of classic key chain.",
+										Computed:            true,
+									},
+									"key_string": schema.StringAttribute{
+										MarkdownDescription: "Key string.",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	}
@@ -106,6 +134,7 @@ func (d *KeychainDataSource) Read(ctx context.Context, req datasource.ReadReques
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "full"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

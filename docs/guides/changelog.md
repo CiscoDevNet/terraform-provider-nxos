@@ -9,6 +9,7 @@ description: |-
 
 ## Unreleased
 
+- BREAKING CHANGE: Remove `nxos_subinterface_vrf` resource and data source, subinterface VRF association is now managed as part of `nxos_subinterface` resource and data source
 - BREAKING CHANGE: Remove `nxos_svi_interface_vrf` resource and data source, SVI interface VRF association is now managed as part of `nxos_svi_interface` resource and data source
 - BREAKING CHANGE: Omit empty or null attribute values from API payload by default
 - BREAKING CHANGE: Remove `nxos_default_qos_class_map_dscp` resource and data source, DSCP values are now managed as child classes of `nxos_default_qos_class_map`

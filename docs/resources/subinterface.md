@@ -5,8 +5,8 @@ subcategory: "Interface"
 description: |-
   This resource can manage a subinterface.
   API Documentation: l3EncRtdIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:EncRtdIf/
-  Child resources
-  nxos_subinterface_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/subinterface_vrf
+  Additional API Documentation
+  nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
 ---
 
 # nxos_subinterface (Resource)
@@ -15,9 +15,9 @@ This resource can manage a subinterface.
 
 - API Documentation: [l3EncRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:EncRtdIf/)
 
-### Child resources
+### Additional API Documentation
 
-- [nxos_subinterface_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/subinterface_vrf)
+- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 
 ## Example Usage
 
@@ -32,6 +32,7 @@ resource "nxos_subinterface" "example" {
   link_logging = "enable"
   medium       = "broadcast"
   mtu          = 1500
+  vrf_dn       = "sys/inst-VRF123"
 }
 ```
 
@@ -66,6 +67,7 @@ resource "nxos_subinterface" "example" {
 - `mtu` (Number) Administrative port MTU.
   - Range: `576`-`9216`
   - Default value: `1500`
+- `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.
 
 ### Read-Only
 

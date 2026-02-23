@@ -5,6 +5,8 @@ subcategory: "Interface"
 description: |-
   This data source can read a subinterface.
   API Documentation: l3EncRtdIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:EncRtdIf/
+  Additional API Documentation
+  nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
 ---
 
 # nxos_subinterface (Data Source)
@@ -12,6 +14,10 @@ description: |-
 This data source can read a subinterface.
 
 - API Documentation: [l3EncRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:EncRtdIf/)
+
+### Additional API Documentation
+
+- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 
 ## Example Usage
 
@@ -43,3 +49,4 @@ data "nxos_subinterface" "example" {
 - `link_logging` (String) Administrative link logging.
 - `medium` (String) The administrative port medium type.
 - `mtu` (Number) Administrative port MTU.
+- `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.

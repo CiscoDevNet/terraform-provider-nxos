@@ -48,6 +48,7 @@ type Subinterface struct {
 	LinkLogging types.String `tfsdk:"link_logging"`
 	Medium      types.String `tfsdk:"medium"`
 	Mtu         types.Int64  `tfsdk:"mtu"`
+	VrfDn       types.String `tfsdk:"vrf_dn"`
 }
 
 type SubinterfaceIdentity struct {
@@ -119,6 +120,15 @@ func (data Subinterface) toBody() nxos.Body {
 	if (!data.Mtu.IsUnknown() && !data.Mtu.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mtu", strconv.FormatInt(data.Mtu.ValueInt64(), 10))
 	}
+	var attrs string
+	childrenPath := data.getClassName() + ".children"
+	attrs = "{}"
+	if (!data.VrfDn.IsUnknown() && !data.VrfDn.IsNull()) || false {
+		attrs, _ = sjson.Set(attrs, "tDn", data.VrfDn.ValueString())
+	}
+	if attrs != "{}" || false {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.nwRtVrfMbr.attributes", attrs)
+	}
 
 	return nxos.Body{body}
 }
@@ -137,6 +147,18 @@ func (data *Subinterface) fromBody(res gjson.Result) {
 	data.LinkLogging = types.StringValue(res.Get(data.getClassName() + ".attributes.linkLog").String())
 	data.Medium = types.StringValue(res.Get(data.getClassName() + ".attributes.mediumType").String())
 	data.Mtu = types.Int64Value(res.Get(data.getClassName() + ".attributes.mtu").Int())
+	var rnwRtVrfMbr gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("nwRtVrfMbr.attributes.rn").String()
+			if key == "rtvrfMbr" {
+				rnwRtVrfMbr = v
+				return false
+			}
+			return true
+		},
+	)
+	data.VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
 }
 
 // End of section. //template:end fromBody
@@ -188,6 +210,22 @@ func (data *Subinterface) updateFromBody(res gjson.Result) {
 		data.Mtu = types.Int64Value(res.Get(data.getClassName() + ".attributes.mtu").Int())
 	} else {
 		data.Mtu = types.Int64Null()
+	}
+	var rnwRtVrfMbr gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("nwRtVrfMbr.attributes.rn").String()
+			if key == "rtvrfMbr" {
+				rnwRtVrfMbr = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.VrfDn.IsNull() {
+		data.VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
+	} else {
+		data.VrfDn = types.StringNull()
 	}
 }
 

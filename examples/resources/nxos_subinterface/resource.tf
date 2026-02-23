@@ -8,4 +8,5 @@ resource "nxos_subinterface" "example" {
   link_logging = "enable"
   medium       = "broadcast"
   mtu          = 1500
+  vrf_dn       = "sys/inst-VRF123"
 }

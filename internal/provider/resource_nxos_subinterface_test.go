@@ -44,6 +44,7 @@ func TestAccNxosSubinterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterface.test", "link_logging", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterface.test", "medium", "broadcast"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterface.test", "mtu", "1500"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterface.test", "vrf_dn", "sys/inst-VRF123"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -124,6 +125,7 @@ func testAccNxosSubinterfaceConfig_all() string {
 	config += `	link_logging = "enable"` + "\n"
 	config += `	medium = "broadcast"` + "\n"
 	config += `	mtu = 1500` + "\n"
+	config += `	vrf_dn = "sys/inst-VRF123"` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

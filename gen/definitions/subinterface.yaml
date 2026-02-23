@@ -6,8 +6,6 @@ ds_description: This data source can read a subinterface.
 res_description: This resource can manage a subinterface.
 doc_path: Layer%203/l3:EncRtdIf/
 doc_category: Interface
-children:
-  - Subinterface VRF
 attributes:
   - nxos_name: id
     tf_name: interface_id
@@ -78,6 +76,17 @@ attributes:
     max_int: 9216
     default_value: 1500
     example: 1500
+child_classes:
+  - class_name: nwRtVrfMbr
+    rn: rtvrfMbr
+    type: single
+    doc_path: Routing%20and%20Forwarding/nw:RtVrfMbr/
+    attributes:
+      - nxos_name: tDn
+        tf_name: vrf_dn
+        type: String
+        description: 'DN of VRF. For example: `sys/inst-VRF1`.'
+        example: sys/inst-VRF123
 test_prerequisites:
   - dn: sys/intf/phys-[eth1/10]
     class_name: l1PhysIf

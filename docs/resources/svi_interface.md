@@ -5,8 +5,8 @@ subcategory: "Interface"
 description: |-
   This resource can manage an SVI interface.
   API Documentation: sviIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/svi:If/
-  Child resources
-  nxos_svi_interface_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/svi_interface_vrf
+  Additional API Documentation
+  nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
 ---
 
 # nxos_svi_interface (Resource)
@@ -15,9 +15,9 @@ This resource can manage an SVI interface.
 
 - API Documentation: [sviIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/svi:If/)
 
-### Child resources
+### Additional API Documentation
 
-- [nxos_svi_interface_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/svi_interface_vrf)
+- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 
 ## Example Usage
 
@@ -30,6 +30,7 @@ resource "nxos_svi_interface" "example" {
   description  = "My Description"
   medium       = "bcast"
   mtu          = 9216
+  vrf_dn       = "sys/inst-VRF123"
 }
 ```
 
@@ -59,6 +60,7 @@ resource "nxos_svi_interface" "example" {
 - `mtu` (Number) Administrative port MTU.
   - Range: `576`-`9216`
   - Default value: `1500`
+- `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.
 
 ### Read-Only
 

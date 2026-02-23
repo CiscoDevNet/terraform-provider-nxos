@@ -5,6 +5,8 @@ subcategory: "Interface"
 description: |-
   This data source can read an SVI interface.
   API Documentation: sviIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/svi:If/
+  Additional API Documentation
+  nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
 ---
 
 # nxos_svi_interface (Data Source)
@@ -12,6 +14,10 @@ description: |-
 This data source can read an SVI interface.
 
 - API Documentation: [sviIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/svi:If/)
+
+### Additional API Documentation
+
+- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 
 ## Example Usage
 
@@ -41,3 +47,4 @@ data "nxos_svi_interface" "example" {
 - `id` (String) The distinguished name of the object.
 - `medium` (String) The administrative port medium type.
 - `mtu` (Number) Administrative port MTU.
+- `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.

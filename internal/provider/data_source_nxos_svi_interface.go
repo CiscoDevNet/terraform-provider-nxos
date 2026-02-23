@@ -57,7 +57,7 @@ func (d *SVIInterfaceDataSource) Metadata(_ context.Context, req datasource.Meta
 func (d *SVIInterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read an SVI interface.", "sviIf", "Interfaces/svi:If/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read an SVI interface.", "sviIf", "Interfaces/svi:If/").AddAdditionalDocs([]string{"nwRtVrfMbr"}, []string{"Routing%20and%20Forwarding/nw:RtVrfMbr/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -96,6 +96,10 @@ func (d *SVIInterfaceDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "Administrative port MTU.",
 				Computed:            true,
 			},
+			"vrf_dn": schema.StringAttribute{
+				MarkdownDescription: "DN of VRF. For example: `sys/inst-VRF1`.",
+				Computed:            true,
+			},
 		},
 	}
 }
@@ -130,6 +134,7 @@ func (d *SVIInterfaceDataSource) Read(ctx context.Context, req datasource.ReadRe
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "children"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

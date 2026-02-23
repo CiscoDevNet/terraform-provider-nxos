@@ -9,6 +9,7 @@ description: |-
 
 ## Unreleased
 
+- BREAKING CHANGE: Remove `nxos_svi_interface_vrf` resource and data source, SVI interface VRF association is now managed as part of `nxos_svi_interface` resource and data source
 - BREAKING CHANGE: Omit empty or null attribute values from API payload by default
 - BREAKING CHANGE: Remove `nxos_default_qos_class_map_dscp` resource and data source, DSCP values are now managed as child classes of `nxos_default_qos_class_map`
 - BREAKING CHANGE: Remove `nxos_hmm_instance` resource and data source and `nxos_hmm_interface` resource and data source, HMM configuration is now managed as a single `nxos_hmm` resource and data source

@@ -42,6 +42,7 @@ func TestAccNxosSVIInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "description", "My Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "medium", "bcast"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "mtu", "9216"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "vrf_dn", "sys/inst-VRF123"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -120,6 +121,7 @@ func testAccNxosSVIInterfaceConfig_all() string {
 	config += `	description = "My Description"` + "\n"
 	config += `	medium = "bcast"` + "\n"
 	config += `	mtu = 9216` + "\n"
+	config += `	vrf_dn = "sys/inst-VRF123"` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

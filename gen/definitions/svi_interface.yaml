@@ -6,8 +6,6 @@ ds_description: This data source can read an SVI interface.
 res_description: This resource can manage an SVI interface.
 doc_path: Interfaces/svi:If/
 doc_category: Interface
-children:
-  - SVI Interface VRF
 attributes:
   - nxos_name: id
     tf_name: interface_id
@@ -62,6 +60,17 @@ attributes:
     max_int: 9216
     default_value: 1500
     example: 9216
+child_classes:
+  - class_name: nwRtVrfMbr
+    rn: rtvrfMbr
+    type: single
+    doc_path: Routing%20and%20Forwarding/nw:RtVrfMbr/
+    attributes:
+      - nxos_name: tDn
+        tf_name: vrf_dn
+        type: String
+        description: 'DN of VRF. For example: `sys/inst-VRF1`.'
+        example: sys/inst-VRF123
 test_prerequisites:
   - dn: sys/fm/ifvlan
     class_name: fmInterfaceVlan

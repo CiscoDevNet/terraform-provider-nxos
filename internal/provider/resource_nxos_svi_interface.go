@@ -65,7 +65,7 @@ func (r *SVIInterfaceResource) Metadata(ctx context.Context, req resource.Metada
 func (r *SVIInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage an SVI interface.", "sviIf", "Interfaces/svi:If/").AddChildren("svi_interface_vrf").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage an SVI interface.", "sviIf", "Interfaces/svi:If/").AddAdditionalDocs([]string{"nwRtVrfMbr"}, []string{"Routing%20and%20Forwarding/nw:RtVrfMbr/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -134,6 +134,10 @@ func (r *SVIInterfaceResource) Schema(ctx context.Context, req resource.SchemaRe
 				Validators: []validator.Int64{
 					int64validator.Between(576, 9216),
 				},
+			},
+			"vrf_dn": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DN of VRF. For example: `sys/inst-VRF1`.").String,
+				Optional:            true,
 			},
 		},
 	}
@@ -241,6 +245,7 @@ func (r *SVIInterfaceResource) Read(ctx context.Context, req resource.ReadReques
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		queries = append(queries, nxos.Query("rsp-subtree", "children"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

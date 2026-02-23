@@ -6,4 +6,5 @@ resource "nxos_svi_interface" "example" {
   description  = "My Description"
   medium       = "bcast"
   mtu          = 9216
+  vrf_dn       = "sys/inst-VRF123"
 }

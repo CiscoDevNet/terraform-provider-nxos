@@ -34,12 +34,25 @@ func TestAccDataSourceNxosVRF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vrf.test", "name", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vrf.test", "description", "My VRF1 Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vrf.test", "encap", "vxlan-103901"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vrf.test", "route_distinguisher", "rd:unknown:0:0"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_vrf.test", "address_families.*", map[string]string{
+		"address_family": "ipv4-ucast",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_vrf.test", "address_families.0.route_target_address_families.*", map[string]string{
+		"route_target_address_family": "ipv4-ucast",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_vrf.test", "address_families.0.route_target_address_families.0.route_target_directions.*", map[string]string{
+		"direction": "import",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_vrf.test", "address_families.0.route_target_address_families.0.route_target_directions.0.route_targets.*", map[string]string{
+		"route_target": "route-target:as2-nn2:2:2",
+	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosVRFConfig(),
+				Config: testAccDataSourceNxosVRFPrerequisitesConfig + testAccDataSourceNxosVRFConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -49,6 +62,17 @@ func TestAccDataSourceNxosVRF(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccDataSourceNxosVRFPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/bgp"
+  class_name = "fmBgp"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -58,6 +82,20 @@ func testAccDataSourceNxosVRFConfig() string {
 	config += `	name = "VRF1"` + "\n"
 	config += `	description = "My VRF1 Description"` + "\n"
 	config += `	encap = "vxlan-103901"` + "\n"
+	config += `	route_distinguisher = "rd:unknown:0:0"` + "\n"
+	config += `	address_families = [{` + "\n"
+	config += `		address_family = "ipv4-ucast"` + "\n"
+	config += `		route_target_address_families = [{` + "\n"
+	config += `			route_target_address_family = "ipv4-ucast"` + "\n"
+	config += `			route_target_directions = [{` + "\n"
+	config += `				direction = "import"` + "\n"
+	config += `				route_targets = [{` + "\n"
+	config += `					route_target = "route-target:as2-nn2:2:2"` + "\n"
+	config += `				}]` + "\n"
+	config += `			}]` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

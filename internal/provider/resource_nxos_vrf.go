@@ -26,6 +26,7 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
@@ -33,6 +34,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -61,7 +63,7 @@ func (r *VRFResource) Metadata(ctx context.Context, req resource.MetadataRequest
 func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a VRF.", "l3Inst", "Layer%203/l3:Inst/").AddChildren("vrf_routing").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a VRF.", "l3Inst", "Layer%203/l3:Inst/").AddAdditionalDocs([]string{"rtctrlDom", "rtctrlDomAf", "rtctrlAfCtrl", "rtctrlRttP", "rtctrlRttEntry"}, []string{"Routing%20and%20Forwarding/rtctrl:Dom/", "Routing%20and%20Forwarding/rtctrl:DomAf/", "Routing%20and%20Forwarding/rtctrl:AfCtrl/", "Routing%20and%20Forwarding/rtctrl:RttP/", "Routing%20and%20Forwarding/rtctrl:RttEntry/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -91,6 +93,81 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				Optional:            true,
 				Computed:            true,
 				Default:             stringdefault.StaticString("unknown"),
+			},
+			"route_distinguisher": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route Distinguisher value in NX-OS DME format.").AddDefaultValueDescription("unknown:unknown:0:0").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("unknown:unknown:0:0"),
+			},
+			"address_families": schema.ListNestedAttribute{
+				MarkdownDescription: "List of VRF address families.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address_family": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Address family.").AddStringEnumDescription("ipv4-ucast", "ipv6-ucast").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("ipv4-ucast", "ipv6-ucast"),
+							},
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"route_target_address_families": schema.ListNestedAttribute{
+							MarkdownDescription: "List of VRF route target address families.",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"route_target_address_family": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Route Target Address Family.").AddStringEnumDescription("ipv4-ucast", "ipv6-ucast", "l2vpn-evpn").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("ipv4-ucast", "ipv6-ucast", "l2vpn-evpn"),
+										},
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplace(),
+										},
+									},
+									"route_target_directions": schema.ListNestedAttribute{
+										MarkdownDescription: "List of VRF route target directions.",
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"direction": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Route Target direction.").AddStringEnumDescription("import", "export").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.OneOf("import", "export"),
+													},
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplace(),
+													},
+												},
+												"route_targets": schema.ListNestedAttribute{
+													MarkdownDescription: "List of VRF route target entries.",
+													Optional:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"route_target": schema.StringAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("Route Target in NX-OS DME format.").String,
+																Required:            true,
+																PlanModifiers: []planmodifier.String{
+																	stringplanmodifier.RequiresReplace(),
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	}
@@ -198,6 +275,7 @@ func (r *VRFResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		queries = append(queries, nxos.Query("rsp-subtree", "full"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -240,6 +318,14 @@ func (r *VRFResource) Update(ctx context.Context, req resource.UpdateRequest, re
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	var state VRF
+
+	// Read state
+	diags = req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
@@ -255,6 +341,19 @@ func (r *VRFResource) Update(ctx context.Context, req resource.UpdateRequest, re
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
+		}
+
+		deletedItems := plan.getDeletedItems(ctx, state)
+		tflog.Debug(ctx, fmt.Sprintf("%s: List items to delete: %v", plan.getDn(), deletedItems))
+		for _, dn := range deletedItems {
+			res, err := device.Client.DeleteDn(dn)
+			if err != nil {
+				errCode := res.Get("imdata.0.error.attributes.code").Str
+				if errCode != "1" && errCode != "107" {
+					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+					return
+				}
+			}
 		}
 	}
 

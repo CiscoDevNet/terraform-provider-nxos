@@ -171,10 +171,10 @@ func (data *ICMPv4) fromBody(res gjson.Result) {
 								nestedV.ForEach(
 									func(nestedClassname, nestedValue gjson.Result) bool {
 										if nestedClassname.String() == "icmpv4If" {
-											var nestedChild ICMPv4Interfaces
-											nestedChild.Id = types.StringValue(nestedValue.Get("attributes.id").String())
-											nestedChild.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
-											child.Interfaces = append(child.Interfaces, nestedChild)
+											var nestedChildicmpv4If ICMPv4Interfaces
+											nestedChildicmpv4If.Id = types.StringValue(nestedValue.Get("attributes.id").String())
+											nestedChildicmpv4If.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
+											child.Interfaces = append(child.Interfaces, nestedChildicmpv4If)
 										}
 										return true
 									},

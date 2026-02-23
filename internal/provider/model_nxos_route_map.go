@@ -222,9 +222,9 @@ func (data *RouteMap) fromBody(res gjson.Result) {
 									nestedV.ForEach(
 										func(nestedClassname, nestedValue gjson.Result) bool {
 											if nestedClassname.String() == "rtmapRsRtDstAtt" {
-												var nestedChild RouteMapMatchRoutePrefixLists
-												nestedChild.PrefixListDn = types.StringValue(nestedValue.Get("attributes.tDn").String())
-												child.MatchRoutePrefixLists = append(child.MatchRoutePrefixLists, nestedChild)
+												var nestedChildrtmapRsRtDstAtt RouteMapMatchRoutePrefixLists
+												nestedChildrtmapRsRtDstAtt.PrefixListDn = types.StringValue(nestedValue.Get("attributes.tDn").String())
+												child.MatchRoutePrefixLists = append(child.MatchRoutePrefixLists, nestedChildrtmapRsRtDstAtt)
 											}
 											return true
 										},
@@ -253,9 +253,9 @@ func (data *RouteMap) fromBody(res gjson.Result) {
 									nestedV.ForEach(
 										func(nestedClassname, nestedValue gjson.Result) bool {
 											if nestedClassname.String() == "rtregcomItem" {
-												var nestedChild RouteMapSetRegularCommunityItems
-												nestedChild.Community = types.StringValue(nestedValue.Get("attributes.community").String())
-												child.SetRegularCommunityItems = append(child.SetRegularCommunityItems, nestedChild)
+												var nestedChildrtregcomItem RouteMapSetRegularCommunityItems
+												nestedChildrtregcomItem.Community = types.StringValue(nestedValue.Get("attributes.community").String())
+												child.SetRegularCommunityItems = append(child.SetRegularCommunityItems, nestedChildrtregcomItem)
 											}
 											return true
 										},
@@ -269,9 +269,9 @@ func (data *RouteMap) fromBody(res gjson.Result) {
 								nestedV.ForEach(
 									func(nestedClassname, nestedValue gjson.Result) bool {
 										if nestedClassname.String() == "rtmapMatchRtTag" {
-											var nestedChild RouteMapMatchTags
-											nestedChild.Tag = types.Int64Value(nestedValue.Get("attributes.tag").Int())
-											child.MatchTags = append(child.MatchTags, nestedChild)
+											var nestedChildrtmapMatchRtTag RouteMapMatchTags
+											nestedChildrtmapMatchRtTag.Tag = types.Int64Value(nestedValue.Get("attributes.tag").Int())
+											child.MatchTags = append(child.MatchTags, nestedChildrtmapMatchRtTag)
 										}
 										return true
 									},

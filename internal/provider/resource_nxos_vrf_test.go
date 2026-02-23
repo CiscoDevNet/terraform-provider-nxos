@@ -38,6 +38,11 @@ func TestAccNxosVRF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf.test", "name", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf.test", "description", "My VRF1 Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf.test", "encap", "vxlan-103901"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf.test", "route_distinguisher", "rd:unknown:0:0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf.test", "address_families.0.address_family", "ipv4-ucast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf.test", "address_families.0.route_target_address_families.0.route_target_address_family", "ipv4-ucast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf.test", "address_families.0.route_target_address_families.0.route_target_directions.0.direction", "import"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf.test", "address_families.0.route_target_address_families.0.route_target_directions.0.route_targets.0.route_target", "route-target:as2-nn2:2:2"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -47,7 +52,7 @@ func TestAccNxosVRF(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosVRFConfig_all(),
+				Config: testAccNxosVRFPrerequisitesConfig + testAccNxosVRFConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -81,6 +86,17 @@ func nxosVRFImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccNxosVRFPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/bgp"
+  class_name = "fmBgp"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -88,6 +104,7 @@ func nxosVRFImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 func testAccNxosVRFConfig_minimum() string {
 	config := `resource "nxos_vrf" "test" {` + "\n"
 	config += `	name = "VRF1"` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -100,6 +117,20 @@ func testAccNxosVRFConfig_all() string {
 	config += `	name = "VRF1"` + "\n"
 	config += `	description = "My VRF1 Description"` + "\n"
 	config += `	encap = "vxlan-103901"` + "\n"
+	config += `	route_distinguisher = "rd:unknown:0:0"` + "\n"
+	config += `	address_families = [{` + "\n"
+	config += `		address_family = "ipv4-ucast"` + "\n"
+	config += `		route_target_address_families = [{` + "\n"
+	config += `			route_target_address_family = "ipv4-ucast"` + "\n"
+	config += `			route_target_directions = [{` + "\n"
+	config += `				direction = "import"` + "\n"
+	config += `				route_targets = [{` + "\n"
+	config += `					route_target = "route-target:as2-nn2:2:2"` + "\n"
+	config += `				}]` + "\n"
+	config += `			}]` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

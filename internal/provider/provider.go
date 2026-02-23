@@ -462,11 +462,6 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewUserResource,
 		NewVPCResource,
 		NewVRFResource,
-		NewVRFAddressFamilyResource,
-		NewVRFRouteTargetResource,
-		NewVRFRouteTargetAddressFamilyResource,
-		NewVRFRouteTargetDirectionResource,
-		NewVRFRoutingResource,
 	}
 }
 
@@ -599,11 +594,6 @@ func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.Data
 		NewUserDataSource,
 		NewVPCDataSource,
 		NewVRFDataSource,
-		NewVRFAddressFamilyDataSource,
-		NewVRFRouteTargetDataSource,
-		NewVRFRouteTargetAddressFamilyDataSource,
-		NewVRFRouteTargetDirectionDataSource,
-		NewVRFRoutingDataSource,
 	}
 }
 

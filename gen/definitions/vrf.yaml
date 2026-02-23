@@ -6,8 +6,6 @@ ds_description: This data source can read a VRF.
 res_description: This resource can manage a VRF.
 doc_path: Layer%203/l3:Inst/
 doc_category: VRF
-children:
-  - VRF Routing
 attributes:
   - nxos_name: name
     tf_name: name
@@ -26,3 +24,90 @@ attributes:
     description: 'Encap for this Context, supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.'
     default_value: unknown
     example: vxlan-103901
+child_classes:
+  - class_name: rtctrlDom
+    doc_path: Routing%20and%20Forwarding/rtctrl:Dom/
+    rn: dom-%[1]s
+    type: single
+    tf_name: routing
+    description: 'VRF routing configuration.'
+    attributes:
+      - nxos_name: rd
+        tf_name: route_distinguisher
+        type: String
+        description: 'Route Distinguisher value in NX-OS DME format.'
+        default_value: 'unknown:unknown:0:0'
+        example: 'rd:unknown:0:0'
+    child_classes:
+      - class_name: rtctrlDomAf
+        doc_path: Routing%20and%20Forwarding/rtctrl:DomAf/
+        rn: af-[%s]
+        type: list
+        tf_name: address_families
+        description: 'List of VRF address families.'
+        attributes:
+          - nxos_name: type
+            tf_name: address_family
+            type: String
+            id: true
+            description: 'Address family.'
+            enum_values:
+              - ipv4-ucast
+              - ipv6-ucast
+            example: ipv4-ucast
+        child_classes:
+          - class_name: rtctrlAfCtrl
+            doc_path: Routing%20and%20Forwarding/rtctrl:AfCtrl/
+            rn: ctrl-[%s]
+            type: list
+            tf_name: route_target_address_families
+            description: 'List of VRF route target address families.'
+            attributes:
+              - nxos_name: type
+                tf_name: route_target_address_family
+                type: String
+                id: true
+                description: 'Route Target Address Family.'
+                enum_values:
+                  - ipv4-ucast
+                  - ipv6-ucast
+                  - l2vpn-evpn
+                example: ipv4-ucast
+            child_classes:
+              - class_name: rtctrlRttP
+                doc_path: Routing%20and%20Forwarding/rtctrl:RttP/
+                rn: rttp-%s
+                type: list
+                tf_name: route_target_directions
+                description: 'List of VRF route target directions.'
+                attributes:
+                  - nxos_name: type
+                    tf_name: direction
+                    type: String
+                    id: true
+                    description: 'Route Target direction.'
+                    enum_values:
+                      - import
+                      - export
+                    example: import
+                child_classes:
+                  - class_name: rtctrlRttEntry
+                    doc_path: Routing%20and%20Forwarding/rtctrl:RttEntry/
+                    rn: ent-[%s]
+                    type: list
+                    tf_name: route_targets
+                    description: 'List of VRF route target entries.'
+                    attributes:
+                      - nxos_name: rtt
+                        tf_name: route_target
+                        type: String
+                        id: true
+                        description: 'Route Target in NX-OS DME format.'
+                        example: route-target:as2-nn2:2:2
+test_prerequisites:
+  - dn: sys/fm/bgp
+    class_name: fmBgp
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled

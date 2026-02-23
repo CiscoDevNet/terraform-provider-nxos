@@ -166,9 +166,9 @@ func (data *Keychain) fromBody(res gjson.Result) {
 								nestedV.ForEach(
 									func(nestedClassname, nestedValue gjson.Result) bool {
 										if nestedClassname.String() == "kcmgrKey" {
-											var nestedChild KeychainKeys
-											nestedChild.KeyId = types.Int64Value(nestedValue.Get("attributes.keyId").Int())
-											child.Keys = append(child.Keys, nestedChild)
+											var nestedChildkcmgrKey KeychainKeys
+											nestedChildkcmgrKey.KeyId = types.Int64Value(nestedValue.Get("attributes.keyId").Int())
+											child.Keys = append(child.Keys, nestedChildkcmgrKey)
 										}
 										return true
 									},

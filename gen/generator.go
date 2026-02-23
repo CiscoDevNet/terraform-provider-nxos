@@ -330,6 +330,32 @@ func HasListChildClasses(children []YamlConfigChildClass) bool {
 	return false
 }
 
+// RnHasDynamicSegment returns true if the rn contains a format placeholder ('%').
+func RnHasDynamicSegment(rn string) bool {
+	return strings.Contains(rn, "%")
+}
+
+// RnFormatArgs generates the Go expression list for fmt.Sprintf arguments
+// to build the rn from the top-level resource's id attributes.
+// Always references "data." since child RN placeholders are filled by the
+// top-level resource's id attributes.
+func RnFormatArgs(attributes []YamlConfigAttribute) string {
+	var args []string
+	for _, attr := range attributes {
+		if attr.Id {
+			switch attr.Type {
+			case "Int64":
+				args = append(args, "data."+ToGoName(attr.TfName)+".ValueInt64()")
+			case "Bool":
+				args = append(args, "data."+ToGoName(attr.TfName)+".ValueBool()")
+			default:
+				args = append(args, "data."+ToGoName(attr.TfName)+".ValueString()")
+			}
+		}
+	}
+	return strings.Join(args, ", ")
+}
+
 // Templating helper function to create a map from key-value pairs for passing multiple values to {{template}}
 func MakeMap(pairs ...interface{}) map[string]interface{} {
 	m := make(map[string]interface{})
@@ -358,6 +384,8 @@ var functions = template.FuncMap{
 	"hasDeleteValue":      HasDeleteValue,
 	"hasListChildClasses": HasListChildClasses,
 	"makeMap":             MakeMap,
+	"rnHasDynamicSegment": RnHasDynamicSegment,
+	"rnFormatArgs":        RnFormatArgs,
 }
 
 // buildTfChildClasses builds the TfChildClasses list by promoting children

@@ -5,8 +5,8 @@ subcategory: "VRF"
 description: |-
   This resource can manage a VRF.
   API Documentation: l3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:Inst/
-  Child resources
-  nxos_vrf_routing https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf_routing
+  Additional API Documentation
+  rtctrlDom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:Dom/rtctrlDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:DomAf/rtctrlAfCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:AfCtrl/rtctrlRttP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttP/rtctrlRttEntry https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/
 ---
 
 # nxos_vrf (Resource)
@@ -15,17 +15,34 @@ This resource can manage a VRF.
 
 - API Documentation: [l3Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:Inst/)
 
-### Child resources
+### Additional API Documentation
 
-- [nxos_vrf_routing](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf_routing)
+- [rtctrlDom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:Dom/)
+- [rtctrlDomAf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:DomAf/)
+- [rtctrlAfCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:AfCtrl/)
+- [rtctrlRttP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttP/)
+- [rtctrlRttEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/)
 
 ## Example Usage
 
 ```terraform
 resource "nxos_vrf" "example" {
-  name        = "VRF1"
-  description = "My VRF1 Description"
-  encap       = "vxlan-103901"
+  name                = "VRF1"
+  description         = "My VRF1 Description"
+  encap               = "vxlan-103901"
+  route_distinguisher = "rd:unknown:0:0"
+  address_families = [{
+    address_family = "ipv4-ucast"
+    route_target_address_families = [{
+      route_target_address_family = "ipv4-ucast"
+      route_target_directions = [{
+        direction = "import"
+        route_targets = [{
+          route_target = "route-target:as2-nn2:2:2"
+        }]
+      }]
+    }]
+  }]
 }
 ```
 
@@ -38,14 +55,60 @@ resource "nxos_vrf" "example" {
 
 ### Optional
 
+- `address_families` (Attributes List) List of VRF address families. (see [below for nested schema](#nestedatt--address_families))
 - `description` (String) VRF description.
 - `device` (String) A device name from the provider configuration.
 - `encap` (String) Encap for this Context, supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.
   - Default value: `unknown`
+- `route_distinguisher` (String) Route Distinguisher value in NX-OS DME format.
+  - Default value: `unknown:unknown:0:0`
 
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--address_families"></a>
+### Nested Schema for `address_families`
+
+Required:
+
+- `address_family` (String) Address family.
+  - Choices: `ipv4-ucast`, `ipv6-ucast`
+
+Optional:
+
+- `route_target_address_families` (Attributes List) List of VRF route target address families. (see [below for nested schema](#nestedatt--address_families--route_target_address_families))
+
+<a id="nestedatt--address_families--route_target_address_families"></a>
+### Nested Schema for `address_families.route_target_address_families`
+
+Required:
+
+- `route_target_address_family` (String) Route Target Address Family.
+  - Choices: `ipv4-ucast`, `ipv6-ucast`, `l2vpn-evpn`
+
+Optional:
+
+- `route_target_directions` (Attributes List) List of VRF route target directions. (see [below for nested schema](#nestedatt--address_families--route_target_address_families--route_target_directions))
+
+<a id="nestedatt--address_families--route_target_address_families--route_target_directions"></a>
+### Nested Schema for `address_families.route_target_address_families.route_target_directions`
+
+Required:
+
+- `direction` (String) Route Target direction.
+  - Choices: `import`, `export`
+
+Optional:
+
+- `route_targets` (Attributes List) List of VRF route target entries. (see [below for nested schema](#nestedatt--address_families--route_target_address_families--route_target_directions--route_targets))
+
+<a id="nestedatt--address_families--route_target_address_families--route_target_directions--route_targets"></a>
+### Nested Schema for `address_families.route_target_address_families.route_target_directions.route_targets`
+
+Required:
+
+- `route_target` (String) Route Target in NX-OS DME format.
 
 ## Import
 

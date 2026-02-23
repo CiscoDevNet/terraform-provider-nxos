@@ -57,7 +57,7 @@ func (d *VRFDataSource) Metadata(_ context.Context, req datasource.MetadataReque
 func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read a VRF.", "l3Inst", "Layer%203/l3:Inst/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read a VRF.", "l3Inst", "Layer%203/l3:Inst/").AddAdditionalDocs([]string{"rtctrlDom", "rtctrlDomAf", "rtctrlAfCtrl", "rtctrlRttP", "rtctrlRttEntry"}, []string{"Routing%20and%20Forwarding/rtctrl:Dom/", "Routing%20and%20Forwarding/rtctrl:DomAf/", "Routing%20and%20Forwarding/rtctrl:AfCtrl/", "Routing%20and%20Forwarding/rtctrl:RttP/", "Routing%20and%20Forwarding/rtctrl:RttEntry/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -79,6 +79,58 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 			"encap": schema.StringAttribute{
 				MarkdownDescription: "Encap for this Context, supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.",
 				Computed:            true,
+			},
+			"route_distinguisher": schema.StringAttribute{
+				MarkdownDescription: "Route Distinguisher value in NX-OS DME format.",
+				Computed:            true,
+			},
+			"address_families": schema.ListNestedAttribute{
+				MarkdownDescription: "List of VRF address families.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address_family": schema.StringAttribute{
+							MarkdownDescription: "Address family.",
+							Computed:            true,
+						},
+						"route_target_address_families": schema.ListNestedAttribute{
+							MarkdownDescription: "List of VRF route target address families.",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"route_target_address_family": schema.StringAttribute{
+										MarkdownDescription: "Route Target Address Family.",
+										Computed:            true,
+									},
+									"route_target_directions": schema.ListNestedAttribute{
+										MarkdownDescription: "List of VRF route target directions.",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"direction": schema.StringAttribute{
+													MarkdownDescription: "Route Target direction.",
+													Computed:            true,
+												},
+												"route_targets": schema.ListNestedAttribute{
+													MarkdownDescription: "List of VRF route target entries.",
+													Computed:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"route_target": schema.StringAttribute{
+																MarkdownDescription: "Route Target in NX-OS DME format.",
+																Computed:            true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	}
@@ -114,6 +166,7 @@ func (d *VRFDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "full"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

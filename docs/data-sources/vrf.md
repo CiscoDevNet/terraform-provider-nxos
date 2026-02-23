@@ -5,6 +5,8 @@ subcategory: "VRF"
 description: |-
   This data source can read a VRF.
   API Documentation: l3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:Inst/
+  Additional API Documentation
+  rtctrlDom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:Dom/rtctrlDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:DomAf/rtctrlAfCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:AfCtrl/rtctrlRttP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttP/rtctrlRttEntry https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/
 ---
 
 # nxos_vrf (Data Source)
@@ -12,6 +14,14 @@ description: |-
 This data source can read a VRF.
 
 - API Documentation: [l3Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:Inst/)
+
+### Additional API Documentation
+
+- [rtctrlDom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:Dom/)
+- [rtctrlDomAf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:DomAf/)
+- [rtctrlAfCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:AfCtrl/)
+- [rtctrlRttP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttP/)
+- [rtctrlRttEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/)
 
 ## Example Usage
 
@@ -34,6 +44,39 @@ data "nxos_vrf" "example" {
 
 ### Read-Only
 
+- `address_families` (Attributes List) List of VRF address families. (see [below for nested schema](#nestedatt--address_families))
 - `description` (String) VRF description.
 - `encap` (String) Encap for this Context, supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.
 - `id` (String) The distinguished name of the object.
+- `route_distinguisher` (String) Route Distinguisher value in NX-OS DME format.
+
+<a id="nestedatt--address_families"></a>
+### Nested Schema for `address_families`
+
+Read-Only:
+
+- `address_family` (String) Address family.
+- `route_target_address_families` (Attributes List) List of VRF route target address families. (see [below for nested schema](#nestedatt--address_families--route_target_address_families))
+
+<a id="nestedatt--address_families--route_target_address_families"></a>
+### Nested Schema for `address_families.route_target_address_families`
+
+Read-Only:
+
+- `route_target_address_family` (String) Route Target Address Family.
+- `route_target_directions` (Attributes List) List of VRF route target directions. (see [below for nested schema](#nestedatt--address_families--route_target_address_families--route_target_directions))
+
+<a id="nestedatt--address_families--route_target_address_families--route_target_directions"></a>
+### Nested Schema for `address_families.route_target_address_families.route_target_directions`
+
+Read-Only:
+
+- `direction` (String) Route Target direction.
+- `route_targets` (Attributes List) List of VRF route target entries. (see [below for nested schema](#nestedatt--address_families--route_target_address_families--route_target_directions--route_targets))
+
+<a id="nestedatt--address_families--route_target_address_families--route_target_directions--route_targets"></a>
+### Nested Schema for `address_families.route_target_address_families.route_target_directions.route_targets`
+
+Read-Only:
+
+- `route_target` (String) Route Target in NX-OS DME format.

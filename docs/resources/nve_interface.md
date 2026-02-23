@@ -5,8 +5,8 @@ subcategory: "NVE"
 description: |-
   This resource can manage the NVE interface configuration.
   API Documentation: nvoEp https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Network%20Virtualization/nvo:Ep/
-  Child resources
-  nxos_nve_vni_container https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/nve_vni_container
+  Additional API Documentation
+  nvoNws https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Network%20Virtualization/nvo:Nws/nvoNw https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Network%20Virtualization/nvo:Nw/nvoIngRepl https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Network%20Virtualization/nvo:IngRepl/
 ---
 
 # nxos_nve_interface (Resource)
@@ -15,9 +15,11 @@ This resource can manage the NVE interface configuration.
 
 - API Documentation: [nvoEp](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Network%20Virtualization/nvo:Ep/)
 
-### Child resources
+### Additional API Documentation
 
-- [nxos_nve_vni_container](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/nve_vni_container)
+- [nvoNws](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Network%20Virtualization/nvo:Nws/)
+- [nvoNw](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Network%20Virtualization/nvo:Nw/)
+- [nvoIngRepl](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Network%20Virtualization/nvo:IngRepl/)
 
 ## Example Usage
 
@@ -34,6 +36,14 @@ resource "nxos_nve_interface" "example" {
   source_interface                 = "lo0"
   suppress_arp                     = true
   suppress_mac_route               = false
+  vnis = [{
+    vni                           = 103100
+    associate_vrf                 = false
+    multicast_group               = "0.0.0.0"
+    multisite_ingress_replication = "disable"
+    suppress_arp                  = "off"
+    protocol                      = "bgp"
+  }]
 }
 ```
 
@@ -68,10 +78,35 @@ resource "nxos_nve_interface" "example" {
   - Default value: `false`
 - `suppress_mac_route` (Boolean) Suppress MAC Route.
   - Default value: `false`
+- `vnis` (Attributes List) List of VNIs. (see [below for nested schema](#nestedatt--vnis))
 
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--vnis"></a>
+### Nested Schema for `vnis`
+
+Required:
+
+- `vni` (Number) Virtual Network ID.
+  - Range: `1`-`16777214`
+
+Optional:
+
+- `associate_vrf` (Boolean) Configures VNI as L3 VNI.
+  - Default value: `false`
+- `multicast_group` (String) Configures multicast group address for VNI.
+  - Default value: `0.0.0.0`
+- `multisite_ingress_replication` (String) Enable or disable Multisite Ingress Replication for VNI(s).
+  - Choices: `enable`, `disable`, `enableOptimized`
+  - Default value: `disable`
+- `protocol` (String) Configure VxLAN Ingress Replication mode.
+  - Choices: `bgp`, `unknown`, `static`
+  - Default value: `unknown`
+- `suppress_arp` (String) Enable or disable ARP suppression for VNI(s).
+  - Choices: `enabled`, `disabled`, `off`
+  - Default value: `off`
 
 ## Import
 

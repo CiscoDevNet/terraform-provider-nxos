@@ -57,7 +57,7 @@ func (d *NVEInterfaceDataSource) Metadata(_ context.Context, req datasource.Meta
 func (d *NVEInterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the NVE interface configuration.", "nvoEp", "Network%20Virtualization/nvo:Ep/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the NVE interface configuration.", "nvoEp", "Network%20Virtualization/nvo:Ep/").AddAdditionalDocs([]string{"nvoNws", "nvoNw", "nvoIngRepl"}, []string{"Network%20Virtualization/nvo:Nws/", "Network%20Virtualization/nvo:Nw/", "Network%20Virtualization/nvo:IngRepl/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -112,6 +112,38 @@ func (d *NVEInterfaceDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "Suppress MAC Route.",
 				Computed:            true,
 			},
+			"vnis": schema.ListNestedAttribute{
+				MarkdownDescription: "List of VNIs.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vni": schema.Int64Attribute{
+							MarkdownDescription: "Virtual Network ID.",
+							Computed:            true,
+						},
+						"associate_vrf": schema.BoolAttribute{
+							MarkdownDescription: "Configures VNI as L3 VNI.",
+							Computed:            true,
+						},
+						"multicast_group": schema.StringAttribute{
+							MarkdownDescription: "Configures multicast group address for VNI.",
+							Computed:            true,
+						},
+						"multisite_ingress_replication": schema.StringAttribute{
+							MarkdownDescription: "Enable or disable Multisite Ingress Replication for VNI(s).",
+							Computed:            true,
+						},
+						"suppress_arp": schema.StringAttribute{
+							MarkdownDescription: "Enable or disable ARP suppression for VNI(s).",
+							Computed:            true,
+						},
+						"protocol": schema.StringAttribute{
+							MarkdownDescription: "Configure VxLAN Ingress Replication mode.",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -146,6 +178,7 @@ func (d *NVEInterfaceDataSource) Read(ctx context.Context, req datasource.ReadRe
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "full"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

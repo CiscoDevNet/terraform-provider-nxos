@@ -15,6 +15,7 @@
 - BREAKING CHANGE: Remove `nxos_keychain_manager` resource and data source, `nxos_keychain` resource and data source, and `nxos_keychain_key` resource and data source, keychain configuration is now managed as a single `nxos_keychain` resource and data source
 - BREAKING CHANGE: Remove `nxos_vpc_instance` resource and data source, `nxos_vpc_domain` resource and data source, `nxos_vpc_keepalive` resource and data source, `nxos_vpc_peerlink` resource and data source, and `nxos_vpc_interface` resource and data source, vPC configuration is now managed as a single `nxos_vpc` resource and data source
 - BREAKING CHANGE: Remove `nxos_evpn_vni` resource and data source, `nxos_evpn_vni_route_target_direction` resource and data source, and `nxos_evpn_vni_route_target` resource and data source, EVPN configuration is now managed as a single `nxos_evpn` resource and data source
+- BREAKING CHANGE: Remove `nxos_nve_vni_container` resource and data source, `nxos_nve_vni` resource and data source, and `nxos_nve_vni_ingress_replication` resource and data source, NVE configuration is now managed as a single `nxos_nve_interface` resource and data source
 - Add `nxos_features` resource and data source
 
 ## 0.7.0

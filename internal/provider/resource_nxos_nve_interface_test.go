@@ -46,6 +46,12 @@ func TestAccNxosNVEInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nve_interface.test", "source_interface", "lo0"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nve_interface.test", "suppress_arp", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nve_interface.test", "suppress_mac_route", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nve_interface.test", "vnis.0.vni", "103100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nve_interface.test", "vnis.0.associate_vrf", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nve_interface.test", "vnis.0.multicast_group", "0.0.0.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nve_interface.test", "vnis.0.multisite_ingress_replication", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nve_interface.test", "vnis.0.suppress_arp", "off"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nve_interface.test", "vnis.0.protocol", "bgp"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -135,6 +141,14 @@ func testAccNxosNVEInterfaceConfig_all() string {
 	config += `	source_interface = "lo0"` + "\n"
 	config += `	suppress_arp = true` + "\n"
 	config += `	suppress_mac_route = false` + "\n"
+	config += `	vnis = [{` + "\n"
+	config += `		vni = 103100` + "\n"
+	config += `		associate_vrf = false` + "\n"
+	config += `		multicast_group = "0.0.0.0"` + "\n"
+	config += `		multisite_ingress_replication = "disable"` + "\n"
+	config += `		suppress_arp = "off"` + "\n"
+	config += `		protocol = "bgp"` + "\n"
+	config += `	}]` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config

@@ -6,8 +6,6 @@ ds_description: This data source can read the NVE interface configuration.
 res_description: This resource can manage the NVE interface configuration.
 doc_path: Network%20Virtualization/nvo:Ep/
 doc_category: NVE
-children:
-  - NVE VNI Container
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state
@@ -86,6 +84,77 @@ attributes:
     description: 'Suppress MAC Route.'
     default_value: false
     example: false
+child_classes:
+  - class_name: nvoNws
+    doc_path: Network%20Virtualization/nvo:Nws/
+    rn: nws
+    type: single
+    child_classes:
+      - class_name: nvoNw
+        doc_path: Network%20Virtualization/nvo:Nw/
+        rn: vni-%v
+        type: list
+        tf_name: vnis
+        description: 'List of VNIs.'
+        attributes:
+          - nxos_name: vni
+            tf_name: vni
+            type: Int64
+            id: true
+            description: 'Virtual Network ID.'
+            min_int: 1
+            max_int: 16777214
+            example: 103100
+          - nxos_name: associateVrfFlag
+            tf_name: associate_vrf
+            type: Bool
+            description: 'Configures VNI as L3 VNI.'
+            default_value: false
+            example: false
+          - nxos_name: mcastGroup
+            tf_name: multicast_group
+            type: String
+            description: 'Configures multicast group address for VNI.'
+            default_value: '0.0.0.0'
+            example: '0.0.0.0'
+          - nxos_name: multisiteIngRepl
+            tf_name: multisite_ingress_replication
+            type: String
+            description: 'Enable or disable Multisite Ingress Replication for VNI(s).'
+            enum_values:
+              - enable
+              - disable
+              - enableOptimized
+            default_value: disable
+            example: disable
+          - nxos_name: suppressARP
+            tf_name: suppress_arp
+            type: String
+            description: 'Enable or disable ARP suppression for VNI(s).'
+            enum_values:
+              - enabled
+              - disabled
+              - 'off'
+            default_value: 'off'
+            example: 'off'
+        child_classes:
+          - class_name: nvoIngRepl
+            doc_path: Network%20Virtualization/nvo:IngRepl/
+            rn: IngRepl
+            type: single
+            tf_name: ingress_replication
+            description: 'Ingress Replication configuration for the VNI.'
+            attributes:
+              - nxos_name: proto
+                tf_name: protocol
+                type: String
+                description: 'Configure VxLAN Ingress Replication mode.'
+                enum_values:
+                  - bgp
+                  - unknown
+                  - static
+                default_value: unknown
+                example: bgp
 test_prerequisites:
   - dn: sys/fm/nvo
     class_name: fmNvo

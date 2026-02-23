@@ -42,6 +42,14 @@ func TestAccDataSourceNxosNVEInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nve_interface.test", "source_interface", "lo0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nve_interface.test", "suppress_arp", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nve_interface.test", "suppress_mac_route", "false"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_nve_interface.test", "vnis.*", map[string]string{
+		"vni":                           "103100",
+		"associate_vrf":                 "false",
+		"multicast_group":               "0.0.0.0",
+		"multisite_ingress_replication": "disable",
+		"suppress_arp":                  "off",
+	}))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nve_interface.test", "vnis.0.protocol", "bgp"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -95,6 +103,14 @@ func testAccDataSourceNxosNVEInterfaceConfig() string {
 	config += `	source_interface = "lo0"` + "\n"
 	config += `	suppress_arp = true` + "\n"
 	config += `	suppress_mac_route = false` + "\n"
+	config += `	vnis = [{` + "\n"
+	config += `		vni = 103100` + "\n"
+	config += `		associate_vrf = false` + "\n"
+	config += `		multicast_group = "0.0.0.0"` + "\n"
+	config += `		multisite_ingress_replication = "disable"` + "\n"
+	config += `		suppress_arp = "off"` + "\n"
+	config += `		protocol = "bgp"` + "\n"
+	config += `	}]` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 

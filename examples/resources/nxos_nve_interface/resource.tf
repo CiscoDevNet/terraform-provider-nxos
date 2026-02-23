@@ -10,4 +10,12 @@ resource "nxos_nve_interface" "example" {
   source_interface                 = "lo0"
   suppress_arp                     = true
   suppress_mac_route               = false
+  vnis = [{
+    vni                           = 103100
+    associate_vrf                 = false
+    multicast_group               = "0.0.0.0"
+    multisite_ingress_replication = "disable"
+    suppress_arp                  = "off"
+    protocol                      = "bgp"
+  }]
 }

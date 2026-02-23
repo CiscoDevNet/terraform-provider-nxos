@@ -5,6 +5,8 @@ subcategory: "NVE"
 description: |-
   This data source can read the NVE interface configuration.
   API Documentation: nvoEp https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Network%20Virtualization/nvo:Ep/
+  Additional API Documentation
+  nvoNws https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Network%20Virtualization/nvo:Nws/nvoNw https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Network%20Virtualization/nvo:Nw/nvoIngRepl https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Network%20Virtualization/nvo:IngRepl/
 ---
 
 # nxos_nve_interface (Data Source)
@@ -12,6 +14,12 @@ description: |-
 This data source can read the NVE interface configuration.
 
 - API Documentation: [nvoEp](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Network%20Virtualization/nvo:Ep/)
+
+### Additional API Documentation
+
+- [nvoNws](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Network%20Virtualization/nvo:Nws/)
+- [nvoNw](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Network%20Virtualization/nvo:Nw/)
+- [nvoIngRepl](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Network%20Virtualization/nvo:IngRepl/)
 
 ## Example Usage
 
@@ -41,3 +49,16 @@ data "nxos_nve_interface" "example" {
 - `source_interface` (String) Source Interface associated with the NVE. Must match first field in the output of `show int brief`.
 - `suppress_arp` (Boolean) Suppress ARP.
 - `suppress_mac_route` (Boolean) Suppress MAC Route.
+- `vnis` (Attributes List) List of VNIs. (see [below for nested schema](#nestedatt--vnis))
+
+<a id="nestedatt--vnis"></a>
+### Nested Schema for `vnis`
+
+Read-Only:
+
+- `associate_vrf` (Boolean) Configures VNI as L3 VNI.
+- `multicast_group` (String) Configures multicast group address for VNI.
+- `multisite_ingress_replication` (String) Enable or disable Multisite Ingress Replication for VNI(s).
+- `protocol` (String) Configure VxLAN Ingress Replication mode.
+- `suppress_arp` (String) Enable or disable ARP suppression for VNI(s).
+- `vni` (Number) Virtual Network ID.

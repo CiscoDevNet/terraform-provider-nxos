@@ -34,6 +34,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -66,7 +67,7 @@ func (r *NVEInterfaceResource) Metadata(ctx context.Context, req resource.Metada
 func (r *NVEInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the NVE interface configuration.", "nvoEp", "Network%20Virtualization/nvo:Ep/").AddChildren("nve_vni_container").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the NVE interface configuration.", "nvoEp", "Network%20Virtualization/nvo:Ep/").AddAdditionalDocs([]string{"nvoNws", "nvoNw", "nvoIngRepl"}, []string{"Network%20Virtualization/nvo:Nws/", "Network%20Virtualization/nvo:Nw/", "Network%20Virtualization/nvo:IngRepl/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -154,6 +155,63 @@ func (r *NVEInterfaceResource) Schema(ctx context.Context, req resource.SchemaRe
 				Optional:            true,
 				Computed:            true,
 				Default:             booldefault.StaticBool(false),
+			},
+			"vnis": schema.ListNestedAttribute{
+				MarkdownDescription: "List of VNIs.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vni": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Virtual Network ID.").AddIntegerRangeDescription(1, 16777214).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 16777214),
+							},
+							PlanModifiers: []planmodifier.Int64{
+								int64planmodifier.RequiresReplace(),
+							},
+						},
+						"associate_vrf": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configures VNI as L3 VNI.").AddDefaultValueDescription("false").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             booldefault.StaticBool(false),
+						},
+						"multicast_group": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configures multicast group address for VNI.").AddDefaultValueDescription("0.0.0.0").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("0.0.0.0"),
+						},
+						"multisite_ingress_replication": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable or disable Multisite Ingress Replication for VNI(s).").AddStringEnumDescription("enable", "disable", "enableOptimized").AddDefaultValueDescription("disable").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("disable"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("enable", "disable", "enableOptimized"),
+							},
+						},
+						"suppress_arp": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable or disable ARP suppression for VNI(s).").AddStringEnumDescription("enabled", "disabled", "off").AddDefaultValueDescription("off").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("off"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled", "off"),
+							},
+						},
+						"protocol": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure VxLAN Ingress Replication mode.").AddStringEnumDescription("bgp", "unknown", "static").AddDefaultValueDescription("unknown").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("unknown"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("bgp", "unknown", "static"),
+							},
+						},
+					},
+				},
 			},
 		},
 	}
@@ -257,6 +315,7 @@ func (r *NVEInterfaceResource) Read(ctx context.Context, req resource.ReadReques
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		queries = append(queries, nxos.Query("rsp-subtree", "full"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -299,6 +358,14 @@ func (r *NVEInterfaceResource) Update(ctx context.Context, req resource.UpdateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	var state NVEInterface
+
+	// Read state
+	diags = req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
@@ -314,6 +381,19 @@ func (r *NVEInterfaceResource) Update(ctx context.Context, req resource.UpdateRe
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
+		}
+
+		deletedItems := plan.getDeletedItems(ctx, state)
+		tflog.Debug(ctx, fmt.Sprintf("%s: List items to delete: %v", plan.getDn(), deletedItems))
+		for _, dn := range deletedItems {
+			res, err := device.Client.DeleteDn(dn)
+			if err != nil {
+				errCode := res.Get("imdata.0.error.attributes.code").Str
+				if errCode != "1" && errCode != "107" {
+					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+					return
+				}
+			}
 		}
 	}
 

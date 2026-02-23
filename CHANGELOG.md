@@ -32,6 +32,7 @@
 - BREAKING CHANGE: Remove `nxos_default_qos_policy_interface_in` resource and data source and `nxos_default_qos_policy_interface_in_policy_map` resource and data source, default QoS policy interface in configuration is now managed as part of `nxos_system` resource and data source
 - BREAKING CHANGE: Remove `nxos_queuing_qos_policy_system_out` resource and data source and `nxos_queuing_qos_policy_system_out_policy_map` resource and data source, queuing QoS policy system out configuration is now managed as part of `nxos_system` resource and data source
 - BREAKING CHANGE: Remove `nxos_ntp_server` resource and data source, NTP configuration is now managed as a single `nxos_ntp` resource and data source
+- BREAKING CHANGE: Remove `nxos_dhcp_relay_interface` resource and data source and `nxos_dhcp_relay_address` resource and data source, DHCP configuration is now managed as a single `nxos_dhcp` resource and data source
 
 ## 0.7.0
 

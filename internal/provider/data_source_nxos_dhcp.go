@@ -38,26 +38,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &DHCPRelayInterfaceDataSource{}
-	_ datasource.DataSourceWithConfigure = &DHCPRelayInterfaceDataSource{}
+	_ datasource.DataSource              = &DHCPDataSource{}
+	_ datasource.DataSourceWithConfigure = &DHCPDataSource{}
 )
 
-func NewDHCPRelayInterfaceDataSource() datasource.DataSource {
-	return &DHCPRelayInterfaceDataSource{}
+func NewDHCPDataSource() datasource.DataSource {
+	return &DHCPDataSource{}
 }
 
-type DHCPRelayInterfaceDataSource struct {
+type DHCPDataSource struct {
 	data *NxosProviderData
 }
 
-func (d *DHCPRelayInterfaceDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_dhcp_relay_interface"
+func (d *DHCPDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_dhcp"
 }
 
-func (d *DHCPRelayInterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *DHCPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read a DHCP relay interface.", "dhcpRelayIf", "DHCP/dhcp:RelayIf/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the DHCP configuration.", "dhcpEntity", "DHCP/dhcp:Entity/").AddAdditionalDocs([]string{"dhcpInst", "dhcpRelayIf", "dhcpRelayAddr"}, []string{"DHCP/dhcp:Inst/", "DHCP/dhcp:RelayIf/", "DHCP/dhcp:RelayAddr/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -68,15 +68,39 @@ func (d *DHCPRelayInterfaceDataSource) Schema(ctx context.Context, req datasourc
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
-			"interface_id": schema.StringAttribute{
-				MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
-				Required:            true,
+			"relay_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "List of DHCP relay interfaces.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_id": schema.StringAttribute{
+							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
+							Computed:            true,
+						},
+						"addresses": schema.ListNestedAttribute{
+							MarkdownDescription: "List of DHCP relay addresses.",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"vrf": schema.StringAttribute{
+										MarkdownDescription: "VRF name.",
+										Computed:            true,
+									},
+									"address": schema.StringAttribute{
+										MarkdownDescription: "IPv4 or IPv6 address.",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	}
 }
 
-func (d *DHCPRelayInterfaceDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *DHCPDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -87,8 +111,8 @@ func (d *DHCPRelayInterfaceDataSource) Configure(_ context.Context, req datasour
 // End of section. //template:end model
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-func (d *DHCPRelayInterfaceDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config DHCPRelayInterface
+func (d *DHCPDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config DHCP
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)
@@ -106,6 +130,7 @@ func (d *DHCPRelayInterfaceDataSource) Read(ctx context.Context, req datasource.
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "full"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

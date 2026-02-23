@@ -29,16 +29,21 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-func TestAccDataSourceNxosDHCPRelayAddress(t *testing.T) {
+func TestAccDataSourceNxosDHCP(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp_relay_address.test", "vrf", "VRF1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp_relay_address.test", "address", "1.1.1.1"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_dhcp.test", "relay_interfaces.*", map[string]string{
+		"interface_id": "eth1/10",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_dhcp.test", "relay_interfaces.*.addresses.*", map[string]string{
+		"vrf":     "VRF1",
+		"address": "1.1.1.1",
+	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosDHCPRelayAddressPrerequisitesConfig + testAccDataSourceNxosDHCPRelayAddressConfig(),
+				Config: testAccDataSourceNxosDHCPConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -48,52 +53,24 @@ func TestAccDataSourceNxosDHCPRelayAddress(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccDataSourceNxosDHCPRelayAddressPrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
-  dn = "sys/fm/dhcp"
-  class_name = "fmDhcp"
-  delete = false
-  content = {
-      adminSt = "enabled"
-  }
-}
-
-resource "nxos_rest" "PreReq1" {
-  dn = "sys/intf/phys-[eth1/10]"
-  class_name = "l1PhysIf"
-  content = {
-      layer = "Layer3"
-  }
-}
-
-resource "nxos_rest" "PreReq2" {
-  dn = "sys/dhcp/inst/relayif-[eth1/10]"
-  class_name = "dhcpRelayIf"
-  content = {
-      id = "eth1/10"
-  }
-  depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]
-}
-
-`
 
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-func testAccDataSourceNxosDHCPRelayAddressConfig() string {
-	config := `resource "nxos_dhcp_relay_address" "test" {` + "\n"
-	config += `	interface_id = "eth1/10"` + "\n"
-	config += `	vrf = "VRF1"` + "\n"
-	config += `	address = "1.1.1.1"` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+func testAccDataSourceNxosDHCPConfig() string {
+	config := `resource "nxos_dhcp" "test" {` + "\n"
+	config += `	relay_interfaces = [{` + "\n"
+	config += `		interface_id = "eth1/10"` + "\n"
+	config += `		addresses = [{` + "\n"
+	config += `			vrf = "VRF1"` + "\n"
+	config += `			address = "1.1.1.1"` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
 	config += `}` + "\n"
 
 	config += `
-data "nxos_dhcp_relay_address" "test" {
-	interface_id = "eth1/10"
-	vrf = "VRF1"
-	address = "1.1.1.1"
-	depends_on = [nxos_dhcp_relay_address.test]
+data "nxos_dhcp" "test" {
+	depends_on = [nxos_dhcp.test]
 }
 	`
 	return config

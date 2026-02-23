@@ -42,25 +42,25 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &DHCPRelayAddressResource{}
-var _ resource.ResourceWithIdentity = &DHCPRelayAddressResource{}
+var _ resource.Resource = &DHCPResource{}
+var _ resource.ResourceWithIdentity = &DHCPResource{}
 
-func NewDHCPRelayAddressResource() resource.Resource {
-	return &DHCPRelayAddressResource{}
+func NewDHCPResource() resource.Resource {
+	return &DHCPResource{}
 }
 
-type DHCPRelayAddressResource struct {
+type DHCPResource struct {
 	data *NxosProviderData
 }
 
-func (r *DHCPRelayAddressResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_dhcp_relay_address"
+func (r *DHCPResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_dhcp"
 }
 
-func (r *DHCPRelayAddressResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a DHCP relay address.", "dhcpRelayAddr", "DHCP/dhcp:RelayAddr/").AddParents("dhcp_relay_interface").AddReferences("vrf").String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the DHCP configuration.", "dhcpEntity", "DHCP/dhcp:Entity/").AddAdditionalDocs([]string{"dhcpInst", "dhcpRelayIf", "dhcpRelayAddr"}, []string{"DHCP/dhcp:Inst/", "DHCP/dhcp:RelayIf/", "DHCP/dhcp:RelayAddr/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -74,55 +74,59 @@ func (r *DHCPRelayAddressResource) Schema(ctx context.Context, req resource.Sche
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"interface_id": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
-				Required:            true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
-				},
-			},
-			"vrf": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
-				Required:            true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
-				},
-			},
-			"address": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("IPv4 or IPv6 address.").String,
-				Required:            true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
+			"relay_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "List of DHCP relay interfaces.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_id": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"addresses": schema.ListNestedAttribute{
+							MarkdownDescription: "List of DHCP relay addresses.",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"vrf": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
+										Required:            true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplace(),
+										},
+									},
+									"address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IPv4 or IPv6 address.").String,
+										Required:            true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplace(),
+										},
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
 	}
 }
 
-func (r *DHCPRelayAddressResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+func (r *DHCPResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
 	resp.IdentitySchema = identityschema.Schema{
 		Attributes: map[string]identityschema.Attribute{
 			"device": identityschema.StringAttribute{
 				Description:       "A device name from the provider configuration.",
 				OptionalForImport: true,
 			},
-			"interface_id": identityschema.StringAttribute{
-				Description:       helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
-				RequiredForImport: true,
-			},
-			"vrf": identityschema.StringAttribute{
-				Description:       helpers.NewAttributeDescription("VRF name.").String,
-				RequiredForImport: true,
-			},
-			"address": identityschema.StringAttribute{
-				Description:       helpers.NewAttributeDescription("IPv4 or IPv6 address.").String,
-				RequiredForImport: true,
-			},
 		},
 	}
 }
 
-func (r *DHCPRelayAddressResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *DHCPResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -134,8 +138,8 @@ func (r *DHCPRelayAddressResource) Configure(ctx context.Context, req resource.C
 // End of section. //template:end model
 
 // Section below is generated&owned by "gen/generator.go". //template:begin create
-func (r *DHCPRelayAddressResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan DHCPRelayAddress
+func (r *DHCPResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan DHCP
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -163,7 +167,7 @@ func (r *DHCPRelayAddressResource) Create(ctx context.Context, req resource.Crea
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity DHCPRelayAddressIdentity
+	var identity DHCPIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -179,8 +183,8 @@ func (r *DHCPRelayAddressResource) Create(ctx context.Context, req resource.Crea
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-func (r *DHCPRelayAddressResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state DHCPRelayAddress
+func (r *DHCPResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state DHCP
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -191,7 +195,7 @@ func (r *DHCPRelayAddressResource) Read(ctx context.Context, req resource.ReadRe
 
 	// Read identity if available (requires Terraform >= 1.12.0)
 	if req.Identity != nil && !req.Identity.Raw.IsNull() {
-		var identity DHCPRelayAddressIdentity
+		var identity DHCPIdentity
 		diags = req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
@@ -209,6 +213,7 @@ func (r *DHCPRelayAddressResource) Read(ctx context.Context, req resource.ReadRe
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
+		queries = append(queries, nxos.Query("rsp-subtree", "full"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -226,7 +231,7 @@ func (r *DHCPRelayAddressResource) Read(ctx context.Context, req resource.ReadRe
 		}
 	}
 
-	var identity DHCPRelayAddressIdentity
+	var identity DHCPIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
@@ -242,11 +247,19 @@ func (r *DHCPRelayAddressResource) Read(ctx context.Context, req resource.ReadRe
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-func (r *DHCPRelayAddressResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan DHCPRelayAddress
+func (r *DHCPResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan DHCP
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	var state DHCP
+
+	// Read state
+	diags = req.State.Get(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -267,10 +280,23 @@ func (r *DHCPRelayAddressResource) Update(ctx context.Context, req resource.Upda
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
 		}
+
+		deletedItems := plan.getDeletedItems(ctx, state)
+		tflog.Debug(ctx, fmt.Sprintf("%s: List items to delete: %v", plan.getDn(), deletedItems))
+		for _, dn := range deletedItems {
+			res, err := device.Client.DeleteDn(dn)
+			if err != nil {
+				errCode := res.Get("imdata.0.error.attributes.code").Str
+				if errCode != "1" && errCode != "107" {
+					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+					return
+				}
+			}
+		}
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity DHCPRelayAddressIdentity
+	var identity DHCPIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
@@ -284,8 +310,8 @@ func (r *DHCPRelayAddressResource) Update(ctx context.Context, req resource.Upda
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-func (r *DHCPRelayAddressResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state DHCPRelayAddress
+func (r *DHCPResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state DHCP
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -333,50 +359,36 @@ func (r *DHCPRelayAddressResource) Delete(ctx context.Context, req resource.Dele
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-func (r *DHCPRelayAddressResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *DHCPResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	if req.ID != "" || req.Identity == nil || req.Identity.Raw.IsNull() {
 		idParts := strings.Split(req.ID, ",")
 		idParts = helpers.RemoveEmptyStrings(idParts)
 
-		if len(idParts) != 3 && len(idParts) != 4 {
-			expectedIdentifier := "Expected import identifier with format: '<interface_id>,<vrf>,<address>'"
-			expectedIdentifier += " or '<interface_id>,<vrf>,<address>,<device>'"
+		if len(idParts) != 0 && len(idParts) != 1 {
+			expectedIdentifier := "Expected import identifier with format: ''"
+			expectedIdentifier += " or '<device>'"
 			resp.Diagnostics.AddError(
 				"Unexpected Import Identifier",
 				fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
 			)
 			return
 		}
-		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("interface_id"), idParts[0])...)
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_id"), idParts[0])...)
-		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("vrf"), idParts[1])...)
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf"), idParts[1])...)
-		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("address"), idParts[2])...)
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address"), idParts[2])...)
-		if len(idParts) == 4 {
+		if len(idParts) == 1 {
 			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 		}
 	} else {
-		var identity DHCPRelayAddressIdentity
+		var identity DHCPIdentity
 		diags := req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
 		}
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_id"), identity.InterfaceId.ValueString())...)
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf"), identity.Vrf.ValueString())...)
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address"), identity.Address.ValueString())...)
 		if !identity.Device.IsNull() && !identity.Device.IsUnknown() {
 			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), identity.Device.ValueString())...)
 		}
 	}
 
-	var state DHCPRelayAddress
-	diags := resp.State.Get(ctx, &state)
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
+	var state DHCP
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getDn())...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

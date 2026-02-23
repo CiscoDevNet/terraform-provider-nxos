@@ -33,9 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosDHCPRelayInterface(t *testing.T) {
+func TestAccNxosDHCP(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp_relay_interface.test", "interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.0.interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.0.addresses.0.vrf", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.0.addresses.0.address", "1.1.1.1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -45,16 +47,16 @@ func TestAccNxosDHCPRelayInterface(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosDHCPRelayInterfacePrerequisitesConfig + testAccNxosDHCPRelayInterfaceConfig_all(),
+				Config: testAccNxosDHCPConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
-				ResourceName:      "nxos_dhcp_relay_interface.test",
+				ResourceName:      "nxos_dhcp.test",
 				ImportState:       true,
-				ImportStateIdFunc: nxosDHCPRelayInterfaceImportStateIdFunc("nxos_dhcp_relay_interface.test"),
+				ImportStateIdFunc: nxosDHCPImportStateIdFunc("nxos_dhcp.test"),
 			},
 			{
-				ResourceName:       "nxos_dhcp_relay_interface.test",
+				ResourceName:       "nxos_dhcp.test",
 				ImportState:        true,
 				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
 				ExpectNonEmptyPlan: true,
@@ -67,45 +69,22 @@ func TestAccNxosDHCPRelayInterface(t *testing.T) {
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosDHCPRelayInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func nxosDHCPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
-		primary := s.RootModule().Resources[resourceName].Primary
-		InterfaceId := primary.Attributes["interface_id"]
 
-		return fmt.Sprintf("%s", InterfaceId), nil
+		return fmt.Sprintf(""), nil
 	}
 }
 
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosDHCPRelayInterfacePrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
-  dn = "sys/fm/dhcp"
-  class_name = "fmDhcp"
-  delete = false
-  content = {
-      adminSt = "enabled"
-  }
-}
-
-resource "nxos_rest" "PreReq1" {
-  dn = "sys/intf/phys-[eth1/10]"
-  class_name = "l1PhysIf"
-  content = {
-      layer = "Layer3"
-  }
-}
-
-`
 
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosDHCPRelayInterfaceConfig_minimum() string {
-	config := `resource "nxos_dhcp_relay_interface" "test" {` + "\n"
-	config += `	interface_id = "eth1/10"` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+func testAccNxosDHCPConfig_minimum() string {
+	config := `resource "nxos_dhcp" "test" {` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -113,10 +92,15 @@ func testAccNxosDHCPRelayInterfaceConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosDHCPRelayInterfaceConfig_all() string {
-	config := `resource "nxos_dhcp_relay_interface" "test" {` + "\n"
-	config += `	interface_id = "eth1/10"` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+func testAccNxosDHCPConfig_all() string {
+	config := `resource "nxos_dhcp" "test" {` + "\n"
+	config += `	relay_interfaces = [{` + "\n"
+	config += `		interface_id = "eth1/10"` + "\n"
+	config += `		addresses = [{` + "\n"
+	config += `			vrf = "VRF1"` + "\n"
+	config += `			address = "1.1.1.1"` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

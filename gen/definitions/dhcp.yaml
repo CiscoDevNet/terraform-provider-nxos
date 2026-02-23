@@ -1,0 +1,50 @@
+---
+name: DHCP
+class_name: dhcpEntity
+dn: sys/dhcp
+no_delete: true
+ds_description: This data source can read the DHCP configuration.
+res_description: This resource can manage the DHCP configuration.
+doc_path: DHCP/dhcp:Entity/
+doc_category: DHCP
+child_classes:
+  - class_name: dhcpInst
+    rn: inst
+    type: single
+    no_delete: true
+    description: 'DHCP instance configuration.'
+    doc_path: DHCP/dhcp:Inst/
+    child_classes:
+      - class_name: dhcpRelayIf
+        rn: relayif-[%s]
+        type: list
+        tf_name: relay_interfaces
+        description: 'List of DHCP relay interfaces.'
+        doc_path: DHCP/dhcp:RelayIf/
+        attributes:
+          - nxos_name: id
+            tf_name: interface_id
+            type: String
+            id: true
+            description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+            example: eth1/10
+        child_classes:
+          - class_name: dhcpRelayAddr
+            rn: addr-[%s]-[%s]
+            type: list
+            tf_name: addresses
+            description: 'List of DHCP relay addresses.'
+            doc_path: DHCP/dhcp:RelayAddr/
+            attributes:
+              - nxos_name: vrf
+                tf_name: vrf
+                type: String
+                id: true
+                description: 'VRF name.'
+                example: VRF1
+              - nxos_name: address
+                tf_name: address
+                type: String
+                id: true
+                description: 'IPv4 or IPv6 address.'
+                example: 1.1.1.1

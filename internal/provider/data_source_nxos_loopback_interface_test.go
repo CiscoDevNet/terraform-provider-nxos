@@ -34,6 +34,7 @@ func TestAccDataSourceNxosLoopbackInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_loopback_interface.test", "interface_id", "lo123"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_loopback_interface.test", "admin_state", "down"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_loopback_interface.test", "description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_loopback_interface.test", "vrf_dn", "sys/inst-default"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -58,6 +59,7 @@ func testAccDataSourceNxosLoopbackInterfaceConfig() string {
 	config += `	interface_id = "lo123"` + "\n"
 	config += `	admin_state = "down"` + "\n"
 	config += `	description = "My Description"` + "\n"
+	config += `	vrf_dn = "sys/inst-default"` + "\n"
 	config += `}` + "\n"
 
 	config += `

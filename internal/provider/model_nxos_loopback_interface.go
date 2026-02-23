@@ -41,6 +41,7 @@ type LoopbackInterface struct {
 	InterfaceId types.String `tfsdk:"interface_id"`
 	AdminState  types.String `tfsdk:"admin_state"`
 	Description types.String `tfsdk:"description"`
+	VrfDn       types.String `tfsdk:"vrf_dn"`
 }
 
 type LoopbackInterfaceIdentity struct {
@@ -94,6 +95,15 @@ func (data LoopbackInterface) toBody() nxos.Body {
 	if (!data.Description.IsUnknown() && !data.Description.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"descr", data.Description.ValueString())
 	}
+	var attrs string
+	childrenPath := data.getClassName() + ".children"
+	attrs = "{}"
+	if (!data.VrfDn.IsUnknown() && !data.VrfDn.IsNull()) || false {
+		attrs, _ = sjson.Set(attrs, "tDn", data.VrfDn.ValueString())
+	}
+	if attrs != "{}" || false {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.nwRtVrfMbr.attributes", attrs)
+	}
 
 	return nxos.Body{body}
 }
@@ -106,6 +116,18 @@ func (data *LoopbackInterface) fromBody(res gjson.Result) {
 	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	data.Description = types.StringValue(res.Get(data.getClassName() + ".attributes.descr").String())
+	var rnwRtVrfMbr gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("nwRtVrfMbr.attributes.rn").String()
+			if key == "rtvrfMbr" {
+				rnwRtVrfMbr = v
+				return false
+			}
+			return true
+		},
+	)
+	data.VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
 }
 
 // End of section. //template:end fromBody
@@ -127,6 +149,22 @@ func (data *LoopbackInterface) updateFromBody(res gjson.Result) {
 		data.Description = types.StringValue(res.Get(data.getClassName() + ".attributes.descr").String())
 	} else {
 		data.Description = types.StringNull()
+	}
+	var rnwRtVrfMbr gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("nwRtVrfMbr.attributes.rn").String()
+			if key == "rtvrfMbr" {
+				rnwRtVrfMbr = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.VrfDn.IsNull() {
+		data.VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
+	} else {
+		data.VrfDn = types.StringNull()
 	}
 }
 

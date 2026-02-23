@@ -1,5 +1,6 @@
 ## Unreleased
 
+- BREAKING CHANGE: Remove `nxos_loopback_interface_vrf` resource and data source, loopback interface VRF association is now managed as part of `nxos_loopback_interface` resource and data source
 - BREAKING CHANGE: Remove `nxos_port_channel_interface_member` resource and data source and `nxos_port_channel_interface_vrf` resource and data source, port-channel interface members and VRF association are now managed as part of `nxos_port_channel_interface` resource and data source
 - BREAKING CHANGE: Remove `nxos_subinterface_vrf` resource and data source, subinterface VRF association is now managed as part of `nxos_subinterface` resource and data source
 - BREAKING CHANGE: Remove `nxos_svi_interface_vrf` resource and data source, SVI interface VRF association is now managed as part of `nxos_svi_interface` resource and data source

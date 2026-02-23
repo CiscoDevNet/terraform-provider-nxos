@@ -5,6 +5,8 @@ subcategory: "Interface"
 description: |-
   This data source can read a loopback interface.
   API Documentation: l3LbRtdIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:LbRtdIf/
+  Additional API Documentation
+  nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
 ---
 
 # nxos_loopback_interface (Data Source)
@@ -12,6 +14,10 @@ description: |-
 This data source can read a loopback interface.
 
 - API Documentation: [l3LbRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:LbRtdIf/)
+
+### Additional API Documentation
+
+- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 
 ## Example Usage
 
@@ -37,3 +43,4 @@ data "nxos_loopback_interface" "example" {
 - `admin_state` (String) Administrative state.
 - `description` (String) Interface description.
 - `id` (String) The distinguished name of the object.
+- `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.

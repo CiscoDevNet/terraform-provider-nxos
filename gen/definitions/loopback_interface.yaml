@@ -6,8 +6,6 @@ ds_description: This data source can read a loopback interface.
 res_description: This resource can manage a loopback interface.
 doc_path: Layer%203/l3:LbRtdIf/
 doc_category: Interface
-children:
-  - Loopback Interface VRF
 attributes:
   - nxos_name: id
     tf_name: interface_id
@@ -29,3 +27,14 @@ attributes:
     type: String
     description: 'Interface description.'
     example: My Description
+child_classes:
+  - class_name: nwRtVrfMbr
+    rn: rtvrfMbr
+    type: single
+    doc_path: Routing%20and%20Forwarding/nw:RtVrfMbr/
+    attributes:
+      - nxos_name: tDn
+        tf_name: vrf_dn
+        type: String
+        description: 'DN of VRF. For example: `sys/inst-VRF1`.'
+        example: sys/inst-default

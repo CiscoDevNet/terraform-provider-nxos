@@ -5,8 +5,8 @@ subcategory: "Interface"
 description: |-
   This resource can manage a loopback interface.
   API Documentation: l3LbRtdIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:LbRtdIf/
-  Child resources
-  nxos_loopback_interface_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/loopback_interface_vrf
+  Additional API Documentation
+  nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
 ---
 
 # nxos_loopback_interface (Resource)
@@ -15,9 +15,9 @@ This resource can manage a loopback interface.
 
 - API Documentation: [l3LbRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:LbRtdIf/)
 
-### Child resources
+### Additional API Documentation
 
-- [nxos_loopback_interface_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/loopback_interface_vrf)
+- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 
 ## Example Usage
 
@@ -26,6 +26,7 @@ resource "nxos_loopback_interface" "example" {
   interface_id = "lo123"
   admin_state  = "down"
   description  = "My Description"
+  vrf_dn       = "sys/inst-default"
 }
 ```
 
@@ -43,6 +44,7 @@ resource "nxos_loopback_interface" "example" {
   - Default value: `up`
 - `description` (String) Interface description.
 - `device` (String) A device name from the provider configuration.
+- `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.
 
 ### Read-Only
 

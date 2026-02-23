@@ -144,7 +144,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				{{- end}}
 			},
 			{{- end}}
-			{{- define "childClassAttrSchema" -}}
+			{{- define "resAttrSchema" -}}
 			"{{.TfName}}": schema.{{.Type}}Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
 					{{- if len .EnumValues -}}
@@ -190,7 +190,14 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				{{- end}}
 			},
 			{{- end}}
-			{{- define "listNestedChildClassSchema" -}}
+			{{- define "resChildrenSchema" -}}
+			{{- range . -}}
+			{{- if eq .Type "single"}}
+			{{- range .Attributes}}
+			{{template "resAttrSchema" .}}
+			{{- end}}
+			{{- template "resChildrenSchema" .TfChildClasses}}
+			{{- else if eq .Type "list"}}
 			"{{.TfName}}": schema.ListNestedAttribute{
 				MarkdownDescription: "{{.Description}}",
 				{{- if .Mandatory}}
@@ -200,52 +207,17 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				{{- end}}
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						{{- range  .Attributes}}
-						{{template "childClassAttrSchema" .}}
-						{{- end}}
-						{{- range .TfChildClasses}}
-						{{- if eq .Type "single"}}
 						{{- range .Attributes}}
-						{{template "childClassAttrSchema" .}}
+						{{template "resAttrSchema" .}}
 						{{- end}}
-						{{- range .TfChildClasses}}
-						{{- if eq .Type "list"}}
-						{{template "listNestedChildClassSchema" .}}
-						{{- end}}
-						{{- end}}
-						{{- else if eq .Type "list"}}
-						{{template "listNestedChildClassSchema" .}}
-						{{- end}}
-						{{- end}}
+						{{- template "resChildrenSchema" .TfChildClasses}}
 					},
 				},
 			},
 			{{- end}}
-			{{- range .TfChildClasses}}
-			{{- if len .Attributes}}
-			{{- if eq .Type "single"}}
-			{{- range  .Attributes}}
-			{{template "childClassAttrSchema" .}}
-			{{- end}}
-			{{- range .TfChildClasses}}
-			{{- if eq .Type "single"}}
-			{{- range .Attributes}}
-			{{template "childClassAttrSchema" .}}
-			{{- end}}
-			{{- range .TfChildClasses}}
-			{{- if eq .Type "list"}}
-			{{template "listNestedChildClassSchema" .}}
 			{{- end}}
 			{{- end}}
-			{{- else if eq .Type "list"}}
-			{{template "listNestedChildClassSchema" .}}
-			{{- end}}
-			{{- end}}
-			{{- else if eq .Type "list"}}
-			{{template "listNestedChildClassSchema" .}}
-			{{- end}}
-			{{- end}}
-			{{- end}}
+			{{- template "resChildrenSchema" .TfChildClasses}}
 		},
 	}
 }

@@ -84,72 +84,36 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 				{{- end}}
 			},
 			{{- end}}
-			{{- define "dsListNestedChildClassSchema" -}}
+			{{- define "dsAttrSchema" -}}
+			"{{.TfName}}": schema.{{.Type}}Attribute{
+				MarkdownDescription: "{{.Description}}",
+				Computed:            true,
+			},
+			{{- end}}
+			{{- define "dsChildrenSchema" -}}
+			{{- range . -}}
+			{{- if eq .Type "single"}}
+			{{- range .Attributes}}
+			{{template "dsAttrSchema" .}}
+			{{- end}}
+			{{- template "dsChildrenSchema" .TfChildClasses}}
+			{{- else if eq .Type "list"}}
 			"{{.TfName}}": schema.ListNestedAttribute{
 				MarkdownDescription: "{{.Description}}",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						{{- range  .Attributes}}
-						"{{.TfName}}": schema.{{.Type}}Attribute{
-							MarkdownDescription: "{{.Description}}",
-							Computed:            true,
-						},
-						{{- end}}
-						{{- range .TfChildClasses}}
-						{{- if eq .Type "single"}}
 						{{- range .Attributes}}
-						"{{.TfName}}": schema.{{.Type}}Attribute{
-							MarkdownDescription: "{{.Description}}",
-							Computed:            true,
-						},
+						{{template "dsAttrSchema" .}}
 						{{- end}}
-						{{- range .TfChildClasses}}
-						{{- if eq .Type "list"}}
-						{{template "dsListNestedChildClassSchema" .}}
-						{{- end}}
-						{{- end}}
-						{{- else if eq .Type "list"}}
-						{{template "dsListNestedChildClassSchema" .}}
-						{{- end}}
-						{{- end}}
+						{{- template "dsChildrenSchema" .TfChildClasses}}
 					},
 				},
 			},
 			{{- end}}
-			{{- range .TfChildClasses}}
-			{{- if eq .Type "single"}}
-			{{- range .Attributes}}
-			"{{.TfName}}": schema.{{.Type}}Attribute{
-				MarkdownDescription: "{{.Description}}",
-				{{- if .Id}}
-				Required:            true,
-				{{- else}}
-				Computed:            true,
-				{{- end}}
-			},
-			{{- end}}
-			{{- range .TfChildClasses}}
-			{{- if eq .Type "single"}}
-			{{- range .Attributes}}
-			"{{.TfName}}": schema.{{.Type}}Attribute{
-				MarkdownDescription: "{{.Description}}",
-				Computed:            true,
-			},
-			{{- end}}
-			{{- range .TfChildClasses}}
-			{{- if eq .Type "list"}}
-			{{template "dsListNestedChildClassSchema" .}}
 			{{- end}}
 			{{- end}}
-			{{- else if eq .Type "list"}}
-			{{template "dsListNestedChildClassSchema" .}}
-			{{- end}}
-			{{- end}}
-			{{- else if eq .Type "list"}}
-			{{template "dsListNestedChildClassSchema" .}}
-			{{- end}}
-			{{- end}}
+			{{- template "dsChildrenSchema" .TfChildClasses}}
 		},
 	}
 }

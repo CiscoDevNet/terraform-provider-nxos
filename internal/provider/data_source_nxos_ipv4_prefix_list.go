@@ -38,26 +38,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &IPv4PrefixListRuleEntryDataSource{}
-	_ datasource.DataSourceWithConfigure = &IPv4PrefixListRuleEntryDataSource{}
+	_ datasource.DataSource              = &IPv4PrefixListDataSource{}
+	_ datasource.DataSourceWithConfigure = &IPv4PrefixListDataSource{}
 )
 
-func NewIPv4PrefixListRuleEntryDataSource() datasource.DataSource {
-	return &IPv4PrefixListRuleEntryDataSource{}
+func NewIPv4PrefixListDataSource() datasource.DataSource {
+	return &IPv4PrefixListDataSource{}
 }
 
-type IPv4PrefixListRuleEntryDataSource struct {
+type IPv4PrefixListDataSource struct {
 	data *NxosProviderData
 }
 
-func (d *IPv4PrefixListRuleEntryDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_ipv4_prefix_list_rule_entry"
+func (d *IPv4PrefixListDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_ipv4_prefix_list"
 }
 
-func (d *IPv4PrefixListRuleEntryDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *IPv4PrefixListDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read an IPv4 Prefix List entry configuration.", "rtpfxEntry", "Routing%20and%20Forwarding/rtpfx:Entry/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read an IPv4 Prefix List configuration.", "rtpfxRuleV4", "Routing%20and%20Forwarding/rtpfx:RuleV4/").AddAdditionalDocs([]string{"rtpfxEntry"}, []string{"Routing%20and%20Forwarding/rtpfx:Entry/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -68,39 +68,47 @@ func (d *IPv4PrefixListRuleEntryDataSource) Schema(ctx context.Context, req data
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
-			"rule_name": schema.StringAttribute{
-				MarkdownDescription: "IPv4 Prefix List Rule name.",
+			"name": schema.StringAttribute{
+				MarkdownDescription: "IPv4 Prefix List name.",
 				Required:            true,
 			},
-			"order": schema.Int64Attribute{
-				MarkdownDescription: "IPv4 Prefix List Rule Entry order.",
-				Required:            true,
-			},
-			"action": schema.StringAttribute{
-				MarkdownDescription: "IPv4 Prefix List Rule Entry action.",
+			"entries": schema.ListNestedAttribute{
+				MarkdownDescription: "IPv4 Prefix List entries.",
 				Computed:            true,
-			},
-			"criteria": schema.StringAttribute{
-				MarkdownDescription: "IPv4 Prefix List Rule Entry criteria.",
-				Computed:            true,
-			},
-			"prefix": schema.StringAttribute{
-				MarkdownDescription: "IPv4 Prefix List Rule Entry prefix.",
-				Computed:            true,
-			},
-			"from_range": schema.Int64Attribute{
-				MarkdownDescription: "IPv4 Prefix List Rule Entry start range.",
-				Computed:            true,
-			},
-			"to_range": schema.Int64Attribute{
-				MarkdownDescription: "IPv4 Prefix List Rule Entry end range.",
-				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"order": schema.Int64Attribute{
+							MarkdownDescription: "IPv4 Prefix List entry order.",
+							Computed:            true,
+						},
+						"action": schema.StringAttribute{
+							MarkdownDescription: "IPv4 Prefix List entry action.",
+							Computed:            true,
+						},
+						"criteria": schema.StringAttribute{
+							MarkdownDescription: "IPv4 Prefix List entry criteria.",
+							Computed:            true,
+						},
+						"prefix": schema.StringAttribute{
+							MarkdownDescription: "IPv4 Prefix List entry prefix.",
+							Computed:            true,
+						},
+						"from_range": schema.Int64Attribute{
+							MarkdownDescription: "IPv4 Prefix List entry start range.",
+							Computed:            true,
+						},
+						"to_range": schema.Int64Attribute{
+							MarkdownDescription: "IPv4 Prefix List entry end range.",
+							Computed:            true,
+						},
+					},
+				},
 			},
 		},
 	}
 }
 
-func (d *IPv4PrefixListRuleEntryDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *IPv4PrefixListDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -111,8 +119,8 @@ func (d *IPv4PrefixListRuleEntryDataSource) Configure(_ context.Context, req dat
 // End of section. //template:end model
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-func (d *IPv4PrefixListRuleEntryDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config IPv4PrefixListRuleEntry
+func (d *IPv4PrefixListDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config IPv4PrefixList
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)
@@ -130,6 +138,7 @@ func (d *IPv4PrefixListRuleEntryDataSource) Read(ctx context.Context, req dataso
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "children"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

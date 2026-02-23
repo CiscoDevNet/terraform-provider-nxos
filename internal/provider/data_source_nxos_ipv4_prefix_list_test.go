@@ -29,15 +29,23 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-func TestAccDataSourceNxosIPv4PrefixListRule(t *testing.T) {
+func TestAccDataSourceNxosIPv4PrefixList(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4_prefix_list_rule.test", "name", "RULE1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4_prefix_list.test", "name", "RULE1"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv4_prefix_list.test", "entries.*", map[string]string{
+		"order":      "10",
+		"action":     "permit",
+		"criteria":   "inexact",
+		"prefix":     "192.168.1.0/24",
+		"from_range": "26",
+		"to_range":   "32",
+	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosIPv4PrefixListRuleConfig(),
+				Config: testAccDataSourceNxosIPv4PrefixListConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -51,15 +59,23 @@ func TestAccDataSourceNxosIPv4PrefixListRule(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-func testAccDataSourceNxosIPv4PrefixListRuleConfig() string {
-	config := `resource "nxos_ipv4_prefix_list_rule" "test" {` + "\n"
+func testAccDataSourceNxosIPv4PrefixListConfig() string {
+	config := `resource "nxos_ipv4_prefix_list" "test" {` + "\n"
 	config += `	name = "RULE1"` + "\n"
+	config += `	entries = [{` + "\n"
+	config += `		order = 10` + "\n"
+	config += `		action = "permit"` + "\n"
+	config += `		criteria = "inexact"` + "\n"
+	config += `		prefix = "192.168.1.0/24"` + "\n"
+	config += `		from_range = 26` + "\n"
+	config += `		to_range = 32` + "\n"
+	config += `	}]` + "\n"
 	config += `}` + "\n"
 
 	config += `
-data "nxos_ipv4_prefix_list_rule" "test" {
+data "nxos_ipv4_prefix_list" "test" {
 	name = "RULE1"
-	depends_on = [nxos_ipv4_prefix_list_rule.test]
+	depends_on = [nxos_ipv4_prefix_list.test]
 }
 	`
 	return config

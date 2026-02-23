@@ -32,6 +32,30 @@ import (
 func TestAccDataSourceNxosIPv4VRF(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4_vrf.test", "name", "VRF1"))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv4_vrf.test", "static_routes.*", map[string]string{
+		"prefix": "1.1.1.0/24",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv4_vrf.test", "static_routes.*.next_hops.*", map[string]string{
+		"interface_id": "unspecified",
+		"address":      "1.2.3.4",
+		"vrf_name":     "default",
+		"description":  "My Description",
+		"object":       "10",
+		"preference":   "123",
+		"tag":          "10",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv4_vrf.test", "interfaces.*", map[string]string{
+		"interface_id": "eth1/10",
+		"drop_glean":   "disabled",
+		"forward":      "disabled",
+		"unnumbered":   "unspecified",
+		"urpf":         "disabled",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv4_vrf.test", "interfaces.*.addresses.*", map[string]string{
+		"address": "24.63.46.49/30",
+		"type":    "primary",
+		"tag":     "1234",
+	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -54,6 +78,30 @@ func TestAccDataSourceNxosIPv4VRF(t *testing.T) {
 func testAccDataSourceNxosIPv4VRFConfig() string {
 	config := `resource "nxos_ipv4_vrf" "test" {` + "\n"
 	config += `	name = "VRF1"` + "\n"
+	config += `	static_routes = [{` + "\n"
+	config += `		prefix = "1.1.1.0/24"` + "\n"
+	config += `		next_hops = [{` + "\n"
+	config += `			interface_id = "unspecified"` + "\n"
+	config += `			address = "1.2.3.4"` + "\n"
+	config += `			vrf_name = "default"` + "\n"
+	config += `			description = "My Description"` + "\n"
+	config += `			object = 10` + "\n"
+	config += `			preference = 123` + "\n"
+	config += `			tag = 10` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `	interfaces = [{` + "\n"
+	config += `		interface_id = "eth1/10"` + "\n"
+	config += `		drop_glean = "disabled"` + "\n"
+	config += `		forward = "disabled"` + "\n"
+	config += `		unnumbered = "unspecified"` + "\n"
+	config += `		urpf = "disabled"` + "\n"
+	config += `		addresses = [{` + "\n"
+	config += `			address = "24.63.46.49/30"` + "\n"
+	config += `			type = "primary"` + "\n"
+	config += `			tag = 1234` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
 	config += `}` + "\n"
 
 	config += `

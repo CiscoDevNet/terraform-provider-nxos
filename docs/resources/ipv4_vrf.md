@@ -5,10 +5,10 @@ subcategory: "IPv4"
 description: |-
   This resource can manage the IPv4 VRF information.
   API Documentation: ipv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv4:Dom/
-  Child resources
-  nxos_ipv4_interface https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv4_interfacenxos_ipv4_static_route https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv4_static_route
   Referenced resources
   nxos_vrf https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf
+  Additional API Documentation
+  ipv4Route https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv4:Route/ipv4Nexthop https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv4:Nexthop/ipv4If https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv4:If/ipv4Addr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv4:Addr/
 ---
 
 # nxos_ipv4_vrf (Resource)
@@ -17,20 +17,46 @@ This resource can manage the IPv4 VRF information.
 
 - API Documentation: [ipv4Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv4:Dom/)
 
-### Child resources
-
-- [nxos_ipv4_interface](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv4_interface)
-- [nxos_ipv4_static_route](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/ipv4_static_route)
-
 ### Referenced resources
 
 - [nxos_vrf](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/vrf)
+
+### Additional API Documentation
+
+- [ipv4Route](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv4:Route/)
+- [ipv4Nexthop](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv4:Nexthop/)
+- [ipv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv4:If/)
+- [ipv4Addr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv4:Addr/)
 
 ## Example Usage
 
 ```terraform
 resource "nxos_ipv4_vrf" "example" {
   name = "VRF1"
+  static_routes = [{
+    prefix = "1.1.1.0/24"
+    next_hops = [{
+      interface_id = "unspecified"
+      address      = "1.2.3.4"
+      vrf_name     = "default"
+      description  = "My Description"
+      object       = 10
+      preference   = 123
+      tag          = 10
+    }]
+  }]
+  interfaces = [{
+    interface_id = "eth1/10"
+    drop_glean   = "disabled"
+    forward      = "disabled"
+    unnumbered   = "unspecified"
+    urpf         = "disabled"
+    addresses = [{
+      address = "24.63.46.49/30"
+      type    = "primary"
+      tag     = 1234
+    }]
+  }]
 }
 ```
 
@@ -44,10 +70,78 @@ resource "nxos_ipv4_vrf" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
+- `interfaces` (Attributes List) List of IPv4 interfaces. (see [below for nested schema](#nestedatt--interfaces))
+- `static_routes` (Attributes List) List of IPv4 static routes. (see [below for nested schema](#nestedatt--static_routes))
 
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--interfaces"></a>
+### Nested Schema for `interfaces`
+
+Required:
+
+- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+
+Optional:
+
+- `addresses` (Attributes List) List of IPv4 interface addresses. (see [below for nested schema](#nestedatt--interfaces--addresses))
+- `drop_glean` (String) ip drop-glean enabled/disabled.
+  - Choices: `enabled`, `disabled`
+  - Default value: `disabled`
+- `forward` (String) ip forward enabled/disabled.
+  - Choices: `enabled`, `disabled`
+  - Default value: `disabled`
+- `unnumbered` (String) IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.
+  - Default value: `unspecified`
+- `urpf` (String) URPF (unicast Reverse Path Forwarding).
+  - Choices: `disabled`, `strict`, `loose`, `loose-allow-default`, `strict-allow-vni-hosts`
+  - Default value: `disabled`
+
+<a id="nestedatt--interfaces--addresses"></a>
+### Nested Schema for `interfaces.addresses`
+
+Required:
+
+- `address` (String) IPv4 address.
+
+Optional:
+
+- `tag` (Number) Route Tag
+  - Default value: `0`
+- `type` (String) Address type.
+  - Choices: `primary`, `secondary`
+  - Default value: `primary`
+
+
+
+<a id="nestedatt--static_routes"></a>
+### Nested Schema for `static_routes`
+
+Required:
+
+- `next_hops` (Attributes List) List of next hops. (see [below for nested schema](#nestedatt--static_routes--next_hops))
+- `prefix` (String) Prefix.
+
+<a id="nestedatt--static_routes--next_hops"></a>
+### Nested Schema for `static_routes.next_hops`
+
+Required:
+
+- `address` (String) Nexthop address.
+- `interface_id` (String) Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.
+- `vrf_name` (String) Nexthop VRF.
+
+Optional:
+
+- `description` (String) Description.
+- `object` (Number) Object to be tracked.
+  - Range: `0`-`4294967295`
+- `preference` (Number) Route preference.
+  - Range: `0`-`255`
+- `tag` (Number) Tag value.
+  - Range: `0`-`4294967295`
 
 ## Import
 

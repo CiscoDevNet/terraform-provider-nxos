@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -36,9 +37,41 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type IPv4VRF struct {
-	Device types.String `tfsdk:"device"`
-	Dn     types.String `tfsdk:"id"`
-	Name   types.String `tfsdk:"name"`
+	Device       types.String          `tfsdk:"device"`
+	Dn           types.String          `tfsdk:"id"`
+	Name         types.String          `tfsdk:"name"`
+	StaticRoutes []IPv4VRFStaticRoutes `tfsdk:"static_routes"`
+	Interfaces   []IPv4VRFInterfaces   `tfsdk:"interfaces"`
+}
+
+type IPv4VRFStaticRoutes struct {
+	Prefix   types.String      `tfsdk:"prefix"`
+	NextHops []IPv4VRFNextHops `tfsdk:"next_hops"`
+}
+
+type IPv4VRFNextHops struct {
+	InterfaceId types.String `tfsdk:"interface_id"`
+	Address     types.String `tfsdk:"address"`
+	VrfName     types.String `tfsdk:"vrf_name"`
+	Description types.String `tfsdk:"description"`
+	Object      types.Int64  `tfsdk:"object"`
+	Preference  types.Int64  `tfsdk:"preference"`
+	Tag         types.Int64  `tfsdk:"tag"`
+}
+
+type IPv4VRFInterfaces struct {
+	InterfaceId types.String       `tfsdk:"interface_id"`
+	DropGlean   types.String       `tfsdk:"drop_glean"`
+	Forward     types.String       `tfsdk:"forward"`
+	Unnumbered  types.String       `tfsdk:"unnumbered"`
+	Urpf        types.String       `tfsdk:"urpf"`
+	Addresses   []IPv4VRFAddresses `tfsdk:"addresses"`
+}
+
+type IPv4VRFAddresses struct {
+	Address types.String `tfsdk:"address"`
+	Type    types.String `tfsdk:"type"`
+	Tag     types.Int64  `tfsdk:"tag"`
 }
 
 type IPv4VRFIdentity struct {
@@ -72,6 +105,22 @@ func (data IPv4VRF) getDn() string {
 	return fmt.Sprintf("sys/ipv4/inst/dom-[%s]", data.Name.ValueString())
 }
 
+func (data IPv4VRFStaticRoutes) getRn() string {
+	return fmt.Sprintf("rt-[%s]", data.Prefix.ValueString())
+}
+
+func (data IPv4VRFNextHops) getRn() string {
+	return fmt.Sprintf("nh-[%s]-addr-[%s]-vrf-[%s]", data.InterfaceId.ValueString(), data.Address.ValueString(), data.VrfName.ValueString())
+}
+
+func (data IPv4VRFInterfaces) getRn() string {
+	return fmt.Sprintf("if-[%s]", data.InterfaceId.ValueString())
+}
+
+func (data IPv4VRFAddresses) getRn() string {
+	return fmt.Sprintf("addr-[%s]", data.Address.ValueString())
+}
+
 func (data IPv4VRF) getClassName() string {
 	return "ipv4Dom"
 }
@@ -86,6 +135,80 @@ func (data IPv4VRF) toBody() nxos.Body {
 	if (!data.Name.IsUnknown() && !data.Name.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"name", data.Name.ValueString())
 	}
+	var attrs string
+	childrenPath := data.getClassName() + ".children"
+	for _, child := range data.StaticRoutes {
+		attrs = "{}"
+		if (!child.Prefix.IsUnknown() && !child.Prefix.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "prefix", child.Prefix.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.ipv4Route.attributes", attrs)
+		{
+			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
+			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".ipv4Route.children"
+			for _, child := range child.NextHops {
+				attrs = "{}"
+				if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "nhIf", child.InterfaceId.ValueString())
+				}
+				if (!child.Address.IsUnknown() && !child.Address.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "nhAddr", child.Address.ValueString())
+				}
+				if (!child.VrfName.IsUnknown() && !child.VrfName.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "nhVrf", child.VrfName.ValueString())
+				}
+				if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+				}
+				if (!child.Object.IsUnknown() && !child.Object.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "object", strconv.FormatInt(child.Object.ValueInt64(), 10))
+				}
+				if (!child.Preference.IsUnknown() && !child.Preference.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "pref", strconv.FormatInt(child.Preference.ValueInt64(), 10))
+				}
+				if (!child.Tag.IsUnknown() && !child.Tag.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "tag", strconv.FormatInt(child.Tag.ValueInt64(), 10))
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipv4Nexthop.attributes", attrs)
+			}
+		}
+	}
+	for _, child := range data.Interfaces {
+		attrs = "{}"
+		if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "id", child.InterfaceId.ValueString())
+		}
+		if (!child.DropGlean.IsUnknown() && !child.DropGlean.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "dropGlean", child.DropGlean.ValueString())
+		}
+		if (!child.Forward.IsUnknown() && !child.Forward.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "forward", child.Forward.ValueString())
+		}
+		if (!child.Unnumbered.IsUnknown() && !child.Unnumbered.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "unnumbered", child.Unnumbered.ValueString())
+		}
+		if (!child.Urpf.IsUnknown() && !child.Urpf.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "urpf", child.Urpf.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.ipv4If.attributes", attrs)
+		{
+			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
+			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".ipv4If.children"
+			for _, child := range child.Addresses {
+				attrs = "{}"
+				if (!child.Address.IsUnknown() && !child.Address.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "addr", child.Address.ValueString())
+				}
+				if (!child.Type.IsUnknown() && !child.Type.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "type", child.Type.ValueString())
+				}
+				if (!child.Tag.IsUnknown() && !child.Tag.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "tag", strconv.FormatInt(child.Tag.ValueInt64(), 10))
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipv4Addr.attributes", attrs)
+			}
+		}
+	}
 
 	return nxos.Body{body}
 }
@@ -96,6 +219,78 @@ func (data IPv4VRF) toBody() nxos.Body {
 
 func (data *IPv4VRF) fromBody(res gjson.Result) {
 	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "ipv4Route" {
+						var child IPv4VRFStaticRoutes
+						child.Prefix = types.StringValue(value.Get("attributes.prefix").String())
+						value.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "ipv4Nexthop" {
+											var nestedChildipv4Nexthop IPv4VRFNextHops
+											nestedChildipv4Nexthop.InterfaceId = types.StringValue(nestedValue.Get("attributes.nhIf").String())
+											nestedChildipv4Nexthop.Address = types.StringValue(nestedValue.Get("attributes.nhAddr").String())
+											nestedChildipv4Nexthop.VrfName = types.StringValue(nestedValue.Get("attributes.nhVrf").String())
+											nestedChildipv4Nexthop.Description = types.StringValue(nestedValue.Get("attributes.descr").String())
+											nestedChildipv4Nexthop.Object = types.Int64Value(nestedValue.Get("attributes.object").Int())
+											nestedChildipv4Nexthop.Preference = types.Int64Value(nestedValue.Get("attributes.pref").Int())
+											nestedChildipv4Nexthop.Tag = types.Int64Value(nestedValue.Get("attributes.tag").Int())
+											child.NextHops = append(child.NextHops, nestedChildipv4Nexthop)
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
+						data.StaticRoutes = append(data.StaticRoutes, child)
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "ipv4If" {
+						var child IPv4VRFInterfaces
+						child.InterfaceId = types.StringValue(value.Get("attributes.id").String())
+						child.DropGlean = types.StringValue(value.Get("attributes.dropGlean").String())
+						child.Forward = types.StringValue(value.Get("attributes.forward").String())
+						child.Unnumbered = types.StringValue(value.Get("attributes.unnumbered").String())
+						child.Urpf = types.StringValue(value.Get("attributes.urpf").String())
+						value.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "ipv4Addr" {
+											var nestedChildipv4Addr IPv4VRFAddresses
+											nestedChildipv4Addr.Address = types.StringValue(nestedValue.Get("attributes.addr").String())
+											nestedChildipv4Addr.Type = types.StringValue(nestedValue.Get("attributes.type").String())
+											nestedChildipv4Addr.Tag = types.Int64Value(nestedValue.Get("attributes.tag").Int())
+											child.Addresses = append(child.Addresses, nestedChildipv4Addr)
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
+						data.Interfaces = append(data.Interfaces, child)
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
 }
 
 // End of section. //template:end fromBody
@@ -107,6 +302,138 @@ func (data *IPv4VRF) updateFromBody(res gjson.Result) {
 		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
 		data.Name = types.StringNull()
+	}
+	for c := range data.StaticRoutes {
+		var ripv4Route gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("ipv4Route.attributes.rn").String()
+				if key == data.StaticRoutes[c].getRn() {
+					ripv4Route = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.StaticRoutes[c].Prefix.IsNull() {
+			data.StaticRoutes[c].Prefix = types.StringValue(ripv4Route.Get("ipv4Route.attributes.prefix").String())
+		} else {
+			data.StaticRoutes[c].Prefix = types.StringNull()
+		}
+		for nc := range data.StaticRoutes[c].NextHops {
+			var ripv4Nexthop gjson.Result
+			ripv4Route.Get("ipv4Route.children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("ipv4Nexthop.attributes.rn").String()
+					if key == data.StaticRoutes[c].NextHops[nc].getRn() {
+						ripv4Nexthop = v
+						return false
+					}
+					return true
+				},
+			)
+			if !data.StaticRoutes[c].NextHops[nc].InterfaceId.IsNull() {
+				data.StaticRoutes[c].NextHops[nc].InterfaceId = types.StringValue(ripv4Nexthop.Get("ipv4Nexthop.attributes.nhIf").String())
+			} else {
+				data.StaticRoutes[c].NextHops[nc].InterfaceId = types.StringNull()
+			}
+			if !data.StaticRoutes[c].NextHops[nc].Address.IsNull() {
+				data.StaticRoutes[c].NextHops[nc].Address = types.StringValue(ripv4Nexthop.Get("ipv4Nexthop.attributes.nhAddr").String())
+			} else {
+				data.StaticRoutes[c].NextHops[nc].Address = types.StringNull()
+			}
+			if !data.StaticRoutes[c].NextHops[nc].VrfName.IsNull() {
+				data.StaticRoutes[c].NextHops[nc].VrfName = types.StringValue(ripv4Nexthop.Get("ipv4Nexthop.attributes.nhVrf").String())
+			} else {
+				data.StaticRoutes[c].NextHops[nc].VrfName = types.StringNull()
+			}
+			if !data.StaticRoutes[c].NextHops[nc].Description.IsNull() {
+				data.StaticRoutes[c].NextHops[nc].Description = types.StringValue(ripv4Nexthop.Get("ipv4Nexthop.attributes.descr").String())
+			} else {
+				data.StaticRoutes[c].NextHops[nc].Description = types.StringNull()
+			}
+			if !data.StaticRoutes[c].NextHops[nc].Object.IsNull() {
+				data.StaticRoutes[c].NextHops[nc].Object = types.Int64Value(ripv4Nexthop.Get("ipv4Nexthop.attributes.object").Int())
+			} else {
+				data.StaticRoutes[c].NextHops[nc].Object = types.Int64Null()
+			}
+			if !data.StaticRoutes[c].NextHops[nc].Preference.IsNull() {
+				data.StaticRoutes[c].NextHops[nc].Preference = types.Int64Value(ripv4Nexthop.Get("ipv4Nexthop.attributes.pref").Int())
+			} else {
+				data.StaticRoutes[c].NextHops[nc].Preference = types.Int64Null()
+			}
+			if !data.StaticRoutes[c].NextHops[nc].Tag.IsNull() {
+				data.StaticRoutes[c].NextHops[nc].Tag = types.Int64Value(ripv4Nexthop.Get("ipv4Nexthop.attributes.tag").Int())
+			} else {
+				data.StaticRoutes[c].NextHops[nc].Tag = types.Int64Null()
+			}
+		}
+	}
+	for c := range data.Interfaces {
+		var ripv4If gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("ipv4If.attributes.rn").String()
+				if key == data.Interfaces[c].getRn() {
+					ripv4If = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.Interfaces[c].InterfaceId.IsNull() {
+			data.Interfaces[c].InterfaceId = types.StringValue(ripv4If.Get("ipv4If.attributes.id").String())
+		} else {
+			data.Interfaces[c].InterfaceId = types.StringNull()
+		}
+		if !data.Interfaces[c].DropGlean.IsNull() {
+			data.Interfaces[c].DropGlean = types.StringValue(ripv4If.Get("ipv4If.attributes.dropGlean").String())
+		} else {
+			data.Interfaces[c].DropGlean = types.StringNull()
+		}
+		if !data.Interfaces[c].Forward.IsNull() {
+			data.Interfaces[c].Forward = types.StringValue(ripv4If.Get("ipv4If.attributes.forward").String())
+		} else {
+			data.Interfaces[c].Forward = types.StringNull()
+		}
+		if !data.Interfaces[c].Unnumbered.IsNull() {
+			data.Interfaces[c].Unnumbered = types.StringValue(ripv4If.Get("ipv4If.attributes.unnumbered").String())
+		} else {
+			data.Interfaces[c].Unnumbered = types.StringNull()
+		}
+		if !data.Interfaces[c].Urpf.IsNull() {
+			data.Interfaces[c].Urpf = types.StringValue(ripv4If.Get("ipv4If.attributes.urpf").String())
+		} else {
+			data.Interfaces[c].Urpf = types.StringNull()
+		}
+		for nc := range data.Interfaces[c].Addresses {
+			var ripv4Addr gjson.Result
+			ripv4If.Get("ipv4If.children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("ipv4Addr.attributes.rn").String()
+					if key == data.Interfaces[c].Addresses[nc].getRn() {
+						ripv4Addr = v
+						return false
+					}
+					return true
+				},
+			)
+			if !data.Interfaces[c].Addresses[nc].Address.IsNull() {
+				data.Interfaces[c].Addresses[nc].Address = types.StringValue(ripv4Addr.Get("ipv4Addr.attributes.addr").String())
+			} else {
+				data.Interfaces[c].Addresses[nc].Address = types.StringNull()
+			}
+			if !data.Interfaces[c].Addresses[nc].Type.IsNull() {
+				data.Interfaces[c].Addresses[nc].Type = types.StringValue(ripv4Addr.Get("ipv4Addr.attributes.type").String())
+			} else {
+				data.Interfaces[c].Addresses[nc].Type = types.StringNull()
+			}
+			if !data.Interfaces[c].Addresses[nc].Tag.IsNull() {
+				data.Interfaces[c].Addresses[nc].Tag = types.Int64Value(ripv4Addr.Get("ipv4Addr.attributes.tag").Int())
+			} else {
+				data.Interfaces[c].Addresses[nc].Tag = types.Int64Null()
+			}
+		}
 	}
 }
 
@@ -134,5 +461,72 @@ func (data IPv4VRF) getDeleteDns() []string {
 // End of section. //template:end getDeleteDns
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data IPv4VRF) getDeletedItems(ctx context.Context, state IPv4VRF) []string {
+	deletedItems := []string{}
+	for _, stateChild := range state.StaticRoutes {
+		found := false
+		for _, planChild := range data.StaticRoutes {
+			if stateChild.Prefix == planChild.Prefix {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, data.getDn()+"/"+stateChild.getRn())
+		}
+	}
+	for di := range state.StaticRoutes {
+		for pdi := range data.StaticRoutes {
+			if state.StaticRoutes[di].Prefix == data.StaticRoutes[pdi].Prefix {
+				for _, stateChild := range state.StaticRoutes[di].NextHops {
+					found := false
+					for _, planChild := range data.StaticRoutes[pdi].NextHops {
+						if stateChild.InterfaceId == planChild.InterfaceId && stateChild.Address == planChild.Address && stateChild.VrfName == planChild.VrfName {
+							found = true
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, data.getDn()+"/"+state.StaticRoutes[di].getRn()+"/"+stateChild.getRn())
+					}
+				}
+				break
+			}
+		}
+	}
+	for _, stateChild := range state.Interfaces {
+		found := false
+		for _, planChild := range data.Interfaces {
+			if stateChild.InterfaceId == planChild.InterfaceId {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, data.getDn()+"/"+stateChild.getRn())
+		}
+	}
+	for di := range state.Interfaces {
+		for pdi := range data.Interfaces {
+			if state.Interfaces[di].InterfaceId == data.Interfaces[pdi].InterfaceId {
+				for _, stateChild := range state.Interfaces[di].Addresses {
+					found := false
+					for _, planChild := range data.Interfaces[pdi].Addresses {
+						if stateChild.Address == planChild.Address {
+							found = true
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, data.getDn()+"/"+state.Interfaces[di].getRn()+"/"+stateChild.getRn())
+					}
+				}
+				break
+			}
+		}
+	}
+	return deletedItems
+}
 
 // End of section. //template:end getDeletedItems

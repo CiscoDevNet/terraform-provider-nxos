@@ -57,7 +57,7 @@ func (d *IPv4VRFDataSource) Metadata(_ context.Context, req datasource.MetadataR
 func (d *IPv4VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the IPv4 VRF information.", "ipv4Dom", "Layer%203/ipv4:Dom/").String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the IPv4 VRF information.", "ipv4Dom", "Layer%203/ipv4:Dom/").AddAdditionalDocs([]string{"ipv4Route", "ipv4Nexthop", "ipv4If", "ipv4Addr"}, []string{"Layer%203/ipv4:Route/", "Layer%203/ipv4:Nexthop/", "Layer%203/ipv4:If/", "Layer%203/ipv4:Addr/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -71,6 +71,102 @@ func (d *IPv4VRFDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 			"name": schema.StringAttribute{
 				MarkdownDescription: "VRF name.",
 				Required:            true,
+			},
+			"static_routes": schema.ListNestedAttribute{
+				MarkdownDescription: "List of IPv4 static routes.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"prefix": schema.StringAttribute{
+							MarkdownDescription: "Prefix.",
+							Computed:            true,
+						},
+						"next_hops": schema.ListNestedAttribute{
+							MarkdownDescription: "List of next hops.",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"interface_id": schema.StringAttribute{
+										MarkdownDescription: "Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.",
+										Computed:            true,
+									},
+									"address": schema.StringAttribute{
+										MarkdownDescription: "Nexthop address.",
+										Computed:            true,
+									},
+									"vrf_name": schema.StringAttribute{
+										MarkdownDescription: "Nexthop VRF.",
+										Computed:            true,
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: "Description.",
+										Computed:            true,
+									},
+									"object": schema.Int64Attribute{
+										MarkdownDescription: "Object to be tracked.",
+										Computed:            true,
+									},
+									"preference": schema.Int64Attribute{
+										MarkdownDescription: "Route preference.",
+										Computed:            true,
+									},
+									"tag": schema.Int64Attribute{
+										MarkdownDescription: "Tag value.",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "List of IPv4 interfaces.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_id": schema.StringAttribute{
+							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
+							Computed:            true,
+						},
+						"drop_glean": schema.StringAttribute{
+							MarkdownDescription: "ip drop-glean enabled/disabled.",
+							Computed:            true,
+						},
+						"forward": schema.StringAttribute{
+							MarkdownDescription: "ip forward enabled/disabled.",
+							Computed:            true,
+						},
+						"unnumbered": schema.StringAttribute{
+							MarkdownDescription: "IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.",
+							Computed:            true,
+						},
+						"urpf": schema.StringAttribute{
+							MarkdownDescription: "URPF (unicast Reverse Path Forwarding).",
+							Computed:            true,
+						},
+						"addresses": schema.ListNestedAttribute{
+							MarkdownDescription: "List of IPv4 interface addresses.",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address": schema.StringAttribute{
+										MarkdownDescription: "IPv4 address.",
+										Computed:            true,
+									},
+									"type": schema.StringAttribute{
+										MarkdownDescription: "Address type.",
+										Computed:            true,
+									},
+									"tag": schema.Int64Attribute{
+										MarkdownDescription: "Route Tag",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	}
@@ -106,6 +202,7 @@ func (d *IPv4VRFDataSource) Read(ctx context.Context, req datasource.ReadRequest
 	}
 
 	queries := []func(*nxos.Req){}
+	queries = append(queries, nxos.Query("rsp-subtree", "full"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

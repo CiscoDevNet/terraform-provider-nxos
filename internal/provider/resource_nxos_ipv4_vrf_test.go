@@ -36,6 +36,22 @@ import (
 func TestAccNxosIPv4VRF(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrf.test", "name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrf.test", "static_routes.0.prefix", "1.1.1.0/24"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrf.test", "static_routes.0.next_hops.0.interface_id", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrf.test", "static_routes.0.next_hops.0.address", "1.2.3.4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrf.test", "static_routes.0.next_hops.0.vrf_name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrf.test", "static_routes.0.next_hops.0.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrf.test", "static_routes.0.next_hops.0.object", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrf.test", "static_routes.0.next_hops.0.preference", "123"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrf.test", "static_routes.0.next_hops.0.tag", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrf.test", "interfaces.0.interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrf.test", "interfaces.0.drop_glean", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrf.test", "interfaces.0.forward", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrf.test", "interfaces.0.unnumbered", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrf.test", "interfaces.0.urpf", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrf.test", "interfaces.0.addresses.0.address", "24.63.46.49/30"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrf.test", "interfaces.0.addresses.0.type", "primary"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrf.test", "interfaces.0.addresses.0.tag", "1234"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -96,6 +112,30 @@ func testAccNxosIPv4VRFConfig_minimum() string {
 func testAccNxosIPv4VRFConfig_all() string {
 	config := `resource "nxos_ipv4_vrf" "test" {` + "\n"
 	config += `	name = "VRF1"` + "\n"
+	config += `	static_routes = [{` + "\n"
+	config += `		prefix = "1.1.1.0/24"` + "\n"
+	config += `		next_hops = [{` + "\n"
+	config += `			interface_id = "unspecified"` + "\n"
+	config += `			address = "1.2.3.4"` + "\n"
+	config += `			vrf_name = "default"` + "\n"
+	config += `			description = "My Description"` + "\n"
+	config += `			object = 10` + "\n"
+	config += `			preference = 123` + "\n"
+	config += `			tag = 10` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `	interfaces = [{` + "\n"
+	config += `		interface_id = "eth1/10"` + "\n"
+	config += `		drop_glean = "disabled"` + "\n"
+	config += `		forward = "disabled"` + "\n"
+	config += `		unnumbered = "unspecified"` + "\n"
+	config += `		urpf = "disabled"` + "\n"
+	config += `		addresses = [{` + "\n"
+	config += `			address = "24.63.46.49/30"` + "\n"
+	config += `			type = "primary"` + "\n"
+	config += `			tag = 1234` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

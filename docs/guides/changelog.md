@@ -34,6 +34,7 @@ description: |-
 - BREAKING CHANGE: Remove `nxos_pim_instance` resource and data source, `nxos_pim_vrf` resource and data source, `nxos_pim_interface` resource and data source, `nxos_pim_ssm_policy` resource and data source, `nxos_pim_ssm_range` resource and data source, `nxos_pim_static_rp_policy` resource and data source, `nxos_pim_static_rp` resource and data source, `nxos_pim_static_rp_group_list` resource and data source, `nxos_pim_anycast_rp` resource and data source, and `nxos_pim_anycast_rp_peer` resource and data source, PIM configuration is now managed as a single `nxos_pim` resource and data source
 - BREAKING CHANGE: Remove `nxos_ospfv3_instance` resource and data source, `nxos_ospfv3_vrf` resource and data source, `nxos_ospfv3_area` resource and data source, `nxos_ospfv3_vrf_address_family` resource and data source, and `nxos_ospfv3_interface` resource and data source, OSPFv3 configuration is now managed as a single `nxos_ospfv3` resource and data source
 - BREAKING CHANGE: Remove `nxos_ipv4_prefix_list_rule` resource and data source and `nxos_ipv4_prefix_list_rule_entry` resource and data source, IPv4 Prefix List configuration is now managed as a single `nxos_ipv4_prefix_list` resource and data source
+- BREAKING CHANGE: Remove `nxos_ipv4_static_route` resource and data source, `nxos_ipv4_interface` resource and data source, and `nxos_ipv4_interface_address` resource and data source, IPv4 configuration is now managed as a single `nxos_ipv4_vrf` resource and data source
 
 ## 0.7.0
 

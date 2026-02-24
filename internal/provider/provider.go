@@ -338,6 +338,7 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewCliResource,
 		NewBGPResource,
 		NewBridgeDomainResource,
+		NewBridgeDomainsResource,
 		NewDefaultQOSClassMapResource,
 		NewDefaultQOSPolicyMapResource,
 		NewDHCPResource,

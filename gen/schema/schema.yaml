@@ -14,6 +14,9 @@ references: list(str(), required=False) # List of referenced resource names
 attributes: list(include('attribute'), required=False) # List of attributes
 child_classes: list(include('child_classes'), required=False) # List of child classes to be included inline
 test_prerequisites: list(include('test_prerequisite'), required=False) # List of test prerequisites
+bulk_resource: bool(required=False) # Set to true to generate a bulk resource variant
+bulk_name: str(required=False) # Name for the bulk resource (auto-pluralized if not set)
+parent_class_name: str(required=False) # NX-API class name of the parent object for bulk operations
 ---
 attribute:
   nxos_name: str() # NX-API attribute name

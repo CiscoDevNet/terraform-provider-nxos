@@ -351,6 +351,7 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewIPv4VRFResource,
 		NewIPv4VRFsResource,
 		NewIPv6VRFResource,
+		NewIPv6VRFsResource,
 		NewISISResource,
 		NewKeychainResource,
 		NewLoggingResource,

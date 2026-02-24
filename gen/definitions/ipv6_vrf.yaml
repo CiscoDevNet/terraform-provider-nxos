@@ -6,6 +6,8 @@ ds_description: This data source can read the IPv6 VRF information.
 res_description: This resource can manage the IPv6 VRF information.
 doc_path: Layer%203/ipv6:Dom/
 doc_category: IPv6
+bulk_resource: true
+parent_class_name: ipv6Inst
 attributes:
   - nxos_name: name
     tf_name: name

@@ -6,6 +6,8 @@ ds_description: This data source can read the IPv4 VRF information.
 res_description: This resource can manage the IPv4 VRF information.
 doc_path: Layer%203/ipv4:Dom/
 doc_category: IPv4
+bulk_resource: true
+parent_class_name: ipv4Inst
 references:
   - VRF
 attributes:

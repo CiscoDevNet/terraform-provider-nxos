@@ -349,6 +349,7 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewIPv4AccessListsResource,
 		NewIPv4PrefixListResource,
 		NewIPv4VRFResource,
+		NewIPv4VRFsResource,
 		NewIPv6VRFResource,
 		NewISISResource,
 		NewKeychainResource,

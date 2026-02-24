@@ -339,6 +339,9 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewCliResource,
 		{{- range .}}
 		New{{camelCase .Name}}Resource,
+		{{- if .BulkResource}}
+		New{{camelCase .BulkName}}Resource,
+		{{- end}}
 		{{- end}}
 	}
 }

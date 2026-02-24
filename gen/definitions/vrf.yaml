@@ -6,6 +6,8 @@ ds_description: This data source can read a VRF.
 res_description: This resource can manage a VRF.
 doc_path: Layer%203/l3:Inst/
 doc_category: VRF
+bulk_resource: true
+parent_class_name: topSystem
 attributes:
   - nxos_name: name
     tf_name: name

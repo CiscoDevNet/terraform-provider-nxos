@@ -192,7 +192,7 @@ func (data {{camelCase .BulkName}}) toBody() nxos.Body {
 		{{- if .ChildClasses}}
 		var attrs string
 		itemChildrenPath := data.getItemClassName() + ".children"
-		{{- template "bulkToBodyChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" "item" "ChildrenPathVar" "itemChildrenPath" "BodyVar" "itemBody" "RnArgs" "")}}
+		{{- template "bulkToBodyChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" "item" "ChildrenPathVar" "itemChildrenPath" "BodyVar" "itemBody" "RnArgs" (rnFormatArgs "item" .Attributes))}}
 		_ = attrs
 		{{- end}}
 
@@ -215,7 +215,38 @@ func (data {{camelCase .BulkName}}) toBody() nxos.Body {
 {{- $childAlwaysInclude := .AlwaysInclude}}
 {{- $childRn := .Rn}}
 {{- if eq .Type "single"}}
+{{- if .ChildClasses}}
+	{
+	childIndex := len(gjson.Get({{$bodyVar}}, {{$childrenPathVar}}).Array())
+	childBodyPath := {{$childrenPathVar}} + "." + strconv.Itoa(childIndex) + ".{{$childClassName}}"
 	attrs = "{}"
+	{{- if rnHasDynamicSegment $childRn}}
+	attrs, _ = sjson.Set(attrs, "name", {{$rnArgs}})
+	{{- end}}
+	{{- range .Attributes}}
+	{{- if .Value}}
+	attrs, _ = sjson.Set(attrs, "{{.NxosName}}", "{{.Value}}")
+	{{- else if not .ReferenceOnly}}
+	if (!{{$dataVar}}.{{toGoName .TfName}}.IsUnknown() && !{{$dataVar}}.{{toGoName .TfName}}.IsNull()) || {{.AlwaysInclude}} {
+		{{- if eq .Type "Int64"}}
+		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatInt({{$dataVar}}.{{toGoName .TfName}}.ValueInt64(), 10))
+		{{- else if eq .Type "Bool"}}
+		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", strconv.FormatBool({{$dataVar}}.{{toGoName .TfName}}.ValueBool()))
+		{{- else if eq .Type "String"}}
+		attrs, _ = sjson.Set(attrs, "{{.NxosName}}", {{$dataVar}}.{{toGoName .TfName}}.ValueString())
+		{{- end}}
+	}
+	{{- end}}
+	{{- end}}
+	{{$bodyVar}}, _ = sjson.SetRaw({{$bodyVar}}, childBodyPath+".attributes", attrs)
+	nestedChildrenPath := childBodyPath + ".children"
+	{{- template "bulkToBodyChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" $dataVar "ChildrenPathVar" "nestedChildrenPath" "BodyVar" $bodyVar "RnArgs" $rnArgs)}}
+	}
+{{- else}}
+	attrs = "{}"
+	{{- if rnHasDynamicSegment $childRn}}
+	attrs, _ = sjson.Set(attrs, "name", {{$rnArgs}})
+	{{- end}}
 	{{- range .Attributes}}
 	{{- if .Value}}
 	attrs, _ = sjson.Set(attrs, "{{.NxosName}}", "{{.Value}}")
@@ -234,6 +265,7 @@ func (data {{camelCase .BulkName}}) toBody() nxos.Body {
 	if attrs != "{}" || {{$childAlwaysInclude}} {
 		{{$bodyVar}}, _ = sjson.SetRaw({{$bodyVar}}, {{$childrenPathVar}}+".-1.{{$childClassName}}.attributes", attrs)
 	}
+{{- end}}
 {{- else if eq .Type "list"}}
 	for _, child := range {{$dataVar}}.{{toGoName .TfName}} {
 		attrs = "{}"
@@ -249,6 +281,13 @@ func (data {{camelCase .BulkName}}) toBody() nxos.Body {
 		}
 		{{- end}}
 		{{$bodyVar}}, _ = sjson.SetRaw({{$bodyVar}}, {{$childrenPathVar}}+".-1.{{$childClassName}}.attributes", attrs)
+		{{- if .ChildClasses}}
+		{
+			nestedIndex := len(gjson.Get({{$bodyVar}}, {{$childrenPathVar}}).Array()) - 1
+			nestedChildrenPath := {{$childrenPathVar}} + "." + strconv.Itoa(nestedIndex) + ".{{$childClassName}}.children"
+			{{- template "bulkToBodyChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" "child" "ChildrenPathVar" "nestedChildrenPath" "BodyVar" $bodyVar "RnArgs" $rnArgs)}}
+		}
+		{{- end}}
 	}
 {{- end}}
 {{- end}}
@@ -320,7 +359,7 @@ func (data *{{camelCase .BulkName}}) fromBody(res gjson.Result) {
 				{{- end}}
 				{{- end}}
 				{{- if .ChildClasses}}
-				{{- template "bulkFromBodyChildrenTemplate" (makeMap "TypePrefix" $bulkName "Children" .ChildClasses "ValueVar" "value" "ParentVar" "item")}}
+				{{- template "bulkFromBodyChildrenTemplate" (makeMap "TypePrefix" $bulkName "Children" .ChildClasses "ValueVar" "value" "ParentVar" "item" "RnArgs" (rnFormatArgs "item" .Attributes))}}
 				{{- end}}
 				data.Items = append(data.Items, item)
 			}
@@ -337,6 +376,7 @@ func (data *{{camelCase .BulkName}}) fromBody(res gjson.Result) {
 {{- $typePrefix := .TypePrefix}}
 {{- $valueVar := .ValueVar}}
 {{- $parentVar := .ParentVar}}
+{{- $rnArgs := .RnArgs}}
 {{- range .Children}}
 {{- $childClassName := .ClassName}}
 {{- if eq .Type "single"}}
@@ -345,7 +385,11 @@ func (data *{{camelCase .BulkName}}) fromBody(res gjson.Result) {
 	{{$valueVar}}.Get("children").ForEach(
 		func(_, nestedV gjson.Result) bool {
 			key := nestedV.Get("{{$childClassName}}.attributes.rn").String()
+			{{- if rnHasDynamicSegment .Rn}}
+			if key == fmt.Sprintf("{{.Rn}}", {{$rnArgs}}) {
+			{{- else}}
 			if key == "{{.Rn}}" {
+			{{- end}}
 				r{{$childClassName}} = nestedV
 				return false
 			}
@@ -363,6 +407,9 @@ func (data *{{camelCase .BulkName}}) fromBody(res gjson.Result) {
 	{{- end}}
 	{{- end}}
 	{{- end}}
+	{{- if .ChildClasses}}
+	{{- template "bulkFromBodyChildrenTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ValueVar" (printf "r%s.Get(\"%s\")" $childClassName $childClassName) "ParentVar" $parentVar "RnArgs" $rnArgs)}}
+	{{- end}}
 	}
 {{- else if eq .Type "list"}}
 	{{$valueVar}}.Get("children").ForEach(
@@ -370,19 +417,22 @@ func (data *{{camelCase .BulkName}}) fromBody(res gjson.Result) {
 			nestedV.ForEach(
 				func(nestedClassname, nestedValue gjson.Result) bool {
 					if nestedClassname.String() == "{{$childClassName}}" {
-						var nestedChild {{$typePrefix}}{{toGoName .TfName}}
+						var nestedChild{{$childClassName}} {{$typePrefix}}{{toGoName .TfName}}
 						{{- range .Attributes}}
 						{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
 						{{- if eq .Type "Int64"}}
-						nestedChild.{{toGoName .TfName}} = types.Int64Value(nestedValue.Get("attributes.{{.NxosName}}").Int())
+						nestedChild{{$childClassName}}.{{toGoName .TfName}} = types.Int64Value(nestedValue.Get("attributes.{{.NxosName}}").Int())
 						{{- else if eq .Type "Bool"}}
-						nestedChild.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.{{.NxosName}}").String()))
+						nestedChild{{$childClassName}}.{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.{{.NxosName}}").String()))
 						{{- else if eq .Type "String"}}
-						nestedChild.{{toGoName .TfName}} = types.StringValue(nestedValue.Get("attributes.{{.NxosName}}").String())
+						nestedChild{{$childClassName}}.{{toGoName .TfName}} = types.StringValue(nestedValue.Get("attributes.{{.NxosName}}").String())
 						{{- end}}
 						{{- end}}
 						{{- end}}
-						{{$parentVar}}.{{toGoName .TfName}} = append({{$parentVar}}.{{toGoName .TfName}}, nestedChild)
+						{{- if .ChildClasses}}
+						{{- template "bulkFromBodyChildrenTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ValueVar" "nestedValue" "ParentVar" (printf "nestedChild%s" $childClassName) "RnArgs" $rnArgs)}}
+						{{- end}}
+						{{$parentVar}}.{{toGoName .TfName}} = append({{$parentVar}}.{{toGoName .TfName}}, nestedChild{{$childClassName}})
 					}
 					return true
 				},
@@ -433,7 +483,7 @@ func (data *{{camelCase .BulkName}}) updateFromBody(res gjson.Result) {
 					{{- end}}
 					{{- end}}
 					{{- if .ChildClasses}}
-					{{- template "bulkUpdateFromBodyChildrenTemplate" (makeMap "TypePrefix" $bulkName "Children" .ChildClasses "ValueVar" "value" "DataExpr" (printf "data.Items[i]"))}}
+					{{- template "bulkUpdateFromBodyChildrenTemplate" (makeMap "TypePrefix" $bulkName "Children" .ChildClasses "ValueVar" "value" "DataExpr" (printf "data.Items[i]") "RnArgs" (rnFormatArgs "data.Items[i]" .Attributes))}}
 					{{- end}}
 				}
 				return true
@@ -443,20 +493,45 @@ func (data *{{camelCase .BulkName}}) updateFromBody(res gjson.Result) {
 	}
 }
 
-{{- /* ==================== bulkUpdateFromBodyChildrenTemplate ==================== */}}
+{{- /* ==================== bulkUpdateFromBodyChildrenTemplate ====================
+       Entry point for updateFromBody children. Sets up initial context and
+       delegates to bulkUpdateFromBodyChildrenRecurse with IndexVar tracking.
+       Context: map with "TypePrefix", "Children", "ValueVar", "DataExpr", "RnArgs"
+       ========================================================= */}}
 {{- define "bulkUpdateFromBodyChildrenTemplate"}}
+{{- template "bulkUpdateFromBodyChildrenRecurse" (makeMap "TypePrefix" .TypePrefix "Children" .Children "ValueVar" .ValueVar "DataExpr" .DataExpr "RnArgs" .RnArgs "IndexVar" "c")}}
+{{- end}}
+
+{{- /* ==================== bulkUpdateFromBodyChildrenRecurse ====================
+       Recursively generates update code for children in updateFromBody.
+       Context: map with:
+         "TypePrefix" (string) - Go type prefix
+         "Children" ([]YamlConfigChildClass)
+         "ValueVar" (string) - Go expression for parent gjson.Result
+         "DataExpr" (string) - Go expression for data element (e.g. "data.Items[i]")
+         "RnArgs" (string) - Go expression args for dynamic RN segments
+         "IndexVar" (string) - Loop index variable name (c, cc, ccc, ...)
+       ========================================================= */}}
+{{- define "bulkUpdateFromBodyChildrenRecurse"}}
 {{- $typePrefix := .TypePrefix}}
 {{- $valueVar := .ValueVar}}
 {{- $dataExpr := .DataExpr}}
+{{- $rnArgs := .RnArgs}}
+{{- $indexVar := .IndexVar}}
 {{- range .Children}}
 {{- $childClassName := .ClassName}}
+{{- $list := (toGoName .TfName)}}
 {{- if eq .Type "single"}}
 	{
 	var r{{$childClassName}} gjson.Result
 	{{$valueVar}}.Get("children").ForEach(
 		func(_, nestedV gjson.Result) bool {
 			key := nestedV.Get("{{$childClassName}}.attributes.rn").String()
+			{{- if rnHasDynamicSegment .Rn}}
+			if key == fmt.Sprintf("{{.Rn}}", {{$rnArgs}}) {
+			{{- else}}
 			if key == "{{.Rn}}" {
+			{{- end}}
 				r{{$childClassName}} = nestedV
 				return false
 			}
@@ -478,14 +553,17 @@ func (data *{{camelCase .BulkName}}) updateFromBody(res gjson.Result) {
 	}
 	{{- end}}
 	{{- end}}
+	{{- if .ChildClasses}}
+	{{- template "bulkUpdateFromBodyChildrenRecurse" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ValueVar" (printf "r%s.Get(\"%s\")" $childClassName $childClassName) "DataExpr" $dataExpr "RnArgs" $rnArgs "IndexVar" $indexVar)}}
+	{{- end}}
 	}
 {{- else if eq .Type "list"}}
-	for c := range {{$dataExpr}}.{{toGoName .TfName}} {
+	for {{$indexVar}} := range {{$dataExpr}}.{{$list}} {
 		var r{{$childClassName}} gjson.Result
 		{{$valueVar}}.Get("children").ForEach(
 			func(_, nestedV gjson.Result) bool {
 				key := nestedV.Get("{{$childClassName}}.attributes.rn").String()
-				if key == {{$dataExpr}}.{{toGoName .TfName}}[c].getRn() {
+				if key == fmt.Sprintf("{{.Rn}}", {{rnFormatArgs (printf "%s.%s[%s]" $dataExpr $list $indexVar) .Attributes}}) {
 					r{{$childClassName}} = nestedV
 					return false
 				}
@@ -494,23 +572,26 @@ func (data *{{camelCase .BulkName}}) updateFromBody(res gjson.Result) {
 		)
 		{{- range .Attributes}}
 		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-		if !{{$dataExpr}}.{{toGoName .TfName}}[c].{{toGoName .TfName}}.IsNull() {
+		if !{{$dataExpr}}.{{$list}}[{{$indexVar}}].{{toGoName .TfName}}.IsNull() {
 			{{- if eq .Type "Int64"}}
-			{{$dataExpr}}.{{toGoName .TfName}}[c].{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
+			{{$dataExpr}}.{{$list}}[{{$indexVar}}].{{toGoName .TfName}} = types.Int64Value(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").Int())
 			{{- else if eq .Type "Bool"}}
-			{{$dataExpr}}.{{toGoName .TfName}}[c].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
+			{{$dataExpr}}.{{$list}}[{{$indexVar}}].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String()))
 			{{- else if eq .Type "String"}}
-			{{$dataExpr}}.{{toGoName .TfName}}[c].{{toGoName .TfName}} = types.StringValue(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
+			{{$dataExpr}}.{{$list}}[{{$indexVar}}].{{toGoName .TfName}} = types.StringValue(r{{$childClassName}}.Get("{{$childClassName}}.attributes.{{.NxosName}}").String())
 			{{- end}}
 		} else {
-			{{$dataExpr}}.{{toGoName .TfName}}[c].{{toGoName .TfName}} = types.{{.Type}}Null()
+			{{$dataExpr}}.{{$list}}[{{$indexVar}}].{{toGoName .TfName}} = types.{{.Type}}Null()
 		}
 		{{- end}}
+		{{- end}}
+		{{- if .ChildClasses}}
+		{{- template "bulkUpdateFromBodyChildrenRecurse" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ValueVar" (printf "r%s.Get(\"%s\")" $childClassName $childClassName) "DataExpr" (printf "%s.%s[%s]" $dataExpr $list $indexVar) "RnArgs" $rnArgs "IndexVar" (printf "%sc" $indexVar))}}
 		{{- end}}
 	}
 {{- end}}
 {{- end}}
 {{- end}}
-{{- /* ==================== end bulkUpdateFromBodyChildrenTemplate ==================== */}}
+{{- /* ==================== end bulkUpdateFromBodyChildrenRecurse ==================== */}}
 
 // End of section. //template:end updateFromBody

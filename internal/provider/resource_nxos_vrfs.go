@@ -1,4 +1,3 @@
-//go:build ignore
 // Copyright © 2023 Cisco Systems, Inc. and its affiliates.
 // All rights reserved.
 //
@@ -24,27 +23,21 @@ package provider
 import (
 	"context"
 	"fmt"
-	"strconv"
 	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
-	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 )
 
 // End of section. //template:end imports
@@ -52,35 +45,25 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &{{camelCase .BulkName}}Resource{}
-var _ resource.ResourceWithIdentity = &{{camelCase .BulkName}}Resource{}
+var _ resource.Resource = &VRFsResource{}
+var _ resource.ResourceWithIdentity = &VRFsResource{}
 
-func New{{camelCase .BulkName}}Resource() resource.Resource {
-	return &{{camelCase .BulkName}}Resource{}
+func NewVRFsResource() resource.Resource {
+	return &VRFsResource{}
 }
 
-type {{camelCase .BulkName}}Resource struct {
+type VRFsResource struct {
 	data *NxosProviderData
 }
 
-func (r *{{camelCase .BulkName}}Resource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_{{snakeCase .BulkName}}"
+func (r *VRFsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_vrfs"
 }
 
-func (r *{{camelCase .BulkName}}Resource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *VRFsResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage multiple {{snakeCase .Name}} resources.", "{{.ClassName}}", "{{.DocPath}}")
-			{{- if len .Parents -}}
-			.AddParents({{range .Parents}}"{{snakeCase .}}", {{end}})
-			{{- end -}}
-			{{- if len .Children -}}
-			.AddChildren({{range .Children}}"{{snakeCase .}}", {{end}})
-			{{- end -}}
-			{{- if len .References -}}
-			.AddReferences({{range .References}}"{{snakeCase .}}", {{end}})
-			{{- end -}}
-			.String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage multiple vrf resources.", "l3Inst", "Layer%203/l3:Inst/").String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -95,122 +78,87 @@ func (r *{{camelCase .BulkName}}Resource) Schema(ctx context.Context, req resour
 				},
 			},
 			"items": schema.SetNestedAttribute{
-				MarkdownDescription: "The set of {{snakeCase .Name}} items.",
+				MarkdownDescription: "The set of vrf items.",
 				Required:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						{{- range .Attributes}}
-						{{- if not .ReferenceOnly}}
-						"{{.TfName}}": schema.{{.Type}}Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
-								{{- if len .EnumValues -}}
-								.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
-								{{- end -}}
-								{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}
-								.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
-								{{- end -}}
-								{{- if len .DefaultValue -}}
-								.AddDefaultValueDescription("{{.DefaultValue}}")
-								{{- end -}}
-								.String,
-							{{- if or .Id .Mandatory}}
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 							Required:            true,
-							{{- else}}
-							Optional:            true,
-							{{- if len .DefaultValue}}
-							Computed:            true,
-							{{- end}}
-							{{- end}}
-							{{- if and (len .DefaultValue) (not .Id) (not .Mandatory)}}
-							{{- if eq .Type "Int64"}}
-							Default: int64default.StaticInt64({{.DefaultValue}}),
-							{{- else if eq .Type "Bool"}}
-							Default: booldefault.StaticBool({{.DefaultValue}}),
-							{{- else if eq .Type "String"}}
-							Default: stringdefault.StaticString("{{.DefaultValue}}"),
-							{{- end}}
-							{{- end}}
-							{{- if and (len .EnumValues) (not .AllowNonEnumValues) }}
-							Validators: []validator.String{
-								stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
-							},
-							{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
-							Validators: []validator.Int64{
-								int64validator.Between({{.MinInt}}, {{.MaxInt}}),
-							},
-							{{- end}}
 						},
-						{{- end}}
-						{{- end}}
-						{{- define "bulkResChildrenSchema" -}}
-						{{- range . -}}
-						{{- if eq .Type "single"}}
-						{{- range .Attributes}}
-						{{template "bulkResAttrSchema" .}}
-						{{- end}}
-						{{- template "bulkResChildrenSchema" .TfChildClasses}}
-						{{- else if eq .Type "list"}}
-						"{{.TfName}}": schema.ListNestedAttribute{
-							MarkdownDescription: "{{.Description}}",
-							{{- if .Mandatory}}
-							Required:            true,
-							{{- else}}
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("VRF description.").String,
 							Optional:            true,
-							{{- end}}
+						},
+						"encap": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Encap for this Context, supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.").AddDefaultValueDescription("unknown").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("unknown"),
+						},
+						"route_distinguisher": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route Distinguisher value in NX-OS DME format.").AddDefaultValueDescription("unknown:unknown:0:0").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("unknown:unknown:0:0"),
+						},
+						"address_families": schema.ListNestedAttribute{
+							MarkdownDescription: "List of VRF address families.",
+							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									{{- range .Attributes}}
-									{{template "bulkResAttrSchema" .}}
-									{{- end}}
-									{{- template "bulkResChildrenSchema" .TfChildClasses}}
+									"address_family": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Address family.").AddStringEnumDescription("ipv4-ucast", "ipv6-ucast").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("ipv4-ucast", "ipv6-ucast"),
+										},
+									},
+									"route_target_address_families": schema.ListNestedAttribute{
+										MarkdownDescription: "List of VRF route target address families.",
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"route_target_address_family": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Route Target Address Family.").AddStringEnumDescription("ipv4-ucast", "ipv6-ucast", "l2vpn-evpn").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.OneOf("ipv4-ucast", "ipv6-ucast", "l2vpn-evpn"),
+													},
+												},
+												"route_target_directions": schema.ListNestedAttribute{
+													MarkdownDescription: "List of VRF route target directions.",
+													Optional:            true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"direction": schema.StringAttribute{
+																MarkdownDescription: helpers.NewAttributeDescription("Route Target direction.").AddStringEnumDescription("import", "export").String,
+																Required:            true,
+																Validators: []validator.String{
+																	stringvalidator.OneOf("import", "export"),
+																},
+															},
+															"route_targets": schema.ListNestedAttribute{
+																MarkdownDescription: "List of VRF route target entries.",
+																Optional:            true,
+																NestedObject: schema.NestedAttributeObject{
+																	Attributes: map[string]schema.Attribute{
+																		"route_target": schema.StringAttribute{
+																			MarkdownDescription: helpers.NewAttributeDescription("Route Target in NX-OS DME format.").String,
+																			Required:            true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
 								},
 							},
 						},
-						{{- end}}
-						{{- end}}
-						{{- end}}
-						{{- define "bulkResAttrSchema" -}}
-						"{{.TfName}}": schema.{{.Type}}Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
-								{{- if len .EnumValues -}}
-								.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
-								{{- end -}}
-								{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}
-								.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
-								{{- end -}}
-								{{- if len .DefaultValue -}}
-								.AddDefaultValueDescription("{{.DefaultValue}}")
-								{{- end -}}
-								.String,
-							{{- if or .Id .Mandatory}}
-							Required:            true,
-							{{- else}}
-							Optional:            true,
-							{{- if len .DefaultValue}}
-							Computed:            true,
-							{{- end}}
-							{{- end}}
-							{{- if and (len .DefaultValue) (not .Id) (not .Mandatory)}}
-							{{- if eq .Type "Int64"}}
-							Default: int64default.StaticInt64({{.DefaultValue}}),
-							{{- else if eq .Type "Bool"}}
-							Default: booldefault.StaticBool({{.DefaultValue}}),
-							{{- else if eq .Type "String"}}
-							Default: stringdefault.StaticString("{{.DefaultValue}}"),
-							{{- end}}
-							{{- end}}
-							{{- if and (len .EnumValues) (not .AllowNonEnumValues) }}
-							Validators: []validator.String{
-								stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
-							},
-							{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
-							Validators: []validator.Int64{
-								int64validator.Between({{.MinInt}}, {{.MaxInt}}),
-							},
-							{{- end}}
-						},
-						{{- end}}
-						{{- template "bulkResChildrenSchema" .TfChildClasses}}
 					},
 				},
 			},
@@ -218,24 +166,18 @@ func (r *{{camelCase .BulkName}}Resource) Schema(ctx context.Context, req resour
 	}
 }
 
-func (r *{{camelCase .BulkName}}Resource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+func (r *VRFsResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
 	resp.IdentitySchema = identityschema.Schema{
 		Attributes: map[string]identityschema.Attribute{
 			"device": identityschema.StringAttribute{
 				Description:       "A device name from the provider configuration.",
 				OptionalForImport: true,
 			},
-			{{- range (bulkImportAttributes .)}}
-			"{{.TfName}}": identityschema.{{.Type}}Attribute{
-				Description:       helpers.NewAttributeDescription("{{.Description}}").String,
-				RequiredForImport: true,
-			},
-			{{- end}}
 		},
 	}
 }
 
-func (r *{{camelCase .BulkName}}Resource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *VRFsResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -247,8 +189,8 @@ func (r *{{camelCase .BulkName}}Resource) Configure(ctx context.Context, req res
 // End of section. //template:end model
 
 // Section below is generated&owned by "gen/generator.go". //template:begin create
-func (r *{{camelCase .BulkName}}Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan {{camelCase .BulkName}}
+func (r *VRFsResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan VRFs
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -276,7 +218,7 @@ func (r *{{camelCase .BulkName}}Resource) Create(ctx context.Context, req resour
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity {{camelCase .BulkName}}Identity
+	var identity VRFsIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -292,8 +234,8 @@ func (r *{{camelCase .BulkName}}Resource) Create(ctx context.Context, req resour
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-func (r *{{camelCase .BulkName}}Resource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state {{camelCase .BulkName}}
+func (r *VRFsResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state VRFs
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -304,7 +246,7 @@ func (r *{{camelCase .BulkName}}Resource) Read(ctx context.Context, req resource
 
 	// Read identity if available (requires Terraform >= 1.12.0)
 	if req.Identity != nil && !req.Identity.Raw.IsNull() {
-		var identity {{camelCase .BulkName}}Identity
+		var identity VRFsIdentity
 		diags = req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
@@ -322,11 +264,7 @@ func (r *{{camelCase .BulkName}}Resource) Read(ctx context.Context, req resource
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
-		{{- if hasNestedChildren .ChildClasses}}
-		queries = append(queries, nxos.Query("rsp-subtree-depth", "{{add (maxChildDepth .ChildClasses) 1}}"))
-		{{- else}}
-		queries = append(queries, nxos.Query("rsp-subtree", "children"))
-		{{- end}}
+		queries = append(queries, nxos.Query("rsp-subtree-depth", "6"))
 		res, err := device.Client.GetDn(state.getDn(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -344,7 +282,7 @@ func (r *{{camelCase .BulkName}}Resource) Read(ctx context.Context, req resource
 		}
 	}
 
-	var identity {{camelCase .BulkName}}Identity
+	var identity VRFsIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
@@ -360,8 +298,8 @@ func (r *{{camelCase .BulkName}}Resource) Read(ctx context.Context, req resource
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-func (r *{{camelCase .BulkName}}Resource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan {{camelCase .BulkName}}
+func (r *VRFsResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan VRFs
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -370,7 +308,7 @@ func (r *{{camelCase .BulkName}}Resource) Update(ctx context.Context, req resour
 		return
 	}
 
-	var state {{camelCase .BulkName}}
+	var state VRFs
 
 	// Read state
 	diags = req.State.Get(ctx, &state)
@@ -397,7 +335,7 @@ func (r *{{camelCase .BulkName}}Resource) Update(ctx context.Context, req resour
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity {{camelCase .BulkName}}Identity
+	var identity VRFsIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
@@ -411,8 +349,8 @@ func (r *{{camelCase .BulkName}}Resource) Update(ctx context.Context, req resour
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-func (r *{{camelCase .BulkName}}Resource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state {{camelCase .BulkName}}
+func (r *VRFsResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state VRFs
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -430,16 +368,12 @@ func (r *{{camelCase .BulkName}}Resource) Delete(ctx context.Context, req resour
 	}
 
 	if device.Managed {
-		{{- if .NoDelete}}
-		tflog.Debug(ctx, fmt.Sprintf("%s: Skipping delete (no_delete configured)", state.Dn.ValueString()))
-		{{- else}}
 		body := state.toDeleteBody(state.Items)
 		_, err := device.Client.Post(state.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
 			return
 		}
-		{{- end}}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Dn.ValueString()))
@@ -450,31 +384,10 @@ func (r *{{camelCase .BulkName}}Resource) Delete(ctx context.Context, req resour
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-func (r *{{camelCase .BulkName}}Resource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	{{- $importAttrs := bulkImportAttributes .}}
+func (r *VRFsResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	if req.ID != "" || req.Identity == nil || req.Identity.Raw.IsNull() {
 		idParts := strings.Split(req.ID, ",")
 		idParts = helpers.RemoveEmptyStrings(idParts)
-
-		{{- if $importAttrs}}
-		if len(idParts) != {{len $importAttrs}} && len(idParts) != {{add (len $importAttrs) 1}} {
-			expectedIdentifier := "Expected import identifier with format: '{{range $i, $e := $importAttrs}}{{if $i}},{{end}}<{{.TfName}}>{{end}}'"
-			expectedIdentifier += " or '{{range $i, $e := $importAttrs}}{{if $i}},{{end}}<{{.TfName}}>{{end}},<device>'"
-			resp.Diagnostics.AddError(
-				"Unexpected Import Identifier",
-				fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
-			)
-			return
-		}
-
-		{{- range $index, $attr := $importAttrs}}
-		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("{{.TfName}}"), {{if eq .Type "Int64"}}helpers.Must(strconv.ParseInt(idParts[{{$index}}], 10, 64)){{else}}idParts[{{$index}}]{{end}})...)
-		{{- end}}
-		if len(idParts) == {{add (len $importAttrs) 1}} {
-			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
-			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
-		}
-		{{- else}}
 		if len(idParts) > 1 {
 			resp.Diagnostics.AddError(
 				"Unexpected Import Identifier",
@@ -486,9 +399,8 @@ func (r *{{camelCase .BulkName}}Resource) ImportState(ctx context.Context, req r
 			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[0])...)
 			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[0])...)
 		}
-		{{- end}}
 	} else {
-		var identity {{camelCase .BulkName}}Identity
+		var identity VRFsIdentity
 		diags := req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
@@ -499,7 +411,7 @@ func (r *{{camelCase .BulkName}}Resource) ImportState(ctx context.Context, req r
 		}
 	}
 
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), "{{parentDn .Dn}}")...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), "sys")...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)
 }

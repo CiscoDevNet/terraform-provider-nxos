@@ -37,6 +37,94 @@ import (
 {{- $bulkName := .BulkName}}
 {{- $name := .Name}}
 
+{{- /* ==================== bulkResourceTestChecksTemplate ====================
+       Recursively emits TestCheckResourceAttr calls for TfChildClasses in bulk resources.
+       Context: map with "BulkName" (string), "Children" ([]TfChildClass), "Prefix" (string)
+       ========================================================= */}}
+{{- define "bulkResourceTestChecksTemplate"}}
+{{- $bulkName := .BulkName}}
+{{- $prefix := .Prefix}}
+{{- range .Children}}
+{{- $list := .TfName}}
+{{- if eq .Type "single"}}
+{{- range .Attributes}}
+{{- if not .ExcludeTest}}
+{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_{{snakeCase $bulkName}}.test", "{{$prefix}}{{.TfName}}", "{{.Example}}"))
+	}
+{{- else}}
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_{{snakeCase $bulkName}}.test", "{{$prefix}}{{.TfName}}", "{{.Example}}"))
+{{- end}}
+{{- end}}
+{{- end}}
+{{- if .TfChildClasses}}
+{{- template "bulkResourceTestChecksTemplate" (makeMap "BulkName" $bulkName "Children" .TfChildClasses "Prefix" $prefix)}}
+{{- end}}
+{{- else if eq .Type "list"}}
+{{- range .Attributes}}
+{{- if not .ExcludeTest}}
+{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_{{snakeCase $bulkName}}.test", "{{$prefix}}{{$list}}.0.{{.TfName}}", "{{.Example}}"))
+	}
+{{- else}}
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_{{snakeCase $bulkName}}.test", "{{$prefix}}{{$list}}.0.{{.TfName}}", "{{.Example}}"))
+{{- end}}
+{{- end}}
+{{- end}}
+{{- if .TfChildClasses}}
+{{- template "bulkResourceTestChecksTemplate" (makeMap "BulkName" $bulkName "Children" .TfChildClasses "Prefix" (printf "%s%s.0." $prefix $list))}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- /* ==================== end bulkResourceTestChecksTemplate ==================== */}}
+
+{{- /* ==================== bulkTestConfigChildrenTemplate ====================
+       Recursively emits HCL config lines for TfChildClasses in bulk resources.
+       Context: map with "Children" ([]TfChildClass), "Indent" (string)
+       ========================================================= */}}
+{{- define "bulkTestConfigChildrenTemplate"}}
+{{- $indent := .Indent}}
+{{- range .Children}}
+{{- if eq .Type "single"}}
+{{- range .Attributes}}
+{{- if not .ExcludeTest}}
+{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		config += `{{$indent}}{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	}
+{{- else}}
+	config += `{{$indent}}{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+{{- end}}
+{{- end}}
+{{- end}}
+{{- if .TfChildClasses}}
+{{- template "bulkTestConfigChildrenTemplate" (makeMap "Children" .TfChildClasses "Indent" $indent)}}
+{{- end}}
+{{- else if eq .Type "list"}}
+	config += `{{$indent}}{{.TfName}} = [{` + "\n"
+{{- range .Attributes}}
+{{- if not .ExcludeTest}}
+{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		config += `{{$indent}}	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+	}
+{{- else}}
+	config += `{{$indent}}	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else}}{{.Example}}{{end}}` + "\n"
+{{- end}}
+{{- end}}
+{{- end}}
+{{- if .TfChildClasses}}
+{{- template "bulkTestConfigChildrenTemplate" (makeMap "Children" .TfChildClasses "Indent" (printf "%s\t" $indent))}}
+{{- end}}
+	config += `{{$indent}}}]` + "\n"
+{{- end}}
+{{- end}}
+{{- end}}
+{{- /* ==================== end bulkTestConfigChildrenTemplate ==================== */}}
+
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxos{{camelCase .BulkName}}(t *testing.T) {
 	{{- if len .TestTags}}
@@ -56,6 +144,7 @@ func TestAccNxos{{camelCase .BulkName}}(t *testing.T) {
 	{{- end}}
 	{{- end}}
 	{{- end}}
+	{{- template "bulkResourceTestChecksTemplate" (makeMap "BulkName" $bulkName "Children" .TfChildClasses "Prefix" "items.0.")}}
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -164,6 +253,7 @@ func testAccNxos{{camelCase .BulkName}}Config_all() string {
 	{{- end}}
 	{{- end}}
 	{{- end}}
+	{{- template "bulkTestConfigChildrenTemplate" (makeMap "Children" .TfChildClasses "Indent" "\t\t")}}
 	config += `	}]` + "\n"
 	{{- if .TestPrerequisites}}
 	config += `	depends_on = [{{range $index, $item := .TestPrerequisites}}nxos_rest.PreReq{{$index}}, {{end}}]` + "\n"

@@ -402,20 +402,18 @@ func RnHasDynamicSegment(rn string) bool {
 }
 
 // RnFormatArgs generates the Go expression list for fmt.Sprintf arguments
-// to build the rn from the top-level resource's id attributes.
-// Always references "data." since child RN placeholders are filled by the
-// top-level resource's id attributes.
-func RnFormatArgs(attributes []YamlConfigAttribute) string {
+// to build the rn from the id attributes with a given variable prefix.
+func RnFormatArgs(prefix string, attributes []YamlConfigAttribute) string {
 	var args []string
 	for _, attr := range attributes {
 		if attr.Id {
 			switch attr.Type {
 			case "Int64":
-				args = append(args, "data."+ToGoName(attr.TfName)+".ValueInt64()")
+				args = append(args, prefix+"."+ToGoName(attr.TfName)+".ValueInt64()")
 			case "Bool":
-				args = append(args, "data."+ToGoName(attr.TfName)+".ValueBool()")
+				args = append(args, prefix+"."+ToGoName(attr.TfName)+".ValueBool()")
 			default:
-				args = append(args, "data."+ToGoName(attr.TfName)+".ValueString()")
+				args = append(args, prefix+"."+ToGoName(attr.TfName)+".ValueString()")
 			}
 		}
 	}

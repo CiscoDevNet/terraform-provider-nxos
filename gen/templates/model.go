@@ -291,7 +291,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 	{{- if .ChildClasses}}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
-	{{- template "toBodyChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" "data" "ChildrenPathVar" "childrenPath" "RnArgs" (rnFormatArgs .Attributes))}}
+	{{- template "toBodyChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" "data" "ChildrenPathVar" "childrenPath" "RnArgs" (rnFormatArgs "data" .Attributes))}}
 	{{- end}}
 
 	return nxos.Body{body}
@@ -481,7 +481,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 	{{- end}}
 	{{- end}}
 	{{- if .ChildClasses}}
-	{{- template "fromBodyChildrenTemplate" (makeMap "TypePrefix" $name "Children" .ChildClasses "ResExpr" (printf "res.Get(data.getClassName() + \".children\")") "DataVar" "data" "RnArgs" (rnFormatArgs .Attributes))}}
+	{{- template "fromBodyChildrenTemplate" (makeMap "TypePrefix" $name "Children" .ChildClasses "ResExpr" (printf "res.Get(data.getClassName() + \".children\")") "DataVar" "data" "RnArgs" (rnFormatArgs "data" .Attributes))}}
 	{{- end}}
 }
 
@@ -707,7 +707,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 		func(_, v gjson.Result) bool {
 			key := v.Get("{{$childClassName}}.attributes.rn").String()
 			{{- if rnHasDynamicSegment $childRn}}
-			if key == fmt.Sprintf("{{$childRn}}", {{rnFormatArgs $.Attributes}}) {
+			if key == fmt.Sprintf("{{$childRn}}", {{rnFormatArgs "data" $.Attributes}}) {
 			{{- else}}
 			if key == "{{$childRn}}" {
 			{{- end}}
@@ -734,7 +734,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 	{{- end}}
 	{{- end}}
 	{{- if .ChildClasses}}
-	{{- template "updateFromBodySingleChildTemplate" (makeMap "TypePrefix" $name "Children" .ChildClasses "ResExpr" (printf "r%s.Get(\"%s.children\")" $childClassName $childClassName) "DataAccessor" "data" "RnArgs" (rnFormatArgs $.Attributes))}}
+	{{- template "updateFromBodySingleChildTemplate" (makeMap "TypePrefix" $name "Children" .ChildClasses "ResExpr" (printf "r%s.Get(\"%s.children\")" $childClassName $childClassName) "DataAccessor" "data" "RnArgs" (rnFormatArgs "data" $.Attributes))}}
 	{{- end}}
 	{{- else if eq .Type "list"}}
 	for c := range data.{{toGoName .TfName}} {

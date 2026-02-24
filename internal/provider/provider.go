@@ -367,6 +367,7 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewSpanningTreeResource,
 		NewSubinterfaceResource,
 		NewSVIInterfaceResource,
+		NewSVIInterfacesResource,
 		NewSystemResource,
 		NewUserResource,
 		NewVPCResource,

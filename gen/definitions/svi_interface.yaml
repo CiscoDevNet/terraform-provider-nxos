@@ -6,6 +6,8 @@ ds_description: This data source can read an SVI interface.
 res_description: This resource can manage an SVI interface.
 doc_path: Interfaces/svi:If/
 doc_category: Interface
+bulk_resource: true
+parent_class_name: interfaceEntity
 attributes:
   - nxos_name: id
     tf_name: interface_id

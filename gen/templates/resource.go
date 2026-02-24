@@ -329,6 +329,8 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 		{{- if .ChildClasses}}
 		{{- if hasNestedChildren .ChildClasses}}
 		queries = append(queries, nxos.Query("rsp-subtree-depth", "{{maxChildDepth .ChildClasses}}"))
+		{{- else}}
+		queries = append(queries, nxos.Query("rsp-subtree", "children"))
 		{{- end}}
 		{{- end}}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)

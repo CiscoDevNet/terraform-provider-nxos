@@ -945,17 +945,18 @@ func (data IPv4AccessLists) toDeleteBody() nxos.Body {
 	if body == "" {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	}
+	childrenPath := data.getClassName() + ".children"
 	for _, child := range data.AccessLists {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACL.attributes.rn", child.getRn())
 		deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACL.attributes.status", "deleted")
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children"+".-1", deleteBody)
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
 	{
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "aclPolicy.attributes.rn", "policy")
 		deleteBody, _ = sjson.Set(deleteBody, "aclPolicy.attributes.status", "deleted")
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children"+".-1", deleteBody)
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
 
 	return nxos.Body{body}

@@ -433,11 +433,12 @@ func (data PhysicalInterface) toDeleteBody() nxos.Body {
 	if body == "" {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	}
+	childrenPath := data.getClassName() + ".children"
 	{
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "nwRtVrfMbr.attributes.rn", "rtvrfMbr")
 		deleteBody, _ = sjson.Set(deleteBody, "nwRtVrfMbr.attributes.status", "deleted")
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children"+".-1", deleteBody)
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
 
 	return nxos.Body{body}

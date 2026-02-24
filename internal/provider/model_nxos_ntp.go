@@ -208,11 +208,12 @@ func (data NTP) toDeleteBody() nxos.Body {
 	if body == "" {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	}
+	childrenPath := data.getClassName() + ".children"
 	for _, child := range data.Servers {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpProvider.attributes.rn", child.getRn())
 		deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpProvider.attributes.status", "deleted")
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children"+".-1", deleteBody)
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
 
 	return nxos.Body{body}

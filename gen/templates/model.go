@@ -778,74 +778,67 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
 
 {{- /* ==================== toDeleteBodyChildrenTemplate ====================
-       Recursively generates sjson body-building code for NoDelete children with DeleteValue attrs.
+       Recursively generates sjson body-building code for child classes in toDeleteBody.
+       Uses dynamic index calculation (matching toBody's approach) to ensure each
+       top-level child class gets its own children array index.
+       For each child:
+         - NoDelete children with sub-children: create entry, set delete_value attrs, recurse
+         - NoDelete leaf children: create entry, set delete_value attrs
+         - Deletable single children: append delete entry
+         - Deletable list children: append delete entries per item
        Context: map with:
          "Children" ([]YamlConfigChildClass)
-         "BodyPathSuffix" (string) - static sjson path suffix after getClassName()
+         "ChildrenPathVar" (string) - Go variable name holding the sjson path to the children array
        ========================================================= */}}
 {{- define "toDeleteBodyChildrenTemplate"}}
-{{- $bodyPathSuffix := .BodyPathSuffix}}
+{{- $childrenPathVar := .ChildrenPathVar}}
 {{- range .Children}}
-{{- if .NoDelete}}
 {{- $childClassName := .ClassName}}
-{{- $childSuffix := (printf "%s.children.0.%s" $bodyPathSuffix $childClassName)}}
+{{- if .NoDelete}}
+{{- if eq .Type "single"}}
+	{
+	childIndex := len(gjson.Get(body, {{$childrenPathVar}}).Array())
+	childBodyPath := {{$childrenPathVar}} + "." + strconv.Itoa(childIndex) + ".{{$childClassName}}"
+	body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
 {{- range .Attributes}}
 {{- if and (not .ReferenceOnly) (.DeleteValue)}}
 	if !data.{{toGoName .TfName}}.IsNull() {
 		{{- if eq .Type "Int64"}}
-		body, _ = sjson.Set(body, data.getClassName()+"{{$childSuffix}}"+".attributes."+"{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
+		body, _ = sjson.Set(body, childBodyPath+".attributes."+"{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
 		{{- else if eq .Type "Bool"}}
-		body, _ = sjson.Set(body, data.getClassName()+"{{$childSuffix}}"+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
+		body, _ = sjson.Set(body, childBodyPath+".attributes."+"{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
 		{{- else if eq .Type "String"}}
-		body, _ = sjson.Set(body, data.getClassName()+"{{$childSuffix}}"+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
+		body, _ = sjson.Set(body, childBodyPath+".attributes."+"{{.NxosName}}", "{{ .DeleteValue}}")
 		{{- end}}
 	}
 {{- end}}
 {{- end}}
 {{- if .ChildClasses}}
-{{- template "toDeleteBodyChildrenTemplate" (makeMap "Children" .ChildClasses "BodyPathSuffix" $childSuffix)}}
+	nestedChildrenPath := childBodyPath + ".children"
+	{{- template "toDeleteBodyChildrenTemplate" (makeMap "Children" .ChildClasses "ChildrenPathVar" "nestedChildrenPath")}}
 {{- end}}
+	}
 {{- end}}
-{{- end}}
-{{- end}}
-{{- /* ==================== end toDeleteBodyChildrenTemplate ==================== */}}
-
-{{- /* ==================== toDeleteAllChildrenTemplate ====================
-       Recursively builds body entries with "status":"deleted" for all deletable
-       children, nesting under NoDelete single-type parents as needed.
-       Context: map with:
-         "Children" ([]YamlConfigChildClass)
-         "BodyPathSuffix" (string) - sjson path suffix for children array
-       ========================================================= */}}
-{{- define "toDeleteAllChildrenTemplate"}}
-{{- $bodyPathSuffix := .BodyPathSuffix}}
-{{- range .Children}}
-{{- if not .NoDelete}}
+{{- else}}
 {{- if eq .Type "single"}}
 	{
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "{{.ClassName}}.attributes.rn", "{{.Rn}}")
 		deleteBody, _ = sjson.Set(deleteBody, "{{.ClassName}}.attributes.status", "deleted")
-		body, _ = sjson.SetRaw(body, data.getClassName()+"{{$bodyPathSuffix}}"+".-1", deleteBody)
+		body, _ = sjson.SetRaw(body, {{$childrenPathVar}}+".-1", deleteBody)
 	}
 {{- else if eq .Type "list"}}
 	for _, child := range data.{{toGoName .TfName}} {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "{{.ClassName}}.attributes.rn", child.getRn())
 		deleteBody, _ = sjson.Set(deleteBody, "{{.ClassName}}.attributes.status", "deleted")
-		body, _ = sjson.SetRaw(body, data.getClassName()+"{{$bodyPathSuffix}}"+".-1", deleteBody)
+		body, _ = sjson.SetRaw(body, {{$childrenPathVar}}+".-1", deleteBody)
 	}
 {{- end}}
-{{- else}}
-{{- if .ChildClasses}}
-{{- if eq .Type "single"}}
-{{- template "toDeleteAllChildrenTemplate" (makeMap "Children" .ChildClasses "BodyPathSuffix" (printf "%s.0.%s.children" $bodyPathSuffix .ClassName))}}
 {{- end}}
 {{- end}}
 {{- end}}
-{{- end}}
-{{- end}}
-{{- /* ==================== end toDeleteAllChildrenTemplate ==================== */}}
+{{- /* ==================== end toDeleteBodyChildrenTemplate ==================== */}}
 
 func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 	body := ""
@@ -866,14 +859,12 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 	}
 	{{- end}}
 	{{- end}}
-	{{- if .ChildClasses}}
-	{{- template "toDeleteBodyChildrenTemplate" (makeMap "Children" .ChildClasses "BodyPathSuffix" "")}}
-	{{- end}}
 	if body == "" {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	}
 	{{- if .ChildClasses}}
-	{{- template "toDeleteAllChildrenTemplate" (makeMap "Children" .ChildClasses "BodyPathSuffix" ".children")}}
+	childrenPath := data.getClassName() + ".children"
+	{{- template "toDeleteBodyChildrenTemplate" (makeMap "Children" .ChildClasses "ChildrenPathVar" "childrenPath")}}
 	{{- end}}
 	{{- end}}
 

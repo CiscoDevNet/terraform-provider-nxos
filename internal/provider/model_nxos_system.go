@@ -592,26 +592,80 @@ func (data *System) updateFromBody(res gjson.Result) {
 
 func (data System) toDeleteBody() nxos.Body {
 	body := ""
-	if !data.Mtu.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.0.ethpmEntity.children.0.ethpmInst"+".attributes."+"systemJumboMtu", strconv.FormatInt(9216, 10))
-	}
-	if !data.DefaultAdminStatus.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".children.0.ethpmEntity.children.0.ethpmInst"+".attributes."+"systemDefaultAdminSt", "DME_UNSET_PROPERTY_MARKER")
-	}
 	if body == "" {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	}
-	for _, child := range data.DefaultQosPolicyInterfaceIn {
-		deleteBody := ""
-		deleteBody, _ = sjson.Set(deleteBody, "ipqosIf.attributes.rn", child.getRn())
-		deleteBody, _ = sjson.Set(deleteBody, "ipqosIf.attributes.status", "deleted")
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children.0.ipqosEntity.children.0.ipqosDefaultQoS.children.0.ipqosServPol.children.0.ipqosIngress.children"+".-1", deleteBody)
+	childrenPath := data.getClassName() + ".children"
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipqosEntity"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		nestedChildrenPath := childBodyPath + ".children"
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosDefaultQoS"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+			nestedChildrenPath := childBodyPath + ".children"
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosServPol"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				{
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosIngress"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+					nestedChildrenPath := childBodyPath + ".children"
+					for _, child := range data.DefaultQosPolicyInterfaceIn {
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "ipqosIf.attributes.rn", child.getRn())
+						deleteBody, _ = sjson.Set(deleteBody, "ipqosIf.attributes.status", "deleted")
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+					}
+				}
+			}
+		}
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosQueuing"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+			nestedChildrenPath := childBodyPath + ".children"
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosServPol"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+				nestedChildrenPath := childBodyPath + ".children"
+				{
+					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosEgress"
+					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+					nestedChildrenPath := childBodyPath + ".children"
+					{
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "ipqosSystem.attributes.rn", "sys")
+						deleteBody, _ = sjson.Set(deleteBody, "ipqosSystem.attributes.status", "deleted")
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+					}
+				}
+			}
+		}
 	}
 	{
-		deleteBody := ""
-		deleteBody, _ = sjson.Set(deleteBody, "ipqosSystem.attributes.rn", "sys")
-		deleteBody, _ = sjson.Set(deleteBody, "ipqosSystem.attributes.status", "deleted")
-		body, _ = sjson.SetRaw(body, data.getClassName()+".children.0.ipqosEntity.children.0.ipqosQueuing.children.0.ipqosServPol.children.0.ipqosEgress.children"+".-1", deleteBody)
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ethpmEntity"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		nestedChildrenPath := childBodyPath + ".children"
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ethpmInst"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+			if !data.Mtu.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"systemJumboMtu", strconv.FormatInt(9216, 10))
+			}
+			if !data.DefaultAdminStatus.IsNull() {
+				body, _ = sjson.Set(body, childBodyPath+".attributes."+"systemDefaultAdminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+		}
 	}
 
 	return nxos.Body{body}

@@ -205,29 +205,23 @@ func (data *NTP) updateFromBody(res gjson.Result) {
 
 func (data NTP) toDeleteBody() nxos.Body {
 	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	}
+	for _, child := range data.Servers {
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpProvider.attributes.rn", child.getRn())
+		deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpProvider.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, data.getClassName()+".children"+".-1", deleteBody)
+	}
 
 	return nxos.Body{body}
 }
 
-// End of section. //template:end toDeleteBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
-
-func (data NTP) getDeleteDns() []string {
-	dns := []string{}
-	for _, child := range data.Servers {
-		dns = append(dns, data.getDn()+"/"+child.getRn())
-	}
-
-	return dns
-}
-
-// End of section. //template:end getDeleteDns
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data NTP) getDeletedItems(ctx context.Context, state NTP) []string {
-	deletedItems := []string{}
+func (data NTP) toBodyWithDeletes(ctx context.Context, state NTP) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
 	for _, stateChild := range state.Servers {
 		found := false
 		for _, planChild := range data.Servers {
@@ -237,10 +231,13 @@ func (data NTP) getDeletedItems(ctx context.Context, state NTP) []string {
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpProvider.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpProvider.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 		}
 	}
-	return deletedItems
+	return body
 }
 
-// End of section. //template:end getDeletedItems
+// End of section. //template:end toDeleteBody

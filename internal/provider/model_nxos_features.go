@@ -1252,22 +1252,11 @@ func (data Features) toDeleteBody() nxos.Body {
 	if !data.Vpc.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".children.0.fmVpc"+".attributes."+"adminSt", "disabled")
 	}
+	if body == "" {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	}
 
 	return nxos.Body{body}
 }
 
 // End of section. //template:end toDeleteBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
-
-func (data Features) getDeleteDns() []string {
-	dns := []string{}
-
-	return dns
-}
-
-// End of section. //template:end getDeleteDns
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-// End of section. //template:end getDeletedItems

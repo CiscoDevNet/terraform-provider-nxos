@@ -357,15 +357,7 @@ func (r *SubinterfaceResource) Delete(ctx context.Context, req resource.DeleteRe
 	if device.Managed {
 		body := state.toDeleteBody()
 		if len(body.Str) > 0 {
-			_, err := device.Client.Post(state.getDn(), body.Str)
-			if err != nil {
-				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
-				return
-			}
-		}
-
-		for _, dn := range state.getDeleteDns() {
-			res, err := device.Client.DeleteDn(dn)
+			res, err := device.Client.Post(state.getDn(), body.Str)
 			if err != nil {
 				errCode := res.Get("imdata.0.error.attributes.code").Str
 				// Ignore errors of type "Cannot delete object"

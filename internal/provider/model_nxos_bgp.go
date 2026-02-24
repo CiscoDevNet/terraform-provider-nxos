@@ -1396,27 +1396,15 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 
 func (data BGP) toDeleteBody() nxos.Body {
 	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
 	return nxos.Body{body}
 }
 
-// End of section. //template:end toDeleteBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
-
-func (data BGP) getDeleteDns() []string {
-	dns := []string{}
-	dns = append(dns, data.getDn())
-
-	return dns
-}
-
-// End of section. //template:end getDeleteDns
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data BGP) getDeletedItems(ctx context.Context, state BGP) []string {
-	deletedItems := []string{}
+func (data BGP) toBodyWithDeletes(ctx context.Context, state BGP) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
 	for _, stateChild := range state.Vrfs {
 		found := false
 		for _, planChild := range data.Vrfs {
@@ -1426,12 +1414,25 @@ func (data BGP) getDeletedItems(ctx context.Context, state BGP) []string {
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "bgpDom.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "bgpDom.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.bgpInst.children"+".-1", deleteBody)
 		}
 	}
 	for di := range state.Vrfs {
 		for pdi := range data.Vrfs {
 			if state.Vrfs[di].Name == data.Vrfs[pdi].Name {
+				matchBodyPathdi := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath+".0.bgpInst.children").Array() {
+					if mv.Get("bgpDom.attributes.rn").String() == state.Vrfs[di].getRn() {
+						matchBodyPathdi = bodyPath + ".0.bgpInst.children" + "." + strconv.Itoa(mi) + ".bgpDom.children"
+						break
+					}
+				}
+				if matchBodyPathdi == "" {
+					break
+				}
 				for _, stateChild := range state.Vrfs[di].AddressFamilies {
 					found := false
 					for _, planChild := range data.Vrfs[pdi].AddressFamilies {
@@ -1441,12 +1442,25 @@ func (data BGP) getDeletedItems(ctx context.Context, state BGP) []string {
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+state.Vrfs[di].getRn()+"/"+stateChild.getRn())
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "bgpDomAf.attributes.rn", stateChild.getRn())
+						deleteBody, _ = sjson.Set(deleteBody, "bgpDomAf.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 					}
 				}
 				for di_ := range state.Vrfs[di].AddressFamilies {
 					for pdi_ := range data.Vrfs[pdi].AddressFamilies {
 						if state.Vrfs[di].AddressFamilies[di_].AddressFamily == data.Vrfs[pdi].AddressFamilies[pdi_].AddressFamily {
+							matchBodyPathdi_ := ""
+							for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
+								if mv.Get("bgpDomAf.attributes.rn").String() == state.Vrfs[di].AddressFamilies[di_].getRn() {
+									matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".bgpDomAf.children"
+									break
+								}
+							}
+							if matchBodyPathdi_ == "" {
+								break
+							}
 							for _, stateChild := range state.Vrfs[di].AddressFamilies[di_].AdvertisedPrefixes {
 								found := false
 								for _, planChild := range data.Vrfs[pdi].AddressFamilies[pdi_].AdvertisedPrefixes {
@@ -1456,7 +1470,10 @@ func (data BGP) getDeletedItems(ctx context.Context, state BGP) []string {
 									}
 								}
 								if !found {
-									deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+state.Vrfs[di].getRn()+"/"+state.Vrfs[di].AddressFamilies[di_].getRn()+"/"+stateChild.getRn())
+									deleteBody := ""
+									deleteBody, _ = sjson.Set(deleteBody, "bgpAdvPrefix.attributes.rn", stateChild.getRn())
+									deleteBody, _ = sjson.Set(deleteBody, "bgpAdvPrefix.attributes.status", "deleted")
+									body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
 								}
 							}
 							for _, stateChild := range state.Vrfs[di].AddressFamilies[di_].Redistributions {
@@ -1468,7 +1485,10 @@ func (data BGP) getDeletedItems(ctx context.Context, state BGP) []string {
 									}
 								}
 								if !found {
-									deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+state.Vrfs[di].getRn()+"/"+state.Vrfs[di].AddressFamilies[di_].getRn()+"/"+stateChild.getRn())
+									deleteBody := ""
+									deleteBody, _ = sjson.Set(deleteBody, "bgpInterLeakP.attributes.rn", stateChild.getRn())
+									deleteBody, _ = sjson.Set(deleteBody, "bgpInterLeakP.attributes.status", "deleted")
+									body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
 								}
 							}
 							break
@@ -1484,12 +1504,25 @@ func (data BGP) getDeletedItems(ctx context.Context, state BGP) []string {
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+state.Vrfs[di].getRn()+"/"+stateChild.getRn())
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "bgpPeerCont.attributes.rn", stateChild.getRn())
+						deleteBody, _ = sjson.Set(deleteBody, "bgpPeerCont.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 					}
 				}
 				for di_ := range state.Vrfs[di].PeerTemplates {
 					for pdi_ := range data.Vrfs[pdi].PeerTemplates {
 						if state.Vrfs[di].PeerTemplates[di_].Name == data.Vrfs[pdi].PeerTemplates[pdi_].Name {
+							matchBodyPathdi_ := ""
+							for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
+								if mv.Get("bgpPeerCont.attributes.rn").String() == state.Vrfs[di].PeerTemplates[di_].getRn() {
+									matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".bgpPeerCont.children"
+									break
+								}
+							}
+							if matchBodyPathdi_ == "" {
+								break
+							}
 							for _, stateChild := range state.Vrfs[di].PeerTemplates[di_].PeerTemplateAddressFamilies {
 								found := false
 								for _, planChild := range data.Vrfs[pdi].PeerTemplates[pdi_].PeerTemplateAddressFamilies {
@@ -1499,12 +1532,25 @@ func (data BGP) getDeletedItems(ctx context.Context, state BGP) []string {
 									}
 								}
 								if !found {
-									deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+state.Vrfs[di].getRn()+"/"+state.Vrfs[di].PeerTemplates[di_].getRn()+"/"+stateChild.getRn())
+									deleteBody := ""
+									deleteBody, _ = sjson.Set(deleteBody, "bgpPeerAf.attributes.rn", stateChild.getRn())
+									deleteBody, _ = sjson.Set(deleteBody, "bgpPeerAf.attributes.status", "deleted")
+									body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
 								}
 							}
 							for di__ := range state.Vrfs[di].PeerTemplates[di_].PeerTemplateAddressFamilies {
 								for pdi__ := range data.Vrfs[pdi].PeerTemplates[pdi_].PeerTemplateAddressFamilies {
 									if state.Vrfs[di].PeerTemplates[di_].PeerTemplateAddressFamilies[di__].AddressFamily == data.Vrfs[pdi].PeerTemplates[pdi_].PeerTemplateAddressFamilies[pdi__].AddressFamily {
+										matchBodyPathdi__ := ""
+										for mi, mv := range gjson.Get(body.Str, matchBodyPathdi_).Array() {
+											if mv.Get("bgpPeerAf.attributes.rn").String() == state.Vrfs[di].PeerTemplates[di_].PeerTemplateAddressFamilies[di__].getRn() {
+												matchBodyPathdi__ = matchBodyPathdi_ + "." + strconv.Itoa(mi) + ".bgpPeerAf.children"
+												break
+											}
+										}
+										if matchBodyPathdi__ == "" {
+											break
+										}
 										break
 									}
 								}
@@ -1522,12 +1568,25 @@ func (data BGP) getDeletedItems(ctx context.Context, state BGP) []string {
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+state.Vrfs[di].getRn()+"/"+stateChild.getRn())
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "bgpPeer.attributes.rn", stateChild.getRn())
+						deleteBody, _ = sjson.Set(deleteBody, "bgpPeer.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 					}
 				}
 				for di_ := range state.Vrfs[di].Peers {
 					for pdi_ := range data.Vrfs[pdi].Peers {
 						if state.Vrfs[di].Peers[di_].Address == data.Vrfs[pdi].Peers[pdi_].Address {
+							matchBodyPathdi_ := ""
+							for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
+								if mv.Get("bgpPeer.attributes.rn").String() == state.Vrfs[di].Peers[di_].getRn() {
+									matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".bgpPeer.children"
+									break
+								}
+							}
+							if matchBodyPathdi_ == "" {
+								break
+							}
 							for _, stateChild := range state.Vrfs[di].Peers[di_].PeerAddressFamilies {
 								found := false
 								for _, planChild := range data.Vrfs[pdi].Peers[pdi_].PeerAddressFamilies {
@@ -1537,12 +1596,25 @@ func (data BGP) getDeletedItems(ctx context.Context, state BGP) []string {
 									}
 								}
 								if !found {
-									deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+state.Vrfs[di].getRn()+"/"+state.Vrfs[di].Peers[di_].getRn()+"/"+stateChild.getRn())
+									deleteBody := ""
+									deleteBody, _ = sjson.Set(deleteBody, "bgpPeerAf.attributes.rn", stateChild.getRn())
+									deleteBody, _ = sjson.Set(deleteBody, "bgpPeerAf.attributes.status", "deleted")
+									body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
 								}
 							}
 							for di__ := range state.Vrfs[di].Peers[di_].PeerAddressFamilies {
 								for pdi__ := range data.Vrfs[pdi].Peers[pdi_].PeerAddressFamilies {
 									if state.Vrfs[di].Peers[di_].PeerAddressFamilies[di__].AddressFamily == data.Vrfs[pdi].Peers[pdi_].PeerAddressFamilies[pdi__].AddressFamily {
+										matchBodyPathdi__ := ""
+										for mi, mv := range gjson.Get(body.Str, matchBodyPathdi_).Array() {
+											if mv.Get("bgpPeerAf.attributes.rn").String() == state.Vrfs[di].Peers[di_].PeerAddressFamilies[di__].getRn() {
+												matchBodyPathdi__ = matchBodyPathdi_ + "." + strconv.Itoa(mi) + ".bgpPeerAf.children"
+												break
+											}
+										}
+										if matchBodyPathdi__ == "" {
+											break
+										}
 										for _, stateChild := range state.Vrfs[di].Peers[di_].PeerAddressFamilies[di__].RouteControls {
 											found := false
 											for _, planChild := range data.Vrfs[pdi].Peers[pdi_].PeerAddressFamilies[pdi__].RouteControls {
@@ -1552,7 +1624,10 @@ func (data BGP) getDeletedItems(ctx context.Context, state BGP) []string {
 												}
 											}
 											if !found {
-												deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+state.Vrfs[di].getRn()+"/"+state.Vrfs[di].Peers[di_].getRn()+"/"+state.Vrfs[di].Peers[di_].PeerAddressFamilies[di__].getRn()+"/"+stateChild.getRn())
+												deleteBody := ""
+												deleteBody, _ = sjson.Set(deleteBody, "bgpRtCtrlP.attributes.rn", stateChild.getRn())
+												deleteBody, _ = sjson.Set(deleteBody, "bgpRtCtrlP.attributes.status", "deleted")
+												body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi__+".-1", deleteBody)
 											}
 										}
 										for _, stateChild := range state.Vrfs[di].Peers[di_].PeerAddressFamilies[di__].PrefixListControls {
@@ -1564,7 +1639,10 @@ func (data BGP) getDeletedItems(ctx context.Context, state BGP) []string {
 												}
 											}
 											if !found {
-												deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+state.Vrfs[di].getRn()+"/"+state.Vrfs[di].Peers[di_].getRn()+"/"+state.Vrfs[di].Peers[di_].PeerAddressFamilies[di__].getRn()+"/"+stateChild.getRn())
+												deleteBody := ""
+												deleteBody, _ = sjson.Set(deleteBody, "bgpPfxCtrlP.attributes.rn", stateChild.getRn())
+												deleteBody, _ = sjson.Set(deleteBody, "bgpPfxCtrlP.attributes.status", "deleted")
+												body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi__+".-1", deleteBody)
 											}
 										}
 										break
@@ -1579,7 +1657,7 @@ func (data BGP) getDeletedItems(ctx context.Context, state BGP) []string {
 			}
 		}
 	}
-	return deletedItems
+	return body
 }
 
-// End of section. //template:end getDeletedItems
+// End of section. //template:end toDeleteBody

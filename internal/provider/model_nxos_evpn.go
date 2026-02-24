@@ -281,27 +281,15 @@ func (data *EVPN) updateFromBody(res gjson.Result) {
 
 func (data EVPN) toDeleteBody() nxos.Body {
 	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
 	return nxos.Body{body}
 }
 
-// End of section. //template:end toDeleteBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
-
-func (data EVPN) getDeleteDns() []string {
-	dns := []string{}
-	dns = append(dns, data.getDn())
-
-	return dns
-}
-
-// End of section. //template:end getDeleteDns
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data EVPN) getDeletedItems(ctx context.Context, state EVPN) []string {
-	deletedItems := []string{}
+func (data EVPN) toBodyWithDeletes(ctx context.Context, state EVPN) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
 	for _, stateChild := range state.Vnis {
 		found := false
 		for _, planChild := range data.Vnis {
@@ -311,12 +299,25 @@ func (data EVPN) getDeletedItems(ctx context.Context, state EVPN) []string {
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "rtctrlBDEvi.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "rtctrlBDEvi.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 		}
 	}
 	for di := range state.Vnis {
 		for pdi := range data.Vnis {
 			if state.Vnis[di].Encap == data.Vnis[pdi].Encap {
+				matchBodyPathdi := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+					if mv.Get("rtctrlBDEvi.attributes.rn").String() == state.Vnis[di].getRn() {
+						matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".rtctrlBDEvi.children"
+						break
+					}
+				}
+				if matchBodyPathdi == "" {
+					break
+				}
 				for _, stateChild := range state.Vnis[di].RouteTargetDirections {
 					found := false
 					for _, planChild := range data.Vnis[pdi].RouteTargetDirections {
@@ -326,12 +327,25 @@ func (data EVPN) getDeletedItems(ctx context.Context, state EVPN) []string {
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, data.getDn()+"/"+state.Vnis[di].getRn()+"/"+stateChild.getRn())
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "rtctrlRttP.attributes.rn", stateChild.getRn())
+						deleteBody, _ = sjson.Set(deleteBody, "rtctrlRttP.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 					}
 				}
 				for di_ := range state.Vnis[di].RouteTargetDirections {
 					for pdi_ := range data.Vnis[pdi].RouteTargetDirections {
 						if state.Vnis[di].RouteTargetDirections[di_].Direction == data.Vnis[pdi].RouteTargetDirections[pdi_].Direction {
+							matchBodyPathdi_ := ""
+							for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
+								if mv.Get("rtctrlRttP.attributes.rn").String() == state.Vnis[di].RouteTargetDirections[di_].getRn() {
+									matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".rtctrlRttP.children"
+									break
+								}
+							}
+							if matchBodyPathdi_ == "" {
+								break
+							}
 							for _, stateChild := range state.Vnis[di].RouteTargetDirections[di_].RouteTargets {
 								found := false
 								for _, planChild := range data.Vnis[pdi].RouteTargetDirections[pdi_].RouteTargets {
@@ -341,7 +355,10 @@ func (data EVPN) getDeletedItems(ctx context.Context, state EVPN) []string {
 									}
 								}
 								if !found {
-									deletedItems = append(deletedItems, data.getDn()+"/"+state.Vnis[di].getRn()+"/"+state.Vnis[di].RouteTargetDirections[di_].getRn()+"/"+stateChild.getRn())
+									deleteBody := ""
+									deleteBody, _ = sjson.Set(deleteBody, "rtctrlRttEntry.attributes.rn", stateChild.getRn())
+									deleteBody, _ = sjson.Set(deleteBody, "rtctrlRttEntry.attributes.status", "deleted")
+									body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
 								}
 							}
 							break
@@ -352,7 +369,7 @@ func (data EVPN) getDeletedItems(ctx context.Context, state EVPN) []string {
 			}
 		}
 	}
-	return deletedItems
+	return body
 }
 
-// End of section. //template:end getDeletedItems
+// End of section. //template:end toDeleteBody

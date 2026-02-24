@@ -425,27 +425,15 @@ func (data *RouteMap) updateFromBody(res gjson.Result) {
 
 func (data RouteMap) toDeleteBody() nxos.Body {
 	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
 	return nxos.Body{body}
 }
 
-// End of section. //template:end toDeleteBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
-
-func (data RouteMap) getDeleteDns() []string {
-	dns := []string{}
-	dns = append(dns, data.getDn())
-
-	return dns
-}
-
-// End of section. //template:end getDeleteDns
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data RouteMap) getDeletedItems(ctx context.Context, state RouteMap) []string {
-	deletedItems := []string{}
+func (data RouteMap) toBodyWithDeletes(ctx context.Context, state RouteMap) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
 	for _, stateChild := range state.Entries {
 		found := false
 		for _, planChild := range data.Entries {
@@ -455,12 +443,25 @@ func (data RouteMap) getDeletedItems(ctx context.Context, state RouteMap) []stri
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "rtmapEntry.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "rtmapEntry.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 		}
 	}
 	for di := range state.Entries {
 		for pdi := range data.Entries {
 			if state.Entries[di].Order == data.Entries[pdi].Order {
+				matchBodyPathdi := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+					if mv.Get("rtmapEntry.attributes.rn").String() == state.Entries[di].getRn() {
+						matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".rtmapEntry.children"
+						break
+					}
+				}
+				if matchBodyPathdi == "" {
+					break
+				}
 				for _, stateChild := range state.Entries[di].MatchRoutePrefixLists {
 					found := false
 					for _, planChild := range data.Entries[pdi].MatchRoutePrefixLists {
@@ -470,7 +471,10 @@ func (data RouteMap) getDeletedItems(ctx context.Context, state RouteMap) []stri
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, data.getDn()+"/"+state.Entries[di].getRn()+"/mrtdst"+"/"+stateChild.getRn())
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "rtmapRsRtDstAtt.attributes.rn", stateChild.getRn())
+						deleteBody, _ = sjson.Set(deleteBody, "rtmapRsRtDstAtt.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".0.rtmapMatchRtDst.children"+".-1", deleteBody)
 					}
 				}
 				for _, stateChild := range state.Entries[di].SetRegularCommunityItems {
@@ -482,7 +486,10 @@ func (data RouteMap) getDeletedItems(ctx context.Context, state RouteMap) []stri
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, data.getDn()+"/"+state.Entries[di].getRn()+"/sregcomm"+"/"+stateChild.getRn())
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "rtregcomItem.attributes.rn", stateChild.getRn())
+						deleteBody, _ = sjson.Set(deleteBody, "rtregcomItem.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".0.rtmapSetRegComm.children"+".-1", deleteBody)
 					}
 				}
 				for _, stateChild := range state.Entries[di].MatchTags {
@@ -494,14 +501,17 @@ func (data RouteMap) getDeletedItems(ctx context.Context, state RouteMap) []stri
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, data.getDn()+"/"+state.Entries[di].getRn()+"/"+stateChild.getRn())
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "rtmapMatchRtTag.attributes.rn", stateChild.getRn())
+						deleteBody, _ = sjson.Set(deleteBody, "rtmapMatchRtTag.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 					}
 				}
 				break
 			}
 		}
 	}
-	return deletedItems
+	return body
 }
 
-// End of section. //template:end getDeletedItems
+// End of section. //template:end toDeleteBody

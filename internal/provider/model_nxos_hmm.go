@@ -236,27 +236,15 @@ func (data *HMM) updateFromBody(res gjson.Result) {
 
 func (data HMM) toDeleteBody() nxos.Body {
 	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
 	return nxos.Body{body}
 }
 
-// End of section. //template:end toDeleteBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
-
-func (data HMM) getDeleteDns() []string {
-	dns := []string{}
-	dns = append(dns, data.getDn())
-
-	return dns
-}
-
-// End of section. //template:end getDeleteDns
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data HMM) getDeletedItems(ctx context.Context, state HMM) []string {
-	deletedItems := []string{}
+func (data HMM) toBodyWithDeletes(ctx context.Context, state HMM) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
 	for _, stateChild := range state.Interfaces {
 		found := false
 		for _, planChild := range data.Interfaces {
@@ -266,10 +254,13 @@ func (data HMM) getDeletedItems(ctx context.Context, state HMM) []string {
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/fwdinst"+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "hmmFwdIf.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "hmmFwdIf.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.hmmFwdInst.children"+".-1", deleteBody)
 		}
 	}
-	return deletedItems
+	return body
 }
 
-// End of section. //template:end getDeletedItems
+// End of section. //template:end toDeleteBody

@@ -218,27 +218,15 @@ func (data *IPv4PrefixList) updateFromBody(res gjson.Result) {
 
 func (data IPv4PrefixList) toDeleteBody() nxos.Body {
 	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
 	return nxos.Body{body}
 }
 
-// End of section. //template:end toDeleteBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
-
-func (data IPv4PrefixList) getDeleteDns() []string {
-	dns := []string{}
-	dns = append(dns, data.getDn())
-
-	return dns
-}
-
-// End of section. //template:end getDeleteDns
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data IPv4PrefixList) getDeletedItems(ctx context.Context, state IPv4PrefixList) []string {
-	deletedItems := []string{}
+func (data IPv4PrefixList) toBodyWithDeletes(ctx context.Context, state IPv4PrefixList) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
 	for _, stateChild := range state.Entries {
 		found := false
 		for _, planChild := range data.Entries {
@@ -248,10 +236,13 @@ func (data IPv4PrefixList) getDeletedItems(ctx context.Context, state IPv4Prefix
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "rtpfxEntry.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "rtpfxEntry.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 		}
 	}
-	return deletedItems
+	return body
 }
 
-// End of section. //template:end getDeletedItems
+// End of section. //template:end toDeleteBody

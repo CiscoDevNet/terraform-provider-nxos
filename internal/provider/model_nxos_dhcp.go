@@ -249,29 +249,23 @@ func (data *DHCP) updateFromBody(res gjson.Result) {
 
 func (data DHCP) toDeleteBody() nxos.Body {
 	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	}
+	for _, child := range data.RelayInterfaces {
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "dhcpRelayIf.attributes.rn", child.getRn())
+		deleteBody, _ = sjson.Set(deleteBody, "dhcpRelayIf.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, data.getClassName()+".children.0.dhcpInst.children"+".-1", deleteBody)
+	}
 
 	return nxos.Body{body}
 }
 
-// End of section. //template:end toDeleteBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
-
-func (data DHCP) getDeleteDns() []string {
-	dns := []string{}
-	for _, child := range data.RelayInterfaces {
-		dns = append(dns, data.getDn()+"/inst"+"/"+child.getRn())
-	}
-
-	return dns
-}
-
-// End of section. //template:end getDeleteDns
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data DHCP) getDeletedItems(ctx context.Context, state DHCP) []string {
-	deletedItems := []string{}
+func (data DHCP) toBodyWithDeletes(ctx context.Context, state DHCP) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
 	for _, stateChild := range state.RelayInterfaces {
 		found := false
 		for _, planChild := range data.RelayInterfaces {
@@ -281,12 +275,25 @@ func (data DHCP) getDeletedItems(ctx context.Context, state DHCP) []string {
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "dhcpRelayIf.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "dhcpRelayIf.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.dhcpInst.children"+".-1", deleteBody)
 		}
 	}
 	for di := range state.RelayInterfaces {
 		for pdi := range data.RelayInterfaces {
 			if state.RelayInterfaces[di].InterfaceId == data.RelayInterfaces[pdi].InterfaceId {
+				matchBodyPathdi := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath+".0.dhcpInst.children").Array() {
+					if mv.Get("dhcpRelayIf.attributes.rn").String() == state.RelayInterfaces[di].getRn() {
+						matchBodyPathdi = bodyPath + ".0.dhcpInst.children" + "." + strconv.Itoa(mi) + ".dhcpRelayIf.children"
+						break
+					}
+				}
+				if matchBodyPathdi == "" {
+					break
+				}
 				for _, stateChild := range state.RelayInterfaces[di].Addresses {
 					found := false
 					for _, planChild := range data.RelayInterfaces[pdi].Addresses {
@@ -296,14 +303,17 @@ func (data DHCP) getDeletedItems(ctx context.Context, state DHCP) []string {
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+state.RelayInterfaces[di].getRn()+"/"+stateChild.getRn())
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "dhcpRelayAddr.attributes.rn", stateChild.getRn())
+						deleteBody, _ = sjson.Set(deleteBody, "dhcpRelayAddr.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 					}
 				}
 				break
 			}
 		}
 	}
-	return deletedItems
+	return body
 }
 
-// End of section. //template:end getDeletedItems
+// End of section. //template:end toDeleteBody

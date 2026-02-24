@@ -430,23 +430,17 @@ func (data PhysicalInterface) toDeleteBody() nxos.Body {
 	if !data.UserConfiguredFlags.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"userCfgdFlags", "none")
 	}
+	if body == "" {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	}
+	{
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "nwRtVrfMbr.attributes.rn", "rtvrfMbr")
+		deleteBody, _ = sjson.Set(deleteBody, "nwRtVrfMbr.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, data.getClassName()+".children"+".-1", deleteBody)
+	}
 
 	return nxos.Body{body}
 }
 
 // End of section. //template:end toDeleteBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
-
-func (data PhysicalInterface) getDeleteDns() []string {
-	dns := []string{}
-	dns = append(dns, data.getDn()+"/rtvrfMbr")
-
-	return dns
-}
-
-// End of section. //template:end getDeleteDns
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-// End of section. //template:end getDeletedItems

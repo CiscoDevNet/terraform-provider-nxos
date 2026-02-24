@@ -389,27 +389,15 @@ func (data *VRF) updateFromBody(res gjson.Result) {
 
 func (data VRF) toDeleteBody() nxos.Body {
 	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
 	return nxos.Body{body}
 }
 
-// End of section. //template:end toDeleteBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
-
-func (data VRF) getDeleteDns() []string {
-	dns := []string{}
-	dns = append(dns, data.getDn())
-
-	return dns
-}
-
-// End of section. //template:end getDeleteDns
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data VRF) getDeletedItems(ctx context.Context, state VRF) []string {
-	deletedItems := []string{}
+func (data VRF) toBodyWithDeletes(ctx context.Context, state VRF) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
 	for _, stateChild := range state.AddressFamilies {
 		found := false
 		for _, planChild := range data.AddressFamilies {
@@ -419,12 +407,25 @@ func (data VRF) getDeletedItems(ctx context.Context, state VRF) []string {
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/dom-%[1]s"+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "rtctrlDomAf.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "rtctrlDomAf.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.rtctrlDom.children"+".-1", deleteBody)
 		}
 	}
 	for di := range state.AddressFamilies {
 		for pdi := range data.AddressFamilies {
 			if state.AddressFamilies[di].AddressFamily == data.AddressFamilies[pdi].AddressFamily {
+				matchBodyPathdi := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath+".0.rtctrlDom.children").Array() {
+					if mv.Get("rtctrlDomAf.attributes.rn").String() == state.AddressFamilies[di].getRn() {
+						matchBodyPathdi = bodyPath + ".0.rtctrlDom.children" + "." + strconv.Itoa(mi) + ".rtctrlDomAf.children"
+						break
+					}
+				}
+				if matchBodyPathdi == "" {
+					break
+				}
 				for _, stateChild := range state.AddressFamilies[di].RouteTargetAddressFamilies {
 					found := false
 					for _, planChild := range data.AddressFamilies[pdi].RouteTargetAddressFamilies {
@@ -434,12 +435,25 @@ func (data VRF) getDeletedItems(ctx context.Context, state VRF) []string {
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, data.getDn()+"/dom-%[1]s"+"/"+state.AddressFamilies[di].getRn()+"/"+stateChild.getRn())
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "rtctrlAfCtrl.attributes.rn", stateChild.getRn())
+						deleteBody, _ = sjson.Set(deleteBody, "rtctrlAfCtrl.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 					}
 				}
 				for di_ := range state.AddressFamilies[di].RouteTargetAddressFamilies {
 					for pdi_ := range data.AddressFamilies[pdi].RouteTargetAddressFamilies {
 						if state.AddressFamilies[di].RouteTargetAddressFamilies[di_].RouteTargetAddressFamily == data.AddressFamilies[pdi].RouteTargetAddressFamilies[pdi_].RouteTargetAddressFamily {
+							matchBodyPathdi_ := ""
+							for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
+								if mv.Get("rtctrlAfCtrl.attributes.rn").String() == state.AddressFamilies[di].RouteTargetAddressFamilies[di_].getRn() {
+									matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".rtctrlAfCtrl.children"
+									break
+								}
+							}
+							if matchBodyPathdi_ == "" {
+								break
+							}
 							for _, stateChild := range state.AddressFamilies[di].RouteTargetAddressFamilies[di_].RouteTargetDirections {
 								found := false
 								for _, planChild := range data.AddressFamilies[pdi].RouteTargetAddressFamilies[pdi_].RouteTargetDirections {
@@ -449,12 +463,25 @@ func (data VRF) getDeletedItems(ctx context.Context, state VRF) []string {
 									}
 								}
 								if !found {
-									deletedItems = append(deletedItems, data.getDn()+"/dom-%[1]s"+"/"+state.AddressFamilies[di].getRn()+"/"+state.AddressFamilies[di].RouteTargetAddressFamilies[di_].getRn()+"/"+stateChild.getRn())
+									deleteBody := ""
+									deleteBody, _ = sjson.Set(deleteBody, "rtctrlRttP.attributes.rn", stateChild.getRn())
+									deleteBody, _ = sjson.Set(deleteBody, "rtctrlRttP.attributes.status", "deleted")
+									body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
 								}
 							}
 							for di__ := range state.AddressFamilies[di].RouteTargetAddressFamilies[di_].RouteTargetDirections {
 								for pdi__ := range data.AddressFamilies[pdi].RouteTargetAddressFamilies[pdi_].RouteTargetDirections {
 									if state.AddressFamilies[di].RouteTargetAddressFamilies[di_].RouteTargetDirections[di__].Direction == data.AddressFamilies[pdi].RouteTargetAddressFamilies[pdi_].RouteTargetDirections[pdi__].Direction {
+										matchBodyPathdi__ := ""
+										for mi, mv := range gjson.Get(body.Str, matchBodyPathdi_).Array() {
+											if mv.Get("rtctrlRttP.attributes.rn").String() == state.AddressFamilies[di].RouteTargetAddressFamilies[di_].RouteTargetDirections[di__].getRn() {
+												matchBodyPathdi__ = matchBodyPathdi_ + "." + strconv.Itoa(mi) + ".rtctrlRttP.children"
+												break
+											}
+										}
+										if matchBodyPathdi__ == "" {
+											break
+										}
 										for _, stateChild := range state.AddressFamilies[di].RouteTargetAddressFamilies[di_].RouteTargetDirections[di__].RouteTargets {
 											found := false
 											for _, planChild := range data.AddressFamilies[pdi].RouteTargetAddressFamilies[pdi_].RouteTargetDirections[pdi__].RouteTargets {
@@ -464,7 +491,10 @@ func (data VRF) getDeletedItems(ctx context.Context, state VRF) []string {
 												}
 											}
 											if !found {
-												deletedItems = append(deletedItems, data.getDn()+"/dom-%[1]s"+"/"+state.AddressFamilies[di].getRn()+"/"+state.AddressFamilies[di].RouteTargetAddressFamilies[di_].getRn()+"/"+state.AddressFamilies[di].RouteTargetAddressFamilies[di_].RouteTargetDirections[di__].getRn()+"/"+stateChild.getRn())
+												deleteBody := ""
+												deleteBody, _ = sjson.Set(deleteBody, "rtctrlRttEntry.attributes.rn", stateChild.getRn())
+												deleteBody, _ = sjson.Set(deleteBody, "rtctrlRttEntry.attributes.status", "deleted")
+												body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi__+".-1", deleteBody)
 											}
 										}
 										break
@@ -479,7 +509,7 @@ func (data VRF) getDeletedItems(ctx context.Context, state VRF) []string {
 			}
 		}
 	}
-	return deletedItems
+	return body
 }
 
-// End of section. //template:end getDeletedItems
+// End of section. //template:end toDeleteBody

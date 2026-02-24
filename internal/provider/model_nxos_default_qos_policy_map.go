@@ -482,27 +482,15 @@ func (data *DefaultQOSPolicyMap) updateFromBody(res gjson.Result) {
 
 func (data DefaultQOSPolicyMap) toDeleteBody() nxos.Body {
 	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
 	return nxos.Body{body}
 }
 
-// End of section. //template:end toDeleteBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
-
-func (data DefaultQOSPolicyMap) getDeleteDns() []string {
-	dns := []string{}
-	dns = append(dns, data.getDn())
-
-	return dns
-}
-
-// End of section. //template:end getDeleteDns
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data DefaultQOSPolicyMap) getDeletedItems(ctx context.Context, state DefaultQOSPolicyMap) []string {
-	deletedItems := []string{}
+func (data DefaultQOSPolicyMap) toBodyWithDeletes(ctx context.Context, state DefaultQOSPolicyMap) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
 	for _, stateChild := range state.MatchClassMaps {
 		found := false
 		for _, planChild := range data.MatchClassMaps {
@@ -512,17 +500,30 @@ func (data DefaultQOSPolicyMap) getDeletedItems(ctx context.Context, state Defau
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "ipqosMatchCMap.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "ipqosMatchCMap.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 		}
 	}
 	for di := range state.MatchClassMaps {
 		for pdi := range data.MatchClassMaps {
 			if state.MatchClassMaps[di].Name == data.MatchClassMaps[pdi].Name {
+				matchBodyPathdi := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+					if mv.Get("ipqosMatchCMap.attributes.rn").String() == state.MatchClassMaps[di].getRn() {
+						matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".ipqosMatchCMap.children"
+						break
+					}
+				}
+				if matchBodyPathdi == "" {
+					break
+				}
 				break
 			}
 		}
 	}
-	return deletedItems
+	return body
 }
 
-// End of section. //template:end getDeletedItems
+// End of section. //template:end toDeleteBody

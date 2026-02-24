@@ -683,27 +683,15 @@ func (data *OSPF) updateFromBody(res gjson.Result) {
 
 func (data OSPF) toDeleteBody() nxos.Body {
 	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
 	return nxos.Body{body}
 }
 
-// End of section. //template:end toDeleteBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
-
-func (data OSPF) getDeleteDns() []string {
-	dns := []string{}
-	dns = append(dns, data.getDn())
-
-	return dns
-}
-
-// End of section. //template:end getDeleteDns
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data OSPF) getDeletedItems(ctx context.Context, state OSPF) []string {
-	deletedItems := []string{}
+func (data OSPF) toBodyWithDeletes(ctx context.Context, state OSPF) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
 	for _, stateChild := range state.Instances {
 		found := false
 		for _, planChild := range data.Instances {
@@ -713,12 +701,25 @@ func (data OSPF) getDeletedItems(ctx context.Context, state OSPF) []string {
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "ospfInst.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "ospfInst.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 		}
 	}
 	for di := range state.Instances {
 		for pdi := range data.Instances {
 			if state.Instances[di].Name == data.Instances[pdi].Name {
+				matchBodyPathdi := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+					if mv.Get("ospfInst.attributes.rn").String() == state.Instances[di].getRn() {
+						matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".ospfInst.children"
+						break
+					}
+				}
+				if matchBodyPathdi == "" {
+					break
+				}
 				for _, stateChild := range state.Instances[di].Vrfs {
 					found := false
 					for _, planChild := range data.Instances[pdi].Vrfs {
@@ -728,12 +729,25 @@ func (data OSPF) getDeletedItems(ctx context.Context, state OSPF) []string {
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, data.getDn()+"/"+state.Instances[di].getRn()+"/"+stateChild.getRn())
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "ospfDom.attributes.rn", stateChild.getRn())
+						deleteBody, _ = sjson.Set(deleteBody, "ospfDom.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 					}
 				}
 				for di_ := range state.Instances[di].Vrfs {
 					for pdi_ := range data.Instances[pdi].Vrfs {
 						if state.Instances[di].Vrfs[di_].Name == data.Instances[pdi].Vrfs[pdi_].Name {
+							matchBodyPathdi_ := ""
+							for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
+								if mv.Get("ospfDom.attributes.rn").String() == state.Instances[di].Vrfs[di_].getRn() {
+									matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".ospfDom.children"
+									break
+								}
+							}
+							if matchBodyPathdi_ == "" {
+								break
+							}
 							for _, stateChild := range state.Instances[di].Vrfs[di_].Areas {
 								found := false
 								for _, planChild := range data.Instances[pdi].Vrfs[pdi_].Areas {
@@ -743,7 +757,10 @@ func (data OSPF) getDeletedItems(ctx context.Context, state OSPF) []string {
 									}
 								}
 								if !found {
-									deletedItems = append(deletedItems, data.getDn()+"/"+state.Instances[di].getRn()+"/"+state.Instances[di].Vrfs[di_].getRn()+"/"+stateChild.getRn())
+									deleteBody := ""
+									deleteBody, _ = sjson.Set(deleteBody, "ospfArea.attributes.rn", stateChild.getRn())
+									deleteBody, _ = sjson.Set(deleteBody, "ospfArea.attributes.status", "deleted")
+									body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
 								}
 							}
 							for _, stateChild := range state.Instances[di].Vrfs[di_].Interfaces {
@@ -755,12 +772,25 @@ func (data OSPF) getDeletedItems(ctx context.Context, state OSPF) []string {
 									}
 								}
 								if !found {
-									deletedItems = append(deletedItems, data.getDn()+"/"+state.Instances[di].getRn()+"/"+state.Instances[di].Vrfs[di_].getRn()+"/"+stateChild.getRn())
+									deleteBody := ""
+									deleteBody, _ = sjson.Set(deleteBody, "ospfIf.attributes.rn", stateChild.getRn())
+									deleteBody, _ = sjson.Set(deleteBody, "ospfIf.attributes.status", "deleted")
+									body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
 								}
 							}
 							for di__ := range state.Instances[di].Vrfs[di_].Interfaces {
 								for pdi__ := range data.Instances[pdi].Vrfs[pdi_].Interfaces {
 									if state.Instances[di].Vrfs[di_].Interfaces[di__].InterfaceId == data.Instances[pdi].Vrfs[pdi_].Interfaces[pdi__].InterfaceId {
+										matchBodyPathdi__ := ""
+										for mi, mv := range gjson.Get(body.Str, matchBodyPathdi_).Array() {
+											if mv.Get("ospfIf.attributes.rn").String() == state.Instances[di].Vrfs[di_].Interfaces[di__].getRn() {
+												matchBodyPathdi__ = matchBodyPathdi_ + "." + strconv.Itoa(mi) + ".ospfIf.children"
+												break
+											}
+										}
+										if matchBodyPathdi__ == "" {
+											break
+										}
 										break
 									}
 								}
@@ -773,7 +803,7 @@ func (data OSPF) getDeletedItems(ctx context.Context, state OSPF) []string {
 			}
 		}
 	}
-	return deletedItems
+	return body
 }
 
-// End of section. //template:end getDeletedItems
+// End of section. //template:end toDeleteBody

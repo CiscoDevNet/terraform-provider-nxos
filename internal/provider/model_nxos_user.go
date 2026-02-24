@@ -218,27 +218,15 @@ func (data *User) updateFromBody(res gjson.Result) {
 
 func (data User) toDeleteBody() nxos.Body {
 	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
 	return nxos.Body{body}
 }
 
-// End of section. //template:end toDeleteBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
-
-func (data User) getDeleteDns() []string {
-	dns := []string{}
-	dns = append(dns, data.getDn())
-
-	return dns
-}
-
-// End of section. //template:end getDeleteDns
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data User) getDeletedItems(ctx context.Context, state User) []string {
-	deletedItems := []string{}
+func (data User) toBodyWithDeletes(ctx context.Context, state User) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
 	for _, stateChild := range state.Roles {
 		found := false
 		for _, planChild := range data.Roles {
@@ -248,10 +236,13 @@ func (data User) getDeletedItems(ctx context.Context, state User) []string {
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/userdomain-[all]"+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "aaaUserRole.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "aaaUserRole.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.aaaUserDomain.children"+".-1", deleteBody)
 		}
 	}
-	return deletedItems
+	return body
 }
 
-// End of section. //template:end getDeletedItems
+// End of section. //template:end toDeleteBody

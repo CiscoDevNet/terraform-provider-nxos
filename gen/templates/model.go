@@ -810,9 +810,49 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 {{- end}}
 {{- /* ==================== end toDeleteBodyChildrenTemplate ==================== */}}
 
+{{- /* ==================== toDeleteAllChildrenTemplate ====================
+       Recursively builds body entries with "status":"deleted" for all deletable
+       children, nesting under NoDelete single-type parents as needed.
+       Context: map with:
+         "Children" ([]YamlConfigChildClass)
+         "BodyPathSuffix" (string) - sjson path suffix for children array
+       ========================================================= */}}
+{{- define "toDeleteAllChildrenTemplate"}}
+{{- $bodyPathSuffix := .BodyPathSuffix}}
+{{- range .Children}}
+{{- if not .NoDelete}}
+{{- if eq .Type "single"}}
+	{
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "{{.ClassName}}.attributes.rn", "{{.Rn}}")
+		deleteBody, _ = sjson.Set(deleteBody, "{{.ClassName}}.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, data.getClassName()+"{{$bodyPathSuffix}}"+".-1", deleteBody)
+	}
+{{- else if eq .Type "list"}}
+	for _, child := range data.{{toGoName .TfName}} {
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "{{.ClassName}}.attributes.rn", child.getRn())
+		deleteBody, _ = sjson.Set(deleteBody, "{{.ClassName}}.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, data.getClassName()+"{{$bodyPathSuffix}}"+".-1", deleteBody)
+	}
+{{- end}}
+{{- else}}
+{{- if .ChildClasses}}
+{{- if eq .Type "single"}}
+{{- template "toDeleteAllChildrenTemplate" (makeMap "Children" .ChildClasses "BodyPathSuffix" (printf "%s.0.%s.children" $bodyPathSuffix .ClassName))}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- /* ==================== end toDeleteAllChildrenTemplate ==================== */}}
+
 func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 	body := ""
 
+	{{- if not .NoDelete}}
+	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
+	{{- else}}
 	{{- range .Attributes}}
 	{{- if and (not .ReferenceOnly) (.DeleteValue)}}
 	if !data.{{toGoName .TfName}}.IsNull() {
@@ -829,71 +869,31 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 	{{- if .ChildClasses}}
 	{{- template "toDeleteBodyChildrenTemplate" (makeMap "Children" .ChildClasses "BodyPathSuffix" "")}}
 	{{- end}}
+	if body == "" {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	}
+	{{- if .ChildClasses}}
+	{{- template "toDeleteAllChildrenTemplate" (makeMap "Children" .ChildClasses "BodyPathSuffix" ".children")}}
+	{{- end}}
+	{{- end}}
 
 	return nxos.Body{body}
 }
 
-// End of section. //template:end toDeleteBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
-
-{{- /* ==================== getDeleteDnsTemplate ====================
-       Recursively generates DN collection for deletable children.
+{{- /* ==================== toBodyDeletedSingleInListTemplate ====================
+       Detects deleted items within single-type children of matched list-item pairs
+       and appends delete entries to the body.
        Context: map with:
          "Children" ([]YamlConfigChildClass)
-         "DnPrefix" (string) - Go expression prefix for building DN paths
-       ========================================================= */}}
-{{- define "getDeleteDnsTemplate"}}
-{{- $dnPrefix := .DnPrefix}}
-{{- range .Children}}
-{{- if not .NoDelete}}
-{{- if eq .Type "single"}}
-	dns = append(dns, {{$dnPrefix}}+"/{{.Rn}}")
-{{- else if eq .Type "list"}}
-	for _, child := range data.{{toGoName .TfName}} {
-		dns = append(dns, {{$dnPrefix}}+"/"+child.getRn())
-	}
-{{- end}}
-{{- else}}
-{{- if .ChildClasses}}
-{{- if eq .Type "single"}}
-{{- template "getDeleteDnsTemplate" (makeMap "Children" .ChildClasses "DnPrefix" (printf "%s+\"/%s\"" $dnPrefix .Rn))}}
-{{- end}}
-{{- end}}
-{{- end}}
-{{- end}}
-{{- end}}
-{{- /* ==================== end getDeleteDnsTemplate ==================== */}}
-
-func (data {{camelCase .Name}}) getDeleteDns() []string {
-	dns := []string{}
-
-	{{- if not .NoDelete}}
-	dns = append(dns, data.getDn())
-	{{- else}}
-	{{- template "getDeleteDnsTemplate" (makeMap "Children" .ChildClasses "DnPrefix" "data.getDn()")}}
-	{{- end}}
-
-	return dns
-}
-
-// End of section. //template:end getDeleteDns
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-{{- /* ==================== getDeletedItemsSingleInListTemplate ====================
-       Detects deleted items within single-type children of matched list-item pairs.
-       Used when a single child (no loop needed) has its own list children to track.
-       Context: map with:
-         "Children" ([]YamlConfigChildClass)
-         "StateItemExpr" (string) - Go expression for a single state item (e.g. "state.Entries[di]")
+         "StateItemExpr" (string) - Go expression for a single state item
          "PlanItemExpr" (string) - Go expression for a single plan item
-         "DnPrefix" (string) - Go expression prefix for DN paths
+         "ParentBodyPath" (string) - Go expression for the parent body path
+         "IndexVar" (string) - Loop index variable name
        ========================================================= */}}
-{{- define "getDeletedItemsSingleInListTemplate"}}
+{{- define "toBodyDeletedSingleInListTemplate"}}
 {{- $stateItemExpr := .StateItemExpr}}
 {{- $planItemExpr := .PlanItemExpr}}
-{{- $dnPrefix := .DnPrefix}}
+{{- $parentBodyPath := .ParentBodyPath}}
 {{- $indexVar := .IndexVar}}
 {{- range .Children}}
 {{- if eq .Type "list"}}
@@ -906,41 +906,56 @@ func (data {{camelCase .Name}}) getDeleteDns() []string {
 					}
 				}
 				if !found {
-					deletedItems = append(deletedItems, {{$dnPrefix}}+"/"+stateChild.getRn())
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "{{.ClassName}}.attributes.rn", stateChild.getRn())
+					deleteBody, _ = sjson.Set(deleteBody, "{{.ClassName}}.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, {{$parentBodyPath}}+".-1", deleteBody)
 				}
 			}
 {{- if .ChildClasses}}
-{{- template "getDeletedItemsListChildTemplate" (makeMap "Children" .ChildClasses "StateListExpr" (printf "%s.%s" $stateItemExpr (toGoName .TfName)) "PlanListExpr" (printf "%s.%s" $planItemExpr (toGoName .TfName)) "DnPrefix" $dnPrefix "IdAttributes" .Attributes "IndexVar" (printf "%s_" $indexVar))}}
+{{- template "toBodyDeletedListChildTemplate" (makeMap "Children" .ChildClasses "StateListExpr" (printf "%s.%s" $stateItemExpr (toGoName .TfName)) "PlanListExpr" (printf "%s.%s" $planItemExpr (toGoName .TfName)) "ParentBodyPath" $parentBodyPath "IdAttributes" .Attributes "ClassName" .ClassName "IndexVar" (printf "%s_" $indexVar))}}
 {{- end}}
 {{- else if eq .Type "single"}}
 {{- if .ChildClasses}}
-{{- template "getDeletedItemsSingleInListTemplate" (makeMap "Children" .ChildClasses "StateItemExpr" $stateItemExpr "PlanItemExpr" $planItemExpr "DnPrefix" (printf "%s+\"/%s\"" $dnPrefix .Rn) "IndexVar" $indexVar)}}
+{{- template "toBodyDeletedSingleInListTemplate" (makeMap "Children" .ChildClasses "StateItemExpr" $stateItemExpr "PlanItemExpr" $planItemExpr "ParentBodyPath" (printf "%s+\".0.%s.children\"" $parentBodyPath .ClassName) "IndexVar" $indexVar)}}
 {{- end}}
 {{- end}}
 {{- end}}
 {{- end}}
-{{- /* ==================== end getDeletedItemsSingleInListTemplate ==================== */}}
+{{- /* ==================== end toBodyDeletedSingleInListTemplate ==================== */}}
 
-{{- /* ==================== getDeletedItemsListChildTemplate ====================
-       Recursively detects deleted items within matched list-item pairs.
-       Used when a list child itself has nested children that may be deleted.
+{{- /* ==================== toBodyDeletedListChildTemplate ====================
+       Recursively detects deleted items within matched list-item pairs
+       and appends delete entries to the body.
        Context: map with:
          "Children" ([]YamlConfigChildClass)
          "StateListExpr" (string) - Go expression for state list
          "PlanListExpr" (string) - Go expression for plan list
-         "DnPrefix" (string) - Go expression prefix for DN paths
+         "ParentBodyPath" (string) - Go expression for the parent body path
          "IdAttributes" ([]Attribute) - Attributes used to match items by ID
+         "ClassName" (string) - Class name of the parent list item
          "IndexVar" (string) - Loop index variable name
        ========================================================= */}}
-{{- define "getDeletedItemsListChildTemplate"}}
+{{- define "toBodyDeletedListChildTemplate"}}
 {{- $stateListExpr := .StateListExpr}}
 {{- $planListExpr := .PlanListExpr}}
-{{- $dnPrefix := .DnPrefix}}
+{{- $parentBodyPath := .ParentBodyPath}}
 {{- $idAttributes := .IdAttributes}}
+{{- $parentClassName := .ClassName}}
 {{- $indexVar := .IndexVar}}
 	for {{$indexVar}} := range {{$stateListExpr}} {
 		for p{{$indexVar}} := range {{$planListExpr}} {
 			if {{range $i, $a := $idAttributes}}{{if $a.Id}}{{if $i}} && {{end}}{{$stateListExpr}}[{{$indexVar}}].{{toGoName $a.TfName}} == {{$planListExpr}}[p{{$indexVar}}].{{toGoName $a.TfName}}{{end}}{{end}} {
+				matchBodyPath{{$indexVar}} := ""
+				for mi, mv := range gjson.Get(body.Str, {{$parentBodyPath}}).Array() {
+					if mv.Get("{{$parentClassName}}.attributes.rn").String() == {{$stateListExpr}}[{{$indexVar}}].getRn() {
+						matchBodyPath{{$indexVar}} = {{$parentBodyPath}} + "." + strconv.Itoa(mi) + ".{{$parentClassName}}.children"
+						break
+					}
+				}
+				if matchBodyPath{{$indexVar}} == "" {
+					break
+				}
 				{{- range .Children}}
 				{{- if eq .Type "list"}}
 				for _, stateChild := range {{$stateListExpr}}[{{$indexVar}}].{{toGoName .TfName}} {
@@ -952,15 +967,18 @@ func (data {{camelCase .Name}}) getDeleteDns() []string {
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, {{$dnPrefix}}+"/"+{{$stateListExpr}}[{{$indexVar}}].getRn()+"/"+stateChild.getRn())
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "{{.ClassName}}.attributes.rn", stateChild.getRn())
+						deleteBody, _ = sjson.Set(deleteBody, "{{.ClassName}}.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPath{{$indexVar}}+".-1", deleteBody)
 					}
 				}
 				{{- if .ChildClasses}}
-				{{- template "getDeletedItemsListChildTemplate" (makeMap "Children" .ChildClasses "StateListExpr" (printf "%s[%s].%s" $stateListExpr $indexVar (toGoName .TfName)) "PlanListExpr" (printf "%s[p%s].%s" $planListExpr $indexVar (toGoName .TfName)) "DnPrefix" (printf "%s+\"/\"+%s[%s].getRn()" $dnPrefix $stateListExpr $indexVar) "IdAttributes" .Attributes "IndexVar" (printf "%s_" $indexVar))}}
+				{{- template "toBodyDeletedListChildTemplate" (makeMap "Children" .ChildClasses "StateListExpr" (printf "%s[%s].%s" $stateListExpr $indexVar (toGoName .TfName)) "PlanListExpr" (printf "%s[p%s].%s" $planListExpr $indexVar (toGoName .TfName)) "ParentBodyPath" (printf "matchBodyPath%s" $indexVar) "IdAttributes" .Attributes "ClassName" .ClassName "IndexVar" (printf "%s_" $indexVar))}}
 				{{- end}}
 				{{- else if eq .Type "single"}}
 				{{- if .ChildClasses}}
-				{{- template "getDeletedItemsSingleInListTemplate" (makeMap "Children" .ChildClasses "StateItemExpr" (printf "%s[%s]" $stateListExpr $indexVar) "PlanItemExpr" (printf "%s[p%s]" $planListExpr $indexVar) "DnPrefix" (printf "%s+\"/\"+%s[%s].getRn()+\"/%s\"" $dnPrefix $stateListExpr $indexVar .Rn) "IndexVar" (printf "%s_" $indexVar))}}
+				{{- template "toBodyDeletedSingleInListTemplate" (makeMap "Children" .ChildClasses "StateItemExpr" (printf "%s[%s]" $stateListExpr $indexVar) "PlanItemExpr" (printf "%s[p%s]" $planListExpr $indexVar) "ParentBodyPath" (printf "matchBodyPath%s+\".0.%s.children\"" $indexVar .ClassName) "IndexVar" (printf "%s_" $indexVar))}}
 				{{- end}}
 				{{- end}}
 				{{- end}}
@@ -969,16 +987,16 @@ func (data {{camelCase .Name}}) getDeleteDns() []string {
 		}
 	}
 {{- end}}
-{{- /* ==================== end getDeletedItemsListChildTemplate ==================== */}}
+{{- /* ==================== end toBodyDeletedListChildTemplate ==================== */}}
 
-{{- /* ==================== getDeletedItemsTemplate ====================
-       Recursively generates deleted-item detection for list children.
+{{- /* ==================== toBodyDeletedChildrenTemplate ====================
+       Recursively generates deleted-item body entries for list children.
        Context: map with:
          "Children" ([]YamlConfigChildClass)
-         "DnPrefix" (string) - Go expression prefix for DN paths
+         "BodyPath" (string) - Go expression for the body path to the children array
        ========================================================= */}}
-{{- define "getDeletedItemsTemplate"}}
-{{- $dnPrefix := .DnPrefix}}
+{{- define "toBodyDeletedChildrenTemplate"}}
+{{- $bodyPath := .BodyPath}}
 {{- range .Children}}
 {{- if eq .Type "list"}}
 	for _, stateChild := range state.{{toGoName .TfName}} {
@@ -990,28 +1008,34 @@ func (data {{camelCase .Name}}) getDeleteDns() []string {
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, {{$dnPrefix}}+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "{{.ClassName}}.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "{{.ClassName}}.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, {{$bodyPath}}+".-1", deleteBody)
 		}
 	}
 	{{- if .ChildClasses}}
-	{{- template "getDeletedItemsListChildTemplate" (makeMap "Children" .ChildClasses "StateListExpr" (printf "state.%s" (toGoName .TfName)) "PlanListExpr" (printf "data.%s" (toGoName .TfName)) "DnPrefix" $dnPrefix "IdAttributes" .Attributes "IndexVar" "di")}}
+	{{- template "toBodyDeletedListChildTemplate" (makeMap "Children" .ChildClasses "StateListExpr" (printf "state.%s" (toGoName .TfName)) "PlanListExpr" (printf "data.%s" (toGoName .TfName)) "ParentBodyPath" $bodyPath "IdAttributes" .Attributes "ClassName" .ClassName "IndexVar" "di")}}
 	{{- end}}
 {{- else if eq .Type "single"}}
 {{- if .ChildClasses}}
-{{- template "getDeletedItemsTemplate" (makeMap "Children" .ChildClasses "DnPrefix" (printf "%s+\"/%s\"" $dnPrefix .Rn))}}
+{{- template "toBodyDeletedChildrenTemplate" (makeMap "Children" .ChildClasses "BodyPath" (printf "%s+\".0.%s.children\"" $bodyPath .ClassName))}}
 {{- end}}
 {{- end}}
 {{- end}}
 {{- end}}
-{{- /* ==================== end getDeletedItemsTemplate ==================== */}}
+{{- /* ==================== end toBodyDeletedChildrenTemplate ==================== */}}
 
 {{- if hasListChildClasses .ChildClasses}}
 
-func (data {{camelCase .Name}}) getDeletedItems(ctx context.Context, state {{camelCase .Name}}) []string {
-	deletedItems := []string{}
-	{{- template "getDeletedItemsTemplate" (makeMap "Children" .ChildClasses "DnPrefix" "data.getDn()")}}
-	return deletedItems
+func (data {{camelCase .Name}}) toBodyWithDeletes(ctx context.Context, state {{camelCase .Name}}) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
+	{{- template "toBodyDeletedChildrenTemplate" (makeMap "Children" .ChildClasses "BodyPath" "bodyPath")}}
+	return body
 }
 {{- end}}
 
-// End of section. //template:end getDeletedItems
+// End of section. //template:end toDeleteBody
+

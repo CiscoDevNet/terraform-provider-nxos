@@ -417,27 +417,15 @@ func (data *PortChannelInterface) updateFromBody(res gjson.Result) {
 
 func (data PortChannelInterface) toDeleteBody() nxos.Body {
 	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
 	return nxos.Body{body}
 }
 
-// End of section. //template:end toDeleteBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
-
-func (data PortChannelInterface) getDeleteDns() []string {
-	dns := []string{}
-	dns = append(dns, data.getDn())
-
-	return dns
-}
-
-// End of section. //template:end getDeleteDns
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data PortChannelInterface) getDeletedItems(ctx context.Context, state PortChannelInterface) []string {
-	deletedItems := []string{}
+func (data PortChannelInterface) toBodyWithDeletes(ctx context.Context, state PortChannelInterface) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
 	for _, stateChild := range state.Members {
 		found := false
 		for _, planChild := range data.Members {
@@ -447,10 +435,13 @@ func (data PortChannelInterface) getDeletedItems(ctx context.Context, state Port
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "pcRsMbrIfs.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "pcRsMbrIfs.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 		}
 	}
-	return deletedItems
+	return body
 }
 
-// End of section. //template:end getDeletedItems
+// End of section. //template:end toDeleteBody

@@ -750,27 +750,15 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 
 func (data PIM) toDeleteBody() nxos.Body {
 	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
 	return nxos.Body{body}
 }
 
-// End of section. //template:end toDeleteBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
-
-func (data PIM) getDeleteDns() []string {
-	dns := []string{}
-	dns = append(dns, data.getDn())
-
-	return dns
-}
-
-// End of section. //template:end getDeleteDns
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data PIM) getDeletedItems(ctx context.Context, state PIM) []string {
-	deletedItems := []string{}
+func (data PIM) toBodyWithDeletes(ctx context.Context, state PIM) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
 	for _, stateChild := range state.Vrfs {
 		found := false
 		for _, planChild := range data.Vrfs {
@@ -780,12 +768,25 @@ func (data PIM) getDeletedItems(ctx context.Context, state PIM) []string {
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "pimDom.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "pimDom.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.pimInst.children"+".-1", deleteBody)
 		}
 	}
 	for di := range state.Vrfs {
 		for pdi := range data.Vrfs {
 			if state.Vrfs[di].Name == data.Vrfs[pdi].Name {
+				matchBodyPathdi := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath+".0.pimInst.children").Array() {
+					if mv.Get("pimDom.attributes.rn").String() == state.Vrfs[di].getRn() {
+						matchBodyPathdi = bodyPath + ".0.pimInst.children" + "." + strconv.Itoa(mi) + ".pimDom.children"
+						break
+					}
+				}
+				if matchBodyPathdi == "" {
+					break
+				}
 				for _, stateChild := range state.Vrfs[di].Interfaces {
 					found := false
 					for _, planChild := range data.Vrfs[pdi].Interfaces {
@@ -795,7 +796,10 @@ func (data PIM) getDeletedItems(ctx context.Context, state PIM) []string {
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+state.Vrfs[di].getRn()+"/"+stateChild.getRn())
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "pimIf.attributes.rn", stateChild.getRn())
+						deleteBody, _ = sjson.Set(deleteBody, "pimIf.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 					}
 				}
 				for _, stateChild := range state.Vrfs[di].StaticRps {
@@ -807,12 +811,25 @@ func (data PIM) getDeletedItems(ctx context.Context, state PIM) []string {
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+state.Vrfs[di].getRn()+"/staticrp"+"/"+stateChild.getRn())
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "pimStaticRP.attributes.rn", stateChild.getRn())
+						deleteBody, _ = sjson.Set(deleteBody, "pimStaticRP.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".0.pimStaticRPP.children"+".-1", deleteBody)
 					}
 				}
 				for di__ := range state.Vrfs[di].StaticRps {
 					for pdi__ := range data.Vrfs[pdi].StaticRps {
 						if state.Vrfs[di].StaticRps[di__].Address == data.Vrfs[pdi].StaticRps[pdi__].Address {
+							matchBodyPathdi__ := ""
+							for mi, mv := range gjson.Get(body.Str, matchBodyPathdi+".0.pimStaticRPP.children").Array() {
+								if mv.Get("pimStaticRP.attributes.rn").String() == state.Vrfs[di].StaticRps[di__].getRn() {
+									matchBodyPathdi__ = matchBodyPathdi + ".0.pimStaticRPP.children" + "." + strconv.Itoa(mi) + ".pimStaticRP.children"
+									break
+								}
+							}
+							if matchBodyPathdi__ == "" {
+								break
+							}
 							for _, stateChild := range state.Vrfs[di].StaticRps[di__].GroupLists {
 								found := false
 								for _, planChild := range data.Vrfs[pdi].StaticRps[pdi__].GroupLists {
@@ -822,7 +839,10 @@ func (data PIM) getDeletedItems(ctx context.Context, state PIM) []string {
 									}
 								}
 								if !found {
-									deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+state.Vrfs[di].getRn()+"/staticrp"+"/"+state.Vrfs[di].StaticRps[di__].getRn()+"/"+stateChild.getRn())
+									deleteBody := ""
+									deleteBody, _ = sjson.Set(deleteBody, "pimRPGrpList.attributes.rn", stateChild.getRn())
+									deleteBody, _ = sjson.Set(deleteBody, "pimRPGrpList.attributes.status", "deleted")
+									body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi__+".-1", deleteBody)
 								}
 							}
 							break
@@ -838,14 +858,17 @@ func (data PIM) getDeletedItems(ctx context.Context, state PIM) []string {
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+state.Vrfs[di].getRn()+"/acastrpfunc"+"/"+stateChild.getRn())
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "pimAcastRPPeer.attributes.rn", stateChild.getRn())
+						deleteBody, _ = sjson.Set(deleteBody, "pimAcastRPPeer.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".0.pimAcastRPFuncP.children"+".-1", deleteBody)
 					}
 				}
 				break
 			}
 		}
 	}
-	return deletedItems
+	return body
 }
 
-// End of section. //template:end getDeletedItems
+// End of section. //template:end toDeleteBody

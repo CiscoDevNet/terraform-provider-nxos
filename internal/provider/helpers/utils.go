@@ -17,6 +17,12 @@
 
 package helpers
 
+import "fmt"
+
+func DeleteBody(className string) string {
+	return fmt.Sprintf(`{"%s":{"attributes":{"status":"deleted"}}}`, className)
+}
+
 func ParseNxosBoolean(s string) bool {
 	if s == "yes" || s == "true" {
 		return true

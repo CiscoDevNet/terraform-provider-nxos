@@ -473,27 +473,15 @@ func (data *IPv6VRF) updateFromBody(res gjson.Result) {
 
 func (data IPv6VRF) toDeleteBody() nxos.Body {
 	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
 	return nxos.Body{body}
 }
 
-// End of section. //template:end toDeleteBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
-
-func (data IPv6VRF) getDeleteDns() []string {
-	dns := []string{}
-	dns = append(dns, data.getDn())
-
-	return dns
-}
-
-// End of section. //template:end getDeleteDns
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data IPv6VRF) getDeletedItems(ctx context.Context, state IPv6VRF) []string {
-	deletedItems := []string{}
+func (data IPv6VRF) toBodyWithDeletes(ctx context.Context, state IPv6VRF) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
 	for _, stateChild := range state.StaticRoutes {
 		found := false
 		for _, planChild := range data.StaticRoutes {
@@ -503,12 +491,25 @@ func (data IPv6VRF) getDeletedItems(ctx context.Context, state IPv6VRF) []string
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "ipv6Route.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "ipv6Route.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 		}
 	}
 	for di := range state.StaticRoutes {
 		for pdi := range data.StaticRoutes {
 			if state.StaticRoutes[di].Prefix == data.StaticRoutes[pdi].Prefix {
+				matchBodyPathdi := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+					if mv.Get("ipv6Route.attributes.rn").String() == state.StaticRoutes[di].getRn() {
+						matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".ipv6Route.children"
+						break
+					}
+				}
+				if matchBodyPathdi == "" {
+					break
+				}
 				for _, stateChild := range state.StaticRoutes[di].NextHops {
 					found := false
 					for _, planChild := range data.StaticRoutes[pdi].NextHops {
@@ -518,7 +519,10 @@ func (data IPv6VRF) getDeletedItems(ctx context.Context, state IPv6VRF) []string
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, data.getDn()+"/"+state.StaticRoutes[di].getRn()+"/"+stateChild.getRn())
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "ipv6Nexthop.attributes.rn", stateChild.getRn())
+						deleteBody, _ = sjson.Set(deleteBody, "ipv6Nexthop.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 					}
 				}
 				break
@@ -534,12 +538,25 @@ func (data IPv6VRF) getDeletedItems(ctx context.Context, state IPv6VRF) []string
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "ipv6If.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "ipv6If.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 		}
 	}
 	for di := range state.Interfaces {
 		for pdi := range data.Interfaces {
 			if state.Interfaces[di].InterfaceId == data.Interfaces[pdi].InterfaceId {
+				matchBodyPathdi := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+					if mv.Get("ipv6If.attributes.rn").String() == state.Interfaces[di].getRn() {
+						matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".ipv6If.children"
+						break
+					}
+				}
+				if matchBodyPathdi == "" {
+					break
+				}
 				for _, stateChild := range state.Interfaces[di].Addresses {
 					found := false
 					for _, planChild := range data.Interfaces[pdi].Addresses {
@@ -549,14 +566,17 @@ func (data IPv6VRF) getDeletedItems(ctx context.Context, state IPv6VRF) []string
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, data.getDn()+"/"+state.Interfaces[di].getRn()+"/"+stateChild.getRn())
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "ipv6Addr.attributes.rn", stateChild.getRn())
+						deleteBody, _ = sjson.Set(deleteBody, "ipv6Addr.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 					}
 				}
 				break
 			}
 		}
 	}
-	return deletedItems
+	return body
 }
 
-// End of section. //template:end getDeletedItems
+// End of section. //template:end toDeleteBody

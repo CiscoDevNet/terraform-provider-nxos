@@ -303,7 +303,8 @@ func (r *RestResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 
 	if device.Managed {
 		if state.Delete.ValueBool() {
-			res, err := device.Client.DeleteDn(state.Dn.ValueString())
+			body := helpers.DeleteBody(state.ClassName.ValueString())
+			res, err := device.Client.Post(state.Dn.ValueString(), body)
 			if err != nil {
 				errCode := res.Get("imdata.0.error.attributes.code").Str
 				// Ignore errors of type "Cannot delete object"

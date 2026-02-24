@@ -255,6 +255,49 @@ func (data {{camelCase .BulkName}}) toBody() nxos.Body {
 {{- end}}
 {{- /* ==================== end bulkToBodyChildrenTemplate ==================== */}}
 
+func (data {{camelCase .BulkName}}) toDeleteBody(items []{{camelCase .BulkName}}Items) nxos.Body {
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	childrenPath := data.getClassName() + ".children"
+	for _, item := range items {
+		itemBody := ""
+		itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.rn", data.getItemRn(item))
+		itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", itemBody)
+	}
+	return nxos.Body{body}
+}
+
+func (data {{camelCase .BulkName}}) toBodyWithDeletes(ctx context.Context, state {{camelCase .BulkName}}) nxos.Body {
+	body := data.toBody()
+	childrenPath := data.getClassName() + ".children"
+	for _, stateItem := range state.Items {
+		found := false
+		for _, planItem := range data.Items {
+			{{- range (bulkIdAttributes .)}}
+			{{- if eq .Type "String"}}
+			if planItem.{{toGoName .TfName}}.ValueString() != stateItem.{{toGoName .TfName}}.ValueString() {
+				continue
+			}
+			{{- else if eq .Type "Int64"}}
+			if planItem.{{toGoName .TfName}}.ValueInt64() != stateItem.{{toGoName .TfName}}.ValueInt64() {
+				continue
+			}
+			{{- end}}
+			{{- end}}
+			found = true
+			break
+		}
+		if !found {
+			itemBody := ""
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.rn", data.getItemRn(stateItem))
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, childrenPath+".-1", itemBody)
+		}
+	}
+	return body
+}
+
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
@@ -471,33 +514,3 @@ func (data *{{camelCase .BulkName}}) updateFromBody(res gjson.Result) {
 {{- /* ==================== end bulkUpdateFromBodyChildrenTemplate ==================== */}}
 
 // End of section. //template:end updateFromBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data {{camelCase .BulkName}}) getDeletedItems(ctx context.Context, state {{camelCase .BulkName}}) []string {
-	var deletedItems []string
-	for _, stateItem := range state.Items {
-		found := false
-		for _, planItem := range data.Items {
-			{{- range (bulkIdAttributes .)}}
-			{{- if eq .Type "String"}}
-			if planItem.{{toGoName .TfName}}.ValueString() != stateItem.{{toGoName .TfName}}.ValueString() {
-				continue
-			}
-			{{- else if eq .Type "Int64"}}
-			if planItem.{{toGoName .TfName}}.ValueInt64() != stateItem.{{toGoName .TfName}}.ValueInt64() {
-				continue
-			}
-			{{- end}}
-			{{- end}}
-			found = true
-			break
-		}
-		if !found {
-			deletedItems = append(deletedItems, data.getItemDn(stateItem))
-		}
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems

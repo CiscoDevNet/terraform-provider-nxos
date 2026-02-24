@@ -598,30 +598,29 @@ func (data System) toDeleteBody() nxos.Body {
 	if !data.DefaultAdminStatus.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".children.0.ethpmEntity.children.0.ethpmInst"+".attributes."+"systemDefaultAdminSt", "DME_UNSET_PROPERTY_MARKER")
 	}
+	if body == "" {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	}
+	for _, child := range data.DefaultQosPolicyInterfaceIn {
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "ipqosIf.attributes.rn", child.getRn())
+		deleteBody, _ = sjson.Set(deleteBody, "ipqosIf.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, data.getClassName()+".children.0.ipqosEntity.children.0.ipqosDefaultQoS.children.0.ipqosServPol.children.0.ipqosIngress.children"+".-1", deleteBody)
+	}
+	{
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "ipqosSystem.attributes.rn", "sys")
+		deleteBody, _ = sjson.Set(deleteBody, "ipqosSystem.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, data.getClassName()+".children.0.ipqosEntity.children.0.ipqosQueuing.children.0.ipqosServPol.children.0.ipqosEgress.children"+".-1", deleteBody)
+	}
 
 	return nxos.Body{body}
 }
 
-// End of section. //template:end toDeleteBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
-
-func (data System) getDeleteDns() []string {
-	dns := []string{}
-	for _, child := range data.DefaultQosPolicyInterfaceIn {
-		dns = append(dns, data.getDn()+"/ipqos"+"/dflt"+"/policy"+"/in"+"/"+child.getRn())
-	}
-	dns = append(dns, data.getDn()+"/ipqos"+"/queuing"+"/policy"+"/out"+"/sys")
-
-	return dns
-}
-
-// End of section. //template:end getDeleteDns
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data System) getDeletedItems(ctx context.Context, state System) []string {
-	deletedItems := []string{}
+func (data System) toBodyWithDeletes(ctx context.Context, state System) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
 	for _, stateChild := range state.DefaultQosPolicyInterfaceIn {
 		found := false
 		for _, planChild := range data.DefaultQosPolicyInterfaceIn {
@@ -631,17 +630,30 @@ func (data System) getDeletedItems(ctx context.Context, state System) []string {
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/ipqos"+"/dflt"+"/policy"+"/in"+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "ipqosIf.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "ipqosIf.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.ipqosEntity.children"+".0.ipqosDefaultQoS.children"+".0.ipqosServPol.children"+".0.ipqosIngress.children"+".-1", deleteBody)
 		}
 	}
 	for di := range state.DefaultQosPolicyInterfaceIn {
 		for pdi := range data.DefaultQosPolicyInterfaceIn {
 			if state.DefaultQosPolicyInterfaceIn[di].InterfaceId == data.DefaultQosPolicyInterfaceIn[pdi].InterfaceId {
+				matchBodyPathdi := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath+".0.ipqosEntity.children"+".0.ipqosDefaultQoS.children"+".0.ipqosServPol.children"+".0.ipqosIngress.children").Array() {
+					if mv.Get("ipqosIf.attributes.rn").String() == state.DefaultQosPolicyInterfaceIn[di].getRn() {
+						matchBodyPathdi = bodyPath + ".0.ipqosEntity.children" + ".0.ipqosDefaultQoS.children" + ".0.ipqosServPol.children" + ".0.ipqosIngress.children" + "." + strconv.Itoa(mi) + ".ipqosIf.children"
+						break
+					}
+				}
+				if matchBodyPathdi == "" {
+					break
+				}
 				break
 			}
 		}
 	}
-	return deletedItems
+	return body
 }
 
-// End of section. //template:end getDeletedItems
+// End of section. //template:end toDeleteBody

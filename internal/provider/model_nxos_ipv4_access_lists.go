@@ -942,30 +942,29 @@ func (data *IPv4AccessLists) updateFromBody(res gjson.Result) {
 
 func (data IPv4AccessLists) toDeleteBody() nxos.Body {
 	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	}
+	for _, child := range data.AccessLists {
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACL.attributes.rn", child.getRn())
+		deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACL.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, data.getClassName()+".children"+".-1", deleteBody)
+	}
+	{
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "aclPolicy.attributes.rn", "policy")
+		deleteBody, _ = sjson.Set(deleteBody, "aclPolicy.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, data.getClassName()+".children"+".-1", deleteBody)
+	}
 
 	return nxos.Body{body}
 }
 
-// End of section. //template:end toDeleteBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
-
-func (data IPv4AccessLists) getDeleteDns() []string {
-	dns := []string{}
-	for _, child := range data.AccessLists {
-		dns = append(dns, data.getDn()+"/"+child.getRn())
-	}
-	dns = append(dns, data.getDn()+"/policy")
-
-	return dns
-}
-
-// End of section. //template:end getDeleteDns
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data IPv4AccessLists) getDeletedItems(ctx context.Context, state IPv4AccessLists) []string {
-	deletedItems := []string{}
+func (data IPv4AccessLists) toBodyWithDeletes(ctx context.Context, state IPv4AccessLists) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
 	for _, stateChild := range state.AccessLists {
 		found := false
 		for _, planChild := range data.AccessLists {
@@ -975,12 +974,25 @@ func (data IPv4AccessLists) getDeletedItems(ctx context.Context, state IPv4Acces
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACL.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACL.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
 		}
 	}
 	for di := range state.AccessLists {
 		for pdi := range data.AccessLists {
 			if state.AccessLists[di].Name == data.AccessLists[pdi].Name {
+				matchBodyPathdi := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+					if mv.Get("ipv4aclACL.attributes.rn").String() == state.AccessLists[di].getRn() {
+						matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".ipv4aclACL.children"
+						break
+					}
+				}
+				if matchBodyPathdi == "" {
+					break
+				}
 				for _, stateChild := range state.AccessLists[di].Entries {
 					found := false
 					for _, planChild := range data.AccessLists[pdi].Entries {
@@ -990,7 +1002,10 @@ func (data IPv4AccessLists) getDeletedItems(ctx context.Context, state IPv4Acces
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, data.getDn()+"/"+state.AccessLists[di].getRn()+"/"+stateChild.getRn())
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACE.attributes.rn", stateChild.getRn())
+						deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACE.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 					}
 				}
 				break
@@ -1006,12 +1021,25 @@ func (data IPv4AccessLists) getDeletedItems(ctx context.Context, state IPv4Acces
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/policy"+"/ingress"+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "aclIf.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "aclIf.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.aclPolicy.children"+".0.aclIngress.children"+".-1", deleteBody)
 		}
 	}
 	for di := range state.IngressInterfaces {
 		for pdi := range data.IngressInterfaces {
 			if state.IngressInterfaces[di].InterfaceId == data.IngressInterfaces[pdi].InterfaceId {
+				matchBodyPathdi := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath+".0.aclPolicy.children"+".0.aclIngress.children").Array() {
+					if mv.Get("aclIf.attributes.rn").String() == state.IngressInterfaces[di].getRn() {
+						matchBodyPathdi = bodyPath + ".0.aclPolicy.children" + ".0.aclIngress.children" + "." + strconv.Itoa(mi) + ".aclIf.children"
+						break
+					}
+				}
+				if matchBodyPathdi == "" {
+					break
+				}
 				break
 			}
 		}
@@ -1025,17 +1053,30 @@ func (data IPv4AccessLists) getDeletedItems(ctx context.Context, state IPv4Acces
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/policy"+"/egress"+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "aclIf.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "aclIf.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.aclPolicy.children"+".0.aclEgress.children"+".-1", deleteBody)
 		}
 	}
 	for di := range state.EgressInterfaces {
 		for pdi := range data.EgressInterfaces {
 			if state.EgressInterfaces[di].InterfaceId == data.EgressInterfaces[pdi].InterfaceId {
+				matchBodyPathdi := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath+".0.aclPolicy.children"+".0.aclEgress.children").Array() {
+					if mv.Get("aclIf.attributes.rn").String() == state.EgressInterfaces[di].getRn() {
+						matchBodyPathdi = bodyPath + ".0.aclPolicy.children" + ".0.aclEgress.children" + "." + strconv.Itoa(mi) + ".aclIf.children"
+						break
+					}
+				}
+				if matchBodyPathdi == "" {
+					break
+				}
 				break
 			}
 		}
 	}
-	return deletedItems
+	return body
 }
 
-// End of section. //template:end getDeletedItems
+// End of section. //template:end toDeleteBody

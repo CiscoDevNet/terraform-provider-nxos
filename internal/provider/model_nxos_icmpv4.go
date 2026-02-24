@@ -269,27 +269,15 @@ func (data *ICMPv4) updateFromBody(res gjson.Result) {
 
 func (data ICMPv4) toDeleteBody() nxos.Body {
 	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
 	return nxos.Body{body}
 }
 
-// End of section. //template:end toDeleteBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
-
-func (data ICMPv4) getDeleteDns() []string {
-	dns := []string{}
-	dns = append(dns, data.getDn())
-
-	return dns
-}
-
-// End of section. //template:end getDeleteDns
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data ICMPv4) getDeletedItems(ctx context.Context, state ICMPv4) []string {
-	deletedItems := []string{}
+func (data ICMPv4) toBodyWithDeletes(ctx context.Context, state ICMPv4) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
 	for _, stateChild := range state.Vrfs {
 		found := false
 		for _, planChild := range data.Vrfs {
@@ -299,12 +287,25 @@ func (data ICMPv4) getDeletedItems(ctx context.Context, state ICMPv4) []string {
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "icmpv4Dom.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "icmpv4Dom.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.icmpv4Inst.children"+".-1", deleteBody)
 		}
 	}
 	for di := range state.Vrfs {
 		for pdi := range data.Vrfs {
 			if state.Vrfs[di].Name == data.Vrfs[pdi].Name {
+				matchBodyPathdi := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath+".0.icmpv4Inst.children").Array() {
+					if mv.Get("icmpv4Dom.attributes.rn").String() == state.Vrfs[di].getRn() {
+						matchBodyPathdi = bodyPath + ".0.icmpv4Inst.children" + "." + strconv.Itoa(mi) + ".icmpv4Dom.children"
+						break
+					}
+				}
+				if matchBodyPathdi == "" {
+					break
+				}
 				for _, stateChild := range state.Vrfs[di].Interfaces {
 					found := false
 					for _, planChild := range data.Vrfs[pdi].Interfaces {
@@ -314,14 +315,17 @@ func (data ICMPv4) getDeletedItems(ctx context.Context, state ICMPv4) []string {
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, data.getDn()+"/inst"+"/"+state.Vrfs[di].getRn()+"/"+stateChild.getRn())
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "icmpv4If.attributes.rn", stateChild.getRn())
+						deleteBody, _ = sjson.Set(deleteBody, "icmpv4If.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 					}
 				}
 				break
 			}
 		}
 	}
-	return deletedItems
+	return body
 }
 
-// End of section. //template:end getDeletedItems
+// End of section. //template:end toDeleteBody

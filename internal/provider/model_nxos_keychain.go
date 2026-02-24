@@ -253,27 +253,15 @@ func (data *Keychain) updateFromBody(res gjson.Result) {
 
 func (data Keychain) toDeleteBody() nxos.Body {
 	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
 	return nxos.Body{body}
 }
 
-// End of section. //template:end toDeleteBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
-
-func (data Keychain) getDeleteDns() []string {
-	dns := []string{}
-	dns = append(dns, data.getDn())
-
-	return dns
-}
-
-// End of section. //template:end getDeleteDns
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data Keychain) getDeletedItems(ctx context.Context, state Keychain) []string {
-	deletedItems := []string{}
+func (data Keychain) toBodyWithDeletes(ctx context.Context, state Keychain) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
 	for _, stateChild := range state.Keychains {
 		found := false
 		for _, planChild := range data.Keychains {
@@ -283,12 +271,25 @@ func (data Keychain) getDeletedItems(ctx context.Context, state Keychain) []stri
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/keychains"+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "kcmgrClassicKeychain.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "kcmgrClassicKeychain.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.kcmgrKeychains.children"+".-1", deleteBody)
 		}
 	}
 	for di := range state.Keychains {
 		for pdi := range data.Keychains {
 			if state.Keychains[di].Name == data.Keychains[pdi].Name {
+				matchBodyPathdi := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath+".0.kcmgrKeychains.children").Array() {
+					if mv.Get("kcmgrClassicKeychain.attributes.rn").String() == state.Keychains[di].getRn() {
+						matchBodyPathdi = bodyPath + ".0.kcmgrKeychains.children" + "." + strconv.Itoa(mi) + ".kcmgrClassicKeychain.children"
+						break
+					}
+				}
+				if matchBodyPathdi == "" {
+					break
+				}
 				for _, stateChild := range state.Keychains[di].Keys {
 					found := false
 					for _, planChild := range data.Keychains[pdi].Keys {
@@ -298,14 +299,17 @@ func (data Keychain) getDeletedItems(ctx context.Context, state Keychain) []stri
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, data.getDn()+"/keychains"+"/"+state.Keychains[di].getRn()+"/"+stateChild.getRn())
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "kcmgrKey.attributes.rn", stateChild.getRn())
+						deleteBody, _ = sjson.Set(deleteBody, "kcmgrKey.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 					}
 				}
 				break
 			}
 		}
 	}
-	return deletedItems
+	return body
 }
 
-// End of section. //template:end getDeletedItems
+// End of section. //template:end toDeleteBody

@@ -388,24 +388,11 @@ func (r *{{camelCase .BulkName}}Resource) Update(ctx context.Context, req resour
 	}
 
 	if device.Managed {
-		body := plan.toBody()
+		body := plan.toBodyWithDeletes(ctx, state)
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
-		}
-
-		deletedItems := plan.getDeletedItems(ctx, state)
-		tflog.Debug(ctx, fmt.Sprintf("%s: Items to delete: %v", plan.getDn(), deletedItems))
-		for _, dn := range deletedItems {
-			res, err := device.Client.DeleteDn(dn)
-			if err != nil {
-				errCode := res.Get("imdata.0.error.attributes.code").Str
-				if errCode != "1" && errCode != "107" {
-					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
-					return
-				}
-			}
 		}
 	}
 
@@ -446,16 +433,11 @@ func (r *{{camelCase .BulkName}}Resource) Delete(ctx context.Context, req resour
 		{{- if .NoDelete}}
 		tflog.Debug(ctx, fmt.Sprintf("%s: Skipping delete (no_delete configured)", state.Dn.ValueString()))
 		{{- else}}
-		for _, item := range state.Items {
-			res, err := device.Client.DeleteDn(state.getItemDn(item))
-			if err != nil {
-				errCode := res.Get("imdata.0.error.attributes.code").Str
-				// Ignore errors of type "Cannot delete object"
-				if errCode != "1" && errCode != "107" {
-					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
-					return
-				}
-			}
+		body := state.toDeleteBody(state.Items)
+		_, err := device.Client.Post(state.getDn(), body.Str)
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+			return
 		}
 		{{- end}}
 	}

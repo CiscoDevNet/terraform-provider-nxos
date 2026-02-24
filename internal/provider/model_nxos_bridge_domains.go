@@ -119,6 +119,41 @@ func (data BridgeDomains) toBody() nxos.Body {
 	return nxos.Body{body}
 }
 
+func (data BridgeDomains) toDeleteBody(items []BridgeDomainsItems) nxos.Body {
+	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	childrenPath := data.getClassName() + ".children"
+	for _, item := range items {
+		itemBody := ""
+		itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.rn", data.getItemRn(item))
+		itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", itemBody)
+	}
+	return nxos.Body{body}
+}
+
+func (data BridgeDomains) toBodyWithDeletes(ctx context.Context, state BridgeDomains) nxos.Body {
+	body := data.toBody()
+	childrenPath := data.getClassName() + ".children"
+	for _, stateItem := range state.Items {
+		found := false
+		for _, planItem := range data.Items {
+			if planItem.FabricEncap.ValueString() != stateItem.FabricEncap.ValueString() {
+				continue
+			}
+			found = true
+			break
+		}
+		if !found {
+			itemBody := ""
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.rn", data.getItemRn(stateItem))
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, childrenPath+".-1", itemBody)
+		}
+	}
+	return body
+}
+
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
@@ -178,25 +213,3 @@ func (data *BridgeDomains) updateFromBody(res gjson.Result) {
 }
 
 // End of section. //template:end updateFromBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data BridgeDomains) getDeletedItems(ctx context.Context, state BridgeDomains) []string {
-	var deletedItems []string
-	for _, stateItem := range state.Items {
-		found := false
-		for _, planItem := range data.Items {
-			if planItem.FabricEncap.ValueString() != stateItem.FabricEncap.ValueString() {
-				continue
-			}
-			found = true
-			break
-		}
-		if !found {
-			deletedItems = append(deletedItems, data.getItemDn(stateItem))
-		}
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems

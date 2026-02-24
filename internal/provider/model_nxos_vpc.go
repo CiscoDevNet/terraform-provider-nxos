@@ -653,27 +653,15 @@ func (data *VPC) updateFromBody(res gjson.Result) {
 
 func (data VPC) toDeleteBody() nxos.Body {
 	body := ""
+	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
 
 	return nxos.Body{body}
 }
 
-// End of section. //template:end toDeleteBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeleteDns
-
-func (data VPC) getDeleteDns() []string {
-	dns := []string{}
-	dns = append(dns, data.getDn())
-
-	return dns
-}
-
-// End of section. //template:end getDeleteDns
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data VPC) getDeletedItems(ctx context.Context, state VPC) []string {
-	deletedItems := []string{}
+func (data VPC) toBodyWithDeletes(ctx context.Context, state VPC) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
 	for _, stateChild := range state.Interfaces {
 		found := false
 		for _, planChild := range data.Interfaces {
@@ -683,17 +671,30 @@ func (data VPC) getDeletedItems(ctx context.Context, state VPC) []string {
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, data.getDn()+"/dom"+"/"+stateChild.getRn())
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "vpcIf.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "vpcIf.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.vpcDom.children"+".-1", deleteBody)
 		}
 	}
 	for di := range state.Interfaces {
 		for pdi := range data.Interfaces {
 			if state.Interfaces[di].VpcInterfaceId == data.Interfaces[pdi].VpcInterfaceId {
+				matchBodyPathdi := ""
+				for mi, mv := range gjson.Get(body.Str, bodyPath+".0.vpcDom.children").Array() {
+					if mv.Get("vpcIf.attributes.rn").String() == state.Interfaces[di].getRn() {
+						matchBodyPathdi = bodyPath + ".0.vpcDom.children" + "." + strconv.Itoa(mi) + ".vpcIf.children"
+						break
+					}
+				}
+				if matchBodyPathdi == "" {
+					break
+				}
 				break
 			}
 		}
 	}
-	return deletedItems
+	return body
 }
 
-// End of section. //template:end getDeletedItems
+// End of section. //template:end toDeleteBody

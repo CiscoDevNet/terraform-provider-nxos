@@ -287,24 +287,11 @@ func (r *SystemResource) Update(ctx context.Context, req resource.UpdateRequest,
 	}
 
 	if device.Managed {
-		body := plan.toBody()
+		body := plan.toBodyWithDeletes(ctx, state)
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
 			return
-		}
-
-		deletedItems := plan.getDeletedItems(ctx, state)
-		tflog.Debug(ctx, fmt.Sprintf("%s: List items to delete: %v", plan.getDn(), deletedItems))
-		for _, dn := range deletedItems {
-			res, err := device.Client.DeleteDn(dn)
-			if err != nil {
-				errCode := res.Get("imdata.0.error.attributes.code").Str
-				if errCode != "1" && errCode != "107" {
-					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
-					return
-				}
-			}
 		}
 	}
 
@@ -344,15 +331,7 @@ func (r *SystemResource) Delete(ctx context.Context, req resource.DeleteRequest,
 	if device.Managed {
 		body := state.toDeleteBody()
 		if len(body.Str) > 0 {
-			_, err := device.Client.Post(state.getDn(), body.Str)
-			if err != nil {
-				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
-				return
-			}
-		}
-
-		for _, dn := range state.getDeleteDns() {
-			res, err := device.Client.DeleteDn(dn)
+			res, err := device.Client.Post(state.getDn(), body.Str)
 			if err != nil {
 				errCode := res.Get("imdata.0.error.attributes.code").Str
 				// Ignore errors of type "Cannot delete object"

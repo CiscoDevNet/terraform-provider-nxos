@@ -354,6 +354,7 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewKeychainResource,
 		NewLoggingResource,
 		NewLoopbackInterfaceResource,
+		NewLoopbackInterfacesResource,
 		NewNTPResource,
 		NewNVEInterfaceResource,
 		NewOSPFResource,

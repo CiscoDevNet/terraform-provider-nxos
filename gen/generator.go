@@ -337,6 +337,21 @@ func HasNestedChildren(children []YamlConfigChildClass) bool {
 	return false
 }
 
+// Templating helper function to compute the maximum nesting depth of child classes
+func MaxChildDepth(children []YamlConfigChildClass) int {
+	if len(children) == 0 {
+		return 0
+	}
+	maxDepth := 0
+	for _, c := range children {
+		d := MaxChildDepth(c.ChildClasses)
+		if d > maxDepth {
+			maxDepth = d
+		}
+	}
+	return maxDepth + 1
+}
+
 // Templating helper function to return import attributes (reference_only or id)
 func ImportAttributes(config YamlConfig) []YamlConfigAttribute {
 	attributes := []YamlConfigAttribute{}
@@ -483,6 +498,7 @@ var functions = template.FuncMap{
 	"childDocClassNames": ChildDocClassNames,
 	"childDocPaths":      ChildDocPaths,
 	"hasNestedChildren":  HasNestedChildren,
+	"maxChildDepth":      MaxChildDepth,
 	"hasWriteOnly":       HasWriteOnly,
 	"importAttributes":   ImportAttributes,
 	"hasDeleteValue":      HasDeleteValue,

@@ -150,9 +150,7 @@ func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource
 	queries := []func(*nxos.Req){}
 	{{- if .ChildClasses}}
 	{{- if hasNestedChildren .ChildClasses}}
-	queries = append(queries, nxos.Query("rsp-subtree", "full"))
-	{{- else}}
-	queries = append(queries, nxos.Query("rsp-subtree", "children"))
+	queries = append(queries, nxos.Query("rsp-subtree-depth", "{{maxChildDepth .ChildClasses}}"))
 	{{- end}}
 	{{- end}}
 	res, err := device.Client.GetDn(config.getDn(), queries...)

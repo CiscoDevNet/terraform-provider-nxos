@@ -323,7 +323,7 @@ func (r *{{camelCase .BulkName}}Resource) Read(ctx context.Context, req resource
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
 		{{- if hasNestedChildren .ChildClasses}}
-		queries = append(queries, nxos.Query("rsp-subtree", "full"))
+		queries = append(queries, nxos.Query("rsp-subtree-depth", "{{maxChildDepth .ChildClasses}}"))
 		{{- else}}
 		queries = append(queries, nxos.Query("rsp-subtree", "children"))
 		{{- end}}

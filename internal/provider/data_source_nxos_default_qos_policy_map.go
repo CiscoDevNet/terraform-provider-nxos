@@ -218,7 +218,7 @@ func (d *DefaultQOSPolicyMapDataSource) Read(ctx context.Context, req datasource
 	}
 
 	queries := []func(*nxos.Req){}
-	queries = append(queries, nxos.Query("rsp-subtree", "full"))
+	queries = append(queries, nxos.Query("rsp-subtree-depth", "2"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

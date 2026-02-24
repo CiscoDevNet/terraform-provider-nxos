@@ -6,6 +6,8 @@ ds_description: This data source can read a subinterface.
 res_description: This resource can manage a subinterface.
 doc_path: Layer%203/l3:EncRtdIf/
 doc_category: Interface
+bulk_resource: true
+parent_class_name: interfaceEntity
 attributes:
   - nxos_name: id
     tf_name: interface_id

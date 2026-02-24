@@ -359,6 +359,7 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewOSPFResource,
 		NewOSPFv3Resource,
 		NewPhysicalInterfaceResource,
+		NewPhysicalInterfacesResource,
 		NewPIMResource,
 		NewPortChannelInterfaceResource,
 		NewQueuingQOSPolicyMapResource,

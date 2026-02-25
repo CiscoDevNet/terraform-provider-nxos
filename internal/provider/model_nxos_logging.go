@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -73,7 +74,7 @@ func (data *Logging) fromIdentity(ctx context.Context, identity *LoggingIdentity
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
 
 func (data Logging) getDn() string {
-	return "sys/logging/loglevel"
+	return "sys/logging"
 }
 
 func (data LoggingFacilities) getRn() string {
@@ -81,7 +82,7 @@ func (data LoggingFacilities) getRn() string {
 }
 
 func (data Logging) getClassName() string {
-	return "loggingLogLevel"
+	return "loggingLogging"
 }
 
 // End of section. //template:end getPath
@@ -91,23 +92,30 @@ func (data Logging) getClassName() string {
 func (data Logging) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.All.IsUnknown() && !data.All.IsNull()) || false {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"all", data.All.ValueString())
-	}
-	if (!data.Level.IsUnknown() && !data.Level.IsNull()) || false {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"severityLevel", data.Level.ValueString())
-	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
-	for _, child := range data.Facilities {
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogLevel"
 		attrs = "{}"
-		if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "facilityName", child.Name.ValueString())
+		if (!data.All.IsUnknown() && !data.All.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "all", data.All.ValueString())
 		}
-		if (!child.Level.IsUnknown() && !child.Level.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "severityLevel", child.Level.ValueString())
+		if (!data.Level.IsUnknown() && !data.Level.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "severityLevel", data.Level.ValueString())
 		}
-		body, _ = sjson.SetRaw(body, childrenPath+".-1.loggingFacility.attributes", attrs)
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		for _, child := range data.Facilities {
+			attrs = "{}"
+			if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "facilityName", child.Name.ValueString())
+			}
+			if (!child.Level.IsUnknown() && !child.Level.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "severityLevel", child.Level.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.loggingFacility.attributes", attrs)
+		}
 	}
 
 	return nxos.Body{body}
@@ -118,22 +126,35 @@ func (data Logging) toBody() nxos.Body {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *Logging) fromBody(res gjson.Result) {
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			v.ForEach(
-				func(classname, value gjson.Result) bool {
-					if classname.String() == "loggingFacility" {
-						var child LoggingFacilities
-						child.Name = types.StringValue(value.Get("attributes.facilityName").String())
-						child.Level = types.StringValue(value.Get("attributes.severityLevel").String())
-						data.Facilities = append(data.Facilities, child)
-					}
-					return true
-				},
-			)
-			return true
-		},
-	)
+	{
+		var rloggingLogLevel gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("loggingLogLevel.attributes.rn").String()
+				if key == "loglevel" {
+					rloggingLogLevel = v
+					return false
+				}
+				return true
+			},
+		)
+		rloggingLogLevel.Get("loggingLogLevel.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "loggingFacility" {
+							var child LoggingFacilities
+							child.Name = types.StringValue(value.Get("attributes.facilityName").String())
+							child.Level = types.StringValue(value.Get("attributes.severityLevel").String())
+							data.Facilities = append(data.Facilities, child)
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+	}
 }
 
 // End of section. //template:end fromBody
@@ -141,9 +162,20 @@ func (data *Logging) fromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *Logging) updateFromBody(res gjson.Result) {
+	var rloggingLogLevel gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("loggingLogLevel.attributes.rn").String()
+			if key == "loglevel" {
+				rloggingLogLevel = v
+				return false
+			}
+			return true
+		},
+	)
 	for c := range data.Facilities {
 		var rloggingFacility gjson.Result
-		res.Get(data.getClassName() + ".children").ForEach(
+		rloggingLogLevel.Get("loggingLogLevel.children").ForEach(
 			func(_, v gjson.Result) bool {
 				key := v.Get("loggingFacility.attributes.rn").String()
 				if key == data.Facilities[c].getRn() {
@@ -172,7 +204,22 @@ func (data *Logging) updateFromBody(res gjson.Result) {
 
 func (data Logging) toDeleteBody() nxos.Body {
 	body := ""
-	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
+	if body == "" {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	}
+	childrenPath := data.getClassName() + ".children"
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogLevel"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		nestedChildrenPath := childBodyPath + ".children"
+		for _, child := range data.Facilities {
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "loggingFacility.attributes.rn", child.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "loggingFacility.attributes.status", "deleted")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		}
+	}
 
 	return nxos.Body{body}
 }
@@ -193,7 +240,7 @@ func (data Logging) toBodyWithDeletes(ctx context.Context, state Logging) nxos.B
 			deleteBody := ""
 			deleteBody, _ = sjson.Set(deleteBody, "loggingFacility.attributes.rn", stateChild.getRn())
 			deleteBody, _ = sjson.Set(deleteBody, "loggingFacility.attributes.status", "deleted")
-			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.loggingLogLevel.children"+".-1", deleteBody)
 		}
 	}
 	return body

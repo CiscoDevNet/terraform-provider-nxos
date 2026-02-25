@@ -4,19 +4,20 @@ page_title: "nxos_logging Resource - terraform-provider-nxos"
 subcategory: "System"
 description: |-
   This resource can manage the logging configuration.
-  API Documentation: loggingLogLevel https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/logging:LogLevel/
+  API Documentation: loggingLogging https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/logging:Logging/
   Additional API Documentation
-  loggingFacility https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/logging:Facility/
+  loggingLogLevel https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/logging:LogLevel/loggingFacility https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/logging:Facility/
 ---
 
 # nxos_logging (Resource)
 
 This resource can manage the logging configuration.
 
-- API Documentation: [loggingLogLevel](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/logging:LogLevel/)
+- API Documentation: [loggingLogging](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/logging:Logging/)
 
 ### Additional API Documentation
 
+- [loggingLogLevel](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/logging:LogLevel/)
 - [loggingFacility](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/logging:Facility/)
 
 ## Example Usage

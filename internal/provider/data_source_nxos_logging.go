@@ -57,7 +57,7 @@ func (d *LoggingDataSource) Metadata(_ context.Context, req datasource.MetadataR
 func (d *LoggingDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the logging configuration.", "loggingLogLevel", "System/logging:LogLevel/").AddAdditionalDocs([]string{"loggingFacility"}, []string{"System/logging:Facility/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the logging configuration.", "loggingLogging", "System/logging:Logging/").AddAdditionalDocs([]string{"loggingLogLevel", "loggingFacility"}, []string{"System/logging:LogLevel/", "System/logging:Facility/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -126,7 +126,7 @@ func (d *LoggingDataSource) Read(ctx context.Context, req datasource.ReadRequest
 	}
 
 	queries := []func(*nxos.Req){}
-	queries = append(queries, nxos.Query("rsp-subtree", "children"))
+	queries = append(queries, nxos.Query("rsp-subtree-depth", "2"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

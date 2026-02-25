@@ -56,6 +56,13 @@ func TestAccNxosLogging(t *testing.T) {
 				ImportState:       true,
 				ImportStateIdFunc: nxosLoggingImportStateIdFunc("nxos_logging.test"),
 			},
+			{
+				ResourceName:       "nxos_logging.test",
+				ImportState:        true,
+				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ExpectNonEmptyPlan: true,
+				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+			},
 		},
 	})
 }

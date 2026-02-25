@@ -63,7 +63,7 @@ func (r *LoggingResource) Metadata(ctx context.Context, req resource.MetadataReq
 func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the logging configuration.", "loggingLogLevel", "System/logging:LogLevel/").AddAdditionalDocs([]string{"loggingFacility"}, []string{"System/logging:Facility/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the logging configuration.", "loggingLogging", "System/logging:Logging/").AddAdditionalDocs([]string{"loggingLogLevel", "loggingFacility"}, []string{"System/logging:LogLevel/", "System/logging:Facility/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -222,7 +222,7 @@ func (r *LoggingResource) Read(ctx context.Context, req resource.ReadRequest, re
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
-		queries = append(queries, nxos.Query("rsp-subtree", "children"))
+		queries = append(queries, nxos.Query("rsp-subtree-depth", "2"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

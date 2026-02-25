@@ -1,76 +1,34 @@
 ---
 name: Logging
-class_name: loggingLogLevel
-dn: sys/logging/loglevel
+class_name: loggingLogging
+dn: sys/logging
+no_delete: true
 ds_description: This data source can read the logging configuration.
 res_description: This resource can manage the logging configuration.
-doc_path: System/logging:LogLevel/
+doc_path: System/logging:Logging/
 doc_category: System
-attributes:
-  - nxos_name: all
-    tf_name: all
-    type: String
-    description: "All logging level."
-    enum_values:
-      - "unspecified"
-      - "enableall"
-      - "disableall"
-    example: "unspecified"
-    default_value: "unspecified"
-    write_only: true
-  - nxos_name: severityLevel
-    tf_name: level
-    type: String
-    description: "Severity level."
-    enum_values:
-      - "emergencies"
-      - "alerts"
-      - "critical"
-      - "errors"
-      - "warnings"
-      - "notifications"
-      - "information"
-      - "debugging"
-    example: "information"
-    default_value: "notifications"
-    write_only: true
 child_classes:
-  - class_name: loggingFacility
-    doc_path: System/logging:Facility/
-    rn: facility-[%v]
-    tf_name: facilities
-    description: List of logging facilities.
-    type: list
-    mandatory: false
+  - class_name: loggingLogLevel
+    doc_path: System/logging:LogLevel/
+    rn: loglevel
+    type: single
+    no_delete: true
     attributes:
-      - nxos_name: facilityName
-        tf_name: name
+      - nxos_name: all
+        tf_name: all
         type: String
-        id: true
-        description: "Logging facility name."
+        description: "All logging level."
         enum_values:
-          - "spanning-tree"
-          - "session-mgr"
-          - "radius"
-          - "security"
-          - "plugin"
-          - "cdp"
-          - "bootvar"
-          - "aaa"
-          - "interface-vlan"
-          - "vshd"
-          - "cfs"
-          - "monitor"
-          - "ntp"
-          - "acllog"
-          - "track"
-          - "pltfm_config"
-          - "lacp"
-        example: "spanning-tree"
+          - "unspecified"
+          - "enableall"
+          - "disableall"
+        example: "unspecified"
+        default_value: "unspecified"
+        write_only: true
       - nxos_name: severityLevel
         tf_name: level
         type: String
-        description: "Logging severity level."
+        description: "Severity level."
         enum_values:
           - "emergencies"
           - "alerts"
@@ -81,3 +39,52 @@ child_classes:
           - "information"
           - "debugging"
         example: "information"
+        default_value: "notifications"
+        write_only: true
+    child_classes:
+      - class_name: loggingFacility
+        doc_path: System/logging:Facility/
+        rn: facility-[%v]
+        tf_name: facilities
+        description: List of logging facilities.
+        type: list
+        mandatory: false
+        attributes:
+          - nxos_name: facilityName
+            tf_name: name
+            type: String
+            id: true
+            description: "Logging facility name."
+            enum_values:
+              - "spanning-tree"
+              - "session-mgr"
+              - "radius"
+              - "security"
+              - "plugin"
+              - "cdp"
+              - "bootvar"
+              - "aaa"
+              - "interface-vlan"
+              - "vshd"
+              - "cfs"
+              - "monitor"
+              - "ntp"
+              - "acllog"
+              - "track"
+              - "pltfm_config"
+              - "lacp"
+            example: "spanning-tree"
+          - nxos_name: severityLevel
+            tf_name: level
+            type: String
+            description: "Logging severity level."
+            enum_values:
+              - "emergencies"
+              - "alerts"
+              - "critical"
+              - "errors"
+              - "warnings"
+              - "notifications"
+              - "information"
+              - "debugging"
+            example: "information"

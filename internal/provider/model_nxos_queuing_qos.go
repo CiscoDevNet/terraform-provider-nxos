@@ -479,6 +479,7 @@ func (data QueuingQoS) toDeleteBody() nxos.Body {
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipqosPMapEntity"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
 		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
 		for _, child := range data.PolicyMaps {
 			deleteBody := ""
 			deleteBody, _ = sjson.Set(deleteBody, "ipqosPMapInst.attributes.rn", child.getRn())
@@ -491,11 +492,13 @@ func (data QueuingQoS) toDeleteBody() nxos.Body {
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipqosServPol"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
 		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
 		{
 			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosEgress"
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
 			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
 			{
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "ipqosSystem.attributes.rn", "sys")

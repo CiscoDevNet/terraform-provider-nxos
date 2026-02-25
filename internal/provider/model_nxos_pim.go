@@ -750,7 +750,16 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 
 func (data PIM) toDeleteBody() nxos.Body {
 	body := ""
-	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
+	if body == "" {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	}
+	childrenPath := data.getClassName() + ".children"
+	{
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "pimInst.attributes.rn", "inst")
+		deleteBody, _ = sjson.Set(deleteBody, "pimInst.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
 
 	return nxos.Body{body}
 }

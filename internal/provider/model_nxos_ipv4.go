@@ -523,6 +523,7 @@ func (data IPv4) toDeleteBody() nxos.Body {
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipv4Inst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
 		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
 		for _, child := range data.Vrfs {
 			deleteBody := ""
 			deleteBody, _ = sjson.Set(deleteBody, "ipv4Dom.attributes.rn", child.getRn())

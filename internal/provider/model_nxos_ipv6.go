@@ -553,6 +553,7 @@ func (data IPv6) toDeleteBody() nxos.Body {
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipv6Inst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
 		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
 		for _, child := range data.Vrfs {
 			deleteBody := ""
 			deleteBody, _ = sjson.Set(deleteBody, "ipv6Dom.attributes.rn", child.getRn())

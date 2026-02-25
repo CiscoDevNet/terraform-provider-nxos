@@ -18,6 +18,7 @@ child_classes:
       - class_name: stpIf
         rn: if-[%s]
         type: list
+        no_delete: true
         tf_name: interfaces
         description: 'List of Spanning Tree interfaces.'
         doc_path: Discovery%20Protocols/stp:If/

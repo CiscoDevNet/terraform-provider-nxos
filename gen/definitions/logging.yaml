@@ -49,6 +49,7 @@ child_classes:
         description: List of logging facilities.
         type: list
         mandatory: false
+        no_delete: true
         attributes:
           - nxos_name: facilityName
             tf_name: name

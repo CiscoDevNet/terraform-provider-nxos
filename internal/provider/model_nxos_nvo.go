@@ -436,7 +436,16 @@ func (data *NVO) updateFromBody(res gjson.Result) {
 
 func (data NVO) toDeleteBody() nxos.Body {
 	body := ""
-	body, _ = sjson.Set(body, data.getClassName()+".attributes.status", "deleted")
+	if body == "" {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	}
+	childrenPath := data.getClassName() + ".children"
+	for _, child := range data.NveInterfaces {
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "nvoEp.attributes.rn", child.getRn())
+		deleteBody, _ = sjson.Set(deleteBody, "nvoEp.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
 
 	return nxos.Body{body}
 }

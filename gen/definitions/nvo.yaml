@@ -4,6 +4,7 @@ class_name: nvoEps
 dn: sys/eps
 ds_description: This data source can read the NVO configuration.
 res_description: This resource can manage the NVO configuration.
+no_delete: true
 doc_path: Network%20Virtualization/nvo:Eps/
 doc_category: Overlay
 child_classes:

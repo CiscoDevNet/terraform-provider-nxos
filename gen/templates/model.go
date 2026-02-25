@@ -824,6 +824,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 {{- end}}
 {{- if .ChildClasses}}
 	nestedChildrenPath := childBodyPath + ".children"
+	_ = nestedChildrenPath
 	{{- template "toDeleteBodyChildrenTemplate" (makeMap "Children" .ChildClasses "ChildrenPathVar" "nestedChildrenPath")}}
 {{- end}}
 	}

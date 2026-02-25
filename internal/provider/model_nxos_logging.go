@@ -213,12 +213,7 @@ func (data Logging) toDeleteBody() nxos.Body {
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogLevel"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
 		nestedChildrenPath := childBodyPath + ".children"
-		for _, child := range data.Facilities {
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "loggingFacility.attributes.rn", child.getRn())
-			deleteBody, _ = sjson.Set(deleteBody, "loggingFacility.attributes.status", "deleted")
-			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
-		}
+		_ = nestedChildrenPath
 	}
 
 	return nxos.Body{body}

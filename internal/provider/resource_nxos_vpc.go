@@ -594,14 +594,10 @@ func (r *VPCResource) Delete(ctx context.Context, req resource.DeleteRequest, re
 	if device.Managed {
 		body := state.toDeleteBody()
 		if len(body.Str) > 0 {
-			res, err := device.Client.Post(state.getDn(), body.Str)
+			_, err := device.Client.Post(state.getDn(), body.Str)
 			if err != nil {
-				errCode := res.Get("imdata.0.error.attributes.code").Str
-				// Ignore errors of type "Cannot delete object"
-				if errCode != "1" && errCode != "107" {
-					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
-					return
-				}
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
+				return
 			}
 		}
 	}

@@ -265,12 +265,7 @@ func (data SpanningTree) toDeleteBody() nxos.Body {
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".stpInst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
 		nestedChildrenPath := childBodyPath + ".children"
-		for _, child := range data.Interfaces {
-			deleteBody := ""
-			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.rn", child.getRn())
-			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.status", "deleted")
-			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
-		}
+		_ = nestedChildrenPath
 	}
 
 	return nxos.Body{body}

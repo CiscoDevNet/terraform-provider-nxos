@@ -258,6 +258,7 @@ func (data DHCP) toDeleteBody() nxos.Body {
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".dhcpInst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
 		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
 		for _, child := range data.RelayInterfaces {
 			deleteBody := ""
 			deleteBody, _ = sjson.Set(deleteBody, "dhcpRelayIf.attributes.rn", child.getRn())

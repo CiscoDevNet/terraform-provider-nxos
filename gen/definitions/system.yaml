@@ -20,51 +20,6 @@ child_classes:
     type: single
     no_delete: true
     child_classes:
-      - class_name: ipqosDefaultQoS
-        doc_path: Qos/ipqos:DefaultQoS/
-        rn: dflt
-        type: single
-        no_delete: true
-        child_classes:
-          - class_name: ipqosServPol
-            doc_path: Qos/ipqos:ServPol/
-            rn: policy
-            type: single
-            no_delete: true
-            child_classes:
-              - class_name: ipqosIngress
-                doc_path: Qos/ipqos:Ingress/
-                rn: in
-                type: single
-                no_delete: true
-                child_classes:
-                  - class_name: ipqosIf
-                    doc_path: Qos/ipqos:If/
-                    rn: intf-[%s]
-                    type: list
-                    tf_name: default_qos_policy_interface_in
-                    description: 'List of interfaces with ingress QoS policy assignments.'
-                    attributes:
-                      - nxos_name: name
-                        tf_name: interface_id
-                        type: String
-                        id: true
-                        description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
-                        example: eth1/10
-                    child_classes:
-                      - class_name: ipqosInst
-                        doc_path: Qos/ipqos:Inst/
-                        rn: pmap
-                        type: single
-                        tf_name: policy_map
-                        description: 'Ingress QoS policy map assignment.'
-                        attributes:
-                          - nxos_name: name
-                            tf_name: policy_map_name
-                            type: String
-                            mandatory: true
-                            description: 'Policy map name.'
-                            example: PM1
       - class_name: ipqosQueuing
         doc_path: Qos/ipqos:Queuing/
         rn: queuing
@@ -133,11 +88,6 @@ child_classes:
             example: up
             delete_value: "DME_UNSET_PROPERTY_MARKER"
 test_prerequisites:
-  - dn: sys/ipqos/dflt/p/name-[PM1]
-    class_name: ipqosPMapInst
-    attributes:
-      - name: name
-        value: PM1
   - dn: sys/ipqos/queuing/p/name-[PM1]
     class_name: ipqosPMapInst
     attributes:
@@ -148,50 +98,50 @@ test_prerequisites:
     attributes:
       - name: name
         value: c-out-q1
-    dependencies: [1]
+    dependencies: [0]
   - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q1]/prio
     class_name: ipqosPriority
     no_delete: true
     attributes:
       - name: level
         value: 1
-    dependencies: [2]
+    dependencies: [1]
   - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q2]
     class_name: ipqosMatchCMap
     attributes:
       - name: name
         value: c-out-q2
-    dependencies: [1]
+    dependencies: [0]
   - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q2]/setRemBW
     class_name: ipqosSetRemBW
     no_delete: true
     attributes:
       - name: val
         value: 10
-    dependencies: [4]
+    dependencies: [3]
   - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q3]
     class_name: ipqosMatchCMap
     attributes:
       - name: name
         value: c-out-q3
-    dependencies: [1]
+    dependencies: [0]
   - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q3]/setRemBW
     class_name: ipqosSetRemBW
     no_delete: true
     attributes:
       - name: val
         value: 10
-    dependencies: [6]
+    dependencies: [5]
   - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q-default]
     class_name: ipqosMatchCMap
     attributes:
       - name: name
         value: c-out-q-default
-    dependencies: [1]
+    dependencies: [0]
   - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q-default]/setRemBW
     class_name: ipqosSetRemBW
     no_delete: true
     attributes:
       - name: val
         value: 10
-    dependencies: [8]
+    dependencies: [7]

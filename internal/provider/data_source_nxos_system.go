@@ -57,7 +57,7 @@ func (d *SystemDataSource) Metadata(_ context.Context, req datasource.MetadataRe
 func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the system configuration.", "topSystem", "System/top:System/").AddAdditionalDocs([]string{"ipqosEntity", "ipqosDefaultQoS", "ipqosServPol", "ipqosIngress", "ipqosIf", "ipqosInst", "ipqosQueuing", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst", "ethpmEntity", "ethpmInst"}, []string{"Qos/ipqos:Entity/", "Qos/ipqos:DefaultQoS/", "Qos/ipqos:ServPol/", "Qos/ipqos:Ingress/", "Qos/ipqos:If/", "Qos/ipqos:Inst/", "Qos/ipqos:Queuing/", "Qos/ipqos:ServPol/", "Qos/ipqos:Egress/", "Qos/ipqos:System/", "Qos/ipqos:Inst/", "Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the system configuration.", "topSystem", "System/top:System/").AddAdditionalDocs([]string{"ipqosEntity", "ipqosQueuing", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst", "ethpmEntity", "ethpmInst"}, []string{"Qos/ipqos:Entity/", "Qos/ipqos:Queuing/", "Qos/ipqos:ServPol/", "Qos/ipqos:Egress/", "Qos/ipqos:System/", "Qos/ipqos:Inst/", "Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -71,22 +71,6 @@ func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 			"name": schema.StringAttribute{
 				MarkdownDescription: "The system name (hostname).",
 				Computed:            true,
-			},
-			"default_qos_policy_interface_in": schema.ListNestedAttribute{
-				MarkdownDescription: "List of interfaces with ingress QoS policy assignments.",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
-							Computed:            true,
-						},
-						"policy_map_name": schema.StringAttribute{
-							MarkdownDescription: "Policy map name.",
-							Computed:            true,
-						},
-					},
-				},
 			},
 			"policy_map_name": schema.StringAttribute{
 				MarkdownDescription: "Policy map name.",

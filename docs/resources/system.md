@@ -6,7 +6,7 @@ description: |-
   This resource can manage the system configuration.
   API Documentation: topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/top:System/
   Additional API Documentation
-  ipqosEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Entity/ipqosDefaultQoS https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:DefaultQoS/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:ServPol/ipqosIngress https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Ingress/ipqosIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:If/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Inst/ipqosQueuing https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Queuing/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:ServPol/ipqosEgress https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Egress/ipqosSystem https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:System/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Inst/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/ethpm:Inst/
+  ipqosEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Entity/ipqosQueuing https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Queuing/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:ServPol/ipqosEgress https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Egress/ipqosSystem https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:System/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Inst/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/ethpm:Inst/
 ---
 
 # nxos_system (Resource)
@@ -18,11 +18,6 @@ This resource can manage the system configuration.
 ### Additional API Documentation
 
 - [ipqosEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Entity/)
-- [ipqosDefaultQoS](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:DefaultQoS/)
-- [ipqosServPol](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:ServPol/)
-- [ipqosIngress](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Ingress/)
-- [ipqosIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:If/)
-- [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Inst/)
 - [ipqosQueuing](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Queuing/)
 - [ipqosServPol](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:ServPol/)
 - [ipqosEgress](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Egress/)
@@ -35,11 +30,7 @@ This resource can manage the system configuration.
 
 ```terraform
 resource "nxos_system" "example" {
-  name = "LEAF1"
-  default_qos_policy_interface_in = [{
-    interface_id    = "eth1/10"
-    policy_map_name = "PM1"
-  }]
+  name                 = "LEAF1"
   policy_map_name      = "PM1"
   mtu                  = 9216
   default_admin_status = "up"
@@ -58,7 +49,6 @@ resource "nxos_system" "example" {
 - `default_admin_status` (String) Default admin status
   - Choices: `up`, `down`
   - Default value: `up`
-- `default_qos_policy_interface_in` (Attributes List) List of interfaces with ingress QoS policy assignments. (see [below for nested schema](#nestedatt--default_qos_policy_interface_in))
 - `device` (String) A device name from the provider configuration.
 - `mtu` (Number) System jumbo MTU.
   - Range: `576`-`9216`
@@ -68,14 +58,6 @@ resource "nxos_system" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-
-<a id="nestedatt--default_qos_policy_interface_in"></a>
-### Nested Schema for `default_qos_policy_interface_in`
-
-Required:
-
-- `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
-- `policy_map_name` (String) Policy map name.
 
 ## Import
 

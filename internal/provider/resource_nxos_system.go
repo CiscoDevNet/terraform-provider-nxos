@@ -65,7 +65,7 @@ func (r *SystemResource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration.", "topSystem", "System/top:System/").AddAdditionalDocs([]string{"ipqosEntity", "ipqosDefaultQoS", "ipqosServPol", "ipqosIngress", "ipqosIf", "ipqosInst", "ipqosQueuing", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst", "ethpmEntity", "ethpmInst"}, []string{"Qos/ipqos:Entity/", "Qos/ipqos:DefaultQoS/", "Qos/ipqos:ServPol/", "Qos/ipqos:Ingress/", "Qos/ipqos:If/", "Qos/ipqos:Inst/", "Qos/ipqos:Queuing/", "Qos/ipqos:ServPol/", "Qos/ipqos:Egress/", "Qos/ipqos:System/", "Qos/ipqos:Inst/", "Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration.", "topSystem", "System/top:System/").AddAdditionalDocs([]string{"ipqosEntity", "ipqosQueuing", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst", "ethpmEntity", "ethpmInst"}, []string{"Qos/ipqos:Entity/", "Qos/ipqos:Queuing/", "Qos/ipqos:ServPol/", "Qos/ipqos:Egress/", "Qos/ipqos:System/", "Qos/ipqos:Inst/", "Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -82,25 +82,6 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			"name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The system name (hostname).").String,
 				Optional:            true,
-			},
-			"default_qos_policy_interface_in": schema.ListNestedAttribute{
-				MarkdownDescription: "List of interfaces with ingress QoS policy assignments.",
-				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
-							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
-						},
-						"policy_map_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Policy map name.").String,
-							Required:            true,
-						},
-					},
-				},
 			},
 			"policy_map_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Policy map name.").String,
@@ -269,14 +250,6 @@ func (r *SystemResource) Update(ctx context.Context, req resource.UpdateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	var state System
-
-	// Read state
-	diags = req.State.Get(ctx, &state)
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
@@ -287,7 +260,7 @@ func (r *SystemResource) Update(ctx context.Context, req resource.UpdateRequest,
 	}
 
 	if device.Managed {
-		body := plan.toBodyWithDeletes(ctx, state)
+		body := plan.toBody()
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))

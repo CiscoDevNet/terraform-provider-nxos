@@ -57,7 +57,7 @@ func (d *VPCDataSource) Metadata(_ context.Context, req datasource.MetadataReque
 func (d *VPCDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the vPC configuration.", "vpcInst", "System/vpc:Inst/").AddAdditionalDocs([]string{"vpcDom", "vpcKeepalive", "vpcPeerLink", "vpcIf", "vpcRsVpcConf"}, []string{"System/vpc:Dom/", "System/vpc:Keepalive/", "System/vpc:PeerLink/", "System/vpc:If/", "System/vpc:RsVpcConf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the vPC configuration.", "vpcEntity", "System/vpc:Entity/").AddAdditionalDocs([]string{"vpcInst", "vpcDom", "vpcKeepalive", "vpcPeerLink", "vpcIf", "vpcRsVpcConf"}, []string{"System/vpc:Inst/", "System/vpc:Dom/", "System/vpc:Keepalive/", "System/vpc:PeerLink/", "System/vpc:If/", "System/vpc:RsVpcConf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -262,7 +262,7 @@ func (d *VPCDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 	}
 
 	queries := []func(*nxos.Req){}
-	queries = append(queries, nxos.Query("rsp-subtree-depth", "3"))
+	queries = append(queries, nxos.Query("rsp-subtree-depth", "4"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

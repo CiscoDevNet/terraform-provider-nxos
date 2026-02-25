@@ -14,7 +14,7 @@ resource "nxos_ospf" "example" {
       control                  = "bfd,default-passive"
       areas = [{
         area_id             = "0.0.0.10"
-        authentication_type = "none"
+        authentication_type = "unspecified"
         cost                = 10
         type                = "stub"
       }]

@@ -133,7 +133,7 @@ child_classes:
                   - md5
                   - unspecified
                 default_value: unspecified
-                example: none
+                example: unspecified
               - nxos_name: cost
                 tf_name: cost
                 type: Int64

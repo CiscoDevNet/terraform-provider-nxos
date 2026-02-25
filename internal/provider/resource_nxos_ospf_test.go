@@ -47,7 +47,7 @@ func TestAccNxosOSPF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf.test", "instances.0.vrfs.0.router_id", "34.56.78.90"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf.test", "instances.0.vrfs.0.control", "bfd,default-passive"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf.test", "instances.0.vrfs.0.areas.0.area_id", "0.0.0.10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf.test", "instances.0.vrfs.0.areas.0.authentication_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf.test", "instances.0.vrfs.0.areas.0.authentication_type", "unspecified"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf.test", "instances.0.vrfs.0.areas.0.cost", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf.test", "instances.0.vrfs.0.areas.0.type", "stub"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf.test", "instances.0.vrfs.0.max_metric_control", "external-lsa,startup,stub,summary-lsa"))
@@ -182,7 +182,7 @@ func testAccNxosOSPFConfig_all() string {
 	config += `			control = "bfd,default-passive"` + "\n"
 	config += `			areas = [{` + "\n"
 	config += `				area_id = "0.0.0.10"` + "\n"
-	config += `				authentication_type = "none"` + "\n"
+	config += `				authentication_type = "unspecified"` + "\n"
 	config += `				cost = 10` + "\n"
 	config += `				type = "stub"` + "\n"
 	config += `			}]` + "\n"

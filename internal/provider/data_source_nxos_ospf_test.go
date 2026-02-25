@@ -48,7 +48,7 @@ func TestAccDataSourceNxosOSPF(t *testing.T) {
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospf.test", "instances.*.vrfs.*.areas.*", map[string]string{
 		"area_id":             "0.0.0.10",
-		"authentication_type": "none",
+		"authentication_type": "unspecified",
 		"cost":                "10",
 		"type":                "stub",
 	}))
@@ -152,7 +152,7 @@ func testAccDataSourceNxosOSPFConfig() string {
 	config += `			control = "bfd,default-passive"` + "\n"
 	config += `			areas = [{` + "\n"
 	config += `				area_id = "0.0.0.10"` + "\n"
-	config += `				authentication_type = "none"` + "\n"
+	config += `				authentication_type = "unspecified"` + "\n"
 	config += `				cost = 10` + "\n"
 	config += `				type = "stub"` + "\n"
 	config += `			}]` + "\n"

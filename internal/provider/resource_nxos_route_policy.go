@@ -92,7 +92,7 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 								stringplanmodifier.RequiresReplace(),
 							},
 						},
-						"prefix_list_entries": schema.ListNestedAttribute{
+						"entries": schema.ListNestedAttribute{
 							MarkdownDescription: "IPv4 Prefix List entries.",
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
@@ -165,7 +165,7 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 								stringplanmodifier.RequiresReplace(),
 							},
 						},
-						"route_map_entries": schema.ListNestedAttribute{
+						"entries": schema.ListNestedAttribute{
 							MarkdownDescription: "List of Route Map Entries.",
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{

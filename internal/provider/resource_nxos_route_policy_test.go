@@ -36,21 +36,21 @@ import (
 func TestAccNxosRoutePolicy(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.name", "PREFIX_LIST1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.prefix_list_entries.0.order", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.prefix_list_entries.0.action", "permit"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.prefix_list_entries.0.criteria", "inexact"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.prefix_list_entries.0.prefix", "192.168.1.0/24"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.prefix_list_entries.0.from_range", "26"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.prefix_list_entries.0.to_range", "32"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.entries.0.order", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.entries.0.action", "permit"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.entries.0.criteria", "inexact"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.entries.0.prefix", "192.168.1.0/24"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.entries.0.from_range", "26"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.entries.0.to_range", "32"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.name", "ROUTE_MAP1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.route_map_entries.0.order", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.route_map_entries.0.action", "permit"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.route_map_entries.0.match_route_prefix_lists.0.prefix_list_dn", "sys/rpm/pfxlistv4-[PREFIX_LIST1]"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.route_map_entries.0.additive", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.route_map_entries.0.no_community", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.route_map_entries.0.set_criteria", "none"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.route_map_entries.0.set_regular_community_items.0.community", "regular:as2-nn2:65001:123"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.route_map_entries.0.match_tags.0.tag", "12345"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.order", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.action", "permit"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.match_route_prefix_lists.0.prefix_list_dn", "sys/rpm/pfxlistv4-[PREFIX_LIST1]"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.additive", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.no_community", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_criteria", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_regular_community_items.0.community", "regular:as2-nn2:65001:123"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.match_tags.0.tag", "12345"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -109,7 +109,7 @@ func testAccNxosRoutePolicyConfig_all() string {
 	config := `resource "nxos_route_policy" "test" {` + "\n"
 	config += `	ipv4_prefix_lists = [{` + "\n"
 	config += `		name = "PREFIX_LIST1"` + "\n"
-	config += `		prefix_list_entries = [{` + "\n"
+	config += `		entries = [{` + "\n"
 	config += `			order = 10` + "\n"
 	config += `			action = "permit"` + "\n"
 	config += `			criteria = "inexact"` + "\n"
@@ -120,7 +120,7 @@ func testAccNxosRoutePolicyConfig_all() string {
 	config += `	}]` + "\n"
 	config += `	route_maps = [{` + "\n"
 	config += `		name = "ROUTE_MAP1"` + "\n"
-	config += `		route_map_entries = [{` + "\n"
+	config += `		entries = [{` + "\n"
 	config += `			order = 10` + "\n"
 	config += `			action = "permit"` + "\n"
 	config += `			match_route_prefix_lists = [{` + "\n"

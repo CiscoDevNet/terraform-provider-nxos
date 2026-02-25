@@ -25,7 +25,7 @@ child_classes:
         doc_path: Routing%20and%20Forwarding/rtpfx:Entry/
         rn: ent-%v
         type: list
-        tf_name: prefix_list_entries
+        tf_name: entries
         description: 'IPv4 Prefix List entries.'
         attributes:
           - nxos_name: order
@@ -93,7 +93,7 @@ child_classes:
         doc_path: Routing%20and%20Forwarding/rtmap:Entry/
         rn: ent-%v
         type: list
-        tf_name: route_map_entries
+        tf_name: entries
         description: 'List of Route Map Entries.'
         attributes:
           - nxos_name: order

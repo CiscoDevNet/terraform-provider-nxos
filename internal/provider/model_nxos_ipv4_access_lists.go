@@ -46,11 +46,11 @@ type IPv4AccessLists struct {
 }
 
 type IPv4AccessListsAccessLists struct {
-	Name    types.String             `tfsdk:"name"`
-	Entries []IPv4AccessListsEntries `tfsdk:"entries"`
+	Name    types.String                        `tfsdk:"name"`
+	Entries []IPv4AccessListsAccessListsEntries `tfsdk:"entries"`
 }
 
-type IPv4AccessListsEntries struct {
+type IPv4AccessListsAccessListsEntries struct {
 	Sequence                types.Int64  `tfsdk:"sequence"`
 	Ack                     types.Bool   `tfsdk:"ack"`
 	Action                  types.String `tfsdk:"action"`
@@ -141,7 +141,7 @@ func (data IPv4AccessListsAccessLists) getRn() string {
 	return fmt.Sprintf("name-[%s]", data.Name.ValueString())
 }
 
-func (data IPv4AccessListsEntries) getRn() string {
+func (data IPv4AccessListsAccessListsEntries) getRn() string {
 	return fmt.Sprintf("seq-%v", data.Sequence.ValueInt64())
 }
 
@@ -397,7 +397,7 @@ func (data *IPv4AccessLists) fromBody(res gjson.Result) {
 								nestedV.ForEach(
 									func(nestedClassname, nestedValue gjson.Result) bool {
 										if nestedClassname.String() == "ipv4aclACE" {
-											var nestedChildipv4aclACE IPv4AccessListsEntries
+											var nestedChildipv4aclACE IPv4AccessListsAccessListsEntries
 											nestedChildipv4aclACE.Sequence = types.Int64Value(nestedValue.Get("attributes.seqNum").Int())
 											nestedChildipv4aclACE.Ack = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.ack").String()))
 											nestedChildipv4aclACE.Action = types.StringValue(nestedValue.Get("attributes.action").String())

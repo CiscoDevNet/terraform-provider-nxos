@@ -48,49 +48,49 @@ type BGP struct {
 }
 
 type BGPVrfs struct {
-	Name                           types.String         `tfsdk:"name"`
-	RouterId                       types.String         `tfsdk:"router_id"`
-	RouteControlEnforceFirstAs     types.String         `tfsdk:"route_control_enforce_first_as"`
-	RouteControlFibAccelerate      types.String         `tfsdk:"route_control_fib_accelerate"`
-	RouteControlLogNeighborChanges types.String         `tfsdk:"route_control_log_neighbor_changes"`
-	RouteControlSuppressRoutes     types.String         `tfsdk:"route_control_suppress_routes"`
-	GracefulRestartInterval        types.Int64          `tfsdk:"graceful_restart_interval"`
-	GracefulRestartStaleInterval   types.Int64          `tfsdk:"graceful_restart_stale_interval"`
-	AddressFamilies                []BGPAddressFamilies `tfsdk:"address_families"`
-	PeerTemplates                  []BGPPeerTemplates   `tfsdk:"peer_templates"`
-	Peers                          []BGPPeers           `tfsdk:"peers"`
+	Name                           types.String             `tfsdk:"name"`
+	RouterId                       types.String             `tfsdk:"router_id"`
+	RouteControlEnforceFirstAs     types.String             `tfsdk:"route_control_enforce_first_as"`
+	RouteControlFibAccelerate      types.String             `tfsdk:"route_control_fib_accelerate"`
+	RouteControlLogNeighborChanges types.String             `tfsdk:"route_control_log_neighbor_changes"`
+	RouteControlSuppressRoutes     types.String             `tfsdk:"route_control_suppress_routes"`
+	GracefulRestartInterval        types.Int64              `tfsdk:"graceful_restart_interval"`
+	GracefulRestartStaleInterval   types.Int64              `tfsdk:"graceful_restart_stale_interval"`
+	AddressFamilies                []BGPVrfsAddressFamilies `tfsdk:"address_families"`
+	PeerTemplates                  []BGPVrfsPeerTemplates   `tfsdk:"peer_templates"`
+	Peers                          []BGPVrfsPeers           `tfsdk:"peers"`
 }
 
-type BGPAddressFamilies struct {
-	AddressFamily                     types.String            `tfsdk:"address_family"`
-	CriticalNexthopTimeout            types.String            `tfsdk:"critical_nexthop_timeout"`
-	NonCriticalNexthopTimeout         types.String            `tfsdk:"non_critical_nexthop_timeout"`
-	AdvertiseL2vpnEvpn                types.String            `tfsdk:"advertise_l2vpn_evpn"`
-	AdvertisePhysicalIpForType5Routes types.String            `tfsdk:"advertise_physical_ip_for_type5_routes"`
-	MaxEcmpPaths                      types.Int64             `tfsdk:"max_ecmp_paths"`
-	MaxExternalEcmpPaths              types.Int64             `tfsdk:"max_external_ecmp_paths"`
-	MaxExternalInternalEcmpPaths      types.Int64             `tfsdk:"max_external_internal_ecmp_paths"`
-	MaxLocalEcmpPaths                 types.Int64             `tfsdk:"max_local_ecmp_paths"`
-	MaxMixedEcmpPaths                 types.Int64             `tfsdk:"max_mixed_ecmp_paths"`
-	DefaultInformationOriginate       types.String            `tfsdk:"default_information_originate"`
-	NextHopRouteMapName               types.String            `tfsdk:"next_hop_route_map_name"`
-	PrefixPriority                    types.String            `tfsdk:"prefix_priority"`
-	RetainRtAll                       types.String            `tfsdk:"retain_rt_all"`
-	AdvertiseOnlyActiveRoutes         types.String            `tfsdk:"advertise_only_active_routes"`
-	TableMapRouteMapName              types.String            `tfsdk:"table_map_route_map_name"`
-	VniEthernetTag                    types.String            `tfsdk:"vni_ethernet_tag"`
-	WaitIgpConverged                  types.String            `tfsdk:"wait_igp_converged"`
-	AdvertisedPrefixes                []BGPAdvertisedPrefixes `tfsdk:"advertised_prefixes"`
-	Redistributions                   []BGPRedistributions    `tfsdk:"redistributions"`
+type BGPVrfsAddressFamilies struct {
+	AddressFamily                     types.String                               `tfsdk:"address_family"`
+	CriticalNexthopTimeout            types.String                               `tfsdk:"critical_nexthop_timeout"`
+	NonCriticalNexthopTimeout         types.String                               `tfsdk:"non_critical_nexthop_timeout"`
+	AdvertiseL2vpnEvpn                types.String                               `tfsdk:"advertise_l2vpn_evpn"`
+	AdvertisePhysicalIpForType5Routes types.String                               `tfsdk:"advertise_physical_ip_for_type5_routes"`
+	MaxEcmpPaths                      types.Int64                                `tfsdk:"max_ecmp_paths"`
+	MaxExternalEcmpPaths              types.Int64                                `tfsdk:"max_external_ecmp_paths"`
+	MaxExternalInternalEcmpPaths      types.Int64                                `tfsdk:"max_external_internal_ecmp_paths"`
+	MaxLocalEcmpPaths                 types.Int64                                `tfsdk:"max_local_ecmp_paths"`
+	MaxMixedEcmpPaths                 types.Int64                                `tfsdk:"max_mixed_ecmp_paths"`
+	DefaultInformationOriginate       types.String                               `tfsdk:"default_information_originate"`
+	NextHopRouteMapName               types.String                               `tfsdk:"next_hop_route_map_name"`
+	PrefixPriority                    types.String                               `tfsdk:"prefix_priority"`
+	RetainRtAll                       types.String                               `tfsdk:"retain_rt_all"`
+	AdvertiseOnlyActiveRoutes         types.String                               `tfsdk:"advertise_only_active_routes"`
+	TableMapRouteMapName              types.String                               `tfsdk:"table_map_route_map_name"`
+	VniEthernetTag                    types.String                               `tfsdk:"vni_ethernet_tag"`
+	WaitIgpConverged                  types.String                               `tfsdk:"wait_igp_converged"`
+	AdvertisedPrefixes                []BGPVrfsAddressFamiliesAdvertisedPrefixes `tfsdk:"advertised_prefixes"`
+	Redistributions                   []BGPVrfsAddressFamiliesRedistributions    `tfsdk:"redistributions"`
 }
 
-type BGPAdvertisedPrefixes struct {
+type BGPVrfsAddressFamiliesAdvertisedPrefixes struct {
 	Prefix   types.String `tfsdk:"prefix"`
 	RouteMap types.String `tfsdk:"route_map"`
 	Evpn     types.String `tfsdk:"evpn"`
 }
 
-type BGPRedistributions struct {
+type BGPVrfsAddressFamiliesRedistributions struct {
 	Protocol         types.String `tfsdk:"protocol"`
 	ProtocolInstance types.String `tfsdk:"protocol_instance"`
 	RouteMap         types.String `tfsdk:"route_map"`
@@ -98,16 +98,16 @@ type BGPRedistributions struct {
 	Srv6PrefixType   types.String `tfsdk:"srv6_prefix_type"`
 }
 
-type BGPPeerTemplates struct {
-	Name                        types.String                     `tfsdk:"name"`
-	RemoteAsn                   types.String                     `tfsdk:"remote_asn"`
-	Description                 types.String                     `tfsdk:"description"`
-	PeerType                    types.String                     `tfsdk:"peer_type"`
-	SourceInterface             types.String                     `tfsdk:"source_interface"`
-	PeerTemplateAddressFamilies []BGPPeerTemplateAddressFamilies `tfsdk:"peer_template_address_families"`
+type BGPVrfsPeerTemplates struct {
+	Name                        types.String                                      `tfsdk:"name"`
+	RemoteAsn                   types.String                                      `tfsdk:"remote_asn"`
+	Description                 types.String                                      `tfsdk:"description"`
+	PeerType                    types.String                                      `tfsdk:"peer_type"`
+	SourceInterface             types.String                                      `tfsdk:"source_interface"`
+	PeerTemplateAddressFamilies []BGPVrfsPeerTemplatesPeerTemplateAddressFamilies `tfsdk:"peer_template_address_families"`
 }
 
-type BGPPeerTemplateAddressFamilies struct {
+type BGPVrfsPeerTemplatesPeerTemplateAddressFamilies struct {
 	AddressFamily         types.String `tfsdk:"address_family"`
 	Control               types.String `tfsdk:"control"`
 	SendCommunityExtended types.String `tfsdk:"send_community_extended"`
@@ -118,39 +118,39 @@ type BGPPeerTemplateAddressFamilies struct {
 	MaxPrefixThreshold    types.Int64  `tfsdk:"max_prefix_threshold"`
 }
 
-type BGPPeers struct {
-	Address             types.String             `tfsdk:"address"`
-	RemoteAsn           types.String             `tfsdk:"remote_asn"`
-	Description         types.String             `tfsdk:"description"`
-	PeerTemplate        types.String             `tfsdk:"peer_template"`
-	PeerType            types.String             `tfsdk:"peer_type"`
-	SourceInterface     types.String             `tfsdk:"source_interface"`
-	HoldTime            types.Int64              `tfsdk:"hold_time"`
-	Keepalive           types.Int64              `tfsdk:"keepalive"`
-	EbgpMultihopTtl     types.Int64              `tfsdk:"ebgp_multihop_ttl"`
-	PeerControl         types.String             `tfsdk:"peer_control"`
-	PasswordType        types.String             `tfsdk:"password_type"`
-	Password            types.String             `tfsdk:"password"`
-	LocalAsnPropagation types.String             `tfsdk:"local_asn_propagation"`
-	LocalAsn            types.String             `tfsdk:"local_asn"`
-	PeerAddressFamilies []BGPPeerAddressFamilies `tfsdk:"peer_address_families"`
+type BGPVrfsPeers struct {
+	Address             types.String                      `tfsdk:"address"`
+	RemoteAsn           types.String                      `tfsdk:"remote_asn"`
+	Description         types.String                      `tfsdk:"description"`
+	PeerTemplate        types.String                      `tfsdk:"peer_template"`
+	PeerType            types.String                      `tfsdk:"peer_type"`
+	SourceInterface     types.String                      `tfsdk:"source_interface"`
+	HoldTime            types.Int64                       `tfsdk:"hold_time"`
+	Keepalive           types.Int64                       `tfsdk:"keepalive"`
+	EbgpMultihopTtl     types.Int64                       `tfsdk:"ebgp_multihop_ttl"`
+	PeerControl         types.String                      `tfsdk:"peer_control"`
+	PasswordType        types.String                      `tfsdk:"password_type"`
+	Password            types.String                      `tfsdk:"password"`
+	LocalAsnPropagation types.String                      `tfsdk:"local_asn_propagation"`
+	LocalAsn            types.String                      `tfsdk:"local_asn"`
+	PeerAddressFamilies []BGPVrfsPeersPeerAddressFamilies `tfsdk:"peer_address_families"`
 }
 
-type BGPPeerAddressFamilies struct {
-	AddressFamily         types.String            `tfsdk:"address_family"`
-	Control               types.String            `tfsdk:"control"`
-	SendCommunityExtended types.String            `tfsdk:"send_community_extended"`
-	SendCommunityStandard types.String            `tfsdk:"send_community_standard"`
-	RouteControls         []BGPRouteControls      `tfsdk:"route_controls"`
-	PrefixListControls    []BGPPrefixListControls `tfsdk:"prefix_list_controls"`
+type BGPVrfsPeersPeerAddressFamilies struct {
+	AddressFamily         types.String                                        `tfsdk:"address_family"`
+	Control               types.String                                        `tfsdk:"control"`
+	SendCommunityExtended types.String                                        `tfsdk:"send_community_extended"`
+	SendCommunityStandard types.String                                        `tfsdk:"send_community_standard"`
+	RouteControls         []BGPVrfsPeersPeerAddressFamiliesRouteControls      `tfsdk:"route_controls"`
+	PrefixListControls    []BGPVrfsPeersPeerAddressFamiliesPrefixListControls `tfsdk:"prefix_list_controls"`
 }
 
-type BGPRouteControls struct {
+type BGPVrfsPeersPeerAddressFamiliesRouteControls struct {
 	Direction    types.String `tfsdk:"direction"`
 	RouteMapName types.String `tfsdk:"route_map_name"`
 }
 
-type BGPPrefixListControls struct {
+type BGPVrfsPeersPeerAddressFamiliesPrefixListControls struct {
 	Direction types.String `tfsdk:"direction"`
 	List      types.String `tfsdk:"list"`
 }
@@ -187,39 +187,39 @@ func (data BGPVrfs) getRn() string {
 	return fmt.Sprintf("dom-%s", data.Name.ValueString())
 }
 
-func (data BGPAddressFamilies) getRn() string {
+func (data BGPVrfsAddressFamilies) getRn() string {
 	return fmt.Sprintf("af-[%s]", data.AddressFamily.ValueString())
 }
 
-func (data BGPAdvertisedPrefixes) getRn() string {
+func (data BGPVrfsAddressFamiliesAdvertisedPrefixes) getRn() string {
 	return fmt.Sprintf("prefix-[%s]", data.Prefix.ValueString())
 }
 
-func (data BGPRedistributions) getRn() string {
+func (data BGPVrfsAddressFamiliesRedistributions) getRn() string {
 	return fmt.Sprintf("interleak-%s-interleak-%s", data.Protocol.ValueString(), data.ProtocolInstance.ValueString())
 }
 
-func (data BGPPeerTemplates) getRn() string {
+func (data BGPVrfsPeerTemplates) getRn() string {
 	return fmt.Sprintf("peercont-%s", data.Name.ValueString())
 }
 
-func (data BGPPeerTemplateAddressFamilies) getRn() string {
+func (data BGPVrfsPeerTemplatesPeerTemplateAddressFamilies) getRn() string {
 	return fmt.Sprintf("af-[%s]", data.AddressFamily.ValueString())
 }
 
-func (data BGPPeers) getRn() string {
+func (data BGPVrfsPeers) getRn() string {
 	return fmt.Sprintf("peer-[%s]", data.Address.ValueString())
 }
 
-func (data BGPPeerAddressFamilies) getRn() string {
+func (data BGPVrfsPeersPeerAddressFamilies) getRn() string {
 	return fmt.Sprintf("af-[%s]", data.AddressFamily.ValueString())
 }
 
-func (data BGPRouteControls) getRn() string {
+func (data BGPVrfsPeersPeerAddressFamiliesRouteControls) getRn() string {
 	return fmt.Sprintf("rtctrl-%s", data.Direction.ValueString())
 }
 
-func (data BGPPrefixListControls) getRn() string {
+func (data BGPVrfsPeersPeerAddressFamiliesPrefixListControls) getRn() string {
 	return fmt.Sprintf("pfxctrl-%s", data.Direction.ValueString())
 }
 
@@ -612,7 +612,7 @@ func (data *BGP) fromBody(res gjson.Result) {
 									nestedV.ForEach(
 										func(nestedClassname, nestedValue gjson.Result) bool {
 											if nestedClassname.String() == "bgpDomAf" {
-												var nestedChildbgpDomAf BGPAddressFamilies
+												var nestedChildbgpDomAf BGPVrfsAddressFamilies
 												nestedChildbgpDomAf.AddressFamily = types.StringValue(nestedValue.Get("attributes.type").String())
 												nestedChildbgpDomAf.CriticalNexthopTimeout = types.StringValue(nestedValue.Get("attributes.critNhTimeout").String())
 												nestedChildbgpDomAf.NonCriticalNexthopTimeout = types.StringValue(nestedValue.Get("attributes.nonCritNhTimeout").String())
@@ -636,7 +636,7 @@ func (data *BGP) fromBody(res gjson.Result) {
 														nestedV.ForEach(
 															func(nestedClassname, nestedValue gjson.Result) bool {
 																if nestedClassname.String() == "bgpAdvPrefix" {
-																	var nestedChildbgpAdvPrefix BGPAdvertisedPrefixes
+																	var nestedChildbgpAdvPrefix BGPVrfsAddressFamiliesAdvertisedPrefixes
 																	nestedChildbgpAdvPrefix.Prefix = types.StringValue(nestedValue.Get("attributes.addr").String())
 																	nestedChildbgpAdvPrefix.RouteMap = types.StringValue(nestedValue.Get("attributes.rtMap").String())
 																	nestedChildbgpAdvPrefix.Evpn = types.StringValue(nestedValue.Get("attributes.evpn").String())
@@ -653,7 +653,7 @@ func (data *BGP) fromBody(res gjson.Result) {
 														nestedV.ForEach(
 															func(nestedClassname, nestedValue gjson.Result) bool {
 																if nestedClassname.String() == "bgpInterLeakP" {
-																	var nestedChildbgpInterLeakP BGPRedistributions
+																	var nestedChildbgpInterLeakP BGPVrfsAddressFamiliesRedistributions
 																	nestedChildbgpInterLeakP.Protocol = types.StringValue(nestedValue.Get("attributes.proto").String())
 																	nestedChildbgpInterLeakP.ProtocolInstance = types.StringValue(nestedValue.Get("attributes.inst").String())
 																	nestedChildbgpInterLeakP.RouteMap = types.StringValue(nestedValue.Get("attributes.rtMap").String())
@@ -680,7 +680,7 @@ func (data *BGP) fromBody(res gjson.Result) {
 									nestedV.ForEach(
 										func(nestedClassname, nestedValue gjson.Result) bool {
 											if nestedClassname.String() == "bgpPeerCont" {
-												var nestedChildbgpPeerCont BGPPeerTemplates
+												var nestedChildbgpPeerCont BGPVrfsPeerTemplates
 												nestedChildbgpPeerCont.Name = types.StringValue(nestedValue.Get("attributes.name").String())
 												nestedChildbgpPeerCont.RemoteAsn = types.StringValue(nestedValue.Get("attributes.asn").String())
 												nestedChildbgpPeerCont.Description = types.StringValue(nestedValue.Get("attributes.desc").String())
@@ -691,7 +691,7 @@ func (data *BGP) fromBody(res gjson.Result) {
 														nestedV.ForEach(
 															func(nestedClassname, nestedValue gjson.Result) bool {
 																if nestedClassname.String() == "bgpPeerAf" {
-																	var nestedChildbgpPeerAf BGPPeerTemplateAddressFamilies
+																	var nestedChildbgpPeerAf BGPVrfsPeerTemplatesPeerTemplateAddressFamilies
 																	nestedChildbgpPeerAf.AddressFamily = types.StringValue(nestedValue.Get("attributes.type").String())
 																	nestedChildbgpPeerAf.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
 																	nestedChildbgpPeerAf.SendCommunityExtended = types.StringValue(nestedValue.Get("attributes.sendComExt").String())
@@ -734,7 +734,7 @@ func (data *BGP) fromBody(res gjson.Result) {
 									nestedV.ForEach(
 										func(nestedClassname, nestedValue gjson.Result) bool {
 											if nestedClassname.String() == "bgpPeer" {
-												var nestedChildbgpPeer BGPPeers
+												var nestedChildbgpPeer BGPVrfsPeers
 												nestedChildbgpPeer.Address = types.StringValue(nestedValue.Get("attributes.addr").String())
 												nestedChildbgpPeer.RemoteAsn = types.StringValue(nestedValue.Get("attributes.asn").String())
 												nestedChildbgpPeer.Description = types.StringValue(nestedValue.Get("attributes.name").String())
@@ -766,7 +766,7 @@ func (data *BGP) fromBody(res gjson.Result) {
 														nestedV.ForEach(
 															func(nestedClassname, nestedValue gjson.Result) bool {
 																if nestedClassname.String() == "bgpPeerAf" {
-																	var nestedChildbgpPeerAf BGPPeerAddressFamilies
+																	var nestedChildbgpPeerAf BGPVrfsPeersPeerAddressFamilies
 																	nestedChildbgpPeerAf.AddressFamily = types.StringValue(nestedValue.Get("attributes.type").String())
 																	nestedChildbgpPeerAf.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
 																	nestedChildbgpPeerAf.SendCommunityExtended = types.StringValue(nestedValue.Get("attributes.sendComExt").String())
@@ -776,7 +776,7 @@ func (data *BGP) fromBody(res gjson.Result) {
 																			nestedV.ForEach(
 																				func(nestedClassname, nestedValue gjson.Result) bool {
 																					if nestedClassname.String() == "bgpRtCtrlP" {
-																						var nestedChildbgpRtCtrlP BGPRouteControls
+																						var nestedChildbgpRtCtrlP BGPVrfsPeersPeerAddressFamiliesRouteControls
 																						nestedChildbgpRtCtrlP.Direction = types.StringValue(nestedValue.Get("attributes.direction").String())
 																						nestedChildbgpRtCtrlP.RouteMapName = types.StringValue(nestedValue.Get("attributes.rtMap").String())
 																						nestedChildbgpPeerAf.RouteControls = append(nestedChildbgpPeerAf.RouteControls, nestedChildbgpRtCtrlP)
@@ -792,7 +792,7 @@ func (data *BGP) fromBody(res gjson.Result) {
 																			nestedV.ForEach(
 																				func(nestedClassname, nestedValue gjson.Result) bool {
 																					if nestedClassname.String() == "bgpPfxCtrlP" {
-																						var nestedChildbgpPfxCtrlP BGPPrefixListControls
+																						var nestedChildbgpPfxCtrlP BGPVrfsPeersPeerAddressFamiliesPrefixListControls
 																						nestedChildbgpPfxCtrlP.Direction = types.StringValue(nestedValue.Get("attributes.direction").String())
 																						nestedChildbgpPfxCtrlP.List = types.StringValue(nestedValue.Get("attributes.list").String())
 																						nestedChildbgpPeerAf.PrefixListControls = append(nestedChildbgpPeerAf.PrefixListControls, nestedChildbgpPfxCtrlP)

@@ -44,11 +44,11 @@ type RoutePolicy struct {
 }
 
 type RoutePolicyIpv4PrefixLists struct {
-	Name              types.String                   `tfsdk:"name"`
-	PrefixListEntries []RoutePolicyPrefixListEntries `tfsdk:"prefix_list_entries"`
+	Name    types.String                        `tfsdk:"name"`
+	Entries []RoutePolicyIpv4PrefixListsEntries `tfsdk:"entries"`
 }
 
-type RoutePolicyPrefixListEntries struct {
+type RoutePolicyIpv4PrefixListsEntries struct {
 	Order     types.Int64  `tfsdk:"order"`
 	Action    types.String `tfsdk:"action"`
 	Criteria  types.String `tfsdk:"criteria"`
@@ -58,30 +58,30 @@ type RoutePolicyPrefixListEntries struct {
 }
 
 type RoutePolicyRouteMaps struct {
-	Name            types.String                 `tfsdk:"name"`
-	RouteMapEntries []RoutePolicyRouteMapEntries `tfsdk:"route_map_entries"`
+	Name    types.String                  `tfsdk:"name"`
+	Entries []RoutePolicyRouteMapsEntries `tfsdk:"entries"`
 }
 
-type RoutePolicyRouteMapEntries struct {
-	Order                    types.Int64                           `tfsdk:"order"`
-	Action                   types.String                          `tfsdk:"action"`
-	MatchRoutePrefixLists    []RoutePolicyMatchRoutePrefixLists    `tfsdk:"match_route_prefix_lists"`
-	Additive                 types.String                          `tfsdk:"additive"`
-	NoCommunity              types.String                          `tfsdk:"no_community"`
-	SetCriteria              types.String                          `tfsdk:"set_criteria"`
-	SetRegularCommunityItems []RoutePolicySetRegularCommunityItems `tfsdk:"set_regular_community_items"`
-	MatchTags                []RoutePolicyMatchTags                `tfsdk:"match_tags"`
+type RoutePolicyRouteMapsEntries struct {
+	Order                    types.Int64                                           `tfsdk:"order"`
+	Action                   types.String                                          `tfsdk:"action"`
+	MatchRoutePrefixLists    []RoutePolicyRouteMapsEntriesMatchRoutePrefixLists    `tfsdk:"match_route_prefix_lists"`
+	Additive                 types.String                                          `tfsdk:"additive"`
+	NoCommunity              types.String                                          `tfsdk:"no_community"`
+	SetCriteria              types.String                                          `tfsdk:"set_criteria"`
+	SetRegularCommunityItems []RoutePolicyRouteMapsEntriesSetRegularCommunityItems `tfsdk:"set_regular_community_items"`
+	MatchTags                []RoutePolicyRouteMapsEntriesMatchTags                `tfsdk:"match_tags"`
 }
 
-type RoutePolicyMatchRoutePrefixLists struct {
+type RoutePolicyRouteMapsEntriesMatchRoutePrefixLists struct {
 	PrefixListDn types.String `tfsdk:"prefix_list_dn"`
 }
 
-type RoutePolicySetRegularCommunityItems struct {
+type RoutePolicyRouteMapsEntriesSetRegularCommunityItems struct {
 	Community types.String `tfsdk:"community"`
 }
 
-type RoutePolicyMatchTags struct {
+type RoutePolicyRouteMapsEntriesMatchTags struct {
 	Tag types.Int64 `tfsdk:"tag"`
 }
 
@@ -117,7 +117,7 @@ func (data RoutePolicyIpv4PrefixLists) getRn() string {
 	return fmt.Sprintf("pfxlistv4-[%s]", data.Name.ValueString())
 }
 
-func (data RoutePolicyPrefixListEntries) getRn() string {
+func (data RoutePolicyIpv4PrefixListsEntries) getRn() string {
 	return fmt.Sprintf("ent-%v", data.Order.ValueInt64())
 }
 
@@ -125,19 +125,19 @@ func (data RoutePolicyRouteMaps) getRn() string {
 	return fmt.Sprintf("rtmap-[%s]", data.Name.ValueString())
 }
 
-func (data RoutePolicyRouteMapEntries) getRn() string {
+func (data RoutePolicyRouteMapsEntries) getRn() string {
 	return fmt.Sprintf("ent-%v", data.Order.ValueInt64())
 }
 
-func (data RoutePolicyMatchRoutePrefixLists) getRn() string {
+func (data RoutePolicyRouteMapsEntriesMatchRoutePrefixLists) getRn() string {
 	return fmt.Sprintf("rsrtDstAtt-[%s]", data.PrefixListDn.ValueString())
 }
 
-func (data RoutePolicySetRegularCommunityItems) getRn() string {
+func (data RoutePolicyRouteMapsEntriesSetRegularCommunityItems) getRn() string {
 	return fmt.Sprintf("item-%s", data.Community.ValueString())
 }
 
-func (data RoutePolicyMatchTags) getRn() string {
+func (data RoutePolicyRouteMapsEntriesMatchTags) getRn() string {
 	return fmt.Sprintf("mrttag-%v", data.Tag.ValueInt64())
 }
 
@@ -163,7 +163,7 @@ func (data RoutePolicy) toBody() nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".rtpfxRuleV4.children"
-			for _, child := range child.PrefixListEntries {
+			for _, child := range child.Entries {
 				attrs = "{}"
 				if (!child.Order.IsUnknown() && !child.Order.IsNull()) || false {
 					attrs, _ = sjson.Set(attrs, "order", strconv.FormatInt(child.Order.ValueInt64(), 10))
@@ -196,7 +196,7 @@ func (data RoutePolicy) toBody() nxos.Body {
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".rtmapRule.children"
-			for _, child := range child.RouteMapEntries {
+			for _, child := range child.Entries {
 				attrs = "{}"
 				if (!child.Order.IsUnknown() && !child.Order.IsNull()) || false {
 					attrs, _ = sjson.Set(attrs, "order", strconv.FormatInt(child.Order.ValueInt64(), 10))
@@ -277,14 +277,14 @@ func (data *RoutePolicy) fromBody(res gjson.Result) {
 								nestedV.ForEach(
 									func(nestedClassname, nestedValue gjson.Result) bool {
 										if nestedClassname.String() == "rtpfxEntry" {
-											var nestedChildrtpfxEntry RoutePolicyPrefixListEntries
+											var nestedChildrtpfxEntry RoutePolicyIpv4PrefixListsEntries
 											nestedChildrtpfxEntry.Order = types.Int64Value(nestedValue.Get("attributes.order").Int())
 											nestedChildrtpfxEntry.Action = types.StringValue(nestedValue.Get("attributes.action").String())
 											nestedChildrtpfxEntry.Criteria = types.StringValue(nestedValue.Get("attributes.criteria").String())
 											nestedChildrtpfxEntry.Prefix = types.StringValue(nestedValue.Get("attributes.pfx").String())
 											nestedChildrtpfxEntry.FromRange = types.Int64Value(nestedValue.Get("attributes.fromPfxLen").Int())
 											nestedChildrtpfxEntry.ToRange = types.Int64Value(nestedValue.Get("attributes.toPfxLen").Int())
-											child.PrefixListEntries = append(child.PrefixListEntries, nestedChildrtpfxEntry)
+											child.Entries = append(child.Entries, nestedChildrtpfxEntry)
 										}
 										return true
 									},
@@ -312,7 +312,7 @@ func (data *RoutePolicy) fromBody(res gjson.Result) {
 								nestedV.ForEach(
 									func(nestedClassname, nestedValue gjson.Result) bool {
 										if nestedClassname.String() == "rtmapEntry" {
-											var nestedChildrtmapEntry RoutePolicyRouteMapEntries
+											var nestedChildrtmapEntry RoutePolicyRouteMapsEntries
 											nestedChildrtmapEntry.Order = types.Int64Value(nestedValue.Get("attributes.order").Int())
 											nestedChildrtmapEntry.Action = types.StringValue(nestedValue.Get("attributes.action").String())
 											{
@@ -332,7 +332,7 @@ func (data *RoutePolicy) fromBody(res gjson.Result) {
 														nestedV.ForEach(
 															func(nestedClassname, nestedValue gjson.Result) bool {
 																if nestedClassname.String() == "rtmapRsRtDstAtt" {
-																	var nestedChildrtmapRsRtDstAtt RoutePolicyMatchRoutePrefixLists
+																	var nestedChildrtmapRsRtDstAtt RoutePolicyRouteMapsEntriesMatchRoutePrefixLists
 																	nestedChildrtmapRsRtDstAtt.PrefixListDn = types.StringValue(nestedValue.Get("attributes.tDn").String())
 																	nestedChildrtmapEntry.MatchRoutePrefixLists = append(nestedChildrtmapEntry.MatchRoutePrefixLists, nestedChildrtmapRsRtDstAtt)
 																}
@@ -363,7 +363,7 @@ func (data *RoutePolicy) fromBody(res gjson.Result) {
 														nestedV.ForEach(
 															func(nestedClassname, nestedValue gjson.Result) bool {
 																if nestedClassname.String() == "rtregcomItem" {
-																	var nestedChildrtregcomItem RoutePolicySetRegularCommunityItems
+																	var nestedChildrtregcomItem RoutePolicyRouteMapsEntriesSetRegularCommunityItems
 																	nestedChildrtregcomItem.Community = types.StringValue(nestedValue.Get("attributes.community").String())
 																	nestedChildrtmapEntry.SetRegularCommunityItems = append(nestedChildrtmapEntry.SetRegularCommunityItems, nestedChildrtregcomItem)
 																}
@@ -379,7 +379,7 @@ func (data *RoutePolicy) fromBody(res gjson.Result) {
 													nestedV.ForEach(
 														func(nestedClassname, nestedValue gjson.Result) bool {
 															if nestedClassname.String() == "rtmapMatchRtTag" {
-																var nestedChildrtmapMatchRtTag RoutePolicyMatchTags
+																var nestedChildrtmapMatchRtTag RoutePolicyRouteMapsEntriesMatchTags
 																nestedChildrtmapMatchRtTag.Tag = types.Int64Value(nestedValue.Get("attributes.tag").Int())
 																nestedChildrtmapEntry.MatchTags = append(nestedChildrtmapEntry.MatchTags, nestedChildrtmapMatchRtTag)
 															}
@@ -389,7 +389,7 @@ func (data *RoutePolicy) fromBody(res gjson.Result) {
 													return true
 												},
 											)
-											child.RouteMapEntries = append(child.RouteMapEntries, nestedChildrtmapEntry)
+											child.Entries = append(child.Entries, nestedChildrtmapEntry)
 										}
 										return true
 									},
@@ -429,47 +429,47 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 		} else {
 			data.Ipv4PrefixLists[c].Name = types.StringNull()
 		}
-		for nc := range data.Ipv4PrefixLists[c].PrefixListEntries {
+		for nc := range data.Ipv4PrefixLists[c].Entries {
 			var rrtpfxEntry gjson.Result
 			rrtpfxRuleV4.Get("rtpfxRuleV4.children").ForEach(
 				func(_, v gjson.Result) bool {
 					key := v.Get("rtpfxEntry.attributes.rn").String()
-					if key == data.Ipv4PrefixLists[c].PrefixListEntries[nc].getRn() {
+					if key == data.Ipv4PrefixLists[c].Entries[nc].getRn() {
 						rrtpfxEntry = v
 						return false
 					}
 					return true
 				},
 			)
-			if !data.Ipv4PrefixLists[c].PrefixListEntries[nc].Order.IsNull() {
-				data.Ipv4PrefixLists[c].PrefixListEntries[nc].Order = types.Int64Value(rrtpfxEntry.Get("rtpfxEntry.attributes.order").Int())
+			if !data.Ipv4PrefixLists[c].Entries[nc].Order.IsNull() {
+				data.Ipv4PrefixLists[c].Entries[nc].Order = types.Int64Value(rrtpfxEntry.Get("rtpfxEntry.attributes.order").Int())
 			} else {
-				data.Ipv4PrefixLists[c].PrefixListEntries[nc].Order = types.Int64Null()
+				data.Ipv4PrefixLists[c].Entries[nc].Order = types.Int64Null()
 			}
-			if !data.Ipv4PrefixLists[c].PrefixListEntries[nc].Action.IsNull() {
-				data.Ipv4PrefixLists[c].PrefixListEntries[nc].Action = types.StringValue(rrtpfxEntry.Get("rtpfxEntry.attributes.action").String())
+			if !data.Ipv4PrefixLists[c].Entries[nc].Action.IsNull() {
+				data.Ipv4PrefixLists[c].Entries[nc].Action = types.StringValue(rrtpfxEntry.Get("rtpfxEntry.attributes.action").String())
 			} else {
-				data.Ipv4PrefixLists[c].PrefixListEntries[nc].Action = types.StringNull()
+				data.Ipv4PrefixLists[c].Entries[nc].Action = types.StringNull()
 			}
-			if !data.Ipv4PrefixLists[c].PrefixListEntries[nc].Criteria.IsNull() {
-				data.Ipv4PrefixLists[c].PrefixListEntries[nc].Criteria = types.StringValue(rrtpfxEntry.Get("rtpfxEntry.attributes.criteria").String())
+			if !data.Ipv4PrefixLists[c].Entries[nc].Criteria.IsNull() {
+				data.Ipv4PrefixLists[c].Entries[nc].Criteria = types.StringValue(rrtpfxEntry.Get("rtpfxEntry.attributes.criteria").String())
 			} else {
-				data.Ipv4PrefixLists[c].PrefixListEntries[nc].Criteria = types.StringNull()
+				data.Ipv4PrefixLists[c].Entries[nc].Criteria = types.StringNull()
 			}
-			if !data.Ipv4PrefixLists[c].PrefixListEntries[nc].Prefix.IsNull() {
-				data.Ipv4PrefixLists[c].PrefixListEntries[nc].Prefix = types.StringValue(rrtpfxEntry.Get("rtpfxEntry.attributes.pfx").String())
+			if !data.Ipv4PrefixLists[c].Entries[nc].Prefix.IsNull() {
+				data.Ipv4PrefixLists[c].Entries[nc].Prefix = types.StringValue(rrtpfxEntry.Get("rtpfxEntry.attributes.pfx").String())
 			} else {
-				data.Ipv4PrefixLists[c].PrefixListEntries[nc].Prefix = types.StringNull()
+				data.Ipv4PrefixLists[c].Entries[nc].Prefix = types.StringNull()
 			}
-			if !data.Ipv4PrefixLists[c].PrefixListEntries[nc].FromRange.IsNull() {
-				data.Ipv4PrefixLists[c].PrefixListEntries[nc].FromRange = types.Int64Value(rrtpfxEntry.Get("rtpfxEntry.attributes.fromPfxLen").Int())
+			if !data.Ipv4PrefixLists[c].Entries[nc].FromRange.IsNull() {
+				data.Ipv4PrefixLists[c].Entries[nc].FromRange = types.Int64Value(rrtpfxEntry.Get("rtpfxEntry.attributes.fromPfxLen").Int())
 			} else {
-				data.Ipv4PrefixLists[c].PrefixListEntries[nc].FromRange = types.Int64Null()
+				data.Ipv4PrefixLists[c].Entries[nc].FromRange = types.Int64Null()
 			}
-			if !data.Ipv4PrefixLists[c].PrefixListEntries[nc].ToRange.IsNull() {
-				data.Ipv4PrefixLists[c].PrefixListEntries[nc].ToRange = types.Int64Value(rrtpfxEntry.Get("rtpfxEntry.attributes.toPfxLen").Int())
+			if !data.Ipv4PrefixLists[c].Entries[nc].ToRange.IsNull() {
+				data.Ipv4PrefixLists[c].Entries[nc].ToRange = types.Int64Value(rrtpfxEntry.Get("rtpfxEntry.attributes.toPfxLen").Int())
 			} else {
-				data.Ipv4PrefixLists[c].PrefixListEntries[nc].ToRange = types.Int64Null()
+				data.Ipv4PrefixLists[c].Entries[nc].ToRange = types.Int64Null()
 			}
 		}
 	}
@@ -490,27 +490,27 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 		} else {
 			data.RouteMaps[c].Name = types.StringNull()
 		}
-		for nc := range data.RouteMaps[c].RouteMapEntries {
+		for nc := range data.RouteMaps[c].Entries {
 			var rrtmapEntry gjson.Result
 			rrtmapRule.Get("rtmapRule.children").ForEach(
 				func(_, v gjson.Result) bool {
 					key := v.Get("rtmapEntry.attributes.rn").String()
-					if key == data.RouteMaps[c].RouteMapEntries[nc].getRn() {
+					if key == data.RouteMaps[c].Entries[nc].getRn() {
 						rrtmapEntry = v
 						return false
 					}
 					return true
 				},
 			)
-			if !data.RouteMaps[c].RouteMapEntries[nc].Order.IsNull() {
-				data.RouteMaps[c].RouteMapEntries[nc].Order = types.Int64Value(rrtmapEntry.Get("rtmapEntry.attributes.order").Int())
+			if !data.RouteMaps[c].Entries[nc].Order.IsNull() {
+				data.RouteMaps[c].Entries[nc].Order = types.Int64Value(rrtmapEntry.Get("rtmapEntry.attributes.order").Int())
 			} else {
-				data.RouteMaps[c].RouteMapEntries[nc].Order = types.Int64Null()
+				data.RouteMaps[c].Entries[nc].Order = types.Int64Null()
 			}
-			if !data.RouteMaps[c].RouteMapEntries[nc].Action.IsNull() {
-				data.RouteMaps[c].RouteMapEntries[nc].Action = types.StringValue(rrtmapEntry.Get("rtmapEntry.attributes.action").String())
+			if !data.RouteMaps[c].Entries[nc].Action.IsNull() {
+				data.RouteMaps[c].Entries[nc].Action = types.StringValue(rrtmapEntry.Get("rtmapEntry.attributes.action").String())
 			} else {
-				data.RouteMaps[c].RouteMapEntries[nc].Action = types.StringNull()
+				data.RouteMaps[c].Entries[nc].Action = types.StringNull()
 			}
 			{
 				var rrtmapMatchRtDst gjson.Result
@@ -524,22 +524,22 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
-				for nc_ := range data.RouteMaps[c].RouteMapEntries[nc].MatchRoutePrefixLists {
+				for nc_ := range data.RouteMaps[c].Entries[nc].MatchRoutePrefixLists {
 					var rrtmapRsRtDstAtt gjson.Result
 					rrtmapMatchRtDst.Get("rtmapMatchRtDst.children").ForEach(
 						func(_, v gjson.Result) bool {
 							key := v.Get("rtmapRsRtDstAtt.attributes.rn").String()
-							if key == data.RouteMaps[c].RouteMapEntries[nc].MatchRoutePrefixLists[nc_].getRn() {
+							if key == data.RouteMaps[c].Entries[nc].MatchRoutePrefixLists[nc_].getRn() {
 								rrtmapRsRtDstAtt = v
 								return false
 							}
 							return true
 						},
 					)
-					if !data.RouteMaps[c].RouteMapEntries[nc].MatchRoutePrefixLists[nc_].PrefixListDn.IsNull() {
-						data.RouteMaps[c].RouteMapEntries[nc].MatchRoutePrefixLists[nc_].PrefixListDn = types.StringValue(rrtmapRsRtDstAtt.Get("rtmapRsRtDstAtt.attributes.tDn").String())
+					if !data.RouteMaps[c].Entries[nc].MatchRoutePrefixLists[nc_].PrefixListDn.IsNull() {
+						data.RouteMaps[c].Entries[nc].MatchRoutePrefixLists[nc_].PrefixListDn = types.StringValue(rrtmapRsRtDstAtt.Get("rtmapRsRtDstAtt.attributes.tDn").String())
 					} else {
-						data.RouteMaps[c].RouteMapEntries[nc].MatchRoutePrefixLists[nc_].PrefixListDn = types.StringNull()
+						data.RouteMaps[c].Entries[nc].MatchRoutePrefixLists[nc_].PrefixListDn = types.StringNull()
 					}
 				}
 			}
@@ -555,56 +555,56 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
-				if !data.RouteMaps[c].RouteMapEntries[nc].Additive.IsNull() {
-					data.RouteMaps[c].RouteMapEntries[nc].Additive = types.StringValue(rrtmapSetRegComm.Get("rtmapSetRegComm.attributes.additive").String())
+				if !data.RouteMaps[c].Entries[nc].Additive.IsNull() {
+					data.RouteMaps[c].Entries[nc].Additive = types.StringValue(rrtmapSetRegComm.Get("rtmapSetRegComm.attributes.additive").String())
 				} else {
-					data.RouteMaps[c].RouteMapEntries[nc].Additive = types.StringNull()
+					data.RouteMaps[c].Entries[nc].Additive = types.StringNull()
 				}
-				if !data.RouteMaps[c].RouteMapEntries[nc].NoCommunity.IsNull() {
-					data.RouteMaps[c].RouteMapEntries[nc].NoCommunity = types.StringValue(rrtmapSetRegComm.Get("rtmapSetRegComm.attributes.noCommAttr").String())
+				if !data.RouteMaps[c].Entries[nc].NoCommunity.IsNull() {
+					data.RouteMaps[c].Entries[nc].NoCommunity = types.StringValue(rrtmapSetRegComm.Get("rtmapSetRegComm.attributes.noCommAttr").String())
 				} else {
-					data.RouteMaps[c].RouteMapEntries[nc].NoCommunity = types.StringNull()
+					data.RouteMaps[c].Entries[nc].NoCommunity = types.StringNull()
 				}
-				if !data.RouteMaps[c].RouteMapEntries[nc].SetCriteria.IsNull() {
-					data.RouteMaps[c].RouteMapEntries[nc].SetCriteria = types.StringValue(rrtmapSetRegComm.Get("rtmapSetRegComm.attributes.setCriteria").String())
+				if !data.RouteMaps[c].Entries[nc].SetCriteria.IsNull() {
+					data.RouteMaps[c].Entries[nc].SetCriteria = types.StringValue(rrtmapSetRegComm.Get("rtmapSetRegComm.attributes.setCriteria").String())
 				} else {
-					data.RouteMaps[c].RouteMapEntries[nc].SetCriteria = types.StringNull()
+					data.RouteMaps[c].Entries[nc].SetCriteria = types.StringNull()
 				}
-				for nc_ := range data.RouteMaps[c].RouteMapEntries[nc].SetRegularCommunityItems {
+				for nc_ := range data.RouteMaps[c].Entries[nc].SetRegularCommunityItems {
 					var rrtregcomItem gjson.Result
 					rrtmapSetRegComm.Get("rtmapSetRegComm.children").ForEach(
 						func(_, v gjson.Result) bool {
 							key := v.Get("rtregcomItem.attributes.rn").String()
-							if key == data.RouteMaps[c].RouteMapEntries[nc].SetRegularCommunityItems[nc_].getRn() {
+							if key == data.RouteMaps[c].Entries[nc].SetRegularCommunityItems[nc_].getRn() {
 								rrtregcomItem = v
 								return false
 							}
 							return true
 						},
 					)
-					if !data.RouteMaps[c].RouteMapEntries[nc].SetRegularCommunityItems[nc_].Community.IsNull() {
-						data.RouteMaps[c].RouteMapEntries[nc].SetRegularCommunityItems[nc_].Community = types.StringValue(rrtregcomItem.Get("rtregcomItem.attributes.community").String())
+					if !data.RouteMaps[c].Entries[nc].SetRegularCommunityItems[nc_].Community.IsNull() {
+						data.RouteMaps[c].Entries[nc].SetRegularCommunityItems[nc_].Community = types.StringValue(rrtregcomItem.Get("rtregcomItem.attributes.community").String())
 					} else {
-						data.RouteMaps[c].RouteMapEntries[nc].SetRegularCommunityItems[nc_].Community = types.StringNull()
+						data.RouteMaps[c].Entries[nc].SetRegularCommunityItems[nc_].Community = types.StringNull()
 					}
 				}
 			}
-			for nc_ := range data.RouteMaps[c].RouteMapEntries[nc].MatchTags {
+			for nc_ := range data.RouteMaps[c].Entries[nc].MatchTags {
 				var rrtmapMatchRtTag gjson.Result
 				rrtmapEntry.Get("rtmapEntry.children").ForEach(
 					func(_, v gjson.Result) bool {
 						key := v.Get("rtmapMatchRtTag.attributes.rn").String()
-						if key == data.RouteMaps[c].RouteMapEntries[nc].MatchTags[nc_].getRn() {
+						if key == data.RouteMaps[c].Entries[nc].MatchTags[nc_].getRn() {
 							rrtmapMatchRtTag = v
 							return false
 						}
 						return true
 					},
 				)
-				if !data.RouteMaps[c].RouteMapEntries[nc].MatchTags[nc_].Tag.IsNull() {
-					data.RouteMaps[c].RouteMapEntries[nc].MatchTags[nc_].Tag = types.Int64Value(rrtmapMatchRtTag.Get("rtmapMatchRtTag.attributes.tag").Int())
+				if !data.RouteMaps[c].Entries[nc].MatchTags[nc_].Tag.IsNull() {
+					data.RouteMaps[c].Entries[nc].MatchTags[nc_].Tag = types.Int64Value(rrtmapMatchRtTag.Get("rtmapMatchRtTag.attributes.tag").Int())
 				} else {
-					data.RouteMaps[c].RouteMapEntries[nc].MatchTags[nc_].Tag = types.Int64Null()
+					data.RouteMaps[c].Entries[nc].MatchTags[nc_].Tag = types.Int64Null()
 				}
 			}
 		}
@@ -654,9 +654,9 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 				if matchBodyPathdi == "" {
 					break
 				}
-				for _, stateChild := range state.Ipv4PrefixLists[di].PrefixListEntries {
+				for _, stateChild := range state.Ipv4PrefixLists[di].Entries {
 					found := false
-					for _, planChild := range data.Ipv4PrefixLists[pdi].PrefixListEntries {
+					for _, planChild := range data.Ipv4PrefixLists[pdi].Entries {
 						if stateChild.Order == planChild.Order {
 							found = true
 							break
@@ -701,9 +701,9 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 				if matchBodyPathdi == "" {
 					break
 				}
-				for _, stateChild := range state.RouteMaps[di].RouteMapEntries {
+				for _, stateChild := range state.RouteMaps[di].Entries {
 					found := false
-					for _, planChild := range data.RouteMaps[pdi].RouteMapEntries {
+					for _, planChild := range data.RouteMaps[pdi].Entries {
 						if stateChild.Order == planChild.Order {
 							found = true
 							break
@@ -716,12 +716,12 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 					}
 				}
-				for di_ := range state.RouteMaps[di].RouteMapEntries {
-					for pdi_ := range data.RouteMaps[pdi].RouteMapEntries {
-						if state.RouteMaps[di].RouteMapEntries[di_].Order == data.RouteMaps[pdi].RouteMapEntries[pdi_].Order {
+				for di_ := range state.RouteMaps[di].Entries {
+					for pdi_ := range data.RouteMaps[pdi].Entries {
+						if state.RouteMaps[di].Entries[di_].Order == data.RouteMaps[pdi].Entries[pdi_].Order {
 							matchBodyPathdi_ := ""
 							for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
-								if mv.Get("rtmapEntry.attributes.rn").String() == state.RouteMaps[di].RouteMapEntries[di_].getRn() {
+								if mv.Get("rtmapEntry.attributes.rn").String() == state.RouteMaps[di].Entries[di_].getRn() {
 									matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".rtmapEntry.children"
 									break
 								}
@@ -729,9 +729,9 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 							if matchBodyPathdi_ == "" {
 								break
 							}
-							for _, stateChild := range state.RouteMaps[di].RouteMapEntries[di_].MatchRoutePrefixLists {
+							for _, stateChild := range state.RouteMaps[di].Entries[di_].MatchRoutePrefixLists {
 								found := false
-								for _, planChild := range data.RouteMaps[pdi].RouteMapEntries[pdi_].MatchRoutePrefixLists {
+								for _, planChild := range data.RouteMaps[pdi].Entries[pdi_].MatchRoutePrefixLists {
 									if stateChild.PrefixListDn == planChild.PrefixListDn {
 										found = true
 										break
@@ -744,9 +744,9 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 									body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".0.rtmapMatchRtDst.children"+".-1", deleteBody)
 								}
 							}
-							for _, stateChild := range state.RouteMaps[di].RouteMapEntries[di_].SetRegularCommunityItems {
+							for _, stateChild := range state.RouteMaps[di].Entries[di_].SetRegularCommunityItems {
 								found := false
-								for _, planChild := range data.RouteMaps[pdi].RouteMapEntries[pdi_].SetRegularCommunityItems {
+								for _, planChild := range data.RouteMaps[pdi].Entries[pdi_].SetRegularCommunityItems {
 									if stateChild.Community == planChild.Community {
 										found = true
 										break
@@ -759,9 +759,9 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 									body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".0.rtmapSetRegComm.children"+".-1", deleteBody)
 								}
 							}
-							for _, stateChild := range state.RouteMaps[di].RouteMapEntries[di_].MatchTags {
+							for _, stateChild := range state.RouteMaps[di].Entries[di_].MatchTags {
 								found := false
-								for _, planChild := range data.RouteMaps[pdi].RouteMapEntries[pdi_].MatchTags {
+								for _, planChild := range data.RouteMaps[pdi].Entries[pdi_].MatchTags {
 									if stateChild.Tag == planChild.Tag {
 										found = true
 										break

@@ -46,26 +46,26 @@ type PIM struct {
 }
 
 type PIMVrfs struct {
-	Name                     types.String        `tfsdk:"name"`
-	AdminState               types.String        `tfsdk:"admin_state"`
-	Bfd                      types.Bool          `tfsdk:"bfd"`
-	Interfaces               []PIMInterfaces     `tfsdk:"interfaces"`
-	SsmPolicyName            types.String        `tfsdk:"ssm_policy_name"`
-	SsmRangeGroupList1       types.String        `tfsdk:"ssm_range_group_list_1"`
-	SsmRangeGroupList2       types.String        `tfsdk:"ssm_range_group_list_2"`
-	SsmRangeGroupList3       types.String        `tfsdk:"ssm_range_group_list_3"`
-	SsmRangeGroupList4       types.String        `tfsdk:"ssm_range_group_list_4"`
-	SsmRangePrefixList       types.String        `tfsdk:"ssm_range_prefix_list"`
-	SsmRangeRouteMap         types.String        `tfsdk:"ssm_range_route_map"`
-	SsmRangeNone             types.Bool          `tfsdk:"ssm_range_none"`
-	StaticRpPolicyName       types.String        `tfsdk:"static_rp_policy_name"`
-	StaticRps                []PIMStaticRps      `tfsdk:"static_rps"`
-	AnycastRpLocalInterface  types.String        `tfsdk:"anycast_rp_local_interface"`
-	AnycastRpSourceInterface types.String        `tfsdk:"anycast_rp_source_interface"`
-	AnycastRpPeers           []PIMAnycastRpPeers `tfsdk:"anycast_rp_peers"`
+	Name                     types.String            `tfsdk:"name"`
+	AdminState               types.String            `tfsdk:"admin_state"`
+	Bfd                      types.Bool              `tfsdk:"bfd"`
+	Interfaces               []PIMVrfsInterfaces     `tfsdk:"interfaces"`
+	SsmPolicyName            types.String            `tfsdk:"ssm_policy_name"`
+	SsmRangeGroupList1       types.String            `tfsdk:"ssm_range_group_list_1"`
+	SsmRangeGroupList2       types.String            `tfsdk:"ssm_range_group_list_2"`
+	SsmRangeGroupList3       types.String            `tfsdk:"ssm_range_group_list_3"`
+	SsmRangeGroupList4       types.String            `tfsdk:"ssm_range_group_list_4"`
+	SsmRangePrefixList       types.String            `tfsdk:"ssm_range_prefix_list"`
+	SsmRangeRouteMap         types.String            `tfsdk:"ssm_range_route_map"`
+	SsmRangeNone             types.Bool              `tfsdk:"ssm_range_none"`
+	StaticRpPolicyName       types.String            `tfsdk:"static_rp_policy_name"`
+	StaticRps                []PIMVrfsStaticRps      `tfsdk:"static_rps"`
+	AnycastRpLocalInterface  types.String            `tfsdk:"anycast_rp_local_interface"`
+	AnycastRpSourceInterface types.String            `tfsdk:"anycast_rp_source_interface"`
+	AnycastRpPeers           []PIMVrfsAnycastRpPeers `tfsdk:"anycast_rp_peers"`
 }
 
-type PIMInterfaces struct {
+type PIMVrfsInterfaces struct {
 	InterfaceId types.String `tfsdk:"interface_id"`
 	AdminState  types.String `tfsdk:"admin_state"`
 	Bfd         types.String `tfsdk:"bfd"`
@@ -74,18 +74,18 @@ type PIMInterfaces struct {
 	SparseMode  types.Bool   `tfsdk:"sparse_mode"`
 }
 
-type PIMStaticRps struct {
-	Address    types.String    `tfsdk:"address"`
-	GroupLists []PIMGroupLists `tfsdk:"group_lists"`
+type PIMVrfsStaticRps struct {
+	Address    types.String                 `tfsdk:"address"`
+	GroupLists []PIMVrfsStaticRpsGroupLists `tfsdk:"group_lists"`
 }
 
-type PIMGroupLists struct {
+type PIMVrfsStaticRpsGroupLists struct {
 	Address  types.String `tfsdk:"address"`
 	Bidir    types.Bool   `tfsdk:"bidir"`
 	Override types.Bool   `tfsdk:"override"`
 }
 
-type PIMAnycastRpPeers struct {
+type PIMVrfsAnycastRpPeers struct {
 	Address      types.String `tfsdk:"address"`
 	RpSetAddress types.String `tfsdk:"rp_set_address"`
 }
@@ -122,19 +122,19 @@ func (data PIMVrfs) getRn() string {
 	return fmt.Sprintf("dom-%s", data.Name.ValueString())
 }
 
-func (data PIMInterfaces) getRn() string {
+func (data PIMVrfsInterfaces) getRn() string {
 	return fmt.Sprintf("if-[%s]", data.InterfaceId.ValueString())
 }
 
-func (data PIMStaticRps) getRn() string {
+func (data PIMVrfsStaticRps) getRn() string {
 	return fmt.Sprintf("rp-[%s]", data.Address.ValueString())
 }
 
-func (data PIMGroupLists) getRn() string {
+func (data PIMVrfsStaticRpsGroupLists) getRn() string {
 	return fmt.Sprintf("rpgrplist-[%s]", data.Address.ValueString())
 }
 
-func (data PIMAnycastRpPeers) getRn() string {
+func (data PIMVrfsAnycastRpPeers) getRn() string {
 	return fmt.Sprintf("peer-[%s]-peer-[%s]", data.Address.ValueString(), data.RpSetAddress.ValueString())
 }
 
@@ -332,7 +332,7 @@ func (data *PIM) fromBody(res gjson.Result) {
 									nestedV.ForEach(
 										func(nestedClassname, nestedValue gjson.Result) bool {
 											if nestedClassname.String() == "pimIf" {
-												var nestedChildpimIf PIMInterfaces
+												var nestedChildpimIf PIMVrfsInterfaces
 												nestedChildpimIf.InterfaceId = types.StringValue(nestedValue.Get("attributes.id").String())
 												nestedChildpimIf.AdminState = types.StringValue(nestedValue.Get("attributes.adminSt").String())
 												nestedChildpimIf.Bfd = types.StringValue(nestedValue.Get("attributes.bfdInst").String())
@@ -399,14 +399,14 @@ func (data *PIM) fromBody(res gjson.Result) {
 										nestedV.ForEach(
 											func(nestedClassname, nestedValue gjson.Result) bool {
 												if nestedClassname.String() == "pimStaticRP" {
-													var nestedChildpimStaticRP PIMStaticRps
+													var nestedChildpimStaticRP PIMVrfsStaticRps
 													nestedChildpimStaticRP.Address = types.StringValue(nestedValue.Get("attributes.addr").String())
 													nestedValue.Get("children").ForEach(
 														func(_, nestedV gjson.Result) bool {
 															nestedV.ForEach(
 																func(nestedClassname, nestedValue gjson.Result) bool {
 																	if nestedClassname.String() == "pimRPGrpList" {
-																		var nestedChildpimRPGrpList PIMGroupLists
+																		var nestedChildpimRPGrpList PIMVrfsStaticRpsGroupLists
 																		nestedChildpimRPGrpList.Address = types.StringValue(nestedValue.Get("attributes.grpListName").String())
 																		nestedChildpimRPGrpList.Bidir = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.bidir").String()))
 																		nestedChildpimRPGrpList.Override = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.override").String()))
@@ -446,7 +446,7 @@ func (data *PIM) fromBody(res gjson.Result) {
 										nestedV.ForEach(
 											func(nestedClassname, nestedValue gjson.Result) bool {
 												if nestedClassname.String() == "pimAcastRPPeer" {
-													var nestedChildpimAcastRPPeer PIMAnycastRpPeers
+													var nestedChildpimAcastRPPeer PIMVrfsAnycastRpPeers
 													nestedChildpimAcastRPPeer.Address = types.StringValue(nestedValue.Get("attributes.addr").String())
 													nestedChildpimAcastRPPeer.RpSetAddress = types.StringValue(nestedValue.Get("attributes.rpSetAddr").String())
 													child.AnycastRpPeers = append(child.AnycastRpPeers, nestedChildpimAcastRPPeer)

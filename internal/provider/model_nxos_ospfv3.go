@@ -46,23 +46,23 @@ type OSPFv3 struct {
 }
 
 type OSPFv3Instances struct {
-	Name       types.String `tfsdk:"name"`
-	AdminState types.String `tfsdk:"admin_state"`
-	Vrfs       []OSPFv3Vrfs `tfsdk:"vrfs"`
+	Name       types.String          `tfsdk:"name"`
+	AdminState types.String          `tfsdk:"admin_state"`
+	Vrfs       []OSPFv3InstancesVrfs `tfsdk:"vrfs"`
 }
 
-type OSPFv3Vrfs struct {
-	Name                   types.String            `tfsdk:"name"`
-	AdminState             types.String            `tfsdk:"admin_state"`
-	BandwidthReference     types.Int64             `tfsdk:"bandwidth_reference"`
-	BandwidthReferenceUnit types.String            `tfsdk:"bandwidth_reference_unit"`
-	RouterId               types.String            `tfsdk:"router_id"`
-	BfdControl             types.Bool              `tfsdk:"bfd_control"`
-	Areas                  []OSPFv3Areas           `tfsdk:"areas"`
-	AddressFamilies        []OSPFv3AddressFamilies `tfsdk:"address_families"`
+type OSPFv3InstancesVrfs struct {
+	Name                   types.String                         `tfsdk:"name"`
+	AdminState             types.String                         `tfsdk:"admin_state"`
+	BandwidthReference     types.Int64                          `tfsdk:"bandwidth_reference"`
+	BandwidthReferenceUnit types.String                         `tfsdk:"bandwidth_reference_unit"`
+	RouterId               types.String                         `tfsdk:"router_id"`
+	BfdControl             types.Bool                           `tfsdk:"bfd_control"`
+	Areas                  []OSPFv3InstancesVrfsAreas           `tfsdk:"areas"`
+	AddressFamilies        []OSPFv3InstancesVrfsAddressFamilies `tfsdk:"address_families"`
 }
 
-type OSPFv3Areas struct {
+type OSPFv3InstancesVrfsAreas struct {
 	AreaId                 types.String `tfsdk:"area_id"`
 	Redistribute           types.Bool   `tfsdk:"redistribute"`
 	Summary                types.Bool   `tfsdk:"summary"`
@@ -70,7 +70,7 @@ type OSPFv3Areas struct {
 	Type                   types.String `tfsdk:"type"`
 }
 
-type OSPFv3AddressFamilies struct {
+type OSPFv3InstancesVrfsAddressFamilies struct {
 	AddressFamilyType      types.String `tfsdk:"address_family_type"`
 	AdministrativeDistance types.String `tfsdk:"administrative_distance"`
 	DefaultMetric          types.String `tfsdk:"default_metric"`
@@ -122,15 +122,15 @@ func (data OSPFv3Instances) getRn() string {
 	return fmt.Sprintf("inst-%s", data.Name.ValueString())
 }
 
-func (data OSPFv3Vrfs) getRn() string {
+func (data OSPFv3InstancesVrfs) getRn() string {
 	return fmt.Sprintf("dom-%s", data.Name.ValueString())
 }
 
-func (data OSPFv3Areas) getRn() string {
+func (data OSPFv3InstancesVrfsAreas) getRn() string {
 	return fmt.Sprintf("area-%s", data.AreaId.ValueString())
 }
 
-func (data OSPFv3AddressFamilies) getRn() string {
+func (data OSPFv3InstancesVrfsAddressFamilies) getRn() string {
 	return fmt.Sprintf("af-%s", data.AddressFamilyType.ValueString())
 }
 
@@ -286,7 +286,7 @@ func (data *OSPFv3) fromBody(res gjson.Result) {
 								nestedV.ForEach(
 									func(nestedClassname, nestedValue gjson.Result) bool {
 										if nestedClassname.String() == "ospfv3Dom" {
-											var nestedChildospfv3Dom OSPFv3Vrfs
+											var nestedChildospfv3Dom OSPFv3InstancesVrfs
 											nestedChildospfv3Dom.Name = types.StringValue(nestedValue.Get("attributes.name").String())
 											nestedChildospfv3Dom.AdminState = types.StringValue(nestedValue.Get("attributes.adminSt").String())
 											nestedChildospfv3Dom.BandwidthReference = types.Int64Value(nestedValue.Get("attributes.bwRef").Int())
@@ -298,7 +298,7 @@ func (data *OSPFv3) fromBody(res gjson.Result) {
 													nestedV.ForEach(
 														func(nestedClassname, nestedValue gjson.Result) bool {
 															if nestedClassname.String() == "ospfv3Area" {
-																var nestedChildospfv3Area OSPFv3Areas
+																var nestedChildospfv3Area OSPFv3InstancesVrfsAreas
 																nestedChildospfv3Area.AreaId = types.StringValue(nestedValue.Get("attributes.id").String())
 																nestedChildospfv3Area.Redistribute = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.redistribute").String()))
 																nestedChildospfv3Area.Summary = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.summary").String()))
@@ -317,7 +317,7 @@ func (data *OSPFv3) fromBody(res gjson.Result) {
 													nestedV.ForEach(
 														func(nestedClassname, nestedValue gjson.Result) bool {
 															if nestedClassname.String() == "ospfv3DomAf" {
-																var nestedChildospfv3DomAf OSPFv3AddressFamilies
+																var nestedChildospfv3DomAf OSPFv3InstancesVrfsAddressFamilies
 																nestedChildospfv3DomAf.AddressFamilyType = types.StringValue(nestedValue.Get("attributes.type").String())
 																nestedChildospfv3DomAf.AdministrativeDistance = types.StringValue(nestedValue.Get("attributes.adminDistance").String())
 																nestedChildospfv3DomAf.DefaultMetric = types.StringValue(nestedValue.Get("attributes.defaultMetric").String())

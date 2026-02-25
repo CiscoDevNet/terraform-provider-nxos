@@ -77,12 +77,17 @@ type {{$typePrefix}}{{toGoName .TfName}} struct {
 	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
 {{- end}}
 {{- if .TfChildClasses}}
-{{- template "structFieldsTemplate" (makeMap "TypePrefix" $typePrefix "Children" .TfChildClasses)}}
+{{- $childTypePrefix := printf "%s%s" $typePrefix (toGoName .TfName)}}
+{{- template "structFieldsTemplate" (makeMap "TypePrefix" $childTypePrefix "Children" .TfChildClasses)}}
 {{- end}}
 }
 {{- end}}
 {{- if .TfChildClasses}}
+{{- if eq .Type "list"}}
+{{- template "childStructTypesTemplate" (makeMap "TypePrefix" (printf "%s%s" $typePrefix (toGoName .TfName)) "Children" .TfChildClasses)}}
+{{- else}}
 {{- template "childStructTypesTemplate" (makeMap "TypePrefix" $typePrefix "Children" .TfChildClasses)}}
+{{- end}}
 {{- end}}
 {{- end}}
 {{- end}}
@@ -159,7 +164,11 @@ func (data {{$typePrefix}}{{toGoName .TfName}}) getRn() string {
 }
 {{- end}}
 {{- if .ChildClasses}}
+{{- if eq .Type "list"}}
+{{- template "getRnTemplate" (makeMap "TypePrefix" (printf "%s%s" $typePrefix (toGoName .TfName)) "Children" .ChildClasses)}}
+{{- else}}
 {{- template "getRnTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses)}}
+{{- end}}
 {{- end}}
 {{- end}}
 {{- end}}
@@ -374,7 +383,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 						{{- end}}
 						{{- end}}
 						{{- if .ChildClasses}}
-						{{- template "fromBodyListChildrenTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ValueVar" "value" "ParentVar" "child")}}
+						{{- template "fromBodyListChildrenTemplate" (makeMap "TypePrefix" (printf "%s%s" $typePrefix (toGoName .TfName)) "Children" .ChildClasses "ValueVar" "value" "ParentVar" "child")}}
 						{{- end}}
 						{{$dataVar}}.{{toGoName .TfName}} = append({{$dataVar}}.{{toGoName .TfName}}, child)
 					}
@@ -453,7 +462,7 @@ func (data {{camelCase .Name}}) toBody() nxos.Body {
 											{{- end}}
 											{{- end}}
 											{{- if .ChildClasses}}
-											{{- template "fromBodyListChildrenTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ValueVar" "nestedValue" "ParentVar" (printf "nestedChild%s" $childClassName))}}
+											{{- template "fromBodyListChildrenTemplate" (makeMap "TypePrefix" (printf "%s%s" $typePrefix (toGoName .TfName)) "Children" .ChildClasses "ValueVar" "nestedValue" "ParentVar" (printf "nestedChild%s" $childClassName))}}
 											{{- end}}
 											{{$parentVar}}.{{toGoName .TfName}} = append({{$parentVar}}.{{toGoName .TfName}}, nestedChild{{$childClassName}})
 										}
@@ -580,7 +589,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 		{{- end}}
 		{{- end}}
 		{{- if .ChildClasses}}
-		{{- template "updateFromBodyListChildTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ResExpr" (printf "r%s.Get(\"%s.children\")" $childClassName $childClassName) "DataListExpr" (printf "%s.%s[c]" $dataAccessor $list) "IndexVar" "nc")}}
+		{{- template "updateFromBodyListChildTemplate" (makeMap "TypePrefix" (printf "%s%s" $typePrefix (toGoName .TfName)) "Children" .ChildClasses "ResExpr" (printf "r%s.Get(\"%s.children\")" $childClassName $childClassName) "DataListExpr" (printf "%s.%s[c]" $dataAccessor $list) "IndexVar" "nc")}}
 		{{- end}}
 	}
 {{- end}}
@@ -667,7 +676,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 		{{- end}}
 		{{- end}}
 		{{- if .ChildClasses}}
-		{{- template "updateFromBodyListChildTemplate" (makeMap "TypePrefix" $typePrefix "Children" .ChildClasses "ResExpr" (printf "r%s.Get(\"%s.children\")" $childClassName $childClassName) "DataListExpr" (printf "%s.%s[%s]" $dataListExpr $list $indexVar) "IndexVar" (printf "%s_" $indexVar))}}
+		{{- template "updateFromBodyListChildTemplate" (makeMap "TypePrefix" (printf "%s%s" $typePrefix (toGoName .TfName)) "Children" .ChildClasses "ResExpr" (printf "r%s.Get(\"%s.children\")" $childClassName $childClassName) "DataListExpr" (printf "%s.%s[%s]" $dataListExpr $list $indexVar) "IndexVar" (printf "%s_" $indexVar))}}
 		{{- end}}
 	}
 {{- end}}
@@ -765,7 +774,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 		{{- end}}
 		{{- end}}
 		{{- if .ChildClasses}}
-		{{- template "updateFromBodyListChildTemplate" (makeMap "TypePrefix" $name "Children" .ChildClasses "ResExpr" (printf "r%s.Get(\"%s.children\")" $childClassName $childClassName) "DataListExpr" (printf "data.%s[c]" $list) "IndexVar" "nc")}}
+		{{- template "updateFromBodyListChildTemplate" (makeMap "TypePrefix" (printf "%s%s" $name (toGoName .TfName)) "Children" .ChildClasses "ResExpr" (printf "r%s.Get(\"%s.children\")" $childClassName $childClassName) "DataListExpr" (printf "data.%s[c]" $list) "IndexVar" "nc")}}
 		{{- end}}
 	}
 	{{- end}}

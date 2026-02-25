@@ -34,7 +34,7 @@ func TestAccDataSourceNxosRoutePolicy(t *testing.T) {
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "ipv4_prefix_lists.*", map[string]string{
 		"name": "PREFIX_LIST1",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "ipv4_prefix_lists.*.prefix_list_entries.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "ipv4_prefix_lists.*.entries.*", map[string]string{
 		"order":      "10",
 		"action":     "permit",
 		"criteria":   "inexact",
@@ -45,22 +45,22 @@ func TestAccDataSourceNxosRoutePolicy(t *testing.T) {
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "route_maps.*", map[string]string{
 		"name": "ROUTE_MAP1",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "route_maps.*.route_map_entries.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "route_maps.*.entries.*", map[string]string{
 		"order":  "10",
 		"action": "permit",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "route_maps.*.route_map_entries.*.match_route_prefix_lists.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "route_maps.*.entries.*.match_route_prefix_lists.*", map[string]string{
 		"prefix_list_dn": "sys/rpm/pfxlistv4-[PREFIX_LIST1]",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "route_maps.*.route_map_entries.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "route_maps.*.entries.*", map[string]string{
 		"additive":     "disabled",
 		"no_community": "disabled",
 		"set_criteria": "none",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "route_maps.*.route_map_entries.*.set_regular_community_items.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "route_maps.*.entries.*.set_regular_community_items.*", map[string]string{
 		"community": "regular:as2-nn2:65001:123",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "route_maps.*.route_map_entries.*.match_tags.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "route_maps.*.entries.*.match_tags.*", map[string]string{
 		"tag": "12345",
 	}))
 	resource.Test(t, resource.TestCase{
@@ -86,7 +86,7 @@ func testAccDataSourceNxosRoutePolicyConfig() string {
 	config := `resource "nxos_route_policy" "test" {` + "\n"
 	config += `	ipv4_prefix_lists = [{` + "\n"
 	config += `		name = "PREFIX_LIST1"` + "\n"
-	config += `		prefix_list_entries = [{` + "\n"
+	config += `		entries = [{` + "\n"
 	config += `			order = 10` + "\n"
 	config += `			action = "permit"` + "\n"
 	config += `			criteria = "inexact"` + "\n"
@@ -97,7 +97,7 @@ func testAccDataSourceNxosRoutePolicyConfig() string {
 	config += `	}]` + "\n"
 	config += `	route_maps = [{` + "\n"
 	config += `		name = "ROUTE_MAP1"` + "\n"
-	config += `		route_map_entries = [{` + "\n"
+	config += `		entries = [{` + "\n"
 	config += `			order = 10` + "\n"
 	config += `			action = "permit"` + "\n"
 	config += `			match_route_prefix_lists = [{` + "\n"

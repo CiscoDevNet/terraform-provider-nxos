@@ -45,11 +45,11 @@ type IPv4VRF struct {
 }
 
 type IPv4VRFStaticRoutes struct {
-	Prefix   types.String      `tfsdk:"prefix"`
-	NextHops []IPv4VRFNextHops `tfsdk:"next_hops"`
+	Prefix   types.String                  `tfsdk:"prefix"`
+	NextHops []IPv4VRFStaticRoutesNextHops `tfsdk:"next_hops"`
 }
 
-type IPv4VRFNextHops struct {
+type IPv4VRFStaticRoutesNextHops struct {
 	InterfaceId types.String `tfsdk:"interface_id"`
 	Address     types.String `tfsdk:"address"`
 	VrfName     types.String `tfsdk:"vrf_name"`
@@ -60,15 +60,15 @@ type IPv4VRFNextHops struct {
 }
 
 type IPv4VRFInterfaces struct {
-	InterfaceId types.String       `tfsdk:"interface_id"`
-	DropGlean   types.String       `tfsdk:"drop_glean"`
-	Forward     types.String       `tfsdk:"forward"`
-	Unnumbered  types.String       `tfsdk:"unnumbered"`
-	Urpf        types.String       `tfsdk:"urpf"`
-	Addresses   []IPv4VRFAddresses `tfsdk:"addresses"`
+	InterfaceId types.String                 `tfsdk:"interface_id"`
+	DropGlean   types.String                 `tfsdk:"drop_glean"`
+	Forward     types.String                 `tfsdk:"forward"`
+	Unnumbered  types.String                 `tfsdk:"unnumbered"`
+	Urpf        types.String                 `tfsdk:"urpf"`
+	Addresses   []IPv4VRFInterfacesAddresses `tfsdk:"addresses"`
 }
 
-type IPv4VRFAddresses struct {
+type IPv4VRFInterfacesAddresses struct {
 	Address types.String `tfsdk:"address"`
 	Type    types.String `tfsdk:"type"`
 	Tag     types.Int64  `tfsdk:"tag"`
@@ -109,7 +109,7 @@ func (data IPv4VRFStaticRoutes) getRn() string {
 	return fmt.Sprintf("rt-[%s]", data.Prefix.ValueString())
 }
 
-func (data IPv4VRFNextHops) getRn() string {
+func (data IPv4VRFStaticRoutesNextHops) getRn() string {
 	return fmt.Sprintf("nh-[%s]-addr-[%s]-vrf-[%s]", data.InterfaceId.ValueString(), data.Address.ValueString(), data.VrfName.ValueString())
 }
 
@@ -117,7 +117,7 @@ func (data IPv4VRFInterfaces) getRn() string {
 	return fmt.Sprintf("if-[%s]", data.InterfaceId.ValueString())
 }
 
-func (data IPv4VRFAddresses) getRn() string {
+func (data IPv4VRFInterfacesAddresses) getRn() string {
 	return fmt.Sprintf("addr-[%s]", data.Address.ValueString())
 }
 
@@ -231,7 +231,7 @@ func (data *IPv4VRF) fromBody(res gjson.Result) {
 								nestedV.ForEach(
 									func(nestedClassname, nestedValue gjson.Result) bool {
 										if nestedClassname.String() == "ipv4Nexthop" {
-											var nestedChildipv4Nexthop IPv4VRFNextHops
+											var nestedChildipv4Nexthop IPv4VRFStaticRoutesNextHops
 											nestedChildipv4Nexthop.InterfaceId = types.StringValue(nestedValue.Get("attributes.nhIf").String())
 											nestedChildipv4Nexthop.Address = types.StringValue(nestedValue.Get("attributes.nhAddr").String())
 											nestedChildipv4Nexthop.VrfName = types.StringValue(nestedValue.Get("attributes.nhVrf").String())
@@ -271,7 +271,7 @@ func (data *IPv4VRF) fromBody(res gjson.Result) {
 								nestedV.ForEach(
 									func(nestedClassname, nestedValue gjson.Result) bool {
 										if nestedClassname.String() == "ipv4Addr" {
-											var nestedChildipv4Addr IPv4VRFAddresses
+											var nestedChildipv4Addr IPv4VRFInterfacesAddresses
 											nestedChildipv4Addr.Address = types.StringValue(nestedValue.Get("attributes.addr").String())
 											nestedChildipv4Addr.Type = types.StringValue(nestedValue.Get("attributes.type").String())
 											nestedChildipv4Addr.Tag = types.Int64Value(nestedValue.Get("attributes.tag").Int())

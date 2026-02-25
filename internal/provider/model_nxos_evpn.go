@@ -44,17 +44,17 @@ type EVPN struct {
 }
 
 type EVPNVnis struct {
-	Encap                 types.String                `tfsdk:"encap"`
-	RouteDistinguisher    types.String                `tfsdk:"route_distinguisher"`
-	RouteTargetDirections []EVPNRouteTargetDirections `tfsdk:"route_target_directions"`
+	Encap                 types.String                    `tfsdk:"encap"`
+	RouteDistinguisher    types.String                    `tfsdk:"route_distinguisher"`
+	RouteTargetDirections []EVPNVnisRouteTargetDirections `tfsdk:"route_target_directions"`
 }
 
-type EVPNRouteTargetDirections struct {
-	Direction    types.String       `tfsdk:"direction"`
-	RouteTargets []EVPNRouteTargets `tfsdk:"route_targets"`
+type EVPNVnisRouteTargetDirections struct {
+	Direction    types.String                                `tfsdk:"direction"`
+	RouteTargets []EVPNVnisRouteTargetDirectionsRouteTargets `tfsdk:"route_targets"`
 }
 
-type EVPNRouteTargets struct {
+type EVPNVnisRouteTargetDirectionsRouteTargets struct {
 	RouteTarget types.String `tfsdk:"route_target"`
 }
 
@@ -90,11 +90,11 @@ func (data EVPNVnis) getRn() string {
 	return fmt.Sprintf("bdevi-[%s]", data.Encap.ValueString())
 }
 
-func (data EVPNRouteTargetDirections) getRn() string {
+func (data EVPNVnisRouteTargetDirections) getRn() string {
 	return fmt.Sprintf("rttp-%s", data.Direction.ValueString())
 }
 
-func (data EVPNRouteTargets) getRn() string {
+func (data EVPNVnisRouteTargetDirectionsRouteTargets) getRn() string {
 	return fmt.Sprintf("ent-[%s]", data.RouteTarget.ValueString())
 }
 
@@ -169,14 +169,14 @@ func (data *EVPN) fromBody(res gjson.Result) {
 								nestedV.ForEach(
 									func(nestedClassname, nestedValue gjson.Result) bool {
 										if nestedClassname.String() == "rtctrlRttP" {
-											var nestedChildrtctrlRttP EVPNRouteTargetDirections
+											var nestedChildrtctrlRttP EVPNVnisRouteTargetDirections
 											nestedChildrtctrlRttP.Direction = types.StringValue(nestedValue.Get("attributes.type").String())
 											nestedValue.Get("children").ForEach(
 												func(_, nestedV gjson.Result) bool {
 													nestedV.ForEach(
 														func(nestedClassname, nestedValue gjson.Result) bool {
 															if nestedClassname.String() == "rtctrlRttEntry" {
-																var nestedChildrtctrlRttEntry EVPNRouteTargets
+																var nestedChildrtctrlRttEntry EVPNVnisRouteTargetDirectionsRouteTargets
 																nestedChildrtctrlRttEntry.RouteTarget = types.StringValue(nestedValue.Get("attributes.rtt").String())
 																nestedChildrtctrlRttP.RouteTargets = append(nestedChildrtctrlRttP.RouteTargets, nestedChildrtctrlRttEntry)
 															}

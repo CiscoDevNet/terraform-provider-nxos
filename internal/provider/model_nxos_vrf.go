@@ -47,21 +47,21 @@ type VRF struct {
 }
 
 type VRFAddressFamilies struct {
-	AddressFamily              types.String                    `tfsdk:"address_family"`
-	RouteTargetAddressFamilies []VRFRouteTargetAddressFamilies `tfsdk:"route_target_address_families"`
+	AddressFamily              types.String                                   `tfsdk:"address_family"`
+	RouteTargetAddressFamilies []VRFAddressFamiliesRouteTargetAddressFamilies `tfsdk:"route_target_address_families"`
 }
 
-type VRFRouteTargetAddressFamilies struct {
-	RouteTargetAddressFamily types.String               `tfsdk:"route_target_address_family"`
-	RouteTargetDirections    []VRFRouteTargetDirections `tfsdk:"route_target_directions"`
+type VRFAddressFamiliesRouteTargetAddressFamilies struct {
+	RouteTargetAddressFamily types.String                                                        `tfsdk:"route_target_address_family"`
+	RouteTargetDirections    []VRFAddressFamiliesRouteTargetAddressFamiliesRouteTargetDirections `tfsdk:"route_target_directions"`
 }
 
-type VRFRouteTargetDirections struct {
-	Direction    types.String      `tfsdk:"direction"`
-	RouteTargets []VRFRouteTargets `tfsdk:"route_targets"`
+type VRFAddressFamiliesRouteTargetAddressFamiliesRouteTargetDirections struct {
+	Direction    types.String                                                                    `tfsdk:"direction"`
+	RouteTargets []VRFAddressFamiliesRouteTargetAddressFamiliesRouteTargetDirectionsRouteTargets `tfsdk:"route_targets"`
 }
 
-type VRFRouteTargets struct {
+type VRFAddressFamiliesRouteTargetAddressFamiliesRouteTargetDirectionsRouteTargets struct {
 	RouteTarget types.String `tfsdk:"route_target"`
 }
 
@@ -100,15 +100,15 @@ func (data VRFAddressFamilies) getRn() string {
 	return fmt.Sprintf("af-[%s]", data.AddressFamily.ValueString())
 }
 
-func (data VRFRouteTargetAddressFamilies) getRn() string {
+func (data VRFAddressFamiliesRouteTargetAddressFamilies) getRn() string {
 	return fmt.Sprintf("ctrl-[%s]", data.RouteTargetAddressFamily.ValueString())
 }
 
-func (data VRFRouteTargetDirections) getRn() string {
+func (data VRFAddressFamiliesRouteTargetAddressFamiliesRouteTargetDirections) getRn() string {
 	return fmt.Sprintf("rttp-%s", data.Direction.ValueString())
 }
 
-func (data VRFRouteTargets) getRn() string {
+func (data VRFAddressFamiliesRouteTargetAddressFamiliesRouteTargetDirectionsRouteTargets) getRn() string {
 	return fmt.Sprintf("ent-[%s]", data.RouteTarget.ValueString())
 }
 
@@ -222,21 +222,21 @@ func (data *VRF) fromBody(res gjson.Result) {
 									nestedV.ForEach(
 										func(nestedClassname, nestedValue gjson.Result) bool {
 											if nestedClassname.String() == "rtctrlAfCtrl" {
-												var nestedChildrtctrlAfCtrl VRFRouteTargetAddressFamilies
+												var nestedChildrtctrlAfCtrl VRFAddressFamiliesRouteTargetAddressFamilies
 												nestedChildrtctrlAfCtrl.RouteTargetAddressFamily = types.StringValue(nestedValue.Get("attributes.type").String())
 												nestedValue.Get("children").ForEach(
 													func(_, nestedV gjson.Result) bool {
 														nestedV.ForEach(
 															func(nestedClassname, nestedValue gjson.Result) bool {
 																if nestedClassname.String() == "rtctrlRttP" {
-																	var nestedChildrtctrlRttP VRFRouteTargetDirections
+																	var nestedChildrtctrlRttP VRFAddressFamiliesRouteTargetAddressFamiliesRouteTargetDirections
 																	nestedChildrtctrlRttP.Direction = types.StringValue(nestedValue.Get("attributes.type").String())
 																	nestedValue.Get("children").ForEach(
 																		func(_, nestedV gjson.Result) bool {
 																			nestedV.ForEach(
 																				func(nestedClassname, nestedValue gjson.Result) bool {
 																					if nestedClassname.String() == "rtctrlRttEntry" {
-																						var nestedChildrtctrlRttEntry VRFRouteTargets
+																						var nestedChildrtctrlRttEntry VRFAddressFamiliesRouteTargetAddressFamiliesRouteTargetDirectionsRouteTargets
 																						nestedChildrtctrlRttEntry.RouteTarget = types.StringValue(nestedValue.Get("attributes.rtt").String())
 																						nestedChildrtctrlRttP.RouteTargets = append(nestedChildrtctrlRttP.RouteTargets, nestedChildrtctrlRttEntry)
 																					}

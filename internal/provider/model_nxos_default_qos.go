@@ -45,22 +45,22 @@ type DefaultQoS struct {
 }
 
 type DefaultQoSClassMaps struct {
-	Name       types.String           `tfsdk:"name"`
-	MatchType  types.String           `tfsdk:"match_type"`
-	DscpValues []DefaultQoSDscpValues `tfsdk:"dscp_values"`
+	Name       types.String                    `tfsdk:"name"`
+	MatchType  types.String                    `tfsdk:"match_type"`
+	DscpValues []DefaultQoSClassMapsDscpValues `tfsdk:"dscp_values"`
 }
 
-type DefaultQoSDscpValues struct {
+type DefaultQoSClassMapsDscpValues struct {
 	Value types.String `tfsdk:"value"`
 }
 
 type DefaultQoSPolicyMaps struct {
-	Name           types.String               `tfsdk:"name"`
-	MatchType      types.String               `tfsdk:"match_type"`
-	MatchClassMaps []DefaultQoSMatchClassMaps `tfsdk:"match_class_maps"`
+	Name           types.String                         `tfsdk:"name"`
+	MatchType      types.String                         `tfsdk:"match_type"`
+	MatchClassMaps []DefaultQoSPolicyMapsMatchClassMaps `tfsdk:"match_class_maps"`
 }
 
-type DefaultQoSMatchClassMaps struct {
+type DefaultQoSPolicyMapsMatchClassMaps struct {
 	Name                 types.String `tfsdk:"name"`
 	QosGroupId           types.Int64  `tfsdk:"qos_group_id"`
 	BcRate               types.Int64  `tfsdk:"bc_rate"`
@@ -125,7 +125,7 @@ func (data DefaultQoSClassMaps) getRn() string {
 	return fmt.Sprintf("name-%s", data.Name.ValueString())
 }
 
-func (data DefaultQoSDscpValues) getRn() string {
+func (data DefaultQoSClassMapsDscpValues) getRn() string {
 	return fmt.Sprintf("dscp-%v", data.Value.ValueString())
 }
 
@@ -133,7 +133,7 @@ func (data DefaultQoSPolicyMaps) getRn() string {
 	return fmt.Sprintf("name-%s", data.Name.ValueString())
 }
 
-func (data DefaultQoSMatchClassMaps) getRn() string {
+func (data DefaultQoSPolicyMapsMatchClassMaps) getRn() string {
 	return fmt.Sprintf("cmap-%s", data.Name.ValueString())
 }
 
@@ -360,7 +360,7 @@ func (data *DefaultQoS) fromBody(res gjson.Result) {
 									nestedV.ForEach(
 										func(nestedClassname, nestedValue gjson.Result) bool {
 											if nestedClassname.String() == "ipqosDscp" {
-												var nestedChildipqosDscp DefaultQoSDscpValues
+												var nestedChildipqosDscp DefaultQoSClassMapsDscpValues
 												nestedChildipqosDscp.Value = types.StringValue(nestedValue.Get("attributes.val").String())
 												child.DscpValues = append(child.DscpValues, nestedChildipqosDscp)
 											}
@@ -404,7 +404,7 @@ func (data *DefaultQoS) fromBody(res gjson.Result) {
 									nestedV.ForEach(
 										func(nestedClassname, nestedValue gjson.Result) bool {
 											if nestedClassname.String() == "ipqosMatchCMap" {
-												var nestedChildipqosMatchCMap DefaultQoSMatchClassMaps
+												var nestedChildipqosMatchCMap DefaultQoSPolicyMapsMatchClassMaps
 												nestedChildipqosMatchCMap.Name = types.StringValue(nestedValue.Get("attributes.name").String())
 												{
 													var ripqosSetQoSGrp gjson.Result

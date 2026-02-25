@@ -43,14 +43,14 @@ type UserManagement struct {
 }
 
 type UserManagementUsers struct {
-	Name                   types.String          `tfsdk:"name"`
-	AllowExpired           types.String          `tfsdk:"allow_expired"`
-	Password               types.String          `tfsdk:"password"`
-	PasswordEncryptionType types.String          `tfsdk:"password_encryption_type"`
-	Roles                  []UserManagementRoles `tfsdk:"roles"`
+	Name                   types.String               `tfsdk:"name"`
+	AllowExpired           types.String               `tfsdk:"allow_expired"`
+	Password               types.String               `tfsdk:"password"`
+	PasswordEncryptionType types.String               `tfsdk:"password_encryption_type"`
+	Roles                  []UserManagementUsersRoles `tfsdk:"roles"`
 }
 
-type UserManagementRoles struct {
+type UserManagementUsersRoles struct {
 	Name types.String `tfsdk:"name"`
 }
 
@@ -86,7 +86,7 @@ func (data UserManagementUsers) getRn() string {
 	return fmt.Sprintf("user-[%s]", data.Name.ValueString())
 }
 
-func (data UserManagementRoles) getRn() string {
+func (data UserManagementUsersRoles) getRn() string {
 	return fmt.Sprintf("role-[%s]", data.Name.ValueString())
 }
 
@@ -172,7 +172,7 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 									nestedV.ForEach(
 										func(nestedClassname, nestedValue gjson.Result) bool {
 											if nestedClassname.String() == "aaaUserRole" {
-												var nestedChildaaaUserRole UserManagementRoles
+												var nestedChildaaaUserRole UserManagementUsersRoles
 												nestedChildaaaUserRole.Name = types.StringValue(nestedValue.Get("attributes.name").String())
 												child.Roles = append(child.Roles, nestedChildaaaUserRole)
 											}

@@ -46,32 +46,32 @@ type ISIS struct {
 }
 
 type ISISInstances struct {
-	Name       types.String `tfsdk:"name"`
-	AdminState types.String `tfsdk:"admin_state"`
-	Vrfs       []ISISVrfs   `tfsdk:"vrfs"`
+	Name       types.String        `tfsdk:"name"`
+	AdminState types.String        `tfsdk:"admin_state"`
+	Vrfs       []ISISInstancesVrfs `tfsdk:"vrfs"`
 }
 
-type ISISVrfs struct {
-	Name                  types.String          `tfsdk:"name"`
-	AdminState            types.String          `tfsdk:"admin_state"`
-	AuthenticationCheckL1 types.Bool            `tfsdk:"authentication_check_l1"`
-	AuthenticationCheckL2 types.Bool            `tfsdk:"authentication_check_l2"`
-	AuthenticationKeyL1   types.String          `tfsdk:"authentication_key_l1"`
-	AuthenticationKeyL2   types.String          `tfsdk:"authentication_key_l2"`
-	AuthenticationTypeL1  types.String          `tfsdk:"authentication_type_l1"`
-	AuthenticationTypeL2  types.String          `tfsdk:"authentication_type_l2"`
-	BandwidthReference    types.Int64           `tfsdk:"bandwidth_reference"`
-	BanwidthReferenceUnit types.String          `tfsdk:"banwidth_reference_unit"`
-	IsType                types.String          `tfsdk:"is_type"`
-	MetricType            types.String          `tfsdk:"metric_type"`
-	Mtu                   types.Int64           `tfsdk:"mtu"`
-	Net                   types.String          `tfsdk:"net"`
-	PassiveDefault        types.String          `tfsdk:"passive_default"`
-	AddressFamilies       []ISISAddressFamilies `tfsdk:"address_families"`
-	OverloadStartupTime   types.Int64           `tfsdk:"overload_startup_time"`
+type ISISInstancesVrfs struct {
+	Name                  types.String                       `tfsdk:"name"`
+	AdminState            types.String                       `tfsdk:"admin_state"`
+	AuthenticationCheckL1 types.Bool                         `tfsdk:"authentication_check_l1"`
+	AuthenticationCheckL2 types.Bool                         `tfsdk:"authentication_check_l2"`
+	AuthenticationKeyL1   types.String                       `tfsdk:"authentication_key_l1"`
+	AuthenticationKeyL2   types.String                       `tfsdk:"authentication_key_l2"`
+	AuthenticationTypeL1  types.String                       `tfsdk:"authentication_type_l1"`
+	AuthenticationTypeL2  types.String                       `tfsdk:"authentication_type_l2"`
+	BandwidthReference    types.Int64                        `tfsdk:"bandwidth_reference"`
+	BanwidthReferenceUnit types.String                       `tfsdk:"banwidth_reference_unit"`
+	IsType                types.String                       `tfsdk:"is_type"`
+	MetricType            types.String                       `tfsdk:"metric_type"`
+	Mtu                   types.Int64                        `tfsdk:"mtu"`
+	Net                   types.String                       `tfsdk:"net"`
+	PassiveDefault        types.String                       `tfsdk:"passive_default"`
+	AddressFamilies       []ISISInstancesVrfsAddressFamilies `tfsdk:"address_families"`
+	OverloadStartupTime   types.Int64                        `tfsdk:"overload_startup_time"`
 }
 
-type ISISAddressFamilies struct {
+type ISISInstancesVrfsAddressFamilies struct {
 	AddressFamily            types.String `tfsdk:"address_family"`
 	SegmentRoutingMpls       types.Bool   `tfsdk:"segment_routing_mpls"`
 	EnableBfd                types.Bool   `tfsdk:"enable_bfd"`
@@ -144,11 +144,11 @@ func (data ISISInstances) getRn() string {
 	return fmt.Sprintf("inst-%s", data.Name.ValueString())
 }
 
-func (data ISISVrfs) getRn() string {
+func (data ISISInstancesVrfs) getRn() string {
 	return fmt.Sprintf("dom-[%s]", data.Name.ValueString())
 }
 
-func (data ISISAddressFamilies) getRn() string {
+func (data ISISInstancesVrfsAddressFamilies) getRn() string {
 	return fmt.Sprintf("af-%s", data.AddressFamily.ValueString())
 }
 
@@ -382,7 +382,7 @@ func (data *ISIS) fromBody(res gjson.Result) {
 								nestedV.ForEach(
 									func(nestedClassname, nestedValue gjson.Result) bool {
 										if nestedClassname.String() == "isisDom" {
-											var nestedChildisisDom ISISVrfs
+											var nestedChildisisDom ISISInstancesVrfs
 											nestedChildisisDom.Name = types.StringValue(nestedValue.Get("attributes.name").String())
 											nestedChildisisDom.AdminState = types.StringValue(nestedValue.Get("attributes.adminSt").String())
 											nestedChildisisDom.AuthenticationCheckL1 = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.authCheckLvl1").String()))
@@ -401,7 +401,7 @@ func (data *ISIS) fromBody(res gjson.Result) {
 													nestedV.ForEach(
 														func(nestedClassname, nestedValue gjson.Result) bool {
 															if nestedClassname.String() == "isisDomAf" {
-																var nestedChildisisDomAf ISISAddressFamilies
+																var nestedChildisisDomAf ISISInstancesVrfsAddressFamilies
 																nestedChildisisDomAf.AddressFamily = types.StringValue(nestedValue.Get("attributes.type").String())
 																nestedChildisisDomAf.SegmentRoutingMpls = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.srMpls").String()))
 																nestedChildisisDomAf.EnableBfd = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.enableBfd").String()))

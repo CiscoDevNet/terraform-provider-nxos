@@ -45,11 +45,11 @@ type IPv6VRF struct {
 }
 
 type IPv6VRFStaticRoutes struct {
-	Prefix   types.String      `tfsdk:"prefix"`
-	NextHops []IPv6VRFNextHops `tfsdk:"next_hops"`
+	Prefix   types.String                  `tfsdk:"prefix"`
+	NextHops []IPv6VRFStaticRoutesNextHops `tfsdk:"next_hops"`
 }
 
-type IPv6VRFNextHops struct {
+type IPv6VRFStaticRoutesNextHops struct {
 	InterfaceId types.String `tfsdk:"interface_id"`
 	Address     types.String `tfsdk:"address"`
 	VrfName     types.String `tfsdk:"vrf_name"`
@@ -60,18 +60,18 @@ type IPv6VRFNextHops struct {
 }
 
 type IPv6VRFInterfaces struct {
-	InterfaceId         types.String       `tfsdk:"interface_id"`
-	AutoConfiguration   types.String       `tfsdk:"auto_configuration"`
-	DefaultRoute        types.String       `tfsdk:"default_route"`
-	Forward             types.String       `tfsdk:"forward"`
-	LinkAddressUseBia   types.String       `tfsdk:"link_address_use_bia"`
-	UseLinkLocalAddress types.String       `tfsdk:"use_link_local_address"`
-	Urpf                types.String       `tfsdk:"urpf"`
-	LinkLocalAddress    types.String       `tfsdk:"link_local_address"`
-	Addresses           []IPv6VRFAddresses `tfsdk:"addresses"`
+	InterfaceId         types.String                 `tfsdk:"interface_id"`
+	AutoConfiguration   types.String                 `tfsdk:"auto_configuration"`
+	DefaultRoute        types.String                 `tfsdk:"default_route"`
+	Forward             types.String                 `tfsdk:"forward"`
+	LinkAddressUseBia   types.String                 `tfsdk:"link_address_use_bia"`
+	UseLinkLocalAddress types.String                 `tfsdk:"use_link_local_address"`
+	Urpf                types.String                 `tfsdk:"urpf"`
+	LinkLocalAddress    types.String                 `tfsdk:"link_local_address"`
+	Addresses           []IPv6VRFInterfacesAddresses `tfsdk:"addresses"`
 }
 
-type IPv6VRFAddresses struct {
+type IPv6VRFInterfacesAddresses struct {
 	Address types.String `tfsdk:"address"`
 	Type    types.String `tfsdk:"type"`
 	Tag     types.Int64  `tfsdk:"tag"`
@@ -112,7 +112,7 @@ func (data IPv6VRFStaticRoutes) getRn() string {
 	return fmt.Sprintf("rt-[%s]", data.Prefix.ValueString())
 }
 
-func (data IPv6VRFNextHops) getRn() string {
+func (data IPv6VRFStaticRoutesNextHops) getRn() string {
 	return fmt.Sprintf("nh-[%s]-addr-[%s]-vrf-[%s]", data.InterfaceId.ValueString(), data.Address.ValueString(), data.VrfName.ValueString())
 }
 
@@ -120,7 +120,7 @@ func (data IPv6VRFInterfaces) getRn() string {
 	return fmt.Sprintf("if-[%s]", data.InterfaceId.ValueString())
 }
 
-func (data IPv6VRFAddresses) getRn() string {
+func (data IPv6VRFInterfacesAddresses) getRn() string {
 	return fmt.Sprintf("addr-[%s]", data.Address.ValueString())
 }
 
@@ -243,7 +243,7 @@ func (data *IPv6VRF) fromBody(res gjson.Result) {
 								nestedV.ForEach(
 									func(nestedClassname, nestedValue gjson.Result) bool {
 										if nestedClassname.String() == "ipv6Nexthop" {
-											var nestedChildipv6Nexthop IPv6VRFNextHops
+											var nestedChildipv6Nexthop IPv6VRFStaticRoutesNextHops
 											nestedChildipv6Nexthop.InterfaceId = types.StringValue(nestedValue.Get("attributes.nhIf").String())
 											nestedChildipv6Nexthop.Address = types.StringValue(nestedValue.Get("attributes.nhAddr").String())
 											nestedChildipv6Nexthop.VrfName = types.StringValue(nestedValue.Get("attributes.nhVrf").String())
@@ -286,7 +286,7 @@ func (data *IPv6VRF) fromBody(res gjson.Result) {
 								nestedV.ForEach(
 									func(nestedClassname, nestedValue gjson.Result) bool {
 										if nestedClassname.String() == "ipv6Addr" {
-											var nestedChildipv6Addr IPv6VRFAddresses
+											var nestedChildipv6Addr IPv6VRFInterfacesAddresses
 											nestedChildipv6Addr.Address = types.StringValue(nestedValue.Get("attributes.addr").String())
 											nestedChildipv6Addr.Type = types.StringValue(nestedValue.Get("attributes.type").String())
 											nestedChildipv6Addr.Tag = types.Int64Value(nestedValue.Get("attributes.tag").Int())

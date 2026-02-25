@@ -44,12 +44,12 @@ type QueuingQoS struct {
 }
 
 type QueuingQoSPolicyMaps struct {
-	Name           types.String               `tfsdk:"name"`
-	MatchType      types.String               `tfsdk:"match_type"`
-	MatchClassMaps []QueuingQoSMatchClassMaps `tfsdk:"match_class_maps"`
+	Name           types.String                         `tfsdk:"name"`
+	MatchType      types.String                         `tfsdk:"match_type"`
+	MatchClassMaps []QueuingQoSPolicyMapsMatchClassMaps `tfsdk:"match_class_maps"`
 }
 
-type QueuingQoSMatchClassMaps struct {
+type QueuingQoSPolicyMapsMatchClassMaps struct {
 	Name               types.String `tfsdk:"name"`
 	Priority           types.Int64  `tfsdk:"priority"`
 	RemainingBandwidth types.Int64  `tfsdk:"remaining_bandwidth"`
@@ -87,7 +87,7 @@ func (data QueuingQoSPolicyMaps) getRn() string {
 	return fmt.Sprintf("name-%s", data.Name.ValueString())
 }
 
-func (data QueuingQoSMatchClassMaps) getRn() string {
+func (data QueuingQoSPolicyMapsMatchClassMaps) getRn() string {
 	return fmt.Sprintf("cmap-%s", data.Name.ValueString())
 }
 
@@ -212,7 +212,7 @@ func (data *QueuingQoS) fromBody(res gjson.Result) {
 									nestedV.ForEach(
 										func(nestedClassname, nestedValue gjson.Result) bool {
 											if nestedClassname.String() == "ipqosMatchCMap" {
-												var nestedChildipqosMatchCMap QueuingQoSMatchClassMaps
+												var nestedChildipqosMatchCMap QueuingQoSPolicyMapsMatchClassMaps
 												nestedChildipqosMatchCMap.Name = types.StringValue(nestedValue.Get("attributes.name").String())
 												{
 													var ripqosPriority gjson.Result

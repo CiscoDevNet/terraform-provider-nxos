@@ -45,36 +45,36 @@ type OSPF struct {
 }
 
 type OSPFInstances struct {
-	Name       types.String `tfsdk:"name"`
-	AdminState types.String `tfsdk:"admin_state"`
-	Vrfs       []OSPFVrfs   `tfsdk:"vrfs"`
+	Name       types.String        `tfsdk:"name"`
+	AdminState types.String        `tfsdk:"admin_state"`
+	Vrfs       []OSPFInstancesVrfs `tfsdk:"vrfs"`
 }
 
-type OSPFVrfs struct {
-	Name                     types.String     `tfsdk:"name"`
-	LogAdjacencyChanges      types.String     `tfsdk:"log_adjacency_changes"`
-	AdminState               types.String     `tfsdk:"admin_state"`
-	BandwidthReference       types.Int64      `tfsdk:"bandwidth_reference"`
-	BandwidthReferenceUnit   types.String     `tfsdk:"bandwidth_reference_unit"`
-	Distance                 types.Int64      `tfsdk:"distance"`
-	RouterId                 types.String     `tfsdk:"router_id"`
-	Control                  types.String     `tfsdk:"control"`
-	Areas                    []OSPFAreas      `tfsdk:"areas"`
-	MaxMetricControl         types.String     `tfsdk:"max_metric_control"`
-	MaxMetricExternalLsa     types.Int64      `tfsdk:"max_metric_external_lsa"`
-	MaxMetricSummaryLsa      types.Int64      `tfsdk:"max_metric_summary_lsa"`
-	MaxMetricStartupInterval types.Int64      `tfsdk:"max_metric_startup_interval"`
-	Interfaces               []OSPFInterfaces `tfsdk:"interfaces"`
+type OSPFInstancesVrfs struct {
+	Name                     types.String                  `tfsdk:"name"`
+	LogAdjacencyChanges      types.String                  `tfsdk:"log_adjacency_changes"`
+	AdminState               types.String                  `tfsdk:"admin_state"`
+	BandwidthReference       types.Int64                   `tfsdk:"bandwidth_reference"`
+	BandwidthReferenceUnit   types.String                  `tfsdk:"bandwidth_reference_unit"`
+	Distance                 types.Int64                   `tfsdk:"distance"`
+	RouterId                 types.String                  `tfsdk:"router_id"`
+	Control                  types.String                  `tfsdk:"control"`
+	Areas                    []OSPFInstancesVrfsAreas      `tfsdk:"areas"`
+	MaxMetricControl         types.String                  `tfsdk:"max_metric_control"`
+	MaxMetricExternalLsa     types.Int64                   `tfsdk:"max_metric_external_lsa"`
+	MaxMetricSummaryLsa      types.Int64                   `tfsdk:"max_metric_summary_lsa"`
+	MaxMetricStartupInterval types.Int64                   `tfsdk:"max_metric_startup_interval"`
+	Interfaces               []OSPFInstancesVrfsInterfaces `tfsdk:"interfaces"`
 }
 
-type OSPFAreas struct {
+type OSPFInstancesVrfsAreas struct {
 	AreaId             types.String `tfsdk:"area_id"`
 	AuthenticationType types.String `tfsdk:"authentication_type"`
 	Cost               types.Int64  `tfsdk:"cost"`
 	Type               types.String `tfsdk:"type"`
 }
 
-type OSPFInterfaces struct {
+type OSPFInstancesVrfsInterfaces struct {
 	InterfaceId                    types.String `tfsdk:"interface_id"`
 	AdvertiseSecondaries           types.Bool   `tfsdk:"advertise_secondaries"`
 	Area                           types.String `tfsdk:"area"`
@@ -126,15 +126,15 @@ func (data OSPFInstances) getRn() string {
 	return fmt.Sprintf("inst-%s", data.Name.ValueString())
 }
 
-func (data OSPFVrfs) getRn() string {
+func (data OSPFInstancesVrfs) getRn() string {
 	return fmt.Sprintf("dom-%s", data.Name.ValueString())
 }
 
-func (data OSPFAreas) getRn() string {
+func (data OSPFInstancesVrfsAreas) getRn() string {
 	return fmt.Sprintf("area-%s", data.AreaId.ValueString())
 }
 
-func (data OSPFInterfaces) getRn() string {
+func (data OSPFInstancesVrfsInterfaces) getRn() string {
 	return fmt.Sprintf("if-[%s]", data.InterfaceId.ValueString())
 }
 
@@ -318,7 +318,7 @@ func (data *OSPF) fromBody(res gjson.Result) {
 								nestedV.ForEach(
 									func(nestedClassname, nestedValue gjson.Result) bool {
 										if nestedClassname.String() == "ospfDom" {
-											var nestedChildospfDom OSPFVrfs
+											var nestedChildospfDom OSPFInstancesVrfs
 											nestedChildospfDom.Name = types.StringValue(nestedValue.Get("attributes.name").String())
 											nestedChildospfDom.LogAdjacencyChanges = types.StringValue(nestedValue.Get("attributes.adjChangeLogLevel").String())
 											nestedChildospfDom.AdminState = types.StringValue(nestedValue.Get("attributes.adminSt").String())
@@ -332,7 +332,7 @@ func (data *OSPF) fromBody(res gjson.Result) {
 													nestedV.ForEach(
 														func(nestedClassname, nestedValue gjson.Result) bool {
 															if nestedClassname.String() == "ospfArea" {
-																var nestedChildospfArea OSPFAreas
+																var nestedChildospfArea OSPFInstancesVrfsAreas
 																nestedChildospfArea.AreaId = types.StringValue(nestedValue.Get("attributes.id").String())
 																nestedChildospfArea.AuthenticationType = types.StringValue(nestedValue.Get("attributes.authType").String())
 																nestedChildospfArea.Cost = types.Int64Value(nestedValue.Get("attributes.cost").Int())
@@ -367,7 +367,7 @@ func (data *OSPF) fromBody(res gjson.Result) {
 													nestedV.ForEach(
 														func(nestedClassname, nestedValue gjson.Result) bool {
 															if nestedClassname.String() == "ospfIf" {
-																var nestedChildospfIf OSPFInterfaces
+																var nestedChildospfIf OSPFInstancesVrfsInterfaces
 																nestedChildospfIf.InterfaceId = types.StringValue(nestedValue.Get("attributes.id").String())
 																nestedChildospfIf.AdvertiseSecondaries = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.advertiseSecondaries").String()))
 																nestedChildospfIf.Area = types.StringValue(nestedValue.Get("attributes.area").String())

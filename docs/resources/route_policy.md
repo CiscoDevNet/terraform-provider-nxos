@@ -33,7 +33,7 @@ This resource can manage the Route Policy configuration.
 resource "nxos_route_policy" "example" {
   ipv4_prefix_lists = [{
     name = "PREFIX_LIST1"
-    prefix_list_entries = [{
+    entries = [{
       order      = 10
       action     = "permit"
       criteria   = "inexact"
@@ -44,7 +44,7 @@ resource "nxos_route_policy" "example" {
   }]
   route_maps = [{
     name = "ROUTE_MAP1"
-    route_map_entries = [{
+    entries = [{
       order  = 10
       action = "permit"
       match_route_prefix_lists = [{
@@ -86,10 +86,10 @@ Required:
 
 Optional:
 
-- `prefix_list_entries` (Attributes List) IPv4 Prefix List entries. (see [below for nested schema](#nestedatt--ipv4_prefix_lists--prefix_list_entries))
+- `entries` (Attributes List) IPv4 Prefix List entries. (see [below for nested schema](#nestedatt--ipv4_prefix_lists--entries))
 
-<a id="nestedatt--ipv4_prefix_lists--prefix_list_entries"></a>
-### Nested Schema for `ipv4_prefix_lists.prefix_list_entries`
+<a id="nestedatt--ipv4_prefix_lists--entries"></a>
+### Nested Schema for `ipv4_prefix_lists.entries`
 
 Required:
 
@@ -123,10 +123,10 @@ Required:
 
 Optional:
 
-- `route_map_entries` (Attributes List) List of Route Map Entries. (see [below for nested schema](#nestedatt--route_maps--route_map_entries))
+- `entries` (Attributes List) List of Route Map Entries. (see [below for nested schema](#nestedatt--route_maps--entries))
 
-<a id="nestedatt--route_maps--route_map_entries"></a>
-### Nested Schema for `route_maps.route_map_entries`
+<a id="nestedatt--route_maps--entries"></a>
+### Nested Schema for `route_maps.entries`
 
 Required:
 
@@ -141,26 +141,26 @@ Optional:
 - `additive` (String) Option to add to an existing community.
   - Choices: `enabled`, `disabled`
   - Default value: `disabled`
-- `match_route_prefix_lists` (Attributes List) List of Match Route Prefix Lists. (see [below for nested schema](#nestedatt--route_maps--route_map_entries--match_route_prefix_lists))
-- `match_tags` (Attributes List) List of Match Tags. (see [below for nested schema](#nestedatt--route_maps--route_map_entries--match_tags))
+- `match_route_prefix_lists` (Attributes List) List of Match Route Prefix Lists. (see [below for nested schema](#nestedatt--route_maps--entries--match_route_prefix_lists))
+- `match_tags` (Attributes List) List of Match Tags. (see [below for nested schema](#nestedatt--route_maps--entries--match_tags))
 - `no_community` (String) Option to have no community attribute.
   - Choices: `enabled`, `disabled`
   - Default value: `disabled`
 - `set_criteria` (String) Operation on the current community.
   - Choices: `none`, `append`, `replace`, `igp`, `pre-bestpath`
   - Default value: `none`
-- `set_regular_community_items` (Attributes List) List of Set Community Items. (see [below for nested schema](#nestedatt--route_maps--route_map_entries--set_regular_community_items))
+- `set_regular_community_items` (Attributes List) List of Set Community Items. (see [below for nested schema](#nestedatt--route_maps--entries--set_regular_community_items))
 
-<a id="nestedatt--route_maps--route_map_entries--match_route_prefix_lists"></a>
-### Nested Schema for `route_maps.route_map_entries.match_route_prefix_lists`
+<a id="nestedatt--route_maps--entries--match_route_prefix_lists"></a>
+### Nested Schema for `route_maps.entries.match_route_prefix_lists`
 
 Required:
 
 - `prefix_list_dn` (String) DN of Prefix List. For example: `sys/rpm/pfxlistv4-[PREFIX_LIST1]`
 
 
-<a id="nestedatt--route_maps--route_map_entries--match_tags"></a>
-### Nested Schema for `route_maps.route_map_entries.match_tags`
+<a id="nestedatt--route_maps--entries--match_tags"></a>
+### Nested Schema for `route_maps.entries.match_tags`
 
 Required:
 
@@ -168,8 +168,8 @@ Required:
   - Range: `0`-`4294967295`
 
 
-<a id="nestedatt--route_maps--route_map_entries--set_regular_community_items"></a>
-### Nested Schema for `route_maps.route_map_entries.set_regular_community_items`
+<a id="nestedatt--route_maps--entries--set_regular_community_items"></a>
+### Nested Schema for `route_maps.entries.set_regular_community_items`
 
 Required:
 

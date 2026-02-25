@@ -43,11 +43,11 @@ type DHCP struct {
 }
 
 type DHCPRelayInterfaces struct {
-	InterfaceId types.String    `tfsdk:"interface_id"`
-	Addresses   []DHCPAddresses `tfsdk:"addresses"`
+	InterfaceId types.String                   `tfsdk:"interface_id"`
+	Addresses   []DHCPRelayInterfacesAddresses `tfsdk:"addresses"`
 }
 
-type DHCPAddresses struct {
+type DHCPRelayInterfacesAddresses struct {
 	Vrf     types.String `tfsdk:"vrf"`
 	Address types.String `tfsdk:"address"`
 }
@@ -84,7 +84,7 @@ func (data DHCPRelayInterfaces) getRn() string {
 	return fmt.Sprintf("relayif-[%s]", data.InterfaceId.ValueString())
 }
 
-func (data DHCPAddresses) getRn() string {
+func (data DHCPRelayInterfacesAddresses) getRn() string {
 	return fmt.Sprintf("addr-[%s]-[%s]", data.Vrf.ValueString(), data.Address.ValueString())
 }
 
@@ -162,7 +162,7 @@ func (data *DHCP) fromBody(res gjson.Result) {
 									nestedV.ForEach(
 										func(nestedClassname, nestedValue gjson.Result) bool {
 											if nestedClassname.String() == "dhcpRelayAddr" {
-												var nestedChilddhcpRelayAddr DHCPAddresses
+												var nestedChilddhcpRelayAddr DHCPRelayInterfacesAddresses
 												nestedChilddhcpRelayAddr.Vrf = types.StringValue(nestedValue.Get("attributes.vrf").String())
 												nestedChilddhcpRelayAddr.Address = types.StringValue(nestedValue.Get("attributes.address").String())
 												child.Addresses = append(child.Addresses, nestedChilddhcpRelayAddr)

@@ -44,11 +44,11 @@ type Keychain struct {
 }
 
 type KeychainKeychains struct {
-	Name types.String   `tfsdk:"name"`
-	Keys []KeychainKeys `tfsdk:"keys"`
+	Name types.String            `tfsdk:"name"`
+	Keys []KeychainKeychainsKeys `tfsdk:"keys"`
 }
 
-type KeychainKeys struct {
+type KeychainKeychainsKeys struct {
 	KeyId     types.Int64  `tfsdk:"key_id"`
 	KeyString types.String `tfsdk:"key_string"`
 }
@@ -85,7 +85,7 @@ func (data KeychainKeychains) getRn() string {
 	return fmt.Sprintf("classickeychain-[%s]", data.Name.ValueString())
 }
 
-func (data KeychainKeys) getRn() string {
+func (data KeychainKeychainsKeys) getRn() string {
 	return fmt.Sprintf("classickeyid-%v", data.KeyId.ValueInt64())
 }
 
@@ -167,7 +167,7 @@ func (data *Keychain) fromBody(res gjson.Result) {
 									nestedV.ForEach(
 										func(nestedClassname, nestedValue gjson.Result) bool {
 											if nestedClassname.String() == "kcmgrKey" {
-												var nestedChildkcmgrKey KeychainKeys
+												var nestedChildkcmgrKey KeychainKeychainsKeys
 												nestedChildkcmgrKey.KeyId = types.Int64Value(nestedValue.Get("attributes.keyId").Int())
 												child.Keys = append(child.Keys, nestedChildkcmgrKey)
 											}

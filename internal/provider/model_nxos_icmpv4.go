@@ -45,11 +45,11 @@ type ICMPv4 struct {
 }
 
 type ICMPv4Vrfs struct {
-	Name       types.String       `tfsdk:"name"`
-	Interfaces []ICMPv4Interfaces `tfsdk:"interfaces"`
+	Name       types.String           `tfsdk:"name"`
+	Interfaces []ICMPv4VrfsInterfaces `tfsdk:"interfaces"`
 }
 
-type ICMPv4Interfaces struct {
+type ICMPv4VrfsInterfaces struct {
 	Id      types.String `tfsdk:"id"`
 	Control types.String `tfsdk:"control"`
 }
@@ -86,7 +86,7 @@ func (data ICMPv4Vrfs) getRn() string {
 	return fmt.Sprintf("dom-%s", data.Name.ValueString())
 }
 
-func (data ICMPv4Interfaces) getRn() string {
+func (data ICMPv4VrfsInterfaces) getRn() string {
 	return fmt.Sprintf("if-[%s]", data.Id.ValueString())
 }
 
@@ -172,7 +172,7 @@ func (data *ICMPv4) fromBody(res gjson.Result) {
 									nestedV.ForEach(
 										func(nestedClassname, nestedValue gjson.Result) bool {
 											if nestedClassname.String() == "icmpv4If" {
-												var nestedChildicmpv4If ICMPv4Interfaces
+												var nestedChildicmpv4If ICMPv4VrfsInterfaces
 												nestedChildicmpv4If.Id = types.StringValue(nestedValue.Get("attributes.id").String())
 												nestedChildicmpv4If.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
 												child.Interfaces = append(child.Interfaces, nestedChildicmpv4If)

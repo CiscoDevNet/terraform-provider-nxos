@@ -52,11 +52,11 @@ data "nxos_route_policy" "example" {
 
 Read-Only:
 
+- `entries` (Attributes List) IPv4 Prefix List entries. (see [below for nested schema](#nestedatt--ipv4_prefix_lists--entries))
 - `name` (String) IPv4 Prefix List name.
-- `prefix_list_entries` (Attributes List) IPv4 Prefix List entries. (see [below for nested schema](#nestedatt--ipv4_prefix_lists--prefix_list_entries))
 
-<a id="nestedatt--ipv4_prefix_lists--prefix_list_entries"></a>
-### Nested Schema for `ipv4_prefix_lists.prefix_list_entries`
+<a id="nestedatt--ipv4_prefix_lists--entries"></a>
+### Nested Schema for `ipv4_prefix_lists.entries`
 
 Read-Only:
 
@@ -74,41 +74,41 @@ Read-Only:
 
 Read-Only:
 
+- `entries` (Attributes List) List of Route Map Entries. (see [below for nested schema](#nestedatt--route_maps--entries))
 - `name` (String) Route Map name.
-- `route_map_entries` (Attributes List) List of Route Map Entries. (see [below for nested schema](#nestedatt--route_maps--route_map_entries))
 
-<a id="nestedatt--route_maps--route_map_entries"></a>
-### Nested Schema for `route_maps.route_map_entries`
+<a id="nestedatt--route_maps--entries"></a>
+### Nested Schema for `route_maps.entries`
 
 Read-Only:
 
 - `action` (String) Route Map Entry action.
 - `additive` (String) Option to add to an existing community.
-- `match_route_prefix_lists` (Attributes List) List of Match Route Prefix Lists. (see [below for nested schema](#nestedatt--route_maps--route_map_entries--match_route_prefix_lists))
-- `match_tags` (Attributes List) List of Match Tags. (see [below for nested schema](#nestedatt--route_maps--route_map_entries--match_tags))
+- `match_route_prefix_lists` (Attributes List) List of Match Route Prefix Lists. (see [below for nested schema](#nestedatt--route_maps--entries--match_route_prefix_lists))
+- `match_tags` (Attributes List) List of Match Tags. (see [below for nested schema](#nestedatt--route_maps--entries--match_tags))
 - `no_community` (String) Option to have no community attribute.
 - `order` (Number) Route Map Entry order.
 - `set_criteria` (String) Operation on the current community.
-- `set_regular_community_items` (Attributes List) List of Set Community Items. (see [below for nested schema](#nestedatt--route_maps--route_map_entries--set_regular_community_items))
+- `set_regular_community_items` (Attributes List) List of Set Community Items. (see [below for nested schema](#nestedatt--route_maps--entries--set_regular_community_items))
 
-<a id="nestedatt--route_maps--route_map_entries--match_route_prefix_lists"></a>
-### Nested Schema for `route_maps.route_map_entries.match_route_prefix_lists`
+<a id="nestedatt--route_maps--entries--match_route_prefix_lists"></a>
+### Nested Schema for `route_maps.entries.match_route_prefix_lists`
 
 Read-Only:
 
 - `prefix_list_dn` (String) DN of Prefix List. For example: `sys/rpm/pfxlistv4-[PREFIX_LIST1]`
 
 
-<a id="nestedatt--route_maps--route_map_entries--match_tags"></a>
-### Nested Schema for `route_maps.route_map_entries.match_tags`
+<a id="nestedatt--route_maps--entries--match_tags"></a>
+### Nested Schema for `route_maps.entries.match_tags`
 
 Read-Only:
 
 - `tag` (Number) Route Map Tag Value
 
 
-<a id="nestedatt--route_maps--route_map_entries--set_regular_community_items"></a>
-### Nested Schema for `route_maps.route_map_entries.set_regular_community_items`
+<a id="nestedatt--route_maps--entries--set_regular_community_items"></a>
+### Nested Schema for `route_maps.entries.set_regular_community_items`
 
 Read-Only:
 

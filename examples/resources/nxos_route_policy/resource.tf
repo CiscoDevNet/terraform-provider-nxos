@@ -1,7 +1,7 @@
 resource "nxos_route_policy" "example" {
   ipv4_prefix_lists = [{
     name = "PREFIX_LIST1"
-    prefix_list_entries = [{
+    entries = [{
       order      = 10
       action     = "permit"
       criteria   = "inexact"
@@ -12,7 +12,7 @@ resource "nxos_route_policy" "example" {
   }]
   route_maps = [{
     name = "ROUTE_MAP1"
-    route_map_entries = [{
+    entries = [{
       order  = 10
       action = "permit"
       match_route_prefix_lists = [{

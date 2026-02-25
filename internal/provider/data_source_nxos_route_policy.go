@@ -77,7 +77,7 @@ func (d *RoutePolicyDataSource) Schema(ctx context.Context, req datasource.Schem
 							MarkdownDescription: "IPv4 Prefix List name.",
 							Computed:            true,
 						},
-						"prefix_list_entries": schema.ListNestedAttribute{
+						"entries": schema.ListNestedAttribute{
 							MarkdownDescription: "IPv4 Prefix List entries.",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
@@ -121,7 +121,7 @@ func (d *RoutePolicyDataSource) Schema(ctx context.Context, req datasource.Schem
 							MarkdownDescription: "Route Map name.",
 							Computed:            true,
 						},
-						"route_map_entries": schema.ListNestedAttribute{
+						"entries": schema.ListNestedAttribute{
 							MarkdownDescription: "List of Route Map Entries.",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{

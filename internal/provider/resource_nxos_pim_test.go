@@ -49,8 +49,6 @@ func TestAccNxosPIM(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.ssm_policy_name", "SSM"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.ssm_range_group_list_1", "232.0.0.0/8"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.ssm_range_group_list_2", "233.0.0.0/8"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.ssm_range_group_list_3", "0.0.0.0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.ssm_range_group_list_4", "0.0.0.0"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.ssm_range_prefix_list", ""))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.ssm_range_route_map", ""))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.ssm_range_none", "false"))
@@ -157,8 +155,6 @@ func testAccNxosPIMConfig_all() string {
 	config += `		ssm_policy_name = "SSM"` + "\n"
 	config += `		ssm_range_group_list_1 = "232.0.0.0/8"` + "\n"
 	config += `		ssm_range_group_list_2 = "233.0.0.0/8"` + "\n"
-	config += `		ssm_range_group_list_3 = "0.0.0.0"` + "\n"
-	config += `		ssm_range_group_list_4 = "0.0.0.0"` + "\n"
 	config += `		ssm_range_prefix_list = ""` + "\n"
 	config += `		ssm_range_route_map = ""` + "\n"
 	config += `		ssm_range_none = false` + "\n"

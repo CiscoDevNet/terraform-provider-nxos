@@ -52,8 +52,6 @@ func TestAccDataSourceNxosPIM(t *testing.T) {
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_pim.test", "vrfs.*", map[string]string{
 		"ssm_range_group_list_1": "232.0.0.0/8",
 		"ssm_range_group_list_2": "233.0.0.0/8",
-		"ssm_range_group_list_3": "0.0.0.0",
-		"ssm_range_group_list_4": "0.0.0.0",
 		"ssm_range_prefix_list":  "",
 		"ssm_range_route_map":    "",
 		"ssm_range_none":         "false",
@@ -135,8 +133,6 @@ func testAccDataSourceNxosPIMConfig() string {
 	config += `		ssm_policy_name = "SSM"` + "\n"
 	config += `		ssm_range_group_list_1 = "232.0.0.0/8"` + "\n"
 	config += `		ssm_range_group_list_2 = "233.0.0.0/8"` + "\n"
-	config += `		ssm_range_group_list_3 = "0.0.0.0"` + "\n"
-	config += `		ssm_range_group_list_4 = "0.0.0.0"` + "\n"
 	config += `		ssm_range_prefix_list = ""` + "\n"
 	config += `		ssm_range_route_map = ""` + "\n"
 	config += `		ssm_range_none = false` + "\n"

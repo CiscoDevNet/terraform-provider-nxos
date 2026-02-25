@@ -184,10 +184,8 @@ func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							Optional:            true,
 						},
 						"ssm_range_group_list_1": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Group list 1.").AddDefaultValueDescription("0.0.0.0").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Group list 1.").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("0.0.0.0"),
 						},
 						"ssm_range_group_list_2": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Group list 2.").AddDefaultValueDescription("0.0.0.0").String,
@@ -196,16 +194,12 @@ func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							Default:             stringdefault.StaticString("0.0.0.0"),
 						},
 						"ssm_range_group_list_3": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Group list 3.").AddDefaultValueDescription("0.0.0.0").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Group list 3.").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("0.0.0.0"),
 						},
 						"ssm_range_group_list_4": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Group list 4.").AddDefaultValueDescription("0.0.0.0").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Group list 4.").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("0.0.0.0"),
 						},
 						"ssm_range_prefix_list": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Prefix list name.").String,

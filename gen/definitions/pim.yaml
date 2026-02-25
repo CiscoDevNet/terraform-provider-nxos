@@ -137,7 +137,6 @@ child_classes:
                     tf_name: ssm_range_group_list_1
                     type: String
                     description: 'Group list 1.'
-                    default_value: 0.0.0.0
                     example: 232.0.0.0/8
                   - nxos_name: grpList1
                     tf_name: ssm_range_group_list_2
@@ -149,13 +148,13 @@ child_classes:
                     tf_name: ssm_range_group_list_3
                     type: String
                     description: 'Group list 3.'
-                    default_value: 0.0.0.0
+                    exclude_test: true
                     example: 0.0.0.0
                   - nxos_name: grpList3
                     tf_name: ssm_range_group_list_4
                     type: String
                     description: 'Group list 4.'
-                    default_value: 0.0.0.0
+                    exclude_test: true
                     example: 0.0.0.0
                   - nxos_name: pfxList
                     tf_name: ssm_range_prefix_list

@@ -65,7 +65,7 @@ func (r *SystemResource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration.", "topSystem", "System/top:System/").AddAdditionalDocs([]string{"ipqosEntity", "ipqosQueuing", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst", "ethpmEntity", "ethpmInst"}, []string{"Qos/ipqos:Entity/", "Qos/ipqos:Queuing/", "Qos/ipqos:ServPol/", "Qos/ipqos:Egress/", "Qos/ipqos:System/", "Qos/ipqos:Inst/", "Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration.", "topSystem", "System/top:System/").AddAdditionalDocs([]string{"ethpmEntity", "ethpmInst"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -82,10 +82,6 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			"name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The system name (hostname).").String,
 				Optional:            true,
-			},
-			"policy_map_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Policy map name.").String,
-				Required:            true,
 			},
 			"mtu": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("System jumbo MTU.").AddIntegerRangeDescription(576, 9216).AddDefaultValueDescription("9216").String,
@@ -207,7 +203,7 @@ func (r *SystemResource) Read(ctx context.Context, req resource.ReadRequest, res
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
-		queries = append(queries, nxos.Query("rsp-subtree-depth", "6"))
+		queries = append(queries, nxos.Query("rsp-subtree-depth", "2"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

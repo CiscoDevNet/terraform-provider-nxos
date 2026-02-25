@@ -39,7 +39,6 @@ type System struct {
 	Device             types.String `tfsdk:"device"`
 	Dn                 types.String `tfsdk:"id"`
 	Name               types.String `tfsdk:"name"`
-	PolicyMapName      types.String `tfsdk:"policy_map_name"`
 	Mtu                types.Int64  `tfsdk:"mtu"`
 	DefaultAdminStatus types.String `tfsdk:"default_admin_status"`
 }
@@ -90,48 +89,6 @@ func (data System) toBody() nxos.Body {
 	childrenPath := data.getClassName() + ".children"
 	{
 		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipqosEntity"
-		attrs = "{}"
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-		nestedChildrenPath := childBodyPath + ".children"
-		{
-			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosQueuing"
-			attrs = "{}"
-			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-			nestedChildrenPath := childBodyPath + ".children"
-			{
-				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosServPol"
-				attrs = "{}"
-				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-				nestedChildrenPath := childBodyPath + ".children"
-				{
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosEgress"
-					attrs = "{}"
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-					nestedChildrenPath := childBodyPath + ".children"
-					{
-						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosSystem"
-						attrs = "{}"
-						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
-						nestedChildrenPath := childBodyPath + ".children"
-						attrs = "{}"
-						if (!data.PolicyMapName.IsUnknown() && !data.PolicyMapName.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "name", data.PolicyMapName.ValueString())
-						}
-						if attrs != "{}" || false {
-							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosInst.attributes", attrs)
-						}
-					}
-				}
-			}
-		}
-	}
-	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ethpmEntity"
 		attrs = "{}"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
@@ -157,85 +114,6 @@ func (data System) toBody() nxos.Body {
 
 func (data *System) fromBody(res gjson.Result) {
 	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
-	{
-		var ripqosEntity gjson.Result
-		res.Get(data.getClassName() + ".children").ForEach(
-			func(_, v gjson.Result) bool {
-				key := v.Get("ipqosEntity.attributes.rn").String()
-				if key == "ipqos" {
-					ripqosEntity = v
-					return false
-				}
-				return true
-			},
-		)
-		{
-			var ripqosQueuing gjson.Result
-			ripqosEntity.Get("ipqosEntity.children").ForEach(
-				func(_, v gjson.Result) bool {
-					key := v.Get("ipqosQueuing.attributes.rn").String()
-					if key == "queuing" {
-						ripqosQueuing = v
-						return false
-					}
-					return true
-				},
-			)
-			{
-				var ripqosServPol gjson.Result
-				ripqosQueuing.Get("ipqosQueuing.children").ForEach(
-					func(_, v gjson.Result) bool {
-						key := v.Get("ipqosServPol.attributes.rn").String()
-						if key == "policy" {
-							ripqosServPol = v
-							return false
-						}
-						return true
-					},
-				)
-				{
-					var ripqosEgress gjson.Result
-					ripqosServPol.Get("ipqosServPol.children").ForEach(
-						func(_, v gjson.Result) bool {
-							key := v.Get("ipqosEgress.attributes.rn").String()
-							if key == "out" {
-								ripqosEgress = v
-								return false
-							}
-							return true
-						},
-					)
-					{
-						var ripqosSystem gjson.Result
-						ripqosEgress.Get("ipqosEgress.children").ForEach(
-							func(_, v gjson.Result) bool {
-								key := v.Get("ipqosSystem.attributes.rn").String()
-								if key == "sys" {
-									ripqosSystem = v
-									return false
-								}
-								return true
-							},
-						)
-						{
-							var ripqosInst gjson.Result
-							ripqosSystem.Get("ipqosSystem.children").ForEach(
-								func(_, v gjson.Result) bool {
-									key := v.Get("ipqosInst.attributes.rn").String()
-									if key == "pmap" {
-										ripqosInst = v
-										return false
-									}
-									return true
-								},
-							)
-							data.PolicyMapName = types.StringValue(ripqosInst.Get("ipqosInst.attributes.name").String())
-						}
-					}
-				}
-			}
-		}
-	}
 	{
 		var rethpmEntity gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -275,87 +153,6 @@ func (data *System) updateFromBody(res gjson.Result) {
 		data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	} else {
 		data.Name = types.StringNull()
-	}
-	var ripqosEntity gjson.Result
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			key := v.Get("ipqosEntity.attributes.rn").String()
-			if key == "ipqos" {
-				ripqosEntity = v
-				return false
-			}
-			return true
-		},
-	)
-	{
-		var ripqosQueuing gjson.Result
-		ripqosEntity.Get("ipqosEntity.children").ForEach(
-			func(_, v gjson.Result) bool {
-				key := v.Get("ipqosQueuing.attributes.rn").String()
-				if key == "queuing" {
-					ripqosQueuing = v
-					return false
-				}
-				return true
-			},
-		)
-		{
-			var ripqosServPol gjson.Result
-			ripqosQueuing.Get("ipqosQueuing.children").ForEach(
-				func(_, v gjson.Result) bool {
-					key := v.Get("ipqosServPol.attributes.rn").String()
-					if key == "policy" {
-						ripqosServPol = v
-						return false
-					}
-					return true
-				},
-			)
-			{
-				var ripqosEgress gjson.Result
-				ripqosServPol.Get("ipqosServPol.children").ForEach(
-					func(_, v gjson.Result) bool {
-						key := v.Get("ipqosEgress.attributes.rn").String()
-						if key == "out" {
-							ripqosEgress = v
-							return false
-						}
-						return true
-					},
-				)
-				{
-					var ripqosSystem gjson.Result
-					ripqosEgress.Get("ipqosEgress.children").ForEach(
-						func(_, v gjson.Result) bool {
-							key := v.Get("ipqosSystem.attributes.rn").String()
-							if key == "sys" {
-								ripqosSystem = v
-								return false
-							}
-							return true
-						},
-					)
-					{
-						var ripqosInst gjson.Result
-						ripqosSystem.Get("ipqosSystem.children").ForEach(
-							func(_, v gjson.Result) bool {
-								key := v.Get("ipqosInst.attributes.rn").String()
-								if key == "pmap" {
-									ripqosInst = v
-									return false
-								}
-								return true
-							},
-						)
-						if !data.PolicyMapName.IsNull() {
-							data.PolicyMapName = types.StringValue(ripqosInst.Get("ipqosInst.attributes.name").String())
-						} else {
-							data.PolicyMapName = types.StringNull()
-						}
-					}
-				}
-			}
-		}
 	}
 	var rethpmEntity gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
@@ -403,36 +200,6 @@ func (data System) toDeleteBody() nxos.Body {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	}
 	childrenPath := data.getClassName() + ".children"
-	{
-		childIndex := len(gjson.Get(body, childrenPath).Array())
-		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipqosEntity"
-		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
-		nestedChildrenPath := childBodyPath + ".children"
-		{
-			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosQueuing"
-			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
-			nestedChildrenPath := childBodyPath + ".children"
-			{
-				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosServPol"
-				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
-				nestedChildrenPath := childBodyPath + ".children"
-				{
-					childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-					childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ipqosEgress"
-					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
-					nestedChildrenPath := childBodyPath + ".children"
-					{
-						deleteBody := ""
-						deleteBody, _ = sjson.Set(deleteBody, "ipqosSystem.attributes.rn", "sys")
-						deleteBody, _ = sjson.Set(deleteBody, "ipqosSystem.attributes.status", "deleted")
-						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
-					}
-				}
-			}
-		}
-	}
 	{
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ethpmEntity"

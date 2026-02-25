@@ -1,0 +1,173 @@
+---
+name: Queuing QoS
+class_name: ipqosQueuing
+dn: sys/ipqos/queuing
+no_delete: true
+ds_description: This data source can read the queuing QoS configuration.
+res_description: This resource can manage the queuing QoS configuration.
+doc_path: Qos/ipqos:Queuing/
+doc_category: QoS
+child_classes:
+  - class_name: ipqosPMapEntity
+    doc_path: Qos/ipqos:PMapEntity/
+    rn: p
+    type: single
+    no_delete: true
+    child_classes:
+      - class_name: ipqosPMapInst
+        doc_path: Qos/ipqos:PMapInst/
+        rn: name-%s
+        type: list
+        tf_name: policy_maps
+        description: 'List of policy maps.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Policy map name.'
+            example: PM1
+          - nxos_name: matchType
+            tf_name: match_type
+            type: String
+            description: 'Match type.'
+            enum_values:
+              - match-any
+              - match-all
+              - match-first
+            default_value: match-all
+            example: match-any
+        child_classes:
+          - class_name: ipqosMatchCMap
+            doc_path: Qos/ipqos:MatchCMap/
+            rn: cmap-%s
+            type: list
+            tf_name: match_class_maps
+            description: 'List of match class maps.'
+            attributes:
+              - nxos_name: name
+                tf_name: name
+                type: String
+                id: true
+                description: 'Class map name.'
+                example: c-out-q1
+            child_classes:
+              - class_name: ipqosPriority
+                doc_path: Qos/ipqos:Priority/
+                rn: prio
+                type: single
+                tf_name: priority
+                description: 'Priority configuration.'
+                attributes:
+                  - nxos_name: level
+                    tf_name: priority
+                    type: Int64
+                    description: 'Priority level.'
+                    min_int: 1
+                    max_int: 8
+                    example: 1
+              - class_name: ipqosSetRemBW
+                doc_path: Qos/ipqos:SetRemBW/
+                rn: setRemBW
+                type: single
+                tf_name: remaining_bandwidth
+                description: 'Remaining bandwidth configuration.'
+                attributes:
+                  - nxos_name: val
+                    tf_name: remaining_bandwidth
+                    type: Int64
+                    description: 'Remaining bandwidth percent.'
+                    min_int: 0
+                    max_int: 100
+                    example: 10
+                    exclude_test: true
+  - class_name: ipqosServPol
+    doc_path: Qos/ipqos:ServPol/
+    rn: policy
+    type: single
+    no_delete: true
+    child_classes:
+      - class_name: ipqosEgress
+        doc_path: Qos/ipqos:Egress/
+        rn: out
+        type: single
+        no_delete: true
+        child_classes:
+          - class_name: ipqosSystem
+            doc_path: Qos/ipqos:System/
+            rn: sys
+            type: single
+            tf_name: policy_system_out
+            description: 'Egress system QoS policy assignment.'
+            child_classes:
+              - class_name: ipqosInst
+                doc_path: Qos/ipqos:Inst/
+                rn: pmap
+                type: single
+                tf_name: policy_map
+                description: 'Queuing QoS policy system out policy map assignment.'
+                attributes:
+                  - nxos_name: name
+                    tf_name: policy_map_name
+                    type: String
+                    mandatory: true
+                    description: 'Policy map name.'
+                    example: PM1
+test_prerequisites:
+  - dn: sys/ipqos/queuing/p/name-[PM1]
+    class_name: ipqosPMapInst
+    attributes:
+      - name: name
+        value: PM1
+  - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q1]
+    class_name: ipqosMatchCMap
+    attributes:
+      - name: name
+        value: c-out-q1
+    dependencies: [0]
+  - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q1]/prio
+    class_name: ipqosPriority
+    no_delete: true
+    attributes:
+      - name: level
+        value: 1
+    dependencies: [1]
+  - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q2]
+    class_name: ipqosMatchCMap
+    attributes:
+      - name: name
+        value: c-out-q2
+    dependencies: [0]
+  - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q2]/setRemBW
+    class_name: ipqosSetRemBW
+    no_delete: true
+    attributes:
+      - name: val
+        value: 10
+    dependencies: [3]
+  - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q3]
+    class_name: ipqosMatchCMap
+    attributes:
+      - name: name
+        value: c-out-q3
+    dependencies: [0]
+  - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q3]/setRemBW
+    class_name: ipqosSetRemBW
+    no_delete: true
+    attributes:
+      - name: val
+        value: 10
+    dependencies: [5]
+  - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q-default]
+    class_name: ipqosMatchCMap
+    attributes:
+      - name: name
+        value: c-out-q-default
+    dependencies: [0]
+  - dn: sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q-default]/setRemBW
+    class_name: ipqosSetRemBW
+    no_delete: true
+    attributes:
+      - name: val
+        value: 10
+    dependencies: [7]

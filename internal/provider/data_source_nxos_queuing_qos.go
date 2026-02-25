@@ -38,26 +38,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &QueuingQOSPolicyMapDataSource{}
-	_ datasource.DataSourceWithConfigure = &QueuingQOSPolicyMapDataSource{}
+	_ datasource.DataSource              = &QueuingQoSDataSource{}
+	_ datasource.DataSourceWithConfigure = &QueuingQoSDataSource{}
 )
 
-func NewQueuingQOSPolicyMapDataSource() datasource.DataSource {
-	return &QueuingQOSPolicyMapDataSource{}
+func NewQueuingQoSDataSource() datasource.DataSource {
+	return &QueuingQoSDataSource{}
 }
 
-type QueuingQOSPolicyMapDataSource struct {
+type QueuingQoSDataSource struct {
 	data *NxosProviderData
 }
 
-func (d *QueuingQOSPolicyMapDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_queuing_qos_policy_map"
+func (d *QueuingQoSDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_queuing_qos"
 }
 
-func (d *QueuingQOSPolicyMapDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *QueuingQoSDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the queuing QoS policy map configuration.", "ipqosPMapInst", "Qos/ipqos:PMapInst/").AddAdditionalDocs([]string{"ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW"}, []string{"Qos/ipqos:MatchCMap/", "Qos/ipqos:Priority/", "Qos/ipqos:SetRemBW/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the queuing QoS configuration.", "ipqosQueuing", "Qos/ipqos:Queuing/").AddAdditionalDocs([]string{"ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst"}, []string{"Qos/ipqos:PMapEntity/", "Qos/ipqos:PMapInst/", "Qos/ipqos:MatchCMap/", "Qos/ipqos:Priority/", "Qos/ipqos:SetRemBW/", "Qos/ipqos:ServPol/", "Qos/ipqos:Egress/", "Qos/ipqos:System/", "Qos/ipqos:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -68,39 +68,51 @@ func (d *QueuingQOSPolicyMapDataSource) Schema(ctx context.Context, req datasour
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
-			"name": schema.StringAttribute{
-				MarkdownDescription: "Policy map name.",
-				Required:            true,
-			},
-			"match_type": schema.StringAttribute{
-				MarkdownDescription: "Match type.",
-				Computed:            true,
-			},
-			"match_class_maps": schema.ListNestedAttribute{
-				MarkdownDescription: "List of match class maps.",
+			"policy_maps": schema.ListNestedAttribute{
+				MarkdownDescription: "List of policy maps.",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							MarkdownDescription: "Class map name.",
+							MarkdownDescription: "Policy map name.",
 							Computed:            true,
 						},
-						"priority": schema.Int64Attribute{
-							MarkdownDescription: "Priority level.",
+						"match_type": schema.StringAttribute{
+							MarkdownDescription: "Match type.",
 							Computed:            true,
 						},
-						"remaining_bandwidth": schema.Int64Attribute{
-							MarkdownDescription: "Remaining bandwidth percent.",
+						"match_class_maps": schema.ListNestedAttribute{
+							MarkdownDescription: "List of match class maps.",
 							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"name": schema.StringAttribute{
+										MarkdownDescription: "Class map name.",
+										Computed:            true,
+									},
+									"priority": schema.Int64Attribute{
+										MarkdownDescription: "Priority level.",
+										Computed:            true,
+									},
+									"remaining_bandwidth": schema.Int64Attribute{
+										MarkdownDescription: "Remaining bandwidth percent.",
+										Computed:            true,
+									},
+								},
+							},
 						},
 					},
 				},
+			},
+			"policy_map_name": schema.StringAttribute{
+				MarkdownDescription: "Policy map name.",
+				Computed:            true,
 			},
 		},
 	}
 }
 
-func (d *QueuingQOSPolicyMapDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *QueuingQoSDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -111,8 +123,8 @@ func (d *QueuingQOSPolicyMapDataSource) Configure(_ context.Context, req datasou
 // End of section. //template:end model
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-func (d *QueuingQOSPolicyMapDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config QueuingQOSPolicyMap
+func (d *QueuingQoSDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config QueuingQoS
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)
@@ -130,7 +142,7 @@ func (d *QueuingQOSPolicyMapDataSource) Read(ctx context.Context, req datasource
 	}
 
 	queries := []func(*nxos.Req){}
-	queries = append(queries, nxos.Query("rsp-subtree-depth", "2"))
+	queries = append(queries, nxos.Query("rsp-subtree-depth", "4"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

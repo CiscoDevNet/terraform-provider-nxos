@@ -46,25 +46,25 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &QueuingQOSPolicyMapResource{}
-var _ resource.ResourceWithIdentity = &QueuingQOSPolicyMapResource{}
+var _ resource.Resource = &QueuingQoSResource{}
+var _ resource.ResourceWithIdentity = &QueuingQoSResource{}
 
-func NewQueuingQOSPolicyMapResource() resource.Resource {
-	return &QueuingQOSPolicyMapResource{}
+func NewQueuingQoSResource() resource.Resource {
+	return &QueuingQoSResource{}
 }
 
-type QueuingQOSPolicyMapResource struct {
+type QueuingQoSResource struct {
 	data *NxosProviderData
 }
 
-func (r *QueuingQOSPolicyMapResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_queuing_qos_policy_map"
+func (r *QueuingQoSResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_queuing_qos"
 }
 
-func (r *QueuingQOSPolicyMapResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *QueuingQoSResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the queuing QoS policy map configuration.", "ipqosPMapInst", "Qos/ipqos:PMapInst/").AddAdditionalDocs([]string{"ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW"}, []string{"Qos/ipqos:MatchCMap/", "Qos/ipqos:Priority/", "Qos/ipqos:SetRemBW/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the queuing QoS configuration.", "ipqosQueuing", "Qos/ipqos:Queuing/").AddAdditionalDocs([]string{"ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosPriority", "ipqosSetRemBW", "ipqosServPol", "ipqosEgress", "ipqosSystem", "ipqosInst"}, []string{"Qos/ipqos:PMapEntity/", "Qos/ipqos:PMapInst/", "Qos/ipqos:MatchCMap/", "Qos/ipqos:Priority/", "Qos/ipqos:SetRemBW/", "Qos/ipqos:ServPol/", "Qos/ipqos:Egress/", "Qos/ipqos:System/", "Qos/ipqos:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -78,71 +78,79 @@ func (r *QueuingQOSPolicyMapResource) Schema(ctx context.Context, req resource.S
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Policy map name.").String,
-				Required:            true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
-				},
-			},
-			"match_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Match type.").AddStringEnumDescription("match-any", "match-all", "match-first").AddDefaultValueDescription("match-all").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("match-all"),
-				Validators: []validator.String{
-					stringvalidator.OneOf("match-any", "match-all", "match-first"),
-				},
-			},
-			"match_class_maps": schema.ListNestedAttribute{
-				MarkdownDescription: "List of match class maps.",
+			"policy_maps": schema.ListNestedAttribute{
+				MarkdownDescription: "List of policy maps.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Class map name.").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Policy map name.").String,
 							Required:            true,
 							PlanModifiers: []planmodifier.String{
 								stringplanmodifier.RequiresReplace(),
 							},
 						},
-						"priority": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Priority level.").AddIntegerRangeDescription(1, 8).String,
+						"match_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Match type.").AddStringEnumDescription("match-any", "match-all", "match-first").AddDefaultValueDescription("match-all").String,
 							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 8),
+							Computed:            true,
+							Default:             stringdefault.StaticString("match-all"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("match-any", "match-all", "match-first"),
 							},
 						},
-						"remaining_bandwidth": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Remaining bandwidth percent.").AddIntegerRangeDescription(0, 100).String,
+						"match_class_maps": schema.ListNestedAttribute{
+							MarkdownDescription: "List of match class maps.",
 							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(0, 100),
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Class map name.").String,
+										Required:            true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplace(),
+										},
+									},
+									"priority": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Priority level.").AddIntegerRangeDescription(1, 8).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 8),
+										},
+									},
+									"remaining_bandwidth": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Remaining bandwidth percent.").AddIntegerRangeDescription(0, 100).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 100),
+										},
+									},
+								},
 							},
 						},
 					},
 				},
 			},
+			"policy_map_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Policy map name.").String,
+				Required:            true,
+			},
 		},
 	}
 }
 
-func (r *QueuingQOSPolicyMapResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+func (r *QueuingQoSResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
 	resp.IdentitySchema = identityschema.Schema{
 		Attributes: map[string]identityschema.Attribute{
 			"device": identityschema.StringAttribute{
 				Description:       "A device name from the provider configuration.",
 				OptionalForImport: true,
 			},
-			"name": identityschema.StringAttribute{
-				Description:       helpers.NewAttributeDescription("Policy map name.").String,
-				RequiredForImport: true,
-			},
 		},
 	}
 }
 
-func (r *QueuingQOSPolicyMapResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *QueuingQoSResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -154,8 +162,8 @@ func (r *QueuingQOSPolicyMapResource) Configure(ctx context.Context, req resourc
 // End of section. //template:end model
 
 // Section below is generated&owned by "gen/generator.go". //template:begin create
-func (r *QueuingQOSPolicyMapResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan QueuingQOSPolicyMap
+func (r *QueuingQoSResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan QueuingQoS
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -183,7 +191,7 @@ func (r *QueuingQOSPolicyMapResource) Create(ctx context.Context, req resource.C
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity QueuingQOSPolicyMapIdentity
+	var identity QueuingQoSIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -199,8 +207,8 @@ func (r *QueuingQOSPolicyMapResource) Create(ctx context.Context, req resource.C
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-func (r *QueuingQOSPolicyMapResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state QueuingQOSPolicyMap
+func (r *QueuingQoSResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state QueuingQoS
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -211,7 +219,7 @@ func (r *QueuingQOSPolicyMapResource) Read(ctx context.Context, req resource.Rea
 
 	// Read identity if available (requires Terraform >= 1.12.0)
 	if req.Identity != nil && !req.Identity.Raw.IsNull() {
-		var identity QueuingQOSPolicyMapIdentity
+		var identity QueuingQoSIdentity
 		diags = req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
@@ -229,7 +237,7 @@ func (r *QueuingQOSPolicyMapResource) Read(ctx context.Context, req resource.Rea
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
-		queries = append(queries, nxos.Query("rsp-subtree-depth", "2"))
+		queries = append(queries, nxos.Query("rsp-subtree-depth", "4"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -247,7 +255,7 @@ func (r *QueuingQOSPolicyMapResource) Read(ctx context.Context, req resource.Rea
 		}
 	}
 
-	var identity QueuingQOSPolicyMapIdentity
+	var identity QueuingQoSIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
@@ -263,8 +271,8 @@ func (r *QueuingQOSPolicyMapResource) Read(ctx context.Context, req resource.Rea
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-func (r *QueuingQOSPolicyMapResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan QueuingQOSPolicyMap
+func (r *QueuingQoSResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan QueuingQoS
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -272,7 +280,7 @@ func (r *QueuingQOSPolicyMapResource) Update(ctx context.Context, req resource.U
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	var state QueuingQOSPolicyMap
+	var state QueuingQoS
 
 	// Read state
 	diags = req.State.Get(ctx, &state)
@@ -299,7 +307,7 @@ func (r *QueuingQOSPolicyMapResource) Update(ctx context.Context, req resource.U
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity QueuingQOSPolicyMapIdentity
+	var identity QueuingQoSIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
@@ -313,8 +321,8 @@ func (r *QueuingQOSPolicyMapResource) Update(ctx context.Context, req resource.U
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-func (r *QueuingQOSPolicyMapResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state QueuingQOSPolicyMap
+func (r *QueuingQoSResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state QueuingQoS
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -354,44 +362,36 @@ func (r *QueuingQOSPolicyMapResource) Delete(ctx context.Context, req resource.D
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-func (r *QueuingQOSPolicyMapResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *QueuingQoSResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	if req.ID != "" || req.Identity == nil || req.Identity.Raw.IsNull() {
 		idParts := strings.Split(req.ID, ",")
 		idParts = helpers.RemoveEmptyStrings(idParts)
 
-		if len(idParts) != 1 && len(idParts) != 2 {
-			expectedIdentifier := "Expected import identifier with format: '<name>'"
-			expectedIdentifier += " or '<name>,<device>'"
+		if len(idParts) != 0 && len(idParts) != 1 {
+			expectedIdentifier := "Expected import identifier with format: ''"
+			expectedIdentifier += " or '<device>'"
 			resp.Diagnostics.AddError(
 				"Unexpected Import Identifier",
 				fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
 			)
 			return
 		}
-		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("name"), idParts[0])...)
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), idParts[0])...)
-		if len(idParts) == 2 {
+		if len(idParts) == 1 {
 			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 		}
 	} else {
-		var identity QueuingQOSPolicyMapIdentity
+		var identity QueuingQoSIdentity
 		diags := req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
 		}
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), identity.Name.ValueString())...)
 		if !identity.Device.IsNull() && !identity.Device.IsUnknown() {
 			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), identity.Device.ValueString())...)
 		}
 	}
 
-	var state QueuingQOSPolicyMap
-	diags := resp.State.Get(ctx, &state)
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
+	var state QueuingQoS
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getDn())...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

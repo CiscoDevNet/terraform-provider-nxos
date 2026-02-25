@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"testing"
 
 	goversion "github.com/hashicorp/go-version"
@@ -32,25 +33,25 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosIPv4VRFs(t *testing.T) {
+func TestAccNxosIPv4(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrfs.test", "items.0.name", "VRF1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrfs.test", "items.0.static_routes.0.prefix", "1.1.1.0/24"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrfs.test", "items.0.static_routes.0.next_hops.0.interface_id", "unspecified"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrfs.test", "items.0.static_routes.0.next_hops.0.address", "1.2.3.4"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrfs.test", "items.0.static_routes.0.next_hops.0.vrf_name", "default"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrfs.test", "items.0.static_routes.0.next_hops.0.description", "My Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrfs.test", "items.0.static_routes.0.next_hops.0.object", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrfs.test", "items.0.static_routes.0.next_hops.0.preference", "123"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrfs.test", "items.0.static_routes.0.next_hops.0.tag", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrfs.test", "items.0.interfaces.0.interface_id", "eth1/10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrfs.test", "items.0.interfaces.0.drop_glean", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrfs.test", "items.0.interfaces.0.forward", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrfs.test", "items.0.interfaces.0.unnumbered", "unspecified"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrfs.test", "items.0.interfaces.0.urpf", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrfs.test", "items.0.interfaces.0.addresses.0.address", "24.63.46.49/30"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrfs.test", "items.0.interfaces.0.addresses.0.type", "primary"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4_vrfs.test", "items.0.interfaces.0.addresses.0.tag", "1234"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.prefix", "1.1.1.0/24"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.interface_id", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.address", "1.2.3.4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.vrf_name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.object", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.preference", "123"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.tag", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.drop_glean", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.forward", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.unnumbered", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.urpf", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.addresses.0.address", "24.63.46.49/30"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.addresses.0.type", "primary"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.addresses.0.tag", "1234"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -60,16 +61,16 @@ func TestAccNxosIPv4VRFs(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosIPv4VRFsConfig_all(),
+				Config: testAccNxosIPv4Config_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
-				ResourceName:      "nxos_ipv4_vrfs.test",
+				ResourceName:      "nxos_ipv4.test",
 				ImportState:       true,
-				ImportStateIdFunc: nxosIPv4VRFsImportStateIdFunc("nxos_ipv4_vrfs.test"),
+				ImportStateIdFunc: nxosIPv4ImportStateIdFunc("nxos_ipv4.test"),
 			},
 			{
-				ResourceName:       "nxos_ipv4_vrfs.test",
+				ResourceName:       "nxos_ipv4.test",
 				ImportState:        true,
 				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
 				ExpectNonEmptyPlan: true,
@@ -82,9 +83,10 @@ func TestAccNxosIPv4VRFs(t *testing.T) {
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosIPv4VRFsImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func nxosIPv4ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
-		return "", nil
+
+		return fmt.Sprintf(""), nil
 	}
 }
 
@@ -95,11 +97,8 @@ func nxosIPv4VRFsImportStateIdFunc(resourceName string) resource.ImportStateIdFu
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosIPv4VRFsConfig_minimum() string {
-	config := `resource "nxos_ipv4_vrfs" "test" {` + "\n"
-	config += `	items = [{` + "\n"
-	config += `		name = "VRF1"` + "\n"
-	config += `	}]` + "\n"
+func testAccNxosIPv4Config_minimum() string {
+	config := `resource "nxos_ipv4" "test" {` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -107,9 +106,9 @@ func testAccNxosIPv4VRFsConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosIPv4VRFsConfig_all() string {
-	config := `resource "nxos_ipv4_vrfs" "test" {` + "\n"
-	config += `	items = [{` + "\n"
+func testAccNxosIPv4Config_all() string {
+	config := `resource "nxos_ipv4" "test" {` + "\n"
+	config += `	vrfs = [{` + "\n"
 	config += `		name = "VRF1"` + "\n"
 	config += `		static_routes = [{` + "\n"
 	config += `			prefix = "1.1.1.0/24"` + "\n"

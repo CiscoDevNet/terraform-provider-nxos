@@ -47,25 +47,25 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &IPv4VRFResource{}
-var _ resource.ResourceWithIdentity = &IPv4VRFResource{}
+var _ resource.Resource = &IPv4Resource{}
+var _ resource.ResourceWithIdentity = &IPv4Resource{}
 
-func NewIPv4VRFResource() resource.Resource {
-	return &IPv4VRFResource{}
+func NewIPv4Resource() resource.Resource {
+	return &IPv4Resource{}
 }
 
-type IPv4VRFResource struct {
+type IPv4Resource struct {
 	data *NxosProviderData
 }
 
-func (r *IPv4VRFResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_ipv4_vrf"
+func (r *IPv4Resource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_ipv4"
 }
 
-func (r *IPv4VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *IPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IPv4 VRF information.", "ipv4Dom", "Layer%203/ipv4:Dom/").AddReferences("vrf").AddAdditionalDocs([]string{"ipv4Route", "ipv4Nexthop", "ipv4If", "ipv4Addr"}, []string{"Layer%203/ipv4:Route/", "Layer%203/ipv4:Nexthop/", "Layer%203/ipv4:If/", "Layer%203/ipv4:Addr/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IPv4 configuration.", "ipv4Entity", "Layer%203/ipv4:Entity/").AddAdditionalDocs([]string{"ipv4Inst", "ipv4Dom", "ipv4Route", "ipv4Nexthop", "ipv4If", "ipv4Addr"}, []string{"Layer%203/ipv4:Inst/", "Layer%203/ipv4:Dom/", "Layer%203/ipv4:Route/", "Layer%203/ipv4:Nexthop/", "Layer%203/ipv4:If/", "Layer%203/ipv4:Addr/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -79,153 +79,161 @@ func (r *IPv4VRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
-				Required:            true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
-				},
-			},
-			"static_routes": schema.ListNestedAttribute{
-				MarkdownDescription: "List of IPv4 static routes.",
+			"vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: "List of IPv4 VRF configurations.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"prefix": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Prefix.").String,
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 							Required:            true,
 							PlanModifiers: []planmodifier.String{
 								stringplanmodifier.RequiresReplace(),
 							},
 						},
-						"next_hops": schema.ListNestedAttribute{
-							MarkdownDescription: "List of next hops.",
-							Required:            true,
+						"static_routes": schema.ListNestedAttribute{
+							MarkdownDescription: "List of IPv4 static routes.",
+							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"interface_id": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.").String,
+									"prefix": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Prefix.").String,
 										Required:            true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplace(),
 										},
 									},
-									"address": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Nexthop address.").String,
+									"next_hops": schema.ListNestedAttribute{
+										MarkdownDescription: "List of next hops.",
 										Required:            true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
-										},
-									},
-									"vrf_name": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Nexthop VRF.").String,
-										Required:            true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
-										},
-									},
-									"description": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
-										Optional:            true,
-									},
-									"object": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Object to be tracked.").AddIntegerRangeDescription(0, 4294967295).String,
-										Optional:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(0, 4294967295),
-										},
-									},
-									"preference": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Route preference.").AddIntegerRangeDescription(0, 255).String,
-										Optional:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(0, 255),
-										},
-									},
-									"tag": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Tag value.").AddIntegerRangeDescription(0, 4294967295).String,
-										Optional:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(0, 4294967295),
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"interface_id": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.").String,
+													Required:            true,
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplace(),
+													},
+												},
+												"address": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Nexthop address.").String,
+													Required:            true,
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplace(),
+													},
+												},
+												"vrf_name": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Nexthop VRF.").String,
+													Required:            true,
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplace(),
+													},
+												},
+												"description": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
+													Optional:            true,
+												},
+												"object": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Object to be tracked.").AddIntegerRangeDescription(0, 4294967295).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(0, 4294967295),
+													},
+												},
+												"preference": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Route preference.").AddIntegerRangeDescription(0, 255).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(0, 255),
+													},
+												},
+												"tag": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Tag value.").AddIntegerRangeDescription(0, 4294967295).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(0, 4294967295),
+													},
+												},
+											},
 										},
 									},
 								},
 							},
 						},
-					},
-				},
-			},
-			"interfaces": schema.ListNestedAttribute{
-				MarkdownDescription: "List of IPv4 interfaces.",
-				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"interface_id": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
-							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
-						},
-						"drop_glean": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("ip drop-glean enabled/disabled.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
-							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("disabled"),
-							Validators: []validator.String{
-								stringvalidator.OneOf("enabled", "disabled"),
-							},
-						},
-						"forward": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("ip forward enabled/disabled.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
-							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("disabled"),
-							Validators: []validator.String{
-								stringvalidator.OneOf("enabled", "disabled"),
-							},
-						},
-						"unnumbered": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.").AddDefaultValueDescription("unspecified").String,
-							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("unspecified"),
-						},
-						"urpf": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("URPF (unicast Reverse Path Forwarding).").AddStringEnumDescription("disabled", "strict", "loose", "loose-allow-default", "strict-allow-vni-hosts").AddDefaultValueDescription("disabled").String,
-							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("disabled"),
-							Validators: []validator.String{
-								stringvalidator.OneOf("disabled", "strict", "loose", "loose-allow-default", "strict-allow-vni-hosts"),
-							},
-						},
-						"addresses": schema.ListNestedAttribute{
-							MarkdownDescription: "List of IPv4 interface addresses.",
+						"interfaces": schema.ListNestedAttribute{
+							MarkdownDescription: "List of IPv4 interfaces.",
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"address": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("IPv4 address.").String,
+									"interface_id": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 										Required:            true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplace(),
 										},
 									},
-									"type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Address type.").AddStringEnumDescription("primary", "secondary").AddDefaultValueDescription("primary").String,
+									"drop_glean": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("ip drop-glean enabled/disabled.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
 										Optional:            true,
 										Computed:            true,
-										Default:             stringdefault.StaticString("primary"),
+										Default:             stringdefault.StaticString("disabled"),
 										Validators: []validator.String{
-											stringvalidator.OneOf("primary", "secondary"),
+											stringvalidator.OneOf("enabled", "disabled"),
 										},
 									},
-									"tag": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Route Tag").AddDefaultValueDescription("0").String,
+									"forward": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("ip forward enabled/disabled.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
 										Optional:            true,
 										Computed:            true,
-										Default:             int64default.StaticInt64(0),
+										Default:             stringdefault.StaticString("disabled"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"unnumbered": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.").AddDefaultValueDescription("unspecified").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("unspecified"),
+									},
+									"urpf": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("URPF (unicast Reverse Path Forwarding).").AddStringEnumDescription("disabled", "strict", "loose", "loose-allow-default", "strict-allow-vni-hosts").AddDefaultValueDescription("disabled").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("disabled"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("disabled", "strict", "loose", "loose-allow-default", "strict-allow-vni-hosts"),
+										},
+									},
+									"addresses": schema.ListNestedAttribute{
+										MarkdownDescription: "List of IPv4 interface addresses.",
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"address": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("IPv4 address.").String,
+													Required:            true,
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplace(),
+													},
+												},
+												"type": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Address type.").AddStringEnumDescription("primary", "secondary").AddDefaultValueDescription("primary").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             stringdefault.StaticString("primary"),
+													Validators: []validator.String{
+														stringvalidator.OneOf("primary", "secondary"),
+													},
+												},
+												"tag": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Route Tag").AddDefaultValueDescription("0").String,
+													Optional:            true,
+													Computed:            true,
+													Default:             int64default.StaticInt64(0),
+												},
+											},
+										},
 									},
 								},
 							},
@@ -237,22 +245,18 @@ func (r *IPv4VRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 	}
 }
 
-func (r *IPv4VRFResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+func (r *IPv4Resource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
 	resp.IdentitySchema = identityschema.Schema{
 		Attributes: map[string]identityschema.Attribute{
 			"device": identityschema.StringAttribute{
 				Description:       "A device name from the provider configuration.",
 				OptionalForImport: true,
 			},
-			"name": identityschema.StringAttribute{
-				Description:       helpers.NewAttributeDescription("VRF name.").String,
-				RequiredForImport: true,
-			},
 		},
 	}
 }
 
-func (r *IPv4VRFResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *IPv4Resource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -264,8 +268,8 @@ func (r *IPv4VRFResource) Configure(ctx context.Context, req resource.ConfigureR
 // End of section. //template:end model
 
 // Section below is generated&owned by "gen/generator.go". //template:begin create
-func (r *IPv4VRFResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan IPv4VRF
+func (r *IPv4Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan IPv4
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -293,7 +297,7 @@ func (r *IPv4VRFResource) Create(ctx context.Context, req resource.CreateRequest
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity IPv4VRFIdentity
+	var identity IPv4Identity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -309,8 +313,8 @@ func (r *IPv4VRFResource) Create(ctx context.Context, req resource.CreateRequest
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-func (r *IPv4VRFResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state IPv4VRF
+func (r *IPv4Resource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state IPv4
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -321,7 +325,7 @@ func (r *IPv4VRFResource) Read(ctx context.Context, req resource.ReadRequest, re
 
 	// Read identity if available (requires Terraform >= 1.12.0)
 	if req.Identity != nil && !req.Identity.Raw.IsNull() {
-		var identity IPv4VRFIdentity
+		var identity IPv4Identity
 		diags = req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
@@ -339,7 +343,7 @@ func (r *IPv4VRFResource) Read(ctx context.Context, req resource.ReadRequest, re
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
-		queries = append(queries, nxos.Query("rsp-subtree-depth", "2"))
+		queries = append(queries, nxos.Query("rsp-subtree-depth", "4"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -357,7 +361,7 @@ func (r *IPv4VRFResource) Read(ctx context.Context, req resource.ReadRequest, re
 		}
 	}
 
-	var identity IPv4VRFIdentity
+	var identity IPv4Identity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
@@ -373,8 +377,8 @@ func (r *IPv4VRFResource) Read(ctx context.Context, req resource.ReadRequest, re
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-func (r *IPv4VRFResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan IPv4VRF
+func (r *IPv4Resource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan IPv4
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -382,7 +386,7 @@ func (r *IPv4VRFResource) Update(ctx context.Context, req resource.UpdateRequest
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	var state IPv4VRF
+	var state IPv4
 
 	// Read state
 	diags = req.State.Get(ctx, &state)
@@ -409,7 +413,7 @@ func (r *IPv4VRFResource) Update(ctx context.Context, req resource.UpdateRequest
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity IPv4VRFIdentity
+	var identity IPv4Identity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
@@ -423,8 +427,8 @@ func (r *IPv4VRFResource) Update(ctx context.Context, req resource.UpdateRequest
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-func (r *IPv4VRFResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state IPv4VRF
+func (r *IPv4Resource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state IPv4
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -464,44 +468,36 @@ func (r *IPv4VRFResource) Delete(ctx context.Context, req resource.DeleteRequest
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-func (r *IPv4VRFResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *IPv4Resource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	if req.ID != "" || req.Identity == nil || req.Identity.Raw.IsNull() {
 		idParts := strings.Split(req.ID, ",")
 		idParts = helpers.RemoveEmptyStrings(idParts)
 
-		if len(idParts) != 1 && len(idParts) != 2 {
-			expectedIdentifier := "Expected import identifier with format: '<name>'"
-			expectedIdentifier += " or '<name>,<device>'"
+		if len(idParts) != 0 && len(idParts) != 1 {
+			expectedIdentifier := "Expected import identifier with format: ''"
+			expectedIdentifier += " or '<device>'"
 			resp.Diagnostics.AddError(
 				"Unexpected Import Identifier",
 				fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
 			)
 			return
 		}
-		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("name"), idParts[0])...)
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), idParts[0])...)
-		if len(idParts) == 2 {
+		if len(idParts) == 1 {
 			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 		}
 	} else {
-		var identity IPv4VRFIdentity
+		var identity IPv4Identity
 		diags := req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
 		}
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), identity.Name.ValueString())...)
 		if !identity.Device.IsNull() && !identity.Device.IsUnknown() {
 			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), identity.Device.ValueString())...)
 		}
 	}
 
-	var state IPv4VRF
-	diags := resp.State.Get(ctx, &state)
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
+	var state IPv4
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getDn())...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

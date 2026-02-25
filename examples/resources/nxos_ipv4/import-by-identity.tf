@@ -1,5 +1,5 @@
 import {
-  to = nxos_ipv4_vrfs.example
+  to = nxos_ipv4.example
   identity = {
   }
 }

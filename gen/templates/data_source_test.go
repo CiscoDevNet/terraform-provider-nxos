@@ -63,7 +63,7 @@ import (
 {{- end}}
 {{- else}}
 {{- range .Attributes}}
-{{- if not .ExcludeTest}}
+{{- if and (not .ExcludeTest) (not .WriteOnly)}}
 {{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
 		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_{{snakeCase $name}}.test", "{{$pathPrefix}}{{.TfName}}", "{{.Example}}"))

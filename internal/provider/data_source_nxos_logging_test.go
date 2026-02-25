@@ -31,8 +31,6 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosLogging(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "all", "unspecified"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "level", "information"))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_logging.test", "facilities.*", map[string]string{
 		"name":  "spanning-tree",
 		"level": "information",

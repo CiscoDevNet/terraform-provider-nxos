@@ -5,7 +5,7 @@ dn: sys/ospfv3
 ds_description: This data source can read the global OSPFv3 configuration.
 res_description: This resource can manage the global OSPFv3 configuration.
 doc_path: Routing%20and%20Forwarding/ospfv3:Entity/
-doc_category: OSPFv3
+doc_category: Routing
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state

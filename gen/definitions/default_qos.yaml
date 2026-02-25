@@ -6,7 +6,7 @@ no_delete: true
 ds_description: This data source can read the default QoS configuration.
 res_description: This resource can manage the default QoS configuration.
 doc_path: Qos/ipqos:DefaultQoS/
-doc_category: QoS
+doc_category: System
 child_classes:
   - class_name: ipqosCMapEntity
     doc_path: Qos/ipqos:CMapEntity/

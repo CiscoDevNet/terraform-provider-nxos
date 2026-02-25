@@ -6,7 +6,7 @@ no_delete: true
 ds_description: This data source can read the user management configuration.
 res_description: This resource can manage the user management configuration.
 doc_path: Security%20and%20Policing/aaa:UserEp/
-doc_category: AAA
+doc_category: Security
 child_classes:
   - class_name: aaaUser
     doc_path: Security%20and%20Policing/aaa:User/

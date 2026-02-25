@@ -5,7 +5,7 @@ dn: sys/evpn
 ds_description: This data source can read a global EVPN configuration.
 res_description: This resource can manage a global EVPN configuration.
 doc_path: Routing%20and%20Forwarding/rtctrl:L2Evpn/
-doc_category: EVPN
+doc_category: Overlay
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state

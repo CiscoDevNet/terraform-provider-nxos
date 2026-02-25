@@ -6,7 +6,7 @@ no_delete: true
 ds_description: This data source can read the queuing QoS configuration.
 res_description: This resource can manage the queuing QoS configuration.
 doc_path: Qos/ipqos:Queuing/
-doc_category: QoS
+doc_category: System
 child_classes:
   - class_name: ipqosPMapEntity
     doc_path: Qos/ipqos:PMapEntity/

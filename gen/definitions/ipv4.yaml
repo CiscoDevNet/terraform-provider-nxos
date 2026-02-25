@@ -6,7 +6,7 @@ no_delete: true
 ds_description: This data source can read the IPv4 configuration.
 res_description: This resource can manage the IPv4 configuration.
 doc_path: Layer%203/ipv4:Entity/
-doc_category: IPv4
+doc_category: Routing
 child_classes:
   - class_name: ipv4Inst
     doc_path: Layer%203/ipv4:Inst/

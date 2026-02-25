@@ -5,7 +5,7 @@ dn: sys/isis
 ds_description: This data source can read the IS-IS configuration.
 res_description: This resource can manage the IS-IS configuration.
 doc_path: Routing%20and%20Forwarding/isis:Entity/
-doc_category: ISIS
+doc_category: Routing
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state

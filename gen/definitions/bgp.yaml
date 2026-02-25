@@ -5,7 +5,7 @@ dn: sys/bgp
 ds_description: This data source can read the BGP configuration.
 res_description: This resource can manage the BGP configuration.
 doc_path: Routing%20and%20Forwarding/bgp:Entity/
-doc_category: BGP
+doc_category: Routing
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state

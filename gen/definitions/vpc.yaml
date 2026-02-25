@@ -5,7 +5,7 @@ dn: sys/vpc
 ds_description: This data source can read the vPC configuration.
 res_description: This resource can manage the vPC configuration.
 doc_path: System/vpc:Entity/
-doc_category: vPC
+doc_category: Switching
 attributes: []
 child_classes:
   - class_name: vpcInst

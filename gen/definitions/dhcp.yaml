@@ -6,7 +6,7 @@ no_delete: true
 ds_description: This data source can read the DHCP configuration.
 res_description: This resource can manage the DHCP configuration.
 doc_path: DHCP/dhcp:Entity/
-doc_category: DHCP
+doc_category: System
 child_classes:
   - class_name: dhcpInst
     rn: inst

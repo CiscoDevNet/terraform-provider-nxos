@@ -5,7 +5,7 @@ dn: sys/kcmgr
 ds_description: This data source can read the keychain configuration.
 res_description: This resource can manage the keychain configuration.
 doc_path: Security%20and%20Policing/kcmgr:Entity/
-doc_category: Keychain
+doc_category: Security
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state

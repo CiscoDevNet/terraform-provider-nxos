@@ -5,7 +5,7 @@ dn: sys/hmm
 ds_description: This data source can read the Host Mobility Manager (HMM) Entity configuration.
 res_description: This resource can manage the Host Mobility Manager (HMM) Entity configuration.
 doc_path: Host%20Mobility/hmm:Entity/
-doc_category: HMM
+doc_category: Overlay
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state

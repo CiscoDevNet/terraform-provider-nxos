@@ -5,7 +5,7 @@ dn: sys/ospf
 ds_description: This data source can read the OSPF configuration.
 res_description: This resource can manage the OSPF configuration.
 doc_path: Routing%20and%20Forwarding/ospf:Entity/
-doc_category: OSPF
+doc_category: Routing
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state

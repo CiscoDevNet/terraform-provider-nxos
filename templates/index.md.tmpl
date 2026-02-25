@@ -20,7 +20,7 @@ All resources and data sources have been tested with the following releases.
 
 | Platform  | Version |
 | --------- | ------- |
-| Nexus 9Kv | 10.3(1) |
+| Nexus 9Kv | 10.5(4) |
 
 ## Guides
 

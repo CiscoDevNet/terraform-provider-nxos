@@ -47,7 +47,7 @@ func TestAccNxosDHCP(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosDHCPConfig_all(),
+				Config: testAccNxosDHCPPrerequisitesConfig + testAccNxosDHCPConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -79,12 +79,24 @@ func nxosDHCPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccNxosDHCPPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/dhcp"
+  class_name = "fmDhcp"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosDHCPConfig_minimum() string {
 	config := `resource "nxos_dhcp" "test" {` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -101,6 +113,7 @@ func testAccNxosDHCPConfig_all() string {
 	config += `			address = "1.1.1.1"` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

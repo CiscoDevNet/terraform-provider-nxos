@@ -43,7 +43,7 @@ func TestAccDataSourceNxosDHCP(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosDHCPConfig(),
+				Config: testAccDataSourceNxosDHCPPrerequisitesConfig + testAccDataSourceNxosDHCPConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -53,6 +53,17 @@ func TestAccDataSourceNxosDHCP(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccDataSourceNxosDHCPPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/dhcp"
+  class_name = "fmDhcp"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -66,6 +77,7 @@ func testAccDataSourceNxosDHCPConfig() string {
 	config += `			address = "1.1.1.1"` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

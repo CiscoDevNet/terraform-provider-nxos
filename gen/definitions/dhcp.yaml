@@ -48,3 +48,10 @@ child_classes:
                 id: true
                 description: 'IPv4 or IPv6 address.'
                 example: 1.1.1.1
+test_prerequisites:
+  - dn: sys/fm/dhcp
+    class_name: fmDhcp
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled

@@ -82,9 +82,9 @@ func TestAccNxosBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.0.peer_templates.0.peer_template_address_families.0.control", "nh-self,rr-client"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.0.peer_templates.0.peer_template_address_families.0.send_community_extended", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.0.peer_templates.0.peer_template_address_families.0.send_community_standard", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.0.peer_templates.0.peer_template_address_families.0.max_prefix_action", "log"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.0.peer_templates.0.peer_template_address_families.0.max_prefix_action", "restart"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.0.peer_templates.0.peer_template_address_families.0.max_prefix_number", "10000"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.0.peer_templates.0.peer_template_address_families.0.max_prefix_restart_time", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.0.peer_templates.0.peer_template_address_families.0.max_prefix_restart_time", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.0.peer_templates.0.peer_template_address_families.0.max_prefix_threshold", "30"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.0.peers.0.address", "192.168.0.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.0.peers.0.remote_asn", "65002"))
@@ -241,9 +241,9 @@ func testAccNxosBGPConfig_all() string {
 	config += `				control = "nh-self,rr-client"` + "\n"
 	config += `				send_community_extended = "enabled"` + "\n"
 	config += `				send_community_standard = "enabled"` + "\n"
-	config += `				max_prefix_action = "log"` + "\n"
+	config += `				max_prefix_action = "restart"` + "\n"
 	config += `				max_prefix_number = 10000` + "\n"
-	config += `				max_prefix_restart_time = 0` + "\n"
+	config += `				max_prefix_restart_time = 1` + "\n"
 	config += `				max_prefix_threshold = 30` + "\n"
 	config += `			}]` + "\n"
 	config += `		}]` + "\n"

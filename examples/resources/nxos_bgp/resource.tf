@@ -55,9 +55,9 @@ resource "nxos_bgp" "example" {
         control                 = "nh-self,rr-client"
         send_community_extended = "enabled"
         send_community_standard = "enabled"
-        max_prefix_action       = "log"
+        max_prefix_action       = "restart"
         max_prefix_number       = 10000
-        max_prefix_restart_time = 0
+        max_prefix_restart_time = 1
         max_prefix_threshold    = 30
       }]
     }]

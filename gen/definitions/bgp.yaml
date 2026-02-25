@@ -488,7 +488,7 @@ child_classes:
                           - shut
                           - restart
                         default_value: shut
-                        example: log
+                        example: restart
                       - nxos_name: maxPfx
                         tf_name: max_prefix_number
                         type: Int64
@@ -499,16 +499,16 @@ child_classes:
                       - nxos_name: restartTime
                         tf_name: max_prefix_restart_time
                         type: Int64
+                        min_int: 1
+                        max_int: 65535
                         description: 'The period of time in minutes before restarting the peer when the prefix limit is reached.'
-                        default_value: 0
-                        example: 0
+                        example: 1
                       - nxos_name: thresh
                         tf_name: max_prefix_threshold
                         type: Int64
                         description: 'The period of time in minutes before restarting the peer when the prefix limit is reached.'
                         min_int: 0
                         max_int: 100
-                        default_value: 0
                         example: 30
           - class_name: bgpPeer
             doc_path: Routing%20and%20Forwarding/bgp:Peer/

@@ -95,9 +95,9 @@ func TestAccDataSourceNxosBGP(t *testing.T) {
 		"send_community_standard": "enabled",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.peer_templates.*.peer_template_address_families.*", map[string]string{
-		"max_prefix_action":       "log",
+		"max_prefix_action":       "restart",
 		"max_prefix_number":       "10000",
-		"max_prefix_restart_time": "0",
+		"max_prefix_restart_time": "1",
 		"max_prefix_threshold":    "30",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.peers.*", map[string]string{
@@ -228,9 +228,9 @@ func testAccDataSourceNxosBGPConfig() string {
 	config += `				control = "nh-self,rr-client"` + "\n"
 	config += `				send_community_extended = "enabled"` + "\n"
 	config += `				send_community_standard = "enabled"` + "\n"
-	config += `				max_prefix_action = "log"` + "\n"
+	config += `				max_prefix_action = "restart"` + "\n"
 	config += `				max_prefix_number = 10000` + "\n"
-	config += `				max_prefix_restart_time = 0` + "\n"
+	config += `				max_prefix_restart_time = 1` + "\n"
 	config += `				max_prefix_threshold = 30` + "\n"
 	config += `			}]` + "\n"
 	config += `		}]` + "\n"

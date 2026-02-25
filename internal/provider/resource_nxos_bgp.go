@@ -500,16 +500,15 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 													},
 												},
 												"max_prefix_restart_time": schema.Int64Attribute{
-													MarkdownDescription: helpers.NewAttributeDescription("The period of time in minutes before restarting the peer when the prefix limit is reached.").AddDefaultValueDescription("0").String,
+													MarkdownDescription: helpers.NewAttributeDescription("The period of time in minutes before restarting the peer when the prefix limit is reached.").AddIntegerRangeDescription(1, 65535).String,
 													Optional:            true,
-													Computed:            true,
-													Default:             int64default.StaticInt64(0),
+													Validators: []validator.Int64{
+														int64validator.Between(1, 65535),
+													},
 												},
 												"max_prefix_threshold": schema.Int64Attribute{
-													MarkdownDescription: helpers.NewAttributeDescription("The period of time in minutes before restarting the peer when the prefix limit is reached.").AddIntegerRangeDescription(0, 100).AddDefaultValueDescription("0").String,
+													MarkdownDescription: helpers.NewAttributeDescription("The period of time in minutes before restarting the peer when the prefix limit is reached.").AddIntegerRangeDescription(0, 100).String,
 													Optional:            true,
-													Computed:            true,
-													Default:             int64default.StaticInt64(0),
 													Validators: []validator.Int64{
 														int64validator.Between(0, 100),
 													},

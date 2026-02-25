@@ -93,9 +93,9 @@ resource "nxos_bgp" "example" {
         control                 = "nh-self,rr-client"
         send_community_extended = "enabled"
         send_community_standard = "enabled"
-        max_prefix_action       = "log"
+        max_prefix_action       = "restart"
         max_prefix_number       = 10000
-        max_prefix_restart_time = 0
+        max_prefix_restart_time = 1
         max_prefix_threshold    = 30
       }]
     }]
@@ -321,10 +321,9 @@ Optional:
 - `max_prefix_number` (Number) Maximum number of prefixes allowed from the peer.
   - Range: `0`-`4294967295`
 - `max_prefix_restart_time` (Number) The period of time in minutes before restarting the peer when the prefix limit is reached.
-  - Default value: `0`
+  - Range: `1`-`65535`
 - `max_prefix_threshold` (Number) The period of time in minutes before restarting the peer when the prefix limit is reached.
   - Range: `0`-`100`
-  - Default value: `0`
 - `send_community_extended` (String) Send-community extended.
   - Choices: `enabled`, `disabled`
   - Default value: `disabled`

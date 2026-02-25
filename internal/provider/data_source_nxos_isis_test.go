@@ -115,6 +115,14 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
+resource "nxos_rest" "PreReq1" {
+  dn = "sys/intf/phys-[eth1/10]"
+  class_name = "l1PhysIf"
+  content = {
+      layer = "Layer3"
+  }
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -184,7 +192,7 @@ func testAccDataSourceNxosISISConfig() string {
 	config += `		priority_l2 = 80` + "\n"
 	config += `		enable_ipv4 = true` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

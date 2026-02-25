@@ -75,8 +75,8 @@ func (r *BridgeDomainsResource) Schema(ctx context.Context, req resource.SchemaR
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"items": schema.SetNestedAttribute{
-				MarkdownDescription: "The set of bridge_domain items.",
+			"items": schema.ListNestedAttribute{
+				MarkdownDescription: "The list of bridge_domain items.",
 				Required:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

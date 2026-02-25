@@ -34,7 +34,7 @@ resource "nxos_svi_interfaces" "example" {
 
 ### Required
 
-- `items` (Attributes Set) The set of svi_interface items. (see [below for nested schema](#nestedatt--items))
+- `items` (Attributes List) The list of svi_interface items. (see [below for nested schema](#nestedatt--items))
 
 ### Optional
 

@@ -30,7 +30,7 @@ resource "nxos_loopback_interfaces" "example" {
 
 ### Required
 
-- `items` (Attributes Set) The set of loopback_interface items. (see [below for nested schema](#nestedatt--items))
+- `items` (Attributes List) The list of loopback_interface items. (see [below for nested schema](#nestedatt--items))
 
 ### Optional
 

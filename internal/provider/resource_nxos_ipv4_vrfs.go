@@ -79,8 +79,8 @@ func (r *IPv4VRFsResource) Schema(ctx context.Context, req resource.SchemaReques
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"items": schema.SetNestedAttribute{
-				MarkdownDescription: "The set of ipv4_vrf items.",
+			"items": schema.ListNestedAttribute{
+				MarkdownDescription: "The list of ipv4_vrf items.",
 				Required:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

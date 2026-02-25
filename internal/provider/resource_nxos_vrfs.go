@@ -77,8 +77,8 @@ func (r *VRFsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"items": schema.SetNestedAttribute{
-				MarkdownDescription: "The set of vrf items.",
+			"items": schema.ListNestedAttribute{
+				MarkdownDescription: "The list of vrf items.",
 				Required:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

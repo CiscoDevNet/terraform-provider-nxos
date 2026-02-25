@@ -94,8 +94,8 @@ func (r *{{camelCase .BulkName}}Resource) Schema(ctx context.Context, req resour
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"items": schema.SetNestedAttribute{
-				MarkdownDescription: "The set of {{snakeCase .Name}} items.",
+			"items": schema.ListNestedAttribute{
+				MarkdownDescription: "The list of {{snakeCase .Name}} items.",
 				Required:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

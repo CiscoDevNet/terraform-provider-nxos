@@ -30,7 +30,7 @@ resource "nxos_bridge_domains" "example" {
 
 ### Required
 
-- `items` (Attributes Set) The set of bridge_domain items. (see [below for nested schema](#nestedatt--items))
+- `items` (Attributes List) The list of bridge_domain items. (see [below for nested schema](#nestedatt--items))
 
 ### Optional
 

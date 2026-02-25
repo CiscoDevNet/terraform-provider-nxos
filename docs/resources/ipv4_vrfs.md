@@ -34,7 +34,7 @@ resource "nxos_ipv4_vrfs" "example" {
 
 ### Required
 
-- `items` (Attributes Set) The set of ipv4_vrf items. (see [below for nested schema](#nestedatt--items))
+- `items` (Attributes List) The list of ipv4_vrf items. (see [below for nested schema](#nestedatt--items))
 
 ### Optional
 

@@ -30,7 +30,7 @@ resource "nxos_vrfs" "example" {
 
 ### Required
 
-- `items` (Attributes Set) The set of vrf items. (see [below for nested schema](#nestedatt--items))
+- `items` (Attributes List) The list of vrf items. (see [below for nested schema](#nestedatt--items))
 
 ### Optional
 

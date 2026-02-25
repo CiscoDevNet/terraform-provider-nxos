@@ -79,8 +79,8 @@ func (r *SubinterfacesResource) Schema(ctx context.Context, req resource.SchemaR
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"items": schema.SetNestedAttribute{
-				MarkdownDescription: "The set of subinterface items.",
+			"items": schema.ListNestedAttribute{
+				MarkdownDescription: "The list of subinterface items.",
 				Required:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

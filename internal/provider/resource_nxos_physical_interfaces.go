@@ -79,8 +79,8 @@ func (r *PhysicalInterfacesResource) Schema(ctx context.Context, req resource.Sc
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"items": schema.SetNestedAttribute{
-				MarkdownDescription: "The set of physical_interface items.",
+			"items": schema.ListNestedAttribute{
+				MarkdownDescription: "The list of physical_interface items.",
 				Required:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

@@ -79,8 +79,8 @@ func (r *PortChannelInterfacesResource) Schema(ctx context.Context, req resource
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"items": schema.SetNestedAttribute{
-				MarkdownDescription: "The set of port_channel_interface items.",
+			"items": schema.ListNestedAttribute{
+				MarkdownDescription: "The list of port_channel_interface items.",
 				Required:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

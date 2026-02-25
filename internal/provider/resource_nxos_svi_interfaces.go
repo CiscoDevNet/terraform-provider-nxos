@@ -79,8 +79,8 @@ func (r *SVIInterfacesResource) Schema(ctx context.Context, req resource.SchemaR
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"items": schema.SetNestedAttribute{
-				MarkdownDescription: "The set of svi_interface items.",
+			"items": schema.ListNestedAttribute{
+				MarkdownDescription: "The list of svi_interface items.",
 				Required:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

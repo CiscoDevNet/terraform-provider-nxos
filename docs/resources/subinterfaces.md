@@ -36,7 +36,7 @@ resource "nxos_subinterfaces" "example" {
 
 ### Required
 
-- `items` (Attributes Set) The set of subinterface items. (see [below for nested schema](#nestedatt--items))
+- `items` (Attributes List) The list of subinterface items. (see [below for nested schema](#nestedatt--items))
 
 ### Optional
 

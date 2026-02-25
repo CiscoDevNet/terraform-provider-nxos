@@ -28,7 +28,7 @@ resource "nxos_ipv6_vrfs" "example" {
 
 ### Required
 
-- `items` (Attributes Set) The set of ipv6_vrf items. (see [below for nested schema](#nestedatt--items))
+- `items` (Attributes List) The list of ipv6_vrf items. (see [below for nested schema](#nestedatt--items))
 
 ### Optional
 

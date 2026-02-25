@@ -49,7 +49,7 @@ resource "nxos_physical_interfaces" "example" {
 
 ### Required
 
-- `items` (Attributes Set) The set of physical_interface items. (see [below for nested schema](#nestedatt--items))
+- `items` (Attributes List) The list of physical_interface items. (see [below for nested schema](#nestedatt--items))
 
 ### Optional
 

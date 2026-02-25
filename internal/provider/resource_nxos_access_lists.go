@@ -49,25 +49,25 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &IPv4AccessListsResource{}
-var _ resource.ResourceWithIdentity = &IPv4AccessListsResource{}
+var _ resource.Resource = &AccessListsResource{}
+var _ resource.ResourceWithIdentity = &AccessListsResource{}
 
-func NewIPv4AccessListsResource() resource.Resource {
-	return &IPv4AccessListsResource{}
+func NewAccessListsResource() resource.Resource {
+	return &AccessListsResource{}
 }
 
-type IPv4AccessListsResource struct {
+type AccessListsResource struct {
 	data *NxosProviderData
 }
 
-func (r *IPv4AccessListsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_ipv4_access_lists"
+func (r *AccessListsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_access_lists"
 }
 
-func (r *IPv4AccessListsResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *AccessListsResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IPv4 Access Lists configuration.", "ipv4aclAF", "Security%20and%20Policing/ipv4acl:AF/").AddAdditionalDocs([]string{"ipv4aclACL", "ipv4aclACE", "aclPolicy", "aclIngress", "aclIf", "aclInst", "aclEgress", "aclIf", "aclInst"}, []string{"Security%20and%20Policing/ipv4acl:ACL/", "Security%20and%20Policing/ipv4acl:ACE/", "Security%20and%20Policing/acl:Policy/", "Security%20and%20Policing/acl:Ingress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Egress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Access Lists configuration.", "aclEntity", "Security%20and%20Policing/acl:Entity/").AddAdditionalDocs([]string{"ipv4aclAF", "ipv4aclACL", "ipv4aclACE", "aclPolicy", "aclIngress", "aclIf", "aclInst", "aclEgress", "aclIf", "aclInst"}, []string{"Security%20and%20Policing/ipv4acl:AF/", "Security%20and%20Policing/ipv4acl:ACL/", "Security%20and%20Policing/ipv4acl:ACE/", "Security%20and%20Policing/acl:Policy/", "Security%20and%20Policing/acl:Ingress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/", "Security%20and%20Policing/acl:Egress/", "Security%20and%20Policing/acl:If/", "Security%20and%20Policing/acl:Inst/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -391,7 +391,7 @@ func (r *IPv4AccessListsResource) Schema(ctx context.Context, req resource.Schem
 	}
 }
 
-func (r *IPv4AccessListsResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+func (r *AccessListsResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
 	resp.IdentitySchema = identityschema.Schema{
 		Attributes: map[string]identityschema.Attribute{
 			"device": identityschema.StringAttribute{
@@ -402,7 +402,7 @@ func (r *IPv4AccessListsResource) IdentitySchema(ctx context.Context, req resour
 	}
 }
 
-func (r *IPv4AccessListsResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *AccessListsResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -414,8 +414,8 @@ func (r *IPv4AccessListsResource) Configure(ctx context.Context, req resource.Co
 // End of section. //template:end model
 
 // Section below is generated&owned by "gen/generator.go". //template:begin create
-func (r *IPv4AccessListsResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan IPv4AccessLists
+func (r *AccessListsResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan AccessLists
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -443,7 +443,7 @@ func (r *IPv4AccessListsResource) Create(ctx context.Context, req resource.Creat
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity IPv4AccessListsIdentity
+	var identity AccessListsIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -459,8 +459,8 @@ func (r *IPv4AccessListsResource) Create(ctx context.Context, req resource.Creat
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-func (r *IPv4AccessListsResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state IPv4AccessLists
+func (r *AccessListsResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state AccessLists
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -471,7 +471,7 @@ func (r *IPv4AccessListsResource) Read(ctx context.Context, req resource.ReadReq
 
 	// Read identity if available (requires Terraform >= 1.12.0)
 	if req.Identity != nil && !req.Identity.Raw.IsNull() {
-		var identity IPv4AccessListsIdentity
+		var identity AccessListsIdentity
 		diags = req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
@@ -489,7 +489,7 @@ func (r *IPv4AccessListsResource) Read(ctx context.Context, req resource.ReadReq
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
-		queries = append(queries, nxos.Query("rsp-subtree-depth", "4"))
+		queries = append(queries, nxos.Query("rsp-subtree-depth", "5"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -507,7 +507,7 @@ func (r *IPv4AccessListsResource) Read(ctx context.Context, req resource.ReadReq
 		}
 	}
 
-	var identity IPv4AccessListsIdentity
+	var identity AccessListsIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
@@ -523,8 +523,8 @@ func (r *IPv4AccessListsResource) Read(ctx context.Context, req resource.ReadReq
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-func (r *IPv4AccessListsResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan IPv4AccessLists
+func (r *AccessListsResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan AccessLists
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -532,7 +532,7 @@ func (r *IPv4AccessListsResource) Update(ctx context.Context, req resource.Updat
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	var state IPv4AccessLists
+	var state AccessLists
 
 	// Read state
 	diags = req.State.Get(ctx, &state)
@@ -559,7 +559,7 @@ func (r *IPv4AccessListsResource) Update(ctx context.Context, req resource.Updat
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity IPv4AccessListsIdentity
+	var identity AccessListsIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
@@ -573,8 +573,8 @@ func (r *IPv4AccessListsResource) Update(ctx context.Context, req resource.Updat
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-func (r *IPv4AccessListsResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state IPv4AccessLists
+func (r *AccessListsResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state AccessLists
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -614,7 +614,7 @@ func (r *IPv4AccessListsResource) Delete(ctx context.Context, req resource.Delet
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-func (r *IPv4AccessListsResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *AccessListsResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	if req.ID != "" || req.Identity == nil || req.Identity.Raw.IsNull() {
 		idParts := strings.Split(req.ID, ",")
 		idParts = helpers.RemoveEmptyStrings(idParts)
@@ -633,7 +633,7 @@ func (r *IPv4AccessListsResource) ImportState(ctx context.Context, req resource.
 			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 		}
 	} else {
-		var identity IPv4AccessListsIdentity
+		var identity AccessListsIdentity
 		diags := req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
@@ -643,7 +643,7 @@ func (r *IPv4AccessListsResource) ImportState(ctx context.Context, req resource.
 		}
 	}
 
-	var state IPv4AccessLists
+	var state AccessLists
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getDn())...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

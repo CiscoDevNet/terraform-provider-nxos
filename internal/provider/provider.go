@@ -336,6 +336,7 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewRestResource,
 		NewSaveConfigResource,
 		NewCliResource,
+		NewAccessListsResource,
 		NewBGPResource,
 		NewBridgeDomainsResource,
 		NewDefaultQoSResource,
@@ -345,7 +346,6 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewHMMResource,
 		NewICMPv4Resource,
 		NewIPv4Resource,
-		NewIPv4AccessListsResource,
 		NewIPv6Resource,
 		NewISISResource,
 		NewKeychainResource,
@@ -379,6 +379,7 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		NewRestDataSource,
+		NewAccessListsDataSource,
 		NewBGPDataSource,
 		NewBridgeDomainsDataSource,
 		NewDefaultQoSDataSource,
@@ -388,7 +389,6 @@ func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.Data
 		NewHMMDataSource,
 		NewICMPv4DataSource,
 		NewIPv4DataSource,
-		NewIPv4AccessListsDataSource,
 		NewIPv6DataSource,
 		NewISISDataSource,
 		NewKeychainDataSource,

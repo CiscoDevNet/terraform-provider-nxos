@@ -29,12 +29,12 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-func TestAccDataSourceNxosIPv4AccessLists(t *testing.T) {
+func TestAccDataSourceNxosAccessLists(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv4_access_lists.test", "access_lists.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_access_lists.test", "access_lists.*", map[string]string{
 		"name": "ACL1",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv4_access_lists.test", "access_lists.*.entries.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_access_lists.test", "access_lists.*.entries.*", map[string]string{
 		"sequence":                  "10",
 		"ack":                       "false",
 		"action":                    "permit",
@@ -63,16 +63,16 @@ func TestAccDataSourceNxosIPv4AccessLists(t *testing.T) {
 		"syn":                       "false",
 		"urg":                       "false",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv4_access_lists.test", "ingress_interfaces.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_access_lists.test", "ingress_interfaces.*", map[string]string{
 		"interface_id": "eth1/10",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv4_access_lists.test", "ingress_interfaces.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_access_lists.test", "ingress_interfaces.*", map[string]string{
 		"access_list_name": "ACL1",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv4_access_lists.test", "egress_interfaces.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_access_lists.test", "egress_interfaces.*", map[string]string{
 		"interface_id": "eth1/10",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv4_access_lists.test", "egress_interfaces.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_access_lists.test", "egress_interfaces.*", map[string]string{
 		"access_list_name": "ACL1",
 	}))
 	resource.Test(t, resource.TestCase{
@@ -80,7 +80,7 @@ func TestAccDataSourceNxosIPv4AccessLists(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosIPv4AccessListsConfig(),
+				Config: testAccDataSourceNxosAccessListsConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -94,8 +94,8 @@ func TestAccDataSourceNxosIPv4AccessLists(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-func testAccDataSourceNxosIPv4AccessListsConfig() string {
-	config := `resource "nxos_ipv4_access_lists" "test" {` + "\n"
+func testAccDataSourceNxosAccessListsConfig() string {
+	config := `resource "nxos_access_lists" "test" {` + "\n"
 	config += `	access_lists = [{` + "\n"
 	config += `		name = "ACL1"` + "\n"
 	config += `		entries = [{` + "\n"
@@ -139,8 +139,8 @@ func testAccDataSourceNxosIPv4AccessListsConfig() string {
 	config += `}` + "\n"
 
 	config += `
-data "nxos_ipv4_access_lists" "test" {
-	depends_on = [nxos_ipv4_access_lists.test]
+data "nxos_access_lists" "test" {
+	depends_on = [nxos_access_lists.test]
 }
 	`
 	return config

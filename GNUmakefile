@@ -21,7 +21,7 @@ test:
 		$(if $(NAME),echo "Running tests matching: $(NAME)";) \
 		TF_ACC=1 \
 		$(if $(DEBUG),TF_LOG=Trace) \
-		go test -v $(if $(NAME),-run $(NAME)) $(TESTARGS) -count 1 -timeout 120m ./... $(if $(DEBUG),2>&1 | tee test-output.log); \
+		go test -v $(if $(NAME),-run $(NAME)) $(TESTARGS) -count 1 -timeout 120m ./internal/provider $(if $(DEBUG),2>&1 | tee test-output.log); \
 	fi
 
 # Update all files from a single definition

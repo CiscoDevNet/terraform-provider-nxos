@@ -49,25 +49,25 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &NVEInterfaceResource{}
-var _ resource.ResourceWithIdentity = &NVEInterfaceResource{}
+var _ resource.Resource = &NVOResource{}
+var _ resource.ResourceWithIdentity = &NVOResource{}
 
-func NewNVEInterfaceResource() resource.Resource {
-	return &NVEInterfaceResource{}
+func NewNVOResource() resource.Resource {
+	return &NVOResource{}
 }
 
-type NVEInterfaceResource struct {
+type NVOResource struct {
 	data *NxosProviderData
 }
 
-func (r *NVEInterfaceResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_nve_interface"
+func (r *NVOResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_nvo"
 }
 
-func (r *NVEInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *NVOResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the NVE interface configuration.", "nvoEp", "Network%20Virtualization/nvo:Ep/").AddAdditionalDocs([]string{"nvoNws", "nvoNw", "nvoIngRepl"}, []string{"Network%20Virtualization/nvo:Nws/", "Network%20Virtualization/nvo:Nw/", "Network%20Virtualization/nvo:IngRepl/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the NVO configuration.", "nvoEps", "Network%20Virtualization/nvo:Eps/").AddAdditionalDocs([]string{"nvoEp", "nvoNws", "nvoNw", "nvoIngRepl"}, []string{"Network%20Virtualization/nvo:Ep/", "Network%20Virtualization/nvo:Nws/", "Network%20Virtualization/nvo:Nw/", "Network%20Virtualization/nvo:IngRepl/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -81,133 +81,148 @@ func (r *NVEInterfaceResource) Schema(ctx context.Context, req resource.SchemaRe
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"admin_state": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("disabled"),
-				Validators: []validator.String{
-					stringvalidator.OneOf("enabled", "disabled"),
-				},
-			},
-			"advertise_virtual_mac": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable or disable Virtual MAC Advertisement in VPC mode.").AddDefaultValueDescription("false").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             booldefault.StaticBool(false),
-			},
-			"hold_down_time": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Hold Down Time.").AddIntegerRangeDescription(1, 1500).AddDefaultValueDescription("180").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(180),
-				Validators: []validator.Int64{
-					int64validator.Between(1, 1500),
-				},
-			},
-			"host_reachability_protocol": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Host Reachability Protocol.").AddStringEnumDescription("Flood-and-learn", "bgp", "controller", "openflow", "openflowIR").AddDefaultValueDescription("Flood-and-learn").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("Flood-and-learn"),
-				Validators: []validator.String{
-					stringvalidator.OneOf("Flood-and-learn", "bgp", "controller", "openflow", "openflowIR"),
-				},
-			},
-			"ingress_replication_protocol_bgp": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("VxLAN Ingress Replication Protocol BGP.").AddDefaultValueDescription("false").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             booldefault.StaticBool(false),
-			},
-			"multicast_group_l2": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Base multicast group address for L2.").AddDefaultValueDescription("0.0.0.0").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("0.0.0.0"),
-			},
-			"multicast_group_l3": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Base multicast group address for L3.").AddDefaultValueDescription("0.0.0.0").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("0.0.0.0"),
-			},
-			"multisite_source_interface": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Interface representing the Multisite Border Gateway. Must match first field in the output of `show int brief`.").AddDefaultValueDescription("unspecified").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("unspecified"),
-			},
-			"source_interface": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Source Interface associated with the NVE. Must match first field in the output of `show int brief`.").AddDefaultValueDescription("unspecified").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("unspecified"),
-			},
-			"suppress_arp": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Suppress ARP.").AddDefaultValueDescription("false").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             booldefault.StaticBool(false),
-			},
-			"suppress_mac_route": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Suppress MAC Route.").AddDefaultValueDescription("false").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             booldefault.StaticBool(false),
-			},
-			"vnis": schema.ListNestedAttribute{
-				MarkdownDescription: "List of VNIs.",
+			"nve_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "NVE interface configuration.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"vni": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Virtual Network ID.").AddIntegerRangeDescription(1, 16777214).String,
+						"id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Network Virtualization Overlay Endpoint (NVE) ID.").AddDefaultValueDescription("1").String,
 							Required:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 16777214),
-							},
 							PlanModifiers: []planmodifier.Int64{
 								int64planmodifier.RequiresReplace(),
 							},
 						},
-						"associate_vrf": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Configures VNI as L3 VNI.").AddDefaultValueDescription("false").String,
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("disabled"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"advertise_virtual_mac": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable or disable Virtual MAC Advertisement in VPC mode.").AddDefaultValueDescription("false").String,
 							Optional:            true,
 							Computed:            true,
 							Default:             booldefault.StaticBool(false),
 						},
-						"multicast_group": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Configures multicast group address for VNI.").AddDefaultValueDescription("0.0.0.0").String,
+						"hold_down_time": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Hold Down Time.").AddIntegerRangeDescription(1, 1500).AddDefaultValueDescription("180").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             int64default.StaticInt64(180),
+							Validators: []validator.Int64{
+								int64validator.Between(1, 1500),
+							},
+						},
+						"host_reachability_protocol": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Host Reachability Protocol.").AddStringEnumDescription("Flood-and-learn", "bgp", "controller", "openflow", "openflowIR").AddDefaultValueDescription("Flood-and-learn").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("Flood-and-learn"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("Flood-and-learn", "bgp", "controller", "openflow", "openflowIR"),
+							},
+						},
+						"ingress_replication_protocol_bgp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("VxLAN Ingress Replication Protocol BGP.").AddDefaultValueDescription("false").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             booldefault.StaticBool(false),
+						},
+						"multicast_group_l2": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Base multicast group address for L2.").AddDefaultValueDescription("0.0.0.0").String,
 							Optional:            true,
 							Computed:            true,
 							Default:             stringdefault.StaticString("0.0.0.0"),
 						},
-						"multisite_ingress_replication": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Enable or disable Multisite Ingress Replication for VNI(s).").AddStringEnumDescription("enable", "disable", "enableOptimized").AddDefaultValueDescription("disable").String,
+						"multicast_group_l3": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Base multicast group address for L3.").AddDefaultValueDescription("0.0.0.0").String,
 							Optional:            true,
 							Computed:            true,
-							Default:             stringdefault.StaticString("disable"),
-							Validators: []validator.String{
-								stringvalidator.OneOf("enable", "disable", "enableOptimized"),
-							},
+							Default:             stringdefault.StaticString("0.0.0.0"),
 						},
-						"suppress_arp": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Enable or disable ARP suppression for VNI(s).").AddStringEnumDescription("enabled", "disabled", "off").AddDefaultValueDescription("off").String,
+						"multisite_source_interface": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Interface representing the Multisite Border Gateway. Must match first field in the output of `show int brief`.").AddDefaultValueDescription("unspecified").String,
 							Optional:            true,
 							Computed:            true,
-							Default:             stringdefault.StaticString("off"),
-							Validators: []validator.String{
-								stringvalidator.OneOf("enabled", "disabled", "off"),
-							},
+							Default:             stringdefault.StaticString("unspecified"),
 						},
-						"protocol": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Configure VxLAN Ingress Replication mode.").AddStringEnumDescription("bgp", "unknown", "static").AddDefaultValueDescription("unknown").String,
+						"source_interface": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Source Interface associated with the NVE. Must match first field in the output of `show int brief`.").AddDefaultValueDescription("unspecified").String,
 							Optional:            true,
 							Computed:            true,
-							Default:             stringdefault.StaticString("unknown"),
-							Validators: []validator.String{
-								stringvalidator.OneOf("bgp", "unknown", "static"),
+							Default:             stringdefault.StaticString("unspecified"),
+						},
+						"suppress_arp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Suppress ARP.").AddDefaultValueDescription("false").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             booldefault.StaticBool(false),
+						},
+						"suppress_mac_route": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Suppress MAC Route.").AddDefaultValueDescription("false").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             booldefault.StaticBool(false),
+						},
+						"vnis": schema.ListNestedAttribute{
+							MarkdownDescription: "List of VNIs.",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"vni": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Virtual Network ID.").AddIntegerRangeDescription(1, 16777214).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 16777214),
+										},
+										PlanModifiers: []planmodifier.Int64{
+											int64planmodifier.RequiresReplace(),
+										},
+									},
+									"associate_vrf": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Configures VNI as L3 VNI.").AddDefaultValueDescription("false").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             booldefault.StaticBool(false),
+									},
+									"multicast_group": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Configures multicast group address for VNI.").AddDefaultValueDescription("0.0.0.0").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("0.0.0.0"),
+									},
+									"multisite_ingress_replication": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Enable or disable Multisite Ingress Replication for VNI(s).").AddStringEnumDescription("enable", "disable", "enableOptimized").AddDefaultValueDescription("disable").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("disable"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("enable", "disable", "enableOptimized"),
+										},
+									},
+									"suppress_arp": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Enable or disable ARP suppression for VNI(s).").AddStringEnumDescription("enabled", "disabled", "off").AddDefaultValueDescription("off").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("off"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled", "off"),
+										},
+									},
+									"protocol": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Configure VxLAN Ingress Replication mode.").AddStringEnumDescription("bgp", "unknown", "static").AddDefaultValueDescription("unknown").String,
+										Optional:            true,
+										Computed:            true,
+										Default:             stringdefault.StaticString("unknown"),
+										Validators: []validator.String{
+											stringvalidator.OneOf("bgp", "unknown", "static"),
+										},
+									},
+								},
 							},
 						},
 					},
@@ -217,7 +232,7 @@ func (r *NVEInterfaceResource) Schema(ctx context.Context, req resource.SchemaRe
 	}
 }
 
-func (r *NVEInterfaceResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+func (r *NVOResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
 	resp.IdentitySchema = identityschema.Schema{
 		Attributes: map[string]identityschema.Attribute{
 			"device": identityschema.StringAttribute{
@@ -228,7 +243,7 @@ func (r *NVEInterfaceResource) IdentitySchema(ctx context.Context, req resource.
 	}
 }
 
-func (r *NVEInterfaceResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *NVOResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -240,8 +255,8 @@ func (r *NVEInterfaceResource) Configure(ctx context.Context, req resource.Confi
 // End of section. //template:end model
 
 // Section below is generated&owned by "gen/generator.go". //template:begin create
-func (r *NVEInterfaceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan NVEInterface
+func (r *NVOResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan NVO
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -269,7 +284,7 @@ func (r *NVEInterfaceResource) Create(ctx context.Context, req resource.CreateRe
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity NVEInterfaceIdentity
+	var identity NVOIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -285,8 +300,8 @@ func (r *NVEInterfaceResource) Create(ctx context.Context, req resource.CreateRe
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-func (r *NVEInterfaceResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state NVEInterface
+func (r *NVOResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state NVO
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -297,7 +312,7 @@ func (r *NVEInterfaceResource) Read(ctx context.Context, req resource.ReadReques
 
 	// Read identity if available (requires Terraform >= 1.12.0)
 	if req.Identity != nil && !req.Identity.Raw.IsNull() {
-		var identity NVEInterfaceIdentity
+		var identity NVOIdentity
 		diags = req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
@@ -315,7 +330,7 @@ func (r *NVEInterfaceResource) Read(ctx context.Context, req resource.ReadReques
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
-		queries = append(queries, nxos.Query("rsp-subtree-depth", "3"))
+		queries = append(queries, nxos.Query("rsp-subtree-depth", "4"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -333,7 +348,7 @@ func (r *NVEInterfaceResource) Read(ctx context.Context, req resource.ReadReques
 		}
 	}
 
-	var identity NVEInterfaceIdentity
+	var identity NVOIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
@@ -349,8 +364,8 @@ func (r *NVEInterfaceResource) Read(ctx context.Context, req resource.ReadReques
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-func (r *NVEInterfaceResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan NVEInterface
+func (r *NVOResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan NVO
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -358,7 +373,7 @@ func (r *NVEInterfaceResource) Update(ctx context.Context, req resource.UpdateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	var state NVEInterface
+	var state NVO
 
 	// Read state
 	diags = req.State.Get(ctx, &state)
@@ -385,7 +400,7 @@ func (r *NVEInterfaceResource) Update(ctx context.Context, req resource.UpdateRe
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity NVEInterfaceIdentity
+	var identity NVOIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
@@ -399,8 +414,8 @@ func (r *NVEInterfaceResource) Update(ctx context.Context, req resource.UpdateRe
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-func (r *NVEInterfaceResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state NVEInterface
+func (r *NVOResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state NVO
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -440,7 +455,7 @@ func (r *NVEInterfaceResource) Delete(ctx context.Context, req resource.DeleteRe
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-func (r *NVEInterfaceResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *NVOResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	if req.ID != "" || req.Identity == nil || req.Identity.Raw.IsNull() {
 		idParts := strings.Split(req.ID, ",")
 		idParts = helpers.RemoveEmptyStrings(idParts)
@@ -459,7 +474,7 @@ func (r *NVEInterfaceResource) ImportState(ctx context.Context, req resource.Imp
 			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 		}
 	} else {
-		var identity NVEInterfaceIdentity
+		var identity NVOIdentity
 		diags := req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
@@ -469,7 +484,7 @@ func (r *NVEInterfaceResource) ImportState(ctx context.Context, req resource.Imp
 		}
 	}
 
-	var state NVEInterface
+	var state NVO
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getDn())...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

@@ -10,7 +10,7 @@ description: |-
 ## Unreleased
 
 - BREAKING CHANGE: Rename `nxos_user` resource and data source to `nxos_user_management`, now targeting the `sys/userext` class instead of `sys/userext/user-[name]`
-- Add `nxos_bridge_domains` bulk resource
+- BREAKING CHANGE: Remove `nxos_bridge_domain` resource and data source, bridge domain configuration is now managed as a single `nxos_bridge_domains` resource and data source
 - Add `nxos_vrfs` bulk resource
 - Add `nxos_physical_interfaces` bulk resource
 - Add `nxos_svi_interfaces` bulk resource

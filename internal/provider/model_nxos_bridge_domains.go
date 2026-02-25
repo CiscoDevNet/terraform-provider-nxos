@@ -36,12 +36,12 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type BridgeDomains struct {
-	Device types.String         `tfsdk:"device"`
-	Dn     types.String         `tfsdk:"id"`
-	Items  []BridgeDomainsItems `tfsdk:"items"`
+	Device        types.String                 `tfsdk:"device"`
+	Dn            types.String                 `tfsdk:"id"`
+	BridgeDomains []BridgeDomainsBridgeDomains `tfsdk:"bridge_domains"`
 }
 
-type BridgeDomainsItems struct {
+type BridgeDomainsBridgeDomains struct {
 	FabricEncap types.String `tfsdk:"fabric_encap"`
 	AccessEncap types.String `tfsdk:"access_encap"`
 	Name        types.String `tfsdk:"name"`
@@ -75,20 +75,12 @@ func (data BridgeDomains) getDn() string {
 	return "sys/bd"
 }
 
+func (data BridgeDomainsBridgeDomains) getRn() string {
+	return fmt.Sprintf("bd-[%s]", data.FabricEncap.ValueString())
+}
+
 func (data BridgeDomains) getClassName() string {
 	return "bdEntity"
-}
-
-func (data BridgeDomains) getItemClassName() string {
-	return "l2BD"
-}
-
-func (data BridgeDomains) getItemDn(item BridgeDomainsItems) string {
-	return fmt.Sprintf("sys/bd/bd-[%s]", item.FabricEncap.ValueString())
-}
-
-func (data BridgeDomains) getItemRn(item BridgeDomainsItems) string {
-	return fmt.Sprintf("bd-[%s]", item.FabricEncap.ValueString())
 }
 
 // End of section. //template:end getPath
@@ -98,60 +90,23 @@ func (data BridgeDomains) getItemRn(item BridgeDomainsItems) string {
 func (data BridgeDomains) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	var attrs string
 	childrenPath := data.getClassName() + ".children"
-
-	for _, item := range data.Items {
-		itemBody := ""
-		itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes", map[string]interface{}{})
-		if (!item.FabricEncap.IsUnknown() && !item.FabricEncap.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"fabEncap", item.FabricEncap.ValueString())
+	for _, child := range data.BridgeDomains {
+		attrs = "{}"
+		if (!child.FabricEncap.IsUnknown() && !child.FabricEncap.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "fabEncap", child.FabricEncap.ValueString())
 		}
-		if (!item.AccessEncap.IsUnknown() && !item.AccessEncap.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"accEncap", item.AccessEncap.ValueString())
+		if (!child.AccessEncap.IsUnknown() && !child.AccessEncap.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "accEncap", child.AccessEncap.ValueString())
 		}
-		if (!item.Name.IsUnknown() && !item.Name.IsNull()) || false {
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"name", item.Name.ValueString())
+		if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
 		}
-
-		body, _ = sjson.SetRaw(body, childrenPath+".-1", itemBody)
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.l2BD.attributes", attrs)
 	}
 
 	return nxos.Body{body}
-}
-
-func (data BridgeDomains) toDeleteBody(items []BridgeDomainsItems) nxos.Body {
-	body := ""
-	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	childrenPath := data.getClassName() + ".children"
-	for _, item := range items {
-		itemBody := ""
-		itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.rn", data.getItemRn(item))
-		itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.status", "deleted")
-		body, _ = sjson.SetRaw(body, childrenPath+".-1", itemBody)
-	}
-	return nxos.Body{body}
-}
-
-func (data BridgeDomains) toBodyWithDeletes(ctx context.Context, state BridgeDomains) nxos.Body {
-	body := data.toBody()
-	childrenPath := data.getClassName() + ".children"
-	for _, stateItem := range state.Items {
-		found := false
-		for _, planItem := range data.Items {
-			if planItem.FabricEncap.ValueString() != stateItem.FabricEncap.ValueString() {
-				continue
-			}
-			found = true
-			break
-		}
-		if !found {
-			itemBody := ""
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.rn", data.getItemRn(stateItem))
-			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes.status", "deleted")
-			body.Str, _ = sjson.SetRaw(body.Str, childrenPath+".-1", itemBody)
-		}
-	}
-	return body
 }
 
 // End of section. //template:end toBody
@@ -159,20 +114,23 @@ func (data BridgeDomains) toBodyWithDeletes(ctx context.Context, state BridgeDom
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *BridgeDomains) fromBody(res gjson.Result) {
-	data.Items = make([]BridgeDomainsItems, 0)
-	res.Get(data.getClassName() + ".children").ForEach(func(_, v gjson.Result) bool {
-		v.ForEach(func(classname, value gjson.Result) bool {
-			if classname.String() == data.getItemClassName() {
-				item := BridgeDomainsItems{}
-				item.FabricEncap = types.StringValue(value.Get("attributes.fabEncap").String())
-				item.AccessEncap = types.StringValue(value.Get("attributes.accEncap").String())
-				item.Name = types.StringValue(value.Get("attributes.name").String())
-				data.Items = append(data.Items, item)
-			}
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "l2BD" {
+						var child BridgeDomainsBridgeDomains
+						child.FabricEncap = types.StringValue(value.Get("attributes.fabEncap").String())
+						child.AccessEncap = types.StringValue(value.Get("attributes.accEncap").String())
+						child.Name = types.StringValue(value.Get("attributes.name").String())
+						data.BridgeDomains = append(data.BridgeDomains, child)
+					}
+					return true
+				},
+			)
 			return true
-		})
-		return true
-	})
+		},
+	)
 }
 
 // End of section. //template:end fromBody
@@ -180,36 +138,76 @@ func (data *BridgeDomains) fromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *BridgeDomains) updateFromBody(res gjson.Result) {
-	for i := range data.Items {
-		// Find the matching item in the response by id attributes
-		res.Get(data.getClassName() + ".children").ForEach(func(_, v gjson.Result) bool {
-			v.ForEach(func(classname, value gjson.Result) bool {
-				if classname.String() == data.getItemClassName() {
-					if value.Get("attributes.fabEncap").String() != data.Items[i].FabricEncap.ValueString() {
-						return true
-					}
-					// Found matching item, update attributes
-					if !data.Items[i].FabricEncap.IsNull() {
-						data.Items[i].FabricEncap = types.StringValue(value.Get("attributes.fabEncap").String())
-					} else {
-						data.Items[i].FabricEncap = types.StringNull()
-					}
-					if !data.Items[i].AccessEncap.IsNull() {
-						data.Items[i].AccessEncap = types.StringValue(value.Get("attributes.accEncap").String())
-					} else {
-						data.Items[i].AccessEncap = types.StringNull()
-					}
-					if !data.Items[i].Name.IsNull() {
-						data.Items[i].Name = types.StringValue(value.Get("attributes.name").String())
-					} else {
-						data.Items[i].Name = types.StringNull()
-					}
+	for c := range data.BridgeDomains {
+		var rl2BD gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("l2BD.attributes.rn").String()
+				if key == data.BridgeDomains[c].getRn() {
+					rl2BD = v
+					return false
 				}
 				return true
-			})
-			return true
-		})
+			},
+		)
+		if !data.BridgeDomains[c].FabricEncap.IsNull() {
+			data.BridgeDomains[c].FabricEncap = types.StringValue(rl2BD.Get("l2BD.attributes.fabEncap").String())
+		} else {
+			data.BridgeDomains[c].FabricEncap = types.StringNull()
+		}
+		if !data.BridgeDomains[c].AccessEncap.IsNull() {
+			data.BridgeDomains[c].AccessEncap = types.StringValue(rl2BD.Get("l2BD.attributes.accEncap").String())
+		} else {
+			data.BridgeDomains[c].AccessEncap = types.StringNull()
+		}
+		if !data.BridgeDomains[c].Name.IsNull() {
+			data.BridgeDomains[c].Name = types.StringValue(rl2BD.Get("l2BD.attributes.name").String())
+		} else {
+			data.BridgeDomains[c].Name = types.StringNull()
+		}
 	}
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toDeleteBody
+
+func (data BridgeDomains) toDeleteBody() nxos.Body {
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	}
+	childrenPath := data.getClassName() + ".children"
+	for _, child := range data.BridgeDomains {
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "l2BD.attributes.rn", child.getRn())
+		deleteBody, _ = sjson.Set(deleteBody, "l2BD.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
+
+	return nxos.Body{body}
+}
+
+func (data BridgeDomains) toBodyWithDeletes(ctx context.Context, state BridgeDomains) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
+	for _, stateChild := range state.BridgeDomains {
+		found := false
+		for _, planChild := range data.BridgeDomains {
+			if stateChild.FabricEncap == planChild.FabricEncap {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "l2BD.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "l2BD.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".-1", deleteBody)
+		}
+	}
+	return body
+}
+
+// End of section. //template:end toDeleteBody

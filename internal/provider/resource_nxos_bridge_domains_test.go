@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"testing"
 
 	goversion "github.com/hashicorp/go-version"
@@ -34,9 +35,9 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosBridgeDomains(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domains.test", "items.0.fabric_encap", "vlan-10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domains.test", "items.0.access_encap", "unknown"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domains.test", "items.0.name", "VLAN10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domains.test", "bridge_domains.0.fabric_encap", "vlan-10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domains.test", "bridge_domains.0.access_encap", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domains.test", "bridge_domains.0.name", "VLAN10"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -70,7 +71,8 @@ func TestAccNxosBridgeDomains(t *testing.T) {
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxosBridgeDomainsImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
-		return "", nil
+
+		return fmt.Sprintf(""), nil
 	}
 }
 
@@ -83,9 +85,6 @@ func nxosBridgeDomainsImportStateIdFunc(resourceName string) resource.ImportStat
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosBridgeDomainsConfig_minimum() string {
 	config := `resource "nxos_bridge_domains" "test" {` + "\n"
-	config += `	items = [{` + "\n"
-	config += `		fabric_encap = "vlan-10"` + "\n"
-	config += `	}]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -95,7 +94,7 @@ func testAccNxosBridgeDomainsConfig_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosBridgeDomainsConfig_all() string {
 	config := `resource "nxos_bridge_domains" "test" {` + "\n"
-	config += `	items = [{` + "\n"
+	config += `	bridge_domains = [{` + "\n"
 	config += `		fabric_encap = "vlan-10"` + "\n"
 	config += `		access_encap = "unknown"` + "\n"
 	config += `		name = "VLAN10"` + "\n"

@@ -1,5 +1,5 @@
 resource "nxos_bridge_domains" "example" {
-  items = [{
+  bridge_domains = [{
     fabric_encap = "vlan-10"
     access_encap = "unknown"
     name         = "VLAN10"

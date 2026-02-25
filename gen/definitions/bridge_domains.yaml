@@ -1,0 +1,35 @@
+---
+name: Bridge Domains
+class_name: bdEntity
+dn: sys/bd
+no_delete: true
+ds_description: This data source can read the bridge domain configuration.
+res_description: This resource can manage the bridge domain configuration.
+doc_path: Layer%202/bd:Entity/
+doc_category: Switching
+child_classes:
+  - class_name: l2BD
+    doc_path: Layer%202/l2:BD/
+    rn: bd-[%s]
+    type: list
+    tf_name: bridge_domains
+    description: 'List of bridge domains.'
+    attributes:
+      - nxos_name: fabEncap
+        tf_name: fabric_encap
+        type: String
+        id: true
+        description: 'Fabric encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
+        default_value: unknown
+        example: vlan-10
+      - nxos_name: accEncap
+        tf_name: access_encap
+        type: String
+        description: 'Access encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
+        default_value: unknown
+        example: unknown
+      - nxos_name: name
+        tf_name: name
+        type: String
+        description: 'Bridge domain name.'
+        example: VLAN10

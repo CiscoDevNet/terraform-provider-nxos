@@ -4,21 +4,21 @@ page_title: "nxos_hmm Resource - terraform-provider-nxos"
 subcategory: "HMM"
 description: |-
   This resource can manage the Host Mobility Manager (HMM) Entity configuration.
-  API Documentation: hmmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Host%20Mobility/hmm:Entity/
+  API Documentation: hmmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Host%20Mobility/hmm:Entity/
   Additional API Documentation
-  hmmFwdInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Host%20Mobility/hmm:FwdInst/hmmFwdIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Host%20Mobility/hmm:FwdIf/
+  hmmFwdInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Host%20Mobility/hmm:FwdInst/hmmFwdIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Host%20Mobility/hmm:FwdIf/
 ---
 
 # nxos_hmm (Resource)
 
 This resource can manage the Host Mobility Manager (HMM) Entity configuration.
 
-- API Documentation: [hmmEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Host%20Mobility/hmm:Entity/)
+- API Documentation: [hmmEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Host%20Mobility/hmm:Entity/)
 
 ### Additional API Documentation
 
-- [hmmFwdInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Host%20Mobility/hmm:FwdInst/)
-- [hmmFwdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Host%20Mobility/hmm:FwdIf/)
+- [hmmFwdInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Host%20Mobility/hmm:FwdInst/)
+- [hmmFwdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Host%20Mobility/hmm:FwdIf/)
 
 ## Example Usage
 

@@ -4,21 +4,21 @@ page_title: "nxos_spanning_tree Resource - terraform-provider-nxos"
 subcategory: "Switching"
 description: |-
   This resource can manage the Spanning Tree configuration.
-  API Documentation: stpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Discovery%20Protocols/stp:Entity/
+  API Documentation: stpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Entity/
   Additional API Documentation
-  stpInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Discovery%20Protocols/stp:Inst/stpIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Discovery%20Protocols/stp:If/
+  stpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Inst/stpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:If/
 ---
 
 # nxos_spanning_tree (Resource)
 
 This resource can manage the Spanning Tree configuration.
 
-- API Documentation: [stpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Discovery%20Protocols/stp:Entity/)
+- API Documentation: [stpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Entity/)
 
 ### Additional API Documentation
 
-- [stpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Discovery%20Protocols/stp:Inst/)
-- [stpIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Discovery%20Protocols/stp:If/)
+- [stpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Inst/)
+- [stpIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:If/)
 
 ## Example Usage
 

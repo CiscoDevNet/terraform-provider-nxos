@@ -4,25 +4,25 @@ page_title: "nxos_vpc Data Source - terraform-provider-nxos"
 subcategory: "vPC"
 description: |-
   This data source can read the vPC configuration.
-  API Documentation: vpcEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:Entity/
+  API Documentation: vpcEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vpc:Entity/
   Additional API Documentation
-  vpcInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:Inst/vpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:Dom/vpcKeepalive https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:Keepalive/vpcPeerLink https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:PeerLink/vpcIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:If/vpcRsVpcConf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:RsVpcConf/
+  vpcInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vpc:Inst/vpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vpc:Dom/vpcKeepalive https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vpc:Keepalive/vpcPeerLink https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vpc:PeerLink/vpcIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vpc:If/vpcRsVpcConf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vpc:RsVpcConf/
 ---
 
 # nxos_vpc (Data Source)
 
 This data source can read the vPC configuration.
 
-- API Documentation: [vpcEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:Entity/)
+- API Documentation: [vpcEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vpc:Entity/)
 
 ### Additional API Documentation
 
-- [vpcInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:Inst/)
-- [vpcDom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:Dom/)
-- [vpcKeepalive](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:Keepalive/)
-- [vpcPeerLink](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:PeerLink/)
-- [vpcIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:If/)
-- [vpcRsVpcConf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/vpc:RsVpcConf/)
+- [vpcInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vpc:Inst/)
+- [vpcDom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vpc:Dom/)
+- [vpcKeepalive](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vpc:Keepalive/)
+- [vpcPeerLink](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vpc:PeerLink/)
+- [vpcIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vpc:If/)
+- [vpcRsVpcConf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vpc:RsVpcConf/)
 
 ## Example Usage
 

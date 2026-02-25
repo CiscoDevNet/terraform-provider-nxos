@@ -4,21 +4,21 @@ page_title: "nxos_port_channel_interface Data Source - terraform-provider-nxos"
 subcategory: "Interface"
 description: |-
   This data source can read the configuration of a port-channel interface.
-  API Documentation: pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/pc:AggrIf/
+  API Documentation: pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/
   Additional API Documentation
-  nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/pc:RsMbrIfs/
+  nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:RsMbrIfs/
 ---
 
 # nxos_port_channel_interface (Data Source)
 
 This data source can read the configuration of a port-channel interface.
 
-- API Documentation: [pcAggrIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/pc:AggrIf/)
+- API Documentation: [pcAggrIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/)
 
 ### Additional API Documentation
 
-- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
-- [pcRsMbrIfs](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/pc:RsMbrIfs/)
+- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
+- [pcRsMbrIfs](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:RsMbrIfs/)
 
 ## Example Usage
 

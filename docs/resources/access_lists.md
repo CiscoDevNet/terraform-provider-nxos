@@ -4,29 +4,29 @@ page_title: "nxos_access_lists Resource - terraform-provider-nxos"
 subcategory: "Security"
 description: |-
   This resource can manage the Access Lists configuration.
-  API Documentation: aclEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/acl:Entity/
+  API Documentation: aclEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Entity/
   Additional API Documentation
-  ipv4aclAF https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/ipv4acl:AF/ipv4aclACL https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/ipv4acl:ACL/ipv4aclACE https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/ipv4acl:ACE/aclPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/acl:Policy/aclIngress https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/acl:Ingress/aclIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/acl:If/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/acl:Inst/aclEgress https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/acl:Egress/aclIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/acl:If/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/acl:Inst/
+  ipv4aclAF https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:AF/ipv4aclACL https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:ACL/ipv4aclACE https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:ACE/aclPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Policy/aclIngress https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Ingress/aclIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclEgress https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Egress/aclIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/
 ---
 
 # nxos_access_lists (Resource)
 
 This resource can manage the Access Lists configuration.
 
-- API Documentation: [aclEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/acl:Entity/)
+- API Documentation: [aclEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Entity/)
 
 ### Additional API Documentation
 
-- [ipv4aclAF](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/ipv4acl:AF/)
-- [ipv4aclACL](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/ipv4acl:ACL/)
-- [ipv4aclACE](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/ipv4acl:ACE/)
-- [aclPolicy](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/acl:Policy/)
-- [aclIngress](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/acl:Ingress/)
-- [aclIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/acl:If/)
-- [aclInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/acl:Inst/)
-- [aclEgress](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/acl:Egress/)
-- [aclIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/acl:If/)
-- [aclInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/acl:Inst/)
+- [ipv4aclAF](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:AF/)
+- [ipv4aclACL](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:ACL/)
+- [ipv4aclACE](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:ACE/)
+- [aclPolicy](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Policy/)
+- [aclIngress](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Ingress/)
+- [aclIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/)
+- [aclInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/)
+- [aclEgress](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Egress/)
+- [aclIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/)
+- [aclInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/)
 
 ## Example Usage
 

@@ -4,14 +4,14 @@ page_title: "nxos_svi_interfaces Resource - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This resource can manage multiple svi_interface resources.
-  API Documentation: sviIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/svi:If/
+  API Documentation: sviIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/svi:If/
 ---
 
 # nxos_svi_interfaces (Resource)
 
 This resource can manage multiple svi_interface resources.
 
-- API Documentation: [sviIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/svi:If/)
+- API Documentation: [sviIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/svi:If/)
 
 ## Example Usage
 

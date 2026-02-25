@@ -4,22 +4,22 @@ page_title: "nxos_user_management Data Source - terraform-provider-nxos"
 subcategory: "AAA"
 description: |-
   This data source can read the user management configuration.
-  API Documentation: aaaUserEp https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/aaa:UserEp/
+  API Documentation: aaaUserEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserEp/
   Additional API Documentation
-  aaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/aaa:User/aaaUserDomain https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/aaa:UserDomain/aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/aaa:UserRole/
+  aaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:User/aaaUserDomain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserDomain/aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserRole/
 ---
 
 # nxos_user_management (Data Source)
 
 This data source can read the user management configuration.
 
-- API Documentation: [aaaUserEp](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/aaa:UserEp/)
+- API Documentation: [aaaUserEp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserEp/)
 
 ### Additional API Documentation
 
-- [aaaUser](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/aaa:User/)
-- [aaaUserDomain](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/aaa:UserDomain/)
-- [aaaUserRole](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/aaa:UserRole/)
+- [aaaUser](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:User/)
+- [aaaUserDomain](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserDomain/)
+- [aaaUserRole](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserRole/)
 
 ## Example Usage
 

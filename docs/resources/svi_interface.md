@@ -4,20 +4,20 @@ page_title: "nxos_svi_interface Resource - terraform-provider-nxos"
 subcategory: "Interface"
 description: |-
   This resource can manage an SVI interface.
-  API Documentation: sviIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/svi:If/
+  API Documentation: sviIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/svi:If/
   Additional API Documentation
-  nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
+  nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
 ---
 
 # nxos_svi_interface (Resource)
 
 This resource can manage an SVI interface.
 
-- API Documentation: [sviIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/svi:If/)
+- API Documentation: [sviIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/svi:If/)
 
 ### Additional API Documentation
 
-- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
+- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 
 ## Example Usage
 

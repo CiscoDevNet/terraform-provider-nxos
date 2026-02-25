@@ -4,14 +4,14 @@ page_title: "nxos_physical_interfaces Resource - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This resource can manage multiple physical_interface resources.
-  API Documentation: l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/l1:PhysIf/
+  API Documentation: l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/
 ---
 
 # nxos_physical_interfaces (Resource)
 
 This resource can manage multiple physical_interface resources.
 
-- API Documentation: [l1PhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/l1:PhysIf/)
+- API Documentation: [l1PhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/)
 
 ## Example Usage
 

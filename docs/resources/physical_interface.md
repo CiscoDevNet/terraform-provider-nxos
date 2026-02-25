@@ -4,20 +4,20 @@ page_title: "nxos_physical_interface Resource - terraform-provider-nxos"
 subcategory: "Interface"
 description: |-
   This resource can manage a physical interface.
-  API Documentation: l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/l1:PhysIf/
+  API Documentation: l1PhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/
   Additional API Documentation
-  nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
+  nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
 ---
 
 # nxos_physical_interface (Resource)
 
 This resource can manage a physical interface.
 
-- API Documentation: [l1PhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/l1:PhysIf/)
+- API Documentation: [l1PhysIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/l1:PhysIf/)
 
 ### Additional API Documentation
 
-- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
+- [nwRtVrfMbr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/)
 
 ## Example Usage
 

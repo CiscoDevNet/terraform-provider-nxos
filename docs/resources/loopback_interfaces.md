@@ -4,14 +4,14 @@ page_title: "nxos_loopback_interfaces Resource - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This resource can manage multiple loopback_interface resources.
-  API Documentation: l3LbRtdIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:LbRtdIf/
+  API Documentation: l3LbRtdIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/l3:LbRtdIf/
 ---
 
 # nxos_loopback_interfaces (Resource)
 
 This resource can manage multiple loopback_interface resources.
 
-- API Documentation: [l3LbRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:LbRtdIf/)
+- API Documentation: [l3LbRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/l3:LbRtdIf/)
 
 ## Example Usage
 

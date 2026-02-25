@@ -4,22 +4,22 @@ page_title: "nxos_dhcp Resource - terraform-provider-nxos"
 subcategory: "DHCP"
 description: |-
   This resource can manage the DHCP configuration.
-  API Documentation: dhcpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/DHCP/dhcp:Entity/
+  API Documentation: dhcpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:Entity/
   Additional API Documentation
-  dhcpInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/DHCP/dhcp:Inst/dhcpRelayIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/DHCP/dhcp:RelayIf/dhcpRelayAddr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/DHCP/dhcp:RelayAddr/
+  dhcpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:Inst/dhcpRelayIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:RelayIf/dhcpRelayAddr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:RelayAddr/
 ---
 
 # nxos_dhcp (Resource)
 
 This resource can manage the DHCP configuration.
 
-- API Documentation: [dhcpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/DHCP/dhcp:Entity/)
+- API Documentation: [dhcpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:Entity/)
 
 ### Additional API Documentation
 
-- [dhcpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/DHCP/dhcp:Inst/)
-- [dhcpRelayIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/DHCP/dhcp:RelayIf/)
-- [dhcpRelayAddr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/DHCP/dhcp:RelayAddr/)
+- [dhcpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:Inst/)
+- [dhcpRelayIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:RelayIf/)
+- [dhcpRelayAddr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:RelayAddr/)
 
 ## Example Usage
 

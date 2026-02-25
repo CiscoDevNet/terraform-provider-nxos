@@ -4,24 +4,24 @@ page_title: "nxos_vrf Resource - terraform-provider-nxos"
 subcategory: "VRF"
 description: |-
   This resource can manage a VRF.
-  API Documentation: l3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:Inst/
+  API Documentation: l3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/l3:Inst/
   Additional API Documentation
-  rtctrlDom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:Dom/rtctrlDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:DomAf/rtctrlAfCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:AfCtrl/rtctrlRttP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttP/rtctrlRttEntry https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/
+  rtctrlDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:Dom/rtctrlDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:DomAf/rtctrlAfCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:AfCtrl/rtctrlRttP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:RttP/rtctrlRttEntry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/
 ---
 
 # nxos_vrf (Resource)
 
 This resource can manage a VRF.
 
-- API Documentation: [l3Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:Inst/)
+- API Documentation: [l3Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/l3:Inst/)
 
 ### Additional API Documentation
 
-- [rtctrlDom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:Dom/)
-- [rtctrlDomAf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:DomAf/)
-- [rtctrlAfCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:AfCtrl/)
-- [rtctrlRttP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttP/)
-- [rtctrlRttEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/)
+- [rtctrlDom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:Dom/)
+- [rtctrlDomAf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:DomAf/)
+- [rtctrlAfCtrl](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:AfCtrl/)
+- [rtctrlRttP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:RttP/)
+- [rtctrlRttEntry](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/)
 
 ## Example Usage
 

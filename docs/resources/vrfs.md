@@ -4,14 +4,14 @@ page_title: "nxos_vrfs Resource - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This resource can manage multiple vrf resources.
-  API Documentation: l3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:Inst/
+  API Documentation: l3Inst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/l3:Inst/
 ---
 
 # nxos_vrfs (Resource)
 
 This resource can manage multiple vrf resources.
 
-- API Documentation: [l3Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:Inst/)
+- API Documentation: [l3Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/l3:Inst/)
 
 ## Example Usage
 

@@ -4,29 +4,29 @@ page_title: "nxos_pim Data Source - terraform-provider-nxos"
 subcategory: "PIM"
 description: |-
   This data source can read the global PIM configuration.
-  API Documentation: pimEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:Entity/
+  API Documentation: pimEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/pim:Entity/
   Additional API Documentation
-  pimInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:Inst/pimDom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:Dom/pimIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:If/pimSSMPatP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:SSMPatP/pimSSMRangeP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:SSMRangeP/pimStaticRPP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:StaticRPP/pimStaticRP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:StaticRP/pimRPGrpList https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:RPGrpList/pimAcastRPFuncP https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:AcastRPFuncP/pimAcastRPPeer https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:AcastRPPeer/
+  pimInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/pim:Inst/pimDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/pim:Dom/pimIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/pim:If/pimSSMPatP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/pim:SSMPatP/pimSSMRangeP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/pim:SSMRangeP/pimStaticRPP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/pim:StaticRPP/pimStaticRP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/pim:StaticRP/pimRPGrpList https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/pim:RPGrpList/pimAcastRPFuncP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/pim:AcastRPFuncP/pimAcastRPPeer https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/pim:AcastRPPeer/
 ---
 
 # nxos_pim (Data Source)
 
 This data source can read the global PIM configuration.
 
-- API Documentation: [pimEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:Entity/)
+- API Documentation: [pimEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/pim:Entity/)
 
 ### Additional API Documentation
 
-- [pimInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:Inst/)
-- [pimDom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:Dom/)
-- [pimIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:If/)
-- [pimSSMPatP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:SSMPatP/)
-- [pimSSMRangeP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:SSMRangeP/)
-- [pimStaticRPP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:StaticRPP/)
-- [pimStaticRP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:StaticRP/)
-- [pimRPGrpList](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:RPGrpList/)
-- [pimAcastRPFuncP](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:AcastRPFuncP/)
-- [pimAcastRPPeer](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/pim:AcastRPPeer/)
+- [pimInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/pim:Inst/)
+- [pimDom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/pim:Dom/)
+- [pimIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/pim:If/)
+- [pimSSMPatP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/pim:SSMPatP/)
+- [pimSSMRangeP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/pim:SSMRangeP/)
+- [pimStaticRPP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/pim:StaticRPP/)
+- [pimStaticRP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/pim:StaticRP/)
+- [pimRPGrpList](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/pim:RPGrpList/)
+- [pimAcastRPFuncP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/pim:AcastRPFuncP/)
+- [pimAcastRPPeer](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/pim:AcastRPPeer/)
 
 ## Example Usage
 

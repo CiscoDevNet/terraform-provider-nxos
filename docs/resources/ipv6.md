@@ -4,25 +4,25 @@ page_title: "nxos_ipv6 Resource - terraform-provider-nxos"
 subcategory: "IPv6"
 description: |-
   This resource can manage the IPv6 configuration.
-  API Documentation: ipv6Entity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Entity/
+  API Documentation: ipv6Entity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv6:Entity/
   Additional API Documentation
-  ipv6Inst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Inst/ipv6Dom https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Dom/ipv6Route https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Route/ipv6Nexthop https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Nexthop/ipv6If https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:If/ipv6Addr https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Addr/
+  ipv6Inst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv6:Inst/ipv6Dom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv6:Dom/ipv6Route https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv6:Route/ipv6Nexthop https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv6:Nexthop/ipv6If https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv6:If/ipv6Addr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv6:Addr/
 ---
 
 # nxos_ipv6 (Resource)
 
 This resource can manage the IPv6 configuration.
 
-- API Documentation: [ipv6Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Entity/)
+- API Documentation: [ipv6Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv6:Entity/)
 
 ### Additional API Documentation
 
-- [ipv6Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Inst/)
-- [ipv6Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Dom/)
-- [ipv6Route](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Route/)
-- [ipv6Nexthop](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Nexthop/)
-- [ipv6If](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:If/)
-- [ipv6Addr](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/ipv6:Addr/)
+- [ipv6Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv6:Inst/)
+- [ipv6Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv6:Dom/)
+- [ipv6Route](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv6:Route/)
+- [ipv6Nexthop](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv6:Nexthop/)
+- [ipv6If](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv6:If/)
+- [ipv6Addr](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv6:Addr/)
 
 ## Example Usage
 

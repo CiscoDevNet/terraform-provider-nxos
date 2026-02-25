@@ -4,14 +4,14 @@ page_title: "nxos_subinterfaces Resource - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This resource can manage multiple subinterface resources.
-  API Documentation: l3EncRtdIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:EncRtdIf/
+  API Documentation: l3EncRtdIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/l3:EncRtdIf/
 ---
 
 # nxos_subinterfaces (Resource)
 
 This resource can manage multiple subinterface resources.
 
-- API Documentation: [l3EncRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%203/l3:EncRtdIf/)
+- API Documentation: [l3EncRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/l3:EncRtdIf/)
 
 ## Example Usage
 

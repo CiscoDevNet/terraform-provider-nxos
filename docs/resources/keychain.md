@@ -4,22 +4,22 @@ page_title: "nxos_keychain Resource - terraform-provider-nxos"
 subcategory: "Keychain"
 description: |-
   This resource can manage the keychain configuration.
-  API Documentation: kcmgrEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/kcmgr:Entity/
+  API Documentation: kcmgrEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Entity/
   Additional API Documentation
-  kcmgrKeychains https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/kcmgr:Keychains/kcmgrClassicKeychain https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/kcmgrKey https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/kcmgr:kcmgrKey/
+  kcmgrKeychains https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Keychains/kcmgrClassicKeychain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/kcmgrKey https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:kcmgrKey/
 ---
 
 # nxos_keychain (Resource)
 
 This resource can manage the keychain configuration.
 
-- API Documentation: [kcmgrEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/kcmgr:Entity/)
+- API Documentation: [kcmgrEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Entity/)
 
 ### Additional API Documentation
 
-- [kcmgrKeychains](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/kcmgr:Keychains/)
-- [kcmgrClassicKeychain](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/)
-- [kcmgrKey](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Security%20and%20Policing/kcmgr:kcmgrKey/)
+- [kcmgrKeychains](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Keychains/)
+- [kcmgrClassicKeychain](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/)
+- [kcmgrKey](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:kcmgrKey/)
 
 ## Example Usage
 

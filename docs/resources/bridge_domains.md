@@ -4,20 +4,20 @@ page_title: "nxos_bridge_domains Resource - terraform-provider-nxos"
 subcategory: "Switching"
 description: |-
   This resource can manage the bridge domain configuration.
-  API Documentation: bdEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%202/bd:Entity/
+  API Documentation: bdEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%202/bd:Entity/
   Additional API Documentation
-  l2BD https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%202/l2:BD/
+  l2BD https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%202/l2:BD/
 ---
 
 # nxos_bridge_domains (Resource)
 
 This resource can manage the bridge domain configuration.
 
-- API Documentation: [bdEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%202/bd:Entity/)
+- API Documentation: [bdEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%202/bd:Entity/)
 
 ### Additional API Documentation
 
-- [l2BD](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Layer%202/l2:BD/)
+- [l2BD](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%202/l2:BD/)
 
 ## Example Usage
 

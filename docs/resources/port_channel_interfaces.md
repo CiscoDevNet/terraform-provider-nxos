@@ -4,14 +4,14 @@ page_title: "nxos_port_channel_interfaces Resource - terraform-provider-nxos"
 subcategory: ""
 description: |-
   This resource can manage multiple port_channel_interface resources.
-  API Documentation: pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/pc:AggrIf/
+  API Documentation: pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/
 ---
 
 # nxos_port_channel_interfaces (Resource)
 
 This resource can manage multiple port_channel_interface resources.
 
-- API Documentation: [pcAggrIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/pc:AggrIf/)
+- API Documentation: [pcAggrIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/)
 
 ## Example Usage
 

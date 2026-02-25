@@ -4,31 +4,31 @@ page_title: "nxos_default_qos Resource - terraform-provider-nxos"
 subcategory: "QoS"
 description: |-
   This resource can manage the default QoS configuration.
-  API Documentation: ipqosDefaultQoS https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:DefaultQoS/
+  API Documentation: ipqosDefaultQoS https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:DefaultQoS/
   Additional API Documentation
-  ipqosCMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:CMapEntity/ipqosCMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:CMapInst/ipqosDscp https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Dscp/ipqosPMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:PMapEntity/ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:PMapInst/ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:MatchCMap/ipqosSetQoSGrp https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:SetQoSGrp/ipqosPolice https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Police/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:ServPol/ipqosIngress https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Ingress/ipqosIf https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:If/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Inst/
+  ipqosCMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:CMapEntity/ipqosCMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:CMapInst/ipqosDscp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Dscp/ipqosPMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PMapEntity/ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PMapInst/ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:MatchCMap/ipqosSetQoSGrp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:SetQoSGrp/ipqosPolice https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Police/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:ServPol/ipqosIngress https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Ingress/ipqosIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:If/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Inst/
 ---
 
 # nxos_default_qos (Resource)
 
 This resource can manage the default QoS configuration.
 
-- API Documentation: [ipqosDefaultQoS](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:DefaultQoS/)
+- API Documentation: [ipqosDefaultQoS](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:DefaultQoS/)
 
 ### Additional API Documentation
 
-- [ipqosCMapEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:CMapEntity/)
-- [ipqosCMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:CMapInst/)
-- [ipqosDscp](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Dscp/)
-- [ipqosPMapEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:PMapEntity/)
-- [ipqosPMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:PMapInst/)
-- [ipqosMatchCMap](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:MatchCMap/)
-- [ipqosSetQoSGrp](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:SetQoSGrp/)
-- [ipqosPolice](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Police/)
-- [ipqosServPol](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:ServPol/)
-- [ipqosIngress](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Ingress/)
-- [ipqosIf](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:If/)
-- [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Inst/)
+- [ipqosCMapEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:CMapEntity/)
+- [ipqosCMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:CMapInst/)
+- [ipqosDscp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Dscp/)
+- [ipqosPMapEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PMapEntity/)
+- [ipqosPMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PMapInst/)
+- [ipqosMatchCMap](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:MatchCMap/)
+- [ipqosSetQoSGrp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:SetQoSGrp/)
+- [ipqosPolice](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Police/)
+- [ipqosServPol](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:ServPol/)
+- [ipqosIngress](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Ingress/)
+- [ipqosIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:If/)
+- [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Inst/)
 
 ## Example Usage
 

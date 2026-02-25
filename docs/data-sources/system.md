@@ -4,21 +4,21 @@ page_title: "nxos_system Data Source - terraform-provider-nxos"
 subcategory: "System"
 description: |-
   This data source can read the system configuration.
-  API Documentation: topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/top:System/
+  API Documentation: topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/
   Additional API Documentation
-  ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/ethpm:Inst/
+  ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/
 ---
 
 # nxos_system (Data Source)
 
 This data source can read the system configuration.
 
-- API Documentation: [topSystem](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/System/top:System/)
+- API Documentation: [topSystem](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/)
 
 ### Additional API Documentation
 
-- [ethpmEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/ethpm:Entity/)
-- [ethpmInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Interfaces/ethpm:Inst/)
+- [ethpmEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/)
+- [ethpmInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/)
 
 ## Example Usage
 

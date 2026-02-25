@@ -4,28 +4,28 @@ page_title: "nxos_queuing_qos Data Source - terraform-provider-nxos"
 subcategory: "QoS"
 description: |-
   This data source can read the queuing QoS configuration.
-  API Documentation: ipqosQueuing https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Queuing/
+  API Documentation: ipqosQueuing https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Queuing/
   Additional API Documentation
-  ipqosPMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:PMapEntity/ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:PMapInst/ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:MatchCMap/ipqosPriority https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Priority/ipqosSetRemBW https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:SetRemBW/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:ServPol/ipqosEgress https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Egress/ipqosSystem https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:System/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Inst/
+  ipqosPMapEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PMapEntity/ipqosPMapInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PMapInst/ipqosMatchCMap https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:MatchCMap/ipqosPriority https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Priority/ipqosSetRemBW https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:SetRemBW/ipqosServPol https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:ServPol/ipqosEgress https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Egress/ipqosSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:System/ipqosInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Inst/
 ---
 
 # nxos_queuing_qos (Data Source)
 
 This data source can read the queuing QoS configuration.
 
-- API Documentation: [ipqosQueuing](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Queuing/)
+- API Documentation: [ipqosQueuing](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Queuing/)
 
 ### Additional API Documentation
 
-- [ipqosPMapEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:PMapEntity/)
-- [ipqosPMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:PMapInst/)
-- [ipqosMatchCMap](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:MatchCMap/)
-- [ipqosPriority](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Priority/)
-- [ipqosSetRemBW](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:SetRemBW/)
-- [ipqosServPol](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:ServPol/)
-- [ipqosEgress](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Egress/)
-- [ipqosSystem](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:System/)
-- [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-3-1/docs/Qos/ipqos:Inst/)
+- [ipqosPMapEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PMapEntity/)
+- [ipqosPMapInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:PMapInst/)
+- [ipqosMatchCMap](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:MatchCMap/)
+- [ipqosPriority](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Priority/)
+- [ipqosSetRemBW](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:SetRemBW/)
+- [ipqosServPol](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:ServPol/)
+- [ipqosEgress](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Egress/)
+- [ipqosSystem](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:System/)
+- [ipqosInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Qos/ipqos:Inst/)
 
 ## Example Usage
 

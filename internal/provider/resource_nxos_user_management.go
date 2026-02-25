@@ -45,25 +45,25 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &UserResource{}
-var _ resource.ResourceWithIdentity = &UserResource{}
+var _ resource.Resource = &UserManagementResource{}
+var _ resource.ResourceWithIdentity = &UserManagementResource{}
 
-func NewUserResource() resource.Resource {
-	return &UserResource{}
+func NewUserManagementResource() resource.Resource {
+	return &UserManagementResource{}
 }
 
-type UserResource struct {
+type UserManagementResource struct {
 	data *NxosProviderData
 }
 
-func (r *UserResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_user"
+func (r *UserManagementResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_user_management"
 }
 
-func (r *UserResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *UserManagementResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the User configuration.", "aaaUser", "Security%20and%20Policing/aaa:User/").AddAdditionalDocs([]string{"aaaUserDomain", "aaaUserRole"}, []string{"Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the user management configuration.", "aaaUserEp", "Security%20and%20Policing/aaa:UserEp/").AddAdditionalDocs([]string{"aaaUser", "aaaUserDomain", "aaaUserRole"}, []string{"Security%20and%20Policing/aaa:User/", "Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -77,43 +77,51 @@ func (r *UserResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("User name.").String,
-				Required:            true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
-				},
-			},
-			"allow_expired": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Allow expired user to be configured.").AddStringEnumDescription("yes", "no").AddDefaultValueDescription("no").String,
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("no"),
-				Validators: []validator.String{
-					stringvalidator.OneOf("yes", "no"),
-				},
-			},
-			"password": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("User password.").String,
-				Optional:            true,
-			},
-			"password_encryption_type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Password encryption type.").AddStringEnumDescription("0", "5", "8", "9", "clear", "255").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("0", "5", "8", "9", "clear", "255"),
-				},
-			},
-			"roles": schema.ListNestedAttribute{
-				MarkdownDescription: "User roles.",
+			"users": schema.ListNestedAttribute{
+				MarkdownDescription: "List of users.",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Role name.").String,
+							MarkdownDescription: helpers.NewAttributeDescription("User name.").String,
 							Required:            true,
 							PlanModifiers: []planmodifier.String{
 								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"allow_expired": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Allow expired user to be configured.").AddStringEnumDescription("yes", "no").AddDefaultValueDescription("no").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("no"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("yes", "no"),
+							},
+						},
+						"password": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("User password.").String,
+							Optional:            true,
+						},
+						"password_encryption_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Password encryption type.").AddStringEnumDescription("0", "5", "8", "9", "clear", "255").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("0", "5", "8", "9", "clear", "255"),
+							},
+						},
+						"roles": schema.ListNestedAttribute{
+							MarkdownDescription: "User roles.",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Role name.").String,
+										Required:            true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplace(),
+										},
+									},
+								},
 							},
 						},
 					},
@@ -123,22 +131,18 @@ func (r *UserResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 	}
 }
 
-func (r *UserResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+func (r *UserManagementResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
 	resp.IdentitySchema = identityschema.Schema{
 		Attributes: map[string]identityschema.Attribute{
 			"device": identityschema.StringAttribute{
 				Description:       "A device name from the provider configuration.",
 				OptionalForImport: true,
 			},
-			"name": identityschema.StringAttribute{
-				Description:       helpers.NewAttributeDescription("User name.").String,
-				RequiredForImport: true,
-			},
 		},
 	}
 }
 
-func (r *UserResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *UserManagementResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -150,8 +154,8 @@ func (r *UserResource) Configure(ctx context.Context, req resource.ConfigureRequ
 // End of section. //template:end model
 
 // Section below is generated&owned by "gen/generator.go". //template:begin create
-func (r *UserResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan User
+func (r *UserManagementResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan UserManagement
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -179,7 +183,7 @@ func (r *UserResource) Create(ctx context.Context, req resource.CreateRequest, r
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity UserIdentity
+	var identity UserManagementIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
@@ -195,8 +199,8 @@ func (r *UserResource) Create(ctx context.Context, req resource.CreateRequest, r
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-func (r *UserResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state User
+func (r *UserManagementResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state UserManagement
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -207,7 +211,7 @@ func (r *UserResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 
 	// Read identity if available (requires Terraform >= 1.12.0)
 	if req.Identity != nil && !req.Identity.Raw.IsNull() {
-		var identity UserIdentity
+		var identity UserManagementIdentity
 		diags = req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
@@ -225,7 +229,7 @@ func (r *UserResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
-		queries = append(queries, nxos.Query("rsp-subtree-depth", "2"))
+		queries = append(queries, nxos.Query("rsp-subtree-depth", "3"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -243,7 +247,7 @@ func (r *UserResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		}
 	}
 
-	var identity UserIdentity
+	var identity UserManagementIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
@@ -259,8 +263,8 @@ func (r *UserResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-func (r *UserResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan User
+func (r *UserManagementResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan UserManagement
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -268,7 +272,7 @@ func (r *UserResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	var state User
+	var state UserManagement
 
 	// Read state
 	diags = req.State.Get(ctx, &state)
@@ -295,7 +299,7 @@ func (r *UserResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	}
 
 	plan.Dn = types.StringValue(plan.getDn())
-	var identity UserIdentity
+	var identity UserManagementIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
@@ -309,8 +313,8 @@ func (r *UserResource) Update(ctx context.Context, req resource.UpdateRequest, r
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-func (r *UserResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state User
+func (r *UserManagementResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state UserManagement
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -350,44 +354,36 @@ func (r *UserResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-func (r *UserResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *UserManagementResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	if req.ID != "" || req.Identity == nil || req.Identity.Raw.IsNull() {
 		idParts := strings.Split(req.ID, ",")
 		idParts = helpers.RemoveEmptyStrings(idParts)
 
-		if len(idParts) != 1 && len(idParts) != 2 {
-			expectedIdentifier := "Expected import identifier with format: '<name>'"
-			expectedIdentifier += " or '<name>,<device>'"
+		if len(idParts) != 0 && len(idParts) != 1 {
+			expectedIdentifier := "Expected import identifier with format: ''"
+			expectedIdentifier += " or '<device>'"
 			resp.Diagnostics.AddError(
 				"Unexpected Import Identifier",
 				fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
 			)
 			return
 		}
-		resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("name"), idParts[0])...)
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), idParts[0])...)
-		if len(idParts) == 2 {
+		if len(idParts) == 1 {
 			resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
 		}
 	} else {
-		var identity UserIdentity
+		var identity UserManagementIdentity
 		diags := req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
 		}
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), identity.Name.ValueString())...)
 		if !identity.Device.IsNull() && !identity.Device.IsUnknown() {
 			resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), identity.Device.ValueString())...)
 		}
 	}
 
-	var state User
-	diags := resp.State.Get(ctx, &state)
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
+	var state UserManagement
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getDn())...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

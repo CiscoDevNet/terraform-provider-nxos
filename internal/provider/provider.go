@@ -373,7 +373,7 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewSVIInterfaceResource,
 		NewSVIInterfacesResource,
 		NewSystemResource,
-		NewUserResource,
+		NewUserManagementResource,
 		NewVPCResource,
 		NewVRFResource,
 		NewVRFsResource,
@@ -412,7 +412,7 @@ func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.Data
 		NewSubinterfaceDataSource,
 		NewSVIInterfaceDataSource,
 		NewSystemDataSource,
-		NewUserDataSource,
+		NewUserManagementDataSource,
 		NewVPCDataSource,
 		NewVRFDataSource,
 	}

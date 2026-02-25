@@ -33,11 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosUser(t *testing.T) {
+func TestAccNxosUserManagement(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_user.test", "name", "user1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_user.test", "allow_expired", "yes"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_user.test", "roles.0.name", "network-operator"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.0.name", "user1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.0.allow_expired", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.0.roles.0.name", "network-operator"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -47,16 +47,16 @@ func TestAccNxosUser(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosUserPrerequisitesConfig + testAccNxosUserConfig_all(),
+				Config: testAccNxosUserManagementConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
-				ResourceName:      "nxos_user.test",
+				ResourceName:      "nxos_user_management.test",
 				ImportState:       true,
-				ImportStateIdFunc: nxosUserImportStateIdFunc("nxos_user.test"),
+				ImportStateIdFunc: nxosUserManagementImportStateIdFunc("nxos_user_management.test"),
 			},
 			{
-				ResourceName:       "nxos_user.test",
+				ResourceName:       "nxos_user_management.test",
 				ImportState:        true,
 				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
 				ExpectNonEmptyPlan: true,
@@ -69,33 +69,22 @@ func TestAccNxosUser(t *testing.T) {
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosUserImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func nxosUserManagementImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
-		primary := s.RootModule().Resources[resourceName].Primary
-		Name := primary.Attributes["name"]
 
-		return fmt.Sprintf("%s", Name), nil
+		return fmt.Sprintf(""), nil
 	}
 }
 
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosUserPrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
-  dn = "sys/userext"
-  class_name = "aaaUserEp"
-}
-
-`
 
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosUserConfig_minimum() string {
-	config := `resource "nxos_user" "test" {` + "\n"
-	config += `	name = "user1"` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+func testAccNxosUserManagementConfig_minimum() string {
+	config := `resource "nxos_user_management" "test" {` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -103,14 +92,15 @@ func testAccNxosUserConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosUserConfig_all() string {
-	config := `resource "nxos_user" "test" {` + "\n"
-	config += `	name = "user1"` + "\n"
-	config += `	allow_expired = "yes"` + "\n"
-	config += `	roles = [{` + "\n"
-	config += `		name = "network-operator"` + "\n"
+func testAccNxosUserManagementConfig_all() string {
+	config := `resource "nxos_user_management" "test" {` + "\n"
+	config += `	users = [{` + "\n"
+	config += `		name = "user1"` + "\n"
+	config += `		allow_expired = "yes"` + "\n"
+	config += `		roles = [{` + "\n"
+	config += `			name = "network-operator"` + "\n"
+	config += `		}]` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

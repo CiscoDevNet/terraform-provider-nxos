@@ -44,7 +44,6 @@ type SpanningTree struct {
 
 type SpanningTreeInterfaces struct {
 	InterfaceId types.String `tfsdk:"interface_id"`
-	AdminState  types.String `tfsdk:"admin_state"`
 	BpduFilter  types.String `tfsdk:"bpdu_filter"`
 	BpduGuard   types.String `tfsdk:"bpdu_guard"`
 	Cost        types.Int64  `tfsdk:"cost"`
@@ -110,9 +109,6 @@ func (data SpanningTree) toBody() nxos.Body {
 			if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || false {
 				attrs, _ = sjson.Set(attrs, "id", child.InterfaceId.ValueString())
 			}
-			if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
-				attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
-			}
 			if (!child.BpduFilter.IsUnknown() && !child.BpduFilter.IsNull()) || false {
 				attrs, _ = sjson.Set(attrs, "bpdufilter", child.BpduFilter.ValueString())
 			}
@@ -165,7 +161,6 @@ func (data *SpanningTree) fromBody(res gjson.Result) {
 						if classname.String() == "stpIf" {
 							var child SpanningTreeInterfaces
 							child.InterfaceId = types.StringValue(value.Get("attributes.id").String())
-							child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
 							child.BpduFilter = types.StringValue(value.Get("attributes.bpdufilter").String())
 							child.BpduGuard = types.StringValue(value.Get("attributes.bpduguard").String())
 							child.Cost = types.Int64Value(value.Get("attributes.cost").Int())
@@ -216,11 +211,6 @@ func (data *SpanningTree) updateFromBody(res gjson.Result) {
 			data.Interfaces[c].InterfaceId = types.StringValue(rstpIf.Get("stpIf.attributes.id").String())
 		} else {
 			data.Interfaces[c].InterfaceId = types.StringNull()
-		}
-		if !data.Interfaces[c].AdminState.IsNull() {
-			data.Interfaces[c].AdminState = types.StringValue(rstpIf.Get("stpIf.attributes.adminSt").String())
-		} else {
-			data.Interfaces[c].AdminState = types.StringNull()
 		}
 		if !data.Interfaces[c].BpduFilter.IsNull() {
 			data.Interfaces[c].BpduFilter = types.StringValue(rstpIf.Get("stpIf.attributes.bpdufilter").String())

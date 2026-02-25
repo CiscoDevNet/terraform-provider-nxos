@@ -44,7 +44,6 @@ data "nxos_spanning_tree" "example" {
 
 Read-Only:
 
-- `admin_state` (String) The administrative state of the object or policy.
 - `bpdu_filter` (String) BPDU filter mode.
 - `bpdu_guard` (String) BPDU guard mode.
 - `cost` (Number) Port path cost.

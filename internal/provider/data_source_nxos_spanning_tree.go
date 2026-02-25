@@ -77,10 +77,6 @@ func (d *SpanningTreeDataSource) Schema(ctx context.Context, req datasource.Sche
 							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
 							Computed:            true,
 						},
-						"admin_state": schema.StringAttribute{
-							MarkdownDescription: "The administrative state of the object or policy.",
-							Computed:            true,
-						},
 						"bpdu_filter": schema.StringAttribute{
 							MarkdownDescription: "BPDU filter mode.",
 							Computed:            true,

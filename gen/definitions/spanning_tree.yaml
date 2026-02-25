@@ -28,15 +28,6 @@ child_classes:
             id: true
             description: "Must match first field in the output of `show intf brief`. Example: `eth1/1`."
             example: eth1/9
-          - nxos_name: adminSt
-            tf_name: admin_state
-            type: String
-            enum_values:
-              - enabled
-              - disabled
-            default_value: enabled
-            description: "The administrative state of the object or policy."
-            example: enabled
           - nxos_name: bpdufilter
             tf_name: bpdu_filter
             type: String

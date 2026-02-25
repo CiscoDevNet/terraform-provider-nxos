@@ -91,15 +91,6 @@ func (r *SpanningTreeResource) Schema(ctx context.Context, req resource.SchemaRe
 								stringplanmodifier.RequiresReplace(),
 							},
 						},
-						"admin_state": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
-							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("enabled"),
-							Validators: []validator.String{
-								stringvalidator.OneOf("enabled", "disabled"),
-							},
-						},
 						"bpdu_filter": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("BPDU filter mode.").AddStringEnumDescription("default", "enable", "disable").AddDefaultValueDescription("default").String,
 							Optional:            true,

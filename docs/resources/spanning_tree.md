@@ -26,7 +26,6 @@ This resource can manage the Spanning Tree configuration.
 resource "nxos_spanning_tree" "example" {
   interfaces = [{
     interface_id = "eth1/9"
-    admin_state  = "enabled"
     bpdu_filter  = "enable"
     bpdu_guard   = "enable"
     cost         = 100
@@ -59,9 +58,6 @@ Required:
 
 Optional:
 
-- `admin_state` (String) The administrative state of the object or policy.
-  - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `bpdu_filter` (String) BPDU filter mode.
   - Choices: `default`, `enable`, `disable`
   - Default value: `default`

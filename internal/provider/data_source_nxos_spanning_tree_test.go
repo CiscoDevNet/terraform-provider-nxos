@@ -33,7 +33,6 @@ func TestAccDataSourceNxosSpanningTree(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_spanning_tree.test", "interfaces.*", map[string]string{
 		"interface_id": "eth1/9",
-		"admin_state":  "enabled",
 		"bpdu_filter":  "enable",
 		"bpdu_guard":   "enable",
 		"cost":         "100",
@@ -65,7 +64,6 @@ func testAccDataSourceNxosSpanningTreeConfig() string {
 	config := `resource "nxos_spanning_tree" "test" {` + "\n"
 	config += `	interfaces = [{` + "\n"
 	config += `		interface_id = "eth1/9"` + "\n"
-	config += `		admin_state = "enabled"` + "\n"
 	config += `		bpdu_filter = "enable"` + "\n"
 	config += `		bpdu_guard = "enable"` + "\n"
 	config += `		cost = 100` + "\n"

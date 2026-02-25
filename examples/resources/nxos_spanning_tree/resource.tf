@@ -1,7 +1,6 @@
 resource "nxos_spanning_tree" "example" {
   interfaces = [{
     interface_id = "eth1/9"
-    admin_state  = "enabled"
     bpdu_filter  = "enable"
     bpdu_guard   = "enable"
     cost         = 100

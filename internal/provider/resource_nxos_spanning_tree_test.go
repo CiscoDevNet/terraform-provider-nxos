@@ -36,7 +36,6 @@ import (
 func TestAccNxosSpanningTree(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.interface_id", "eth1/9"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.bpdu_filter", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.bpdu_guard", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.cost", "100"))
@@ -102,7 +101,6 @@ func testAccNxosSpanningTreeConfig_all() string {
 	config := `resource "nxos_spanning_tree" "test" {` + "\n"
 	config += `	interfaces = [{` + "\n"
 	config += `		interface_id = "eth1/9"` + "\n"
-	config += `		admin_state = "enabled"` + "\n"
 	config += `		bpdu_filter = "enable"` + "\n"
 	config += `		bpdu_guard = "enable"` + "\n"
 	config += `		cost = 100` + "\n"

@@ -8,7 +8,7 @@ description: |-
 
 # NXOS Provider
 
-The NXOS provider provides resources to interact with one or [more](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/guides/manage_multiple_devices) Cisco NX-OS devices. Each resource or data source maps to a single NX-OS DME object. There are several [Terraform Modules](https://registry.terraform.io/browse/modules?provider=nxos) available which offer a certain level of abstraction and therefore not requiring in-depth knowledge of the DME object model.
+The NXOS provider provides resources to interact with one or [more](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/guides/manage_multiple_devices) Cisco NX-OS devices.
 
 It communicates with NX-OS devices via the NX-API REST, which requires the following device configuration.
 

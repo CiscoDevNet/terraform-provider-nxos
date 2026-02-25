@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"testing"
 
 	goversion "github.com/hashicorp/go-version"
@@ -32,28 +33,28 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosIPv6VRFs(t *testing.T) {
+func TestAccNxosIPv6(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrfs.test", "items.0.name", "VRF1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrfs.test", "items.0.static_routes.0.prefix", "2001:db8:3333:4444:5555:6666:102:304/128"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrfs.test", "items.0.static_routes.0.next_hops.0.interface_id", "unspecified"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrfs.test", "items.0.static_routes.0.next_hops.0.address", "a:b::c:d/128"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrfs.test", "items.0.static_routes.0.next_hops.0.vrf_name", "default"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrfs.test", "items.0.static_routes.0.next_hops.0.description", "My Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrfs.test", "items.0.static_routes.0.next_hops.0.object", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrfs.test", "items.0.static_routes.0.next_hops.0.preference", "123"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrfs.test", "items.0.static_routes.0.next_hops.0.tag", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrfs.test", "items.0.interfaces.0.interface_id", "eth1/10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrfs.test", "items.0.interfaces.0.auto_configuration", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrfs.test", "items.0.interfaces.0.default_route", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrfs.test", "items.0.interfaces.0.forward", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrfs.test", "items.0.interfaces.0.link_address_use_bia", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrfs.test", "items.0.interfaces.0.use_link_local_address", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrfs.test", "items.0.interfaces.0.urpf", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrfs.test", "items.0.interfaces.0.link_local_address", "2001:db8:3333:4444:5555:6666:7777:8888"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrfs.test", "items.0.interfaces.0.addresses.0.address", "2001:db8:3333:4444:5555:6666:7777:8888"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrfs.test", "items.0.interfaces.0.addresses.0.type", "primary"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6_vrfs.test", "items.0.interfaces.0.addresses.0.tag", "1234"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.prefix", "2001:db8:3333:4444:5555:6666:102:304/128"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.next_hops.0.interface_id", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.next_hops.0.address", "a:b::c:d/128"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.next_hops.0.vrf_name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.next_hops.0.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.next_hops.0.object", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.next_hops.0.preference", "123"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.next_hops.0.tag", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.auto_configuration", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.default_route", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.forward", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.link_address_use_bia", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.use_link_local_address", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.urpf", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.link_local_address", "2001:db8:3333:4444:5555:6666:7777:8888"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.addresses.0.address", "2001:db8:3333:4444:5555:6666:7777:8888"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.addresses.0.type", "primary"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.addresses.0.tag", "1234"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -63,16 +64,16 @@ func TestAccNxosIPv6VRFs(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosIPv6VRFsConfig_all(),
+				Config: testAccNxosIPv6Config_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
-				ResourceName:      "nxos_ipv6_vrfs.test",
+				ResourceName:      "nxos_ipv6.test",
 				ImportState:       true,
-				ImportStateIdFunc: nxosIPv6VRFsImportStateIdFunc("nxos_ipv6_vrfs.test"),
+				ImportStateIdFunc: nxosIPv6ImportStateIdFunc("nxos_ipv6.test"),
 			},
 			{
-				ResourceName:       "nxos_ipv6_vrfs.test",
+				ResourceName:       "nxos_ipv6.test",
 				ImportState:        true,
 				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
 				ExpectNonEmptyPlan: true,
@@ -85,9 +86,10 @@ func TestAccNxosIPv6VRFs(t *testing.T) {
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosIPv6VRFsImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func nxosIPv6ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
-		return "", nil
+
+		return fmt.Sprintf(""), nil
 	}
 }
 
@@ -98,11 +100,8 @@ func nxosIPv6VRFsImportStateIdFunc(resourceName string) resource.ImportStateIdFu
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosIPv6VRFsConfig_minimum() string {
-	config := `resource "nxos_ipv6_vrfs" "test" {` + "\n"
-	config += `	items = [{` + "\n"
-	config += `		name = "VRF1"` + "\n"
-	config += `	}]` + "\n"
+func testAccNxosIPv6Config_minimum() string {
+	config := `resource "nxos_ipv6" "test" {` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -110,9 +109,9 @@ func testAccNxosIPv6VRFsConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosIPv6VRFsConfig_all() string {
-	config := `resource "nxos_ipv6_vrfs" "test" {` + "\n"
-	config += `	items = [{` + "\n"
+func testAccNxosIPv6Config_all() string {
+	config := `resource "nxos_ipv6" "test" {` + "\n"
+	config += `	vrfs = [{` + "\n"
 	config += `		name = "VRF1"` + "\n"
 	config += `		static_routes = [{` + "\n"
 	config += `			prefix = "2001:db8:3333:4444:5555:6666:102:304/128"` + "\n"

@@ -29,13 +29,15 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
-func TestAccDataSourceNxosIPv6VRF(t *testing.T) {
+func TestAccDataSourceNxosIPv6(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6_vrf.test", "name", "VRF1"))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv6_vrf.test", "static_routes.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv6.test", "vrfs.*", map[string]string{
+		"name": "VRF1",
+	}))
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv6.test", "vrfs.*.static_routes.*", map[string]string{
 		"prefix": "2001:db8:3333:4444:5555:6666:102:304/128",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv6_vrf.test", "static_routes.*.next_hops.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv6.test", "vrfs.*.static_routes.*.next_hops.*", map[string]string{
 		"interface_id": "unspecified",
 		"address":      "a:b::c:d/128",
 		"vrf_name":     "default",
@@ -44,7 +46,7 @@ func TestAccDataSourceNxosIPv6VRF(t *testing.T) {
 		"preference":   "123",
 		"tag":          "10",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv6_vrf.test", "interfaces.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv6.test", "vrfs.*.interfaces.*", map[string]string{
 		"interface_id":           "eth1/10",
 		"auto_configuration":     "disabled",
 		"default_route":          "disabled",
@@ -54,7 +56,7 @@ func TestAccDataSourceNxosIPv6VRF(t *testing.T) {
 		"urpf":                   "disabled",
 		"link_local_address":     "2001:db8:3333:4444:5555:6666:7777:8888",
 	}))
-	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv6_vrf.test", "interfaces.*.addresses.*", map[string]string{
+	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv6.test", "vrfs.*.interfaces.*.addresses.*", map[string]string{
 		"address": "2001:db8:3333:4444:5555:6666:7777:8888",
 		"type":    "primary",
 		"tag":     "1234",
@@ -64,7 +66,7 @@ func TestAccDataSourceNxosIPv6VRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosIPv6VRFConfig(),
+				Config: testAccDataSourceNxosIPv6Config(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -78,42 +80,43 @@ func TestAccDataSourceNxosIPv6VRF(t *testing.T) {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
-func testAccDataSourceNxosIPv6VRFConfig() string {
-	config := `resource "nxos_ipv6_vrf" "test" {` + "\n"
-	config += `	name = "VRF1"` + "\n"
-	config += `	static_routes = [{` + "\n"
-	config += `		prefix = "2001:db8:3333:4444:5555:6666:102:304/128"` + "\n"
-	config += `		next_hops = [{` + "\n"
-	config += `			interface_id = "unspecified"` + "\n"
-	config += `			address = "a:b::c:d/128"` + "\n"
-	config += `			vrf_name = "default"` + "\n"
-	config += `			description = "My Description"` + "\n"
-	config += `			object = 10` + "\n"
-	config += `			preference = 123` + "\n"
-	config += `			tag = 10` + "\n"
+func testAccDataSourceNxosIPv6Config() string {
+	config := `resource "nxos_ipv6" "test" {` + "\n"
+	config += `	vrfs = [{` + "\n"
+	config += `		name = "VRF1"` + "\n"
+	config += `		static_routes = [{` + "\n"
+	config += `			prefix = "2001:db8:3333:4444:5555:6666:102:304/128"` + "\n"
+	config += `			next_hops = [{` + "\n"
+	config += `				interface_id = "unspecified"` + "\n"
+	config += `				address = "a:b::c:d/128"` + "\n"
+	config += `				vrf_name = "default"` + "\n"
+	config += `				description = "My Description"` + "\n"
+	config += `				object = 10` + "\n"
+	config += `				preference = 123` + "\n"
+	config += `				tag = 10` + "\n"
+	config += `			}]` + "\n"
 	config += `		}]` + "\n"
-	config += `	}]` + "\n"
-	config += `	interfaces = [{` + "\n"
-	config += `		interface_id = "eth1/10"` + "\n"
-	config += `		auto_configuration = "disabled"` + "\n"
-	config += `		default_route = "disabled"` + "\n"
-	config += `		forward = "disabled"` + "\n"
-	config += `		link_address_use_bia = "disabled"` + "\n"
-	config += `		use_link_local_address = "disabled"` + "\n"
-	config += `		urpf = "disabled"` + "\n"
-	config += `		link_local_address = "2001:db8:3333:4444:5555:6666:7777:8888"` + "\n"
-	config += `		addresses = [{` + "\n"
-	config += `			address = "2001:db8:3333:4444:5555:6666:7777:8888"` + "\n"
-	config += `			type = "primary"` + "\n"
-	config += `			tag = 1234` + "\n"
+	config += `		interfaces = [{` + "\n"
+	config += `			interface_id = "eth1/10"` + "\n"
+	config += `			auto_configuration = "disabled"` + "\n"
+	config += `			default_route = "disabled"` + "\n"
+	config += `			forward = "disabled"` + "\n"
+	config += `			link_address_use_bia = "disabled"` + "\n"
+	config += `			use_link_local_address = "disabled"` + "\n"
+	config += `			urpf = "disabled"` + "\n"
+	config += `			link_local_address = "2001:db8:3333:4444:5555:6666:7777:8888"` + "\n"
+	config += `			addresses = [{` + "\n"
+	config += `				address = "2001:db8:3333:4444:5555:6666:7777:8888"` + "\n"
+	config += `				type = "primary"` + "\n"
+	config += `				tag = 1234` + "\n"
+	config += `			}]` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
 	config += `}` + "\n"
 
 	config += `
-data "nxos_ipv6_vrf" "test" {
-	name = "VRF1"
-	depends_on = [nxos_ipv6_vrf.test]
+data "nxos_ipv6" "test" {
+	depends_on = [nxos_ipv6.test]
 }
 	`
 	return config

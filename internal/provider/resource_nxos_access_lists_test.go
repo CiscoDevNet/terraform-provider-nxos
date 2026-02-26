@@ -36,6 +36,10 @@ import (
 func TestAccNxosAccessLists(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.name", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.fragments", "permit-all"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.ignore_routable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.per_ace_statistics", "off"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.udf_present", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.sequence_number", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.ack", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.action", "permit"))
@@ -63,6 +67,16 @@ func TestAccNxosAccessLists(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.source_prefix_length", "16"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.syn", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.urg", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.capture_session", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.dscp_mask", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.igmp_type", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.load_share", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.priority_all", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.tcp_flags_mask", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.tcp_option_length", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.telemetry_path", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.telemetry_queue", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.type_of_service", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "ingress_interfaces.0.interface_id", "eth1/10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "ingress_interfaces.0.access_list_name", "ACL1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "egress_interfaces.0.interface_id", "eth1/10"))
@@ -125,6 +139,10 @@ func testAccNxosAccessListsConfig_all() string {
 	config := `resource "nxos_access_lists" "test" {` + "\n"
 	config += `	access_lists = [{` + "\n"
 	config += `		name = "ACL1"` + "\n"
+	config += `		fragments = "permit-all"` + "\n"
+	config += `		ignore_routable = false` + "\n"
+	config += `		per_ace_statistics = "off"` + "\n"
+	config += `		udf_present = false` + "\n"
 	config += `		entries = [{` + "\n"
 	config += `			sequence_number = 10` + "\n"
 	config += `			ack = false` + "\n"
@@ -153,6 +171,16 @@ func testAccNxosAccessListsConfig_all() string {
 	config += `			source_prefix_length = "16"` + "\n"
 	config += `			syn = false` + "\n"
 	config += `			urg = false` + "\n"
+	config += `			capture_session = 1` + "\n"
+	config += `			dscp_mask = 0` + "\n"
+	config += `			igmp_type = 0` + "\n"
+	config += `			load_share = false` + "\n"
+	config += `			priority_all = false` + "\n"
+	config += `			tcp_flags_mask = 0` + "\n"
+	config += `			tcp_option_length = 0` + "\n"
+	config += `			telemetry_path = false` + "\n"
+	config += `			telemetry_queue = false` + "\n"
+	config += `			type_of_service = 0` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
 	config += `	ingress_interfaces = [{` + "\n"

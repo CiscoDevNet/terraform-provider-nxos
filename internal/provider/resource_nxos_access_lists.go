@@ -90,6 +90,28 @@ func (r *AccessListsResource) Schema(ctx context.Context, req resource.SchemaReq
 								stringplanmodifier.RequiresReplace(),
 							},
 						},
+						"fragments": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Fragments type for IPv4 and IPv6.").AddStringEnumDescription("disabled", "deny-all", "permit-all").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disabled", "deny-all", "permit-all"),
+							},
+						},
+						"ignore_routable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ignore Multicast Routed ACLs.").String,
+							Optional:            true,
+						},
+						"per_ace_statistics": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Per Access Control Entries statistics.").AddStringEnumDescription("off", "on").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("off", "on"),
+							},
+						},
+						"udf_present": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Flag to denote UDF is present.").String,
+							Optional:            true,
+						},
 						"entries": schema.ListNestedAttribute{
 							MarkdownDescription: "Access list entries.",
 							Optional:            true,
@@ -314,6 +336,72 @@ func (r *AccessListsResource) Schema(ctx context.Context, req resource.SchemaReq
 									"vni": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("NVE VNI ID. Either `invalid` or a number between 0 and 16777216.").String,
 										Optional:            true,
+									},
+									"capture_session": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Capture session.").AddIntegerRangeDescription(0, 48).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 48),
+										},
+									},
+									"dscp_mask": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Match DSCP mask.").AddIntegerRangeDescription(0, 63).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 63),
+										},
+									},
+									"icmp_string": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("ICMP type.").AddStringEnumDescription("echo-reply", "unreachable", "net-unreachable", "host-unreachable", "dod-host-prohibited", "net-tos-unreachable", "host-tos-unreachable", "administratively-prohibited", "host-precedence-unreachable", "precedence-unreachable", "protocol-unreachable", "port-unreachable", "packet-too-big", "source-route-failed", "network-unknown", "host-unknown", "host-isolated", "dod-net-prohibited", "source-quench", "redirect", "net-redirect", "host-redirect", "net-tos-redirect", "host-tos-redirect", "alternate-address", "echo", "router-advertisement", "router-solicitation", "time-exceeded", "ttl-exceeded", "reassembly-timeout", "parameter-problem", "general-parameter-problem", "option-missing", "no-room-for-option", "timestamp-request", "timestamp-reply", "information-request", "information-reply", "mask-request", "mask-reply", "traceroute", "conversion-error", "mobile-redirect").String,
+										Optional:            true,
+									},
+									"igmp_type": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IGMP type.").AddIntegerRangeDescription(0, 16).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 16),
+										},
+									},
+									"load_share": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Load share across redirect ports.").String,
+										Optional:            true,
+									},
+									"priority_all": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Increases priority of IPv4/v6 ACE action.").String,
+										Optional:            true,
+									},
+									"redirect_all": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IPV4/V6 Redirect all action.").String,
+										Optional:            true,
+									},
+									"tcp_flags_mask": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("TCP flags mask.").AddIntegerRangeDescription(0, 64).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 64),
+										},
+									},
+									"tcp_option_length": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("TCP options length.").AddIntegerRangeDescription(0, 41).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 41),
+										},
+									},
+									"telemetry_path": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Telemetry path action.").String,
+										Optional:            true,
+									},
+									"telemetry_queue": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Telemetry queue action.").String,
+										Optional:            true,
+									},
+									"type_of_service": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Type of service.").AddIntegerRangeDescription(0, 15).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 15),
+										},
 									},
 								},
 							},

@@ -77,6 +77,22 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 							MarkdownDescription: "Name of Access lists.",
 							Computed:            true,
 						},
+						"fragments": schema.StringAttribute{
+							MarkdownDescription: "Fragments type for IPv4 and IPv6.",
+							Computed:            true,
+						},
+						"ignore_routable": schema.BoolAttribute{
+							MarkdownDescription: "Ignore Multicast Routed ACLs.",
+							Computed:            true,
+						},
+						"per_ace_statistics": schema.StringAttribute{
+							MarkdownDescription: "Per Access Control Entries statistics.",
+							Computed:            true,
+						},
+						"udf_present": schema.BoolAttribute{
+							MarkdownDescription: "Flag to denote UDF is present.",
+							Computed:            true,
+						},
 						"entries": schema.ListNestedAttribute{
 							MarkdownDescription: "Access list entries.",
 							Computed:            true,
@@ -264,6 +280,54 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 									},
 									"vni": schema.StringAttribute{
 										MarkdownDescription: "NVE VNI ID. Either `invalid` or a number between 0 and 16777216.",
+										Computed:            true,
+									},
+									"capture_session": schema.Int64Attribute{
+										MarkdownDescription: "Capture session.",
+										Computed:            true,
+									},
+									"dscp_mask": schema.Int64Attribute{
+										MarkdownDescription: "Match DSCP mask.",
+										Computed:            true,
+									},
+									"icmp_string": schema.StringAttribute{
+										MarkdownDescription: "ICMP type.",
+										Computed:            true,
+									},
+									"igmp_type": schema.Int64Attribute{
+										MarkdownDescription: "IGMP type.",
+										Computed:            true,
+									},
+									"load_share": schema.BoolAttribute{
+										MarkdownDescription: "Load share across redirect ports.",
+										Computed:            true,
+									},
+									"priority_all": schema.BoolAttribute{
+										MarkdownDescription: "Increases priority of IPv4/v6 ACE action.",
+										Computed:            true,
+									},
+									"redirect_all": schema.StringAttribute{
+										MarkdownDescription: "IPV4/V6 Redirect all action.",
+										Computed:            true,
+									},
+									"tcp_flags_mask": schema.Int64Attribute{
+										MarkdownDescription: "TCP flags mask.",
+										Computed:            true,
+									},
+									"tcp_option_length": schema.Int64Attribute{
+										MarkdownDescription: "TCP options length.",
+										Computed:            true,
+									},
+									"telemetry_path": schema.BoolAttribute{
+										MarkdownDescription: "Telemetry path action.",
+										Computed:            true,
+									},
+									"telemetry_queue": schema.BoolAttribute{
+										MarkdownDescription: "Telemetry queue action.",
+										Computed:            true,
+									},
+									"type_of_service": schema.Int64Attribute{
+										MarkdownDescription: "Type of service.",
 										Computed:            true,
 									},
 								},

@@ -33,7 +33,11 @@ This resource can manage IPv4 access control lists (ACLs) on NX-OS devices, incl
 ```terraform
 resource "nxos_access_lists" "example" {
   access_lists = [{
-    name = "ACL1"
+    name               = "ACL1"
+    fragments          = "permit-all"
+    ignore_routable    = false
+    per_ace_statistics = "off"
+    udf_present        = false
     entries = [{
       sequence_number           = 10
       ack                       = false
@@ -81,6 +85,18 @@ resource "nxos_access_lists" "example" {
       urg                       = false
       vlan                      = 4095
       vni                       = "invalid"
+      capture_session           = 1
+      dscp_mask                 = 0
+      icmp_string               = "echo"
+      igmp_type                 = 0
+      load_share                = false
+      priority_all              = false
+      redirect_all              = "eth1/1"
+      tcp_flags_mask            = 0
+      tcp_option_length         = 0
+      telemetry_path            = false
+      telemetry_queue           = false
+      type_of_service           = 0
     }]
   }]
   ingress_interfaces = [{
@@ -118,6 +134,12 @@ Required:
 Optional:
 
 - `entries` (Attributes List) Access list entries. (see [below for nested schema](#nestedatt--access_lists--entries))
+- `fragments` (String) Fragments type for IPv4 and IPv6.
+  - Choices: `disabled`, `deny-all`, `permit-all`
+- `ignore_routable` (Boolean) Ignore Multicast Routed ACLs.
+- `per_ace_statistics` (String) Per Access Control Entries statistics.
+  - Choices: `off`, `on`
+- `udf_present` (Boolean) Flag to denote UDF is present.
 
 <a id="nestedatt--access_lists--entries"></a>
 ### Nested Schema for `access_lists.entries`
@@ -132,6 +154,8 @@ Optional:
 - `ack` (Boolean) TCP ACK flag.
 - `action` (String) Specify packets to forward or reject.
   - Choices: `invalid`, `permit`, `deny`
+- `capture_session` (Number) Capture session.
+  - Range: `0`-`48`
 - `destination_address_group` (String) Destination address group.
 - `destination_port_1` (String) First destination port number.
   - Choices: `echo`, `discard`, `daytime`, `chargen`, `ftp-data`, `ftp`, `telnet`, `smtp`, `time`, `nameserver`, `whois`, `tacacs`, `domain`, `bootps`, `bootpc`, `tftp`, `gopher`, `finger`, `www`, `hostname`, `pop2`, `pop3`, `sunrpc`, `ident`, `nntp`, `ntp`, `netbios-ns`, `netbios-dgm`, `netbios-ss`, `snmp`, `snmptrap`, `xdmcp`, `bgp`, `irc`, `dnsix`, `mobile-ip`, `pim-auto-rp`, `isakmp`, `biff`, `exec`, `who`, `login`, `syslog`, `cmd`, `lpd`, `talk`, `rip`, `uucp`, `klogin`, `kshell`, `drip`, `non500-isakmp`
@@ -147,6 +171,8 @@ Optional:
 - `destination_prefix_mask` (String) Destination IPv4 prefix mask.
 - `dscp` (Number) Match DSCP.
   - Range: `0`-`63`
+- `dscp_mask` (Number) Match DSCP mask.
+  - Range: `0`-`63`
 - `established` (Boolean) TCP EST flag.
 - `fin` (Boolean) TCP FIN flag.
 - `fragment` (Boolean) Non-initial fragment.
@@ -154,20 +180,27 @@ Optional:
   - Choices: `invalid`, `get`, `put`, `head`, `post`, `delete`, `trace`, `connect`
 - `icmp_code` (Number) ICMP code.
   - Range: `0`-`256`
+- `icmp_string` (String) ICMP type.
+  - Choices: `echo-reply`, `unreachable`, `net-unreachable`, `host-unreachable`, `dod-host-prohibited`, `net-tos-unreachable`, `host-tos-unreachable`, `administratively-prohibited`, `host-precedence-unreachable`, `precedence-unreachable`, `protocol-unreachable`, `port-unreachable`, `packet-too-big`, `source-route-failed`, `network-unknown`, `host-unknown`, `host-isolated`, `dod-net-prohibited`, `source-quench`, `redirect`, `net-redirect`, `host-redirect`, `net-tos-redirect`, `host-tos-redirect`, `alternate-address`, `echo`, `router-advertisement`, `router-solicitation`, `time-exceeded`, `ttl-exceeded`, `reassembly-timeout`, `parameter-problem`, `general-parameter-problem`, `option-missing`, `no-room-for-option`, `timestamp-request`, `timestamp-reply`, `information-request`, `information-reply`, `mask-request`, `mask-reply`, `traceroute`, `conversion-error`, `mobile-redirect`
 - `icmp_type` (Number) ICMP type.
   - Range: `0`-`256`
+- `igmp_type` (Number) IGMP type.
+  - Range: `0`-`16`
+- `load_share` (Boolean) Load share across redirect ports.
 - `log` (Boolean) Log matches against ACL entry.
 - `packet_length_1` (String) First packet length. Either `invalid` or a number between 19 and 9210.
 - `packet_length_2` (String) Second packet length. Either `invalid` or a number between 19 and 9210.
 - `packet_length_operator` (String) Packet length operator.
   - Choices: `none`, `lt`, `gt`, `eq`, `neq`, `range`
 - `precedence` (String) IPv4 precedence. Either `unspecified` or a number between 0 and 7.
+- `priority_all` (Boolean) Increases priority of IPv4/v6 ACE action.
 - `protocol` (String) Protocol for access-list entry.
   - Choices: `ip`, `icmp`, `igmp`, `tcp`, `udp`, `gre`, `esp`, `ahp`, `eigrp`, `ospf`, `nos`, `pim`, `pcp`, `ethertype`, `udf`
 - `protocol_mask` (String) Defines the Protocol Mask.
   - Choices: `ip`, `icmp`, `igmp`, `tcp`, `udp`, `gre`, `esp`, `ahp`, `eigrp`, `ospf`, `nos`, `pim`, `pcp`, `ethertype`, `udf`
 - `psh` (Boolean) TCP PSH flag.
 - `redirect` (String) Redirect action.
+- `redirect_all` (String) IPV4/V6 Redirect all action.
 - `remark` (String) Access-list entry comment.
 - `rev` (Boolean) TCP reversed flag.
 - `rst` (Boolean) TCP RST flag.
@@ -185,9 +218,17 @@ Optional:
 - `source_prefix_length` (String) Source IPv4 prefix length.
 - `source_prefix_mask` (String) Source IPv4 prefix mask.
 - `syn` (Boolean) TCP SYN flag.
+- `tcp_flags_mask` (Number) TCP flags mask.
+  - Range: `0`-`64`
+- `tcp_option_length` (Number) TCP options length.
+  - Range: `0`-`41`
+- `telemetry_path` (Boolean) Telemetry path action.
+- `telemetry_queue` (Boolean) Telemetry queue action.
 - `time_range` (String) Time range name.
 - `ttl` (Number) TTL Operator.
   - Range: `0`-`255`
+- `type_of_service` (Number) Type of service.
+  - Range: `0`-`15`
 - `urg` (Boolean) TCP URG flag.
 - `vlan` (Number) VLAN ID.
   - Range: `0`-`4095`

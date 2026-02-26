@@ -1,6 +1,10 @@
 resource "nxos_access_lists" "example" {
   access_lists = [{
-    name = "ACL1"
+    name               = "ACL1"
+    fragments          = "permit-all"
+    ignore_routable    = false
+    per_ace_statistics = "off"
+    udf_present        = false
     entries = [{
       sequence_number           = 10
       ack                       = false
@@ -48,6 +52,18 @@ resource "nxos_access_lists" "example" {
       urg                       = false
       vlan                      = 4095
       vni                       = "invalid"
+      capture_session           = 1
+      dscp_mask                 = 0
+      icmp_string               = "echo"
+      igmp_type                 = 0
+      load_share                = false
+      priority_all              = false
+      redirect_all              = "eth1/1"
+      tcp_flags_mask            = 0
+      tcp_option_length         = 0
+      telemetry_path            = false
+      telemetry_queue           = false
+      type_of_service           = 0
     }]
   }]
   ingress_interfaces = [{

@@ -55,7 +55,11 @@ data "nxos_access_lists" "example" {
 Read-Only:
 
 - `entries` (Attributes List) Access list entries. (see [below for nested schema](#nestedatt--access_lists--entries))
+- `fragments` (String) Fragments type for IPv4 and IPv6.
+- `ignore_routable` (Boolean) Ignore Multicast Routed ACLs.
 - `name` (String) Name of Access lists.
+- `per_ace_statistics` (String) Per Access Control Entries statistics.
+- `udf_present` (Boolean) Flag to denote UDF is present.
 
 <a id="nestedatt--access_lists--entries"></a>
 ### Nested Schema for `access_lists.entries`
@@ -64,6 +68,7 @@ Read-Only:
 
 - `ack` (Boolean) TCP ACK flag.
 - `action` (String) Specify packets to forward or reject.
+- `capture_session` (Number) Capture session.
 - `destination_address_group` (String) Destination address group.
 - `destination_port_1` (String) First destination port number.
 - `destination_port_2` (String) Second destination port number.
@@ -74,21 +79,27 @@ Read-Only:
 - `destination_prefix_length` (String) Destination IPv4 prefix length.
 - `destination_prefix_mask` (String) Destination IPv4 prefix mask.
 - `dscp` (Number) Match DSCP.
+- `dscp_mask` (Number) Match DSCP mask.
 - `established` (Boolean) TCP EST flag.
 - `fin` (Boolean) TCP FIN flag.
 - `fragment` (Boolean) Non-initial fragment.
 - `http_option_type` (String) HTTP option method.
 - `icmp_code` (Number) ICMP code.
+- `icmp_string` (String) ICMP type.
 - `icmp_type` (Number) ICMP type.
+- `igmp_type` (Number) IGMP type.
+- `load_share` (Boolean) Load share across redirect ports.
 - `log` (Boolean) Log matches against ACL entry.
 - `packet_length_1` (String) First packet length. Either `invalid` or a number between 19 and 9210.
 - `packet_length_2` (String) Second packet length. Either `invalid` or a number between 19 and 9210.
 - `packet_length_operator` (String) Packet length operator.
 - `precedence` (String) IPv4 precedence. Either `unspecified` or a number between 0 and 7.
+- `priority_all` (Boolean) Increases priority of IPv4/v6 ACE action.
 - `protocol` (String) Protocol for access-list entry.
 - `protocol_mask` (String) Defines the Protocol Mask.
 - `psh` (Boolean) TCP PSH flag.
 - `redirect` (String) Redirect action.
+- `redirect_all` (String) IPV4/V6 Redirect all action.
 - `remark` (String) Access-list entry comment.
 - `rev` (Boolean) TCP reversed flag.
 - `rst` (Boolean) TCP RST flag.
@@ -103,8 +114,13 @@ Read-Only:
 - `source_prefix_length` (String) Source IPv4 prefix length.
 - `source_prefix_mask` (String) Source IPv4 prefix mask.
 - `syn` (Boolean) TCP SYN flag.
+- `tcp_flags_mask` (Number) TCP flags mask.
+- `tcp_option_length` (Number) TCP options length.
+- `telemetry_path` (Boolean) Telemetry path action.
+- `telemetry_queue` (Boolean) Telemetry queue action.
 - `time_range` (String) Time range name.
 - `ttl` (Number) TTL Operator.
+- `type_of_service` (Number) Type of service.
 - `urg` (Boolean) TCP URG flag.
 - `vlan` (Number) VLAN ID.
 - `vni` (String) NVE VNI ID. Either `invalid` or a number between 0 and 16777216.

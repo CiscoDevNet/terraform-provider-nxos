@@ -27,6 +27,33 @@ child_classes:
             id: true
             description: 'Name of Access lists.'
             example: ACL1
+          - nxos_name: fragments
+            tf_name: fragments
+            type: String
+            description: "Fragments type for IPv4 and IPv6."
+            enum_values:
+              - disabled
+              - deny-all
+              - permit-all
+            example: permit-all
+          - nxos_name: ignRoutable
+            tf_name: ignore_routable
+            type: Bool
+            description: "Ignore Multicast Routed ACLs."
+            example: false
+          - nxos_name: perACEStatistics
+            tf_name: per_ace_statistics
+            type: String
+            description: "Per Access Control Entries statistics."
+            enum_values:
+              - off
+              - on
+            example: off
+          - nxos_name: udfPresent
+            tf_name: udf_present
+            type: Bool
+            description: "Flag to denote UDF is present."
+            example: false
         child_classes:
           - class_name: ipv4aclACE
             doc_path: Security%20and%20Policing/ipv4acl:ACE/
@@ -689,6 +716,126 @@ child_classes:
                 description: "NVE VNI ID. Either `invalid` or a number between 0 and 16777216."
                 exclude_test: true
                 example: invalid
+              - nxos_name: captureSession
+                tf_name: capture_session
+                type: Int64
+                min_int: 0
+                max_int: 48
+                description: "Capture session."
+                example: 1
+              - nxos_name: dscpMask
+                tf_name: dscp_mask
+                type: Int64
+                min_int: 0
+                max_int: 63
+                description: "Match DSCP mask."
+                example: 0
+              - nxos_name: icmpStr
+                tf_name: icmp_string
+                type: String
+                description: "ICMP type."
+                enum_values:
+                  - echo-reply
+                  - unreachable
+                  - net-unreachable
+                  - host-unreachable
+                  - dod-host-prohibited
+                  - net-tos-unreachable
+                  - host-tos-unreachable
+                  - administratively-prohibited
+                  - host-precedence-unreachable
+                  - precedence-unreachable
+                  - protocol-unreachable
+                  - port-unreachable
+                  - packet-too-big
+                  - source-route-failed
+                  - network-unknown
+                  - host-unknown
+                  - host-isolated
+                  - dod-net-prohibited
+                  - source-quench
+                  - redirect
+                  - net-redirect
+                  - host-redirect
+                  - net-tos-redirect
+                  - host-tos-redirect
+                  - alternate-address
+                  - echo
+                  - router-advertisement
+                  - router-solicitation
+                  - time-exceeded
+                  - ttl-exceeded
+                  - reassembly-timeout
+                  - parameter-problem
+                  - general-parameter-problem
+                  - option-missing
+                  - no-room-for-option
+                  - timestamp-request
+                  - timestamp-reply
+                  - information-request
+                  - information-reply
+                  - mask-request
+                  - mask-reply
+                  - traceroute
+                  - conversion-error
+                  - mobile-redirect
+                allow_non_enum_values: true
+                exclude_test: true
+                example: echo
+              - nxos_name: igmpType
+                tf_name: igmp_type
+                type: Int64
+                min_int: 0
+                max_int: 16
+                description: "IGMP type."
+                example: 0
+              - nxos_name: loadShare
+                tf_name: load_share
+                type: Bool
+                description: "Load share across redirect ports."
+                example: false
+              - nxos_name: priorityAll
+                tf_name: priority_all
+                type: Bool
+                description: "Increases priority of IPv4/v6 ACE action."
+                example: false
+              - nxos_name: redirect_all
+                tf_name: redirect_all
+                type: String
+                description: "IPV4/V6 Redirect all action."
+                exclude_test: true
+                example: "eth1/1"
+              - nxos_name: tcpFlagsMask
+                tf_name: tcp_flags_mask
+                type: Int64
+                min_int: 0
+                max_int: 64
+                description: "TCP flags mask."
+                example: 0
+              - nxos_name: tcpOptionLength
+                tf_name: tcp_option_length
+                type: Int64
+                min_int: 0
+                max_int: 41
+                description: "TCP options length."
+                example: 0
+              - nxos_name: telemetryPath
+                tf_name: telemetry_path
+                type: Bool
+                description: "Telemetry path action."
+                example: false
+              - nxos_name: telemetryQueue
+                tf_name: telemetry_queue
+                type: Bool
+                description: "Telemetry queue action."
+                example: false
+              - nxos_name: tos
+                tf_name: type_of_service
+                type: Int64
+                min_int: 0
+                max_int: 15
+                description: "Type of service."
+                example: 0
       - class_name: aclPolicy
         doc_path: Security%20and%20Policing/acl:Policy/
         rn: policy

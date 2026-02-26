@@ -32,7 +32,11 @@ import (
 func TestAccDataSourceNxosAccessLists(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_access_lists.test", "access_lists.*", map[string]string{
-		"name": "ACL1",
+		"name":               "ACL1",
+		"fragments":          "permit-all",
+		"ignore_routable":    "false",
+		"per_ace_statistics": "off",
+		"udf_present":        "false",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_access_lists.test", "access_lists.*.entries.*", map[string]string{
 		"sequence_number":           "10",
@@ -62,6 +66,16 @@ func TestAccDataSourceNxosAccessLists(t *testing.T) {
 		"source_prefix_length":      "16",
 		"syn":                       "false",
 		"urg":                       "false",
+		"capture_session":           "1",
+		"dscp_mask":                 "0",
+		"igmp_type":                 "0",
+		"load_share":                "false",
+		"priority_all":              "false",
+		"tcp_flags_mask":            "0",
+		"tcp_option_length":         "0",
+		"telemetry_path":            "false",
+		"telemetry_queue":           "false",
+		"type_of_service":           "0",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_access_lists.test", "ingress_interfaces.*", map[string]string{
 		"interface_id": "eth1/10",
@@ -98,6 +112,10 @@ func testAccDataSourceNxosAccessListsConfig() string {
 	config := `resource "nxos_access_lists" "test" {` + "\n"
 	config += `	access_lists = [{` + "\n"
 	config += `		name = "ACL1"` + "\n"
+	config += `		fragments = "permit-all"` + "\n"
+	config += `		ignore_routable = false` + "\n"
+	config += `		per_ace_statistics = "off"` + "\n"
+	config += `		udf_present = false` + "\n"
 	config += `		entries = [{` + "\n"
 	config += `			sequence_number = 10` + "\n"
 	config += `			ack = false` + "\n"
@@ -126,6 +144,16 @@ func testAccDataSourceNxosAccessListsConfig() string {
 	config += `			source_prefix_length = "16"` + "\n"
 	config += `			syn = false` + "\n"
 	config += `			urg = false` + "\n"
+	config += `			capture_session = 1` + "\n"
+	config += `			dscp_mask = 0` + "\n"
+	config += `			igmp_type = 0` + "\n"
+	config += `			load_share = false` + "\n"
+	config += `			priority_all = false` + "\n"
+	config += `			tcp_flags_mask = 0` + "\n"
+	config += `			tcp_option_length = 0` + "\n"
+	config += `			telemetry_path = false` + "\n"
+	config += `			telemetry_queue = false` + "\n"
+	config += `			type_of_service = 0` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
 	config += `	ingress_interfaces = [{` + "\n"

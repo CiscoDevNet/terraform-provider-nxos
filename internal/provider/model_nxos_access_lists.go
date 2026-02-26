@@ -46,8 +46,12 @@ type AccessLists struct {
 }
 
 type AccessListsAccessLists struct {
-	Name    types.String                    `tfsdk:"name"`
-	Entries []AccessListsAccessListsEntries `tfsdk:"entries"`
+	Name             types.String                    `tfsdk:"name"`
+	Fragments        types.String                    `tfsdk:"fragments"`
+	IgnoreRoutable   types.Bool                      `tfsdk:"ignore_routable"`
+	PerAceStatistics types.String                    `tfsdk:"per_ace_statistics"`
+	UdfPresent       types.Bool                      `tfsdk:"udf_present"`
+	Entries          []AccessListsAccessListsEntries `tfsdk:"entries"`
 }
 
 type AccessListsAccessListsEntries struct {
@@ -97,6 +101,18 @@ type AccessListsAccessListsEntries struct {
 	Urg                     types.Bool   `tfsdk:"urg"`
 	Vlan                    types.Int64  `tfsdk:"vlan"`
 	Vni                     types.String `tfsdk:"vni"`
+	CaptureSession          types.Int64  `tfsdk:"capture_session"`
+	DscpMask                types.Int64  `tfsdk:"dscp_mask"`
+	IcmpString              types.String `tfsdk:"icmp_string"`
+	IgmpType                types.Int64  `tfsdk:"igmp_type"`
+	LoadShare               types.Bool   `tfsdk:"load_share"`
+	PriorityAll             types.Bool   `tfsdk:"priority_all"`
+	RedirectAll             types.String `tfsdk:"redirect_all"`
+	TcpFlagsMask            types.Int64  `tfsdk:"tcp_flags_mask"`
+	TcpOptionLength         types.Int64  `tfsdk:"tcp_option_length"`
+	TelemetryPath           types.Bool   `tfsdk:"telemetry_path"`
+	TelemetryQueue          types.Bool   `tfsdk:"telemetry_queue"`
+	TypeOfService           types.Int64  `tfsdk:"type_of_service"`
 }
 
 type AccessListsIngressInterfaces struct {
@@ -176,6 +192,18 @@ func (data AccessLists) toBody() nxos.Body {
 			attrs = "{}"
 			if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
 				attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
+			}
+			if (!child.Fragments.IsUnknown() && !child.Fragments.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "fragments", child.Fragments.ValueString())
+			}
+			if (!child.IgnoreRoutable.IsUnknown() && !child.IgnoreRoutable.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "ignRoutable", strconv.FormatBool(child.IgnoreRoutable.ValueBool()))
+			}
+			if (!child.PerAceStatistics.IsUnknown() && !child.PerAceStatistics.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "perACEStatistics", child.PerAceStatistics.ValueString())
+			}
+			if (!child.UdfPresent.IsUnknown() && !child.UdfPresent.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "udfPresent", strconv.FormatBool(child.UdfPresent.ValueBool()))
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipv4aclACL.attributes", attrs)
 			{
@@ -321,6 +349,42 @@ func (data AccessLists) toBody() nxos.Body {
 					if (!child.Vni.IsUnknown() && !child.Vni.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "vni", child.Vni.ValueString())
 					}
+					if (!child.CaptureSession.IsUnknown() && !child.CaptureSession.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "captureSession", strconv.FormatInt(child.CaptureSession.ValueInt64(), 10))
+					}
+					if (!child.DscpMask.IsUnknown() && !child.DscpMask.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "dscpMask", strconv.FormatInt(child.DscpMask.ValueInt64(), 10))
+					}
+					if (!child.IcmpString.IsUnknown() && !child.IcmpString.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "icmpStr", child.IcmpString.ValueString())
+					}
+					if (!child.IgmpType.IsUnknown() && !child.IgmpType.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "igmpType", strconv.FormatInt(child.IgmpType.ValueInt64(), 10))
+					}
+					if (!child.LoadShare.IsUnknown() && !child.LoadShare.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "loadShare", strconv.FormatBool(child.LoadShare.ValueBool()))
+					}
+					if (!child.PriorityAll.IsUnknown() && !child.PriorityAll.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "priorityAll", strconv.FormatBool(child.PriorityAll.ValueBool()))
+					}
+					if (!child.RedirectAll.IsUnknown() && !child.RedirectAll.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "redirect_all", child.RedirectAll.ValueString())
+					}
+					if (!child.TcpFlagsMask.IsUnknown() && !child.TcpFlagsMask.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "tcpFlagsMask", strconv.FormatInt(child.TcpFlagsMask.ValueInt64(), 10))
+					}
+					if (!child.TcpOptionLength.IsUnknown() && !child.TcpOptionLength.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "tcpOptionLength", strconv.FormatInt(child.TcpOptionLength.ValueInt64(), 10))
+					}
+					if (!child.TelemetryPath.IsUnknown() && !child.TelemetryPath.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "telemetryPath", strconv.FormatBool(child.TelemetryPath.ValueBool()))
+					}
+					if (!child.TelemetryQueue.IsUnknown() && !child.TelemetryQueue.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "telemetryQueue", strconv.FormatBool(child.TelemetryQueue.ValueBool()))
+					}
+					if (!child.TypeOfService.IsUnknown() && !child.TypeOfService.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "tos", strconv.FormatInt(child.TypeOfService.ValueInt64(), 10))
+					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipv4aclACE.attributes", attrs)
 				}
 			}
@@ -411,6 +475,10 @@ func (data *AccessLists) fromBody(res gjson.Result) {
 						if classname.String() == "ipv4aclACL" {
 							var child AccessListsAccessLists
 							child.Name = types.StringValue(value.Get("attributes.name").String())
+							child.Fragments = types.StringValue(value.Get("attributes.fragments").String())
+							child.IgnoreRoutable = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.ignRoutable").String()))
+							child.PerAceStatistics = types.StringValue(value.Get("attributes.perACEStatistics").String())
+							child.UdfPresent = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.udfPresent").String()))
 							value.Get("children").ForEach(
 								func(_, nestedV gjson.Result) bool {
 									nestedV.ForEach(
@@ -463,6 +531,18 @@ func (data *AccessLists) fromBody(res gjson.Result) {
 												nestedChildipv4aclACE.Urg = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.urg").String()))
 												nestedChildipv4aclACE.Vlan = types.Int64Value(nestedValue.Get("attributes.vlan").Int())
 												nestedChildipv4aclACE.Vni = types.StringValue(nestedValue.Get("attributes.vni").String())
+												nestedChildipv4aclACE.CaptureSession = types.Int64Value(nestedValue.Get("attributes.captureSession").Int())
+												nestedChildipv4aclACE.DscpMask = types.Int64Value(nestedValue.Get("attributes.dscpMask").Int())
+												nestedChildipv4aclACE.IcmpString = types.StringValue(nestedValue.Get("attributes.icmpStr").String())
+												nestedChildipv4aclACE.IgmpType = types.Int64Value(nestedValue.Get("attributes.igmpType").Int())
+												nestedChildipv4aclACE.LoadShare = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.loadShare").String()))
+												nestedChildipv4aclACE.PriorityAll = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.priorityAll").String()))
+												nestedChildipv4aclACE.RedirectAll = types.StringValue(nestedValue.Get("attributes.redirect_all").String())
+												nestedChildipv4aclACE.TcpFlagsMask = types.Int64Value(nestedValue.Get("attributes.tcpFlagsMask").Int())
+												nestedChildipv4aclACE.TcpOptionLength = types.Int64Value(nestedValue.Get("attributes.tcpOptionLength").Int())
+												nestedChildipv4aclACE.TelemetryPath = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.telemetryPath").String()))
+												nestedChildipv4aclACE.TelemetryQueue = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.telemetryQueue").String()))
+												nestedChildipv4aclACE.TypeOfService = types.Int64Value(nestedValue.Get("attributes.tos").Int())
 												child.Entries = append(child.Entries, nestedChildipv4aclACE)
 											}
 											return true
@@ -611,6 +691,26 @@ func (data *AccessLists) updateFromBody(res gjson.Result) {
 			data.AccessLists[c].Name = types.StringValue(ripv4aclACL.Get("ipv4aclACL.attributes.name").String())
 		} else {
 			data.AccessLists[c].Name = types.StringNull()
+		}
+		if !data.AccessLists[c].Fragments.IsNull() {
+			data.AccessLists[c].Fragments = types.StringValue(ripv4aclACL.Get("ipv4aclACL.attributes.fragments").String())
+		} else {
+			data.AccessLists[c].Fragments = types.StringNull()
+		}
+		if !data.AccessLists[c].IgnoreRoutable.IsNull() {
+			data.AccessLists[c].IgnoreRoutable = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACL.Get("ipv4aclACL.attributes.ignRoutable").String()))
+		} else {
+			data.AccessLists[c].IgnoreRoutable = types.BoolNull()
+		}
+		if !data.AccessLists[c].PerAceStatistics.IsNull() {
+			data.AccessLists[c].PerAceStatistics = types.StringValue(ripv4aclACL.Get("ipv4aclACL.attributes.perACEStatistics").String())
+		} else {
+			data.AccessLists[c].PerAceStatistics = types.StringNull()
+		}
+		if !data.AccessLists[c].UdfPresent.IsNull() {
+			data.AccessLists[c].UdfPresent = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACL.Get("ipv4aclACL.attributes.udfPresent").String()))
+		} else {
+			data.AccessLists[c].UdfPresent = types.BoolNull()
 		}
 		for nc := range data.AccessLists[c].Entries {
 			var ripv4aclACE gjson.Result
@@ -853,6 +953,66 @@ func (data *AccessLists) updateFromBody(res gjson.Result) {
 				data.AccessLists[c].Entries[nc].Vni = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.vni").String())
 			} else {
 				data.AccessLists[c].Entries[nc].Vni = types.StringNull()
+			}
+			if !data.AccessLists[c].Entries[nc].CaptureSession.IsNull() {
+				data.AccessLists[c].Entries[nc].CaptureSession = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.captureSession").Int())
+			} else {
+				data.AccessLists[c].Entries[nc].CaptureSession = types.Int64Null()
+			}
+			if !data.AccessLists[c].Entries[nc].DscpMask.IsNull() {
+				data.AccessLists[c].Entries[nc].DscpMask = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.dscpMask").Int())
+			} else {
+				data.AccessLists[c].Entries[nc].DscpMask = types.Int64Null()
+			}
+			if !data.AccessLists[c].Entries[nc].IcmpString.IsNull() {
+				data.AccessLists[c].Entries[nc].IcmpString = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.icmpStr").String())
+			} else {
+				data.AccessLists[c].Entries[nc].IcmpString = types.StringNull()
+			}
+			if !data.AccessLists[c].Entries[nc].IgmpType.IsNull() {
+				data.AccessLists[c].Entries[nc].IgmpType = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.igmpType").Int())
+			} else {
+				data.AccessLists[c].Entries[nc].IgmpType = types.Int64Null()
+			}
+			if !data.AccessLists[c].Entries[nc].LoadShare.IsNull() {
+				data.AccessLists[c].Entries[nc].LoadShare = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.loadShare").String()))
+			} else {
+				data.AccessLists[c].Entries[nc].LoadShare = types.BoolNull()
+			}
+			if !data.AccessLists[c].Entries[nc].PriorityAll.IsNull() {
+				data.AccessLists[c].Entries[nc].PriorityAll = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.priorityAll").String()))
+			} else {
+				data.AccessLists[c].Entries[nc].PriorityAll = types.BoolNull()
+			}
+			if !data.AccessLists[c].Entries[nc].RedirectAll.IsNull() {
+				data.AccessLists[c].Entries[nc].RedirectAll = types.StringValue(ripv4aclACE.Get("ipv4aclACE.attributes.redirect_all").String())
+			} else {
+				data.AccessLists[c].Entries[nc].RedirectAll = types.StringNull()
+			}
+			if !data.AccessLists[c].Entries[nc].TcpFlagsMask.IsNull() {
+				data.AccessLists[c].Entries[nc].TcpFlagsMask = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.tcpFlagsMask").Int())
+			} else {
+				data.AccessLists[c].Entries[nc].TcpFlagsMask = types.Int64Null()
+			}
+			if !data.AccessLists[c].Entries[nc].TcpOptionLength.IsNull() {
+				data.AccessLists[c].Entries[nc].TcpOptionLength = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.tcpOptionLength").Int())
+			} else {
+				data.AccessLists[c].Entries[nc].TcpOptionLength = types.Int64Null()
+			}
+			if !data.AccessLists[c].Entries[nc].TelemetryPath.IsNull() {
+				data.AccessLists[c].Entries[nc].TelemetryPath = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.telemetryPath").String()))
+			} else {
+				data.AccessLists[c].Entries[nc].TelemetryPath = types.BoolNull()
+			}
+			if !data.AccessLists[c].Entries[nc].TelemetryQueue.IsNull() {
+				data.AccessLists[c].Entries[nc].TelemetryQueue = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.telemetryQueue").String()))
+			} else {
+				data.AccessLists[c].Entries[nc].TelemetryQueue = types.BoolNull()
+			}
+			if !data.AccessLists[c].Entries[nc].TypeOfService.IsNull() {
+				data.AccessLists[c].Entries[nc].TypeOfService = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.tos").Int())
+			} else {
+				data.AccessLists[c].Entries[nc].TypeOfService = types.Int64Null()
 			}
 		}
 	}

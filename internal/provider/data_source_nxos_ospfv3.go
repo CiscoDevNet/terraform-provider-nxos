@@ -69,7 +69,7 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Computed:            true,
 			},
 			"admin_state": schema.StringAttribute{
-				MarkdownDescription: "Administrative state",
+				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
 			"instances": schema.ListNestedAttribute{
@@ -82,7 +82,7 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 							Computed:            true,
 						},
 						"admin_state": schema.StringAttribute{
-							MarkdownDescription: "Administrative state.",
+							MarkdownDescription: "The administrative state of the object or policy.",
 							Computed:            true,
 						},
 						"vrfs": schema.ListNestedAttribute{
@@ -95,23 +95,23 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 										Computed:            true,
 									},
 									"admin_state": schema.StringAttribute{
-										MarkdownDescription: "Administrative state.",
+										MarkdownDescription: "OSPFv3 VRF administrative state.",
 										Computed:            true,
 									},
 									"bandwidth_reference": schema.Int64Attribute{
-										MarkdownDescription: "Bandwidth reference value",
+										MarkdownDescription: "Bandwidth reference value, holds the range from 1-4000000 if unit is mbps and holds range from 1-4000 if unit is gbps.",
 										Computed:            true,
 									},
 									"bandwidth_reference_unit": schema.StringAttribute{
-										MarkdownDescription: "Bandwidth reference unit",
+										MarkdownDescription: "Bandwidth reference unit (Mbps or Gbps).",
 										Computed:            true,
 									},
 									"router_id": schema.StringAttribute{
-										MarkdownDescription: "Router ID",
+										MarkdownDescription: "Router identifier for this VRF.",
 										Computed:            true,
 									},
 									"bfd_control": schema.BoolAttribute{
-										MarkdownDescription: "Holds the controls for bfd",
+										MarkdownDescription: "Holds the controls for bfd.",
 										Computed:            true,
 									},
 									"areas": schema.ListNestedAttribute{
@@ -120,23 +120,23 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"area_id": schema.StringAttribute{
-													MarkdownDescription: "Area identifier to which a network or interface belongs in IPv4 address format.",
+													MarkdownDescription: "Area Id as an integer or ip address.",
 													Computed:            true,
 												},
 												"redistribute": schema.BoolAttribute{
-													MarkdownDescription: "Send redistributed LSAs into NSSA area",
+													MarkdownDescription: "Send redistributed LSAs into NSSA area.",
 													Computed:            true,
 												},
 												"summary": schema.BoolAttribute{
-													MarkdownDescription: "Originate summary LSA into other areas",
+													MarkdownDescription: "Originate summary LSA into other areas.",
 													Computed:            true,
 												},
 												"suppress_forward_address": schema.BoolAttribute{
-													MarkdownDescription: "Originate summary LSA into other areas",
+													MarkdownDescription: "Supress forwarding address in translated LSA.",
 													Computed:            true,
 												},
 												"type": schema.StringAttribute{
-													MarkdownDescription: "Configure area type as NSSA or stub",
+													MarkdownDescription: "Configure area type as NSSA or stub.",
 													Computed:            true,
 												},
 											},
@@ -148,7 +148,7 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"address_family_type": schema.StringAttribute{
-													MarkdownDescription: "IPv6 unicast address family type",
+													MarkdownDescription: "IPv6 unicast address family type.",
 													Computed:            true,
 												},
 												"administrative_distance": schema.StringAttribute{
@@ -160,7 +160,7 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 													Computed:            true,
 												},
 												"max_ecmp_cost": schema.Int64Attribute{
-													MarkdownDescription: "Maximum Equal Cost Multi Path(ECMP)",
+													MarkdownDescription: "Maximum Equal Cost Multi Path(ECMP).",
 													Computed:            true,
 												},
 											},
@@ -182,39 +182,39 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 							Computed:            true,
 						},
 						"advertise_secondaries": schema.BoolAttribute{
-							MarkdownDescription: "Advertise secondary IPv6 addresses",
+							MarkdownDescription: "Advertise secondary IPv6 addresses.",
 							Computed:            true,
 						},
 						"area": schema.StringAttribute{
-							MarkdownDescription: "Area identifier to which a network or interface belongs in IPv4 address format.",
+							MarkdownDescription: "Area associated with interface.",
 							Computed:            true,
 						},
-						"bfd": schema.StringAttribute{
-							MarkdownDescription: "Bidirectional Forwarding Detection (BFD).",
+						"bfd_control": schema.StringAttribute{
+							MarkdownDescription: "Bidirectional Forwarding Detection (BFD) control.",
 							Computed:            true,
 						},
 						"cost": schema.Int64Attribute{
-							MarkdownDescription: "Specifies the cost of interface.",
+							MarkdownDescription: "Cost associated with interface.",
 							Computed:            true,
 						},
 						"dead_interval": schema.Int64Attribute{
-							MarkdownDescription: "Dead interval, interval after which router declares that neighbor as down.",
+							MarkdownDescription: "Dead interval, interval during which at least one hello packet must be received from a neighbor before the router declares that neighbor as down.",
 							Computed:            true,
 						},
 						"hello_interval": schema.Int64Attribute{
-							MarkdownDescription: "Hello interval, interval between hello packets that OSPF sends on the interface.",
+							MarkdownDescription: "Interval between hello packets that OSPFv3 sends on the interface.",
 							Computed:            true,
 						},
 						"network_type": schema.StringAttribute{
-							MarkdownDescription: "Network type.",
+							MarkdownDescription: "Network Type, can be Point-to-point or Broadcast.",
 							Computed:            true,
 						},
 						"passive": schema.StringAttribute{
-							MarkdownDescription: "Passive interface control. Interface can be configured as passive or non-passive.",
+							MarkdownDescription: "Suppress routing updates on the interface.",
 							Computed:            true,
 						},
 						"priority": schema.Int64Attribute{
-							MarkdownDescription: "Priority, used in determining the designated router on this network.",
+							MarkdownDescription: "Router priority, used in determining the designated router on this network.",
 							Computed:            true,
 						},
 					},

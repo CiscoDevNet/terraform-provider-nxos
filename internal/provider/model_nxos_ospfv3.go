@@ -81,7 +81,7 @@ type OSPFv3Interfaces struct {
 	InterfaceId          types.String `tfsdk:"interface_id"`
 	AdvertiseSecondaries types.Bool   `tfsdk:"advertise_secondaries"`
 	Area                 types.String `tfsdk:"area"`
-	Bfd                  types.String `tfsdk:"bfd"`
+	BfdControl           types.String `tfsdk:"bfd_control"`
 	Cost                 types.Int64  `tfsdk:"cost"`
 	DeadInterval         types.Int64  `tfsdk:"dead_interval"`
 	HelloInterval        types.Int64  `tfsdk:"hello_interval"`
@@ -240,8 +240,8 @@ func (data OSPFv3) toBody() nxos.Body {
 		if (!child.Area.IsUnknown() && !child.Area.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "area", child.Area.ValueString())
 		}
-		if (!child.Bfd.IsUnknown() && !child.Bfd.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "bfdCtrl", child.Bfd.ValueString())
+		if (!child.BfdControl.IsUnknown() && !child.BfdControl.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "bfdCtrl", child.BfdControl.ValueString())
 		}
 		if (!child.Cost.IsUnknown() && !child.Cost.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "cost", strconv.FormatInt(child.Cost.ValueInt64(), 10))
@@ -355,7 +355,7 @@ func (data *OSPFv3) fromBody(res gjson.Result) {
 						child.InterfaceId = types.StringValue(value.Get("attributes.id").String())
 						child.AdvertiseSecondaries = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.advSecondary").String()))
 						child.Area = types.StringValue(value.Get("attributes.area").String())
-						child.Bfd = types.StringValue(value.Get("attributes.bfdCtrl").String())
+						child.BfdControl = types.StringValue(value.Get("attributes.bfdCtrl").String())
 						child.Cost = types.Int64Value(value.Get("attributes.cost").Int())
 						child.DeadInterval = types.Int64Value(value.Get("attributes.deadIntvl").Int())
 						child.HelloInterval = types.Int64Value(value.Get("attributes.helloIntvl").Int())
@@ -546,10 +546,10 @@ func (data *OSPFv3) updateFromBody(res gjson.Result) {
 		} else {
 			data.Interfaces[c].Area = types.StringNull()
 		}
-		if !data.Interfaces[c].Bfd.IsNull() {
-			data.Interfaces[c].Bfd = types.StringValue(rospfv3If.Get("ospfv3If.attributes.bfdCtrl").String())
+		if !data.Interfaces[c].BfdControl.IsNull() {
+			data.Interfaces[c].BfdControl = types.StringValue(rospfv3If.Get("ospfv3If.attributes.bfdCtrl").String())
 		} else {
-			data.Interfaces[c].Bfd = types.StringNull()
+			data.Interfaces[c].BfdControl = types.StringNull()
 		}
 		if !data.Interfaces[c].Cost.IsNull() {
 			data.Interfaces[c].Cost = types.Int64Value(rospfv3If.Get("ospfv3If.attributes.cost").Int())

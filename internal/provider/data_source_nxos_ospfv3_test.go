@@ -61,7 +61,7 @@ func TestAccDataSourceNxosOSPFv3(t *testing.T) {
 		"interface_id":          "eth1/10",
 		"advertise_secondaries": "false",
 		"area":                  "0.0.0.10",
-		"bfd":                   "disabled",
+		"bfd_control":           "disabled",
 		"cost":                  "1000",
 		"dead_interval":         "60",
 		"hello_interval":        "15",
@@ -150,7 +150,7 @@ func testAccDataSourceNxosOSPFv3Config() string {
 	config += `		interface_id = "eth1/10"` + "\n"
 	config += `		advertise_secondaries = false` + "\n"
 	config += `		area = "0.0.0.10"` + "\n"
-	config += `		bfd = "disabled"` + "\n"
+	config += `		bfd_control = "disabled"` + "\n"
 	config += `		cost = 1000` + "\n"
 	config += `		dead_interval = 60` + "\n"
 	config += `		hello_interval = 15` + "\n"

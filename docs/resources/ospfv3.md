@@ -57,7 +57,7 @@ resource "nxos_ospfv3" "example" {
     interface_id          = "eth1/10"
     advertise_secondaries = false
     area                  = "0.0.0.10"
-    bfd                   = "disabled"
+    bfd_control           = "disabled"
     cost                  = 1000
     dead_interval         = 60
     hello_interval        = 15
@@ -73,9 +73,8 @@ resource "nxos_ospfv3" "example" {
 
 ### Optional
 
-- `admin_state` (String) Administrative state
+- `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `device` (String) A device name from the provider configuration.
 - `instances` (Attributes List) List of OSPFv3 instances. (see [below for nested schema](#nestedatt--instances))
 - `interfaces` (Attributes List) List of OSPFv3 interface configurations. (see [below for nested schema](#nestedatt--interfaces))
@@ -93,9 +92,8 @@ Required:
 
 Optional:
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `vrfs` (Attributes List) List of OSPFv3 VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
 
 <a id="nestedatt--instances--vrfs"></a>
@@ -108,39 +106,30 @@ Required:
 Optional:
 
 - `address_families` (Attributes List) List of OSPFv3 address families. (see [below for nested schema](#nestedatt--instances--vrfs--address_families))
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) OSPFv3 VRF administrative state.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `areas` (Attributes List) List of OSPFv3 areas. (see [below for nested schema](#nestedatt--instances--vrfs--areas))
-- `bandwidth_reference` (Number) Bandwidth reference value
+- `bandwidth_reference` (Number) Bandwidth reference value, holds the range from 1-4000000 if unit is mbps and holds range from 1-4000 if unit is gbps.
   - Range: `0`-`4294967295`
-  - Default value: `40000`
-- `bandwidth_reference_unit` (String) Bandwidth reference unit
+- `bandwidth_reference_unit` (String) Bandwidth reference unit (Mbps or Gbps).
   - Choices: `mbps`, `gbps`
-  - Default value: `mbps`
-- `bfd_control` (Boolean) Holds the controls for bfd
-  - Default value: `true`
-- `router_id` (String) Router ID
-  - Default value: `0.0.0.0`
+- `bfd_control` (Boolean) Holds the controls for bfd.
+- `router_id` (String) Router identifier for this VRF.
 
 <a id="nestedatt--instances--vrfs--address_families"></a>
 ### Nested Schema for `instances.vrfs.address_families`
 
 Required:
 
-- `address_family_type` (String) IPv6 unicast address family type
+- `address_family_type` (String) IPv6 unicast address family type.
   - Choices: `ipv6-ucast`
-  - Default value: `ipv6-ucast`
 
 Optional:
 
 - `administrative_distance` (String) Adminitrative distance. Value must be an integer range [1,255] or keyword: unspecified
-  - Default value: `unspecified`
 - `default_metric` (String) Default metric for redistributed routes. Value must be an integer range [0,16777214] or keyword: unspecified
-  - Default value: `unspecified`
-- `max_ecmp_cost` (Number) Maximum Equal Cost Multi Path(ECMP)
+- `max_ecmp_cost` (Number) Maximum Equal Cost Multi Path(ECMP).
   - Range: `1`-`64`
-  - Default value: `8`
 
 
 <a id="nestedatt--instances--vrfs--areas"></a>
@@ -148,20 +137,15 @@ Optional:
 
 Required:
 
-- `area_id` (String) Area identifier to which a network or interface belongs in IPv4 address format.
-  - Default value: `0.0.0.0`
+- `area_id` (String) Area Id as an integer or ip address.
 
 Optional:
 
-- `redistribute` (Boolean) Send redistributed LSAs into NSSA area
-  - Default value: `true`
-- `summary` (Boolean) Originate summary LSA into other areas
-  - Default value: `true`
-- `suppress_forward_address` (Boolean) Originate summary LSA into other areas
-  - Default value: `false`
-- `type` (String) Configure area type as NSSA or stub
+- `redistribute` (Boolean) Send redistributed LSAs into NSSA area.
+- `summary` (Boolean) Originate summary LSA into other areas.
+- `suppress_forward_address` (Boolean) Supress forwarding address in translated LSA.
+- `type` (String) Configure area type as NSSA or stub.
   - Choices: `regular`, `stub`, `nssa`
-  - Default value: `regular`
 
 
 
@@ -175,31 +159,22 @@ Required:
 
 Optional:
 
-- `advertise_secondaries` (Boolean) Advertise secondary IPv6 addresses
-  - Default value: `true`
-- `area` (String) Area identifier to which a network or interface belongs in IPv4 address format.
-  - Default value: `0.0.0.0`
-- `bfd` (String) Bidirectional Forwarding Detection (BFD).
+- `advertise_secondaries` (Boolean) Advertise secondary IPv6 addresses.
+- `area` (String) Area associated with interface.
+- `bfd_control` (String) Bidirectional Forwarding Detection (BFD) control.
   - Choices: `unspecified`, `enabled`, `disabled`
-  - Default value: `unspecified`
-- `cost` (Number) Specifies the cost of interface.
+- `cost` (Number) Cost associated with interface.
   - Range: `0`-`65535`
-  - Default value: `0`
-- `dead_interval` (Number) Dead interval, interval after which router declares that neighbor as down.
+- `dead_interval` (Number) Dead interval, interval during which at least one hello packet must be received from a neighbor before the router declares that neighbor as down.
   - Range: `0`-`65535`
-  - Default value: `0`
-- `hello_interval` (Number) Hello interval, interval between hello packets that OSPF sends on the interface.
-  - Range: `0`-`65535`
-  - Default value: `10`
-- `network_type` (String) Network type.
+- `hello_interval` (Number) Interval between hello packets that OSPFv3 sends on the interface.
+  - Range: `1`-`65535`
+- `network_type` (String) Network Type, can be Point-to-point or Broadcast.
   - Choices: `none`, `p2p`, `bcast`
-  - Default value: `none`
-- `passive` (String) Passive interface control. Interface can be configured as passive or non-passive.
+- `passive` (String) Suppress routing updates on the interface.
   - Choices: `none`, `enabled`, `disabled`
-  - Default value: `none`
-- `priority` (Number) Priority, used in determining the designated router on this network.
+- `priority` (Number) Router priority, used in determining the designated router on this network.
   - Range: `0`-`255`
-  - Default value: `1`
 
 ## Import
 

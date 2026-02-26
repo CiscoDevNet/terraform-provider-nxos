@@ -56,7 +56,7 @@ func TestAccNxosOSPFv3(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.interface_id", "eth1/10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.advertise_secondaries", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.area", "0.0.0.10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.bfd", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.bfd_control", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.cost", "1000"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.dead_interval", "60"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.hello_interval", "15"))
@@ -180,7 +180,7 @@ func testAccNxosOSPFv3Config_all() string {
 	config += `		interface_id = "eth1/10"` + "\n"
 	config += `		advertise_secondaries = false` + "\n"
 	config += `		area = "0.0.0.10"` + "\n"
-	config += `		bfd = "disabled"` + "\n"
+	config += `		bfd_control = "disabled"` + "\n"
 	config += `		cost = 1000` + "\n"
 	config += `		dead_interval = 60` + "\n"
 	config += `		hello_interval = 15` + "\n"

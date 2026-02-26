@@ -69,7 +69,7 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				Computed:            true,
 			},
 			"admin_state": schema.StringAttribute{
-				MarkdownDescription: "Administrative state.",
+				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
 			"instances": schema.ListNestedAttribute{
@@ -82,7 +82,7 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							Computed:            true,
 						},
 						"admin_state": schema.StringAttribute{
-							MarkdownDescription: "Administrative state.",
+							MarkdownDescription: "The administrative state of the object or policy.",
 							Computed:            true,
 						},
 						"vrfs": schema.ListNestedAttribute{
@@ -95,47 +95,47 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										Computed:            true,
 									},
 									"admin_state": schema.StringAttribute{
-										MarkdownDescription: "Administrative state.",
+										MarkdownDescription: "Holds ISIS Domain Administative state.",
 										Computed:            true,
 									},
 									"authentication_check_l1": schema.BoolAttribute{
-										MarkdownDescription: "Authentication Check for ISIS on Level-1.",
+										MarkdownDescription: "Authentication Check for ISIS DOM on Level-1.",
 										Computed:            true,
 									},
 									"authentication_check_l2": schema.BoolAttribute{
-										MarkdownDescription: "Authentication Check for ISIS on Level-2.",
+										MarkdownDescription: "Authentication Check for ISIS DOM on Level-2.",
 										Computed:            true,
 									},
 									"authentication_key_l1": schema.StringAttribute{
-										MarkdownDescription: "Authentication Key for IS-IS on Level-1.",
+										MarkdownDescription: "Holds Authentication Key for ISIS DOM on Level-1.",
 										Computed:            true,
 									},
 									"authentication_key_l2": schema.StringAttribute{
-										MarkdownDescription: "Authentication Key for IS-IS on Level-2.",
+										MarkdownDescription: "Holds Authentication Key for ISIS DOM on Level-2.",
 										Computed:            true,
 									},
 									"authentication_type_l1": schema.StringAttribute{
-										MarkdownDescription: "IS-IS Authentication-Type for Level-1.",
+										MarkdownDescription: "Holds ISIS DOM Authentication-Type for Level-1.",
 										Computed:            true,
 									},
 									"authentication_type_l2": schema.StringAttribute{
-										MarkdownDescription: "IS-IS Authentication-Type for Level-2.",
+										MarkdownDescription: "Holds ISIS DOM Authentication-Type for Level-2.",
 										Computed:            true,
 									},
 									"bandwidth_reference": schema.Int64Attribute{
 										MarkdownDescription: "The IS-IS domain bandwidth reference. This sets the default reference bandwidth used for calculating the IS-IS cost metric.",
 										Computed:            true,
 									},
-									"banwidth_reference_unit": schema.StringAttribute{
-										MarkdownDescription: "Bandwidth reference unit.",
+									"bandwidth_reference_unit": schema.StringAttribute{
+										MarkdownDescription: "Holds ISIS Domain Bandwidth Reference Unit (Mbps or Gbps).",
 										Computed:            true,
 									},
 									"is_type": schema.StringAttribute{
-										MarkdownDescription: "IS-IS domain type.",
+										MarkdownDescription: "Holds ISIS Domain IS[Level] Type.",
 										Computed:            true,
 									},
 									"metric_type": schema.StringAttribute{
-										MarkdownDescription: "IS-IS metric type.",
+										MarkdownDescription: "Holds ISIS Domain Metric Style.",
 										Computed:            true,
 									},
 									"mtu": schema.Int64Attribute{
@@ -143,11 +143,11 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										Computed:            true,
 									},
 									"net": schema.StringAttribute{
-										MarkdownDescription: "Holds IS-IS domain NET (address) value.",
+										MarkdownDescription: "Holds ISIS Domain Net value.",
 										Computed:            true,
 									},
 									"passive_default": schema.StringAttribute{
-										MarkdownDescription: "IS-IS Domain passive-interface default level.",
+										MarkdownDescription: "Holds ISIS Domain passive-interface default level.",
 										Computed:            true,
 									},
 									"address_families": schema.ListNestedAttribute{
@@ -156,11 +156,11 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"address_family": schema.StringAttribute{
-													MarkdownDescription: "Address family type.",
+													MarkdownDescription: "Type.",
 													Computed:            true,
 												},
 												"segment_routing_mpls": schema.BoolAttribute{
-													MarkdownDescription: "Segment routing for MPLS",
+													MarkdownDescription: "Segment routing for MPLS.",
 													Computed:            true,
 												},
 												"enable_bfd": schema.BoolAttribute{
@@ -168,11 +168,11 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 													Computed:            true,
 												},
 												"prefix_advertise_passive_l1": schema.BoolAttribute{
-													MarkdownDescription: "Prefix advertise passive only for level-1",
+													MarkdownDescription: "Prefix advertise passive only for level-1.",
 													Computed:            true,
 												},
 												"prefix_advertise_passive_l2": schema.BoolAttribute{
-													MarkdownDescription: "Prefix advertise passive only level-2",
+													MarkdownDescription: "Prefix advertise passive only level-2.",
 													Computed:            true,
 												},
 											},
@@ -198,75 +198,75 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							Computed:            true,
 						},
 						"authentication_check": schema.BoolAttribute{
-							MarkdownDescription: "Authentication Check for ISIS without specific level.",
+							MarkdownDescription: "Enabling Authentication check for ISIS interface without specific Level.",
 							Computed:            true,
 						},
 						"authentication_check_l1": schema.BoolAttribute{
-							MarkdownDescription: "Authentication Check for ISIS on Level-1.",
+							MarkdownDescription: "Enabling Authentication check for ISIS interface at Level1.",
 							Computed:            true,
 						},
 						"authentication_check_l2": schema.BoolAttribute{
-							MarkdownDescription: "Authentication Check for ISIS on Level-2.",
+							MarkdownDescription: "Enabling Authentication check for ISIS interface at Level2.",
 							Computed:            true,
 						},
 						"authentication_key": schema.StringAttribute{
-							MarkdownDescription: "Authentication Key for IS-IS without specific level.",
+							MarkdownDescription: "Holds Authentication Key for ISIS Interface.",
 							Computed:            true,
 						},
 						"authentication_key_l1": schema.StringAttribute{
-							MarkdownDescription: "Authentication Key for IS-IS on Level-1.",
+							MarkdownDescription: "Holds Authentication Key for ISIS Interface on Level-1.",
 							Computed:            true,
 						},
 						"authentication_key_l2": schema.StringAttribute{
-							MarkdownDescription: "Authentication Key for IS-IS on Level-2.",
+							MarkdownDescription: "Holds Authentication Key for ISIS Interface on Level-2.",
 							Computed:            true,
 						},
 						"authentication_type": schema.StringAttribute{
-							MarkdownDescription: "IS-IS Authentication-Type without specific level.",
+							MarkdownDescription: "Holds Authentication Type value for ISIS Interface.",
 							Computed:            true,
 						},
 						"authentication_type_l1": schema.StringAttribute{
-							MarkdownDescription: "IS-IS Authentication-Type for Level-1.",
+							MarkdownDescription: "Holds ISIS Level-1 Authentication Type value for Interface.",
 							Computed:            true,
 						},
 						"authentication_type_l2": schema.StringAttribute{
-							MarkdownDescription: "IS-IS Authentication-Type for Level-2.",
+							MarkdownDescription: "Holds ISIS Level-2 Authentication Type value for Interface.",
 							Computed:            true,
 						},
 						"circuit_type": schema.StringAttribute{
-							MarkdownDescription: "Circuit type.",
+							MarkdownDescription: "Holds ISIS interface Circuit Type.",
 							Computed:            true,
 						},
 						"vrf": schema.StringAttribute{
-							MarkdownDescription: "VRF.",
+							MarkdownDescription: "Dom to which the interface belongs to.",
 							Computed:            true,
 						},
 						"hello_interval": schema.Int64Attribute{
-							MarkdownDescription: "Hello interval.",
+							MarkdownDescription: "Holds Interface Hello Interval value.",
 							Computed:            true,
 						},
 						"hello_interval_l1": schema.Int64Attribute{
-							MarkdownDescription: "Hello interval Level-1.",
+							MarkdownDescription: "Holds ISIS interface Hello Interval Level-1 value.",
 							Computed:            true,
 						},
 						"hello_interval_l2": schema.Int64Attribute{
-							MarkdownDescription: "Hello interval Level-2.",
+							MarkdownDescription: "Holds ISIS interface Hello Interval Level-2 value.",
 							Computed:            true,
 						},
 						"hello_multiplier": schema.Int64Attribute{
-							MarkdownDescription: "Hello multiplier.",
+							MarkdownDescription: "Holds Interface Hello Multiplier value.",
 							Computed:            true,
 						},
 						"hello_multiplier_l1": schema.Int64Attribute{
-							MarkdownDescription: "Hello multiplier Level-1.",
+							MarkdownDescription: "Holds ISIS interface Hello Multiplier Level-1 value.",
 							Computed:            true,
 						},
 						"hello_multiplier_l2": schema.Int64Attribute{
-							MarkdownDescription: "Hello multiplier Level-2.",
+							MarkdownDescription: "Holds ISIS interface Hello Multiplier Level-2 value.",
 							Computed:            true,
 						},
 						"hello_padding": schema.StringAttribute{
-							MarkdownDescription: "Hello padding.",
+							MarkdownDescription: "Holds ISIS Interface Hello Padding Info.",
 							Computed:            true,
 						},
 						"instance_name": schema.StringAttribute{
@@ -274,39 +274,39 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							Computed:            true,
 						},
 						"metric_l1": schema.Int64Attribute{
-							MarkdownDescription: "Interface metric Level-1.",
+							MarkdownDescription: "Holds ISIS interface Metric level-1.",
 							Computed:            true,
 						},
 						"metric_l2": schema.Int64Attribute{
-							MarkdownDescription: "Interface metric Level-2.",
+							MarkdownDescription: "Holds ISIS interface Metric level-2.",
 							Computed:            true,
 						},
 						"mtu_check": schema.BoolAttribute{
-							MarkdownDescription: "MTU Check for IS-IS without specific level.",
+							MarkdownDescription: "Enabling Mtu check for ISIS interface without specific Level.",
 							Computed:            true,
 						},
 						"mtu_check_l1": schema.BoolAttribute{
-							MarkdownDescription: "MTU Check for IS-IS on Level-1.",
+							MarkdownDescription: "Enabling Mtu check for ISIS interface at Level1.",
 							Computed:            true,
 						},
 						"mtu_check_l2": schema.BoolAttribute{
-							MarkdownDescription: "MTU Check for IS-IS on Level-2.",
+							MarkdownDescription: "Enabling Mtu check for ISIS interface at Level2.",
 							Computed:            true,
 						},
 						"network_type_p2p": schema.StringAttribute{
-							MarkdownDescription: "Enabling Point-to-Point Network Type on IS-IS Interface.",
+							MarkdownDescription: "Enabling Point-to-Point Network Type on ISIS Interface.",
 							Computed:            true,
 						},
 						"passive": schema.StringAttribute{
-							MarkdownDescription: "IS-IS Passive Interface Info.",
+							MarkdownDescription: "Holds ISIS Passive Interface Info.",
 							Computed:            true,
 						},
 						"priority_l1": schema.Int64Attribute{
-							MarkdownDescription: "Circuit priority.",
+							MarkdownDescription: "Holds ISIS Interface Level-1 Circuit Priority.",
 							Computed:            true,
 						},
 						"priority_l2": schema.Int64Attribute{
-							MarkdownDescription: "Circuit priority.",
+							MarkdownDescription: "Holds ISIS Interface Level-2 Circuit Priority.",
 							Computed:            true,
 						},
 						"enable_ipv4": schema.BoolAttribute{

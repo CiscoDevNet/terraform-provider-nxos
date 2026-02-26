@@ -32,21 +32,21 @@ resource "nxos_isis" "example" {
     name        = "ISIS1"
     admin_state = "enabled"
     vrfs = [{
-      name                    = "default"
-      admin_state             = "enabled"
-      authentication_check_l1 = false
-      authentication_check_l2 = false
-      authentication_key_l1   = ""
-      authentication_key_l2   = ""
-      authentication_type_l1  = "unknown"
-      authentication_type_l2  = "unknown"
-      bandwidth_reference     = 400000
-      banwidth_reference_unit = "mbps"
-      is_type                 = "l2"
-      metric_type             = "wide"
-      mtu                     = 2000
-      net                     = "49.0001.0000.0000.3333.00"
-      passive_default         = "l12"
+      name                     = "default"
+      admin_state              = "enabled"
+      authentication_check_l1  = false
+      authentication_check_l2  = false
+      authentication_key_l1    = ""
+      authentication_key_l2    = ""
+      authentication_type_l1   = "unknown"
+      authentication_type_l2   = "unknown"
+      bandwidth_reference      = 400000
+      bandwidth_reference_unit = "mbps"
+      is_type                  = "l2"
+      metric_type              = "wide"
+      mtu                      = 2000
+      net                      = "49.0001.0000.0000.3333.00"
+      passive_default          = "l12"
       address_families = [{
         address_family              = "v4"
         segment_routing_mpls        = true
@@ -97,9 +97,8 @@ resource "nxos_isis" "example" {
 
 ### Optional
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `device` (String) A device name from the provider configuration.
 - `instances` (Attributes List) List of IS-IS instances. (see [below for nested schema](#nestedatt--instances))
 - `interfaces` (Attributes List) List of IS-IS interfaces. (see [below for nested schema](#nestedatt--interfaces))
@@ -117,9 +116,8 @@ Required:
 
 Optional:
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `vrfs` (Attributes List) List of IS-IS VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
 
 <a id="nestedatt--instances--vrfs"></a>
@@ -132,63 +130,46 @@ Required:
 Optional:
 
 - `address_families` (Attributes List) List of IS-IS address families. (see [below for nested schema](#nestedatt--instances--vrfs--address_families))
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) Holds ISIS Domain Administative state.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
-- `authentication_check_l1` (Boolean) Authentication Check for ISIS on Level-1.
-  - Default value: `true`
-- `authentication_check_l2` (Boolean) Authentication Check for ISIS on Level-2.
-  - Default value: `true`
-- `authentication_key_l1` (String) Authentication Key for IS-IS on Level-1.
-- `authentication_key_l2` (String) Authentication Key for IS-IS on Level-2.
-- `authentication_type_l1` (String) IS-IS Authentication-Type for Level-1.
+- `authentication_check_l1` (Boolean) Authentication Check for ISIS DOM on Level-1.
+- `authentication_check_l2` (Boolean) Authentication Check for ISIS DOM on Level-2.
+- `authentication_key_l1` (String) Holds Authentication Key for ISIS DOM on Level-1.
+- `authentication_key_l2` (String) Holds Authentication Key for ISIS DOM on Level-2.
+- `authentication_type_l1` (String) Holds ISIS DOM Authentication-Type for Level-1.
   - Choices: `clear`, `md5`, `unknown`
-  - Default value: `unknown`
-- `authentication_type_l2` (String) IS-IS Authentication-Type for Level-2.
+- `authentication_type_l2` (String) Holds ISIS DOM Authentication-Type for Level-2.
   - Choices: `clear`, `md5`, `unknown`
-  - Default value: `unknown`
 - `bandwidth_reference` (Number) The IS-IS domain bandwidth reference. This sets the default reference bandwidth used for calculating the IS-IS cost metric.
   - Range: `0`-`4294967295`
-  - Default value: `40000`
-- `banwidth_reference_unit` (String) Bandwidth reference unit.
+- `bandwidth_reference_unit` (String) Holds ISIS Domain Bandwidth Reference Unit (Mbps or Gbps).
   - Choices: `mbps`, `gbps`
-  - Default value: `mbps`
-- `is_type` (String) IS-IS domain type.
+- `is_type` (String) Holds ISIS Domain IS[Level] Type.
   - Choices: `l1`, `l2`, `l12`
-  - Default value: `l12`
-- `metric_type` (String) IS-IS metric type.
+- `metric_type` (String) Holds ISIS Domain Metric Style.
   - Choices: `narrow`, `wide`, `transition`
-  - Default value: `wide`
 - `mtu` (Number) The configuration of link-state packet (LSP) maximum transmission units (MTU) is supported. You can enable up to 4352 bytes.
   - Range: `256`-`4352`
-  - Default value: `1492`
-- `net` (String) Holds IS-IS domain NET (address) value.
+- `net` (String) Holds ISIS Domain Net value.
 - `overload_startup_time` (Number) The overload startup time. The overload state begins when the switch boots up and ends at the time specified as the overload startup time.
   - Range: `5`-`86400`
-  - Default value: `60`
-- `passive_default` (String) IS-IS Domain passive-interface default level.
+- `passive_default` (String) Holds ISIS Domain passive-interface default level.
   - Choices: `l1`, `l2`, `l12`, `unknown`
-  - Default value: `unknown`
 
 <a id="nestedatt--instances--vrfs--address_families"></a>
 ### Nested Schema for `instances.vrfs.address_families`
 
 Required:
 
-- `address_family` (String) Address family type.
+- `address_family` (String) Type.
   - Choices: `v4`, `v6`
-  - Default value: `v4`
 
 Optional:
 
 - `enable_bfd` (Boolean) Enabling BFD on all ISIS domain interfaces.
-  - Default value: `false`
-- `prefix_advertise_passive_l1` (Boolean) Prefix advertise passive only for level-1
-  - Default value: `false`
-- `prefix_advertise_passive_l2` (Boolean) Prefix advertise passive only level-2
-  - Default value: `false`
-- `segment_routing_mpls` (Boolean) Segment routing for MPLS
-  - Default value: `false`
+- `prefix_advertise_passive_l1` (Boolean) Prefix advertise passive only for level-1.
+- `prefix_advertise_passive_l2` (Boolean) Prefix advertise passive only level-2.
+- `segment_routing_mpls` (Boolean) Segment routing for MPLS.
 
 
 
@@ -202,76 +183,52 @@ Required:
 
 Optional:
 
-- `authentication_check` (Boolean) Authentication Check for ISIS without specific level.
-  - Default value: `true`
-- `authentication_check_l1` (Boolean) Authentication Check for ISIS on Level-1.
-  - Default value: `true`
-- `authentication_check_l2` (Boolean) Authentication Check for ISIS on Level-2.
-  - Default value: `true`
-- `authentication_key` (String) Authentication Key for IS-IS without specific level.
-- `authentication_key_l1` (String) Authentication Key for IS-IS on Level-1.
-- `authentication_key_l2` (String) Authentication Key for IS-IS on Level-2.
-- `authentication_type` (String) IS-IS Authentication-Type without specific level.
+- `authentication_check` (Boolean) Enabling Authentication check for ISIS interface without specific Level.
+- `authentication_check_l1` (Boolean) Enabling Authentication check for ISIS interface at Level1.
+- `authentication_check_l2` (Boolean) Enabling Authentication check for ISIS interface at Level2.
+- `authentication_key` (String) Holds Authentication Key for ISIS Interface.
+- `authentication_key_l1` (String) Holds Authentication Key for ISIS Interface on Level-1.
+- `authentication_key_l2` (String) Holds Authentication Key for ISIS Interface on Level-2.
+- `authentication_type` (String) Holds Authentication Type value for ISIS Interface.
   - Choices: `clear`, `md5`, `unknown`
-  - Default value: `unknown`
-- `authentication_type_l1` (String) IS-IS Authentication-Type for Level-1.
+- `authentication_type_l1` (String) Holds ISIS Level-1 Authentication Type value for Interface.
   - Choices: `clear`, `md5`, `unknown`
-  - Default value: `unknown`
-- `authentication_type_l2` (String) IS-IS Authentication-Type for Level-2.
+- `authentication_type_l2` (String) Holds ISIS Level-2 Authentication Type value for Interface.
   - Choices: `clear`, `md5`, `unknown`
-  - Default value: `unknown`
-- `circuit_type` (String) Circuit type.
+- `circuit_type` (String) Holds ISIS interface Circuit Type.
   - Choices: `l1`, `l2`, `l12`
-  - Default value: `l12`
 - `enable_ipv4` (Boolean) Enabling ISIS router tag on Interface's IPV4 family.
-  - Default value: `false`
-- `hello_interval` (Number) Hello interval.
+- `hello_interval` (Number) Holds Interface Hello Interval value.
   - Range: `1`-`65535`
-  - Default value: `10`
-- `hello_interval_l1` (Number) Hello interval Level-1.
+- `hello_interval_l1` (Number) Holds ISIS interface Hello Interval Level-1 value.
   - Range: `1`-`65535`
-  - Default value: `10`
-- `hello_interval_l2` (Number) Hello interval Level-2.
+- `hello_interval_l2` (Number) Holds ISIS interface Hello Interval Level-2 value.
   - Range: `1`-`65535`
-  - Default value: `10`
-- `hello_multiplier` (Number) Hello multiplier.
+- `hello_multiplier` (Number) Holds Interface Hello Multiplier value.
   - Range: `3`-`1000`
-  - Default value: `3`
-- `hello_multiplier_l1` (Number) Hello multiplier Level-1.
+- `hello_multiplier_l1` (Number) Holds ISIS interface Hello Multiplier Level-1 value.
   - Range: `3`-`1000`
-  - Default value: `3`
-- `hello_multiplier_l2` (Number) Hello multiplier Level-2.
+- `hello_multiplier_l2` (Number) Holds ISIS interface Hello Multiplier Level-2 value.
   - Range: `3`-`1000`
-  - Default value: `3`
-- `hello_padding` (String) Hello padding.
+- `hello_padding` (String) Holds ISIS Interface Hello Padding Info.
   - Choices: `always`, `transient`, `never`
-  - Default value: `always`
 - `instance_name` (String) Instance to which the interface belongs to.
-- `metric_l1` (Number) Interface metric Level-1.
+- `metric_l1` (Number) Holds ISIS interface Metric level-1.
   - Range: `0`-`16777216`
-  - Default value: `16777216`
-- `metric_l2` (Number) Interface metric Level-2.
+- `metric_l2` (Number) Holds ISIS interface Metric level-2.
   - Range: `0`-`16777216`
-  - Default value: `16777216`
-- `mtu_check` (Boolean) MTU Check for IS-IS without specific level.
-  - Default value: `false`
-- `mtu_check_l1` (Boolean) MTU Check for IS-IS on Level-1.
-  - Default value: `false`
-- `mtu_check_l2` (Boolean) MTU Check for IS-IS on Level-2.
-  - Default value: `false`
-- `network_type_p2p` (String) Enabling Point-to-Point Network Type on IS-IS Interface.
+- `mtu_check` (Boolean) Enabling Mtu check for ISIS interface without specific Level.
+- `mtu_check_l1` (Boolean) Enabling Mtu check for ISIS interface at Level1.
+- `mtu_check_l2` (Boolean) Enabling Mtu check for ISIS interface at Level2.
+- `network_type_p2p` (String) Enabling Point-to-Point Network Type on ISIS Interface.
   - Choices: `off`, `on`, `useAllISMac`
-  - Default value: `off`
-- `passive` (String) IS-IS Passive Interface Info.
+- `passive` (String) Holds ISIS Passive Interface Info.
   - Choices: `l1`, `l2`, `l12`, `noL1`, `noL2`, `noL12`, `inheritDef`
-  - Default value: `inheritDef`
-- `priority_l1` (Number) Circuit priority.
+- `priority_l1` (Number) Holds ISIS Interface Level-1 Circuit Priority.
   - Range: `0`-`127`
-  - Default value: `64`
-- `priority_l2` (Number) Circuit priority.
+- `priority_l2` (Number) Holds ISIS Interface Level-2 Circuit Priority.
   - Range: `0`-`127`
-  - Default value: `64`
-- `vrf` (String) VRF.
+- `vrf` (String) Dom to which the interface belongs to.
 
 ## Import
 

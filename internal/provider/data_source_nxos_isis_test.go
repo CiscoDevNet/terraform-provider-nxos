@@ -37,19 +37,19 @@ func TestAccDataSourceNxosISIS(t *testing.T) {
 		"admin_state": "enabled",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_isis.test", "instances.*.vrfs.*", map[string]string{
-		"name":                    "default",
-		"admin_state":             "enabled",
-		"authentication_check_l1": "false",
-		"authentication_check_l2": "false",
-		"authentication_type_l1":  "unknown",
-		"authentication_type_l2":  "unknown",
-		"bandwidth_reference":     "400000",
-		"banwidth_reference_unit": "mbps",
-		"is_type":                 "l2",
-		"metric_type":             "wide",
-		"mtu":                     "2000",
-		"net":                     "49.0001.0000.0000.3333.00",
-		"passive_default":         "l12",
+		"name":                     "default",
+		"admin_state":              "enabled",
+		"authentication_check_l1":  "false",
+		"authentication_check_l2":  "false",
+		"authentication_type_l1":   "unknown",
+		"authentication_type_l2":   "unknown",
+		"bandwidth_reference":      "400000",
+		"bandwidth_reference_unit": "mbps",
+		"is_type":                  "l2",
+		"metric_type":              "wide",
+		"mtu":                      "2000",
+		"net":                      "49.0001.0000.0000.3333.00",
+		"passive_default":          "l12",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_isis.test", "instances.*.vrfs.*.address_families.*", map[string]string{
 		"address_family":              "v4",
@@ -144,7 +144,7 @@ func testAccDataSourceNxosISISConfig() string {
 	config += `			authentication_type_l1 = "unknown"` + "\n"
 	config += `			authentication_type_l2 = "unknown"` + "\n"
 	config += `			bandwidth_reference = 400000` + "\n"
-	config += `			banwidth_reference_unit = "mbps"` + "\n"
+	config += `			bandwidth_reference_unit = "mbps"` + "\n"
 	config += `			is_type = "l2"` + "\n"
 	config += `			metric_type = "wide"` + "\n"
 	config += `			mtu = 2000` + "\n"

@@ -52,23 +52,23 @@ type ISISInstances struct {
 }
 
 type ISISInstancesVrfs struct {
-	Name                  types.String                       `tfsdk:"name"`
-	AdminState            types.String                       `tfsdk:"admin_state"`
-	AuthenticationCheckL1 types.Bool                         `tfsdk:"authentication_check_l1"`
-	AuthenticationCheckL2 types.Bool                         `tfsdk:"authentication_check_l2"`
-	AuthenticationKeyL1   types.String                       `tfsdk:"authentication_key_l1"`
-	AuthenticationKeyL2   types.String                       `tfsdk:"authentication_key_l2"`
-	AuthenticationTypeL1  types.String                       `tfsdk:"authentication_type_l1"`
-	AuthenticationTypeL2  types.String                       `tfsdk:"authentication_type_l2"`
-	BandwidthReference    types.Int64                        `tfsdk:"bandwidth_reference"`
-	BanwidthReferenceUnit types.String                       `tfsdk:"banwidth_reference_unit"`
-	IsType                types.String                       `tfsdk:"is_type"`
-	MetricType            types.String                       `tfsdk:"metric_type"`
-	Mtu                   types.Int64                        `tfsdk:"mtu"`
-	Net                   types.String                       `tfsdk:"net"`
-	PassiveDefault        types.String                       `tfsdk:"passive_default"`
-	AddressFamilies       []ISISInstancesVrfsAddressFamilies `tfsdk:"address_families"`
-	OverloadStartupTime   types.Int64                        `tfsdk:"overload_startup_time"`
+	Name                   types.String                       `tfsdk:"name"`
+	AdminState             types.String                       `tfsdk:"admin_state"`
+	AuthenticationCheckL1  types.Bool                         `tfsdk:"authentication_check_l1"`
+	AuthenticationCheckL2  types.Bool                         `tfsdk:"authentication_check_l2"`
+	AuthenticationKeyL1    types.String                       `tfsdk:"authentication_key_l1"`
+	AuthenticationKeyL2    types.String                       `tfsdk:"authentication_key_l2"`
+	AuthenticationTypeL1   types.String                       `tfsdk:"authentication_type_l1"`
+	AuthenticationTypeL2   types.String                       `tfsdk:"authentication_type_l2"`
+	BandwidthReference     types.Int64                        `tfsdk:"bandwidth_reference"`
+	BandwidthReferenceUnit types.String                       `tfsdk:"bandwidth_reference_unit"`
+	IsType                 types.String                       `tfsdk:"is_type"`
+	MetricType             types.String                       `tfsdk:"metric_type"`
+	Mtu                    types.Int64                        `tfsdk:"mtu"`
+	Net                    types.String                       `tfsdk:"net"`
+	PassiveDefault         types.String                       `tfsdk:"passive_default"`
+	AddressFamilies        []ISISInstancesVrfsAddressFamilies `tfsdk:"address_families"`
+	OverloadStartupTime    types.Int64                        `tfsdk:"overload_startup_time"`
 }
 
 type ISISInstancesVrfsAddressFamilies struct {
@@ -213,8 +213,8 @@ func (data ISIS) toBody() nxos.Body {
 				if (!child.BandwidthReference.IsUnknown() && !child.BandwidthReference.IsNull()) || false {
 					attrs, _ = sjson.Set(attrs, "bwRef", strconv.FormatInt(child.BandwidthReference.ValueInt64(), 10))
 				}
-				if (!child.BanwidthReferenceUnit.IsUnknown() && !child.BanwidthReferenceUnit.IsNull()) || false {
-					attrs, _ = sjson.Set(attrs, "bwRefUnit", child.BanwidthReferenceUnit.ValueString())
+				if (!child.BandwidthReferenceUnit.IsUnknown() && !child.BandwidthReferenceUnit.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "bwRefUnit", child.BandwidthReferenceUnit.ValueString())
 				}
 				if (!child.IsType.IsUnknown() && !child.IsType.IsNull()) || false {
 					attrs, _ = sjson.Set(attrs, "isType", child.IsType.ValueString())
@@ -390,7 +390,7 @@ func (data *ISIS) fromBody(res gjson.Result) {
 											nestedChildisisDom.AuthenticationTypeL1 = types.StringValue(nestedValue.Get("attributes.authTypeLvl1").String())
 											nestedChildisisDom.AuthenticationTypeL2 = types.StringValue(nestedValue.Get("attributes.authTypeLvl2").String())
 											nestedChildisisDom.BandwidthReference = types.Int64Value(nestedValue.Get("attributes.bwRef").Int())
-											nestedChildisisDom.BanwidthReferenceUnit = types.StringValue(nestedValue.Get("attributes.bwRefUnit").String())
+											nestedChildisisDom.BandwidthReferenceUnit = types.StringValue(nestedValue.Get("attributes.bwRefUnit").String())
 											nestedChildisisDom.IsType = types.StringValue(nestedValue.Get("attributes.isType").String())
 											nestedChildisisDom.MetricType = types.StringValue(nestedValue.Get("attributes.metricStyle").String())
 											nestedChildisisDom.Mtu = types.Int64Value(nestedValue.Get("attributes.mtu").Int())
@@ -567,10 +567,10 @@ func (data *ISIS) updateFromBody(res gjson.Result) {
 			} else {
 				data.Instances[c].Vrfs[nc].BandwidthReference = types.Int64Null()
 			}
-			if !data.Instances[c].Vrfs[nc].BanwidthReferenceUnit.IsNull() {
-				data.Instances[c].Vrfs[nc].BanwidthReferenceUnit = types.StringValue(risisDom.Get("isisDom.attributes.bwRefUnit").String())
+			if !data.Instances[c].Vrfs[nc].BandwidthReferenceUnit.IsNull() {
+				data.Instances[c].Vrfs[nc].BandwidthReferenceUnit = types.StringValue(risisDom.Get("isisDom.attributes.bwRefUnit").String())
 			} else {
-				data.Instances[c].Vrfs[nc].BanwidthReferenceUnit = types.StringNull()
+				data.Instances[c].Vrfs[nc].BandwidthReferenceUnit = types.StringNull()
 			}
 			if !data.Instances[c].Vrfs[nc].IsType.IsNull() {
 				data.Instances[c].Vrfs[nc].IsType = types.StringValue(risisDom.Get("isisDom.attributes.isType").String())

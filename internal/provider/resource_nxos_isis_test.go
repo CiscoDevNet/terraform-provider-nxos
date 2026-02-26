@@ -47,7 +47,7 @@ func TestAccNxosISIS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.authentication_type_l1", "unknown"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.authentication_type_l2", "unknown"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.bandwidth_reference", "400000"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.banwidth_reference_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.bandwidth_reference_unit", "mbps"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.is_type", "l2"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.metric_type", "wide"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.mtu", "2000"))
@@ -179,7 +179,7 @@ func testAccNxosISISConfig_all() string {
 	config += `			authentication_type_l1 = "unknown"` + "\n"
 	config += `			authentication_type_l2 = "unknown"` + "\n"
 	config += `			bandwidth_reference = 400000` + "\n"
-	config += `			banwidth_reference_unit = "mbps"` + "\n"
+	config += `			bandwidth_reference_unit = "mbps"` + "\n"
 	config += `			is_type = "l2"` + "\n"
 	config += `			metric_type = "wide"` + "\n"
 	config += `			mtu = 2000` + "\n"

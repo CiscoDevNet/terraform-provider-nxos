@@ -10,11 +10,10 @@ attributes:
   - nxos_name: adminSt
     tf_name: admin_state
     type: String
-    description: 'Administrative state.'
+    description: 'The administrative state of the object or policy.'
     enum_values:
       - enabled
       - disabled
-    default_value: enabled
     example: enabled
 child_classes:
   - class_name: isisInst
@@ -33,11 +32,10 @@ child_classes:
       - nxos_name: adminSt
         tf_name: admin_state
         type: String
-        description: 'Administrative state.'
+        description: 'The administrative state of the object or policy.'
         enum_values:
           - enabled
           - disabled
-        default_value: enabled
         example: enabled
     child_classes:
       - class_name: isisDom
@@ -56,116 +54,105 @@ child_classes:
           - nxos_name: adminSt
             tf_name: admin_state
             type: String
-            description: 'Administrative state.'
+            description: 'Holds ISIS Domain Administative state.'
             enum_values:
               - enabled
               - disabled
-            default_value: enabled
             example: enabled
           - nxos_name: authCheckLvl1
             tf_name: authentication_check_l1
             type: Bool
-            description: 'Authentication Check for ISIS on Level-1.'
-            default_value: true
+            description: 'Authentication Check for ISIS DOM on Level-1.'
             example: false
           - nxos_name: authCheckLvl2
             tf_name: authentication_check_l2
             type: Bool
-            description: 'Authentication Check for ISIS on Level-2.'
-            default_value: true
+            description: 'Authentication Check for ISIS DOM on Level-2.'
             example: false
           - nxos_name: authKeyLvl1
             tf_name: authentication_key_l1
             type: String
             write_only: true
-            description: 'Authentication Key for IS-IS on Level-1.'
+            description: 'Holds Authentication Key for ISIS DOM on Level-1.'
             example: ''
           - nxos_name: authKeyLvl2
             tf_name: authentication_key_l2
             type: String
             write_only: true
-            description: 'Authentication Key for IS-IS on Level-2.'
+            description: 'Holds Authentication Key for ISIS DOM on Level-2.'
             example: ''
           - nxos_name: authTypeLvl1
             tf_name: authentication_type_l1
             type: String
-            description: 'IS-IS Authentication-Type for Level-1.'
+            description: 'Holds ISIS DOM Authentication-Type for Level-1.'
             enum_values:
               - clear
               - md5
               - unknown
-            default_value: unknown
             example: unknown
           - nxos_name: authTypeLvl2
             tf_name: authentication_type_l2
             type: String
-            description: 'IS-IS Authentication-Type for Level-2.'
+            description: 'Holds ISIS DOM Authentication-Type for Level-2.'
             enum_values:
               - clear
               - md5
               - unknown
-            default_value: unknown
             example: unknown
           - nxos_name: bwRef
             tf_name: bandwidth_reference
             type: Int64
             min_int: 0
             max_int: 4294967295
-            default_value: 40000
             description: 'The IS-IS domain bandwidth reference. This sets the default reference bandwidth used for calculating the IS-IS cost metric.'
             example: 400000
           - nxos_name: bwRefUnit
-            tf_name: banwidth_reference_unit
+            tf_name: bandwidth_reference_unit
             type: String
-            description: 'Bandwidth reference unit.'
+            description: 'Holds ISIS Domain Bandwidth Reference Unit (Mbps or Gbps).'
             enum_values:
               - mbps
               - gbps
-            default_value: mbps
             example: mbps
           - nxos_name: isType
             tf_name: is_type
             type: String
-            description: 'IS-IS domain type.'
+            description: 'Holds ISIS Domain IS[Level] Type.'
             enum_values:
               - l1
               - l2
               - l12
-            default_value: l12
             example: l2
           - nxos_name: metricStyle
             tf_name: metric_type
             type: String
-            description: 'IS-IS metric type.'
+            description: 'Holds ISIS Domain Metric Style.'
             enum_values:
               - narrow
               - wide
               - transition
-            default_value: wide
             example: wide
           - nxos_name: mtu
             tf_name: mtu
             type: Int64
             min_int: 256
             max_int: 4352
-            default_value: 1492
             description: 'The configuration of link-state packet (LSP) maximum transmission units (MTU) is supported. You can enable up to 4352 bytes.'
             example: 2000
           - nxos_name: net
             tf_name: net
             type: String
-            description: 'Holds IS-IS domain NET (address) value.'
+            description: 'Holds ISIS Domain Net value.'
             example: '49.0001.0000.0000.3333.00'
           - nxos_name: passiveDflt
             tf_name: passive_default
             type: String
-            description: 'IS-IS Domain passive-interface default level.'
+            description: 'Holds ISIS Domain passive-interface default level.'
             enum_values:
               - l1
               - l2
               - l12
               - unknown
-            default_value: unknown
             example: l12
         child_classes:
           - class_name: isisDomAf
@@ -179,35 +166,30 @@ child_classes:
                 tf_name: address_family
                 type: String
                 id: true
-                description: 'Address family type.'
+                description: 'Type.'
                 enum_values:
                   - v4
                   - v6
-                default_value: v4
                 example: v4
               - nxos_name: srMpls
                 tf_name: segment_routing_mpls
                 type: Bool
-                description: 'Segment routing for MPLS'
-                default_value: false
+                description: 'Segment routing for MPLS.'
                 example: true
               - nxos_name: enableBfd
                 tf_name: enable_bfd
                 type: Bool
                 description: 'Enabling BFD on all ISIS domain interfaces.'
-                default_value: false
                 example: false
               - nxos_name: advPassiveLvl1
                 tf_name: prefix_advertise_passive_l1
                 type: Bool
-                description: 'Prefix advertise passive only for level-1'
-                default_value: false
+                description: 'Prefix advertise passive only for level-1.'
                 example: true
               - nxos_name: advPassiveLvl2
                 tf_name: prefix_advertise_passive_l2
                 type: Bool
-                description: 'Prefix advertise passive only level-2'
-                default_value: false
+                description: 'Prefix advertise passive only level-2.'
                 example: true
           - class_name: isisOverload
             doc_path: Routing%20and%20Forwarding/isis:Overload/
@@ -220,7 +202,6 @@ child_classes:
                 type: Int64
                 min_int: 5
                 max_int: 86400
-                default_value: 60
                 description: 'The overload startup time. The overload state begins when the switch boots up and ends at the time specified as the overload startup time.'
                 example: 60
   - class_name: isisInternalIf
@@ -239,141 +220,127 @@ child_classes:
       - nxos_name: authCheck
         tf_name: authentication_check
         type: Bool
-        description: 'Authentication Check for ISIS without specific level.'
-        default_value: true
+        description: 'Enabling Authentication check for ISIS interface without specific Level.'
         example: false
       - nxos_name: authCheckLvl1
         tf_name: authentication_check_l1
         type: Bool
-        description: 'Authentication Check for ISIS on Level-1.'
-        default_value: true
+        description: 'Enabling Authentication check for ISIS interface at Level1.'
         example: false
       - nxos_name: authCheckLvl2
         tf_name: authentication_check_l2
         type: Bool
-        description: 'Authentication Check for ISIS on Level-2.'
-        default_value: true
+        description: 'Enabling Authentication check for ISIS interface at Level2.'
         example: false
       - nxos_name: authKey
         tf_name: authentication_key
         type: String
         write_only: true
-        description: 'Authentication Key for IS-IS without specific level.'
+        description: 'Holds Authentication Key for ISIS Interface.'
         example: ''
       - nxos_name: authKeyLvl1
         tf_name: authentication_key_l1
         type: String
         write_only: true
-        description: 'Authentication Key for IS-IS on Level-1.'
+        description: 'Holds Authentication Key for ISIS Interface on Level-1.'
         example: ''
       - nxos_name: authKeyLvl2
         tf_name: authentication_key_l2
         type: String
         write_only: true
-        description: 'Authentication Key for IS-IS on Level-2.'
+        description: 'Holds Authentication Key for ISIS Interface on Level-2.'
         example: ''
       - nxos_name: authType
         tf_name: authentication_type
         type: String
-        description: 'IS-IS Authentication-Type without specific level.'
+        description: 'Holds Authentication Type value for ISIS Interface.'
         enum_values:
           - clear
           - md5
           - unknown
-        default_value: unknown
         example: unknown
       - nxos_name: authTypeLvl1
         tf_name: authentication_type_l1
         type: String
-        description: 'IS-IS Authentication-Type for Level-1.'
+        description: 'Holds ISIS Level-1 Authentication Type value for Interface.'
         enum_values:
           - clear
           - md5
           - unknown
-        default_value: unknown
         example: unknown
       - nxos_name: authTypeLvl2
         tf_name: authentication_type_l2
         type: String
-        description: 'IS-IS Authentication-Type for Level-2.'
+        description: 'Holds ISIS Level-2 Authentication Type value for Interface.'
         enum_values:
           - clear
           - md5
           - unknown
-        default_value: unknown
         example: unknown
       - nxos_name: cktT
         tf_name: circuit_type
         type: String
-        description: 'Circuit type.'
+        description: 'Holds ISIS interface Circuit Type.'
         enum_values:
           - l1
           - l2
           - l12
-        default_value: l12
         example: l2
       - nxos_name: dom
         tf_name: vrf
         type: String
-        description: 'VRF.'
+        description: 'Dom to which the interface belongs to.'
         example: 'default'
       - nxos_name: helloIntvl
         tf_name: hello_interval
         type: Int64
         min_int: 1
         max_int: 65535
-        default_value: 10
-        description: 'Hello interval.'
+        description: 'Holds Interface Hello Interval value.'
         example: 20
       - nxos_name: helloIntvlLvl1
         tf_name: hello_interval_l1
         type: Int64
         min_int: 1
         max_int: 65535
-        default_value: 10
-        description: 'Hello interval Level-1.'
+        description: 'Holds ISIS interface Hello Interval Level-1 value.'
         example: 20
       - nxos_name: helloIntvlLvl2
         tf_name: hello_interval_l2
         type: Int64
         min_int: 1
         max_int: 65535
-        default_value: 10
-        description: 'Hello interval Level-2.'
+        description: 'Holds ISIS interface Hello Interval Level-2 value.'
         example: 20
       - nxos_name: helloMult
         tf_name: hello_multiplier
         type: Int64
         min_int: 3
         max_int: 1000
-        default_value: 3
-        description: 'Hello multiplier.'
+        description: 'Holds Interface Hello Multiplier value.'
         example: 4
       - nxos_name: helloMultLvl1
         tf_name: hello_multiplier_l1
         type: Int64
         min_int: 3
         max_int: 1000
-        default_value: 3
-        description: 'Hello multiplier Level-1.'
+        description: 'Holds ISIS interface Hello Multiplier Level-1 value.'
         example: 4
       - nxos_name: helloMultLvl2
         tf_name: hello_multiplier_l2
         type: Int64
         min_int: 3
         max_int: 1000
-        default_value: 3
-        description: 'Hello multiplier Level-2.'
+        description: 'Holds ISIS interface Hello Multiplier Level-2 value.'
         example: 4
       - nxos_name: helloPad
         tf_name: hello_padding
         type: String
-        description: 'Hello padding.'
+        description: 'Holds ISIS Interface Hello Padding Info.'
         enum_values:
           - always
           - transient
           - never
-        default_value: always
         example: never
       - nxos_name: instance
         tf_name: instance_name
@@ -385,49 +352,43 @@ child_classes:
         type: Int64
         min_int: 0
         max_int: 16777216
-        default_value: 16777216
-        description: 'Interface metric Level-1.'
+        description: 'Holds ISIS interface Metric level-1.'
         example: 1000
       - nxos_name: metricLvl2
         tf_name: metric_l2
         type: Int64
         min_int: 0
         max_int: 16777216
-        default_value: 16777216
-        description: 'Interface metric Level-2.'
+        description: 'Holds ISIS interface Metric level-2.'
         example: 1000
       - nxos_name: mtuCheck
         tf_name: mtu_check
         type: Bool
-        description: 'MTU Check for IS-IS without specific level.'
-        default_value: false
+        description: 'Enabling Mtu check for ISIS interface without specific Level.'
         example: true
       - nxos_name: mtuCheckLvl1
         tf_name: mtu_check_l1
         type: Bool
-        description: 'MTU Check for IS-IS on Level-1.'
-        default_value: false
+        description: 'Enabling Mtu check for ISIS interface at Level1.'
         example: true
       - nxos_name: mtuCheckLvl2
         tf_name: mtu_check_l2
         type: Bool
-        description: 'MTU Check for IS-IS on Level-2.'
-        default_value: false
+        description: 'Enabling Mtu check for ISIS interface at Level2.'
         example: true
       - nxos_name: networkTypeP2P
         tf_name: network_type_p2p
         type: String
-        description: 'Enabling Point-to-Point Network Type on IS-IS Interface.'
+        description: 'Enabling Point-to-Point Network Type on ISIS Interface.'
         enum_values:
           - 'off'
           - 'on'
           - useAllISMac
-        default_value: 'off'
         example: 'on'
       - nxos_name: passive
         tf_name: passive
         type: String
-        description: 'IS-IS Passive Interface Info.'
+        description: 'Holds ISIS Passive Interface Info.'
         enum_values:
           - l1
           - l2
@@ -436,28 +397,24 @@ child_classes:
           - noL2
           - noL12
           - inheritDef
-        default_value: inheritDef
         example: l1
       - nxos_name: priorityLvl1
         tf_name: priority_l1
         type: Int64
         min_int: 0
         max_int: 127
-        default_value: 64
-        description: 'Circuit priority.'
+        description: 'Holds ISIS Interface Level-1 Circuit Priority.'
         example: 80
       - nxos_name: priorityLvl2
         tf_name: priority_l2
         type: Int64
         min_int: 0
         max_int: 127
-        default_value: 64
-        description: 'Circuit priority.'
+        description: 'Holds ISIS Interface Level-2 Circuit Priority.'
         example: 80
       - nxos_name: v4enable
         tf_name: enable_ipv4
         type: Bool
-        default_value: false
         description: "Enabling ISIS router tag on Interface's IPV4 family."
         example: true
 test_prerequisites:

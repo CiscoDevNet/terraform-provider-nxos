@@ -126,7 +126,7 @@ type BGPVrfsPeers struct {
 	PeerType            types.String                      `tfsdk:"peer_type"`
 	SourceInterface     types.String                      `tfsdk:"source_interface"`
 	HoldTime            types.Int64                       `tfsdk:"hold_time"`
-	Keepalive           types.Int64                       `tfsdk:"keepalive"`
+	KeepaliveInterval   types.Int64                       `tfsdk:"keepalive_interval"`
 	EbgpMultihopTtl     types.Int64                       `tfsdk:"ebgp_multihop_ttl"`
 	PeerControl         types.String                      `tfsdk:"peer_control"`
 	PasswordType        types.String                      `tfsdk:"password_type"`
@@ -468,8 +468,8 @@ func (data BGP) toBody() nxos.Body {
 					if (!child.HoldTime.IsUnknown() && !child.HoldTime.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "holdIntvl", strconv.FormatInt(child.HoldTime.ValueInt64(), 10))
 					}
-					if (!child.Keepalive.IsUnknown() && !child.Keepalive.IsNull()) || false {
-						attrs, _ = sjson.Set(attrs, "kaIntvl", strconv.FormatInt(child.Keepalive.ValueInt64(), 10))
+					if (!child.KeepaliveInterval.IsUnknown() && !child.KeepaliveInterval.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "kaIntvl", strconv.FormatInt(child.KeepaliveInterval.ValueInt64(), 10))
 					}
 					if (!child.EbgpMultihopTtl.IsUnknown() && !child.EbgpMultihopTtl.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "ttl", strconv.FormatInt(child.EbgpMultihopTtl.ValueInt64(), 10))
@@ -742,7 +742,7 @@ func (data *BGP) fromBody(res gjson.Result) {
 												nestedChildbgpPeer.PeerType = types.StringValue(nestedValue.Get("attributes.peerType").String())
 												nestedChildbgpPeer.SourceInterface = types.StringValue(nestedValue.Get("attributes.srcIf").String())
 												nestedChildbgpPeer.HoldTime = types.Int64Value(nestedValue.Get("attributes.holdIntvl").Int())
-												nestedChildbgpPeer.Keepalive = types.Int64Value(nestedValue.Get("attributes.kaIntvl").Int())
+												nestedChildbgpPeer.KeepaliveInterval = types.Int64Value(nestedValue.Get("attributes.kaIntvl").Int())
 												nestedChildbgpPeer.EbgpMultihopTtl = types.Int64Value(nestedValue.Get("attributes.ttl").Int())
 												nestedChildbgpPeer.PeerControl = types.StringValue(nestedValue.Get("attributes.ctrl").String())
 												nestedChildbgpPeer.PasswordType = types.StringValue(nestedValue.Get("attributes.passwdType").String())
@@ -1264,10 +1264,10 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 			} else {
 				data.Vrfs[c].Peers[nc].HoldTime = types.Int64Null()
 			}
-			if !data.Vrfs[c].Peers[nc].Keepalive.IsNull() {
-				data.Vrfs[c].Peers[nc].Keepalive = types.Int64Value(rbgpPeer.Get("bgpPeer.attributes.kaIntvl").Int())
+			if !data.Vrfs[c].Peers[nc].KeepaliveInterval.IsNull() {
+				data.Vrfs[c].Peers[nc].KeepaliveInterval = types.Int64Value(rbgpPeer.Get("bgpPeer.attributes.kaIntvl").Int())
 			} else {
-				data.Vrfs[c].Peers[nc].Keepalive = types.Int64Null()
+				data.Vrfs[c].Peers[nc].KeepaliveInterval = types.Int64Null()
 			}
 			if !data.Vrfs[c].Peers[nc].EbgpMultihopTtl.IsNull() {
 				data.Vrfs[c].Peers[nc].EbgpMultihopTtl = types.Int64Value(rbgpPeer.Get("bgpPeer.attributes.ttl").Int())

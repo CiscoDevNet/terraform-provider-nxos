@@ -6,7 +6,7 @@ description: |-
   This resource can manage the BGP configuration.
   API Documentation: bgpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Entity/
   Additional API Documentation
-  bgpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Inst/bgpDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Dom/bgpRtCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrl/bgpGr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Gr/bgpDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:DomAf/bgpAdvPrefix https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AdvPrefix/bgpInterLeakP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:InterLeakP/bgpPeerCont https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerCont/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpPeer https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Peer/bgpLocalAsn https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:localasn/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpRtCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/bgpPfxCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/
+  bgpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Inst/bgpDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Dom/bgpRtCtrl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrl/bgpGr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Gr/bgpDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:DomAf/bgpAdvPrefix https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:AdvPrefix/bgpInterLeakP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:InterLeakP/bgpPeerCont https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerCont/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpMaxPfxP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/bgpPeer https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Peer/bgpLocalAsn https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:LocalAsn/bgpPeerAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/bgpRtCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/bgpPfxCtrlP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/
 ---
 
 # nxos_bgp (Resource)
@@ -28,7 +28,7 @@ This resource can manage the BGP configuration.
 - [bgpPeerAf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/)
 - [bgpMaxPfxP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:MaxPfxP/)
 - [bgpPeer](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:Peer/)
-- [bgpLocalAsn](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:localasn/)
+- [bgpLocalAsn](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:LocalAsn/)
 - [bgpPeerAf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PeerAf/)
 - [bgpRtCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:RtCtrlP/)
 - [bgpPfxCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/)
@@ -107,7 +107,7 @@ resource "nxos_bgp" "example" {
       peer_type             = "fabric-internal"
       source_interface      = "lo0"
       hold_time             = 45
-      keepalive             = 15
+      keepalive_interval    = 15
       ebgp_multihop_ttl     = 5
       peer_control          = "bfd,dis-conn-check"
       password_type         = "LINE"
@@ -138,16 +138,13 @@ resource "nxos_bgp" "example" {
 
 ### Optional
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `asn` (String) Autonomous system number.
 - `device` (String) A device name from the provider configuration.
-- `enhanced_error_handling` (Boolean) Enable BGP Enhanced Error Handling.
-  - Default value: `true`
-- `instance_admin_state` (String) Administrative state.
+- `enhanced_error_handling` (Boolean) Enable BGP Enhanced Error Handling to prevent inadvertent session resets for minor errors. See RFC7606 for more details.
+- `instance_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `vrfs` (Attributes List) List of BGP VRFs. (see [below for nested schema](#nestedatt--vrfs))
 
 ### Read-Only
@@ -159,91 +156,69 @@ resource "nxos_bgp" "example" {
 
 Required:
 
-- `name` (String) VRF name.
+- `name` (String) The name of the object.
 
 Optional:
 
 - `address_families` (Attributes List) List of BGP address families. (see [below for nested schema](#nestedatt--vrfs--address_families))
 - `graceful_restart_interval` (Number) The graceful restart interval.
   - Range: `1`-`3600`
-  - Default value: `120`
 - `graceful_restart_stale_interval` (Number) The stale interval for routes advertised by the BGP peer.
   - Range: `1`-`3600`
-  - Default value: `300`
 - `peer_templates` (Attributes List) List of BGP peer templates. (see [below for nested schema](#nestedatt--vrfs--peer_templates))
 - `peers` (Attributes List) List of BGP peers. (see [below for nested schema](#nestedatt--vrfs--peers))
-- `route_control_enforce_first_as` (String) Enforce First AS For Ebgp. Can be configured only for VRF default.
+- `route_control_enforce_first_as` (String) Enforce First AS For EBgp. Can be configured only for VRF default.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `route_control_fib_accelerate` (String) Accelerate the hardware updates for IP/IPv6 adjacencies for neighbor. Can be configured only for VRF default.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
 - `route_control_log_neighbor_changes` (String) Log Neighbor Changes.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
 - `route_control_suppress_routes` (String) Suppress Routes: Advertise only routes that are programmed in hardware to peers. Can be configured only for VRF default.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
-- `router_id` (String) Router ID.
+- `router_id` (String) The BGP router ID.
 
 <a id="nestedatt--vrfs--address_families"></a>
 ### Nested Schema for `vrfs.address_families`
 
 Required:
 
-- `address_family` (String) Address Family.
+- `address_family` (String) Type.
   - Choices: `ipv4-ucast`, `ipv4-mcast`, `vpnv4-ucast`, `ipv6-ucast`, `ipv6-mcast`, `vpnv6-ucast`, `vpnv6-mcast`, `l2vpn-evpn`, `ipv4-lucast`, `ipv6-lucast`, `lnkstate`, `ipv4-mvpn`, `ipv6-mvpn`, `l2vpn-vpls`, `ipv4-mdt`
-  - Default value: `ipv4-ucast`
 
 Optional:
 
-- `advertise_l2vpn_evpn` (String) Enable or disable the advertisement of L2VPN EVPN routes.
+- `advertise_l2vpn_evpn` (String) Advertise L2vpn Evpn.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
 - `advertise_only_active_routes` (String) Advertise only active routes to peers
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
 - `advertise_physical_ip_for_type5_routes` (String) Advertise physical IP for type-5 routes
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
 - `advertised_prefixes` (Attributes List) List of BGP advertised prefixes. (see [below for nested schema](#nestedatt--vrfs--address_families--advertised_prefixes))
 - `critical_nexthop_timeout` (String) The next-hop address tracking delay timer for critical next-hop reachability routes.
-  - Default value: `crit`
-- `default_information_originate` (String) Enable or disable the default-information originate.
+- `default_information_originate` (String) default-information originate.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
-- `max_ecmp_paths` (Number) Maximum number of ECMP paths.
-  - Range: `1`-`128`
-  - Default value: `1`
-- `max_external_ecmp_paths` (Number) Maximum number of external ECMP paths.
-  - Range: `1`-`128`
-  - Default value: `1`
-- `max_external_internal_ecmp_paths` (Number) Maximum number of external/internal ECMP paths.
-  - Range: `1`-`128`
-  - Default value: `1`
-- `max_local_ecmp_paths` (Number) Maximum number of equal-cost multipath for local paths ECMP paths.
-  - Range: `1`-`128`
-  - Default value: `1`
-- `max_mixed_ecmp_paths` (Number) Maximum mixed equal-cost multipath for local and remote ECMP paths.
-  - Range: `1`-`128`
-  - Default value: `1`
-- `next_hop_route_map_name` (String) Next hope route map name
+- `max_ecmp_paths` (Number) The maximum number of equal-cost paths for BGP load sharing.
+  - Range: `1`-`512`
+- `max_external_ecmp_paths` (Number) Max External ECMP.
+  - Range: `1`-`512`
+- `max_external_internal_ecmp_paths` (Number) Max External Internal ECMP.
+  - Range: `1`-`512`
+- `max_local_ecmp_paths` (Number) Maximum number of equal-cost multipath for local paths.
+  - Range: `1`-`512`
+- `max_mixed_ecmp_paths` (Number) Max mixed equal-cost multipath for local and remote paths.
+  - Range: `1`-`512`
+- `next_hop_route_map_name` (String) Next hop route map name.
 - `non_critical_nexthop_timeout` (String) The next-hop address tracking delay timer for non-critical next-hop reachability routes.
-  - Default value: `noncrit`
 - `prefix_priority` (String) Enable prefix priority for AF
   - Choices: `none`, `high`
-  - Default value: `none`
 - `redistributions` (Attributes List) List of BGP route redistributions. (see [below for nested schema](#nestedatt--vrfs--address_families--redistributions))
 - `retain_rt_all` (String) Retain Route Target All
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
-- `table_map_route_map_name` (String) Route Map name
+- `table_map_route_map_name` (String) Route-map name.
 - `vni_ethernet_tag` (String) Allow VNI in Ethernet Tag field in EVPN route
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
 - `wait_igp_converged` (String) Delay initial bestpath until redistributed IGPs have converged
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
 
 <a id="nestedatt--vrfs--address_families--advertised_prefixes"></a>
 ### Nested Schema for `vrfs.address_families.advertised_prefixes`
@@ -254,9 +229,8 @@ Required:
 
 Optional:
 
-- `evpn` (String) Advertise route towards evpn side.
+- `evpn` (String) Evpn to advertise route towards evpn side.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
 - `route_map` (String) Route map to modify attributes.
 
 
@@ -266,20 +240,16 @@ Optional:
 Required:
 
 - `protocol` (String) The list of protocols to match.
-  - Choices: `unspecified`, `static`, `direct`, `bgp`, `isis`, `ospf`, `ospfv3`, `eigrp`, `host`, `rip`, `amt`, `lisp`, `hmm`, `am`, `srv6`
-  - Default value: `unspecified`
+  - Choices: `unspecified`, `static`, `direct`, `bgp`, `isis`, `ospf`, `ospfv3`, `eigrp`, `host`, `rip`, `amt`, `lisp`, `hmm`, `am`, `srv6`, `dhcpv6`, `icmpv6`
 - `protocol_instance` (String) The inter protocol route leak policy instance (Use `none` for `static` and `direct` protocols).
-  - Default value: `none`
 
 Optional:
 
 - `route_map` (String) The name of the default route leak policy route map. This route map name is used to control distribution.
 - `scope` (String) The domain applicable to the capability.
   - Choices: `intra`, `inter`, `defrt`
-  - Default value: `inter`
 - `srv6_prefix_type` (String) SRv6 Prefix Type; Valid only when proto is srv6.
   - Choices: `unspecified`, `locator`
-  - Default value: `unspecified`
 
 
 
@@ -288,27 +258,24 @@ Optional:
 
 Required:
 
-- `name` (String) Peer template name.
+- `name` (String) The name of the object.
 
 Optional:
 
-- `description` (String) Peer template description.
+- `description` (String) Description.
 - `peer_template_address_families` (Attributes List) List of BGP peer template address families. (see [below for nested schema](#nestedatt--vrfs--peer_templates--peer_template_address_families))
 - `peer_type` (String) Neighbor Fabric Type.
   - Choices: `fabric-internal`, `fabric-external`, `fabric-border-leaf`
-  - Default value: `fabric-internal`
-- `remote_asn` (String) Peer template autonomous system number.
+- `remote_asn` (String) Autonomous System Number.
 - `source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`.
-  - Default value: `unspecified`
 
 <a id="nestedatt--vrfs--peer_templates--peer_template_address_families"></a>
 ### Nested Schema for `vrfs.peer_templates.peer_template_address_families`
 
 Required:
 
-- `address_family` (String) Address Family.
+- `address_family` (String) Type.
   - Choices: `ipv4-ucast`, `vpnv4-ucast`, `ipv6-ucast`, `vpnv6-ucast`, `l2vpn-evpn`, `lnkstate`
-  - Default value: `ipv4-ucast`
 
 Optional:
 
@@ -317,19 +284,16 @@ Optional:
   - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.
 - `max_prefix_action` (String) Action to do when limit is exceeded.
   - Choices: `log`, `shut`, `restart`
-  - Default value: `shut`
 - `max_prefix_number` (Number) Maximum number of prefixes allowed from the peer.
   - Range: `0`-`4294967295`
 - `max_prefix_restart_time` (Number) The period of time in minutes before restarting the peer when the prefix limit is reached.
   - Range: `1`-`65535`
-- `max_prefix_threshold` (Number) The period of time in minutes before restarting the peer when the prefix limit is reached.
-  - Range: `0`-`100`
+- `max_prefix_threshold` (Number) The threshold percentage of the maximum number of prefixes before a warning is issued.
+  - Range: `1`-`100`
 - `send_community_extended` (String) Send-community extended.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
 - `send_community_standard` (String) Send-community standard.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
 
 
 
@@ -339,45 +303,39 @@ Optional:
 Required:
 
 - `address` (String) Peer address.
-- `local_asn` (String) Local Autonomous system number.
+- `local_asn` (String) Local Autonomous System Number.
 
 Optional:
 
-- `description` (String) Peer description.
-- `ebgp_multihop_ttl` (Number) eBGP Multihop TTL
-  - Range: `0`-`255`
-- `hold_time` (Number) BGP Hold Timer in seconds. The value must be greater than the keepalive timer
+- `description` (String) The name of the object.
+- `ebgp_multihop_ttl` (Number) eBGP Multihop TTL value.
+  - Range: `2`-`255`
+- `hold_time` (Number) Hold Interval.
   - Range: `3`-`3600`
-  - Default value: `180`
-- `keepalive` (Number) BGP Keepalive Timer in seconds
+- `keepalive_interval` (Number) Keepalive Interval.
   - Range: `0`-`3600`
-  - Default value: `60`
 - `local_asn_propagation` (String) ASN Propagation.
   - Choices: `none`, `no-prepend`, `replace-as`, `dual-as`
-  - Default value: `none`
 - `password` (String) Password.
-- `password_type` (String) Password Encryption Type.
-  - Choices: `0`, `3`, `LINE`, `7`
+- `password_type` (String) Password EnCrypt Type.
+  - Choices: `0`, `3`, `LINE`, `6`, `7`
 - `peer_address_families` (Attributes List) List of BGP peer address families. (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families))
 - `peer_control` (String) Peer Controls. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:
   - Single value. Example: `bfd`
   - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.
-- `peer_template` (String) Peer template name.
+- `peer_template` (String) Peer Template To Import From.
 - `peer_type` (String) Neighbor Fabric Type.
   - Choices: `fabric-internal`, `fabric-external`, `fabric-border-leaf`
-  - Default value: `fabric-internal`
-- `remote_asn` (String) Peer autonomous system number.
+- `remote_asn` (String) Autonomous System Number, takes value from (1-4294967295 | 1-65535[.(0-65535)]).
 - `source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`.
-  - Default value: `unspecified`
 
 <a id="nestedatt--vrfs--peers--peer_address_families"></a>
 ### Nested Schema for `vrfs.peers.peer_address_families`
 
 Required:
 
-- `address_family` (String) Address Family.
+- `address_family` (String) Type.
   - Choices: `ipv4-ucast`, `ipv4-mvpn`, `vpnv4-ucast`, `ipv6-ucast`, `vpnv6-ucast`, `l2vpn-evpn`, `lnkstate`
-  - Default value: `ipv4-ucast`
 
 Optional:
 
@@ -388,23 +346,20 @@ Optional:
 - `route_controls` (Attributes List) List of BGP peer address family route controls. (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families--route_controls))
 - `send_community_extended` (String) Send-community extended.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
 - `send_community_standard` (String) Send-community standard.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
 
 <a id="nestedatt--vrfs--peers--peer_address_families--prefix_list_controls"></a>
 ### Nested Schema for `vrfs.peers.peer_address_families.prefix_list_controls`
 
 Required:
 
-- `direction` (String) Route Control direction.
+- `direction` (String) Direction: Specifies whether to apply this policy in the incoming or outgoing direction.
   - Choices: `in`, `out`
-  - Default value: `in`
 
 Optional:
 
-- `list` (String) Route Control Prefix-List name.
+- `list` (String) Name of list to control the route distribution.
 
 
 <a id="nestedatt--vrfs--peers--peer_address_families--route_controls"></a>
@@ -412,13 +367,12 @@ Optional:
 
 Required:
 
-- `direction` (String) Route Control direction.
+- `direction` (String) Direction.
   - Choices: `in`, `out`
-  - Default value: `in`
 
 Optional:
 
-- `route_map_name` (String) Route Control Route-Map name.
+- `route_map_name` (String) Route Map.
 
 ## Import
 

@@ -10,11 +10,10 @@ attributes:
   - nxos_name: adminSt
     tf_name: admin_state
     type: String
-    description: 'Administrative state.'
+    description: 'The administrative state of the object or policy.'
     enum_values:
       - enabled
       - disabled
-    default_value: enabled
     example: enabled
 child_classes:
   - class_name: bgpInst
@@ -27,11 +26,10 @@ child_classes:
       - nxos_name: adminSt
         tf_name: instance_admin_state
         type: String
-        description: 'Administrative state.'
+        description: 'The administrative state of the object or policy.'
         enum_values:
           - enabled
           - disabled
-        default_value: enabled
         example: enabled
       - nxos_name: asn
         tf_name: asn
@@ -42,8 +40,7 @@ child_classes:
       - nxos_name: enhancedErr
         tf_name: enhanced_error_handling
         type: Bool
-        description: 'Enable BGP Enhanced Error Handling.'
-        default_value: true
+        description: 'Enable BGP Enhanced Error Handling to prevent inadvertent session resets for minor errors. See RFC7606 for more details.'
         example: false
     child_classes:
       - class_name: bgpDom
@@ -57,12 +54,12 @@ child_classes:
             tf_name: name
             type: String
             id: true
-            description: 'VRF name.'
+            description: 'The name of the object.'
             example: default
           - nxos_name: rtrId
             tf_name: router_id
             type: String
-            description: 'Router ID.'
+            description: 'The BGP router ID.'
             example: '1.1.1.1'
         child_classes:
           - class_name: bgpRtCtrl
@@ -75,11 +72,10 @@ child_classes:
               - nxos_name: enforceFirstAs
                 tf_name: route_control_enforce_first_as
                 type: String
-                description: 'Enforce First AS For Ebgp. Can be configured only for VRF default.'
+                description: 'Enforce First AS For EBgp. Can be configured only for VRF default.'
                 enum_values:
                   - enabled
                   - disabled
-                default_value: enabled
                 example: disabled
               - nxos_name: fibAccelerate
                 tf_name: route_control_fib_accelerate
@@ -88,7 +84,6 @@ child_classes:
                 enum_values:
                   - enabled
                   - disabled
-                default_value: disabled
                 example: enabled
               - nxos_name: logNeighborChanges
                 tf_name: route_control_log_neighbor_changes
@@ -97,7 +92,6 @@ child_classes:
                 enum_values:
                   - enabled
                   - disabled
-                default_value: disabled
                 example: enabled
               - nxos_name: supprRt
                 tf_name: route_control_suppress_routes
@@ -106,7 +100,6 @@ child_classes:
                 enum_values:
                   - enabled
                   - disabled
-                default_value: enabled
                 example: disabled
           - class_name: bgpGr
             doc_path: Routing%20and%20Forwarding/bgp:Gr/
@@ -121,7 +114,6 @@ child_classes:
                 description: 'The graceful restart interval.'
                 min_int: 1
                 max_int: 3600
-                default_value: 120
                 example: 240
               - nxos_name: staleIntvl
                 tf_name: graceful_restart_stale_interval
@@ -129,7 +121,6 @@ child_classes:
                 description: 'The stale interval for routes advertised by the BGP peer.'
                 min_int: 1
                 max_int: 3600
-                default_value: 300
                 example: 1800
           - class_name: bgpDomAf
             doc_path: Routing%20and%20Forwarding/bgp:DomAf/
@@ -142,7 +133,7 @@ child_classes:
                 tf_name: address_family
                 type: String
                 id: true
-                description: 'Address Family.'
+                description: 'Type.'
                 enum_values:
                   - ipv4-ucast
                   - ipv4-mcast
@@ -159,28 +150,24 @@ child_classes:
                   - ipv6-mvpn
                   - l2vpn-vpls
                   - ipv4-mdt
-                default_value: 'ipv4-ucast'
                 example: 'ipv4-ucast'
               - nxos_name: critNhTimeout
                 tf_name: critical_nexthop_timeout
                 type: String
                 description: 'The next-hop address tracking delay timer for critical next-hop reachability routes.'
-                default_value: 'crit'
                 example: 2500
               - nxos_name: nonCritNhTimeout
                 tf_name: non_critical_nexthop_timeout
                 type: String
                 description: 'The next-hop address tracking delay timer for non-critical next-hop reachability routes.'
-                default_value: 'noncrit'
                 example: 8000
               - nxos_name: advertL2vpnEvpn
                 tf_name: advertise_l2vpn_evpn
                 type: String
-                description: 'Enable or disable the advertisement of L2VPN EVPN routes.'
+                description: 'Advertise L2vpn Evpn.'
                 enum_values:
                   - enabled
                   - disabled
-                default_value: disabled
                 example: disabled
               - nxos_name: advPip
                 tf_name: advertise_physical_ip_for_type5_routes
@@ -189,63 +176,55 @@ child_classes:
                 enum_values:
                   - enabled
                   - disabled
-                default_value: disabled
                 example: disabled
               - nxos_name: maxEcmp
                 tf_name: max_ecmp_paths
                 type: Int64
-                description: 'Maximum number of ECMP paths.'
+                description: 'The maximum number of equal-cost paths for BGP load sharing.'
                 min_int: 1
-                max_int: 128
-                default_value: 1
+                max_int: 512
                 example: 2
               - nxos_name: maxExtEcmp
                 tf_name: max_external_ecmp_paths
                 type: Int64
-                description: 'Maximum number of external ECMP paths.'
+                description: 'Max External ECMP.'
                 min_int: 1
-                max_int: 128
-                default_value: 1
+                max_int: 512
                 example: 1
               - nxos_name: maxExtIntEcmp
                 tf_name: max_external_internal_ecmp_paths
                 type: Int64
-                description: 'Maximum number of external/internal ECMP paths.'
+                description: 'Max External Internal ECMP.'
                 min_int: 1
-                max_int: 128
-                default_value: 1
+                max_int: 512
                 example: 1
               - nxos_name: maxLclEcmp
                 tf_name: max_local_ecmp_paths
                 type: Int64
-                description: 'Maximum number of equal-cost multipath for local paths ECMP paths.'
+                description: 'Maximum number of equal-cost multipath for local paths.'
                 min_int: 1
-                max_int: 128
-                default_value: 1
+                max_int: 512
                 example: 1
               - nxos_name: maxMxdEcmp
                 tf_name: max_mixed_ecmp_paths
                 type: Int64
-                description: 'Maximum mixed equal-cost multipath for local and remote ECMP paths.'
+                description: 'Max mixed equal-cost multipath for local and remote paths.'
                 min_int: 1
-                max_int: 128
-                default_value: 1
+                max_int: 512
                 example: 1
               - nxos_name: defInfOriginate
                 tf_name: default_information_originate
                 type: String
-                description: 'Enable or disable the default-information originate.'
+                description: 'default-information originate.'
                 enum_values:
                   - enabled
                   - disabled
-                default_value: disabled
                 example: disabled
               - nxos_name: nhRtMap
                 tf_name: next_hop_route_map_name
                 type: String
-                description: 'Next hope route map name'
+                description: 'Next hop route map name.'
                 example: ROUTEMAP1
-                default_value: ''
               - nxos_name: prfxPriority
                 tf_name: prefix_priority
                 type: String
@@ -253,7 +232,6 @@ child_classes:
                 enum_values:
                   - none
                   - high
-                default_value: none
                 example: none
               - nxos_name: retainRttAll
                 tf_name: retain_rt_all
@@ -262,7 +240,6 @@ child_classes:
                 enum_values:
                   - enabled
                   - disabled
-                default_value: disabled
                 example: disabled
               - nxos_name: supprInactive
                 tf_name: advertise_only_active_routes
@@ -271,14 +248,12 @@ child_classes:
                 enum_values:
                   - enabled
                   - disabled
-                default_value: disabled
                 example: disabled
               - nxos_name: tblMap
                 tf_name: table_map_route_map_name
                 type: String
-                description: 'Route Map name'
+                description: 'Route-map name.'
                 example: ROUTE_MAP1
-                default_value: ''
               - nxos_name: vniEthTag
                 tf_name: vni_ethernet_tag
                 type: String
@@ -286,7 +261,6 @@ child_classes:
                 enum_values:
                   - enabled
                   - disabled
-                default_value: disabled
                 example: disabled
               - nxos_name: waitIgpConv
                 tf_name: wait_igp_converged
@@ -295,7 +269,6 @@ child_classes:
                 enum_values:
                   - enabled
                   - disabled
-                default_value: disabled
                 example: disabled
             child_classes:
               - class_name: bgpAdvPrefix
@@ -315,17 +288,15 @@ child_classes:
                     tf_name: route_map
                     type: String
                     description: 'Route map to modify attributes.'
-                    default_value: ''
                     example: rt-map
                   - nxos_name: evpn
                     tf_name: evpn
                     type: String
-                    description: 'Advertise route towards evpn side.'
+                    description: 'Evpn to advertise route towards evpn side.'
                     enum_values:
                       - enabled
                       - disabled
                     example: enabled
-                    default_value: disabled
               - class_name: bgpInterLeakP
                 doc_path: Routing%20and%20Forwarding/bgp:InterLeakP/
                 rn: interleak-%s-interleak-%s
@@ -354,14 +325,14 @@ child_classes:
                       - hmm
                       - am
                       - srv6
-                    default_value: 'unspecified'
+                      - dhcpv6
+                      - icmpv6
                     example: 'ospf'
                   - nxos_name: inst
                     tf_name: protocol_instance
                     type: String
                     id: true
                     description: 'The inter protocol route leak policy instance (Use `none` for `static` and `direct` protocols).'
-                    default_value: 'none'
                     example: 'OSPF1'
                   - nxos_name: rtMap
                     tf_name: route_map
@@ -376,7 +347,6 @@ child_classes:
                       - intra
                       - inter
                       - defrt
-                    default_value: 'inter'
                     example: 'inter'
                   - nxos_name: srv6PrefixType
                     tf_name: srv6_prefix_type
@@ -385,7 +355,6 @@ child_classes:
                     enum_values:
                       - unspecified
                       - locator
-                    default_value: 'unspecified'
                     example: 'unspecified'
           - class_name: bgpPeerCont
             doc_path: Routing%20and%20Forwarding/bgp:PeerCont/
@@ -398,17 +367,17 @@ child_classes:
                 tf_name: name
                 type: String
                 id: true
-                description: 'Peer template name.'
+                description: 'The name of the object.'
                 example: SPINE-PEERS
               - nxos_name: asn
                 tf_name: remote_asn
                 type: String
-                description: 'Peer template autonomous system number.'
+                description: 'Autonomous System Number.'
                 example: '65002'
               - nxos_name: desc
                 tf_name: description
                 type: String
-                description: 'Peer template description.'
+                description: 'Description.'
                 example: My Description
               - nxos_name: peerType
                 tf_name: peer_type
@@ -418,13 +387,11 @@ child_classes:
                   - fabric-internal
                   - fabric-external
                   - fabric-border-leaf
-                default_value: 'fabric-internal'
                 example: 'fabric-internal'
               - nxos_name: srcIf
                 tf_name: source_interface
                 type: String
                 description: 'Source Interface. Must match first field in the output of `show intf brief`.'
-                default_value: 'unspecified'
                 example: 'lo0'
             child_classes:
               - class_name: bgpPeerAf
@@ -438,7 +405,7 @@ child_classes:
                     tf_name: address_family
                     type: String
                     id: true
-                    description: 'Address Family.'
+                    description: 'Type.'
                     enum_values:
                       - ipv4-ucast
                       - vpnv4-ucast
@@ -446,7 +413,6 @@ child_classes:
                       - vpnv6-ucast
                       - l2vpn-evpn
                       - lnkstate
-                    default_value: 'ipv4-ucast'
                     example: 'ipv4-ucast'
                   - nxos_name: ctrl
                     tf_name: control
@@ -460,7 +426,6 @@ child_classes:
                     enum_values:
                       - enabled
                       - disabled
-                    default_value: disabled
                     example: enabled
                   - nxos_name: sendComStd
                     tf_name: send_community_standard
@@ -469,7 +434,6 @@ child_classes:
                     enum_values:
                       - enabled
                       - disabled
-                    default_value: disabled
                     example: enabled
                 child_classes:
                   - class_name: bgpMaxPfxP
@@ -487,7 +451,6 @@ child_classes:
                           - log
                           - shut
                           - restart
-                        default_value: shut
                         example: restart
                       - nxos_name: maxPfx
                         tf_name: max_prefix_number
@@ -506,8 +469,8 @@ child_classes:
                       - nxos_name: thresh
                         tf_name: max_prefix_threshold
                         type: Int64
-                        description: 'The period of time in minutes before restarting the peer when the prefix limit is reached.'
-                        min_int: 0
+                        description: 'The threshold percentage of the maximum number of prefixes before a warning is issued.'
+                        min_int: 1
                         max_int: 100
                         example: 30
           - class_name: bgpPeer
@@ -526,17 +489,17 @@ child_classes:
               - nxos_name: asn
                 tf_name: remote_asn
                 type: String
-                description: 'Peer autonomous system number.'
+                description: 'Autonomous System Number, takes value from (1-4294967295 | 1-65535[.(0-65535)]).'
                 example: '65002'
               - nxos_name: name
                 tf_name: description
                 type: String
-                description: 'Peer description.'
+                description: 'The name of the object.'
                 example: 'My description'
               - nxos_name: peerImp
                 tf_name: peer_template
                 type: String
-                description: 'Peer template name.'
+                description: 'Peer Template To Import From.'
                 example: 'SPINE-PEERS'
               - nxos_name: peerType
                 tf_name: peer_type
@@ -546,36 +509,32 @@ child_classes:
                   - fabric-internal
                   - fabric-external
                   - fabric-border-leaf
-                default_value: 'fabric-internal'
                 example: 'fabric-internal'
               - nxos_name: srcIf
                 tf_name: source_interface
                 type: String
                 description: 'Source Interface. Must match first field in the output of `show intf brief`.'
-                default_value: 'unspecified'
                 example: 'lo0'
               - nxos_name: holdIntvl
                 tf_name: hold_time
                 type: Int64
-                description: 'BGP Hold Timer in seconds. The value must be greater than the keepalive timer'
-                default_value: 180
+                description: 'Hold Interval.'
                 example: 45
                 min_int: 3
                 max_int: 3600
               - nxos_name: kaIntvl
-                tf_name: keepalive
+                tf_name: keepalive_interval
                 type: Int64
-                description: 'BGP Keepalive Timer in seconds'
-                default_value: 60
+                description: 'Keepalive Interval.'
                 example: 15
                 min_int: 0
                 max_int: 3600
               - nxos_name: ttl
                 tf_name: ebgp_multihop_ttl
                 type: Int64
-                description: 'eBGP Multihop TTL'
+                description: 'eBGP Multihop TTL value.'
                 example: 5
-                min_int: 0
+                min_int: 2
                 max_int: 255
               - nxos_name: ctrl
                 tf_name: peer_control
@@ -585,11 +544,12 @@ child_classes:
               - nxos_name: passwdType
                 tf_name: password_type
                 type: String
-                description: 'Password Encryption Type.'
+                description: 'Password EnCrypt Type.'
                 enum_values:
                   - '0'
                   - '3'
                   - LINE
+                  - '6'
                   - '7'
                 example: LINE
                 exclude_test: true
@@ -601,7 +561,7 @@ child_classes:
                 write_only: true
             child_classes:
               - class_name: bgpLocalAsn
-                doc_path: Routing%20and%20Forwarding/bgp:localasn/
+                doc_path: Routing%20and%20Forwarding/bgp:LocalAsn/
                 rn: localasn
                 type: single
                 tf_name: local_asn
@@ -611,7 +571,6 @@ child_classes:
                     tf_name: local_asn_propagation
                     type: String
                     description: 'ASN Propagation.'
-                    default_value: none
                     enum_values:
                       - none
                       - no-prepend
@@ -621,7 +580,7 @@ child_classes:
                   - nxos_name: localAsn
                     tf_name: local_asn
                     type: String
-                    description: 'Local Autonomous system number.'
+                    description: 'Local Autonomous System Number.'
                     mandatory: true
                     example: '65001'
               - class_name: bgpPeerAf
@@ -635,7 +594,7 @@ child_classes:
                     tf_name: address_family
                     type: String
                     id: true
-                    description: 'Address Family.'
+                    description: 'Type.'
                     enum_values:
                       - ipv4-ucast
                       - ipv4-mvpn
@@ -644,7 +603,6 @@ child_classes:
                       - vpnv6-ucast
                       - l2vpn-evpn
                       - lnkstate
-                    default_value: 'ipv4-ucast'
                     example: 'ipv4-ucast'
                   - nxos_name: ctrl
                     tf_name: control
@@ -658,7 +616,6 @@ child_classes:
                     enum_values:
                       - enabled
                       - disabled
-                    default_value: disabled
                     example: enabled
                   - nxos_name: sendComStd
                     tf_name: send_community_standard
@@ -667,7 +624,6 @@ child_classes:
                     enum_values:
                       - enabled
                       - disabled
-                    default_value: disabled
                     example: enabled
                 child_classes:
                   - class_name: bgpRtCtrlP
@@ -681,16 +637,15 @@ child_classes:
                         tf_name: direction
                         type: String
                         id: true
-                        description: 'Route Control direction.'
+                        description: 'Direction.'
                         enum_values:
                           - in
                           - out
-                        default_value: in
                         example: in
                       - nxos_name: rtMap
                         tf_name: route_map_name
                         type: String
-                        description: 'Route Control Route-Map name.'
+                        description: 'Route Map.'
                         example: ROUTE_MAP1
                   - class_name: bgpPfxCtrlP
                     doc_path: Routing%20and%20Forwarding/bgp:PfxCtrlP/
@@ -703,16 +658,15 @@ child_classes:
                         tf_name: direction
                         type: String
                         id: true
-                        description: 'Route Control direction.'
+                        description: 'Direction: Specifies whether to apply this policy in the incoming or outgoing direction.'
                         enum_values:
                           - in
                           - out
-                        default_value: in
                         example: in
                       - nxos_name: list
                         tf_name: list
                         type: String
-                        description: 'Route Control Prefix-List name.'
+                        description: 'Name of list to control the route distribution.'
                         example: PREFIX_LIST1
 test_prerequisites:
   - dn: sys/fm/bgp

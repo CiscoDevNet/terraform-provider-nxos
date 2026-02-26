@@ -69,7 +69,7 @@ resource "nxos_bgp" "example" {
       peer_type             = "fabric-internal"
       source_interface      = "lo0"
       hold_time             = 45
-      keepalive             = 15
+      keepalive_interval    = 15
       ebgp_multihop_ttl     = 5
       peer_control          = "bfd,dis-conn-check"
       password_type         = "LINE"

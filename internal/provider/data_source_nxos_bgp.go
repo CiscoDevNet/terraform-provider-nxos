@@ -57,7 +57,7 @@ func (d *BGPDataSource) Metadata(_ context.Context, req datasource.MetadataReque
 func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the BGP configuration.", "bgpEntity", "Routing%20and%20Forwarding/bgp:Entity/").AddAdditionalDocs([]string{"bgpInst", "bgpDom", "bgpRtCtrl", "bgpGr", "bgpDomAf", "bgpAdvPrefix", "bgpInterLeakP", "bgpPeerCont", "bgpPeerAf", "bgpMaxPfxP", "bgpPeer", "bgpLocalAsn", "bgpPeerAf", "bgpRtCtrlP", "bgpPfxCtrlP"}, []string{"Routing%20and%20Forwarding/bgp:Inst/", "Routing%20and%20Forwarding/bgp:Dom/", "Routing%20and%20Forwarding/bgp:RtCtrl/", "Routing%20and%20Forwarding/bgp:Gr/", "Routing%20and%20Forwarding/bgp:DomAf/", "Routing%20and%20Forwarding/bgp:AdvPrefix/", "Routing%20and%20Forwarding/bgp:InterLeakP/", "Routing%20and%20Forwarding/bgp:PeerCont/", "Routing%20and%20Forwarding/bgp:PeerAf/", "Routing%20and%20Forwarding/bgp:MaxPfxP/", "Routing%20and%20Forwarding/bgp:Peer/", "Routing%20and%20Forwarding/bgp:localasn/", "Routing%20and%20Forwarding/bgp:PeerAf/", "Routing%20and%20Forwarding/bgp:RtCtrlP/", "Routing%20and%20Forwarding/bgp:PfxCtrlP/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the BGP configuration.", "bgpEntity", "Routing%20and%20Forwarding/bgp:Entity/").AddAdditionalDocs([]string{"bgpInst", "bgpDom", "bgpRtCtrl", "bgpGr", "bgpDomAf", "bgpAdvPrefix", "bgpInterLeakP", "bgpPeerCont", "bgpPeerAf", "bgpMaxPfxP", "bgpPeer", "bgpLocalAsn", "bgpPeerAf", "bgpRtCtrlP", "bgpPfxCtrlP"}, []string{"Routing%20and%20Forwarding/bgp:Inst/", "Routing%20and%20Forwarding/bgp:Dom/", "Routing%20and%20Forwarding/bgp:RtCtrl/", "Routing%20and%20Forwarding/bgp:Gr/", "Routing%20and%20Forwarding/bgp:DomAf/", "Routing%20and%20Forwarding/bgp:AdvPrefix/", "Routing%20and%20Forwarding/bgp:InterLeakP/", "Routing%20and%20Forwarding/bgp:PeerCont/", "Routing%20and%20Forwarding/bgp:PeerAf/", "Routing%20and%20Forwarding/bgp:MaxPfxP/", "Routing%20and%20Forwarding/bgp:Peer/", "Routing%20and%20Forwarding/bgp:LocalAsn/", "Routing%20and%20Forwarding/bgp:PeerAf/", "Routing%20and%20Forwarding/bgp:RtCtrlP/", "Routing%20and%20Forwarding/bgp:PfxCtrlP/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -69,11 +69,11 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				Computed:            true,
 			},
 			"admin_state": schema.StringAttribute{
-				MarkdownDescription: "Administrative state.",
+				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
 			"instance_admin_state": schema.StringAttribute{
-				MarkdownDescription: "Administrative state.",
+				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
 			"asn": schema.StringAttribute{
@@ -81,7 +81,7 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				Computed:            true,
 			},
 			"enhanced_error_handling": schema.BoolAttribute{
-				MarkdownDescription: "Enable BGP Enhanced Error Handling.",
+				MarkdownDescription: "Enable BGP Enhanced Error Handling to prevent inadvertent session resets for minor errors. See RFC7606 for more details.",
 				Computed:            true,
 			},
 			"vrfs": schema.ListNestedAttribute{
@@ -90,15 +90,15 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							MarkdownDescription: "VRF name.",
+							MarkdownDescription: "The name of the object.",
 							Computed:            true,
 						},
 						"router_id": schema.StringAttribute{
-							MarkdownDescription: "Router ID.",
+							MarkdownDescription: "The BGP router ID.",
 							Computed:            true,
 						},
 						"route_control_enforce_first_as": schema.StringAttribute{
-							MarkdownDescription: "Enforce First AS For Ebgp. Can be configured only for VRF default.",
+							MarkdownDescription: "Enforce First AS For EBgp. Can be configured only for VRF default.",
 							Computed:            true,
 						},
 						"route_control_fib_accelerate": schema.StringAttribute{
@@ -127,7 +127,7 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"address_family": schema.StringAttribute{
-										MarkdownDescription: "Address Family.",
+										MarkdownDescription: "Type.",
 										Computed:            true,
 									},
 									"critical_nexthop_timeout": schema.StringAttribute{
@@ -139,7 +139,7 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										Computed:            true,
 									},
 									"advertise_l2vpn_evpn": schema.StringAttribute{
-										MarkdownDescription: "Enable or disable the advertisement of L2VPN EVPN routes.",
+										MarkdownDescription: "Advertise L2vpn Evpn.",
 										Computed:            true,
 									},
 									"advertise_physical_ip_for_type5_routes": schema.StringAttribute{
@@ -147,31 +147,31 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										Computed:            true,
 									},
 									"max_ecmp_paths": schema.Int64Attribute{
-										MarkdownDescription: "Maximum number of ECMP paths.",
+										MarkdownDescription: "The maximum number of equal-cost paths for BGP load sharing.",
 										Computed:            true,
 									},
 									"max_external_ecmp_paths": schema.Int64Attribute{
-										MarkdownDescription: "Maximum number of external ECMP paths.",
+										MarkdownDescription: "Max External ECMP.",
 										Computed:            true,
 									},
 									"max_external_internal_ecmp_paths": schema.Int64Attribute{
-										MarkdownDescription: "Maximum number of external/internal ECMP paths.",
+										MarkdownDescription: "Max External Internal ECMP.",
 										Computed:            true,
 									},
 									"max_local_ecmp_paths": schema.Int64Attribute{
-										MarkdownDescription: "Maximum number of equal-cost multipath for local paths ECMP paths.",
+										MarkdownDescription: "Maximum number of equal-cost multipath for local paths.",
 										Computed:            true,
 									},
 									"max_mixed_ecmp_paths": schema.Int64Attribute{
-										MarkdownDescription: "Maximum mixed equal-cost multipath for local and remote ECMP paths.",
+										MarkdownDescription: "Max mixed equal-cost multipath for local and remote paths.",
 										Computed:            true,
 									},
 									"default_information_originate": schema.StringAttribute{
-										MarkdownDescription: "Enable or disable the default-information originate.",
+										MarkdownDescription: "default-information originate.",
 										Computed:            true,
 									},
 									"next_hop_route_map_name": schema.StringAttribute{
-										MarkdownDescription: "Next hope route map name",
+										MarkdownDescription: "Next hop route map name.",
 										Computed:            true,
 									},
 									"prefix_priority": schema.StringAttribute{
@@ -187,7 +187,7 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										Computed:            true,
 									},
 									"table_map_route_map_name": schema.StringAttribute{
-										MarkdownDescription: "Route Map name",
+										MarkdownDescription: "Route-map name.",
 										Computed:            true,
 									},
 									"vni_ethernet_tag": schema.StringAttribute{
@@ -212,7 +212,7 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 													Computed:            true,
 												},
 												"evpn": schema.StringAttribute{
-													MarkdownDescription: "Advertise route towards evpn side.",
+													MarkdownDescription: "Evpn to advertise route towards evpn side.",
 													Computed:            true,
 												},
 											},
@@ -255,15 +255,15 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"name": schema.StringAttribute{
-										MarkdownDescription: "Peer template name.",
+										MarkdownDescription: "The name of the object.",
 										Computed:            true,
 									},
 									"remote_asn": schema.StringAttribute{
-										MarkdownDescription: "Peer template autonomous system number.",
+										MarkdownDescription: "Autonomous System Number.",
 										Computed:            true,
 									},
 									"description": schema.StringAttribute{
-										MarkdownDescription: "Peer template description.",
+										MarkdownDescription: "Description.",
 										Computed:            true,
 									},
 									"peer_type": schema.StringAttribute{
@@ -280,7 +280,7 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"address_family": schema.StringAttribute{
-													MarkdownDescription: "Address Family.",
+													MarkdownDescription: "Type.",
 													Computed:            true,
 												},
 												"control": schema.StringAttribute{
@@ -308,7 +308,7 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 													Computed:            true,
 												},
 												"max_prefix_threshold": schema.Int64Attribute{
-													MarkdownDescription: "The period of time in minutes before restarting the peer when the prefix limit is reached.",
+													MarkdownDescription: "The threshold percentage of the maximum number of prefixes before a warning is issued.",
 													Computed:            true,
 												},
 											},
@@ -327,15 +327,15 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										Computed:            true,
 									},
 									"remote_asn": schema.StringAttribute{
-										MarkdownDescription: "Peer autonomous system number.",
+										MarkdownDescription: "Autonomous System Number, takes value from (1-4294967295 | 1-65535[.(0-65535)]).",
 										Computed:            true,
 									},
 									"description": schema.StringAttribute{
-										MarkdownDescription: "Peer description.",
+										MarkdownDescription: "The name of the object.",
 										Computed:            true,
 									},
 									"peer_template": schema.StringAttribute{
-										MarkdownDescription: "Peer template name.",
+										MarkdownDescription: "Peer Template To Import From.",
 										Computed:            true,
 									},
 									"peer_type": schema.StringAttribute{
@@ -347,15 +347,15 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										Computed:            true,
 									},
 									"hold_time": schema.Int64Attribute{
-										MarkdownDescription: "BGP Hold Timer in seconds. The value must be greater than the keepalive timer",
+										MarkdownDescription: "Hold Interval.",
 										Computed:            true,
 									},
-									"keepalive": schema.Int64Attribute{
-										MarkdownDescription: "BGP Keepalive Timer in seconds",
+									"keepalive_interval": schema.Int64Attribute{
+										MarkdownDescription: "Keepalive Interval.",
 										Computed:            true,
 									},
 									"ebgp_multihop_ttl": schema.Int64Attribute{
-										MarkdownDescription: "eBGP Multihop TTL",
+										MarkdownDescription: "eBGP Multihop TTL value.",
 										Computed:            true,
 									},
 									"peer_control": schema.StringAttribute{
@@ -363,7 +363,7 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										Computed:            true,
 									},
 									"password_type": schema.StringAttribute{
-										MarkdownDescription: "Password Encryption Type.",
+										MarkdownDescription: "Password EnCrypt Type.",
 										Computed:            true,
 									},
 									"password": schema.StringAttribute{
@@ -375,7 +375,7 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										Computed:            true,
 									},
 									"local_asn": schema.StringAttribute{
-										MarkdownDescription: "Local Autonomous system number.",
+										MarkdownDescription: "Local Autonomous System Number.",
 										Computed:            true,
 									},
 									"peer_address_families": schema.ListNestedAttribute{
@@ -384,7 +384,7 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"address_family": schema.StringAttribute{
-													MarkdownDescription: "Address Family.",
+													MarkdownDescription: "Type.",
 													Computed:            true,
 												},
 												"control": schema.StringAttribute{
@@ -405,11 +405,11 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 													NestedObject: schema.NestedAttributeObject{
 														Attributes: map[string]schema.Attribute{
 															"direction": schema.StringAttribute{
-																MarkdownDescription: "Route Control direction.",
+																MarkdownDescription: "Direction.",
 																Computed:            true,
 															},
 															"route_map_name": schema.StringAttribute{
-																MarkdownDescription: "Route Control Route-Map name.",
+																MarkdownDescription: "Route Map.",
 																Computed:            true,
 															},
 														},
@@ -421,11 +421,11 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 													NestedObject: schema.NestedAttributeObject{
 														Attributes: map[string]schema.Attribute{
 															"direction": schema.StringAttribute{
-																MarkdownDescription: "Route Control direction.",
+																MarkdownDescription: "Direction: Specifies whether to apply this policy in the incoming or outgoing direction.",
 																Computed:            true,
 															},
 															"list": schema.StringAttribute{
-																MarkdownDescription: "Route Control Prefix-List name.",
+																MarkdownDescription: "Name of list to control the route distribution.",
 																Computed:            true,
 															},
 														},

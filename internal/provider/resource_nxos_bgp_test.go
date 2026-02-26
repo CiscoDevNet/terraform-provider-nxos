@@ -93,7 +93,7 @@ func TestAccNxosBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.0.peers.0.peer_type", "fabric-internal"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.0.peers.0.source_interface", "lo0"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.0.peers.0.hold_time", "45"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.0.peers.0.keepalive", "15"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.0.peers.0.keepalive_interval", "15"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.0.peers.0.ebgp_multihop_ttl", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.0.peers.0.peer_control", "bfd,dis-conn-check"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.0.peers.0.password", "secret_password"))
@@ -255,7 +255,7 @@ func testAccNxosBGPConfig_all() string {
 	config += `			peer_type = "fabric-internal"` + "\n"
 	config += `			source_interface = "lo0"` + "\n"
 	config += `			hold_time = 45` + "\n"
-	config += `			keepalive = 15` + "\n"
+	config += `			keepalive_interval = 15` + "\n"
 	config += `			ebgp_multihop_ttl = 5` + "\n"
 	config += `			peer_control = "bfd,dis-conn-check"` + "\n"
 	config += `			password = "secret_password"` + "\n"

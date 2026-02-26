@@ -101,16 +101,16 @@ func TestAccDataSourceNxosBGP(t *testing.T) {
 		"max_prefix_threshold":    "30",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.peers.*", map[string]string{
-		"address":           "192.168.0.1",
-		"remote_asn":        "65002",
-		"description":       "My description",
-		"peer_template":     "SPINE-PEERS",
-		"peer_type":         "fabric-internal",
-		"source_interface":  "lo0",
-		"hold_time":         "45",
-		"keepalive":         "15",
-		"ebgp_multihop_ttl": "5",
-		"peer_control":      "bfd,dis-conn-check",
+		"address":            "192.168.0.1",
+		"remote_asn":         "65002",
+		"description":        "My description",
+		"peer_template":      "SPINE-PEERS",
+		"peer_type":          "fabric-internal",
+		"source_interface":   "lo0",
+		"hold_time":          "45",
+		"keepalive_interval": "15",
+		"ebgp_multihop_ttl":  "5",
+		"peer_control":       "bfd,dis-conn-check",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bgp.test", "vrfs.*.peers.*", map[string]string{
 		"local_asn_propagation": "no-prepend",
@@ -242,7 +242,7 @@ func testAccDataSourceNxosBGPConfig() string {
 	config += `			peer_type = "fabric-internal"` + "\n"
 	config += `			source_interface = "lo0"` + "\n"
 	config += `			hold_time = 45` + "\n"
-	config += `			keepalive = 15` + "\n"
+	config += `			keepalive_interval = 15` + "\n"
 	config += `			ebgp_multihop_ttl = 5` + "\n"
 	config += `			peer_control = "bfd,dis-conn-check"` + "\n"
 	config += `			password = "secret_password"` + "\n"

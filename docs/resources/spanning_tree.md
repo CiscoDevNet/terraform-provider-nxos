@@ -3,7 +3,7 @@
 page_title: "nxos_spanning_tree Resource - terraform-provider-nxos"
 subcategory: "Switching"
 description: |-
-  This resource can manage the Spanning Tree configuration.
+  This resource can manage the Spanning Tree configuration on NX-OS devices, including per-interface settings such as BPDU filter, BPDU guard, cost, guard mode, and port priority.
   API Documentation: stpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Entity/
   Additional API Documentation
   stpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Inst/stpIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:If/
@@ -11,7 +11,7 @@ description: |-
 
 # nxos_spanning_tree (Resource)
 
-This resource can manage the Spanning Tree configuration.
+This resource can manage the Spanning Tree configuration on NX-OS devices, including per-interface settings such as BPDU filter, BPDU guard, cost, guard mode, and port priority.
 
 - API Documentation: [stpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/stp:Entity/)
 

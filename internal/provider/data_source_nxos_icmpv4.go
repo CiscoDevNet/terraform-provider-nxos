@@ -57,7 +57,7 @@ func (d *ICMPv4DataSource) Metadata(_ context.Context, req datasource.MetadataRe
 func (d *ICMPv4DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the global ICMP configuration.", "icmpv4Entity", "ICMP/icmpv4:Entity/").AddAdditionalDocs([]string{"icmpv4Inst", "icmpv4Dom", "icmpv4If"}, []string{"ICMP/icmpv4:Inst/", "ICMP/icmpv4:Dom/", "ICMP/icmpv4:If/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the ICMPv4 configuration on NX-OS devices, including per-VRF and per-interface ICMP control settings such as redirects and unreachables.", "icmpv4Entity", "ICMP/icmpv4:Entity/").AddAdditionalDocs([]string{"icmpv4Inst", "icmpv4Dom", "icmpv4If"}, []string{"ICMP/icmpv4:Inst/", "ICMP/icmpv4:Dom/", "ICMP/icmpv4:If/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

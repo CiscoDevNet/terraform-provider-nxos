@@ -3,8 +3,8 @@ name: System
 class_name: topSystem
 dn: sys
 no_delete: true
-ds_description: This data source can read the system configuration.
-res_description: This resource can manage the system configuration.
+ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.
+res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.
 doc_path: System/top:System/
 doc_category: System
 attributes:

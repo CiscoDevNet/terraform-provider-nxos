@@ -2,8 +2,8 @@
 name: Subinterface
 class_name: l3EncRtdIf
 dn: sys/intf/encrtd-[%s]
-ds_description: This data source can read a subinterface.
-res_description: This resource can manage a subinterface.
+ds_description: This data source can read a subinterface on NX-OS devices, including VLAN encapsulation, bandwidth, MTU, and administrative state settings.
+res_description: This resource can manage a subinterface on NX-OS devices, including VLAN encapsulation, bandwidth, MTU, and administrative state settings.
 doc_path: Layer%203/l3:EncRtdIf/
 doc_category: Interface
 bulk_resource: true

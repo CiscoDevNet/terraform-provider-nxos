@@ -63,7 +63,7 @@ func (r *IPv6Resource) Metadata(ctx context.Context, req resource.MetadataReques
 func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IPv6 configuration.", "ipv6Entity", "Layer%203/ipv6:Entity/").AddAdditionalDocs([]string{"ipv6Inst", "ipv6Dom", "ipv6Route", "ipv6Nexthop", "ipv6If", "ipv6Addr"}, []string{"Layer%203/ipv6:Inst/", "Layer%203/ipv6:Dom/", "Layer%203/ipv6:Route/", "Layer%203/ipv6:Nexthop/", "Layer%203/ipv6:If/", "Layer%203/ipv6:Addr/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IPv6 configuration on NX-OS devices, including per-VRF static routes with next hops and interface addresses.", "ipv6Entity", "Layer%203/ipv6:Entity/").AddAdditionalDocs([]string{"ipv6Inst", "ipv6Dom", "ipv6Route", "ipv6Nexthop", "ipv6If", "ipv6Addr"}, []string{"Layer%203/ipv6:Inst/", "Layer%203/ipv6:Dom/", "Layer%203/ipv6:Route/", "Layer%203/ipv6:Nexthop/", "Layer%203/ipv6:If/", "Layer%203/ipv6:Addr/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

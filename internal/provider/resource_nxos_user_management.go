@@ -62,7 +62,7 @@ func (r *UserManagementResource) Metadata(ctx context.Context, req resource.Meta
 func (r *UserManagementResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the user management configuration.", "aaaUserEp", "Security%20and%20Policing/aaa:UserEp/").AddAdditionalDocs([]string{"aaaUser", "aaaUserDomain", "aaaUserRole"}, []string{"Security%20and%20Policing/aaa:User/", "Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.", "aaaUserEp", "Security%20and%20Policing/aaa:UserEp/").AddAdditionalDocs([]string{"aaaUser", "aaaUserDomain", "aaaUserRole"}, []string{"Security%20and%20Policing/aaa:User/", "Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

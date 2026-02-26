@@ -3,8 +3,8 @@ name: DHCP
 class_name: dhcpEntity
 dn: sys/dhcp
 no_delete: true
-ds_description: This data source can read the DHCP configuration.
-res_description: This resource can manage the DHCP configuration.
+ds_description: This data source can read the DHCP relay configuration on NX-OS devices, including relay interfaces and their associated relay server addresses.
+res_description: This resource can manage the DHCP relay configuration on NX-OS devices, including relay interfaces and their associated relay server addresses.
 doc_path: DHCP/dhcp:Entity/
 doc_category: System
 child_classes:

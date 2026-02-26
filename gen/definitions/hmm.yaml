@@ -2,8 +2,8 @@
 name: HMM
 class_name: hmmEntity
 dn: sys/hmm
-ds_description: This data source can read the Host Mobility Manager (HMM) Entity configuration.
-res_description: This resource can manage the Host Mobility Manager (HMM) Entity configuration.
+ds_description: This data source can read the Host Mobility Manager (HMM) configuration on NX-OS devices, including anycast gateway MAC and fabric forwarding interface settings.
+res_description: This resource can manage the Host Mobility Manager (HMM) configuration on NX-OS devices, including anycast gateway MAC and fabric forwarding interface settings.
 doc_path: Host%20Mobility/hmm:Entity/
 doc_category: Overlay
 attributes:

@@ -63,7 +63,7 @@ func (r *ISISResource) Metadata(ctx context.Context, req resource.MetadataReques
 func (r *ISISResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IS-IS configuration.", "isisEntity", "Routing%20and%20Forwarding/isis:Entity/").AddAdditionalDocs([]string{"isisInst", "isisDom", "isisDomAf", "isisOverload", "isisInternalIf"}, []string{"Routing%20and%20Forwarding/isis:Inst/", "Routing%20and%20Forwarding/isis:Dom/", "Routing%20and%20Forwarding/isis:DomAf/", "Routing%20and%20Forwarding/isis:Overload/", "Routing%20and%20Forwarding/isis:InternalIf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the IS-IS configuration on NX-OS devices, including IS-IS instances, VRFs, authentication settings, and interface configurations.", "isisEntity", "Routing%20and%20Forwarding/isis:Entity/").AddAdditionalDocs([]string{"isisInst", "isisDom", "isisDomAf", "isisOverload", "isisInternalIf"}, []string{"Routing%20and%20Forwarding/isis:Inst/", "Routing%20and%20Forwarding/isis:Dom/", "Routing%20and%20Forwarding/isis:DomAf/", "Routing%20and%20Forwarding/isis:Overload/", "Routing%20and%20Forwarding/isis:InternalIf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

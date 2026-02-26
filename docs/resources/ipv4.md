@@ -3,7 +3,7 @@
 page_title: "nxos_ipv4 Resource - terraform-provider-nxos"
 subcategory: "Routing"
 description: |-
-  This resource can manage the IPv4 configuration.
+  This resource can manage the IPv4 configuration on NX-OS devices, including per-VRF static routes with next hops and interface addresses.
   API Documentation: ipv4Entity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv4:Entity/
   Additional API Documentation
   ipv4Inst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv4:Inst/ipv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv4:Dom/ipv4Route https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv4:Route/ipv4Nexthop https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv4:Nexthop/ipv4If https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv4:If/ipv4Addr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv4:Addr/
@@ -11,7 +11,7 @@ description: |-
 
 # nxos_ipv4 (Resource)
 
-This resource can manage the IPv4 configuration.
+This resource can manage the IPv4 configuration on NX-OS devices, including per-VRF static routes with next hops and interface addresses.
 
 - API Documentation: [ipv4Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv4:Entity/)
 

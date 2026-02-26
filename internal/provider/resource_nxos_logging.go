@@ -62,7 +62,7 @@ func (r *LoggingResource) Metadata(ctx context.Context, req resource.MetadataReq
 func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the logging configuration.", "loggingLogging", "System/logging:Logging/").AddAdditionalDocs([]string{"loggingLogLevel", "loggingFacility"}, []string{"System/logging:LogLevel/", "System/logging:Facility/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the logging configuration on NX-OS devices, including global severity levels and per-facility logging settings.", "loggingLogging", "System/logging:Logging/").AddAdditionalDocs([]string{"loggingLogLevel", "loggingFacility"}, []string{"System/logging:LogLevel/", "System/logging:Facility/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

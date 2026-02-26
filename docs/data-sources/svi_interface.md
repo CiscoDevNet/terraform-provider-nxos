@@ -3,7 +3,7 @@
 page_title: "nxos_svi_interface Data Source - terraform-provider-nxos"
 subcategory: "Interface"
 description: |-
-  This data source can read an SVI interface.
+  This data source can read an SVI (Switch Virtual Interface) on NX-OS devices, including administrative state, bandwidth, MTU, and medium type settings.
   API Documentation: sviIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/svi:If/
   Additional API Documentation
   nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
@@ -11,7 +11,7 @@ description: |-
 
 # nxos_svi_interface (Data Source)
 
-This data source can read an SVI interface.
+This data source can read an SVI (Switch Virtual Interface) on NX-OS devices, including administrative state, bandwidth, MTU, and medium type settings.
 
 - API Documentation: [sviIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/svi:If/)
 

@@ -2,8 +2,8 @@
 name: VRF
 class_name: l3Inst
 dn: sys/inst-[%s]
-ds_description: This data source can read a VRF.
-res_description: This resource can manage a VRF.
+ds_description: This data source can read a VRF on NX-OS devices, including route distinguisher, address families, and route target configurations.
+res_description: This resource can manage a VRF on NX-OS devices, including route distinguisher, address families, and route target configurations.
 doc_path: Layer%203/l3:Inst/
 doc_category: Routing
 bulk_resource: true

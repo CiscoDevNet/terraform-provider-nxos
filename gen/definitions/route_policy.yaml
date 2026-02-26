@@ -2,8 +2,8 @@
 name: Route Policy
 class_name: rpmEntity
 dn: sys/rpm
-ds_description: This data source can read the Route Policy configuration.
-res_description: This resource can manage the Route Policy configuration.
+ds_description: This data source can read the route policy configuration on NX-OS devices, including IPv4 prefix lists and route maps with match and set criteria.
+res_description: This resource can manage the route policy configuration on NX-OS devices, including IPv4 prefix lists and route maps with match and set criteria.
 doc_path: Routing%20and%20Forwarding/rpm:Entity/
 doc_category: Routing
 child_classes:

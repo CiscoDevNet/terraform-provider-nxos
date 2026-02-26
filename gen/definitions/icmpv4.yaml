@@ -2,8 +2,8 @@
 name: ICMPv4
 class_name: icmpv4Entity
 dn: sys/icmpv4
-ds_description: This data source can read the global ICMP configuration.
-res_description: This resource can manage the global ICMP configuration.
+ds_description: This data source can read the ICMPv4 configuration on NX-OS devices, including per-VRF and per-interface ICMP control settings such as redirects and unreachables.
+res_description: This resource can manage the ICMPv4 configuration on NX-OS devices, including per-VRF and per-interface ICMP control settings such as redirects and unreachables.
 doc_path: ICMP/icmpv4:Entity/
 doc_category: System
 attributes:

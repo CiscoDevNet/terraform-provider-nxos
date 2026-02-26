@@ -3,7 +3,7 @@
 page_title: "nxos_keychain Resource - terraform-provider-nxos"
 subcategory: "Security"
 description: |-
-  This resource can manage the keychain configuration.
+  This resource can manage the keychain configuration on NX-OS devices, including keychains and their associated key entries.
   API Documentation: kcmgrEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Entity/
   Additional API Documentation
   kcmgrKeychains https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Keychains/kcmgrClassicKeychain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/kcmgrKey https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Key/
@@ -11,7 +11,7 @@ description: |-
 
 # nxos_keychain (Resource)
 
-This resource can manage the keychain configuration.
+This resource can manage the keychain configuration on NX-OS devices, including keychains and their associated key entries.
 
 - API Documentation: [kcmgrEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Entity/)
 

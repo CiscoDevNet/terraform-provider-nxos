@@ -63,7 +63,7 @@ func (r *PIMResource) Metadata(ctx context.Context, req resource.MetadataRequest
 func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the global PIM configuration.", "pimEntity", "Layer%203/pim:Entity/").AddAdditionalDocs([]string{"pimInst", "pimDom", "pimIf", "pimSSMPatP", "pimSSMRangeP", "pimStaticRPP", "pimStaticRP", "pimRPGrpList", "pimAcastRPFuncP", "pimAcastRPPeer"}, []string{"Layer%203/pim:Inst/", "Layer%203/pim:Dom/", "Layer%203/pim:If/", "Layer%203/pim:SSMPatP/", "Layer%203/pim:SSMRangeP/", "Layer%203/pim:StaticRPP/", "Layer%203/pim:StaticRP/", "Layer%203/pim:RPGrpList/", "Layer%203/pim:AcastRPFuncP/", "Layer%203/pim:AcastRPPeer/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the PIM (Protocol Independent Multicast) configuration on NX-OS devices, including per-VRF settings, interface configurations, and SSM (Source-Specific Multicast) policies.", "pimEntity", "Layer%203/pim:Entity/").AddAdditionalDocs([]string{"pimInst", "pimDom", "pimIf", "pimSSMPatP", "pimSSMRangeP", "pimStaticRPP", "pimStaticRP", "pimRPGrpList", "pimAcastRPFuncP", "pimAcastRPPeer"}, []string{"Layer%203/pim:Inst/", "Layer%203/pim:Dom/", "Layer%203/pim:If/", "Layer%203/pim:SSMPatP/", "Layer%203/pim:SSMRangeP/", "Layer%203/pim:StaticRPP/", "Layer%203/pim:StaticRP/", "Layer%203/pim:RPGrpList/", "Layer%203/pim:AcastRPFuncP/", "Layer%203/pim:AcastRPPeer/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

@@ -3,7 +3,7 @@
 page_title: "nxos_ipv6 Data Source - terraform-provider-nxos"
 subcategory: "Routing"
 description: |-
-  This data source can read the IPv6 configuration.
+  This data source can read the IPv6 configuration on NX-OS devices, including per-VRF static routes with next hops and interface addresses.
   API Documentation: ipv6Entity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv6:Entity/
   Additional API Documentation
   ipv6Inst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv6:Inst/ipv6Dom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv6:Dom/ipv6Route https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv6:Route/ipv6Nexthop https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv6:Nexthop/ipv6If https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv6:If/ipv6Addr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv6:Addr/
@@ -11,7 +11,7 @@ description: |-
 
 # nxos_ipv6 (Data Source)
 
-This data source can read the IPv6 configuration.
+This data source can read the IPv6 configuration on NX-OS devices, including per-VRF static routes with next hops and interface addresses.
 
 - API Documentation: [ipv6Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/ipv6:Entity/)
 

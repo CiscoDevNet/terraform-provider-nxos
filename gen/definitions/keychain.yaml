@@ -2,8 +2,8 @@
 name: Keychain
 class_name: kcmgrEntity
 dn: sys/kcmgr
-ds_description: This data source can read the keychain configuration.
-res_description: This resource can manage the keychain configuration.
+ds_description: This data source can read the keychain configuration on NX-OS devices, including keychains and their associated key entries.
+res_description: This resource can manage the keychain configuration on NX-OS devices, including keychains and their associated key entries.
 doc_path: Security%20and%20Policing/kcmgr:Entity/
 doc_category: Security
 attributes:

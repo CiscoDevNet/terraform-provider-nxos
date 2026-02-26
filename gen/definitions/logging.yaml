@@ -3,8 +3,8 @@ name: Logging
 class_name: loggingLogging
 dn: sys/logging
 no_delete: true
-ds_description: This data source can read the logging configuration.
-res_description: This resource can manage the logging configuration.
+ds_description: This data source can read the logging configuration on NX-OS devices, including global severity levels and per-facility logging settings.
+res_description: This resource can manage the logging configuration on NX-OS devices, including global severity levels and per-facility logging settings.
 doc_path: System/logging:Logging/
 doc_category: System
 child_classes:

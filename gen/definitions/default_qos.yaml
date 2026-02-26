@@ -3,8 +3,8 @@ name: Default QoS
 class_name: ipqosDefaultQoS
 dn: sys/ipqos/dflt
 no_delete: true
-ds_description: This data source can read the default QoS configuration.
-res_description: This resource can manage the default QoS configuration.
+ds_description: This data source can read the default QoS configuration on NX-OS devices, including class maps with DSCP matching and policy maps with policing and QoS group settings.
+res_description: This resource can manage the default QoS configuration on NX-OS devices, including class maps with DSCP matching and policy maps with policing and QoS group settings.
 doc_path: Qos/ipqos:DefaultQoS/
 doc_category: System
 child_classes:

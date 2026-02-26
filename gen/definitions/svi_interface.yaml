@@ -2,8 +2,8 @@
 name: SVI Interface
 class_name: sviIf
 dn: sys/intf/svi-[%s]
-ds_description: This data source can read an SVI interface.
-res_description: This resource can manage an SVI interface.
+ds_description: This data source can read an SVI (Switch Virtual Interface) on NX-OS devices, including administrative state, bandwidth, MTU, and medium type settings.
+res_description: This resource can manage an SVI (Switch Virtual Interface) on NX-OS devices, including administrative state, bandwidth, MTU, and medium type settings.
 doc_path: Interfaces/svi:If/
 doc_category: Interface
 bulk_resource: true

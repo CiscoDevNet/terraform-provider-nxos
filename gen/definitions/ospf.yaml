@@ -2,8 +2,8 @@
 name: OSPF
 class_name: ospfEntity
 dn: sys/ospf
-ds_description: This data source can read the OSPF configuration.
-res_description: This resource can manage the OSPF configuration.
+ds_description: This data source can read the OSPF configuration on NX-OS devices, including OSPF instances, VRFs, areas, and interface settings such as cost, priority, and authentication.
+res_description: This resource can manage the OSPF configuration on NX-OS devices, including OSPF instances, VRFs, areas, and interface settings such as cost, priority, and authentication.
 doc_path: Routing%20and%20Forwarding/ospf:Entity/
 doc_category: Routing
 attributes:

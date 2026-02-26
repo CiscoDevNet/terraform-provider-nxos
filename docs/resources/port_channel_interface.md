@@ -3,7 +3,7 @@
 page_title: "nxos_port_channel_interface Resource - terraform-provider-nxos"
 subcategory: "Interface"
 description: |-
-  This resource can manage a port-channel interface.
+  This resource can manage a port-channel interface on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.
   API Documentation: pcAggrIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/
   Additional API Documentation
   nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/pcRsMbrIfs https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:RsMbrIfs/
@@ -11,7 +11,7 @@ description: |-
 
 # nxos_port_channel_interface (Resource)
 
-This resource can manage a port-channel interface.
+This resource can manage a port-channel interface on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.
 
 - API Documentation: [pcAggrIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/pc:AggrIf/)
 

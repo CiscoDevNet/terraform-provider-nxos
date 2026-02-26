@@ -3,8 +3,8 @@ name: User Management
 class_name: aaaUserEp
 dn: sys/userext
 no_delete: true
-ds_description: This data source can read the user management configuration.
-res_description: This resource can manage the user management configuration.
+ds_description: This data source can read the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.
+res_description: This resource can manage the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.
 doc_path: Security%20and%20Policing/aaa:UserEp/
 doc_category: Security
 child_classes:

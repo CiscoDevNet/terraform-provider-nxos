@@ -3,8 +3,8 @@ name: Bridge Domains
 class_name: bdEntity
 dn: sys/bd
 no_delete: true
-ds_description: This data source can read the bridge domain configuration.
-res_description: This resource can manage the bridge domain configuration.
+ds_description: This data source can read the bridge domain configuration on NX-OS devices, including VLAN and VXLAN encapsulation mappings.
+res_description: This resource can manage the bridge domain configuration on NX-OS devices, including VLAN and VXLAN encapsulation mappings.
 doc_path: Layer%202/bd:Entity/
 doc_category: Switching
 child_classes:

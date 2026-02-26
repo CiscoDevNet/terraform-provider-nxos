@@ -63,7 +63,7 @@ func (r *NTPResource) Metadata(ctx context.Context, req resource.MetadataRequest
 func (r *NTPResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the NTP configuration.", "datetimeClkPol", "System/datetime:ClkPol/").AddAdditionalDocs([]string{"datetimeNtpProvider"}, []string{"System/datetime:NtpProvider/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings.", "datetimeClkPol", "System/datetime:ClkPol/").AddAdditionalDocs([]string{"datetimeNtpProvider"}, []string{"System/datetime:NtpProvider/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

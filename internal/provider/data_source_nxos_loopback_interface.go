@@ -57,7 +57,7 @@ func (d *LoopbackInterfaceDataSource) Metadata(_ context.Context, req datasource
 func (d *LoopbackInterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read a loopback interface.", "l3LbRtdIf", "Layer%203/l3:LbRtdIf/").AddAdditionalDocs([]string{"nwRtVrfMbr"}, []string{"Routing%20and%20Forwarding/nw:RtVrfMbr/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read a loopback interface on NX-OS devices, including its administrative state, description, and VRF membership.", "l3LbRtdIf", "Layer%203/l3:LbRtdIf/").AddAdditionalDocs([]string{"nwRtVrfMbr"}, []string{"Routing%20and%20Forwarding/nw:RtVrfMbr/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

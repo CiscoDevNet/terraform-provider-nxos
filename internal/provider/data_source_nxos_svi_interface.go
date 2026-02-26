@@ -57,7 +57,7 @@ func (d *SVIInterfaceDataSource) Metadata(_ context.Context, req datasource.Meta
 func (d *SVIInterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read an SVI interface.", "sviIf", "Interfaces/svi:If/").AddAdditionalDocs([]string{"nwRtVrfMbr"}, []string{"Routing%20and%20Forwarding/nw:RtVrfMbr/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read an SVI (Switch Virtual Interface) on NX-OS devices, including administrative state, bandwidth, MTU, and medium type settings.", "sviIf", "Interfaces/svi:If/").AddAdditionalDocs([]string{"nwRtVrfMbr"}, []string{"Routing%20and%20Forwarding/nw:RtVrfMbr/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

@@ -3,7 +3,7 @@
 page_title: "nxos_subinterface Resource - terraform-provider-nxos"
 subcategory: "Interface"
 description: |-
-  This resource can manage a subinterface.
+  This resource can manage a subinterface on NX-OS devices, including VLAN encapsulation, bandwidth, MTU, and administrative state settings.
   API Documentation: l3EncRtdIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/l3:EncRtdIf/
   Additional API Documentation
   nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
@@ -11,7 +11,7 @@ description: |-
 
 # nxos_subinterface (Resource)
 
-This resource can manage a subinterface.
+This resource can manage a subinterface on NX-OS devices, including VLAN encapsulation, bandwidth, MTU, and administrative state settings.
 
 - API Documentation: [l3EncRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/l3:EncRtdIf/)
 

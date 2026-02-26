@@ -3,7 +3,7 @@
 page_title: "nxos_icmpv4 Resource - terraform-provider-nxos"
 subcategory: "System"
 description: |-
-  This resource can manage the global ICMP configuration.
+  This resource can manage the ICMPv4 configuration on NX-OS devices, including per-VRF and per-interface ICMP control settings such as redirects and unreachables.
   API Documentation: icmpv4Entity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Entity/
   Additional API Documentation
   icmpv4Inst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Inst/icmpv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Dom/icmpv4If https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:If/
@@ -11,7 +11,7 @@ description: |-
 
 # nxos_icmpv4 (Resource)
 
-This resource can manage the global ICMP configuration.
+This resource can manage the ICMPv4 configuration on NX-OS devices, including per-VRF and per-interface ICMP control settings such as redirects and unreachables.
 
 - API Documentation: [icmpv4Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Entity/)
 

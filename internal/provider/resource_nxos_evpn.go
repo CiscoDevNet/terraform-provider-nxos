@@ -62,7 +62,7 @@ func (r *EVPNResource) Metadata(ctx context.Context, req resource.MetadataReques
 func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a global EVPN configuration.", "rtctrlL2Evpn", "Routing%20and%20Forwarding/rtctrl:L2Evpn/").AddAdditionalDocs([]string{"rtctrlBDEvi", "rtctrlRttP", "rtctrlRttEntry"}, []string{"Routing%20and%20Forwarding/rtctrl:BDEvi/", "Routing%20and%20Forwarding/rtctrl:RttP/", "Routing%20and%20Forwarding/rtctrl:RttEntry/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the global EVPN configuration on NX-OS devices, including EVPN VNIs with route distinguisher and route target settings.", "rtctrlL2Evpn", "Routing%20and%20Forwarding/rtctrl:L2Evpn/").AddAdditionalDocs([]string{"rtctrlBDEvi", "rtctrlRttP", "rtctrlRttEntry"}, []string{"Routing%20and%20Forwarding/rtctrl:BDEvi/", "Routing%20and%20Forwarding/rtctrl:RttP/", "Routing%20and%20Forwarding/rtctrl:RttEntry/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

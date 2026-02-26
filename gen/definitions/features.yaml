@@ -3,8 +3,8 @@ name: Features
 class_name: fmEntity
 dn: sys/fm
 no_delete: true
-ds_description: This data source can read the feature configuration.
-res_description: This resource can manage the feature configuration.
+ds_description: This data source can read the feature configuration on NX-OS devices, including the administrative state of features such as BGP, OSPF, PIM, EVPN, LACP, vPC, and others.
+res_description: This resource can manage the feature configuration on NX-OS devices, including the administrative state of features such as BGP, OSPF, PIM, EVPN, LACP, vPC, and others.
 doc_path: Feature%20Management/fm:Entity/
 doc_category: System
 test_tags: [FEATURES]

@@ -57,7 +57,7 @@ func (d *OSPFv3DataSource) Metadata(_ context.Context, req datasource.MetadataRe
 func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the global OSPFv3 configuration.", "ospfv3Entity", "Routing%20and%20Forwarding/ospfv3:Entity/").AddAdditionalDocs([]string{"ospfv3Inst", "ospfv3Dom", "ospfv3Area", "ospfv3DomAf", "ospfv3If"}, []string{"Routing%20and%20Forwarding/ospfv3:Inst/", "Routing%20and%20Forwarding/ospfv3:Dom/", "Routing%20and%20Forwarding/ospfv3:Area/", "Routing%20and%20Forwarding/ospfv3:DomAf/", "Routing%20and%20Forwarding/ospfv3:If/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the OSPFv3 configuration on NX-OS devices, including OSPFv3 instances, VRFs, areas, and interface settings.", "ospfv3Entity", "Routing%20and%20Forwarding/ospfv3:Entity/").AddAdditionalDocs([]string{"ospfv3Inst", "ospfv3Dom", "ospfv3Area", "ospfv3DomAf", "ospfv3If"}, []string{"Routing%20and%20Forwarding/ospfv3:Inst/", "Routing%20and%20Forwarding/ospfv3:Dom/", "Routing%20and%20Forwarding/ospfv3:Area/", "Routing%20and%20Forwarding/ospfv3:DomAf/", "Routing%20and%20Forwarding/ospfv3:If/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

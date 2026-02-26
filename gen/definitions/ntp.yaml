@@ -3,8 +3,8 @@ name: NTP
 class_name: datetimeClkPol
 dn: sys/time
 no_delete: true
-ds_description: This data source can read the NTP configuration.
-res_description: This resource can manage the NTP configuration.
+ds_description: This data source can read the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings.
+res_description: This resource can manage the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings.
 doc_path: System/datetime:ClkPol/
 doc_category: System
 child_classes:

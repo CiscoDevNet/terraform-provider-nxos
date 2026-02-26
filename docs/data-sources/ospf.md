@@ -3,7 +3,7 @@
 page_title: "nxos_ospf Data Source - terraform-provider-nxos"
 subcategory: "Routing"
 description: |-
-  This data source can read the OSPF configuration.
+  This data source can read the OSPF configuration on NX-OS devices, including OSPF instances, VRFs, areas, and interface settings such as cost, priority, and authentication.
   API Documentation: ospfEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Entity/
   Additional API Documentation
   ospfInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Inst/ospfDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Dom/ospfArea https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Area/ospfMaxMetricLsaP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:MaxMetricLsaP/ospfIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:If/ospfAuthNewP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:AuthNewP/
@@ -11,7 +11,7 @@ description: |-
 
 # nxos_ospf (Data Source)
 
-This data source can read the OSPF configuration.
+This data source can read the OSPF configuration on NX-OS devices, including OSPF instances, VRFs, areas, and interface settings such as cost, priority, and authentication.
 
 - API Documentation: [ospfEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Entity/)
 

@@ -2,8 +2,8 @@
 name: PIM
 class_name: pimEntity
 dn: sys/pim
-ds_description: This data source can read the global PIM configuration.
-res_description: This resource can manage the global PIM configuration.
+ds_description: This data source can read the PIM (Protocol Independent Multicast) configuration on NX-OS devices, including per-VRF settings, interface configurations, and SSM (Source-Specific Multicast) policies.
+res_description: This resource can manage the PIM (Protocol Independent Multicast) configuration on NX-OS devices, including per-VRF settings, interface configurations, and SSM (Source-Specific Multicast) policies.
 doc_path: Layer%203/pim:Entity/
 doc_category: Routing
 no_delete: true

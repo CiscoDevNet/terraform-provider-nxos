@@ -3,7 +3,7 @@
 page_title: "nxos_system Resource - terraform-provider-nxos"
 subcategory: "System"
 description: |-
-  This resource can manage the system configuration.
+  This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.
   API Documentation: topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/
   Additional API Documentation
   ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/
@@ -11,7 +11,7 @@ description: |-
 
 # nxos_system (Resource)
 
-This resource can manage the system configuration.
+This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.
 
 - API Documentation: [topSystem](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/)
 

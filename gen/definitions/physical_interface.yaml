@@ -3,8 +3,8 @@ name: Physical Interface
 class_name: l1PhysIf
 dn: sys/intf/phys-[%s]
 no_delete: true
-ds_description: This data source can read the configuration of a physical interface.
-res_description: This resource can manage a physical interface.
+ds_description: This data source can read the configuration of a physical interface on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.
+res_description: This resource can manage a physical interface on NX-OS devices, including settings such as speed, duplex, MTU, switchport mode, and VLAN assignments.
 doc_path: System/l1:PhysIf/
 doc_category: Interface
 bulk_resource: true

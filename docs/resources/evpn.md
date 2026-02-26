@@ -3,7 +3,7 @@
 page_title: "nxos_evpn Resource - terraform-provider-nxos"
 subcategory: "Overlay"
 description: |-
-  This resource can manage a global EVPN configuration.
+  This resource can manage the global EVPN configuration on NX-OS devices, including EVPN VNIs with route distinguisher and route target settings.
   API Documentation: rtctrlL2Evpn https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:L2Evpn/
   Additional API Documentation
   rtctrlBDEvi https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:BDEvi/rtctrlRttP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:RttP/rtctrlRttEntry https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:RttEntry/
@@ -11,7 +11,7 @@ description: |-
 
 # nxos_evpn (Resource)
 
-This resource can manage a global EVPN configuration.
+This resource can manage the global EVPN configuration on NX-OS devices, including EVPN VNIs with route distinguisher and route target settings.
 
 - API Documentation: [rtctrlL2Evpn](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/rtctrl:L2Evpn/)
 

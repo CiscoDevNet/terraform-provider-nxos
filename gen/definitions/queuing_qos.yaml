@@ -3,8 +3,8 @@ name: Queuing QoS
 class_name: ipqosQueuing
 dn: sys/ipqos/queuing
 no_delete: true
-ds_description: This data source can read the queuing QoS configuration.
-res_description: This resource can manage the queuing QoS configuration.
+ds_description: This data source can read the queuing QoS configuration on NX-OS devices, including policy maps with class-based queuing priorities, bandwidth allocation, and system egress policy assignments.
+res_description: This resource can manage the queuing QoS configuration on NX-OS devices, including policy maps with class-based queuing priorities, bandwidth allocation, and system egress policy assignments.
 doc_path: Qos/ipqos:Queuing/
 doc_category: System
 child_classes:

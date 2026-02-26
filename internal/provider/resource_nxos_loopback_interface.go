@@ -62,7 +62,7 @@ func (r *LoopbackInterfaceResource) Metadata(ctx context.Context, req resource.M
 func (r *LoopbackInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a loopback interface.", "l3LbRtdIf", "Layer%203/l3:LbRtdIf/").AddAdditionalDocs([]string{"nwRtVrfMbr"}, []string{"Routing%20and%20Forwarding/nw:RtVrfMbr/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a loopback interface on NX-OS devices, including its administrative state, description, and VRF membership.", "l3LbRtdIf", "Layer%203/l3:LbRtdIf/").AddAdditionalDocs([]string{"nwRtVrfMbr"}, []string{"Routing%20and%20Forwarding/nw:RtVrfMbr/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

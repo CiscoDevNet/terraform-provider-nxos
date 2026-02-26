@@ -2,8 +2,8 @@
 name: Port Channel Interface
 class_name: pcAggrIf
 dn: sys/intf/aggr-[%s]
-ds_description: This data source can read the configuration of a port-channel interface.
-res_description: This resource can manage a port-channel interface.
+ds_description: This data source can read the configuration of a port-channel interface on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.
+res_description: This resource can manage a port-channel interface on NX-OS devices, including channel mode, member link settings, switchport mode, and VLAN assignments.
 doc_path: Interfaces/pc:AggrIf/
 doc_category: Interface
 bulk_resource: true

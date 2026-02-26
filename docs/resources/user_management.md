@@ -3,7 +3,7 @@
 page_title: "nxos_user_management Resource - terraform-provider-nxos"
 subcategory: "Security"
 description: |-
-  This resource can manage the user management configuration.
+  This resource can manage the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.
   API Documentation: aaaUserEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserEp/
   Additional API Documentation
   aaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:User/aaaUserDomain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserDomain/aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserRole/
@@ -11,7 +11,7 @@ description: |-
 
 # nxos_user_management (Resource)
 
-This resource can manage the user management configuration.
+This resource can manage the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.
 
 - API Documentation: [aaaUserEp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserEp/)
 

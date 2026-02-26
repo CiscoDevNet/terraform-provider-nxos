@@ -63,7 +63,7 @@ func (r *OSPFResource) Metadata(ctx context.Context, req resource.MetadataReques
 func (r *OSPFResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the OSPF configuration.", "ospfEntity", "Routing%20and%20Forwarding/ospf:Entity/").AddAdditionalDocs([]string{"ospfInst", "ospfDom", "ospfArea", "ospfMaxMetricLsaP", "ospfIf", "ospfAuthNewP"}, []string{"Routing%20and%20Forwarding/ospf:Inst/", "Routing%20and%20Forwarding/ospf:Dom/", "Routing%20and%20Forwarding/ospf:Area/", "Routing%20and%20Forwarding/ospf:MaxMetricLsaP/", "Routing%20and%20Forwarding/ospf:If/", "Routing%20and%20Forwarding/ospf:AuthNewP/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the OSPF configuration on NX-OS devices, including OSPF instances, VRFs, areas, and interface settings such as cost, priority, and authentication.", "ospfEntity", "Routing%20and%20Forwarding/ospf:Entity/").AddAdditionalDocs([]string{"ospfInst", "ospfDom", "ospfArea", "ospfMaxMetricLsaP", "ospfIf", "ospfAuthNewP"}, []string{"Routing%20and%20Forwarding/ospf:Inst/", "Routing%20and%20Forwarding/ospf:Dom/", "Routing%20and%20Forwarding/ospf:Area/", "Routing%20and%20Forwarding/ospf:MaxMetricLsaP/", "Routing%20and%20Forwarding/ospf:If/", "Routing%20and%20Forwarding/ospf:AuthNewP/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

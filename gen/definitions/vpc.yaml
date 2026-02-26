@@ -2,8 +2,8 @@
 name: vPC
 class_name: vpcEntity
 dn: sys/vpc
-ds_description: This data source can read the vPC configuration.
-res_description: This resource can manage the vPC configuration.
+ds_description: This data source can read the vPC (Virtual Port Channel) configuration on NX-OS devices, including the vPC domain with peer settings, keepalive, role priority, and peer gateway options.
+res_description: This resource can manage the vPC (Virtual Port Channel) configuration on NX-OS devices, including the vPC domain with peer settings, keepalive, role priority, and peer gateway options.
 doc_path: System/vpc:Entity/
 doc_category: Switching
 attributes: []

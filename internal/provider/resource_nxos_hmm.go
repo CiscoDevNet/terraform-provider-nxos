@@ -62,7 +62,7 @@ func (r *HMMResource) Metadata(ctx context.Context, req resource.MetadataRequest
 func (r *HMMResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Host Mobility Manager (HMM) Entity configuration.", "hmmEntity", "Host%20Mobility/hmm:Entity/").AddAdditionalDocs([]string{"hmmFwdInst", "hmmFwdIf"}, []string{"Host%20Mobility/hmm:FwdInst/", "Host%20Mobility/hmm:FwdIf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the Host Mobility Manager (HMM) configuration on NX-OS devices, including anycast gateway MAC and fabric forwarding interface settings.", "hmmEntity", "Host%20Mobility/hmm:Entity/").AddAdditionalDocs([]string{"hmmFwdInst", "hmmFwdIf"}, []string{"Host%20Mobility/hmm:FwdInst/", "Host%20Mobility/hmm:FwdIf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

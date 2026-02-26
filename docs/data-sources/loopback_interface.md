@@ -3,7 +3,7 @@
 page_title: "nxos_loopback_interface Data Source - terraform-provider-nxos"
 subcategory: "Interface"
 description: |-
-  This data source can read a loopback interface.
+  This data source can read a loopback interface on NX-OS devices, including its administrative state, description, and VRF membership.
   API Documentation: l3LbRtdIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/l3:LbRtdIf/
   Additional API Documentation
   nwRtVrfMbr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/nw:RtVrfMbr/
@@ -11,7 +11,7 @@ description: |-
 
 # nxos_loopback_interface (Data Source)
 
-This data source can read a loopback interface.
+This data source can read a loopback interface on NX-OS devices, including its administrative state, description, and VRF membership.
 
 - API Documentation: [l3LbRtdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%203/l3:LbRtdIf/)
 

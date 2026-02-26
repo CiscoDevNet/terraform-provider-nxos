@@ -57,7 +57,7 @@ func (d *IPv4DataSource) Metadata(_ context.Context, req datasource.MetadataRequ
 func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the IPv4 configuration.", "ipv4Entity", "Layer%203/ipv4:Entity/").AddAdditionalDocs([]string{"ipv4Inst", "ipv4Dom", "ipv4Route", "ipv4Nexthop", "ipv4If", "ipv4Addr"}, []string{"Layer%203/ipv4:Inst/", "Layer%203/ipv4:Dom/", "Layer%203/ipv4:Route/", "Layer%203/ipv4:Nexthop/", "Layer%203/ipv4:If/", "Layer%203/ipv4:Addr/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the IPv4 configuration on NX-OS devices, including per-VRF static routes with next hops and interface addresses.", "ipv4Entity", "Layer%203/ipv4:Entity/").AddAdditionalDocs([]string{"ipv4Inst", "ipv4Dom", "ipv4Route", "ipv4Nexthop", "ipv4If", "ipv4Addr"}, []string{"Layer%203/ipv4:Inst/", "Layer%203/ipv4:Dom/", "Layer%203/ipv4:Route/", "Layer%203/ipv4:Nexthop/", "Layer%203/ipv4:If/", "Layer%203/ipv4:Addr/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

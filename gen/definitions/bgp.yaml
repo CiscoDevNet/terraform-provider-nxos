@@ -2,8 +2,8 @@
 name: BGP
 class_name: bgpEntity
 dn: sys/bgp
-ds_description: This data source can read the BGP configuration.
-res_description: This resource can manage the BGP configuration.
+ds_description: This data source can read the BGP configuration on NX-OS devices, including the BGP instance, VRFs, peers, address families, route control, and graceful restart settings.
+res_description: This resource can manage the BGP configuration on NX-OS devices, including the BGP instance, VRFs, peers, address families, route control, and graceful restart settings.
 doc_path: Routing%20and%20Forwarding/bgp:Entity/
 doc_category: Routing
 attributes:

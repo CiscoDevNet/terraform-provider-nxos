@@ -63,7 +63,7 @@ func (r *SubinterfaceResource) Metadata(ctx context.Context, req resource.Metada
 func (r *SubinterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a subinterface.", "l3EncRtdIf", "Layer%203/l3:EncRtdIf/").AddAdditionalDocs([]string{"nwRtVrfMbr"}, []string{"Routing%20and%20Forwarding/nw:RtVrfMbr/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage a subinterface on NX-OS devices, including VLAN encapsulation, bandwidth, MTU, and administrative state settings.", "l3EncRtdIf", "Layer%203/l3:EncRtdIf/").AddAdditionalDocs([]string{"nwRtVrfMbr"}, []string{"Routing%20and%20Forwarding/nw:RtVrfMbr/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

@@ -3,7 +3,7 @@
 page_title: "nxos_dhcp Data Source - terraform-provider-nxos"
 subcategory: "System"
 description: |-
-  This data source can read the DHCP configuration.
+  This data source can read the DHCP relay configuration on NX-OS devices, including relay interfaces and their associated relay server addresses.
   API Documentation: dhcpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:Entity/
   Additional API Documentation
   dhcpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:Inst/dhcpRelayIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:RelayIf/dhcpRelayAddr https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:RelayAddr/
@@ -11,7 +11,7 @@ description: |-
 
 # nxos_dhcp (Data Source)
 
-This data source can read the DHCP configuration.
+This data source can read the DHCP relay configuration on NX-OS devices, including relay interfaces and their associated relay server addresses.
 
 - API Documentation: [dhcpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/DHCP/dhcp:Entity/)
 

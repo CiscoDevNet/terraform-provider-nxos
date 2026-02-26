@@ -57,7 +57,7 @@ func (d *VRFDataSource) Metadata(_ context.Context, req datasource.MetadataReque
 func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read a VRF.", "l3Inst", "Layer%203/l3:Inst/").AddAdditionalDocs([]string{"rtctrlDom", "rtctrlDomAf", "rtctrlAfCtrl", "rtctrlRttP", "rtctrlRttEntry"}, []string{"Routing%20and%20Forwarding/rtctrl:Dom/", "Routing%20and%20Forwarding/rtctrl:DomAf/", "Routing%20and%20Forwarding/rtctrl:AfCtrl/", "Routing%20and%20Forwarding/rtctrl:RttP/", "Routing%20and%20Forwarding/rtctrl:RttEntry/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read a VRF on NX-OS devices, including route distinguisher, address families, and route target configurations.", "l3Inst", "Layer%203/l3:Inst/").AddAdditionalDocs([]string{"rtctrlDom", "rtctrlDomAf", "rtctrlAfCtrl", "rtctrlRttP", "rtctrlRttEntry"}, []string{"Routing%20and%20Forwarding/rtctrl:Dom/", "Routing%20and%20Forwarding/rtctrl:DomAf/", "Routing%20and%20Forwarding/rtctrl:AfCtrl/", "Routing%20and%20Forwarding/rtctrl:RttP/", "Routing%20and%20Forwarding/rtctrl:RttEntry/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

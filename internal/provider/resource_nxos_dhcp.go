@@ -60,7 +60,7 @@ func (r *DHCPResource) Metadata(ctx context.Context, req resource.MetadataReques
 func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the DHCP configuration.", "dhcpEntity", "DHCP/dhcp:Entity/").AddAdditionalDocs([]string{"dhcpInst", "dhcpRelayIf", "dhcpRelayAddr"}, []string{"DHCP/dhcp:Inst/", "DHCP/dhcp:RelayIf/", "DHCP/dhcp:RelayAddr/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the DHCP relay configuration on NX-OS devices, including relay interfaces and their associated relay server addresses.", "dhcpEntity", "DHCP/dhcp:Entity/").AddAdditionalDocs([]string{"dhcpInst", "dhcpRelayIf", "dhcpRelayAddr"}, []string{"DHCP/dhcp:Inst/", "DHCP/dhcp:RelayIf/", "DHCP/dhcp:RelayAddr/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

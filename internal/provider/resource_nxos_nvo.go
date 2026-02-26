@@ -64,7 +64,7 @@ func (r *NVOResource) Metadata(ctx context.Context, req resource.MetadataRequest
 func (r *NVOResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the NVO configuration.", "nvoEps", "Network%20Virtualization/nvo:Eps/").AddAdditionalDocs([]string{"nvoEp", "nvoNws", "nvoNw", "nvoIngRepl"}, []string{"Network%20Virtualization/nvo:Ep/", "Network%20Virtualization/nvo:Nws/", "Network%20Virtualization/nvo:Nw/", "Network%20Virtualization/nvo:IngRepl/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the NVO (Network Virtualization Overlay) configuration on NX-OS devices, including NVE interfaces, VNIs, and ingress replication settings.", "nvoEps", "Network%20Virtualization/nvo:Eps/").AddAdditionalDocs([]string{"nvoEp", "nvoNws", "nvoNw", "nvoIngRepl"}, []string{"Network%20Virtualization/nvo:Ep/", "Network%20Virtualization/nvo:Nws/", "Network%20Virtualization/nvo:Nw/", "Network%20Virtualization/nvo:IngRepl/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

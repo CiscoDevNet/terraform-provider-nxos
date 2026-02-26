@@ -3,7 +3,7 @@
 page_title: "nxos_logging Resource - terraform-provider-nxos"
 subcategory: "System"
 description: |-
-  This resource can manage the logging configuration.
+  This resource can manage the logging configuration on NX-OS devices, including global severity levels and per-facility logging settings.
   API Documentation: loggingLogging https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:Logging/
   Additional API Documentation
   loggingLogLevel https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:LogLevel/loggingFacility https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:Facility/
@@ -11,7 +11,7 @@ description: |-
 
 # nxos_logging (Resource)
 
-This resource can manage the logging configuration.
+This resource can manage the logging configuration on NX-OS devices, including global severity levels and per-facility logging settings.
 
 - API Documentation: [loggingLogging](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/logging:Logging/)
 

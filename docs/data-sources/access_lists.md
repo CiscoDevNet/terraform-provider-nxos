@@ -3,7 +3,7 @@
 page_title: "nxos_access_lists Data Source - terraform-provider-nxos"
 subcategory: "Security"
 description: |-
-  This data source can read the Access Lists configuration.
+  This data source can read IPv4 access control lists (ACLs) from NX-OS devices, including ACL entries with match criteria such as source/destination prefixes, ports, protocols, and TCP flags. It also supports reading ACL interface bindings in ingress or egress direction.
   API Documentation: aclEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Entity/
   Additional API Documentation
   ipv4aclAF https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:AF/ipv4aclACL https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:ACL/ipv4aclACE https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/ipv4acl:ACE/aclPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Policy/aclIngress https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Ingress/aclIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/aclEgress https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Egress/aclIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:If/aclInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Inst/
@@ -11,7 +11,7 @@ description: |-
 
 # nxos_access_lists (Data Source)
 
-This data source can read the Access Lists configuration.
+This data source can read IPv4 access control lists (ACLs) from NX-OS devices, including ACL entries with match criteria such as source/destination prefixes, ports, protocols, and TCP flags. It also supports reading ACL interface bindings in ingress or egress direction.
 
 - API Documentation: [aclEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/acl:Entity/)
 

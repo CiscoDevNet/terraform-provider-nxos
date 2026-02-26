@@ -3,7 +3,7 @@
 page_title: "nxos_ntp Data Source - terraform-provider-nxos"
 subcategory: "System"
 description: |-
-  This data source can read the NTP configuration.
+  This data source can read the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings.
   API Documentation: datetimeClkPol https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:ClkPol/
   Additional API Documentation
   datetimeNtpProvider https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:NtpProvider/
@@ -11,7 +11,7 @@ description: |-
 
 # nxos_ntp (Data Source)
 
-This data source can read the NTP configuration.
+This data source can read the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings.
 
 - API Documentation: [datetimeClkPol](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/datetime:ClkPol/)
 

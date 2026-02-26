@@ -3,7 +3,7 @@
 page_title: "nxos_isis Data Source - terraform-provider-nxos"
 subcategory: "Routing"
 description: |-
-  This data source can read the IS-IS configuration.
+  This data source can read the IS-IS configuration on NX-OS devices, including IS-IS instances, VRFs, authentication settings, and interface configurations.
   API Documentation: isisEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/isis:Entity/
   Additional API Documentation
   isisInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/isis:Inst/isisDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/isis:Dom/isisDomAf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/isis:DomAf/isisOverload https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/isis:Overload/isisInternalIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/isis:InternalIf/
@@ -11,7 +11,7 @@ description: |-
 
 # nxos_isis (Data Source)
 
-This data source can read the IS-IS configuration.
+This data source can read the IS-IS configuration on NX-OS devices, including IS-IS instances, VRFs, authentication settings, and interface configurations.
 
 - API Documentation: [isisEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/isis:Entity/)
 

@@ -2,8 +2,8 @@
 name: NVO
 class_name: nvoEps
 dn: sys/eps
-ds_description: This data source can read the NVO configuration.
-res_description: This resource can manage the NVO configuration.
+ds_description: This data source can read the NVO (Network Virtualization Overlay) configuration on NX-OS devices, including NVE interfaces, VNIs, and ingress replication settings.
+res_description: This resource can manage the NVO (Network Virtualization Overlay) configuration on NX-OS devices, including NVE interfaces, VNIs, and ingress replication settings.
 no_delete: true
 doc_path: Network%20Virtualization/nvo:Eps/
 doc_category: Overlay

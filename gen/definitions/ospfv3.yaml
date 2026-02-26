@@ -2,8 +2,8 @@
 name: OSPFv3
 class_name: ospfv3Entity
 dn: sys/ospfv3
-ds_description: This data source can read the global OSPFv3 configuration.
-res_description: This resource can manage the global OSPFv3 configuration.
+ds_description: This data source can read the OSPFv3 configuration on NX-OS devices, including OSPFv3 instances, VRFs, areas, and interface settings.
+res_description: This resource can manage the OSPFv3 configuration on NX-OS devices, including OSPFv3 instances, VRFs, areas, and interface settings.
 doc_path: Routing%20and%20Forwarding/ospfv3:Entity/
 doc_category: Routing
 attributes:

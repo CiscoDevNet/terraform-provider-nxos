@@ -3,7 +3,7 @@
 page_title: "nxos_vpc Data Source - terraform-provider-nxos"
 subcategory: "Switching"
 description: |-
-  This data source can read the vPC configuration.
+  This data source can read the vPC (Virtual Port Channel) configuration on NX-OS devices, including the vPC domain with peer settings, keepalive, role priority, and peer gateway options.
   API Documentation: vpcEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vpc:Entity/
   Additional API Documentation
   vpcInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vpc:Inst/vpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vpc:Dom/vpcKeepalive https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vpc:Keepalive/vpcPeerLink https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vpc:PeerLink/vpcIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vpc:If/vpcRsVpcConf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vpc:RsVpcConf/
@@ -11,7 +11,7 @@ description: |-
 
 # nxos_vpc (Data Source)
 
-This data source can read the vPC configuration.
+This data source can read the vPC (Virtual Port Channel) configuration on NX-OS devices, including the vPC domain with peer settings, keepalive, role priority, and peer gateway options.
 
 - API Documentation: [vpcEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/vpc:Entity/)
 

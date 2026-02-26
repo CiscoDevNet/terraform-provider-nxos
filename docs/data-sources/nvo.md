@@ -3,7 +3,7 @@
 page_title: "nxos_nvo Data Source - terraform-provider-nxos"
 subcategory: "Overlay"
 description: |-
-  This data source can read the NVO configuration.
+  This data source can read the NVO (Network Virtualization Overlay) configuration on NX-OS devices, including NVE interfaces, VNIs, and ingress replication settings.
   API Documentation: nvoEps https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Eps/
   Additional API Documentation
   nvoEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Ep/nvoNws https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Nws/nvoNw https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Nw/nvoIngRepl https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:IngRepl/
@@ -11,7 +11,7 @@ description: |-
 
 # nxos_nvo (Data Source)
 
-This data source can read the NVO configuration.
+This data source can read the NVO (Network Virtualization Overlay) configuration on NX-OS devices, including NVE interfaces, VNIs, and ingress replication settings.
 
 - API Documentation: [nvoEps](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Network%20Virtualization/nvo:Eps/)
 

@@ -57,7 +57,7 @@ func (d *SpanningTreeDataSource) Metadata(_ context.Context, req datasource.Meta
 func (d *SpanningTreeDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the Spanning Tree configuration.", "stpEntity", "Discovery%20Protocols/stp:Entity/").AddAdditionalDocs([]string{"stpInst", "stpIf"}, []string{"Discovery%20Protocols/stp:Inst/", "Discovery%20Protocols/stp:If/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the Spanning Tree configuration on NX-OS devices, including per-interface settings such as BPDU filter, BPDU guard, cost, guard mode, and port priority.", "stpEntity", "Discovery%20Protocols/stp:Entity/").AddAdditionalDocs([]string{"stpInst", "stpIf"}, []string{"Discovery%20Protocols/stp:Inst/", "Discovery%20Protocols/stp:If/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

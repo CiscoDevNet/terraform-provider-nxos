@@ -64,7 +64,7 @@ func (r *VPCResource) Metadata(ctx context.Context, req resource.MetadataRequest
 func (r *VPCResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the vPC configuration.", "vpcEntity", "System/vpc:Entity/").AddAdditionalDocs([]string{"vpcInst", "vpcDom", "vpcKeepalive", "vpcPeerLink", "vpcIf", "vpcRsVpcConf"}, []string{"System/vpc:Inst/", "System/vpc:Dom/", "System/vpc:Keepalive/", "System/vpc:PeerLink/", "System/vpc:If/", "System/vpc:RsVpcConf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the vPC (Virtual Port Channel) configuration on NX-OS devices, including the vPC domain with peer settings, keepalive, role priority, and peer gateway options.", "vpcEntity", "System/vpc:Entity/").AddAdditionalDocs([]string{"vpcInst", "vpcDom", "vpcKeepalive", "vpcPeerLink", "vpcIf", "vpcRsVpcConf"}, []string{"System/vpc:Inst/", "System/vpc:Dom/", "System/vpc:Keepalive/", "System/vpc:PeerLink/", "System/vpc:If/", "System/vpc:RsVpcConf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

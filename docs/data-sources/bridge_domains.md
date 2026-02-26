@@ -3,7 +3,7 @@
 page_title: "nxos_bridge_domains Data Source - terraform-provider-nxos"
 subcategory: "Switching"
 description: |-
-  This data source can read the bridge domain configuration.
+  This data source can read the bridge domain configuration on NX-OS devices, including VLAN and VXLAN encapsulation mappings.
   API Documentation: bdEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%202/bd:Entity/
   Additional API Documentation
   l2BD https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%202/l2:BD/
@@ -11,7 +11,7 @@ description: |-
 
 # nxos_bridge_domains (Data Source)
 
-This data source can read the bridge domain configuration.
+This data source can read the bridge domain configuration on NX-OS devices, including VLAN and VXLAN encapsulation mappings.
 
 - API Documentation: [bdEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Layer%202/bd:Entity/)
 

@@ -3,8 +3,8 @@ name: IPv4
 class_name: ipv4Entity
 dn: sys/ipv4
 no_delete: true
-ds_description: This data source can read the IPv4 configuration.
-res_description: This resource can manage the IPv4 configuration.
+ds_description: This data source can read the IPv4 configuration on NX-OS devices, including per-VRF static routes with next hops and interface addresses.
+res_description: This resource can manage the IPv4 configuration on NX-OS devices, including per-VRF static routes with next hops and interface addresses.
 doc_path: Layer%203/ipv4:Entity/
 doc_category: Routing
 child_classes:

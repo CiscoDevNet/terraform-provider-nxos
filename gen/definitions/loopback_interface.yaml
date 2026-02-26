@@ -2,8 +2,8 @@
 name: Loopback Interface
 class_name: l3LbRtdIf
 dn: sys/intf/lb-[%s]
-ds_description: This data source can read a loopback interface.
-res_description: This resource can manage a loopback interface.
+ds_description: This data source can read a loopback interface on NX-OS devices, including its administrative state, description, and VRF membership.
+res_description: This resource can manage a loopback interface on NX-OS devices, including its administrative state, description, and VRF membership.
 doc_path: Layer%203/l3:LbRtdIf/
 doc_category: Interface
 bulk_resource: true

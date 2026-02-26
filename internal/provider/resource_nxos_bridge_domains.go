@@ -31,7 +31,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -81,20 +80,18 @@ func (r *BridgeDomainsResource) Schema(ctx context.Context, req resource.SchemaR
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"fabric_encap": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Fabric encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").AddDefaultValueDescription("unknown").String,
+							MarkdownDescription: helpers.NewAttributeDescription("The Layer 2 bridge-domain Fabric encapsulation (VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
 							Required:            true,
 							PlanModifiers: []planmodifier.String{
 								stringplanmodifier.RequiresReplace(),
 							},
 						},
 						"access_encap": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Access encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").AddDefaultValueDescription("unknown").String,
+							MarkdownDescription: helpers.NewAttributeDescription("The Layer 2 access encapsulation (VLAN or VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("unknown"),
 						},
 						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Bridge domain name.").String,
+							MarkdownDescription: helpers.NewAttributeDescription("The name of the object.").String,
 							Optional:            true,
 						},
 					},

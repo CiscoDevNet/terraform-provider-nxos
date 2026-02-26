@@ -43,6 +43,6 @@ data "nxos_bridge_domains" "example" {
 
 Read-Only:
 
-- `access_encap` (String) Access encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
-- `fabric_encap` (String) Fabric encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
-- `name` (String) Bridge domain name.
+- `access_encap` (String) The Layer 2 access encapsulation (VLAN or VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `fabric_encap` (String) The Layer 2 bridge-domain Fabric encapsulation (VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `name` (String) The name of the object.

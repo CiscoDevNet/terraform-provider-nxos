@@ -74,15 +74,15 @@ func (d *BridgeDomainsDataSource) Schema(ctx context.Context, req datasource.Sch
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"fabric_encap": schema.StringAttribute{
-							MarkdownDescription: "Fabric encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.",
+							MarkdownDescription: "The Layer 2 bridge-domain Fabric encapsulation (VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.",
 							Computed:            true,
 						},
 						"access_encap": schema.StringAttribute{
-							MarkdownDescription: "Access encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.",
+							MarkdownDescription: "The Layer 2 access encapsulation (VLAN or VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.",
 							Computed:            true,
 						},
 						"name": schema.StringAttribute{
-							MarkdownDescription: "Bridge domain name.",
+							MarkdownDescription: "The name of the object.",
 							Computed:            true,
 						},
 					},

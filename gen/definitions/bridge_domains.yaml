@@ -19,17 +19,15 @@ child_classes:
         tf_name: fabric_encap
         type: String
         id: true
-        description: 'Fabric encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
-        default_value: unknown
+        description: 'The Layer 2 bridge-domain Fabric encapsulation (VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
         example: vlan-10
       - nxos_name: accEncap
         tf_name: access_encap
         type: String
-        description: 'Access encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
-        default_value: unknown
+        description: 'The Layer 2 access encapsulation (VLAN or VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
         example: unknown
       - nxos_name: name
         tf_name: name
         type: String
-        description: 'Bridge domain name.'
+        description: 'The name of the object.'
         example: VLAN10

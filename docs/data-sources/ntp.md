@@ -48,4 +48,4 @@ Read-Only:
 - `min_poll` (Number) NTP minimum interval default in seconds. Possible range is from `4` to `16`.
 - `name` (String) NTP server or peer address.
 - `type` (String) NTP provider type. Possible values are `server` or `peer`.
-- `vrf` (String) Identifies the VRF for the NTP provider.
+- `vrf` (String) Identifies the VRF for the NTP providers.

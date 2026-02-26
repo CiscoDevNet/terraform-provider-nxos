@@ -59,14 +59,11 @@ Optional:
   - Range: `1`-`65535`
 - `max_poll` (Number) NTP maximum interval default in seconds. Possible range is from `4` to `16`.
   - Range: `4`-`16`
-  - Default value: `6`
 - `min_poll` (Number) NTP minimum interval default in seconds. Possible range is from `4` to `16`.
   - Range: `4`-`16`
-  - Default value: `4`
 - `type` (String) NTP provider type. Possible values are `server` or `peer`.
-  - Choices: `server`, `peer`
-- `vrf` (String) Identifies the VRF for the NTP provider.
-  - Default value: `default`
+  - Choices: `peer`, `server`, `invalid`
+- `vrf` (String) Identifies the VRF for the NTP providers.
 
 ## Import
 

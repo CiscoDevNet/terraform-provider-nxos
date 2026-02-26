@@ -24,16 +24,16 @@ child_classes:
       - nxos_name: vrf
         tf_name: vrf
         type: String
-        description: 'Identifies the VRF for the NTP provider.'
-        default_value: default
+        description: 'Identifies the VRF for the NTP providers.'
         example: management
       - nxos_name: provT
         tf_name: type
         type: String
         description: 'NTP provider type. Possible values are `server` or `peer`.'
         enum_values:
-          - server
           - peer
+          - server
+          - invalid
         example: server
       - nxos_name: keyId
         tf_name: key_id
@@ -46,7 +46,6 @@ child_classes:
         tf_name: min_poll
         type: Int64
         description: 'NTP minimum interval default in seconds. Possible range is from `4` to `16`.'
-        default_value: 4
         min_int: 4
         max_int: 16
         example: 4
@@ -54,7 +53,6 @@ child_classes:
         tf_name: max_poll
         type: Int64
         description: 'NTP maximum interval default in seconds. Possible range is from `4` to `16`.'
-        default_value: 6
         min_int: 4
         max_int: 16
         example: 6

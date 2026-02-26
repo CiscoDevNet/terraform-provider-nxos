@@ -78,7 +78,7 @@ func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							Computed:            true,
 						},
 						"vrf": schema.StringAttribute{
-							MarkdownDescription: "Identifies the VRF for the NTP provider.",
+							MarkdownDescription: "Identifies the VRF for the NTP providers.",
 							Computed:            true,
 						},
 						"type": schema.StringAttribute{

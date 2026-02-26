@@ -32,9 +32,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -89,52 +87,40 @@ func (r *PhysicalInterfacesResource) Schema(ctx context.Context, req resource.Sc
 							Required:            true,
 						},
 						"fec_mode": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("FEC mode.").AddStringEnumDescription("fc-fec", "rs-fec", "fec-off", "auto", "rs-ieee", "rs-cons16", "kp-fec").AddDefaultValueDescription("auto").String,
+							MarkdownDescription: helpers.NewAttributeDescription("FEC Mode.").AddStringEnumDescription("fc-fec", "rs-fec", "fec-off", "auto", "rs-ieee", "rs-cons16", "kp-fec").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("auto"),
 							Validators: []validator.String{
 								stringvalidator.OneOf("fc-fec", "rs-fec", "fec-off", "auto", "rs-ieee", "rs-cons16", "kp-fec"),
 							},
 						},
 						"access_vlan": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Access VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").AddDefaultValueDescription("vlan-1").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Configured Access Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("vlan-1"),
 						},
 						"admin_state": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Administrative port state.").AddStringEnumDescription("up", "down").AddDefaultValueDescription("up").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Administrative port state.").AddStringEnumDescription("down", "up").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("up"),
 							Validators: []validator.String{
-								stringvalidator.OneOf("up", "down"),
+								stringvalidator.OneOf("down", "up"),
 							},
 						},
 						"auto_negotiation": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Administrative port auto-negotiation.").AddStringEnumDescription("on", "off", "25G").AddDefaultValueDescription("on").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Administrative port auto-negotiation.").AddStringEnumDescription("on", "off", "25G").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("on"),
 							Validators: []validator.String{
 								stringvalidator.OneOf("on", "off", "25G"),
 							},
 						},
 						"bandwidth": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("The bandwidth parameter for a routed interface, port channel, or subinterface.").AddIntegerRangeDescription(0, 3200000000).AddDefaultValueDescription("0").String,
+							MarkdownDescription: helpers.NewAttributeDescription("The bandwidth parameter for a routed interface, port channel, or subinterface.").AddIntegerRangeDescription(0, 3200000000).String,
 							Optional:            true,
-							Computed:            true,
-							Default:             int64default.StaticInt64(0),
 							Validators: []validator.Int64{
 								int64validator.Between(0, 3200000000),
 							},
 						},
 						"delay": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("The administrative port delay time.").AddIntegerRangeDescription(1, 16777215).AddDefaultValueDescription("1").String,
+							MarkdownDescription: helpers.NewAttributeDescription("The administrative port delay time.").AddIntegerRangeDescription(1, 16777215).String,
 							Optional:            true,
-							Computed:            true,
-							Default:             int64default.StaticInt64(1),
 							Validators: []validator.Int64{
 								int64validator.Between(1, 16777215),
 							},
@@ -144,118 +130,92 @@ func (r *PhysicalInterfacesResource) Schema(ctx context.Context, req resource.Sc
 							Optional:            true,
 						},
 						"duplex": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Duplex.").AddStringEnumDescription("auto", "full", "half").AddDefaultValueDescription("auto").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Duplex.").AddStringEnumDescription("auto", "full", "half").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("auto"),
 							Validators: []validator.String{
 								stringvalidator.OneOf("auto", "full", "half"),
 							},
 						},
 						"layer": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Administrative port layer.").AddStringEnumDescription("Layer2", "Layer3").AddDefaultValueDescription("Layer2").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Administrative port layer.").AddStringEnumDescription("Layer1", "Layer2", "Layer3").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("Layer2"),
 							Validators: []validator.String{
-								stringvalidator.OneOf("Layer2", "Layer3"),
+								stringvalidator.OneOf("Layer1", "Layer2", "Layer3"),
 							},
 						},
 						"link_logging": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Administrative link logging.").AddStringEnumDescription("default", "enable", "disable").AddDefaultValueDescription("default").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Administrative link logging enable.").AddStringEnumDescription("default", "enable", "disable").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("default"),
 							Validators: []validator.String{
 								stringvalidator.OneOf("default", "enable", "disable"),
 							},
 						},
 						"link_debounce_down": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Administrative port link debounce interval.").AddIntegerRangeDescription(0, 20000).AddDefaultValueDescription("100").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Administrative port link debounce interval.").AddIntegerRangeDescription(0, 20000).String,
 							Optional:            true,
-							Computed:            true,
-							Default:             int64default.StaticInt64(100),
 							Validators: []validator.Int64{
 								int64validator.Between(0, 20000),
 							},
 						},
 						"link_debounce_up": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Link Debounce Interval - LinkUp Event.").AddIntegerRangeDescription(0, 20000).AddDefaultValueDescription("0").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Link Debounce Interval - LinkUp Event.").AddIntegerRangeDescription(0, 10000).String,
 							Optional:            true,
-							Computed:            true,
-							Default:             int64default.StaticInt64(0),
 							Validators: []validator.Int64{
-								int64validator.Between(0, 20000),
+								int64validator.Between(0, 10000),
 							},
 						},
 						"medium": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("The administrative port medium type.").AddStringEnumDescription("broadcast", "p2p").AddDefaultValueDescription("broadcast").String,
+							MarkdownDescription: helpers.NewAttributeDescription("The administrative port medium type.").AddStringEnumDescription("broadcast", "p2p").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("broadcast"),
 							Validators: []validator.String{
 								stringvalidator.OneOf("broadcast", "p2p"),
 							},
 						},
 						"mode": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Administrative port mode.").AddStringEnumDescription("access", "trunk", "fex-fabric", "dot1q-tunnel", "promiscuous", "host", "trunk_secondary", "trunk_promiscuous", "vntag").AddDefaultValueDescription("access").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Administrative port mode.").AddStringEnumDescription("access", "trunk", "fex-fabric", "dot1q-tunnel", "promiscuous", "host", "trunk_secondary", "trunk_promiscuous", "vntag").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("access"),
 							Validators: []validator.String{
 								stringvalidator.OneOf("access", "trunk", "fex-fabric", "dot1q-tunnel", "promiscuous", "host", "trunk_secondary", "trunk_promiscuous", "vntag"),
 							},
 						},
 						"mtu": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Administrative port MTU.").AddIntegerRangeDescription(576, 9216).AddDefaultValueDescription("1500").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Administrative port mtu.").AddIntegerRangeDescription(576, 9216).String,
 							Optional:            true,
-							Computed:            true,
-							Default:             int64default.StaticInt64(1500),
 							Validators: []validator.Int64{
 								int64validator.Between(576, 9216),
 							},
 						},
 						"native_vlan": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Native VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").AddDefaultValueDescription("vlan-1").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Configured Native Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("vlan-1"),
 						},
 						"speed": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Administrative port speed.").AddStringEnumDescription("unknown", "100M", "1G", "10G", "40G", "auto", "auto 100M", "auto 100M 1G", "100G", "25G", "10M", "50G", "200G", "400G", "2.5G", "5G", "auto 2.5G 5G 10G", "auto 100M 1G 2.5G 5G").AddDefaultValueDescription("auto").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Administrative port speed.").AddStringEnumDescription("unknown", "100M", "1G", "10G", "40G", "auto", "auto 100M", "auto 100M 1G", "100G", "25G", "10M", "50G", "200G", "400G", "2.5G", "5G", "auto 2.5G 5G 10G", "auto 100M 1G 2.5G 5G", "800G").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("auto"),
 							Validators: []validator.String{
-								stringvalidator.OneOf("unknown", "100M", "1G", "10G", "40G", "auto", "auto 100M", "auto 100M 1G", "100G", "25G", "10M", "50G", "200G", "400G", "2.5G", "5G", "auto 2.5G 5G 10G", "auto 100M 1G 2.5G 5G"),
+								stringvalidator.OneOf("unknown", "100M", "1G", "10G", "40G", "auto", "auto 100M", "auto 100M 1G", "100G", "25G", "10M", "50G", "200G", "400G", "2.5G", "5G", "auto 2.5G 5G 10G", "auto 100M 1G 2.5G 5G", "800G"),
 							},
 						},
 						"speed_group": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Speed group.").AddStringEnumDescription("unknown", "1000", "10000", "40000", "auto", "25000").AddDefaultValueDescription("auto").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Speed Group.").AddStringEnumDescription("unknown", "1000", "10000", "40000", "auto", "25000").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("auto"),
 							Validators: []validator.String{
 								stringvalidator.OneOf("unknown", "1000", "10000", "40000", "auto", "25000"),
 							},
 						},
 						"trunk_vlans": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("List of trunk VLANs.").AddDefaultValueDescription("1-4094").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Configed Trunk Vlans.").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("1-4094"),
 						},
 						"uni_directional_ethernet": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("UDE (Uni-Directional Ethernet).").AddStringEnumDescription("disable", "send-only", "receive-only").AddDefaultValueDescription("disable").String,
+							MarkdownDescription: helpers.NewAttributeDescription("UDE (Uni-Directional Ethernet).").AddStringEnumDescription("disable", "send-only", "receive-only").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("disable"),
 							Validators: []validator.String{
 								stringvalidator.OneOf("disable", "send-only", "receive-only"),
 							},
 						},
 						"user_configured_flags": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Port User Config Flags.").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Port User Config Flags.").AddStringEnumDescription("none", "admin_state", "admin_layer", "admin_router_mac", "admin_dce_mode", "admin_mtu").String,
 							Optional:            true,
 						},
 						"vrf_dn": schema.StringAttribute{

@@ -68,62 +68,44 @@ Required:
 
 Optional:
 
-- `access_vlan` (String) Access VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
-  - Default value: `vlan-1`
+- `access_vlan` (String) Configured Access Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
 - `admin_state` (String) Administrative port state.
-  - Choices: `up`, `down`
-  - Default value: `up`
+  - Choices: `down`, `up`
 - `auto_negotiation` (String) Administrative port auto-negotiation.
   - Choices: `on`, `off`, `25G`
-  - Default value: `on`
 - `bandwidth` (Number) The bandwidth parameter for a routed interface, port channel, or subinterface.
   - Range: `0`-`3200000000`
-  - Default value: `0`
 - `delay` (Number) The administrative port delay time.
   - Range: `1`-`16777215`
-  - Default value: `1`
 - `description` (String) Interface description.
 - `duplex` (String) Duplex.
   - Choices: `auto`, `full`, `half`
-  - Default value: `auto`
-- `fec_mode` (String) FEC mode.
+- `fec_mode` (String) FEC Mode.
   - Choices: `fc-fec`, `rs-fec`, `fec-off`, `auto`, `rs-ieee`, `rs-cons16`, `kp-fec`
-  - Default value: `auto`
 - `layer` (String) Administrative port layer.
-  - Choices: `Layer2`, `Layer3`
-  - Default value: `Layer2`
+  - Choices: `Layer1`, `Layer2`, `Layer3`
 - `link_debounce_down` (Number) Administrative port link debounce interval.
   - Range: `0`-`20000`
-  - Default value: `100`
 - `link_debounce_up` (Number) Link Debounce Interval - LinkUp Event.
-  - Range: `0`-`20000`
-  - Default value: `0`
-- `link_logging` (String) Administrative link logging.
+  - Range: `0`-`10000`
+- `link_logging` (String) Administrative link logging enable.
   - Choices: `default`, `enable`, `disable`
-  - Default value: `default`
 - `medium` (String) The administrative port medium type.
   - Choices: `broadcast`, `p2p`
-  - Default value: `broadcast`
 - `mode` (String) Administrative port mode.
   - Choices: `access`, `trunk`, `fex-fabric`, `dot1q-tunnel`, `promiscuous`, `host`, `trunk_secondary`, `trunk_promiscuous`, `vntag`
-  - Default value: `access`
-- `mtu` (Number) Administrative port MTU.
+- `mtu` (Number) Administrative port mtu.
   - Range: `576`-`9216`
-  - Default value: `1500`
-- `native_vlan` (String) Native VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
-  - Default value: `vlan-1`
+- `native_vlan` (String) Configured Native Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
 - `speed` (String) Administrative port speed.
-  - Choices: `unknown`, `100M`, `1G`, `10G`, `40G`, `auto`, `auto 100M`, `auto 100M 1G`, `100G`, `25G`, `10M`, `50G`, `200G`, `400G`, `2.5G`, `5G`, `auto 2.5G 5G 10G`, `auto 100M 1G 2.5G 5G`
-  - Default value: `auto`
-- `speed_group` (String) Speed group.
+  - Choices: `unknown`, `100M`, `1G`, `10G`, `40G`, `auto`, `auto 100M`, `auto 100M 1G`, `100G`, `25G`, `10M`, `50G`, `200G`, `400G`, `2.5G`, `5G`, `auto 2.5G 5G 10G`, `auto 100M 1G 2.5G 5G`, `800G`
+- `speed_group` (String) Speed Group.
   - Choices: `unknown`, `1000`, `10000`, `40000`, `auto`, `25000`
-  - Default value: `auto`
-- `trunk_vlans` (String) List of trunk VLANs.
-  - Default value: `1-4094`
+- `trunk_vlans` (String) Configed Trunk Vlans.
 - `uni_directional_ethernet` (String) UDE (Uni-Directional Ethernet).
   - Choices: `disable`, `send-only`, `receive-only`
-  - Default value: `disable`
 - `user_configured_flags` (String) Port User Config Flags.
+  - Choices: `none`, `admin_state`, `admin_layer`, `admin_router_mac`, `admin_dce_mode`, `admin_mtu`
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.
 
 ## Import

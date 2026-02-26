@@ -40,26 +40,26 @@ data "nxos_physical_interface" "example" {
 
 ### Read-Only
 
-- `access_vlan` (String) Access VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `access_vlan` (String) Configured Access Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
 - `admin_state` (String) Administrative port state.
 - `auto_negotiation` (String) Administrative port auto-negotiation.
 - `bandwidth` (Number) The bandwidth parameter for a routed interface, port channel, or subinterface.
 - `delay` (Number) The administrative port delay time.
 - `description` (String) Interface description.
 - `duplex` (String) Duplex.
-- `fec_mode` (String) FEC mode.
+- `fec_mode` (String) FEC Mode.
 - `id` (String) The distinguished name of the object.
 - `layer` (String) Administrative port layer.
 - `link_debounce_down` (Number) Administrative port link debounce interval.
 - `link_debounce_up` (Number) Link Debounce Interval - LinkUp Event.
-- `link_logging` (String) Administrative link logging.
+- `link_logging` (String) Administrative link logging enable.
 - `medium` (String) The administrative port medium type.
 - `mode` (String) Administrative port mode.
-- `mtu` (Number) Administrative port MTU.
-- `native_vlan` (String) Native VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `mtu` (Number) Administrative port mtu.
+- `native_vlan` (String) Configured Native Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
 - `speed` (String) Administrative port speed.
-- `speed_group` (String) Speed group.
-- `trunk_vlans` (String) List of trunk VLANs.
+- `speed_group` (String) Speed Group.
+- `trunk_vlans` (String) Configed Trunk Vlans.
 - `uni_directional_ethernet` (String) UDE (Uni-Directional Ethernet).
 - `user_configured_flags` (String) Port User Config Flags.
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.

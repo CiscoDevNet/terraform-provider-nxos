@@ -30,7 +30,7 @@ resource "nxos_evpn" "example" {
     encap               = "vxlan-123456"
     route_distinguisher = "rd:unknown:0:0"
     route_target_directions = [{
-      direction = "import"
+      type = "import"
       route_targets = [{
         route_target = "route-target:as2-nn2:2:2"
       }]
@@ -44,9 +44,8 @@ resource "nxos_evpn" "example" {
 
 ### Optional
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `device` (String) A device name from the provider configuration.
 - `vnis` (Attributes List) List of EVPN VNIs. (see [below for nested schema](#nestedatt--vnis))
 
@@ -63,8 +62,7 @@ Required:
 
 Optional:
 
-- `route_distinguisher` (String) Route Distinguisher value in NX-OS DME format.
-  - Default value: `unknown:unknown:0:0`
+- `route_distinguisher` (String) Route Distinguisher. value in NX-OS DME format.
 - `route_target_directions` (Attributes List) List of EVPN VNI route target directions. (see [below for nested schema](#nestedatt--vnis--route_target_directions))
 
 <a id="nestedatt--vnis--route_target_directions"></a>
@@ -72,7 +70,7 @@ Optional:
 
 Required:
 
-- `direction` (String) Route Target direction.
+- `type` (String) Type.
   - Choices: `import`, `export`
 
 Optional:
@@ -84,7 +82,7 @@ Optional:
 
 Required:
 
-- `route_target` (String) Route Target in NX-OS DME format.
+- `route_target` (String) Route Target. in NX-OS DME format.
 
 ## Import
 

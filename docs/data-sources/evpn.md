@@ -37,7 +37,7 @@ data "nxos_evpn" "example" {
 
 ### Read-Only
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) The administrative state of the object or policy.
 - `id` (String) The distinguished name of the object.
 - `vnis` (Attributes List) List of EVPN VNIs. (see [below for nested schema](#nestedatt--vnis))
 
@@ -47,7 +47,7 @@ data "nxos_evpn" "example" {
 Read-Only:
 
 - `encap` (String) Encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
-- `route_distinguisher` (String) Route Distinguisher value in NX-OS DME format.
+- `route_distinguisher` (String) Route Distinguisher. value in NX-OS DME format.
 - `route_target_directions` (Attributes List) List of EVPN VNI route target directions. (see [below for nested schema](#nestedatt--vnis--route_target_directions))
 
 <a id="nestedatt--vnis--route_target_directions"></a>
@@ -55,12 +55,12 @@ Read-Only:
 
 Read-Only:
 
-- `direction` (String) Route Target direction.
 - `route_targets` (Attributes List) List of EVPN VNI route target entries. (see [below for nested schema](#nestedatt--vnis--route_target_directions--route_targets))
+- `type` (String) Type.
 
 <a id="nestedatt--vnis--route_target_directions--route_targets"></a>
 ### Nested Schema for `vnis.route_target_directions.route_targets`
 
 Read-Only:
 
-- `route_target` (String) Route Target in NX-OS DME format.
+- `route_target` (String) Route Target. in NX-OS DME format.

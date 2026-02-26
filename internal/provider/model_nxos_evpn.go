@@ -50,7 +50,7 @@ type EVPNVnis struct {
 }
 
 type EVPNVnisRouteTargetDirections struct {
-	Direction    types.String                                `tfsdk:"direction"`
+	Type         types.String                                `tfsdk:"type"`
 	RouteTargets []EVPNVnisRouteTargetDirectionsRouteTargets `tfsdk:"route_targets"`
 }
 
@@ -91,7 +91,7 @@ func (data EVPNVnis) getRn() string {
 }
 
 func (data EVPNVnisRouteTargetDirections) getRn() string {
-	return fmt.Sprintf("rttp-%s", data.Direction.ValueString())
+	return fmt.Sprintf("rttp-%s", data.Type.ValueString())
 }
 
 func (data EVPNVnisRouteTargetDirectionsRouteTargets) getRn() string {
@@ -128,8 +128,8 @@ func (data EVPN) toBody() nxos.Body {
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".rtctrlBDEvi.children"
 			for _, child := range child.RouteTargetDirections {
 				attrs = "{}"
-				if (!child.Direction.IsUnknown() && !child.Direction.IsNull()) || false {
-					attrs, _ = sjson.Set(attrs, "type", child.Direction.ValueString())
+				if (!child.Type.IsUnknown() && !child.Type.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "type", child.Type.ValueString())
 				}
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtctrlRttP.attributes", attrs)
 				{
@@ -170,7 +170,7 @@ func (data *EVPN) fromBody(res gjson.Result) {
 									func(nestedClassname, nestedValue gjson.Result) bool {
 										if nestedClassname.String() == "rtctrlRttP" {
 											var nestedChildrtctrlRttP EVPNVnisRouteTargetDirections
-											nestedChildrtctrlRttP.Direction = types.StringValue(nestedValue.Get("attributes.type").String())
+											nestedChildrtctrlRttP.Type = types.StringValue(nestedValue.Get("attributes.type").String())
 											nestedValue.Get("children").ForEach(
 												func(_, nestedV gjson.Result) bool {
 													nestedV.ForEach(
@@ -248,10 +248,10 @@ func (data *EVPN) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
-			if !data.Vnis[c].RouteTargetDirections[nc].Direction.IsNull() {
-				data.Vnis[c].RouteTargetDirections[nc].Direction = types.StringValue(rrtctrlRttP.Get("rtctrlRttP.attributes.type").String())
+			if !data.Vnis[c].RouteTargetDirections[nc].Type.IsNull() {
+				data.Vnis[c].RouteTargetDirections[nc].Type = types.StringValue(rrtctrlRttP.Get("rtctrlRttP.attributes.type").String())
 			} else {
-				data.Vnis[c].RouteTargetDirections[nc].Direction = types.StringNull()
+				data.Vnis[c].RouteTargetDirections[nc].Type = types.StringNull()
 			}
 			for nc_ := range data.Vnis[c].RouteTargetDirections[nc].RouteTargets {
 				var rrtctrlRttEntry gjson.Result
@@ -321,7 +321,7 @@ func (data EVPN) toBodyWithDeletes(ctx context.Context, state EVPN) nxos.Body {
 				for _, stateChild := range state.Vnis[di].RouteTargetDirections {
 					found := false
 					for _, planChild := range data.Vnis[pdi].RouteTargetDirections {
-						if stateChild.Direction == planChild.Direction {
+						if stateChild.Type == planChild.Type {
 							found = true
 							break
 						}
@@ -335,7 +335,7 @@ func (data EVPN) toBodyWithDeletes(ctx context.Context, state EVPN) nxos.Body {
 				}
 				for di_ := range state.Vnis[di].RouteTargetDirections {
 					for pdi_ := range data.Vnis[pdi].RouteTargetDirections {
-						if state.Vnis[di].RouteTargetDirections[di_].Direction == data.Vnis[pdi].RouteTargetDirections[pdi_].Direction {
+						if state.Vnis[di].RouteTargetDirections[di_].Type == data.Vnis[pdi].RouteTargetDirections[pdi_].Type {
 							matchBodyPathdi_ := ""
 							for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
 								if mv.Get("rtctrlRttP.attributes.rn").String() == state.Vnis[di].RouteTargetDirections[di_].getRn() {

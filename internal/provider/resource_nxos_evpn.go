@@ -32,7 +32,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -78,10 +77,8 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				},
 			},
 			"admin_state": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("enabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
@@ -99,18 +96,16 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							},
 						},
 						"route_distinguisher": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Route Distinguisher value in NX-OS DME format.").AddDefaultValueDescription("unknown:unknown:0:0").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Route Distinguisher. value in NX-OS DME format.").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("unknown:unknown:0:0"),
 						},
 						"route_target_directions": schema.ListNestedAttribute{
 							MarkdownDescription: "List of EVPN VNI route target directions.",
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"direction": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Route Target direction.").AddStringEnumDescription("import", "export").String,
+									"type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Type.").AddStringEnumDescription("import", "export").String,
 										Required:            true,
 										Validators: []validator.String{
 											stringvalidator.OneOf("import", "export"),
@@ -125,7 +120,7 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"route_target": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Route Target in NX-OS DME format.").String,
+													MarkdownDescription: helpers.NewAttributeDescription("Route Target. in NX-OS DME format.").String,
 													Required:            true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplace(),

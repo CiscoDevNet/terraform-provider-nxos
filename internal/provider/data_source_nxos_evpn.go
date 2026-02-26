@@ -69,7 +69,7 @@ func (d *EVPNDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				Computed:            true,
 			},
 			"admin_state": schema.StringAttribute{
-				MarkdownDescription: "Administrative state.",
+				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
 			"vnis": schema.ListNestedAttribute{
@@ -82,7 +82,7 @@ func (d *EVPNDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							Computed:            true,
 						},
 						"route_distinguisher": schema.StringAttribute{
-							MarkdownDescription: "Route Distinguisher value in NX-OS DME format.",
+							MarkdownDescription: "Route Distinguisher. value in NX-OS DME format.",
 							Computed:            true,
 						},
 						"route_target_directions": schema.ListNestedAttribute{
@@ -90,8 +90,8 @@ func (d *EVPNDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"direction": schema.StringAttribute{
-										MarkdownDescription: "Route Target direction.",
+									"type": schema.StringAttribute{
+										MarkdownDescription: "Type.",
 										Computed:            true,
 									},
 									"route_targets": schema.ListNestedAttribute{
@@ -100,7 +100,7 @@ func (d *EVPNDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"route_target": schema.StringAttribute{
-													MarkdownDescription: "Route Target in NX-OS DME format.",
+													MarkdownDescription: "Route Target. in NX-OS DME format.",
 													Computed:            true,
 												},
 											},

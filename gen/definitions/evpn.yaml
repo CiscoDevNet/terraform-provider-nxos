@@ -10,11 +10,10 @@ attributes:
   - nxos_name: adminSt
     tf_name: admin_state
     type: String
-    description: 'Administrative state.'
+    description: 'The administrative state of the object or policy.'
     enum_values:
       - enabled
       - disabled
-    default_value: enabled
     example: enabled
 child_classes:
   - class_name: rtctrlBDEvi
@@ -33,8 +32,7 @@ child_classes:
       - nxos_name: rd
         tf_name: route_distinguisher
         type: String
-        description: 'Route Distinguisher value in NX-OS DME format.'
-        default_value: 'unknown:unknown:0:0'
+        description: 'Route Distinguisher. value in NX-OS DME format.'
         example: 'rd:unknown:0:0'
     child_classes:
       - class_name: rtctrlRttP
@@ -45,10 +43,10 @@ child_classes:
         description: 'List of EVPN VNI route target directions.'
         attributes:
           - nxos_name: type
-            tf_name: direction
+            tf_name: type
             type: String
             id: true
-            description: 'Route Target direction.'
+            description: 'Type.'
             enum_values:
               - import
               - export
@@ -65,7 +63,7 @@ child_classes:
                 tf_name: route_target
                 type: String
                 id: true
-                description: 'Route Target in NX-OS DME format.'
+                description: 'Route Target. in NX-OS DME format.'
                 example: route-target:as2-nn2:2:2
 test_prerequisites:
   - dn: sys/fm/nvo

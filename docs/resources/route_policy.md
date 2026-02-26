@@ -50,9 +50,9 @@ resource "nxos_route_policy" "example" {
       match_route_prefix_lists = [{
         prefix_list_dn = "sys/rpm/pfxlistv4-[PREFIX_LIST1]"
       }]
-      additive     = "disabled"
-      no_community = "disabled"
-      set_criteria = "none"
+      set_regular_community_additive     = "disabled"
+      set_regular_community_no_community = "disabled"
+      set_regular_community_criteria     = "none"
       set_regular_community_items = [{
         community = "regular:as2-nn2:65001:123"
       }]
@@ -82,7 +82,7 @@ resource "nxos_route_policy" "example" {
 
 Required:
 
-- `name` (String) IPv4 Prefix List name.
+- `name` (String) Object name.
 
 Optional:
 
@@ -93,24 +93,20 @@ Optional:
 
 Required:
 
-- `order` (Number) IPv4 Prefix List entry order.
-  - Range: `0`-`4294967294`
+- `order` (Number) Order.
+  - Range: `1`-`4294967294`
 
 Optional:
 
-- `action` (String) IPv4 Prefix List entry action.
+- `action` (String) Action.
   - Choices: `deny`, `permit`
-  - Default value: `permit`
-- `criteria` (String) IPv4 Prefix List entry criteria.
+- `criteria` (String) Criteria.
   - Choices: `exact`, `inexact`
-  - Default value: `exact`
-- `from_range` (Number) IPv4 Prefix List entry start range.
+- `from_range` (Number) The start of a range used to describe the prefix length if the criteria is not an exact match.
   - Range: `0`-`128`
-  - Default value: `0`
-- `prefix` (String) IPv4 Prefix List entry prefix.
-- `to_range` (Number) IPv4 Prefix List entry end range.
+- `prefix` (String) Specifies the OSPF route prefix.
+- `to_range` (Number) The end of a range to describe the prefix length if the criteria is not an exact match.
   - Range: `0`-`128`
-  - Default value: `0`
 
 
 
@@ -119,7 +115,7 @@ Optional:
 
 Required:
 
-- `name` (String) Route Map name.
+- `name` (String) Object name.
 
 Optional:
 
@@ -130,26 +126,22 @@ Optional:
 
 Required:
 
-- `order` (Number) Route Map Entry order.
+- `order` (Number) Order.
   - Range: `0`-`65535`
 
 Optional:
 
-- `action` (String) Route Map Entry action.
+- `action` (String) Action.
   - Choices: `deny`, `permit`
-  - Default value: `permit`
-- `additive` (String) Option to add to an existing community.
-  - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
 - `match_route_prefix_lists` (Attributes List) List of Match Route Prefix Lists. (see [below for nested schema](#nestedatt--route_maps--entries--match_route_prefix_lists))
 - `match_tags` (Attributes List) List of Match Tags. (see [below for nested schema](#nestedatt--route_maps--entries--match_tags))
-- `no_community` (String) Option to have no community attribute.
+- `set_regular_community_additive` (String) Add To Existing Community.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
-- `set_criteria` (String) Operation on the current community.
+- `set_regular_community_criteria` (String) Criteria.
   - Choices: `none`, `append`, `replace`, `igp`, `pre-bestpath`
-  - Default value: `none`
 - `set_regular_community_items` (Attributes List) List of Set Community Items. (see [below for nested schema](#nestedatt--route_maps--entries--set_regular_community_items))
+- `set_regular_community_no_community` (String) No Community Attribute.
+  - Choices: `enabled`, `disabled`
 
 <a id="nestedatt--route_maps--entries--match_route_prefix_lists"></a>
 ### Nested Schema for `route_maps.entries.match_route_prefix_lists`
@@ -164,7 +156,7 @@ Required:
 
 Required:
 
-- `tag` (Number) Route Map Tag Value
+- `tag` (Number) The color of a policy label.
   - Range: `0`-`4294967295`
 
 
@@ -173,7 +165,7 @@ Required:
 
 Required:
 
-- `community` (String) Set Community.
+- `community` (String) Community.
 
 ## Import
 

@@ -63,14 +63,14 @@ type RoutePolicyRouteMaps struct {
 }
 
 type RoutePolicyRouteMapsEntries struct {
-	Order                    types.Int64                                           `tfsdk:"order"`
-	Action                   types.String                                          `tfsdk:"action"`
-	MatchRoutePrefixLists    []RoutePolicyRouteMapsEntriesMatchRoutePrefixLists    `tfsdk:"match_route_prefix_lists"`
-	Additive                 types.String                                          `tfsdk:"additive"`
-	NoCommunity              types.String                                          `tfsdk:"no_community"`
-	SetCriteria              types.String                                          `tfsdk:"set_criteria"`
-	SetRegularCommunityItems []RoutePolicyRouteMapsEntriesSetRegularCommunityItems `tfsdk:"set_regular_community_items"`
-	MatchTags                []RoutePolicyRouteMapsEntriesMatchTags                `tfsdk:"match_tags"`
+	Order                          types.Int64                                           `tfsdk:"order"`
+	Action                         types.String                                          `tfsdk:"action"`
+	MatchRoutePrefixLists          []RoutePolicyRouteMapsEntriesMatchRoutePrefixLists    `tfsdk:"match_route_prefix_lists"`
+	SetRegularCommunityAdditive    types.String                                          `tfsdk:"set_regular_community_additive"`
+	SetRegularCommunityNoCommunity types.String                                          `tfsdk:"set_regular_community_no_community"`
+	SetRegularCommunityCriteria    types.String                                          `tfsdk:"set_regular_community_criteria"`
+	SetRegularCommunityItems       []RoutePolicyRouteMapsEntriesSetRegularCommunityItems `tfsdk:"set_regular_community_items"`
+	MatchTags                      []RoutePolicyRouteMapsEntriesMatchTags                `tfsdk:"match_tags"`
 }
 
 type RoutePolicyRouteMapsEntriesMatchRoutePrefixLists struct {
@@ -226,14 +226,14 @@ func (data RoutePolicy) toBody() nxos.Body {
 						childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 						childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".rtmapSetRegComm"
 						attrs = "{}"
-						if (!child.Additive.IsUnknown() && !child.Additive.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "additive", child.Additive.ValueString())
+						if (!child.SetRegularCommunityAdditive.IsUnknown() && !child.SetRegularCommunityAdditive.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "additive", child.SetRegularCommunityAdditive.ValueString())
 						}
-						if (!child.NoCommunity.IsUnknown() && !child.NoCommunity.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "noCommAttr", child.NoCommunity.ValueString())
+						if (!child.SetRegularCommunityNoCommunity.IsUnknown() && !child.SetRegularCommunityNoCommunity.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "noCommAttr", child.SetRegularCommunityNoCommunity.ValueString())
 						}
-						if (!child.SetCriteria.IsUnknown() && !child.SetCriteria.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "setCriteria", child.SetCriteria.ValueString())
+						if (!child.SetRegularCommunityCriteria.IsUnknown() && !child.SetRegularCommunityCriteria.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "setCriteria", child.SetRegularCommunityCriteria.ValueString())
 						}
 						body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 						nestedChildrenPath := childBodyPath + ".children"
@@ -355,9 +355,9 @@ func (data *RoutePolicy) fromBody(res gjson.Result) {
 														return true
 													},
 												)
-												nestedChildrtmapEntry.Additive = types.StringValue(rrtmapSetRegComm.Get("rtmapSetRegComm.attributes.additive").String())
-												nestedChildrtmapEntry.NoCommunity = types.StringValue(rrtmapSetRegComm.Get("rtmapSetRegComm.attributes.noCommAttr").String())
-												nestedChildrtmapEntry.SetCriteria = types.StringValue(rrtmapSetRegComm.Get("rtmapSetRegComm.attributes.setCriteria").String())
+												nestedChildrtmapEntry.SetRegularCommunityAdditive = types.StringValue(rrtmapSetRegComm.Get("rtmapSetRegComm.attributes.additive").String())
+												nestedChildrtmapEntry.SetRegularCommunityNoCommunity = types.StringValue(rrtmapSetRegComm.Get("rtmapSetRegComm.attributes.noCommAttr").String())
+												nestedChildrtmapEntry.SetRegularCommunityCriteria = types.StringValue(rrtmapSetRegComm.Get("rtmapSetRegComm.attributes.setCriteria").String())
 												rrtmapSetRegComm.Get("rtmapSetRegComm").Get("children").ForEach(
 													func(_, nestedV gjson.Result) bool {
 														nestedV.ForEach(
@@ -555,20 +555,20 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
-				if !data.RouteMaps[c].Entries[nc].Additive.IsNull() {
-					data.RouteMaps[c].Entries[nc].Additive = types.StringValue(rrtmapSetRegComm.Get("rtmapSetRegComm.attributes.additive").String())
+				if !data.RouteMaps[c].Entries[nc].SetRegularCommunityAdditive.IsNull() {
+					data.RouteMaps[c].Entries[nc].SetRegularCommunityAdditive = types.StringValue(rrtmapSetRegComm.Get("rtmapSetRegComm.attributes.additive").String())
 				} else {
-					data.RouteMaps[c].Entries[nc].Additive = types.StringNull()
+					data.RouteMaps[c].Entries[nc].SetRegularCommunityAdditive = types.StringNull()
 				}
-				if !data.RouteMaps[c].Entries[nc].NoCommunity.IsNull() {
-					data.RouteMaps[c].Entries[nc].NoCommunity = types.StringValue(rrtmapSetRegComm.Get("rtmapSetRegComm.attributes.noCommAttr").String())
+				if !data.RouteMaps[c].Entries[nc].SetRegularCommunityNoCommunity.IsNull() {
+					data.RouteMaps[c].Entries[nc].SetRegularCommunityNoCommunity = types.StringValue(rrtmapSetRegComm.Get("rtmapSetRegComm.attributes.noCommAttr").String())
 				} else {
-					data.RouteMaps[c].Entries[nc].NoCommunity = types.StringNull()
+					data.RouteMaps[c].Entries[nc].SetRegularCommunityNoCommunity = types.StringNull()
 				}
-				if !data.RouteMaps[c].Entries[nc].SetCriteria.IsNull() {
-					data.RouteMaps[c].Entries[nc].SetCriteria = types.StringValue(rrtmapSetRegComm.Get("rtmapSetRegComm.attributes.setCriteria").String())
+				if !data.RouteMaps[c].Entries[nc].SetRegularCommunityCriteria.IsNull() {
+					data.RouteMaps[c].Entries[nc].SetRegularCommunityCriteria = types.StringValue(rrtmapSetRegComm.Get("rtmapSetRegComm.attributes.setCriteria").String())
 				} else {
-					data.RouteMaps[c].Entries[nc].SetCriteria = types.StringNull()
+					data.RouteMaps[c].Entries[nc].SetRegularCommunityCriteria = types.StringNull()
 				}
 				for nc_ := range data.RouteMaps[c].Entries[nc].SetRegularCommunityItems {
 					var rrtregcomItem gjson.Result

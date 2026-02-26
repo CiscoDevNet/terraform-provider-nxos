@@ -53,9 +53,9 @@ func TestAccDataSourceNxosRoutePolicy(t *testing.T) {
 		"prefix_list_dn": "sys/rpm/pfxlistv4-[PREFIX_LIST1]",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "route_maps.*.entries.*", map[string]string{
-		"additive":     "disabled",
-		"no_community": "disabled",
-		"set_criteria": "none",
+		"set_regular_community_additive":     "disabled",
+		"set_regular_community_no_community": "disabled",
+		"set_regular_community_criteria":     "none",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "route_maps.*.entries.*.set_regular_community_items.*", map[string]string{
 		"community": "regular:as2-nn2:65001:123",
@@ -103,9 +103,9 @@ func testAccDataSourceNxosRoutePolicyConfig() string {
 	config += `			match_route_prefix_lists = [{` + "\n"
 	config += `				prefix_list_dn = "sys/rpm/pfxlistv4-[PREFIX_LIST1]"` + "\n"
 	config += `			}]` + "\n"
-	config += `			additive = "disabled"` + "\n"
-	config += `			no_community = "disabled"` + "\n"
-	config += `			set_criteria = "none"` + "\n"
+	config += `			set_regular_community_additive = "disabled"` + "\n"
+	config += `			set_regular_community_no_community = "disabled"` + "\n"
+	config += `			set_regular_community_criteria = "none"` + "\n"
 	config += `			set_regular_community_items = [{` + "\n"
 	config += `				community = "regular:as2-nn2:65001:123"` + "\n"
 	config += `			}]` + "\n"

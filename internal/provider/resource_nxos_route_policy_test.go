@@ -46,9 +46,9 @@ func TestAccNxosRoutePolicy(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.order", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.action", "permit"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.match_route_prefix_lists.0.prefix_list_dn", "sys/rpm/pfxlistv4-[PREFIX_LIST1]"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.additive", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.no_community", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_criteria", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_regular_community_additive", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_regular_community_no_community", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_regular_community_criteria", "none"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_regular_community_items.0.community", "regular:as2-nn2:65001:123"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.match_tags.0.tag", "12345"))
 	var tfVersion *goversion.Version
@@ -126,9 +126,9 @@ func testAccNxosRoutePolicyConfig_all() string {
 	config += `			match_route_prefix_lists = [{` + "\n"
 	config += `				prefix_list_dn = "sys/rpm/pfxlistv4-[PREFIX_LIST1]"` + "\n"
 	config += `			}]` + "\n"
-	config += `			additive = "disabled"` + "\n"
-	config += `			no_community = "disabled"` + "\n"
-	config += `			set_criteria = "none"` + "\n"
+	config += `			set_regular_community_additive = "disabled"` + "\n"
+	config += `			set_regular_community_no_community = "disabled"` + "\n"
+	config += `			set_regular_community_criteria = "none"` + "\n"
 	config += `			set_regular_community_items = [{` + "\n"
 	config += `				community = "regular:as2-nn2:65001:123"` + "\n"
 	config += `			}]` + "\n"

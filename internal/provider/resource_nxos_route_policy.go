@@ -32,10 +32,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -86,7 +84,7 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix List name.").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
 							Required:            true,
 							PlanModifiers: []planmodifier.String{
 								stringplanmodifier.RequiresReplace(),
@@ -98,51 +96,43 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"order": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix List entry order.").AddIntegerRangeDescription(0, 4294967294).String,
+										MarkdownDescription: helpers.NewAttributeDescription("Order.").AddIntegerRangeDescription(1, 4294967294).String,
 										Required:            true,
 										Validators: []validator.Int64{
-											int64validator.Between(0, 4294967294),
+											int64validator.Between(1, 4294967294),
 										},
 										PlanModifiers: []planmodifier.Int64{
 											int64planmodifier.RequiresReplace(),
 										},
 									},
 									"action": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix List entry action.").AddStringEnumDescription("deny", "permit").AddDefaultValueDescription("permit").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Action.").AddStringEnumDescription("deny", "permit").String,
 										Optional:            true,
-										Computed:            true,
-										Default:             stringdefault.StaticString("permit"),
 										Validators: []validator.String{
 											stringvalidator.OneOf("deny", "permit"),
 										},
 									},
 									"criteria": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix List entry criteria.").AddStringEnumDescription("exact", "inexact").AddDefaultValueDescription("exact").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Criteria.").AddStringEnumDescription("exact", "inexact").String,
 										Optional:            true,
-										Computed:            true,
-										Default:             stringdefault.StaticString("exact"),
 										Validators: []validator.String{
 											stringvalidator.OneOf("exact", "inexact"),
 										},
 									},
 									"prefix": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix List entry prefix.").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Specifies the OSPF route prefix.").String,
 										Optional:            true,
 									},
 									"from_range": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix List entry start range.").AddIntegerRangeDescription(0, 128).AddDefaultValueDescription("0").String,
+										MarkdownDescription: helpers.NewAttributeDescription("The start of a range used to describe the prefix length if the criteria is not an exact match.").AddIntegerRangeDescription(0, 128).String,
 										Optional:            true,
-										Computed:            true,
-										Default:             int64default.StaticInt64(0),
 										Validators: []validator.Int64{
 											int64validator.Between(0, 128),
 										},
 									},
 									"to_range": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("IPv4 Prefix List entry end range.").AddIntegerRangeDescription(0, 128).AddDefaultValueDescription("0").String,
+										MarkdownDescription: helpers.NewAttributeDescription("The end of a range to describe the prefix length if the criteria is not an exact match.").AddIntegerRangeDescription(0, 128).String,
 										Optional:            true,
-										Computed:            true,
-										Default:             int64default.StaticInt64(0),
 										Validators: []validator.Int64{
 											int64validator.Between(0, 128),
 										},
@@ -159,7 +149,7 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Route Map name.").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
 							Required:            true,
 							PlanModifiers: []planmodifier.String{
 								stringplanmodifier.RequiresReplace(),
@@ -171,7 +161,7 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"order": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Route Map Entry order.").AddIntegerRangeDescription(0, 65535).String,
+										MarkdownDescription: helpers.NewAttributeDescription("Order.").AddIntegerRangeDescription(0, 65535).String,
 										Required:            true,
 										Validators: []validator.Int64{
 											int64validator.Between(0, 65535),
@@ -181,10 +171,8 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 										},
 									},
 									"action": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Route Map Entry action.").AddStringEnumDescription("deny", "permit").AddDefaultValueDescription("permit").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Action.").AddStringEnumDescription("deny", "permit").String,
 										Optional:            true,
-										Computed:            true,
-										Default:             stringdefault.StaticString("permit"),
 										Validators: []validator.String{
 											stringvalidator.OneOf("deny", "permit"),
 										},
@@ -204,29 +192,23 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 											},
 										},
 									},
-									"additive": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Option to add to an existing community.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+									"set_regular_community_additive": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Add To Existing Community.").AddStringEnumDescription("enabled", "disabled").String,
 										Optional:            true,
-										Computed:            true,
-										Default:             stringdefault.StaticString("disabled"),
 										Validators: []validator.String{
 											stringvalidator.OneOf("enabled", "disabled"),
 										},
 									},
-									"no_community": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Option to have no community attribute.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+									"set_regular_community_no_community": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("No Community Attribute.").AddStringEnumDescription("enabled", "disabled").String,
 										Optional:            true,
-										Computed:            true,
-										Default:             stringdefault.StaticString("disabled"),
 										Validators: []validator.String{
 											stringvalidator.OneOf("enabled", "disabled"),
 										},
 									},
-									"set_criteria": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Operation on the current community.").AddStringEnumDescription("none", "append", "replace", "igp", "pre-bestpath").AddDefaultValueDescription("none").String,
+									"set_regular_community_criteria": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Criteria.").AddStringEnumDescription("none", "append", "replace", "igp", "pre-bestpath").String,
 										Optional:            true,
-										Computed:            true,
-										Default:             stringdefault.StaticString("none"),
 										Validators: []validator.String{
 											stringvalidator.OneOf("none", "append", "replace", "igp", "pre-bestpath"),
 										},
@@ -237,7 +219,7 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"community": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Set Community.").String,
+													MarkdownDescription: helpers.NewAttributeDescription("Community.").String,
 													Required:            true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplace(),
@@ -252,7 +234,7 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"tag": schema.Int64Attribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Route Map Tag Value").AddIntegerRangeDescription(0, 4294967295).String,
+													MarkdownDescription: helpers.NewAttributeDescription("The color of a policy label.").AddIntegerRangeDescription(0, 4294967295).String,
 													Required:            true,
 													Validators: []validator.Int64{
 														int64validator.Between(0, 4294967295),

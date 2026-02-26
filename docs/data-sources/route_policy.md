@@ -53,19 +53,19 @@ data "nxos_route_policy" "example" {
 Read-Only:
 
 - `entries` (Attributes List) IPv4 Prefix List entries. (see [below for nested schema](#nestedatt--ipv4_prefix_lists--entries))
-- `name` (String) IPv4 Prefix List name.
+- `name` (String) Object name.
 
 <a id="nestedatt--ipv4_prefix_lists--entries"></a>
 ### Nested Schema for `ipv4_prefix_lists.entries`
 
 Read-Only:
 
-- `action` (String) IPv4 Prefix List entry action.
-- `criteria` (String) IPv4 Prefix List entry criteria.
-- `from_range` (Number) IPv4 Prefix List entry start range.
-- `order` (Number) IPv4 Prefix List entry order.
-- `prefix` (String) IPv4 Prefix List entry prefix.
-- `to_range` (Number) IPv4 Prefix List entry end range.
+- `action` (String) Action.
+- `criteria` (String) Criteria.
+- `from_range` (Number) The start of a range used to describe the prefix length if the criteria is not an exact match.
+- `order` (Number) Order.
+- `prefix` (String) Specifies the OSPF route prefix.
+- `to_range` (Number) The end of a range to describe the prefix length if the criteria is not an exact match.
 
 
 
@@ -75,21 +75,21 @@ Read-Only:
 Read-Only:
 
 - `entries` (Attributes List) List of Route Map Entries. (see [below for nested schema](#nestedatt--route_maps--entries))
-- `name` (String) Route Map name.
+- `name` (String) Object name.
 
 <a id="nestedatt--route_maps--entries"></a>
 ### Nested Schema for `route_maps.entries`
 
 Read-Only:
 
-- `action` (String) Route Map Entry action.
-- `additive` (String) Option to add to an existing community.
+- `action` (String) Action.
 - `match_route_prefix_lists` (Attributes List) List of Match Route Prefix Lists. (see [below for nested schema](#nestedatt--route_maps--entries--match_route_prefix_lists))
 - `match_tags` (Attributes List) List of Match Tags. (see [below for nested schema](#nestedatt--route_maps--entries--match_tags))
-- `no_community` (String) Option to have no community attribute.
-- `order` (Number) Route Map Entry order.
-- `set_criteria` (String) Operation on the current community.
+- `order` (Number) Order.
+- `set_regular_community_additive` (String) Add To Existing Community.
+- `set_regular_community_criteria` (String) Criteria.
 - `set_regular_community_items` (Attributes List) List of Set Community Items. (see [below for nested schema](#nestedatt--route_maps--entries--set_regular_community_items))
+- `set_regular_community_no_community` (String) No Community Attribute.
 
 <a id="nestedatt--route_maps--entries--match_route_prefix_lists"></a>
 ### Nested Schema for `route_maps.entries.match_route_prefix_lists`
@@ -104,7 +104,7 @@ Read-Only:
 
 Read-Only:
 
-- `tag` (Number) Route Map Tag Value
+- `tag` (Number) The color of a policy label.
 
 
 <a id="nestedatt--route_maps--entries--set_regular_community_items"></a>
@@ -112,4 +112,4 @@ Read-Only:
 
 Read-Only:
 
-- `community` (String) Set Community.
+- `community` (String) Community.

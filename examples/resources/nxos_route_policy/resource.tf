@@ -18,9 +18,9 @@ resource "nxos_route_policy" "example" {
       match_route_prefix_lists = [{
         prefix_list_dn = "sys/rpm/pfxlistv4-[PREFIX_LIST1]"
       }]
-      additive     = "disabled"
-      no_community = "disabled"
-      set_criteria = "none"
+      set_regular_community_additive     = "disabled"
+      set_regular_community_no_community = "disabled"
+      set_regular_community_criteria     = "none"
       set_regular_community_items = [{
         community = "regular:as2-nn2:65001:123"
       }]

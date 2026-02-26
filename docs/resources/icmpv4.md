@@ -4,22 +4,22 @@ page_title: "nxos_icmpv4 Resource - terraform-provider-nxos"
 subcategory: "System"
 description: |-
   This resource can manage the global ICMP configuration.
-  API Documentation: icmpv4Entity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/icmpv4:Entity/
+  API Documentation: icmpv4Entity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Entity/
   Additional API Documentation
-  icmpv4Inst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/icmpv4:Instance/icmpv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/icmpv4:Dom/icmpv4If https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/icmpv4:If/
+  icmpv4Inst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Inst/icmpv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Dom/icmpv4If https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:If/
 ---
 
 # nxos_icmpv4 (Resource)
 
 This resource can manage the global ICMP configuration.
 
-- API Documentation: [icmpv4Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/icmpv4:Entity/)
+- API Documentation: [icmpv4Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Entity/)
 
 ### Additional API Documentation
 
-- [icmpv4Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/icmpv4:Instance/)
-- [icmpv4Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/icmpv4:Dom/)
-- [icmpv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/icmpv4:If/)
+- [icmpv4Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Inst/)
+- [icmpv4Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Dom/)
+- [icmpv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:If/)
 
 ## Example Usage
 
@@ -42,13 +42,11 @@ resource "nxos_icmpv4" "example" {
 
 ### Optional
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `device` (String) A device name from the provider configuration.
-- `instance_admin_state` (String) Administrative state.
+- `instance_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `vrfs` (Attributes List) List of ICMPv4 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
 
 ### Read-Only
@@ -60,7 +58,7 @@ resource "nxos_icmpv4" "example" {
 
 Required:
 
-- `name` (String) VRF name.
+- `name` (String) The name of the object.
 
 Optional:
 
@@ -75,10 +73,10 @@ Required:
 
 Optional:
 
-- `control` (String) ICMP interface control. Choices: `redirect`, `unreachable`, `port-unreachable`. Can be an empty string. Allowed formats:
+- `control` (String) The control state. Choices: `redirect`, `unreachable`, `port-unreachable`. Can be an empty string. Allowed formats:
   - Single value. Example: `unreachable`
   - Multiple values (comma-separated). Example: `redirect,unreachable`. In this case values must be in alphabetical order.
-  - Default value: `unreachable`
+  - Choices: `port-unreachable`, `redirect`, `unreachable`
 
 ## Import
 

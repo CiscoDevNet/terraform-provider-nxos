@@ -4,32 +4,30 @@ class_name: icmpv4Entity
 dn: sys/icmpv4
 ds_description: This data source can read the global ICMP configuration.
 res_description: This resource can manage the global ICMP configuration.
-doc_path: Routing%20and%20Forwarding/icmpv4:Entity/
+doc_path: ICMP/icmpv4:Entity/
 doc_category: System
 attributes:
   - nxos_name: adminSt
     tf_name: admin_state
     type: String
-    description: 'Administrative state.'
+    description: 'The administrative state of the object or policy.'
     enum_values:
       - enabled
       - disabled
-    default_value: enabled
     example: enabled
 child_classes:
   - class_name: icmpv4Inst
     rn: inst
     type: single
-    doc_path: Routing%20and%20Forwarding/icmpv4:Instance/
+    doc_path: ICMP/icmpv4:Inst/
     attributes:
       - nxos_name: adminSt
         tf_name: instance_admin_state
         type: String
-        description: 'Administrative state.'
+        description: 'The administrative state of the object or policy.'
         enum_values:
           - enabled
           - disabled
-        default_value: enabled
         example: enabled
     child_classes:
       - class_name: icmpv4Dom
@@ -37,13 +35,13 @@ child_classes:
         type: list
         tf_name: vrfs
         description: 'List of ICMPv4 VRF configurations.'
-        doc_path: Routing%20and%20Forwarding/icmpv4:Dom/
+        doc_path: ICMP/icmpv4:Dom/
         attributes:
           - nxos_name: name
             tf_name: name
             type: String
             id: true
-            description: 'VRF name.'
+            description: 'The name of the object.'
             example: VRF1
         child_classes:
           - class_name: icmpv4If
@@ -51,7 +49,7 @@ child_classes:
             type: list
             tf_name: interfaces
             description: 'List of ICMPv4 interface configurations.'
-            doc_path: Routing%20and%20Forwarding/icmpv4:If/
+            doc_path: ICMP/icmpv4:If/
             attributes:
               - nxos_name: id
                 tf_name: id
@@ -62,8 +60,12 @@ child_classes:
               - nxos_name: ctrl
                 tf_name: control
                 type: String
-                description: 'ICMP interface control. Choices: `redirect`, `unreachable`, `port-unreachable`. Can be an empty string. Allowed formats:\n  - Single value. Example: `unreachable`\n  - Multiple values (comma-separated). Example: `redirect,unreachable`. In this case values must be in alphabetical order.'
-                default_value: unreachable
+                enum_values:
+                  - port-unreachable
+                  - redirect
+                  - unreachable
+                allow_non_enum_values: true
+                description: 'The control state. Choices: `redirect`, `unreachable`, `port-unreachable`. Can be an empty string. Allowed formats:\n  - Single value. Example: `unreachable`\n  - Multiple values (comma-separated). Example: `redirect,unreachable`. In this case values must be in alphabetical order.'
                 example: port-unreachable
 test_prerequisites:
   - dn: sys/fm/ifvlan

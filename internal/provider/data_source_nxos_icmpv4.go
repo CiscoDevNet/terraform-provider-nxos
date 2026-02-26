@@ -57,7 +57,7 @@ func (d *ICMPv4DataSource) Metadata(_ context.Context, req datasource.MetadataRe
 func (d *ICMPv4DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the global ICMP configuration.", "icmpv4Entity", "Routing%20and%20Forwarding/icmpv4:Entity/").AddAdditionalDocs([]string{"icmpv4Inst", "icmpv4Dom", "icmpv4If"}, []string{"Routing%20and%20Forwarding/icmpv4:Instance/", "Routing%20and%20Forwarding/icmpv4:Dom/", "Routing%20and%20Forwarding/icmpv4:If/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the global ICMP configuration.", "icmpv4Entity", "ICMP/icmpv4:Entity/").AddAdditionalDocs([]string{"icmpv4Inst", "icmpv4Dom", "icmpv4If"}, []string{"ICMP/icmpv4:Inst/", "ICMP/icmpv4:Dom/", "ICMP/icmpv4:If/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -69,11 +69,11 @@ func (d *ICMPv4DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Computed:            true,
 			},
 			"admin_state": schema.StringAttribute{
-				MarkdownDescription: "Administrative state.",
+				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
 			"instance_admin_state": schema.StringAttribute{
-				MarkdownDescription: "Administrative state.",
+				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
 			"vrfs": schema.ListNestedAttribute{
@@ -82,7 +82,7 @@ func (d *ICMPv4DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							MarkdownDescription: "VRF name.",
+							MarkdownDescription: "The name of the object.",
 							Computed:            true,
 						},
 						"interfaces": schema.ListNestedAttribute{
@@ -95,7 +95,7 @@ func (d *ICMPv4DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 										Computed:            true,
 									},
 									"control": schema.StringAttribute{
-										MarkdownDescription: "ICMP interface control. Choices: `redirect`, `unreachable`, `port-unreachable`. Can be an empty string. Allowed formats:\n  - Single value. Example: `unreachable`\n  - Multiple values (comma-separated). Example: `redirect,unreachable`. In this case values must be in alphabetical order.",
+										MarkdownDescription: "The control state. Choices: `redirect`, `unreachable`, `port-unreachable`. Can be an empty string. Allowed formats:\n  - Single value. Example: `unreachable`\n  - Multiple values (comma-separated). Example: `redirect,unreachable`. In this case values must be in alphabetical order.",
 										Computed:            true,
 									},
 								},

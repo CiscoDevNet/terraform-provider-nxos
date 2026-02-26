@@ -4,22 +4,22 @@ page_title: "nxos_icmpv4 Data Source - terraform-provider-nxos"
 subcategory: "System"
 description: |-
   This data source can read the global ICMP configuration.
-  API Documentation: icmpv4Entity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/icmpv4:Entity/
+  API Documentation: icmpv4Entity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Entity/
   Additional API Documentation
-  icmpv4Inst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/icmpv4:Instance/icmpv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/icmpv4:Dom/icmpv4If https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/icmpv4:If/
+  icmpv4Inst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Inst/icmpv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Dom/icmpv4If https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:If/
 ---
 
 # nxos_icmpv4 (Data Source)
 
 This data source can read the global ICMP configuration.
 
-- API Documentation: [icmpv4Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/icmpv4:Entity/)
+- API Documentation: [icmpv4Entity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Entity/)
 
 ### Additional API Documentation
 
-- [icmpv4Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/icmpv4:Instance/)
-- [icmpv4Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/icmpv4:Dom/)
-- [icmpv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/icmpv4:If/)
+- [icmpv4Inst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Inst/)
+- [icmpv4Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:Dom/)
+- [icmpv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/ICMP/icmpv4:If/)
 
 ## Example Usage
 
@@ -37,9 +37,9 @@ data "nxos_icmpv4" "example" {
 
 ### Read-Only
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) The administrative state of the object or policy.
 - `id` (String) The distinguished name of the object.
-- `instance_admin_state` (String) Administrative state.
+- `instance_admin_state` (String) The administrative state of the object or policy.
 - `vrfs` (Attributes List) List of ICMPv4 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
 
 <a id="nestedatt--vrfs"></a>
@@ -48,14 +48,14 @@ data "nxos_icmpv4" "example" {
 Read-Only:
 
 - `interfaces` (Attributes List) List of ICMPv4 interface configurations. (see [below for nested schema](#nestedatt--vrfs--interfaces))
-- `name` (String) VRF name.
+- `name` (String) The name of the object.
 
 <a id="nestedatt--vrfs--interfaces"></a>
 ### Nested Schema for `vrfs.interfaces`
 
 Read-Only:
 
-- `control` (String) ICMP interface control. Choices: `redirect`, `unreachable`, `port-unreachable`. Can be an empty string. Allowed formats:
+- `control` (String) The control state. Choices: `redirect`, `unreachable`, `port-unreachable`. Can be an empty string. Allowed formats:
   - Single value. Example: `unreachable`
   - Multiple values (comma-separated). Example: `redirect,unreachable`. In this case values must be in alphabetical order.
 - `id` (String) Must match first field in the output of `show intf brief`. Example: `vlan100`.

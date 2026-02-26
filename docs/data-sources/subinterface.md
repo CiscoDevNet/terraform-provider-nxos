@@ -41,12 +41,12 @@ data "nxos_subinterface" "example" {
 ### Read-Only
 
 - `admin_state` (String) Administrative state.
-- `bandwidth` (Number) Specifies the administrative port bandwidth.
-- `delay` (Number) Specifies the administrative port delay.
-- `description` (String) Interface description.
-- `encap` (String) Subinterface encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `bandwidth` (Number) The encapsulated routed interface bandwidth.
+- `delay` (Number) The encapsulation routed interface delay.
+- `description` (String) Description.
+- `encap` (String) The routed interface encapsulation VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
 - `id` (String) The distinguished name of the object.
-- `link_logging` (String) Administrative link logging.
-- `medium` (String) The administrative port medium type.
-- `mtu` (Number) Administrative port MTU.
+- `link_logging` (String) Interface Link Logging Enable.
+- `medium` (String) Interface Medium Type.
+- `mtu` (Number) The encapsulation routed interface MTU.
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.

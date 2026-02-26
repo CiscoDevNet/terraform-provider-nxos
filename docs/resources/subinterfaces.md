@@ -56,26 +56,19 @@ Required:
 Optional:
 
 - `admin_state` (String) Administrative state.
-  - Choices: `up`, `down`
-  - Default value: `up`
-- `bandwidth` (Number) Specifies the administrative port bandwidth.
+  - Choices: `down`, `up`
+- `bandwidth` (Number) The encapsulated routed interface bandwidth.
   - Range: `0`-`3200000000`
-  - Default value: `0`
-- `delay` (Number) Specifies the administrative port delay.
+- `delay` (Number) The encapsulation routed interface delay.
   - Range: `1`-`16777215`
-  - Default value: `1`
-- `description` (String) Interface description.
-- `encap` (String) Subinterface encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
-  - Default value: `unknown`
-- `link_logging` (String) Administrative link logging.
+- `description` (String) Description.
+- `encap` (String) The routed interface encapsulation VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `link_logging` (String) Interface Link Logging Enable.
   - Choices: `default`, `enable`, `disable`
-  - Default value: `default`
-- `medium` (String) The administrative port medium type.
+- `medium` (String) Interface Medium Type.
   - Choices: `broadcast`, `p2p`
-  - Default value: `broadcast`
-- `mtu` (Number) Administrative port MTU.
+- `mtu` (Number) The encapsulation routed interface MTU.
   - Range: `576`-`9216`
-  - Default value: `1500`
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.
 
 ## Import

@@ -20,63 +20,56 @@ attributes:
     type: String
     description: 'Administrative state.'
     enum_values:
-      - up
       - down
-    default_value: up
+      - up
     example: down
   - nxos_name: bw
     tf_name: bandwidth
     type: Int64
-    description: 'Specifies the administrative port bandwidth.'
+    description: 'The encapsulated routed interface bandwidth.'
     min_int: 0
     max_int: 3200000000
-    default_value: 0
     example: 1000
   - nxos_name: delay
     tf_name: delay
     type: Int64
-    description: 'Specifies the administrative port delay.'
+    description: 'The encapsulation routed interface delay.'
     min_int: 1
     max_int: 16777215
-    default_value: 1
     example: 10
   - nxos_name: descr
     tf_name: description
     type: String
-    description: 'Interface description.'
+    description: 'Description.'
     example: My Description
   - nxos_name: encap
     tf_name: encap
     type: String
-    description: 'Subinterface encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
-    default_value: unknown
+    description: 'The routed interface encapsulation VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.'
     example: vlan-124
   - nxos_name: linkLog
     tf_name: link_logging
     type: String
-    description: 'Administrative link logging.'
+    description: 'Interface Link Logging Enable.'
     enum_values:
       - default
       - enable
       - disable
-    default_value: default
     example: enable
   - nxos_name: mediumType
     tf_name: medium
     type: String
-    description: 'The administrative port medium type.'
+    description: 'Interface Medium Type.'
     enum_values:
       - broadcast
       - p2p
-    default_value: broadcast
     example: broadcast
   - nxos_name: mtu
     tf_name: mtu
     type: Int64
-    description: 'Administrative port MTU.'
+    description: 'The encapsulation routed interface MTU.'
     min_int: 576
     max_int: 9216
-    default_value: 1500
     example: 1500
 child_classes:
   - class_name: nwRtVrfMbr

@@ -77,31 +77,31 @@ func (d *SubinterfaceDataSource) Schema(ctx context.Context, req datasource.Sche
 				Computed:            true,
 			},
 			"bandwidth": schema.Int64Attribute{
-				MarkdownDescription: "Specifies the administrative port bandwidth.",
+				MarkdownDescription: "The encapsulated routed interface bandwidth.",
 				Computed:            true,
 			},
 			"delay": schema.Int64Attribute{
-				MarkdownDescription: "Specifies the administrative port delay.",
+				MarkdownDescription: "The encapsulation routed interface delay.",
 				Computed:            true,
 			},
 			"description": schema.StringAttribute{
-				MarkdownDescription: "Interface description.",
+				MarkdownDescription: "Description.",
 				Computed:            true,
 			},
 			"encap": schema.StringAttribute{
-				MarkdownDescription: "Subinterface encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.",
+				MarkdownDescription: "The routed interface encapsulation VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.",
 				Computed:            true,
 			},
 			"link_logging": schema.StringAttribute{
-				MarkdownDescription: "Administrative link logging.",
+				MarkdownDescription: "Interface Link Logging Enable.",
 				Computed:            true,
 			},
 			"medium": schema.StringAttribute{
-				MarkdownDescription: "The administrative port medium type.",
+				MarkdownDescription: "Interface Medium Type.",
 				Computed:            true,
 			},
 			"mtu": schema.Int64Attribute{
-				MarkdownDescription: "Administrative port MTU.",
+				MarkdownDescription: "The encapsulation routed interface MTU.",
 				Computed:            true,
 			},
 			"vrf_dn": schema.StringAttribute{

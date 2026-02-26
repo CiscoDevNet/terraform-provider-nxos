@@ -32,9 +32,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -87,65 +85,51 @@ func (r *SubinterfaceResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 			},
 			"admin_state": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("up", "down").AddDefaultValueDescription("up").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("down", "up").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("up"),
 				Validators: []validator.String{
-					stringvalidator.OneOf("up", "down"),
+					stringvalidator.OneOf("down", "up"),
 				},
 			},
 			"bandwidth": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specifies the administrative port bandwidth.").AddIntegerRangeDescription(0, 3200000000).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("The encapsulated routed interface bandwidth.").AddIntegerRangeDescription(0, 3200000000).String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 3200000000),
 				},
 			},
 			"delay": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specifies the administrative port delay.").AddIntegerRangeDescription(1, 16777215).AddDefaultValueDescription("1").String,
+				MarkdownDescription: helpers.NewAttributeDescription("The encapsulation routed interface delay.").AddIntegerRangeDescription(1, 16777215).String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(1),
 				Validators: []validator.Int64{
 					int64validator.Between(1, 16777215),
 				},
 			},
 			"description": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Interface description.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
 				Optional:            true,
 			},
 			"encap": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Subinterface encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").AddDefaultValueDescription("unknown").String,
+				MarkdownDescription: helpers.NewAttributeDescription("The routed interface encapsulation VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("unknown"),
 			},
 			"link_logging": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Administrative link logging.").AddStringEnumDescription("default", "enable", "disable").AddDefaultValueDescription("default").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Interface Link Logging Enable.").AddStringEnumDescription("default", "enable", "disable").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("default"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("default", "enable", "disable"),
 				},
 			},
 			"medium": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The administrative port medium type.").AddStringEnumDescription("broadcast", "p2p").AddDefaultValueDescription("broadcast").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Interface Medium Type.").AddStringEnumDescription("broadcast", "p2p").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("broadcast"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("broadcast", "p2p"),
 				},
 			},
 			"mtu": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Administrative port MTU.").AddIntegerRangeDescription(576, 9216).AddDefaultValueDescription("1500").String,
+				MarkdownDescription: helpers.NewAttributeDescription("The encapsulation routed interface MTU.").AddIntegerRangeDescription(576, 9216).String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(1500),
 				Validators: []validator.Int64{
 					int64validator.Between(576, 9216),
 				},

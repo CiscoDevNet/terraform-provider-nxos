@@ -46,9 +46,9 @@ data "nxos_user_management" "example" {
 Read-Only:
 
 - `allow_expired` (String) Allow expired user to be configured.
-- `name` (String) User name.
-- `password` (String) User password.
-- `password_encryption_type` (String) Password encryption type.
+- `name` (String) Object name.
+- `password` (String) The system user password.
+- `password_encryption_type` (String) Password Encryption Type.
 - `roles` (Attributes List) User roles. (see [below for nested schema](#nestedatt--users--roles))
 
 <a id="nestedatt--users--roles"></a>
@@ -56,4 +56,4 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Role name.
+- `name` (String) Object name.

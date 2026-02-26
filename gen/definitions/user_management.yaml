@@ -19,35 +19,34 @@ child_classes:
         tf_name: name
         type: String
         id: true
-        description: 'User name.'
+        description: 'Object name.'
         example: user1
       - nxos_name: allowExpired
         tf_name: allow_expired
         type: String
         enum_values:
-          - "yes"
           - "no"
-        default_value: "no"
+          - "yes"
         description: "Allow expired user to be configured."
         example: "yes"
       - nxos_name: pwd
         tf_name: password
         type: String
-        description: "User password."
+        description: "The system user password."
         example: "password123"
         write_only: true
         exclude_test: true
       - nxos_name: pwdEncryptType
         tf_name: password_encryption_type
-        description: "Password encryption type."
+        description: "Password Encryption Type."
         type: String
         enum_values:
-          - "0"
-          - "5"
-          - "8"
-          - "9"
           - "clear"
-          - "255"
+          - "Encrypt"
+          - "Pbkdf2"
+          - "scrypt"
+          - "unspecified"
+        allow_non_enum_values: true
         example: "clear"
         exclude_test: true
         write_only: true
@@ -73,5 +72,5 @@ child_classes:
                 tf_name: name
                 type: String
                 id: true
-                description: "Role name."
+                description: "Object name."
                 example: "network-operator"

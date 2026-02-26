@@ -54,16 +54,15 @@ resource "nxos_user_management" "example" {
 
 Required:
 
-- `name` (String) User name.
+- `name` (String) Object name.
 
 Optional:
 
 - `allow_expired` (String) Allow expired user to be configured.
-  - Choices: `yes`, `no`
-  - Default value: `no`
-- `password` (String) User password.
-- `password_encryption_type` (String) Password encryption type.
-  - Choices: `0`, `5`, `8`, `9`, `clear`, `255`
+  - Choices: `no`, `yes`
+- `password` (String) The system user password.
+- `password_encryption_type` (String) Password Encryption Type.
+  - Choices: `clear`, `Encrypt`, `Pbkdf2`, `scrypt`, `unspecified`
 - `roles` (Attributes List) User roles. (see [below for nested schema](#nestedatt--users--roles))
 
 <a id="nestedatt--users--roles"></a>
@@ -71,7 +70,7 @@ Optional:
 
 Required:
 
-- `name` (String) Role name.
+- `name` (String) Object name.
 
 ## Import
 

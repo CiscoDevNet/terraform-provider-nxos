@@ -74,7 +74,7 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							MarkdownDescription: "User name.",
+							MarkdownDescription: "Object name.",
 							Computed:            true,
 						},
 						"allow_expired": schema.StringAttribute{
@@ -82,11 +82,11 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 							Computed:            true,
 						},
 						"password": schema.StringAttribute{
-							MarkdownDescription: "User password.",
+							MarkdownDescription: "The system user password.",
 							Computed:            true,
 						},
 						"password_encryption_type": schema.StringAttribute{
-							MarkdownDescription: "Password encryption type.",
+							MarkdownDescription: "Password Encryption Type.",
 							Computed:            true,
 						},
 						"roles": schema.ListNestedAttribute{
@@ -95,7 +95,7 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"name": schema.StringAttribute{
-										MarkdownDescription: "Role name.",
+										MarkdownDescription: "Object name.",
 										Computed:            true,
 									},
 								},

@@ -32,7 +32,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -83,31 +82,26 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("User name.").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
 							Required:            true,
 							PlanModifiers: []planmodifier.String{
 								stringplanmodifier.RequiresReplace(),
 							},
 						},
 						"allow_expired": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Allow expired user to be configured.").AddStringEnumDescription("yes", "no").AddDefaultValueDescription("no").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Allow expired user to be configured.").AddStringEnumDescription("no", "yes").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("no"),
 							Validators: []validator.String{
-								stringvalidator.OneOf("yes", "no"),
+								stringvalidator.OneOf("no", "yes"),
 							},
 						},
 						"password": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("User password.").String,
+							MarkdownDescription: helpers.NewAttributeDescription("The system user password.").String,
 							Optional:            true,
 						},
 						"password_encryption_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Password encryption type.").AddStringEnumDescription("0", "5", "8", "9", "clear", "255").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Password Encryption Type.").AddStringEnumDescription("clear", "Encrypt", "Pbkdf2", "scrypt", "unspecified").String,
 							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("0", "5", "8", "9", "clear", "255"),
-							},
 						},
 						"roles": schema.ListNestedAttribute{
 							MarkdownDescription: "User roles.",
@@ -115,7 +109,7 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"name": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Role name.").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
 										Required:            true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplace(),

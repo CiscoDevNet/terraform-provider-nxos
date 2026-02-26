@@ -36,11 +36,11 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type System struct {
-	Device             types.String `tfsdk:"device"`
-	Dn                 types.String `tfsdk:"id"`
-	Name               types.String `tfsdk:"name"`
-	Mtu                types.Int64  `tfsdk:"mtu"`
-	DefaultAdminStatus types.String `tfsdk:"default_admin_status"`
+	Device            types.String `tfsdk:"device"`
+	Dn                types.String `tfsdk:"id"`
+	Name              types.String `tfsdk:"name"`
+	Mtu               types.Int64  `tfsdk:"mtu"`
+	DefaultAdminState types.String `tfsdk:"default_admin_state"`
 }
 
 type SystemIdentity struct {
@@ -97,8 +97,8 @@ func (data System) toBody() nxos.Body {
 		if (!data.Mtu.IsUnknown() && !data.Mtu.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "systemJumboMtu", strconv.FormatInt(data.Mtu.ValueInt64(), 10))
 		}
-		if (!data.DefaultAdminStatus.IsUnknown() && !data.DefaultAdminStatus.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "systemDefaultAdminSt", data.DefaultAdminStatus.ValueString())
+		if (!data.DefaultAdminState.IsUnknown() && !data.DefaultAdminState.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "systemDefaultAdminSt", data.DefaultAdminState.ValueString())
 		}
 		if attrs != "{}" || false {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ethpmInst.attributes", attrs)
@@ -139,7 +139,7 @@ func (data *System) fromBody(res gjson.Result) {
 				},
 			)
 			data.Mtu = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.systemJumboMtu").Int())
-			data.DefaultAdminStatus = types.StringValue(rethpmInst.Get("ethpmInst.attributes.systemDefaultAdminSt").String())
+			data.DefaultAdminState = types.StringValue(rethpmInst.Get("ethpmInst.attributes.systemDefaultAdminSt").String())
 		}
 	}
 }
@@ -182,10 +182,10 @@ func (data *System) updateFromBody(res gjson.Result) {
 		} else {
 			data.Mtu = types.Int64Null()
 		}
-		if !data.DefaultAdminStatus.IsNull() {
-			data.DefaultAdminStatus = types.StringValue(rethpmInst.Get("ethpmInst.attributes.systemDefaultAdminSt").String())
+		if !data.DefaultAdminState.IsNull() {
+			data.DefaultAdminState = types.StringValue(rethpmInst.Get("ethpmInst.attributes.systemDefaultAdminSt").String())
 		} else {
-			data.DefaultAdminStatus = types.StringNull()
+			data.DefaultAdminState = types.StringNull()
 		}
 	}
 }
@@ -211,7 +211,7 @@ func (data System) toDeleteBody() nxos.Body {
 			if !data.Mtu.IsNull() {
 				childBody, _ = sjson.Set(childBody, "systemJumboMtu", strconv.FormatInt(9216, 10))
 			}
-			if !data.DefaultAdminStatus.IsNull() {
+			if !data.DefaultAdminState.IsNull() {
 				childBody, _ = sjson.Set(childBody, "systemDefaultAdminSt", "DME_UNSET_PROPERTY_MARKER")
 			}
 			if childBody != "" {

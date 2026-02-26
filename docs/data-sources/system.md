@@ -36,7 +36,7 @@ data "nxos_system" "example" {
 
 ### Read-Only
 
-- `default_admin_status` (String) Default admin status
+- `default_admin_state` (String) System Default Admin St.
 - `id` (String) The distinguished name of the object.
-- `mtu` (Number) System jumbo MTU.
+- `mtu` (Number) System jumbo Mtu.
 - `name` (String) The system name (hostname).

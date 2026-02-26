@@ -73,11 +73,11 @@ func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Computed:            true,
 			},
 			"mtu": schema.Int64Attribute{
-				MarkdownDescription: "System jumbo MTU.",
+				MarkdownDescription: "System jumbo Mtu.",
 				Computed:            true,
 			},
-			"default_admin_status": schema.StringAttribute{
-				MarkdownDescription: "Default admin status",
+			"default_admin_state": schema.StringAttribute{
+				MarkdownDescription: "System Default Admin St.",
 				Computed:            true,
 			},
 		},

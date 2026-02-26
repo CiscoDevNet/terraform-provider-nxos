@@ -37,7 +37,7 @@ func TestAccNxosSystem(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "name", "LEAF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "mtu", "9216"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "default_admin_status", "up"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "default_admin_state", "up"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -96,7 +96,7 @@ func testAccNxosSystemConfig_all() string {
 	config := `resource "nxos_system" "test" {` + "\n"
 	config += `	name = "LEAF1"` + "\n"
 	config += `	mtu = 9216` + "\n"
-	config += `	default_admin_status = "up"` + "\n"
+	config += `	default_admin_state = "up"` + "\n"
 	config += `}` + "\n"
 	return config
 }

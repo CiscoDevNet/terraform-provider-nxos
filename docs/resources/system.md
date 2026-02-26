@@ -24,9 +24,9 @@ This resource can manage the system configuration.
 
 ```terraform
 resource "nxos_system" "example" {
-  name                 = "LEAF1"
-  mtu                  = 9216
-  default_admin_status = "up"
+  name                = "LEAF1"
+  mtu                 = 9216
+  default_admin_state = "up"
 }
 ```
 
@@ -35,13 +35,11 @@ resource "nxos_system" "example" {
 
 ### Optional
 
-- `default_admin_status` (String) Default admin status
-  - Choices: `up`, `down`
-  - Default value: `up`
+- `default_admin_state` (String) System Default Admin St.
+  - Choices: `down`, `up`
 - `device` (String) A device name from the provider configuration.
-- `mtu` (Number) System jumbo MTU.
+- `mtu` (Number) System jumbo Mtu.
   - Range: `576`-`9216`
-  - Default value: `9216`
 - `name` (String) The system name (hostname).
 
 ### Read-Only

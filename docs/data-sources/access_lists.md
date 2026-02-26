@@ -55,28 +55,28 @@ data "nxos_access_lists" "example" {
 Read-Only:
 
 - `entries` (Attributes List) Access list entries. (see [below for nested schema](#nestedatt--access_lists--entries))
-- `name` (String) Access list name.
+- `name` (String) Name of Access lists.
 
 <a id="nestedatt--access_lists--entries"></a>
 ### Nested Schema for `access_lists.entries`
 
 Read-Only:
 
-- `ack` (Boolean) Match TCP ACK flag.
-- `action` (String) Action.
+- `ack` (Boolean) TCP ACK flag.
+- `action` (String) Specify packets to forward or reject.
 - `destination_address_group` (String) Destination address group.
-- `destination_port_1` (String) First destination port number or name.
-- `destination_port_2` (String) Second destination port number or name.
+- `destination_port_1` (String) First destination port number.
+- `destination_port_2` (String) Second destination port number.
 - `destination_port_group` (String) Destination port group.
-- `destination_port_mask` (String) Destination port mask number or name.
+- `destination_port_mask` (String) Destination Port Mask.
 - `destination_port_operator` (String) Destination port operator.
-- `destination_prefix` (String) Destination prefix.
-- `destination_prefix_length` (String) Destination prefix length.
-- `destination_prefix_mask` (String) Destination prefix mask.
+- `destination_prefix` (String) Destination IPv4 prefix.
+- `destination_prefix_length` (String) Destination IPv4 prefix length.
+- `destination_prefix_mask` (String) Destination IPv4 prefix mask.
 - `dscp` (Number) Match DSCP.
-- `established` (Boolean) Match TCP EST flag.
-- `fin` (Boolean) Match TCP FIN flag.
-- `fragment` (Boolean) Match non-initial fragment.
+- `established` (Boolean) TCP EST flag.
+- `fin` (Boolean) TCP FIN flag.
+- `fragment` (Boolean) Non-initial fragment.
 - `http_option_type` (String) HTTP option method.
 - `icmp_code` (Number) ICMP code.
 - `icmp_type` (Number) ICMP type.
@@ -84,28 +84,28 @@ Read-Only:
 - `packet_length_1` (String) First packet length. Either `invalid` or a number between 19 and 9210.
 - `packet_length_2` (String) Second packet length. Either `invalid` or a number between 19 and 9210.
 - `packet_length_operator` (String) Packet length operator.
-- `precedence` (String) Precedence. Either `unspecified` or a number between 0 and 7.
-- `protocol` (String) Protocol name or number.
-- `protocol_mask` (String) Protocol mask name or number.
-- `psh` (Boolean) Match TCP PSH flag.
+- `precedence` (String) IPv4 precedence. Either `unspecified` or a number between 0 and 7.
+- `protocol` (String) Protocol for access-list entry.
+- `protocol_mask` (String) Defines the Protocol Mask.
+- `psh` (Boolean) TCP PSH flag.
 - `redirect` (String) Redirect action.
-- `remark` (String) ACL comment.
-- `rev` (Boolean) Match TCP REV flag.
-- `rst` (Boolean) Match TCP RST flag.
-- `sequence` (Number) Sequence ID.
+- `remark` (String) Access-list entry comment.
+- `rev` (Boolean) TCP reversed flag.
+- `rst` (Boolean) TCP RST flag.
+- `sequence_number` (Number) Sequence number.
 - `source_address_group` (String) Source address group.
-- `source_port_1` (String) First source port name or number.
-- `source_port_2` (String) Second source port name or number.
+- `source_port_1` (String) First source port.
+- `source_port_2` (String) Second source port.
 - `source_port_group` (String) Source port group.
-- `source_port_mask` (String) Source port mask name or number.
+- `source_port_mask` (String) Defines the Source Port Mask.
 - `source_port_operator` (String) Source port operator.
-- `source_prefix` (String) Source prefix.
-- `source_prefix_length` (String) Source prefix length.
-- `source_prefix_mask` (String) Source prefix mask.
-- `syn` (Boolean) Match TCP SYN flag.
+- `source_prefix` (String) Source IPv4 prefix.
+- `source_prefix_length` (String) Source IPv4 prefix length.
+- `source_prefix_mask` (String) Source IPv4 prefix mask.
+- `syn` (Boolean) TCP SYN flag.
 - `time_range` (String) Time range name.
-- `ttl` (Number) TTL.
-- `urg` (Boolean) Match TCP URG flag.
+- `ttl` (Number) TTL Operator.
+- `urg` (Boolean) TCP URG flag.
 - `vlan` (Number) VLAN ID.
 - `vni` (String) NVE VNI ID. Either `invalid` or a number between 0 and 16777216.
 
@@ -116,7 +116,7 @@ Read-Only:
 
 Read-Only:
 
-- `access_list_name` (String) Access list name.
+- `access_list_name` (String) Access Control List name.
 - `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 
 
@@ -125,5 +125,5 @@ Read-Only:
 
 Read-Only:
 
-- `access_list_name` (String) Access list name.
+- `access_list_name` (String) Access Control List name.
 - `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.

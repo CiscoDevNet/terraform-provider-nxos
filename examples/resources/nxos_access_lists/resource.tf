@@ -2,7 +2,7 @@ resource "nxos_access_lists" "example" {
   access_lists = [{
     name = "ACL1"
     entries = [{
-      sequence                  = 10
+      sequence_number           = 10
       ack                       = false
       action                    = "permit"
       dscp                      = 0

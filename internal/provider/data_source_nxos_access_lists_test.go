@@ -35,7 +35,7 @@ func TestAccDataSourceNxosAccessLists(t *testing.T) {
 		"name": "ACL1",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_access_lists.test", "access_lists.*.entries.*", map[string]string{
-		"sequence":                  "10",
+		"sequence_number":           "10",
 		"ack":                       "false",
 		"action":                    "permit",
 		"dscp":                      "0",
@@ -99,7 +99,7 @@ func testAccDataSourceNxosAccessListsConfig() string {
 	config += `	access_lists = [{` + "\n"
 	config += `		name = "ACL1"` + "\n"
 	config += `		entries = [{` + "\n"
-	config += `			sequence = 10` + "\n"
+	config += `			sequence_number = 10` + "\n"
 	config += `			ack = false` + "\n"
 	config += `			action = "permit"` + "\n"
 	config += `			dscp = 0` + "\n"

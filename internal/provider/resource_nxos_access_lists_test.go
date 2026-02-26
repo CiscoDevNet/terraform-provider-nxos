@@ -36,7 +36,7 @@ import (
 func TestAccNxosAccessLists(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.name", "ACL1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.sequence", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.sequence_number", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.ack", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.action", "permit"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_lists.test", "access_lists.0.entries.0.dscp", "0"))
@@ -126,7 +126,7 @@ func testAccNxosAccessListsConfig_all() string {
 	config += `	access_lists = [{` + "\n"
 	config += `		name = "ACL1"` + "\n"
 	config += `		entries = [{` + "\n"
-	config += `			sequence = 10` + "\n"
+	config += `			sequence_number = 10` + "\n"
 	config += `			ack = false` + "\n"
 	config += `			action = "permit"` + "\n"
 	config += `			dscp = 0` + "\n"

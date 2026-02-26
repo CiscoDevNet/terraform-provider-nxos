@@ -12,6 +12,7 @@ child_classes:
     doc_path: Security%20and%20Policing/ipv4acl:AF/
     rn: ipv4
     type: single
+    no_delete: true
     child_classes:
       - class_name: ipv4aclACL
         doc_path: Security%20and%20Policing/ipv4acl:ACL/
@@ -24,7 +25,7 @@ child_classes:
             tf_name: name
             type: String
             id: true
-            description: 'Access list name.'
+            description: 'Name of Access lists.'
             example: ACL1
         child_classes:
           - class_name: ipv4aclACE
@@ -35,25 +36,26 @@ child_classes:
             description: 'Access list entries.'
             attributes:
               - nxos_name: seqNum
-                tf_name: sequence
+                tf_name: sequence_number
                 type: Int64
                 id: true
-                description: "Sequence ID."
+                min_int: 0
+                max_int: 4294967295
+                description: "Sequence number."
                 example: 10
               - nxos_name: ack
                 tf_name: ack
                 type: Bool
-                description: "Match TCP ACK flag."
+                description: "TCP ACK flag."
                 example: false
               - nxos_name: action
                 tf_name: action
                 type: String
-                description: "Action."
+                description: "Specify packets to forward or reject."
                 enum_values:
                   - invalid
                   - permit
                   - deny
-                default_value: invalid
                 example: permit
               - nxos_name: dscp
                 tf_name: dscp
@@ -125,7 +127,7 @@ child_classes:
                   - drip
                   - non500-isakmp
                 allow_non_enum_values: true
-                description: "First destination port number or name."
+                description: "First destination port number."
                 example: 443
               - nxos_name: dstPort2
                 tf_name: destination_port_2
@@ -184,7 +186,7 @@ child_classes:
                   - drip
                   - non500-isakmp
                 allow_non_enum_values: true
-                description: "Second destination port number or name."
+                description: "Second destination port number."
                 example: 0
               - nxos_name: dstPortGroup
                 tf_name: destination_port_group
@@ -249,7 +251,7 @@ child_classes:
                   - drip
                   - non500-isakmp
                 allow_non_enum_values: true
-                description: "Destination port mask number or name."
+                description: "Destination Port Mask."
                 exclude_test: true
                 example: 0
               - nxos_name: dstPortOp
@@ -263,38 +265,37 @@ child_classes:
                   - eq
                   - neq
                   - range
-                default_value: none
                 example: eq
               - nxos_name: dstPrefix
                 tf_name: destination_prefix
                 type: String
-                description: "Destination prefix."
+                description: "Destination IPv4 prefix."
                 example: 10.1.1.0
               - nxos_name: dstPrefixLength
                 tf_name: destination_prefix_length
                 type: String
-                description: "Destination prefix length."
+                description: "Destination IPv4 prefix length."
                 example: 24
               - nxos_name: dstPrefixMask
                 tf_name: destination_prefix_mask
                 type: String
-                description: "Destination prefix mask."
+                description: "Destination IPv4 prefix mask."
                 exclude_test: true
                 example: 255.255.255.0
               - nxos_name: est
                 tf_name: established
                 type: Bool
-                description: "Match TCP EST flag."
+                description: "TCP EST flag."
                 example: false
               - nxos_name: fin
                 tf_name: fin
                 type: Bool
-                description: "Match TCP FIN flag."
+                description: "TCP FIN flag."
                 example: false
               - nxos_name: fragment
                 tf_name: fragment
                 type: Bool
-                description: "Match non-initial fragment."
+                description: "Non-initial fragment."
                 example: false
               - nxos_name: httpOption
                 tf_name: http_option_type
@@ -309,7 +310,6 @@ child_classes:
                   - delete
                   - trace
                   - connect
-                default_value: invalid
                 example: invalid
               - nxos_name: icmpCode
                 tf_name: icmp_code
@@ -317,7 +317,6 @@ child_classes:
                 min_int: 0
                 max_int: 256
                 description: "ICMP code."
-                default_value: 256
                 example: 0
               - nxos_name: icmpType
                 tf_name: icmp_type
@@ -325,27 +324,23 @@ child_classes:
                 min_int: 0
                 max_int: 256
                 description: "ICMP type."
-                default_value: 256
                 example: 0
               - nxos_name: logging
                 tf_name: log
                 type: Bool
                 description: "Log matches against ACL entry."
-                default_value: false
                 example: false
               - nxos_name: pktLen1
                 tf_name: packet_length_1
                 type: String
                 description: "First packet length. Either `invalid` or a number between 19 and 9210."
                 exclude_test: true
-                default_value: invalid
                 example: 19
               - nxos_name: pktLen2
                 tf_name: packet_length_2
                 type: String
                 description: "Second packet length. Either `invalid` or a number between 19 and 9210."
                 exclude_test: true
-                default_value: invalid
                 example: 9210
               - nxos_name: pktLenOp
                 tf_name: packet_length_operator
@@ -358,14 +353,12 @@ child_classes:
                   - eq
                   - neq
                   - range
-                default_value: none
                 exclude_test: true
                 example: range
               - nxos_name: precedence
                 tf_name: precedence
                 type: String
-                description: "Precedence. Either `unspecified` or a number between 0 and 7."
-                default_value: unspecified
+                description: "IPv4 precedence. Either `unspecified` or a number between 0 and 7."
                 exclude_test: true
                 example: "0"
               - nxos_name: protocol
@@ -385,9 +378,10 @@ child_classes:
                   - nos
                   - pim
                   - pcp
+                  - ethertype
                   - udf
                 allow_non_enum_values: true
-                description: "Protocol name or number."
+                description: "Protocol for access-list entry."
                 example: tcp
               - nxos_name: protocolMask
                 tf_name: protocol_mask
@@ -406,15 +400,16 @@ child_classes:
                   - nos
                   - pim
                   - pcp
+                  - ethertype
                   - udf
                 allow_non_enum_values: true
-                description: "Protocol mask name or number."
+                description: "Defines the Protocol Mask."
                 exclude_test: true
                 example: tcp
               - nxos_name: psh
                 tf_name: psh
                 type: Bool
-                description: "Match TCP PSH flag."
+                description: "TCP PSH flag."
                 example: false
               - nxos_name: redirect
                 tf_name: redirect
@@ -425,18 +420,18 @@ child_classes:
               - nxos_name: remark
                 tf_name: remark
                 type: String
-                description: "ACL comment."
+                description: "Access-list entry comment."
                 exclude_test: true
                 example: Line1
               - nxos_name: rev
                 tf_name: rev
                 type: Bool
-                description: "Match TCP REV flag."
+                description: "TCP reversed flag."
                 example: false
               - nxos_name: rst
                 tf_name: rst
                 type: Bool
-                description: "Match TCP RST flag."
+                description: "TCP RST flag."
                 example: false
               - nxos_name: srcAddrGroup
                 tf_name: source_address_group
@@ -501,7 +496,7 @@ child_classes:
                   - drip
                   - non500-isakmp
                 allow_non_enum_values: true
-                description: "First source port name or number."
+                description: "First source port."
                 example: 443
               - nxos_name: srcPort2
                 tf_name: source_port_2
@@ -560,7 +555,7 @@ child_classes:
                   - drip
                   - non500-isakmp
                 allow_non_enum_values: true
-                description: "Second source port name or number."
+                description: "Second source port."
                 example: 0
               - nxos_name: srcPortGroup
                 tf_name: source_port_group
@@ -625,7 +620,7 @@ child_classes:
                   - drip
                   - non500-isakmp
                 allow_non_enum_values: true
-                description: "Source port mask name or number."
+                description: "Defines the Source Port Mask."
                 exclude_test: true
                 example: 0
               - nxos_name: srcPortOp
@@ -639,28 +634,27 @@ child_classes:
                   - eq
                   - neq
                   - range
-                default_value: none
                 example: eq
               - nxos_name: srcPrefix
                 tf_name: source_prefix
                 type: String
-                description: "Source prefix."
+                description: "Source IPv4 prefix."
                 example: 20.1.0.0
               - nxos_name: srcPrefixLength
                 tf_name: source_prefix_length
                 type: String
-                description: "Source prefix length."
+                description: "Source IPv4 prefix length."
                 example: 16
               - nxos_name: srcPrefixMask
                 tf_name: source_prefix_mask
                 type: String
-                description: "Source prefix mask."
+                description: "Source IPv4 prefix mask."
                 exclude_test: true
                 example: 255.255.0.0
               - nxos_name: syn
                 tf_name: syn
                 type: Bool
-                description: "Match TCP SYN flag."
+                description: "TCP SYN flag."
                 example: false
               - nxos_name: timeRange
                 tf_name: time_range
@@ -673,14 +667,13 @@ child_classes:
                 type: Int64
                 min_int: 0
                 max_int: 255
-                description: "TTL."
+                description: "TTL Operator."
                 exclude_test: true
-                default_value: 0
                 example: 0
               - nxos_name: urg
                 tf_name: urg
                 type: Bool
-                description: "Match TCP URG flag."
+                description: "TCP URG flag."
                 example: false
               - nxos_name: vlan
                 tf_name: vlan
@@ -688,7 +681,6 @@ child_classes:
                 min_int: 0
                 max_int: 4095
                 description: "VLAN ID."
-                default_value: 4095
                 exclude_test: true
                 example: 4095
               - nxos_name: vni
@@ -696,7 +688,6 @@ child_classes:
                 type: String
                 description: "NVE VNI ID. Either `invalid` or a number between 0 and 16777216."
                 exclude_test: true
-                default_value: invalid
                 example: invalid
       - class_name: aclPolicy
         doc_path: Security%20and%20Policing/acl:Policy/
@@ -730,7 +721,7 @@ child_classes:
                       - nxos_name: name
                         tf_name: access_list_name
                         type: String
-                        description: "Access list name."
+                        description: "Access Control List name."
                         example: ACL1
           - class_name: aclEgress
             doc_path: Security%20and%20Policing/acl:Egress/
@@ -759,5 +750,5 @@ child_classes:
                       - nxos_name: name
                         tf_name: access_list_name
                         type: String
-                        description: "Access list name."
+                        description: "Access Control List name."
                         example: ACL1

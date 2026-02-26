@@ -35,7 +35,7 @@ resource "nxos_access_lists" "example" {
   access_lists = [{
     name = "ACL1"
     entries = [{
-      sequence                  = 10
+      sequence_number           = 10
       ack                       = false
       action                    = "permit"
       dscp                      = 0
@@ -113,7 +113,7 @@ resource "nxos_access_lists" "example" {
 
 Required:
 
-- `name` (String) Access list name.
+- `name` (String) Name of Access lists.
 
 Optional:
 
@@ -124,87 +124,74 @@ Optional:
 
 Required:
 
-- `sequence` (Number) Sequence ID.
+- `sequence_number` (Number) Sequence number.
+  - Range: `0`-`4294967295`
 
 Optional:
 
-- `ack` (Boolean) Match TCP ACK flag.
-- `action` (String) Action.
+- `ack` (Boolean) TCP ACK flag.
+- `action` (String) Specify packets to forward or reject.
   - Choices: `invalid`, `permit`, `deny`
-  - Default value: `invalid`
 - `destination_address_group` (String) Destination address group.
-- `destination_port_1` (String) First destination port number or name.
+- `destination_port_1` (String) First destination port number.
   - Choices: `echo`, `discard`, `daytime`, `chargen`, `ftp-data`, `ftp`, `telnet`, `smtp`, `time`, `nameserver`, `whois`, `tacacs`, `domain`, `bootps`, `bootpc`, `tftp`, `gopher`, `finger`, `www`, `hostname`, `pop2`, `pop3`, `sunrpc`, `ident`, `nntp`, `ntp`, `netbios-ns`, `netbios-dgm`, `netbios-ss`, `snmp`, `snmptrap`, `xdmcp`, `bgp`, `irc`, `dnsix`, `mobile-ip`, `pim-auto-rp`, `isakmp`, `biff`, `exec`, `who`, `login`, `syslog`, `cmd`, `lpd`, `talk`, `rip`, `uucp`, `klogin`, `kshell`, `drip`, `non500-isakmp`
-- `destination_port_2` (String) Second destination port number or name.
+- `destination_port_2` (String) Second destination port number.
   - Choices: `echo`, `discard`, `daytime`, `chargen`, `ftp-data`, `ftp`, `telnet`, `smtp`, `time`, `nameserver`, `whois`, `tacacs`, `domain`, `bootps`, `bootpc`, `tftp`, `gopher`, `finger`, `www`, `hostname`, `pop2`, `pop3`, `sunrpc`, `ident`, `nntp`, `ntp`, `netbios-ns`, `netbios-dgm`, `netbios-ss`, `snmp`, `snmptrap`, `xdmcp`, `bgp`, `irc`, `dnsix`, `mobile-ip`, `pim-auto-rp`, `isakmp`, `biff`, `exec`, `who`, `login`, `syslog`, `cmd`, `lpd`, `talk`, `rip`, `uucp`, `klogin`, `kshell`, `drip`, `non500-isakmp`
 - `destination_port_group` (String) Destination port group.
-- `destination_port_mask` (String) Destination port mask number or name.
+- `destination_port_mask` (String) Destination Port Mask.
   - Choices: `echo`, `discard`, `daytime`, `chargen`, `ftp-data`, `ftp`, `telnet`, `smtp`, `time`, `nameserver`, `whois`, `tacacs`, `domain`, `bootps`, `bootpc`, `tftp`, `gopher`, `finger`, `www`, `hostname`, `pop2`, `pop3`, `sunrpc`, `ident`, `nntp`, `ntp`, `netbios-ns`, `netbios-dgm`, `netbios-ss`, `snmp`, `snmptrap`, `xdmcp`, `bgp`, `irc`, `dnsix`, `mobile-ip`, `pim-auto-rp`, `isakmp`, `biff`, `exec`, `who`, `login`, `syslog`, `cmd`, `lpd`, `talk`, `rip`, `uucp`, `klogin`, `kshell`, `drip`, `non500-isakmp`
 - `destination_port_operator` (String) Destination port operator.
   - Choices: `none`, `lt`, `gt`, `eq`, `neq`, `range`
-  - Default value: `none`
-- `destination_prefix` (String) Destination prefix.
-- `destination_prefix_length` (String) Destination prefix length.
-- `destination_prefix_mask` (String) Destination prefix mask.
+- `destination_prefix` (String) Destination IPv4 prefix.
+- `destination_prefix_length` (String) Destination IPv4 prefix length.
+- `destination_prefix_mask` (String) Destination IPv4 prefix mask.
 - `dscp` (Number) Match DSCP.
   - Range: `0`-`63`
-- `established` (Boolean) Match TCP EST flag.
-- `fin` (Boolean) Match TCP FIN flag.
-- `fragment` (Boolean) Match non-initial fragment.
+- `established` (Boolean) TCP EST flag.
+- `fin` (Boolean) TCP FIN flag.
+- `fragment` (Boolean) Non-initial fragment.
 - `http_option_type` (String) HTTP option method.
   - Choices: `invalid`, `get`, `put`, `head`, `post`, `delete`, `trace`, `connect`
-  - Default value: `invalid`
 - `icmp_code` (Number) ICMP code.
   - Range: `0`-`256`
-  - Default value: `256`
 - `icmp_type` (Number) ICMP type.
   - Range: `0`-`256`
-  - Default value: `256`
 - `log` (Boolean) Log matches against ACL entry.
-  - Default value: `false`
 - `packet_length_1` (String) First packet length. Either `invalid` or a number between 19 and 9210.
-  - Default value: `invalid`
 - `packet_length_2` (String) Second packet length. Either `invalid` or a number between 19 and 9210.
-  - Default value: `invalid`
 - `packet_length_operator` (String) Packet length operator.
   - Choices: `none`, `lt`, `gt`, `eq`, `neq`, `range`
-  - Default value: `none`
-- `precedence` (String) Precedence. Either `unspecified` or a number between 0 and 7.
-  - Default value: `unspecified`
-- `protocol` (String) Protocol name or number.
-  - Choices: `ip`, `icmp`, `igmp`, `tcp`, `udp`, `gre`, `esp`, `ahp`, `eigrp`, `ospf`, `nos`, `pim`, `pcp`, `udf`
-- `protocol_mask` (String) Protocol mask name or number.
-  - Choices: `ip`, `icmp`, `igmp`, `tcp`, `udp`, `gre`, `esp`, `ahp`, `eigrp`, `ospf`, `nos`, `pim`, `pcp`, `udf`
-- `psh` (Boolean) Match TCP PSH flag.
+- `precedence` (String) IPv4 precedence. Either `unspecified` or a number between 0 and 7.
+- `protocol` (String) Protocol for access-list entry.
+  - Choices: `ip`, `icmp`, `igmp`, `tcp`, `udp`, `gre`, `esp`, `ahp`, `eigrp`, `ospf`, `nos`, `pim`, `pcp`, `ethertype`, `udf`
+- `protocol_mask` (String) Defines the Protocol Mask.
+  - Choices: `ip`, `icmp`, `igmp`, `tcp`, `udp`, `gre`, `esp`, `ahp`, `eigrp`, `ospf`, `nos`, `pim`, `pcp`, `ethertype`, `udf`
+- `psh` (Boolean) TCP PSH flag.
 - `redirect` (String) Redirect action.
-- `remark` (String) ACL comment.
-- `rev` (Boolean) Match TCP REV flag.
-- `rst` (Boolean) Match TCP RST flag.
+- `remark` (String) Access-list entry comment.
+- `rev` (Boolean) TCP reversed flag.
+- `rst` (Boolean) TCP RST flag.
 - `source_address_group` (String) Source address group.
-- `source_port_1` (String) First source port name or number.
+- `source_port_1` (String) First source port.
   - Choices: `echo`, `discard`, `daytime`, `chargen`, `ftp-data`, `ftp`, `telnet`, `smtp`, `time`, `nameserver`, `whois`, `tacacs`, `domain`, `bootps`, `bootpc`, `tftp`, `gopher`, `finger`, `www`, `hostname`, `pop2`, `pop3`, `sunrpc`, `ident`, `nntp`, `ntp`, `netbios-ns`, `netbios-dgm`, `netbios-ss`, `snmp`, `snmptrap`, `xdmcp`, `bgp`, `irc`, `dnsix`, `mobile-ip`, `pim-auto-rp`, `isakmp`, `biff`, `exec`, `who`, `login`, `syslog`, `cmd`, `lpd`, `talk`, `rip`, `uucp`, `klogin`, `kshell`, `drip`, `non500-isakmp`
-- `source_port_2` (String) Second source port name or number.
+- `source_port_2` (String) Second source port.
   - Choices: `echo`, `discard`, `daytime`, `chargen`, `ftp-data`, `ftp`, `telnet`, `smtp`, `time`, `nameserver`, `whois`, `tacacs`, `domain`, `bootps`, `bootpc`, `tftp`, `gopher`, `finger`, `www`, `hostname`, `pop2`, `pop3`, `sunrpc`, `ident`, `nntp`, `ntp`, `netbios-ns`, `netbios-dgm`, `netbios-ss`, `snmp`, `snmptrap`, `xdmcp`, `bgp`, `irc`, `dnsix`, `mobile-ip`, `pim-auto-rp`, `isakmp`, `biff`, `exec`, `who`, `login`, `syslog`, `cmd`, `lpd`, `talk`, `rip`, `uucp`, `klogin`, `kshell`, `drip`, `non500-isakmp`
 - `source_port_group` (String) Source port group.
-- `source_port_mask` (String) Source port mask name or number.
+- `source_port_mask` (String) Defines the Source Port Mask.
   - Choices: `echo`, `discard`, `daytime`, `chargen`, `ftp-data`, `ftp`, `telnet`, `smtp`, `time`, `nameserver`, `whois`, `tacacs`, `domain`, `bootps`, `bootpc`, `tftp`, `gopher`, `finger`, `www`, `hostname`, `pop2`, `pop3`, `sunrpc`, `ident`, `nntp`, `ntp`, `netbios-ns`, `netbios-dgm`, `netbios-ss`, `snmp`, `snmptrap`, `xdmcp`, `bgp`, `irc`, `dnsix`, `mobile-ip`, `pim-auto-rp`, `isakmp`, `biff`, `exec`, `who`, `login`, `syslog`, `cmd`, `lpd`, `talk`, `rip`, `uucp`, `klogin`, `kshell`, `drip`, `non500-isakmp`
 - `source_port_operator` (String) Source port operator.
   - Choices: `none`, `lt`, `gt`, `eq`, `neq`, `range`
-  - Default value: `none`
-- `source_prefix` (String) Source prefix.
-- `source_prefix_length` (String) Source prefix length.
-- `source_prefix_mask` (String) Source prefix mask.
-- `syn` (Boolean) Match TCP SYN flag.
+- `source_prefix` (String) Source IPv4 prefix.
+- `source_prefix_length` (String) Source IPv4 prefix length.
+- `source_prefix_mask` (String) Source IPv4 prefix mask.
+- `syn` (Boolean) TCP SYN flag.
 - `time_range` (String) Time range name.
-- `ttl` (Number) TTL.
+- `ttl` (Number) TTL Operator.
   - Range: `0`-`255`
-  - Default value: `0`
-- `urg` (Boolean) Match TCP URG flag.
+- `urg` (Boolean) TCP URG flag.
 - `vlan` (Number) VLAN ID.
   - Range: `0`-`4095`
-  - Default value: `4095`
 - `vni` (String) NVE VNI ID. Either `invalid` or a number between 0 and 16777216.
-  - Default value: `invalid`
 
 
 
@@ -217,7 +204,7 @@ Required:
 
 Optional:
 
-- `access_list_name` (String) Access list name.
+- `access_list_name` (String) Access Control List name.
 
 
 <a id="nestedatt--ingress_interfaces"></a>
@@ -229,7 +216,7 @@ Required:
 
 Optional:
 
-- `access_list_name` (String) Access list name.
+- `access_list_name` (String) Access Control List name.
 
 ## Import
 

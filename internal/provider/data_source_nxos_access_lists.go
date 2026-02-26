@@ -74,7 +74,7 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							MarkdownDescription: "Access list name.",
+							MarkdownDescription: "Name of Access lists.",
 							Computed:            true,
 						},
 						"entries": schema.ListNestedAttribute{
@@ -82,16 +82,16 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"sequence": schema.Int64Attribute{
-										MarkdownDescription: "Sequence ID.",
+									"sequence_number": schema.Int64Attribute{
+										MarkdownDescription: "Sequence number.",
 										Computed:            true,
 									},
 									"ack": schema.BoolAttribute{
-										MarkdownDescription: "Match TCP ACK flag.",
+										MarkdownDescription: "TCP ACK flag.",
 										Computed:            true,
 									},
 									"action": schema.StringAttribute{
-										MarkdownDescription: "Action.",
+										MarkdownDescription: "Specify packets to forward or reject.",
 										Computed:            true,
 									},
 									"dscp": schema.Int64Attribute{
@@ -103,11 +103,11 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 										Computed:            true,
 									},
 									"destination_port_1": schema.StringAttribute{
-										MarkdownDescription: "First destination port number or name.",
+										MarkdownDescription: "First destination port number.",
 										Computed:            true,
 									},
 									"destination_port_2": schema.StringAttribute{
-										MarkdownDescription: "Second destination port number or name.",
+										MarkdownDescription: "Second destination port number.",
 										Computed:            true,
 									},
 									"destination_port_group": schema.StringAttribute{
@@ -115,7 +115,7 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 										Computed:            true,
 									},
 									"destination_port_mask": schema.StringAttribute{
-										MarkdownDescription: "Destination port mask number or name.",
+										MarkdownDescription: "Destination Port Mask.",
 										Computed:            true,
 									},
 									"destination_port_operator": schema.StringAttribute{
@@ -123,27 +123,27 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 										Computed:            true,
 									},
 									"destination_prefix": schema.StringAttribute{
-										MarkdownDescription: "Destination prefix.",
+										MarkdownDescription: "Destination IPv4 prefix.",
 										Computed:            true,
 									},
 									"destination_prefix_length": schema.StringAttribute{
-										MarkdownDescription: "Destination prefix length.",
+										MarkdownDescription: "Destination IPv4 prefix length.",
 										Computed:            true,
 									},
 									"destination_prefix_mask": schema.StringAttribute{
-										MarkdownDescription: "Destination prefix mask.",
+										MarkdownDescription: "Destination IPv4 prefix mask.",
 										Computed:            true,
 									},
 									"established": schema.BoolAttribute{
-										MarkdownDescription: "Match TCP EST flag.",
+										MarkdownDescription: "TCP EST flag.",
 										Computed:            true,
 									},
 									"fin": schema.BoolAttribute{
-										MarkdownDescription: "Match TCP FIN flag.",
+										MarkdownDescription: "TCP FIN flag.",
 										Computed:            true,
 									},
 									"fragment": schema.BoolAttribute{
-										MarkdownDescription: "Match non-initial fragment.",
+										MarkdownDescription: "Non-initial fragment.",
 										Computed:            true,
 									},
 									"http_option_type": schema.StringAttribute{
@@ -175,19 +175,19 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 										Computed:            true,
 									},
 									"precedence": schema.StringAttribute{
-										MarkdownDescription: "Precedence. Either `unspecified` or a number between 0 and 7.",
+										MarkdownDescription: "IPv4 precedence. Either `unspecified` or a number between 0 and 7.",
 										Computed:            true,
 									},
 									"protocol": schema.StringAttribute{
-										MarkdownDescription: "Protocol name or number.",
+										MarkdownDescription: "Protocol for access-list entry.",
 										Computed:            true,
 									},
 									"protocol_mask": schema.StringAttribute{
-										MarkdownDescription: "Protocol mask name or number.",
+										MarkdownDescription: "Defines the Protocol Mask.",
 										Computed:            true,
 									},
 									"psh": schema.BoolAttribute{
-										MarkdownDescription: "Match TCP PSH flag.",
+										MarkdownDescription: "TCP PSH flag.",
 										Computed:            true,
 									},
 									"redirect": schema.StringAttribute{
@@ -195,15 +195,15 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 										Computed:            true,
 									},
 									"remark": schema.StringAttribute{
-										MarkdownDescription: "ACL comment.",
+										MarkdownDescription: "Access-list entry comment.",
 										Computed:            true,
 									},
 									"rev": schema.BoolAttribute{
-										MarkdownDescription: "Match TCP REV flag.",
+										MarkdownDescription: "TCP reversed flag.",
 										Computed:            true,
 									},
 									"rst": schema.BoolAttribute{
-										MarkdownDescription: "Match TCP RST flag.",
+										MarkdownDescription: "TCP RST flag.",
 										Computed:            true,
 									},
 									"source_address_group": schema.StringAttribute{
@@ -211,11 +211,11 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 										Computed:            true,
 									},
 									"source_port_1": schema.StringAttribute{
-										MarkdownDescription: "First source port name or number.",
+										MarkdownDescription: "First source port.",
 										Computed:            true,
 									},
 									"source_port_2": schema.StringAttribute{
-										MarkdownDescription: "Second source port name or number.",
+										MarkdownDescription: "Second source port.",
 										Computed:            true,
 									},
 									"source_port_group": schema.StringAttribute{
@@ -223,7 +223,7 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 										Computed:            true,
 									},
 									"source_port_mask": schema.StringAttribute{
-										MarkdownDescription: "Source port mask name or number.",
+										MarkdownDescription: "Defines the Source Port Mask.",
 										Computed:            true,
 									},
 									"source_port_operator": schema.StringAttribute{
@@ -231,19 +231,19 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 										Computed:            true,
 									},
 									"source_prefix": schema.StringAttribute{
-										MarkdownDescription: "Source prefix.",
+										MarkdownDescription: "Source IPv4 prefix.",
 										Computed:            true,
 									},
 									"source_prefix_length": schema.StringAttribute{
-										MarkdownDescription: "Source prefix length.",
+										MarkdownDescription: "Source IPv4 prefix length.",
 										Computed:            true,
 									},
 									"source_prefix_mask": schema.StringAttribute{
-										MarkdownDescription: "Source prefix mask.",
+										MarkdownDescription: "Source IPv4 prefix mask.",
 										Computed:            true,
 									},
 									"syn": schema.BoolAttribute{
-										MarkdownDescription: "Match TCP SYN flag.",
+										MarkdownDescription: "TCP SYN flag.",
 										Computed:            true,
 									},
 									"time_range": schema.StringAttribute{
@@ -251,11 +251,11 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 										Computed:            true,
 									},
 									"ttl": schema.Int64Attribute{
-										MarkdownDescription: "TTL.",
+										MarkdownDescription: "TTL Operator.",
 										Computed:            true,
 									},
 									"urg": schema.BoolAttribute{
-										MarkdownDescription: "Match TCP URG flag.",
+										MarkdownDescription: "TCP URG flag.",
 										Computed:            true,
 									},
 									"vlan": schema.Int64Attribute{
@@ -282,7 +282,7 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 							Computed:            true,
 						},
 						"access_list_name": schema.StringAttribute{
-							MarkdownDescription: "Access list name.",
+							MarkdownDescription: "Access Control List name.",
 							Computed:            true,
 						},
 					},
@@ -298,7 +298,7 @@ func (d *AccessListsDataSource) Schema(ctx context.Context, req datasource.Schem
 							Computed:            true,
 						},
 						"access_list_name": schema.StringAttribute{
-							MarkdownDescription: "Access list name.",
+							MarkdownDescription: "Access Control List name.",
 							Computed:            true,
 						},
 					},

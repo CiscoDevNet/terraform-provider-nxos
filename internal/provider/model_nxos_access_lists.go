@@ -51,7 +51,7 @@ type AccessListsAccessLists struct {
 }
 
 type AccessListsAccessListsEntries struct {
-	Sequence                types.Int64  `tfsdk:"sequence"`
+	SequenceNumber          types.Int64  `tfsdk:"sequence_number"`
 	Ack                     types.Bool   `tfsdk:"ack"`
 	Action                  types.String `tfsdk:"action"`
 	Dscp                    types.Int64  `tfsdk:"dscp"`
@@ -142,7 +142,7 @@ func (data AccessListsAccessLists) getRn() string {
 }
 
 func (data AccessListsAccessListsEntries) getRn() string {
-	return fmt.Sprintf("seq-%v", data.Sequence.ValueInt64())
+	return fmt.Sprintf("seq-%v", data.SequenceNumber.ValueInt64())
 }
 
 func (data AccessListsIngressInterfaces) getRn() string {
@@ -183,8 +183,8 @@ func (data AccessLists) toBody() nxos.Body {
 				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipv4aclACL.children"
 				for _, child := range child.Entries {
 					attrs = "{}"
-					if (!child.Sequence.IsUnknown() && !child.Sequence.IsNull()) || false {
-						attrs, _ = sjson.Set(attrs, "seqNum", strconv.FormatInt(child.Sequence.ValueInt64(), 10))
+					if (!child.SequenceNumber.IsUnknown() && !child.SequenceNumber.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "seqNum", strconv.FormatInt(child.SequenceNumber.ValueInt64(), 10))
 					}
 					if (!child.Ack.IsUnknown() && !child.Ack.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "ack", strconv.FormatBool(child.Ack.ValueBool()))
@@ -417,7 +417,7 @@ func (data *AccessLists) fromBody(res gjson.Result) {
 										func(nestedClassname, nestedValue gjson.Result) bool {
 											if nestedClassname.String() == "ipv4aclACE" {
 												var nestedChildipv4aclACE AccessListsAccessListsEntries
-												nestedChildipv4aclACE.Sequence = types.Int64Value(nestedValue.Get("attributes.seqNum").Int())
+												nestedChildipv4aclACE.SequenceNumber = types.Int64Value(nestedValue.Get("attributes.seqNum").Int())
 												nestedChildipv4aclACE.Ack = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.ack").String()))
 												nestedChildipv4aclACE.Action = types.StringValue(nestedValue.Get("attributes.action").String())
 												nestedChildipv4aclACE.Dscp = types.Int64Value(nestedValue.Get("attributes.dscp").Int())
@@ -624,10 +624,10 @@ func (data *AccessLists) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
-			if !data.AccessLists[c].Entries[nc].Sequence.IsNull() {
-				data.AccessLists[c].Entries[nc].Sequence = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.seqNum").Int())
+			if !data.AccessLists[c].Entries[nc].SequenceNumber.IsNull() {
+				data.AccessLists[c].Entries[nc].SequenceNumber = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.seqNum").Int())
 			} else {
-				data.AccessLists[c].Entries[nc].Sequence = types.Int64Null()
+				data.AccessLists[c].Entries[nc].SequenceNumber = types.Int64Null()
 			}
 			if !data.AccessLists[c].Entries[nc].Ack.IsNull() {
 				data.AccessLists[c].Entries[nc].Ack = types.BoolValue(helpers.ParseNxosBoolean(ripv4aclACE.Get("ipv4aclACE.attributes.ack").String()))
@@ -980,10 +980,23 @@ func (data AccessLists) toDeleteBody() nxos.Body {
 	}
 	childrenPath := data.getClassName() + ".children"
 	{
-		deleteBody := ""
-		deleteBody, _ = sjson.Set(deleteBody, "ipv4aclAF.attributes.rn", "ipv4")
-		deleteBody, _ = sjson.Set(deleteBody, "ipv4aclAF.attributes.status", "deleted")
-		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipv4aclAF"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		for _, child := range data.AccessLists {
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACL.attributes.rn", child.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "ipv4aclACL.attributes.status", "deleted")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		}
+		{
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "aclPolicy.attributes.rn", "policy")
+			deleteBody, _ = sjson.Set(deleteBody, "aclPolicy.attributes.status", "deleted")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		}
 	}
 
 	return nxos.Body{body}
@@ -1024,7 +1037,7 @@ func (data AccessLists) toBodyWithDeletes(ctx context.Context, state AccessLists
 				for _, stateChild := range state.AccessLists[di].Entries {
 					found := false
 					for _, planChild := range data.AccessLists[pdi].Entries {
-						if stateChild.Sequence == planChild.Sequence {
+						if stateChild.SequenceNumber == planChild.SequenceNumber {
 							found = true
 							break
 						}

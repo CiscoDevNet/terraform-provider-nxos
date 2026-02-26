@@ -26,6 +26,7 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -33,7 +34,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -64,7 +64,7 @@ func (r *KeychainResource) Metadata(ctx context.Context, req resource.MetadataRe
 func (r *KeychainResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the keychain configuration.", "kcmgrEntity", "Security%20and%20Policing/kcmgr:Entity/").AddAdditionalDocs([]string{"kcmgrKeychains", "kcmgrClassicKeychain", "kcmgrKey"}, []string{"Security%20and%20Policing/kcmgr:Keychains/", "Security%20and%20Policing/kcmgr:ClassicKeychain/", "Security%20and%20Policing/kcmgr:kcmgrKey/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the keychain configuration.", "kcmgrEntity", "Security%20and%20Policing/kcmgr:Entity/").AddAdditionalDocs([]string{"kcmgrKeychains", "kcmgrClassicKeychain", "kcmgrKey"}, []string{"Security%20and%20Policing/kcmgr:Keychains/", "Security%20and%20Policing/kcmgr:ClassicKeychain/", "Security%20and%20Policing/kcmgr:Key/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -79,10 +79,8 @@ func (r *KeychainResource) Schema(ctx context.Context, req resource.SchemaReques
 				},
 			},
 			"admin_state": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("enabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
@@ -105,14 +103,17 @@ func (r *KeychainResource) Schema(ctx context.Context, req resource.SchemaReques
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"key_id": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Key ID of classic key chain.").String,
+										MarkdownDescription: helpers.NewAttributeDescription("keyId of classic key chain.").AddIntegerRangeDescription(0, 65535).String,
 										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 65535),
+										},
 										PlanModifiers: []planmodifier.Int64{
 											int64planmodifier.RequiresReplace(),
 										},
 									},
 									"key_string": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Key string.").String,
+										MarkdownDescription: helpers.NewAttributeDescription("keyString provided by user for the keychain.").String,
 										Optional:            true,
 									},
 								},

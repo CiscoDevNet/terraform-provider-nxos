@@ -6,7 +6,7 @@ description: |-
   This data source can read the keychain configuration.
   API Documentation: kcmgrEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Entity/
   Additional API Documentation
-  kcmgrKeychains https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Keychains/kcmgrClassicKeychain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/kcmgrKey https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:kcmgrKey/
+  kcmgrKeychains https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Keychains/kcmgrClassicKeychain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/kcmgrKey https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Key/
 ---
 
 # nxos_keychain (Data Source)
@@ -19,7 +19,7 @@ This data source can read the keychain configuration.
 
 - [kcmgrKeychains](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Keychains/)
 - [kcmgrClassicKeychain](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/)
-- [kcmgrKey](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:kcmgrKey/)
+- [kcmgrKey](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Key/)
 
 ## Example Usage
 
@@ -37,7 +37,7 @@ data "nxos_keychain" "example" {
 
 ### Read-Only
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) The administrative state of the object or policy.
 - `id` (String) The distinguished name of the object.
 - `keychains` (Attributes List) List of keychains. (see [below for nested schema](#nestedatt--keychains))
 
@@ -54,5 +54,5 @@ Read-Only:
 
 Read-Only:
 
-- `key_id` (Number) Key ID of classic key chain.
-- `key_string` (String) Key string.
+- `key_id` (Number) keyId of classic key chain.
+- `key_string` (String) keyString provided by user for the keychain.

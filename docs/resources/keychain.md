@@ -6,7 +6,7 @@ description: |-
   This resource can manage the keychain configuration.
   API Documentation: kcmgrEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Entity/
   Additional API Documentation
-  kcmgrKeychains https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Keychains/kcmgrClassicKeychain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/kcmgrKey https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:kcmgrKey/
+  kcmgrKeychains https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Keychains/kcmgrClassicKeychain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/kcmgrKey https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Key/
 ---
 
 # nxos_keychain (Resource)
@@ -19,7 +19,7 @@ This resource can manage the keychain configuration.
 
 - [kcmgrKeychains](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Keychains/)
 - [kcmgrClassicKeychain](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/)
-- [kcmgrKey](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:kcmgrKey/)
+- [kcmgrKey](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/kcmgr:Key/)
 
 ## Example Usage
 
@@ -41,9 +41,8 @@ resource "nxos_keychain" "example" {
 
 ### Optional
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `device` (String) A device name from the provider configuration.
 - `keychains` (Attributes List) List of keychains. (see [below for nested schema](#nestedatt--keychains))
 
@@ -67,11 +66,12 @@ Optional:
 
 Required:
 
-- `key_id` (Number) Key ID of classic key chain.
+- `key_id` (Number) keyId of classic key chain.
+  - Range: `0`-`65535`
 
 Optional:
 
-- `key_string` (String) Key string.
+- `key_string` (String) keyString provided by user for the keychain.
 
 ## Import
 

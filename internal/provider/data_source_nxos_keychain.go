@@ -57,7 +57,7 @@ func (d *KeychainDataSource) Metadata(_ context.Context, req datasource.Metadata
 func (d *KeychainDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the keychain configuration.", "kcmgrEntity", "Security%20and%20Policing/kcmgr:Entity/").AddAdditionalDocs([]string{"kcmgrKeychains", "kcmgrClassicKeychain", "kcmgrKey"}, []string{"Security%20and%20Policing/kcmgr:Keychains/", "Security%20and%20Policing/kcmgr:ClassicKeychain/", "Security%20and%20Policing/kcmgr:kcmgrKey/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the keychain configuration.", "kcmgrEntity", "Security%20and%20Policing/kcmgr:Entity/").AddAdditionalDocs([]string{"kcmgrKeychains", "kcmgrClassicKeychain", "kcmgrKey"}, []string{"Security%20and%20Policing/kcmgr:Keychains/", "Security%20and%20Policing/kcmgr:ClassicKeychain/", "Security%20and%20Policing/kcmgr:Key/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -69,7 +69,7 @@ func (d *KeychainDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				Computed:            true,
 			},
 			"admin_state": schema.StringAttribute{
-				MarkdownDescription: "Administrative state.",
+				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
 			"keychains": schema.ListNestedAttribute{
@@ -87,11 +87,11 @@ func (d *KeychainDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"key_id": schema.Int64Attribute{
-										MarkdownDescription: "Key ID of classic key chain.",
+										MarkdownDescription: "keyId of classic key chain.",
 										Computed:            true,
 									},
 									"key_string": schema.StringAttribute{
-										MarkdownDescription: "Key string.",
+										MarkdownDescription: "keyString provided by user for the keychain.",
 										Computed:            true,
 									},
 								},

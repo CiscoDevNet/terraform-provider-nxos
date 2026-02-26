@@ -10,11 +10,10 @@ attributes:
   - nxos_name: adminSt
     tf_name: admin_state
     type: String
-    description: 'Administrative state.'
+    description: 'The administrative state of the object or policy.'
     enum_values:
       - enabled
       - disabled
-    default_value: enabled
     example: enabled
 child_classes:
   - class_name: kcmgrKeychains
@@ -37,7 +36,7 @@ child_classes:
             example: KEYCHAIN1
         child_classes:
           - class_name: kcmgrKey
-            doc_path: Security%20and%20Policing/kcmgr:kcmgrKey/
+            doc_path: Security%20and%20Policing/kcmgr:Key/
             rn: classickeyid-%v
             type: list
             tf_name: keys
@@ -47,11 +46,13 @@ child_classes:
                 tf_name: key_id
                 type: Int64
                 id: true
-                description: 'Key ID of classic key chain.'
+                description: 'keyId of classic key chain.'
+                min_int: 0
+                max_int: 65535
                 example: 1
               - nxos_name: keyString
                 tf_name: key_string
-                description: 'Key string.'
+                description: 'keyString provided by user for the keychain.'
                 type: String
                 example: secret_password
                 write_only: true

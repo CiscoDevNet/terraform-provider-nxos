@@ -58,27 +58,20 @@ Required:
 
 Optional:
 
-- `bpdu_filter` (String) BPDU filter mode.
+- `bpdu_filter` (String) bpdufilter mode.
   - Choices: `default`, `enable`, `disable`
-  - Default value: `default`
-- `bpdu_guard` (String) BPDU guard mode.
+- `bpdu_guard` (String) Guard Mode.
   - Choices: `default`, `enable`, `disable`
-  - Default value: `default`
-- `cost` (Number) Port path cost.
+- `cost` (Number) Port Path Cost.
   - Range: `0`-`200000000`
-  - Default value: `0`
-- `guard` (String) Guard mode.
+- `guard` (String) Guard Mode.
   - Choices: `default`, `root`, `loop`, `none`
-  - Default value: `default`
-- `link_type` (String) Link type.
+- `link_type` (String) Link Type.
   - Choices: `auto`, `p2p`, `shared`
-  - Default value: `auto`
 - `mode` (String) Port mode.
   - Choices: `default`, `edge`, `network`, `normal`, `trunk`
-  - Default value: `default`
-- `priority` (Number) Port priority.
+- `priority` (Number) Port Priority.
   - Range: `0`-`224`
-  - Default value: `128`
 
 ## Import
 

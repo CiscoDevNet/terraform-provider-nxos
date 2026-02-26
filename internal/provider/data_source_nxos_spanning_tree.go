@@ -78,23 +78,23 @@ func (d *SpanningTreeDataSource) Schema(ctx context.Context, req datasource.Sche
 							Computed:            true,
 						},
 						"bpdu_filter": schema.StringAttribute{
-							MarkdownDescription: "BPDU filter mode.",
+							MarkdownDescription: "bpdufilter mode.",
 							Computed:            true,
 						},
 						"bpdu_guard": schema.StringAttribute{
-							MarkdownDescription: "BPDU guard mode.",
+							MarkdownDescription: "Guard Mode.",
 							Computed:            true,
 						},
 						"cost": schema.Int64Attribute{
-							MarkdownDescription: "Port path cost.",
+							MarkdownDescription: "Port Path Cost.",
 							Computed:            true,
 						},
 						"guard": schema.StringAttribute{
-							MarkdownDescription: "Guard mode.",
+							MarkdownDescription: "Guard Mode.",
 							Computed:            true,
 						},
 						"link_type": schema.StringAttribute{
-							MarkdownDescription: "Link type.",
+							MarkdownDescription: "Link Type.",
 							Computed:            true,
 						},
 						"mode": schema.StringAttribute{
@@ -102,7 +102,7 @@ func (d *SpanningTreeDataSource) Schema(ctx context.Context, req datasource.Sche
 							Computed:            true,
 						},
 						"priority": schema.Int64Attribute{
-							MarkdownDescription: "Port priority.",
+							MarkdownDescription: "Port Priority.",
 							Computed:            true,
 						},
 					},

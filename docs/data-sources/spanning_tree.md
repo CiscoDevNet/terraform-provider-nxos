@@ -44,11 +44,11 @@ data "nxos_spanning_tree" "example" {
 
 Read-Only:
 
-- `bpdu_filter` (String) BPDU filter mode.
-- `bpdu_guard` (String) BPDU guard mode.
-- `cost` (Number) Port path cost.
-- `guard` (String) Guard mode.
+- `bpdu_filter` (String) bpdufilter mode.
+- `bpdu_guard` (String) Guard Mode.
+- `cost` (Number) Port Path Cost.
+- `guard` (String) Guard Mode.
 - `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
-- `link_type` (String) Link type.
+- `link_type` (String) Link Type.
 - `mode` (String) Port mode.
-- `priority` (Number) Port priority.
+- `priority` (Number) Port Priority.

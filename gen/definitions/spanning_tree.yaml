@@ -36,8 +36,7 @@ child_classes:
               - default
               - enable
               - disable
-            default_value: default
-            description: "BPDU filter mode."
+            description: "bpdufilter mode."
             example: enable
           - nxos_name: bpduguard
             tf_name: bpdu_guard
@@ -46,16 +45,14 @@ child_classes:
               - default
               - enable
               - disable
-            default_value: default
-            description: "BPDU guard mode."
+            description: "Guard Mode."
             example: enable
           - nxos_name: cost
             tf_name: cost
             type: Int64
             min_int: 0
             max_int: 200000000
-            default_value: 0
-            description: "Port path cost."
+            description: "Port Path Cost."
             example: 100
           - nxos_name: guard
             tf_name: guard
@@ -65,8 +62,7 @@ child_classes:
               - root
               - loop
               - none
-            default_value: default
-            description: "Guard mode."
+            description: "Guard Mode."
             example: root
           - nxos_name: linkType
             tf_name: link_type
@@ -75,8 +71,7 @@ child_classes:
               - auto
               - p2p
               - shared
-            default_value: auto
-            description: "Link type."
+            description: "Link Type."
             example: p2p
           - nxos_name: mode
             tf_name: mode
@@ -87,7 +82,6 @@ child_classes:
               - network
               - normal
               - trunk
-            default_value: default
             description: "Port mode."
             example: edge
           - nxos_name: priority
@@ -95,6 +89,5 @@ child_classes:
             type: Int64
             min_int: 0
             max_int: 224
-            default_value: 128
-            description: "Port priority."
+            description: "Port Priority."
             example: 200

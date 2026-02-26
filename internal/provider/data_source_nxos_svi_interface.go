@@ -73,7 +73,7 @@ func (d *SVIInterfaceDataSource) Schema(ctx context.Context, req datasource.Sche
 				Required:            true,
 			},
 			"admin_state": schema.StringAttribute{
-				MarkdownDescription: "Administrative port state.",
+				MarkdownDescription: "Administrative state.",
 				Computed:            true,
 			},
 			"bandwidth": schema.Int64Attribute{
@@ -85,15 +85,15 @@ func (d *SVIInterfaceDataSource) Schema(ctx context.Context, req datasource.Sche
 				Computed:            true,
 			},
 			"description": schema.StringAttribute{
-				MarkdownDescription: "Interface description.",
+				MarkdownDescription: "Tunnel Description.",
 				Computed:            true,
 			},
 			"medium": schema.StringAttribute{
-				MarkdownDescription: "The administrative port medium type.",
+				MarkdownDescription: "Indicates the administrative port medium type.",
 				Computed:            true,
 			},
 			"mtu": schema.Int64Attribute{
-				MarkdownDescription: "Administrative port MTU.",
+				MarkdownDescription: "The administrative MTU port on the aggregated interface.",
 				Computed:            true,
 			},
 			"vrf_dn": schema.StringAttribute{

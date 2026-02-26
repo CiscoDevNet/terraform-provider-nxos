@@ -40,11 +40,11 @@ data "nxos_svi_interface" "example" {
 
 ### Read-Only
 
-- `admin_state` (String) Administrative port state.
+- `admin_state` (String) Administrative state.
 - `bandwidth` (Number) Specifies the administrative port bandwidth.
 - `delay` (Number) Specifies the administrative port delay.
-- `description` (String) Interface description.
+- `description` (String) Tunnel Description.
 - `id` (String) The distinguished name of the object.
-- `medium` (String) The administrative port medium type.
-- `mtu` (Number) Administrative port MTU.
+- `medium` (String) Indicates the administrative port medium type.
+- `mtu` (Number) The administrative MTU port on the aggregated interface.
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.

@@ -18,11 +18,10 @@ attributes:
   - nxos_name: adminSt
     tf_name: admin_state
     type: String
-    description: 'Administrative port state.'
+    description: 'Administrative state.'
     enum_values:
-      - up
       - down
-    default_value: up
+      - up
     example: down
   - nxos_name: bw
     tf_name: bandwidth
@@ -30,7 +29,6 @@ attributes:
     description: 'Specifies the administrative port bandwidth.'
     min_int: 1
     max_int: 400000000
-    default_value: 1000000
     example: 1000
   - nxos_name: delay
     tf_name: delay
@@ -38,29 +36,26 @@ attributes:
     description: 'Specifies the administrative port delay.'
     min_int: 1
     max_int: 16777215
-    default_value: 1
     example: 10
   - nxos_name: descr
     tf_name: description
     type: String
-    description: 'Interface description.'
+    description: 'Tunnel Description.'
     example: My Description
   - nxos_name: medium
     tf_name: medium
     type: String
-    description: 'The administrative port medium type.'
+    description: 'Indicates the administrative port medium type.'
     enum_values:
       - bcast
       - p2p
-    default_value: bcast
     example: bcast
   - nxos_name: mtu
     tf_name: mtu
     type: Int64
-    description: 'Administrative port MTU.'
-    min_int: 576
+    description: 'The administrative MTU port on the aggregated interface.'
+    min_int: 64
     max_int: 9216
-    default_value: 1500
     example: 9216
 child_classes:
   - class_name: nwRtVrfMbr

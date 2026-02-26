@@ -32,9 +32,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -89,52 +87,42 @@ func (r *SVIInterfacesResource) Schema(ctx context.Context, req resource.SchemaR
 							Required:            true,
 						},
 						"admin_state": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Administrative port state.").AddStringEnumDescription("up", "down").AddDefaultValueDescription("up").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("down", "up").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("up"),
 							Validators: []validator.String{
-								stringvalidator.OneOf("up", "down"),
+								stringvalidator.OneOf("down", "up"),
 							},
 						},
 						"bandwidth": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specifies the administrative port bandwidth.").AddIntegerRangeDescription(1, 400000000).AddDefaultValueDescription("1000000").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies the administrative port bandwidth.").AddIntegerRangeDescription(1, 400000000).String,
 							Optional:            true,
-							Computed:            true,
-							Default:             int64default.StaticInt64(1000000),
 							Validators: []validator.Int64{
 								int64validator.Between(1, 400000000),
 							},
 						},
 						"delay": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specifies the administrative port delay.").AddIntegerRangeDescription(1, 16777215).AddDefaultValueDescription("1").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies the administrative port delay.").AddIntegerRangeDescription(1, 16777215).String,
 							Optional:            true,
-							Computed:            true,
-							Default:             int64default.StaticInt64(1),
 							Validators: []validator.Int64{
 								int64validator.Between(1, 16777215),
 							},
 						},
 						"description": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Interface description.").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Tunnel Description.").String,
 							Optional:            true,
 						},
 						"medium": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("The administrative port medium type.").AddStringEnumDescription("bcast", "p2p").AddDefaultValueDescription("bcast").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Indicates the administrative port medium type.").AddStringEnumDescription("bcast", "p2p").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("bcast"),
 							Validators: []validator.String{
 								stringvalidator.OneOf("bcast", "p2p"),
 							},
 						},
 						"mtu": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Administrative port MTU.").AddIntegerRangeDescription(576, 9216).AddDefaultValueDescription("1500").String,
+							MarkdownDescription: helpers.NewAttributeDescription("The administrative MTU port on the aggregated interface.").AddIntegerRangeDescription(64, 9216).String,
 							Optional:            true,
-							Computed:            true,
-							Default:             int64default.StaticInt64(1500),
 							Validators: []validator.Int64{
-								int64validator.Between(576, 9216),
+								int64validator.Between(64, 9216),
 							},
 						},
 						"vrf_dn": schema.StringAttribute{

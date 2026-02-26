@@ -53,22 +53,17 @@ Required:
 
 Optional:
 
-- `admin_state` (String) Administrative port state.
-  - Choices: `up`, `down`
-  - Default value: `up`
+- `admin_state` (String) Administrative state.
+  - Choices: `down`, `up`
 - `bandwidth` (Number) Specifies the administrative port bandwidth.
   - Range: `1`-`400000000`
-  - Default value: `1000000`
 - `delay` (Number) Specifies the administrative port delay.
   - Range: `1`-`16777215`
-  - Default value: `1`
-- `description` (String) Interface description.
-- `medium` (String) The administrative port medium type.
+- `description` (String) Tunnel Description.
+- `medium` (String) Indicates the administrative port medium type.
   - Choices: `bcast`, `p2p`
-  - Default value: `bcast`
-- `mtu` (Number) Administrative port MTU.
-  - Range: `576`-`9216`
-  - Default value: `1500`
+- `mtu` (Number) The administrative MTU port on the aggregated interface.
+  - Range: `64`-`9216`
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.
 
 ## Import

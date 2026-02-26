@@ -63,7 +63,7 @@ func TestAccDataSourceNxosIPv4(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosIPv4Config(),
+				Config: testAccDataSourceNxosIPv4PrerequisitesConfig + testAccDataSourceNxosIPv4Config(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -73,6 +73,16 @@ func TestAccDataSourceNxosIPv4(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccDataSourceNxosIPv4PrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/intf/phys-[eth1/10]"
+  class_name = "l1PhysIf"
+  content = {
+      layer = "Layer3"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -106,6 +116,7 @@ func testAccDataSourceNxosIPv4Config() string {
 	config += `			}]` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

@@ -75,7 +75,7 @@ resource "nxos_ipv4" "example" {
 
 Required:
 
-- `name` (String) VRF name.
+- `name` (String) The name of the object.
 
 Optional:
 
@@ -94,30 +94,24 @@ Optional:
 - `addresses` (Attributes List) List of IPv4 interface addresses. (see [below for nested schema](#nestedatt--vrfs--interfaces--addresses))
 - `drop_glean` (String) ip drop-glean enabled/disabled.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
-- `forward` (String) ip forward enabled/disabled.
+- `forward` (String) IP forward.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
 - `unnumbered` (String) IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.
-  - Default value: `unspecified`
-- `urpf` (String) URPF (unicast Reverse Path Forwarding).
+- `urpf` (String) URPF Info.
   - Choices: `disabled`, `strict`, `loose`, `loose-allow-default`, `strict-allow-vni-hosts`
-  - Default value: `disabled`
 
 <a id="nestedatt--vrfs--interfaces--addresses"></a>
 ### Nested Schema for `vrfs.interfaces.addresses`
 
 Required:
 
-- `address` (String) IPv4 address.
+- `address` (String) Address.
 
 Optional:
 
-- `tag` (Number) Route Tag
-  - Default value: `0`
-- `type` (String) Address type.
+- `tag` (Number) Route Tag.
+- `type` (String) Type.
   - Choices: `primary`, `secondary`
-  - Default value: `primary`
 
 
 
@@ -134,13 +128,13 @@ Required:
 
 Required:
 
-- `address` (String) Nexthop address.
-- `interface_id` (String) Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.
+- `address` (String) Nexthop Address.
+- `interface_id` (String) Nexthop Interface. Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.
 - `vrf_name` (String) Nexthop VRF.
 
 Optional:
 
-- `description` (String) Description.
+- `description` (String) Description of the specified attribute.
 - `object` (Number) Object to be tracked.
   - Range: `0`-`4294967295`
 - `preference` (Number) Route preference.

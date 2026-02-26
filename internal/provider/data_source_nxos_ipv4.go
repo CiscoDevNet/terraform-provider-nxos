@@ -74,7 +74,7 @@ func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							MarkdownDescription: "VRF name.",
+							MarkdownDescription: "The name of the object.",
 							Computed:            true,
 						},
 						"static_routes": schema.ListNestedAttribute{
@@ -92,11 +92,11 @@ func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"interface_id": schema.StringAttribute{
-													MarkdownDescription: "Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.",
+													MarkdownDescription: "Nexthop Interface. Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.",
 													Computed:            true,
 												},
 												"address": schema.StringAttribute{
-													MarkdownDescription: "Nexthop address.",
+													MarkdownDescription: "Nexthop Address.",
 													Computed:            true,
 												},
 												"vrf_name": schema.StringAttribute{
@@ -104,7 +104,7 @@ func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 													Computed:            true,
 												},
 												"description": schema.StringAttribute{
-													MarkdownDescription: "Description.",
+													MarkdownDescription: "Description of the specified attribute.",
 													Computed:            true,
 												},
 												"object": schema.Int64Attribute{
@@ -139,7 +139,7 @@ func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										Computed:            true,
 									},
 									"forward": schema.StringAttribute{
-										MarkdownDescription: "ip forward enabled/disabled.",
+										MarkdownDescription: "IP forward.",
 										Computed:            true,
 									},
 									"unnumbered": schema.StringAttribute{
@@ -147,7 +147,7 @@ func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										Computed:            true,
 									},
 									"urpf": schema.StringAttribute{
-										MarkdownDescription: "URPF (unicast Reverse Path Forwarding).",
+										MarkdownDescription: "URPF Info.",
 										Computed:            true,
 									},
 									"addresses": schema.ListNestedAttribute{
@@ -156,15 +156,15 @@ func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"address": schema.StringAttribute{
-													MarkdownDescription: "IPv4 address.",
+													MarkdownDescription: "Address.",
 													Computed:            true,
 												},
 												"type": schema.StringAttribute{
-													MarkdownDescription: "Address type.",
+													MarkdownDescription: "Type.",
 													Computed:            true,
 												},
 												"tag": schema.Int64Attribute{
-													MarkdownDescription: "Route Tag",
+													MarkdownDescription: "Route Tag.",
 													Computed:            true,
 												},
 											},

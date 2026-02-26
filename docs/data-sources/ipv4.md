@@ -49,7 +49,7 @@ data "nxos_ipv4" "example" {
 Read-Only:
 
 - `interfaces` (Attributes List) List of IPv4 interfaces. (see [below for nested schema](#nestedatt--vrfs--interfaces))
-- `name` (String) VRF name.
+- `name` (String) The name of the object.
 - `static_routes` (Attributes List) List of IPv4 static routes. (see [below for nested schema](#nestedatt--vrfs--static_routes))
 
 <a id="nestedatt--vrfs--interfaces"></a>
@@ -59,19 +59,19 @@ Read-Only:
 
 - `addresses` (Attributes List) List of IPv4 interface addresses. (see [below for nested schema](#nestedatt--vrfs--interfaces--addresses))
 - `drop_glean` (String) ip drop-glean enabled/disabled.
-- `forward` (String) ip forward enabled/disabled.
+- `forward` (String) IP forward.
 - `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `unnumbered` (String) IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.
-- `urpf` (String) URPF (unicast Reverse Path Forwarding).
+- `urpf` (String) URPF Info.
 
 <a id="nestedatt--vrfs--interfaces--addresses"></a>
 ### Nested Schema for `vrfs.interfaces.addresses`
 
 Read-Only:
 
-- `address` (String) IPv4 address.
-- `tag` (Number) Route Tag
-- `type` (String) Address type.
+- `address` (String) Address.
+- `tag` (Number) Route Tag.
+- `type` (String) Type.
 
 
 
@@ -88,9 +88,9 @@ Read-Only:
 
 Read-Only:
 
-- `address` (String) Nexthop address.
-- `description` (String) Description.
-- `interface_id` (String) Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.
+- `address` (String) Nexthop Address.
+- `description` (String) Description of the specified attribute.
+- `interface_id` (String) Nexthop Interface. Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.
 - `object` (Number) Object to be tracked.
 - `preference` (Number) Route preference.
 - `tag` (Number) Tag value.

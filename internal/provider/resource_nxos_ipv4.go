@@ -32,9 +32,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -85,7 +83,7 @@ func (r *IPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
+							MarkdownDescription: helpers.NewAttributeDescription("The name of the object.").String,
 							Required:            true,
 							PlanModifiers: []planmodifier.String{
 								stringplanmodifier.RequiresReplace(),
@@ -109,14 +107,14 @@ func (r *IPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"interface_id": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.").String,
+													MarkdownDescription: helpers.NewAttributeDescription("Nexthop Interface. Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.").String,
 													Required:            true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplace(),
 													},
 												},
 												"address": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Nexthop address.").String,
+													MarkdownDescription: helpers.NewAttributeDescription("Nexthop Address.").String,
 													Required:            true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplace(),
@@ -130,7 +128,7 @@ func (r *IPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 													},
 												},
 												"description": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
+													MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
 													Optional:            true,
 												},
 												"object": schema.Int64Attribute{
@@ -173,34 +171,26 @@ func (r *IPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 										},
 									},
 									"drop_glean": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("ip drop-glean enabled/disabled.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+										MarkdownDescription: helpers.NewAttributeDescription("ip drop-glean enabled/disabled.").AddStringEnumDescription("enabled", "disabled").String,
 										Optional:            true,
-										Computed:            true,
-										Default:             stringdefault.StaticString("disabled"),
 										Validators: []validator.String{
 											stringvalidator.OneOf("enabled", "disabled"),
 										},
 									},
 									"forward": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("ip forward enabled/disabled.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+										MarkdownDescription: helpers.NewAttributeDescription("IP forward.").AddStringEnumDescription("enabled", "disabled").String,
 										Optional:            true,
-										Computed:            true,
-										Default:             stringdefault.StaticString("disabled"),
 										Validators: []validator.String{
 											stringvalidator.OneOf("enabled", "disabled"),
 										},
 									},
 									"unnumbered": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.").AddDefaultValueDescription("unspecified").String,
+										MarkdownDescription: helpers.NewAttributeDescription("IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 										Optional:            true,
-										Computed:            true,
-										Default:             stringdefault.StaticString("unspecified"),
 									},
 									"urpf": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("URPF (unicast Reverse Path Forwarding).").AddStringEnumDescription("disabled", "strict", "loose", "loose-allow-default", "strict-allow-vni-hosts").AddDefaultValueDescription("disabled").String,
+										MarkdownDescription: helpers.NewAttributeDescription("URPF Info.").AddStringEnumDescription("disabled", "strict", "loose", "loose-allow-default", "strict-allow-vni-hosts").String,
 										Optional:            true,
-										Computed:            true,
-										Default:             stringdefault.StaticString("disabled"),
 										Validators: []validator.String{
 											stringvalidator.OneOf("disabled", "strict", "loose", "loose-allow-default", "strict-allow-vni-hosts"),
 										},
@@ -211,26 +201,22 @@ func (r *IPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"address": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("IPv4 address.").String,
+													MarkdownDescription: helpers.NewAttributeDescription("Address.").String,
 													Required:            true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplace(),
 													},
 												},
 												"type": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Address type.").AddStringEnumDescription("primary", "secondary").AddDefaultValueDescription("primary").String,
+													MarkdownDescription: helpers.NewAttributeDescription("Type.").AddStringEnumDescription("primary", "secondary").String,
 													Optional:            true,
-													Computed:            true,
-													Default:             stringdefault.StaticString("primary"),
 													Validators: []validator.String{
 														stringvalidator.OneOf("primary", "secondary"),
 													},
 												},
 												"tag": schema.Int64Attribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Route Tag").AddDefaultValueDescription("0").String,
+													MarkdownDescription: helpers.NewAttributeDescription("Route Tag.").String,
 													Optional:            true,
-													Computed:            true,
-													Default:             int64default.StaticInt64(0),
 												},
 											},
 										},

@@ -61,7 +61,7 @@ func TestAccNxosIPv4(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosIPv4Config_all(),
+				Config: testAccNxosIPv4PrerequisitesConfig + testAccNxosIPv4Config_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -93,12 +93,23 @@ func nxosIPv4ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccNxosIPv4PrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/intf/phys-[eth1/10]"
+  class_name = "l1PhysIf"
+  content = {
+      layer = "Layer3"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosIPv4Config_minimum() string {
 	config := `resource "nxos_ipv4" "test" {` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -135,6 +146,7 @@ func testAccNxosIPv4Config_all() string {
 	config += `			}]` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

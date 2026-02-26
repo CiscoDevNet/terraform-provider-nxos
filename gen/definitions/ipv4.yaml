@@ -25,7 +25,7 @@ child_classes:
             tf_name: name
             type: String
             id: true
-            description: 'VRF name.'
+            description: 'The name of the object.'
             example: VRF1
         child_classes:
           - class_name: ipv4Route
@@ -54,13 +54,13 @@ child_classes:
                     tf_name: interface_id
                     type: String
                     id: true
-                    description: 'Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.'
+                    description: 'Nexthop Interface. Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.'
                     example: unspecified
                   - nxos_name: nhAddr
                     tf_name: address
                     type: String
                     id: true
-                    description: 'Nexthop address.'
+                    description: 'Nexthop Address.'
                     example: 1.2.3.4
                   - nxos_name: nhVrf
                     tf_name: vrf_name
@@ -71,7 +71,7 @@ child_classes:
                   - nxos_name: descr
                     tf_name: description
                     type: String
-                    description: 'Description.'
+                    description: 'Description of the specified attribute.'
                     example: My Description
                   - nxos_name: object
                     tf_name: object
@@ -114,34 +114,30 @@ child_classes:
                 enum_values:
                   - enabled
                   - disabled
-                default_value: disabled
                 example: disabled
               - nxos_name: forward
                 tf_name: forward
                 type: String
-                description: 'ip forward enabled/disabled.'
+                description: 'IP forward.'
                 enum_values:
                   - enabled
                   - disabled
-                default_value: disabled
                 example: disabled
               - nxos_name: unnumbered
                 tf_name: unnumbered
                 type: String
                 description: 'IP unnumbered. Reference to interface must match first field in the output of `show intf brief`. Example: `eth1/1`.'
-                default_value: unspecified
                 example: unspecified
               - nxos_name: urpf
                 tf_name: urpf
                 type: String
-                description: 'URPF (unicast Reverse Path Forwarding).'
+                description: 'URPF Info.'
                 enum_values:
                   - disabled
                   - strict
                   - loose
                   - loose-allow-default
                   - strict-allow-vni-hosts
-                default_value: disabled
                 example: disabled
             child_classes:
               - class_name: ipv4Addr
@@ -155,20 +151,24 @@ child_classes:
                     tf_name: address
                     type: String
                     id: true
-                    description: 'IPv4 address.'
+                    description: 'Address.'
                     example: '24.63.46.49/30'
                   - nxos_name: type
                     tf_name: type
                     type: String
-                    description: 'Address type.'
+                    description: 'Type.'
                     enum_values:
                       - primary
                       - secondary
-                    default_value: 'primary'
                     example: 'primary'
                   - nxos_name: tag
                     tf_name: tag
                     type: Int64
-                    description: 'Route Tag'
-                    default_value: 0
+                    description: 'Route Tag.'
                     example: 1234
+test_prerequisites:
+  - dn: sys/intf/phys-[eth1/10]
+    class_name: l1PhysIf
+    attributes:
+      - name: layer
+        value: Layer3

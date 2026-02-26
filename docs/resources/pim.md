@@ -78,13 +78,11 @@ resource "nxos_pim" "example" {
 
 ### Optional
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `device` (String) A device name from the provider configuration.
-- `instance_admin_state` (String) Administrative state.
+- `instance_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `vrfs` (Attributes List) List of PIM VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
 
 ### Read-Only
@@ -100,25 +98,21 @@ Required:
 
 Optional:
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) Admin State.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
-- `anycast_rp_local_interface` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `anycast_rp_local_interface` (String) Local Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `anycast_rp_peers` (Attributes List) List of PIM Anycast RP peer configurations. (see [below for nested schema](#nestedatt--vrfs--anycast_rp_peers))
-- `anycast_rp_source_interface` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `anycast_rp_source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `bfd` (Boolean) BFD.
-  - Default value: `false`
 - `interfaces` (Attributes List) List of PIM interface configurations. (see [below for nested schema](#nestedatt--vrfs--interfaces))
 - `ssm_policy_name` (String) Policy name.
-- `ssm_range_group_list_1` (String) Group list 1.
-- `ssm_range_group_list_2` (String) Group list 2.
-  - Default value: `0.0.0.0`
-- `ssm_range_group_list_3` (String) Group list 3.
-- `ssm_range_group_list_4` (String) Group list 4.
-- `ssm_range_none` (Boolean) Exclude standard SSM range (232.0.0.0/8).
-  - Default value: `false`
-- `ssm_range_prefix_list` (String) Prefix list name.
-- `ssm_range_route_map` (String) Route map name.
+- `ssm_range_group_list_1` (String) Group List.
+- `ssm_range_group_list_2` (String) Group List.
+- `ssm_range_group_list_3` (String) Group List.
+- `ssm_range_group_list_4` (String) Group List.
+- `ssm_range_none` (Boolean) SSM None. Exclude standard SSM range (232.0.0.0/8).
+- `ssm_range_prefix_list` (String) Prefix List.
+- `ssm_range_route_map` (String) Route Map.
 - `static_rp_policy_name` (String) Policy name.
 - `static_rps` (Attributes List) List of PIM Static RP configurations. (see [below for nested schema](#nestedatt--vrfs--static_rps))
 
@@ -127,8 +121,8 @@ Optional:
 
 Required:
 
-- `address` (String) Anycast RP address.
-- `rp_set_address` (String) RP set address.
+- `address` (String) Address.
+- `rp_set_address` (String) IP Address of node performing the function.
 
 
 <a id="nestedatt--vrfs--interfaces"></a>
@@ -140,19 +134,14 @@ Required:
 
 Optional:
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
-- `bfd` (String) BFD.
+- `bfd` (String) BFD Instance State.
   - Choices: `none`, `enabled`, `disabled`
-  - Default value: `none`
-- `dr_priority` (Number) Designated Router priority level.
+- `dr_priority` (Number) Designated Router Priority level.
   - Range: `1`-`4294967295`
-  - Default value: `1`
 - `passive` (Boolean) Passive interface.
-  - Default value: `false`
 - `sparse_mode` (Boolean) Sparse mode.
-  - Default value: `false`
 
 
 <a id="nestedatt--vrfs--static_rps"></a>
@@ -171,14 +160,12 @@ Optional:
 
 Required:
 
-- `address` (String) Group list address information.
+- `address` (String) Group List address information.
 
 Optional:
 
 - `bidir` (Boolean) Flag to treat Group Ranges as BiDir.
-  - Default value: `false`
 - `override` (Boolean) Flag to override RP preference to use Static over Dynamic RP.
-  - Default value: `false`
 
 ## Import
 

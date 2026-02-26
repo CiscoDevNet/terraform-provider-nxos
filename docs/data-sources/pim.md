@@ -44,9 +44,9 @@ data "nxos_pim" "example" {
 
 ### Read-Only
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) The administrative state of the object or policy.
 - `id` (String) The distinguished name of the object.
-- `instance_admin_state` (String) Administrative state.
+- `instance_admin_state` (String) The administrative state of the object or policy.
 - `vrfs` (Attributes List) List of PIM VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
 
 <a id="nestedatt--vrfs"></a>
@@ -54,21 +54,21 @@ data "nxos_pim" "example" {
 
 Read-Only:
 
-- `admin_state` (String) Administrative state.
-- `anycast_rp_local_interface` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `admin_state` (String) Admin State.
+- `anycast_rp_local_interface` (String) Local Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `anycast_rp_peers` (Attributes List) List of PIM Anycast RP peer configurations. (see [below for nested schema](#nestedatt--vrfs--anycast_rp_peers))
-- `anycast_rp_source_interface` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `anycast_rp_source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `bfd` (Boolean) BFD.
 - `interfaces` (Attributes List) List of PIM interface configurations. (see [below for nested schema](#nestedatt--vrfs--interfaces))
 - `name` (String) VRF name.
 - `ssm_policy_name` (String) Policy name.
-- `ssm_range_group_list_1` (String) Group list 1.
-- `ssm_range_group_list_2` (String) Group list 2.
-- `ssm_range_group_list_3` (String) Group list 3.
-- `ssm_range_group_list_4` (String) Group list 4.
-- `ssm_range_none` (Boolean) Exclude standard SSM range (232.0.0.0/8).
-- `ssm_range_prefix_list` (String) Prefix list name.
-- `ssm_range_route_map` (String) Route map name.
+- `ssm_range_group_list_1` (String) Group List.
+- `ssm_range_group_list_2` (String) Group List.
+- `ssm_range_group_list_3` (String) Group List.
+- `ssm_range_group_list_4` (String) Group List.
+- `ssm_range_none` (Boolean) SSM None. Exclude standard SSM range (232.0.0.0/8).
+- `ssm_range_prefix_list` (String) Prefix List.
+- `ssm_range_route_map` (String) Route Map.
 - `static_rp_policy_name` (String) Policy name.
 - `static_rps` (Attributes List) List of PIM Static RP configurations. (see [below for nested schema](#nestedatt--vrfs--static_rps))
 
@@ -77,8 +77,8 @@ Read-Only:
 
 Read-Only:
 
-- `address` (String) Anycast RP address.
-- `rp_set_address` (String) RP set address.
+- `address` (String) Address.
+- `rp_set_address` (String) IP Address of node performing the function.
 
 
 <a id="nestedatt--vrfs--interfaces"></a>
@@ -86,9 +86,9 @@ Read-Only:
 
 Read-Only:
 
-- `admin_state` (String) Administrative state.
-- `bfd` (String) BFD.
-- `dr_priority` (Number) Designated Router priority level.
+- `admin_state` (String) The administrative state of the object or policy.
+- `bfd` (String) BFD Instance State.
+- `dr_priority` (Number) Designated Router Priority level.
 - `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `passive` (Boolean) Passive interface.
 - `sparse_mode` (Boolean) Sparse mode.
@@ -107,6 +107,6 @@ Read-Only:
 
 Read-Only:
 
-- `address` (String) Group list address information.
+- `address` (String) Group List address information.
 - `bidir` (Boolean) Flag to treat Group Ranges as BiDir.
 - `override` (Boolean) Flag to override RP preference to use Static over Dynamic RP.

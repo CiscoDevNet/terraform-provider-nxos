@@ -69,11 +69,11 @@ func (d *PIMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				Computed:            true,
 			},
 			"admin_state": schema.StringAttribute{
-				MarkdownDescription: "Administrative state.",
+				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
 			"instance_admin_state": schema.StringAttribute{
-				MarkdownDescription: "Administrative state.",
+				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
 			"vrfs": schema.ListNestedAttribute{
@@ -86,7 +86,7 @@ func (d *PIMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							Computed:            true,
 						},
 						"admin_state": schema.StringAttribute{
-							MarkdownDescription: "Administrative state.",
+							MarkdownDescription: "Admin State.",
 							Computed:            true,
 						},
 						"bfd": schema.BoolAttribute{
@@ -103,15 +103,15 @@ func (d *PIMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										Computed:            true,
 									},
 									"admin_state": schema.StringAttribute{
-										MarkdownDescription: "Administrative state.",
+										MarkdownDescription: "The administrative state of the object or policy.",
 										Computed:            true,
 									},
 									"bfd": schema.StringAttribute{
-										MarkdownDescription: "BFD.",
+										MarkdownDescription: "BFD Instance State.",
 										Computed:            true,
 									},
 									"dr_priority": schema.Int64Attribute{
-										MarkdownDescription: "Designated Router priority level.",
+										MarkdownDescription: "Designated Router Priority level.",
 										Computed:            true,
 									},
 									"passive": schema.BoolAttribute{
@@ -130,31 +130,31 @@ func (d *PIMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							Computed:            true,
 						},
 						"ssm_range_group_list_1": schema.StringAttribute{
-							MarkdownDescription: "Group list 1.",
+							MarkdownDescription: "Group List.",
 							Computed:            true,
 						},
 						"ssm_range_group_list_2": schema.StringAttribute{
-							MarkdownDescription: "Group list 2.",
+							MarkdownDescription: "Group List.",
 							Computed:            true,
 						},
 						"ssm_range_group_list_3": schema.StringAttribute{
-							MarkdownDescription: "Group list 3.",
+							MarkdownDescription: "Group List.",
 							Computed:            true,
 						},
 						"ssm_range_group_list_4": schema.StringAttribute{
-							MarkdownDescription: "Group list 4.",
+							MarkdownDescription: "Group List.",
 							Computed:            true,
 						},
 						"ssm_range_prefix_list": schema.StringAttribute{
-							MarkdownDescription: "Prefix list name.",
+							MarkdownDescription: "Prefix List.",
 							Computed:            true,
 						},
 						"ssm_range_route_map": schema.StringAttribute{
-							MarkdownDescription: "Route map name.",
+							MarkdownDescription: "Route Map.",
 							Computed:            true,
 						},
 						"ssm_range_none": schema.BoolAttribute{
-							MarkdownDescription: "Exclude standard SSM range (232.0.0.0/8).",
+							MarkdownDescription: "SSM None. Exclude standard SSM range (232.0.0.0/8).",
 							Computed:            true,
 						},
 						"static_rp_policy_name": schema.StringAttribute{
@@ -176,7 +176,7 @@ func (d *PIMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"address": schema.StringAttribute{
-													MarkdownDescription: "Group list address information.",
+													MarkdownDescription: "Group List address information.",
 													Computed:            true,
 												},
 												"bidir": schema.BoolAttribute{
@@ -194,11 +194,11 @@ func (d *PIMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							},
 						},
 						"anycast_rp_local_interface": schema.StringAttribute{
-							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
+							MarkdownDescription: "Local Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
 							Computed:            true,
 						},
 						"anycast_rp_source_interface": schema.StringAttribute{
-							MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
+							MarkdownDescription: "Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
 							Computed:            true,
 						},
 						"anycast_rp_peers": schema.ListNestedAttribute{
@@ -207,11 +207,11 @@ func (d *PIMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"address": schema.StringAttribute{
-										MarkdownDescription: "Anycast RP address.",
+										MarkdownDescription: "Address.",
 										Computed:            true,
 									},
 									"rp_set_address": schema.StringAttribute{
-										MarkdownDescription: "RP set address.",
+										MarkdownDescription: "IP Address of node performing the function.",
 										Computed:            true,
 									},
 								},

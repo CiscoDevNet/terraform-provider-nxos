@@ -11,11 +11,10 @@ attributes:
   - nxos_name: adminSt
     tf_name: admin_state
     type: String
-    description: 'Administrative state.'
+    description: 'The administrative state of the object or policy.'
     enum_values:
       - enabled
       - disabled
-    default_value: enabled
     example: enabled
 child_classes:
   - class_name: pimInst
@@ -26,11 +25,10 @@ child_classes:
       - nxos_name: adminSt
         tf_name: instance_admin_state
         type: String
-        description: 'Administrative state.'
+        description: 'The administrative state of the object or policy.'
         enum_values:
           - enabled
           - disabled
-        default_value: enabled
         example: enabled
     child_classes:
       - class_name: pimDom
@@ -49,17 +47,15 @@ child_classes:
           - nxos_name: adminSt
             tf_name: admin_state
             type: String
-            description: 'Administrative state.'
+            description: 'Admin State.'
             enum_values:
               - enabled
               - disabled
-            default_value: enabled
             example: enabled
           - nxos_name: bfd
             tf_name: bfd
             type: Bool
             description: 'BFD.'
-            default_value: false
             example: true
         child_classes:
           - class_name: pimIf
@@ -78,41 +74,36 @@ child_classes:
               - nxos_name: adminSt
                 tf_name: admin_state
                 type: String
-                description: 'Administrative state.'
+                description: 'The administrative state of the object or policy.'
                 enum_values:
                   - enabled
                   - disabled
-                default_value: enabled
                 example: enabled
               - nxos_name: bfdInst
                 tf_name: bfd
                 type: String
-                description: 'BFD.'
+                description: 'BFD Instance State.'
                 enum_values:
                   - none
                   - enabled
                   - disabled
-                default_value: none
                 example: enabled
               - nxos_name: drPrio
                 tf_name: dr_priority
                 type: Int64
                 min_int: 1
                 max_int: 4294967295
-                default_value: 1
-                description: 'Designated Router priority level.'
+                description: 'Designated Router Priority level.'
                 example: 10
               - nxos_name: passive
                 tf_name: passive
                 type: Bool
                 description: 'Passive interface.'
-                default_value: false
                 example: false
               - nxos_name: pimSparseMode
                 tf_name: sparse_mode
                 type: Bool
                 description: 'Sparse mode.'
-                default_value: false
                 example: true
           - class_name: pimSSMPatP
             doc_path: Layer%203/pim:SSMPatP/
@@ -137,41 +128,39 @@ child_classes:
                   - nxos_name: grpList
                     tf_name: ssm_range_group_list_1
                     type: String
-                    description: 'Group list 1.'
+                    description: 'Group List.'
                     example: 232.0.0.0/8
                   - nxos_name: grpList1
                     tf_name: ssm_range_group_list_2
                     type: String
-                    description: 'Group list 2.'
-                    default_value: 0.0.0.0
+                    description: 'Group List.'
                     example: 233.0.0.0/8
                   - nxos_name: grpList2
                     tf_name: ssm_range_group_list_3
                     type: String
-                    description: 'Group list 3.'
+                    description: 'Group List.'
                     exclude_test: true
                     example: 0.0.0.0
                   - nxos_name: grpList3
                     tf_name: ssm_range_group_list_4
                     type: String
-                    description: 'Group list 4.'
+                    description: 'Group List.'
                     exclude_test: true
                     example: 0.0.0.0
                   - nxos_name: pfxList
                     tf_name: ssm_range_prefix_list
                     type: String
-                    description: 'Prefix list name.'
+                    description: 'Prefix List.'
                     example: ''
                   - nxos_name: rtMap
                     tf_name: ssm_range_route_map
                     type: String
-                    description: 'Route map name.'
+                    description: 'Route Map.'
                     example: ''
                   - nxos_name: ssmNone
                     tf_name: ssm_range_none
                     type: Bool
-                    description: 'Exclude standard SSM range (232.0.0.0/8).'
-                    default_value: false
+                    description: 'SSM None. Exclude standard SSM range (232.0.0.0/8).'
                     example: false
           - class_name: pimStaticRPP
             doc_path: Layer%203/pim:StaticRPP/
@@ -211,19 +200,17 @@ child_classes:
                         tf_name: address
                         type: String
                         id: true
-                        description: 'Group list address information.'
+                        description: 'Group List address information.'
                         example: 224.0.0.0/4
                       - nxos_name: bidir
                         tf_name: bidir
                         type: Bool
                         description: 'Flag to treat Group Ranges as BiDir.'
-                        default_value: false
                         example: true
                       - nxos_name: override
                         tf_name: override
                         type: Bool
                         description: 'Flag to override RP preference to use Static over Dynamic RP.'
-                        default_value: false
                         example: true
           - class_name: pimAcastRPFuncP
             doc_path: Layer%203/pim:AcastRPFuncP/
@@ -235,12 +222,12 @@ child_classes:
               - nxos_name: localIf
                 tf_name: anycast_rp_local_interface
                 type: String
-                description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+                description: 'Local Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
                 example: eth1/10
               - nxos_name: srcIf
                 tf_name: anycast_rp_source_interface
                 type: String
-                description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+                description: 'Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
                 example: eth1/10
             child_classes:
               - class_name: pimAcastRPPeer
@@ -254,13 +241,13 @@ child_classes:
                     tf_name: address
                     type: String
                     id: true
-                    description: 'Anycast RP address.'
+                    description: 'Address.'
                     example: 10.1.1.1/32
                   - nxos_name: rpSetAddr
                     tf_name: rp_set_address
                     type: String
                     id: true
-                    description: 'RP set address.'
+                    description: 'IP Address of node performing the function.'
                     example: 20.1.1.1/32
 test_prerequisites:
   - dn: sys/intf/phys-[eth1/10]

@@ -103,10 +103,10 @@ func (r *VRFsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"address_family": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Type.").AddStringEnumDescription("ipv4-ucast", "ipv6-ucast").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Type.").AddStringEnumDescription("ipv4-ucast", "ipv4-mcast", "vpnv4-ucast", "ipv6-ucast", "ipv6-mcast", "vpnv6-ucast", "vpnv6-mcast", "l2vpn-evpn", "ipv4-lucast", "ipv6-lucast", "lnkstate", "ipv4-mvpn", "ipv6-mvpn", "l2vpn-vpls", "ipv4-mdt").String,
 										Required:            true,
 										Validators: []validator.String{
-											stringvalidator.OneOf("ipv4-ucast", "ipv6-ucast"),
+											stringvalidator.OneOf("ipv4-ucast", "ipv4-mcast", "vpnv4-ucast", "ipv6-ucast", "ipv6-mcast", "vpnv6-ucast", "vpnv6-mcast", "l2vpn-evpn", "ipv4-lucast", "ipv6-lucast", "lnkstate", "ipv4-mvpn", "ipv6-mvpn", "l2vpn-vpls", "ipv4-mdt"),
 										},
 									},
 									"route_target_address_families": schema.ListNestedAttribute{
@@ -115,10 +115,10 @@ func (r *VRFsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"route_target_address_family": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Type.").AddStringEnumDescription("ipv4-ucast", "ipv6-ucast", "l2vpn-evpn").String,
+													MarkdownDescription: helpers.NewAttributeDescription("Type.").AddStringEnumDescription("ipv4-ucast", "ipv4-mcast", "vpnv4-ucast", "ipv6-ucast", "ipv6-mcast", "vpnv6-ucast", "vpnv6-mcast", "l2vpn-evpn", "ipv4-lucast", "ipv6-lucast", "lnkstate", "ipv4-mvpn", "ipv6-mvpn", "l2vpn-vpls", "ipv4-mdt").String,
 													Required:            true,
 													Validators: []validator.String{
-														stringvalidator.OneOf("ipv4-ucast", "ipv6-ucast", "l2vpn-evpn"),
+														stringvalidator.OneOf("ipv4-ucast", "ipv4-mcast", "vpnv4-ucast", "ipv6-ucast", "ipv6-mcast", "vpnv6-ucast", "vpnv6-mcast", "l2vpn-evpn", "ipv4-lucast", "ipv6-lucast", "lnkstate", "ipv4-mvpn", "ipv6-mvpn", "l2vpn-vpls", "ipv4-mdt"),
 													},
 												},
 												"route_target_directions": schema.ListNestedAttribute{

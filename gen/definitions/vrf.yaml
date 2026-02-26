@@ -53,7 +53,20 @@ child_classes:
             description: 'Type.'
             enum_values:
               - ipv4-ucast
+              - ipv4-mcast
+              - vpnv4-ucast
               - ipv6-ucast
+              - ipv6-mcast
+              - vpnv6-ucast
+              - vpnv6-mcast
+              - l2vpn-evpn
+              - ipv4-lucast
+              - ipv6-lucast
+              - lnkstate
+              - ipv4-mvpn
+              - ipv6-mvpn
+              - l2vpn-vpls
+              - ipv4-mdt
             example: ipv4-ucast
         child_classes:
           - class_name: rtctrlAfCtrl
@@ -70,8 +83,20 @@ child_classes:
                 description: 'Type.'
                 enum_values:
                   - ipv4-ucast
+                  - ipv4-mcast
+                  - vpnv4-ucast
                   - ipv6-ucast
+                  - ipv6-mcast
+                  - vpnv6-ucast
+                  - vpnv6-mcast
                   - l2vpn-evpn
+                  - ipv4-lucast
+                  - ipv6-lucast
+                  - lnkstate
+                  - ipv4-mvpn
+                  - ipv6-mvpn
+                  - l2vpn-vpls
+                  - ipv4-mdt
                 example: ipv4-ucast
             child_classes:
               - class_name: rtctrlRttP

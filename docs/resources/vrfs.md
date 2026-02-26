@@ -60,7 +60,7 @@ Optional:
 Required:
 
 - `address_family` (String) Type.
-  - Choices: `ipv4-ucast`, `ipv6-ucast`
+  - Choices: `ipv4-ucast`, `ipv4-mcast`, `vpnv4-ucast`, `ipv6-ucast`, `ipv6-mcast`, `vpnv6-ucast`, `vpnv6-mcast`, `l2vpn-evpn`, `ipv4-lucast`, `ipv6-lucast`, `lnkstate`, `ipv4-mvpn`, `ipv6-mvpn`, `l2vpn-vpls`, `ipv4-mdt`
 
 Optional:
 
@@ -72,7 +72,7 @@ Optional:
 Required:
 
 - `route_target_address_family` (String) Type.
-  - Choices: `ipv4-ucast`, `ipv6-ucast`, `l2vpn-evpn`
+  - Choices: `ipv4-ucast`, `ipv4-mcast`, `vpnv4-ucast`, `ipv6-ucast`, `ipv6-mcast`, `vpnv6-ucast`, `vpnv6-mcast`, `l2vpn-evpn`, `ipv4-lucast`, `ipv6-lucast`, `lnkstate`, `ipv4-mvpn`, `ipv6-mvpn`, `l2vpn-vpls`, `ipv4-mdt`
 
 Optional:
 

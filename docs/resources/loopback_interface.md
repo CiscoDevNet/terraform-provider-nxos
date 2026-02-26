@@ -40,8 +40,7 @@ resource "nxos_loopback_interface" "example" {
 ### Optional
 
 - `admin_state` (String) Administrative state.
-  - Choices: `up`, `down`
-  - Default value: `up`
+  - Choices: `down`, `up`
 - `description` (String) Interface description.
 - `device` (String) A device name from the provider configuration.
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.

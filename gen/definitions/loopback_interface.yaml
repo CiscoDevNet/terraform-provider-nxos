@@ -20,9 +20,8 @@ attributes:
     type: String
     description: 'Administrative state.'
     enum_values:
-      - up
       - down
-    default_value: up
+      - up
     example: down
   - nxos_name: descr
     tf_name: description

@@ -50,8 +50,7 @@ Required:
 Optional:
 
 - `admin_state` (String) Administrative state.
-  - Choices: `up`, `down`
-  - Default value: `up`
+  - Choices: `down`, `up`
 - `description` (String) Interface description.
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.
 

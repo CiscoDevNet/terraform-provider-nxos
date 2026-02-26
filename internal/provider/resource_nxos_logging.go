@@ -32,7 +32,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -78,19 +77,15 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 			},
 			"all": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("All logging level.").AddStringEnumDescription("unspecified", "enableall", "disableall").AddDefaultValueDescription("unspecified").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Logging level all state disabled/enabled.").AddStringEnumDescription("unspecified", "enableall", "disableall").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("unspecified"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("unspecified", "enableall", "disableall"),
 				},
 			},
 			"level": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Severity level.").AddStringEnumDescription("emergencies", "alerts", "critical", "errors", "warnings", "notifications", "information", "debugging").AddDefaultValueDescription("notifications").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Logging severity level for all the facilites.").AddStringEnumDescription("emergencies", "alerts", "critical", "errors", "warnings", "notifications", "information", "debugging").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("notifications"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("emergencies", "alerts", "critical", "errors", "warnings", "notifications", "information", "debugging"),
 				},
@@ -101,7 +96,7 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Logging facility name.").AddStringEnumDescription("spanning-tree", "session-mgr", "radius", "security", "plugin", "cdp", "bootvar", "aaa", "interface-vlan", "vshd", "cfs", "monitor", "ntp", "acllog", "track", "pltfm_config", "lacp").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Facility Name of individual processes subscribed for logging level.").AddStringEnumDescription("spanning-tree", "session-mgr", "radius", "security", "plugin", "cdp", "bootvar", "aaa", "interface-vlan", "vshd", "cfs", "monitor", "ntp", "acllog", "track", "pltfm_config", "lacp").String,
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("spanning-tree", "session-mgr", "radius", "security", "plugin", "cdp", "bootvar", "aaa", "interface-vlan", "vshd", "cfs", "monitor", "ntp", "acllog", "track", "pltfm_config", "lacp"),
@@ -111,7 +106,7 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 							},
 						},
 						"level": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Logging severity level.").AddStringEnumDescription("emergencies", "alerts", "critical", "errors", "warnings", "notifications", "information", "debugging").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Logging severity level for individual facility name.").AddStringEnumDescription("emergencies", "alerts", "critical", "errors", "warnings", "notifications", "information", "debugging").String,
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("emergencies", "alerts", "critical", "errors", "warnings", "notifications", "information", "debugging"),

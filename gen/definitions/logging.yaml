@@ -17,18 +17,17 @@ child_classes:
       - nxos_name: all
         tf_name: all
         type: String
-        description: "All logging level."
+        description: "Logging level all state disabled/enabled."
         enum_values:
           - "unspecified"
           - "enableall"
           - "disableall"
         example: "unspecified"
-        default_value: "unspecified"
         write_only: true
       - nxos_name: severityLevel
         tf_name: level
         type: String
-        description: "Severity level."
+        description: "Logging severity level for all the facilites."
         enum_values:
           - "emergencies"
           - "alerts"
@@ -39,7 +38,6 @@ child_classes:
           - "information"
           - "debugging"
         example: "information"
-        default_value: "notifications"
         write_only: true
     child_classes:
       - class_name: loggingFacility
@@ -55,7 +53,7 @@ child_classes:
             tf_name: name
             type: String
             id: true
-            description: "Logging facility name."
+            description: "Facility Name of individual processes subscribed for logging level."
             enum_values:
               - "spanning-tree"
               - "session-mgr"
@@ -78,7 +76,7 @@ child_classes:
           - nxos_name: severityLevel
             tf_name: level
             type: String
-            description: "Logging severity level."
+            description: "Logging severity level for individual facility name."
             enum_values:
               - "emergencies"
               - "alerts"

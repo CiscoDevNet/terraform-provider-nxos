@@ -38,14 +38,12 @@ resource "nxos_logging" "example" {
 
 ### Optional
 
-- `all` (String) All logging level.
+- `all` (String) Logging level all state disabled/enabled.
   - Choices: `unspecified`, `enableall`, `disableall`
-  - Default value: `unspecified`
 - `device` (String) A device name from the provider configuration.
 - `facilities` (Attributes List) List of logging facilities. (see [below for nested schema](#nestedatt--facilities))
-- `level` (String) Severity level.
+- `level` (String) Logging severity level for all the facilites.
   - Choices: `emergencies`, `alerts`, `critical`, `errors`, `warnings`, `notifications`, `information`, `debugging`
-  - Default value: `notifications`
 
 ### Read-Only
 
@@ -56,12 +54,12 @@ resource "nxos_logging" "example" {
 
 Required:
 
-- `name` (String) Logging facility name.
+- `name` (String) Facility Name of individual processes subscribed for logging level.
   - Choices: `spanning-tree`, `session-mgr`, `radius`, `security`, `plugin`, `cdp`, `bootvar`, `aaa`, `interface-vlan`, `vshd`, `cfs`, `monitor`, `ntp`, `acllog`, `track`, `pltfm_config`, `lacp`
 
 Optional:
 
-- `level` (String) Logging severity level.
+- `level` (String) Logging severity level for individual facility name.
   - Choices: `emergencies`, `alerts`, `critical`, `errors`, `warnings`, `notifications`, `information`, `debugging`
 
 ## Import

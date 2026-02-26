@@ -40,7 +40,7 @@ child_classes:
                 tf_name: vrf
                 type: String
                 id: true
-                description: 'VRF name.'
+                description: 'vrf in which the dhcp server is present. Valid only when the client is in a different vrf from the server vrf.'
                 example: VRF1
               - nxos_name: address
                 tf_name: address

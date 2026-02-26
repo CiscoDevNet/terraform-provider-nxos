@@ -83,7 +83,7 @@ func (d *DHCPDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"vrf": schema.StringAttribute{
-										MarkdownDescription: "VRF name.",
+										MarkdownDescription: "vrf in which the dhcp server is present. Valid only when the client is in a different vrf from the server vrf.",
 										Computed:            true,
 									},
 									"address": schema.StringAttribute{

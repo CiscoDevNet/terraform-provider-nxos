@@ -92,7 +92,7 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"vrf": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
+										MarkdownDescription: helpers.NewAttributeDescription("vrf in which the dhcp server is present. Valid only when the client is in a different vrf from the server vrf.").String,
 										Required:            true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplace(),

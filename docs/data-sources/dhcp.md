@@ -54,4 +54,4 @@ Read-Only:
 Read-Only:
 
 - `address` (String) IPv4 or IPv6 address.
-- `vrf` (String) VRF name.
+- `vrf` (String) vrf in which the dhcp server is present. Valid only when the client is in a different vrf from the server vrf.

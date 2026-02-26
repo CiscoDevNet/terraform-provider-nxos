@@ -10,11 +10,10 @@ attributes:
   - nxos_name: adminSt
     tf_name: admin_state
     type: String
-    description: 'Administrative state.'
+    description: 'The administrative state of the object or policy.'
     enum_values:
       - enabled
       - disabled
-    default_value: enabled
     example: enabled
 child_classes:
   - class_name: ospfInst
@@ -33,11 +32,10 @@ child_classes:
       - nxos_name: adminSt
         tf_name: admin_state
         type: String
-        description: 'Administrative state.'
+        description: 'The administrative state of the object or policy.'
         enum_values:
           - enabled
           - disabled
-        default_value: enabled
         example: enabled
     child_classes:
       - class_name: ospfDom
@@ -56,57 +54,58 @@ child_classes:
           - nxos_name: adjChangeLogLevel
             tf_name: log_adjacency_changes
             type: String
-            description: 'Log level for adjacency changes.'
+            description: 'Adjacency change logging level.'
             enum_values:
               - none
               - brief
               - detail
-            default_value: none
             example: brief
           - nxos_name: adminSt
             tf_name: admin_state
             type: String
-            description: 'Administrative state.'
+            description: 'Holds the administrative state of domain.'
             enum_values:
               - enabled
               - disabled
-            default_value: enabled
             example: enabled
           - nxos_name: bwRef
             tf_name: bandwidth_reference
             type: Int64
             min_int: 0
             max_int: 4294967295
-            default_value: 40000
-            description: 'Bandwidth reference value.'
+            description: 'Bandwidth reference value, holds the range from 1-4000000 if unit is mbps and holds range from 1-4000 if unit is gbps.'
             example: 400000
           - nxos_name: bwRefUnit
             tf_name: bandwidth_reference_unit
             type: String
-            description: 'Bandwidth reference unit.'
+            description: 'Bandwidth reference unit (Mbps or Gbps).'
             enum_values:
               - mbps
               - gbps
-            default_value: mbps
             example: mbps
           - nxos_name: dist
             tf_name: distance
             type: Int64
             min_int: 1
             max_int: 255
-            default_value: 110
             description: 'Administrative distance preference.'
             example: 110
           - nxos_name: rtrId
             tf_name: router_id
             type: String
-            description: 'Router ID.'
-            default_value: 0.0.0.0
+            description: 'Router identifier for this domain.'
             example: 34.56.78.90
           - nxos_name: ctrl
             tf_name: control
             type: String
-            description: 'Controls. Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,default-passive`. In this case values must be in alphabetical order.'
+            description: 'Holds the controls bfd, name-lookup, default-passive and Segment Routing. Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,default-passive`. In this case values must be in alphabetical order.'
+            enum_values:
+              - unspecified
+              - bfd
+              - name-lookup
+              - default-passive
+              - segrt
+            allow_non_enum_values: true
             example: 'bfd,default-passive'
         child_classes:
           - class_name: ospfArea
@@ -120,40 +119,36 @@ child_classes:
                 tf_name: area_id
                 type: String
                 id: true
-                default_value: 0.0.0.0
                 description: 'Area identifier to which a network or interface belongs in IPv4 address format.'
                 example: 0.0.0.10
               - nxos_name: authType
                 tf_name: authentication_type
                 type: String
-                description: 'Authentication type.'
+                description: 'Authentication type can be simple, none or md5.'
                 enum_values:
                   - none
                   - simple
                   - md5
                   - unspecified
-                default_value: unspecified
                 example: unspecified
               - nxos_name: cost
                 tf_name: cost
                 type: Int64
                 min_int: 0
                 max_int: 16777215
-                default_value: 1
-                description: 'Area cost, specifies cost for default summary LSAs. Used with nssa/stub area types.'
+                description: 'Area cost, specifies cost for default summary LSAs, Used with nssa/stub area types.'
                 example: 10
               - nxos_name: type
                 tf_name: type
                 type: String
-                description: 'Area type.'
+                description: 'Area types can be stub, nssa, backbone etc.'
                 enum_values:
                   - regular
                   - stub
                   - nssa
-                default_value: regular
                 example: stub
           - class_name: ospfMaxMetricLsaP
-            doc_path: Routing%20and%20Forwarding/ospf:maxmetriclsap/
+            doc_path: Routing%20and%20Forwarding/ospf:MaxMetricLsaP/
             rn: maxmetriclsap
             type: single
             tf_name: max_metric
@@ -163,18 +158,25 @@ child_classes:
                 tf_name: max_metric_control
                 type: String
                 description: 'Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:\n  - Single value. Example: `stub`\n  - Multiple values (comma-separated). Example: `stub,summary-lsa`. In this case values must be in alphabetical order.'
+                enum_values:
+                  - unspecified
+                  - summary-lsa
+                  - external-lsa
+                  - startup
+                  - stub
+                allow_non_enum_values: true
                 example: 'external-lsa,startup,stub,summary-lsa'
               - nxos_name: maxMetricExtLsa
                 tf_name: max_metric_external_lsa
                 type: Int64
-                min_int: 1
+                min_int: 0
                 max_int: 16777215
                 description: 'Maximum metric value for external LSAs.'
                 example: 600
               - nxos_name: maxMetricSummLsa
                 tf_name: max_metric_summary_lsa
                 type: Int64
-                min_int: 1
+                min_int: 0
                 max_int: 16777215
                 description: 'Maximum metric value for summary LSAs.'
                 example: 600
@@ -202,30 +204,26 @@ child_classes:
                 tf_name: advertise_secondaries
                 type: Bool
                 description: 'Advertise secondary IP addresses.'
-                default_value: true
                 example: false
               - nxos_name: area
                 tf_name: area
                 type: String
-                description: 'Area identifier to which a network or interface belongs in IPv4 address format.'
-                default_value: 0.0.0.0
+                description: 'Area to which this interface belongs to.'
                 example: 0.0.0.10
               - nxos_name: bfdCtrl
                 tf_name: bfd
                 type: String
-                description: 'Bidirectional Forwarding Detection (BFD).'
+                description: 'Bidirectional Forwarding Detection (BFD) control.'
                 enum_values:
                   - unspecified
                   - enabled
                   - disabled
-                default_value: unspecified
                 example: disabled
               - nxos_name: cost
                 tf_name: cost
                 type: Int64
                 min_int: 0
                 max_int: 65535
-                default_value: 0
                 description: 'Specifies the cost of interface.'
                 example: 1000
               - nxos_name: deadIntvl
@@ -233,7 +231,6 @@ child_classes:
                 type: Int64
                 min_int: 0
                 max_int: 65535
-                default_value: 0
                 description: 'Dead interval, interval after which router declares that neighbor as down.'
                 example: 60
               - nxos_name: helloIntvl
@@ -241,18 +238,16 @@ child_classes:
                 type: Int64
                 min_int: 0
                 max_int: 65535
-                default_value: 10
                 description: 'Hello interval, interval between hello packets that OSPF sends on the interface.'
                 example: 15
               - nxos_name: nwT
                 tf_name: network_type
                 type: String
-                description: 'Network type.'
+                description: 'Holds the network type as point2point or broadcast.'
                 enum_values:
                   - unspecified
                   - p2p
                   - bcast
-                default_value: unspecified
                 example: p2p
               - nxos_name: passiveCtrl
                 tf_name: passive
@@ -262,14 +257,12 @@ child_classes:
                   - unspecified
                   - enabled
                   - disabled
-                default_value: unspecified
                 example: enabled
               - nxos_name: prio
                 tf_name: priority
                 type: Int64
                 min_int: 0
                 max_int: 255
-                default_value: 1
                 description: 'Priority, used in determining the designated router on this network.'
                 example: 10
             child_classes:
@@ -284,21 +277,19 @@ child_classes:
                     tf_name: authentication_key
                     type: String
                     write_only: true
-                    description: 'Key used for authentication.'
+                    description: 'Key used for authenticatoin.'
                     example: 0 mykey
                   - nxos_name: keyId
                     tf_name: authentication_key_id
                     type: Int64
                     min_int: 0
                     max_int: 255
-                    default_value: 0
-                    description: 'Key ID used for authentication.'
+                    description: 'Key id used for authentication.'
                     example: 1
                   - nxos_name: keySecureMode
                     tf_name: authentication_key_secure_mode
                     type: Bool
                     description: 'Encrypted authentication key or plain text key.'
-                    default_value: false
                     example: false
                   - nxos_name: keychain
                     tf_name: authentication_keychain
@@ -309,24 +300,22 @@ child_classes:
                     tf_name: authentication_md5_key
                     type: String
                     write_only: true
-                    description: 'Key used for md5 authentication.'
+                    description: 'Authentication md5 key.'
                     example: 0 mymd5key
                   - nxos_name: md5keySecureMode
                     tf_name: authentication_md5_key_secure_mode
                     type: Bool
                     description: 'Encrypted authentication md5 key or plain text key.'
-                    default_value: false
                     example: false
                   - nxos_name: type
                     tf_name: authentication_type
                     type: String
-                    description: 'Authentication type.'
+                    description: 'Authentication types can be simple, md5 or none.'
                     enum_values:
                       - none
                       - simple
                       - md5
                       - unspecified
-                    default_value: unspecified
                     example: none
 test_prerequisites:
   - dn: sys/fm/ospf

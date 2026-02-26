@@ -6,7 +6,7 @@ description: |-
   This resource can manage the OSPF configuration.
   API Documentation: ospfEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Entity/
   Additional API Documentation
-  ospfInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Inst/ospfDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Dom/ospfArea https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Area/ospfMaxMetricLsaP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:maxmetriclsap/ospfIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:If/ospfAuthNewP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:AuthNewP/
+  ospfInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Inst/ospfDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Dom/ospfArea https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Area/ospfMaxMetricLsaP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:MaxMetricLsaP/ospfIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:If/ospfAuthNewP https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:AuthNewP/
 ---
 
 # nxos_ospf (Resource)
@@ -20,7 +20,7 @@ This resource can manage the OSPF configuration.
 - [ospfInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Inst/)
 - [ospfDom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Dom/)
 - [ospfArea](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:Area/)
-- [ospfMaxMetricLsaP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:maxmetriclsap/)
+- [ospfMaxMetricLsaP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:MaxMetricLsaP/)
 - [ospfIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:If/)
 - [ospfAuthNewP](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Routing%20and%20Forwarding/ospf:AuthNewP/)
 
@@ -80,9 +80,8 @@ resource "nxos_ospf" "example" {
 
 ### Optional
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `device` (String) A device name from the provider configuration.
 - `instances` (Attributes List) List of OSPF instances. (see [below for nested schema](#nestedatt--instances))
 
@@ -99,9 +98,8 @@ Required:
 
 Optional:
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `vrfs` (Attributes List) List of OSPF VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
 
 <a id="nestedatt--instances--vrfs"></a>
@@ -113,37 +111,33 @@ Required:
 
 Optional:
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) Holds the administrative state of domain.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `areas` (Attributes List) List of OSPF areas. (see [below for nested schema](#nestedatt--instances--vrfs--areas))
-- `bandwidth_reference` (Number) Bandwidth reference value.
+- `bandwidth_reference` (Number) Bandwidth reference value, holds the range from 1-4000000 if unit is mbps and holds range from 1-4000 if unit is gbps.
   - Range: `0`-`4294967295`
-  - Default value: `40000`
-- `bandwidth_reference_unit` (String) Bandwidth reference unit.
+- `bandwidth_reference_unit` (String) Bandwidth reference unit (Mbps or Gbps).
   - Choices: `mbps`, `gbps`
-  - Default value: `mbps`
-- `control` (String) Controls. Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`. Can be an empty string. Allowed formats:
+- `control` (String) Holds the controls bfd, name-lookup, default-passive and Segment Routing. Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`. Can be an empty string. Allowed formats:
   - Single value. Example: `bfd`
   - Multiple values (comma-separated). Example: `bfd,default-passive`. In this case values must be in alphabetical order.
+  - Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`
 - `distance` (Number) Administrative distance preference.
   - Range: `1`-`255`
-  - Default value: `110`
 - `interfaces` (Attributes List) List of OSPF interfaces. (see [below for nested schema](#nestedatt--instances--vrfs--interfaces))
-- `log_adjacency_changes` (String) Log level for adjacency changes.
+- `log_adjacency_changes` (String) Adjacency change logging level.
   - Choices: `none`, `brief`, `detail`
-  - Default value: `none`
 - `max_metric_control` (String) Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:
   - Single value. Example: `stub`
   - Multiple values (comma-separated). Example: `stub,summary-lsa`. In this case values must be in alphabetical order.
+  - Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`
 - `max_metric_external_lsa` (Number) Maximum metric value for external LSAs.
-  - Range: `1`-`16777215`
+  - Range: `0`-`16777215`
 - `max_metric_startup_interval` (Number) Time (in secs) for which max metric should be advertised at startup.
   - Range: `0`-`4294967295`
 - `max_metric_summary_lsa` (Number) Maximum metric value for summary LSAs.
-  - Range: `1`-`16777215`
-- `router_id` (String) Router ID.
-  - Default value: `0.0.0.0`
+  - Range: `0`-`16777215`
+- `router_id` (String) Router identifier for this domain.
 
 <a id="nestedatt--instances--vrfs--areas"></a>
 ### Nested Schema for `instances.vrfs.areas`
@@ -151,19 +145,15 @@ Optional:
 Required:
 
 - `area_id` (String) Area identifier to which a network or interface belongs in IPv4 address format.
-  - Default value: `0.0.0.0`
 
 Optional:
 
-- `authentication_type` (String) Authentication type.
+- `authentication_type` (String) Authentication type can be simple, none or md5.
   - Choices: `none`, `simple`, `md5`, `unspecified`
-  - Default value: `unspecified`
-- `cost` (Number) Area cost, specifies cost for default summary LSAs. Used with nssa/stub area types.
+- `cost` (Number) Area cost, specifies cost for default summary LSAs, Used with nssa/stub area types.
   - Range: `0`-`16777215`
-  - Default value: `1`
-- `type` (String) Area type.
+- `type` (String) Area types can be stub, nssa, backbone etc.
   - Choices: `regular`, `stub`, `nssa`
-  - Default value: `regular`
 
 
 <a id="nestedatt--instances--vrfs--interfaces"></a>
@@ -176,43 +166,30 @@ Required:
 Optional:
 
 - `advertise_secondaries` (Boolean) Advertise secondary IP addresses.
-  - Default value: `true`
-- `area` (String) Area identifier to which a network or interface belongs in IPv4 address format.
-  - Default value: `0.0.0.0`
-- `authentication_key` (String) Key used for authentication.
-- `authentication_key_id` (Number) Key ID used for authentication.
+- `area` (String) Area to which this interface belongs to.
+- `authentication_key` (String) Key used for authenticatoin.
+- `authentication_key_id` (Number) Key id used for authentication.
   - Range: `0`-`255`
-  - Default value: `0`
 - `authentication_key_secure_mode` (Boolean) Encrypted authentication key or plain text key.
-  - Default value: `false`
 - `authentication_keychain` (String) Authentication keychain.
-- `authentication_md5_key` (String) Key used for md5 authentication.
+- `authentication_md5_key` (String) Authentication md5 key.
 - `authentication_md5_key_secure_mode` (Boolean) Encrypted authentication md5 key or plain text key.
-  - Default value: `false`
-- `authentication_type` (String) Authentication type.
+- `authentication_type` (String) Authentication types can be simple, md5 or none.
   - Choices: `none`, `simple`, `md5`, `unspecified`
-  - Default value: `unspecified`
-- `bfd` (String) Bidirectional Forwarding Detection (BFD).
+- `bfd` (String) Bidirectional Forwarding Detection (BFD) control.
   - Choices: `unspecified`, `enabled`, `disabled`
-  - Default value: `unspecified`
 - `cost` (Number) Specifies the cost of interface.
   - Range: `0`-`65535`
-  - Default value: `0`
 - `dead_interval` (Number) Dead interval, interval after which router declares that neighbor as down.
   - Range: `0`-`65535`
-  - Default value: `0`
 - `hello_interval` (Number) Hello interval, interval between hello packets that OSPF sends on the interface.
   - Range: `0`-`65535`
-  - Default value: `10`
-- `network_type` (String) Network type.
+- `network_type` (String) Holds the network type as point2point or broadcast.
   - Choices: `unspecified`, `p2p`, `bcast`
-  - Default value: `unspecified`
 - `passive` (String) Passive interface control. Interface can be configured as passive or non-passive.
   - Choices: `unspecified`, `enabled`, `disabled`
-  - Default value: `unspecified`
 - `priority` (Number) Priority, used in determining the designated router on this network.
   - Range: `0`-`255`
-  - Default value: `1`
 
 ## Import
 

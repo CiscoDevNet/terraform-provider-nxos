@@ -57,7 +57,7 @@ func (d *OSPFDataSource) Metadata(_ context.Context, req datasource.MetadataRequ
 func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the OSPF configuration.", "ospfEntity", "Routing%20and%20Forwarding/ospf:Entity/").AddAdditionalDocs([]string{"ospfInst", "ospfDom", "ospfArea", "ospfMaxMetricLsaP", "ospfIf", "ospfAuthNewP"}, []string{"Routing%20and%20Forwarding/ospf:Inst/", "Routing%20and%20Forwarding/ospf:Dom/", "Routing%20and%20Forwarding/ospf:Area/", "Routing%20and%20Forwarding/ospf:maxmetriclsap/", "Routing%20and%20Forwarding/ospf:If/", "Routing%20and%20Forwarding/ospf:AuthNewP/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the OSPF configuration.", "ospfEntity", "Routing%20and%20Forwarding/ospf:Entity/").AddAdditionalDocs([]string{"ospfInst", "ospfDom", "ospfArea", "ospfMaxMetricLsaP", "ospfIf", "ospfAuthNewP"}, []string{"Routing%20and%20Forwarding/ospf:Inst/", "Routing%20and%20Forwarding/ospf:Dom/", "Routing%20and%20Forwarding/ospf:Area/", "Routing%20and%20Forwarding/ospf:MaxMetricLsaP/", "Routing%20and%20Forwarding/ospf:If/", "Routing%20and%20Forwarding/ospf:AuthNewP/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -69,7 +69,7 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				Computed:            true,
 			},
 			"admin_state": schema.StringAttribute{
-				MarkdownDescription: "Administrative state.",
+				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
 			"instances": schema.ListNestedAttribute{
@@ -82,7 +82,7 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							Computed:            true,
 						},
 						"admin_state": schema.StringAttribute{
-							MarkdownDescription: "Administrative state.",
+							MarkdownDescription: "The administrative state of the object or policy.",
 							Computed:            true,
 						},
 						"vrfs": schema.ListNestedAttribute{
@@ -95,19 +95,19 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										Computed:            true,
 									},
 									"log_adjacency_changes": schema.StringAttribute{
-										MarkdownDescription: "Log level for adjacency changes.",
+										MarkdownDescription: "Adjacency change logging level.",
 										Computed:            true,
 									},
 									"admin_state": schema.StringAttribute{
-										MarkdownDescription: "Administrative state.",
+										MarkdownDescription: "Holds the administrative state of domain.",
 										Computed:            true,
 									},
 									"bandwidth_reference": schema.Int64Attribute{
-										MarkdownDescription: "Bandwidth reference value.",
+										MarkdownDescription: "Bandwidth reference value, holds the range from 1-4000000 if unit is mbps and holds range from 1-4000 if unit is gbps.",
 										Computed:            true,
 									},
 									"bandwidth_reference_unit": schema.StringAttribute{
-										MarkdownDescription: "Bandwidth reference unit.",
+										MarkdownDescription: "Bandwidth reference unit (Mbps or Gbps).",
 										Computed:            true,
 									},
 									"distance": schema.Int64Attribute{
@@ -115,11 +115,11 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										Computed:            true,
 									},
 									"router_id": schema.StringAttribute{
-										MarkdownDescription: "Router ID.",
+										MarkdownDescription: "Router identifier for this domain.",
 										Computed:            true,
 									},
 									"control": schema.StringAttribute{
-										MarkdownDescription: "Controls. Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,default-passive`. In this case values must be in alphabetical order.",
+										MarkdownDescription: "Holds the controls bfd, name-lookup, default-passive and Segment Routing. Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,default-passive`. In this case values must be in alphabetical order.",
 										Computed:            true,
 									},
 									"areas": schema.ListNestedAttribute{
@@ -132,15 +132,15 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 													Computed:            true,
 												},
 												"authentication_type": schema.StringAttribute{
-													MarkdownDescription: "Authentication type.",
+													MarkdownDescription: "Authentication type can be simple, none or md5.",
 													Computed:            true,
 												},
 												"cost": schema.Int64Attribute{
-													MarkdownDescription: "Area cost, specifies cost for default summary LSAs. Used with nssa/stub area types.",
+													MarkdownDescription: "Area cost, specifies cost for default summary LSAs, Used with nssa/stub area types.",
 													Computed:            true,
 												},
 												"type": schema.StringAttribute{
-													MarkdownDescription: "Area type.",
+													MarkdownDescription: "Area types can be stub, nssa, backbone etc.",
 													Computed:            true,
 												},
 											},
@@ -176,11 +176,11 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 													Computed:            true,
 												},
 												"area": schema.StringAttribute{
-													MarkdownDescription: "Area identifier to which a network or interface belongs in IPv4 address format.",
+													MarkdownDescription: "Area to which this interface belongs to.",
 													Computed:            true,
 												},
 												"bfd": schema.StringAttribute{
-													MarkdownDescription: "Bidirectional Forwarding Detection (BFD).",
+													MarkdownDescription: "Bidirectional Forwarding Detection (BFD) control.",
 													Computed:            true,
 												},
 												"cost": schema.Int64Attribute{
@@ -196,7 +196,7 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 													Computed:            true,
 												},
 												"network_type": schema.StringAttribute{
-													MarkdownDescription: "Network type.",
+													MarkdownDescription: "Holds the network type as point2point or broadcast.",
 													Computed:            true,
 												},
 												"passive": schema.StringAttribute{
@@ -208,11 +208,11 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 													Computed:            true,
 												},
 												"authentication_key": schema.StringAttribute{
-													MarkdownDescription: "Key used for authentication.",
+													MarkdownDescription: "Key used for authenticatoin.",
 													Computed:            true,
 												},
 												"authentication_key_id": schema.Int64Attribute{
-													MarkdownDescription: "Key ID used for authentication.",
+													MarkdownDescription: "Key id used for authentication.",
 													Computed:            true,
 												},
 												"authentication_key_secure_mode": schema.BoolAttribute{
@@ -224,7 +224,7 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 													Computed:            true,
 												},
 												"authentication_md5_key": schema.StringAttribute{
-													MarkdownDescription: "Key used for md5 authentication.",
+													MarkdownDescription: "Authentication md5 key.",
 													Computed:            true,
 												},
 												"authentication_md5_key_secure_mode": schema.BoolAttribute{
@@ -232,7 +232,7 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 													Computed:            true,
 												},
 												"authentication_type": schema.StringAttribute{
-													MarkdownDescription: "Authentication type.",
+													MarkdownDescription: "Authentication types can be simple, md5 or none.",
 													Computed:            true,
 												},
 											},

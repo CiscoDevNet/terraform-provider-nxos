@@ -25,17 +25,16 @@ child_classes:
             tf_name: name
             type: String
             id: true
-            description: 'Policy map name.'
+            description: 'Name of policy-map.'
             example: PM1
           - nxos_name: matchType
             tf_name: match_type
             type: String
-            description: 'Match type.'
+            description: 'Match-any, match-all or match-first.'
             enum_values:
               - match-any
               - match-all
               - match-first
-            default_value: match-all
             example: match-any
         child_classes:
           - class_name: ipqosMatchCMap
@@ -49,7 +48,7 @@ child_classes:
                 tf_name: name
                 type: String
                 id: true
-                description: 'Class map name.'
+                description: 'Match using class-map.'
                 example: c-out-q1
             child_classes:
               - class_name: ipqosPriority
@@ -62,7 +61,7 @@ child_classes:
                   - nxos_name: level
                     tf_name: priority
                     type: Int64
-                    description: 'Priority level.'
+                    description: 'Optional priority level.'
                     min_int: 1
                     max_int: 8
                     example: 1
@@ -76,7 +75,7 @@ child_classes:
                   - nxos_name: val
                     tf_name: remaining_bandwidth
                     type: Int64
-                    description: 'Remaining bandwidth percent.'
+                    description: 'Remaining bandwidth.'
                     min_int: 0
                     max_int: 100
                     example: 10
@@ -108,10 +107,10 @@ child_classes:
                 description: 'Queuing QoS policy system out policy map assignment.'
                 attributes:
                   - nxos_name: name
-                    tf_name: policy_map_name
+                    tf_name: system_out_policy_map_name
                     type: String
                     mandatory: true
-                    description: 'Policy map name.'
+                    description: 'Policy-map Name.'
                     example: PM1
 test_prerequisites:
   - dn: sys/ipqos/queuing/p/name-[PM1]

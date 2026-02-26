@@ -8,5 +8,5 @@ resource "nxos_queuing_qos" "example" {
       remaining_bandwidth = 10
     }]
   }]
-  policy_map_name = "PM1"
+  system_out_policy_map_name = "PM1"
 }

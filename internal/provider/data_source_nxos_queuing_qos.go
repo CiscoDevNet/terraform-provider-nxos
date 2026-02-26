@@ -74,11 +74,11 @@ func (d *QueuingQoSDataSource) Schema(ctx context.Context, req datasource.Schema
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							MarkdownDescription: "Policy map name.",
+							MarkdownDescription: "Name of policy-map.",
 							Computed:            true,
 						},
 						"match_type": schema.StringAttribute{
-							MarkdownDescription: "Match type.",
+							MarkdownDescription: "Match-any, match-all or match-first.",
 							Computed:            true,
 						},
 						"match_class_maps": schema.ListNestedAttribute{
@@ -87,15 +87,15 @@ func (d *QueuingQoSDataSource) Schema(ctx context.Context, req datasource.Schema
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"name": schema.StringAttribute{
-										MarkdownDescription: "Class map name.",
+										MarkdownDescription: "Match using class-map.",
 										Computed:            true,
 									},
 									"priority": schema.Int64Attribute{
-										MarkdownDescription: "Priority level.",
+										MarkdownDescription: "Optional priority level.",
 										Computed:            true,
 									},
 									"remaining_bandwidth": schema.Int64Attribute{
-										MarkdownDescription: "Remaining bandwidth percent.",
+										MarkdownDescription: "Remaining bandwidth.",
 										Computed:            true,
 									},
 								},
@@ -104,8 +104,8 @@ func (d *QueuingQoSDataSource) Schema(ctx context.Context, req datasource.Schema
 					},
 				},
 			},
-			"policy_map_name": schema.StringAttribute{
-				MarkdownDescription: "Policy map name.",
+			"system_out_policy_map_name": schema.StringAttribute{
+				MarkdownDescription: "Policy-map Name.",
 				Computed:            true,
 			},
 		},

@@ -39,7 +39,7 @@ func TestAccNxosQueuingQoS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.0.match_type", "match-any"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.0.match_class_maps.0.name", "c-out-q1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.0.match_class_maps.0.priority", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_map_name", "PM1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "system_out_policy_map_name", "PM1"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -191,7 +191,7 @@ func testAccNxosQueuingQoSConfig_all() string {
 	config += `			priority = 1` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
-	config += `	policy_map_name = "PM1"` + "\n"
+	config += `	system_out_policy_map_name = "PM1"` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, nxos_rest.PreReq7, nxos_rest.PreReq8, ]` + "\n"
 	config += `}` + "\n"
 	return config

@@ -40,7 +40,7 @@ resource "nxos_queuing_qos" "example" {
       remaining_bandwidth = 10
     }]
   }]
-  policy_map_name = "PM1"
+  system_out_policy_map_name = "PM1"
 }
 ```
 
@@ -49,7 +49,7 @@ resource "nxos_queuing_qos" "example" {
 
 ### Required
 
-- `policy_map_name` (String) Policy map name.
+- `system_out_policy_map_name` (String) Policy-map Name.
 
 ### Optional
 
@@ -65,27 +65,26 @@ resource "nxos_queuing_qos" "example" {
 
 Required:
 
-- `name` (String) Policy map name.
+- `name` (String) Name of policy-map.
 
 Optional:
 
 - `match_class_maps` (Attributes List) List of match class maps. (see [below for nested schema](#nestedatt--policy_maps--match_class_maps))
-- `match_type` (String) Match type.
+- `match_type` (String) Match-any, match-all or match-first.
   - Choices: `match-any`, `match-all`, `match-first`
-  - Default value: `match-all`
 
 <a id="nestedatt--policy_maps--match_class_maps"></a>
 ### Nested Schema for `policy_maps.match_class_maps`
 
 Required:
 
-- `name` (String) Class map name.
+- `name` (String) Match using class-map.
 
 Optional:
 
-- `priority` (Number) Priority level.
+- `priority` (Number) Optional priority level.
   - Range: `1`-`8`
-- `remaining_bandwidth` (Number) Remaining bandwidth percent.
+- `remaining_bandwidth` (Number) Remaining bandwidth.
   - Range: `0`-`100`
 
 ## Import

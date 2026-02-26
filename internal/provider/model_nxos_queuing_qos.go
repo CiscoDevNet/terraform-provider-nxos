@@ -37,10 +37,10 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type QueuingQoS struct {
-	Device        types.String           `tfsdk:"device"`
-	Dn            types.String           `tfsdk:"id"`
-	PolicyMaps    []QueuingQoSPolicyMaps `tfsdk:"policy_maps"`
-	PolicyMapName types.String           `tfsdk:"policy_map_name"`
+	Device                 types.String           `tfsdk:"device"`
+	Dn                     types.String           `tfsdk:"id"`
+	PolicyMaps             []QueuingQoSPolicyMaps `tfsdk:"policy_maps"`
+	SystemOutPolicyMapName types.String           `tfsdk:"system_out_policy_map_name"`
 }
 
 type QueuingQoSPolicyMaps struct {
@@ -169,8 +169,8 @@ func (data QueuingQoS) toBody() nxos.Body {
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
-				if (!data.PolicyMapName.IsUnknown() && !data.PolicyMapName.IsNull()) || false {
-					attrs, _ = sjson.Set(attrs, "name", data.PolicyMapName.ValueString())
+				if (!data.SystemOutPolicyMapName.IsUnknown() && !data.SystemOutPolicyMapName.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "name", data.SystemOutPolicyMapName.ValueString())
 				}
 				if attrs != "{}" || false {
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosInst.attributes", attrs)
@@ -307,7 +307,7 @@ func (data *QueuingQoS) fromBody(res gjson.Result) {
 							return true
 						},
 					)
-					data.PolicyMapName = types.StringValue(ripqosInst.Get("ipqosInst.attributes.name").String())
+					data.SystemOutPolicyMapName = types.StringValue(ripqosInst.Get("ipqosInst.attributes.name").String())
 				}
 			}
 		}
@@ -454,10 +454,10 @@ func (data *QueuingQoS) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
-				if !data.PolicyMapName.IsNull() {
-					data.PolicyMapName = types.StringValue(ripqosInst.Get("ipqosInst.attributes.name").String())
+				if !data.SystemOutPolicyMapName.IsNull() {
+					data.SystemOutPolicyMapName = types.StringValue(ripqosInst.Get("ipqosInst.attributes.name").String())
 				} else {
-					data.PolicyMapName = types.StringNull()
+					data.SystemOutPolicyMapName = types.StringNull()
 				}
 			}
 		}

@@ -33,7 +33,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -84,17 +83,15 @@ func (r *QueuingQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Policy map name.").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Name of policy-map.").String,
 							Required:            true,
 							PlanModifiers: []planmodifier.String{
 								stringplanmodifier.RequiresReplace(),
 							},
 						},
 						"match_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Match type.").AddStringEnumDescription("match-any", "match-all", "match-first").AddDefaultValueDescription("match-all").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Match-any, match-all or match-first.").AddStringEnumDescription("match-any", "match-all", "match-first").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("match-all"),
 							Validators: []validator.String{
 								stringvalidator.OneOf("match-any", "match-all", "match-first"),
 							},
@@ -105,21 +102,21 @@ func (r *QueuingQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"name": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Class map name.").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Match using class-map.").String,
 										Required:            true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplace(),
 										},
 									},
 									"priority": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Priority level.").AddIntegerRangeDescription(1, 8).String,
+										MarkdownDescription: helpers.NewAttributeDescription("Optional priority level.").AddIntegerRangeDescription(1, 8).String,
 										Optional:            true,
 										Validators: []validator.Int64{
 											int64validator.Between(1, 8),
 										},
 									},
 									"remaining_bandwidth": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Remaining bandwidth percent.").AddIntegerRangeDescription(0, 100).String,
+										MarkdownDescription: helpers.NewAttributeDescription("Remaining bandwidth.").AddIntegerRangeDescription(0, 100).String,
 										Optional:            true,
 										Validators: []validator.Int64{
 											int64validator.Between(0, 100),
@@ -131,8 +128,8 @@ func (r *QueuingQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 				},
 			},
-			"policy_map_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Policy map name.").String,
+			"system_out_policy_map_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Policy-map Name.").String,
 				Required:            true,
 			},
 		},

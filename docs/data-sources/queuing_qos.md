@@ -44,8 +44,8 @@ data "nxos_queuing_qos" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
-- `policy_map_name` (String) Policy map name.
 - `policy_maps` (Attributes List) List of policy maps. (see [below for nested schema](#nestedatt--policy_maps))
+- `system_out_policy_map_name` (String) Policy-map Name.
 
 <a id="nestedatt--policy_maps"></a>
 ### Nested Schema for `policy_maps`
@@ -53,14 +53,14 @@ data "nxos_queuing_qos" "example" {
 Read-Only:
 
 - `match_class_maps` (Attributes List) List of match class maps. (see [below for nested schema](#nestedatt--policy_maps--match_class_maps))
-- `match_type` (String) Match type.
-- `name` (String) Policy map name.
+- `match_type` (String) Match-any, match-all or match-first.
+- `name` (String) Name of policy-map.
 
 <a id="nestedatt--policy_maps--match_class_maps"></a>
 ### Nested Schema for `policy_maps.match_class_maps`
 
 Read-Only:
 
-- `name` (String) Class map name.
-- `priority` (Number) Priority level.
-- `remaining_bandwidth` (Number) Remaining bandwidth percent.
+- `name` (String) Match using class-map.
+- `priority` (Number) Optional priority level.
+- `remaining_bandwidth` (Number) Remaining bandwidth.

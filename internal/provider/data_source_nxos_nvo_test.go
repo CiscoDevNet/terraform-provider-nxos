@@ -53,7 +53,7 @@ func TestAccDataSourceNxosNVO(t *testing.T) {
 		"suppress_arp":                  "off",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_nvo.test", "nve_interfaces.*.vnis.*", map[string]string{
-		"protocol": "bgp",
+		"ingress_replication_protocol": "bgp",
 	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -116,7 +116,7 @@ func testAccDataSourceNxosNVOConfig() string {
 	config += `			multicast_group = "0.0.0.0"` + "\n"
 	config += `			multisite_ingress_replication = "disable"` + "\n"
 	config += `			suppress_arp = "off"` + "\n"
-	config += `			protocol = "bgp"` + "\n"
+	config += `			ingress_replication_protocol = "bgp"` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"

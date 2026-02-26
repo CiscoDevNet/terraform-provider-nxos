@@ -52,7 +52,7 @@ func TestAccNxosNVO(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.vnis.0.multicast_group", "0.0.0.0"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.vnis.0.multisite_ingress_replication", "disable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.vnis.0.suppress_arp", "off"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.vnis.0.protocol", "bgp"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.0.vnis.0.ingress_replication_protocol", "bgp"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -150,7 +150,7 @@ func testAccNxosNVOConfig_all() string {
 	config += `			multicast_group = "0.0.0.0"` + "\n"
 	config += `			multisite_ingress_replication = "disable"` + "\n"
 	config += `			suppress_arp = "off"` + "\n"
-	config += `			protocol = "bgp"` + "\n"
+	config += `			ingress_replication_protocol = "bgp"` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"

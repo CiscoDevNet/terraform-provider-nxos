@@ -32,11 +32,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -87,86 +84,64 @@ func (r *NVOResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"id": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Network Virtualization Overlay Endpoint (NVE) ID.").AddDefaultValueDescription("1").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Network Virtualization Overlay Endpoint (NVE) ID.").String,
 							Required:            true,
 							PlanModifiers: []planmodifier.Int64{
 								int64planmodifier.RequiresReplace(),
 							},
 						},
 						"admin_state": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Administrative Up or Down state of the NVE.").AddStringEnumDescription("enabled", "disabled").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("disabled"),
 							Validators: []validator.String{
 								stringvalidator.OneOf("enabled", "disabled"),
 							},
 						},
 						"advertise_virtual_mac": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Enable or disable Virtual MAC Advertisement in VPC mode.").AddDefaultValueDescription("false").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Enable or disable Virtual MAC Advertisement in VPC mode.").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             booldefault.StaticBool(false),
 						},
 						"hold_down_time": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Hold Down Time.").AddIntegerRangeDescription(1, 1500).AddDefaultValueDescription("180").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Hold Down Time.").AddIntegerRangeDescription(1, 1500).String,
 							Optional:            true,
-							Computed:            true,
-							Default:             int64default.StaticInt64(180),
 							Validators: []validator.Int64{
 								int64validator.Between(1, 1500),
 							},
 						},
 						"host_reachability_protocol": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Host Reachability Protocol.").AddStringEnumDescription("Flood-and-learn", "bgp", "controller", "openflow", "openflowIR").AddDefaultValueDescription("Flood-and-learn").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Host Reachability Protocol.").AddStringEnumDescription("Flood-and-learn", "bgp", "controller", "openflow", "openflowIR").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("Flood-and-learn"),
 							Validators: []validator.String{
 								stringvalidator.OneOf("Flood-and-learn", "bgp", "controller", "openflow", "openflowIR"),
 							},
 						},
 						"ingress_replication_protocol_bgp": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("VxLAN Ingress Replication Protocol BGP.").AddDefaultValueDescription("false").String,
+							MarkdownDescription: helpers.NewAttributeDescription("VxLAN Ingress Replication Protocol BGP.").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             booldefault.StaticBool(false),
 						},
 						"multicast_group_l2": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Base multicast group address for L2.").AddDefaultValueDescription("0.0.0.0").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Base multicast group address for L2.").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("0.0.0.0"),
 						},
 						"multicast_group_l3": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Base multicast group address for L3.").AddDefaultValueDescription("0.0.0.0").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Base multicast group address for L3.").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("0.0.0.0"),
 						},
 						"multisite_source_interface": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Interface representing the Multisite Border Gateway. Must match first field in the output of `show int brief`.").AddDefaultValueDescription("unspecified").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Interface representing the Multisite Border Gateway. Must match first field in the output of `show int brief`.").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("unspecified"),
 						},
 						"source_interface": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Source Interface associated with the NVE. Must match first field in the output of `show int brief`.").AddDefaultValueDescription("unspecified").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Source Interface associated with the NVE. Must match first field in the output of `show int brief`.").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("unspecified"),
 						},
 						"suppress_arp": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Suppress ARP.").AddDefaultValueDescription("false").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Suppress ARP.").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             booldefault.StaticBool(false),
 						},
 						"suppress_mac_route": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Suppress MAC Route.").AddDefaultValueDescription("false").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Suppress MAC Route.").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             booldefault.StaticBool(false),
 						},
 						"vnis": schema.ListNestedAttribute{
 							MarkdownDescription: "List of VNIs.",
@@ -174,7 +149,7 @@ func (r *NVOResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"vni": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Virtual Network ID.").AddIntegerRangeDescription(1, 16777214).String,
+										MarkdownDescription: helpers.NewAttributeDescription("Configure Virtual Network ID.").AddIntegerRangeDescription(1, 16777214).String,
 										Required:            true,
 										Validators: []validator.Int64{
 											int64validator.Between(1, 16777214),
@@ -184,42 +159,32 @@ func (r *NVOResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 										},
 									},
 									"associate_vrf": schema.BoolAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Configures VNI as L3 VNI.").AddDefaultValueDescription("false").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Configures VNI(s) as L3 VNI.").String,
 										Optional:            true,
-										Computed:            true,
-										Default:             booldefault.StaticBool(false),
 									},
 									"multicast_group": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Configures multicast group address for VNI.").AddDefaultValueDescription("0.0.0.0").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Configures multicast group address for VNI(s).").String,
 										Optional:            true,
-										Computed:            true,
-										Default:             stringdefault.StaticString("0.0.0.0"),
 									},
 									"multisite_ingress_replication": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Enable or disable Multisite Ingress Replication for VNI(s).").AddStringEnumDescription("enable", "disable", "enableOptimized").AddDefaultValueDescription("disable").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Enable or disable Multisite Ingress Replication for VNI(s).").AddStringEnumDescription("disable", "enable", "enableOptimized").String,
 										Optional:            true,
-										Computed:            true,
-										Default:             stringdefault.StaticString("disable"),
 										Validators: []validator.String{
-											stringvalidator.OneOf("enable", "disable", "enableOptimized"),
+											stringvalidator.OneOf("disable", "enable", "enableOptimized"),
 										},
 									},
 									"suppress_arp": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Enable or disable ARP suppression for VNI(s).").AddStringEnumDescription("enabled", "disabled", "off").AddDefaultValueDescription("off").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Enable or disable ARP suppression for VNI(s).").AddStringEnumDescription("off", "enabled", "disabled").String,
 										Optional:            true,
-										Computed:            true,
-										Default:             stringdefault.StaticString("off"),
 										Validators: []validator.String{
-											stringvalidator.OneOf("enabled", "disabled", "off"),
+											stringvalidator.OneOf("off", "enabled", "disabled"),
 										},
 									},
-									"protocol": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Configure VxLAN Ingress Replication mode.").AddStringEnumDescription("bgp", "unknown", "static").AddDefaultValueDescription("unknown").String,
+									"ingress_replication_protocol": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Configure VxLAN Ingress Replication mode.").AddStringEnumDescription("unknown", "bgp", "static").String,
 										Optional:            true,
-										Computed:            true,
-										Default:             stringdefault.StaticString("unknown"),
 										Validators: []validator.String{
-											stringvalidator.OneOf("bgp", "unknown", "static"),
+											stringvalidator.OneOf("unknown", "bgp", "static"),
 										},
 									},
 								},

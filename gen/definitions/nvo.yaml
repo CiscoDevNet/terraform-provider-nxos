@@ -20,22 +20,19 @@ child_classes:
         type: Int64
         id: true
         description: 'Network Virtualization Overlay Endpoint (NVE) ID.'
-        default_value: 1
         example: 1
       - nxos_name: adminSt
         tf_name: admin_state
         type: String
-        description: 'Administrative state.'
+        description: 'Administrative Up or Down state of the NVE.'
         enum_values:
           - enabled
           - disabled
-        default_value: disabled
         example: enabled
       - nxos_name: advertiseVmac
         tf_name: advertise_virtual_mac
         type: Bool
         description: 'Enable or disable Virtual MAC Advertisement in VPC mode.'
-        default_value: false
         example: true
       - nxos_name: holdDownTime
         tf_name: hold_down_time
@@ -43,7 +40,6 @@ child_classes:
         description: 'Hold Down Time.'
         min_int: 1
         max_int: 1500
-        default_value: 180
         example: 60
       - nxos_name: hostReach
         tf_name: host_reachability_protocol
@@ -55,49 +51,41 @@ child_classes:
           - controller
           - openflow
           - openflowIR
-        default_value: Flood-and-learn
         example: bgp
       - nxos_name: ingressReplProtoBGP
         tf_name: ingress_replication_protocol_bgp
         type: Bool
         description: 'VxLAN Ingress Replication Protocol BGP.'
-        default_value: false
         example: true
       - nxos_name: mcastGroupL2
         tf_name: multicast_group_l2
         type: String
         description: 'Base multicast group address for L2.'
-        default_value: '0.0.0.0'
         example: '0.0.0.0'
       - nxos_name: mcastGroupL3
         tf_name: multicast_group_l3
         type: String
         description: 'Base multicast group address for L3.'
-        default_value: '0.0.0.0'
         example: '0.0.0.0'
       - nxos_name: multisiteBordergwInterface
         tf_name: multisite_source_interface
         type: String
         description: 'Interface representing the Multisite Border Gateway. Must match first field in the output of `show int brief`.'
-        default_value: 'unspecified'
         example: 'unspecified'
       - nxos_name: sourceInterface
         tf_name: source_interface
         type: String
         description: 'Source Interface associated with the NVE. Must match first field in the output of `show int brief`.'
-        default_value: 'unspecified'
         example: 'lo0'
       - nxos_name: suppressARP
         tf_name: suppress_arp
         type: Bool
         description: 'Suppress ARP.'
-        default_value: false
         example: true
       - nxos_name: suppressMacRoute
         tf_name: suppress_mac_route
         type: Bool
         description: 'Suppress MAC Route.'
-        default_value: false
         example: false
     child_classes:
       - class_name: nvoNws
@@ -116,41 +104,37 @@ child_classes:
                 tf_name: vni
                 type: Int64
                 id: true
-                description: 'Virtual Network ID.'
+                description: 'Configure Virtual Network ID.'
                 min_int: 1
                 max_int: 16777214
                 example: 103100
               - nxos_name: associateVrfFlag
                 tf_name: associate_vrf
                 type: Bool
-                description: 'Configures VNI as L3 VNI.'
-                default_value: false
+                description: 'Configures VNI(s) as L3 VNI.'
                 example: false
               - nxos_name: mcastGroup
                 tf_name: multicast_group
                 type: String
-                description: 'Configures multicast group address for VNI.'
-                default_value: '0.0.0.0'
+                description: 'Configures multicast group address for VNI(s).'
                 example: '0.0.0.0'
               - nxos_name: multisiteIngRepl
                 tf_name: multisite_ingress_replication
                 type: String
                 description: 'Enable or disable Multisite Ingress Replication for VNI(s).'
                 enum_values:
-                  - enable
                   - disable
+                  - enable
                   - enableOptimized
-                default_value: disable
                 example: disable
               - nxos_name: suppressARP
                 tf_name: suppress_arp
                 type: String
                 description: 'Enable or disable ARP suppression for VNI(s).'
                 enum_values:
+                  - 'off'
                   - enabled
                   - disabled
-                  - 'off'
-                default_value: 'off'
                 example: 'off'
             child_classes:
               - class_name: nvoIngRepl
@@ -161,14 +145,13 @@ child_classes:
                 description: 'Ingress Replication configuration for the VNI.'
                 attributes:
                   - nxos_name: proto
-                    tf_name: protocol
+                    tf_name: ingress_replication_protocol
                     type: String
                     description: 'Configure VxLAN Ingress Replication mode.'
                     enum_values:
-                      - bgp
                       - unknown
+                      - bgp
                       - static
-                    default_value: unknown
                     example: bgp
 test_prerequisites:
   - dn: sys/fm/nvo

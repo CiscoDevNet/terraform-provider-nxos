@@ -45,7 +45,7 @@ resource "nxos_nvo" "example" {
       multicast_group               = "0.0.0.0"
       multisite_ingress_replication = "disable"
       suppress_arp                  = "off"
-      protocol                      = "bgp"
+      ingress_replication_protocol  = "bgp"
     }]
   }]
 }
@@ -69,35 +69,23 @@ resource "nxos_nvo" "example" {
 Required:
 
 - `id` (Number) Network Virtualization Overlay Endpoint (NVE) ID.
-  - Default value: `1`
 
 Optional:
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) Administrative Up or Down state of the NVE.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
 - `advertise_virtual_mac` (Boolean) Enable or disable Virtual MAC Advertisement in VPC mode.
-  - Default value: `false`
 - `hold_down_time` (Number) Hold Down Time.
   - Range: `1`-`1500`
-  - Default value: `180`
 - `host_reachability_protocol` (String) Host Reachability Protocol.
   - Choices: `Flood-and-learn`, `bgp`, `controller`, `openflow`, `openflowIR`
-  - Default value: `Flood-and-learn`
 - `ingress_replication_protocol_bgp` (Boolean) VxLAN Ingress Replication Protocol BGP.
-  - Default value: `false`
 - `multicast_group_l2` (String) Base multicast group address for L2.
-  - Default value: `0.0.0.0`
 - `multicast_group_l3` (String) Base multicast group address for L3.
-  - Default value: `0.0.0.0`
 - `multisite_source_interface` (String) Interface representing the Multisite Border Gateway. Must match first field in the output of `show int brief`.
-  - Default value: `unspecified`
 - `source_interface` (String) Source Interface associated with the NVE. Must match first field in the output of `show int brief`.
-  - Default value: `unspecified`
 - `suppress_arp` (Boolean) Suppress ARP.
-  - Default value: `false`
 - `suppress_mac_route` (Boolean) Suppress MAC Route.
-  - Default value: `false`
 - `vnis` (Attributes List) List of VNIs. (see [below for nested schema](#nestedatt--nve_interfaces--vnis))
 
 <a id="nestedatt--nve_interfaces--vnis"></a>
@@ -105,24 +93,19 @@ Optional:
 
 Required:
 
-- `vni` (Number) Virtual Network ID.
+- `vni` (Number) Configure Virtual Network ID.
   - Range: `1`-`16777214`
 
 Optional:
 
-- `associate_vrf` (Boolean) Configures VNI as L3 VNI.
-  - Default value: `false`
-- `multicast_group` (String) Configures multicast group address for VNI.
-  - Default value: `0.0.0.0`
+- `associate_vrf` (Boolean) Configures VNI(s) as L3 VNI.
+- `ingress_replication_protocol` (String) Configure VxLAN Ingress Replication mode.
+  - Choices: `unknown`, `bgp`, `static`
+- `multicast_group` (String) Configures multicast group address for VNI(s).
 - `multisite_ingress_replication` (String) Enable or disable Multisite Ingress Replication for VNI(s).
-  - Choices: `enable`, `disable`, `enableOptimized`
-  - Default value: `disable`
-- `protocol` (String) Configure VxLAN Ingress Replication mode.
-  - Choices: `bgp`, `unknown`, `static`
-  - Default value: `unknown`
+  - Choices: `disable`, `enable`, `enableOptimized`
 - `suppress_arp` (String) Enable or disable ARP suppression for VNI(s).
-  - Choices: `enabled`, `disabled`, `off`
-  - Default value: `off`
+  - Choices: `off`, `enabled`, `disabled`
 
 ## Import
 

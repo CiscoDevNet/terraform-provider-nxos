@@ -78,7 +78,7 @@ func (d *NVODataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							Computed:            true,
 						},
 						"admin_state": schema.StringAttribute{
-							MarkdownDescription: "Administrative state.",
+							MarkdownDescription: "Administrative Up or Down state of the NVE.",
 							Computed:            true,
 						},
 						"advertise_virtual_mac": schema.BoolAttribute{
@@ -127,15 +127,15 @@ func (d *NVODataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"vni": schema.Int64Attribute{
-										MarkdownDescription: "Virtual Network ID.",
+										MarkdownDescription: "Configure Virtual Network ID.",
 										Computed:            true,
 									},
 									"associate_vrf": schema.BoolAttribute{
-										MarkdownDescription: "Configures VNI as L3 VNI.",
+										MarkdownDescription: "Configures VNI(s) as L3 VNI.",
 										Computed:            true,
 									},
 									"multicast_group": schema.StringAttribute{
-										MarkdownDescription: "Configures multicast group address for VNI.",
+										MarkdownDescription: "Configures multicast group address for VNI(s).",
 										Computed:            true,
 									},
 									"multisite_ingress_replication": schema.StringAttribute{
@@ -146,7 +146,7 @@ func (d *NVODataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										MarkdownDescription: "Enable or disable ARP suppression for VNI(s).",
 										Computed:            true,
 									},
-									"protocol": schema.StringAttribute{
+									"ingress_replication_protocol": schema.StringAttribute{
 										MarkdownDescription: "Configure VxLAN Ingress Replication mode.",
 										Computed:            true,
 									},

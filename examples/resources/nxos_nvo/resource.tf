@@ -18,7 +18,7 @@ resource "nxos_nvo" "example" {
       multicast_group               = "0.0.0.0"
       multisite_ingress_replication = "disable"
       suppress_arp                  = "off"
-      protocol                      = "bgp"
+      ingress_replication_protocol  = "bgp"
     }]
   }]
 }

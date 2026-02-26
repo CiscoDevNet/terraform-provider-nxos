@@ -46,7 +46,7 @@ data "nxos_nvo" "example" {
 
 Read-Only:
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) Administrative Up or Down state of the NVE.
 - `advertise_virtual_mac` (Boolean) Enable or disable Virtual MAC Advertisement in VPC mode.
 - `hold_down_time` (Number) Hold Down Time.
 - `host_reachability_protocol` (String) Host Reachability Protocol.
@@ -65,9 +65,9 @@ Read-Only:
 
 Read-Only:
 
-- `associate_vrf` (Boolean) Configures VNI as L3 VNI.
-- `multicast_group` (String) Configures multicast group address for VNI.
+- `associate_vrf` (Boolean) Configures VNI(s) as L3 VNI.
+- `ingress_replication_protocol` (String) Configure VxLAN Ingress Replication mode.
+- `multicast_group` (String) Configures multicast group address for VNI(s).
 - `multisite_ingress_replication` (String) Enable or disable Multisite Ingress Replication for VNI(s).
-- `protocol` (String) Configure VxLAN Ingress Replication mode.
 - `suppress_arp` (String) Enable or disable ARP suppression for VNI(s).
-- `vni` (Number) Virtual Network ID.
+- `vni` (Number) Configure Virtual Network ID.

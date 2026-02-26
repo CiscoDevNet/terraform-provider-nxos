@@ -65,7 +65,7 @@ type NVONveInterfacesVnis struct {
 	MulticastGroup              types.String `tfsdk:"multicast_group"`
 	MultisiteIngressReplication types.String `tfsdk:"multisite_ingress_replication"`
 	SuppressArp                 types.String `tfsdk:"suppress_arp"`
-	Protocol                    types.String `tfsdk:"protocol"`
+	IngressReplicationProtocol  types.String `tfsdk:"ingress_replication_protocol"`
 }
 
 type NVOIdentity struct {
@@ -187,8 +187,8 @@ func (data NVO) toBody() nxos.Body {
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".nvoNw.children"
 						attrs = "{}"
-						if (!child.Protocol.IsUnknown() && !child.Protocol.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "proto", child.Protocol.ValueString())
+						if (!child.IngressReplicationProtocol.IsUnknown() && !child.IngressReplicationProtocol.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "proto", child.IngressReplicationProtocol.ValueString())
 						}
 						if attrs != "{}" || false {
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.nvoIngRepl.attributes", attrs)
@@ -260,7 +260,7 @@ func (data *NVO) fromBody(res gjson.Result) {
 															return true
 														},
 													)
-													nestedChildnvoNw.Protocol = types.StringValue(rnvoIngRepl.Get("nvoIngRepl.attributes.proto").String())
+													nestedChildnvoNw.IngressReplicationProtocol = types.StringValue(rnvoIngRepl.Get("nvoIngRepl.attributes.proto").String())
 												}
 												child.Vnis = append(child.Vnis, nestedChildnvoNw)
 											}
@@ -419,10 +419,10 @@ func (data *NVO) updateFromBody(res gjson.Result) {
 							return true
 						},
 					)
-					if !data.NveInterfaces[c].Vnis[nc].Protocol.IsNull() {
-						data.NveInterfaces[c].Vnis[nc].Protocol = types.StringValue(rnvoIngRepl.Get("nvoIngRepl.attributes.proto").String())
+					if !data.NveInterfaces[c].Vnis[nc].IngressReplicationProtocol.IsNull() {
+						data.NveInterfaces[c].Vnis[nc].IngressReplicationProtocol = types.StringValue(rnvoIngRepl.Get("nvoIngRepl.attributes.proto").String())
 					} else {
-						data.NveInterfaces[c].Vnis[nc].Protocol = types.StringNull()
+						data.NveInterfaces[c].Vnis[nc].IngressReplicationProtocol = types.StringNull()
 					}
 				}
 			}

@@ -16,11 +16,10 @@ child_classes:
       - nxos_name: adminSt
         tf_name: admin_state
         type: String
-        description: "Administrative state."
+        description: "The administrative state of the object or policy."
         enum_values:
           - enabled
           - disabled
-        default_value: enabled
         example: enabled
     child_classes:
       - class_name: vpcDom
@@ -35,7 +34,6 @@ child_classes:
             enum_values:
               - enabled
               - disabled
-            default_value: enabled
             example: enabled
           - nxos_name: id
             tf_name: domain_id
@@ -52,7 +50,6 @@ child_classes:
             enum_values:
               - enabled
               - disabled
-            default_value: disabled
             example: enabled
           - nxos_name: autoRecoveryIntvl
             tf_name: auto_recovery_interval
@@ -60,7 +57,6 @@ child_classes:
             description: "Auto Recovery interval."
             min_int: 60
             max_int: 3600
-            default_value: 240
             example: 480
           - nxos_name: delayRestoreOrphanPort
             tf_name: delay_restore_orphan_port
@@ -68,7 +64,6 @@ child_classes:
             description: "Delay restore for orphan ports."
             min_int: 0
             max_int: 300
-            default_value: 0
             example: 10
           - nxos_name: delayRestoreSVI
             tf_name: delay_restore_svi
@@ -76,7 +71,6 @@ child_classes:
             description: "Delay restore for SVI."
             min_int: 1
             max_int: 3600
-            default_value: 10
             example: 20
           - nxos_name: delayRestoreVPC
             tf_name: delay_restore_vpc
@@ -84,7 +78,6 @@ child_classes:
             description: "Delay restore for vPC links."
             min_int: 1
             max_int: 3600
-            default_value: 30
             example: 60
           - nxos_name: dscp
             tf_name: dscp
@@ -92,7 +85,6 @@ child_classes:
             description: "DSCP."
             min_int: 0
             max_int: 63
-            default_value: 0
             example: 0
           - nxos_name: fastConvergence
             tf_name: fast_convergence
@@ -101,7 +93,6 @@ child_classes:
             enum_values:
               - enabled
               - disabled
-            default_value: disabled
             example: enabled
           - nxos_name: grcflCnstncyChck
             tf_name: graceful_consistency_check
@@ -110,7 +101,6 @@ child_classes:
             enum_values:
               - enabled
               - disabled
-            default_value: enabled
             example: disabled
           - nxos_name: l3PeerRouter
             tf_name: l3_peer_router
@@ -119,7 +109,6 @@ child_classes:
             enum_values:
               - enabled
               - disabled
-            default_value: disabled
             example: enabled
           - nxos_name: l3PeerRouterSyslog
             tf_name: l3_peer_router_syslog
@@ -128,7 +117,6 @@ child_classes:
             enum_values:
               - enabled
               - disabled
-            default_value: disabled
             example: enabled
           - nxos_name: l3PeerRouterSyslogInterval
             tf_name: l3_peer_router_syslog_interval
@@ -136,7 +124,6 @@ child_classes:
             description: "L3 Peer Router Syslog Interval."
             min_int: 1
             max_int: 3600
-            default_value: 3600
             example: 3000
           - nxos_name: peerGw
             tf_name: peer_gateway
@@ -145,12 +132,11 @@ child_classes:
             enum_values:
               - enabled
               - disabled
-            default_value: disabled
             example: enabled
           - nxos_name: peerIp
             tf_name: peer_ip
             type: String
-            description: "vPC peer IP address."
+            description: "vpc peer IP address."
             example: 1.2.3.4
           - nxos_name: peerSwitch
             tf_name: peer_switch
@@ -159,28 +145,25 @@ child_classes:
             enum_values:
               - enabled
               - disabled
-            default_value: disabled
             example: enabled
           - nxos_name: rolePrio
             tf_name: role_priority
             type: Int64
-            description: "Role priority."
+            description: "role priority."
             min_int: 1
             max_int: 65535
-            default_value: 32667
             example: 100
           - nxos_name: sysMac
             tf_name: sys_mac
             type: String
-            description: "System MAC."
+            description: "system mac."
             example: 01:01:01:01:01:01
           - nxos_name: sysPrio
             tf_name: system_priority
             type: Int64
-            description: "System priority."
+            description: "system priority."
             min_int: 1
             max_int: 65535
-            default_value: 32667
             example: 100
           - nxos_name: track
             tf_name: track
@@ -188,12 +171,11 @@ child_classes:
             description: "Tracking object to suspend vPC if object goes down."
             min_int: 0
             max_int: 500
-            default_value: 0
             example: 10
           - nxos_name: virtualIp
             tf_name: virtual_ip
             type: String
-            description: "vPC virtual IP address (vIP)."
+            description: "vpc virtual IP address (vIP)."
             example: 1.1.1.1
         child_classes:
           - class_name: vpcKeepalive
@@ -205,96 +187,103 @@ child_classes:
                 tf_name: keepalive_destination_ip
                 type: String
                 mandatory: true
-                description: "vPC Keepalive destination address."
+                description: "destination address."
                 example: "192.168.1.1"
               - nxos_name: flushTout
                 tf_name: keepalive_flush_timeout
                 type: Int64
-                description: "vPC Keepalive flush timeout."
+                description: "flush timeout."
                 min_int: 3
                 max_int: 10
-                default_value: 3
                 example: 3
               - nxos_name: interval
                 tf_name: keepalive_interval
                 type: Int64
-                description: "vPC Keepalive interval."
+                description: "interval."
                 min_int: 400
                 max_int: 10000
-                default_value: 1000
                 example: 1000
               - nxos_name: precType
                 tf_name: keepalive_precedence_type
-                type: Int64
-                description: "vPC Keepalive precedence type. `0` - network, `1` - internet, `2` - critical, `3` flash-override, `4` - flash, `5` - immediate, `6` - prioriy, `7` - routine."
-                min_int: 0
-                max_int: 7
-                default_value: 0
-                example: 0
+                type: String
+                description: "precedence type."
+                enum_values:
+                  - network
+                  - internet
+                  - critical
+                  - flash-override
+                  - flash
+                  - immediate
+                  - priority
+                  - routine
+                example: network
               - nxos_name: precValue
                 tf_name: keepalive_precedence_value
                 type: Int64
-                description: "vPC Keepalive precedence value."
+                description: "precedence value."
                 min_int: 0
                 max_int: 7
-                default_value: 6
                 example: 6
               - nxos_name: srcIp
                 tf_name: keepalive_source_ip
                 type: String
                 mandatory: true
-                description: "vPC Keepalive source address."
+                description: "source address."
                 example: "192.168.1.2"
               - nxos_name: timeout
                 tf_name: keepalive_timeout
                 type: Int64
-                description: "vPC Keepalive timeout."
+                description: "timeout."
                 min_int: 3
                 max_int: 20
-                default_value: 5
                 example: 5
               - nxos_name: tosByte
                 tf_name: keepalive_type_of_service_byte
                 type: Int64
-                description: "vPC Keepalive type of service (ToS) byte."
+                description: "tos byte."
                 min_int: 0
                 max_int: 255
-                default_value: 0
                 example: 0
               - nxos_name: tosCfgType
                 tf_name: keepalive_type_of_service_configuration_type
-                type: Int64
-                description: "vPC Keepalive type of service (ToS) configuration type. `0` - noCfg, `1` - tos-byte, `2` - tos-value, `3` - tos-type, `4` -  precedence-type, `5` - precedence-value."
-                min_int: 0
-                max_int: 5
-                default_value: 0
-                example: 0
+                type: String
+                description: "tos config type."
+                enum_values:
+                  - noCfg
+                  - tos-byte
+                  - tos-value
+                  - tos-type
+                  - precedence-type
+                  - precedence-value
+                example: noCfg
               - nxos_name: tosType
                 tf_name: keepalive_type_of_service_type
-                type: Int64
-                description: "vPC Keepalive type of service (ToS) type. `0` - min-delay, `1` - max-throughput, `2` - max-reliability, `3` - min-monetary-cost, `4` -  normal."
-                min_int: 0
-                max_int: 4
-                default_value: 4
-                example: 0
+                type: String
+                description: "tos type."
+                enum_values:
+                  - min-delay
+                  - max-throughput
+                  - max-reliability
+                  - min-monetary-cost
+                  - normal
+                example: min-delay
               - nxos_name: tosValue
                 tf_name: keepalive_type_of_service_value
                 type: Int64
-                description: "vPC Keepalive type of service (ToS) value."
+                description: "tos value."
                 min_int: 0
                 max_int: 15
-                default_value: 0
                 example: 0
               - nxos_name: udpPort
                 tf_name: keepalive_udp_port
                 type: Int64
-                description: "vPC Keepalive UDP port."
+                description: "port number."
                 min_int: 1
                 max_int: 65535
                 example: 1234
               - nxos_name: vrf
                 tf_name: keepalive_vrf
-                description: "vPC Keepalive VRF."
+                description: "vrf name."
                 type: String
                 example: "management"
             child_classes:
@@ -307,7 +296,7 @@ child_classes:
                     tf_name: peerlink_port_channel_id
                     type: String
                     mandatory: true
-                    description: "vPC Peerlink port-channel id."
+                    description: "An identifier."
                     example: "po1"
           - class_name: vpcIf
             doc_path: System/vpc:If/

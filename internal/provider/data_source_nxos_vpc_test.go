@@ -56,13 +56,13 @@ func TestAccDataSourceNxosVPC(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_destination_ip", "192.168.1.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_flush_timeout", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_interval", "1000"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_precedence_type", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_precedence_type", "network"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_precedence_value", "6"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_source_ip", "192.168.1.2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_timeout", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_type_of_service_byte", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_type_of_service_configuration_type", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_type_of_service_type", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_type_of_service_configuration_type", "noCfg"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_type_of_service_type", "min-delay"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_type_of_service_value", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_udp_port", "1234"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_vrf", "management"))
@@ -148,13 +148,13 @@ func testAccDataSourceNxosVPCConfig() string {
 	config += `	keepalive_destination_ip = "192.168.1.1"` + "\n"
 	config += `	keepalive_flush_timeout = 3` + "\n"
 	config += `	keepalive_interval = 1000` + "\n"
-	config += `	keepalive_precedence_type = 0` + "\n"
+	config += `	keepalive_precedence_type = "network"` + "\n"
 	config += `	keepalive_precedence_value = 6` + "\n"
 	config += `	keepalive_source_ip = "192.168.1.2"` + "\n"
 	config += `	keepalive_timeout = 5` + "\n"
 	config += `	keepalive_type_of_service_byte = 0` + "\n"
-	config += `	keepalive_type_of_service_configuration_type = 0` + "\n"
-	config += `	keepalive_type_of_service_type = 0` + "\n"
+	config += `	keepalive_type_of_service_configuration_type = "noCfg"` + "\n"
+	config += `	keepalive_type_of_service_type = "min-delay"` + "\n"
 	config += `	keepalive_type_of_service_value = 0` + "\n"
 	config += `	keepalive_udp_port = 1234` + "\n"
 	config += `	keepalive_vrf = "management"` + "\n"

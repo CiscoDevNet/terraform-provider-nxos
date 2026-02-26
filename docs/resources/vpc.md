@@ -53,13 +53,13 @@ resource "nxos_vpc" "example" {
   keepalive_destination_ip                     = "192.168.1.1"
   keepalive_flush_timeout                      = 3
   keepalive_interval                           = 1000
-  keepalive_precedence_type                    = 0
+  keepalive_precedence_type                    = "network"
   keepalive_precedence_value                   = 6
   keepalive_source_ip                          = "192.168.1.2"
   keepalive_timeout                            = 5
   keepalive_type_of_service_byte               = 0
-  keepalive_type_of_service_configuration_type = 0
-  keepalive_type_of_service_type               = 0
+  keepalive_type_of_service_configuration_type = "noCfg"
+  keepalive_type_of_service_type               = "min-delay"
   keepalive_type_of_service_value              = 0
   keepalive_udp_port                           = 1234
   keepalive_vrf                                = "management"
@@ -78,101 +78,74 @@ resource "nxos_vpc" "example" {
 
 - `domain_id` (Number) Domain id.
   - Range: `1`-`1000`
-- `keepalive_destination_ip` (String) vPC Keepalive destination address.
-- `keepalive_source_ip` (String) vPC Keepalive source address.
-- `peerlink_port_channel_id` (String) vPC Peerlink port-channel id.
+- `keepalive_destination_ip` (String) destination address.
+- `keepalive_source_ip` (String) source address.
+- `peerlink_port_channel_id` (String) An identifier.
 
 ### Optional
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `auto_recovery` (String) Auto Recovery.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
 - `auto_recovery_interval` (Number) Auto Recovery interval.
   - Range: `60`-`3600`
-  - Default value: `240`
 - `delay_restore_orphan_port` (Number) Delay restore for orphan ports.
   - Range: `0`-`300`
-  - Default value: `0`
 - `delay_restore_svi` (Number) Delay restore for SVI.
   - Range: `1`-`3600`
-  - Default value: `10`
 - `delay_restore_vpc` (Number) Delay restore for vPC links.
   - Range: `1`-`3600`
-  - Default value: `30`
 - `device` (String) A device name from the provider configuration.
 - `domain_admin_state` (String) vPC suspend locally.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `dscp` (Number) DSCP.
   - Range: `0`-`63`
-  - Default value: `0`
 - `fast_convergence` (String) Fast Convergence.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
 - `graceful_consistency_check` (String) Graceful Type-1 Consistency Check.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `interfaces` (Attributes List) List of vPC interfaces. (see [below for nested schema](#nestedatt--interfaces))
-- `keepalive_flush_timeout` (Number) vPC Keepalive flush timeout.
+- `keepalive_flush_timeout` (Number) flush timeout.
   - Range: `3`-`10`
-  - Default value: `3`
-- `keepalive_interval` (Number) vPC Keepalive interval.
+- `keepalive_interval` (Number) interval.
   - Range: `400`-`10000`
-  - Default value: `1000`
-- `keepalive_precedence_type` (Number) vPC Keepalive precedence type. `0` - network, `1` - internet, `2` - critical, `3` flash-override, `4` - flash, `5` - immediate, `6` - prioriy, `7` - routine.
+- `keepalive_precedence_type` (String) precedence type.
+  - Choices: `network`, `internet`, `critical`, `flash-override`, `flash`, `immediate`, `priority`, `routine`
+- `keepalive_precedence_value` (Number) precedence value.
   - Range: `0`-`7`
-  - Default value: `0`
-- `keepalive_precedence_value` (Number) vPC Keepalive precedence value.
-  - Range: `0`-`7`
-  - Default value: `6`
-- `keepalive_timeout` (Number) vPC Keepalive timeout.
+- `keepalive_timeout` (Number) timeout.
   - Range: `3`-`20`
-  - Default value: `5`
-- `keepalive_type_of_service_byte` (Number) vPC Keepalive type of service (ToS) byte.
+- `keepalive_type_of_service_byte` (Number) tos byte.
   - Range: `0`-`255`
-  - Default value: `0`
-- `keepalive_type_of_service_configuration_type` (Number) vPC Keepalive type of service (ToS) configuration type. `0` - noCfg, `1` - tos-byte, `2` - tos-value, `3` - tos-type, `4` -  precedence-type, `5` - precedence-value.
-  - Range: `0`-`5`
-  - Default value: `0`
-- `keepalive_type_of_service_type` (Number) vPC Keepalive type of service (ToS) type. `0` - min-delay, `1` - max-throughput, `2` - max-reliability, `3` - min-monetary-cost, `4` -  normal.
-  - Range: `0`-`4`
-  - Default value: `4`
-- `keepalive_type_of_service_value` (Number) vPC Keepalive type of service (ToS) value.
+- `keepalive_type_of_service_configuration_type` (String) tos config type.
+  - Choices: `noCfg`, `tos-byte`, `tos-value`, `tos-type`, `precedence-type`, `precedence-value`
+- `keepalive_type_of_service_type` (String) tos type.
+  - Choices: `min-delay`, `max-throughput`, `max-reliability`, `min-monetary-cost`, `normal`
+- `keepalive_type_of_service_value` (Number) tos value.
   - Range: `0`-`15`
-  - Default value: `0`
-- `keepalive_udp_port` (Number) vPC Keepalive UDP port.
+- `keepalive_udp_port` (Number) port number.
   - Range: `1`-`65535`
-- `keepalive_vrf` (String) vPC Keepalive VRF.
+- `keepalive_vrf` (String) vrf name.
 - `l3_peer_router` (String) L3 Peer Router.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
 - `l3_peer_router_syslog` (String) L3 Peer Router Syslog.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
 - `l3_peer_router_syslog_interval` (Number) L3 Peer Router Syslog Interval.
   - Range: `1`-`3600`
-  - Default value: `3600`
 - `peer_gateway` (String) Peer Gateway.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
-- `peer_ip` (String) vPC peer IP address.
+- `peer_ip` (String) vpc peer IP address.
 - `peer_switch` (String) vPC pair switches.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
-- `role_priority` (Number) Role priority.
+- `role_priority` (Number) role priority.
   - Range: `1`-`65535`
-  - Default value: `32667`
-- `sys_mac` (String) System MAC.
-- `system_priority` (Number) System priority.
+- `sys_mac` (String) system mac.
+- `system_priority` (Number) system priority.
   - Range: `1`-`65535`
-  - Default value: `32667`
 - `track` (Number) Tracking object to suspend vPC if object goes down.
   - Range: `0`-`500`
-  - Default value: `0`
-- `virtual_ip` (String) vPC virtual IP address (vIP).
+- `virtual_ip` (String) vpc virtual IP address (vIP).
 
 ### Read-Only
 

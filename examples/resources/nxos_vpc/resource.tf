@@ -24,13 +24,13 @@ resource "nxos_vpc" "example" {
   keepalive_destination_ip                     = "192.168.1.1"
   keepalive_flush_timeout                      = 3
   keepalive_interval                           = 1000
-  keepalive_precedence_type                    = 0
+  keepalive_precedence_type                    = "network"
   keepalive_precedence_value                   = 6
   keepalive_source_ip                          = "192.168.1.2"
   keepalive_timeout                            = 5
   keepalive_type_of_service_byte               = 0
-  keepalive_type_of_service_configuration_type = 0
-  keepalive_type_of_service_type               = 0
+  keepalive_type_of_service_configuration_type = "noCfg"
+  keepalive_type_of_service_type               = "min-delay"
   keepalive_type_of_service_value              = 0
   keepalive_udp_port                           = 1234
   keepalive_vrf                                = "management"

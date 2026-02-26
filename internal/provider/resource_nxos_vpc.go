@@ -32,10 +32,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -81,19 +79,15 @@ func (r *VPCResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				},
 			},
 			"admin_state": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("enabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
 			"domain_admin_state": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC suspend locally.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("vPC suspend locally.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("enabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
@@ -106,263 +100,213 @@ func (r *VPCResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				},
 			},
 			"auto_recovery": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Auto Recovery.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Auto Recovery.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("disabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
 			"auto_recovery_interval": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Auto Recovery interval.").AddIntegerRangeDescription(60, 3600).AddDefaultValueDescription("240").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Auto Recovery interval.").AddIntegerRangeDescription(60, 3600).String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(240),
 				Validators: []validator.Int64{
 					int64validator.Between(60, 3600),
 				},
 			},
 			"delay_restore_orphan_port": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Delay restore for orphan ports.").AddIntegerRangeDescription(0, 300).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Delay restore for orphan ports.").AddIntegerRangeDescription(0, 300).String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 300),
 				},
 			},
 			"delay_restore_svi": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Delay restore for SVI.").AddIntegerRangeDescription(1, 3600).AddDefaultValueDescription("10").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Delay restore for SVI.").AddIntegerRangeDescription(1, 3600).String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(10),
 				Validators: []validator.Int64{
 					int64validator.Between(1, 3600),
 				},
 			},
 			"delay_restore_vpc": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Delay restore for vPC links.").AddIntegerRangeDescription(1, 3600).AddDefaultValueDescription("30").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Delay restore for vPC links.").AddIntegerRangeDescription(1, 3600).String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(30),
 				Validators: []validator.Int64{
 					int64validator.Between(1, 3600),
 				},
 			},
 			"dscp": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("DSCP.").AddIntegerRangeDescription(0, 63).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("DSCP.").AddIntegerRangeDescription(0, 63).String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 63),
 				},
 			},
 			"fast_convergence": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Fast Convergence.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Fast Convergence.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("disabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
 			"graceful_consistency_check": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Graceful Type-1 Consistency Check.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Graceful Type-1 Consistency Check.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("enabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
 			"l3_peer_router": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("L3 Peer Router.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("L3 Peer Router.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("disabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
 			"l3_peer_router_syslog": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("L3 Peer Router Syslog.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("L3 Peer Router Syslog.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("disabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
 			"l3_peer_router_syslog_interval": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("L3 Peer Router Syslog Interval.").AddIntegerRangeDescription(1, 3600).AddDefaultValueDescription("3600").String,
+				MarkdownDescription: helpers.NewAttributeDescription("L3 Peer Router Syslog Interval.").AddIntegerRangeDescription(1, 3600).String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(3600),
 				Validators: []validator.Int64{
 					int64validator.Between(1, 3600),
 				},
 			},
 			"peer_gateway": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Peer Gateway.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Peer Gateway.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("disabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
 			"peer_ip": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC peer IP address.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("vpc peer IP address.").String,
 				Optional:            true,
 			},
 			"peer_switch": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC pair switches.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("vPC pair switches.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("disabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
 			"role_priority": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Role priority.").AddIntegerRangeDescription(1, 65535).AddDefaultValueDescription("32667").String,
+				MarkdownDescription: helpers.NewAttributeDescription("role priority.").AddIntegerRangeDescription(1, 65535).String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(32667),
 				Validators: []validator.Int64{
 					int64validator.Between(1, 65535),
 				},
 			},
 			"sys_mac": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("System MAC.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("system mac.").String,
 				Optional:            true,
 			},
 			"system_priority": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("System priority.").AddIntegerRangeDescription(1, 65535).AddDefaultValueDescription("32667").String,
+				MarkdownDescription: helpers.NewAttributeDescription("system priority.").AddIntegerRangeDescription(1, 65535).String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(32667),
 				Validators: []validator.Int64{
 					int64validator.Between(1, 65535),
 				},
 			},
 			"track": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Tracking object to suspend vPC if object goes down.").AddIntegerRangeDescription(0, 500).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Tracking object to suspend vPC if object goes down.").AddIntegerRangeDescription(0, 500).String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 500),
 				},
 			},
 			"virtual_ip": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC virtual IP address (vIP).").String,
+				MarkdownDescription: helpers.NewAttributeDescription("vpc virtual IP address (vIP).").String,
 				Optional:            true,
 			},
 			"keepalive_destination_ip": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive destination address.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("destination address.").String,
 				Required:            true,
 			},
 			"keepalive_flush_timeout": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive flush timeout.").AddIntegerRangeDescription(3, 10).AddDefaultValueDescription("3").String,
+				MarkdownDescription: helpers.NewAttributeDescription("flush timeout.").AddIntegerRangeDescription(3, 10).String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(3),
 				Validators: []validator.Int64{
 					int64validator.Between(3, 10),
 				},
 			},
 			"keepalive_interval": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive interval.").AddIntegerRangeDescription(400, 10000).AddDefaultValueDescription("1000").String,
+				MarkdownDescription: helpers.NewAttributeDescription("interval.").AddIntegerRangeDescription(400, 10000).String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(1000),
 				Validators: []validator.Int64{
 					int64validator.Between(400, 10000),
 				},
 			},
-			"keepalive_precedence_type": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive precedence type. `0` - network, `1` - internet, `2` - critical, `3` flash-override, `4` - flash, `5` - immediate, `6` - prioriy, `7` - routine.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("0").String,
+			"keepalive_precedence_type": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("precedence type.").AddStringEnumDescription("network", "internet", "critical", "flash-override", "flash", "immediate", "priority", "routine").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(0),
-				Validators: []validator.Int64{
-					int64validator.Between(0, 7),
+				Validators: []validator.String{
+					stringvalidator.OneOf("network", "internet", "critical", "flash-override", "flash", "immediate", "priority", "routine"),
 				},
 			},
 			"keepalive_precedence_value": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive precedence value.").AddIntegerRangeDescription(0, 7).AddDefaultValueDescription("6").String,
+				MarkdownDescription: helpers.NewAttributeDescription("precedence value.").AddIntegerRangeDescription(0, 7).String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(6),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 7),
 				},
 			},
 			"keepalive_source_ip": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive source address.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("source address.").String,
 				Required:            true,
 			},
 			"keepalive_timeout": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive timeout.").AddIntegerRangeDescription(3, 20).AddDefaultValueDescription("5").String,
+				MarkdownDescription: helpers.NewAttributeDescription("timeout.").AddIntegerRangeDescription(3, 20).String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(5),
 				Validators: []validator.Int64{
 					int64validator.Between(3, 20),
 				},
 			},
 			"keepalive_type_of_service_byte": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive type of service (ToS) byte.").AddIntegerRangeDescription(0, 255).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("tos byte.").AddIntegerRangeDescription(0, 255).String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 255),
 				},
 			},
-			"keepalive_type_of_service_configuration_type": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive type of service (ToS) configuration type. `0` - noCfg, `1` - tos-byte, `2` - tos-value, `3` - tos-type, `4` -  precedence-type, `5` - precedence-value.").AddIntegerRangeDescription(0, 5).AddDefaultValueDescription("0").String,
+			"keepalive_type_of_service_configuration_type": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("tos config type.").AddStringEnumDescription("noCfg", "tos-byte", "tos-value", "tos-type", "precedence-type", "precedence-value").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(0),
-				Validators: []validator.Int64{
-					int64validator.Between(0, 5),
+				Validators: []validator.String{
+					stringvalidator.OneOf("noCfg", "tos-byte", "tos-value", "tos-type", "precedence-type", "precedence-value"),
 				},
 			},
-			"keepalive_type_of_service_type": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive type of service (ToS) type. `0` - min-delay, `1` - max-throughput, `2` - max-reliability, `3` - min-monetary-cost, `4` -  normal.").AddIntegerRangeDescription(0, 4).AddDefaultValueDescription("4").String,
+			"keepalive_type_of_service_type": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("tos type.").AddStringEnumDescription("min-delay", "max-throughput", "max-reliability", "min-monetary-cost", "normal").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(4),
-				Validators: []validator.Int64{
-					int64validator.Between(0, 4),
+				Validators: []validator.String{
+					stringvalidator.OneOf("min-delay", "max-throughput", "max-reliability", "min-monetary-cost", "normal"),
 				},
 			},
 			"keepalive_type_of_service_value": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive type of service (ToS) value.").AddIntegerRangeDescription(0, 15).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("tos value.").AddIntegerRangeDescription(0, 15).String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 15),
 				},
 			},
 			"keepalive_udp_port": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive UDP port.").AddIntegerRangeDescription(1, 65535).String,
+				MarkdownDescription: helpers.NewAttributeDescription("port number.").AddIntegerRangeDescription(1, 65535).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 65535),
 				},
 			},
 			"keepalive_vrf": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Keepalive VRF.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("vrf name.").String,
 				Optional:            true,
 			},
 			"peerlink_port_channel_id": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("vPC Peerlink port-channel id.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("An identifier.").String,
 				Required:            true,
 			},
 			"interfaces": schema.ListNestedAttribute{

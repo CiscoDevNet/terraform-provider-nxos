@@ -69,7 +69,7 @@ func (d *VPCDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				Computed:            true,
 			},
 			"admin_state": schema.StringAttribute{
-				MarkdownDescription: "Administrative state.",
+				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
 			"domain_admin_state": schema.StringAttribute{
@@ -129,7 +129,7 @@ func (d *VPCDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				Computed:            true,
 			},
 			"peer_ip": schema.StringAttribute{
-				MarkdownDescription: "vPC peer IP address.",
+				MarkdownDescription: "vpc peer IP address.",
 				Computed:            true,
 			},
 			"peer_switch": schema.StringAttribute{
@@ -137,15 +137,15 @@ func (d *VPCDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				Computed:            true,
 			},
 			"role_priority": schema.Int64Attribute{
-				MarkdownDescription: "Role priority.",
+				MarkdownDescription: "role priority.",
 				Computed:            true,
 			},
 			"sys_mac": schema.StringAttribute{
-				MarkdownDescription: "System MAC.",
+				MarkdownDescription: "system mac.",
 				Computed:            true,
 			},
 			"system_priority": schema.Int64Attribute{
-				MarkdownDescription: "System priority.",
+				MarkdownDescription: "system priority.",
 				Computed:            true,
 			},
 			"track": schema.Int64Attribute{
@@ -153,63 +153,63 @@ func (d *VPCDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				Computed:            true,
 			},
 			"virtual_ip": schema.StringAttribute{
-				MarkdownDescription: "vPC virtual IP address (vIP).",
+				MarkdownDescription: "vpc virtual IP address (vIP).",
 				Computed:            true,
 			},
 			"keepalive_destination_ip": schema.StringAttribute{
-				MarkdownDescription: "vPC Keepalive destination address.",
+				MarkdownDescription: "destination address.",
 				Computed:            true,
 			},
 			"keepalive_flush_timeout": schema.Int64Attribute{
-				MarkdownDescription: "vPC Keepalive flush timeout.",
+				MarkdownDescription: "flush timeout.",
 				Computed:            true,
 			},
 			"keepalive_interval": schema.Int64Attribute{
-				MarkdownDescription: "vPC Keepalive interval.",
+				MarkdownDescription: "interval.",
 				Computed:            true,
 			},
-			"keepalive_precedence_type": schema.Int64Attribute{
-				MarkdownDescription: "vPC Keepalive precedence type. `0` - network, `1` - internet, `2` - critical, `3` flash-override, `4` - flash, `5` - immediate, `6` - prioriy, `7` - routine.",
+			"keepalive_precedence_type": schema.StringAttribute{
+				MarkdownDescription: "precedence type.",
 				Computed:            true,
 			},
 			"keepalive_precedence_value": schema.Int64Attribute{
-				MarkdownDescription: "vPC Keepalive precedence value.",
+				MarkdownDescription: "precedence value.",
 				Computed:            true,
 			},
 			"keepalive_source_ip": schema.StringAttribute{
-				MarkdownDescription: "vPC Keepalive source address.",
+				MarkdownDescription: "source address.",
 				Computed:            true,
 			},
 			"keepalive_timeout": schema.Int64Attribute{
-				MarkdownDescription: "vPC Keepalive timeout.",
+				MarkdownDescription: "timeout.",
 				Computed:            true,
 			},
 			"keepalive_type_of_service_byte": schema.Int64Attribute{
-				MarkdownDescription: "vPC Keepalive type of service (ToS) byte.",
+				MarkdownDescription: "tos byte.",
 				Computed:            true,
 			},
-			"keepalive_type_of_service_configuration_type": schema.Int64Attribute{
-				MarkdownDescription: "vPC Keepalive type of service (ToS) configuration type. `0` - noCfg, `1` - tos-byte, `2` - tos-value, `3` - tos-type, `4` -  precedence-type, `5` - precedence-value.",
+			"keepalive_type_of_service_configuration_type": schema.StringAttribute{
+				MarkdownDescription: "tos config type.",
 				Computed:            true,
 			},
-			"keepalive_type_of_service_type": schema.Int64Attribute{
-				MarkdownDescription: "vPC Keepalive type of service (ToS) type. `0` - min-delay, `1` - max-throughput, `2` - max-reliability, `3` - min-monetary-cost, `4` -  normal.",
+			"keepalive_type_of_service_type": schema.StringAttribute{
+				MarkdownDescription: "tos type.",
 				Computed:            true,
 			},
 			"keepalive_type_of_service_value": schema.Int64Attribute{
-				MarkdownDescription: "vPC Keepalive type of service (ToS) value.",
+				MarkdownDescription: "tos value.",
 				Computed:            true,
 			},
 			"keepalive_udp_port": schema.Int64Attribute{
-				MarkdownDescription: "vPC Keepalive UDP port.",
+				MarkdownDescription: "port number.",
 				Computed:            true,
 			},
 			"keepalive_vrf": schema.StringAttribute{
-				MarkdownDescription: "vPC Keepalive VRF.",
+				MarkdownDescription: "vrf name.",
 				Computed:            true,
 			},
 			"peerlink_port_channel_id": schema.StringAttribute{
-				MarkdownDescription: "vPC Peerlink port-channel id.",
+				MarkdownDescription: "An identifier.",
 				Computed:            true,
 			},
 			"interfaces": schema.ListNestedAttribute{

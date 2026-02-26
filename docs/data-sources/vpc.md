@@ -40,7 +40,7 @@ data "nxos_vpc" "example" {
 
 ### Read-Only
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) The administrative state of the object or policy.
 - `auto_recovery` (String) Auto Recovery.
 - `auto_recovery_interval` (Number) Auto Recovery interval.
 - `delay_restore_orphan_port` (Number) Delay restore for orphan ports.
@@ -53,31 +53,31 @@ data "nxos_vpc" "example" {
 - `graceful_consistency_check` (String) Graceful Type-1 Consistency Check.
 - `id` (String) The distinguished name of the object.
 - `interfaces` (Attributes List) List of vPC interfaces. (see [below for nested schema](#nestedatt--interfaces))
-- `keepalive_destination_ip` (String) vPC Keepalive destination address.
-- `keepalive_flush_timeout` (Number) vPC Keepalive flush timeout.
-- `keepalive_interval` (Number) vPC Keepalive interval.
-- `keepalive_precedence_type` (Number) vPC Keepalive precedence type. `0` - network, `1` - internet, `2` - critical, `3` flash-override, `4` - flash, `5` - immediate, `6` - prioriy, `7` - routine.
-- `keepalive_precedence_value` (Number) vPC Keepalive precedence value.
-- `keepalive_source_ip` (String) vPC Keepalive source address.
-- `keepalive_timeout` (Number) vPC Keepalive timeout.
-- `keepalive_type_of_service_byte` (Number) vPC Keepalive type of service (ToS) byte.
-- `keepalive_type_of_service_configuration_type` (Number) vPC Keepalive type of service (ToS) configuration type. `0` - noCfg, `1` - tos-byte, `2` - tos-value, `3` - tos-type, `4` -  precedence-type, `5` - precedence-value.
-- `keepalive_type_of_service_type` (Number) vPC Keepalive type of service (ToS) type. `0` - min-delay, `1` - max-throughput, `2` - max-reliability, `3` - min-monetary-cost, `4` -  normal.
-- `keepalive_type_of_service_value` (Number) vPC Keepalive type of service (ToS) value.
-- `keepalive_udp_port` (Number) vPC Keepalive UDP port.
-- `keepalive_vrf` (String) vPC Keepalive VRF.
+- `keepalive_destination_ip` (String) destination address.
+- `keepalive_flush_timeout` (Number) flush timeout.
+- `keepalive_interval` (Number) interval.
+- `keepalive_precedence_type` (String) precedence type.
+- `keepalive_precedence_value` (Number) precedence value.
+- `keepalive_source_ip` (String) source address.
+- `keepalive_timeout` (Number) timeout.
+- `keepalive_type_of_service_byte` (Number) tos byte.
+- `keepalive_type_of_service_configuration_type` (String) tos config type.
+- `keepalive_type_of_service_type` (String) tos type.
+- `keepalive_type_of_service_value` (Number) tos value.
+- `keepalive_udp_port` (Number) port number.
+- `keepalive_vrf` (String) vrf name.
 - `l3_peer_router` (String) L3 Peer Router.
 - `l3_peer_router_syslog` (String) L3 Peer Router Syslog.
 - `l3_peer_router_syslog_interval` (Number) L3 Peer Router Syslog Interval.
 - `peer_gateway` (String) Peer Gateway.
-- `peer_ip` (String) vPC peer IP address.
+- `peer_ip` (String) vpc peer IP address.
 - `peer_switch` (String) vPC pair switches.
-- `peerlink_port_channel_id` (String) vPC Peerlink port-channel id.
-- `role_priority` (Number) Role priority.
-- `sys_mac` (String) System MAC.
-- `system_priority` (Number) System priority.
+- `peerlink_port_channel_id` (String) An identifier.
+- `role_priority` (Number) role priority.
+- `sys_mac` (String) system mac.
+- `system_priority` (Number) system priority.
 - `track` (Number) Tracking object to suspend vPC if object goes down.
-- `virtual_ip` (String) vPC virtual IP address (vIP).
+- `virtual_ip` (String) vpc virtual IP address (vIP).
 
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`

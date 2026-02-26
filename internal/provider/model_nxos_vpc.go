@@ -64,13 +64,13 @@ type VPC struct {
 	KeepaliveDestinationIp                  types.String    `tfsdk:"keepalive_destination_ip"`
 	KeepaliveFlushTimeout                   types.Int64     `tfsdk:"keepalive_flush_timeout"`
 	KeepaliveInterval                       types.Int64     `tfsdk:"keepalive_interval"`
-	KeepalivePrecedenceType                 types.Int64     `tfsdk:"keepalive_precedence_type"`
+	KeepalivePrecedenceType                 types.String    `tfsdk:"keepalive_precedence_type"`
 	KeepalivePrecedenceValue                types.Int64     `tfsdk:"keepalive_precedence_value"`
 	KeepaliveSourceIp                       types.String    `tfsdk:"keepalive_source_ip"`
 	KeepaliveTimeout                        types.Int64     `tfsdk:"keepalive_timeout"`
 	KeepaliveTypeOfServiceByte              types.Int64     `tfsdk:"keepalive_type_of_service_byte"`
-	KeepaliveTypeOfServiceConfigurationType types.Int64     `tfsdk:"keepalive_type_of_service_configuration_type"`
-	KeepaliveTypeOfServiceType              types.Int64     `tfsdk:"keepalive_type_of_service_type"`
+	KeepaliveTypeOfServiceConfigurationType types.String    `tfsdk:"keepalive_type_of_service_configuration_type"`
+	KeepaliveTypeOfServiceType              types.String    `tfsdk:"keepalive_type_of_service_type"`
 	KeepaliveTypeOfServiceValue             types.Int64     `tfsdk:"keepalive_type_of_service_value"`
 	KeepaliveUdpPort                        types.Int64     `tfsdk:"keepalive_udp_port"`
 	KeepaliveVrf                            types.String    `tfsdk:"keepalive_vrf"`
@@ -220,7 +220,7 @@ func (data VPC) toBody() nxos.Body {
 					attrs, _ = sjson.Set(attrs, "interval", strconv.FormatInt(data.KeepaliveInterval.ValueInt64(), 10))
 				}
 				if (!data.KeepalivePrecedenceType.IsUnknown() && !data.KeepalivePrecedenceType.IsNull()) || false {
-					attrs, _ = sjson.Set(attrs, "precType", strconv.FormatInt(data.KeepalivePrecedenceType.ValueInt64(), 10))
+					attrs, _ = sjson.Set(attrs, "precType", data.KeepalivePrecedenceType.ValueString())
 				}
 				if (!data.KeepalivePrecedenceValue.IsUnknown() && !data.KeepalivePrecedenceValue.IsNull()) || false {
 					attrs, _ = sjson.Set(attrs, "precValue", strconv.FormatInt(data.KeepalivePrecedenceValue.ValueInt64(), 10))
@@ -235,10 +235,10 @@ func (data VPC) toBody() nxos.Body {
 					attrs, _ = sjson.Set(attrs, "tosByte", strconv.FormatInt(data.KeepaliveTypeOfServiceByte.ValueInt64(), 10))
 				}
 				if (!data.KeepaliveTypeOfServiceConfigurationType.IsUnknown() && !data.KeepaliveTypeOfServiceConfigurationType.IsNull()) || false {
-					attrs, _ = sjson.Set(attrs, "tosCfgType", strconv.FormatInt(data.KeepaliveTypeOfServiceConfigurationType.ValueInt64(), 10))
+					attrs, _ = sjson.Set(attrs, "tosCfgType", data.KeepaliveTypeOfServiceConfigurationType.ValueString())
 				}
 				if (!data.KeepaliveTypeOfServiceType.IsUnknown() && !data.KeepaliveTypeOfServiceType.IsNull()) || false {
-					attrs, _ = sjson.Set(attrs, "tosType", strconv.FormatInt(data.KeepaliveTypeOfServiceType.ValueInt64(), 10))
+					attrs, _ = sjson.Set(attrs, "tosType", data.KeepaliveTypeOfServiceType.ValueString())
 				}
 				if (!data.KeepaliveTypeOfServiceValue.IsUnknown() && !data.KeepaliveTypeOfServiceValue.IsNull()) || false {
 					attrs, _ = sjson.Set(attrs, "tosValue", strconv.FormatInt(data.KeepaliveTypeOfServiceValue.ValueInt64(), 10))
@@ -349,13 +349,13 @@ func (data *VPC) fromBody(res gjson.Result) {
 				data.KeepaliveDestinationIp = types.StringValue(rvpcKeepalive.Get("vpcKeepalive.attributes.destIp").String())
 				data.KeepaliveFlushTimeout = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.flushTout").Int())
 				data.KeepaliveInterval = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.interval").Int())
-				data.KeepalivePrecedenceType = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.precType").Int())
+				data.KeepalivePrecedenceType = types.StringValue(rvpcKeepalive.Get("vpcKeepalive.attributes.precType").String())
 				data.KeepalivePrecedenceValue = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.precValue").Int())
 				data.KeepaliveSourceIp = types.StringValue(rvpcKeepalive.Get("vpcKeepalive.attributes.srcIp").String())
 				data.KeepaliveTimeout = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.timeout").Int())
 				data.KeepaliveTypeOfServiceByte = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosByte").Int())
-				data.KeepaliveTypeOfServiceConfigurationType = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosCfgType").Int())
-				data.KeepaliveTypeOfServiceType = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosType").Int())
+				data.KeepaliveTypeOfServiceConfigurationType = types.StringValue(rvpcKeepalive.Get("vpcKeepalive.attributes.tosCfgType").String())
+				data.KeepaliveTypeOfServiceType = types.StringValue(rvpcKeepalive.Get("vpcKeepalive.attributes.tosType").String())
 				data.KeepaliveTypeOfServiceValue = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosValue").Int())
 				data.KeepaliveUdpPort = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.udpPort").Int())
 				data.KeepaliveVrf = types.StringValue(rvpcKeepalive.Get("vpcKeepalive.attributes.vrf").String())
@@ -573,9 +573,9 @@ func (data *VPC) updateFromBody(res gjson.Result) {
 				data.KeepaliveInterval = types.Int64Null()
 			}
 			if !data.KeepalivePrecedenceType.IsNull() {
-				data.KeepalivePrecedenceType = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.precType").Int())
+				data.KeepalivePrecedenceType = types.StringValue(rvpcKeepalive.Get("vpcKeepalive.attributes.precType").String())
 			} else {
-				data.KeepalivePrecedenceType = types.Int64Null()
+				data.KeepalivePrecedenceType = types.StringNull()
 			}
 			if !data.KeepalivePrecedenceValue.IsNull() {
 				data.KeepalivePrecedenceValue = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.precValue").Int())
@@ -598,14 +598,14 @@ func (data *VPC) updateFromBody(res gjson.Result) {
 				data.KeepaliveTypeOfServiceByte = types.Int64Null()
 			}
 			if !data.KeepaliveTypeOfServiceConfigurationType.IsNull() {
-				data.KeepaliveTypeOfServiceConfigurationType = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosCfgType").Int())
+				data.KeepaliveTypeOfServiceConfigurationType = types.StringValue(rvpcKeepalive.Get("vpcKeepalive.attributes.tosCfgType").String())
 			} else {
-				data.KeepaliveTypeOfServiceConfigurationType = types.Int64Null()
+				data.KeepaliveTypeOfServiceConfigurationType = types.StringNull()
 			}
 			if !data.KeepaliveTypeOfServiceType.IsNull() {
-				data.KeepaliveTypeOfServiceType = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosType").Int())
+				data.KeepaliveTypeOfServiceType = types.StringValue(rvpcKeepalive.Get("vpcKeepalive.attributes.tosType").String())
 			} else {
-				data.KeepaliveTypeOfServiceType = types.Int64Null()
+				data.KeepaliveTypeOfServiceType = types.StringNull()
 			}
 			if !data.KeepaliveTypeOfServiceValue.IsNull() {
 				data.KeepaliveTypeOfServiceValue = types.Int64Value(rvpcKeepalive.Get("vpcKeepalive.attributes.tosValue").Int())

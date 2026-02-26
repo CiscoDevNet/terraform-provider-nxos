@@ -61,31 +61,31 @@ type DefaultQoSPolicyMaps struct {
 }
 
 type DefaultQoSPolicyMapsMatchClassMaps struct {
-	Name                 types.String `tfsdk:"name"`
-	QosGroupId           types.Int64  `tfsdk:"qos_group_id"`
-	BcRate               types.Int64  `tfsdk:"bc_rate"`
-	BcUnit               types.String `tfsdk:"bc_unit"`
-	BeRate               types.Int64  `tfsdk:"be_rate"`
-	BeUnit               types.String `tfsdk:"be_unit"`
-	CirRate              types.Int64  `tfsdk:"cir_rate"`
-	CirUnit              types.String `tfsdk:"cir_unit"`
-	ConformAction        types.String `tfsdk:"conform_action"`
-	ConformSetCos        types.Int64  `tfsdk:"conform_set_cos"`
-	ConformSetDscp       types.Int64  `tfsdk:"conform_set_dscp"`
-	ConformSetPrecedence types.String `tfsdk:"conform_set_precedence"`
-	ConformSetQosGroup   types.Int64  `tfsdk:"conform_set_qos_group"`
-	ExceedAction         types.String `tfsdk:"exceed_action"`
-	ExceedSetCos         types.Int64  `tfsdk:"exceed_set_cos"`
-	ExceedSetDscp        types.Int64  `tfsdk:"exceed_set_dscp"`
-	ExceedSetPrecedence  types.String `tfsdk:"exceed_set_precedence"`
-	ExceedSetQosGroup    types.Int64  `tfsdk:"exceed_set_qos_group"`
-	PirRate              types.Int64  `tfsdk:"pir_rate"`
-	PirUnit              types.String `tfsdk:"pir_unit"`
-	ViolateAction        types.String `tfsdk:"violate_action"`
-	ViolateSetCos        types.Int64  `tfsdk:"violate_set_cos"`
-	ViolateSetDscp       types.Int64  `tfsdk:"violate_set_dscp"`
-	ViolateSetPrecedence types.String `tfsdk:"violate_set_precedence"`
-	ViolateSetQosGroup   types.Int64  `tfsdk:"violate_set_qos_group"`
+	Name                       types.String `tfsdk:"name"`
+	SetQosGroupId              types.Int64  `tfsdk:"set_qos_group_id"`
+	PoliceBcRate               types.Int64  `tfsdk:"police_bc_rate"`
+	PoliceBcUnit               types.String `tfsdk:"police_bc_unit"`
+	PoliceBeRate               types.Int64  `tfsdk:"police_be_rate"`
+	PoliceBeUnit               types.String `tfsdk:"police_be_unit"`
+	PoliceCirRate              types.Int64  `tfsdk:"police_cir_rate"`
+	PoliceCirUnit              types.String `tfsdk:"police_cir_unit"`
+	PoliceConformAction        types.String `tfsdk:"police_conform_action"`
+	PoliceConformSetCos        types.Int64  `tfsdk:"police_conform_set_cos"`
+	PoliceConformSetDscp       types.Int64  `tfsdk:"police_conform_set_dscp"`
+	PoliceConformSetPrecedence types.String `tfsdk:"police_conform_set_precedence"`
+	PoliceConformSetQosGroup   types.Int64  `tfsdk:"police_conform_set_qos_group"`
+	PoliceExceedAction         types.String `tfsdk:"police_exceed_action"`
+	PoliceExceedSetCos         types.Int64  `tfsdk:"police_exceed_set_cos"`
+	PoliceExceedSetDscp        types.Int64  `tfsdk:"police_exceed_set_dscp"`
+	PoliceExceedSetPrecedence  types.String `tfsdk:"police_exceed_set_precedence"`
+	PoliceExceedSetQosGroup    types.Int64  `tfsdk:"police_exceed_set_qos_group"`
+	PolicePirRate              types.Int64  `tfsdk:"police_pir_rate"`
+	PolicePirUnit              types.String `tfsdk:"police_pir_unit"`
+	PoliceViolateAction        types.String `tfsdk:"police_violate_action"`
+	PoliceViolateSetCos        types.Int64  `tfsdk:"police_violate_set_cos"`
+	PoliceViolateSetDscp       types.Int64  `tfsdk:"police_violate_set_dscp"`
+	PoliceViolateSetPrecedence types.String `tfsdk:"police_violate_set_precedence"`
+	PoliceViolateSetQosGroup   types.Int64  `tfsdk:"police_violate_set_qos_group"`
 }
 
 type DefaultQoSPolicyInterfaceIn struct {
@@ -210,81 +210,81 @@ func (data DefaultQoS) toBody() nxos.Body {
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
 						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".ipqosMatchCMap.children"
 						attrs = "{}"
-						if (!child.QosGroupId.IsUnknown() && !child.QosGroupId.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "id", strconv.FormatInt(child.QosGroupId.ValueInt64(), 10))
+						if (!child.SetQosGroupId.IsUnknown() && !child.SetQosGroupId.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "id", strconv.FormatInt(child.SetQosGroupId.ValueInt64(), 10))
 						}
 						if attrs != "{}" || false {
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosSetQoSGrp.attributes", attrs)
 						}
 						attrs = "{}"
-						if (!child.BcRate.IsUnknown() && !child.BcRate.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "bcRate", strconv.FormatInt(child.BcRate.ValueInt64(), 10))
+						if (!child.PoliceBcRate.IsUnknown() && !child.PoliceBcRate.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "bcRate", strconv.FormatInt(child.PoliceBcRate.ValueInt64(), 10))
 						}
-						if (!child.BcUnit.IsUnknown() && !child.BcUnit.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "bcUnit", child.BcUnit.ValueString())
+						if (!child.PoliceBcUnit.IsUnknown() && !child.PoliceBcUnit.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "bcUnit", child.PoliceBcUnit.ValueString())
 						}
-						if (!child.BeRate.IsUnknown() && !child.BeRate.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "beRate", strconv.FormatInt(child.BeRate.ValueInt64(), 10))
+						if (!child.PoliceBeRate.IsUnknown() && !child.PoliceBeRate.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "beRate", strconv.FormatInt(child.PoliceBeRate.ValueInt64(), 10))
 						}
-						if (!child.BeUnit.IsUnknown() && !child.BeUnit.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "beUnit", child.BeUnit.ValueString())
+						if (!child.PoliceBeUnit.IsUnknown() && !child.PoliceBeUnit.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "beUnit", child.PoliceBeUnit.ValueString())
 						}
-						if (!child.CirRate.IsUnknown() && !child.CirRate.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "cirRate", strconv.FormatInt(child.CirRate.ValueInt64(), 10))
+						if (!child.PoliceCirRate.IsUnknown() && !child.PoliceCirRate.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "cirRate", strconv.FormatInt(child.PoliceCirRate.ValueInt64(), 10))
 						}
-						if (!child.CirUnit.IsUnknown() && !child.CirUnit.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "cirUnit", child.CirUnit.ValueString())
+						if (!child.PoliceCirUnit.IsUnknown() && !child.PoliceCirUnit.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "cirUnit", child.PoliceCirUnit.ValueString())
 						}
-						if (!child.ConformAction.IsUnknown() && !child.ConformAction.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "conformAction", child.ConformAction.ValueString())
+						if (!child.PoliceConformAction.IsUnknown() && !child.PoliceConformAction.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "conformAction", child.PoliceConformAction.ValueString())
 						}
-						if (!child.ConformSetCos.IsUnknown() && !child.ConformSetCos.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "conformSetCosTransmit", strconv.FormatInt(child.ConformSetCos.ValueInt64(), 10))
+						if (!child.PoliceConformSetCos.IsUnknown() && !child.PoliceConformSetCos.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "conformSetCosTransmit", strconv.FormatInt(child.PoliceConformSetCos.ValueInt64(), 10))
 						}
-						if (!child.ConformSetDscp.IsUnknown() && !child.ConformSetDscp.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "conformSetDscpTransmit", strconv.FormatInt(child.ConformSetDscp.ValueInt64(), 10))
+						if (!child.PoliceConformSetDscp.IsUnknown() && !child.PoliceConformSetDscp.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "conformSetDscpTransmit", strconv.FormatInt(child.PoliceConformSetDscp.ValueInt64(), 10))
 						}
-						if (!child.ConformSetPrecedence.IsUnknown() && !child.ConformSetPrecedence.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "conformSetPrecTransmit", child.ConformSetPrecedence.ValueString())
+						if (!child.PoliceConformSetPrecedence.IsUnknown() && !child.PoliceConformSetPrecedence.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "conformSetPrecTransmit", child.PoliceConformSetPrecedence.ValueString())
 						}
-						if (!child.ConformSetQosGroup.IsUnknown() && !child.ConformSetQosGroup.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "conformSetQosGrpTransmit", strconv.FormatInt(child.ConformSetQosGroup.ValueInt64(), 10))
+						if (!child.PoliceConformSetQosGroup.IsUnknown() && !child.PoliceConformSetQosGroup.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "conformSetQosGrpTransmit", strconv.FormatInt(child.PoliceConformSetQosGroup.ValueInt64(), 10))
 						}
-						if (!child.ExceedAction.IsUnknown() && !child.ExceedAction.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "exceedAction", child.ExceedAction.ValueString())
+						if (!child.PoliceExceedAction.IsUnknown() && !child.PoliceExceedAction.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "exceedAction", child.PoliceExceedAction.ValueString())
 						}
-						if (!child.ExceedSetCos.IsUnknown() && !child.ExceedSetCos.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "exceedSetCosTransmit", strconv.FormatInt(child.ExceedSetCos.ValueInt64(), 10))
+						if (!child.PoliceExceedSetCos.IsUnknown() && !child.PoliceExceedSetCos.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "exceedSetCosTransmit", strconv.FormatInt(child.PoliceExceedSetCos.ValueInt64(), 10))
 						}
-						if (!child.ExceedSetDscp.IsUnknown() && !child.ExceedSetDscp.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "exceedSetDscpTransmit", strconv.FormatInt(child.ExceedSetDscp.ValueInt64(), 10))
+						if (!child.PoliceExceedSetDscp.IsUnknown() && !child.PoliceExceedSetDscp.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "exceedSetDscpTransmit", strconv.FormatInt(child.PoliceExceedSetDscp.ValueInt64(), 10))
 						}
-						if (!child.ExceedSetPrecedence.IsUnknown() && !child.ExceedSetPrecedence.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "exceedSetPrecTransmit", child.ExceedSetPrecedence.ValueString())
+						if (!child.PoliceExceedSetPrecedence.IsUnknown() && !child.PoliceExceedSetPrecedence.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "exceedSetPrecTransmit", child.PoliceExceedSetPrecedence.ValueString())
 						}
-						if (!child.ExceedSetQosGroup.IsUnknown() && !child.ExceedSetQosGroup.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "exceedSetQosGrpTransmit", strconv.FormatInt(child.ExceedSetQosGroup.ValueInt64(), 10))
+						if (!child.PoliceExceedSetQosGroup.IsUnknown() && !child.PoliceExceedSetQosGroup.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "exceedSetQosGrpTransmit", strconv.FormatInt(child.PoliceExceedSetQosGroup.ValueInt64(), 10))
 						}
-						if (!child.PirRate.IsUnknown() && !child.PirRate.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "pirRate", strconv.FormatInt(child.PirRate.ValueInt64(), 10))
+						if (!child.PolicePirRate.IsUnknown() && !child.PolicePirRate.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "pirRate", strconv.FormatInt(child.PolicePirRate.ValueInt64(), 10))
 						}
-						if (!child.PirUnit.IsUnknown() && !child.PirUnit.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "pirUnit", child.PirUnit.ValueString())
+						if (!child.PolicePirUnit.IsUnknown() && !child.PolicePirUnit.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "pirUnit", child.PolicePirUnit.ValueString())
 						}
-						if (!child.ViolateAction.IsUnknown() && !child.ViolateAction.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "violateAction", child.ViolateAction.ValueString())
+						if (!child.PoliceViolateAction.IsUnknown() && !child.PoliceViolateAction.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "violateAction", child.PoliceViolateAction.ValueString())
 						}
-						if (!child.ViolateSetCos.IsUnknown() && !child.ViolateSetCos.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "violateSetCosTransmit", strconv.FormatInt(child.ViolateSetCos.ValueInt64(), 10))
+						if (!child.PoliceViolateSetCos.IsUnknown() && !child.PoliceViolateSetCos.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "violateSetCosTransmit", strconv.FormatInt(child.PoliceViolateSetCos.ValueInt64(), 10))
 						}
-						if (!child.ViolateSetDscp.IsUnknown() && !child.ViolateSetDscp.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "violateSetDscpTransmit", strconv.FormatInt(child.ViolateSetDscp.ValueInt64(), 10))
+						if (!child.PoliceViolateSetDscp.IsUnknown() && !child.PoliceViolateSetDscp.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "violateSetDscpTransmit", strconv.FormatInt(child.PoliceViolateSetDscp.ValueInt64(), 10))
 						}
-						if (!child.ViolateSetPrecedence.IsUnknown() && !child.ViolateSetPrecedence.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "violateSetPrecTransmit", child.ViolateSetPrecedence.ValueString())
+						if (!child.PoliceViolateSetPrecedence.IsUnknown() && !child.PoliceViolateSetPrecedence.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "violateSetPrecTransmit", child.PoliceViolateSetPrecedence.ValueString())
 						}
-						if (!child.ViolateSetQosGroup.IsUnknown() && !child.ViolateSetQosGroup.IsNull()) || false {
-							attrs, _ = sjson.Set(attrs, "violateSetQosGrpTransmit", strconv.FormatInt(child.ViolateSetQosGroup.ValueInt64(), 10))
+						if (!child.PoliceViolateSetQosGroup.IsUnknown() && !child.PoliceViolateSetQosGroup.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "violateSetQosGrpTransmit", strconv.FormatInt(child.PoliceViolateSetQosGroup.ValueInt64(), 10))
 						}
 						if attrs != "{}" || false {
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosPolice.attributes", attrs)
@@ -418,7 +418,7 @@ func (data *DefaultQoS) fromBody(res gjson.Result) {
 															return true
 														},
 													)
-													nestedChildipqosMatchCMap.QosGroupId = types.Int64Value(ripqosSetQoSGrp.Get("ipqosSetQoSGrp.attributes.id").Int())
+													nestedChildipqosMatchCMap.SetQosGroupId = types.Int64Value(ripqosSetQoSGrp.Get("ipqosSetQoSGrp.attributes.id").Int())
 												}
 												{
 													var ripqosPolice gjson.Result
@@ -432,29 +432,29 @@ func (data *DefaultQoS) fromBody(res gjson.Result) {
 															return true
 														},
 													)
-													nestedChildipqosMatchCMap.BcRate = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.bcRate").Int())
-													nestedChildipqosMatchCMap.BcUnit = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.bcUnit").String())
-													nestedChildipqosMatchCMap.BeRate = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.beRate").Int())
-													nestedChildipqosMatchCMap.BeUnit = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.beUnit").String())
-													nestedChildipqosMatchCMap.CirRate = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.cirRate").Int())
-													nestedChildipqosMatchCMap.CirUnit = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.cirUnit").String())
-													nestedChildipqosMatchCMap.ConformAction = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.conformAction").String())
-													nestedChildipqosMatchCMap.ConformSetCos = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.conformSetCosTransmit").Int())
-													nestedChildipqosMatchCMap.ConformSetDscp = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.conformSetDscpTransmit").Int())
-													nestedChildipqosMatchCMap.ConformSetPrecedence = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.conformSetPrecTransmit").String())
-													nestedChildipqosMatchCMap.ConformSetQosGroup = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.conformSetQosGrpTransmit").Int())
-													nestedChildipqosMatchCMap.ExceedAction = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.exceedAction").String())
-													nestedChildipqosMatchCMap.ExceedSetCos = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.exceedSetCosTransmit").Int())
-													nestedChildipqosMatchCMap.ExceedSetDscp = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.exceedSetDscpTransmit").Int())
-													nestedChildipqosMatchCMap.ExceedSetPrecedence = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.exceedSetPrecTransmit").String())
-													nestedChildipqosMatchCMap.ExceedSetQosGroup = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.exceedSetQosGrpTransmit").Int())
-													nestedChildipqosMatchCMap.PirRate = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.pirRate").Int())
-													nestedChildipqosMatchCMap.PirUnit = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.pirUnit").String())
-													nestedChildipqosMatchCMap.ViolateAction = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.violateAction").String())
-													nestedChildipqosMatchCMap.ViolateSetCos = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.violateSetCosTransmit").Int())
-													nestedChildipqosMatchCMap.ViolateSetDscp = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.violateSetDscpTransmit").Int())
-													nestedChildipqosMatchCMap.ViolateSetPrecedence = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.violateSetPrecTransmit").String())
-													nestedChildipqosMatchCMap.ViolateSetQosGroup = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.violateSetQosGrpTransmit").Int())
+													nestedChildipqosMatchCMap.PoliceBcRate = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.bcRate").Int())
+													nestedChildipqosMatchCMap.PoliceBcUnit = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.bcUnit").String())
+													nestedChildipqosMatchCMap.PoliceBeRate = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.beRate").Int())
+													nestedChildipqosMatchCMap.PoliceBeUnit = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.beUnit").String())
+													nestedChildipqosMatchCMap.PoliceCirRate = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.cirRate").Int())
+													nestedChildipqosMatchCMap.PoliceCirUnit = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.cirUnit").String())
+													nestedChildipqosMatchCMap.PoliceConformAction = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.conformAction").String())
+													nestedChildipqosMatchCMap.PoliceConformSetCos = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.conformSetCosTransmit").Int())
+													nestedChildipqosMatchCMap.PoliceConformSetDscp = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.conformSetDscpTransmit").Int())
+													nestedChildipqosMatchCMap.PoliceConformSetPrecedence = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.conformSetPrecTransmit").String())
+													nestedChildipqosMatchCMap.PoliceConformSetQosGroup = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.conformSetQosGrpTransmit").Int())
+													nestedChildipqosMatchCMap.PoliceExceedAction = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.exceedAction").String())
+													nestedChildipqosMatchCMap.PoliceExceedSetCos = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.exceedSetCosTransmit").Int())
+													nestedChildipqosMatchCMap.PoliceExceedSetDscp = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.exceedSetDscpTransmit").Int())
+													nestedChildipqosMatchCMap.PoliceExceedSetPrecedence = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.exceedSetPrecTransmit").String())
+													nestedChildipqosMatchCMap.PoliceExceedSetQosGroup = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.exceedSetQosGrpTransmit").Int())
+													nestedChildipqosMatchCMap.PolicePirRate = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.pirRate").Int())
+													nestedChildipqosMatchCMap.PolicePirUnit = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.pirUnit").String())
+													nestedChildipqosMatchCMap.PoliceViolateAction = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.violateAction").String())
+													nestedChildipqosMatchCMap.PoliceViolateSetCos = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.violateSetCosTransmit").Int())
+													nestedChildipqosMatchCMap.PoliceViolateSetDscp = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.violateSetDscpTransmit").Int())
+													nestedChildipqosMatchCMap.PoliceViolateSetPrecedence = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.violateSetPrecTransmit").String())
+													nestedChildipqosMatchCMap.PoliceViolateSetQosGroup = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.violateSetQosGrpTransmit").Int())
 												}
 												child.MatchClassMaps = append(child.MatchClassMaps, nestedChildipqosMatchCMap)
 											}
@@ -649,10 +649,10 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
-				if !data.PolicyMaps[c].MatchClassMaps[nc].QosGroupId.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].QosGroupId = types.Int64Value(ripqosSetQoSGrp.Get("ipqosSetQoSGrp.attributes.id").Int())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].SetQosGroupId.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].SetQosGroupId = types.Int64Value(ripqosSetQoSGrp.Get("ipqosSetQoSGrp.attributes.id").Int())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].QosGroupId = types.Int64Null()
+					data.PolicyMaps[c].MatchClassMaps[nc].SetQosGroupId = types.Int64Null()
 				}
 			}
 			{
@@ -667,120 +667,120 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
-				if !data.PolicyMaps[c].MatchClassMaps[nc].BcRate.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].BcRate = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.bcRate").Int())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PoliceBcRate.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceBcRate = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.bcRate").Int())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].BcRate = types.Int64Null()
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceBcRate = types.Int64Null()
 				}
-				if !data.PolicyMaps[c].MatchClassMaps[nc].BcUnit.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].BcUnit = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.bcUnit").String())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PoliceBcUnit.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceBcUnit = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.bcUnit").String())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].BcUnit = types.StringNull()
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceBcUnit = types.StringNull()
 				}
-				if !data.PolicyMaps[c].MatchClassMaps[nc].BeRate.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].BeRate = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.beRate").Int())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PoliceBeRate.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceBeRate = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.beRate").Int())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].BeRate = types.Int64Null()
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceBeRate = types.Int64Null()
 				}
-				if !data.PolicyMaps[c].MatchClassMaps[nc].BeUnit.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].BeUnit = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.beUnit").String())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PoliceBeUnit.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceBeUnit = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.beUnit").String())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].BeUnit = types.StringNull()
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceBeUnit = types.StringNull()
 				}
-				if !data.PolicyMaps[c].MatchClassMaps[nc].CirRate.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].CirRate = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.cirRate").Int())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PoliceCirRate.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceCirRate = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.cirRate").Int())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].CirRate = types.Int64Null()
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceCirRate = types.Int64Null()
 				}
-				if !data.PolicyMaps[c].MatchClassMaps[nc].CirUnit.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].CirUnit = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.cirUnit").String())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PoliceCirUnit.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceCirUnit = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.cirUnit").String())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].CirUnit = types.StringNull()
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceCirUnit = types.StringNull()
 				}
-				if !data.PolicyMaps[c].MatchClassMaps[nc].ConformAction.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].ConformAction = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.conformAction").String())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PoliceConformAction.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceConformAction = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.conformAction").String())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].ConformAction = types.StringNull()
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceConformAction = types.StringNull()
 				}
-				if !data.PolicyMaps[c].MatchClassMaps[nc].ConformSetCos.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].ConformSetCos = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.conformSetCosTransmit").Int())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PoliceConformSetCos.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceConformSetCos = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.conformSetCosTransmit").Int())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].ConformSetCos = types.Int64Null()
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceConformSetCos = types.Int64Null()
 				}
-				if !data.PolicyMaps[c].MatchClassMaps[nc].ConformSetDscp.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].ConformSetDscp = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.conformSetDscpTransmit").Int())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PoliceConformSetDscp.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceConformSetDscp = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.conformSetDscpTransmit").Int())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].ConformSetDscp = types.Int64Null()
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceConformSetDscp = types.Int64Null()
 				}
-				if !data.PolicyMaps[c].MatchClassMaps[nc].ConformSetPrecedence.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].ConformSetPrecedence = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.conformSetPrecTransmit").String())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PoliceConformSetPrecedence.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceConformSetPrecedence = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.conformSetPrecTransmit").String())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].ConformSetPrecedence = types.StringNull()
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceConformSetPrecedence = types.StringNull()
 				}
-				if !data.PolicyMaps[c].MatchClassMaps[nc].ConformSetQosGroup.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].ConformSetQosGroup = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.conformSetQosGrpTransmit").Int())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PoliceConformSetQosGroup.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceConformSetQosGroup = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.conformSetQosGrpTransmit").Int())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].ConformSetQosGroup = types.Int64Null()
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceConformSetQosGroup = types.Int64Null()
 				}
-				if !data.PolicyMaps[c].MatchClassMaps[nc].ExceedAction.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].ExceedAction = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.exceedAction").String())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PoliceExceedAction.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceExceedAction = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.exceedAction").String())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].ExceedAction = types.StringNull()
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceExceedAction = types.StringNull()
 				}
-				if !data.PolicyMaps[c].MatchClassMaps[nc].ExceedSetCos.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].ExceedSetCos = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.exceedSetCosTransmit").Int())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PoliceExceedSetCos.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceExceedSetCos = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.exceedSetCosTransmit").Int())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].ExceedSetCos = types.Int64Null()
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceExceedSetCos = types.Int64Null()
 				}
-				if !data.PolicyMaps[c].MatchClassMaps[nc].ExceedSetDscp.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].ExceedSetDscp = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.exceedSetDscpTransmit").Int())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PoliceExceedSetDscp.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceExceedSetDscp = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.exceedSetDscpTransmit").Int())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].ExceedSetDscp = types.Int64Null()
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceExceedSetDscp = types.Int64Null()
 				}
-				if !data.PolicyMaps[c].MatchClassMaps[nc].ExceedSetPrecedence.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].ExceedSetPrecedence = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.exceedSetPrecTransmit").String())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PoliceExceedSetPrecedence.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceExceedSetPrecedence = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.exceedSetPrecTransmit").String())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].ExceedSetPrecedence = types.StringNull()
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceExceedSetPrecedence = types.StringNull()
 				}
-				if !data.PolicyMaps[c].MatchClassMaps[nc].ExceedSetQosGroup.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].ExceedSetQosGroup = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.exceedSetQosGrpTransmit").Int())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PoliceExceedSetQosGroup.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceExceedSetQosGroup = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.exceedSetQosGrpTransmit").Int())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].ExceedSetQosGroup = types.Int64Null()
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceExceedSetQosGroup = types.Int64Null()
 				}
-				if !data.PolicyMaps[c].MatchClassMaps[nc].PirRate.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].PirRate = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.pirRate").Int())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PolicePirRate.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PolicePirRate = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.pirRate").Int())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].PirRate = types.Int64Null()
+					data.PolicyMaps[c].MatchClassMaps[nc].PolicePirRate = types.Int64Null()
 				}
-				if !data.PolicyMaps[c].MatchClassMaps[nc].PirUnit.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].PirUnit = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.pirUnit").String())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PolicePirUnit.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PolicePirUnit = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.pirUnit").String())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].PirUnit = types.StringNull()
+					data.PolicyMaps[c].MatchClassMaps[nc].PolicePirUnit = types.StringNull()
 				}
-				if !data.PolicyMaps[c].MatchClassMaps[nc].ViolateAction.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].ViolateAction = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.violateAction").String())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PoliceViolateAction.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceViolateAction = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.violateAction").String())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].ViolateAction = types.StringNull()
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceViolateAction = types.StringNull()
 				}
-				if !data.PolicyMaps[c].MatchClassMaps[nc].ViolateSetCos.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].ViolateSetCos = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.violateSetCosTransmit").Int())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PoliceViolateSetCos.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceViolateSetCos = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.violateSetCosTransmit").Int())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].ViolateSetCos = types.Int64Null()
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceViolateSetCos = types.Int64Null()
 				}
-				if !data.PolicyMaps[c].MatchClassMaps[nc].ViolateSetDscp.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].ViolateSetDscp = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.violateSetDscpTransmit").Int())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PoliceViolateSetDscp.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceViolateSetDscp = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.violateSetDscpTransmit").Int())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].ViolateSetDscp = types.Int64Null()
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceViolateSetDscp = types.Int64Null()
 				}
-				if !data.PolicyMaps[c].MatchClassMaps[nc].ViolateSetPrecedence.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].ViolateSetPrecedence = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.violateSetPrecTransmit").String())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PoliceViolateSetPrecedence.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceViolateSetPrecedence = types.StringValue(ripqosPolice.Get("ipqosPolice.attributes.violateSetPrecTransmit").String())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].ViolateSetPrecedence = types.StringNull()
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceViolateSetPrecedence = types.StringNull()
 				}
-				if !data.PolicyMaps[c].MatchClassMaps[nc].ViolateSetQosGroup.IsNull() {
-					data.PolicyMaps[c].MatchClassMaps[nc].ViolateSetQosGroup = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.violateSetQosGrpTransmit").Int())
+				if !data.PolicyMaps[c].MatchClassMaps[nc].PoliceViolateSetQosGroup.IsNull() {
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceViolateSetQosGroup = types.Int64Value(ripqosPolice.Get("ipqosPolice.attributes.violateSetQosGrpTransmit").Int())
 				} else {
-					data.PolicyMaps[c].MatchClassMaps[nc].ViolateSetQosGroup = types.Int64Null()
+					data.PolicyMaps[c].MatchClassMaps[nc].PoliceViolateSetQosGroup = types.Int64Null()
 				}
 			}
 		}

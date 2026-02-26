@@ -46,32 +46,32 @@ func TestAccDataSourceNxosDefaultQoS(t *testing.T) {
 		"name": "Voice",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_default_qos.test", "policy_maps.*.match_class_maps.*", map[string]string{
-		"qos_group_id": "1",
+		"set_qos_group_id": "1",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_default_qos.test", "policy_maps.*.match_class_maps.*", map[string]string{
-		"bc_rate":                "200",
-		"bc_unit":                "mbytes",
-		"be_rate":                "200",
-		"be_unit":                "mbytes",
-		"cir_rate":               "10000",
-		"cir_unit":               "mbps",
-		"conform_action":         "transmit",
-		"conform_set_cos":        "0",
-		"conform_set_dscp":       "0",
-		"conform_set_precedence": "routine",
-		"conform_set_qos_group":  "0",
-		"exceed_action":          "transmit",
-		"exceed_set_cos":         "0",
-		"exceed_set_dscp":        "0",
-		"exceed_set_precedence":  "routine",
-		"exceed_set_qos_group":   "0",
-		"pir_rate":               "10000",
-		"pir_unit":               "mbps",
-		"violate_action":         "drop",
-		"violate_set_cos":        "0",
-		"violate_set_dscp":       "0",
-		"violate_set_precedence": "routine",
-		"violate_set_qos_group":  "0",
+		"police_bc_rate":                "200",
+		"police_bc_unit":                "mbytes",
+		"police_be_rate":                "200",
+		"police_be_unit":                "mbytes",
+		"police_cir_rate":               "10000",
+		"police_cir_unit":               "mbps",
+		"police_conform_action":         "transmit",
+		"police_conform_set_cos":        "0",
+		"police_conform_set_dscp":       "0",
+		"police_conform_set_precedence": "routine",
+		"police_conform_set_qos_group":  "0",
+		"police_exceed_action":          "transmit",
+		"police_exceed_set_cos":         "0",
+		"police_exceed_set_dscp":        "0",
+		"police_exceed_set_precedence":  "routine",
+		"police_exceed_set_qos_group":   "0",
+		"police_pir_rate":               "10000",
+		"police_pir_unit":               "mbps",
+		"police_violate_action":         "drop",
+		"police_violate_set_cos":        "0",
+		"police_violate_set_dscp":       "0",
+		"police_violate_set_precedence": "routine",
+		"police_violate_set_qos_group":  "0",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_default_qos.test", "policy_interface_in.*", map[string]string{
 		"interface_id": "eth1/10",
@@ -130,30 +130,30 @@ func testAccDataSourceNxosDefaultQoSConfig() string {
 	config += `		match_type = "match-any"` + "\n"
 	config += `		match_class_maps = [{` + "\n"
 	config += `			name = "Voice"` + "\n"
-	config += `			qos_group_id = 1` + "\n"
-	config += `			bc_rate = 200` + "\n"
-	config += `			bc_unit = "mbytes"` + "\n"
-	config += `			be_rate = 200` + "\n"
-	config += `			be_unit = "mbytes"` + "\n"
-	config += `			cir_rate = 10000` + "\n"
-	config += `			cir_unit = "mbps"` + "\n"
-	config += `			conform_action = "transmit"` + "\n"
-	config += `			conform_set_cos = 0` + "\n"
-	config += `			conform_set_dscp = 0` + "\n"
-	config += `			conform_set_precedence = "routine"` + "\n"
-	config += `			conform_set_qos_group = 0` + "\n"
-	config += `			exceed_action = "transmit"` + "\n"
-	config += `			exceed_set_cos = 0` + "\n"
-	config += `			exceed_set_dscp = 0` + "\n"
-	config += `			exceed_set_precedence = "routine"` + "\n"
-	config += `			exceed_set_qos_group = 0` + "\n"
-	config += `			pir_rate = 10000` + "\n"
-	config += `			pir_unit = "mbps"` + "\n"
-	config += `			violate_action = "drop"` + "\n"
-	config += `			violate_set_cos = 0` + "\n"
-	config += `			violate_set_dscp = 0` + "\n"
-	config += `			violate_set_precedence = "routine"` + "\n"
-	config += `			violate_set_qos_group = 0` + "\n"
+	config += `			set_qos_group_id = 1` + "\n"
+	config += `			police_bc_rate = 200` + "\n"
+	config += `			police_bc_unit = "mbytes"` + "\n"
+	config += `			police_be_rate = 200` + "\n"
+	config += `			police_be_unit = "mbytes"` + "\n"
+	config += `			police_cir_rate = 10000` + "\n"
+	config += `			police_cir_unit = "mbps"` + "\n"
+	config += `			police_conform_action = "transmit"` + "\n"
+	config += `			police_conform_set_cos = 0` + "\n"
+	config += `			police_conform_set_dscp = 0` + "\n"
+	config += `			police_conform_set_precedence = "routine"` + "\n"
+	config += `			police_conform_set_qos_group = 0` + "\n"
+	config += `			police_exceed_action = "transmit"` + "\n"
+	config += `			police_exceed_set_cos = 0` + "\n"
+	config += `			police_exceed_set_dscp = 0` + "\n"
+	config += `			police_exceed_set_precedence = "routine"` + "\n"
+	config += `			police_exceed_set_qos_group = 0` + "\n"
+	config += `			police_pir_rate = 10000` + "\n"
+	config += `			police_pir_unit = "mbps"` + "\n"
+	config += `			police_violate_action = "drop"` + "\n"
+	config += `			police_violate_set_cos = 0` + "\n"
+	config += `			police_violate_set_dscp = 0` + "\n"
+	config += `			police_violate_set_precedence = "routine"` + "\n"
+	config += `			police_violate_set_qos_group = 0` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
 	config += `	policy_interface_in = [{` + "\n"

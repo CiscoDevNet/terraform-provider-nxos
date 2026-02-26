@@ -25,17 +25,16 @@ child_classes:
             tf_name: name
             type: String
             id: true
-            description: 'Class map name.'
+            description: 'Name of class-map.'
             example: Voice
           - nxos_name: matchType
             tf_name: match_type
             type: String
-            description: 'Match type.'
+            description: 'Match-any, match-all or match-first.'
             enum_values:
               - match-any
               - match-all
               - match-first
-            default_value: match-all
             example: match-any
         child_classes:
           - class_name: ipqosDscp
@@ -49,8 +48,7 @@ child_classes:
                 tf_name: value
                 type: String
                 id: true
-                description: 'DSCP value.'
-                default_value: '0'
+                description: 'Dscp value.'
                 example: ef
   - class_name: ipqosPMapEntity
     doc_path: Qos/ipqos:PMapEntity/
@@ -69,17 +67,16 @@ child_classes:
             tf_name: name
             type: String
             id: true
-            description: 'Policy map name.'
+            description: 'Name of policy-map.'
             example: PM1
           - nxos_name: matchType
             tf_name: match_type
             type: String
-            description: 'Match type.'
+            description: 'Match-any, match-all or match-first.'
             enum_values:
               - match-any
               - match-all
               - match-first
-            default_value: match-all
             example: match-any
         child_classes:
           - class_name: ipqosMatchCMap
@@ -93,7 +90,7 @@ child_classes:
                 tf_name: name
                 type: String
                 id: true
-                description: 'Class map name.'
+                description: 'Match using class-map.'
                 example: Voice
             child_classes:
               - class_name: ipqosSetQoSGrp
@@ -104,12 +101,11 @@ child_classes:
                 description: 'Set QoS group configuration.'
                 attributes:
                   - nxos_name: id
-                    tf_name: qos_group_id
+                    tf_name: set_qos_group_id
                     type: Int64
                     description: 'QoS group ID.'
                     min_int: 0
                     max_int: 7
-                    default_value: 0
                     example: 1
               - class_name: ipqosPolice
                 doc_path: Qos/ipqos:Police/
@@ -119,17 +115,16 @@ child_classes:
                 description: 'Police configuration.'
                 attributes:
                   - nxos_name: bcRate
-                    tf_name: bc_rate
+                    tf_name: police_bc_rate
                     type: Int64
-                    description: 'CIR burst rate.'
+                    description: 'CIR burst.'
                     min_int: 0
                     max_int: 536870912
-                    default_value: 200
                     example: 200
                   - nxos_name: bcUnit
-                    tf_name: bc_unit
+                    tf_name: police_bc_unit
                     type: String
-                    description: 'CIR burst rate unit.'
+                    description: 'CIR burst unit.'
                     enum_values:
                       - unspecified
                       - bytes
@@ -138,20 +133,18 @@ child_classes:
                       - ms
                       - us
                       - packets
-                    default_value: ms
                     example: mbytes
                   - nxos_name: beRate
-                    tf_name: be_rate
+                    tf_name: police_be_rate
                     type: Int64
-                    description: 'PIR burst rate.'
+                    description: 'PIR burst.'
                     min_int: 0
                     max_int: 536870912
-                    default_value: 0
                     example: 200
                   - nxos_name: beUnit
-                    tf_name: be_unit
+                    tf_name: police_be_unit
                     type: String
-                    description: 'PIR burst rate unit.'
+                    description: 'PIR burst unit.'
                     enum_values:
                       - unspecified
                       - bytes
@@ -160,21 +153,19 @@ child_classes:
                       - ms
                       - us
                       - packets
-                    default_value: unspecified
                     example: mbytes
                   - nxos_name: cirRate
-                    tf_name: cir_rate
+                    tf_name: police_cir_rate
                     type: Int64
                     mandatory: true
-                    description: 'CIR rate.'
+                    description: 'CIR.'
                     min_int: 0
                     max_int: 100000000000
-                    default_value: 0
                     example: 10000
                   - nxos_name: cirUnit
-                    tf_name: cir_unit
+                    tf_name: police_cir_unit
                     type: String
-                    description: 'CIR rate unit.'
+                    description: 'CIR unit.'
                     enum_values:
                       - unspecified
                       - bps
@@ -183,10 +174,9 @@ child_classes:
                       - gbps
                       - pps
                       - pct
-                    default_value: bps
                     example: mbps
                   - nxos_name: conformAction
-                    tf_name: conform_action
+                    tf_name: police_conform_action
                     type: String
                     description: 'Conform action.'
                     enum_values:
@@ -197,28 +187,25 @@ child_classes:
                       - set-dscp-transmit
                       - set-prec-transmit
                       - set-qos-transmit
-                    default_value: transmit
                     example: transmit
                   - nxos_name: conformSetCosTransmit
-                    tf_name: conform_set_cos
+                    tf_name: police_conform_set_cos
                     type: Int64
-                    description: 'Set CoS for conforming traffic.'
+                    description: 'set cos for conforming traffic.'
                     min_int: 0
                     max_int: 7
-                    default_value: 0
                     example: 0
                   - nxos_name: conformSetDscpTransmit
-                    tf_name: conform_set_dscp
+                    tf_name: police_conform_set_dscp
                     type: Int64
-                    description: 'Set DSCP for conforming traffic.'
+                    description: 'set dscp for conforming traffic.'
                     min_int: 0
                     max_int: 63
-                    default_value: 0
                     example: 0
                   - nxos_name: conformSetPrecTransmit
-                    tf_name: conform_set_precedence
+                    tf_name: police_conform_set_precedence
                     type: String
-                    description: 'Set precedence for conforming traffic.'
+                    description: 'set precedence for conforming traffic.'
                     enum_values:
                       - routine
                       - priority
@@ -228,18 +215,16 @@ child_classes:
                       - critical
                       - internet
                       - network
-                    default_value: routine
                     example: routine
                   - nxos_name: conformSetQosGrpTransmit
-                    tf_name: conform_set_qos_group
+                    tf_name: police_conform_set_qos_group
                     type: Int64
-                    description: 'Set qos-group for conforming traffic.'
+                    description: 'set qos-group for conforming traffic.'
                     min_int: 0
                     max_int: 7
-                    default_value: 0
                     example: 0
                   - nxos_name: exceedAction
-                    tf_name: exceed_action
+                    tf_name: police_exceed_action
                     type: String
                     description: 'Exceed action.'
                     enum_values:
@@ -250,28 +235,25 @@ child_classes:
                       - set-dscp-transmit
                       - set-prec-transmit
                       - set-qos-transmit
-                    default_value: unspecified
                     example: transmit
                   - nxos_name: exceedSetCosTransmit
-                    tf_name: exceed_set_cos
+                    tf_name: police_exceed_set_cos
                     type: Int64
-                    description: 'Set CoS for exceeding traffic.'
+                    description: 'set cos for exceeding traffic.'
                     min_int: 0
                     max_int: 7
-                    default_value: 0
                     example: 0
                   - nxos_name: exceedSetDscpTransmit
-                    tf_name: exceed_set_dscp
+                    tf_name: police_exceed_set_dscp
                     type: Int64
-                    description: 'Set DSCP for exceeding traffic.'
+                    description: 'set dscp for exceeding traffic.'
                     min_int: 0
                     max_int: 63
-                    default_value: 0
                     example: 0
                   - nxos_name: exceedSetPrecTransmit
-                    tf_name: exceed_set_precedence
+                    tf_name: police_exceed_set_precedence
                     type: String
-                    description: 'Set precedence for exceeding traffic.'
+                    description: 'set precedence for exceeding traffic.'
                     enum_values:
                       - routine
                       - priority
@@ -281,28 +263,25 @@ child_classes:
                       - critical
                       - internet
                       - network
-                    default_value: routine
                     example: routine
                   - nxos_name: exceedSetQosGrpTransmit
-                    tf_name: exceed_set_qos_group
+                    tf_name: police_exceed_set_qos_group
                     type: Int64
-                    description: 'Set qos-group for exceeding traffic.'
+                    description: 'set qos-group for exceeding traffic.'
                     min_int: 0
                     max_int: 7
-                    default_value: 0
                     example: 0
                   - nxos_name: pirRate
-                    tf_name: pir_rate
+                    tf_name: police_pir_rate
                     type: Int64
-                    description: 'PIR rate.'
+                    description: 'PIR.'
                     min_int: 0
                     max_int: 100000000000
-                    default_value: 0
                     example: 10000
                   - nxos_name: pirUnit
-                    tf_name: pir_unit
+                    tf_name: police_pir_unit
                     type: String
-                    description: 'PIR rate unit.'
+                    description: 'PIR unit.'
                     enum_values:
                       - unspecified
                       - bps
@@ -311,10 +290,9 @@ child_classes:
                       - gbps
                       - pps
                       - pct
-                    default_value: unspecified
                     example: mbps
                   - nxos_name: violateAction
-                    tf_name: violate_action
+                    tf_name: police_violate_action
                     type: String
                     description: 'Violate action.'
                     enum_values:
@@ -325,28 +303,25 @@ child_classes:
                       - set-dscp-transmit
                       - set-prec-transmit
                       - set-qos-transmit
-                    default_value: drop
                     example: drop
                   - nxos_name: violateSetCosTransmit
-                    tf_name: violate_set_cos
+                    tf_name: police_violate_set_cos
                     type: Int64
-                    description: 'Set CoS for violating traffic.'
+                    description: 'set cos for violating traffic.'
                     min_int: 0
                     max_int: 7
-                    default_value: 0
                     example: 0
                   - nxos_name: violateSetDscpTransmit
-                    tf_name: violate_set_dscp
+                    tf_name: police_violate_set_dscp
                     type: Int64
-                    description: 'Set DSCP for violating traffic.'
+                    description: 'set dscp for violating traffic.'
                     min_int: 0
                     max_int: 63
-                    default_value: 0
                     example: 0
                   - nxos_name: violateSetPrecTransmit
-                    tf_name: violate_set_precedence
+                    tf_name: police_violate_set_precedence
                     type: String
-                    description: 'Set precedence for violating traffic.'
+                    description: 'set precedence for violating traffic.'
                     enum_values:
                       - routine
                       - priority
@@ -356,15 +331,13 @@ child_classes:
                       - critical
                       - internet
                       - network
-                    default_value: routine
                     example: routine
                   - nxos_name: violateSetQosGrpTransmit
-                    tf_name: violate_set_qos_group
+                    tf_name: police_violate_set_qos_group
                     type: Int64
-                    description: 'Set qos-group for violating traffic.'
+                    description: 'set qos-group for violating traffic.'
                     min_int: 0
                     max_int: 7
-                    default_value: 0
                     example: 0
   - class_name: ipqosServPol
     doc_path: Qos/ipqos:ServPol/
@@ -403,7 +376,7 @@ child_classes:
                     tf_name: policy_map_name
                     type: String
                     mandatory: true
-                    description: 'Policy map name.'
+                    description: 'Policy-map Name.'
                     example: PM1
 test_prerequisites:
   - dn: sys/ipqos/dflt/c/name-[Voice]

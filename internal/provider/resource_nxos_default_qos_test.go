@@ -41,30 +41,30 @@ func TestAccNxosDefaultQoS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.name", "PM1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_type", "match-any"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.name", "Voice"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.qos_group_id", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.bc_rate", "200"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.bc_unit", "mbytes"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.be_rate", "200"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.be_unit", "mbytes"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.cir_rate", "10000"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.cir_unit", "mbps"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.conform_action", "transmit"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.conform_set_cos", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.conform_set_dscp", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.conform_set_precedence", "routine"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.conform_set_qos_group", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.exceed_action", "transmit"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.exceed_set_cos", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.exceed_set_dscp", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.exceed_set_precedence", "routine"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.exceed_set_qos_group", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.pir_rate", "10000"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.pir_unit", "mbps"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.violate_action", "drop"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.violate_set_cos", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.violate_set_dscp", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.violate_set_precedence", "routine"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.violate_set_qos_group", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.set_qos_group_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_bc_rate", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_bc_unit", "mbytes"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_be_rate", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_be_unit", "mbytes"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_cir_rate", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_cir_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_conform_action", "transmit"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_conform_set_cos", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_conform_set_dscp", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_conform_set_precedence", "routine"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_conform_set_qos_group", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_exceed_action", "transmit"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_exceed_set_cos", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_exceed_set_dscp", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_exceed_set_precedence", "routine"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_exceed_set_qos_group", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_pir_rate", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_pir_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_violate_action", "drop"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_violate_set_cos", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_violate_set_dscp", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_violate_set_precedence", "routine"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_violate_set_qos_group", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_interface_in.0.interface_id", "eth1/10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_interface_in.0.policy_map_name", "PM1"))
 	var tfVersion *goversion.Version
@@ -154,30 +154,30 @@ func testAccNxosDefaultQoSConfig_all() string {
 	config += `		match_type = "match-any"` + "\n"
 	config += `		match_class_maps = [{` + "\n"
 	config += `			name = "Voice"` + "\n"
-	config += `			qos_group_id = 1` + "\n"
-	config += `			bc_rate = 200` + "\n"
-	config += `			bc_unit = "mbytes"` + "\n"
-	config += `			be_rate = 200` + "\n"
-	config += `			be_unit = "mbytes"` + "\n"
-	config += `			cir_rate = 10000` + "\n"
-	config += `			cir_unit = "mbps"` + "\n"
-	config += `			conform_action = "transmit"` + "\n"
-	config += `			conform_set_cos = 0` + "\n"
-	config += `			conform_set_dscp = 0` + "\n"
-	config += `			conform_set_precedence = "routine"` + "\n"
-	config += `			conform_set_qos_group = 0` + "\n"
-	config += `			exceed_action = "transmit"` + "\n"
-	config += `			exceed_set_cos = 0` + "\n"
-	config += `			exceed_set_dscp = 0` + "\n"
-	config += `			exceed_set_precedence = "routine"` + "\n"
-	config += `			exceed_set_qos_group = 0` + "\n"
-	config += `			pir_rate = 10000` + "\n"
-	config += `			pir_unit = "mbps"` + "\n"
-	config += `			violate_action = "drop"` + "\n"
-	config += `			violate_set_cos = 0` + "\n"
-	config += `			violate_set_dscp = 0` + "\n"
-	config += `			violate_set_precedence = "routine"` + "\n"
-	config += `			violate_set_qos_group = 0` + "\n"
+	config += `			set_qos_group_id = 1` + "\n"
+	config += `			police_bc_rate = 200` + "\n"
+	config += `			police_bc_unit = "mbytes"` + "\n"
+	config += `			police_be_rate = 200` + "\n"
+	config += `			police_be_unit = "mbytes"` + "\n"
+	config += `			police_cir_rate = 10000` + "\n"
+	config += `			police_cir_unit = "mbps"` + "\n"
+	config += `			police_conform_action = "transmit"` + "\n"
+	config += `			police_conform_set_cos = 0` + "\n"
+	config += `			police_conform_set_dscp = 0` + "\n"
+	config += `			police_conform_set_precedence = "routine"` + "\n"
+	config += `			police_conform_set_qos_group = 0` + "\n"
+	config += `			police_exceed_action = "transmit"` + "\n"
+	config += `			police_exceed_set_cos = 0` + "\n"
+	config += `			police_exceed_set_dscp = 0` + "\n"
+	config += `			police_exceed_set_precedence = "routine"` + "\n"
+	config += `			police_exceed_set_qos_group = 0` + "\n"
+	config += `			police_pir_rate = 10000` + "\n"
+	config += `			police_pir_unit = "mbps"` + "\n"
+	config += `			police_violate_action = "drop"` + "\n"
+	config += `			police_violate_set_cos = 0` + "\n"
+	config += `			police_violate_set_dscp = 0` + "\n"
+	config += `			police_violate_set_precedence = "routine"` + "\n"
+	config += `			police_violate_set_qos_group = 0` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
 	config += `	policy_interface_in = [{` + "\n"

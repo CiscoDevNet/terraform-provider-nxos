@@ -74,11 +74,11 @@ func (d *DefaultQoSDataSource) Schema(ctx context.Context, req datasource.Schema
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							MarkdownDescription: "Class map name.",
+							MarkdownDescription: "Name of class-map.",
 							Computed:            true,
 						},
 						"match_type": schema.StringAttribute{
-							MarkdownDescription: "Match type.",
+							MarkdownDescription: "Match-any, match-all or match-first.",
 							Computed:            true,
 						},
 						"dscp_values": schema.ListNestedAttribute{
@@ -87,7 +87,7 @@ func (d *DefaultQoSDataSource) Schema(ctx context.Context, req datasource.Schema
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"value": schema.StringAttribute{
-										MarkdownDescription: "DSCP value.",
+										MarkdownDescription: "Dscp value.",
 										Computed:            true,
 									},
 								},
@@ -102,11 +102,11 @@ func (d *DefaultQoSDataSource) Schema(ctx context.Context, req datasource.Schema
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							MarkdownDescription: "Policy map name.",
+							MarkdownDescription: "Name of policy-map.",
 							Computed:            true,
 						},
 						"match_type": schema.StringAttribute{
-							MarkdownDescription: "Match type.",
+							MarkdownDescription: "Match-any, match-all or match-first.",
 							Computed:            true,
 						},
 						"match_class_maps": schema.ListNestedAttribute{
@@ -115,103 +115,103 @@ func (d *DefaultQoSDataSource) Schema(ctx context.Context, req datasource.Schema
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"name": schema.StringAttribute{
-										MarkdownDescription: "Class map name.",
+										MarkdownDescription: "Match using class-map.",
 										Computed:            true,
 									},
-									"qos_group_id": schema.Int64Attribute{
+									"set_qos_group_id": schema.Int64Attribute{
 										MarkdownDescription: "QoS group ID.",
 										Computed:            true,
 									},
-									"bc_rate": schema.Int64Attribute{
-										MarkdownDescription: "CIR burst rate.",
+									"police_bc_rate": schema.Int64Attribute{
+										MarkdownDescription: "CIR burst.",
 										Computed:            true,
 									},
-									"bc_unit": schema.StringAttribute{
-										MarkdownDescription: "CIR burst rate unit.",
+									"police_bc_unit": schema.StringAttribute{
+										MarkdownDescription: "CIR burst unit.",
 										Computed:            true,
 									},
-									"be_rate": schema.Int64Attribute{
-										MarkdownDescription: "PIR burst rate.",
+									"police_be_rate": schema.Int64Attribute{
+										MarkdownDescription: "PIR burst.",
 										Computed:            true,
 									},
-									"be_unit": schema.StringAttribute{
-										MarkdownDescription: "PIR burst rate unit.",
+									"police_be_unit": schema.StringAttribute{
+										MarkdownDescription: "PIR burst unit.",
 										Computed:            true,
 									},
-									"cir_rate": schema.Int64Attribute{
-										MarkdownDescription: "CIR rate.",
+									"police_cir_rate": schema.Int64Attribute{
+										MarkdownDescription: "CIR.",
 										Computed:            true,
 									},
-									"cir_unit": schema.StringAttribute{
-										MarkdownDescription: "CIR rate unit.",
+									"police_cir_unit": schema.StringAttribute{
+										MarkdownDescription: "CIR unit.",
 										Computed:            true,
 									},
-									"conform_action": schema.StringAttribute{
+									"police_conform_action": schema.StringAttribute{
 										MarkdownDescription: "Conform action.",
 										Computed:            true,
 									},
-									"conform_set_cos": schema.Int64Attribute{
-										MarkdownDescription: "Set CoS for conforming traffic.",
+									"police_conform_set_cos": schema.Int64Attribute{
+										MarkdownDescription: "set cos for conforming traffic.",
 										Computed:            true,
 									},
-									"conform_set_dscp": schema.Int64Attribute{
-										MarkdownDescription: "Set DSCP for conforming traffic.",
+									"police_conform_set_dscp": schema.Int64Attribute{
+										MarkdownDescription: "set dscp for conforming traffic.",
 										Computed:            true,
 									},
-									"conform_set_precedence": schema.StringAttribute{
-										MarkdownDescription: "Set precedence for conforming traffic.",
+									"police_conform_set_precedence": schema.StringAttribute{
+										MarkdownDescription: "set precedence for conforming traffic.",
 										Computed:            true,
 									},
-									"conform_set_qos_group": schema.Int64Attribute{
-										MarkdownDescription: "Set qos-group for conforming traffic.",
+									"police_conform_set_qos_group": schema.Int64Attribute{
+										MarkdownDescription: "set qos-group for conforming traffic.",
 										Computed:            true,
 									},
-									"exceed_action": schema.StringAttribute{
+									"police_exceed_action": schema.StringAttribute{
 										MarkdownDescription: "Exceed action.",
 										Computed:            true,
 									},
-									"exceed_set_cos": schema.Int64Attribute{
-										MarkdownDescription: "Set CoS for exceeding traffic.",
+									"police_exceed_set_cos": schema.Int64Attribute{
+										MarkdownDescription: "set cos for exceeding traffic.",
 										Computed:            true,
 									},
-									"exceed_set_dscp": schema.Int64Attribute{
-										MarkdownDescription: "Set DSCP for exceeding traffic.",
+									"police_exceed_set_dscp": schema.Int64Attribute{
+										MarkdownDescription: "set dscp for exceeding traffic.",
 										Computed:            true,
 									},
-									"exceed_set_precedence": schema.StringAttribute{
-										MarkdownDescription: "Set precedence for exceeding traffic.",
+									"police_exceed_set_precedence": schema.StringAttribute{
+										MarkdownDescription: "set precedence for exceeding traffic.",
 										Computed:            true,
 									},
-									"exceed_set_qos_group": schema.Int64Attribute{
-										MarkdownDescription: "Set qos-group for exceeding traffic.",
+									"police_exceed_set_qos_group": schema.Int64Attribute{
+										MarkdownDescription: "set qos-group for exceeding traffic.",
 										Computed:            true,
 									},
-									"pir_rate": schema.Int64Attribute{
-										MarkdownDescription: "PIR rate.",
+									"police_pir_rate": schema.Int64Attribute{
+										MarkdownDescription: "PIR.",
 										Computed:            true,
 									},
-									"pir_unit": schema.StringAttribute{
-										MarkdownDescription: "PIR rate unit.",
+									"police_pir_unit": schema.StringAttribute{
+										MarkdownDescription: "PIR unit.",
 										Computed:            true,
 									},
-									"violate_action": schema.StringAttribute{
+									"police_violate_action": schema.StringAttribute{
 										MarkdownDescription: "Violate action.",
 										Computed:            true,
 									},
-									"violate_set_cos": schema.Int64Attribute{
-										MarkdownDescription: "Set CoS for violating traffic.",
+									"police_violate_set_cos": schema.Int64Attribute{
+										MarkdownDescription: "set cos for violating traffic.",
 										Computed:            true,
 									},
-									"violate_set_dscp": schema.Int64Attribute{
-										MarkdownDescription: "Set DSCP for violating traffic.",
+									"police_violate_set_dscp": schema.Int64Attribute{
+										MarkdownDescription: "set dscp for violating traffic.",
 										Computed:            true,
 									},
-									"violate_set_precedence": schema.StringAttribute{
-										MarkdownDescription: "Set precedence for violating traffic.",
+									"police_violate_set_precedence": schema.StringAttribute{
+										MarkdownDescription: "set precedence for violating traffic.",
 										Computed:            true,
 									},
-									"violate_set_qos_group": schema.Int64Attribute{
-										MarkdownDescription: "Set qos-group for violating traffic.",
+									"police_violate_set_qos_group": schema.Int64Attribute{
+										MarkdownDescription: "set qos-group for violating traffic.",
 										Computed:            true,
 									},
 								},
@@ -230,7 +230,7 @@ func (d *DefaultQoSDataSource) Schema(ctx context.Context, req datasource.Schema
 							Computed:            true,
 						},
 						"policy_map_name": schema.StringAttribute{
-							MarkdownDescription: "Policy map name.",
+							MarkdownDescription: "Policy-map Name.",
 							Computed:            true,
 						},
 					},

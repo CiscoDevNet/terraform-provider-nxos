@@ -57,15 +57,15 @@ data "nxos_default_qos" "example" {
 Read-Only:
 
 - `dscp_values` (Attributes List) List of DSCP values to match. (see [below for nested schema](#nestedatt--class_maps--dscp_values))
-- `match_type` (String) Match type.
-- `name` (String) Class map name.
+- `match_type` (String) Match-any, match-all or match-first.
+- `name` (String) Name of class-map.
 
 <a id="nestedatt--class_maps--dscp_values"></a>
 ### Nested Schema for `class_maps.dscp_values`
 
 Read-Only:
 
-- `value` (String) DSCP value.
+- `value` (String) Dscp value.
 
 
 
@@ -75,7 +75,7 @@ Read-Only:
 Read-Only:
 
 - `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
-- `policy_map_name` (String) Policy map name.
+- `policy_map_name` (String) Policy-map Name.
 
 
 <a id="nestedatt--policy_maps"></a>
@@ -84,36 +84,36 @@ Read-Only:
 Read-Only:
 
 - `match_class_maps` (Attributes List) List of match class maps. (see [below for nested schema](#nestedatt--policy_maps--match_class_maps))
-- `match_type` (String) Match type.
-- `name` (String) Policy map name.
+- `match_type` (String) Match-any, match-all or match-first.
+- `name` (String) Name of policy-map.
 
 <a id="nestedatt--policy_maps--match_class_maps"></a>
 ### Nested Schema for `policy_maps.match_class_maps`
 
 Read-Only:
 
-- `bc_rate` (Number) CIR burst rate.
-- `bc_unit` (String) CIR burst rate unit.
-- `be_rate` (Number) PIR burst rate.
-- `be_unit` (String) PIR burst rate unit.
-- `cir_rate` (Number) CIR rate.
-- `cir_unit` (String) CIR rate unit.
-- `conform_action` (String) Conform action.
-- `conform_set_cos` (Number) Set CoS for conforming traffic.
-- `conform_set_dscp` (Number) Set DSCP for conforming traffic.
-- `conform_set_precedence` (String) Set precedence for conforming traffic.
-- `conform_set_qos_group` (Number) Set qos-group for conforming traffic.
-- `exceed_action` (String) Exceed action.
-- `exceed_set_cos` (Number) Set CoS for exceeding traffic.
-- `exceed_set_dscp` (Number) Set DSCP for exceeding traffic.
-- `exceed_set_precedence` (String) Set precedence for exceeding traffic.
-- `exceed_set_qos_group` (Number) Set qos-group for exceeding traffic.
-- `name` (String) Class map name.
-- `pir_rate` (Number) PIR rate.
-- `pir_unit` (String) PIR rate unit.
-- `qos_group_id` (Number) QoS group ID.
-- `violate_action` (String) Violate action.
-- `violate_set_cos` (Number) Set CoS for violating traffic.
-- `violate_set_dscp` (Number) Set DSCP for violating traffic.
-- `violate_set_precedence` (String) Set precedence for violating traffic.
-- `violate_set_qos_group` (Number) Set qos-group for violating traffic.
+- `name` (String) Match using class-map.
+- `police_bc_rate` (Number) CIR burst.
+- `police_bc_unit` (String) CIR burst unit.
+- `police_be_rate` (Number) PIR burst.
+- `police_be_unit` (String) PIR burst unit.
+- `police_cir_rate` (Number) CIR.
+- `police_cir_unit` (String) CIR unit.
+- `police_conform_action` (String) Conform action.
+- `police_conform_set_cos` (Number) set cos for conforming traffic.
+- `police_conform_set_dscp` (Number) set dscp for conforming traffic.
+- `police_conform_set_precedence` (String) set precedence for conforming traffic.
+- `police_conform_set_qos_group` (Number) set qos-group for conforming traffic.
+- `police_exceed_action` (String) Exceed action.
+- `police_exceed_set_cos` (Number) set cos for exceeding traffic.
+- `police_exceed_set_dscp` (Number) set dscp for exceeding traffic.
+- `police_exceed_set_precedence` (String) set precedence for exceeding traffic.
+- `police_exceed_set_qos_group` (Number) set qos-group for exceeding traffic.
+- `police_pir_rate` (Number) PIR.
+- `police_pir_unit` (String) PIR unit.
+- `police_violate_action` (String) Violate action.
+- `police_violate_set_cos` (Number) set cos for violating traffic.
+- `police_violate_set_dscp` (Number) set dscp for violating traffic.
+- `police_violate_set_precedence` (String) set precedence for violating traffic.
+- `police_violate_set_qos_group` (Number) set qos-group for violating traffic.
+- `set_qos_group_id` (Number) QoS group ID.

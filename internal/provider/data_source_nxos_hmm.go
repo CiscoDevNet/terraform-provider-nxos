@@ -69,11 +69,11 @@ func (d *HMMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				Computed:            true,
 			},
 			"admin_state": schema.StringAttribute{
-				MarkdownDescription: "Administrative state.",
+				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
 			"instance_admin_state": schema.StringAttribute{
-				MarkdownDescription: "Forwarding instance administrative state.",
+				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
 			"anycast_mac": schema.StringAttribute{
@@ -90,7 +90,7 @@ func (d *HMMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							Computed:            true,
 						},
 						"admin_state": schema.StringAttribute{
-							MarkdownDescription: "Administrative state.",
+							MarkdownDescription: "The administrative state of the object or policy.",
 							Computed:            true,
 						},
 						"mode": schema.StringAttribute{

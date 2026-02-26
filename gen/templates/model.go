@@ -805,6 +805,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 {{- $childClassName := .ClassName}}
 {{- if .NoDelete}}
 {{- if eq .Type "single"}}
+{{- if .ChildClasses}}
 	{
 	childIndex := len(gjson.Get(body, {{$childrenPathVar}}).Array())
 	childBodyPath := {{$childrenPathVar}} + "." + strconv.Itoa(childIndex) + ".{{$childClassName}}"
@@ -822,12 +823,33 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 	}
 {{- end}}
 {{- end}}
-{{- if .ChildClasses}}
 	nestedChildrenPath := childBodyPath + ".children"
 	_ = nestedChildrenPath
 	{{- template "toDeleteBodyChildrenTemplate" (makeMap "Children" .ChildClasses "ChildrenPathVar" "nestedChildrenPath")}}
-{{- end}}
 	}
+{{- else}}
+	{
+	childBody := ""
+{{- range .Attributes}}
+{{- if and (not .ReferenceOnly) (.DeleteValue)}}
+	if !data.{{toGoName .TfName}}.IsNull() {
+		{{- if eq .Type "Int64"}}
+		childBody, _ = sjson.Set(childBody, "{{.NxosName}}", strconv.FormatInt({{ .DeleteValue}}, 10))
+		{{- else if eq .Type "Bool"}}
+		childBody, _ = sjson.Set(childBody, "{{.NxosName}}", strconv.FormatBool({{ .DeleteValue}}))
+		{{- else if eq .Type "String"}}
+		childBody, _ = sjson.Set(childBody, "{{.NxosName}}", "{{ .DeleteValue}}")
+		{{- end}}
+	}
+{{- end}}
+{{- end}}
+	if childBody != "" {
+		childIndex := len(gjson.Get(body, {{$childrenPathVar}}).Array())
+		childBodyPath := {{$childrenPathVar}} + "." + strconv.Itoa(childIndex) + ".{{$childClassName}}"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+	}
+	}
+{{- end}}
 {{- end}}
 {{- else}}
 {{- if eq .Type "single"}}

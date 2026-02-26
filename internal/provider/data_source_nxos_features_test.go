@@ -48,10 +48,10 @@ func TestAccDataSourceNxosFeatures(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_features.test", "isis", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_features.test", "lacp", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_features.test", "lldp", "enabled"))
-	if os.Getenv("MACSEC") != "" {
+	if os.Getenv("FEATURE_MACSEC") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_features.test", "macsec", "enabled"))
 	}
-	if os.Getenv("NETFLOW") != "" {
+	if os.Getenv("FEATURE_NETFLOW") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_features.test", "netflow", "enabled"))
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_features.test", "ngmvpn", "enabled"))
@@ -103,10 +103,10 @@ func testAccDataSourceNxosFeaturesConfig() string {
 	config += `	isis = "enabled"` + "\n"
 	config += `	lacp = "enabled"` + "\n"
 	config += `	lldp = "enabled"` + "\n"
-	if os.Getenv("MACSEC") != "" {
+	if os.Getenv("FEATURE_MACSEC") != "" {
 		config += `	macsec = "enabled"` + "\n"
 	}
-	if os.Getenv("NETFLOW") != "" {
+	if os.Getenv("FEATURE_NETFLOW") != "" {
 		config += `	netflow = "enabled"` + "\n"
 	}
 	config += `	ngmvpn = "enabled"` + "\n"

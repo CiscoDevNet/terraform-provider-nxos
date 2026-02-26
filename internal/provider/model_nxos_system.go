@@ -207,14 +207,17 @@ func (data System) toDeleteBody() nxos.Body {
 		nestedChildrenPath := childBodyPath + ".children"
 		_ = nestedChildrenPath
 		{
-			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
-			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ethpmInst"
-			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+			childBody := ""
 			if !data.Mtu.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"systemJumboMtu", strconv.FormatInt(9216, 10))
+				childBody, _ = sjson.Set(childBody, "systemJumboMtu", strconv.FormatInt(9216, 10))
 			}
 			if !data.DefaultAdminStatus.IsNull() {
-				body, _ = sjson.Set(body, childBodyPath+".attributes."+"systemDefaultAdminSt", "DME_UNSET_PROPERTY_MARKER")
+				childBody, _ = sjson.Set(childBody, "systemDefaultAdminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if childBody != "" {
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ethpmInst"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 			}
 		}
 	}

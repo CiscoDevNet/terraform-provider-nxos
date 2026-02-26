@@ -10,11 +10,10 @@ attributes:
   - nxos_name: adminSt
     tf_name: admin_state
     type: String
-    description: "Administrative state."
+    description: "The administrative state of the object or policy."
     enum_values:
       - enabled
       - disabled
-    default_value: enabled
     example: enabled
 child_classes:
   - class_name: hmmFwdInst
@@ -25,17 +24,15 @@ child_classes:
       - nxos_name: adminSt
         tf_name: instance_admin_state
         type: String
-        description: "Forwarding instance administrative state."
+        description: "The administrative state of the object or policy."
         enum_values:
           - enabled
           - disabled
-        default_value: enabled
         example: enabled
       - nxos_name: amac
         tf_name: anycast_mac
         type: String
         description: "Anycast Gateway MAC address."
-        default_value: enabled
         example: "20:20:00:00:10:10"
     child_classes:
       - class_name: hmmFwdIf
@@ -54,11 +51,10 @@ child_classes:
           - nxos_name: adminSt
             tf_name: admin_state
             type: String
-            description: "Administrative state."
+            description: "The administrative state of the object or policy."
             enum_values:
               - enabled
               - disabled
-            default_value: enabled
             example: enabled
           - nxos_name: mode
             tf_name: mode
@@ -68,7 +64,6 @@ child_classes:
               - standard
               - anycastGW
               - proxyGW
-            default_value: standard
             example: anycastGW
 test_prerequisites:
   - dn: sys/fm/ifvlan

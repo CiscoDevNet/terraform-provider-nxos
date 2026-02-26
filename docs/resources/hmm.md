@@ -40,15 +40,12 @@ resource "nxos_hmm" "example" {
 
 ### Optional
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `anycast_mac` (String) Anycast Gateway MAC address.
-  - Default value: `enabled`
 - `device` (String) A device name from the provider configuration.
-- `instance_admin_state` (String) Forwarding instance administrative state.
+- `instance_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `interfaces` (Attributes List) List of HMM Fabric Forwarding interfaces. (see [below for nested schema](#nestedatt--interfaces))
 
 ### Read-Only
@@ -64,12 +61,10 @@ Required:
 
 Optional:
 
-- `admin_state` (String) Administrative state.
+- `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `mode` (String) HMM Fabric Forwarding mode information for the interface.
   - Choices: `standard`, `anycastGW`, `proxyGW`
-  - Default value: `standard`
 
 ## Import
 

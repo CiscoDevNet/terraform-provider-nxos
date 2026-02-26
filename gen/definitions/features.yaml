@@ -202,7 +202,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
-        test_tags: [MACSEC]
+        test_tags: [FEATURE_MACSEC]
   - class_name: fmNetflow
     rn: netflow
     type: single
@@ -219,7 +219,7 @@ child_classes:
           - disabled
         example: enabled
         delete_value: disabled
-        test_tags: [NETFLOW]
+        test_tags: [FEATURE_NETFLOW]
   - class_name: fmNgmvpn
     rn: ngmvpn
     type: single

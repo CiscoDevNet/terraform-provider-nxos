@@ -64,15 +64,15 @@ type IPv6VrfsStaticRoutesNextHops struct {
 }
 
 type IPv6VrfsInterfaces struct {
-	InterfaceId         types.String                  `tfsdk:"interface_id"`
-	AutoConfiguration   types.String                  `tfsdk:"auto_configuration"`
-	DefaultRoute        types.String                  `tfsdk:"default_route"`
-	Forward             types.String                  `tfsdk:"forward"`
-	LinkAddressUseBia   types.String                  `tfsdk:"link_address_use_bia"`
-	UseLinkLocalAddress types.String                  `tfsdk:"use_link_local_address"`
-	Urpf                types.String                  `tfsdk:"urpf"`
-	LinkLocalAddress    types.String                  `tfsdk:"link_local_address"`
-	Addresses           []IPv6VrfsInterfacesAddresses `tfsdk:"addresses"`
+	InterfaceId            types.String                  `tfsdk:"interface_id"`
+	AutoConfiguration      types.String                  `tfsdk:"auto_configuration"`
+	DefaultRoute           types.String                  `tfsdk:"default_route"`
+	Forward                types.String                  `tfsdk:"forward"`
+	LinkLocalAddressUseBia types.String                  `tfsdk:"link_local_address_use_bia"`
+	UseLinkLocalAddress    types.String                  `tfsdk:"use_link_local_address"`
+	Urpf                   types.String                  `tfsdk:"urpf"`
+	LinkLocalAddress       types.String                  `tfsdk:"link_local_address"`
+	Addresses              []IPv6VrfsInterfacesAddresses `tfsdk:"addresses"`
 }
 
 type IPv6VrfsInterfacesAddresses struct {
@@ -207,8 +207,8 @@ func (data IPv6) toBody() nxos.Body {
 					if (!child.Forward.IsUnknown() && !child.Forward.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "forward", child.Forward.ValueString())
 					}
-					if (!child.LinkAddressUseBia.IsUnknown() && !child.LinkAddressUseBia.IsNull()) || false {
-						attrs, _ = sjson.Set(attrs, "llAddrUseBia", child.LinkAddressUseBia.ValueString())
+					if (!child.LinkLocalAddressUseBia.IsUnknown() && !child.LinkLocalAddressUseBia.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "llAddrUseBia", child.LinkLocalAddressUseBia.ValueString())
 					}
 					if (!child.UseLinkLocalAddress.IsUnknown() && !child.UseLinkLocalAddress.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "useLinkLocalAddr", child.UseLinkLocalAddress.ValueString())
@@ -315,7 +315,7 @@ func (data *IPv6) fromBody(res gjson.Result) {
 												nestedChildipv6If.AutoConfiguration = types.StringValue(nestedValue.Get("attributes.autoconfig").String())
 												nestedChildipv6If.DefaultRoute = types.StringValue(nestedValue.Get("attributes.defaultRoute").String())
 												nestedChildipv6If.Forward = types.StringValue(nestedValue.Get("attributes.forward").String())
-												nestedChildipv6If.LinkAddressUseBia = types.StringValue(nestedValue.Get("attributes.llAddrUseBia").String())
+												nestedChildipv6If.LinkLocalAddressUseBia = types.StringValue(nestedValue.Get("attributes.llAddrUseBia").String())
 												nestedChildipv6If.UseLinkLocalAddress = types.StringValue(nestedValue.Get("attributes.useLinkLocalAddr").String())
 												nestedChildipv6If.Urpf = types.StringValue(nestedValue.Get("attributes.urpf").String())
 												nestedChildipv6If.LinkLocalAddress = types.StringValue(nestedValue.Get("attributes.llAddr").String())
@@ -486,10 +486,10 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 			} else {
 				data.Vrfs[c].Interfaces[nc].Forward = types.StringNull()
 			}
-			if !data.Vrfs[c].Interfaces[nc].LinkAddressUseBia.IsNull() {
-				data.Vrfs[c].Interfaces[nc].LinkAddressUseBia = types.StringValue(ripv6If.Get("ipv6If.attributes.llAddrUseBia").String())
+			if !data.Vrfs[c].Interfaces[nc].LinkLocalAddressUseBia.IsNull() {
+				data.Vrfs[c].Interfaces[nc].LinkLocalAddressUseBia = types.StringValue(ripv6If.Get("ipv6If.attributes.llAddrUseBia").String())
 			} else {
-				data.Vrfs[c].Interfaces[nc].LinkAddressUseBia = types.StringNull()
+				data.Vrfs[c].Interfaces[nc].LinkLocalAddressUseBia = types.StringNull()
 			}
 			if !data.Vrfs[c].Interfaces[nc].UseLinkLocalAddress.IsNull() {
 				data.Vrfs[c].Interfaces[nc].UseLinkLocalAddress = types.StringValue(ripv6If.Get("ipv6If.attributes.useLinkLocalAddr").String())

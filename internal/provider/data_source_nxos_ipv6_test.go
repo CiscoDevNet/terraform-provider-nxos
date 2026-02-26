@@ -47,14 +47,14 @@ func TestAccDataSourceNxosIPv6(t *testing.T) {
 		"tag":          "10",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv6.test", "vrfs.*.interfaces.*", map[string]string{
-		"interface_id":           "eth1/10",
-		"auto_configuration":     "disabled",
-		"default_route":          "disabled",
-		"forward":                "disabled",
-		"link_address_use_bia":   "disabled",
-		"use_link_local_address": "disabled",
-		"urpf":                   "disabled",
-		"link_local_address":     "2001:db8:3333:4444:5555:6666:7777:8888",
+		"interface_id":               "eth1/10",
+		"auto_configuration":         "disabled",
+		"default_route":              "disabled",
+		"forward":                    "disabled",
+		"link_local_address_use_bia": "disabled",
+		"use_link_local_address":     "disabled",
+		"urpf":                       "disabled",
+		"link_local_address":         "2001:db8:3333:4444:5555:6666:7777:8888",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv6.test", "vrfs.*.interfaces.*.addresses.*", map[string]string{
 		"address": "2001:db8:3333:4444:5555:6666:7777:8888",
@@ -66,7 +66,7 @@ func TestAccDataSourceNxosIPv6(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosIPv6Config(),
+				Config: testAccDataSourceNxosIPv6PrerequisitesConfig + testAccDataSourceNxosIPv6Config(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -76,6 +76,16 @@ func TestAccDataSourceNxosIPv6(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccDataSourceNxosIPv6PrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/intf/phys-[eth1/10]"
+  class_name = "l1PhysIf"
+  content = {
+      layer = "Layer3"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -101,7 +111,7 @@ func testAccDataSourceNxosIPv6Config() string {
 	config += `			auto_configuration = "disabled"` + "\n"
 	config += `			default_route = "disabled"` + "\n"
 	config += `			forward = "disabled"` + "\n"
-	config += `			link_address_use_bia = "disabled"` + "\n"
+	config += `			link_local_address_use_bia = "disabled"` + "\n"
 	config += `			use_link_local_address = "disabled"` + "\n"
 	config += `			urpf = "disabled"` + "\n"
 	config += `			link_local_address = "2001:db8:3333:4444:5555:6666:7777:8888"` + "\n"
@@ -112,6 +122,7 @@ func testAccDataSourceNxosIPv6Config() string {
 	config += `			}]` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

@@ -48,7 +48,7 @@ func TestAccNxosIPv6(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.auto_configuration", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.default_route", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.forward", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.link_address_use_bia", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.link_local_address_use_bia", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.use_link_local_address", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.urpf", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.link_local_address", "2001:db8:3333:4444:5555:6666:7777:8888"))
@@ -64,7 +64,7 @@ func TestAccNxosIPv6(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosIPv6Config_all(),
+				Config: testAccNxosIPv6PrerequisitesConfig + testAccNxosIPv6Config_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -96,12 +96,23 @@ func nxosIPv6ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccNxosIPv6PrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/intf/phys-[eth1/10]"
+  class_name = "l1PhysIf"
+  content = {
+      layer = "Layer3"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosIPv6Config_minimum() string {
 	config := `resource "nxos_ipv6" "test" {` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -130,7 +141,7 @@ func testAccNxosIPv6Config_all() string {
 	config += `			auto_configuration = "disabled"` + "\n"
 	config += `			default_route = "disabled"` + "\n"
 	config += `			forward = "disabled"` + "\n"
-	config += `			link_address_use_bia = "disabled"` + "\n"
+	config += `			link_local_address_use_bia = "disabled"` + "\n"
 	config += `			use_link_local_address = "disabled"` + "\n"
 	config += `			urpf = "disabled"` + "\n"
 	config += `			link_local_address = "2001:db8:3333:4444:5555:6666:7777:8888"` + "\n"
@@ -141,6 +152,7 @@ func testAccNxosIPv6Config_all() string {
 	config += `			}]` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

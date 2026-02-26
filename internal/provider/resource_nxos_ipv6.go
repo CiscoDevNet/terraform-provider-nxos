@@ -32,9 +32,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -116,7 +114,7 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 													},
 												},
 												"address": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Nexthop address.").String,
+													MarkdownDescription: helpers.NewAttributeDescription("Nexthop Address.").String,
 													Required:            true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplace(),
@@ -130,7 +128,7 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 													},
 												},
 												"description": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
+													MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
 													Optional:            true,
 												},
 												"object": schema.Int64Attribute{
@@ -173,61 +171,49 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 										},
 									},
 									"auto_configuration": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("IPv6 Stateless address auto configuration.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+										MarkdownDescription: helpers.NewAttributeDescription("IPv6 Stateless address autoconfig.").AddStringEnumDescription("enabled", "disabled").String,
 										Optional:            true,
-										Computed:            true,
-										Default:             stringdefault.StaticString("disabled"),
 										Validators: []validator.String{
 											stringvalidator.OneOf("enabled", "disabled"),
 										},
 									},
 									"default_route": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Default Route Addition with Nexthop as RA Source Address").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Default Route Addition with Nexthop as RA Source Address.").AddStringEnumDescription("enabled", "disabled").String,
 										Optional:            true,
-										Computed:            true,
-										Default:             stringdefault.StaticString("disabled"),
 										Validators: []validator.String{
 											stringvalidator.OneOf("enabled", "disabled"),
 										},
 									},
 									"forward": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("ip forward enabled/disabled.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+										MarkdownDescription: helpers.NewAttributeDescription("IPv6 forward.").AddStringEnumDescription("enabled", "disabled").String,
 										Optional:            true,
-										Computed:            true,
-										Default:             stringdefault.StaticString("disabled"),
 										Validators: []validator.String{
 											stringvalidator.OneOf("enabled", "disabled"),
 										},
 									},
-									"link_address_use_bia": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("IPv6 Link Local Use BIA").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+									"link_local_address_use_bia": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IPv6 Link Local Use BIA.").AddStringEnumDescription("enabled", "disabled").String,
 										Optional:            true,
-										Computed:            true,
-										Default:             stringdefault.StaticString("disabled"),
 										Validators: []validator.String{
 											stringvalidator.OneOf("enabled", "disabled"),
 										},
 									},
 									"use_link_local_address": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("IPv6 Address Use Link Local Address").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("disabled").String,
+										MarkdownDescription: helpers.NewAttributeDescription("IPv6 Address Use Link Local Address.").AddStringEnumDescription("enabled", "disabled").String,
 										Optional:            true,
-										Computed:            true,
-										Default:             stringdefault.StaticString("disabled"),
 										Validators: []validator.String{
 											stringvalidator.OneOf("enabled", "disabled"),
 										},
 									},
 									"urpf": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("URPF (unicast Reverse Path Forwarding).").AddStringEnumDescription("disabled", "strict", "loose", "loose-allow-default", "strict-allow-vni-hosts").AddDefaultValueDescription("disabled").String,
+										MarkdownDescription: helpers.NewAttributeDescription("IPv6 URPF Info.").AddStringEnumDescription("disabled", "strict", "loose", "loose-allow-default", "strict-allow-vni-hosts").String,
 										Optional:            true,
-										Computed:            true,
-										Default:             stringdefault.StaticString("disabled"),
 										Validators: []validator.String{
 											stringvalidator.OneOf("disabled", "strict", "loose", "loose-allow-default", "strict-allow-vni-hosts"),
 										},
 									},
 									"link_local_address": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("IPv6 address.").String,
+										MarkdownDescription: helpers.NewAttributeDescription("IPv6 Link Local Address.").String,
 										Optional:            true,
 									},
 									"addresses": schema.ListNestedAttribute{
@@ -236,26 +222,25 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"address": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("IPv6 address.").String,
+													MarkdownDescription: helpers.NewAttributeDescription("Address.").String,
 													Required:            true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplace(),
 													},
 												},
 												"type": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Address type.").AddStringEnumDescription("primary", "secondary").AddDefaultValueDescription("primary").String,
+													MarkdownDescription: helpers.NewAttributeDescription("Type.").AddStringEnumDescription("primary", "secondary").String,
 													Optional:            true,
-													Computed:            true,
-													Default:             stringdefault.StaticString("primary"),
 													Validators: []validator.String{
 														stringvalidator.OneOf("primary", "secondary"),
 													},
 												},
 												"tag": schema.Int64Attribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Route Tag").AddDefaultValueDescription("0").String,
+													MarkdownDescription: helpers.NewAttributeDescription("Route Tag.").AddIntegerRangeDescription(0, 4294967295).String,
 													Optional:            true,
-													Computed:            true,
-													Default:             int64default.StaticInt64(0),
+													Validators: []validator.Int64{
+														int64validator.Between(0, 4294967295),
+													},
 												},
 											},
 										},

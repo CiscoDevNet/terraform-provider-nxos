@@ -58,23 +58,23 @@ Read-Only:
 Read-Only:
 
 - `addresses` (Attributes List) List of IPv6 interface addresses. (see [below for nested schema](#nestedatt--vrfs--interfaces--addresses))
-- `auto_configuration` (String) IPv6 Stateless address auto configuration.
-- `default_route` (String) Default Route Addition with Nexthop as RA Source Address
-- `forward` (String) ip forward enabled/disabled.
+- `auto_configuration` (String) IPv6 Stateless address autoconfig.
+- `default_route` (String) Default Route Addition with Nexthop as RA Source Address.
+- `forward` (String) IPv6 forward.
 - `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
-- `link_address_use_bia` (String) IPv6 Link Local Use BIA
-- `link_local_address` (String) IPv6 address.
-- `urpf` (String) URPF (unicast Reverse Path Forwarding).
-- `use_link_local_address` (String) IPv6 Address Use Link Local Address
+- `link_local_address` (String) IPv6 Link Local Address.
+- `link_local_address_use_bia` (String) IPv6 Link Local Use BIA.
+- `urpf` (String) IPv6 URPF Info.
+- `use_link_local_address` (String) IPv6 Address Use Link Local Address.
 
 <a id="nestedatt--vrfs--interfaces--addresses"></a>
 ### Nested Schema for `vrfs.interfaces.addresses`
 
 Read-Only:
 
-- `address` (String) IPv6 address.
-- `tag` (Number) Route Tag
-- `type` (String) Address type.
+- `address` (String) Address.
+- `tag` (Number) Route Tag.
+- `type` (String) Type.
 
 
 
@@ -91,8 +91,8 @@ Read-Only:
 
 Read-Only:
 
-- `address` (String) Nexthop address.
-- `description` (String) Description.
+- `address` (String) Nexthop Address.
+- `description` (String) Description of the specified attribute.
 - `interface_id` (String) Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.
 - `object` (Number) Object to be tracked.
 - `preference` (Number) Route preference.

@@ -43,14 +43,14 @@ resource "nxos_ipv6" "example" {
       }]
     }]
     interfaces = [{
-      interface_id           = "eth1/10"
-      auto_configuration     = "disabled"
-      default_route          = "disabled"
-      forward                = "disabled"
-      link_address_use_bia   = "disabled"
-      use_link_local_address = "disabled"
-      urpf                   = "disabled"
-      link_local_address     = "2001:db8:3333:4444:5555:6666:7777:8888"
+      interface_id               = "eth1/10"
+      auto_configuration         = "disabled"
+      default_route              = "disabled"
+      forward                    = "disabled"
+      link_local_address_use_bia = "disabled"
+      use_link_local_address     = "disabled"
+      urpf                       = "disabled"
+      link_local_address         = "2001:db8:3333:4444:5555:6666:7777:8888"
       addresses = [{
         address = "2001:db8:3333:4444:5555:6666:7777:8888"
         type    = "primary"
@@ -95,40 +95,33 @@ Required:
 Optional:
 
 - `addresses` (Attributes List) List of IPv6 interface addresses. (see [below for nested schema](#nestedatt--vrfs--interfaces--addresses))
-- `auto_configuration` (String) IPv6 Stateless address auto configuration.
+- `auto_configuration` (String) IPv6 Stateless address autoconfig.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
-- `default_route` (String) Default Route Addition with Nexthop as RA Source Address
+- `default_route` (String) Default Route Addition with Nexthop as RA Source Address.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
-- `forward` (String) ip forward enabled/disabled.
+- `forward` (String) IPv6 forward.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
-- `link_address_use_bia` (String) IPv6 Link Local Use BIA
+- `link_local_address` (String) IPv6 Link Local Address.
+- `link_local_address_use_bia` (String) IPv6 Link Local Use BIA.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
-- `link_local_address` (String) IPv6 address.
-- `urpf` (String) URPF (unicast Reverse Path Forwarding).
+- `urpf` (String) IPv6 URPF Info.
   - Choices: `disabled`, `strict`, `loose`, `loose-allow-default`, `strict-allow-vni-hosts`
-  - Default value: `disabled`
-- `use_link_local_address` (String) IPv6 Address Use Link Local Address
+- `use_link_local_address` (String) IPv6 Address Use Link Local Address.
   - Choices: `enabled`, `disabled`
-  - Default value: `disabled`
 
 <a id="nestedatt--vrfs--interfaces--addresses"></a>
 ### Nested Schema for `vrfs.interfaces.addresses`
 
 Required:
 
-- `address` (String) IPv6 address.
+- `address` (String) Address.
 
 Optional:
 
-- `tag` (Number) Route Tag
-  - Default value: `0`
-- `type` (String) Address type.
+- `tag` (Number) Route Tag.
+  - Range: `0`-`4294967295`
+- `type` (String) Type.
   - Choices: `primary`, `secondary`
-  - Default value: `primary`
 
 
 
@@ -145,13 +138,13 @@ Required:
 
 Required:
 
-- `address` (String) Nexthop address.
+- `address` (String) Nexthop Address.
 - `interface_id` (String) Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.
 - `vrf_name` (String) Nexthop VRF.
 
 Optional:
 
-- `description` (String) Description.
+- `description` (String) Description of the specified attribute.
 - `object` (Number) Object to be tracked.
   - Range: `0`-`4294967295`
 - `preference` (Number) Route preference.

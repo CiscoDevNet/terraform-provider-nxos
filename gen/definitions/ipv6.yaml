@@ -60,7 +60,7 @@ child_classes:
                     tf_name: address
                     type: String
                     id: true
-                    description: 'Nexthop address.'
+                    description: 'Nexthop Address.'
                     example: 'a:b::c:d/128'
                   - nxos_name: nhVrf
                     tf_name: vrf_name
@@ -71,7 +71,7 @@ child_classes:
                   - nxos_name: descr
                     tf_name: description
                     type: String
-                    description: 'Description.'
+                    description: 'Description of the specified attribute.'
                     example: My Description
                   - nxos_name: object
                     tf_name: object
@@ -110,64 +110,58 @@ child_classes:
               - nxos_name: autoconfig
                 tf_name: auto_configuration
                 type: String
-                description: 'IPv6 Stateless address auto configuration.'
+                description: 'IPv6 Stateless address autoconfig.'
                 enum_values:
                   - enabled
                   - disabled
-                default_value: disabled
                 example: disabled
               - nxos_name: defaultRoute
                 tf_name: default_route
                 type: String
-                description: 'Default Route Addition with Nexthop as RA Source Address'
+                description: 'Default Route Addition with Nexthop as RA Source Address.'
                 enum_values:
                   - enabled
                   - disabled
-                default_value: disabled
                 example: disabled
               - nxos_name: forward
                 tf_name: forward
                 type: String
-                description: 'ip forward enabled/disabled.'
+                description: 'IPv6 forward.'
                 enum_values:
                   - enabled
                   - disabled
-                default_value: disabled
                 example: disabled
               - nxos_name: llAddrUseBia
-                tf_name: link_address_use_bia
+                tf_name: link_local_address_use_bia
                 type: String
-                description: 'IPv6 Link Local Use BIA'
+                description: 'IPv6 Link Local Use BIA.'
                 enum_values:
                   - enabled
                   - disabled
-                default_value: disabled
                 example: disabled
               - nxos_name: useLinkLocalAddr
                 tf_name: use_link_local_address
                 type: String
-                description: 'IPv6 Address Use Link Local Address'
+                description: 'IPv6 Address Use Link Local Address.'
                 enum_values:
                   - enabled
                   - disabled
-                default_value: disabled
                 example: disabled
               - nxos_name: urpf
                 tf_name: urpf
                 type: String
-                description: 'URPF (unicast Reverse Path Forwarding).'
+                description: 'IPv6 URPF Info.'
                 enum_values:
                   - disabled
                   - strict
                   - loose
                   - loose-allow-default
                   - strict-allow-vni-hosts
-                default_value: disabled
                 example: disabled
               - nxos_name: llAddr
                 tf_name: link_local_address
                 type: String
-                description: 'IPv6 address.'
+                description: 'IPv6 Link Local Address.'
                 example: '2001:db8:3333:4444:5555:6666:7777:8888'
             child_classes:
               - class_name: ipv6Addr
@@ -181,20 +175,26 @@ child_classes:
                     tf_name: address
                     type: String
                     id: true
-                    description: 'IPv6 address.'
+                    description: 'Address.'
                     example: '2001:db8:3333:4444:5555:6666:7777:8888'
                   - nxos_name: type
                     tf_name: type
                     type: String
-                    description: 'Address type.'
+                    description: 'Type.'
                     enum_values:
                       - primary
                       - secondary
-                    default_value: 'primary'
                     example: 'primary'
                   - nxos_name: tag
                     tf_name: tag
                     type: Int64
-                    description: 'Route Tag'
-                    default_value: 0
+                    description: 'Route Tag.'
+                    min_int: 0
+                    max_int: 4294967295
                     example: 1234
+test_prerequisites:
+  - dn: sys/intf/phys-[eth1/10]
+    class_name: l1PhysIf
+    attributes:
+      - name: layer
+        value: Layer3

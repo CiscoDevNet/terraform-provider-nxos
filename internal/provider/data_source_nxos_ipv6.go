@@ -96,7 +96,7 @@ func (d *IPv6DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 													Computed:            true,
 												},
 												"address": schema.StringAttribute{
-													MarkdownDescription: "Nexthop address.",
+													MarkdownDescription: "Nexthop Address.",
 													Computed:            true,
 												},
 												"vrf_name": schema.StringAttribute{
@@ -104,7 +104,7 @@ func (d *IPv6DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 													Computed:            true,
 												},
 												"description": schema.StringAttribute{
-													MarkdownDescription: "Description.",
+													MarkdownDescription: "Description of the specified attribute.",
 													Computed:            true,
 												},
 												"object": schema.Int64Attribute{
@@ -135,31 +135,31 @@ func (d *IPv6DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										Computed:            true,
 									},
 									"auto_configuration": schema.StringAttribute{
-										MarkdownDescription: "IPv6 Stateless address auto configuration.",
+										MarkdownDescription: "IPv6 Stateless address autoconfig.",
 										Computed:            true,
 									},
 									"default_route": schema.StringAttribute{
-										MarkdownDescription: "Default Route Addition with Nexthop as RA Source Address",
+										MarkdownDescription: "Default Route Addition with Nexthop as RA Source Address.",
 										Computed:            true,
 									},
 									"forward": schema.StringAttribute{
-										MarkdownDescription: "ip forward enabled/disabled.",
+										MarkdownDescription: "IPv6 forward.",
 										Computed:            true,
 									},
-									"link_address_use_bia": schema.StringAttribute{
-										MarkdownDescription: "IPv6 Link Local Use BIA",
+									"link_local_address_use_bia": schema.StringAttribute{
+										MarkdownDescription: "IPv6 Link Local Use BIA.",
 										Computed:            true,
 									},
 									"use_link_local_address": schema.StringAttribute{
-										MarkdownDescription: "IPv6 Address Use Link Local Address",
+										MarkdownDescription: "IPv6 Address Use Link Local Address.",
 										Computed:            true,
 									},
 									"urpf": schema.StringAttribute{
-										MarkdownDescription: "URPF (unicast Reverse Path Forwarding).",
+										MarkdownDescription: "IPv6 URPF Info.",
 										Computed:            true,
 									},
 									"link_local_address": schema.StringAttribute{
-										MarkdownDescription: "IPv6 address.",
+										MarkdownDescription: "IPv6 Link Local Address.",
 										Computed:            true,
 									},
 									"addresses": schema.ListNestedAttribute{
@@ -168,15 +168,15 @@ func (d *IPv6DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"address": schema.StringAttribute{
-													MarkdownDescription: "IPv6 address.",
+													MarkdownDescription: "Address.",
 													Computed:            true,
 												},
 												"type": schema.StringAttribute{
-													MarkdownDescription: "Address type.",
+													MarkdownDescription: "Type.",
 													Computed:            true,
 												},
 												"tag": schema.Int64Attribute{
-													MarkdownDescription: "Route Tag",
+													MarkdownDescription: "Route Tag.",
 													Computed:            true,
 												},
 											},

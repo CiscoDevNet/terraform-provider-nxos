@@ -77,11 +77,11 @@ func (d *PortChannelInterfaceDataSource) Schema(ctx context.Context, req datasou
 				Computed:            true,
 			},
 			"minimum_links": schema.Int64Attribute{
-				MarkdownDescription: "Minimum links.",
+				MarkdownDescription: "minimum links.",
 				Computed:            true,
 			},
 			"maximum_links": schema.Int64Attribute{
-				MarkdownDescription: "Maximum links.",
+				MarkdownDescription: "maximum links.",
 				Computed:            true,
 			},
 			"suspend_individual": schema.StringAttribute{
@@ -89,7 +89,7 @@ func (d *PortChannelInterfaceDataSource) Schema(ctx context.Context, req datasou
 				Computed:            true,
 			},
 			"access_vlan": schema.StringAttribute{
-				MarkdownDescription: "Access VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.",
+				MarkdownDescription: "Configured Access Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.",
 				Computed:            true,
 			},
 			"admin_state": schema.StringAttribute{
@@ -121,7 +121,7 @@ func (d *PortChannelInterfaceDataSource) Schema(ctx context.Context, req datasou
 				Computed:            true,
 			},
 			"link_logging": schema.StringAttribute{
-				MarkdownDescription: "Administrative link logging.",
+				MarkdownDescription: "Administrative link logging enable.",
 				Computed:            true,
 			},
 			"medium": schema.StringAttribute{
@@ -133,11 +133,11 @@ func (d *PortChannelInterfaceDataSource) Schema(ctx context.Context, req datasou
 				Computed:            true,
 			},
 			"mtu": schema.Int64Attribute{
-				MarkdownDescription: "Administrative port MTU.",
+				MarkdownDescription: "Administrative port mtu.",
 				Computed:            true,
 			},
 			"native_vlan": schema.StringAttribute{
-				MarkdownDescription: "Native VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.",
+				MarkdownDescription: "Configured Native Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.",
 				Computed:            true,
 			},
 			"speed": schema.StringAttribute{
@@ -145,7 +145,7 @@ func (d *PortChannelInterfaceDataSource) Schema(ctx context.Context, req datasou
 				Computed:            true,
 			},
 			"trunk_vlans": schema.StringAttribute{
-				MarkdownDescription: "List of trunk VLANs.",
+				MarkdownDescription: "Configed Trunk Vlans.",
 				Computed:            true,
 			},
 			"user_configured_flags": schema.StringAttribute{

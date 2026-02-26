@@ -21,7 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"os"
 	"testing"
 
 	goversion "github.com/hashicorp/go-version"
@@ -34,9 +33,6 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosPortChannelInterfaces(t *testing.T) {
-	if os.Getenv("PORT_CHANNEL_INTERFACE") == "" {
-		t.Skip("skipping test, set environment variable PORT_CHANNEL_INTERFACE")
-	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.interface_id", "po1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.port_channel_mode", "active"))
@@ -59,9 +55,8 @@ func TestAccNxosPortChannelInterfaces(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.speed", "auto"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.trunk_vlans", "1-4094"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.user_configured_flags", "admin_layer,admin_mtu,admin_state"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.vrf_dn", "sys/inst-default"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.members.0.interface_dn", "sys/intf/phys-[eth1/11]"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.members.0.force", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.members.0.force", "true"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -71,7 +66,7 @@ func TestAccNxosPortChannelInterfaces(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosPortChannelInterfacesConfig_all(),
+				Config: testAccNxosPortChannelInterfacesPrerequisitesConfig + testAccNxosPortChannelInterfacesConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -102,6 +97,17 @@ func nxosPortChannelInterfacesImportStateIdFunc(resourceName string) resource.Im
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccNxosPortChannelInterfacesPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/fm/lacp"
+  class_name = "fmLacp"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -111,6 +117,7 @@ func testAccNxosPortChannelInterfacesConfig_minimum() string {
 	config += `	items = [{` + "\n"
 	config += `		interface_id = "po1"` + "\n"
 	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -142,12 +149,12 @@ func testAccNxosPortChannelInterfacesConfig_all() string {
 	config += `		speed = "auto"` + "\n"
 	config += `		trunk_vlans = "1-4094"` + "\n"
 	config += `		user_configured_flags = "admin_layer,admin_mtu,admin_state"` + "\n"
-	config += `		vrf_dn = "sys/inst-default"` + "\n"
 	config += `		members = [{` + "\n"
 	config += `			interface_dn = "sys/intf/phys-[eth1/11]"` + "\n"
-	config += `			force = false` + "\n"
+	config += `			force = true` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

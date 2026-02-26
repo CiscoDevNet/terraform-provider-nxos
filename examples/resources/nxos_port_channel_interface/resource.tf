@@ -23,6 +23,6 @@ resource "nxos_port_channel_interface" "example" {
   vrf_dn                = "sys/inst-default"
   members = [{
     interface_dn = "sys/intf/phys-[eth1/11]"
-    force        = false
+    force        = true
   }]
 }

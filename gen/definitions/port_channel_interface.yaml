@@ -2,7 +2,6 @@
 name: Port Channel Interface
 class_name: pcAggrIf
 dn: sys/intf/aggr-[%s]
-test_tags: [PORT_CHANNEL_INTERFACE]
 ds_description: This data source can read the configuration of a port-channel interface.
 res_description: This resource can manage a port-channel interface.
 doc_path: Interfaces/pc:AggrIf/
@@ -26,23 +25,20 @@ attributes:
       - active
       - passive
       - mac-pin
-    default_value: "on"
     example: active
   - nxos_name: minLinks
     tf_name: minimum_links
     type: Int64
-    description: "Minimum links."
+    description: "minimum links."
     min_int: 1
     max_int: 32
-    default_value: 1
     example: 2
   - nxos_name: maxLinks
     tf_name: maximum_links
     type: Int64
-    description: "Maximum links."
+    description: "maximum links."
     min_int: 1
     max_int: 32
-    default_value: 32
     example: 10
   - nxos_name: suspIndividual
     tf_name: suspend_individual
@@ -51,22 +47,19 @@ attributes:
     enum_values:
       - enable
       - disable
-    default_value: enable
     example: disable
   - nxos_name: accessVlan
     tf_name: access_vlan
     type: String
-    description: "Access VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`."
-    default_value: vlan-1
+    description: "Configured Access Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`."
     example: vlan-1
   - nxos_name: adminSt
     tf_name: admin_state
     type: String
     description: "Administrative port state."
     enum_values:
-      - up
       - down
-    default_value: up
+      - up
     example: up
   - nxos_name: autoNeg
     tf_name: auto_negotiation
@@ -76,7 +69,6 @@ attributes:
       - "on"
       - "off"
       - 25G
-    default_value: "on"
     example: "on"
   - nxos_name: bw
     tf_name: bandwidth
@@ -84,7 +76,6 @@ attributes:
     description: "The bandwidth parameter for a routed interface, port channel, or subinterface."
     min_int: 0
     max_int: 3200000000
-    default_value: 0
     example: 0
   - nxos_name: delay
     tf_name: delay
@@ -92,7 +83,6 @@ attributes:
     description: "The administrative port delay time."
     min_int: 1
     max_int: 16777215
-    default_value: 1
     example: 1
   - nxos_name: descr
     tf_name: description
@@ -107,26 +97,24 @@ attributes:
       - auto
       - full
       - half
-    default_value: auto
     example: auto
   - nxos_name: layer
     tf_name: layer
     type: String
     description: "Administrative port layer."
     enum_values:
+      - Layer1
       - Layer2
       - Layer3
-    default_value: Layer2
     example: Layer2
   - nxos_name: linkLog
     tf_name: link_logging
     type: String
-    description: "Administrative link logging."
+    description: "Administrative link logging enable."
     enum_values:
       - default
       - enable
       - disable
-    default_value: default
     example: enable
   - nxos_name: medium
     tf_name: medium
@@ -135,7 +123,6 @@ attributes:
     enum_values:
       - broadcast
       - p2p
-    default_value: broadcast
     example: broadcast
   - nxos_name: mode
     tf_name: mode
@@ -151,21 +138,18 @@ attributes:
       - trunk_secondary
       - trunk_promiscuous
       - vntag
-    default_value: access
     example: access
   - nxos_name: mtu
     tf_name: mtu
     type: Int64
-    description: "Administrative port MTU."
+    description: "Administrative port mtu."
     min_int: 576
     max_int: 9216
-    default_value: 1500
     example: 1500
   - nxos_name: nativeVlan
     tf_name: native_vlan
     type: String
-    description: "Native VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`."
-    default_value: vlan-1
+    description: "Configured Native Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`."
     example: unknown
   - nxos_name: speed
     tf_name: speed
@@ -190,17 +174,24 @@ attributes:
       - 5G
       - auto 2.5G 5G 10G
       - auto 100M 1G 2.5G 5G
-    default_value: auto
+      - 800G
     example: auto
   - nxos_name: trunkVlans
     tf_name: trunk_vlans
     type: String
-    description: "List of trunk VLANs."
-    default_value: 1-4094
+    description: "Configed Trunk Vlans."
     example: 1-4094
   - nxos_name: userCfgdFlags
     tf_name: user_configured_flags
     type: String
+    enum_values:
+      - none
+      - admin_state
+      - admin_layer
+      - admin_router_mac
+      - admin_dce_mode
+      - admin_mtu
+    allow_non_enum_values: true
     description: "Port User Config Flags."
     example: "admin_layer,admin_mtu,admin_state"
 child_classes:
@@ -214,6 +205,7 @@ child_classes:
         type: String
         description: "DN of VRF. For example: `sys/inst-VRF1`."
         example: sys/inst-default
+        exclude_test: true
   - class_name: pcRsMbrIfs
     rn: rsmbrIfs-[%s]
     type: list
@@ -231,4 +223,11 @@ child_classes:
         tf_name: force
         type: Bool
         description: "Channel group force."
-        example: false
+        example: true
+test_prerequisites:
+  - dn: sys/fm/lacp
+    class_name: fmLacp
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled

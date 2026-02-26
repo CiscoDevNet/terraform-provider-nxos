@@ -48,7 +48,7 @@ resource "nxos_port_channel_interface" "example" {
   vrf_dn                = "sys/inst-default"
   members = [{
     interface_dn = "sys/intf/phys-[eth1/11]"
-    force        = false
+    force        = true
   }]
 }
 ```
@@ -62,61 +62,44 @@ resource "nxos_port_channel_interface" "example" {
 
 ### Optional
 
-- `access_vlan` (String) Access VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
-  - Default value: `vlan-1`
+- `access_vlan` (String) Configured Access Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
 - `admin_state` (String) Administrative port state.
-  - Choices: `up`, `down`
-  - Default value: `up`
+  - Choices: `down`, `up`
 - `auto_negotiation` (String) Administrative port auto-negotiation.
   - Choices: `on`, `off`, `25G`
-  - Default value: `on`
 - `bandwidth` (Number) The bandwidth parameter for a routed interface, port channel, or subinterface.
   - Range: `0`-`3200000000`
-  - Default value: `0`
 - `delay` (Number) The administrative port delay time.
   - Range: `1`-`16777215`
-  - Default value: `1`
 - `description` (String) Interface description.
 - `device` (String) A device name from the provider configuration.
 - `duplex` (String) Duplex.
   - Choices: `auto`, `full`, `half`
-  - Default value: `auto`
 - `layer` (String) Administrative port layer.
-  - Choices: `Layer2`, `Layer3`
-  - Default value: `Layer2`
-- `link_logging` (String) Administrative link logging.
+  - Choices: `Layer1`, `Layer2`, `Layer3`
+- `link_logging` (String) Administrative link logging enable.
   - Choices: `default`, `enable`, `disable`
-  - Default value: `default`
-- `maximum_links` (Number) Maximum links.
+- `maximum_links` (Number) maximum links.
   - Range: `1`-`32`
-  - Default value: `32`
 - `medium` (String) The administrative port medium type.
   - Choices: `broadcast`, `p2p`
-  - Default value: `broadcast`
 - `members` (Attributes List) List of port-channel member interfaces. (see [below for nested schema](#nestedatt--members))
-- `minimum_links` (Number) Minimum links.
+- `minimum_links` (Number) minimum links.
   - Range: `1`-`32`
-  - Default value: `1`
 - `mode` (String) Administrative port mode.
   - Choices: `access`, `trunk`, `fex-fabric`, `dot1q-tunnel`, `promiscuous`, `host`, `trunk_secondary`, `trunk_promiscuous`, `vntag`
-  - Default value: `access`
-- `mtu` (Number) Administrative port MTU.
+- `mtu` (Number) Administrative port mtu.
   - Range: `576`-`9216`
-  - Default value: `1500`
-- `native_vlan` (String) Native VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
-  - Default value: `vlan-1`
+- `native_vlan` (String) Configured Native Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
 - `port_channel_mode` (String) The aggregated interface protocol channel mode.
   - Choices: `on`, `static`, `active`, `passive`, `mac-pin`
-  - Default value: `on`
 - `speed` (String) Administrative port speed.
-  - Choices: `unknown`, `100M`, `1G`, `10G`, `40G`, `auto`, `auto 100M`, `auto 100M 1G`, `100G`, `25G`, `10M`, `50G`, `200G`, `400G`, `2.5G`, `5G`, `auto 2.5G 5G 10G`, `auto 100M 1G 2.5G 5G`
-  - Default value: `auto`
+  - Choices: `unknown`, `100M`, `1G`, `10G`, `40G`, `auto`, `auto 100M`, `auto 100M 1G`, `100G`, `25G`, `10M`, `50G`, `200G`, `400G`, `2.5G`, `5G`, `auto 2.5G 5G 10G`, `auto 100M 1G 2.5G 5G`, `800G`
 - `suspend_individual` (String) Suspend Individual Port.
   - Choices: `enable`, `disable`
-  - Default value: `enable`
-- `trunk_vlans` (String) List of trunk VLANs.
-  - Default value: `1-4094`
+- `trunk_vlans` (String) Configed Trunk Vlans.
 - `user_configured_flags` (String) Port User Config Flags.
+  - Choices: `none`, `admin_state`, `admin_layer`, `admin_router_mac`, `admin_dce_mode`, `admin_mtu`
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.
 
 ### Read-Only

@@ -225,6 +225,7 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 {{- template "testConfigChildrenTemplate" (makeMap "Children" .TfChildClasses "Indent" $indent)}}
 {{- end}}
 {{- else if eq .Type "list"}}
+{{- if hasTestAttrs .Attributes}}
 	config += `{{$indent}}{{.TfName}} = [{` + "\n"
 {{- range .Attributes}}
 {{- if not .ExcludeTest}}
@@ -241,6 +242,7 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 {{- template "testConfigChildrenTemplate" (makeMap "Children" .TfChildClasses "Indent" (printf "%s\t" $indent))}}
 {{- end}}
 	config += `{{$indent}}}]` + "\n"
+{{- end}}
 {{- end}}
 {{- end}}
 {{- end}}

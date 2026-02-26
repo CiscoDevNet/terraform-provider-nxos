@@ -41,7 +41,7 @@ data "nxos_port_channel_interface" "example" {
 
 ### Read-Only
 
-- `access_vlan` (String) Access VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `access_vlan` (String) Configured Access Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
 - `admin_state` (String) Administrative port state.
 - `auto_negotiation` (String) Administrative port auto-negotiation.
 - `bandwidth` (Number) The bandwidth parameter for a routed interface, port channel, or subinterface.
@@ -50,18 +50,18 @@ data "nxos_port_channel_interface" "example" {
 - `duplex` (String) Duplex.
 - `id` (String) The distinguished name of the object.
 - `layer` (String) Administrative port layer.
-- `link_logging` (String) Administrative link logging.
-- `maximum_links` (Number) Maximum links.
+- `link_logging` (String) Administrative link logging enable.
+- `maximum_links` (Number) maximum links.
 - `medium` (String) The administrative port medium type.
 - `members` (Attributes List) List of port-channel member interfaces. (see [below for nested schema](#nestedatt--members))
-- `minimum_links` (Number) Minimum links.
+- `minimum_links` (Number) minimum links.
 - `mode` (String) Administrative port mode.
-- `mtu` (Number) Administrative port MTU.
-- `native_vlan` (String) Native VLAN. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `mtu` (Number) Administrative port mtu.
+- `native_vlan` (String) Configured Native Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
 - `port_channel_mode` (String) The aggregated interface protocol channel mode.
 - `speed` (String) Administrative port speed.
 - `suspend_individual` (String) Suspend Individual Port.
-- `trunk_vlans` (String) List of trunk VLANs.
+- `trunk_vlans` (String) Configed Trunk Vlans.
 - `user_configured_flags` (String) Port User Config Flags.
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.
 

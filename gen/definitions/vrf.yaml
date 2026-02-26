@@ -18,13 +18,12 @@ attributes:
   - nxos_name: descr
     tf_name: description
     type: String
-    description: 'VRF description.'
+    description: 'Description.'
     example: My VRF1 Description
   - nxos_name: encap
     tf_name: encap
     type: String
-    description: 'Encap for this Context, supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.'
-    default_value: unknown
+    description: 'Encap for this Context. Supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.'
     example: vxlan-103901
 child_classes:
   - class_name: rtctrlDom
@@ -37,8 +36,7 @@ child_classes:
       - nxos_name: rd
         tf_name: route_distinguisher
         type: String
-        description: 'Route Distinguisher value in NX-OS DME format.'
-        default_value: 'unknown:unknown:0:0'
+        description: 'Route Distinguisher. Value in NX-OS DME format.'
         example: 'rd:unknown:0:0'
     child_classes:
       - class_name: rtctrlDomAf
@@ -52,7 +50,7 @@ child_classes:
             tf_name: address_family
             type: String
             id: true
-            description: 'Address family.'
+            description: 'Type.'
             enum_values:
               - ipv4-ucast
               - ipv6-ucast
@@ -69,7 +67,7 @@ child_classes:
                 tf_name: route_target_address_family
                 type: String
                 id: true
-                description: 'Route Target Address Family.'
+                description: 'Type.'
                 enum_values:
                   - ipv4-ucast
                   - ipv6-ucast
@@ -87,7 +85,7 @@ child_classes:
                     tf_name: direction
                     type: String
                     id: true
-                    description: 'Route Target direction.'
+                    description: 'Type.'
                     enum_values:
                       - import
                       - export
@@ -104,7 +102,7 @@ child_classes:
                         tf_name: route_target
                         type: String
                         id: true
-                        description: 'Route Target in NX-OS DME format.'
+                        description: 'Route Target. Value in NX-OS DME format.'
                         example: route-target:as2-nn2:2:2
 test_prerequisites:
   - dn: sys/fm/bgp

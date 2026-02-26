@@ -45,17 +45,17 @@ data "nxos_vrf" "example" {
 ### Read-Only
 
 - `address_families` (Attributes List) List of VRF address families. (see [below for nested schema](#nestedatt--address_families))
-- `description` (String) VRF description.
-- `encap` (String) Encap for this Context, supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.
+- `description` (String) Description.
+- `encap` (String) Encap for this Context. Supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.
 - `id` (String) The distinguished name of the object.
-- `route_distinguisher` (String) Route Distinguisher value in NX-OS DME format.
+- `route_distinguisher` (String) Route Distinguisher. Value in NX-OS DME format.
 
 <a id="nestedatt--address_families"></a>
 ### Nested Schema for `address_families`
 
 Read-Only:
 
-- `address_family` (String) Address family.
+- `address_family` (String) Type.
 - `route_target_address_families` (Attributes List) List of VRF route target address families. (see [below for nested schema](#nestedatt--address_families--route_target_address_families))
 
 <a id="nestedatt--address_families--route_target_address_families"></a>
@@ -63,7 +63,7 @@ Read-Only:
 
 Read-Only:
 
-- `route_target_address_family` (String) Route Target Address Family.
+- `route_target_address_family` (String) Type.
 - `route_target_directions` (Attributes List) List of VRF route target directions. (see [below for nested schema](#nestedatt--address_families--route_target_address_families--route_target_directions))
 
 <a id="nestedatt--address_families--route_target_address_families--route_target_directions"></a>
@@ -71,7 +71,7 @@ Read-Only:
 
 Read-Only:
 
-- `direction` (String) Route Target direction.
+- `direction` (String) Type.
 - `route_targets` (Attributes List) List of VRF route target entries. (see [below for nested schema](#nestedatt--address_families--route_target_address_families--route_target_directions--route_targets))
 
 <a id="nestedatt--address_families--route_target_address_families--route_target_directions--route_targets"></a>
@@ -79,4 +79,4 @@ Read-Only:
 
 Read-Only:
 
-- `route_target` (String) Route Target in NX-OS DME format.
+- `route_target` (String) Route Target. Value in NX-OS DME format.

@@ -32,7 +32,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -87,20 +86,16 @@ func (r *VRFsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							Required:            true,
 						},
 						"description": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("VRF description.").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
 							Optional:            true,
 						},
 						"encap": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Encap for this Context, supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.").AddDefaultValueDescription("unknown").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Encap for this Context. Supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("unknown"),
 						},
 						"route_distinguisher": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Route Distinguisher value in NX-OS DME format.").AddDefaultValueDescription("unknown:unknown:0:0").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Route Distinguisher. Value in NX-OS DME format.").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("unknown:unknown:0:0"),
 						},
 						"address_families": schema.ListNestedAttribute{
 							MarkdownDescription: "List of VRF address families.",
@@ -108,7 +103,7 @@ func (r *VRFsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"address_family": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Address family.").AddStringEnumDescription("ipv4-ucast", "ipv6-ucast").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Type.").AddStringEnumDescription("ipv4-ucast", "ipv6-ucast").String,
 										Required:            true,
 										Validators: []validator.String{
 											stringvalidator.OneOf("ipv4-ucast", "ipv6-ucast"),
@@ -120,7 +115,7 @@ func (r *VRFsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"route_target_address_family": schema.StringAttribute{
-													MarkdownDescription: helpers.NewAttributeDescription("Route Target Address Family.").AddStringEnumDescription("ipv4-ucast", "ipv6-ucast", "l2vpn-evpn").String,
+													MarkdownDescription: helpers.NewAttributeDescription("Type.").AddStringEnumDescription("ipv4-ucast", "ipv6-ucast", "l2vpn-evpn").String,
 													Required:            true,
 													Validators: []validator.String{
 														stringvalidator.OneOf("ipv4-ucast", "ipv6-ucast", "l2vpn-evpn"),
@@ -132,7 +127,7 @@ func (r *VRFsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 													NestedObject: schema.NestedAttributeObject{
 														Attributes: map[string]schema.Attribute{
 															"direction": schema.StringAttribute{
-																MarkdownDescription: helpers.NewAttributeDescription("Route Target direction.").AddStringEnumDescription("import", "export").String,
+																MarkdownDescription: helpers.NewAttributeDescription("Type.").AddStringEnumDescription("import", "export").String,
 																Required:            true,
 																Validators: []validator.String{
 																	stringvalidator.OneOf("import", "export"),
@@ -144,7 +139,7 @@ func (r *VRFsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 																NestedObject: schema.NestedAttributeObject{
 																	Attributes: map[string]schema.Attribute{
 																		"route_target": schema.StringAttribute{
-																			MarkdownDescription: helpers.NewAttributeDescription("Route Target in NX-OS DME format.").String,
+																			MarkdownDescription: helpers.NewAttributeDescription("Route Target. Value in NX-OS DME format.").String,
 																			Required:            true,
 																		},
 																	},

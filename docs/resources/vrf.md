@@ -56,12 +56,10 @@ resource "nxos_vrf" "example" {
 ### Optional
 
 - `address_families` (Attributes List) List of VRF address families. (see [below for nested schema](#nestedatt--address_families))
-- `description` (String) VRF description.
+- `description` (String) Description.
 - `device` (String) A device name from the provider configuration.
-- `encap` (String) Encap for this Context, supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.
-  - Default value: `unknown`
-- `route_distinguisher` (String) Route Distinguisher value in NX-OS DME format.
-  - Default value: `unknown:unknown:0:0`
+- `encap` (String) Encap for this Context. Supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.
+- `route_distinguisher` (String) Route Distinguisher. Value in NX-OS DME format.
 
 ### Read-Only
 
@@ -72,7 +70,7 @@ resource "nxos_vrf" "example" {
 
 Required:
 
-- `address_family` (String) Address family.
+- `address_family` (String) Type.
   - Choices: `ipv4-ucast`, `ipv6-ucast`
 
 Optional:
@@ -84,7 +82,7 @@ Optional:
 
 Required:
 
-- `route_target_address_family` (String) Route Target Address Family.
+- `route_target_address_family` (String) Type.
   - Choices: `ipv4-ucast`, `ipv6-ucast`, `l2vpn-evpn`
 
 Optional:
@@ -96,7 +94,7 @@ Optional:
 
 Required:
 
-- `direction` (String) Route Target direction.
+- `direction` (String) Type.
   - Choices: `import`, `export`
 
 Optional:
@@ -108,7 +106,7 @@ Optional:
 
 Required:
 
-- `route_target` (String) Route Target in NX-OS DME format.
+- `route_target` (String) Route Target. Value in NX-OS DME format.
 
 ## Import
 

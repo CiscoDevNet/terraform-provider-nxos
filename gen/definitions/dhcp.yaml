@@ -256,3 +256,8 @@ test_prerequisites:
     attributes:
       - name: adminSt
         value: enabled
+  - dn: sys/intf/phys-[eth1/10]
+    class_name: l1PhysIf
+    attributes:
+      - name: layer
+        value: Layer3

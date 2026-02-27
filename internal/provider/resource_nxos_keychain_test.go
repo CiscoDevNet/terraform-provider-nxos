@@ -38,6 +38,7 @@ func TestAccNxosKeychain(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.0.name", "KEYCHAIN1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.0.keys.0.key_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.0.keys.0.cryptographic_algorithm", "AES"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.0.keys.0.key_string", "secret_password"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -100,6 +101,7 @@ func testAccNxosKeychainConfig_all() string {
 	config += `		name = "KEYCHAIN1"` + "\n"
 	config += `		keys = [{` + "\n"
 	config += `			key_id = 1` + "\n"
+	config += `			cryptographic_algorithm = "AES"` + "\n"
 	config += `			key_string = "secret_password"` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"

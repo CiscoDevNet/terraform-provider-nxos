@@ -112,6 +112,20 @@ func (r *KeychainResource) Schema(ctx context.Context, req resource.SchemaReques
 											int64planmodifier.RequiresReplace(),
 										},
 									},
+									"cryptographic_algorithm": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Cryptographic Algorithm used in key.").AddStringEnumDescription("NONE", "MD5", "HMAC-SHA-1", "HMAC-SHA-256", "HMAC-SHA-384", "HMAC-SHA-512", "3DES", "AES").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("NONE", "MD5", "HMAC-SHA-1", "HMAC-SHA-256", "HMAC-SHA-384", "HMAC-SHA-512", "3DES", "AES"),
+										},
+									},
+									"encryption_type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Encryption type value based on user input.").AddStringEnumDescription("unencrypted", "type7", "type6").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("unencrypted", "type7", "type6"),
+										},
+									},
 									"key_string": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("keyString provided by user for the keychain.").String,
 										Optional:            true,

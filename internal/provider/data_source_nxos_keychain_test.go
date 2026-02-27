@@ -36,7 +36,8 @@ func TestAccDataSourceNxosKeychain(t *testing.T) {
 		"name": "KEYCHAIN1",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_keychain.test", "keychains.*.keys.*", map[string]string{
-		"key_id": "1",
+		"key_id":                  "1",
+		"cryptographic_algorithm": "AES",
 	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -64,6 +65,7 @@ func testAccDataSourceNxosKeychainConfig() string {
 	config += `		name = "KEYCHAIN1"` + "\n"
 	config += `		keys = [{` + "\n"
 	config += `			key_id = 1` + "\n"
+	config += `			cryptographic_algorithm = "AES"` + "\n"
 	config += `			key_string = "secret_password"` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"

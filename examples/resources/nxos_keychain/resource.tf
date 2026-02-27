@@ -3,8 +3,10 @@ resource "nxos_keychain" "example" {
   keychains = [{
     name = "KEYCHAIN1"
     keys = [{
-      key_id     = 1
-      key_string = "secret_password"
+      key_id                  = 1
+      cryptographic_algorithm = "AES"
+      encryption_type         = "type7"
+      key_string              = "secret_password"
     }]
   }]
 }

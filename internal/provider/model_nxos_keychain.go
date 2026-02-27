@@ -49,8 +49,10 @@ type KeychainKeychains struct {
 }
 
 type KeychainKeychainsKeys struct {
-	KeyId     types.Int64  `tfsdk:"key_id"`
-	KeyString types.String `tfsdk:"key_string"`
+	KeyId                  types.Int64  `tfsdk:"key_id"`
+	CryptographicAlgorithm types.String `tfsdk:"cryptographic_algorithm"`
+	EncryptionType         types.String `tfsdk:"encryption_type"`
+	KeyString              types.String `tfsdk:"key_string"`
 }
 
 type KeychainIdentity struct {
@@ -125,6 +127,12 @@ func (data Keychain) toBody() nxos.Body {
 					if (!child.KeyId.IsUnknown() && !child.KeyId.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "keyId", strconv.FormatInt(child.KeyId.ValueInt64(), 10))
 					}
+					if (!child.CryptographicAlgorithm.IsUnknown() && !child.CryptographicAlgorithm.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "cryptoAlgo", child.CryptographicAlgorithm.ValueString())
+					}
+					if (!child.EncryptionType.IsUnknown() && !child.EncryptionType.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "encryptType", child.EncryptionType.ValueString())
+					}
 					if (!child.KeyString.IsUnknown() && !child.KeyString.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "keyString", child.KeyString.ValueString())
 					}
@@ -169,6 +177,8 @@ func (data *Keychain) fromBody(res gjson.Result) {
 											if nestedClassname.String() == "kcmgrKey" {
 												var nestedChildkcmgrKey KeychainKeychainsKeys
 												nestedChildkcmgrKey.KeyId = types.Int64Value(nestedValue.Get("attributes.keyId").Int())
+												nestedChildkcmgrKey.CryptographicAlgorithm = types.StringValue(nestedValue.Get("attributes.cryptoAlgo").String())
+												nestedChildkcmgrKey.EncryptionType = types.StringValue(nestedValue.Get("attributes.encryptType").String())
 												child.Keys = append(child.Keys, nestedChildkcmgrKey)
 											}
 											return true
@@ -242,6 +252,16 @@ func (data *Keychain) updateFromBody(res gjson.Result) {
 				data.Keychains[c].Keys[nc].KeyId = types.Int64Value(rkcmgrKey.Get("kcmgrKey.attributes.keyId").Int())
 			} else {
 				data.Keychains[c].Keys[nc].KeyId = types.Int64Null()
+			}
+			if !data.Keychains[c].Keys[nc].CryptographicAlgorithm.IsNull() {
+				data.Keychains[c].Keys[nc].CryptographicAlgorithm = types.StringValue(rkcmgrKey.Get("kcmgrKey.attributes.cryptoAlgo").String())
+			} else {
+				data.Keychains[c].Keys[nc].CryptographicAlgorithm = types.StringNull()
+			}
+			if !data.Keychains[c].Keys[nc].EncryptionType.IsNull() {
+				data.Keychains[c].Keys[nc].EncryptionType = types.StringValue(rkcmgrKey.Get("kcmgrKey.attributes.encryptType").String())
+			} else {
+				data.Keychains[c].Keys[nc].EncryptionType = types.StringNull()
 			}
 		}
 	}

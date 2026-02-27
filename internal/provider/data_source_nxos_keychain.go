@@ -90,6 +90,14 @@ func (d *KeychainDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 										MarkdownDescription: "keyId of classic key chain.",
 										Computed:            true,
 									},
+									"cryptographic_algorithm": schema.StringAttribute{
+										MarkdownDescription: "Cryptographic Algorithm used in key.",
+										Computed:            true,
+									},
+									"encryption_type": schema.StringAttribute{
+										MarkdownDescription: "Encryption type value based on user input.",
+										Computed:            true,
+									},
 									"key_string": schema.StringAttribute{
 										MarkdownDescription: "keyString provided by user for the keychain.",
 										Computed:            true,

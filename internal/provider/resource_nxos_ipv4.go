@@ -77,6 +77,80 @@ func (r *IPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"instance_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"access_list_match_local": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Access-List Match Local.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"control": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("stateful-ha").String,
+				Optional:            true,
+			},
+			"hardware_ecmp_hash_offset_concatenation": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("hardware Ecmp HashOffset Concatenation.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"hardware_ecmp_hash_offset_value": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("hardware Ecmp HashOffset Value.").AddIntegerRangeDescription(0, 63).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 63),
+				},
+			},
+			"hardware_ecmp_hash_polynomial": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("hardware Ecmp Hash-Polynomial.").AddStringEnumDescription("CRC16", "CRC32HI").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("CRC16", "CRC32HI"),
+				},
+			},
+			"logging_level": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Logging level.").AddStringEnumDescription("emergency", "alert", "critical", "error", "warning", "notification", "informational", "debug").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("emergency", "alert", "critical", "error", "warning", "notification", "informational", "debug"),
+				},
+			},
+			"redirect_syslog": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ipv4 redirect syslog.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"redirect_syslog_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("redirect syslog interval.").AddIntegerRangeDescription(30, 1800).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(30, 1800),
+				},
+			},
+			"source_route": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Source-Route.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
 			"vrfs": schema.ListNestedAttribute{
 				MarkdownDescription: "List of IPv4 VRF configurations.",
 				Optional:            true,
@@ -89,6 +163,17 @@ func (r *IPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 								stringplanmodifier.RequiresReplace(),
 							},
 						},
+						"auto_discard": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Auto-Discard.").AddStringEnumDescription("enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"icmp_errors_source_interface": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ICMP errors source-interface.").String,
+							Optional:            true,
+						},
 						"static_routes": schema.ListNestedAttribute{
 							MarkdownDescription: "List of IPv4 static routes.",
 							Optional:            true,
@@ -99,6 +184,28 @@ func (r *IPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 										Required:            true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplace(),
+										},
+									},
+									"control": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Controls.").AddStringEnumDescription("pervasive", "bfd").String,
+										Optional:            true,
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+										Optional:            true,
+									},
+									"preference": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Preference.").AddIntegerRangeDescription(1, 255).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 255),
+										},
+									},
+									"tag": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Tag.").AddIntegerRangeDescription(0, 4294967295).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 4294967295),
 										},
 									},
 									"next_hops": schema.ListNestedAttribute{
@@ -152,6 +259,14 @@ func (r *IPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 														int64validator.Between(0, 4294967295),
 													},
 												},
+												"name": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Next hop name.").String,
+													Optional:            true,
+												},
+												"rewrite_encapsulation": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Rewrite Encapsulation.").String,
+													Optional:            true,
+												},
 											},
 										},
 									},
@@ -195,6 +310,17 @@ func (r *IPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 											stringvalidator.OneOf("disabled", "strict", "loose", "loose-allow-default", "strict-allow-vni-hosts"),
 										},
 									},
+									"directed_broadcast_acl": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP directed broadcast ACL.").String,
+										Optional:            true,
+									},
+									"directed_broadcast": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP directed broadcast.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
 									"addresses": schema.ListNestedAttribute{
 										MarkdownDescription: "List of IPv4 interface addresses.",
 										Optional:            true,
@@ -216,6 +342,28 @@ func (r *IPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 												},
 												"tag": schema.Int64Attribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Route Tag.").String,
+													Optional:            true,
+												},
+												"control": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("pervasive", "fabric-aware", "eui64", "anycast").String,
+													Optional:            true,
+												},
+												"preference": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Preference.").AddIntegerRangeDescription(0, 255).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(0, 255),
+													},
+												},
+												"use_bia": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Use Interface MAC Address.").AddStringEnumDescription("enabled", "disabled").String,
+													Optional:            true,
+													Validators: []validator.String{
+														stringvalidator.OneOf("enabled", "disabled"),
+													},
+												},
+												"vpc_peer": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("VPC Peer.").String,
 													Optional:            true,
 												},
 											},

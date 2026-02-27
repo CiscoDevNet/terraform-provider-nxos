@@ -40,7 +40,18 @@ data "nxos_ipv4" "example" {
 
 ### Read-Only
 
+- `access_list_match_local` (String) Access-List Match Local.
+- `admin_state` (String) The administrative state of the object or policy.
+- `control` (String) The control state.
+- `hardware_ecmp_hash_offset_concatenation` (String) hardware Ecmp HashOffset Concatenation.
+- `hardware_ecmp_hash_offset_value` (Number) hardware Ecmp HashOffset Value.
+- `hardware_ecmp_hash_polynomial` (String) hardware Ecmp Hash-Polynomial.
 - `id` (String) The distinguished name of the object.
+- `instance_admin_state` (String) The administrative state of the object or policy.
+- `logging_level` (String) Logging level.
+- `redirect_syslog` (String) ipv4 redirect syslog.
+- `redirect_syslog_interval` (Number) redirect syslog interval.
+- `source_route` (String) Source-Route.
 - `vrfs` (Attributes List) List of IPv4 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
 
 <a id="nestedatt--vrfs"></a>
@@ -48,6 +59,8 @@ data "nxos_ipv4" "example" {
 
 Read-Only:
 
+- `auto_discard` (String) Auto-Discard.
+- `icmp_errors_source_interface` (String) ICMP errors source-interface.
 - `interfaces` (Attributes List) List of IPv4 interfaces. (see [below for nested schema](#nestedatt--vrfs--interfaces))
 - `name` (String) The name of the object.
 - `static_routes` (Attributes List) List of IPv4 static routes. (see [below for nested schema](#nestedatt--vrfs--static_routes))
@@ -58,6 +71,8 @@ Read-Only:
 Read-Only:
 
 - `addresses` (Attributes List) List of IPv4 interface addresses. (see [below for nested schema](#nestedatt--vrfs--interfaces--addresses))
+- `directed_broadcast` (String) IP directed broadcast.
+- `directed_broadcast_acl` (String) IP directed broadcast ACL.
 - `drop_glean` (String) ip drop-glean enabled/disabled.
 - `forward` (String) IP forward.
 - `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
@@ -70,8 +85,12 @@ Read-Only:
 Read-Only:
 
 - `address` (String) Address.
+- `control` (String) The control state.
+- `preference` (Number) Preference.
 - `tag` (Number) Route Tag.
 - `type` (String) Type.
+- `use_bia` (String) Use Interface MAC Address.
+- `vpc_peer` (String) VPC Peer.
 
 
 
@@ -80,8 +99,12 @@ Read-Only:
 
 Read-Only:
 
+- `control` (String) Controls.
+- `description` (String) Description of the specified attribute.
 - `next_hops` (Attributes List) List of next hops. (see [below for nested schema](#nestedatt--vrfs--static_routes--next_hops))
+- `preference` (Number) Preference.
 - `prefix` (String) Prefix.
+- `tag` (Number) Tag.
 
 <a id="nestedatt--vrfs--static_routes--next_hops"></a>
 ### Nested Schema for `vrfs.static_routes.next_hops`
@@ -91,7 +114,9 @@ Read-Only:
 - `address` (String) Nexthop Address.
 - `description` (String) Description of the specified attribute.
 - `interface_id` (String) Nexthop Interface. Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.
+- `name` (String) Next hop name.
 - `object` (Number) Object to be tracked.
 - `preference` (Number) Route preference.
+- `rewrite_encapsulation` (String) Rewrite Encapsulation.
 - `tag` (Number) Tag value.
 - `vrf_name` (String) Nexthop VRF.

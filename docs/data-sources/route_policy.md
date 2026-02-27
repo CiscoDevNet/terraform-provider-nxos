@@ -43,6 +43,7 @@ data "nxos_route_policy" "example" {
 
 ### Read-Only
 
+- `admin_state` (String) The administrative state of the object or policy.
 - `id` (String) The distinguished name of the object.
 - `ipv4_prefix_lists` (Attributes List) List of IPv4 Prefix Lists. (see [below for nested schema](#nestedatt--ipv4_prefix_lists))
 - `route_maps` (Attributes List) List of Route Maps. (see [below for nested schema](#nestedatt--route_maps))
@@ -52,7 +53,9 @@ data "nxos_route_policy" "example" {
 
 Read-Only:
 
+- `description` (String) Description.
 - `entries` (Attributes List) IPv4 Prefix List entries. (see [below for nested schema](#nestedatt--ipv4_prefix_lists--entries))
+- `mode` (String) Mode of ipv4 prefix-list.
 - `name` (String) Object name.
 
 <a id="nestedatt--ipv4_prefix_lists--entries"></a>
@@ -63,6 +66,7 @@ Read-Only:
 - `action` (String) Action.
 - `criteria` (String) Criteria.
 - `from_range` (Number) The start of a range used to describe the prefix length if the criteria is not an exact match.
+- `mask` (String) Mask.
 - `order` (Number) Order.
 - `prefix` (String) Specifies the OSPF route prefix.
 - `to_range` (Number) The end of a range to describe the prefix length if the criteria is not an exact match.
@@ -76,6 +80,7 @@ Read-Only:
 
 - `entries` (Attributes List) List of Route Map Entries. (see [below for nested schema](#nestedatt--route_maps--entries))
 - `name` (String) Object name.
+- `pbr_statistics` (String) Route map pbr-statistics.
 
 <a id="nestedatt--route_maps--entries"></a>
 ### Nested Schema for `route_maps.entries`
@@ -83,13 +88,26 @@ Read-Only:
 Read-Only:
 
 - `action` (String) Action.
+- `description` (String) Description.
+- `drop_on_fail_v4` (String) Drop On Fail V4 for v4 nexthop.
+- `drop_on_fail_v6` (String) Drop On Fail V6 for v6 nexthop.
+- `force_order_v4` (String) Force Order V4.
+- `force_order_v6` (String) Force Order V6.
+- `load_share_v4` (String) Load Sharing V4.
+- `load_share_v6` (String) Load Sharing V6.
 - `match_route_prefix_lists` (Attributes List) List of Match Route Prefix Lists. (see [below for nested schema](#nestedatt--route_maps--entries--match_route_prefix_lists))
 - `match_tags` (Attributes List) List of Match Tags. (see [below for nested schema](#nestedatt--route_maps--entries--match_tags))
 - `order` (Number) Order.
+- `set_default_next_hop_v4` (String) Default V4 Next-hop Address.
+- `set_default_next_hop_v6` (String) Default V6 Next-hop Address.
 - `set_regular_community_additive` (String) Add To Existing Community.
 - `set_regular_community_criteria` (String) Criteria.
 - `set_regular_community_items` (Attributes List) List of Set Community Items. (see [below for nested schema](#nestedatt--route_maps--entries--set_regular_community_items))
 - `set_regular_community_no_community` (String) No Community Attribute.
+- `set_vrf_v4` (String) Enable vrf based set ipv4 next-hop resolution.
+- `set_vrf_v6` (String) Enable vrf based set ipv6 next-hop resolution.
+- `verify_availability_v4` (String) Next Hop with V4 Verify Availability.
+- `verify_availability_v6` (String) Next Hop with V6 Verify Availability.
 
 <a id="nestedatt--route_maps--entries--match_route_prefix_lists"></a>
 ### Nested Schema for `route_maps.entries.match_route_prefix_lists`
@@ -113,3 +131,5 @@ Read-Only:
 Read-Only:
 
 - `community` (String) Community.
+- `description` (String) Description of the specified attribute.
+- `name` (String) Object name.

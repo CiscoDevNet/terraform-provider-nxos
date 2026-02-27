@@ -31,8 +31,11 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosRoutePolicy(t *testing.T) {
 	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "ipv4_prefix_lists.*", map[string]string{
-		"name": "PREFIX_LIST1",
+		"name":        "PREFIX_LIST1",
+		"description": "My prefix list",
+		"mode":        "IPV4",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "ipv4_prefix_lists.*.entries.*", map[string]string{
 		"order":      "10",
@@ -41,13 +44,28 @@ func TestAccDataSourceNxosRoutePolicy(t *testing.T) {
 		"prefix":     "192.168.1.0/24",
 		"from_range": "26",
 		"to_range":   "32",
+		"mask":       "255.255.255.0",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "route_maps.*", map[string]string{
-		"name": "ROUTE_MAP1",
+		"name":           "ROUTE_MAP1",
+		"pbr_statistics": "enabled",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "route_maps.*.entries.*", map[string]string{
-		"order":  "10",
-		"action": "permit",
+		"order":                   "10",
+		"action":                  "permit",
+		"description":             "My route map entry",
+		"drop_on_fail_v4":         "enabled",
+		"drop_on_fail_v6":         "enabled",
+		"force_order_v4":          "enabled",
+		"force_order_v6":          "enabled",
+		"load_share_v4":           "enabled",
+		"load_share_v6":           "enabled",
+		"set_default_next_hop_v4": "enabled",
+		"set_default_next_hop_v6": "enabled",
+		"set_vrf_v4":              "enabled",
+		"set_vrf_v6":              "enabled",
+		"verify_availability_v4":  "enabled",
+		"verify_availability_v6":  "enabled",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "route_maps.*.entries.*.match_route_prefix_lists.*", map[string]string{
 		"prefix_list_dn": "sys/rpm/pfxlistv4-[PREFIX_LIST1]",
@@ -58,7 +76,9 @@ func TestAccDataSourceNxosRoutePolicy(t *testing.T) {
 		"set_regular_community_criteria":     "none",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "route_maps.*.entries.*.set_regular_community_items.*", map[string]string{
-		"community": "regular:as2-nn2:65001:123",
+		"community":   "regular:as2-nn2:65001:123",
+		"description": "My community",
+		"name":        "COMMUNITY1",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "route_maps.*.entries.*.match_tags.*", map[string]string{
 		"tag": "12345",
@@ -84,8 +104,11 @@ func TestAccDataSourceNxosRoutePolicy(t *testing.T) {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 func testAccDataSourceNxosRoutePolicyConfig() string {
 	config := `resource "nxos_route_policy" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
 	config += `	ipv4_prefix_lists = [{` + "\n"
 	config += `		name = "PREFIX_LIST1"` + "\n"
+	config += `		description = "My prefix list"` + "\n"
+	config += `		mode = "IPV4"` + "\n"
 	config += `		entries = [{` + "\n"
 	config += `			order = 10` + "\n"
 	config += `			action = "permit"` + "\n"
@@ -93,13 +116,28 @@ func testAccDataSourceNxosRoutePolicyConfig() string {
 	config += `			prefix = "192.168.1.0/24"` + "\n"
 	config += `			from_range = 26` + "\n"
 	config += `			to_range = 32` + "\n"
+	config += `			mask = "255.255.255.0"` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
 	config += `	route_maps = [{` + "\n"
 	config += `		name = "ROUTE_MAP1"` + "\n"
+	config += `		pbr_statistics = "enabled"` + "\n"
 	config += `		entries = [{` + "\n"
 	config += `			order = 10` + "\n"
 	config += `			action = "permit"` + "\n"
+	config += `			description = "My route map entry"` + "\n"
+	config += `			drop_on_fail_v4 = "enabled"` + "\n"
+	config += `			drop_on_fail_v6 = "enabled"` + "\n"
+	config += `			force_order_v4 = "enabled"` + "\n"
+	config += `			force_order_v6 = "enabled"` + "\n"
+	config += `			load_share_v4 = "enabled"` + "\n"
+	config += `			load_share_v6 = "enabled"` + "\n"
+	config += `			set_default_next_hop_v4 = "enabled"` + "\n"
+	config += `			set_default_next_hop_v6 = "enabled"` + "\n"
+	config += `			set_vrf_v4 = "enabled"` + "\n"
+	config += `			set_vrf_v6 = "enabled"` + "\n"
+	config += `			verify_availability_v4 = "enabled"` + "\n"
+	config += `			verify_availability_v6 = "enabled"` + "\n"
 	config += `			match_route_prefix_lists = [{` + "\n"
 	config += `				prefix_list_dn = "sys/rpm/pfxlistv4-[PREFIX_LIST1]"` + "\n"
 	config += `			}]` + "\n"
@@ -108,6 +146,8 @@ func testAccDataSourceNxosRoutePolicyConfig() string {
 	config += `			set_regular_community_criteria = "none"` + "\n"
 	config += `			set_regular_community_items = [{` + "\n"
 	config += `				community = "regular:as2-nn2:65001:123"` + "\n"
+	config += `				description = "My community"` + "\n"
+	config += `				name = "COMMUNITY1"` + "\n"
 	config += `			}]` + "\n"
 	config += `			match_tags = [{` + "\n"
 	config += `				tag = 12345` + "\n"

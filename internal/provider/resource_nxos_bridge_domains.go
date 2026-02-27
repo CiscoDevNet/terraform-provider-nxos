@@ -31,9 +31,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -79,10 +77,8 @@ func (r *BridgeDomainsResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"svi_autostate": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Disable/enable autoState for SVI interface.").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("enable").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Disable/enable autoState for SVI interface.").AddStringEnumDescription("disable", "enable").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("enable"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
@@ -108,28 +104,22 @@ func (r *BridgeDomainsResource) Schema(ctx context.Context, req resource.SchemaR
 							Optional:            true,
 						},
 						"bridge_domain_state": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Bridge Domain State can be active or suspended.").AddStringEnumDescription("suspend", "active").AddDefaultValueDescription("active").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Bridge Domain State can be active or suspended.").AddStringEnumDescription("suspend", "active").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("active"),
 							Validators: []validator.String{
 								stringvalidator.OneOf("suspend", "active"),
 							},
 						},
 						"admin_state": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("admin state.").AddStringEnumDescription("suspend", "active").AddDefaultValueDescription("active").String,
+							MarkdownDescription: helpers.NewAttributeDescription("admin state.").AddStringEnumDescription("suspend", "active").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("active"),
 							Validators: []validator.String{
 								stringvalidator.OneOf("suspend", "active"),
 							},
 						},
 						"bridge_mode": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("The Layer 2 bridge-domain parameter mode used by the node for enabling classical bridging or bridging with the IP address.").AddStringEnumDescription("ip", "mac").AddDefaultValueDescription("mac").String,
+							MarkdownDescription: helpers.NewAttributeDescription("The Layer 2 bridge-domain parameter mode used by the node for enabling classical bridging or bridging with the IP address.").AddStringEnumDescription("ip", "mac").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("mac"),
 							Validators: []validator.String{
 								stringvalidator.OneOf("ip", "mac"),
 							},
@@ -139,37 +129,27 @@ func (r *BridgeDomainsResource) Schema(ctx context.Context, req resource.SchemaR
 							Optional:            true,
 						},
 						"forwarding_control": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("The Layer 2 bridge-domain forwarding controls.").AddStringEnumDescription("mdst-flood", "arp-flood").AddDefaultValueDescription("mdst-flood").String,
+							MarkdownDescription: helpers.NewAttributeDescription("The Layer 2 bridge-domain forwarding controls.").AddStringEnumDescription("mdst-flood", "arp-flood").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("mdst-flood"),
 						},
 						"forwarding_mode": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("The Layer 2 bridge-domain parameter mode used by the node for enabling forwarding modes.").AddStringEnumDescription("route", "bridge").AddDefaultValueDescription("route,bridge").String,
+							MarkdownDescription: helpers.NewAttributeDescription("The Layer 2 bridge-domain parameter mode used by the node for enabling forwarding modes.").AddStringEnumDescription("route", "bridge").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("route,bridge"),
 						},
 						"long_name": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Enable or disable long name of 128 characters for VLAN.").AddDefaultValueDescription("false").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Enable or disable long name of 128 characters for VLAN.").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             booldefault.StaticBool(false),
 						},
 						"mac_packet_classify": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Vlan mac packet classify.").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Vlan mac packet classify.").AddStringEnumDescription("disable", "enable").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("disable"),
 							Validators: []validator.String{
 								stringvalidator.OneOf("disable", "enable"),
 							},
 						},
 						"mode": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Vlan mode.").AddStringEnumDescription("CE", "FabricPath").AddDefaultValueDescription("CE").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Vlan mode.").AddStringEnumDescription("CE", "FabricPath").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("CE"),
 							Validators: []validator.String{
 								stringvalidator.OneOf("CE", "FabricPath"),
 							},
@@ -179,10 +159,8 @@ func (r *BridgeDomainsResource) Schema(ctx context.Context, req resource.SchemaR
 							Optional:            true,
 						},
 						"cross_connect": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Enable Cross Connect on VLAN.").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Enable Cross Connect on VLAN.").AddStringEnumDescription("disable", "enable").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("disable"),
 							Validators: []validator.String{
 								stringvalidator.OneOf("disable", "enable"),
 							},

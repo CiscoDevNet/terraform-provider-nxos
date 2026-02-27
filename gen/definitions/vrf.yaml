@@ -50,11 +50,13 @@ attributes:
     type: String
     description: 'VRF OUI.'
     example: '000000'
+    exclude_test: true
   - nxos_name: vpnId
     tf_name: vpn_id
     type: String
     description: 'VRF VPN ID.'
     example: '100:200'
+    exclude_test: true
 child_classes:
   - class_name: rtctrlDom
     doc_path: Routing%20and%20Forwarding/rtctrl:Dom/

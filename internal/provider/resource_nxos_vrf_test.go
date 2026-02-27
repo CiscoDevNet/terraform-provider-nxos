@@ -41,8 +41,6 @@ func TestAccNxosVRF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf.test", "controller_id", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf.test", "encap", "vxlan-103901"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf.test", "l3vni", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf.test", "oui", "000000"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf.test", "vpn_id", "100:200"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf.test", "routing_encap", "unknown"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf.test", "route_distinguisher", "rd:unknown:0:0"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrf.test", "address_families.0.address_family", "ipv4-ucast"))
@@ -126,8 +124,6 @@ func testAccNxosVRFConfig_all() string {
 	config += `	controller_id = 1` + "\n"
 	config += `	encap = "vxlan-103901"` + "\n"
 	config += `	l3vni = false` + "\n"
-	config += `	oui = "000000"` + "\n"
-	config += `	vpn_id = "100:200"` + "\n"
 	config += `	routing_encap = "unknown"` + "\n"
 	config += `	route_distinguisher = "rd:unknown:0:0"` + "\n"
 	config += `	address_families = [{` + "\n"

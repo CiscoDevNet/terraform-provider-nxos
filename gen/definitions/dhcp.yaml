@@ -128,7 +128,7 @@ child_classes:
         description: 'Dynamic ARP Inspection functionality with DHCP Relay is enabled.'
         example: true
       - nxos_name: relayInformationOptionServerIdOverrideDisableEnabled
-        tf_name: relay_information_option_server_id_override_disable
+        tf_name: relay_information_option_server_id_override
         type: Int64
         min_int: 0
         max_int: 1

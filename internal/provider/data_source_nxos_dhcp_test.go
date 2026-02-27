@@ -52,7 +52,7 @@ func TestAccDataSourceNxosDHCP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "ipv6_relay_option79", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "packet_strict_validation", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_dai", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_information_option_server_id_override_disable", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_information_option_server_id_override", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_sub_option_format_non_tlv", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_v4_over_v6", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_v6_iapd_route_add", "true"))
@@ -127,7 +127,7 @@ func testAccDataSourceNxosDHCPConfig() string {
 	config += `	ipv6_relay_option79 = true` + "\n"
 	config += `	packet_strict_validation = true` + "\n"
 	config += `	relay_dai = true` + "\n"
-	config += `	relay_information_option_server_id_override_disable = 1` + "\n"
+	config += `	relay_information_option_server_id_override = 1` + "\n"
 	config += `	relay_sub_option_format_non_tlv = true` + "\n"
 	config += `	relay_v4_over_v6 = true` + "\n"
 	config += `	relay_v6_iapd_route_add = true` + "\n"

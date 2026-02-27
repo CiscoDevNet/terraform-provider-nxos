@@ -25,36 +25,36 @@ This resource can manage the DHCP relay configuration on NX-OS devices, includin
 
 ```terraform
 resource "nxos_dhcp" "example" {
-  admin_state                                         = "enabled"
-  ipv6_relay_information_option_vpn                   = true
-  ipv6_relay_option_type_cisco                        = true
-  relay_information_option                            = true
-  relay_information_option_trust                      = true
-  relay_information_option_vpn                        = true
-  relay_information_trust_all                         = true
-  relay_sub_option_circuit_id_customized              = true
-  relay_sub_option_circuit_id_format_string           = "%p"
-  relay_sub_option_type_cisco                         = true
-  smart_relay_global                                  = true
-  snooping                                            = true
-  snooping_information_option                         = true
-  snooping_verify_mac_address                         = false
-  dai_log_buffer_entries                              = 64
-  dai_validate_destination                            = true
-  dai_validate_ip                                     = true
-  dai_validate_source                                 = true
-  ipv6_relay_option79                                 = true
-  packet_strict_validation                            = true
-  relay_dai                                           = true
-  relay_information_option_server_id_override_disable = 1
-  relay_sub_option_format_non_tlv                     = true
-  relay_v4_over_v6                                    = true
-  relay_v6_iapd_route_add                             = true
-  snoop_sub_option_circuit_id_format_string           = "%p"
-  snooping_sub_option_format_non_tlv                  = true
-  v4_relay                                            = true
-  v6_relay                                            = true
-  v6_smart_relay_global                               = true
+  admin_state                                 = "enabled"
+  ipv6_relay_information_option_vpn           = true
+  ipv6_relay_option_type_cisco                = true
+  relay_information_option                    = true
+  relay_information_option_trust              = true
+  relay_information_option_vpn                = true
+  relay_information_trust_all                 = true
+  relay_sub_option_circuit_id_customized      = true
+  relay_sub_option_circuit_id_format_string   = "%p"
+  relay_sub_option_type_cisco                 = true
+  smart_relay_global                          = true
+  snooping                                    = true
+  snooping_information_option                 = true
+  snooping_verify_mac_address                 = false
+  dai_log_buffer_entries                      = 64
+  dai_validate_destination                    = true
+  dai_validate_ip                             = true
+  dai_validate_source                         = true
+  ipv6_relay_option79                         = true
+  packet_strict_validation                    = true
+  relay_dai                                   = true
+  relay_information_option_server_id_override = 1
+  relay_sub_option_format_non_tlv             = true
+  relay_v4_over_v6                            = true
+  relay_v6_iapd_route_add                     = true
+  snoop_sub_option_circuit_id_format_string   = "%p"
+  snooping_sub_option_format_non_tlv          = true
+  v4_relay                                    = true
+  v6_relay                                    = true
+  v6_smart_relay_global                       = true
   relay_interfaces = [{
     interface_id        = "eth1/10"
     information_trusted = true
@@ -91,7 +91,7 @@ resource "nxos_dhcp" "example" {
 - `packet_strict_validation` (Boolean) Pkt Strict Validation.
 - `relay_dai` (Boolean) Dynamic ARP Inspection functionality with DHCP Relay is enabled.
 - `relay_information_option` (Boolean) Relay Information Option Enabled.
-- `relay_information_option_server_id_override_disable` (Number) Relay Information Option Server-id-override-disable Enabled.
+- `relay_information_option_server_id_override` (Number) Relay Information Option Server-id-override-disable Enabled.
   - Range: `0`-`1`
 - `relay_information_option_trust` (Boolean) Relay Information Option Trust Enabled.
 - `relay_information_option_vpn` (Boolean) Relay Information Option Vpn Enabled.

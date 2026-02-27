@@ -152,7 +152,7 @@ func (d *DHCPDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "Dynamic ARP Inspection functionality with DHCP Relay is enabled.",
 				Computed:            true,
 			},
-			"relay_information_option_server_id_override_disable": schema.Int64Attribute{
+			"relay_information_option_server_id_override": schema.Int64Attribute{
 				MarkdownDescription: "Relay Information Option Server-id-override-disable Enabled.",
 				Computed:            true,
 			},

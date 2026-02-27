@@ -38,39 +38,39 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type DHCP struct {
-	Device                                        types.String          `tfsdk:"device"`
-	Dn                                            types.String          `tfsdk:"id"`
-	AdminState                                    types.String          `tfsdk:"admin_state"`
-	Ipv6RelayInformationOptionVpn                 types.Bool            `tfsdk:"ipv6_relay_information_option_vpn"`
-	Ipv6RelayOptionTypeCisco                      types.Bool            `tfsdk:"ipv6_relay_option_type_cisco"`
-	RelayInformationOption                        types.Bool            `tfsdk:"relay_information_option"`
-	RelayInformationOptionTrust                   types.Bool            `tfsdk:"relay_information_option_trust"`
-	RelayInformationOptionVpn                     types.Bool            `tfsdk:"relay_information_option_vpn"`
-	RelayInformationTrustAll                      types.Bool            `tfsdk:"relay_information_trust_all"`
-	RelaySubOptionCircuitIdCustomized             types.Bool            `tfsdk:"relay_sub_option_circuit_id_customized"`
-	RelaySubOptionCircuitIdFormatString           types.String          `tfsdk:"relay_sub_option_circuit_id_format_string"`
-	RelaySubOptionTypeCisco                       types.Bool            `tfsdk:"relay_sub_option_type_cisco"`
-	SmartRelayGlobal                              types.Bool            `tfsdk:"smart_relay_global"`
-	Snooping                                      types.Bool            `tfsdk:"snooping"`
-	SnoopingInformationOption                     types.Bool            `tfsdk:"snooping_information_option"`
-	SnoopingVerifyMacAddress                      types.Bool            `tfsdk:"snooping_verify_mac_address"`
-	DaiLogBufferEntries                           types.Int64           `tfsdk:"dai_log_buffer_entries"`
-	DaiValidateDestination                        types.Bool            `tfsdk:"dai_validate_destination"`
-	DaiValidateIp                                 types.Bool            `tfsdk:"dai_validate_ip"`
-	DaiValidateSource                             types.Bool            `tfsdk:"dai_validate_source"`
-	Ipv6RelayOption79                             types.Bool            `tfsdk:"ipv6_relay_option79"`
-	PacketStrictValidation                        types.Bool            `tfsdk:"packet_strict_validation"`
-	RelayDai                                      types.Bool            `tfsdk:"relay_dai"`
-	RelayInformationOptionServerIdOverrideDisable types.Int64           `tfsdk:"relay_information_option_server_id_override_disable"`
-	RelaySubOptionFormatNonTlv                    types.Bool            `tfsdk:"relay_sub_option_format_non_tlv"`
-	RelayV4OverV6                                 types.Bool            `tfsdk:"relay_v4_over_v6"`
-	RelayV6IapdRouteAdd                           types.Bool            `tfsdk:"relay_v6_iapd_route_add"`
-	SnoopSubOptionCircuitIdFormatString           types.String          `tfsdk:"snoop_sub_option_circuit_id_format_string"`
-	SnoopingSubOptionFormatNonTlv                 types.Bool            `tfsdk:"snooping_sub_option_format_non_tlv"`
-	V4Relay                                       types.Bool            `tfsdk:"v4_relay"`
-	V6Relay                                       types.Bool            `tfsdk:"v6_relay"`
-	V6SmartRelayGlobal                            types.Bool            `tfsdk:"v6_smart_relay_global"`
-	RelayInterfaces                               []DHCPRelayInterfaces `tfsdk:"relay_interfaces"`
+	Device                                 types.String          `tfsdk:"device"`
+	Dn                                     types.String          `tfsdk:"id"`
+	AdminState                             types.String          `tfsdk:"admin_state"`
+	Ipv6RelayInformationOptionVpn          types.Bool            `tfsdk:"ipv6_relay_information_option_vpn"`
+	Ipv6RelayOptionTypeCisco               types.Bool            `tfsdk:"ipv6_relay_option_type_cisco"`
+	RelayInformationOption                 types.Bool            `tfsdk:"relay_information_option"`
+	RelayInformationOptionTrust            types.Bool            `tfsdk:"relay_information_option_trust"`
+	RelayInformationOptionVpn              types.Bool            `tfsdk:"relay_information_option_vpn"`
+	RelayInformationTrustAll               types.Bool            `tfsdk:"relay_information_trust_all"`
+	RelaySubOptionCircuitIdCustomized      types.Bool            `tfsdk:"relay_sub_option_circuit_id_customized"`
+	RelaySubOptionCircuitIdFormatString    types.String          `tfsdk:"relay_sub_option_circuit_id_format_string"`
+	RelaySubOptionTypeCisco                types.Bool            `tfsdk:"relay_sub_option_type_cisco"`
+	SmartRelayGlobal                       types.Bool            `tfsdk:"smart_relay_global"`
+	Snooping                               types.Bool            `tfsdk:"snooping"`
+	SnoopingInformationOption              types.Bool            `tfsdk:"snooping_information_option"`
+	SnoopingVerifyMacAddress               types.Bool            `tfsdk:"snooping_verify_mac_address"`
+	DaiLogBufferEntries                    types.Int64           `tfsdk:"dai_log_buffer_entries"`
+	DaiValidateDestination                 types.Bool            `tfsdk:"dai_validate_destination"`
+	DaiValidateIp                          types.Bool            `tfsdk:"dai_validate_ip"`
+	DaiValidateSource                      types.Bool            `tfsdk:"dai_validate_source"`
+	Ipv6RelayOption79                      types.Bool            `tfsdk:"ipv6_relay_option79"`
+	PacketStrictValidation                 types.Bool            `tfsdk:"packet_strict_validation"`
+	RelayDai                               types.Bool            `tfsdk:"relay_dai"`
+	RelayInformationOptionServerIdOverride types.Int64           `tfsdk:"relay_information_option_server_id_override"`
+	RelaySubOptionFormatNonTlv             types.Bool            `tfsdk:"relay_sub_option_format_non_tlv"`
+	RelayV4OverV6                          types.Bool            `tfsdk:"relay_v4_over_v6"`
+	RelayV6IapdRouteAdd                    types.Bool            `tfsdk:"relay_v6_iapd_route_add"`
+	SnoopSubOptionCircuitIdFormatString    types.String          `tfsdk:"snoop_sub_option_circuit_id_format_string"`
+	SnoopingSubOptionFormatNonTlv          types.Bool            `tfsdk:"snooping_sub_option_format_non_tlv"`
+	V4Relay                                types.Bool            `tfsdk:"v4_relay"`
+	V6Relay                                types.Bool            `tfsdk:"v6_relay"`
+	V6SmartRelayGlobal                     types.Bool            `tfsdk:"v6_smart_relay_global"`
+	RelayInterfaces                        []DHCPRelayInterfaces `tfsdk:"relay_interfaces"`
 }
 
 type DHCPRelayInterfaces struct {
@@ -206,8 +206,8 @@ func (data DHCP) toBody() nxos.Body {
 		if (!data.RelayDai.IsUnknown() && !data.RelayDai.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "relayDAIEnabled", strconv.FormatBool(data.RelayDai.ValueBool()))
 		}
-		if (!data.RelayInformationOptionServerIdOverrideDisable.IsUnknown() && !data.RelayInformationOptionServerIdOverrideDisable.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "relayInformationOptionServerIdOverrideDisableEnabled", strconv.FormatInt(data.RelayInformationOptionServerIdOverrideDisable.ValueInt64(), 10))
+		if (!data.RelayInformationOptionServerIdOverride.IsUnknown() && !data.RelayInformationOptionServerIdOverride.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "relayInformationOptionServerIdOverrideDisableEnabled", strconv.FormatInt(data.RelayInformationOptionServerIdOverride.ValueInt64(), 10))
 		}
 		if (!data.RelaySubOptionFormatNonTlv.IsUnknown() && !data.RelaySubOptionFormatNonTlv.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "relaySubOptionFormatNonTLVEnabled", strconv.FormatBool(data.RelaySubOptionFormatNonTlv.ValueBool()))
@@ -320,7 +320,7 @@ func (data *DHCP) fromBody(res gjson.Result) {
 		data.Ipv6RelayOption79 = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.ipv6RelayOption79Enabled").String()))
 		data.PacketStrictValidation = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.pktStrictVal").String()))
 		data.RelayDai = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.relayDAIEnabled").String()))
-		data.RelayInformationOptionServerIdOverrideDisable = types.Int64Value(rdhcpInst.Get("dhcpInst.attributes.relayInformationOptionServerIdOverrideDisableEnabled").Int())
+		data.RelayInformationOptionServerIdOverride = types.Int64Value(rdhcpInst.Get("dhcpInst.attributes.relayInformationOptionServerIdOverrideDisableEnabled").Int())
 		data.RelaySubOptionFormatNonTlv = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.relaySubOptionFormatNonTLVEnabled").String()))
 		data.RelayV4OverV6 = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.relayV4overV6Enabled").String()))
 		data.RelayV6IapdRouteAdd = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.relayV6IAPDRouteAddEnabled").String()))
@@ -491,10 +491,10 @@ func (data *DHCP) updateFromBody(res gjson.Result) {
 	} else {
 		data.RelayDai = types.BoolNull()
 	}
-	if !data.RelayInformationOptionServerIdOverrideDisable.IsNull() {
-		data.RelayInformationOptionServerIdOverrideDisable = types.Int64Value(rdhcpInst.Get("dhcpInst.attributes.relayInformationOptionServerIdOverrideDisableEnabled").Int())
+	if !data.RelayInformationOptionServerIdOverride.IsNull() {
+		data.RelayInformationOptionServerIdOverride = types.Int64Value(rdhcpInst.Get("dhcpInst.attributes.relayInformationOptionServerIdOverrideDisableEnabled").Int())
 	} else {
-		data.RelayInformationOptionServerIdOverrideDisable = types.Int64Null()
+		data.RelayInformationOptionServerIdOverride = types.Int64Null()
 	}
 	if !data.RelaySubOptionFormatNonTlv.IsNull() {
 		data.RelaySubOptionFormatNonTlv = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.relaySubOptionFormatNonTLVEnabled").String()))

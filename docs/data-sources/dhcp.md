@@ -49,7 +49,7 @@ data "nxos_dhcp" "example" {
 - `packet_strict_validation` (Boolean) Pkt Strict Validation.
 - `relay_dai` (Boolean) Dynamic ARP Inspection functionality with DHCP Relay is enabled.
 - `relay_information_option` (Boolean) Relay Information Option Enabled.
-- `relay_information_option_server_id_override_disable` (Number) Relay Information Option Server-id-override-disable Enabled.
+- `relay_information_option_server_id_override` (Number) Relay Information Option Server-id-override-disable Enabled.
 - `relay_information_option_trust` (Boolean) Relay Information Option Trust Enabled.
 - `relay_information_option_vpn` (Boolean) Relay Information Option Vpn Enabled.
 - `relay_information_trust_all` (Boolean) Relay Information Trust All Enabled.

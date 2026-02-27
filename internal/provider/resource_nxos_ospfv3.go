@@ -103,6 +103,14 @@ func (r *OSPFv3Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 								stringvalidator.OneOf("enabled", "disabled"),
 							},
 						},
+						"flush_routes": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Flush routes on non-graceful controlled restart.").String,
+							Optional:            true,
+						},
+						"isolate": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Isolate this router from OSPFv3 perspective.").String,
+							Optional:            true,
+						},
 						"vrfs": schema.ListNestedAttribute{
 							MarkdownDescription: "List of OSPFv3 VRFs.",
 							Optional:            true,
@@ -144,6 +152,29 @@ func (r *OSPFv3Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 										MarkdownDescription: helpers.NewAttributeDescription("Holds the controls for bfd.").String,
 										Optional:            true,
 									},
+									"log_adjacency_changes": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Adjacency change logging level.").AddStringEnumDescription("none", "brief", "detail").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("none", "brief", "detail"),
+										},
+									},
+									"discard_route_external": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Holds the controls for discard-route external.").String,
+										Optional:            true,
+									},
+									"discard_route_internal": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Holds the controls for discard-route internal.").String,
+										Optional:            true,
+									},
+									"name_lookup": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Enable Name Lookup for OSPFv3 Neighbors.").String,
+										Optional:            true,
+									},
+									"passive_interface_default": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Suppress routing updates on the interface.").String,
+										Optional:            true,
+									},
 									"areas": schema.ListNestedAttribute{
 										MarkdownDescription: "List of OSPFv3 areas.",
 										Optional:            true,
@@ -159,6 +190,13 @@ func (r *OSPFv3Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 												"redistribute": schema.BoolAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Send redistributed LSAs into NSSA area.").String,
 													Optional:            true,
+												},
+												"nssa_translator_role": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Not-so-stubby area(NSSA) translator role.").AddStringEnumDescription("always", "candidate", "never").String,
+													Optional:            true,
+													Validators: []validator.String{
+														stringvalidator.OneOf("always", "candidate", "never"),
+													},
 												},
 												"summary": schema.BoolAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Originate summary LSA into other areas.").String,
@@ -199,6 +237,10 @@ func (r *OSPFv3Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 												"default_metric": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Default metric for redistributed routes. Value must be an integer range [0,16777214] or keyword: unspecified").String,
+													Optional:            true,
+												},
+												"default_route_nssa_pbit_clear": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Override RFC 3101 behaviour and add default route on ABR even if P-bit is clear in received type-7 default route LSA.").String,
 													Optional:            true,
 												},
 												"max_ecmp_cost": schema.Int64Attribute{
@@ -284,6 +326,42 @@ func (r *OSPFv3Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 255),
+							},
+						},
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"instance": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("OSPFv3 instance name used with area command.").String,
+							Optional:            true,
+						},
+						"instance_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("OSPFv3 instance identifier under interface.").AddIntegerRangeDescription(0, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+						"mtu_ignore": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable OSPF MTU mismatch detection.").String,
+							Optional:            true,
+						},
+						"retransmit_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Retransmit interval, the time between LSA retransmissions.").AddIntegerRangeDescription(1, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"transmit_delay": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Transmit delay, estimated time needed to send an LSA update packet.").AddIntegerRangeDescription(1, 450).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 450),
 							},
 						},
 					},

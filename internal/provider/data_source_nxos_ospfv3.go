@@ -85,6 +85,14 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 							MarkdownDescription: "The administrative state of the object or policy.",
 							Computed:            true,
 						},
+						"flush_routes": schema.BoolAttribute{
+							MarkdownDescription: "Flush routes on non-graceful controlled restart.",
+							Computed:            true,
+						},
+						"isolate": schema.BoolAttribute{
+							MarkdownDescription: "Isolate this router from OSPFv3 perspective.",
+							Computed:            true,
+						},
 						"vrfs": schema.ListNestedAttribute{
 							MarkdownDescription: "List of OSPFv3 VRFs.",
 							Computed:            true,
@@ -114,6 +122,26 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 										MarkdownDescription: "Holds the controls for bfd.",
 										Computed:            true,
 									},
+									"log_adjacency_changes": schema.StringAttribute{
+										MarkdownDescription: "Adjacency change logging level.",
+										Computed:            true,
+									},
+									"discard_route_external": schema.BoolAttribute{
+										MarkdownDescription: "Holds the controls for discard-route external.",
+										Computed:            true,
+									},
+									"discard_route_internal": schema.BoolAttribute{
+										MarkdownDescription: "Holds the controls for discard-route internal.",
+										Computed:            true,
+									},
+									"name_lookup": schema.BoolAttribute{
+										MarkdownDescription: "Enable Name Lookup for OSPFv3 Neighbors.",
+										Computed:            true,
+									},
+									"passive_interface_default": schema.BoolAttribute{
+										MarkdownDescription: "Suppress routing updates on the interface.",
+										Computed:            true,
+									},
 									"areas": schema.ListNestedAttribute{
 										MarkdownDescription: "List of OSPFv3 areas.",
 										Computed:            true,
@@ -125,6 +153,10 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 												},
 												"redistribute": schema.BoolAttribute{
 													MarkdownDescription: "Send redistributed LSAs into NSSA area.",
+													Computed:            true,
+												},
+												"nssa_translator_role": schema.StringAttribute{
+													MarkdownDescription: "Not-so-stubby area(NSSA) translator role.",
 													Computed:            true,
 												},
 												"summary": schema.BoolAttribute{
@@ -157,6 +189,10 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 												},
 												"default_metric": schema.StringAttribute{
 													MarkdownDescription: "Default metric for redistributed routes. Value must be an integer range [0,16777214] or keyword: unspecified",
+													Computed:            true,
+												},
+												"default_route_nssa_pbit_clear": schema.BoolAttribute{
+													MarkdownDescription: "Override RFC 3101 behaviour and add default route on ABR even if P-bit is clear in received type-7 default route LSA.",
 													Computed:            true,
 												},
 												"max_ecmp_cost": schema.Int64Attribute{
@@ -215,6 +251,30 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 						},
 						"priority": schema.Int64Attribute{
 							MarkdownDescription: "Router priority, used in determining the designated router on this network.",
+							Computed:            true,
+						},
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: "The administrative state of the object or policy.",
+							Computed:            true,
+						},
+						"instance": schema.StringAttribute{
+							MarkdownDescription: "OSPFv3 instance name used with area command.",
+							Computed:            true,
+						},
+						"instance_id": schema.Int64Attribute{
+							MarkdownDescription: "OSPFv3 instance identifier under interface.",
+							Computed:            true,
+						},
+						"mtu_ignore": schema.BoolAttribute{
+							MarkdownDescription: "Disable OSPF MTU mismatch detection.",
+							Computed:            true,
+						},
+						"retransmit_interval": schema.Int64Attribute{
+							MarkdownDescription: "Retransmit interval, the time between LSA retransmissions.",
+							Computed:            true,
+						},
+						"transmit_delay": schema.Int64Attribute{
+							MarkdownDescription: "Transmit delay, estimated time needed to send an LSA update packet.",
 							Computed:            true,
 						},
 					},

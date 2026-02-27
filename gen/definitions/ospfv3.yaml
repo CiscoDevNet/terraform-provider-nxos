@@ -37,6 +37,16 @@ child_classes:
           - enabled
           - disabled
         example: enabled
+      - nxos_name: flushRoutes
+        tf_name: flush_routes
+        type: Bool
+        description: 'Flush routes on non-graceful controlled restart.'
+        example: false
+      - nxos_name: isolate
+        tf_name: isolate
+        type: Bool
+        description: 'Isolate this router from OSPFv3 perspective.'
+        example: false
     child_classes:
       - class_name: ospfv3Dom
         doc_path: Routing%20and%20Forwarding/ospfv3:Dom/
@@ -84,6 +94,35 @@ child_classes:
             type: Bool
             description: 'Holds the controls for bfd.'
             example: false
+          - nxos_name: adjChangeLogLevel
+            tf_name: log_adjacency_changes
+            type: String
+            description: 'Adjacency change logging level.'
+            enum_values:
+              - none
+              - brief
+              - detail
+            example: brief
+          - nxos_name: discardRouteExt
+            tf_name: discard_route_external
+            type: Bool
+            description: 'Holds the controls for discard-route external.'
+            example: false
+          - nxos_name: discardRouteInt
+            tf_name: discard_route_internal
+            type: Bool
+            description: 'Holds the controls for discard-route internal.'
+            example: false
+          - nxos_name: nameLookup
+            tf_name: name_lookup
+            type: Bool
+            description: 'Enable Name Lookup for OSPFv3 Neighbors.'
+            example: true
+          - nxos_name: passiveIntfDefault
+            tf_name: passive_interface_default
+            type: Bool
+            description: 'Suppress routing updates on the interface.'
+            example: false
         child_classes:
           - class_name: ospfv3Area
             doc_path: Routing%20and%20Forwarding/ospfv3:Area/
@@ -103,6 +142,15 @@ child_classes:
                 type: Bool
                 description: 'Send redistributed LSAs into NSSA area.'
                 example: false
+              - nxos_name: nssaTransRole
+                tf_name: nssa_translator_role
+                type: String
+                description: 'Not-so-stubby area(NSSA) translator role.'
+                enum_values:
+                  - always
+                  - candidate
+                  - never
+                example: always
               - nxos_name: summary
                 tf_name: summary
                 type: Bool
@@ -147,6 +195,11 @@ child_classes:
                 type: String
                 description: 'Default metric for redistributed routes. Value must be an integer range [0,16777214] or keyword: unspecified'
                 example: 1024
+              - nxos_name: defRtNssaPbitClear
+                tf_name: default_route_nssa_pbit_clear
+                type: Bool
+                description: 'Override RFC 3101 behaviour and add default route on ABR even if P-bit is clear in received type-7 default route LSA.'
+                example: true
               - nxos_name: maxEcmp
                 tf_name: max_ecmp_cost
                 type: Int64
@@ -166,7 +219,7 @@ child_classes:
         type: String
         id: true
         description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
-        example: eth1/10
+        example: eth1/4
       - nxos_name: advSecondary
         tf_name: advertise_secondaries
         type: Bool
@@ -232,6 +285,45 @@ child_classes:
         max_int: 255
         description: 'Router priority, used in determining the designated router on this network.'
         example: 10
+      - nxos_name: adminSt
+        tf_name: admin_state
+        type: String
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: instance
+        tf_name: instance
+        type: String
+        description: 'OSPFv3 instance name used with area command.'
+        example: OSPFv3
+      - nxos_name: instanceId
+        tf_name: instance_id
+        type: Int64
+        min_int: 0
+        max_int: 255
+        description: 'OSPFv3 instance identifier under interface.'
+        example: 1
+      - nxos_name: mtuIgnore
+        tf_name: mtu_ignore
+        type: Bool
+        description: 'Disable OSPF MTU mismatch detection.'
+        example: true
+      - nxos_name: reTxIntvl
+        tf_name: retransmit_interval
+        type: Int64
+        min_int: 1
+        max_int: 65535
+        description: 'Retransmit interval, the time between LSA retransmissions.'
+        example: 10
+      - nxos_name: txDelay
+        tf_name: transmit_delay
+        type: Int64
+        min_int: 1
+        max_int: 450
+        description: 'Transmit delay, estimated time needed to send an LSA update packet.'
+        example: 5
 test_prerequisites:
   - dn: sys/fm/ospfv3
     class_name: fmOspfv3

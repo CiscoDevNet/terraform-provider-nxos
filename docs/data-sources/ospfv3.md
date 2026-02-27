@@ -113,8 +113,8 @@ Read-Only:
 - `cost` (Number) Cost associated with interface.
 - `dead_interval` (Number) Dead interval, interval during which at least one hello packet must be received from a neighbor before the router declares that neighbor as down.
 - `hello_interval` (Number) Interval between hello packets that OSPFv3 sends on the interface.
-- `instance` (String) OSPFv3 instance name used with area command.
 - `instance_id` (Number) OSPFv3 instance identifier under interface.
+- `instance_name` (String) OSPFv3 instance name used with area command.
 - `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `mtu_ignore` (Boolean) Disable OSPF MTU mismatch detection.
 - `network_type` (String) Network Type, can be Point-to-point or Broadcast.

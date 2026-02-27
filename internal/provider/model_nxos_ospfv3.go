@@ -98,7 +98,7 @@ type OSPFv3Interfaces struct {
 	Passive              types.String `tfsdk:"passive"`
 	Priority             types.Int64  `tfsdk:"priority"`
 	AdminState           types.String `tfsdk:"admin_state"`
-	Instance             types.String `tfsdk:"instance"`
+	InstanceName         types.String `tfsdk:"instance_name"`
 	InstanceId           types.Int64  `tfsdk:"instance_id"`
 	MtuIgnore            types.Bool   `tfsdk:"mtu_ignore"`
 	RetransmitInterval   types.Int64  `tfsdk:"retransmit_interval"`
@@ -306,8 +306,8 @@ func (data OSPFv3) toBody() nxos.Body {
 		if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
 		}
-		if (!child.Instance.IsUnknown() && !child.Instance.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "instance", child.Instance.ValueString())
+		if (!child.InstanceName.IsUnknown() && !child.InstanceName.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "instance", child.InstanceName.ValueString())
 		}
 		if (!child.InstanceId.IsUnknown() && !child.InstanceId.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "instanceId", strconv.FormatInt(child.InstanceId.ValueInt64(), 10))
@@ -432,7 +432,7 @@ func (data *OSPFv3) fromBody(res gjson.Result) {
 						child.Passive = types.StringValue(value.Get("attributes.passive").String())
 						child.Priority = types.Int64Value(value.Get("attributes.prio").Int())
 						child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
-						child.Instance = types.StringValue(value.Get("attributes.instance").String())
+						child.InstanceName = types.StringValue(value.Get("attributes.instance").String())
 						child.InstanceId = types.Int64Value(value.Get("attributes.instanceId").Int())
 						child.MtuIgnore = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.mtuIgnore").String()))
 						child.RetransmitInterval = types.Int64Value(value.Get("attributes.reTxIntvl").Int())
@@ -706,10 +706,10 @@ func (data *OSPFv3) updateFromBody(res gjson.Result) {
 		} else {
 			data.Interfaces[c].AdminState = types.StringNull()
 		}
-		if !data.Interfaces[c].Instance.IsNull() {
-			data.Interfaces[c].Instance = types.StringValue(rospfv3If.Get("ospfv3If.attributes.instance").String())
+		if !data.Interfaces[c].InstanceName.IsNull() {
+			data.Interfaces[c].InstanceName = types.StringValue(rospfv3If.Get("ospfv3If.attributes.instance").String())
 		} else {
-			data.Interfaces[c].Instance = types.StringNull()
+			data.Interfaces[c].InstanceName = types.StringNull()
 		}
 		if !data.Interfaces[c].InstanceId.IsNull() {
 			data.Interfaces[c].InstanceId = types.Int64Value(rospfv3If.Get("ospfv3If.attributes.instanceId").Int())

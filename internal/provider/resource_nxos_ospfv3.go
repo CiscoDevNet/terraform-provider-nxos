@@ -335,7 +335,7 @@ func (r *OSPFv3Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 								stringvalidator.OneOf("enabled", "disabled"),
 							},
 						},
-						"instance": schema.StringAttribute{
+						"instance_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("OSPFv3 instance name used with area command.").String,
 							Optional:            true,
 						},

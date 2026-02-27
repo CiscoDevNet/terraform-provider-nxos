@@ -46,7 +46,7 @@ resource "nxos_ospfv3" "example" {
     passive               = "enabled"
     priority              = 10
     admin_state           = "enabled"
-    instance              = "OSPFv3"
+    instance_name         = "OSPFv3"
     instance_id           = 1
     mtu_ignore            = true
     retransmit_interval   = 10

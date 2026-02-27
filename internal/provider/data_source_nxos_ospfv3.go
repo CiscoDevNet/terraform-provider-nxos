@@ -257,7 +257,7 @@ func (d *OSPFv3DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 							MarkdownDescription: "The administrative state of the object or policy.",
 							Computed:            true,
 						},
-						"instance": schema.StringAttribute{
+						"instance_name": schema.StringAttribute{
 							MarkdownDescription: "OSPFv3 instance name used with area command.",
 							Computed:            true,
 						},

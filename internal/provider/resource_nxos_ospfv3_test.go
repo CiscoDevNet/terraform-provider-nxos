@@ -73,7 +73,7 @@ func TestAccNxosOSPFv3(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.passive", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.priority", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.instance", "OSPFv3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.instance_name", "OSPFv3"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.instance_id", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.mtu_ignore", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.retransmit_interval", "10"))
@@ -212,7 +212,7 @@ func testAccNxosOSPFv3Config_all() string {
 	config += `		passive = "enabled"` + "\n"
 	config += `		priority = 10` + "\n"
 	config += `		admin_state = "enabled"` + "\n"
-	config += `		instance = "OSPFv3"` + "\n"
+	config += `		instance_name = "OSPFv3"` + "\n"
 	config += `		instance_id = 1` + "\n"
 	config += `		mtu_ignore = true` + "\n"
 	config += `		retransmit_interval = 10` + "\n"

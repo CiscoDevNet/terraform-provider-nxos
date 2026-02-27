@@ -74,7 +74,7 @@ resource "nxos_ospfv3" "example" {
     passive               = "enabled"
     priority              = 10
     admin_state           = "enabled"
-    instance              = "OSPFv3"
+    instance_name         = "OSPFv3"
     instance_id           = 1
     mtu_ignore            = true
     retransmit_interval   = 10
@@ -197,9 +197,9 @@ Optional:
   - Range: `0`-`65535`
 - `hello_interval` (Number) Interval between hello packets that OSPFv3 sends on the interface.
   - Range: `1`-`65535`
-- `instance` (String) OSPFv3 instance name used with area command.
 - `instance_id` (Number) OSPFv3 instance identifier under interface.
   - Range: `0`-`255`
+- `instance_name` (String) OSPFv3 instance name used with area command.
 - `mtu_ignore` (Boolean) Disable OSPF MTU mismatch detection.
 - `network_type` (String) Network Type, can be Point-to-point or Broadcast.
   - Choices: `none`, `p2p`, `bcast`

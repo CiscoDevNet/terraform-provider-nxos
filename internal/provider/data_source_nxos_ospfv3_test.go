@@ -78,7 +78,7 @@ func TestAccDataSourceNxosOSPFv3(t *testing.T) {
 		"passive":               "enabled",
 		"priority":              "10",
 		"admin_state":           "enabled",
-		"instance":              "OSPFv3",
+		"instance_name":         "OSPFv3",
 		"instance_id":           "1",
 		"mtu_ignore":            "true",
 		"retransmit_interval":   "10",
@@ -182,7 +182,7 @@ func testAccDataSourceNxosOSPFv3Config() string {
 	config += `		passive = "enabled"` + "\n"
 	config += `		priority = 10` + "\n"
 	config += `		admin_state = "enabled"` + "\n"
-	config += `		instance = "OSPFv3"` + "\n"
+	config += `		instance_name = "OSPFv3"` + "\n"
 	config += `		instance_id = 1` + "\n"
 	config += `		mtu_ignore = true` + "\n"
 	config += `		retransmit_interval = 10` + "\n"

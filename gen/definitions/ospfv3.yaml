@@ -294,7 +294,7 @@ child_classes:
           - disabled
         example: enabled
       - nxos_name: instance
-        tf_name: instance
+        tf_name: instance_name
         type: String
         description: 'OSPFv3 instance name used with area command.'
         example: OSPFv3

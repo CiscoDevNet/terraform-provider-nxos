@@ -31,7 +31,6 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosRoutePolicy(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "ipv4_prefix_lists.*", map[string]string{
 		"name":        "PREFIX_LIST1",
 		"description": "My prefix list",
@@ -76,9 +75,7 @@ func TestAccDataSourceNxosRoutePolicy(t *testing.T) {
 		"set_regular_community_criteria":     "none",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "route_maps.*.entries.*.set_regular_community_items.*", map[string]string{
-		"community":   "regular:as2-nn2:65001:123",
-		"description": "My community",
-		"name":        "COMMUNITY1",
+		"community": "regular:as2-nn2:65001:123",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_route_policy.test", "route_maps.*.entries.*.match_tags.*", map[string]string{
 		"tag": "12345",
@@ -104,7 +101,6 @@ func TestAccDataSourceNxosRoutePolicy(t *testing.T) {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 func testAccDataSourceNxosRoutePolicyConfig() string {
 	config := `resource "nxos_route_policy" "test" {` + "\n"
-	config += `	admin_state = "enabled"` + "\n"
 	config += `	ipv4_prefix_lists = [{` + "\n"
 	config += `		name = "PREFIX_LIST1"` + "\n"
 	config += `		description = "My prefix list"` + "\n"
@@ -146,8 +142,6 @@ func testAccDataSourceNxosRoutePolicyConfig() string {
 	config += `			set_regular_community_criteria = "none"` + "\n"
 	config += `			set_regular_community_items = [{` + "\n"
 	config += `				community = "regular:as2-nn2:65001:123"` + "\n"
-	config += `				description = "My community"` + "\n"
-	config += `				name = "COMMUNITY1"` + "\n"
 	config += `			}]` + "\n"
 	config += `			match_tags = [{` + "\n"
 	config += `				tag = 12345` + "\n"

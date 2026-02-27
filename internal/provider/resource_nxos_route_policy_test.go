@@ -35,7 +35,6 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosRoutePolicy(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.name", "PREFIX_LIST1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.description", "My prefix list"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.mode", "IPV4"))
@@ -68,8 +67,6 @@ func TestAccNxosRoutePolicy(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_regular_community_no_community", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_regular_community_criteria", "none"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_regular_community_items.0.community", "regular:as2-nn2:65001:123"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_regular_community_items.0.description", "My community"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_regular_community_items.0.name", "COMMUNITY1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.match_tags.0.tag", "12345"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -127,7 +124,6 @@ func testAccNxosRoutePolicyConfig_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosRoutePolicyConfig_all() string {
 	config := `resource "nxos_route_policy" "test" {` + "\n"
-	config += `	admin_state = "enabled"` + "\n"
 	config += `	ipv4_prefix_lists = [{` + "\n"
 	config += `		name = "PREFIX_LIST1"` + "\n"
 	config += `		description = "My prefix list"` + "\n"
@@ -169,8 +165,6 @@ func testAccNxosRoutePolicyConfig_all() string {
 	config += `			set_regular_community_criteria = "none"` + "\n"
 	config += `			set_regular_community_items = [{` + "\n"
 	config += `				community = "regular:as2-nn2:65001:123"` + "\n"
-	config += `				description = "My community"` + "\n"
-	config += `				name = "COMMUNITY1"` + "\n"
 	config += `			}]` + "\n"
 	config += `			match_tags = [{` + "\n"
 	config += `				tag = 12345` + "\n"

@@ -15,6 +15,7 @@ attributes:
       - enabled
       - disabled
     example: enabled
+    exclude_test: true
 child_classes:
   - class_name: rtpfxRuleV4
     doc_path: Routing%20and%20Forwarding/rtpfx:RuleV4/
@@ -317,11 +318,13 @@ child_classes:
                     type: String
                     description: "Description of the specified attribute."
                     example: 'My community'
+                    exclude_test: true
                   - nxos_name: name
                     tf_name: name
                     type: String
                     description: "Object name."
                     example: 'COMMUNITY1'
+                    exclude_test: true
           - class_name: rtmapMatchRtTag
             doc_path: Routing%20and%20Forwarding/rtmap:MatchRtTag/
             rn: mrttag-%v

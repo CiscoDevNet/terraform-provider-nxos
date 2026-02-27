@@ -55,7 +55,6 @@ child_classes:
         max_int: 1000
         description: 'Inter Packet Delay.'
         example: 200
-        delete_value: 100
       - nxos_name: nrDelay
         tf_name: null_register_delay
         type: Int64
@@ -64,7 +63,6 @@ child_classes:
         description: 'Null Register Inter Batch Delay.'
         example: 1000
         exclude_test: true
-        delete_value: 10000
       - nxos_name: nrNumRt
         tf_name: null_register_number_of_routes
         type: Int64
@@ -73,7 +71,6 @@ child_classes:
         description: 'Null Register Number of Routes.'
         example: 500
         exclude_test: true
-        delete_value: 500
       - nxos_name: regStop
         tf_name: register_stop
         type: Bool

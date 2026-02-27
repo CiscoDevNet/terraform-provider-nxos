@@ -1068,15 +1068,6 @@ func (data PIM) toDeleteBody() nxos.Body {
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".pimInst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
-		if !data.JoinPruneDelay.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"jpDelay", strconv.FormatInt(100, 10))
-		}
-		if !data.NullRegisterDelay.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"nrDelay", strconv.FormatInt(10000, 10))
-		}
-		if !data.NullRegisterNumberOfRoutes.IsNull() {
-			body, _ = sjson.Set(body, childBodyPath+".attributes."+"nrNumRt", strconv.FormatInt(500, 10))
-		}
 		nestedChildrenPath := childBodyPath + ".children"
 		_ = nestedChildrenPath
 		for _, child := range data.Vrfs {

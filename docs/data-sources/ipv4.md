@@ -114,7 +114,7 @@ Read-Only:
 - `address` (String) Nexthop Address.
 - `description` (String) Description of the specified attribute.
 - `interface_id` (String) Nexthop Interface. Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.
-- `next_hop_name` (String) Next hop name.
+- `name` (String) Next hop name.
 - `object` (Number) Object to be tracked.
 - `preference` (Number) Route preference.
 - `rewrite_encapsulation` (String) Rewrite Encapsulation.

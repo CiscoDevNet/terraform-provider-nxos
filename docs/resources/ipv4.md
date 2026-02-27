@@ -57,7 +57,7 @@ resource "nxos_ipv4" "example" {
         object                = 10
         preference            = 123
         tag                   = 10
-        next_hop_name         = "nh1"
+        name                  = "nh1"
         rewrite_encapsulation = "unknown"
       }]
     }]
@@ -205,7 +205,7 @@ Required:
 Optional:
 
 - `description` (String) Description of the specified attribute.
-- `next_hop_name` (String) Next hop name.
+- `name` (String) Next hop name.
 - `object` (Number) Object to be tracked.
   - Range: `0`-`4294967295`
 - `preference` (Number) Route preference.

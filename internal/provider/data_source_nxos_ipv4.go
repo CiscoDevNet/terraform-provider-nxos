@@ -187,7 +187,7 @@ func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 													MarkdownDescription: "Tag value.",
 													Computed:            true,
 												},
-												"next_hop_name": schema.StringAttribute{
+												"name": schema.StringAttribute{
 													MarkdownDescription: "Next hop name.",
 													Computed:            true,
 												},

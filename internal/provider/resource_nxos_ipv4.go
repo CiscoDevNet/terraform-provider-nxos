@@ -259,7 +259,7 @@ func (r *IPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 														int64validator.Between(0, 4294967295),
 													},
 												},
-												"next_hop_name": schema.StringAttribute{
+												"name": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Next hop name.").String,
 													Optional:            true,
 												},

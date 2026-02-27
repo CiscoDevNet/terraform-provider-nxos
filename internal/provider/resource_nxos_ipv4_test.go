@@ -58,7 +58,7 @@ func TestAccNxosIPv4(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.object", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.preference", "123"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.tag", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.next_hop_name", "nh1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.name", "nh1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.rewrite_encapsulation", "unknown"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.interface_id", "eth1/10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.drop_glean", "disabled"))
@@ -173,7 +173,7 @@ func testAccNxosIPv4Config_all() string {
 	config += `				object = 10` + "\n"
 	config += `				preference = 123` + "\n"
 	config += `				tag = 10` + "\n"
-	config += `				next_hop_name = "nh1"` + "\n"
+	config += `				name = "nh1"` + "\n"
 	config += `				rewrite_encapsulation = "unknown"` + "\n"
 	config += `			}]` + "\n"
 	config += `		}]` + "\n"

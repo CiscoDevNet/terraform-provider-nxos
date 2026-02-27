@@ -78,7 +78,7 @@ type IPv4VrfsStaticRoutesNextHops struct {
 	Object               types.Int64  `tfsdk:"object"`
 	Preference           types.Int64  `tfsdk:"preference"`
 	Tag                  types.Int64  `tfsdk:"tag"`
-	NextHopName          types.String `tfsdk:"next_hop_name"`
+	Name                 types.String `tfsdk:"name"`
 	RewriteEncapsulation types.String `tfsdk:"rewrite_encapsulation"`
 }
 
@@ -262,8 +262,8 @@ func (data IPv4) toBody() nxos.Body {
 							if (!child.Tag.IsUnknown() && !child.Tag.IsNull()) || false {
 								attrs, _ = sjson.Set(attrs, "tag", strconv.FormatInt(child.Tag.ValueInt64(), 10))
 							}
-							if (!child.NextHopName.IsUnknown() && !child.NextHopName.IsNull()) || false {
-								attrs, _ = sjson.Set(attrs, "rtname", child.NextHopName.ValueString())
+							if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "rtname", child.Name.ValueString())
 							}
 							if (!child.RewriteEncapsulation.IsUnknown() && !child.RewriteEncapsulation.IsNull()) || false {
 								attrs, _ = sjson.Set(attrs, "rwEncap", child.RewriteEncapsulation.ValueString())
@@ -394,7 +394,7 @@ func (data *IPv4) fromBody(res gjson.Result) {
 																	nestedChildipv4Nexthop.Object = types.Int64Value(nestedValue.Get("attributes.object").Int())
 																	nestedChildipv4Nexthop.Preference = types.Int64Value(nestedValue.Get("attributes.pref").Int())
 																	nestedChildipv4Nexthop.Tag = types.Int64Value(nestedValue.Get("attributes.tag").Int())
-																	nestedChildipv4Nexthop.NextHopName = types.StringValue(nestedValue.Get("attributes.rtname").String())
+																	nestedChildipv4Nexthop.Name = types.StringValue(nestedValue.Get("attributes.rtname").String())
 																	nestedChildipv4Nexthop.RewriteEncapsulation = types.StringValue(nestedValue.Get("attributes.rwEncap").String())
 																	nestedChildipv4Route.NextHops = append(nestedChildipv4Route.NextHops, nestedChildipv4Nexthop)
 																}
@@ -647,10 +647,10 @@ func (data *IPv4) updateFromBody(res gjson.Result) {
 				} else {
 					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Tag = types.Int64Null()
 				}
-				if !data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].NextHopName.IsNull() {
-					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].NextHopName = types.StringValue(ripv4Nexthop.Get("ipv4Nexthop.attributes.rtname").String())
+				if !data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Name.IsNull() {
+					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Name = types.StringValue(ripv4Nexthop.Get("ipv4Nexthop.attributes.rtname").String())
 				} else {
-					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].NextHopName = types.StringNull()
+					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Name = types.StringNull()
 				}
 				if !data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].RewriteEncapsulation.IsNull() {
 					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].RewriteEncapsulation = types.StringValue(ripv4Nexthop.Get("ipv4Nexthop.attributes.rwEncap").String())

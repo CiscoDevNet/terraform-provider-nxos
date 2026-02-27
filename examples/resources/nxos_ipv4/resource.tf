@@ -28,7 +28,7 @@ resource "nxos_ipv4" "example" {
         object                = 10
         preference            = 123
         tag                   = 10
-        next_hop_name         = "nh1"
+        name                  = "nh1"
         rewrite_encapsulation = "unknown"
       }]
     }]

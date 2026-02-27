@@ -235,7 +235,7 @@ child_classes:
                     max_int: 4294967295
                     example: 10
                   - nxos_name: rtname
-                    tf_name: next_hop_name
+                    tf_name: name
                     type: String
                     description: 'Next hop name.'
                     example: nh1

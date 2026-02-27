@@ -59,7 +59,7 @@ func TestAccDataSourceNxosIPv4(t *testing.T) {
 		"object":                "10",
 		"preference":            "123",
 		"tag":                   "10",
-		"next_hop_name":         "nh1",
+		"name":                  "nh1",
 		"rewrite_encapsulation": "unknown",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv4.test", "vrfs.*.interfaces.*", map[string]string{
@@ -143,7 +143,7 @@ func testAccDataSourceNxosIPv4Config() string {
 	config += `				object = 10` + "\n"
 	config += `				preference = 123` + "\n"
 	config += `				tag = 10` + "\n"
-	config += `				next_hop_name = "nh1"` + "\n"
+	config += `				name = "nh1"` + "\n"
 	config += `				rewrite_encapsulation = "unknown"` + "\n"
 	config += `			}]` + "\n"
 	config += `		}]` + "\n"

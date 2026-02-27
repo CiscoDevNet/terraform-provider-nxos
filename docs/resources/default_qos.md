@@ -46,6 +46,8 @@ resource "nxos_default_qos" "example" {
     match_type = "match-any"
     match_class_maps = [{
       name                          = "Voice"
+      next_class_map                = "Voice"
+      previous_class_map            = "Voice"
       set_qos_group_id              = 1
       police_bc_rate                = 200
       police_bc_unit                = "mbytes"
@@ -73,8 +75,9 @@ resource "nxos_default_qos" "example" {
     }]
   }]
   policy_interface_in = [{
-    interface_id    = "eth1/10"
-    policy_map_name = "PM1"
+    interface_id          = "eth1/10"
+    policy_map_name       = "PM1"
+    policy_map_statistics = false
   }]
 }
 ```
@@ -123,6 +126,10 @@ Required:
 - `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `policy_map_name` (String) Policy-map Name.
 
+Optional:
+
+- `policy_map_statistics` (Boolean) Turn on/off statistics.
+
 
 <a id="nestedatt--policy_maps"></a>
 ### Nested Schema for `policy_maps`
@@ -148,6 +155,7 @@ Required:
 
 Optional:
 
+- `next_class_map` (String) Insert before the given class-map.
 - `police_bc_rate` (Number) CIR burst.
   - Range: `0`-`536870912`
 - `police_bc_unit` (String) CIR burst unit.
@@ -192,6 +200,7 @@ Optional:
   - Choices: `routine`, `priority`, `immediate`, `flash`, `flash-override`, `critical`, `internet`, `network`
 - `police_violate_set_qos_group` (Number) set qos-group for violating traffic.
   - Range: `0`-`7`
+- `previous_class_map` (String) Insert after the given class-map.
 - `set_qos_group_id` (Number) QoS group ID.
   - Range: `0`-`7`
 

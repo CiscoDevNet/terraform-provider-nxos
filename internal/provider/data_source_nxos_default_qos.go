@@ -118,6 +118,14 @@ func (d *DefaultQoSDataSource) Schema(ctx context.Context, req datasource.Schema
 										MarkdownDescription: "Match using class-map.",
 										Computed:            true,
 									},
+									"next_class_map": schema.StringAttribute{
+										MarkdownDescription: "Insert before the given class-map.",
+										Computed:            true,
+									},
+									"previous_class_map": schema.StringAttribute{
+										MarkdownDescription: "Insert after the given class-map.",
+										Computed:            true,
+									},
 									"set_qos_group_id": schema.Int64Attribute{
 										MarkdownDescription: "QoS group ID.",
 										Computed:            true,
@@ -231,6 +239,10 @@ func (d *DefaultQoSDataSource) Schema(ctx context.Context, req datasource.Schema
 						},
 						"policy_map_name": schema.StringAttribute{
 							MarkdownDescription: "Policy-map Name.",
+							Computed:            true,
+						},
+						"policy_map_statistics": schema.BoolAttribute{
+							MarkdownDescription: "Turn on/off statistics.",
 							Computed:            true,
 						},
 					},

@@ -145,6 +145,14 @@ func (r *DefaultQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplace(),
 										},
 									},
+									"next_class_map": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Insert before the given class-map.").String,
+										Optional:            true,
+									},
+									"previous_class_map": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Insert after the given class-map.").String,
+										Optional:            true,
+									},
 									"set_qos_group_id": schema.Int64Attribute{
 										MarkdownDescription: helpers.NewAttributeDescription("QoS group ID.").AddIntegerRangeDescription(0, 7).String,
 										Optional:            true,
@@ -334,6 +342,10 @@ func (r *DefaultQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 						"policy_map_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Policy-map Name.").String,
 							Required:            true,
+						},
+						"policy_map_statistics": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Turn on/off statistics.").String,
+							Optional:            true,
 						},
 					},
 				},

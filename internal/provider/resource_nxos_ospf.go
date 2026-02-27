@@ -103,6 +103,13 @@ func (r *OSPFResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 								stringvalidator.OneOf("enabled", "disabled"),
 							},
 						},
+						"control": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("unspecified", "stateful-ha").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("unspecified", "stateful-ha"),
+							},
+						},
 						"vrfs": schema.ListNestedAttribute{
 							MarkdownDescription: "List of OSPF VRFs.",
 							Optional:            true,
@@ -154,8 +161,53 @@ func (r *OSPFResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 										MarkdownDescription: helpers.NewAttributeDescription("Router identifier for this domain.").String,
 										Optional:            true,
 									},
+									"capability_vrf_lite": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Capability vrf-lite for L3VPN or Ethernet VPN.").AddStringEnumDescription("unspecified", "l3vpn", "evpn").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("unspecified", "l3vpn", "evpn"),
+										},
+									},
 									"control": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Holds the controls bfd, name-lookup, default-passive and Segment Routing. Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,default-passive`. In this case values must be in alphabetical order.").AddStringEnumDescription("unspecified", "bfd", "name-lookup", "default-passive", "segrt").String,
+										Optional:            true,
+									},
+									"default_metric": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Default metric cost for redistributed routes.").AddIntegerRangeDescription(0, 16777214).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 16777214),
+										},
+									},
+									"default_route_nssa_pbit_clear": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Override RFC 3101 behaviour and add default route on ABR even if P-bit is clear in received type-7 default route LSA.").String,
+										Optional:            true,
+									},
+									"discard_route": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Control bits for discard-route external and internal.").AddStringEnumDescription("unspecified", "int", "ext").String,
+										Optional:            true,
+									},
+									"down_bit_ignore": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Holds the status of Down-bit ignore.").String,
+										Optional:            true,
+									},
+									"max_ecmp": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Maximum Equal Cost Multi Path(ECMP).").AddIntegerRangeDescription(1, 64).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 64),
+										},
+									},
+									"name_lookup_vrf": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Holds vrf name of dns-server for name-lookup.").String,
+										Optional:            true,
+									},
+									"rfc1583_compatible": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("RFC 1583 compatibility for external path preferences.").String,
+										Optional:            true,
+									},
+									"rfc1583_compatible_ios": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("RFC 1583 compatibility to IOS for external path preferences.").String,
 										Optional:            true,
 									},
 									"areas": schema.ListNestedAttribute{
@@ -184,6 +236,24 @@ func (r *OSPFResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 														int64validator.Between(0, 16777215),
 													},
 												},
+												"control": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Area controls can be ABRs originate summary LSAs into other areas, redistributed LSAs or suppress forwarding address. Choices: `unspecified`, `summary`, `redistribute`, `suppress-fa`. Can be an empty string. Allowed formats:\n  - Single value. Example: `summary`\n  - Multiple values (comma-separated). Example: `redistribute,summary`. In this case values must be in alphabetical order.").AddStringEnumDescription("unspecified", "summary", "redistribute", "suppress-fa").String,
+													Optional:            true,
+												},
+												"nssa_translator_role": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Not-so-stubby area(NSSA) translator role.").AddStringEnumDescription("always", "candidate", "never").String,
+													Optional:            true,
+													Validators: []validator.String{
+														stringvalidator.OneOf("always", "candidate", "never"),
+													},
+												},
+												"segment_routing_mpls": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Segment routing mpls control.").AddStringEnumDescription("unspecified", "mpls", "disable").String,
+													Optional:            true,
+													Validators: []validator.String{
+														stringvalidator.OneOf("unspecified", "mpls", "disable"),
+													},
+												},
 												"type": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Area types can be stub, nssa, backbone etc.").AddStringEnumDescription("regular", "stub", "nssa").String,
 													Optional:            true,
@@ -193,6 +263,10 @@ func (r *OSPFResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 												},
 											},
 										},
+									},
+									"max_metric_await_convergence_bgp_asn": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("At startup, advertise max metric until convergence of BGP ASN.").String,
+										Optional:            true,
 									},
 									"max_metric_control": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:\n  - Single value. Example: `stub`\n  - Multiple values (comma-separated). Example: `stub,summary-lsa`. In this case values must be in alphabetical order.").AddStringEnumDescription("unspecified", "summary-lsa", "external-lsa", "startup", "stub").String,
@@ -229,6 +303,13 @@ func (r *OSPFResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 													Required:            true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplace(),
+													},
+												},
+												"admin_state": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+													Optional:            true,
+													Validators: []validator.String{
+														stringvalidator.OneOf("enabled", "disabled"),
 													},
 												},
 												"advertise_secondaries": schema.BoolAttribute{
@@ -288,6 +369,31 @@ func (r *OSPFResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 														int64validator.Between(0, 255),
 													},
 												},
+												"control": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Interface controls can be MTU ignore, Advertise subnet. Choices: `unspecified`, `mtu-ignore`, `advert-subnet`. Can be an empty string. Allowed formats:\n  - Single value. Example: `mtu-ignore`\n  - Multiple values (comma-separated). Example: `advert-subnet,mtu-ignore`. In this case values must be in alphabetical order.").AddStringEnumDescription("mtu-ignore", "advert-subnet", "unspecified").String,
+													Optional:            true,
+												},
+												"node_flag": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Node flag, determines if prefix attribute should have the node flag or not.").AddStringEnumDescription("unspecified", "clear").String,
+													Optional:            true,
+													Validators: []validator.String{
+														stringvalidator.OneOf("unspecified", "clear"),
+													},
+												},
+												"retransmit_interval": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Retransmit interval, time between LSA retransmissions.").AddIntegerRangeDescription(1, 65535).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 65535),
+													},
+												},
+												"transmit_delay": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Transmit delay, estimated time needed to send an LSA update packet.").AddIntegerRangeDescription(1, 450).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 450),
+													},
+												},
 												"authentication_key": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Key used for authenticatoin.").String,
 													Optional:            true,
@@ -299,6 +405,10 @@ func (r *OSPFResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 														int64validator.Between(0, 255),
 													},
 												},
+												"authentication_key_new": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Key used for authenticatoin.").String,
+													Optional:            true,
+												},
 												"authentication_key_secure_mode": schema.BoolAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Encrypted authentication key or plain text key.").String,
 													Optional:            true,
@@ -308,6 +418,10 @@ func (r *OSPFResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 													Optional:            true,
 												},
 												"authentication_md5_key": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Authentication md5 key.").String,
+													Optional:            true,
+												},
+												"authentication_md5_key_new": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Authentication md5 key.").String,
 													Optional:            true,
 												},

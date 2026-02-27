@@ -335,7 +335,7 @@ child_classes:
                     type: String
                     mandatory: true
                     description: "An identifier."
-                    example: "po1"
+                    example: "eth1/9"
                   - nxos_name: adminSt
                     tf_name: peerlink_admin_state
                     type: String
@@ -394,3 +394,8 @@ test_prerequisites:
     attributes:
       - name: id
         value: po1
+  - dn: sys/intf/phys-[eth1/9]
+    class_name: l1PhysIf
+    attributes:
+      - name: layer
+        value: Layer2

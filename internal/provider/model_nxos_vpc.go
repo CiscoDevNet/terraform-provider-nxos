@@ -26,6 +26,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -40,6 +41,8 @@ type VPC struct {
 	Device                                  types.String    `tfsdk:"device"`
 	Dn                                      types.String    `tfsdk:"id"`
 	AdminState                              types.String    `tfsdk:"admin_state"`
+	InstanceAdminState                      types.String    `tfsdk:"instance_admin_state"`
+	Control                                 types.String    `tfsdk:"control"`
 	DomainAdminState                        types.String    `tfsdk:"domain_admin_state"`
 	DomainId                                types.Int64     `tfsdk:"domain_id"`
 	AutoRecovery                            types.String    `tfsdk:"auto_recovery"`
@@ -61,6 +64,10 @@ type VPC struct {
 	SystemPriority                          types.Int64     `tfsdk:"system_priority"`
 	Track                                   types.Int64     `tfsdk:"track"`
 	VirtualIp                               types.String    `tfsdk:"virtual_ip"`
+	DelayPeerLinkBringup                    types.Int64     `tfsdk:"delay_peer_link_bringup"`
+	ExcludeSvi                              types.String    `tfsdk:"exclude_svi"`
+	MacBpduSourceVersion2                   types.Bool      `tfsdk:"mac_bpdu_source_version_2"`
+	PeerGatewayExcludeVlan                  types.String    `tfsdk:"peer_gateway_exclude_vlan"`
 	KeepaliveDestinationIp                  types.String    `tfsdk:"keepalive_destination_ip"`
 	KeepaliveFlushTimeout                   types.Int64     `tfsdk:"keepalive_flush_timeout"`
 	KeepaliveInterval                       types.Int64     `tfsdk:"keepalive_interval"`
@@ -75,6 +82,8 @@ type VPC struct {
 	KeepaliveUdpPort                        types.Int64     `tfsdk:"keepalive_udp_port"`
 	KeepaliveVrf                            types.String    `tfsdk:"keepalive_vrf"`
 	PeerlinkPortChannelId                   types.String    `tfsdk:"peerlink_port_channel_id"`
+	PeerlinkAdminState                      types.String    `tfsdk:"peerlink_admin_state"`
+	PeerlinkDescription                     types.String    `tfsdk:"peerlink_description"`
 	Interfaces                              []VPCInterfaces `tfsdk:"interfaces"`
 }
 
@@ -126,14 +135,20 @@ func (data VPC) getClassName() string {
 func (data VPC) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
+	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".vpcInst"
 		attrs = "{}"
-		if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "adminSt", data.AdminState.ValueString())
+		if (!data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
+		}
+		if (!data.Control.IsUnknown() && !data.Control.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "ctrl", data.Control.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
@@ -204,6 +219,18 @@ func (data VPC) toBody() nxos.Body {
 			if (!data.VirtualIp.IsUnknown() && !data.VirtualIp.IsNull()) || false {
 				attrs, _ = sjson.Set(attrs, "virtualIp", data.VirtualIp.ValueString())
 			}
+			if (!data.DelayPeerLinkBringup.IsUnknown() && !data.DelayPeerLinkBringup.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "delayPeerLinkBringup", strconv.FormatInt(data.DelayPeerLinkBringup.ValueInt64(), 10))
+			}
+			if (!data.ExcludeSvi.IsUnknown() && !data.ExcludeSvi.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "excludeSVI", data.ExcludeSvi.ValueString())
+			}
+			if (!data.MacBpduSourceVersion2.IsUnknown() && !data.MacBpduSourceVersion2.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "macBpduSrcVer2", strconv.FormatBool(data.MacBpduSourceVersion2.ValueBool()))
+			}
+			if (!data.PeerGatewayExcludeVlan.IsUnknown() && !data.PeerGatewayExcludeVlan.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "peerGWExcludeVLAN", data.PeerGatewayExcludeVlan.ValueString())
+			}
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 			nestedChildrenPath := childBodyPath + ".children"
 			{
@@ -255,6 +282,12 @@ func (data VPC) toBody() nxos.Body {
 				if (!data.PeerlinkPortChannelId.IsUnknown() && !data.PeerlinkPortChannelId.IsNull()) || false {
 					attrs, _ = sjson.Set(attrs, "id", data.PeerlinkPortChannelId.ValueString())
 				}
+				if (!data.PeerlinkAdminState.IsUnknown() && !data.PeerlinkAdminState.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "adminSt", data.PeerlinkAdminState.ValueString())
+				}
+				if (!data.PeerlinkDescription.IsUnknown() && !data.PeerlinkDescription.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "descr", data.PeerlinkDescription.ValueString())
+				}
 				if attrs != "{}" || false {
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.vpcPeerLink.attributes", attrs)
 				}
@@ -288,6 +321,7 @@ func (data VPC) toBody() nxos.Body {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *VPC) fromBody(res gjson.Result) {
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	{
 		var rvpcInst gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -300,7 +334,8 @@ func (data *VPC) fromBody(res gjson.Result) {
 				return true
 			},
 		)
-		data.AdminState = types.StringValue(rvpcInst.Get("vpcInst.attributes.adminSt").String())
+		data.InstanceAdminState = types.StringValue(rvpcInst.Get("vpcInst.attributes.adminSt").String())
+		data.Control = types.StringValue(rvpcInst.Get("vpcInst.attributes.ctrl").String())
 		{
 			var rvpcDom gjson.Result
 			rvpcInst.Get("vpcInst.children").ForEach(
@@ -334,6 +369,10 @@ func (data *VPC) fromBody(res gjson.Result) {
 			data.SystemPriority = types.Int64Value(rvpcDom.Get("vpcDom.attributes.sysPrio").Int())
 			data.Track = types.Int64Value(rvpcDom.Get("vpcDom.attributes.track").Int())
 			data.VirtualIp = types.StringValue(rvpcDom.Get("vpcDom.attributes.virtualIp").String())
+			data.DelayPeerLinkBringup = types.Int64Value(rvpcDom.Get("vpcDom.attributes.delayPeerLinkBringup").Int())
+			data.ExcludeSvi = types.StringValue(rvpcDom.Get("vpcDom.attributes.excludeSVI").String())
+			data.MacBpduSourceVersion2 = types.BoolValue(helpers.ParseNxosBoolean(rvpcDom.Get("vpcDom.attributes.macBpduSrcVer2").String()))
+			data.PeerGatewayExcludeVlan = types.StringValue(rvpcDom.Get("vpcDom.attributes.peerGWExcludeVLAN").String())
 			{
 				var rvpcKeepalive gjson.Result
 				rvpcDom.Get("vpcDom.children").ForEach(
@@ -372,6 +411,8 @@ func (data *VPC) fromBody(res gjson.Result) {
 						},
 					)
 					data.PeerlinkPortChannelId = types.StringValue(rvpcPeerLink.Get("vpcPeerLink.attributes.id").String())
+					data.PeerlinkAdminState = types.StringValue(rvpcPeerLink.Get("vpcPeerLink.attributes.adminSt").String())
+					data.PeerlinkDescription = types.StringValue(rvpcPeerLink.Get("vpcPeerLink.attributes.descr").String())
 				}
 			}
 			rvpcDom.Get("vpcDom.children").ForEach(
@@ -412,6 +453,11 @@ func (data *VPC) fromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *VPC) updateFromBody(res gjson.Result) {
+	if !data.AdminState.IsNull() {
+		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	} else {
+		data.AdminState = types.StringNull()
+	}
 	var rvpcInst gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -423,10 +469,15 @@ func (data *VPC) updateFromBody(res gjson.Result) {
 			return true
 		},
 	)
-	if !data.AdminState.IsNull() {
-		data.AdminState = types.StringValue(rvpcInst.Get("vpcInst.attributes.adminSt").String())
+	if !data.InstanceAdminState.IsNull() {
+		data.InstanceAdminState = types.StringValue(rvpcInst.Get("vpcInst.attributes.adminSt").String())
 	} else {
-		data.AdminState = types.StringNull()
+		data.InstanceAdminState = types.StringNull()
+	}
+	if !data.Control.IsNull() {
+		data.Control = types.StringValue(rvpcInst.Get("vpcInst.attributes.ctrl").String())
+	} else {
+		data.Control = types.StringNull()
 	}
 	{
 		var rvpcDom gjson.Result
@@ -545,6 +596,26 @@ func (data *VPC) updateFromBody(res gjson.Result) {
 		} else {
 			data.VirtualIp = types.StringNull()
 		}
+		if !data.DelayPeerLinkBringup.IsNull() {
+			data.DelayPeerLinkBringup = types.Int64Value(rvpcDom.Get("vpcDom.attributes.delayPeerLinkBringup").Int())
+		} else {
+			data.DelayPeerLinkBringup = types.Int64Null()
+		}
+		if !data.ExcludeSvi.IsNull() {
+			data.ExcludeSvi = types.StringValue(rvpcDom.Get("vpcDom.attributes.excludeSVI").String())
+		} else {
+			data.ExcludeSvi = types.StringNull()
+		}
+		if !data.MacBpduSourceVersion2.IsNull() {
+			data.MacBpduSourceVersion2 = types.BoolValue(helpers.ParseNxosBoolean(rvpcDom.Get("vpcDom.attributes.macBpduSrcVer2").String()))
+		} else {
+			data.MacBpduSourceVersion2 = types.BoolNull()
+		}
+		if !data.PeerGatewayExcludeVlan.IsNull() {
+			data.PeerGatewayExcludeVlan = types.StringValue(rvpcDom.Get("vpcDom.attributes.peerGWExcludeVLAN").String())
+		} else {
+			data.PeerGatewayExcludeVlan = types.StringNull()
+		}
 		{
 			var rvpcKeepalive gjson.Result
 			rvpcDom.Get("vpcDom.children").ForEach(
@@ -638,6 +709,16 @@ func (data *VPC) updateFromBody(res gjson.Result) {
 					data.PeerlinkPortChannelId = types.StringValue(rvpcPeerLink.Get("vpcPeerLink.attributes.id").String())
 				} else {
 					data.PeerlinkPortChannelId = types.StringNull()
+				}
+				if !data.PeerlinkAdminState.IsNull() {
+					data.PeerlinkAdminState = types.StringValue(rvpcPeerLink.Get("vpcPeerLink.attributes.adminSt").String())
+				} else {
+					data.PeerlinkAdminState = types.StringNull()
+				}
+				if !data.PeerlinkDescription.IsNull() {
+					data.PeerlinkDescription = types.StringValue(rvpcPeerLink.Get("vpcPeerLink.attributes.descr").String())
+				} else {
+					data.PeerlinkDescription = types.StringNull()
 				}
 			}
 		}

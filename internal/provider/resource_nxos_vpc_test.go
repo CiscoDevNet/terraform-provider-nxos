@@ -36,6 +36,8 @@ import (
 func TestAccNxosVPC(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "control", "stateful-ha"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "domain_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "domain_id", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "auto_recovery", "enabled"))
@@ -57,6 +59,10 @@ func TestAccNxosVPC(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "system_priority", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "track", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "virtual_ip", "1.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "delay_peer_link_bringup", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "exclude_svi", "1-2"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "mac_bpdu_source_version_2", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "peer_gateway_exclude_vlan", "1-2"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "keepalive_destination_ip", "192.168.1.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "keepalive_flush_timeout", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "keepalive_interval", "1000"))
@@ -71,6 +77,8 @@ func TestAccNxosVPC(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "keepalive_udp_port", "1234"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "keepalive_vrf", "management"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "peerlink_port_channel_id", "po1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "peerlink_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "peerlink_description", "My description"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "interfaces.0.vpc_interface_id", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "interfaces.0.port_channel_interface_dn", "sys/intf/aggr-[po1]"))
 	var tfVersion *goversion.Version
@@ -160,6 +168,8 @@ func testAccNxosVPCConfig_minimum() string {
 func testAccNxosVPCConfig_all() string {
 	config := `resource "nxos_vpc" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
+	config += `	instance_admin_state = "enabled"` + "\n"
+	config += `	control = "stateful-ha"` + "\n"
 	config += `	domain_admin_state = "enabled"` + "\n"
 	config += `	domain_id = 100` + "\n"
 	config += `	auto_recovery = "enabled"` + "\n"
@@ -181,6 +191,10 @@ func testAccNxosVPCConfig_all() string {
 	config += `	system_priority = 100` + "\n"
 	config += `	track = 10` + "\n"
 	config += `	virtual_ip = "1.1.1.1"` + "\n"
+	config += `	delay_peer_link_bringup = 60` + "\n"
+	config += `	exclude_svi = "1-2"` + "\n"
+	config += `	mac_bpdu_source_version_2 = false` + "\n"
+	config += `	peer_gateway_exclude_vlan = "1-2"` + "\n"
 	config += `	keepalive_destination_ip = "192.168.1.1"` + "\n"
 	config += `	keepalive_flush_timeout = 3` + "\n"
 	config += `	keepalive_interval = 1000` + "\n"
@@ -195,6 +209,8 @@ func testAccNxosVPCConfig_all() string {
 	config += `	keepalive_udp_port = 1234` + "\n"
 	config += `	keepalive_vrf = "management"` + "\n"
 	config += `	peerlink_port_channel_id = "po1"` + "\n"
+	config += `	peerlink_admin_state = "enabled"` + "\n"
+	config += `	peerlink_description = "My description"` + "\n"
 	config += `	interfaces = [{` + "\n"
 	config += `		vpc_interface_id = 1` + "\n"
 	config += `		port_channel_interface_dn = "sys/intf/aggr-[po1]"` + "\n"

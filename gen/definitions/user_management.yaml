@@ -7,6 +7,99 @@ ds_description: This data source can read the user management configuration on N
 res_description: This resource can manage the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.
 doc_path: Security%20and%20Policing/aaa:UserEp/
 doc_category: Security
+attributes:
+  - nxos_name: alphabetSequence
+    tf_name: alphabet_sequence
+    type: Int64
+    min_int: 0
+    max_int: 10
+    description: "Disallow sequential alphabetical characters in password."
+    example: 3
+  - nxos_name: descr
+    tf_name: description
+    type: String
+    description: "Description of the specified attribute."
+    example: "User management policy"
+  - nxos_name: keyBoardSequence
+    tf_name: keyboard_sequence
+    type: Int64
+    min_int: 0
+    max_int: 10
+    description: "Disallow sequential keyboard characters in password."
+    example: 3
+  - nxos_name: maxLogins
+    tf_name: max_logins
+    type: Int64
+    min_int: 0
+    max_int: 7
+    description: "Maximum Simultaneous Logins."
+    example: 4
+  - nxos_name: minUnique
+    tf_name: min_unique
+    type: Int64
+    min_int: 0
+    max_int: 10
+    description: "Count for number of old password history accepted."
+    example: 3
+  - nxos_name: pwdGraceTime
+    tf_name: password_grace_time
+    type: Int64
+    min_int: 0
+    max_int: 99999
+    description: "Grace time of user passphrase (in days)."
+    example: 5
+  - nxos_name: pwdLifeTime
+    tf_name: password_life_time
+    type: Int64
+    min_int: 0
+    max_int: 99999
+    description: "Lifetime of user passphrase (in days)."
+    example: 90
+  - nxos_name: pwdMaxLength
+    tf_name: password_max_length
+    type: Int64
+    min_int: 0
+    max_int: 65535
+    description: "Password max length."
+    example: 127
+  - nxos_name: pwdMinLength
+    tf_name: password_min_length
+    type: Int64
+    min_int: 0
+    max_int: 65535
+    description: "Password min length."
+    example: 10
+  - nxos_name: pwdSecureMode
+    tf_name: password_secure_mode
+    type: String
+    enum_values:
+      - "no"
+      - "yes"
+    description: "Password secure-mode."
+    example: "no"
+  - nxos_name: pwdStrengthCheck
+    tf_name: password_strength_check
+    type: String
+    enum_values:
+      - "no"
+      - "yes"
+    description: "The password strength check, which specifies if the system enforces the strength of the user password."
+    example: "no"
+  - nxos_name: pwdWarningTime
+    tf_name: password_warning_time
+    type: Int64
+    min_int: 0
+    max_int: 99999
+    description: "Warning time of user passphrase (in days)."
+    example: 10
+  - nxos_name: svcPwdRecovery
+    tf_name: service_password_recovery
+    type: String
+    enum_values:
+      - "no"
+      - "yes"
+    description: "Service Password Recovery."
+    example: "no"
 child_classes:
   - class_name: aaaUser
     doc_path: Security%20and%20Policing/aaa:User/
@@ -21,6 +114,14 @@ child_classes:
         id: true
         description: 'Object name.'
         example: user1
+      - nxos_name: accountStatus
+        tf_name: account_status
+        type: String
+        enum_values:
+          - "active"
+          - "inactive"
+        description: "The status of the locally-authenticated user account."
+        example: "active"
       - nxos_name: allowExpired
         tf_name: allow_expired
         type: String
@@ -29,6 +130,70 @@ child_classes:
           - "yes"
         description: "Allow expired user to be configured."
         example: "yes"
+      - nxos_name: clearPwdHistory
+        tf_name: clear_password_history
+        type: String
+        enum_values:
+          - "no"
+          - "yes"
+        description: "Allows the administrator to clear the password history of a locally-authenticated user."
+        example: "no"
+      - nxos_name: descr
+        tf_name: description
+        type: String
+        description: "Description of the specified attribute."
+        example: "Test user account"
+      - nxos_name: email
+        tf_name: email
+        type: String
+        description: "The email address of the locally-authenticated user."
+        example: "user1@example.com"
+      - nxos_name: expiration
+        tf_name: expiration
+        type: String
+        description: "Account Expiration Date."
+        example: "2030-01-01T00:00:00.000+00:00"
+      - nxos_name: expires
+        tf_name: expires
+        type: String
+        enum_values:
+          - "no"
+          - "yes"
+        description: "A property to enable an expiration date for the locally-authenticated user account."
+        example: "no"
+      - nxos_name: firstName
+        tf_name: first_name
+        type: String
+        description: "The first name of the locally-authenticated user."
+        example: "John"
+      - nxos_name: force
+        tf_name: force
+        type: String
+        enum_values:
+          - "no"
+          - "yes"
+        description: "Delete user entry forcibly."
+        example: "no"
+      - nxos_name: lastName
+        tf_name: last_name
+        type: String
+        description: "The last name of the locally-authenticated user."
+        example: "Doe"
+      - nxos_name: passwordHash
+        tf_name: password_hash
+        type: String
+        enum_values:
+          - "unspecified"
+          - "pbkdf2"
+          - "scrypt"
+        description: "Generate password hash for clear text password."
+        example: "unspecified"
+        exclude_test: true
+      - nxos_name: phone
+        tf_name: phone
+        type: String
+        description: "The phone number of the locally-authenticated user."
+        example: "1234567890"
       - nxos_name: pwd
         tf_name: password
         type: String
@@ -50,6 +215,22 @@ child_classes:
         example: "clear"
         exclude_test: true
         write_only: true
+      - nxos_name: shelltype
+        tf_name: shell_type
+        type: String
+        enum_values:
+          - "shellvsh"
+          - "shellbash"
+        description: "User Shelltype Access."
+        example: "shellvsh"
+      - nxos_name: unixUserId
+        tf_name: unix_user_id
+        type: Int64
+        min_int: 99
+        max_int: 15999
+        description: "The UNIX identifier of the locally-authenticated user."
+        example: 100
+        exclude_test: true
     child_classes:
       - class_name: aaaUserDomain
         doc_path: Security%20and%20Policing/aaa:UserDomain/
@@ -74,3 +255,17 @@ child_classes:
                 id: true
                 description: "Object name."
                 example: "network-operator"
+              - nxos_name: descr
+                tf_name: description
+                type: String
+                description: "Description of the specified attribute."
+                example: "Operator role"
+              - nxos_name: privType
+                tf_name: privilege_type
+                type: String
+                enum_values:
+                  - "noDataPriv"
+                  - "readPriv"
+                  - "writePriv"
+                description: "The privilege type for a user role."
+                example: "readPriv"

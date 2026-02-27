@@ -35,9 +35,35 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosUserManagement(t *testing.T) {
 	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "alphabet_sequence", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "description", "User management policy"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "keyboard_sequence", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "max_logins", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "min_unique", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "password_grace_time", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "password_life_time", "90"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "password_max_length", "127"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "password_min_length", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "password_secure_mode", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "password_strength_check", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "password_warning_time", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "service_password_recovery", "no"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.0.name", "user1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.0.account_status", "active"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.0.allow_expired", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.0.clear_password_history", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.0.description", "Test user account"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.0.email", "user1@example.com"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.0.expiration", "2030-01-01T00:00:00.000+00:00"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.0.expires", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.0.first_name", "John"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.0.force", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.0.last_name", "Doe"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.0.phone", "1234567890"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.0.shell_type", "shellvsh"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.0.roles.0.name", "network-operator"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.0.roles.0.description", "Operator role"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.0.roles.0.privilege_type", "readPriv"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -94,11 +120,37 @@ func testAccNxosUserManagementConfig_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosUserManagementConfig_all() string {
 	config := `resource "nxos_user_management" "test" {` + "\n"
+	config += `	alphabet_sequence = 3` + "\n"
+	config += `	description = "User management policy"` + "\n"
+	config += `	keyboard_sequence = 3` + "\n"
+	config += `	max_logins = 4` + "\n"
+	config += `	min_unique = 3` + "\n"
+	config += `	password_grace_time = 5` + "\n"
+	config += `	password_life_time = 90` + "\n"
+	config += `	password_max_length = 127` + "\n"
+	config += `	password_min_length = 10` + "\n"
+	config += `	password_secure_mode = "no"` + "\n"
+	config += `	password_strength_check = "no"` + "\n"
+	config += `	password_warning_time = 10` + "\n"
+	config += `	service_password_recovery = "no"` + "\n"
 	config += `	users = [{` + "\n"
 	config += `		name = "user1"` + "\n"
+	config += `		account_status = "active"` + "\n"
 	config += `		allow_expired = "yes"` + "\n"
+	config += `		clear_password_history = "no"` + "\n"
+	config += `		description = "Test user account"` + "\n"
+	config += `		email = "user1@example.com"` + "\n"
+	config += `		expiration = "2030-01-01T00:00:00.000+00:00"` + "\n"
+	config += `		expires = "no"` + "\n"
+	config += `		first_name = "John"` + "\n"
+	config += `		force = "no"` + "\n"
+	config += `		last_name = "Doe"` + "\n"
+	config += `		phone = "1234567890"` + "\n"
+	config += `		shell_type = "shellvsh"` + "\n"
 	config += `		roles = [{` + "\n"
 	config += `			name = "network-operator"` + "\n"
+	config += `			description = "Operator role"` + "\n"
+	config += `			privilege_type = "readPriv"` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
 	config += `}` + "\n"

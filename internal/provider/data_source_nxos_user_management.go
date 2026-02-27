@@ -68,6 +68,58 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
+			"alphabet_sequence": schema.Int64Attribute{
+				MarkdownDescription: "Disallow sequential alphabetical characters in password.",
+				Computed:            true,
+			},
+			"description": schema.StringAttribute{
+				MarkdownDescription: "Description of the specified attribute.",
+				Computed:            true,
+			},
+			"keyboard_sequence": schema.Int64Attribute{
+				MarkdownDescription: "Disallow sequential keyboard characters in password.",
+				Computed:            true,
+			},
+			"max_logins": schema.Int64Attribute{
+				MarkdownDescription: "Maximum Simultaneous Logins.",
+				Computed:            true,
+			},
+			"min_unique": schema.Int64Attribute{
+				MarkdownDescription: "Count for number of old password history accepted.",
+				Computed:            true,
+			},
+			"password_grace_time": schema.Int64Attribute{
+				MarkdownDescription: "Grace time of user passphrase (in days).",
+				Computed:            true,
+			},
+			"password_life_time": schema.Int64Attribute{
+				MarkdownDescription: "Lifetime of user passphrase (in days).",
+				Computed:            true,
+			},
+			"password_max_length": schema.Int64Attribute{
+				MarkdownDescription: "Password max length.",
+				Computed:            true,
+			},
+			"password_min_length": schema.Int64Attribute{
+				MarkdownDescription: "Password min length.",
+				Computed:            true,
+			},
+			"password_secure_mode": schema.StringAttribute{
+				MarkdownDescription: "Password secure-mode.",
+				Computed:            true,
+			},
+			"password_strength_check": schema.StringAttribute{
+				MarkdownDescription: "The password strength check, which specifies if the system enforces the strength of the user password.",
+				Computed:            true,
+			},
+			"password_warning_time": schema.Int64Attribute{
+				MarkdownDescription: "Warning time of user passphrase (in days).",
+				Computed:            true,
+			},
+			"service_password_recovery": schema.StringAttribute{
+				MarkdownDescription: "Service Password Recovery.",
+				Computed:            true,
+			},
 			"users": schema.ListNestedAttribute{
 				MarkdownDescription: "List of users.",
 				Computed:            true,
@@ -77,8 +129,52 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "Object name.",
 							Computed:            true,
 						},
+						"account_status": schema.StringAttribute{
+							MarkdownDescription: "The status of the locally-authenticated user account.",
+							Computed:            true,
+						},
 						"allow_expired": schema.StringAttribute{
 							MarkdownDescription: "Allow expired user to be configured.",
+							Computed:            true,
+						},
+						"clear_password_history": schema.StringAttribute{
+							MarkdownDescription: "Allows the administrator to clear the password history of a locally-authenticated user.",
+							Computed:            true,
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"email": schema.StringAttribute{
+							MarkdownDescription: "The email address of the locally-authenticated user.",
+							Computed:            true,
+						},
+						"expiration": schema.StringAttribute{
+							MarkdownDescription: "Account Expiration Date.",
+							Computed:            true,
+						},
+						"expires": schema.StringAttribute{
+							MarkdownDescription: "A property to enable an expiration date for the locally-authenticated user account.",
+							Computed:            true,
+						},
+						"first_name": schema.StringAttribute{
+							MarkdownDescription: "The first name of the locally-authenticated user.",
+							Computed:            true,
+						},
+						"force": schema.StringAttribute{
+							MarkdownDescription: "Delete user entry forcibly.",
+							Computed:            true,
+						},
+						"last_name": schema.StringAttribute{
+							MarkdownDescription: "The last name of the locally-authenticated user.",
+							Computed:            true,
+						},
+						"password_hash": schema.StringAttribute{
+							MarkdownDescription: "Generate password hash for clear text password.",
+							Computed:            true,
+						},
+						"phone": schema.StringAttribute{
+							MarkdownDescription: "The phone number of the locally-authenticated user.",
 							Computed:            true,
 						},
 						"password": schema.StringAttribute{
@@ -89,6 +185,14 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "Password Encryption Type.",
 							Computed:            true,
 						},
+						"shell_type": schema.StringAttribute{
+							MarkdownDescription: "User Shelltype Access.",
+							Computed:            true,
+						},
+						"unix_user_id": schema.Int64Attribute{
+							MarkdownDescription: "The UNIX identifier of the locally-authenticated user.",
+							Computed:            true,
+						},
 						"roles": schema.ListNestedAttribute{
 							MarkdownDescription: "User roles.",
 							Computed:            true,
@@ -96,6 +200,14 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 								Attributes: map[string]schema.Attribute{
 									"name": schema.StringAttribute{
 										MarkdownDescription: "Object name.",
+										Computed:            true,
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: "Description of the specified attribute.",
+										Computed:            true,
+									},
+									"privilege_type": schema.StringAttribute{
+										MarkdownDescription: "The privilege type for a user role.",
 										Computed:            true,
 									},
 								},

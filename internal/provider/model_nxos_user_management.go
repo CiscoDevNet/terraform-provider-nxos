@@ -37,21 +37,49 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type UserManagement struct {
-	Device types.String          `tfsdk:"device"`
-	Dn     types.String          `tfsdk:"id"`
-	Users  []UserManagementUsers `tfsdk:"users"`
+	Device                  types.String          `tfsdk:"device"`
+	Dn                      types.String          `tfsdk:"id"`
+	AlphabetSequence        types.Int64           `tfsdk:"alphabet_sequence"`
+	Description             types.String          `tfsdk:"description"`
+	KeyboardSequence        types.Int64           `tfsdk:"keyboard_sequence"`
+	MaxLogins               types.Int64           `tfsdk:"max_logins"`
+	MinUnique               types.Int64           `tfsdk:"min_unique"`
+	PasswordGraceTime       types.Int64           `tfsdk:"password_grace_time"`
+	PasswordLifeTime        types.Int64           `tfsdk:"password_life_time"`
+	PasswordMaxLength       types.Int64           `tfsdk:"password_max_length"`
+	PasswordMinLength       types.Int64           `tfsdk:"password_min_length"`
+	PasswordSecureMode      types.String          `tfsdk:"password_secure_mode"`
+	PasswordStrengthCheck   types.String          `tfsdk:"password_strength_check"`
+	PasswordWarningTime     types.Int64           `tfsdk:"password_warning_time"`
+	ServicePasswordRecovery types.String          `tfsdk:"service_password_recovery"`
+	Users                   []UserManagementUsers `tfsdk:"users"`
 }
 
 type UserManagementUsers struct {
 	Name                   types.String               `tfsdk:"name"`
+	AccountStatus          types.String               `tfsdk:"account_status"`
 	AllowExpired           types.String               `tfsdk:"allow_expired"`
+	ClearPasswordHistory   types.String               `tfsdk:"clear_password_history"`
+	Description            types.String               `tfsdk:"description"`
+	Email                  types.String               `tfsdk:"email"`
+	Expiration             types.String               `tfsdk:"expiration"`
+	Expires                types.String               `tfsdk:"expires"`
+	FirstName              types.String               `tfsdk:"first_name"`
+	Force                  types.String               `tfsdk:"force"`
+	LastName               types.String               `tfsdk:"last_name"`
+	PasswordHash           types.String               `tfsdk:"password_hash"`
+	Phone                  types.String               `tfsdk:"phone"`
 	Password               types.String               `tfsdk:"password"`
 	PasswordEncryptionType types.String               `tfsdk:"password_encryption_type"`
+	ShellType              types.String               `tfsdk:"shell_type"`
+	UnixUserId             types.Int64                `tfsdk:"unix_user_id"`
 	Roles                  []UserManagementUsersRoles `tfsdk:"roles"`
 }
 
 type UserManagementUsersRoles struct {
-	Name types.String `tfsdk:"name"`
+	Name          types.String `tfsdk:"name"`
+	Description   types.String `tfsdk:"description"`
+	PrivilegeType types.String `tfsdk:"privilege_type"`
 }
 
 type UserManagementIdentity struct {
@@ -101,6 +129,45 @@ func (data UserManagement) getClassName() string {
 func (data UserManagement) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.AlphabetSequence.IsUnknown() && !data.AlphabetSequence.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"alphabetSequence", strconv.FormatInt(data.AlphabetSequence.ValueInt64(), 10))
+	}
+	if (!data.Description.IsUnknown() && !data.Description.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"descr", data.Description.ValueString())
+	}
+	if (!data.KeyboardSequence.IsUnknown() && !data.KeyboardSequence.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"keyBoardSequence", strconv.FormatInt(data.KeyboardSequence.ValueInt64(), 10))
+	}
+	if (!data.MaxLogins.IsUnknown() && !data.MaxLogins.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxLogins", strconv.FormatInt(data.MaxLogins.ValueInt64(), 10))
+	}
+	if (!data.MinUnique.IsUnknown() && !data.MinUnique.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"minUnique", strconv.FormatInt(data.MinUnique.ValueInt64(), 10))
+	}
+	if (!data.PasswordGraceTime.IsUnknown() && !data.PasswordGraceTime.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdGraceTime", strconv.FormatInt(data.PasswordGraceTime.ValueInt64(), 10))
+	}
+	if (!data.PasswordLifeTime.IsUnknown() && !data.PasswordLifeTime.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdLifeTime", strconv.FormatInt(data.PasswordLifeTime.ValueInt64(), 10))
+	}
+	if (!data.PasswordMaxLength.IsUnknown() && !data.PasswordMaxLength.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdMaxLength", strconv.FormatInt(data.PasswordMaxLength.ValueInt64(), 10))
+	}
+	if (!data.PasswordMinLength.IsUnknown() && !data.PasswordMinLength.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdMinLength", strconv.FormatInt(data.PasswordMinLength.ValueInt64(), 10))
+	}
+	if (!data.PasswordSecureMode.IsUnknown() && !data.PasswordSecureMode.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdSecureMode", data.PasswordSecureMode.ValueString())
+	}
+	if (!data.PasswordStrengthCheck.IsUnknown() && !data.PasswordStrengthCheck.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdStrengthCheck", data.PasswordStrengthCheck.ValueString())
+	}
+	if (!data.PasswordWarningTime.IsUnknown() && !data.PasswordWarningTime.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdWarningTime", strconv.FormatInt(data.PasswordWarningTime.ValueInt64(), 10))
+	}
+	if (!data.ServicePasswordRecovery.IsUnknown() && !data.ServicePasswordRecovery.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"svcPwdRecovery", data.ServicePasswordRecovery.ValueString())
+	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	for _, child := range data.Users {
@@ -108,14 +175,53 @@ func (data UserManagement) toBody() nxos.Body {
 		if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
 		}
+		if (!child.AccountStatus.IsUnknown() && !child.AccountStatus.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "accountStatus", child.AccountStatus.ValueString())
+		}
 		if (!child.AllowExpired.IsUnknown() && !child.AllowExpired.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "allowExpired", child.AllowExpired.ValueString())
+		}
+		if (!child.ClearPasswordHistory.IsUnknown() && !child.ClearPasswordHistory.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "clearPwdHistory", child.ClearPasswordHistory.ValueString())
+		}
+		if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+		}
+		if (!child.Email.IsUnknown() && !child.Email.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "email", child.Email.ValueString())
+		}
+		if (!child.Expiration.IsUnknown() && !child.Expiration.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "expiration", child.Expiration.ValueString())
+		}
+		if (!child.Expires.IsUnknown() && !child.Expires.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "expires", child.Expires.ValueString())
+		}
+		if (!child.FirstName.IsUnknown() && !child.FirstName.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "firstName", child.FirstName.ValueString())
+		}
+		if (!child.Force.IsUnknown() && !child.Force.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "force", child.Force.ValueString())
+		}
+		if (!child.LastName.IsUnknown() && !child.LastName.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "lastName", child.LastName.ValueString())
+		}
+		if (!child.PasswordHash.IsUnknown() && !child.PasswordHash.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "passwordHash", child.PasswordHash.ValueString())
+		}
+		if (!child.Phone.IsUnknown() && !child.Phone.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "phone", child.Phone.ValueString())
 		}
 		if (!child.Password.IsUnknown() && !child.Password.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "pwd", child.Password.ValueString())
 		}
 		if (!child.PasswordEncryptionType.IsUnknown() && !child.PasswordEncryptionType.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "pwdEncryptType", child.PasswordEncryptionType.ValueString())
+		}
+		if (!child.ShellType.IsUnknown() && !child.ShellType.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "shelltype", child.ShellType.ValueString())
+		}
+		if (!child.UnixUserId.IsUnknown() && !child.UnixUserId.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "unixUserId", strconv.FormatInt(child.UnixUserId.ValueInt64(), 10))
 		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.aaaUser.attributes", attrs)
 		{
@@ -133,6 +239,12 @@ func (data UserManagement) toBody() nxos.Body {
 					if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
 					}
+					if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+					}
+					if (!child.PrivilegeType.IsUnknown() && !child.PrivilegeType.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "privType", child.PrivilegeType.ValueString())
+					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaUserRole.attributes", attrs)
 				}
 			}
@@ -147,6 +259,19 @@ func (data UserManagement) toBody() nxos.Body {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *UserManagement) fromBody(res gjson.Result) {
+	data.AlphabetSequence = types.Int64Value(res.Get(data.getClassName() + ".attributes.alphabetSequence").Int())
+	data.Description = types.StringValue(res.Get(data.getClassName() + ".attributes.descr").String())
+	data.KeyboardSequence = types.Int64Value(res.Get(data.getClassName() + ".attributes.keyBoardSequence").Int())
+	data.MaxLogins = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxLogins").Int())
+	data.MinUnique = types.Int64Value(res.Get(data.getClassName() + ".attributes.minUnique").Int())
+	data.PasswordGraceTime = types.Int64Value(res.Get(data.getClassName() + ".attributes.pwdGraceTime").Int())
+	data.PasswordLifeTime = types.Int64Value(res.Get(data.getClassName() + ".attributes.pwdLifeTime").Int())
+	data.PasswordMaxLength = types.Int64Value(res.Get(data.getClassName() + ".attributes.pwdMaxLength").Int())
+	data.PasswordMinLength = types.Int64Value(res.Get(data.getClassName() + ".attributes.pwdMinLength").Int())
+	data.PasswordSecureMode = types.StringValue(res.Get(data.getClassName() + ".attributes.pwdSecureMode").String())
+	data.PasswordStrengthCheck = types.StringValue(res.Get(data.getClassName() + ".attributes.pwdStrengthCheck").String())
+	data.PasswordWarningTime = types.Int64Value(res.Get(data.getClassName() + ".attributes.pwdWarningTime").Int())
+	data.ServicePasswordRecovery = types.StringValue(res.Get(data.getClassName() + ".attributes.svcPwdRecovery").String())
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
 			v.ForEach(
@@ -154,7 +279,20 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 					if classname.String() == "aaaUser" {
 						var child UserManagementUsers
 						child.Name = types.StringValue(value.Get("attributes.name").String())
+						child.AccountStatus = types.StringValue(value.Get("attributes.accountStatus").String())
 						child.AllowExpired = types.StringValue(value.Get("attributes.allowExpired").String())
+						child.ClearPasswordHistory = types.StringValue(value.Get("attributes.clearPwdHistory").String())
+						child.Description = types.StringValue(value.Get("attributes.descr").String())
+						child.Email = types.StringValue(value.Get("attributes.email").String())
+						child.Expiration = types.StringValue(value.Get("attributes.expiration").String())
+						child.Expires = types.StringValue(value.Get("attributes.expires").String())
+						child.FirstName = types.StringValue(value.Get("attributes.firstName").String())
+						child.Force = types.StringValue(value.Get("attributes.force").String())
+						child.LastName = types.StringValue(value.Get("attributes.lastName").String())
+						child.PasswordHash = types.StringValue(value.Get("attributes.passwordHash").String())
+						child.Phone = types.StringValue(value.Get("attributes.phone").String())
+						child.ShellType = types.StringValue(value.Get("attributes.shelltype").String())
+						child.UnixUserId = types.Int64Value(value.Get("attributes.unixUserId").Int())
 						{
 							var raaaUserDomain gjson.Result
 							value.Get("children").ForEach(
@@ -174,6 +312,8 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 											if nestedClassname.String() == "aaaUserRole" {
 												var nestedChildaaaUserRole UserManagementUsersRoles
 												nestedChildaaaUserRole.Name = types.StringValue(nestedValue.Get("attributes.name").String())
+												nestedChildaaaUserRole.Description = types.StringValue(nestedValue.Get("attributes.descr").String())
+												nestedChildaaaUserRole.PrivilegeType = types.StringValue(nestedValue.Get("attributes.privType").String())
 												child.Roles = append(child.Roles, nestedChildaaaUserRole)
 											}
 											return true
@@ -198,6 +338,71 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *UserManagement) updateFromBody(res gjson.Result) {
+	if !data.AlphabetSequence.IsNull() {
+		data.AlphabetSequence = types.Int64Value(res.Get(data.getClassName() + ".attributes.alphabetSequence").Int())
+	} else {
+		data.AlphabetSequence = types.Int64Null()
+	}
+	if !data.Description.IsNull() {
+		data.Description = types.StringValue(res.Get(data.getClassName() + ".attributes.descr").String())
+	} else {
+		data.Description = types.StringNull()
+	}
+	if !data.KeyboardSequence.IsNull() {
+		data.KeyboardSequence = types.Int64Value(res.Get(data.getClassName() + ".attributes.keyBoardSequence").Int())
+	} else {
+		data.KeyboardSequence = types.Int64Null()
+	}
+	if !data.MaxLogins.IsNull() {
+		data.MaxLogins = types.Int64Value(res.Get(data.getClassName() + ".attributes.maxLogins").Int())
+	} else {
+		data.MaxLogins = types.Int64Null()
+	}
+	if !data.MinUnique.IsNull() {
+		data.MinUnique = types.Int64Value(res.Get(data.getClassName() + ".attributes.minUnique").Int())
+	} else {
+		data.MinUnique = types.Int64Null()
+	}
+	if !data.PasswordGraceTime.IsNull() {
+		data.PasswordGraceTime = types.Int64Value(res.Get(data.getClassName() + ".attributes.pwdGraceTime").Int())
+	} else {
+		data.PasswordGraceTime = types.Int64Null()
+	}
+	if !data.PasswordLifeTime.IsNull() {
+		data.PasswordLifeTime = types.Int64Value(res.Get(data.getClassName() + ".attributes.pwdLifeTime").Int())
+	} else {
+		data.PasswordLifeTime = types.Int64Null()
+	}
+	if !data.PasswordMaxLength.IsNull() {
+		data.PasswordMaxLength = types.Int64Value(res.Get(data.getClassName() + ".attributes.pwdMaxLength").Int())
+	} else {
+		data.PasswordMaxLength = types.Int64Null()
+	}
+	if !data.PasswordMinLength.IsNull() {
+		data.PasswordMinLength = types.Int64Value(res.Get(data.getClassName() + ".attributes.pwdMinLength").Int())
+	} else {
+		data.PasswordMinLength = types.Int64Null()
+	}
+	if !data.PasswordSecureMode.IsNull() {
+		data.PasswordSecureMode = types.StringValue(res.Get(data.getClassName() + ".attributes.pwdSecureMode").String())
+	} else {
+		data.PasswordSecureMode = types.StringNull()
+	}
+	if !data.PasswordStrengthCheck.IsNull() {
+		data.PasswordStrengthCheck = types.StringValue(res.Get(data.getClassName() + ".attributes.pwdStrengthCheck").String())
+	} else {
+		data.PasswordStrengthCheck = types.StringNull()
+	}
+	if !data.PasswordWarningTime.IsNull() {
+		data.PasswordWarningTime = types.Int64Value(res.Get(data.getClassName() + ".attributes.pwdWarningTime").Int())
+	} else {
+		data.PasswordWarningTime = types.Int64Null()
+	}
+	if !data.ServicePasswordRecovery.IsNull() {
+		data.ServicePasswordRecovery = types.StringValue(res.Get(data.getClassName() + ".attributes.svcPwdRecovery").String())
+	} else {
+		data.ServicePasswordRecovery = types.StringNull()
+	}
 	for c := range data.Users {
 		var raaaUser gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -215,10 +420,75 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 		} else {
 			data.Users[c].Name = types.StringNull()
 		}
+		if !data.Users[c].AccountStatus.IsNull() {
+			data.Users[c].AccountStatus = types.StringValue(raaaUser.Get("aaaUser.attributes.accountStatus").String())
+		} else {
+			data.Users[c].AccountStatus = types.StringNull()
+		}
 		if !data.Users[c].AllowExpired.IsNull() {
 			data.Users[c].AllowExpired = types.StringValue(raaaUser.Get("aaaUser.attributes.allowExpired").String())
 		} else {
 			data.Users[c].AllowExpired = types.StringNull()
+		}
+		if !data.Users[c].ClearPasswordHistory.IsNull() {
+			data.Users[c].ClearPasswordHistory = types.StringValue(raaaUser.Get("aaaUser.attributes.clearPwdHistory").String())
+		} else {
+			data.Users[c].ClearPasswordHistory = types.StringNull()
+		}
+		if !data.Users[c].Description.IsNull() {
+			data.Users[c].Description = types.StringValue(raaaUser.Get("aaaUser.attributes.descr").String())
+		} else {
+			data.Users[c].Description = types.StringNull()
+		}
+		if !data.Users[c].Email.IsNull() {
+			data.Users[c].Email = types.StringValue(raaaUser.Get("aaaUser.attributes.email").String())
+		} else {
+			data.Users[c].Email = types.StringNull()
+		}
+		if !data.Users[c].Expiration.IsNull() {
+			data.Users[c].Expiration = types.StringValue(raaaUser.Get("aaaUser.attributes.expiration").String())
+		} else {
+			data.Users[c].Expiration = types.StringNull()
+		}
+		if !data.Users[c].Expires.IsNull() {
+			data.Users[c].Expires = types.StringValue(raaaUser.Get("aaaUser.attributes.expires").String())
+		} else {
+			data.Users[c].Expires = types.StringNull()
+		}
+		if !data.Users[c].FirstName.IsNull() {
+			data.Users[c].FirstName = types.StringValue(raaaUser.Get("aaaUser.attributes.firstName").String())
+		} else {
+			data.Users[c].FirstName = types.StringNull()
+		}
+		if !data.Users[c].Force.IsNull() {
+			data.Users[c].Force = types.StringValue(raaaUser.Get("aaaUser.attributes.force").String())
+		} else {
+			data.Users[c].Force = types.StringNull()
+		}
+		if !data.Users[c].LastName.IsNull() {
+			data.Users[c].LastName = types.StringValue(raaaUser.Get("aaaUser.attributes.lastName").String())
+		} else {
+			data.Users[c].LastName = types.StringNull()
+		}
+		if !data.Users[c].PasswordHash.IsNull() {
+			data.Users[c].PasswordHash = types.StringValue(raaaUser.Get("aaaUser.attributes.passwordHash").String())
+		} else {
+			data.Users[c].PasswordHash = types.StringNull()
+		}
+		if !data.Users[c].Phone.IsNull() {
+			data.Users[c].Phone = types.StringValue(raaaUser.Get("aaaUser.attributes.phone").String())
+		} else {
+			data.Users[c].Phone = types.StringNull()
+		}
+		if !data.Users[c].ShellType.IsNull() {
+			data.Users[c].ShellType = types.StringValue(raaaUser.Get("aaaUser.attributes.shelltype").String())
+		} else {
+			data.Users[c].ShellType = types.StringNull()
+		}
+		if !data.Users[c].UnixUserId.IsNull() {
+			data.Users[c].UnixUserId = types.Int64Value(raaaUser.Get("aaaUser.attributes.unixUserId").Int())
+		} else {
+			data.Users[c].UnixUserId = types.Int64Null()
 		}
 		{
 			var raaaUserDomain gjson.Result
@@ -248,6 +518,16 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 					data.Users[c].Roles[nc].Name = types.StringValue(raaaUserRole.Get("aaaUserRole.attributes.name").String())
 				} else {
 					data.Users[c].Roles[nc].Name = types.StringNull()
+				}
+				if !data.Users[c].Roles[nc].Description.IsNull() {
+					data.Users[c].Roles[nc].Description = types.StringValue(raaaUserRole.Get("aaaUserRole.attributes.descr").String())
+				} else {
+					data.Users[c].Roles[nc].Description = types.StringNull()
+				}
+				if !data.Users[c].Roles[nc].PrivilegeType.IsNull() {
+					data.Users[c].Roles[nc].PrivilegeType = types.StringValue(raaaUserRole.Get("aaaUserRole.attributes.privType").String())
+				} else {
+					data.Users[c].Roles[nc].PrivilegeType = types.StringNull()
 				}
 			}
 		}

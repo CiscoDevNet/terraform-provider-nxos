@@ -25,13 +25,41 @@ This resource can manage the user management configuration on NX-OS devices, inc
 
 ```terraform
 resource "nxos_user_management" "example" {
+  alphabet_sequence         = 3
+  description               = "User management policy"
+  keyboard_sequence         = 3
+  max_logins                = 4
+  min_unique                = 3
+  password_grace_time       = 5
+  password_life_time        = 90
+  password_max_length       = 127
+  password_min_length       = 10
+  password_secure_mode      = "no"
+  password_strength_check   = "no"
+  password_warning_time     = 10
+  service_password_recovery = "no"
   users = [{
     name                     = "user1"
+    account_status           = "active"
     allow_expired            = "yes"
+    clear_password_history   = "no"
+    description              = "Test user account"
+    email                    = "user1@example.com"
+    expiration               = "2030-01-01T00:00:00.000+00:00"
+    expires                  = "no"
+    first_name               = "John"
+    force                    = "no"
+    last_name                = "Doe"
+    password_hash            = "unspecified"
+    phone                    = "1234567890"
     password                 = "password123"
     password_encryption_type = "clear"
+    shell_type               = "shellvsh"
+    unix_user_id             = 100
     roles = [{
-      name = "network-operator"
+      name           = "network-operator"
+      description    = "Operator role"
+      privilege_type = "readPriv"
     }]
   }]
 }
@@ -42,7 +70,32 @@ resource "nxos_user_management" "example" {
 
 ### Optional
 
+- `alphabet_sequence` (Number) Disallow sequential alphabetical characters in password.
+  - Range: `0`-`10`
+- `description` (String) Description of the specified attribute.
 - `device` (String) A device name from the provider configuration.
+- `keyboard_sequence` (Number) Disallow sequential keyboard characters in password.
+  - Range: `0`-`10`
+- `max_logins` (Number) Maximum Simultaneous Logins.
+  - Range: `0`-`7`
+- `min_unique` (Number) Count for number of old password history accepted.
+  - Range: `0`-`10`
+- `password_grace_time` (Number) Grace time of user passphrase (in days).
+  - Range: `0`-`99999`
+- `password_life_time` (Number) Lifetime of user passphrase (in days).
+  - Range: `0`-`99999`
+- `password_max_length` (Number) Password max length.
+  - Range: `0`-`65535`
+- `password_min_length` (Number) Password min length.
+  - Range: `0`-`65535`
+- `password_secure_mode` (String) Password secure-mode.
+  - Choices: `no`, `yes`
+- `password_strength_check` (String) The password strength check, which specifies if the system enforces the strength of the user password.
+  - Choices: `no`, `yes`
+- `password_warning_time` (Number) Warning time of user passphrase (in days).
+  - Range: `0`-`99999`
+- `service_password_recovery` (String) Service Password Recovery.
+  - Choices: `no`, `yes`
 - `users` (Attributes List) List of users. (see [below for nested schema](#nestedatt--users))
 
 ### Read-Only
@@ -58,12 +111,32 @@ Required:
 
 Optional:
 
+- `account_status` (String) The status of the locally-authenticated user account.
+  - Choices: `active`, `inactive`
 - `allow_expired` (String) Allow expired user to be configured.
   - Choices: `no`, `yes`
+- `clear_password_history` (String) Allows the administrator to clear the password history of a locally-authenticated user.
+  - Choices: `no`, `yes`
+- `description` (String) Description of the specified attribute.
+- `email` (String) The email address of the locally-authenticated user.
+- `expiration` (String) Account Expiration Date.
+- `expires` (String) A property to enable an expiration date for the locally-authenticated user account.
+  - Choices: `no`, `yes`
+- `first_name` (String) The first name of the locally-authenticated user.
+- `force` (String) Delete user entry forcibly.
+  - Choices: `no`, `yes`
+- `last_name` (String) The last name of the locally-authenticated user.
 - `password` (String) The system user password.
 - `password_encryption_type` (String) Password Encryption Type.
   - Choices: `clear`, `Encrypt`, `Pbkdf2`, `scrypt`, `unspecified`
+- `password_hash` (String) Generate password hash for clear text password.
+  - Choices: `unspecified`, `pbkdf2`, `scrypt`
+- `phone` (String) The phone number of the locally-authenticated user.
 - `roles` (Attributes List) User roles. (see [below for nested schema](#nestedatt--users--roles))
+- `shell_type` (String) User Shelltype Access.
+  - Choices: `shellvsh`, `shellbash`
+- `unix_user_id` (Number) The UNIX identifier of the locally-authenticated user.
+  - Range: `99`-`15999`
 
 <a id="nestedatt--users--roles"></a>
 ### Nested Schema for `users.roles`
@@ -71,6 +144,12 @@ Optional:
 Required:
 
 - `name` (String) Object name.
+
+Optional:
+
+- `description` (String) Description of the specified attribute.
+- `privilege_type` (String) The privilege type for a user role.
+  - Choices: `noDataPriv`, `readPriv`, `writePriv`
 
 ## Import
 

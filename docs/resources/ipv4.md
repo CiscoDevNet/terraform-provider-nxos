@@ -28,17 +28,17 @@ This resource can manage the IPv4 configuration on NX-OS devices, including per-
 
 ```terraform
 resource "nxos_ipv4" "example" {
-  admin_state                                      = "enabled"
-  instance_admin_state                             = "enabled"
-  instance_access_list_match_local                 = "enabled"
-  instance_control                                 = "stateful-ha"
-  instance_hardware_ecmp_hash_offset_concatenation = "enabled"
-  instance_hardware_ecmp_hash_offset_value         = 10
-  instance_hardware_ecmp_hash_polynomial           = "CRC32HI"
-  instance_logging_level                           = "warning"
-  instance_redirect_syslog                         = "disabled"
-  instance_redirect_syslog_interval                = 120
-  instance_source_route                            = "disabled"
+  admin_state                             = "enabled"
+  instance_admin_state                    = "enabled"
+  access_list_match_local                 = "enabled"
+  control                                 = "stateful-ha"
+  hardware_ecmp_hash_offset_concatenation = "enabled"
+  hardware_ecmp_hash_offset_value         = 10
+  hardware_ecmp_hash_polynomial           = "CRC32HI"
+  logging_level                           = "warning"
+  redirect_syslog                         = "disabled"
+  redirect_syslog_interval                = 120
+  source_route                            = "disabled"
   vrfs = [{
     name                         = "VRF1"
     auto_discard                 = "enabled"
@@ -88,28 +88,28 @@ resource "nxos_ipv4" "example" {
 
 ### Optional
 
+- `access_list_match_local` (String) Access-List Match Local.
+  - Choices: `enabled`, `disabled`
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
+- `control` (String) The control state.
+  - Choices: `stateful-ha`
 - `device` (String) A device name from the provider configuration.
-- `instance_access_list_match_local` (String) Access-List Match Local.
+- `hardware_ecmp_hash_offset_concatenation` (String) hardware Ecmp HashOffset Concatenation.
   - Choices: `enabled`, `disabled`
+- `hardware_ecmp_hash_offset_value` (Number) hardware Ecmp HashOffset Value.
+  - Range: `0`-`63`
+- `hardware_ecmp_hash_polynomial` (String) hardware Ecmp Hash-Polynomial.
+  - Choices: `CRC16`, `CRC32HI`
 - `instance_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-- `instance_control` (String) The control state.
-  - Choices: `stateful-ha`
-- `instance_hardware_ecmp_hash_offset_concatenation` (String) hardware Ecmp HashOffset Concatenation.
-  - Choices: `enabled`, `disabled`
-- `instance_hardware_ecmp_hash_offset_value` (Number) hardware Ecmp HashOffset Value.
-  - Range: `0`-`63`
-- `instance_hardware_ecmp_hash_polynomial` (String) hardware Ecmp Hash-Polynomial.
-  - Choices: `CRC16`, `CRC32HI`
-- `instance_logging_level` (String) Logging level.
+- `logging_level` (String) Logging level.
   - Choices: `emergency`, `alert`, `critical`, `error`, `warning`, `notification`, `informational`, `debug`
-- `instance_redirect_syslog` (String) ipv4 redirect syslog.
+- `redirect_syslog` (String) ipv4 redirect syslog.
   - Choices: `enabled`, `disabled`
-- `instance_redirect_syslog_interval` (Number) redirect syslog interval.
+- `redirect_syslog_interval` (Number) redirect syslog interval.
   - Range: `30`-`1800`
-- `instance_source_route` (String) Source-Route.
+- `source_route` (String) Source-Route.
   - Choices: `enabled`, `disabled`
 - `vrfs` (Attributes List) List of IPv4 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
 

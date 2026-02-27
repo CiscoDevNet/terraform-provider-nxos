@@ -91,60 +91,60 @@ func (r *IPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"instance_access_list_match_local": schema.StringAttribute{
+			"access_list_match_local": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Access-List Match Local.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"instance_control": schema.StringAttribute{
+			"control": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("stateful-ha").String,
 				Optional:            true,
 			},
-			"instance_hardware_ecmp_hash_offset_concatenation": schema.StringAttribute{
+			"hardware_ecmp_hash_offset_concatenation": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("hardware Ecmp HashOffset Concatenation.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"instance_hardware_ecmp_hash_offset_value": schema.Int64Attribute{
+			"hardware_ecmp_hash_offset_value": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("hardware Ecmp HashOffset Value.").AddIntegerRangeDescription(0, 63).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 63),
 				},
 			},
-			"instance_hardware_ecmp_hash_polynomial": schema.StringAttribute{
+			"hardware_ecmp_hash_polynomial": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("hardware Ecmp Hash-Polynomial.").AddStringEnumDescription("CRC16", "CRC32HI").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("CRC16", "CRC32HI"),
 				},
 			},
-			"instance_logging_level": schema.StringAttribute{
+			"logging_level": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Logging level.").AddStringEnumDescription("emergency", "alert", "critical", "error", "warning", "notification", "informational", "debug").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("emergency", "alert", "critical", "error", "warning", "notification", "informational", "debug"),
 				},
 			},
-			"instance_redirect_syslog": schema.StringAttribute{
+			"redirect_syslog": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("ipv4 redirect syslog.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"instance_redirect_syslog_interval": schema.Int64Attribute{
+			"redirect_syslog_interval": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("redirect syslog interval.").AddIntegerRangeDescription(30, 1800).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(30, 1800),
 				},
 			},
-			"instance_source_route": schema.StringAttribute{
+			"source_route": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Source-Route.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
 				Validators: []validator.String{

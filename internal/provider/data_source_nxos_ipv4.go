@@ -76,39 +76,39 @@ func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
-			"instance_access_list_match_local": schema.StringAttribute{
+			"access_list_match_local": schema.StringAttribute{
 				MarkdownDescription: "Access-List Match Local.",
 				Computed:            true,
 			},
-			"instance_control": schema.StringAttribute{
+			"control": schema.StringAttribute{
 				MarkdownDescription: "The control state.",
 				Computed:            true,
 			},
-			"instance_hardware_ecmp_hash_offset_concatenation": schema.StringAttribute{
+			"hardware_ecmp_hash_offset_concatenation": schema.StringAttribute{
 				MarkdownDescription: "hardware Ecmp HashOffset Concatenation.",
 				Computed:            true,
 			},
-			"instance_hardware_ecmp_hash_offset_value": schema.Int64Attribute{
+			"hardware_ecmp_hash_offset_value": schema.Int64Attribute{
 				MarkdownDescription: "hardware Ecmp HashOffset Value.",
 				Computed:            true,
 			},
-			"instance_hardware_ecmp_hash_polynomial": schema.StringAttribute{
+			"hardware_ecmp_hash_polynomial": schema.StringAttribute{
 				MarkdownDescription: "hardware Ecmp Hash-Polynomial.",
 				Computed:            true,
 			},
-			"instance_logging_level": schema.StringAttribute{
+			"logging_level": schema.StringAttribute{
 				MarkdownDescription: "Logging level.",
 				Computed:            true,
 			},
-			"instance_redirect_syslog": schema.StringAttribute{
+			"redirect_syslog": schema.StringAttribute{
 				MarkdownDescription: "ipv4 redirect syslog.",
 				Computed:            true,
 			},
-			"instance_redirect_syslog_interval": schema.Int64Attribute{
+			"redirect_syslog_interval": schema.Int64Attribute{
 				MarkdownDescription: "redirect syslog interval.",
 				Computed:            true,
 			},
-			"instance_source_route": schema.StringAttribute{
+			"source_route": schema.StringAttribute{
 				MarkdownDescription: "Source-Route.",
 				Computed:            true,
 			},

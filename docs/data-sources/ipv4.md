@@ -40,18 +40,18 @@ data "nxos_ipv4" "example" {
 
 ### Read-Only
 
+- `access_list_match_local` (String) Access-List Match Local.
 - `admin_state` (String) The administrative state of the object or policy.
+- `control` (String) The control state.
+- `hardware_ecmp_hash_offset_concatenation` (String) hardware Ecmp HashOffset Concatenation.
+- `hardware_ecmp_hash_offset_value` (Number) hardware Ecmp HashOffset Value.
+- `hardware_ecmp_hash_polynomial` (String) hardware Ecmp Hash-Polynomial.
 - `id` (String) The distinguished name of the object.
-- `instance_access_list_match_local` (String) Access-List Match Local.
 - `instance_admin_state` (String) The administrative state of the object or policy.
-- `instance_control` (String) The control state.
-- `instance_hardware_ecmp_hash_offset_concatenation` (String) hardware Ecmp HashOffset Concatenation.
-- `instance_hardware_ecmp_hash_offset_value` (Number) hardware Ecmp HashOffset Value.
-- `instance_hardware_ecmp_hash_polynomial` (String) hardware Ecmp Hash-Polynomial.
-- `instance_logging_level` (String) Logging level.
-- `instance_redirect_syslog` (String) ipv4 redirect syslog.
-- `instance_redirect_syslog_interval` (Number) redirect syslog interval.
-- `instance_source_route` (String) Source-Route.
+- `logging_level` (String) Logging level.
+- `redirect_syslog` (String) ipv4 redirect syslog.
+- `redirect_syslog_interval` (Number) redirect syslog interval.
+- `source_route` (String) Source-Route.
 - `vrfs` (Attributes List) List of IPv4 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
 
 <a id="nestedatt--vrfs"></a>

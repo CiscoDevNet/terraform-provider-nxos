@@ -33,12 +33,12 @@ func TestAccDataSourceNxosIPv4(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "instance_admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "instance_access_list_match_local", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "instance_control", "stateful-ha"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "instance_logging_level", "warning"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "instance_redirect_syslog", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "instance_redirect_syslog_interval", "120"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "instance_source_route", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "access_list_match_local", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "logging_level", "warning"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "redirect_syslog", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "redirect_syslog_interval", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv4.test", "source_route", "disabled"))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv4.test", "vrfs.*", map[string]string{
 		"name":                         "VRF1",
 		"auto_discard":                 "enabled",
@@ -119,12 +119,12 @@ func testAccDataSourceNxosIPv4Config() string {
 	config := `resource "nxos_ipv4" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	instance_admin_state = "enabled"` + "\n"
-	config += `	instance_access_list_match_local = "enabled"` + "\n"
-	config += `	instance_control = "stateful-ha"` + "\n"
-	config += `	instance_logging_level = "warning"` + "\n"
-	config += `	instance_redirect_syslog = "disabled"` + "\n"
-	config += `	instance_redirect_syslog_interval = 120` + "\n"
-	config += `	instance_source_route = "disabled"` + "\n"
+	config += `	access_list_match_local = "enabled"` + "\n"
+	config += `	control = "stateful-ha"` + "\n"
+	config += `	logging_level = "warning"` + "\n"
+	config += `	redirect_syslog = "disabled"` + "\n"
+	config += `	redirect_syslog_interval = 120` + "\n"
+	config += `	source_route = "disabled"` + "\n"
 	config += `	vrfs = [{` + "\n"
 	config += `		name = "VRF1"` + "\n"
 	config += `		auto_discard = "enabled"` + "\n"

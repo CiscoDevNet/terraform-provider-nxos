@@ -37,20 +37,20 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type IPv4 struct {
-	Device                                      types.String `tfsdk:"device"`
-	Dn                                          types.String `tfsdk:"id"`
-	AdminState                                  types.String `tfsdk:"admin_state"`
-	InstanceAdminState                          types.String `tfsdk:"instance_admin_state"`
-	InstanceAccessListMatchLocal                types.String `tfsdk:"instance_access_list_match_local"`
-	InstanceControl                             types.String `tfsdk:"instance_control"`
-	InstanceHardwareEcmpHashOffsetConcatenation types.String `tfsdk:"instance_hardware_ecmp_hash_offset_concatenation"`
-	InstanceHardwareEcmpHashOffsetValue         types.Int64  `tfsdk:"instance_hardware_ecmp_hash_offset_value"`
-	InstanceHardwareEcmpHashPolynomial          types.String `tfsdk:"instance_hardware_ecmp_hash_polynomial"`
-	InstanceLoggingLevel                        types.String `tfsdk:"instance_logging_level"`
-	InstanceRedirectSyslog                      types.String `tfsdk:"instance_redirect_syslog"`
-	InstanceRedirectSyslogInterval              types.Int64  `tfsdk:"instance_redirect_syslog_interval"`
-	InstanceSourceRoute                         types.String `tfsdk:"instance_source_route"`
-	Vrfs                                        []IPv4Vrfs   `tfsdk:"vrfs"`
+	Device                              types.String `tfsdk:"device"`
+	Dn                                  types.String `tfsdk:"id"`
+	AdminState                          types.String `tfsdk:"admin_state"`
+	InstanceAdminState                  types.String `tfsdk:"instance_admin_state"`
+	AccessListMatchLocal                types.String `tfsdk:"access_list_match_local"`
+	Control                             types.String `tfsdk:"control"`
+	HardwareEcmpHashOffsetConcatenation types.String `tfsdk:"hardware_ecmp_hash_offset_concatenation"`
+	HardwareEcmpHashOffsetValue         types.Int64  `tfsdk:"hardware_ecmp_hash_offset_value"`
+	HardwareEcmpHashPolynomial          types.String `tfsdk:"hardware_ecmp_hash_polynomial"`
+	LoggingLevel                        types.String `tfsdk:"logging_level"`
+	RedirectSyslog                      types.String `tfsdk:"redirect_syslog"`
+	RedirectSyslogInterval              types.Int64  `tfsdk:"redirect_syslog_interval"`
+	SourceRoute                         types.String `tfsdk:"source_route"`
+	Vrfs                                []IPv4Vrfs   `tfsdk:"vrfs"`
 }
 
 type IPv4Vrfs struct {
@@ -174,32 +174,32 @@ func (data IPv4) toBody() nxos.Body {
 		if (!data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
 		}
-		if (!data.InstanceAccessListMatchLocal.IsUnknown() && !data.InstanceAccessListMatchLocal.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "accessListMatchLocal", data.InstanceAccessListMatchLocal.ValueString())
+		if (!data.AccessListMatchLocal.IsUnknown() && !data.AccessListMatchLocal.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "accessListMatchLocal", data.AccessListMatchLocal.ValueString())
 		}
-		if (!data.InstanceControl.IsUnknown() && !data.InstanceControl.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "ctrl", data.InstanceControl.ValueString())
+		if (!data.Control.IsUnknown() && !data.Control.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "ctrl", data.Control.ValueString())
 		}
-		if (!data.InstanceHardwareEcmpHashOffsetConcatenation.IsUnknown() && !data.InstanceHardwareEcmpHashOffsetConcatenation.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "hardwareEcmpHashOffsetConcat", data.InstanceHardwareEcmpHashOffsetConcatenation.ValueString())
+		if (!data.HardwareEcmpHashOffsetConcatenation.IsUnknown() && !data.HardwareEcmpHashOffsetConcatenation.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "hardwareEcmpHashOffsetConcat", data.HardwareEcmpHashOffsetConcatenation.ValueString())
 		}
-		if (!data.InstanceHardwareEcmpHashOffsetValue.IsUnknown() && !data.InstanceHardwareEcmpHashOffsetValue.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "hardwareEcmpHashOffsetValue", strconv.FormatInt(data.InstanceHardwareEcmpHashOffsetValue.ValueInt64(), 10))
+		if (!data.HardwareEcmpHashOffsetValue.IsUnknown() && !data.HardwareEcmpHashOffsetValue.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "hardwareEcmpHashOffsetValue", strconv.FormatInt(data.HardwareEcmpHashOffsetValue.ValueInt64(), 10))
 		}
-		if (!data.InstanceHardwareEcmpHashPolynomial.IsUnknown() && !data.InstanceHardwareEcmpHashPolynomial.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "hardwareEcmpHashPolynomial", data.InstanceHardwareEcmpHashPolynomial.ValueString())
+		if (!data.HardwareEcmpHashPolynomial.IsUnknown() && !data.HardwareEcmpHashPolynomial.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "hardwareEcmpHashPolynomial", data.HardwareEcmpHashPolynomial.ValueString())
 		}
-		if (!data.InstanceLoggingLevel.IsUnknown() && !data.InstanceLoggingLevel.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "loggingLevel", data.InstanceLoggingLevel.ValueString())
+		if (!data.LoggingLevel.IsUnknown() && !data.LoggingLevel.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "loggingLevel", data.LoggingLevel.ValueString())
 		}
-		if (!data.InstanceRedirectSyslog.IsUnknown() && !data.InstanceRedirectSyslog.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "redirectSyslog", data.InstanceRedirectSyslog.ValueString())
+		if (!data.RedirectSyslog.IsUnknown() && !data.RedirectSyslog.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "redirectSyslog", data.RedirectSyslog.ValueString())
 		}
-		if (!data.InstanceRedirectSyslogInterval.IsUnknown() && !data.InstanceRedirectSyslogInterval.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "redirectSyslogInterval", strconv.FormatInt(data.InstanceRedirectSyslogInterval.ValueInt64(), 10))
+		if (!data.RedirectSyslogInterval.IsUnknown() && !data.RedirectSyslogInterval.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "redirectSyslogInterval", strconv.FormatInt(data.RedirectSyslogInterval.ValueInt64(), 10))
 		}
-		if (!data.InstanceSourceRoute.IsUnknown() && !data.InstanceSourceRoute.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "sourceRoute", data.InstanceSourceRoute.ValueString())
+		if (!data.SourceRoute.IsUnknown() && !data.SourceRoute.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "sourceRoute", data.SourceRoute.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
@@ -352,15 +352,15 @@ func (data *IPv4) fromBody(res gjson.Result) {
 			},
 		)
 		data.InstanceAdminState = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.adminSt").String())
-		data.InstanceAccessListMatchLocal = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.accessListMatchLocal").String())
-		data.InstanceControl = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.ctrl").String())
-		data.InstanceHardwareEcmpHashOffsetConcatenation = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.hardwareEcmpHashOffsetConcat").String())
-		data.InstanceHardwareEcmpHashOffsetValue = types.Int64Value(ripv4Inst.Get("ipv4Inst.attributes.hardwareEcmpHashOffsetValue").Int())
-		data.InstanceHardwareEcmpHashPolynomial = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.hardwareEcmpHashPolynomial").String())
-		data.InstanceLoggingLevel = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.loggingLevel").String())
-		data.InstanceRedirectSyslog = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.redirectSyslog").String())
-		data.InstanceRedirectSyslogInterval = types.Int64Value(ripv4Inst.Get("ipv4Inst.attributes.redirectSyslogInterval").Int())
-		data.InstanceSourceRoute = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.sourceRoute").String())
+		data.AccessListMatchLocal = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.accessListMatchLocal").String())
+		data.Control = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.ctrl").String())
+		data.HardwareEcmpHashOffsetConcatenation = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.hardwareEcmpHashOffsetConcat").String())
+		data.HardwareEcmpHashOffsetValue = types.Int64Value(ripv4Inst.Get("ipv4Inst.attributes.hardwareEcmpHashOffsetValue").Int())
+		data.HardwareEcmpHashPolynomial = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.hardwareEcmpHashPolynomial").String())
+		data.LoggingLevel = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.loggingLevel").String())
+		data.RedirectSyslog = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.redirectSyslog").String())
+		data.RedirectSyslogInterval = types.Int64Value(ripv4Inst.Get("ipv4Inst.attributes.redirectSyslogInterval").Int())
+		data.SourceRoute = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.sourceRoute").String())
 		ripv4Inst.Get("ipv4Inst.children").ForEach(
 			func(_, v gjson.Result) bool {
 				v.ForEach(
@@ -491,50 +491,50 @@ func (data *IPv4) updateFromBody(res gjson.Result) {
 	} else {
 		data.InstanceAdminState = types.StringNull()
 	}
-	if !data.InstanceAccessListMatchLocal.IsNull() {
-		data.InstanceAccessListMatchLocal = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.accessListMatchLocal").String())
+	if !data.AccessListMatchLocal.IsNull() {
+		data.AccessListMatchLocal = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.accessListMatchLocal").String())
 	} else {
-		data.InstanceAccessListMatchLocal = types.StringNull()
+		data.AccessListMatchLocal = types.StringNull()
 	}
-	if !data.InstanceControl.IsNull() {
-		data.InstanceControl = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.ctrl").String())
+	if !data.Control.IsNull() {
+		data.Control = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.ctrl").String())
 	} else {
-		data.InstanceControl = types.StringNull()
+		data.Control = types.StringNull()
 	}
-	if !data.InstanceHardwareEcmpHashOffsetConcatenation.IsNull() {
-		data.InstanceHardwareEcmpHashOffsetConcatenation = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.hardwareEcmpHashOffsetConcat").String())
+	if !data.HardwareEcmpHashOffsetConcatenation.IsNull() {
+		data.HardwareEcmpHashOffsetConcatenation = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.hardwareEcmpHashOffsetConcat").String())
 	} else {
-		data.InstanceHardwareEcmpHashOffsetConcatenation = types.StringNull()
+		data.HardwareEcmpHashOffsetConcatenation = types.StringNull()
 	}
-	if !data.InstanceHardwareEcmpHashOffsetValue.IsNull() {
-		data.InstanceHardwareEcmpHashOffsetValue = types.Int64Value(ripv4Inst.Get("ipv4Inst.attributes.hardwareEcmpHashOffsetValue").Int())
+	if !data.HardwareEcmpHashOffsetValue.IsNull() {
+		data.HardwareEcmpHashOffsetValue = types.Int64Value(ripv4Inst.Get("ipv4Inst.attributes.hardwareEcmpHashOffsetValue").Int())
 	} else {
-		data.InstanceHardwareEcmpHashOffsetValue = types.Int64Null()
+		data.HardwareEcmpHashOffsetValue = types.Int64Null()
 	}
-	if !data.InstanceHardwareEcmpHashPolynomial.IsNull() {
-		data.InstanceHardwareEcmpHashPolynomial = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.hardwareEcmpHashPolynomial").String())
+	if !data.HardwareEcmpHashPolynomial.IsNull() {
+		data.HardwareEcmpHashPolynomial = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.hardwareEcmpHashPolynomial").String())
 	} else {
-		data.InstanceHardwareEcmpHashPolynomial = types.StringNull()
+		data.HardwareEcmpHashPolynomial = types.StringNull()
 	}
-	if !data.InstanceLoggingLevel.IsNull() {
-		data.InstanceLoggingLevel = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.loggingLevel").String())
+	if !data.LoggingLevel.IsNull() {
+		data.LoggingLevel = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.loggingLevel").String())
 	} else {
-		data.InstanceLoggingLevel = types.StringNull()
+		data.LoggingLevel = types.StringNull()
 	}
-	if !data.InstanceRedirectSyslog.IsNull() {
-		data.InstanceRedirectSyslog = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.redirectSyslog").String())
+	if !data.RedirectSyslog.IsNull() {
+		data.RedirectSyslog = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.redirectSyslog").String())
 	} else {
-		data.InstanceRedirectSyslog = types.StringNull()
+		data.RedirectSyslog = types.StringNull()
 	}
-	if !data.InstanceRedirectSyslogInterval.IsNull() {
-		data.InstanceRedirectSyslogInterval = types.Int64Value(ripv4Inst.Get("ipv4Inst.attributes.redirectSyslogInterval").Int())
+	if !data.RedirectSyslogInterval.IsNull() {
+		data.RedirectSyslogInterval = types.Int64Value(ripv4Inst.Get("ipv4Inst.attributes.redirectSyslogInterval").Int())
 	} else {
-		data.InstanceRedirectSyslogInterval = types.Int64Null()
+		data.RedirectSyslogInterval = types.Int64Null()
 	}
-	if !data.InstanceSourceRoute.IsNull() {
-		data.InstanceSourceRoute = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.sourceRoute").String())
+	if !data.SourceRoute.IsNull() {
+		data.SourceRoute = types.StringValue(ripv4Inst.Get("ipv4Inst.attributes.sourceRoute").String())
 	} else {
-		data.InstanceSourceRoute = types.StringNull()
+		data.SourceRoute = types.StringNull()
 	}
 	for c := range data.Vrfs {
 		var ripv4Dom gjson.Result

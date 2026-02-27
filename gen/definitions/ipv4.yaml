@@ -34,7 +34,7 @@ child_classes:
           - disabled
         example: enabled
       - nxos_name: accessListMatchLocal
-        tf_name: instance_access_list_match_local
+        tf_name: access_list_match_local
         type: String
         description: 'Access-List Match Local.'
         enum_values:
@@ -42,7 +42,7 @@ child_classes:
           - disabled
         example: enabled
       - nxos_name: ctrl
-        tf_name: instance_control
+        tf_name: control
         type: String
         description: 'The control state.'
         allow_non_enum_values: true
@@ -50,7 +50,7 @@ child_classes:
           - stateful-ha
         example: stateful-ha
       - nxos_name: hardwareEcmpHashOffsetConcat
-        tf_name: instance_hardware_ecmp_hash_offset_concatenation
+        tf_name: hardware_ecmp_hash_offset_concatenation
         type: String
         description: 'hardware Ecmp HashOffset Concatenation.'
         enum_values:
@@ -59,7 +59,7 @@ child_classes:
         example: enabled
         exclude_test: true
       - nxos_name: hardwareEcmpHashOffsetValue
-        tf_name: instance_hardware_ecmp_hash_offset_value
+        tf_name: hardware_ecmp_hash_offset_value
         type: Int64
         description: 'hardware Ecmp HashOffset Value.'
         min_int: 0
@@ -67,7 +67,7 @@ child_classes:
         example: 10
         exclude_test: true
       - nxos_name: hardwareEcmpHashPolynomial
-        tf_name: instance_hardware_ecmp_hash_polynomial
+        tf_name: hardware_ecmp_hash_polynomial
         type: String
         description: 'hardware Ecmp Hash-Polynomial.'
         enum_values:
@@ -76,7 +76,7 @@ child_classes:
         example: CRC32HI
         exclude_test: true
       - nxos_name: loggingLevel
-        tf_name: instance_logging_level
+        tf_name: logging_level
         type: String
         description: 'Logging level.'
         enum_values:
@@ -90,7 +90,7 @@ child_classes:
           - debug
         example: warning
       - nxos_name: redirectSyslog
-        tf_name: instance_redirect_syslog
+        tf_name: redirect_syslog
         type: String
         description: 'ipv4 redirect syslog.'
         enum_values:
@@ -98,14 +98,14 @@ child_classes:
           - disabled
         example: disabled
       - nxos_name: redirectSyslogInterval
-        tf_name: instance_redirect_syslog_interval
+        tf_name: redirect_syslog_interval
         type: Int64
         description: 'redirect syslog interval.'
         min_int: 30
         max_int: 1800
         example: 120
       - nxos_name: sourceRoute
-        tf_name: instance_source_route
+        tf_name: source_route
         type: String
         description: 'Source-Route.'
         enum_values:

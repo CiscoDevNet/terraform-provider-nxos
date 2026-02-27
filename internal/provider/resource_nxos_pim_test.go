@@ -37,28 +37,54 @@ func TestAccNxosPIM(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "evpn_border_leaf", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "extra_net", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "join_prune_delay", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "register_stop", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.name", "default"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.bfd", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.auto_enable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.control", "flush-on-restart"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.flush_routes", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.join_prune_delay", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.log_neighbor_changes", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.mtu", "1600"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.register_rate_limit", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.rfc_strict", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.spt_switch_graceful", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.interfaces.0.interface_id", "eth1/10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.interfaces.0.admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.interfaces.0.bfd", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.interfaces.0.dr_priority", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.interfaces.0.passive", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.interfaces.0.sparse_mode", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.interfaces.0.border", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.interfaces.0.border_router", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.interfaces.0.control", "border"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.interfaces.0.description", "MyDescription"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.interfaces.0.dr_delay", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.interfaces.0.join_prune_route_map", "JP_POLICY"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.interfaces.0.name", "pim-if"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.interfaces.0.neighbor_route_map", "NEIGH_POLICY"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.interfaces.0.pfm_sd_boundary", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.interfaces.0.rfc_strict", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.ssm_policy_name", "SSM"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.ssm_policy_description", "SSM_Policy"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.ssm_range_group_list_1", "232.0.0.0/8"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.ssm_range_group_list_2", "233.0.0.0/8"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.ssm_range_prefix_list", ""))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.ssm_range_route_map", ""))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.ssm_range_none", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.static_rp_policy_name", "RP"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.static_rp_policy_description", "Static_RP_Policy"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.static_rps.0.address", "1.2.3.4"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.static_rps.0.group_lists.0.address", "224.0.0.0/4"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.static_rps.0.group_lists.0.bidir", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.static_rps.0.group_lists.0.override", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.anycast_rp_local_interface", "eth1/10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.anycast_rp_source_interface", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.anycast_rp_description", "Anycast_RP"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.anycast_rp_name", "anycast-rp"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.anycast_rp_peers.0.address", "10.1.1.1/32"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_pim.test", "vrfs.0.anycast_rp_peers.0.rp_set_address", "20.1.1.1/32"))
 	var tfVersion *goversion.Version
@@ -140,10 +166,24 @@ func testAccNxosPIMConfig_all() string {
 	config := `resource "nxos_pim" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	instance_admin_state = "enabled"` + "\n"
+	config += `	control = "stateful-ha"` + "\n"
+	config += `	evpn_border_leaf = false` + "\n"
+	config += `	extra_net = false` + "\n"
+	config += `	join_prune_delay = 200` + "\n"
+	config += `	register_stop = false` + "\n"
 	config += `	vrfs = [{` + "\n"
 	config += `		name = "default"` + "\n"
 	config += `		admin_state = "enabled"` + "\n"
 	config += `		bfd = true` + "\n"
+	config += `		auto_enable = false` + "\n"
+	config += `		control = "flush-on-restart"` + "\n"
+	config += `		flush_routes = false` + "\n"
+	config += `		join_prune_delay = 200` + "\n"
+	config += `		log_neighbor_changes = false` + "\n"
+	config += `		mtu = 1600` + "\n"
+	config += `		register_rate_limit = 100` + "\n"
+	config += `		rfc_strict = false` + "\n"
+	config += `		spt_switch_graceful = false` + "\n"
 	config += `		interfaces = [{` + "\n"
 	config += `			interface_id = "eth1/10"` + "\n"
 	config += `			admin_state = "enabled"` + "\n"
@@ -151,14 +191,24 @@ func testAccNxosPIMConfig_all() string {
 	config += `			dr_priority = 10` + "\n"
 	config += `			passive = false` + "\n"
 	config += `			sparse_mode = true` + "\n"
+	config += `			border = false` + "\n"
+	config += `			border_router = false` + "\n"
+	config += `			control = "border"` + "\n"
+	config += `			description = "MyDescription"` + "\n"
+	config += `			dr_delay = 5` + "\n"
+	config += `			join_prune_route_map = "JP_POLICY"` + "\n"
+	config += `			name = "pim-if"` + "\n"
+	config += `			neighbor_route_map = "NEIGH_POLICY"` + "\n"
+	config += `			pfm_sd_boundary = 0` + "\n"
+	config += `			rfc_strict = false` + "\n"
 	config += `		}]` + "\n"
 	config += `		ssm_policy_name = "SSM"` + "\n"
+	config += `		ssm_policy_description = "SSM_Policy"` + "\n"
 	config += `		ssm_range_group_list_1 = "232.0.0.0/8"` + "\n"
 	config += `		ssm_range_group_list_2 = "233.0.0.0/8"` + "\n"
-	config += `		ssm_range_prefix_list = ""` + "\n"
-	config += `		ssm_range_route_map = ""` + "\n"
 	config += `		ssm_range_none = false` + "\n"
 	config += `		static_rp_policy_name = "RP"` + "\n"
+	config += `		static_rp_policy_description = "Static_RP_Policy"` + "\n"
 	config += `		static_rps = [{` + "\n"
 	config += `			address = "1.2.3.4"` + "\n"
 	config += `			group_lists = [{` + "\n"
@@ -169,6 +219,8 @@ func testAccNxosPIMConfig_all() string {
 	config += `		}]` + "\n"
 	config += `		anycast_rp_local_interface = "eth1/10"` + "\n"
 	config += `		anycast_rp_source_interface = "eth1/10"` + "\n"
+	config += `		anycast_rp_description = "Anycast_RP"` + "\n"
+	config += `		anycast_rp_name = "anycast-rp"` + "\n"
 	config += `		anycast_rp_peers = [{` + "\n"
 	config += `			address = "10.1.1.1/32"` + "\n"
 	config += `			rp_set_address = "20.1.1.1/32"` + "\n"

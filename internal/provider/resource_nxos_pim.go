@@ -91,6 +91,46 @@ func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
+			"control": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("stateful-ha").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("stateful-ha"),
+				},
+			},
+			"evpn_border_leaf": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("EVPN Border Leaf flag.").String,
+				Optional:            true,
+			},
+			"extra_net": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Extranet RPF Lookup.").String,
+				Optional:            true,
+			},
+			"join_prune_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Inter Packet Delay.").AddIntegerRangeDescription(1, 1000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 1000),
+				},
+			},
+			"null_register_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Null Register Inter Batch Delay.").AddIntegerRangeDescription(1, 50000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 50000),
+				},
+			},
+			"null_register_number_of_routes": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Null Register Number of Routes.").AddIntegerRangeDescription(1, 32000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 32000),
+				},
+			},
+			"register_stop": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Register until stops.").String,
+				Optional:            true,
+			},
 			"vrfs": schema.ListNestedAttribute{
 				MarkdownDescription: "List of PIM VRF configurations.",
 				Optional:            true,
@@ -112,6 +152,54 @@ func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 						},
 						"bfd": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("BFD.").String,
+							Optional:            true,
+						},
+						"auto_enable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Auto Enable.").String,
+							Optional:            true,
+						},
+						"control": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Domain Controls.").AddStringEnumDescription("flush-on-restart").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("flush-on-restart"),
+							},
+						},
+						"flush_routes": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Flush Routes.").String,
+							Optional:            true,
+						},
+						"join_prune_delay": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Join-Prune message inter-packet delay.").AddIntegerRangeDescription(1, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"log_neighbor_changes": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Log Neighbhor changes.").String,
+							Optional:            true,
+						},
+						"mtu": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Maximum Transmission Unit.").AddIntegerRangeDescription(1500, 65536).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1500, 65536),
+							},
+						},
+						"register_rate_limit": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Register rate limit for data packets per second.").AddIntegerRangeDescription(0, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"rfc_strict": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Do not process joins from unknown neighbors.").String,
+							Optional:            true,
+						},
+						"spt_switch_graceful": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Graceful switch to SPT.").String,
 							Optional:            true,
 						},
 						"interfaces": schema.ListNestedAttribute{
@@ -155,11 +243,68 @@ func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 										MarkdownDescription: helpers.NewAttributeDescription("Sparse mode.").String,
 										Optional:            true,
 									},
+									"border": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Border policy - Treat interface as boundary of PIM domain.").String,
+										Optional:            true,
+									},
+									"border_router": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Acts as a border router on configuration.").String,
+										Optional:            true,
+									},
+									"control": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Interface Controls.").AddStringEnumDescription("border", "passive").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("border", "passive"),
+										},
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
+										Optional:            true,
+									},
+									"dr_delay": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Designated Router Delay value.").AddIntegerRangeDescription(1, 65535).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"join_prune_route_map": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Join Prune Policy name.").String,
+										Optional:            true,
+									},
+									"name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("The name of the object.").String,
+										Optional:            true,
+									},
+									"neighbor_route_map": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Neighbor route-map Policy.").String,
+										Optional:            true,
+									},
+									"neighbor_prefix_list": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Neighbor prefix-list Policy.").String,
+										Optional:            true,
+									},
+									"pfm_sd_boundary": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Pfm-sd boundary, in for restricting incoming pfm-sd message, out for restricting outgoing pfm-sd message.").AddIntegerRangeDescription(0, 3).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 3),
+										},
+									},
+									"rfc_strict": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Do not process joins from unknown neighbors on this interface.").String,
+										Optional:            true,
+									},
 								},
 							},
 						},
 						"ssm_policy_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Policy name.").String,
+							Optional:            true,
+						},
+						"ssm_policy_description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
 							Optional:            true,
 						},
 						"ssm_range_group_list_1": schema.StringAttribute{
@@ -192,6 +337,10 @@ func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 						},
 						"static_rp_policy_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Policy name.").String,
+							Optional:            true,
+						},
+						"static_rp_policy_description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
 							Optional:            true,
 						},
 						"static_rps": schema.ListNestedAttribute{
@@ -238,6 +387,14 @@ func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 						},
 						"anycast_rp_source_interface": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+							Optional:            true,
+						},
+						"anycast_rp_description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+							Optional:            true,
+						},
+						"anycast_rp_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
 							Optional:            true,
 						},
 						"anycast_rp_peers": schema.ListNestedAttribute{

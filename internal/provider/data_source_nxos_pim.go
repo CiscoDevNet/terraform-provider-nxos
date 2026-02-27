@@ -76,6 +76,34 @@ func (d *PIMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
+			"control": schema.StringAttribute{
+				MarkdownDescription: "The control state.",
+				Computed:            true,
+			},
+			"evpn_border_leaf": schema.BoolAttribute{
+				MarkdownDescription: "EVPN Border Leaf flag.",
+				Computed:            true,
+			},
+			"extra_net": schema.BoolAttribute{
+				MarkdownDescription: "Extranet RPF Lookup.",
+				Computed:            true,
+			},
+			"join_prune_delay": schema.Int64Attribute{
+				MarkdownDescription: "Inter Packet Delay.",
+				Computed:            true,
+			},
+			"null_register_delay": schema.Int64Attribute{
+				MarkdownDescription: "Null Register Inter Batch Delay.",
+				Computed:            true,
+			},
+			"null_register_number_of_routes": schema.Int64Attribute{
+				MarkdownDescription: "Null Register Number of Routes.",
+				Computed:            true,
+			},
+			"register_stop": schema.BoolAttribute{
+				MarkdownDescription: "Register until stops.",
+				Computed:            true,
+			},
 			"vrfs": schema.ListNestedAttribute{
 				MarkdownDescription: "List of PIM VRF configurations.",
 				Computed:            true,
@@ -91,6 +119,42 @@ func (d *PIMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 						},
 						"bfd": schema.BoolAttribute{
 							MarkdownDescription: "BFD.",
+							Computed:            true,
+						},
+						"auto_enable": schema.BoolAttribute{
+							MarkdownDescription: "Auto Enable.",
+							Computed:            true,
+						},
+						"control": schema.StringAttribute{
+							MarkdownDescription: "Domain Controls.",
+							Computed:            true,
+						},
+						"flush_routes": schema.BoolAttribute{
+							MarkdownDescription: "Flush Routes.",
+							Computed:            true,
+						},
+						"join_prune_delay": schema.Int64Attribute{
+							MarkdownDescription: "Join-Prune message inter-packet delay.",
+							Computed:            true,
+						},
+						"log_neighbor_changes": schema.BoolAttribute{
+							MarkdownDescription: "Log Neighbhor changes.",
+							Computed:            true,
+						},
+						"mtu": schema.Int64Attribute{
+							MarkdownDescription: "Maximum Transmission Unit.",
+							Computed:            true,
+						},
+						"register_rate_limit": schema.Int64Attribute{
+							MarkdownDescription: "Register rate limit for data packets per second.",
+							Computed:            true,
+						},
+						"rfc_strict": schema.BoolAttribute{
+							MarkdownDescription: "Do not process joins from unknown neighbors.",
+							Computed:            true,
+						},
+						"spt_switch_graceful": schema.BoolAttribute{
+							MarkdownDescription: "Graceful switch to SPT.",
 							Computed:            true,
 						},
 						"interfaces": schema.ListNestedAttribute{
@@ -122,11 +186,59 @@ func (d *PIMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										MarkdownDescription: "Sparse mode.",
 										Computed:            true,
 									},
+									"border": schema.BoolAttribute{
+										MarkdownDescription: "Border policy - Treat interface as boundary of PIM domain.",
+										Computed:            true,
+									},
+									"border_router": schema.BoolAttribute{
+										MarkdownDescription: "Acts as a border router on configuration.",
+										Computed:            true,
+									},
+									"control": schema.StringAttribute{
+										MarkdownDescription: "Interface Controls.",
+										Computed:            true,
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: "Description.",
+										Computed:            true,
+									},
+									"dr_delay": schema.Int64Attribute{
+										MarkdownDescription: "Designated Router Delay value.",
+										Computed:            true,
+									},
+									"join_prune_route_map": schema.StringAttribute{
+										MarkdownDescription: "Join Prune Policy name.",
+										Computed:            true,
+									},
+									"name": schema.StringAttribute{
+										MarkdownDescription: "The name of the object.",
+										Computed:            true,
+									},
+									"neighbor_route_map": schema.StringAttribute{
+										MarkdownDescription: "Neighbor route-map Policy.",
+										Computed:            true,
+									},
+									"neighbor_prefix_list": schema.StringAttribute{
+										MarkdownDescription: "Neighbor prefix-list Policy.",
+										Computed:            true,
+									},
+									"pfm_sd_boundary": schema.Int64Attribute{
+										MarkdownDescription: "Pfm-sd boundary, in for restricting incoming pfm-sd message, out for restricting outgoing pfm-sd message.",
+										Computed:            true,
+									},
+									"rfc_strict": schema.BoolAttribute{
+										MarkdownDescription: "Do not process joins from unknown neighbors on this interface.",
+										Computed:            true,
+									},
 								},
 							},
 						},
 						"ssm_policy_name": schema.StringAttribute{
 							MarkdownDescription: "Policy name.",
+							Computed:            true,
+						},
+						"ssm_policy_description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
 							Computed:            true,
 						},
 						"ssm_range_group_list_1": schema.StringAttribute{
@@ -159,6 +271,10 @@ func (d *PIMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 						},
 						"static_rp_policy_name": schema.StringAttribute{
 							MarkdownDescription: "Policy name.",
+							Computed:            true,
+						},
+						"static_rp_policy_description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
 							Computed:            true,
 						},
 						"static_rps": schema.ListNestedAttribute{
@@ -199,6 +315,14 @@ func (d *PIMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 						},
 						"anycast_rp_source_interface": schema.StringAttribute{
 							MarkdownDescription: "Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
+							Computed:            true,
+						},
+						"anycast_rp_description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"anycast_rp_name": schema.StringAttribute{
+							MarkdownDescription: "Object name.",
 							Computed:            true,
 						},
 						"anycast_rp_peers": schema.ListNestedAttribute{

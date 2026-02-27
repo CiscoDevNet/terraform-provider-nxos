@@ -32,29 +32,58 @@ This resource can manage the PIM (Protocol Independent Multicast) configuration 
 
 ```terraform
 resource "nxos_pim" "example" {
-  admin_state          = "enabled"
-  instance_admin_state = "enabled"
+  admin_state                    = "enabled"
+  instance_admin_state           = "enabled"
+  control                        = "stateful-ha"
+  evpn_border_leaf               = false
+  extra_net                      = false
+  join_prune_delay               = 200
+  null_register_delay            = 1000
+  null_register_number_of_routes = 500
+  register_stop                  = false
   vrfs = [{
-    name        = "default"
-    admin_state = "enabled"
-    bfd         = true
+    name                 = "default"
+    admin_state          = "enabled"
+    bfd                  = true
+    auto_enable          = false
+    control              = "flush-on-restart"
+    flush_routes         = false
+    join_prune_delay     = 200
+    log_neighbor_changes = false
+    mtu                  = 1600
+    register_rate_limit  = 100
+    rfc_strict           = false
+    spt_switch_graceful  = false
     interfaces = [{
-      interface_id = "eth1/10"
-      admin_state  = "enabled"
-      bfd          = "enabled"
-      dr_priority  = 10
-      passive      = false
-      sparse_mode  = true
+      interface_id         = "eth1/10"
+      admin_state          = "enabled"
+      bfd                  = "enabled"
+      dr_priority          = 10
+      passive              = false
+      sparse_mode          = true
+      border               = false
+      border_router        = false
+      control              = "border"
+      description          = "MyDescription"
+      dr_delay             = 5
+      join_prune_route_map = "JP_POLICY"
+      name                 = "pim-if"
+      neighbor_route_map   = "NEIGH_POLICY"
+      neighbor_prefix_list = "NEIGH_PFX"
+      pfm_sd_boundary      = 0
+      rfc_strict           = false
     }]
-    ssm_policy_name        = "SSM"
-    ssm_range_group_list_1 = "232.0.0.0/8"
-    ssm_range_group_list_2 = "233.0.0.0/8"
-    ssm_range_group_list_3 = "0.0.0.0"
-    ssm_range_group_list_4 = "0.0.0.0"
-    ssm_range_prefix_list  = ""
-    ssm_range_route_map    = ""
-    ssm_range_none         = false
-    static_rp_policy_name  = "RP"
+    ssm_policy_name              = "SSM"
+    ssm_policy_description       = "SSM_Policy"
+    ssm_range_group_list_1       = "232.0.0.0/8"
+    ssm_range_group_list_2       = "233.0.0.0/8"
+    ssm_range_group_list_3       = "0.0.0.0"
+    ssm_range_group_list_4       = "0.0.0.0"
+    ssm_range_prefix_list        = ""
+    ssm_range_route_map          = ""
+    ssm_range_none               = false
+    static_rp_policy_name        = "RP"
+    static_rp_policy_description = "Static_RP_Policy"
     static_rps = [{
       address = "1.2.3.4"
       group_lists = [{
@@ -65,6 +94,8 @@ resource "nxos_pim" "example" {
     }]
     anycast_rp_local_interface  = "eth1/10"
     anycast_rp_source_interface = "eth1/10"
+    anycast_rp_description      = "Anycast_RP"
+    anycast_rp_name             = "anycast-rp"
     anycast_rp_peers = [{
       address        = "10.1.1.1/32"
       rp_set_address = "20.1.1.1/32"
@@ -80,9 +111,20 @@ resource "nxos_pim" "example" {
 
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
+- `control` (String) The control state.
+  - Choices: `stateful-ha`
 - `device` (String) A device name from the provider configuration.
+- `evpn_border_leaf` (Boolean) EVPN Border Leaf flag.
+- `extra_net` (Boolean) Extranet RPF Lookup.
 - `instance_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
+- `join_prune_delay` (Number) Inter Packet Delay.
+  - Range: `1`-`1000`
+- `null_register_delay` (Number) Null Register Inter Batch Delay.
+  - Range: `1`-`50000`
+- `null_register_number_of_routes` (Number) Null Register Number of Routes.
+  - Range: `1`-`32000`
+- `register_stop` (Boolean) Register until stops.
 - `vrfs` (Attributes List) List of PIM VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
 
 ### Read-Only
@@ -100,11 +142,27 @@ Optional:
 
 - `admin_state` (String) Admin State.
   - Choices: `enabled`, `disabled`
+- `anycast_rp_description` (String) Description of the specified attribute.
 - `anycast_rp_local_interface` (String) Local Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `anycast_rp_name` (String) Object name.
 - `anycast_rp_peers` (Attributes List) List of PIM Anycast RP peer configurations. (see [below for nested schema](#nestedatt--vrfs--anycast_rp_peers))
 - `anycast_rp_source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `auto_enable` (Boolean) Auto Enable.
 - `bfd` (Boolean) BFD.
+- `control` (String) Domain Controls.
+  - Choices: `flush-on-restart`
+- `flush_routes` (Boolean) Flush Routes.
 - `interfaces` (Attributes List) List of PIM interface configurations. (see [below for nested schema](#nestedatt--vrfs--interfaces))
+- `join_prune_delay` (Number) Join-Prune message inter-packet delay.
+  - Range: `1`-`4294967295`
+- `log_neighbor_changes` (Boolean) Log Neighbhor changes.
+- `mtu` (Number) Maximum Transmission Unit.
+  - Range: `1500`-`65536`
+- `register_rate_limit` (Number) Register rate limit for data packets per second.
+  - Range: `0`-`65535`
+- `rfc_strict` (Boolean) Do not process joins from unknown neighbors.
+- `spt_switch_graceful` (Boolean) Graceful switch to SPT.
+- `ssm_policy_description` (String) Description of the specified attribute.
 - `ssm_policy_name` (String) Policy name.
 - `ssm_range_group_list_1` (String) Group List.
 - `ssm_range_group_list_2` (String) Group List.
@@ -113,6 +171,7 @@ Optional:
 - `ssm_range_none` (Boolean) SSM None. Exclude standard SSM range (232.0.0.0/8).
 - `ssm_range_prefix_list` (String) Prefix List.
 - `ssm_range_route_map` (String) Route Map.
+- `static_rp_policy_description` (String) Description of the specified attribute.
 - `static_rp_policy_name` (String) Policy name.
 - `static_rps` (Attributes List) List of PIM Static RP configurations. (see [below for nested schema](#nestedatt--vrfs--static_rps))
 
@@ -138,9 +197,23 @@ Optional:
   - Choices: `enabled`, `disabled`
 - `bfd` (String) BFD Instance State.
   - Choices: `none`, `enabled`, `disabled`
+- `border` (Boolean) Border policy - Treat interface as boundary of PIM domain.
+- `border_router` (Boolean) Acts as a border router on configuration.
+- `control` (String) Interface Controls.
+  - Choices: `border`, `passive`
+- `description` (String) Description.
+- `dr_delay` (Number) Designated Router Delay value.
+  - Range: `1`-`65535`
 - `dr_priority` (Number) Designated Router Priority level.
   - Range: `1`-`4294967295`
+- `join_prune_route_map` (String) Join Prune Policy name.
+- `name` (String) The name of the object.
+- `neighbor_prefix_list` (String) Neighbor prefix-list Policy.
+- `neighbor_route_map` (String) Neighbor route-map Policy.
 - `passive` (Boolean) Passive interface.
+- `pfm_sd_boundary` (Number) Pfm-sd boundary, in for restricting incoming pfm-sd message, out for restricting outgoing pfm-sd message.
+  - Range: `0`-`3`
+- `rfc_strict` (Boolean) Do not process joins from unknown neighbors on this interface.
 - `sparse_mode` (Boolean) Sparse mode.
 
 

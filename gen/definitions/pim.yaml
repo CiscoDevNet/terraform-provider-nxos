@@ -21,6 +21,7 @@ child_classes:
     doc_path: Layer%203/pim:Inst/
     rn: inst
     type: single
+    no_delete: true
     attributes:
       - nxos_name: adminSt
         tf_name: instance_admin_state
@@ -30,6 +31,54 @@ child_classes:
           - enabled
           - disabled
         example: enabled
+      - nxos_name: ctrl
+        tf_name: control
+        type: String
+        description: 'The control state.'
+        enum_values:
+          - stateful-ha
+        example: stateful-ha
+      - nxos_name: evpnBorderLeaf
+        tf_name: evpn_border_leaf
+        type: Bool
+        description: 'EVPN Border Leaf flag.'
+        example: false
+      - nxos_name: extraNet
+        tf_name: extra_net
+        type: Bool
+        description: 'Extranet RPF Lookup.'
+        example: false
+      - nxos_name: jpDelay
+        tf_name: join_prune_delay
+        type: Int64
+        min_int: 1
+        max_int: 1000
+        description: 'Inter Packet Delay.'
+        example: 200
+        delete_value: 100
+      - nxos_name: nrDelay
+        tf_name: null_register_delay
+        type: Int64
+        min_int: 1
+        max_int: 50000
+        description: 'Null Register Inter Batch Delay.'
+        example: 1000
+        exclude_test: true
+        delete_value: 10000
+      - nxos_name: nrNumRt
+        tf_name: null_register_number_of_routes
+        type: Int64
+        min_int: 1
+        max_int: 32000
+        description: 'Null Register Number of Routes.'
+        example: 500
+        exclude_test: true
+        delete_value: 500
+      - nxos_name: regStop
+        tf_name: register_stop
+        type: Bool
+        description: 'Register until stops.'
+        example: false
     child_classes:
       - class_name: pimDom
         doc_path: Layer%203/pim:Dom/
@@ -57,6 +106,61 @@ child_classes:
             type: Bool
             description: 'BFD.'
             example: true
+          - nxos_name: autoEnable
+            tf_name: auto_enable
+            type: Bool
+            description: 'Auto Enable.'
+            example: false
+          - nxos_name: ctrl
+            tf_name: control
+            type: String
+            description: 'Domain Controls.'
+            enum_values:
+              - flush-on-restart
+            example: flush-on-restart
+          - nxos_name: flushRoutes
+            tf_name: flush_routes
+            type: Bool
+            description: 'Flush Routes.'
+            example: false
+          - nxos_name: jpDelay
+            tf_name: join_prune_delay
+            type: Int64
+            min_int: 1
+            max_int: 4294967295
+            description: 'Join-Prune message inter-packet delay.'
+            example: 200
+            delete_value: 100
+          - nxos_name: logNbhChng
+            tf_name: log_neighbor_changes
+            type: Bool
+            description: 'Log Neighbhor changes.'
+            example: false
+          - nxos_name: mtu
+            tf_name: mtu
+            type: Int64
+            min_int: 1500
+            max_int: 65536
+            description: 'Maximum Transmission Unit.'
+            example: 1600
+            delete_value: 1500
+          - nxos_name: regRateLmt
+            tf_name: register_rate_limit
+            type: Int64
+            min_int: 0
+            max_int: 65535
+            description: 'Register rate limit for data packets per second.'
+            example: 100
+          - nxos_name: rfcStrict
+            tf_name: rfc_strict
+            type: Bool
+            description: 'Do not process joins from unknown neighbors.'
+            example: false
+          - nxos_name: sptSwitchGraceful
+            tf_name: spt_switch_graceful
+            type: Bool
+            description: 'Graceful switch to SPT.'
+            example: false
         child_classes:
           - class_name: pimIf
             doc_path: Layer%203/pim:If/
@@ -95,6 +199,7 @@ child_classes:
                 max_int: 4294967295
                 description: 'Designated Router Priority level.'
                 example: 10
+                delete_value: 1
               - nxos_name: passive
                 tf_name: passive
                 type: Bool
@@ -105,6 +210,70 @@ child_classes:
                 type: Bool
                 description: 'Sparse mode.'
                 example: true
+              - nxos_name: border
+                tf_name: border
+                type: Bool
+                description: 'Border policy - Treat interface as boundary of PIM domain.'
+                example: false
+              - nxos_name: borderRouter
+                tf_name: border_router
+                type: Bool
+                description: 'Acts as a border router on configuration.'
+                example: false
+              - nxos_name: ctrl
+                tf_name: control
+                type: String
+                description: 'Interface Controls.'
+                enum_values:
+                  - border
+                  - passive
+                example: border
+              - nxos_name: descr
+                tf_name: description
+                type: String
+                description: 'Description.'
+                example: MyDescription
+              - nxos_name: drDelay
+                tf_name: dr_delay
+                type: Int64
+                min_int: 1
+                max_int: 65535
+                description: 'Designated Router Delay value.'
+                example: 5
+                delete_value: 3
+              - nxos_name: jpRtMap
+                tf_name: join_prune_route_map
+                type: String
+                description: 'Join Prune Policy name.'
+                example: JP_POLICY
+              - nxos_name: name
+                tf_name: name
+                type: String
+                description: 'The name of the object.'
+                example: pim-if
+              - nxos_name: neighRtMap
+                tf_name: neighbor_route_map
+                type: String
+                description: 'Neighbor route-map Policy.'
+                example: NEIGH_POLICY
+              - nxos_name: neighpfxList
+                tf_name: neighbor_prefix_list
+                type: String
+                description: 'Neighbor prefix-list Policy.'
+                example: NEIGH_PFX
+                exclude_test: true
+              - nxos_name: pfmSdBoundary
+                tf_name: pfm_sd_boundary
+                type: Int64
+                min_int: 0
+                max_int: 3
+                description: 'Pfm-sd boundary, in for restricting incoming pfm-sd message, out for restricting outgoing pfm-sd message.'
+                example: 0
+              - nxos_name: rfcStrict
+                tf_name: rfc_strict
+                type: Bool
+                description: 'Do not process joins from unknown neighbors on this interface.'
+                example: false
           - class_name: pimSSMPatP
             doc_path: Layer%203/pim:SSMPatP/
             rn: ssm
@@ -117,6 +286,11 @@ child_classes:
                 type: String
                 description: 'Policy name.'
                 example: SSM
+              - nxos_name: descr
+                tf_name: ssm_policy_description
+                type: String
+                description: 'Description of the specified attribute.'
+                example: SSM_Policy
             child_classes:
               - class_name: pimSSMRangeP
                 doc_path: Layer%203/pim:SSMRangeP/
@@ -152,11 +326,13 @@ child_classes:
                     type: String
                     description: 'Prefix List.'
                     example: ''
+                    exclude_test: true
                   - nxos_name: rtMap
                     tf_name: ssm_range_route_map
                     type: String
                     description: 'Route Map.'
                     example: ''
+                    exclude_test: true
                   - nxos_name: ssmNone
                     tf_name: ssm_range_none
                     type: Bool
@@ -174,6 +350,11 @@ child_classes:
                 type: String
                 description: 'Policy name.'
                 example: RP
+              - nxos_name: descr
+                tf_name: static_rp_policy_description
+                type: String
+                description: 'Description of the specified attribute.'
+                example: Static_RP_Policy
             child_classes:
               - class_name: pimStaticRP
                 doc_path: Layer%203/pim:StaticRP/
@@ -229,6 +410,16 @@ child_classes:
                 type: String
                 description: 'Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
                 example: eth1/10
+              - nxos_name: descr
+                tf_name: anycast_rp_description
+                type: String
+                description: 'Description of the specified attribute.'
+                example: Anycast_RP
+              - nxos_name: name
+                tf_name: anycast_rp_name
+                type: String
+                description: 'Object name.'
+                example: anycast-rp
             child_classes:
               - class_name: pimAcastRPPeer
                 doc_path: Layer%203/pim:AcastRPPeer/

@@ -35,7 +35,17 @@ data "nxos_ntp" "example" {
 
 ### Read-Only
 
+- `admin_state` (String) A property that indicates if the NTP protocol is enabled or disabled.
+- `allow_control` (String) Allow Control Mode NTP Packets.
+- `allow_private` (String) Allow Private Mode NTP Packets.
+- `authentication_state` (String) A property that indicates if the Datetime policy authentication is enabled or disabled.
 - `id` (String) The distinguished name of the object.
+- `logging` (String) NTP Logging Status.
+- `logging_level` (String) NTP Logging Level.
+- `master` (String) NTP Master Configuration.
+- `master_stratum` (Number) NTP Master Stratum Level.
+- `passive` (String) Enable/Disable Passive NTP Associations.
+- `rate_limit` (Number) Rate-Limit NTP Control Mode Packets.
 - `servers` (Attributes List) List of NTP servers or peers. (see [below for nested schema](#nestedatt--servers))
 
 <a id="nestedatt--servers"></a>
@@ -47,5 +57,6 @@ Read-Only:
 - `max_poll` (Number) NTP maximum interval default in seconds. Possible range is from `4` to `16`.
 - `min_poll` (Number) NTP minimum interval default in seconds. Possible range is from `4` to `16`.
 - `name` (String) NTP server or peer address.
+- `preferred` (Boolean) A property that indicates if the NTP server is preferred. Only one preferred server is allowed.
 - `type` (String) NTP provider type. Possible values are `server` or `peer`.
 - `vrf` (String) Identifies the VRF for the NTP providers.

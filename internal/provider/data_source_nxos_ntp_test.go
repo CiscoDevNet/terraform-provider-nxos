@@ -31,13 +31,24 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosNTP(t *testing.T) {
 	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "allow_control", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "allow_private", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "authentication_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "logging", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "logging_level", "error"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "master", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "master_stratum", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "passive", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ntp.test", "rate_limit", "5"))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ntp.test", "servers.*", map[string]string{
-		"name":     "1.2.3.4",
-		"vrf":      "management",
-		"type":     "server",
-		"key_id":   "10",
-		"min_poll": "4",
-		"max_poll": "6",
+		"name":      "1.2.3.4",
+		"vrf":       "management",
+		"type":      "server",
+		"key_id":    "10",
+		"min_poll":  "4",
+		"max_poll":  "6",
+		"preferred": "true",
 	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -60,6 +71,16 @@ func TestAccDataSourceNxosNTP(t *testing.T) {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 func testAccDataSourceNxosNTPConfig() string {
 	config := `resource "nxos_ntp" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	allow_control = "enabled"` + "\n"
+	config += `	allow_private = "enabled"` + "\n"
+	config += `	authentication_state = "enabled"` + "\n"
+	config += `	logging = "enabled"` + "\n"
+	config += `	logging_level = "error"` + "\n"
+	config += `	master = "enabled"` + "\n"
+	config += `	master_stratum = 4` + "\n"
+	config += `	passive = "enabled"` + "\n"
+	config += `	rate_limit = 5` + "\n"
 	config += `	servers = [{` + "\n"
 	config += `		name = "1.2.3.4"` + "\n"
 	config += `		vrf = "management"` + "\n"
@@ -67,6 +88,7 @@ func testAccDataSourceNxosNTPConfig() string {
 	config += `		key_id = 10` + "\n"
 	config += `		min_poll = 4` + "\n"
 	config += `		max_poll = 6` + "\n"
+	config += `		preferred = true` + "\n"
 	config += `	}]` + "\n"
 	config += `}` + "\n"
 

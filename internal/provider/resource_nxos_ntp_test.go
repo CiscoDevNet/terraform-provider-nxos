@@ -35,12 +35,23 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosNTP(t *testing.T) {
 	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "allow_control", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "allow_private", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "authentication_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "logging", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "logging_level", "error"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "master", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "master_stratum", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "passive", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "rate_limit", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.0.name", "1.2.3.4"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.0.vrf", "management"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.0.type", "server"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.0.key_id", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.0.min_poll", "4"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.0.max_poll", "6"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ntp.test", "servers.0.preferred", "true"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -97,6 +108,16 @@ func testAccNxosNTPConfig_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosNTPConfig_all() string {
 	config := `resource "nxos_ntp" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	allow_control = "enabled"` + "\n"
+	config += `	allow_private = "enabled"` + "\n"
+	config += `	authentication_state = "enabled"` + "\n"
+	config += `	logging = "enabled"` + "\n"
+	config += `	logging_level = "error"` + "\n"
+	config += `	master = "enabled"` + "\n"
+	config += `	master_stratum = 4` + "\n"
+	config += `	passive = "enabled"` + "\n"
+	config += `	rate_limit = 5` + "\n"
 	config += `	servers = [{` + "\n"
 	config += `		name = "1.2.3.4"` + "\n"
 	config += `		vrf = "management"` + "\n"
@@ -104,6 +125,7 @@ func testAccNxosNTPConfig_all() string {
 	config += `		key_id = 10` + "\n"
 	config += `		min_poll = 4` + "\n"
 	config += `		max_poll = 6` + "\n"
+	config += `		preferred = true` + "\n"
 	config += `	}]` + "\n"
 	config += `}` + "\n"
 	return config

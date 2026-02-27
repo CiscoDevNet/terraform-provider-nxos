@@ -68,6 +68,46 @@ func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
+			"admin_state": schema.StringAttribute{
+				MarkdownDescription: "A property that indicates if the NTP protocol is enabled or disabled.",
+				Computed:            true,
+			},
+			"allow_control": schema.StringAttribute{
+				MarkdownDescription: "Allow Control Mode NTP Packets.",
+				Computed:            true,
+			},
+			"allow_private": schema.StringAttribute{
+				MarkdownDescription: "Allow Private Mode NTP Packets.",
+				Computed:            true,
+			},
+			"authentication_state": schema.StringAttribute{
+				MarkdownDescription: "A property that indicates if the Datetime policy authentication is enabled or disabled.",
+				Computed:            true,
+			},
+			"logging": schema.StringAttribute{
+				MarkdownDescription: "NTP Logging Status.",
+				Computed:            true,
+			},
+			"logging_level": schema.StringAttribute{
+				MarkdownDescription: "NTP Logging Level.",
+				Computed:            true,
+			},
+			"master": schema.StringAttribute{
+				MarkdownDescription: "NTP Master Configuration.",
+				Computed:            true,
+			},
+			"master_stratum": schema.Int64Attribute{
+				MarkdownDescription: "NTP Master Stratum Level.",
+				Computed:            true,
+			},
+			"passive": schema.StringAttribute{
+				MarkdownDescription: "Enable/Disable Passive NTP Associations.",
+				Computed:            true,
+			},
+			"rate_limit": schema.Int64Attribute{
+				MarkdownDescription: "Rate-Limit NTP Control Mode Packets.",
+				Computed:            true,
+			},
 			"servers": schema.ListNestedAttribute{
 				MarkdownDescription: "List of NTP servers or peers.",
 				Computed:            true,
@@ -95,6 +135,10 @@ func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 						},
 						"max_poll": schema.Int64Attribute{
 							MarkdownDescription: "NTP maximum interval default in seconds. Possible range is from `4` to `16`.",
+							Computed:            true,
+						},
+						"preferred": schema.BoolAttribute{
+							MarkdownDescription: "A property that indicates if the NTP server is preferred. Only one preferred server is allowed.",
 							Computed:            true,
 						},
 					},

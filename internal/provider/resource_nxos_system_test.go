@@ -38,6 +38,24 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "name", "LEAF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "mtu", "9216"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "default_admin_state", "up"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "admin_link_down_syslog_level", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "admin_link_up_syslog_level", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "allow_unsupported_sfp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "chassis_infrastructure_adaptor_vlan", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "chassis_infrastructure_epds_port_number", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "chassis_infrastructure_ipv6_address", "2001:db8::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "chassis_infrastructure_vlan", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "chassis_management_instance", "mgmt0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "chassis_management_instance_fabric_number", "LeftFabric"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "interface_syslog_info", "info-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "log_event", "linkStatusEnable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "default_layer", "Layer3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "system_interface_admin_state", "up"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "system_link_failure_laser_on", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "system_storm_control_multi_threshold", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "vlan_tag_native", "false"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -97,6 +115,24 @@ func testAccNxosSystemConfig_all() string {
 	config += `	name = "LEAF1"` + "\n"
 	config += `	mtu = 9216` + "\n"
 	config += `	default_admin_state = "up"` + "\n"
+	config += `	admin_link_down_syslog_level = 4` + "\n"
+	config += `	admin_link_up_syslog_level = 4` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	allow_unsupported_sfp = true` + "\n"
+	config += `	chassis_infrastructure_adaptor_vlan = 100` + "\n"
+	config += `	chassis_infrastructure_epds_port_number = 100` + "\n"
+	config += `	chassis_infrastructure_ipv6_address = "2001:db8::1"` + "\n"
+	config += `	chassis_infrastructure_vlan = 100` + "\n"
+	config += `	chassis_management_instance = "mgmt0"` + "\n"
+	config += `	chassis_management_instance_fabric_number = "LeftFabric"` + "\n"
+	config += `	control = "stateful-ha"` + "\n"
+	config += `	interface_syslog_info = "info-1"` + "\n"
+	config += `	log_event = "linkStatusEnable"` + "\n"
+	config += `	default_layer = "Layer3"` + "\n"
+	config += `	system_interface_admin_state = "up"` + "\n"
+	config += `	system_link_failure_laser_on = false` + "\n"
+	config += `	system_storm_control_multi_threshold = false` + "\n"
+	config += `	vlan_tag_native = false` + "\n"
 	config += `}` + "\n"
 	return config
 }

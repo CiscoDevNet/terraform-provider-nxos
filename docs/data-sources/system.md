@@ -36,7 +36,25 @@ data "nxos_system" "example" {
 
 ### Read-Only
 
+- `admin_link_down_syslog_level` (Number) Admin link-down syslog level.
+- `admin_link_up_syslog_level` (Number) Admin link-up syslog level.
+- `admin_state` (String) The administrative state of the object or policy.
+- `allow_unsupported_sfp` (Boolean) Allow unsupported SFP.
+- `chassis_infrastructure_adaptor_vlan` (Number) Chassis infra adaptor vlan id.
+- `chassis_infrastructure_epds_port_number` (Number) Chassis infra EPDS port no.
+- `chassis_infrastructure_ipv6_address` (String) Chassis infra IPv6 address.
+- `chassis_infrastructure_vlan` (Number) Chassis infra vlan id.
+- `chassis_management_instance` (String) Chassis MGMT instance.
+- `chassis_management_instance_fabric_number` (String) Chassis MGMT fabric no.
+- `control` (String) The control state.
 - `default_admin_state` (String) System Default Admin St.
+- `default_layer` (String) System Default Layer.
 - `id` (String) The distinguished name of the object.
+- `interface_syslog_info` (String) Interface syslog info.
+- `log_event` (String) Logging Interface events.
 - `mtu` (Number) System jumbo Mtu.
 - `name` (String) The system name (hostname).
+- `system_interface_admin_state` (String) System Interface Admin State.
+- `system_link_failure_laser_on` (Boolean) Enable or disable the system link failure laser on.
+- `system_storm_control_multi_threshold` (Boolean) Enable or disable the storm control multi threshold.
+- `vlan_tag_native` (Boolean) Tag native vlan.

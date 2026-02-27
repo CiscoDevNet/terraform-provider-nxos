@@ -92,6 +92,18 @@ child_classes:
                 id: true
                 description: 'Match using class-map.'
                 example: Voice
+              - nxos_name: nextCMap
+                tf_name: next_class_map
+                type: String
+                description: 'Insert before the given class-map.'
+                example: Voice
+                exclude_test: true
+              - nxos_name: prevCMap
+                tf_name: previous_class_map
+                type: String
+                description: 'Insert after the given class-map.'
+                example: Voice
+                exclude_test: true
             child_classes:
               - class_name: ipqosSetQoSGrp
                 doc_path: Qos/ipqos:SetQoSGrp/
@@ -378,6 +390,11 @@ child_classes:
                     mandatory: true
                     description: 'Policy-map Name.'
                     example: PM1
+                  - nxos_name: stats
+                    tf_name: policy_map_statistics
+                    type: Bool
+                    description: 'Turn on/off statistics.'
+                    example: false
 test_prerequisites:
   - dn: sys/ipqos/dflt/c/name-[Voice]
     class_name: ipqosCMapInst

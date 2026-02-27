@@ -67,6 +67,7 @@ func TestAccNxosDefaultQoS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.0.match_class_maps.0.police_violate_set_qos_group", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_interface_in.0.interface_id", "eth1/10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_interface_in.0.policy_map_name", "PM1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_interface_in.0.policy_map_statistics", "false"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -183,6 +184,7 @@ func testAccNxosDefaultQoSConfig_all() string {
 	config += `	policy_interface_in = [{` + "\n"
 	config += `		interface_id = "eth1/10"` + "\n"
 	config += `		policy_map_name = "PM1"` + "\n"
+	config += `		policy_map_statistics = false` + "\n"
 	config += `	}]` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
 	config += `}` + "\n"

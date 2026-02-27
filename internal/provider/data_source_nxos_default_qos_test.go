@@ -77,7 +77,8 @@ func TestAccDataSourceNxosDefaultQoS(t *testing.T) {
 		"interface_id": "eth1/10",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_default_qos.test", "policy_interface_in.*", map[string]string{
-		"policy_map_name": "PM1",
+		"policy_map_name":       "PM1",
+		"policy_map_statistics": "false",
 	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -159,6 +160,7 @@ func testAccDataSourceNxosDefaultQoSConfig() string {
 	config += `	policy_interface_in = [{` + "\n"
 	config += `		interface_id = "eth1/10"` + "\n"
 	config += `		policy_map_name = "PM1"` + "\n"
+	config += `		policy_map_statistics = false` + "\n"
 	config += `	}]` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
 	config += `}` + "\n"

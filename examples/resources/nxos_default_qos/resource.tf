@@ -11,6 +11,8 @@ resource "nxos_default_qos" "example" {
     match_type = "match-any"
     match_class_maps = [{
       name                          = "Voice"
+      next_class_map                = "Voice"
+      previous_class_map            = "Voice"
       set_qos_group_id              = 1
       police_bc_rate                = 200
       police_bc_unit                = "mbytes"
@@ -38,7 +40,8 @@ resource "nxos_default_qos" "example" {
     }]
   }]
   policy_interface_in = [{
-    interface_id    = "eth1/10"
-    policy_map_name = "PM1"
+    interface_id          = "eth1/10"
+    policy_map_name       = "PM1"
+    policy_map_statistics = false
   }]
 }

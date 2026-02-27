@@ -76,6 +76,7 @@ Read-Only:
 
 - `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `policy_map_name` (String) Policy-map Name.
+- `policy_map_statistics` (Boolean) Turn on/off statistics.
 
 
 <a id="nestedatt--policy_maps"></a>
@@ -93,6 +94,7 @@ Read-Only:
 Read-Only:
 
 - `name` (String) Match using class-map.
+- `next_class_map` (String) Insert before the given class-map.
 - `police_bc_rate` (Number) CIR burst.
 - `police_bc_unit` (String) CIR burst unit.
 - `police_be_rate` (Number) PIR burst.
@@ -116,4 +118,5 @@ Read-Only:
 - `police_violate_set_dscp` (Number) set dscp for violating traffic.
 - `police_violate_set_precedence` (String) set precedence for violating traffic.
 - `police_violate_set_qos_group` (Number) set qos-group for violating traffic.
+- `previous_class_map` (String) Insert after the given class-map.
 - `set_qos_group_id` (Number) QoS group ID.

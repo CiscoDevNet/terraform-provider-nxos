@@ -96,6 +96,13 @@ func (r *LoopbackInterfacesResource) Schema(ctx context.Context, req resource.Sc
 							MarkdownDescription: helpers.NewAttributeDescription("Interface description.").String,
 							Optional:            true,
 						},
+						"link_logging": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The administrative state of link logging.").AddStringEnumDescription("default", "enable", "disable").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("default", "enable", "disable"),
+							},
+						},
 						"vrf_dn": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("DN of VRF. For example: `sys/inst-VRF1`.").String,
 							Optional:            true,

@@ -28,6 +28,15 @@ attributes:
     type: String
     description: 'Interface description.'
     example: My Description
+  - nxos_name: linkLog
+    tf_name: link_logging
+    type: String
+    description: 'The administrative state of link logging.'
+    enum_values:
+      - default
+      - enable
+      - disable
+    example: enable
 child_classes:
   - class_name: nwRtVrfMbr
     rn: rtvrfMbr

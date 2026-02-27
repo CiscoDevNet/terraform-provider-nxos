@@ -28,18 +28,32 @@ This resource can manage the IPv6 configuration on NX-OS devices, including per-
 
 ```terraform
 resource "nxos_ipv6" "example" {
+  admin_state                             = "enabled"
+  instance_access_list_match_local        = "enabled"
+  instance_admin_state                    = "enabled"
+  instance_control                        = "stateful-ha"
+  instance_drop_nd_fragments              = "enabled"
+  instance_queue_packets                  = "enabled"
+  instance_static_neighbor_outside_subnet = "enabled"
+  instance_switch_packets                 = "all"
   vrfs = [{
     name = "VRF1"
     static_routes = [{
-      prefix = "2001:db8:3333:4444:5555:6666:102:304/128"
+      prefix      = "2001:db8:3333:4444:5555:6666:102:304/128"
+      control     = "bfd"
+      description = "My Description"
+      preference  = 10
+      tag         = 100
       next_hops = [{
-        interface_id = "unspecified"
-        address      = "a:b::c:d/128"
-        vrf_name     = "default"
-        description  = "My Description"
-        object       = 10
-        preference   = 123
-        tag          = 10
+        interface_id          = "unspecified"
+        address               = "a:b::c:d/128"
+        vrf_name              = "default"
+        description           = "My Description"
+        object                = 10
+        preference            = 123
+        tag                   = 10
+        route_name            = "nh-name"
+        rewrite_encapsulation = "vlan-1"
       }]
     }]
     interfaces = [{
@@ -52,9 +66,14 @@ resource "nxos_ipv6" "example" {
       urpf                       = "disabled"
       link_local_address         = "2001:db8:3333:4444:5555:6666:7777:8888"
       addresses = [{
-        address = "2001:db8:3333:4444:5555:6666:7777:8888"
-        type    = "primary"
-        tag     = 1234
+        address                 = "2001:db8:3333:4444:5555:6666:7777:8888"
+        type                    = "primary"
+        tag                     = 1234
+        aggregate_prefix_length = 64
+        control                 = "anycast"
+        preference              = 10
+        use_bia                 = "enabled"
+        vpc_peer                = "2001:db8::1"
       }]
     }]
   }]
@@ -66,7 +85,23 @@ resource "nxos_ipv6" "example" {
 
 ### Optional
 
+- `admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
 - `device` (String) A device name from the provider configuration.
+- `instance_access_list_match_local` (String) Access-List Match Local.
+  - Choices: `enabled`, `disabled`
+- `instance_admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
+- `instance_control` (String) The control state.
+  - Choices: `stateful-ha`
+- `instance_drop_nd_fragments` (String) Drop ND Fragments.
+  - Choices: `enabled`, `disabled`
+- `instance_queue_packets` (String) Queue-packets.
+  - Choices: `enabled`, `disabled`
+- `instance_static_neighbor_outside_subnet` (String) Static Neighbor Outside Subnet.
+  - Choices: `enabled`, `disabled`
+- `instance_switch_packets` (String) Switch-packets.
+  - Choices: `disabled`, `all`, `lla`
 - `vrfs` (Attributes List) List of IPv6 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
 
 ### Read-Only
@@ -118,10 +153,19 @@ Required:
 
 Optional:
 
+- `aggregate_prefix_length` (Number) Prefix-Length for AM Route Aggregation.
+  - Range: `0`-`127`
+- `control` (String) The control state.
+  - Choices: `pervasive`, `fabric-aware`, `eui64`, `anycast`
+- `preference` (Number) Preference.
+  - Range: `0`-`255`
 - `tag` (Number) Route Tag.
   - Range: `0`-`4294967295`
 - `type` (String) Type.
   - Choices: `primary`, `secondary`
+- `use_bia` (String) Use Interface MAC Address.
+  - Choices: `enabled`, `disabled`
+- `vpc_peer` (String) VPC Peer.
 
 
 
@@ -132,6 +176,16 @@ Required:
 
 - `next_hops` (Attributes List) List of next hops. (see [below for nested schema](#nestedatt--vrfs--static_routes--next_hops))
 - `prefix` (String) Prefix.
+
+Optional:
+
+- `control` (String) Controls.
+  - Choices: `pervasive`, `bfd`
+- `description` (String) Description of the specified attribute.
+- `preference` (Number) Preference.
+  - Range: `1`-`255`
+- `tag` (Number) Tag.
+  - Range: `0`-`4294967295`
 
 <a id="nestedatt--vrfs--static_routes--next_hops"></a>
 ### Nested Schema for `vrfs.static_routes.next_hops`
@@ -149,6 +203,8 @@ Optional:
   - Range: `0`-`4294967295`
 - `preference` (Number) Route preference.
   - Range: `0`-`255`
+- `rewrite_encapsulation` (String) Rewrite Encapsulation.
+- `route_name` (String) Next hop name.
 - `tag` (Number) Tag value.
   - Range: `0`-`4294967295`
 

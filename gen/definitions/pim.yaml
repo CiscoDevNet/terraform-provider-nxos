@@ -127,7 +127,6 @@ child_classes:
             max_int: 4294967295
             description: 'Join-Prune message inter-packet delay.'
             example: 200
-            delete_value: 100
           - nxos_name: logNbhChng
             tf_name: log_neighbor_changes
             type: Bool
@@ -140,7 +139,6 @@ child_classes:
             max_int: 65536
             description: 'Maximum Transmission Unit.'
             example: 1600
-            delete_value: 1500
           - nxos_name: regRateLmt
             tf_name: register_rate_limit
             type: Int64
@@ -196,7 +194,6 @@ child_classes:
                 max_int: 4294967295
                 description: 'Designated Router Priority level.'
                 example: 10
-                delete_value: 1
               - nxos_name: passive
                 tf_name: passive
                 type: Bool
@@ -237,7 +234,6 @@ child_classes:
                 max_int: 65535
                 description: 'Designated Router Delay value.'
                 example: 5
-                delete_value: 3
               - nxos_name: jpRtMap
                 tf_name: join_prune_route_map
                 type: String

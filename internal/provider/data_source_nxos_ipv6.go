@@ -68,6 +68,34 @@ func (d *IPv6DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
+			"access_list_match_local": schema.StringAttribute{
+				MarkdownDescription: "Access-List Match Local.",
+				Computed:            true,
+			},
+			"admin_state": schema.StringAttribute{
+				MarkdownDescription: "The administrative state of the object or policy.",
+				Computed:            true,
+			},
+			"control": schema.StringAttribute{
+				MarkdownDescription: "The control state.",
+				Computed:            true,
+			},
+			"drop_nd_fragments": schema.StringAttribute{
+				MarkdownDescription: "Drop ND Fragments.",
+				Computed:            true,
+			},
+			"queue_packets": schema.StringAttribute{
+				MarkdownDescription: "Queue-packets.",
+				Computed:            true,
+			},
+			"static_neighbor_outside_subnet": schema.StringAttribute{
+				MarkdownDescription: "Static Neighbor Outside Subnet.",
+				Computed:            true,
+			},
+			"switch_packets": schema.StringAttribute{
+				MarkdownDescription: "Switch-packets.",
+				Computed:            true,
+			},
 			"vrfs": schema.ListNestedAttribute{
 				MarkdownDescription: "List of IPv6 VRF configurations.",
 				Computed:            true,
@@ -84,6 +112,22 @@ func (d *IPv6DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 								Attributes: map[string]schema.Attribute{
 									"prefix": schema.StringAttribute{
 										MarkdownDescription: "Prefix.",
+										Computed:            true,
+									},
+									"control": schema.StringAttribute{
+										MarkdownDescription: "Controls.",
+										Computed:            true,
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: "Description of the specified attribute.",
+										Computed:            true,
+									},
+									"preference": schema.Int64Attribute{
+										MarkdownDescription: "Preference.",
+										Computed:            true,
+									},
+									"tag": schema.Int64Attribute{
+										MarkdownDescription: "Tag.",
 										Computed:            true,
 									},
 									"next_hops": schema.ListNestedAttribute{
@@ -117,6 +161,14 @@ func (d *IPv6DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 												},
 												"tag": schema.Int64Attribute{
 													MarkdownDescription: "Tag value.",
+													Computed:            true,
+												},
+												"name": schema.StringAttribute{
+													MarkdownDescription: "Next hop name.",
+													Computed:            true,
+												},
+												"rewrite_encapsulation": schema.StringAttribute{
+													MarkdownDescription: "Rewrite Encapsulation.",
 													Computed:            true,
 												},
 											},
@@ -177,6 +229,26 @@ func (d *IPv6DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 												},
 												"tag": schema.Int64Attribute{
 													MarkdownDescription: "Route Tag.",
+													Computed:            true,
+												},
+												"aggregate_prefix_length": schema.Int64Attribute{
+													MarkdownDescription: "Prefix-Length for AM Route Aggregation.",
+													Computed:            true,
+												},
+												"control": schema.StringAttribute{
+													MarkdownDescription: "The control state.",
+													Computed:            true,
+												},
+												"preference": schema.Int64Attribute{
+													MarkdownDescription: "Preference.",
+													Computed:            true,
+												},
+												"use_bia": schema.StringAttribute{
+													MarkdownDescription: "Use Interface MAC Address.",
+													Computed:            true,
+												},
+												"vpc_peer": schema.StringAttribute{
+													MarkdownDescription: "VPC Peer.",
 													Computed:            true,
 												},
 											},

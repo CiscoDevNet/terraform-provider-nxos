@@ -13,6 +13,66 @@ child_classes:
     rn: inst
     type: single
     no_delete: true
+    tf_name: instance
+    description: 'IPv6 instance.'
+    attributes:
+      - nxos_name: accessListMatchLocal
+        tf_name: access_list_match_local
+        type: String
+        description: 'Access-List Match Local.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: adminSt
+        tf_name: admin_state
+        type: String
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: ctrl
+        tf_name: control
+        type: String
+        description: 'The control state.'
+        allow_non_enum_values: true
+        enum_values:
+          - stateful-ha
+        example: stateful-ha
+      - nxos_name: dropNdFragments
+        tf_name: drop_nd_fragments
+        type: String
+        description: 'Drop ND Fragments.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: queuePackets
+        tf_name: queue_packets
+        type: String
+        description: 'Queue-packets.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: staticNeighborOutsideSubnet
+        tf_name: static_neighbor_outside_subnet
+        type: String
+        description: 'Static Neighbor Outside Subnet.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: switchPackets
+        tf_name: switch_packets
+        type: String
+        description: 'Switch-packets.'
+        enum_values:
+          - disabled
+          - all
+          - lla
+        example: all
     child_classes:
       - class_name: ipv6Dom
         doc_path: Layer%203/ipv6:Dom/
@@ -41,6 +101,34 @@ child_classes:
                 id: true
                 description: 'Prefix.'
                 example: '2001:db8:3333:4444:5555:6666:102:304/128'
+              - nxos_name: ctrl
+                tf_name: control
+                type: String
+                description: 'Controls.'
+                allow_non_enum_values: true
+                enum_values:
+                  - pervasive
+                  - bfd
+                example: bfd
+              - nxos_name: descr
+                tf_name: description
+                type: String
+                description: 'Description of the specified attribute.'
+                example: 'My Description'
+              - nxos_name: pref
+                tf_name: preference
+                type: Int64
+                description: 'Preference.'
+                min_int: 1
+                max_int: 255
+                example: 10
+              - nxos_name: tag
+                tf_name: tag
+                type: Int64
+                description: 'Tag.'
+                min_int: 0
+                max_int: 4294967295
+                example: 100
             child_classes:
               - class_name: ipv6Nexthop
                 doc_path: Layer%203/ipv6:Nexthop/
@@ -94,6 +182,16 @@ child_classes:
                     min_int: 0
                     max_int: 4294967295
                     example: 10
+                  - nxos_name: rtname
+                    tf_name: name
+                    type: String
+                    description: 'Next hop name.'
+                    example: 'nh-name'
+                  - nxos_name: rwEncap
+                    tf_name: rewrite_encapsulation
+                    type: String
+                    description: 'Rewrite Encapsulation.'
+                    example: 'vlan-1'
           - class_name: ipv6If
             doc_path: Layer%203/ipv6:If/
             rn: if-[%s]
@@ -192,6 +290,46 @@ child_classes:
                     min_int: 0
                     max_int: 4294967295
                     example: 1234
+                  - nxos_name: aggregatePrefixLength
+                    tf_name: aggregate_prefix_length
+                    type: Int64
+                    description: 'Prefix-Length for AM Route Aggregation.'
+                    min_int: 0
+                    max_int: 127
+                    exclude_test: true
+                    example: 64
+                  - nxos_name: ctrl
+                    tf_name: control
+                    type: String
+                    description: 'The control state.'
+                    allow_non_enum_values: true
+                    enum_values:
+                      - pervasive
+                      - fabric-aware
+                      - eui64
+                      - anycast
+                    example: anycast
+                  - nxos_name: pref
+                    tf_name: preference
+                    type: Int64
+                    description: 'Preference.'
+                    min_int: 0
+                    max_int: 255
+                    example: 10
+                  - nxos_name: useBia
+                    tf_name: use_bia
+                    type: String
+                    description: 'Use Interface MAC Address.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    exclude_test: true
+                    example: enabled
+                  - nxos_name: vpcPeer
+                    tf_name: vpc_peer
+                    type: String
+                    description: 'VPC Peer.'
+                    example: '2001:db8::1'
 test_prerequisites:
   - dn: sys/intf/phys-[eth1/10]
     class_name: l1PhysIf

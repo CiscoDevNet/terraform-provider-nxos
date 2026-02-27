@@ -31,20 +31,33 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosIPv6(t *testing.T) {
 	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "access_list_match_local", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "drop_nd_fragments", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "queue_packets", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "static_neighbor_outside_subnet", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "switch_packets", "all"))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv6.test", "vrfs.*", map[string]string{
 		"name": "VRF1",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv6.test", "vrfs.*.static_routes.*", map[string]string{
-		"prefix": "2001:db8:3333:4444:5555:6666:102:304/128",
+		"prefix":      "2001:db8:3333:4444:5555:6666:102:304/128",
+		"control":     "bfd",
+		"description": "My Description",
+		"preference":  "10",
+		"tag":         "100",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv6.test", "vrfs.*.static_routes.*.next_hops.*", map[string]string{
-		"interface_id": "unspecified",
-		"address":      "a:b::c:d/128",
-		"vrf_name":     "default",
-		"description":  "My Description",
-		"object":       "10",
-		"preference":   "123",
-		"tag":          "10",
+		"interface_id":          "unspecified",
+		"address":               "a:b::c:d/128",
+		"vrf_name":              "default",
+		"description":           "My Description",
+		"object":                "10",
+		"preference":            "123",
+		"tag":                   "10",
+		"name":                  "nh-name",
+		"rewrite_encapsulation": "vlan-1",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv6.test", "vrfs.*.interfaces.*", map[string]string{
 		"interface_id":               "eth1/10",
@@ -57,9 +70,12 @@ func TestAccDataSourceNxosIPv6(t *testing.T) {
 		"link_local_address":         "2001:db8:3333:4444:5555:6666:7777:8888",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv6.test", "vrfs.*.interfaces.*.addresses.*", map[string]string{
-		"address": "2001:db8:3333:4444:5555:6666:7777:8888",
-		"type":    "primary",
-		"tag":     "1234",
+		"address":    "2001:db8:3333:4444:5555:6666:7777:8888",
+		"type":       "primary",
+		"tag":        "1234",
+		"control":    "anycast",
+		"preference": "10",
+		"vpc_peer":   "2001:db8::1",
 	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -92,10 +108,21 @@ resource "nxos_rest" "PreReq0" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 func testAccDataSourceNxosIPv6Config() string {
 	config := `resource "nxos_ipv6" "test" {` + "\n"
+	config += `	access_list_match_local = "enabled"` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	control = "stateful-ha"` + "\n"
+	config += `	drop_nd_fragments = "enabled"` + "\n"
+	config += `	queue_packets = "enabled"` + "\n"
+	config += `	static_neighbor_outside_subnet = "enabled"` + "\n"
+	config += `	switch_packets = "all"` + "\n"
 	config += `	vrfs = [{` + "\n"
 	config += `		name = "VRF1"` + "\n"
 	config += `		static_routes = [{` + "\n"
 	config += `			prefix = "2001:db8:3333:4444:5555:6666:102:304/128"` + "\n"
+	config += `			control = "bfd"` + "\n"
+	config += `			description = "My Description"` + "\n"
+	config += `			preference = 10` + "\n"
+	config += `			tag = 100` + "\n"
 	config += `			next_hops = [{` + "\n"
 	config += `				interface_id = "unspecified"` + "\n"
 	config += `				address = "a:b::c:d/128"` + "\n"
@@ -104,6 +131,8 @@ func testAccDataSourceNxosIPv6Config() string {
 	config += `				object = 10` + "\n"
 	config += `				preference = 123` + "\n"
 	config += `				tag = 10` + "\n"
+	config += `				name = "nh-name"` + "\n"
+	config += `				rewrite_encapsulation = "vlan-1"` + "\n"
 	config += `			}]` + "\n"
 	config += `		}]` + "\n"
 	config += `		interfaces = [{` + "\n"
@@ -119,6 +148,9 @@ func testAccDataSourceNxosIPv6Config() string {
 	config += `				address = "2001:db8:3333:4444:5555:6666:7777:8888"` + "\n"
 	config += `				type = "primary"` + "\n"
 	config += `				tag = 1234` + "\n"
+	config += `				control = "anycast"` + "\n"
+	config += `				preference = 10` + "\n"
+	config += `				vpc_peer = "2001:db8::1"` + "\n"
 	config += `			}]` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"

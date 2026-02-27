@@ -77,6 +77,52 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"access_list_match_local": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Access-List Match Local.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"control": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("stateful-ha").String,
+				Optional:            true,
+			},
+			"drop_nd_fragments": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Drop ND Fragments.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"queue_packets": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Queue-packets.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"static_neighbor_outside_subnet": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Static Neighbor Outside Subnet.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"switch_packets": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Switch-packets.").AddStringEnumDescription("disabled", "all", "lla").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disabled", "all", "lla"),
+				},
+			},
 			"vrfs": schema.ListNestedAttribute{
 				MarkdownDescription: "List of IPv6 VRF configurations.",
 				Optional:            true,
@@ -99,6 +145,28 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 										Required:            true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplace(),
+										},
+									},
+									"control": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Controls.").AddStringEnumDescription("pervasive", "bfd").String,
+										Optional:            true,
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+										Optional:            true,
+									},
+									"preference": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Preference.").AddIntegerRangeDescription(1, 255).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 255),
+										},
+									},
+									"tag": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Tag.").AddIntegerRangeDescription(0, 4294967295).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 4294967295),
 										},
 									},
 									"next_hops": schema.ListNestedAttribute{
@@ -151,6 +219,14 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 													Validators: []validator.Int64{
 														int64validator.Between(0, 4294967295),
 													},
+												},
+												"name": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Next hop name.").String,
+													Optional:            true,
+												},
+												"rewrite_encapsulation": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Rewrite Encapsulation.").String,
+													Optional:            true,
 												},
 											},
 										},
@@ -241,6 +317,35 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 													Validators: []validator.Int64{
 														int64validator.Between(0, 4294967295),
 													},
+												},
+												"aggregate_prefix_length": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Prefix-Length for AM Route Aggregation.").AddIntegerRangeDescription(0, 127).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(0, 127),
+													},
+												},
+												"control": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("pervasive", "fabric-aware", "eui64", "anycast").String,
+													Optional:            true,
+												},
+												"preference": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Preference.").AddIntegerRangeDescription(0, 255).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(0, 255),
+													},
+												},
+												"use_bia": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Use Interface MAC Address.").AddStringEnumDescription("enabled", "disabled").String,
+													Optional:            true,
+													Validators: []validator.String{
+														stringvalidator.OneOf("enabled", "disabled"),
+													},
+												},
+												"vpc_peer": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("VPC Peer.").String,
+													Optional:            true,
 												},
 											},
 										},

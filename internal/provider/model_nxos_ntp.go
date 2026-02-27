@@ -26,6 +26,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -37,18 +38,29 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type NTP struct {
-	Device  types.String `tfsdk:"device"`
-	Dn      types.String `tfsdk:"id"`
-	Servers []NTPServers `tfsdk:"servers"`
+	Device              types.String `tfsdk:"device"`
+	Dn                  types.String `tfsdk:"id"`
+	AdminState          types.String `tfsdk:"admin_state"`
+	AllowControl        types.String `tfsdk:"allow_control"`
+	AllowPrivate        types.String `tfsdk:"allow_private"`
+	AuthenticationState types.String `tfsdk:"authentication_state"`
+	Logging             types.String `tfsdk:"logging"`
+	LoggingLevel        types.String `tfsdk:"logging_level"`
+	Master              types.String `tfsdk:"master"`
+	MasterStratum       types.Int64  `tfsdk:"master_stratum"`
+	Passive             types.String `tfsdk:"passive"`
+	RateLimit           types.Int64  `tfsdk:"rate_limit"`
+	Servers             []NTPServers `tfsdk:"servers"`
 }
 
 type NTPServers struct {
-	Name    types.String `tfsdk:"name"`
-	Vrf     types.String `tfsdk:"vrf"`
-	Type    types.String `tfsdk:"type"`
-	KeyId   types.Int64  `tfsdk:"key_id"`
-	MinPoll types.Int64  `tfsdk:"min_poll"`
-	MaxPoll types.Int64  `tfsdk:"max_poll"`
+	Name      types.String `tfsdk:"name"`
+	Vrf       types.String `tfsdk:"vrf"`
+	Type      types.String `tfsdk:"type"`
+	KeyId     types.Int64  `tfsdk:"key_id"`
+	MinPoll   types.Int64  `tfsdk:"min_poll"`
+	MaxPoll   types.Int64  `tfsdk:"max_poll"`
+	Preferred types.Bool   `tfsdk:"preferred"`
 }
 
 type NTPIdentity struct {
@@ -94,6 +106,36 @@ func (data NTP) getClassName() string {
 func (data NTP) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
+	}
+	if (!data.AllowControl.IsUnknown() && !data.AllowControl.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"allowControl", data.AllowControl.ValueString())
+	}
+	if (!data.AllowPrivate.IsUnknown() && !data.AllowPrivate.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"allowPrivate", data.AllowPrivate.ValueString())
+	}
+	if (!data.AuthenticationState.IsUnknown() && !data.AuthenticationState.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authSt", data.AuthenticationState.ValueString())
+	}
+	if (!data.Logging.IsUnknown() && !data.Logging.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"logging", data.Logging.ValueString())
+	}
+	if (!data.LoggingLevel.IsUnknown() && !data.LoggingLevel.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"loggingLevel", data.LoggingLevel.ValueString())
+	}
+	if (!data.Master.IsUnknown() && !data.Master.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"master", data.Master.ValueString())
+	}
+	if (!data.MasterStratum.IsUnknown() && !data.MasterStratum.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"masterStratum", strconv.FormatInt(data.MasterStratum.ValueInt64(), 10))
+	}
+	if (!data.Passive.IsUnknown() && !data.Passive.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"passive", data.Passive.ValueString())
+	}
+	if (!data.RateLimit.IsUnknown() && !data.RateLimit.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rateLimit", strconv.FormatInt(data.RateLimit.ValueInt64(), 10))
+	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	for _, child := range data.Servers {
@@ -116,6 +158,9 @@ func (data NTP) toBody() nxos.Body {
 		if (!child.MaxPoll.IsUnknown() && !child.MaxPoll.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "maxPoll", strconv.FormatInt(child.MaxPoll.ValueInt64(), 10))
 		}
+		if (!child.Preferred.IsUnknown() && !child.Preferred.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "preferred", strconv.FormatBool(child.Preferred.ValueBool()))
+		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.datetimeNtpProvider.attributes", attrs)
 	}
 
@@ -127,6 +172,16 @@ func (data NTP) toBody() nxos.Body {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *NTP) fromBody(res gjson.Result) {
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	data.AllowControl = types.StringValue(res.Get(data.getClassName() + ".attributes.allowControl").String())
+	data.AllowPrivate = types.StringValue(res.Get(data.getClassName() + ".attributes.allowPrivate").String())
+	data.AuthenticationState = types.StringValue(res.Get(data.getClassName() + ".attributes.authSt").String())
+	data.Logging = types.StringValue(res.Get(data.getClassName() + ".attributes.logging").String())
+	data.LoggingLevel = types.StringValue(res.Get(data.getClassName() + ".attributes.loggingLevel").String())
+	data.Master = types.StringValue(res.Get(data.getClassName() + ".attributes.master").String())
+	data.MasterStratum = types.Int64Value(res.Get(data.getClassName() + ".attributes.masterStratum").Int())
+	data.Passive = types.StringValue(res.Get(data.getClassName() + ".attributes.passive").String())
+	data.RateLimit = types.Int64Value(res.Get(data.getClassName() + ".attributes.rateLimit").Int())
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
 			v.ForEach(
@@ -139,6 +194,7 @@ func (data *NTP) fromBody(res gjson.Result) {
 						child.KeyId = types.Int64Value(value.Get("attributes.keyId").Int())
 						child.MinPoll = types.Int64Value(value.Get("attributes.minPoll").Int())
 						child.MaxPoll = types.Int64Value(value.Get("attributes.maxPoll").Int())
+						child.Preferred = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.preferred").String()))
 						data.Servers = append(data.Servers, child)
 					}
 					return true
@@ -154,6 +210,56 @@ func (data *NTP) fromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *NTP) updateFromBody(res gjson.Result) {
+	if !data.AdminState.IsNull() {
+		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	} else {
+		data.AdminState = types.StringNull()
+	}
+	if !data.AllowControl.IsNull() {
+		data.AllowControl = types.StringValue(res.Get(data.getClassName() + ".attributes.allowControl").String())
+	} else {
+		data.AllowControl = types.StringNull()
+	}
+	if !data.AllowPrivate.IsNull() {
+		data.AllowPrivate = types.StringValue(res.Get(data.getClassName() + ".attributes.allowPrivate").String())
+	} else {
+		data.AllowPrivate = types.StringNull()
+	}
+	if !data.AuthenticationState.IsNull() {
+		data.AuthenticationState = types.StringValue(res.Get(data.getClassName() + ".attributes.authSt").String())
+	} else {
+		data.AuthenticationState = types.StringNull()
+	}
+	if !data.Logging.IsNull() {
+		data.Logging = types.StringValue(res.Get(data.getClassName() + ".attributes.logging").String())
+	} else {
+		data.Logging = types.StringNull()
+	}
+	if !data.LoggingLevel.IsNull() {
+		data.LoggingLevel = types.StringValue(res.Get(data.getClassName() + ".attributes.loggingLevel").String())
+	} else {
+		data.LoggingLevel = types.StringNull()
+	}
+	if !data.Master.IsNull() {
+		data.Master = types.StringValue(res.Get(data.getClassName() + ".attributes.master").String())
+	} else {
+		data.Master = types.StringNull()
+	}
+	if !data.MasterStratum.IsNull() {
+		data.MasterStratum = types.Int64Value(res.Get(data.getClassName() + ".attributes.masterStratum").Int())
+	} else {
+		data.MasterStratum = types.Int64Null()
+	}
+	if !data.Passive.IsNull() {
+		data.Passive = types.StringValue(res.Get(data.getClassName() + ".attributes.passive").String())
+	} else {
+		data.Passive = types.StringNull()
+	}
+	if !data.RateLimit.IsNull() {
+		data.RateLimit = types.Int64Value(res.Get(data.getClassName() + ".attributes.rateLimit").Int())
+	} else {
+		data.RateLimit = types.Int64Null()
+	}
 	for c := range data.Servers {
 		var rdatetimeNtpProvider gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -195,6 +301,11 @@ func (data *NTP) updateFromBody(res gjson.Result) {
 			data.Servers[c].MaxPoll = types.Int64Value(rdatetimeNtpProvider.Get("datetimeNtpProvider.attributes.maxPoll").Int())
 		} else {
 			data.Servers[c].MaxPoll = types.Int64Null()
+		}
+		if !data.Servers[c].Preferred.IsNull() {
+			data.Servers[c].Preferred = types.BoolValue(helpers.ParseNxosBoolean(rdatetimeNtpProvider.Get("datetimeNtpProvider.attributes.preferred").String()))
+		} else {
+			data.Servers[c].Preferred = types.BoolNull()
 		}
 	}
 }

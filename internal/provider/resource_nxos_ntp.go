@@ -77,6 +77,76 @@ func (r *NTPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("A property that indicates if the NTP protocol is enabled or disabled.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"allow_control": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow Control Mode NTP Packets.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"allow_private": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow Private Mode NTP Packets.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"authentication_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("A property that indicates if the Datetime policy authentication is enabled or disabled.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"logging": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("NTP Logging Status.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"logging_level": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("NTP Logging Level.").AddStringEnumDescription("emergency", "alert", "critical", "error", "warning", "notif", "inform", "debug").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("emergency", "alert", "critical", "error", "warning", "notif", "inform", "debug"),
+				},
+			},
+			"master": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("NTP Master Configuration.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"master_stratum": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("NTP Master Stratum Level.").AddIntegerRangeDescription(1, 15).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 15),
+				},
+			},
+			"passive": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable/Disable Passive NTP Associations.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"rate_limit": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Rate-Limit NTP Control Mode Packets.").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
 			"servers": schema.ListNestedAttribute{
 				MarkdownDescription: "List of NTP servers or peers.",
 				Optional:            true,
@@ -120,6 +190,10 @@ func (r *NTPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							Validators: []validator.Int64{
 								int64validator.Between(4, 16),
 							},
+						},
+						"preferred": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("A property that indicates if the NTP server is preferred. Only one preferred server is allowed.").String,
+							Optional:            true,
 						},
 					},
 				},

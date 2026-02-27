@@ -23,13 +23,24 @@ This resource can manage the NTP configuration on NX-OS devices, including NTP s
 
 ```terraform
 resource "nxos_ntp" "example" {
+  admin_state          = "enabled"
+  allow_control        = "enabled"
+  allow_private        = "enabled"
+  authentication_state = "enabled"
+  logging              = "enabled"
+  logging_level        = "error"
+  master               = "enabled"
+  master_stratum       = 4
+  passive              = "enabled"
+  rate_limit           = 5
   servers = [{
-    name     = "1.2.3.4"
-    vrf      = "management"
-    type     = "server"
-    key_id   = 10
-    min_poll = 4
-    max_poll = 6
+    name      = "1.2.3.4"
+    vrf       = "management"
+    type      = "server"
+    key_id    = 10
+    min_poll  = 4
+    max_poll  = 6
+    preferred = true
   }]
 }
 ```
@@ -39,7 +50,27 @@ resource "nxos_ntp" "example" {
 
 ### Optional
 
+- `admin_state` (String) A property that indicates if the NTP protocol is enabled or disabled.
+  - Choices: `enabled`, `disabled`
+- `allow_control` (String) Allow Control Mode NTP Packets.
+  - Choices: `enabled`, `disabled`
+- `allow_private` (String) Allow Private Mode NTP Packets.
+  - Choices: `enabled`, `disabled`
+- `authentication_state` (String) A property that indicates if the Datetime policy authentication is enabled or disabled.
+  - Choices: `enabled`, `disabled`
 - `device` (String) A device name from the provider configuration.
+- `logging` (String) NTP Logging Status.
+  - Choices: `enabled`, `disabled`
+- `logging_level` (String) NTP Logging Level.
+  - Choices: `emergency`, `alert`, `critical`, `error`, `warning`, `notif`, `inform`, `debug`
+- `master` (String) NTP Master Configuration.
+  - Choices: `enabled`, `disabled`
+- `master_stratum` (Number) NTP Master Stratum Level.
+  - Range: `1`-`15`
+- `passive` (String) Enable/Disable Passive NTP Associations.
+  - Choices: `enabled`, `disabled`
+- `rate_limit` (Number) Rate-Limit NTP Control Mode Packets.
+  - Range: `1`-`65535`
 - `servers` (Attributes List) List of NTP servers or peers. (see [below for nested schema](#nestedatt--servers))
 
 ### Read-Only
@@ -61,6 +92,7 @@ Optional:
   - Range: `4`-`16`
 - `min_poll` (Number) NTP minimum interval default in seconds. Possible range is from `4` to `16`.
   - Range: `4`-`16`
+- `preferred` (Boolean) A property that indicates if the NTP server is preferred. Only one preferred server is allowed.
 - `type` (String) NTP provider type. Possible values are `server` or `peer`.
   - Choices: `peer`, `server`, `invalid`
 - `vrf` (String) Identifies the VRF for the NTP providers.

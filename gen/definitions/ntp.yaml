@@ -7,6 +7,91 @@ ds_description: This data source can read the NTP configuration on NX-OS devices
 res_description: This resource can manage the NTP configuration on NX-OS devices, including NTP servers and peers with VRF, authentication key, and polling interval settings.
 doc_path: System/datetime:ClkPol/
 doc_category: System
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'A property that indicates if the NTP protocol is enabled or disabled.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+  - nxos_name: allowControl
+    tf_name: allow_control
+    type: String
+    description: 'Allow Control Mode NTP Packets.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+  - nxos_name: allowPrivate
+    tf_name: allow_private
+    type: String
+    description: 'Allow Private Mode NTP Packets.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+  - nxos_name: authSt
+    tf_name: authentication_state
+    type: String
+    description: 'A property that indicates if the Datetime policy authentication is enabled or disabled.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+  - nxos_name: logging
+    tf_name: logging
+    type: String
+    description: 'NTP Logging Status.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+  - nxos_name: loggingLevel
+    tf_name: logging_level
+    type: String
+    description: 'NTP Logging Level.'
+    enum_values:
+      - emergency
+      - alert
+      - critical
+      - error
+      - warning
+      - notif
+      - inform
+      - debug
+    example: error
+  - nxos_name: master
+    tf_name: master
+    type: String
+    description: 'NTP Master Configuration.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+  - nxos_name: masterStratum
+    tf_name: master_stratum
+    type: Int64
+    description: 'NTP Master Stratum Level.'
+    min_int: 1
+    max_int: 15
+    example: 4
+  - nxos_name: passive
+    tf_name: passive
+    type: String
+    description: 'Enable/Disable Passive NTP Associations.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+  - nxos_name: rateLimit
+    tf_name: rate_limit
+    type: Int64
+    description: 'Rate-Limit NTP Control Mode Packets.'
+    min_int: 1
+    max_int: 65535
+    example: 5
 child_classes:
   - class_name: datetimeNtpProvider
     rn: prov-[%s]
@@ -56,3 +141,8 @@ child_classes:
         min_int: 4
         max_int: 16
         example: 6
+      - nxos_name: preferred
+        tf_name: preferred
+        type: Bool
+        description: 'A property that indicates if the NTP server is preferred. Only one preferred server is allowed.'
+        example: true

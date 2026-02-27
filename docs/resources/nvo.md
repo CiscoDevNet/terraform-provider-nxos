@@ -26,25 +26,40 @@ This resource can manage the NVO (Network Virtualization Overlay) configuration 
 
 ```terraform
 resource "nxos_nvo" "example" {
+  vxlan_udp_port             = 4789
+  vxlan_udp_source_port_mode = "rfc"
   nve_interfaces = [{
-    id                               = 1
-    admin_state                      = "enabled"
-    advertise_virtual_mac            = true
-    hold_down_time                   = 60
-    host_reachability_protocol       = "bgp"
-    ingress_replication_protocol_bgp = true
-    multicast_group_l2               = "0.0.0.0"
-    multicast_group_l3               = "0.0.0.0"
-    multisite_source_interface       = "unspecified"
-    source_interface                 = "lo0"
-    suppress_arp                     = true
-    suppress_mac_route               = false
+    id                                 = 1
+    admin_state                        = "enabled"
+    advertise_virtual_mac              = true
+    hold_down_time                     = 60
+    host_reachability_protocol         = "bgp"
+    ingress_replication_protocol_bgp   = true
+    multicast_group_l2                 = "0.0.0.0"
+    multicast_group_l3                 = "0.0.0.0"
+    multisite_source_interface         = "unspecified"
+    source_interface                   = "lo0"
+    suppress_arp                       = true
+    suppress_mac_route                 = false
+    anycast_source_interface           = "unspecified"
+    configuration_source               = "cli"
+    controller_id                      = 0
+    description                        = "My NVE interface"
+    encapsulation_type                 = "vxlan"
+    fabric_ready_time                  = 120
+    multicast_routing_source_interface = "unspecified"
+    multisite_virtual_mac              = "00:00:00:00:00:00"
+    suppress_nd                        = true
+    virtual_mac                        = "00:00:00:00:00:00"
     vnis = [{
       vni                           = 103100
       associate_vrf                 = false
       multicast_group               = "0.0.0.0"
       multisite_ingress_replication = "disable"
       suppress_arp                  = "off"
+      legacy_mode                   = false
+      multisite_multicast_group     = "0.0.0.0"
+      spine_anycast_gateway         = false
       ingress_replication_protocol  = "bgp"
     }]
   }]
@@ -58,6 +73,10 @@ resource "nxos_nvo" "example" {
 
 - `device` (String) A device name from the provider configuration.
 - `nve_interfaces` (Attributes List) NVE interface configuration. (see [below for nested schema](#nestedatt--nve_interfaces))
+- `vxlan_udp_port` (Number) VxLAN UDP Port. Allowed value range is 1024-65535.
+  - Range: `1024`-`65535`
+- `vxlan_udp_source_port_mode` (String) VxLAN UDP Source Port Mode.
+  - Choices: `low`, `high`, `rfc`
 
 ### Read-Only
 
@@ -75,6 +94,16 @@ Optional:
 - `admin_state` (String) Administrative Up or Down state of the NVE.
   - Choices: `enabled`, `disabled`
 - `advertise_virtual_mac` (Boolean) Enable or disable Virtual MAC Advertisement in VPC mode.
+- `anycast_source_interface` (String) Anycast Source Interface associated with the NVE. Must match first field in the output of `show intf brief`.
+- `configuration_source` (String) Enable or disable VxLAN configuration via controller.
+  - Choices: `unknown`, `cli`, `controller`
+- `controller_id` (Number) Controller ID (applicable when host reachability proto is controller).
+  - Range: `0`-`4294967295`
+- `description` (String) Description for the NVE.
+- `encapsulation_type` (String) Encapsulation Type.
+  - Choices: `unknown`, `vxlan`, `vxlan-tun-ctrl-frame`, `vxlan-tun-ctrl-frame-lacp`, `vxlan-tun-ctrl-frame-stp`, `dot1q`, `dot1q-tun-ctrl-frame`, `dot1q-tun-ctrl-frame-lacp`, `dot1q-tun-ctrl-frame-stp`
+- `fabric_ready_time` (Number) Time in seconds after which fabric convergence is signalled.
+  - Range: `0`-`1200`
 - `hold_down_time` (Number) Hold Down Time.
   - Range: `1`-`1500`
 - `host_reachability_protocol` (String) Host Reachability Protocol.
@@ -82,10 +111,14 @@ Optional:
 - `ingress_replication_protocol_bgp` (Boolean) VxLAN Ingress Replication Protocol BGP.
 - `multicast_group_l2` (String) Base multicast group address for L2.
 - `multicast_group_l3` (String) Base multicast group address for L3.
+- `multicast_routing_source_interface` (String) Multicast routing source interface.
 - `multisite_source_interface` (String) Interface representing the Multisite Border Gateway. Must match first field in the output of `show int brief`.
+- `multisite_virtual_mac` (String) Custom Multisite Virtual Router MAC address configuration.
 - `source_interface` (String) Source Interface associated with the NVE. Must match first field in the output of `show int brief`.
 - `suppress_arp` (Boolean) Suppress ARP.
 - `suppress_mac_route` (Boolean) Suppress MAC Route.
+- `suppress_nd` (Boolean) Suppress ND enabled for those VNIs that have suppress ARP already enabled on them.
+- `virtual_mac` (String) Custom Virtual Router MAC address configuration for VPC VxLAN.
 - `vnis` (Attributes List) List of VNIs. (see [below for nested schema](#nestedatt--nve_interfaces--vnis))
 
 <a id="nestedatt--nve_interfaces--vnis"></a>
@@ -101,9 +134,12 @@ Optional:
 - `associate_vrf` (Boolean) Configures VNI(s) as L3 VNI.
 - `ingress_replication_protocol` (String) Configure VxLAN Ingress Replication mode.
   - Choices: `unknown`, `bgp`, `static`
+- `legacy_mode` (Boolean) Indicates whether Multicast group configuration for the VNI(s) is configured in legacy mode or not.
 - `multicast_group` (String) Configures multicast group address for VNI(s).
 - `multisite_ingress_replication` (String) Enable or disable Multisite Ingress Replication for VNI(s).
   - Choices: `disable`, `enable`, `enableOptimized`
+- `multisite_multicast_group` (String) Configures multisite multicast group address for VNI(s).
+- `spine_anycast_gateway` (Boolean) Enable or disable spine anycast gateway for VNI(s).
 - `suppress_arp` (String) Enable or disable ARP suppression for VNI(s).
   - Choices: `off`, `enabled`, `disabled`
 

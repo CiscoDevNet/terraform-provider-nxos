@@ -78,6 +78,20 @@ func (r *NVOResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"vxlan_udp_port": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("VxLAN UDP Port. Allowed value range is 1024-65535.").AddIntegerRangeDescription(1024, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1024, 65535),
+				},
+			},
+			"vxlan_udp_source_port_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("VxLAN UDP Source Port Mode.").AddStringEnumDescription("low", "high", "rfc").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("low", "high", "rfc"),
+				},
+			},
 			"nve_interfaces": schema.ListNestedAttribute{
 				MarkdownDescription: "NVE interface configuration.",
 				Optional:            true,
@@ -143,6 +157,58 @@ func (r *NVOResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							MarkdownDescription: helpers.NewAttributeDescription("Suppress MAC Route.").String,
 							Optional:            true,
 						},
+						"anycast_source_interface": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Anycast Source Interface associated with the NVE. Must match first field in the output of `show intf brief`.").String,
+							Optional:            true,
+						},
+						"configuration_source": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable or disable VxLAN configuration via controller.").AddStringEnumDescription("unknown", "cli", "controller").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("unknown", "cli", "controller"),
+							},
+						},
+						"controller_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Controller ID (applicable when host reachability proto is controller).").AddIntegerRangeDescription(0, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description for the NVE.").String,
+							Optional:            true,
+						},
+						"encapsulation_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Encapsulation Type.").AddStringEnumDescription("unknown", "vxlan", "vxlan-tun-ctrl-frame", "vxlan-tun-ctrl-frame-lacp", "vxlan-tun-ctrl-frame-stp", "dot1q", "dot1q-tun-ctrl-frame", "dot1q-tun-ctrl-frame-lacp", "dot1q-tun-ctrl-frame-stp").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("unknown", "vxlan", "vxlan-tun-ctrl-frame", "vxlan-tun-ctrl-frame-lacp", "vxlan-tun-ctrl-frame-stp", "dot1q", "dot1q-tun-ctrl-frame", "dot1q-tun-ctrl-frame-lacp", "dot1q-tun-ctrl-frame-stp"),
+							},
+						},
+						"fabric_ready_time": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Time in seconds after which fabric convergence is signalled.").AddIntegerRangeDescription(0, 1200).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 1200),
+							},
+						},
+						"multicast_routing_source_interface": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Multicast routing source interface.").String,
+							Optional:            true,
+						},
+						"multisite_virtual_mac": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Custom Multisite Virtual Router MAC address configuration.").String,
+							Optional:            true,
+						},
+						"suppress_nd": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Suppress ND enabled for those VNIs that have suppress ARP already enabled on them.").String,
+							Optional:            true,
+						},
+						"virtual_mac": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Custom Virtual Router MAC address configuration for VPC VxLAN.").String,
+							Optional:            true,
+						},
 						"vnis": schema.ListNestedAttribute{
 							MarkdownDescription: "List of VNIs.",
 							Optional:            true,
@@ -179,6 +245,18 @@ func (r *NVOResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 										Validators: []validator.String{
 											stringvalidator.OneOf("off", "enabled", "disabled"),
 										},
+									},
+									"legacy_mode": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Indicates whether Multicast group configuration for the VNI(s) is configured in legacy mode or not.").String,
+										Optional:            true,
+									},
+									"multisite_multicast_group": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Configures multisite multicast group address for VNI(s).").String,
+										Optional:            true,
+									},
+									"spine_anycast_gateway": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Enable or disable spine anycast gateway for VNI(s).").String,
+										Optional:            true,
 									},
 									"ingress_replication_protocol": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Configure VxLAN Ingress Replication mode.").AddStringEnumDescription("unknown", "bgp", "static").String,

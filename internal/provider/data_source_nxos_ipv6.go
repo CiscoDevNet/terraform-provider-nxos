@@ -68,35 +68,31 @@ func (d *IPv6DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
+			"access_list_match_local": schema.StringAttribute{
+				MarkdownDescription: "Access-List Match Local.",
+				Computed:            true,
+			},
 			"admin_state": schema.StringAttribute{
 				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
-			"instance_access_list_match_local": schema.StringAttribute{
-				MarkdownDescription: "Access-List Match Local.",
-				Computed:            true,
-			},
-			"instance_admin_state": schema.StringAttribute{
-				MarkdownDescription: "The administrative state of the object or policy.",
-				Computed:            true,
-			},
-			"instance_control": schema.StringAttribute{
+			"control": schema.StringAttribute{
 				MarkdownDescription: "The control state.",
 				Computed:            true,
 			},
-			"instance_drop_nd_fragments": schema.StringAttribute{
+			"drop_nd_fragments": schema.StringAttribute{
 				MarkdownDescription: "Drop ND Fragments.",
 				Computed:            true,
 			},
-			"instance_queue_packets": schema.StringAttribute{
+			"queue_packets": schema.StringAttribute{
 				MarkdownDescription: "Queue-packets.",
 				Computed:            true,
 			},
-			"instance_static_neighbor_outside_subnet": schema.StringAttribute{
+			"static_neighbor_outside_subnet": schema.StringAttribute{
 				MarkdownDescription: "Static Neighbor Outside Subnet.",
 				Computed:            true,
 			},
-			"instance_switch_packets": schema.StringAttribute{
+			"switch_packets": schema.StringAttribute{
 				MarkdownDescription: "Switch-packets.",
 				Computed:            true,
 			},
@@ -167,7 +163,7 @@ func (d *IPv6DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 													MarkdownDescription: "Tag value.",
 													Computed:            true,
 												},
-												"route_name": schema.StringAttribute{
+												"name": schema.StringAttribute{
 													MarkdownDescription: "Next hop name.",
 													Computed:            true,
 												},

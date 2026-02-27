@@ -77,6 +77,13 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"access_list_match_local": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Access-List Match Local.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
 			"admin_state": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
@@ -84,46 +91,32 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"instance_access_list_match_local": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Access-List Match Local.").AddStringEnumDescription("enabled", "disabled").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("enabled", "disabled"),
-				},
-			},
-			"instance_admin_state": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("enabled", "disabled"),
-				},
-			},
-			"instance_control": schema.StringAttribute{
+			"control": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("stateful-ha").String,
 				Optional:            true,
 			},
-			"instance_drop_nd_fragments": schema.StringAttribute{
+			"drop_nd_fragments": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Drop ND Fragments.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"instance_queue_packets": schema.StringAttribute{
+			"queue_packets": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Queue-packets.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"instance_static_neighbor_outside_subnet": schema.StringAttribute{
+			"static_neighbor_outside_subnet": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Static Neighbor Outside Subnet.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"instance_switch_packets": schema.StringAttribute{
+			"switch_packets": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Switch-packets.").AddStringEnumDescription("disabled", "all", "lla").String,
 				Optional:            true,
 				Validators: []validator.String{
@@ -227,7 +220,7 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 														int64validator.Between(0, 4294967295),
 													},
 												},
-												"route_name": schema.StringAttribute{
+												"name": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Next hop name.").String,
 													Optional:            true,
 												},

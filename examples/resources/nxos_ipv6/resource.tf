@@ -1,12 +1,11 @@
 resource "nxos_ipv6" "example" {
-  admin_state                             = "enabled"
-  instance_access_list_match_local        = "enabled"
-  instance_admin_state                    = "enabled"
-  instance_control                        = "stateful-ha"
-  instance_drop_nd_fragments              = "enabled"
-  instance_queue_packets                  = "enabled"
-  instance_static_neighbor_outside_subnet = "enabled"
-  instance_switch_packets                 = "all"
+  access_list_match_local        = "enabled"
+  admin_state                    = "enabled"
+  control                        = "stateful-ha"
+  drop_nd_fragments              = "enabled"
+  queue_packets                  = "enabled"
+  static_neighbor_outside_subnet = "enabled"
+  switch_packets                 = "all"
   vrfs = [{
     name = "VRF1"
     static_routes = [{
@@ -23,7 +22,7 @@ resource "nxos_ipv6" "example" {
         object                = 10
         preference            = 123
         tag                   = 10
-        route_name            = "nh-name"
+        name                  = "nh-name"
         rewrite_encapsulation = "vlan-1"
       }]
     }]

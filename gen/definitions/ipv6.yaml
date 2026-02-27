@@ -7,15 +7,6 @@ ds_description: This data source can read the IPv6 configuration on NX-OS device
 res_description: This resource can manage the IPv6 configuration on NX-OS devices, including per-VRF static routes with next hops and interface addresses.
 doc_path: Layer%203/ipv6:Entity/
 doc_category: Routing
-attributes:
-  - nxos_name: adminSt
-    tf_name: admin_state
-    type: String
-    description: 'The administrative state of the object or policy.'
-    enum_values:
-      - enabled
-      - disabled
-    example: enabled
 child_classes:
   - class_name: ipv6Inst
     doc_path: Layer%203/ipv6:Inst/
@@ -26,7 +17,7 @@ child_classes:
     description: 'IPv6 instance.'
     attributes:
       - nxos_name: accessListMatchLocal
-        tf_name: instance_access_list_match_local
+        tf_name: access_list_match_local
         type: String
         description: 'Access-List Match Local.'
         enum_values:
@@ -34,7 +25,7 @@ child_classes:
           - disabled
         example: enabled
       - nxos_name: adminSt
-        tf_name: instance_admin_state
+        tf_name: admin_state
         type: String
         description: 'The administrative state of the object or policy.'
         enum_values:
@@ -42,7 +33,7 @@ child_classes:
           - disabled
         example: enabled
       - nxos_name: ctrl
-        tf_name: instance_control
+        tf_name: control
         type: String
         description: 'The control state.'
         allow_non_enum_values: true
@@ -50,7 +41,7 @@ child_classes:
           - stateful-ha
         example: stateful-ha
       - nxos_name: dropNdFragments
-        tf_name: instance_drop_nd_fragments
+        tf_name: drop_nd_fragments
         type: String
         description: 'Drop ND Fragments.'
         enum_values:
@@ -58,7 +49,7 @@ child_classes:
           - disabled
         example: enabled
       - nxos_name: queuePackets
-        tf_name: instance_queue_packets
+        tf_name: queue_packets
         type: String
         description: 'Queue-packets.'
         enum_values:
@@ -66,7 +57,7 @@ child_classes:
           - disabled
         example: enabled
       - nxos_name: staticNeighborOutsideSubnet
-        tf_name: instance_static_neighbor_outside_subnet
+        tf_name: static_neighbor_outside_subnet
         type: String
         description: 'Static Neighbor Outside Subnet.'
         enum_values:
@@ -74,7 +65,7 @@ child_classes:
           - disabled
         example: enabled
       - nxos_name: switchPackets
-        tf_name: instance_switch_packets
+        tf_name: switch_packets
         type: String
         description: 'Switch-packets.'
         enum_values:
@@ -192,7 +183,7 @@ child_classes:
                     max_int: 4294967295
                     example: 10
                   - nxos_name: rtname
-                    tf_name: route_name
+                    tf_name: name
                     type: String
                     description: 'Next hop name.'
                     example: 'nh-name'

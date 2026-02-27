@@ -31,14 +31,13 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosIPv6(t *testing.T) {
 	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "access_list_match_local", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "instance_access_list_match_local", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "instance_admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "instance_control", "stateful-ha"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "instance_drop_nd_fragments", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "instance_queue_packets", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "instance_static_neighbor_outside_subnet", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "instance_switch_packets", "all"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "drop_nd_fragments", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "queue_packets", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "static_neighbor_outside_subnet", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "switch_packets", "all"))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv6.test", "vrfs.*", map[string]string{
 		"name": "VRF1",
 	}))
@@ -57,7 +56,7 @@ func TestAccDataSourceNxosIPv6(t *testing.T) {
 		"object":                "10",
 		"preference":            "123",
 		"tag":                   "10",
-		"route_name":            "nh-name",
+		"name":                  "nh-name",
 		"rewrite_encapsulation": "vlan-1",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ipv6.test", "vrfs.*.interfaces.*", map[string]string{
@@ -109,14 +108,13 @@ resource "nxos_rest" "PreReq0" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 func testAccDataSourceNxosIPv6Config() string {
 	config := `resource "nxos_ipv6" "test" {` + "\n"
+	config += `	access_list_match_local = "enabled"` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
-	config += `	instance_access_list_match_local = "enabled"` + "\n"
-	config += `	instance_admin_state = "enabled"` + "\n"
-	config += `	instance_control = "stateful-ha"` + "\n"
-	config += `	instance_drop_nd_fragments = "enabled"` + "\n"
-	config += `	instance_queue_packets = "enabled"` + "\n"
-	config += `	instance_static_neighbor_outside_subnet = "enabled"` + "\n"
-	config += `	instance_switch_packets = "all"` + "\n"
+	config += `	control = "stateful-ha"` + "\n"
+	config += `	drop_nd_fragments = "enabled"` + "\n"
+	config += `	queue_packets = "enabled"` + "\n"
+	config += `	static_neighbor_outside_subnet = "enabled"` + "\n"
+	config += `	switch_packets = "all"` + "\n"
 	config += `	vrfs = [{` + "\n"
 	config += `		name = "VRF1"` + "\n"
 	config += `		static_routes = [{` + "\n"
@@ -133,7 +131,7 @@ func testAccDataSourceNxosIPv6Config() string {
 	config += `				object = 10` + "\n"
 	config += `				preference = 123` + "\n"
 	config += `				tag = 10` + "\n"
-	config += `				route_name = "nh-name"` + "\n"
+	config += `				name = "nh-name"` + "\n"
 	config += `				rewrite_encapsulation = "vlan-1"` + "\n"
 	config += `			}]` + "\n"
 	config += `		}]` + "\n"

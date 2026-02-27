@@ -37,17 +37,16 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type IPv6 struct {
-	Device                              types.String `tfsdk:"device"`
-	Dn                                  types.String `tfsdk:"id"`
-	AdminState                          types.String `tfsdk:"admin_state"`
-	InstanceAccessListMatchLocal        types.String `tfsdk:"instance_access_list_match_local"`
-	InstanceAdminState                  types.String `tfsdk:"instance_admin_state"`
-	InstanceControl                     types.String `tfsdk:"instance_control"`
-	InstanceDropNdFragments             types.String `tfsdk:"instance_drop_nd_fragments"`
-	InstanceQueuePackets                types.String `tfsdk:"instance_queue_packets"`
-	InstanceStaticNeighborOutsideSubnet types.String `tfsdk:"instance_static_neighbor_outside_subnet"`
-	InstanceSwitchPackets               types.String `tfsdk:"instance_switch_packets"`
-	Vrfs                                []IPv6Vrfs   `tfsdk:"vrfs"`
+	Device                      types.String `tfsdk:"device"`
+	Dn                          types.String `tfsdk:"id"`
+	AccessListMatchLocal        types.String `tfsdk:"access_list_match_local"`
+	AdminState                  types.String `tfsdk:"admin_state"`
+	Control                     types.String `tfsdk:"control"`
+	DropNdFragments             types.String `tfsdk:"drop_nd_fragments"`
+	QueuePackets                types.String `tfsdk:"queue_packets"`
+	StaticNeighborOutsideSubnet types.String `tfsdk:"static_neighbor_outside_subnet"`
+	SwitchPackets               types.String `tfsdk:"switch_packets"`
+	Vrfs                        []IPv6Vrfs   `tfsdk:"vrfs"`
 }
 
 type IPv6Vrfs struct {
@@ -73,7 +72,7 @@ type IPv6VrfsStaticRoutesNextHops struct {
 	Object               types.Int64  `tfsdk:"object"`
 	Preference           types.Int64  `tfsdk:"preference"`
 	Tag                  types.Int64  `tfsdk:"tag"`
-	RouteName            types.String `tfsdk:"route_name"`
+	Name                 types.String `tfsdk:"name"`
 	RewriteEncapsulation types.String `tfsdk:"rewrite_encapsulation"`
 }
 
@@ -159,35 +158,32 @@ func (data IPv6) getClassName() string {
 func (data IPv6) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
-	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipv6Inst"
 		attrs = "{}"
-		if (!data.InstanceAccessListMatchLocal.IsUnknown() && !data.InstanceAccessListMatchLocal.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "accessListMatchLocal", data.InstanceAccessListMatchLocal.ValueString())
+		if (!data.AccessListMatchLocal.IsUnknown() && !data.AccessListMatchLocal.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "accessListMatchLocal", data.AccessListMatchLocal.ValueString())
 		}
-		if (!data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
+		if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.AdminState.ValueString())
 		}
-		if (!data.InstanceControl.IsUnknown() && !data.InstanceControl.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "ctrl", data.InstanceControl.ValueString())
+		if (!data.Control.IsUnknown() && !data.Control.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "ctrl", data.Control.ValueString())
 		}
-		if (!data.InstanceDropNdFragments.IsUnknown() && !data.InstanceDropNdFragments.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "dropNdFragments", data.InstanceDropNdFragments.ValueString())
+		if (!data.DropNdFragments.IsUnknown() && !data.DropNdFragments.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "dropNdFragments", data.DropNdFragments.ValueString())
 		}
-		if (!data.InstanceQueuePackets.IsUnknown() && !data.InstanceQueuePackets.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "queuePackets", data.InstanceQueuePackets.ValueString())
+		if (!data.QueuePackets.IsUnknown() && !data.QueuePackets.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "queuePackets", data.QueuePackets.ValueString())
 		}
-		if (!data.InstanceStaticNeighborOutsideSubnet.IsUnknown() && !data.InstanceStaticNeighborOutsideSubnet.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "staticNeighborOutsideSubnet", data.InstanceStaticNeighborOutsideSubnet.ValueString())
+		if (!data.StaticNeighborOutsideSubnet.IsUnknown() && !data.StaticNeighborOutsideSubnet.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "staticNeighborOutsideSubnet", data.StaticNeighborOutsideSubnet.ValueString())
 		}
-		if (!data.InstanceSwitchPackets.IsUnknown() && !data.InstanceSwitchPackets.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "switchPackets", data.InstanceSwitchPackets.ValueString())
+		if (!data.SwitchPackets.IsUnknown() && !data.SwitchPackets.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "switchPackets", data.SwitchPackets.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
@@ -244,8 +240,8 @@ func (data IPv6) toBody() nxos.Body {
 							if (!child.Tag.IsUnknown() && !child.Tag.IsNull()) || false {
 								attrs, _ = sjson.Set(attrs, "tag", strconv.FormatInt(child.Tag.ValueInt64(), 10))
 							}
-							if (!child.RouteName.IsUnknown() && !child.RouteName.IsNull()) || false {
-								attrs, _ = sjson.Set(attrs, "rtname", child.RouteName.ValueString())
+							if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "rtname", child.Name.ValueString())
 							}
 							if (!child.RewriteEncapsulation.IsUnknown() && !child.RewriteEncapsulation.IsNull()) || false {
 								attrs, _ = sjson.Set(attrs, "rwEncap", child.RewriteEncapsulation.ValueString())
@@ -326,7 +322,6 @@ func (data IPv6) toBody() nxos.Body {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *IPv6) fromBody(res gjson.Result) {
-	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	{
 		var ripv6Inst gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -339,13 +334,13 @@ func (data *IPv6) fromBody(res gjson.Result) {
 				return true
 			},
 		)
-		data.InstanceAccessListMatchLocal = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.accessListMatchLocal").String())
-		data.InstanceAdminState = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.adminSt").String())
-		data.InstanceControl = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.ctrl").String())
-		data.InstanceDropNdFragments = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.dropNdFragments").String())
-		data.InstanceQueuePackets = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.queuePackets").String())
-		data.InstanceStaticNeighborOutsideSubnet = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.staticNeighborOutsideSubnet").String())
-		data.InstanceSwitchPackets = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.switchPackets").String())
+		data.AccessListMatchLocal = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.accessListMatchLocal").String())
+		data.AdminState = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.adminSt").String())
+		data.Control = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.ctrl").String())
+		data.DropNdFragments = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.dropNdFragments").String())
+		data.QueuePackets = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.queuePackets").String())
+		data.StaticNeighborOutsideSubnet = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.staticNeighborOutsideSubnet").String())
+		data.SwitchPackets = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.switchPackets").String())
 		ripv6Inst.Get("ipv6Inst.children").ForEach(
 			func(_, v gjson.Result) bool {
 				v.ForEach(
@@ -377,7 +372,7 @@ func (data *IPv6) fromBody(res gjson.Result) {
 																	nestedChildipv6Nexthop.Object = types.Int64Value(nestedValue.Get("attributes.object").Int())
 																	nestedChildipv6Nexthop.Preference = types.Int64Value(nestedValue.Get("attributes.pref").Int())
 																	nestedChildipv6Nexthop.Tag = types.Int64Value(nestedValue.Get("attributes.tag").Int())
-																	nestedChildipv6Nexthop.RouteName = types.StringValue(nestedValue.Get("attributes.rtname").String())
+																	nestedChildipv6Nexthop.Name = types.StringValue(nestedValue.Get("attributes.rtname").String())
 																	nestedChildipv6Nexthop.RewriteEncapsulation = types.StringValue(nestedValue.Get("attributes.rwEncap").String())
 																	nestedChildipv6Route.NextHops = append(nestedChildipv6Route.NextHops, nestedChildipv6Nexthop)
 																}
@@ -455,11 +450,6 @@ func (data *IPv6) fromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *IPv6) updateFromBody(res gjson.Result) {
-	if !data.AdminState.IsNull() {
-		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
-	} else {
-		data.AdminState = types.StringNull()
-	}
 	var ripv6Inst gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -471,40 +461,40 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 			return true
 		},
 	)
-	if !data.InstanceAccessListMatchLocal.IsNull() {
-		data.InstanceAccessListMatchLocal = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.accessListMatchLocal").String())
+	if !data.AccessListMatchLocal.IsNull() {
+		data.AccessListMatchLocal = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.accessListMatchLocal").String())
 	} else {
-		data.InstanceAccessListMatchLocal = types.StringNull()
+		data.AccessListMatchLocal = types.StringNull()
 	}
-	if !data.InstanceAdminState.IsNull() {
-		data.InstanceAdminState = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.adminSt").String())
+	if !data.AdminState.IsNull() {
+		data.AdminState = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.adminSt").String())
 	} else {
-		data.InstanceAdminState = types.StringNull()
+		data.AdminState = types.StringNull()
 	}
-	if !data.InstanceControl.IsNull() {
-		data.InstanceControl = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.ctrl").String())
+	if !data.Control.IsNull() {
+		data.Control = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.ctrl").String())
 	} else {
-		data.InstanceControl = types.StringNull()
+		data.Control = types.StringNull()
 	}
-	if !data.InstanceDropNdFragments.IsNull() {
-		data.InstanceDropNdFragments = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.dropNdFragments").String())
+	if !data.DropNdFragments.IsNull() {
+		data.DropNdFragments = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.dropNdFragments").String())
 	} else {
-		data.InstanceDropNdFragments = types.StringNull()
+		data.DropNdFragments = types.StringNull()
 	}
-	if !data.InstanceQueuePackets.IsNull() {
-		data.InstanceQueuePackets = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.queuePackets").String())
+	if !data.QueuePackets.IsNull() {
+		data.QueuePackets = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.queuePackets").String())
 	} else {
-		data.InstanceQueuePackets = types.StringNull()
+		data.QueuePackets = types.StringNull()
 	}
-	if !data.InstanceStaticNeighborOutsideSubnet.IsNull() {
-		data.InstanceStaticNeighborOutsideSubnet = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.staticNeighborOutsideSubnet").String())
+	if !data.StaticNeighborOutsideSubnet.IsNull() {
+		data.StaticNeighborOutsideSubnet = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.staticNeighborOutsideSubnet").String())
 	} else {
-		data.InstanceStaticNeighborOutsideSubnet = types.StringNull()
+		data.StaticNeighborOutsideSubnet = types.StringNull()
 	}
-	if !data.InstanceSwitchPackets.IsNull() {
-		data.InstanceSwitchPackets = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.switchPackets").String())
+	if !data.SwitchPackets.IsNull() {
+		data.SwitchPackets = types.StringValue(ripv6Inst.Get("ipv6Inst.attributes.switchPackets").String())
 	} else {
-		data.InstanceSwitchPackets = types.StringNull()
+		data.SwitchPackets = types.StringNull()
 	}
 	for c := range data.Vrfs {
 		var ripv6Dom gjson.Result
@@ -607,10 +597,10 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 				} else {
 					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Tag = types.Int64Null()
 				}
-				if !data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].RouteName.IsNull() {
-					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].RouteName = types.StringValue(ripv6Nexthop.Get("ipv6Nexthop.attributes.rtname").String())
+				if !data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Name.IsNull() {
+					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Name = types.StringValue(ripv6Nexthop.Get("ipv6Nexthop.attributes.rtname").String())
 				} else {
-					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].RouteName = types.StringNull()
+					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Name = types.StringNull()
 				}
 				if !data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].RewriteEncapsulation.IsNull() {
 					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].RewriteEncapsulation = types.StringValue(ripv6Nexthop.Get("ipv6Nexthop.attributes.rwEncap").String())

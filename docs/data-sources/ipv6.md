@@ -40,15 +40,14 @@ data "nxos_ipv6" "example" {
 
 ### Read-Only
 
+- `access_list_match_local` (String) Access-List Match Local.
 - `admin_state` (String) The administrative state of the object or policy.
+- `control` (String) The control state.
+- `drop_nd_fragments` (String) Drop ND Fragments.
 - `id` (String) The distinguished name of the object.
-- `instance_access_list_match_local` (String) Access-List Match Local.
-- `instance_admin_state` (String) The administrative state of the object or policy.
-- `instance_control` (String) The control state.
-- `instance_drop_nd_fragments` (String) Drop ND Fragments.
-- `instance_queue_packets` (String) Queue-packets.
-- `instance_static_neighbor_outside_subnet` (String) Static Neighbor Outside Subnet.
-- `instance_switch_packets` (String) Switch-packets.
+- `queue_packets` (String) Queue-packets.
+- `static_neighbor_outside_subnet` (String) Static Neighbor Outside Subnet.
+- `switch_packets` (String) Switch-packets.
 - `vrfs` (Attributes List) List of IPv6 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
 
 <a id="nestedatt--vrfs"></a>
@@ -111,9 +110,9 @@ Read-Only:
 - `address` (String) Nexthop Address.
 - `description` (String) Description of the specified attribute.
 - `interface_id` (String) Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.
+- `name` (String) Next hop name.
 - `object` (Number) Object to be tracked.
 - `preference` (Number) Route preference.
 - `rewrite_encapsulation` (String) Rewrite Encapsulation.
-- `route_name` (String) Next hop name.
 - `tag` (Number) Tag value.
 - `vrf_name` (String) Nexthop VRF.

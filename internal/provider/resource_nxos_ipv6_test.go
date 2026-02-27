@@ -35,14 +35,13 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosIPv6(t *testing.T) {
 	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "access_list_match_local", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "instance_access_list_match_local", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "instance_admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "instance_control", "stateful-ha"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "instance_drop_nd_fragments", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "instance_queue_packets", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "instance_static_neighbor_outside_subnet", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "instance_switch_packets", "all"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "drop_nd_fragments", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "queue_packets", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "static_neighbor_outside_subnet", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "switch_packets", "all"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.name", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.prefix", "2001:db8:3333:4444:5555:6666:102:304/128"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.control", "bfd"))
@@ -56,7 +55,7 @@ func TestAccNxosIPv6(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.next_hops.0.object", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.next_hops.0.preference", "123"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.next_hops.0.tag", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.next_hops.0.route_name", "nh-name"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.next_hops.0.name", "nh-name"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.static_routes.0.next_hops.0.rewrite_encapsulation", "vlan-1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.interface_id", "eth1/10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.0.interfaces.0.auto_configuration", "disabled"))
@@ -139,14 +138,13 @@ func testAccNxosIPv6Config_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosIPv6Config_all() string {
 	config := `resource "nxos_ipv6" "test" {` + "\n"
+	config += `	access_list_match_local = "enabled"` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
-	config += `	instance_access_list_match_local = "enabled"` + "\n"
-	config += `	instance_admin_state = "enabled"` + "\n"
-	config += `	instance_control = "stateful-ha"` + "\n"
-	config += `	instance_drop_nd_fragments = "enabled"` + "\n"
-	config += `	instance_queue_packets = "enabled"` + "\n"
-	config += `	instance_static_neighbor_outside_subnet = "enabled"` + "\n"
-	config += `	instance_switch_packets = "all"` + "\n"
+	config += `	control = "stateful-ha"` + "\n"
+	config += `	drop_nd_fragments = "enabled"` + "\n"
+	config += `	queue_packets = "enabled"` + "\n"
+	config += `	static_neighbor_outside_subnet = "enabled"` + "\n"
+	config += `	switch_packets = "all"` + "\n"
 	config += `	vrfs = [{` + "\n"
 	config += `		name = "VRF1"` + "\n"
 	config += `		static_routes = [{` + "\n"
@@ -163,7 +161,7 @@ func testAccNxosIPv6Config_all() string {
 	config += `				object = 10` + "\n"
 	config += `				preference = 123` + "\n"
 	config += `				tag = 10` + "\n"
-	config += `				route_name = "nh-name"` + "\n"
+	config += `				name = "nh-name"` + "\n"
 	config += `				rewrite_encapsulation = "vlan-1"` + "\n"
 	config += `			}]` + "\n"
 	config += `		}]` + "\n"

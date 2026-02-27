@@ -28,14 +28,13 @@ This resource can manage the IPv6 configuration on NX-OS devices, including per-
 
 ```terraform
 resource "nxos_ipv6" "example" {
-  admin_state                             = "enabled"
-  instance_access_list_match_local        = "enabled"
-  instance_admin_state                    = "enabled"
-  instance_control                        = "stateful-ha"
-  instance_drop_nd_fragments              = "enabled"
-  instance_queue_packets                  = "enabled"
-  instance_static_neighbor_outside_subnet = "enabled"
-  instance_switch_packets                 = "all"
+  access_list_match_local        = "enabled"
+  admin_state                    = "enabled"
+  control                        = "stateful-ha"
+  drop_nd_fragments              = "enabled"
+  queue_packets                  = "enabled"
+  static_neighbor_outside_subnet = "enabled"
+  switch_packets                 = "all"
   vrfs = [{
     name = "VRF1"
     static_routes = [{
@@ -52,7 +51,7 @@ resource "nxos_ipv6" "example" {
         object                = 10
         preference            = 123
         tag                   = 10
-        route_name            = "nh-name"
+        name                  = "nh-name"
         rewrite_encapsulation = "vlan-1"
       }]
     }]
@@ -85,22 +84,20 @@ resource "nxos_ipv6" "example" {
 
 ### Optional
 
+- `access_list_match_local` (String) Access-List Match Local.
+  - Choices: `enabled`, `disabled`
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-- `device` (String) A device name from the provider configuration.
-- `instance_access_list_match_local` (String) Access-List Match Local.
-  - Choices: `enabled`, `disabled`
-- `instance_admin_state` (String) The administrative state of the object or policy.
-  - Choices: `enabled`, `disabled`
-- `instance_control` (String) The control state.
+- `control` (String) The control state.
   - Choices: `stateful-ha`
-- `instance_drop_nd_fragments` (String) Drop ND Fragments.
+- `device` (String) A device name from the provider configuration.
+- `drop_nd_fragments` (String) Drop ND Fragments.
   - Choices: `enabled`, `disabled`
-- `instance_queue_packets` (String) Queue-packets.
+- `queue_packets` (String) Queue-packets.
   - Choices: `enabled`, `disabled`
-- `instance_static_neighbor_outside_subnet` (String) Static Neighbor Outside Subnet.
+- `static_neighbor_outside_subnet` (String) Static Neighbor Outside Subnet.
   - Choices: `enabled`, `disabled`
-- `instance_switch_packets` (String) Switch-packets.
+- `switch_packets` (String) Switch-packets.
   - Choices: `disabled`, `all`, `lla`
 - `vrfs` (Attributes List) List of IPv6 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
 
@@ -199,12 +196,12 @@ Required:
 Optional:
 
 - `description` (String) Description of the specified attribute.
+- `name` (String) Next hop name.
 - `object` (Number) Object to be tracked.
   - Range: `0`-`4294967295`
 - `preference` (Number) Route preference.
   - Range: `0`-`255`
 - `rewrite_encapsulation` (String) Rewrite Encapsulation.
-- `route_name` (String) Next hop name.
 - `tag` (Number) Tag value.
   - Range: `0`-`4294967295`
 

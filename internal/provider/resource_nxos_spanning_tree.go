@@ -77,6 +77,76 @@ func (r *SpanningTreeResource) Schema(ctx context.Context, req resource.SchemaRe
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"instance_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"bridge_assurance": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable spanning-tree bridge assurance on all ports.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"control": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("normal", "stateful-ha").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("normal", "stateful-ha"),
+				},
+			},
+			"fcoe": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable spanning tree for fcoe vlan.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"l2_gateway_stp_domain_id": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Spanning tree L2 Gateway Domain Id.").AddIntegerRangeDescription(0, 200000000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 200000000),
+				},
+			},
+			"lc_issu": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Linecard ISSU type.").AddStringEnumDescription("default", "disruptive", "non-disruptive", "auto").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("default", "disruptive", "non-disruptive", "auto"),
+				},
+			},
+			"loopguard": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable loop guard on all ports.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Spanning tree mode.").AddStringEnumDescription("mst", "pvrst").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("mst", "pvrst"),
+				},
+			},
+			"pathcost_option": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Spanning tree pathcost options.").AddStringEnumDescription("auto", "short", "long").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("auto", "short", "long"),
+				},
+			},
 			"interfaces": schema.ListNestedAttribute{
 				MarkdownDescription: "List of Spanning Tree interfaces.",
 				Optional:            true,
@@ -136,6 +206,35 @@ func (r *SpanningTreeResource) Schema(ctx context.Context, req resource.SchemaRe
 							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 224),
+							},
+						},
+						"control": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Interface controls.").AddStringEnumDescription("unspecified", "bpdu-guard", "bpdu-filter").String,
+							Optional:            true,
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
+							Optional:            true,
+						},
+						"lc_issu": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Port lc issu.").AddStringEnumDescription("default", "disruptive", "non-disruptive", "auto").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("default", "disruptive", "non-disruptive", "auto"),
+							},
+						},
+						"prestandard_configuration": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Port mst prestd.").AddStringEnumDescription("enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"simulate_pvst": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Port simulate pvst.").AddStringEnumDescription("default", "enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("default", "enabled", "disabled"),
 							},
 						},
 					},

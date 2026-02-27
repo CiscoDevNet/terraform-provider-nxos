@@ -31,15 +31,30 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosSpanningTree(t *testing.T) {
 	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "bridge_assurance", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "fcoe", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "l2_gateway_stp_domain_id", "2048"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "lc_issu", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "loopguard", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "mode", "mst"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "pathcost_option", "long"))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_spanning_tree.test", "interfaces.*", map[string]string{
-		"interface_id": "eth1/9",
-		"bpdu_filter":  "enable",
-		"bpdu_guard":   "enable",
-		"cost":         "100",
-		"guard":        "root",
-		"link_type":    "p2p",
-		"mode":         "edge",
-		"priority":     "200",
+		"interface_id":              "eth1/9",
+		"bpdu_filter":               "enable",
+		"bpdu_guard":                "enable",
+		"cost":                      "100",
+		"guard":                     "root",
+		"link_type":                 "p2p",
+		"mode":                      "edge",
+		"priority":                  "200",
+		"control":                   "bpdu-guard",
+		"description":               "My interface description",
+		"lc_issu":                   "auto",
+		"prestandard_configuration": "enabled",
+		"simulate_pvst":             "enabled",
 	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -62,6 +77,16 @@ func TestAccDataSourceNxosSpanningTree(t *testing.T) {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 func testAccDataSourceNxosSpanningTreeConfig() string {
 	config := `resource "nxos_spanning_tree" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	instance_admin_state = "enabled"` + "\n"
+	config += `	bridge_assurance = "disabled"` + "\n"
+	config += `	control = "stateful-ha"` + "\n"
+	config += `	fcoe = "enabled"` + "\n"
+	config += `	l2_gateway_stp_domain_id = 2048` + "\n"
+	config += `	lc_issu = "auto"` + "\n"
+	config += `	loopguard = "enabled"` + "\n"
+	config += `	mode = "mst"` + "\n"
+	config += `	pathcost_option = "long"` + "\n"
 	config += `	interfaces = [{` + "\n"
 	config += `		interface_id = "eth1/9"` + "\n"
 	config += `		bpdu_filter = "enable"` + "\n"
@@ -71,6 +96,11 @@ func testAccDataSourceNxosSpanningTreeConfig() string {
 	config += `		link_type = "p2p"` + "\n"
 	config += `		mode = "edge"` + "\n"
 	config += `		priority = 200` + "\n"
+	config += `		control = "bpdu-guard"` + "\n"
+	config += `		description = "My interface description"` + "\n"
+	config += `		lc_issu = "auto"` + "\n"
+	config += `		prestandard_configuration = "enabled"` + "\n"
+	config += `		simulate_pvst = "enabled"` + "\n"
 	config += `	}]` + "\n"
 	config += `}` + "\n"
 

@@ -37,20 +37,35 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type SpanningTree struct {
-	Device     types.String             `tfsdk:"device"`
-	Dn         types.String             `tfsdk:"id"`
-	Interfaces []SpanningTreeInterfaces `tfsdk:"interfaces"`
+	Device               types.String             `tfsdk:"device"`
+	Dn                   types.String             `tfsdk:"id"`
+	AdminState           types.String             `tfsdk:"admin_state"`
+	InstanceAdminState   types.String             `tfsdk:"instance_admin_state"`
+	BridgeAssurance      types.String             `tfsdk:"bridge_assurance"`
+	Control              types.String             `tfsdk:"control"`
+	Fcoe                 types.String             `tfsdk:"fcoe"`
+	L2GatewayStpDomainId types.Int64              `tfsdk:"l2_gateway_stp_domain_id"`
+	LcIssu               types.String             `tfsdk:"lc_issu"`
+	Loopguard            types.String             `tfsdk:"loopguard"`
+	Mode                 types.String             `tfsdk:"mode"`
+	PathcostOption       types.String             `tfsdk:"pathcost_option"`
+	Interfaces           []SpanningTreeInterfaces `tfsdk:"interfaces"`
 }
 
 type SpanningTreeInterfaces struct {
-	InterfaceId types.String `tfsdk:"interface_id"`
-	BpduFilter  types.String `tfsdk:"bpdu_filter"`
-	BpduGuard   types.String `tfsdk:"bpdu_guard"`
-	Cost        types.Int64  `tfsdk:"cost"`
-	Guard       types.String `tfsdk:"guard"`
-	LinkType    types.String `tfsdk:"link_type"`
-	Mode        types.String `tfsdk:"mode"`
-	Priority    types.Int64  `tfsdk:"priority"`
+	InterfaceId              types.String `tfsdk:"interface_id"`
+	BpduFilter               types.String `tfsdk:"bpdu_filter"`
+	BpduGuard                types.String `tfsdk:"bpdu_guard"`
+	Cost                     types.Int64  `tfsdk:"cost"`
+	Guard                    types.String `tfsdk:"guard"`
+	LinkType                 types.String `tfsdk:"link_type"`
+	Mode                     types.String `tfsdk:"mode"`
+	Priority                 types.Int64  `tfsdk:"priority"`
+	Control                  types.String `tfsdk:"control"`
+	Description              types.String `tfsdk:"description"`
+	LcIssu                   types.String `tfsdk:"lc_issu"`
+	PrestandardConfiguration types.String `tfsdk:"prestandard_configuration"`
+	SimulatePvst             types.String `tfsdk:"simulate_pvst"`
 }
 
 type SpanningTreeIdentity struct {
@@ -96,12 +111,42 @@ func (data SpanningTree) getClassName() string {
 func (data SpanningTree) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
+	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".stpInst"
 		attrs = "{}"
+		if (!data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
+		}
+		if (!data.BridgeAssurance.IsUnknown() && !data.BridgeAssurance.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "bridge", data.BridgeAssurance.ValueString())
+		}
+		if (!data.Control.IsUnknown() && !data.Control.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "ctrl", data.Control.ValueString())
+		}
+		if (!data.Fcoe.IsUnknown() && !data.Fcoe.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "fcoe", data.Fcoe.ValueString())
+		}
+		if (!data.L2GatewayStpDomainId.IsUnknown() && !data.L2GatewayStpDomainId.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "l2GStpDomId", strconv.FormatInt(data.L2GatewayStpDomainId.ValueInt64(), 10))
+		}
+		if (!data.LcIssu.IsUnknown() && !data.LcIssu.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "lcIssu", data.LcIssu.ValueString())
+		}
+		if (!data.Loopguard.IsUnknown() && !data.Loopguard.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "loopguard", data.Loopguard.ValueString())
+		}
+		if (!data.Mode.IsUnknown() && !data.Mode.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "mode", data.Mode.ValueString())
+		}
+		if (!data.PathcostOption.IsUnknown() && !data.PathcostOption.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "pathcostOp", data.PathcostOption.ValueString())
+		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for _, child := range data.Interfaces {
@@ -130,6 +175,21 @@ func (data SpanningTree) toBody() nxos.Body {
 			if (!child.Priority.IsUnknown() && !child.Priority.IsNull()) || false {
 				attrs, _ = sjson.Set(attrs, "priority", strconv.FormatInt(child.Priority.ValueInt64(), 10))
 			}
+			if (!child.Control.IsUnknown() && !child.Control.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
+			}
+			if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+			}
+			if (!child.LcIssu.IsUnknown() && !child.LcIssu.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "lcIssu", child.LcIssu.ValueString())
+			}
+			if (!child.PrestandardConfiguration.IsUnknown() && !child.PrestandardConfiguration.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "prestdCfg", child.PrestandardConfiguration.ValueString())
+			}
+			if (!child.SimulatePvst.IsUnknown() && !child.SimulatePvst.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "simulatePvst", child.SimulatePvst.ValueString())
+			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.stpIf.attributes", attrs)
 		}
 	}
@@ -142,6 +202,7 @@ func (data SpanningTree) toBody() nxos.Body {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *SpanningTree) fromBody(res gjson.Result) {
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	{
 		var rstpInst gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -154,6 +215,15 @@ func (data *SpanningTree) fromBody(res gjson.Result) {
 				return true
 			},
 		)
+		data.InstanceAdminState = types.StringValue(rstpInst.Get("stpInst.attributes.adminSt").String())
+		data.BridgeAssurance = types.StringValue(rstpInst.Get("stpInst.attributes.bridge").String())
+		data.Control = types.StringValue(rstpInst.Get("stpInst.attributes.ctrl").String())
+		data.Fcoe = types.StringValue(rstpInst.Get("stpInst.attributes.fcoe").String())
+		data.L2GatewayStpDomainId = types.Int64Value(rstpInst.Get("stpInst.attributes.l2GStpDomId").Int())
+		data.LcIssu = types.StringValue(rstpInst.Get("stpInst.attributes.lcIssu").String())
+		data.Loopguard = types.StringValue(rstpInst.Get("stpInst.attributes.loopguard").String())
+		data.Mode = types.StringValue(rstpInst.Get("stpInst.attributes.mode").String())
+		data.PathcostOption = types.StringValue(rstpInst.Get("stpInst.attributes.pathcostOp").String())
 		rstpInst.Get("stpInst.children").ForEach(
 			func(_, v gjson.Result) bool {
 				v.ForEach(
@@ -168,6 +238,11 @@ func (data *SpanningTree) fromBody(res gjson.Result) {
 							child.LinkType = types.StringValue(value.Get("attributes.linkType").String())
 							child.Mode = types.StringValue(value.Get("attributes.mode").String())
 							child.Priority = types.Int64Value(value.Get("attributes.priority").Int())
+							child.Control = types.StringValue(value.Get("attributes.ctrl").String())
+							child.Description = types.StringValue(value.Get("attributes.descr").String())
+							child.LcIssu = types.StringValue(value.Get("attributes.lcIssu").String())
+							child.PrestandardConfiguration = types.StringValue(value.Get("attributes.prestdCfg").String())
+							child.SimulatePvst = types.StringValue(value.Get("attributes.simulatePvst").String())
 							data.Interfaces = append(data.Interfaces, child)
 						}
 						return true
@@ -184,6 +259,11 @@ func (data *SpanningTree) fromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *SpanningTree) updateFromBody(res gjson.Result) {
+	if !data.AdminState.IsNull() {
+		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	} else {
+		data.AdminState = types.StringNull()
+	}
 	var rstpInst gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -195,6 +275,51 @@ func (data *SpanningTree) updateFromBody(res gjson.Result) {
 			return true
 		},
 	)
+	if !data.InstanceAdminState.IsNull() {
+		data.InstanceAdminState = types.StringValue(rstpInst.Get("stpInst.attributes.adminSt").String())
+	} else {
+		data.InstanceAdminState = types.StringNull()
+	}
+	if !data.BridgeAssurance.IsNull() {
+		data.BridgeAssurance = types.StringValue(rstpInst.Get("stpInst.attributes.bridge").String())
+	} else {
+		data.BridgeAssurance = types.StringNull()
+	}
+	if !data.Control.IsNull() {
+		data.Control = types.StringValue(rstpInst.Get("stpInst.attributes.ctrl").String())
+	} else {
+		data.Control = types.StringNull()
+	}
+	if !data.Fcoe.IsNull() {
+		data.Fcoe = types.StringValue(rstpInst.Get("stpInst.attributes.fcoe").String())
+	} else {
+		data.Fcoe = types.StringNull()
+	}
+	if !data.L2GatewayStpDomainId.IsNull() {
+		data.L2GatewayStpDomainId = types.Int64Value(rstpInst.Get("stpInst.attributes.l2GStpDomId").Int())
+	} else {
+		data.L2GatewayStpDomainId = types.Int64Null()
+	}
+	if !data.LcIssu.IsNull() {
+		data.LcIssu = types.StringValue(rstpInst.Get("stpInst.attributes.lcIssu").String())
+	} else {
+		data.LcIssu = types.StringNull()
+	}
+	if !data.Loopguard.IsNull() {
+		data.Loopguard = types.StringValue(rstpInst.Get("stpInst.attributes.loopguard").String())
+	} else {
+		data.Loopguard = types.StringNull()
+	}
+	if !data.Mode.IsNull() {
+		data.Mode = types.StringValue(rstpInst.Get("stpInst.attributes.mode").String())
+	} else {
+		data.Mode = types.StringNull()
+	}
+	if !data.PathcostOption.IsNull() {
+		data.PathcostOption = types.StringValue(rstpInst.Get("stpInst.attributes.pathcostOp").String())
+	} else {
+		data.PathcostOption = types.StringNull()
+	}
 	for c := range data.Interfaces {
 		var rstpIf gjson.Result
 		rstpInst.Get("stpInst.children").ForEach(
@@ -246,6 +371,31 @@ func (data *SpanningTree) updateFromBody(res gjson.Result) {
 			data.Interfaces[c].Priority = types.Int64Value(rstpIf.Get("stpIf.attributes.priority").Int())
 		} else {
 			data.Interfaces[c].Priority = types.Int64Null()
+		}
+		if !data.Interfaces[c].Control.IsNull() {
+			data.Interfaces[c].Control = types.StringValue(rstpIf.Get("stpIf.attributes.ctrl").String())
+		} else {
+			data.Interfaces[c].Control = types.StringNull()
+		}
+		if !data.Interfaces[c].Description.IsNull() {
+			data.Interfaces[c].Description = types.StringValue(rstpIf.Get("stpIf.attributes.descr").String())
+		} else {
+			data.Interfaces[c].Description = types.StringNull()
+		}
+		if !data.Interfaces[c].LcIssu.IsNull() {
+			data.Interfaces[c].LcIssu = types.StringValue(rstpIf.Get("stpIf.attributes.lcIssu").String())
+		} else {
+			data.Interfaces[c].LcIssu = types.StringNull()
+		}
+		if !data.Interfaces[c].PrestandardConfiguration.IsNull() {
+			data.Interfaces[c].PrestandardConfiguration = types.StringValue(rstpIf.Get("stpIf.attributes.prestdCfg").String())
+		} else {
+			data.Interfaces[c].PrestandardConfiguration = types.StringNull()
+		}
+		if !data.Interfaces[c].SimulatePvst.IsNull() {
+			data.Interfaces[c].SimulatePvst = types.StringValue(rstpIf.Get("stpIf.attributes.simulatePvst").String())
+		} else {
+			data.Interfaces[c].SimulatePvst = types.StringNull()
 		}
 	}
 }

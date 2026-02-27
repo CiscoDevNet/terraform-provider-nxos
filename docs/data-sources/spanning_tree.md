@@ -36,8 +36,18 @@ data "nxos_spanning_tree" "example" {
 
 ### Read-Only
 
+- `admin_state` (String) The administrative state of the object or policy.
+- `bridge_assurance` (String) Enable spanning-tree bridge assurance on all ports.
+- `control` (String) The control state.
+- `fcoe` (String) Disable spanning tree for fcoe vlan.
 - `id` (String) The distinguished name of the object.
+- `instance_admin_state` (String) The administrative state of the object or policy.
 - `interfaces` (Attributes List) List of Spanning Tree interfaces. (see [below for nested schema](#nestedatt--interfaces))
+- `l2_gateway_stp_domain_id` (Number) Spanning tree L2 Gateway Domain Id.
+- `lc_issu` (String) Linecard ISSU type.
+- `loopguard` (String) Enable loop guard on all ports.
+- `mode` (String) Spanning tree mode.
+- `pathcost_option` (String) Spanning tree pathcost options.
 
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`
@@ -46,9 +56,14 @@ Read-Only:
 
 - `bpdu_filter` (String) bpdufilter mode.
 - `bpdu_guard` (String) Guard Mode.
+- `control` (String) Interface controls.
 - `cost` (Number) Port Path Cost.
+- `description` (String) Description.
 - `guard` (String) Guard Mode.
 - `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `lc_issu` (String) Port lc issu.
 - `link_type` (String) Link Type.
 - `mode` (String) Port mode.
+- `prestandard_configuration` (String) Port mst prestd.
 - `priority` (Number) Port Priority.
+- `simulate_pvst` (String) Port simulate pvst.

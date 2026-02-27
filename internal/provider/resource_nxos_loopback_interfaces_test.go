@@ -37,6 +37,7 @@ func TestAccNxosLoopbackInterfaces(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "items.0.interface_id", "lo123"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "items.0.admin_state", "down"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "items.0.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "items.0.link_logging", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "items.0.vrf_dn", "sys/inst-default"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -100,6 +101,7 @@ func testAccNxosLoopbackInterfacesConfig_all() string {
 	config += `		interface_id = "lo123"` + "\n"
 	config += `		admin_state = "down"` + "\n"
 	config += `		description = "My Description"` + "\n"
+	config += `		link_logging = "enable"` + "\n"
 	config += `		vrf_dn = "sys/inst-default"` + "\n"
 	config += `	}]` + "\n"
 	config += `}` + "\n"

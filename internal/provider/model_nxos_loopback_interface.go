@@ -41,6 +41,7 @@ type LoopbackInterface struct {
 	InterfaceId types.String `tfsdk:"interface_id"`
 	AdminState  types.String `tfsdk:"admin_state"`
 	Description types.String `tfsdk:"description"`
+	LinkLogging types.String `tfsdk:"link_logging"`
 	VrfDn       types.String `tfsdk:"vrf_dn"`
 }
 
@@ -95,6 +96,9 @@ func (data LoopbackInterface) toBody() nxos.Body {
 	if (!data.Description.IsUnknown() && !data.Description.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"descr", data.Description.ValueString())
 	}
+	if (!data.LinkLogging.IsUnknown() && !data.LinkLogging.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkLog", data.LinkLogging.ValueString())
+	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	attrs = "{}"
@@ -116,6 +120,7 @@ func (data *LoopbackInterface) fromBody(res gjson.Result) {
 	data.InterfaceId = types.StringValue(res.Get(data.getClassName() + ".attributes.id").String())
 	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	data.Description = types.StringValue(res.Get(data.getClassName() + ".attributes.descr").String())
+	data.LinkLogging = types.StringValue(res.Get(data.getClassName() + ".attributes.linkLog").String())
 	{
 		var rnwRtVrfMbr gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -151,6 +156,11 @@ func (data *LoopbackInterface) updateFromBody(res gjson.Result) {
 		data.Description = types.StringValue(res.Get(data.getClassName() + ".attributes.descr").String())
 	} else {
 		data.Description = types.StringNull()
+	}
+	if !data.LinkLogging.IsNull() {
+		data.LinkLogging = types.StringValue(res.Get(data.getClassName() + ".attributes.linkLog").String())
+	} else {
+		data.LinkLogging = types.StringNull()
 	}
 	var rnwRtVrfMbr gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(

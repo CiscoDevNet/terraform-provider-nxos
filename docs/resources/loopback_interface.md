@@ -26,6 +26,7 @@ resource "nxos_loopback_interface" "example" {
   interface_id = "lo123"
   admin_state  = "down"
   description  = "My Description"
+  link_logging = "enable"
   vrf_dn       = "sys/inst-default"
 }
 ```
@@ -43,6 +44,8 @@ resource "nxos_loopback_interface" "example" {
   - Choices: `down`, `up`
 - `description` (String) Interface description.
 - `device` (String) A device name from the provider configuration.
+- `link_logging` (String) The administrative state of link logging.
+  - Choices: `default`, `enable`, `disable`
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.
 
 ### Read-Only

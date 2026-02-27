@@ -43,4 +43,5 @@ data "nxos_loopback_interface" "example" {
 - `admin_state` (String) Administrative state.
 - `description` (String) Interface description.
 - `id` (String) The distinguished name of the object.
+- `link_logging` (String) The administrative state of link logging.
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.

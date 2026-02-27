@@ -80,6 +80,10 @@ func (d *LoopbackInterfaceDataSource) Schema(ctx context.Context, req datasource
 				MarkdownDescription: "Interface description.",
 				Computed:            true,
 			},
+			"link_logging": schema.StringAttribute{
+				MarkdownDescription: "The administrative state of link logging.",
+				Computed:            true,
+			},
 			"vrf_dn": schema.StringAttribute{
 				MarkdownDescription: "DN of VRF. For example: `sys/inst-VRF1`.",
 				Computed:            true,

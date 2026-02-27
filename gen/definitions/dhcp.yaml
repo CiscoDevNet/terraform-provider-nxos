@@ -7,13 +7,177 @@ ds_description: This data source can read the DHCP relay configuration on NX-OS 
 res_description: This resource can manage the DHCP relay configuration on NX-OS devices, including relay interfaces and their associated relay server addresses.
 doc_path: DHCP/dhcp:Entity/
 doc_category: System
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'The administrative state of the object or policy.'
+    enum_values:
+      - enabled
+      - disabled
+    default_value: enabled
+    example: enabled
 child_classes:
   - class_name: dhcpInst
     rn: inst
     type: single
     no_delete: true
+    tf_name: instance
     description: 'DHCP instance configuration.'
     doc_path: DHCP/dhcp:Inst/
+    attributes:
+      - nxos_name: Ipv6RelayInformationOptionVpnEnabled
+        tf_name: instance_ipv6_relay_information_option_vpn_enabled
+        type: Bool
+        description: 'IPv6 Relay Information Option Vpn Enabled.'
+        example: true
+      - nxos_name: Ipv6RelayOptionTypeCiscoEnabled
+        tf_name: instance_ipv6_relay_option_type_cisco_enabled
+        type: Bool
+        description: 'IPv6 Relay Sub-Option Type Cisco Enabled.'
+        example: true
+      - nxos_name: RelayInformationOptionEnabled
+        tf_name: instance_relay_information_option_enabled
+        type: Bool
+        description: 'Relay Information Option Enabled.'
+        example: true
+      - nxos_name: RelayInformationOptionTrustEnabled
+        tf_name: instance_relay_information_option_trust_enabled
+        type: Bool
+        description: 'Relay Information Option Trust Enabled.'
+        example: true
+      - nxos_name: RelayInformationOptionVpnEnabled
+        tf_name: instance_relay_information_option_vpn_enabled
+        type: Bool
+        description: 'Relay Information Option Vpn Enabled.'
+        example: true
+      - nxos_name: RelayInformationTrustAllEnabled
+        tf_name: instance_relay_information_trust_all_enabled
+        type: Bool
+        description: 'Relay Information Trust All Enabled.'
+        example: true
+      - nxos_name: RelaySubOptionCircuitIdCustomizedEnabled
+        tf_name: instance_relay_sub_option_circuit_id_customized_enabled
+        type: Bool
+        description: 'Relay Sub-Option Circuit-id Customized Enabled.'
+        example: true
+      - nxos_name: RelaySubOptionCircuitIdFormatString
+        tf_name: instance_relay_sub_option_circuit_id_format_string
+        type: String
+        description: 'Relay Sub-Option Circuit-id Format String.'
+        example: '%p'
+      - nxos_name: RelaySubOptionTypeCiscoEnabled
+        tf_name: instance_relay_sub_option_type_cisco_enabled
+        type: Bool
+        description: 'Relay Sub-Option Type Cisco Enabled.'
+        example: true
+      - nxos_name: SmartRelayGlobalEnabled
+        tf_name: instance_smart_relay_global_enabled
+        type: Bool
+        description: 'Smart Relay Global Enabled.'
+        example: true
+      - nxos_name: SnoopingEnabled
+        tf_name: instance_snooping_enabled
+        type: Bool
+        description: 'Snooping Enabled.'
+        example: true
+      - nxos_name: SnoopingInformationOptionEnabled
+        tf_name: instance_snooping_information_option_enabled
+        type: Bool
+        description: 'Snooping Information Option Enabled.'
+        example: true
+      - nxos_name: SnoopingVerifyMacAddressEnabled
+        tf_name: instance_snooping_verify_mac_address_enabled
+        type: Bool
+        description: 'Snooping Verify Mac Address Enabled.'
+        default_value: true
+        example: false
+      - nxos_name: daiLogBufEntries
+        tf_name: instance_dai_log_buffer_entries
+        type: Int64
+        min_int: 1
+        max_int: 1024
+        description: 'DAI Log Buffer Entries.'
+        default_value: 32
+        example: 64
+      - nxos_name: daiValidateDst
+        tf_name: instance_dai_validate_destination
+        type: Bool
+        description: 'DAI Validate Type: dst-mac.'
+        example: true
+      - nxos_name: daiValidateIp
+        tf_name: instance_dai_validate_ip
+        type: Bool
+        description: 'DAI Validate Type: ip.'
+        example: true
+      - nxos_name: daiValidateSrc
+        tf_name: instance_dai_validate_source
+        type: Bool
+        description: 'DAI Validate Type: src-mac.'
+        example: true
+      - nxos_name: ipv6RelayOption79Enabled
+        tf_name: instance_ipv6_relay_option79_enabled
+        type: Bool
+        description: 'IPv6 Relay Option79 Enabled.'
+        example: true
+      - nxos_name: pktStrictVal
+        tf_name: instance_packet_strict_validation
+        type: Bool
+        description: 'Pkt Strict Validation.'
+        example: true
+      - nxos_name: relayDAIEnabled
+        tf_name: instance_relay_dai_enabled
+        type: Bool
+        description: 'Dynamic ARP Inspection functionality with DHCP Relay is enabled.'
+        example: true
+      - nxos_name: relayInformationOptionServerIdOverrideDisableEnabled
+        tf_name: instance_relay_information_option_server_id_override_disable_enabled
+        type: Int64
+        min_int: 0
+        max_int: 1
+        description: 'Relay Information Option Server-id-override-disable Enabled.'
+        default_value: 0
+        example: 1
+      - nxos_name: relaySubOptionFormatNonTLVEnabled
+        tf_name: instance_relay_sub_option_format_non_tlv_enabled
+        type: Bool
+        description: 'Relay Option82 Sub-Option Format Non-TLV Enabled.'
+        example: true
+      - nxos_name: relayV4overV6Enabled
+        tf_name: instance_relay_v4_over_v6_enabled
+        type: Bool
+        description: 'v4 over v6 relay transport.'
+        example: true
+      - nxos_name: relayV6IAPDRouteAddEnabled
+        tf_name: instance_relay_v6_iapd_route_add_enabled
+        type: Bool
+        description: 'DHCPv6 IAPD route addition.'
+        example: true
+      - nxos_name: snoopSubOptionCircuitIdFormatString
+        tf_name: instance_snoop_sub_option_circuit_id_format_string
+        type: String
+        description: 'Snoop Sub-Option Circuit-id Format String.'
+        example: '%p'
+      - nxos_name: snoopingSubOptionFormatNonTLVEnabled
+        tf_name: instance_snooping_sub_option_format_non_tlv_enabled
+        type: Bool
+        description: 'Snooping Option82 Sub-Option Format Non-TLV Enabled.'
+        example: true
+      - nxos_name: v4RelayEnabled
+        tf_name: instance_v4_relay_enabled
+        type: Bool
+        description: 'DHCPv4 Enabled.'
+        example: true
+      - nxos_name: v6RelayEnabled
+        tf_name: instance_v6_relay_enabled
+        type: Bool
+        description: 'DHCPv6 Enabled.'
+        example: true
+      - nxos_name: v6SmartRelayGlobalEnabled
+        tf_name: instance_v6_smart_relay_global_enabled
+        type: Bool
+        description: 'V6 Smart Relay Global Enabled.'
+        example: true
     child_classes:
       - class_name: dhcpRelayIf
         rn: relayif-[%s]
@@ -28,6 +192,41 @@ child_classes:
             id: true
             description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
             example: eth1/10
+          - nxos_name: InformationTrustedEnabled
+            tf_name: information_trusted_enabled
+            type: Bool
+            description: 'Information Trusted Enabled.'
+            example: true
+          - nxos_name: SmartRelayEnabled
+            tf_name: smart_relay_enabled
+            type: Bool
+            description: 'Smart Relay Enabled.'
+            example: true
+          - nxos_name: SubnetBroadcastEnabled
+            tf_name: subnet_broadcast_enabled
+            type: Bool
+            description: 'Subnet Broadcast Enabled.'
+            example: true
+          - nxos_name: options
+            tf_name: options
+            type: String
+            description: 'DHCP options.'
+            enum_values:
+              - none
+              - relay-info
+            default_value: none
+            example: relay-info
+          - nxos_name: subnetSelection
+            tf_name: subnet_selection
+            type: String
+            description: 'DHCP relay source subnet.'
+            example: 10.0.0.0
+            exclude_test: true
+          - nxos_name: v6SmartRelayEnabled
+            tf_name: v6_smart_relay_enabled
+            type: Bool
+            description: 'V6 Smart Relay Enabled.'
+            example: false
         child_classes:
           - class_name: dhcpRelayAddr
             rn: addr-[%s]-[%s]
@@ -48,6 +247,13 @@ child_classes:
                 id: true
                 description: 'IPv4 or IPv6 address.'
                 example: 1.1.1.1
+              - nxos_name: counter
+                tf_name: counter
+                type: Int64
+                min_int: 0
+                max_int: 65535
+                description: 'Counter.'
+                example: 1
 test_prerequisites:
   - dn: sys/fm/dhcp
     class_name: fmDhcp

@@ -26,12 +26,18 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -74,6 +80,143 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("enabled"),
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"instance_ipv6_relay_information_option_vpn_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 Relay Information Option Vpn Enabled.").String,
+				Optional:            true,
+			},
+			"instance_ipv6_relay_option_type_cisco_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 Relay Sub-Option Type Cisco Enabled.").String,
+				Optional:            true,
+			},
+			"instance_relay_information_option_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Relay Information Option Enabled.").String,
+				Optional:            true,
+			},
+			"instance_relay_information_option_trust_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Relay Information Option Trust Enabled.").String,
+				Optional:            true,
+			},
+			"instance_relay_information_option_vpn_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Relay Information Option Vpn Enabled.").String,
+				Optional:            true,
+			},
+			"instance_relay_information_trust_all_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Relay Information Trust All Enabled.").String,
+				Optional:            true,
+			},
+			"instance_relay_sub_option_circuit_id_customized_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Relay Sub-Option Circuit-id Customized Enabled.").String,
+				Optional:            true,
+			},
+			"instance_relay_sub_option_circuit_id_format_string": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Relay Sub-Option Circuit-id Format String.").String,
+				Optional:            true,
+			},
+			"instance_relay_sub_option_type_cisco_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Relay Sub-Option Type Cisco Enabled.").String,
+				Optional:            true,
+			},
+			"instance_smart_relay_global_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Smart Relay Global Enabled.").String,
+				Optional:            true,
+			},
+			"instance_snooping_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Snooping Enabled.").String,
+				Optional:            true,
+			},
+			"instance_snooping_information_option_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Snooping Information Option Enabled.").String,
+				Optional:            true,
+			},
+			"instance_snooping_verify_mac_address_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Snooping Verify Mac Address Enabled.").AddDefaultValueDescription("true").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             booldefault.StaticBool(true),
+			},
+			"instance_dai_log_buffer_entries": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DAI Log Buffer Entries.").AddIntegerRangeDescription(1, 1024).AddDefaultValueDescription("32").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             int64default.StaticInt64(32),
+				Validators: []validator.Int64{
+					int64validator.Between(1, 1024),
+				},
+			},
+			"instance_dai_validate_destination": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DAI Validate Type: dst-mac.").String,
+				Optional:            true,
+			},
+			"instance_dai_validate_ip": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DAI Validate Type: ip.").String,
+				Optional:            true,
+			},
+			"instance_dai_validate_source": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DAI Validate Type: src-mac.").String,
+				Optional:            true,
+			},
+			"instance_ipv6_relay_option79_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 Relay Option79 Enabled.").String,
+				Optional:            true,
+			},
+			"instance_packet_strict_validation": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Pkt Strict Validation.").String,
+				Optional:            true,
+			},
+			"instance_relay_dai_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Dynamic ARP Inspection functionality with DHCP Relay is enabled.").String,
+				Optional:            true,
+			},
+			"instance_relay_information_option_server_id_override_disable_enabled": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Relay Information Option Server-id-override-disable Enabled.").AddIntegerRangeDescription(0, 1).AddDefaultValueDescription("0").String,
+				Optional:            true,
+				Computed:            true,
+				Default:             int64default.StaticInt64(0),
+				Validators: []validator.Int64{
+					int64validator.Between(0, 1),
+				},
+			},
+			"instance_relay_sub_option_format_non_tlv_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Relay Option82 Sub-Option Format Non-TLV Enabled.").String,
+				Optional:            true,
+			},
+			"instance_relay_v4_over_v6_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("v4 over v6 relay transport.").String,
+				Optional:            true,
+			},
+			"instance_relay_v6_iapd_route_add_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DHCPv6 IAPD route addition.").String,
+				Optional:            true,
+			},
+			"instance_snoop_sub_option_circuit_id_format_string": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Snoop Sub-Option Circuit-id Format String.").String,
+				Optional:            true,
+			},
+			"instance_snooping_sub_option_format_non_tlv_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Snooping Option82 Sub-Option Format Non-TLV Enabled.").String,
+				Optional:            true,
+			},
+			"instance_v4_relay_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DHCPv4 Enabled.").String,
+				Optional:            true,
+			},
+			"instance_v6_relay_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DHCPv6 Enabled.").String,
+				Optional:            true,
+			},
+			"instance_v6_smart_relay_global_enabled": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("V6 Smart Relay Global Enabled.").String,
+				Optional:            true,
+			},
 			"relay_interfaces": schema.ListNestedAttribute{
 				MarkdownDescription: "List of DHCP relay interfaces.",
 				Optional:            true,
@@ -85,6 +228,35 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							PlanModifiers: []planmodifier.String{
 								stringplanmodifier.RequiresReplace(),
 							},
+						},
+						"information_trusted_enabled": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Information Trusted Enabled.").String,
+							Optional:            true,
+						},
+						"smart_relay_enabled": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Smart Relay Enabled.").String,
+							Optional:            true,
+						},
+						"subnet_broadcast_enabled": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Subnet Broadcast Enabled.").String,
+							Optional:            true,
+						},
+						"options": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("DHCP options.").AddStringEnumDescription("none", "relay-info").AddDefaultValueDescription("none").String,
+							Optional:            true,
+							Computed:            true,
+							Default:             stringdefault.StaticString("none"),
+							Validators: []validator.String{
+								stringvalidator.OneOf("none", "relay-info"),
+							},
+						},
+						"subnet_selection": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("DHCP relay source subnet.").String,
+							Optional:            true,
+						},
+						"v6_smart_relay_enabled": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("V6 Smart Relay Enabled.").String,
+							Optional:            true,
 						},
 						"addresses": schema.ListNestedAttribute{
 							MarkdownDescription: "List of DHCP relay addresses.",
@@ -103,6 +275,13 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 										Required:            true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplace(),
+										},
+									},
+									"counter": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Counter.").AddIntegerRangeDescription(0, 65535).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 65535),
 										},
 									},
 								},

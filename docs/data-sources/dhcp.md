@@ -37,7 +37,37 @@ data "nxos_dhcp" "example" {
 
 ### Read-Only
 
+- `admin_state` (String) The administrative state of the object or policy.
 - `id` (String) The distinguished name of the object.
+- `instance_dai_log_buffer_entries` (Number) DAI Log Buffer Entries.
+- `instance_dai_validate_destination` (Boolean) DAI Validate Type: dst-mac.
+- `instance_dai_validate_ip` (Boolean) DAI Validate Type: ip.
+- `instance_dai_validate_source` (Boolean) DAI Validate Type: src-mac.
+- `instance_ipv6_relay_information_option_vpn_enabled` (Boolean) IPv6 Relay Information Option Vpn Enabled.
+- `instance_ipv6_relay_option79_enabled` (Boolean) IPv6 Relay Option79 Enabled.
+- `instance_ipv6_relay_option_type_cisco_enabled` (Boolean) IPv6 Relay Sub-Option Type Cisco Enabled.
+- `instance_packet_strict_validation` (Boolean) Pkt Strict Validation.
+- `instance_relay_dai_enabled` (Boolean) Dynamic ARP Inspection functionality with DHCP Relay is enabled.
+- `instance_relay_information_option_enabled` (Boolean) Relay Information Option Enabled.
+- `instance_relay_information_option_server_id_override_disable_enabled` (Number) Relay Information Option Server-id-override-disable Enabled.
+- `instance_relay_information_option_trust_enabled` (Boolean) Relay Information Option Trust Enabled.
+- `instance_relay_information_option_vpn_enabled` (Boolean) Relay Information Option Vpn Enabled.
+- `instance_relay_information_trust_all_enabled` (Boolean) Relay Information Trust All Enabled.
+- `instance_relay_sub_option_circuit_id_customized_enabled` (Boolean) Relay Sub-Option Circuit-id Customized Enabled.
+- `instance_relay_sub_option_circuit_id_format_string` (String) Relay Sub-Option Circuit-id Format String.
+- `instance_relay_sub_option_format_non_tlv_enabled` (Boolean) Relay Option82 Sub-Option Format Non-TLV Enabled.
+- `instance_relay_sub_option_type_cisco_enabled` (Boolean) Relay Sub-Option Type Cisco Enabled.
+- `instance_relay_v4_over_v6_enabled` (Boolean) v4 over v6 relay transport.
+- `instance_relay_v6_iapd_route_add_enabled` (Boolean) DHCPv6 IAPD route addition.
+- `instance_smart_relay_global_enabled` (Boolean) Smart Relay Global Enabled.
+- `instance_snoop_sub_option_circuit_id_format_string` (String) Snoop Sub-Option Circuit-id Format String.
+- `instance_snooping_enabled` (Boolean) Snooping Enabled.
+- `instance_snooping_information_option_enabled` (Boolean) Snooping Information Option Enabled.
+- `instance_snooping_sub_option_format_non_tlv_enabled` (Boolean) Snooping Option82 Sub-Option Format Non-TLV Enabled.
+- `instance_snooping_verify_mac_address_enabled` (Boolean) Snooping Verify Mac Address Enabled.
+- `instance_v4_relay_enabled` (Boolean) DHCPv4 Enabled.
+- `instance_v6_relay_enabled` (Boolean) DHCPv6 Enabled.
+- `instance_v6_smart_relay_global_enabled` (Boolean) V6 Smart Relay Global Enabled.
 - `relay_interfaces` (Attributes List) List of DHCP relay interfaces. (see [below for nested schema](#nestedatt--relay_interfaces))
 
 <a id="nestedatt--relay_interfaces"></a>
@@ -46,7 +76,13 @@ data "nxos_dhcp" "example" {
 Read-Only:
 
 - `addresses` (Attributes List) List of DHCP relay addresses. (see [below for nested schema](#nestedatt--relay_interfaces--addresses))
+- `information_trusted_enabled` (Boolean) Information Trusted Enabled.
 - `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `options` (String) DHCP options.
+- `smart_relay_enabled` (Boolean) Smart Relay Enabled.
+- `subnet_broadcast_enabled` (Boolean) Subnet Broadcast Enabled.
+- `subnet_selection` (String) DHCP relay source subnet.
+- `v6_smart_relay_enabled` (Boolean) V6 Smart Relay Enabled.
 
 <a id="nestedatt--relay_interfaces--addresses"></a>
 ### Nested Schema for `relay_interfaces.addresses`
@@ -54,4 +90,5 @@ Read-Only:
 Read-Only:
 
 - `address` (String) IPv4 or IPv6 address.
+- `counter` (Number) Counter.
 - `vrf` (String) vrf in which the dhcp server is present. Valid only when the client is in a different vrf from the server vrf.

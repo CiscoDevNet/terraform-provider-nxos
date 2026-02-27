@@ -26,6 +26,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -37,19 +38,56 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type DHCP struct {
-	Device          types.String          `tfsdk:"device"`
-	Dn              types.String          `tfsdk:"id"`
-	RelayInterfaces []DHCPRelayInterfaces `tfsdk:"relay_interfaces"`
+	Device                                                       types.String          `tfsdk:"device"`
+	Dn                                                           types.String          `tfsdk:"id"`
+	AdminState                                                   types.String          `tfsdk:"admin_state"`
+	InstanceIpv6RelayInformationOptionVpnEnabled                 types.Bool            `tfsdk:"instance_ipv6_relay_information_option_vpn_enabled"`
+	InstanceIpv6RelayOptionTypeCiscoEnabled                      types.Bool            `tfsdk:"instance_ipv6_relay_option_type_cisco_enabled"`
+	InstanceRelayInformationOptionEnabled                        types.Bool            `tfsdk:"instance_relay_information_option_enabled"`
+	InstanceRelayInformationOptionTrustEnabled                   types.Bool            `tfsdk:"instance_relay_information_option_trust_enabled"`
+	InstanceRelayInformationOptionVpnEnabled                     types.Bool            `tfsdk:"instance_relay_information_option_vpn_enabled"`
+	InstanceRelayInformationTrustAllEnabled                      types.Bool            `tfsdk:"instance_relay_information_trust_all_enabled"`
+	InstanceRelaySubOptionCircuitIdCustomizedEnabled             types.Bool            `tfsdk:"instance_relay_sub_option_circuit_id_customized_enabled"`
+	InstanceRelaySubOptionCircuitIdFormatString                  types.String          `tfsdk:"instance_relay_sub_option_circuit_id_format_string"`
+	InstanceRelaySubOptionTypeCiscoEnabled                       types.Bool            `tfsdk:"instance_relay_sub_option_type_cisco_enabled"`
+	InstanceSmartRelayGlobalEnabled                              types.Bool            `tfsdk:"instance_smart_relay_global_enabled"`
+	InstanceSnoopingEnabled                                      types.Bool            `tfsdk:"instance_snooping_enabled"`
+	InstanceSnoopingInformationOptionEnabled                     types.Bool            `tfsdk:"instance_snooping_information_option_enabled"`
+	InstanceSnoopingVerifyMacAddressEnabled                      types.Bool            `tfsdk:"instance_snooping_verify_mac_address_enabled"`
+	InstanceDaiLogBufferEntries                                  types.Int64           `tfsdk:"instance_dai_log_buffer_entries"`
+	InstanceDaiValidateDestination                               types.Bool            `tfsdk:"instance_dai_validate_destination"`
+	InstanceDaiValidateIp                                        types.Bool            `tfsdk:"instance_dai_validate_ip"`
+	InstanceDaiValidateSource                                    types.Bool            `tfsdk:"instance_dai_validate_source"`
+	InstanceIpv6RelayOption79Enabled                             types.Bool            `tfsdk:"instance_ipv6_relay_option79_enabled"`
+	InstancePacketStrictValidation                               types.Bool            `tfsdk:"instance_packet_strict_validation"`
+	InstanceRelayDaiEnabled                                      types.Bool            `tfsdk:"instance_relay_dai_enabled"`
+	InstanceRelayInformationOptionServerIdOverrideDisableEnabled types.Int64           `tfsdk:"instance_relay_information_option_server_id_override_disable_enabled"`
+	InstanceRelaySubOptionFormatNonTlvEnabled                    types.Bool            `tfsdk:"instance_relay_sub_option_format_non_tlv_enabled"`
+	InstanceRelayV4OverV6Enabled                                 types.Bool            `tfsdk:"instance_relay_v4_over_v6_enabled"`
+	InstanceRelayV6IapdRouteAddEnabled                           types.Bool            `tfsdk:"instance_relay_v6_iapd_route_add_enabled"`
+	InstanceSnoopSubOptionCircuitIdFormatString                  types.String          `tfsdk:"instance_snoop_sub_option_circuit_id_format_string"`
+	InstanceSnoopingSubOptionFormatNonTlvEnabled                 types.Bool            `tfsdk:"instance_snooping_sub_option_format_non_tlv_enabled"`
+	InstanceV4RelayEnabled                                       types.Bool            `tfsdk:"instance_v4_relay_enabled"`
+	InstanceV6RelayEnabled                                       types.Bool            `tfsdk:"instance_v6_relay_enabled"`
+	InstanceV6SmartRelayGlobalEnabled                            types.Bool            `tfsdk:"instance_v6_smart_relay_global_enabled"`
+	RelayInterfaces                                              []DHCPRelayInterfaces `tfsdk:"relay_interfaces"`
 }
 
 type DHCPRelayInterfaces struct {
-	InterfaceId types.String                   `tfsdk:"interface_id"`
-	Addresses   []DHCPRelayInterfacesAddresses `tfsdk:"addresses"`
+	InterfaceId               types.String                   `tfsdk:"interface_id"`
+	InformationTrustedEnabled types.Bool                     `tfsdk:"information_trusted_enabled"`
+	SmartRelayEnabled         types.Bool                     `tfsdk:"smart_relay_enabled"`
+	SubnetBroadcastEnabled    types.Bool                     `tfsdk:"subnet_broadcast_enabled"`
+	Options                   types.String                   `tfsdk:"options"`
+	SubnetSelection           types.String                   `tfsdk:"subnet_selection"`
+	V6SmartRelayEnabled       types.Bool                     `tfsdk:"v6_smart_relay_enabled"`
+	Addresses                 []DHCPRelayInterfacesAddresses `tfsdk:"addresses"`
 }
 
 type DHCPRelayInterfacesAddresses struct {
 	Vrf     types.String `tfsdk:"vrf"`
 	Address types.String `tfsdk:"address"`
+	Counter types.Int64  `tfsdk:"counter"`
 }
 
 type DHCPIdentity struct {
@@ -99,18 +137,126 @@ func (data DHCP) getClassName() string {
 func (data DHCP) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
+	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	{
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".dhcpInst"
 		attrs = "{}"
+		if (!data.InstanceIpv6RelayInformationOptionVpnEnabled.IsUnknown() && !data.InstanceIpv6RelayInformationOptionVpnEnabled.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "Ipv6RelayInformationOptionVpnEnabled", strconv.FormatBool(data.InstanceIpv6RelayInformationOptionVpnEnabled.ValueBool()))
+		}
+		if (!data.InstanceIpv6RelayOptionTypeCiscoEnabled.IsUnknown() && !data.InstanceIpv6RelayOptionTypeCiscoEnabled.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "Ipv6RelayOptionTypeCiscoEnabled", strconv.FormatBool(data.InstanceIpv6RelayOptionTypeCiscoEnabled.ValueBool()))
+		}
+		if (!data.InstanceRelayInformationOptionEnabled.IsUnknown() && !data.InstanceRelayInformationOptionEnabled.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "RelayInformationOptionEnabled", strconv.FormatBool(data.InstanceRelayInformationOptionEnabled.ValueBool()))
+		}
+		if (!data.InstanceRelayInformationOptionTrustEnabled.IsUnknown() && !data.InstanceRelayInformationOptionTrustEnabled.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "RelayInformationOptionTrustEnabled", strconv.FormatBool(data.InstanceRelayInformationOptionTrustEnabled.ValueBool()))
+		}
+		if (!data.InstanceRelayInformationOptionVpnEnabled.IsUnknown() && !data.InstanceRelayInformationOptionVpnEnabled.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "RelayInformationOptionVpnEnabled", strconv.FormatBool(data.InstanceRelayInformationOptionVpnEnabled.ValueBool()))
+		}
+		if (!data.InstanceRelayInformationTrustAllEnabled.IsUnknown() && !data.InstanceRelayInformationTrustAllEnabled.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "RelayInformationTrustAllEnabled", strconv.FormatBool(data.InstanceRelayInformationTrustAllEnabled.ValueBool()))
+		}
+		if (!data.InstanceRelaySubOptionCircuitIdCustomizedEnabled.IsUnknown() && !data.InstanceRelaySubOptionCircuitIdCustomizedEnabled.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "RelaySubOptionCircuitIdCustomizedEnabled", strconv.FormatBool(data.InstanceRelaySubOptionCircuitIdCustomizedEnabled.ValueBool()))
+		}
+		if (!data.InstanceRelaySubOptionCircuitIdFormatString.IsUnknown() && !data.InstanceRelaySubOptionCircuitIdFormatString.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "RelaySubOptionCircuitIdFormatString", data.InstanceRelaySubOptionCircuitIdFormatString.ValueString())
+		}
+		if (!data.InstanceRelaySubOptionTypeCiscoEnabled.IsUnknown() && !data.InstanceRelaySubOptionTypeCiscoEnabled.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "RelaySubOptionTypeCiscoEnabled", strconv.FormatBool(data.InstanceRelaySubOptionTypeCiscoEnabled.ValueBool()))
+		}
+		if (!data.InstanceSmartRelayGlobalEnabled.IsUnknown() && !data.InstanceSmartRelayGlobalEnabled.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "SmartRelayGlobalEnabled", strconv.FormatBool(data.InstanceSmartRelayGlobalEnabled.ValueBool()))
+		}
+		if (!data.InstanceSnoopingEnabled.IsUnknown() && !data.InstanceSnoopingEnabled.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "SnoopingEnabled", strconv.FormatBool(data.InstanceSnoopingEnabled.ValueBool()))
+		}
+		if (!data.InstanceSnoopingInformationOptionEnabled.IsUnknown() && !data.InstanceSnoopingInformationOptionEnabled.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "SnoopingInformationOptionEnabled", strconv.FormatBool(data.InstanceSnoopingInformationOptionEnabled.ValueBool()))
+		}
+		if (!data.InstanceSnoopingVerifyMacAddressEnabled.IsUnknown() && !data.InstanceSnoopingVerifyMacAddressEnabled.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "SnoopingVerifyMacAddressEnabled", strconv.FormatBool(data.InstanceSnoopingVerifyMacAddressEnabled.ValueBool()))
+		}
+		if (!data.InstanceDaiLogBufferEntries.IsUnknown() && !data.InstanceDaiLogBufferEntries.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "daiLogBufEntries", strconv.FormatInt(data.InstanceDaiLogBufferEntries.ValueInt64(), 10))
+		}
+		if (!data.InstanceDaiValidateDestination.IsUnknown() && !data.InstanceDaiValidateDestination.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "daiValidateDst", strconv.FormatBool(data.InstanceDaiValidateDestination.ValueBool()))
+		}
+		if (!data.InstanceDaiValidateIp.IsUnknown() && !data.InstanceDaiValidateIp.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "daiValidateIp", strconv.FormatBool(data.InstanceDaiValidateIp.ValueBool()))
+		}
+		if (!data.InstanceDaiValidateSource.IsUnknown() && !data.InstanceDaiValidateSource.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "daiValidateSrc", strconv.FormatBool(data.InstanceDaiValidateSource.ValueBool()))
+		}
+		if (!data.InstanceIpv6RelayOption79Enabled.IsUnknown() && !data.InstanceIpv6RelayOption79Enabled.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "ipv6RelayOption79Enabled", strconv.FormatBool(data.InstanceIpv6RelayOption79Enabled.ValueBool()))
+		}
+		if (!data.InstancePacketStrictValidation.IsUnknown() && !data.InstancePacketStrictValidation.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "pktStrictVal", strconv.FormatBool(data.InstancePacketStrictValidation.ValueBool()))
+		}
+		if (!data.InstanceRelayDaiEnabled.IsUnknown() && !data.InstanceRelayDaiEnabled.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "relayDAIEnabled", strconv.FormatBool(data.InstanceRelayDaiEnabled.ValueBool()))
+		}
+		if (!data.InstanceRelayInformationOptionServerIdOverrideDisableEnabled.IsUnknown() && !data.InstanceRelayInformationOptionServerIdOverrideDisableEnabled.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "relayInformationOptionServerIdOverrideDisableEnabled", strconv.FormatInt(data.InstanceRelayInformationOptionServerIdOverrideDisableEnabled.ValueInt64(), 10))
+		}
+		if (!data.InstanceRelaySubOptionFormatNonTlvEnabled.IsUnknown() && !data.InstanceRelaySubOptionFormatNonTlvEnabled.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "relaySubOptionFormatNonTLVEnabled", strconv.FormatBool(data.InstanceRelaySubOptionFormatNonTlvEnabled.ValueBool()))
+		}
+		if (!data.InstanceRelayV4OverV6Enabled.IsUnknown() && !data.InstanceRelayV4OverV6Enabled.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "relayV4overV6Enabled", strconv.FormatBool(data.InstanceRelayV4OverV6Enabled.ValueBool()))
+		}
+		if (!data.InstanceRelayV6IapdRouteAddEnabled.IsUnknown() && !data.InstanceRelayV6IapdRouteAddEnabled.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "relayV6IAPDRouteAddEnabled", strconv.FormatBool(data.InstanceRelayV6IapdRouteAddEnabled.ValueBool()))
+		}
+		if (!data.InstanceSnoopSubOptionCircuitIdFormatString.IsUnknown() && !data.InstanceSnoopSubOptionCircuitIdFormatString.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "snoopSubOptionCircuitIdFormatString", data.InstanceSnoopSubOptionCircuitIdFormatString.ValueString())
+		}
+		if (!data.InstanceSnoopingSubOptionFormatNonTlvEnabled.IsUnknown() && !data.InstanceSnoopingSubOptionFormatNonTlvEnabled.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "snoopingSubOptionFormatNonTLVEnabled", strconv.FormatBool(data.InstanceSnoopingSubOptionFormatNonTlvEnabled.ValueBool()))
+		}
+		if (!data.InstanceV4RelayEnabled.IsUnknown() && !data.InstanceV4RelayEnabled.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "v4RelayEnabled", strconv.FormatBool(data.InstanceV4RelayEnabled.ValueBool()))
+		}
+		if (!data.InstanceV6RelayEnabled.IsUnknown() && !data.InstanceV6RelayEnabled.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "v6RelayEnabled", strconv.FormatBool(data.InstanceV6RelayEnabled.ValueBool()))
+		}
+		if (!data.InstanceV6SmartRelayGlobalEnabled.IsUnknown() && !data.InstanceV6SmartRelayGlobalEnabled.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "v6SmartRelayGlobalEnabled", strconv.FormatBool(data.InstanceV6SmartRelayGlobalEnabled.ValueBool()))
+		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for _, child := range data.RelayInterfaces {
 			attrs = "{}"
 			if (!child.InterfaceId.IsUnknown() && !child.InterfaceId.IsNull()) || false {
 				attrs, _ = sjson.Set(attrs, "id", child.InterfaceId.ValueString())
+			}
+			if (!child.InformationTrustedEnabled.IsUnknown() && !child.InformationTrustedEnabled.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "InformationTrustedEnabled", strconv.FormatBool(child.InformationTrustedEnabled.ValueBool()))
+			}
+			if (!child.SmartRelayEnabled.IsUnknown() && !child.SmartRelayEnabled.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "SmartRelayEnabled", strconv.FormatBool(child.SmartRelayEnabled.ValueBool()))
+			}
+			if (!child.SubnetBroadcastEnabled.IsUnknown() && !child.SubnetBroadcastEnabled.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "SubnetBroadcastEnabled", strconv.FormatBool(child.SubnetBroadcastEnabled.ValueBool()))
+			}
+			if (!child.Options.IsUnknown() && !child.Options.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "options", child.Options.ValueString())
+			}
+			if (!child.SubnetSelection.IsUnknown() && !child.SubnetSelection.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "subnetSelection", child.SubnetSelection.ValueString())
+			}
+			if (!child.V6SmartRelayEnabled.IsUnknown() && !child.V6SmartRelayEnabled.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "v6SmartRelayEnabled", strconv.FormatBool(child.V6SmartRelayEnabled.ValueBool()))
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dhcpRelayIf.attributes", attrs)
 			{
@@ -123,6 +269,9 @@ func (data DHCP) toBody() nxos.Body {
 					}
 					if (!child.Address.IsUnknown() && !child.Address.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "address", child.Address.ValueString())
+					}
+					if (!child.Counter.IsUnknown() && !child.Counter.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "counter", strconv.FormatInt(child.Counter.ValueInt64(), 10))
 					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dhcpRelayAddr.attributes", attrs)
 				}
@@ -138,6 +287,7 @@ func (data DHCP) toBody() nxos.Body {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *DHCP) fromBody(res gjson.Result) {
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	{
 		var rdhcpInst gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -150,6 +300,35 @@ func (data *DHCP) fromBody(res gjson.Result) {
 				return true
 			},
 		)
+		data.InstanceIpv6RelayInformationOptionVpnEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.Ipv6RelayInformationOptionVpnEnabled").String()))
+		data.InstanceIpv6RelayOptionTypeCiscoEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.Ipv6RelayOptionTypeCiscoEnabled").String()))
+		data.InstanceRelayInformationOptionEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.RelayInformationOptionEnabled").String()))
+		data.InstanceRelayInformationOptionTrustEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.RelayInformationOptionTrustEnabled").String()))
+		data.InstanceRelayInformationOptionVpnEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.RelayInformationOptionVpnEnabled").String()))
+		data.InstanceRelayInformationTrustAllEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.RelayInformationTrustAllEnabled").String()))
+		data.InstanceRelaySubOptionCircuitIdCustomizedEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.RelaySubOptionCircuitIdCustomizedEnabled").String()))
+		data.InstanceRelaySubOptionCircuitIdFormatString = types.StringValue(rdhcpInst.Get("dhcpInst.attributes.RelaySubOptionCircuitIdFormatString").String())
+		data.InstanceRelaySubOptionTypeCiscoEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.RelaySubOptionTypeCiscoEnabled").String()))
+		data.InstanceSmartRelayGlobalEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.SmartRelayGlobalEnabled").String()))
+		data.InstanceSnoopingEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.SnoopingEnabled").String()))
+		data.InstanceSnoopingInformationOptionEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.SnoopingInformationOptionEnabled").String()))
+		data.InstanceSnoopingVerifyMacAddressEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.SnoopingVerifyMacAddressEnabled").String()))
+		data.InstanceDaiLogBufferEntries = types.Int64Value(rdhcpInst.Get("dhcpInst.attributes.daiLogBufEntries").Int())
+		data.InstanceDaiValidateDestination = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.daiValidateDst").String()))
+		data.InstanceDaiValidateIp = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.daiValidateIp").String()))
+		data.InstanceDaiValidateSource = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.daiValidateSrc").String()))
+		data.InstanceIpv6RelayOption79Enabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.ipv6RelayOption79Enabled").String()))
+		data.InstancePacketStrictValidation = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.pktStrictVal").String()))
+		data.InstanceRelayDaiEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.relayDAIEnabled").String()))
+		data.InstanceRelayInformationOptionServerIdOverrideDisableEnabled = types.Int64Value(rdhcpInst.Get("dhcpInst.attributes.relayInformationOptionServerIdOverrideDisableEnabled").Int())
+		data.InstanceRelaySubOptionFormatNonTlvEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.relaySubOptionFormatNonTLVEnabled").String()))
+		data.InstanceRelayV4OverV6Enabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.relayV4overV6Enabled").String()))
+		data.InstanceRelayV6IapdRouteAddEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.relayV6IAPDRouteAddEnabled").String()))
+		data.InstanceSnoopSubOptionCircuitIdFormatString = types.StringValue(rdhcpInst.Get("dhcpInst.attributes.snoopSubOptionCircuitIdFormatString").String())
+		data.InstanceSnoopingSubOptionFormatNonTlvEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.snoopingSubOptionFormatNonTLVEnabled").String()))
+		data.InstanceV4RelayEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.v4RelayEnabled").String()))
+		data.InstanceV6RelayEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.v6RelayEnabled").String()))
+		data.InstanceV6SmartRelayGlobalEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.v6SmartRelayGlobalEnabled").String()))
 		rdhcpInst.Get("dhcpInst.children").ForEach(
 			func(_, v gjson.Result) bool {
 				v.ForEach(
@@ -157,6 +336,12 @@ func (data *DHCP) fromBody(res gjson.Result) {
 						if classname.String() == "dhcpRelayIf" {
 							var child DHCPRelayInterfaces
 							child.InterfaceId = types.StringValue(value.Get("attributes.id").String())
+							child.InformationTrustedEnabled = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.InformationTrustedEnabled").String()))
+							child.SmartRelayEnabled = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.SmartRelayEnabled").String()))
+							child.SubnetBroadcastEnabled = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.SubnetBroadcastEnabled").String()))
+							child.Options = types.StringValue(value.Get("attributes.options").String())
+							child.SubnetSelection = types.StringValue(value.Get("attributes.subnetSelection").String())
+							child.V6SmartRelayEnabled = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.v6SmartRelayEnabled").String()))
 							value.Get("children").ForEach(
 								func(_, nestedV gjson.Result) bool {
 									nestedV.ForEach(
@@ -165,6 +350,7 @@ func (data *DHCP) fromBody(res gjson.Result) {
 												var nestedChilddhcpRelayAddr DHCPRelayInterfacesAddresses
 												nestedChilddhcpRelayAddr.Vrf = types.StringValue(nestedValue.Get("attributes.vrf").String())
 												nestedChilddhcpRelayAddr.Address = types.StringValue(nestedValue.Get("attributes.address").String())
+												nestedChilddhcpRelayAddr.Counter = types.Int64Value(nestedValue.Get("attributes.counter").Int())
 												child.Addresses = append(child.Addresses, nestedChilddhcpRelayAddr)
 											}
 											return true
@@ -189,6 +375,11 @@ func (data *DHCP) fromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *DHCP) updateFromBody(res gjson.Result) {
+	if !data.AdminState.IsNull() {
+		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	} else {
+		data.AdminState = types.StringNull()
+	}
 	var rdhcpInst gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -200,6 +391,151 @@ func (data *DHCP) updateFromBody(res gjson.Result) {
 			return true
 		},
 	)
+	if !data.InstanceIpv6RelayInformationOptionVpnEnabled.IsNull() {
+		data.InstanceIpv6RelayInformationOptionVpnEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.Ipv6RelayInformationOptionVpnEnabled").String()))
+	} else {
+		data.InstanceIpv6RelayInformationOptionVpnEnabled = types.BoolNull()
+	}
+	if !data.InstanceIpv6RelayOptionTypeCiscoEnabled.IsNull() {
+		data.InstanceIpv6RelayOptionTypeCiscoEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.Ipv6RelayOptionTypeCiscoEnabled").String()))
+	} else {
+		data.InstanceIpv6RelayOptionTypeCiscoEnabled = types.BoolNull()
+	}
+	if !data.InstanceRelayInformationOptionEnabled.IsNull() {
+		data.InstanceRelayInformationOptionEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.RelayInformationOptionEnabled").String()))
+	} else {
+		data.InstanceRelayInformationOptionEnabled = types.BoolNull()
+	}
+	if !data.InstanceRelayInformationOptionTrustEnabled.IsNull() {
+		data.InstanceRelayInformationOptionTrustEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.RelayInformationOptionTrustEnabled").String()))
+	} else {
+		data.InstanceRelayInformationOptionTrustEnabled = types.BoolNull()
+	}
+	if !data.InstanceRelayInformationOptionVpnEnabled.IsNull() {
+		data.InstanceRelayInformationOptionVpnEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.RelayInformationOptionVpnEnabled").String()))
+	} else {
+		data.InstanceRelayInformationOptionVpnEnabled = types.BoolNull()
+	}
+	if !data.InstanceRelayInformationTrustAllEnabled.IsNull() {
+		data.InstanceRelayInformationTrustAllEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.RelayInformationTrustAllEnabled").String()))
+	} else {
+		data.InstanceRelayInformationTrustAllEnabled = types.BoolNull()
+	}
+	if !data.InstanceRelaySubOptionCircuitIdCustomizedEnabled.IsNull() {
+		data.InstanceRelaySubOptionCircuitIdCustomizedEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.RelaySubOptionCircuitIdCustomizedEnabled").String()))
+	} else {
+		data.InstanceRelaySubOptionCircuitIdCustomizedEnabled = types.BoolNull()
+	}
+	if !data.InstanceRelaySubOptionCircuitIdFormatString.IsNull() {
+		data.InstanceRelaySubOptionCircuitIdFormatString = types.StringValue(rdhcpInst.Get("dhcpInst.attributes.RelaySubOptionCircuitIdFormatString").String())
+	} else {
+		data.InstanceRelaySubOptionCircuitIdFormatString = types.StringNull()
+	}
+	if !data.InstanceRelaySubOptionTypeCiscoEnabled.IsNull() {
+		data.InstanceRelaySubOptionTypeCiscoEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.RelaySubOptionTypeCiscoEnabled").String()))
+	} else {
+		data.InstanceRelaySubOptionTypeCiscoEnabled = types.BoolNull()
+	}
+	if !data.InstanceSmartRelayGlobalEnabled.IsNull() {
+		data.InstanceSmartRelayGlobalEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.SmartRelayGlobalEnabled").String()))
+	} else {
+		data.InstanceSmartRelayGlobalEnabled = types.BoolNull()
+	}
+	if !data.InstanceSnoopingEnabled.IsNull() {
+		data.InstanceSnoopingEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.SnoopingEnabled").String()))
+	} else {
+		data.InstanceSnoopingEnabled = types.BoolNull()
+	}
+	if !data.InstanceSnoopingInformationOptionEnabled.IsNull() {
+		data.InstanceSnoopingInformationOptionEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.SnoopingInformationOptionEnabled").String()))
+	} else {
+		data.InstanceSnoopingInformationOptionEnabled = types.BoolNull()
+	}
+	if !data.InstanceSnoopingVerifyMacAddressEnabled.IsNull() {
+		data.InstanceSnoopingVerifyMacAddressEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.SnoopingVerifyMacAddressEnabled").String()))
+	} else {
+		data.InstanceSnoopingVerifyMacAddressEnabled = types.BoolNull()
+	}
+	if !data.InstanceDaiLogBufferEntries.IsNull() {
+		data.InstanceDaiLogBufferEntries = types.Int64Value(rdhcpInst.Get("dhcpInst.attributes.daiLogBufEntries").Int())
+	} else {
+		data.InstanceDaiLogBufferEntries = types.Int64Null()
+	}
+	if !data.InstanceDaiValidateDestination.IsNull() {
+		data.InstanceDaiValidateDestination = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.daiValidateDst").String()))
+	} else {
+		data.InstanceDaiValidateDestination = types.BoolNull()
+	}
+	if !data.InstanceDaiValidateIp.IsNull() {
+		data.InstanceDaiValidateIp = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.daiValidateIp").String()))
+	} else {
+		data.InstanceDaiValidateIp = types.BoolNull()
+	}
+	if !data.InstanceDaiValidateSource.IsNull() {
+		data.InstanceDaiValidateSource = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.daiValidateSrc").String()))
+	} else {
+		data.InstanceDaiValidateSource = types.BoolNull()
+	}
+	if !data.InstanceIpv6RelayOption79Enabled.IsNull() {
+		data.InstanceIpv6RelayOption79Enabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.ipv6RelayOption79Enabled").String()))
+	} else {
+		data.InstanceIpv6RelayOption79Enabled = types.BoolNull()
+	}
+	if !data.InstancePacketStrictValidation.IsNull() {
+		data.InstancePacketStrictValidation = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.pktStrictVal").String()))
+	} else {
+		data.InstancePacketStrictValidation = types.BoolNull()
+	}
+	if !data.InstanceRelayDaiEnabled.IsNull() {
+		data.InstanceRelayDaiEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.relayDAIEnabled").String()))
+	} else {
+		data.InstanceRelayDaiEnabled = types.BoolNull()
+	}
+	if !data.InstanceRelayInformationOptionServerIdOverrideDisableEnabled.IsNull() {
+		data.InstanceRelayInformationOptionServerIdOverrideDisableEnabled = types.Int64Value(rdhcpInst.Get("dhcpInst.attributes.relayInformationOptionServerIdOverrideDisableEnabled").Int())
+	} else {
+		data.InstanceRelayInformationOptionServerIdOverrideDisableEnabled = types.Int64Null()
+	}
+	if !data.InstanceRelaySubOptionFormatNonTlvEnabled.IsNull() {
+		data.InstanceRelaySubOptionFormatNonTlvEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.relaySubOptionFormatNonTLVEnabled").String()))
+	} else {
+		data.InstanceRelaySubOptionFormatNonTlvEnabled = types.BoolNull()
+	}
+	if !data.InstanceRelayV4OverV6Enabled.IsNull() {
+		data.InstanceRelayV4OverV6Enabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.relayV4overV6Enabled").String()))
+	} else {
+		data.InstanceRelayV4OverV6Enabled = types.BoolNull()
+	}
+	if !data.InstanceRelayV6IapdRouteAddEnabled.IsNull() {
+		data.InstanceRelayV6IapdRouteAddEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.relayV6IAPDRouteAddEnabled").String()))
+	} else {
+		data.InstanceRelayV6IapdRouteAddEnabled = types.BoolNull()
+	}
+	if !data.InstanceSnoopSubOptionCircuitIdFormatString.IsNull() {
+		data.InstanceSnoopSubOptionCircuitIdFormatString = types.StringValue(rdhcpInst.Get("dhcpInst.attributes.snoopSubOptionCircuitIdFormatString").String())
+	} else {
+		data.InstanceSnoopSubOptionCircuitIdFormatString = types.StringNull()
+	}
+	if !data.InstanceSnoopingSubOptionFormatNonTlvEnabled.IsNull() {
+		data.InstanceSnoopingSubOptionFormatNonTlvEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.snoopingSubOptionFormatNonTLVEnabled").String()))
+	} else {
+		data.InstanceSnoopingSubOptionFormatNonTlvEnabled = types.BoolNull()
+	}
+	if !data.InstanceV4RelayEnabled.IsNull() {
+		data.InstanceV4RelayEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.v4RelayEnabled").String()))
+	} else {
+		data.InstanceV4RelayEnabled = types.BoolNull()
+	}
+	if !data.InstanceV6RelayEnabled.IsNull() {
+		data.InstanceV6RelayEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.v6RelayEnabled").String()))
+	} else {
+		data.InstanceV6RelayEnabled = types.BoolNull()
+	}
+	if !data.InstanceV6SmartRelayGlobalEnabled.IsNull() {
+		data.InstanceV6SmartRelayGlobalEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpInst.Get("dhcpInst.attributes.v6SmartRelayGlobalEnabled").String()))
+	} else {
+		data.InstanceV6SmartRelayGlobalEnabled = types.BoolNull()
+	}
 	for c := range data.RelayInterfaces {
 		var rdhcpRelayIf gjson.Result
 		rdhcpInst.Get("dhcpInst.children").ForEach(
@@ -216,6 +552,36 @@ func (data *DHCP) updateFromBody(res gjson.Result) {
 			data.RelayInterfaces[c].InterfaceId = types.StringValue(rdhcpRelayIf.Get("dhcpRelayIf.attributes.id").String())
 		} else {
 			data.RelayInterfaces[c].InterfaceId = types.StringNull()
+		}
+		if !data.RelayInterfaces[c].InformationTrustedEnabled.IsNull() {
+			data.RelayInterfaces[c].InformationTrustedEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpRelayIf.Get("dhcpRelayIf.attributes.InformationTrustedEnabled").String()))
+		} else {
+			data.RelayInterfaces[c].InformationTrustedEnabled = types.BoolNull()
+		}
+		if !data.RelayInterfaces[c].SmartRelayEnabled.IsNull() {
+			data.RelayInterfaces[c].SmartRelayEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpRelayIf.Get("dhcpRelayIf.attributes.SmartRelayEnabled").String()))
+		} else {
+			data.RelayInterfaces[c].SmartRelayEnabled = types.BoolNull()
+		}
+		if !data.RelayInterfaces[c].SubnetBroadcastEnabled.IsNull() {
+			data.RelayInterfaces[c].SubnetBroadcastEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpRelayIf.Get("dhcpRelayIf.attributes.SubnetBroadcastEnabled").String()))
+		} else {
+			data.RelayInterfaces[c].SubnetBroadcastEnabled = types.BoolNull()
+		}
+		if !data.RelayInterfaces[c].Options.IsNull() {
+			data.RelayInterfaces[c].Options = types.StringValue(rdhcpRelayIf.Get("dhcpRelayIf.attributes.options").String())
+		} else {
+			data.RelayInterfaces[c].Options = types.StringNull()
+		}
+		if !data.RelayInterfaces[c].SubnetSelection.IsNull() {
+			data.RelayInterfaces[c].SubnetSelection = types.StringValue(rdhcpRelayIf.Get("dhcpRelayIf.attributes.subnetSelection").String())
+		} else {
+			data.RelayInterfaces[c].SubnetSelection = types.StringNull()
+		}
+		if !data.RelayInterfaces[c].V6SmartRelayEnabled.IsNull() {
+			data.RelayInterfaces[c].V6SmartRelayEnabled = types.BoolValue(helpers.ParseNxosBoolean(rdhcpRelayIf.Get("dhcpRelayIf.attributes.v6SmartRelayEnabled").String()))
+		} else {
+			data.RelayInterfaces[c].V6SmartRelayEnabled = types.BoolNull()
 		}
 		for nc := range data.RelayInterfaces[c].Addresses {
 			var rdhcpRelayAddr gjson.Result
@@ -238,6 +604,11 @@ func (data *DHCP) updateFromBody(res gjson.Result) {
 				data.RelayInterfaces[c].Addresses[nc].Address = types.StringValue(rdhcpRelayAddr.Get("dhcpRelayAddr.attributes.address").String())
 			} else {
 				data.RelayInterfaces[c].Addresses[nc].Address = types.StringNull()
+			}
+			if !data.RelayInterfaces[c].Addresses[nc].Counter.IsNull() {
+				data.RelayInterfaces[c].Addresses[nc].Counter = types.Int64Value(rdhcpRelayAddr.Get("dhcpRelayAddr.attributes.counter").Int())
+			} else {
+				data.RelayInterfaces[c].Addresses[nc].Counter = types.Int64Null()
 			}
 		}
 	}

@@ -31,12 +31,48 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosDHCP(t *testing.T) {
 	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_ipv6_relay_information_option_vpn_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_ipv6_relay_option_type_cisco_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_relay_information_option_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_relay_information_option_trust_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_relay_information_option_vpn_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_relay_information_trust_all_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_relay_sub_option_circuit_id_customized_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_relay_sub_option_circuit_id_format_string", "%p"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_relay_sub_option_type_cisco_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_smart_relay_global_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_snooping_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_snooping_information_option_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_snooping_verify_mac_address_enabled", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_dai_log_buffer_entries", "64"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_dai_validate_destination", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_dai_validate_ip", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_dai_validate_source", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_ipv6_relay_option79_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_packet_strict_validation", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_relay_dai_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_relay_information_option_server_id_override_disable_enabled", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_relay_sub_option_format_non_tlv_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_relay_v4_over_v6_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_relay_v6_iapd_route_add_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_snoop_sub_option_circuit_id_format_string", "%p"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_snooping_sub_option_format_non_tlv_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_v4_relay_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_v6_relay_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "instance_v6_smart_relay_global_enabled", "true"))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_dhcp.test", "relay_interfaces.*", map[string]string{
-		"interface_id": "eth1/10",
+		"interface_id":                "eth1/10",
+		"information_trusted_enabled": "true",
+		"smart_relay_enabled":         "true",
+		"subnet_broadcast_enabled":    "true",
+		"options":                     "relay-info",
+		"v6_smart_relay_enabled":      "false",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_dhcp.test", "relay_interfaces.*.addresses.*", map[string]string{
 		"vrf":     "VRF1",
 		"address": "1.1.1.1",
+		"counter": "1",
 	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -70,11 +106,47 @@ resource "nxos_rest" "PreReq0" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 func testAccDataSourceNxosDHCPConfig() string {
 	config := `resource "nxos_dhcp" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	instance_ipv6_relay_information_option_vpn_enabled = true` + "\n"
+	config += `	instance_ipv6_relay_option_type_cisco_enabled = true` + "\n"
+	config += `	instance_relay_information_option_enabled = true` + "\n"
+	config += `	instance_relay_information_option_trust_enabled = true` + "\n"
+	config += `	instance_relay_information_option_vpn_enabled = true` + "\n"
+	config += `	instance_relay_information_trust_all_enabled = true` + "\n"
+	config += `	instance_relay_sub_option_circuit_id_customized_enabled = true` + "\n"
+	config += `	instance_relay_sub_option_circuit_id_format_string = "%p"` + "\n"
+	config += `	instance_relay_sub_option_type_cisco_enabled = true` + "\n"
+	config += `	instance_smart_relay_global_enabled = true` + "\n"
+	config += `	instance_snooping_enabled = true` + "\n"
+	config += `	instance_snooping_information_option_enabled = true` + "\n"
+	config += `	instance_snooping_verify_mac_address_enabled = false` + "\n"
+	config += `	instance_dai_log_buffer_entries = 64` + "\n"
+	config += `	instance_dai_validate_destination = true` + "\n"
+	config += `	instance_dai_validate_ip = true` + "\n"
+	config += `	instance_dai_validate_source = true` + "\n"
+	config += `	instance_ipv6_relay_option79_enabled = true` + "\n"
+	config += `	instance_packet_strict_validation = true` + "\n"
+	config += `	instance_relay_dai_enabled = true` + "\n"
+	config += `	instance_relay_information_option_server_id_override_disable_enabled = 1` + "\n"
+	config += `	instance_relay_sub_option_format_non_tlv_enabled = true` + "\n"
+	config += `	instance_relay_v4_over_v6_enabled = true` + "\n"
+	config += `	instance_relay_v6_iapd_route_add_enabled = true` + "\n"
+	config += `	instance_snoop_sub_option_circuit_id_format_string = "%p"` + "\n"
+	config += `	instance_snooping_sub_option_format_non_tlv_enabled = true` + "\n"
+	config += `	instance_v4_relay_enabled = true` + "\n"
+	config += `	instance_v6_relay_enabled = true` + "\n"
+	config += `	instance_v6_smart_relay_global_enabled = true` + "\n"
 	config += `	relay_interfaces = [{` + "\n"
 	config += `		interface_id = "eth1/10"` + "\n"
+	config += `		information_trusted_enabled = true` + "\n"
+	config += `		smart_relay_enabled = true` + "\n"
+	config += `		subnet_broadcast_enabled = true` + "\n"
+	config += `		options = "relay-info"` + "\n"
+	config += `		v6_smart_relay_enabled = false` + "\n"
 	config += `		addresses = [{` + "\n"
 	config += `			vrf = "VRF1"` + "\n"
 	config += `			address = "1.1.1.1"` + "\n"
+	config += `			counter = 1` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"

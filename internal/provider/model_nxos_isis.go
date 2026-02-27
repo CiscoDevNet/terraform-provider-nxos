@@ -146,7 +146,7 @@ type ISISInterfaces struct {
 	SuppressedState            types.Bool   `tfsdk:"suppressed_state"`
 	Ipv4Bfd                    types.String `tfsdk:"ipv4_bfd"`
 	Ipv6Bfd                    types.String `tfsdk:"ipv6_bfd"`
-	EnableIpv6                 types.Bool   `tfsdk:"enable_ipv6"`
+	Ipv6                       types.Bool   `tfsdk:"ipv6"`
 }
 
 type ISISIdentity struct {
@@ -502,8 +502,8 @@ func (data ISIS) toBody() nxos.Body {
 		if (!child.Ipv6Bfd.IsUnknown() && !child.Ipv6Bfd.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "v6Bfd", child.Ipv6Bfd.ValueString())
 		}
-		if (!child.EnableIpv6.IsUnknown() && !child.EnableIpv6.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "v6enable", strconv.FormatBool(child.EnableIpv6.ValueBool()))
+		if (!child.Ipv6.IsUnknown() && !child.Ipv6.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "v6enable", strconv.FormatBool(child.Ipv6.ValueBool()))
 		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.isisInternalIf.attributes", attrs)
 	}
@@ -662,7 +662,7 @@ func (data *ISIS) fromBody(res gjson.Result) {
 						child.SuppressedState = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.suppressedState").String()))
 						child.Ipv4Bfd = types.StringValue(value.Get("attributes.v4Bfd").String())
 						child.Ipv6Bfd = types.StringValue(value.Get("attributes.v6Bfd").String())
-						child.EnableIpv6 = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.v6enable").String()))
+						child.Ipv6 = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.v6enable").String()))
 						data.Interfaces = append(data.Interfaces, child)
 					}
 					return true
@@ -1167,10 +1167,10 @@ func (data *ISIS) updateFromBody(res gjson.Result) {
 		} else {
 			data.Interfaces[c].Ipv6Bfd = types.StringNull()
 		}
-		if !data.Interfaces[c].EnableIpv6.IsNull() {
-			data.Interfaces[c].EnableIpv6 = types.BoolValue(helpers.ParseNxosBoolean(risisInternalIf.Get("isisInternalIf.attributes.v6enable").String()))
+		if !data.Interfaces[c].Ipv6.IsNull() {
+			data.Interfaces[c].Ipv6 = types.BoolValue(helpers.ParseNxosBoolean(risisInternalIf.Get("isisInternalIf.attributes.v6enable").String()))
 		} else {
-			data.Interfaces[c].EnableIpv6 = types.BoolNull()
+			data.Interfaces[c].Ipv6 = types.BoolNull()
 		}
 	}
 }

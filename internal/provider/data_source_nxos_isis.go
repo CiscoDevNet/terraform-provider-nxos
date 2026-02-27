@@ -457,7 +457,7 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							MarkdownDescription: "Holds Interface BFD Configruation for IPV6 family.",
 							Computed:            true,
 						},
-						"enable_ipv6": schema.BoolAttribute{
+						"ipv6": schema.BoolAttribute{
 							MarkdownDescription: "Enabling ISIS router tag on Interface's IPV6 family.",
 							Computed:            true,
 						},

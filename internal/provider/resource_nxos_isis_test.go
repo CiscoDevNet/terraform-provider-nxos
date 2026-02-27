@@ -123,7 +123,7 @@ func TestAccNxosISIS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.suppressed_state", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.ipv4_bfd", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.ipv6_bfd", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.enable_ipv6", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.ipv6", "true"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -295,7 +295,7 @@ func testAccNxosISISConfig_all() string {
 	config += `		suppressed_state = true` + "\n"
 	config += `		ipv4_bfd = "enabled"` + "\n"
 	config += `		ipv6_bfd = "enabled"` + "\n"
-	config += `		enable_ipv6 = true` + "\n"
+	config += `		ipv6 = true` + "\n"
 	config += `	}]` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
 	config += `}` + "\n"

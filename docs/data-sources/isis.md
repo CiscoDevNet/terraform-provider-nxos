@@ -131,7 +131,6 @@ Read-Only:
 - `csnp_interval_l2` (Number) Holds ISIS Interface Level-2 CSNP Interval.
 - `description` (String) Description.
 - `enable_ipv4` (Boolean) Enabling ISIS router tag on Interface's IPV4 family.
-- `enable_ipv6` (Boolean) Enabling ISIS router tag on Interface's IPV6 family.
 - `hello_interval` (Number) Holds Interface Hello Interval value.
 - `hello_interval_l1` (Number) Holds ISIS interface Hello Interval Level-1 value.
 - `hello_interval_l2` (Number) Holds ISIS interface Hello Interval Level-2 value.
@@ -142,6 +141,7 @@ Read-Only:
 - `instance_name` (String) Instance to which the interface belongs to.
 - `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
 - `ipv4_bfd` (String) Holds ISIS Interface BFD Configruation.
+- `ipv6` (Boolean) Enabling ISIS router tag on Interface's IPV6 family.
 - `ipv6_bfd` (String) Holds Interface BFD Configruation for IPV6 family.
 - `ipv6_metric_l1` (Number) Holds ISIS interface IPV6 wide metric value for Level-1.
 - `ipv6_metric_l2` (Number) Holds ISIS interface IPV6 wide metric value for Level-2.

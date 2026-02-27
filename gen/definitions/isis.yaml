@@ -673,7 +673,7 @@ child_classes:
           - disabled
         example: enabled
       - nxos_name: v6enable
-        tf_name: enable_ipv6
+        tf_name: ipv6
         type: Bool
         description: "Enabling ISIS router tag on Interface's IPV6 family."
         example: true

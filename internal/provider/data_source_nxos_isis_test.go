@@ -123,7 +123,7 @@ func TestAccDataSourceNxosISIS(t *testing.T) {
 		"suppressed_state":             "true",
 		"ipv4_bfd":                     "enabled",
 		"ipv6_bfd":                     "enabled",
-		"enable_ipv6":                  "true",
+		"ipv6":                         "true",
 	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -260,7 +260,7 @@ func testAccDataSourceNxosISISConfig() string {
 	config += `		suppressed_state = true` + "\n"
 	config += `		ipv4_bfd = "enabled"` + "\n"
 	config += `		ipv6_bfd = "enabled"` + "\n"
-	config += `		enable_ipv6 = true` + "\n"
+	config += `		ipv6 = true` + "\n"
 	config += `	}]` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
 	config += `}` + "\n"

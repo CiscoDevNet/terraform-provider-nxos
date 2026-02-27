@@ -124,7 +124,7 @@ resource "nxos_isis" "example" {
     suppressed_state             = true
     ipv4_bfd                     = "enabled"
     ipv6_bfd                     = "enabled"
-    enable_ipv6                  = true
+    ipv6                         = true
   }]
 }
 ```
@@ -277,7 +277,6 @@ Optional:
   - Range: `1`-`65535`
 - `description` (String) Description.
 - `enable_ipv4` (Boolean) Enabling ISIS router tag on Interface's IPV4 family.
-- `enable_ipv6` (Boolean) Enabling ISIS router tag on Interface's IPV6 family.
 - `hello_interval` (Number) Holds Interface Hello Interval value.
   - Range: `1`-`65535`
 - `hello_interval_l1` (Number) Holds ISIS interface Hello Interval Level-1 value.
@@ -295,6 +294,7 @@ Optional:
 - `instance_name` (String) Instance to which the interface belongs to.
 - `ipv4_bfd` (String) Holds ISIS Interface BFD Configruation.
   - Choices: `inheritVrf`, `enabled`, `disabled`
+- `ipv6` (Boolean) Enabling ISIS router tag on Interface's IPV6 family.
 - `ipv6_bfd` (String) Holds Interface BFD Configruation for IPV6 family.
   - Choices: `inheritVrf`, `enabled`, `disabled`
 - `ipv6_metric_l1` (Number) Holds ISIS interface IPV6 wide metric value for Level-1.

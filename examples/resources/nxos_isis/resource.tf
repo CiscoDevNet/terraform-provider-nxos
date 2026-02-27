@@ -96,6 +96,6 @@ resource "nxos_isis" "example" {
     suppressed_state             = true
     ipv4_bfd                     = "enabled"
     ipv6_bfd                     = "enabled"
-    enable_ipv6                  = true
+    ipv6                         = true
   }]
 }

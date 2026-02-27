@@ -643,7 +643,7 @@ func (r *ISISResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 								stringvalidator.OneOf("inheritVrf", "enabled", "disabled"),
 							},
 						},
-						"enable_ipv6": schema.BoolAttribute{
+						"ipv6": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Enabling ISIS router tag on Interface's IPV6 family.").String,
 							Optional:            true,
 						},

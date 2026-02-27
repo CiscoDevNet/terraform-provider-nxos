@@ -51,18 +51,18 @@ func TestAccNxosRoutePolicy(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.order", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.action", "permit"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.description", "My route map entry"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.drop_on_fail_v4", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.drop_on_fail_v6", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.force_order_v4", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.force_order_v6", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.load_share_v4", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.load_share_v6", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_default_next_hop_v4", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_default_next_hop_v6", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_vrf_v4", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_vrf_v6", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.verify_availability_v4", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.verify_availability_v6", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.drop_on_fail_v4", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.drop_on_fail_v6", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.force_order_v4", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.force_order_v6", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.load_share_v4", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.load_share_v6", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_default_next_hop_v4", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_default_next_hop_v6", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_vrf_v4", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_vrf_v6", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.verify_availability_v4", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.verify_availability_v6", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.match_route_prefix_lists.0.prefix_list_dn", "sys/rpm/pfxlistv4-[PREFIX_LIST1]"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_regular_community_additive", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_regular_community_no_community", "disabled"))
@@ -149,18 +149,18 @@ func testAccNxosRoutePolicyConfig_all() string {
 	config += `			order = 10` + "\n"
 	config += `			action = "permit"` + "\n"
 	config += `			description = "My route map entry"` + "\n"
-	config += `			drop_on_fail_v4 = "enabled"` + "\n"
-	config += `			drop_on_fail_v6 = "enabled"` + "\n"
-	config += `			force_order_v4 = "enabled"` + "\n"
-	config += `			force_order_v6 = "enabled"` + "\n"
-	config += `			load_share_v4 = "enabled"` + "\n"
-	config += `			load_share_v6 = "enabled"` + "\n"
-	config += `			set_default_next_hop_v4 = "enabled"` + "\n"
-	config += `			set_default_next_hop_v6 = "enabled"` + "\n"
-	config += `			set_vrf_v4 = "enabled"` + "\n"
-	config += `			set_vrf_v6 = "enabled"` + "\n"
-	config += `			verify_availability_v4 = "enabled"` + "\n"
-	config += `			verify_availability_v6 = "enabled"` + "\n"
+	config += `			drop_on_fail_v4 = "disabled"` + "\n"
+	config += `			drop_on_fail_v6 = "disabled"` + "\n"
+	config += `			force_order_v4 = "disabled"` + "\n"
+	config += `			force_order_v6 = "disabled"` + "\n"
+	config += `			load_share_v4 = "disabled"` + "\n"
+	config += `			load_share_v6 = "disabled"` + "\n"
+	config += `			set_default_next_hop_v4 = "disabled"` + "\n"
+	config += `			set_default_next_hop_v6 = "disabled"` + "\n"
+	config += `			set_vrf_v4 = "disabled"` + "\n"
+	config += `			set_vrf_v6 = "disabled"` + "\n"
+	config += `			verify_availability_v4 = "disabled"` + "\n"
+	config += `			verify_availability_v6 = "disabled"` + "\n"
 	config += `			match_route_prefix_lists = [{` + "\n"
 	config += `				prefix_list_dn = "sys/rpm/pfxlistv4-[PREFIX_LIST1]"` + "\n"
 	config += `			}]` + "\n"

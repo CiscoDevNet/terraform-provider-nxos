@@ -154,7 +154,7 @@ child_classes:
             enum_values:
               - enabled
               - disabled
-            example: enabled
+            example: disabled
           - nxos_name: dropOnFailV6
             tf_name: drop_on_fail_v6
             type: String
@@ -162,7 +162,7 @@ child_classes:
             enum_values:
               - enabled
               - disabled
-            example: enabled
+            example: disabled
           - nxos_name: forceOrderV4
             tf_name: force_order_v4
             type: String
@@ -170,7 +170,7 @@ child_classes:
             enum_values:
               - enabled
               - disabled
-            example: enabled
+            example: disabled
           - nxos_name: forceOrderV6
             tf_name: force_order_v6
             type: String
@@ -178,7 +178,7 @@ child_classes:
             enum_values:
               - enabled
               - disabled
-            example: enabled
+            example: disabled
           - nxos_name: loadShareV4
             tf_name: load_share_v4
             type: String
@@ -186,7 +186,7 @@ child_classes:
             enum_values:
               - enabled
               - disabled
-            example: enabled
+            example: disabled
           - nxos_name: loadShareV6
             tf_name: load_share_v6
             type: String
@@ -194,7 +194,7 @@ child_classes:
             enum_values:
               - enabled
               - disabled
-            example: enabled
+            example: disabled
           - nxos_name: setDefaultNhV4
             tf_name: set_default_next_hop_v4
             type: String
@@ -202,7 +202,7 @@ child_classes:
             enum_values:
               - enabled
               - disabled
-            example: enabled
+            example: disabled
           - nxos_name: setDefaultNhV6
             tf_name: set_default_next_hop_v6
             type: String
@@ -210,7 +210,7 @@ child_classes:
             enum_values:
               - enabled
               - disabled
-            example: enabled
+            example: disabled
           - nxos_name: setVrfV4
             tf_name: set_vrf_v4
             type: String
@@ -218,7 +218,7 @@ child_classes:
             enum_values:
               - enabled
               - disabled
-            example: enabled
+            example: disabled
           - nxos_name: setVrfV6
             tf_name: set_vrf_v6
             type: String
@@ -226,7 +226,7 @@ child_classes:
             enum_values:
               - enabled
               - disabled
-            example: enabled
+            example: disabled
           - nxos_name: verifyAvailabilityV4
             tf_name: verify_availability_v4
             type: String
@@ -234,7 +234,7 @@ child_classes:
             enum_values:
               - enabled
               - disabled
-            example: enabled
+            example: disabled
           - nxos_name: verifyAvailabilityV6
             tf_name: verify_availability_v6
             type: String
@@ -242,7 +242,7 @@ child_classes:
             enum_values:
               - enabled
               - disabled
-            example: enabled
+            example: disabled
         child_classes:
           - class_name: rtmapMatchRtDst
             doc_path: Routing%20and%20Forwarding/rtmap:MatchRtDst/

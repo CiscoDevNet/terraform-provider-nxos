@@ -216,6 +216,231 @@ func (r *PhysicalInterfaceResource) Schema(ctx context.Context, req resource.Sch
 				MarkdownDescription: helpers.NewAttributeDescription("Port User Config Flags.").AddStringEnumDescription("none", "admin_state", "admin_layer", "admin_router_mac", "admin_dce_mode", "admin_mtu").String,
 				Optional:            true,
 			},
+			"beacon": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Beacon State.").AddStringEnumDescription("on", "off").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("on", "off"),
+				},
+			},
+			"dfe_adaptive_tuning": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DFE (Decision Feedback Equalizer) Adaptive Tuning.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"dfe_tuning_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DFE (Decision Feedback Equalizer) Tuning Delay.").AddIntegerRangeDescription(100, 10000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(100, 10000),
+				},
+			},
+			"dot1q_ether_type": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative port Dot1q ether-type. Dot1q Ether Type configures the TPID value in the VLAN tag field for packets received and sent by the interface.").AddIntegerRangeDescription(1536, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1536, 65535),
+				},
+			},
+			"equalization_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative port equalization delay time.").AddIntegerRangeDescription(0, 31).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 31),
+				},
+			},
+			"inherit_bandwidth": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative port inherit bandwidth.").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"itu_channel": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ITU Channel to support DWDM XCVR.").AddIntegerRangeDescription(1, 96).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 96),
+				},
+			},
+			"link_active_jitter_management": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative port link active-jitter-management.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"link_flap_error_disable": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable/Disable Link Flap Error Config.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"link_flap_error_max": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Max Flaps allowed per time.").AddIntegerRangeDescription(2, 30).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(2, 30),
+				},
+			},
+			"link_flap_error_seconds": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Time Allowed for max flaps.").AddIntegerRangeDescription(5, 420).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(5, 420),
+				},
+			},
+			"link_loopback": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Link loopback configuration.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"link_mac_up_timer": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative port link mac-up timer.").AddIntegerRangeDescription(0, 120).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 120),
+				},
+			},
+			"link_max_bring_up_timer": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative port link mac-up timer max.").AddIntegerRangeDescription(0, 120).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 120),
+				},
+			},
+			"link_transmit_reset": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Link Transmit Reset.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"mdix": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative Mdix mode. The Medium-dependant interface crossover (Mdix) is when the interface automatically detects the required cable connection type (straight through or crossover) and configures the connection appropriately.").AddStringEnumDescription("auto", "mdi", "mdi-x").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("auto", "mdi", "mdi-x"),
+				},
+			},
+			"media_type": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Phy interfaces media type.").AddStringEnumDescription("none", "10g-tx").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("none", "10g-tx"),
+				},
+			},
+			"optics_loopback": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configured Loopback.").AddStringEnumDescription("disable", "internal", "line").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "internal", "line"),
+				},
+			},
+			"packet_timestamp_egress_source_id": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Egress timestamp Source Id.").AddIntegerRangeDescription(0, 8388606).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 8388606),
+				},
+			},
+			"packet_timestamp_ingress_source_id": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ingress timestamp Source Id.").AddIntegerRangeDescription(0, 8388606).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 8388606),
+				},
+			},
+			"packet_timestamp_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Packet timestamp feature state.").AddStringEnumDescription("disable", "enable-ingress", "enable-egress", "enable-both").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable-ingress", "enable-egress", "enable-both"),
+				},
+			},
+			"port_type": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Type of the port: Fabric vs Leaf.").AddStringEnumDescription("unknown", "eobc", "mgmt", "fab", "leaf", "extchhp", "extchfp").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("unknown", "eobc", "mgmt", "fab", "leaf", "extchhp", "extchfp"),
+				},
+			},
+			"router_mac": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative router MAC address.").String,
+				Optional:            true,
+			},
+			"snmp_trap_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative port snmp trap state.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"span_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative port span mode.").AddStringEnumDescription("not-a-span-dest", "span-dest", "span-dest-fwd", "span-dest-fwd-learn").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("not-a-span-dest", "span-dest", "span-dest-fwd", "span-dest-fwd-learn"),
+				},
+			},
+			"squelch": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configured Squelch.").AddStringEnumDescription("enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enable", "disable"),
+				},
+			},
+			"transparent_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative port layer1 mode.").AddStringEnumDescription("not-a-trans-port", "trans-port").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("not-a-trans-port", "trans-port"),
+				},
+			},
+			"trunk_logging": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Administrative trunk logging enable.").AddStringEnumDescription("default", "enable", "disable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("default", "enable", "disable"),
+				},
+			},
+			"usage": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The port usage type.").AddStringEnumDescription("discovery", "epg", "fabric", "infra", "controller", "blacklist").String,
+				Optional:            true,
+			},
+			"voice_port_cos": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Voice Port Cos.").AddIntegerRangeDescription(-1, 7).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(-1, 7),
+				},
+			},
+			"voice_port_trust": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Voice Port Trust.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"voice_vlan_id": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Voice VLAN ID.").AddIntegerRangeDescription(0, 4092).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4092),
+				},
+			},
+			"voice_vlan_type": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Voice vlan type.").AddStringEnumDescription("none", "tagged", "dot1p", "untagged").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("none", "tagged", "dot1p", "untagged"),
+				},
+			},
 			"vrf_dn": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("DN of VRF. For example: `sys/inst-VRF1`.").String,
 				Optional:            true,

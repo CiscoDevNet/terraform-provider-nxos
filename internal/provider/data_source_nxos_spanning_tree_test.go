@@ -61,7 +61,7 @@ func TestAccDataSourceNxosSpanningTree(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosSpanningTreeConfig(),
+				Config: testAccDataSourceNxosSpanningTreePrerequisitesConfig + testAccDataSourceNxosSpanningTreeConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -71,6 +71,16 @@ func TestAccDataSourceNxosSpanningTree(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccDataSourceNxosSpanningTreePrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/intf/phys-[eth1/9]"
+  class_name = "l1PhysIf"
+  content = {
+      layer = "Layer2"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -102,6 +112,7 @@ func testAccDataSourceNxosSpanningTreeConfig() string {
 	config += `		prestandard_configuration = "enabled"` + "\n"
 	config += `		simulate_pvst = "enabled"` + "\n"
 	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

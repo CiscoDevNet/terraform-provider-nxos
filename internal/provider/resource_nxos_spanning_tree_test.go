@@ -67,7 +67,7 @@ func TestAccNxosSpanningTree(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosSpanningTreeConfig_all(),
+				Config: testAccNxosSpanningTreePrerequisitesConfig + testAccNxosSpanningTreeConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -99,12 +99,23 @@ func nxosSpanningTreeImportStateIdFunc(resourceName string) resource.ImportState
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccNxosSpanningTreePrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/intf/phys-[eth1/9]"
+  class_name = "l1PhysIf"
+  content = {
+      layer = "Layer2"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosSpanningTreeConfig_minimum() string {
 	config := `resource "nxos_spanning_tree" "test" {` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -139,6 +150,7 @@ func testAccNxosSpanningTreeConfig_all() string {
 	config += `		prestandard_configuration = "enabled"` + "\n"
 	config += `		simulate_pvst = "enabled"` + "\n"
 	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

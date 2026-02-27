@@ -219,3 +219,9 @@ child_classes:
               - disabled
             description: "Port simulate pvst."
             example: enabled
+test_prerequisites:
+  - dn: sys/intf/phys-[eth1/9]
+    class_name: l1PhysIf
+    attributes:
+      - name: layer
+        value: Layer2

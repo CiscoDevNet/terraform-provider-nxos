@@ -33,8 +33,11 @@ func TestAccDataSourceNxosISIS(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_isis.test", "instances.*", map[string]string{
-		"name":        "ISIS1",
-		"admin_state": "enabled",
+		"name":         "ISIS1",
+		"admin_state":  "enabled",
+		"control":      "stateful-ha",
+		"flush_routes": "true",
+		"isolate":      "true",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_isis.test", "instances.*.vrfs.*", map[string]string{
 		"name":                     "default",
@@ -50,45 +53,77 @@ func TestAccDataSourceNxosISIS(t *testing.T) {
 		"mtu":                      "2000",
 		"net":                      "49.0001.0000.0000.3333.00",
 		"passive_default":          "l12",
+		"control":                  "log-adj-changes",
+		"lsp_lifetime":             "1000",
+		"queue_limit":              "3000",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_isis.test", "instances.*.vrfs.*.address_families.*", map[string]string{
-		"address_family":              "v4",
-		"segment_routing_mpls":        "true",
-		"enable_bfd":                  "false",
-		"prefix_advertise_passive_l1": "true",
-		"prefix_advertise_passive_l2": "true",
+		"address_family":                          "v4",
+		"segment_routing_mpls":                    "true",
+		"enable_bfd":                              "false",
+		"prefix_advertise_passive_l1":             "true",
+		"prefix_advertise_passive_l2":             "true",
+		"control":                                 "adj-check",
+		"default_information_originate":           "on",
+		"default_information_originate_route_map": "rm1",
+		"distance":                                "100",
+		"max_ecmp":                                "4",
+		"multi_topology":                          "st",
+		"router_id_interface":                     "lo0",
+		"table_map":                               "rm1",
+		"table_map_filter":                        "enabled",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_isis.test", "instances.*.vrfs.*", map[string]string{
-		"overload_startup_time": "60",
+		"overload_startup_time":         "60",
+		"overload_admin_state":          "always-on",
+		"overload_bgp_as_number":        "100",
+		"overload_bgp_as_number_string": "100",
+		"overload_suppress":             "interlevel",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_isis.test", "interfaces.*", map[string]string{
-		"interface_id":            "eth1/10",
-		"authentication_check":    "false",
-		"authentication_check_l1": "false",
-		"authentication_check_l2": "false",
-		"authentication_type":     "unknown",
-		"authentication_type_l1":  "unknown",
-		"authentication_type_l2":  "unknown",
-		"circuit_type":            "l2",
-		"vrf":                     "default",
-		"hello_interval":          "20",
-		"hello_interval_l1":       "20",
-		"hello_interval_l2":       "20",
-		"hello_multiplier":        "4",
-		"hello_multiplier_l1":     "4",
-		"hello_multiplier_l2":     "4",
-		"hello_padding":           "never",
-		"instance_name":           "ISIS1",
-		"metric_l1":               "1000",
-		"metric_l2":               "1000",
-		"mtu_check":               "true",
-		"mtu_check_l1":            "true",
-		"mtu_check_l2":            "true",
-		"network_type_p2p":        "on",
-		"passive":                 "l1",
-		"priority_l1":             "80",
-		"priority_l2":             "80",
-		"enable_ipv4":             "true",
+		"interface_id":                 "eth1/10",
+		"authentication_check":         "false",
+		"authentication_check_l1":      "false",
+		"authentication_check_l2":      "false",
+		"authentication_type":          "unknown",
+		"authentication_type_l1":       "unknown",
+		"authentication_type_l2":       "unknown",
+		"circuit_type":                 "l2",
+		"vrf":                          "default",
+		"hello_interval":               "20",
+		"hello_interval_l1":            "20",
+		"hello_interval_l2":            "20",
+		"hello_multiplier":             "4",
+		"hello_multiplier_l1":          "4",
+		"hello_multiplier_l2":          "4",
+		"hello_padding":                "never",
+		"instance_name":                "ISIS1",
+		"metric_l1":                    "1000",
+		"metric_l2":                    "1000",
+		"mtu_check":                    "true",
+		"mtu_check_l1":                 "true",
+		"mtu_check_l2":                 "true",
+		"network_type_p2p":             "on",
+		"passive":                      "l1",
+		"priority_l1":                  "80",
+		"priority_l2":                  "80",
+		"enable_ipv4":                  "true",
+		"admin_state":                  "enabled",
+		"csnp_interval_l1":             "30",
+		"csnp_interval_l2":             "30",
+		"control":                      "advert-tep",
+		"description":                  "ISIS interface",
+		"lsp_refresh_interval":         "100",
+		"mesh_group_id":                "10",
+		"ipv6_metric_l1":               "1000",
+		"ipv6_metric_l2":               "1000",
+		"n_flag_clear":                 "true",
+		"retransmit_interval":          "10",
+		"retransmit_throttle_interval": "100",
+		"suppressed_state":             "true",
+		"ipv4_bfd":                     "enabled",
+		"ipv6_bfd":                     "enabled",
+		"ipv6":                         "true",
 	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -134,6 +169,9 @@ func testAccDataSourceNxosISISConfig() string {
 	config += `	instances = [{` + "\n"
 	config += `		name = "ISIS1"` + "\n"
 	config += `		admin_state = "enabled"` + "\n"
+	config += `		control = "stateful-ha"` + "\n"
+	config += `		flush_routes = true` + "\n"
+	config += `		isolate = true` + "\n"
 	config += `		vrfs = [{` + "\n"
 	config += `			name = "default"` + "\n"
 	config += `			admin_state = "enabled"` + "\n"
@@ -150,14 +188,30 @@ func testAccDataSourceNxosISISConfig() string {
 	config += `			mtu = 2000` + "\n"
 	config += `			net = "49.0001.0000.0000.3333.00"` + "\n"
 	config += `			passive_default = "l12"` + "\n"
+	config += `			control = "log-adj-changes"` + "\n"
+	config += `			lsp_lifetime = 1000` + "\n"
+	config += `			queue_limit = 3000` + "\n"
 	config += `			address_families = [{` + "\n"
 	config += `				address_family = "v4"` + "\n"
 	config += `				segment_routing_mpls = true` + "\n"
 	config += `				enable_bfd = false` + "\n"
 	config += `				prefix_advertise_passive_l1 = true` + "\n"
 	config += `				prefix_advertise_passive_l2 = true` + "\n"
+	config += `				control = "adj-check"` + "\n"
+	config += `				default_information_originate = "on"` + "\n"
+	config += `				default_information_originate_route_map = "rm1"` + "\n"
+	config += `				distance = 100` + "\n"
+	config += `				max_ecmp = 4` + "\n"
+	config += `				multi_topology = "st"` + "\n"
+	config += `				router_id_interface = "lo0"` + "\n"
+	config += `				table_map = "rm1"` + "\n"
+	config += `				table_map_filter = "enabled"` + "\n"
 	config += `			}]` + "\n"
 	config += `			overload_startup_time = 60` + "\n"
+	config += `			overload_admin_state = "always-on"` + "\n"
+	config += `			overload_bgp_as_number = 100` + "\n"
+	config += `			overload_bgp_as_number_string = "100"` + "\n"
+	config += `			overload_suppress = "interlevel"` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
 	config += `	interfaces = [{` + "\n"
@@ -191,6 +245,22 @@ func testAccDataSourceNxosISISConfig() string {
 	config += `		priority_l1 = 80` + "\n"
 	config += `		priority_l2 = 80` + "\n"
 	config += `		enable_ipv4 = true` + "\n"
+	config += `		admin_state = "enabled"` + "\n"
+	config += `		csnp_interval_l1 = 30` + "\n"
+	config += `		csnp_interval_l2 = 30` + "\n"
+	config += `		control = "advert-tep"` + "\n"
+	config += `		description = "ISIS interface"` + "\n"
+	config += `		lsp_refresh_interval = 100` + "\n"
+	config += `		mesh_group_id = 10` + "\n"
+	config += `		ipv6_metric_l1 = 1000` + "\n"
+	config += `		ipv6_metric_l2 = 1000` + "\n"
+	config += `		n_flag_clear = true` + "\n"
+	config += `		retransmit_interval = 10` + "\n"
+	config += `		retransmit_throttle_interval = 100` + "\n"
+	config += `		suppressed_state = true` + "\n"
+	config += `		ipv4_bfd = "enabled"` + "\n"
+	config += `		ipv6_bfd = "enabled"` + "\n"
+	config += `		ipv6 = true` + "\n"
 	config += `	}]` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
 	config += `}` + "\n"

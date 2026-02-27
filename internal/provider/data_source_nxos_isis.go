@@ -85,6 +85,18 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							MarkdownDescription: "The administrative state of the object or policy.",
 							Computed:            true,
 						},
+						"control": schema.StringAttribute{
+							MarkdownDescription: "The control state.",
+							Computed:            true,
+						},
+						"flush_routes": schema.BoolAttribute{
+							MarkdownDescription: "Flush ISIS Routes on non graceful controlled restart.",
+							Computed:            true,
+						},
+						"isolate": schema.BoolAttribute{
+							MarkdownDescription: "Isolate ISIS Instance from other process tags.",
+							Computed:            true,
+						},
 						"vrfs": schema.ListNestedAttribute{
 							MarkdownDescription: "List of IS-IS VRFs.",
 							Computed:            true,
@@ -150,6 +162,18 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										MarkdownDescription: "Holds ISIS Domain passive-interface default level.",
 										Computed:            true,
 									},
+									"control": schema.StringAttribute{
+										MarkdownDescription: "Holds ISIS Domain Control messages.",
+										Computed:            true,
+									},
+									"lsp_lifetime": schema.Int64Attribute{
+										MarkdownDescription: "Holds ISIS Domain LSP Lifetime.",
+										Computed:            true,
+									},
+									"queue_limit": schema.Int64Attribute{
+										MarkdownDescription: "Holds the ISIS queue limit retransmit value.",
+										Computed:            true,
+									},
 									"address_families": schema.ListNestedAttribute{
 										MarkdownDescription: "List of IS-IS address families.",
 										Computed:            true,
@@ -175,11 +199,67 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 													MarkdownDescription: "Prefix advertise passive only level-2.",
 													Computed:            true,
 												},
+												"control": schema.StringAttribute{
+													MarkdownDescription: "The address family controls. This determines the address family to run. Note that IPv4 and IPv6 are both supported.",
+													Computed:            true,
+												},
+												"default_information_originate": schema.StringAttribute{
+													MarkdownDescription: "Holds ISIS Domain address family default-information originate state for Route.",
+													Computed:            true,
+												},
+												"default_information_originate_route_map": schema.StringAttribute{
+													MarkdownDescription: "Holds Route-map name for ISIS Domain address family default-information originate.",
+													Computed:            true,
+												},
+												"distance": schema.Int64Attribute{
+													MarkdownDescription: "Holds ISIS Domain address family Administrative Distance.",
+													Computed:            true,
+												},
+												"max_ecmp": schema.Int64Attribute{
+													MarkdownDescription: "Holds ISIS Domain address family Max ECMP value.",
+													Computed:            true,
+												},
+												"multi_topology": schema.StringAttribute{
+													MarkdownDescription: "Holds ISIS Domain address family Multi-topology information.",
+													Computed:            true,
+												},
+												"router_id_interface": schema.StringAttribute{
+													MarkdownDescription: "Holds interface.",
+													Computed:            true,
+												},
+												"router_id_ip_address": schema.StringAttribute{
+													MarkdownDescription: "Holds ip address to become router id.",
+													Computed:            true,
+												},
+												"table_map": schema.StringAttribute{
+													MarkdownDescription: "Holds Route-map name to filter routes downloaded.",
+													Computed:            true,
+												},
+												"table_map_filter": schema.StringAttribute{
+													MarkdownDescription: "Enables table-map for Selective route.",
+													Computed:            true,
+												},
 											},
 										},
 									},
 									"overload_startup_time": schema.Int64Attribute{
 										MarkdownDescription: "The overload startup time. The overload state begins when the switch boots up and ends at the time specified as the overload startup time.",
+										Computed:            true,
+									},
+									"overload_admin_state": schema.StringAttribute{
+										MarkdownDescription: "Admin State.",
+										Computed:            true,
+									},
+									"overload_bgp_as_number": schema.Int64Attribute{
+										MarkdownDescription: "The BGP autonomous system number. This sets overload until BGP converges on this autonomous system number. This is not currently supported.",
+										Computed:            true,
+									},
+									"overload_bgp_as_number_string": schema.StringAttribute{
+										MarkdownDescription: "BGP AS Num in supported format.",
+										Computed:            true,
+									},
+									"overload_suppress": schema.StringAttribute{
+										MarkdownDescription: "Suppress Internal/External.",
 										Computed:            true,
 									},
 								},
@@ -311,6 +391,74 @@ func (d *ISISDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 						},
 						"enable_ipv4": schema.BoolAttribute{
 							MarkdownDescription: "Enabling ISIS router tag on Interface's IPV4 family.",
+							Computed:            true,
+						},
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: "The administrative state of the object or policy.",
+							Computed:            true,
+						},
+						"csnp_interval_l1": schema.Int64Attribute{
+							MarkdownDescription: "Holds ISIS Interface Level-1 CSNP Interval.",
+							Computed:            true,
+						},
+						"csnp_interval_l2": schema.Int64Attribute{
+							MarkdownDescription: "Holds ISIS Interface Level-2 CSNP Interval.",
+							Computed:            true,
+						},
+						"control": schema.StringAttribute{
+							MarkdownDescription: "Holds ISIS interface Control messages.",
+							Computed:            true,
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: "Description.",
+							Computed:            true,
+						},
+						"lsp_refresh_interval": schema.Int64Attribute{
+							MarkdownDescription: "Holds ISIS Interface LSP Refresh Interval.",
+							Computed:            true,
+						},
+						"mesh_group_blocked": schema.BoolAttribute{
+							MarkdownDescription: "Mesh group blocked value.",
+							Computed:            true,
+						},
+						"mesh_group_id": schema.Int64Attribute{
+							MarkdownDescription: "Holds the ISIS mesh group ID value.",
+							Computed:            true,
+						},
+						"ipv6_metric_l1": schema.Int64Attribute{
+							MarkdownDescription: "Holds ISIS interface IPV6 wide metric value for Level-1.",
+							Computed:            true,
+						},
+						"ipv6_metric_l2": schema.Int64Attribute{
+							MarkdownDescription: "Holds ISIS interface IPV6 wide metric value for Level-2.",
+							Computed:            true,
+						},
+						"n_flag_clear": schema.BoolAttribute{
+							MarkdownDescription: "Enabling N flag clear for ISIS interface.",
+							Computed:            true,
+						},
+						"retransmit_interval": schema.Int64Attribute{
+							MarkdownDescription: "Holds ISIS Interface Retransmit Interval.",
+							Computed:            true,
+						},
+						"retransmit_throttle_interval": schema.Int64Attribute{
+							MarkdownDescription: "Holds ISIS Interface Retransmit Throttle Interval.",
+							Computed:            true,
+						},
+						"suppressed_state": schema.BoolAttribute{
+							MarkdownDescription: "Suppress the prefix advertisement.",
+							Computed:            true,
+						},
+						"ipv4_bfd": schema.StringAttribute{
+							MarkdownDescription: "Holds ISIS Interface BFD Configruation.",
+							Computed:            true,
+						},
+						"ipv6_bfd": schema.StringAttribute{
+							MarkdownDescription: "Holds Interface BFD Configruation for IPV6 family.",
+							Computed:            true,
+						},
+						"ipv6": schema.BoolAttribute{
+							MarkdownDescription: "Enabling ISIS router tag on Interface's IPV6 family.",
 							Computed:            true,
 						},
 					},

@@ -46,70 +46,107 @@ type ISIS struct {
 }
 
 type ISISInstances struct {
-	Name       types.String        `tfsdk:"name"`
-	AdminState types.String        `tfsdk:"admin_state"`
-	Vrfs       []ISISInstancesVrfs `tfsdk:"vrfs"`
+	Name        types.String        `tfsdk:"name"`
+	AdminState  types.String        `tfsdk:"admin_state"`
+	Control     types.String        `tfsdk:"control"`
+	FlushRoutes types.Bool          `tfsdk:"flush_routes"`
+	Isolate     types.Bool          `tfsdk:"isolate"`
+	Vrfs        []ISISInstancesVrfs `tfsdk:"vrfs"`
 }
 
 type ISISInstancesVrfs struct {
-	Name                   types.String                       `tfsdk:"name"`
-	AdminState             types.String                       `tfsdk:"admin_state"`
-	AuthenticationCheckL1  types.Bool                         `tfsdk:"authentication_check_l1"`
-	AuthenticationCheckL2  types.Bool                         `tfsdk:"authentication_check_l2"`
-	AuthenticationKeyL1    types.String                       `tfsdk:"authentication_key_l1"`
-	AuthenticationKeyL2    types.String                       `tfsdk:"authentication_key_l2"`
-	AuthenticationTypeL1   types.String                       `tfsdk:"authentication_type_l1"`
-	AuthenticationTypeL2   types.String                       `tfsdk:"authentication_type_l2"`
-	BandwidthReference     types.Int64                        `tfsdk:"bandwidth_reference"`
-	BandwidthReferenceUnit types.String                       `tfsdk:"bandwidth_reference_unit"`
-	IsType                 types.String                       `tfsdk:"is_type"`
-	MetricType             types.String                       `tfsdk:"metric_type"`
-	Mtu                    types.Int64                        `tfsdk:"mtu"`
-	Net                    types.String                       `tfsdk:"net"`
-	PassiveDefault         types.String                       `tfsdk:"passive_default"`
-	AddressFamilies        []ISISInstancesVrfsAddressFamilies `tfsdk:"address_families"`
-	OverloadStartupTime    types.Int64                        `tfsdk:"overload_startup_time"`
+	Name                      types.String                       `tfsdk:"name"`
+	AdminState                types.String                       `tfsdk:"admin_state"`
+	AuthenticationCheckL1     types.Bool                         `tfsdk:"authentication_check_l1"`
+	AuthenticationCheckL2     types.Bool                         `tfsdk:"authentication_check_l2"`
+	AuthenticationKeyL1       types.String                       `tfsdk:"authentication_key_l1"`
+	AuthenticationKeyL2       types.String                       `tfsdk:"authentication_key_l2"`
+	AuthenticationTypeL1      types.String                       `tfsdk:"authentication_type_l1"`
+	AuthenticationTypeL2      types.String                       `tfsdk:"authentication_type_l2"`
+	BandwidthReference        types.Int64                        `tfsdk:"bandwidth_reference"`
+	BandwidthReferenceUnit    types.String                       `tfsdk:"bandwidth_reference_unit"`
+	IsType                    types.String                       `tfsdk:"is_type"`
+	MetricType                types.String                       `tfsdk:"metric_type"`
+	Mtu                       types.Int64                        `tfsdk:"mtu"`
+	Net                       types.String                       `tfsdk:"net"`
+	PassiveDefault            types.String                       `tfsdk:"passive_default"`
+	Control                   types.String                       `tfsdk:"control"`
+	LspLifetime               types.Int64                        `tfsdk:"lsp_lifetime"`
+	QueueLimit                types.Int64                        `tfsdk:"queue_limit"`
+	AddressFamilies           []ISISInstancesVrfsAddressFamilies `tfsdk:"address_families"`
+	OverloadStartupTime       types.Int64                        `tfsdk:"overload_startup_time"`
+	OverloadAdminState        types.String                       `tfsdk:"overload_admin_state"`
+	OverloadBgpAsNumber       types.Int64                        `tfsdk:"overload_bgp_as_number"`
+	OverloadBgpAsNumberString types.String                       `tfsdk:"overload_bgp_as_number_string"`
+	OverloadSuppress          types.String                       `tfsdk:"overload_suppress"`
 }
 
 type ISISInstancesVrfsAddressFamilies struct {
-	AddressFamily            types.String `tfsdk:"address_family"`
-	SegmentRoutingMpls       types.Bool   `tfsdk:"segment_routing_mpls"`
-	EnableBfd                types.Bool   `tfsdk:"enable_bfd"`
-	PrefixAdvertisePassiveL1 types.Bool   `tfsdk:"prefix_advertise_passive_l1"`
-	PrefixAdvertisePassiveL2 types.Bool   `tfsdk:"prefix_advertise_passive_l2"`
+	AddressFamily                       types.String `tfsdk:"address_family"`
+	SegmentRoutingMpls                  types.Bool   `tfsdk:"segment_routing_mpls"`
+	EnableBfd                           types.Bool   `tfsdk:"enable_bfd"`
+	PrefixAdvertisePassiveL1            types.Bool   `tfsdk:"prefix_advertise_passive_l1"`
+	PrefixAdvertisePassiveL2            types.Bool   `tfsdk:"prefix_advertise_passive_l2"`
+	Control                             types.String `tfsdk:"control"`
+	DefaultInformationOriginate         types.String `tfsdk:"default_information_originate"`
+	DefaultInformationOriginateRouteMap types.String `tfsdk:"default_information_originate_route_map"`
+	Distance                            types.Int64  `tfsdk:"distance"`
+	MaxEcmp                             types.Int64  `tfsdk:"max_ecmp"`
+	MultiTopology                       types.String `tfsdk:"multi_topology"`
+	RouterIdInterface                   types.String `tfsdk:"router_id_interface"`
+	RouterIdIpAddress                   types.String `tfsdk:"router_id_ip_address"`
+	TableMap                            types.String `tfsdk:"table_map"`
+	TableMapFilter                      types.String `tfsdk:"table_map_filter"`
 }
 
 type ISISInterfaces struct {
-	InterfaceId           types.String `tfsdk:"interface_id"`
-	AuthenticationCheck   types.Bool   `tfsdk:"authentication_check"`
-	AuthenticationCheckL1 types.Bool   `tfsdk:"authentication_check_l1"`
-	AuthenticationCheckL2 types.Bool   `tfsdk:"authentication_check_l2"`
-	AuthenticationKey     types.String `tfsdk:"authentication_key"`
-	AuthenticationKeyL1   types.String `tfsdk:"authentication_key_l1"`
-	AuthenticationKeyL2   types.String `tfsdk:"authentication_key_l2"`
-	AuthenticationType    types.String `tfsdk:"authentication_type"`
-	AuthenticationTypeL1  types.String `tfsdk:"authentication_type_l1"`
-	AuthenticationTypeL2  types.String `tfsdk:"authentication_type_l2"`
-	CircuitType           types.String `tfsdk:"circuit_type"`
-	Vrf                   types.String `tfsdk:"vrf"`
-	HelloInterval         types.Int64  `tfsdk:"hello_interval"`
-	HelloIntervalL1       types.Int64  `tfsdk:"hello_interval_l1"`
-	HelloIntervalL2       types.Int64  `tfsdk:"hello_interval_l2"`
-	HelloMultiplier       types.Int64  `tfsdk:"hello_multiplier"`
-	HelloMultiplierL1     types.Int64  `tfsdk:"hello_multiplier_l1"`
-	HelloMultiplierL2     types.Int64  `tfsdk:"hello_multiplier_l2"`
-	HelloPadding          types.String `tfsdk:"hello_padding"`
-	InstanceName          types.String `tfsdk:"instance_name"`
-	MetricL1              types.Int64  `tfsdk:"metric_l1"`
-	MetricL2              types.Int64  `tfsdk:"metric_l2"`
-	MtuCheck              types.Bool   `tfsdk:"mtu_check"`
-	MtuCheckL1            types.Bool   `tfsdk:"mtu_check_l1"`
-	MtuCheckL2            types.Bool   `tfsdk:"mtu_check_l2"`
-	NetworkTypeP2p        types.String `tfsdk:"network_type_p2p"`
-	Passive               types.String `tfsdk:"passive"`
-	PriorityL1            types.Int64  `tfsdk:"priority_l1"`
-	PriorityL2            types.Int64  `tfsdk:"priority_l2"`
-	EnableIpv4            types.Bool   `tfsdk:"enable_ipv4"`
+	InterfaceId                types.String `tfsdk:"interface_id"`
+	AuthenticationCheck        types.Bool   `tfsdk:"authentication_check"`
+	AuthenticationCheckL1      types.Bool   `tfsdk:"authentication_check_l1"`
+	AuthenticationCheckL2      types.Bool   `tfsdk:"authentication_check_l2"`
+	AuthenticationKey          types.String `tfsdk:"authentication_key"`
+	AuthenticationKeyL1        types.String `tfsdk:"authentication_key_l1"`
+	AuthenticationKeyL2        types.String `tfsdk:"authentication_key_l2"`
+	AuthenticationType         types.String `tfsdk:"authentication_type"`
+	AuthenticationTypeL1       types.String `tfsdk:"authentication_type_l1"`
+	AuthenticationTypeL2       types.String `tfsdk:"authentication_type_l2"`
+	CircuitType                types.String `tfsdk:"circuit_type"`
+	Vrf                        types.String `tfsdk:"vrf"`
+	HelloInterval              types.Int64  `tfsdk:"hello_interval"`
+	HelloIntervalL1            types.Int64  `tfsdk:"hello_interval_l1"`
+	HelloIntervalL2            types.Int64  `tfsdk:"hello_interval_l2"`
+	HelloMultiplier            types.Int64  `tfsdk:"hello_multiplier"`
+	HelloMultiplierL1          types.Int64  `tfsdk:"hello_multiplier_l1"`
+	HelloMultiplierL2          types.Int64  `tfsdk:"hello_multiplier_l2"`
+	HelloPadding               types.String `tfsdk:"hello_padding"`
+	InstanceName               types.String `tfsdk:"instance_name"`
+	MetricL1                   types.Int64  `tfsdk:"metric_l1"`
+	MetricL2                   types.Int64  `tfsdk:"metric_l2"`
+	MtuCheck                   types.Bool   `tfsdk:"mtu_check"`
+	MtuCheckL1                 types.Bool   `tfsdk:"mtu_check_l1"`
+	MtuCheckL2                 types.Bool   `tfsdk:"mtu_check_l2"`
+	NetworkTypeP2p             types.String `tfsdk:"network_type_p2p"`
+	Passive                    types.String `tfsdk:"passive"`
+	PriorityL1                 types.Int64  `tfsdk:"priority_l1"`
+	PriorityL2                 types.Int64  `tfsdk:"priority_l2"`
+	EnableIpv4                 types.Bool   `tfsdk:"enable_ipv4"`
+	AdminState                 types.String `tfsdk:"admin_state"`
+	CsnpIntervalL1             types.Int64  `tfsdk:"csnp_interval_l1"`
+	CsnpIntervalL2             types.Int64  `tfsdk:"csnp_interval_l2"`
+	Control                    types.String `tfsdk:"control"`
+	Description                types.String `tfsdk:"description"`
+	LspRefreshInterval         types.Int64  `tfsdk:"lsp_refresh_interval"`
+	MeshGroupBlocked           types.Bool   `tfsdk:"mesh_group_blocked"`
+	MeshGroupId                types.Int64  `tfsdk:"mesh_group_id"`
+	Ipv6MetricL1               types.Int64  `tfsdk:"ipv6_metric_l1"`
+	Ipv6MetricL2               types.Int64  `tfsdk:"ipv6_metric_l2"`
+	NFlagClear                 types.Bool   `tfsdk:"n_flag_clear"`
+	RetransmitInterval         types.Int64  `tfsdk:"retransmit_interval"`
+	RetransmitThrottleInterval types.Int64  `tfsdk:"retransmit_throttle_interval"`
+	SuppressedState            types.Bool   `tfsdk:"suppressed_state"`
+	Ipv4Bfd                    types.String `tfsdk:"ipv4_bfd"`
+	Ipv6Bfd                    types.String `tfsdk:"ipv6_bfd"`
+	Ipv6                       types.Bool   `tfsdk:"ipv6"`
 }
 
 type ISISIdentity struct {
@@ -180,6 +217,15 @@ func (data ISIS) toBody() nxos.Body {
 		if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
 		}
+		if (!child.Control.IsUnknown() && !child.Control.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
+		}
+		if (!child.FlushRoutes.IsUnknown() && !child.FlushRoutes.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "flushRoutes", strconv.FormatBool(child.FlushRoutes.ValueBool()))
+		}
+		if (!child.Isolate.IsUnknown() && !child.Isolate.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "isolate", strconv.FormatBool(child.Isolate.ValueBool()))
+		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.isisInst.attributes", attrs)
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
@@ -231,6 +277,15 @@ func (data ISIS) toBody() nxos.Body {
 				if (!child.PassiveDefault.IsUnknown() && !child.PassiveDefault.IsNull()) || false {
 					attrs, _ = sjson.Set(attrs, "passiveDflt", child.PassiveDefault.ValueString())
 				}
+				if (!child.Control.IsUnknown() && !child.Control.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
+				}
+				if (!child.LspLifetime.IsUnknown() && !child.LspLifetime.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "lspLifetime", strconv.FormatInt(child.LspLifetime.ValueInt64(), 10))
+				}
+				if (!child.QueueLimit.IsUnknown() && !child.QueueLimit.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "queueLimit", strconv.FormatInt(child.QueueLimit.ValueInt64(), 10))
+				}
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.isisDom.attributes", attrs)
 				{
 					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
@@ -252,11 +307,53 @@ func (data ISIS) toBody() nxos.Body {
 						if (!child.PrefixAdvertisePassiveL2.IsUnknown() && !child.PrefixAdvertisePassiveL2.IsNull()) || false {
 							attrs, _ = sjson.Set(attrs, "advPassiveLvl2", strconv.FormatBool(child.PrefixAdvertisePassiveL2.ValueBool()))
 						}
+						if (!child.Control.IsUnknown() && !child.Control.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
+						}
+						if (!child.DefaultInformationOriginate.IsUnknown() && !child.DefaultInformationOriginate.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "defInfOrig", child.DefaultInformationOriginate.ValueString())
+						}
+						if (!child.DefaultInformationOriginateRouteMap.IsUnknown() && !child.DefaultInformationOriginateRouteMap.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "defInfOrigRtMap", child.DefaultInformationOriginateRouteMap.ValueString())
+						}
+						if (!child.Distance.IsUnknown() && !child.Distance.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "dist", strconv.FormatInt(child.Distance.ValueInt64(), 10))
+						}
+						if (!child.MaxEcmp.IsUnknown() && !child.MaxEcmp.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "maxEcmp", strconv.FormatInt(child.MaxEcmp.ValueInt64(), 10))
+						}
+						if (!child.MultiTopology.IsUnknown() && !child.MultiTopology.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "mtType", child.MultiTopology.ValueString())
+						}
+						if (!child.RouterIdInterface.IsUnknown() && !child.RouterIdInterface.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "rtrIdIf", child.RouterIdInterface.ValueString())
+						}
+						if (!child.RouterIdIpAddress.IsUnknown() && !child.RouterIdIpAddress.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "rtrIdIpAddr", child.RouterIdIpAddress.ValueString())
+						}
+						if (!child.TableMap.IsUnknown() && !child.TableMap.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "tblMap", child.TableMap.ValueString())
+						}
+						if (!child.TableMapFilter.IsUnknown() && !child.TableMapFilter.IsNull()) || false {
+							attrs, _ = sjson.Set(attrs, "tblMapFltr", child.TableMapFilter.ValueString())
+						}
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.isisDomAf.attributes", attrs)
 					}
 					attrs = "{}"
 					if (!child.OverloadStartupTime.IsUnknown() && !child.OverloadStartupTime.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "startupTime", strconv.FormatInt(child.OverloadStartupTime.ValueInt64(), 10))
+					}
+					if (!child.OverloadAdminState.IsUnknown() && !child.OverloadAdminState.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "adminSt", child.OverloadAdminState.ValueString())
+					}
+					if (!child.OverloadBgpAsNumber.IsUnknown() && !child.OverloadBgpAsNumber.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "bgpAsNum", strconv.FormatInt(child.OverloadBgpAsNumber.ValueInt64(), 10))
+					}
+					if (!child.OverloadBgpAsNumberString.IsUnknown() && !child.OverloadBgpAsNumberString.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "bgpAsNumStr", child.OverloadBgpAsNumberString.ValueString())
+					}
+					if (!child.OverloadSuppress.IsUnknown() && !child.OverloadSuppress.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "suppress", child.OverloadSuppress.ValueString())
 					}
 					if attrs != "{}" || false {
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.isisOverload.attributes", attrs)
@@ -357,6 +454,57 @@ func (data ISIS) toBody() nxos.Body {
 		if (!child.EnableIpv4.IsUnknown() && !child.EnableIpv4.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "v4enable", strconv.FormatBool(child.EnableIpv4.ValueBool()))
 		}
+		if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
+		}
+		if (!child.CsnpIntervalL1.IsUnknown() && !child.CsnpIntervalL1.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "csnpIntvlLvl1", strconv.FormatInt(child.CsnpIntervalL1.ValueInt64(), 10))
+		}
+		if (!child.CsnpIntervalL2.IsUnknown() && !child.CsnpIntervalL2.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "csnpIntvlLvl2", strconv.FormatInt(child.CsnpIntervalL2.ValueInt64(), 10))
+		}
+		if (!child.Control.IsUnknown() && !child.Control.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
+		}
+		if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+		}
+		if (!child.LspRefreshInterval.IsUnknown() && !child.LspRefreshInterval.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "lspRefreshIntvl", strconv.FormatInt(child.LspRefreshInterval.ValueInt64(), 10))
+		}
+		if (!child.MeshGroupBlocked.IsUnknown() && !child.MeshGroupBlocked.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "meshGroupBlocked", strconv.FormatBool(child.MeshGroupBlocked.ValueBool()))
+		}
+		if (!child.MeshGroupId.IsUnknown() && !child.MeshGroupId.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "meshGroupId", strconv.FormatInt(child.MeshGroupId.ValueInt64(), 10))
+		}
+		if (!child.Ipv6MetricL1.IsUnknown() && !child.Ipv6MetricL1.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "mt2MetricLvl1", strconv.FormatInt(child.Ipv6MetricL1.ValueInt64(), 10))
+		}
+		if (!child.Ipv6MetricL2.IsUnknown() && !child.Ipv6MetricL2.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "mt2MetricLvl2", strconv.FormatInt(child.Ipv6MetricL2.ValueInt64(), 10))
+		}
+		if (!child.NFlagClear.IsUnknown() && !child.NFlagClear.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "nFlagClear", strconv.FormatBool(child.NFlagClear.ValueBool()))
+		}
+		if (!child.RetransmitInterval.IsUnknown() && !child.RetransmitInterval.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "retransInterval", strconv.FormatInt(child.RetransmitInterval.ValueInt64(), 10))
+		}
+		if (!child.RetransmitThrottleInterval.IsUnknown() && !child.RetransmitThrottleInterval.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "retransThrottleInterval", strconv.FormatInt(child.RetransmitThrottleInterval.ValueInt64(), 10))
+		}
+		if (!child.SuppressedState.IsUnknown() && !child.SuppressedState.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "suppressedState", strconv.FormatBool(child.SuppressedState.ValueBool()))
+		}
+		if (!child.Ipv4Bfd.IsUnknown() && !child.Ipv4Bfd.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "v4Bfd", child.Ipv4Bfd.ValueString())
+		}
+		if (!child.Ipv6Bfd.IsUnknown() && !child.Ipv6Bfd.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "v6Bfd", child.Ipv6Bfd.ValueString())
+		}
+		if (!child.Ipv6.IsUnknown() && !child.Ipv6.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "v6enable", strconv.FormatBool(child.Ipv6.ValueBool()))
+		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.isisInternalIf.attributes", attrs)
 	}
 
@@ -377,6 +525,9 @@ func (data *ISIS) fromBody(res gjson.Result) {
 						var child ISISInstances
 						child.Name = types.StringValue(value.Get("attributes.name").String())
 						child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
+						child.Control = types.StringValue(value.Get("attributes.ctrl").String())
+						child.FlushRoutes = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.flushRoutes").String()))
+						child.Isolate = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.isolate").String()))
 						value.Get("children").ForEach(
 							func(_, nestedV gjson.Result) bool {
 								nestedV.ForEach(
@@ -396,6 +547,9 @@ func (data *ISIS) fromBody(res gjson.Result) {
 											nestedChildisisDom.Mtu = types.Int64Value(nestedValue.Get("attributes.mtu").Int())
 											nestedChildisisDom.Net = types.StringValue(nestedValue.Get("attributes.net").String())
 											nestedChildisisDom.PassiveDefault = types.StringValue(nestedValue.Get("attributes.passiveDflt").String())
+											nestedChildisisDom.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
+											nestedChildisisDom.LspLifetime = types.Int64Value(nestedValue.Get("attributes.lspLifetime").Int())
+											nestedChildisisDom.QueueLimit = types.Int64Value(nestedValue.Get("attributes.queueLimit").Int())
 											nestedValue.Get("children").ForEach(
 												func(_, nestedV gjson.Result) bool {
 													nestedV.ForEach(
@@ -407,6 +561,16 @@ func (data *ISIS) fromBody(res gjson.Result) {
 																nestedChildisisDomAf.EnableBfd = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.enableBfd").String()))
 																nestedChildisisDomAf.PrefixAdvertisePassiveL1 = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.advPassiveLvl1").String()))
 																nestedChildisisDomAf.PrefixAdvertisePassiveL2 = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.advPassiveLvl2").String()))
+																nestedChildisisDomAf.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
+																nestedChildisisDomAf.DefaultInformationOriginate = types.StringValue(nestedValue.Get("attributes.defInfOrig").String())
+																nestedChildisisDomAf.DefaultInformationOriginateRouteMap = types.StringValue(nestedValue.Get("attributes.defInfOrigRtMap").String())
+																nestedChildisisDomAf.Distance = types.Int64Value(nestedValue.Get("attributes.dist").Int())
+																nestedChildisisDomAf.MaxEcmp = types.Int64Value(nestedValue.Get("attributes.maxEcmp").Int())
+																nestedChildisisDomAf.MultiTopology = types.StringValue(nestedValue.Get("attributes.mtType").String())
+																nestedChildisisDomAf.RouterIdInterface = types.StringValue(nestedValue.Get("attributes.rtrIdIf").String())
+																nestedChildisisDomAf.RouterIdIpAddress = types.StringValue(nestedValue.Get("attributes.rtrIdIpAddr").String())
+																nestedChildisisDomAf.TableMap = types.StringValue(nestedValue.Get("attributes.tblMap").String())
+																nestedChildisisDomAf.TableMapFilter = types.StringValue(nestedValue.Get("attributes.tblMapFltr").String())
 																nestedChildisisDom.AddressFamilies = append(nestedChildisisDom.AddressFamilies, nestedChildisisDomAf)
 															}
 															return true
@@ -428,6 +592,10 @@ func (data *ISIS) fromBody(res gjson.Result) {
 													},
 												)
 												nestedChildisisDom.OverloadStartupTime = types.Int64Value(risisOverload.Get("isisOverload.attributes.startupTime").Int())
+												nestedChildisisDom.OverloadAdminState = types.StringValue(risisOverload.Get("isisOverload.attributes.adminSt").String())
+												nestedChildisisDom.OverloadBgpAsNumber = types.Int64Value(risisOverload.Get("isisOverload.attributes.bgpAsNum").Int())
+												nestedChildisisDom.OverloadBgpAsNumberString = types.StringValue(risisOverload.Get("isisOverload.attributes.bgpAsNumStr").String())
+												nestedChildisisDom.OverloadSuppress = types.StringValue(risisOverload.Get("isisOverload.attributes.suppress").String())
 											}
 											child.Vrfs = append(child.Vrfs, nestedChildisisDom)
 										}
@@ -478,6 +646,23 @@ func (data *ISIS) fromBody(res gjson.Result) {
 						child.PriorityL1 = types.Int64Value(value.Get("attributes.priorityLvl1").Int())
 						child.PriorityL2 = types.Int64Value(value.Get("attributes.priorityLvl2").Int())
 						child.EnableIpv4 = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.v4enable").String()))
+						child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
+						child.CsnpIntervalL1 = types.Int64Value(value.Get("attributes.csnpIntvlLvl1").Int())
+						child.CsnpIntervalL2 = types.Int64Value(value.Get("attributes.csnpIntvlLvl2").Int())
+						child.Control = types.StringValue(value.Get("attributes.ctrl").String())
+						child.Description = types.StringValue(value.Get("attributes.descr").String())
+						child.LspRefreshInterval = types.Int64Value(value.Get("attributes.lspRefreshIntvl").Int())
+						child.MeshGroupBlocked = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.meshGroupBlocked").String()))
+						child.MeshGroupId = types.Int64Value(value.Get("attributes.meshGroupId").Int())
+						child.Ipv6MetricL1 = types.Int64Value(value.Get("attributes.mt2MetricLvl1").Int())
+						child.Ipv6MetricL2 = types.Int64Value(value.Get("attributes.mt2MetricLvl2").Int())
+						child.NFlagClear = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.nFlagClear").String()))
+						child.RetransmitInterval = types.Int64Value(value.Get("attributes.retransInterval").Int())
+						child.RetransmitThrottleInterval = types.Int64Value(value.Get("attributes.retransThrottleInterval").Int())
+						child.SuppressedState = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.suppressedState").String()))
+						child.Ipv4Bfd = types.StringValue(value.Get("attributes.v4Bfd").String())
+						child.Ipv6Bfd = types.StringValue(value.Get("attributes.v6Bfd").String())
+						child.Ipv6 = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.v6enable").String()))
 						data.Interfaces = append(data.Interfaces, child)
 					}
 					return true
@@ -519,6 +704,21 @@ func (data *ISIS) updateFromBody(res gjson.Result) {
 			data.Instances[c].AdminState = types.StringValue(risisInst.Get("isisInst.attributes.adminSt").String())
 		} else {
 			data.Instances[c].AdminState = types.StringNull()
+		}
+		if !data.Instances[c].Control.IsNull() {
+			data.Instances[c].Control = types.StringValue(risisInst.Get("isisInst.attributes.ctrl").String())
+		} else {
+			data.Instances[c].Control = types.StringNull()
+		}
+		if !data.Instances[c].FlushRoutes.IsNull() {
+			data.Instances[c].FlushRoutes = types.BoolValue(helpers.ParseNxosBoolean(risisInst.Get("isisInst.attributes.flushRoutes").String()))
+		} else {
+			data.Instances[c].FlushRoutes = types.BoolNull()
+		}
+		if !data.Instances[c].Isolate.IsNull() {
+			data.Instances[c].Isolate = types.BoolValue(helpers.ParseNxosBoolean(risisInst.Get("isisInst.attributes.isolate").String()))
+		} else {
+			data.Instances[c].Isolate = types.BoolNull()
 		}
 		for nc := range data.Instances[c].Vrfs {
 			var risisDom gjson.Result
@@ -597,6 +797,21 @@ func (data *ISIS) updateFromBody(res gjson.Result) {
 			} else {
 				data.Instances[c].Vrfs[nc].PassiveDefault = types.StringNull()
 			}
+			if !data.Instances[c].Vrfs[nc].Control.IsNull() {
+				data.Instances[c].Vrfs[nc].Control = types.StringValue(risisDom.Get("isisDom.attributes.ctrl").String())
+			} else {
+				data.Instances[c].Vrfs[nc].Control = types.StringNull()
+			}
+			if !data.Instances[c].Vrfs[nc].LspLifetime.IsNull() {
+				data.Instances[c].Vrfs[nc].LspLifetime = types.Int64Value(risisDom.Get("isisDom.attributes.lspLifetime").Int())
+			} else {
+				data.Instances[c].Vrfs[nc].LspLifetime = types.Int64Null()
+			}
+			if !data.Instances[c].Vrfs[nc].QueueLimit.IsNull() {
+				data.Instances[c].Vrfs[nc].QueueLimit = types.Int64Value(risisDom.Get("isisDom.attributes.queueLimit").Int())
+			} else {
+				data.Instances[c].Vrfs[nc].QueueLimit = types.Int64Null()
+			}
 			for nc_ := range data.Instances[c].Vrfs[nc].AddressFamilies {
 				var risisDomAf gjson.Result
 				risisDom.Get("isisDom.children").ForEach(
@@ -634,6 +849,56 @@ func (data *ISIS) updateFromBody(res gjson.Result) {
 				} else {
 					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].PrefixAdvertisePassiveL2 = types.BoolNull()
 				}
+				if !data.Instances[c].Vrfs[nc].AddressFamilies[nc_].Control.IsNull() {
+					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].Control = types.StringValue(risisDomAf.Get("isisDomAf.attributes.ctrl").String())
+				} else {
+					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].Control = types.StringNull()
+				}
+				if !data.Instances[c].Vrfs[nc].AddressFamilies[nc_].DefaultInformationOriginate.IsNull() {
+					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].DefaultInformationOriginate = types.StringValue(risisDomAf.Get("isisDomAf.attributes.defInfOrig").String())
+				} else {
+					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].DefaultInformationOriginate = types.StringNull()
+				}
+				if !data.Instances[c].Vrfs[nc].AddressFamilies[nc_].DefaultInformationOriginateRouteMap.IsNull() {
+					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].DefaultInformationOriginateRouteMap = types.StringValue(risisDomAf.Get("isisDomAf.attributes.defInfOrigRtMap").String())
+				} else {
+					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].DefaultInformationOriginateRouteMap = types.StringNull()
+				}
+				if !data.Instances[c].Vrfs[nc].AddressFamilies[nc_].Distance.IsNull() {
+					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].Distance = types.Int64Value(risisDomAf.Get("isisDomAf.attributes.dist").Int())
+				} else {
+					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].Distance = types.Int64Null()
+				}
+				if !data.Instances[c].Vrfs[nc].AddressFamilies[nc_].MaxEcmp.IsNull() {
+					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].MaxEcmp = types.Int64Value(risisDomAf.Get("isisDomAf.attributes.maxEcmp").Int())
+				} else {
+					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].MaxEcmp = types.Int64Null()
+				}
+				if !data.Instances[c].Vrfs[nc].AddressFamilies[nc_].MultiTopology.IsNull() {
+					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].MultiTopology = types.StringValue(risisDomAf.Get("isisDomAf.attributes.mtType").String())
+				} else {
+					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].MultiTopology = types.StringNull()
+				}
+				if !data.Instances[c].Vrfs[nc].AddressFamilies[nc_].RouterIdInterface.IsNull() {
+					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].RouterIdInterface = types.StringValue(risisDomAf.Get("isisDomAf.attributes.rtrIdIf").String())
+				} else {
+					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].RouterIdInterface = types.StringNull()
+				}
+				if !data.Instances[c].Vrfs[nc].AddressFamilies[nc_].RouterIdIpAddress.IsNull() {
+					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].RouterIdIpAddress = types.StringValue(risisDomAf.Get("isisDomAf.attributes.rtrIdIpAddr").String())
+				} else {
+					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].RouterIdIpAddress = types.StringNull()
+				}
+				if !data.Instances[c].Vrfs[nc].AddressFamilies[nc_].TableMap.IsNull() {
+					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].TableMap = types.StringValue(risisDomAf.Get("isisDomAf.attributes.tblMap").String())
+				} else {
+					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].TableMap = types.StringNull()
+				}
+				if !data.Instances[c].Vrfs[nc].AddressFamilies[nc_].TableMapFilter.IsNull() {
+					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].TableMapFilter = types.StringValue(risisDomAf.Get("isisDomAf.attributes.tblMapFltr").String())
+				} else {
+					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].TableMapFilter = types.StringNull()
+				}
 			}
 			{
 				var risisOverload gjson.Result
@@ -651,6 +916,26 @@ func (data *ISIS) updateFromBody(res gjson.Result) {
 					data.Instances[c].Vrfs[nc].OverloadStartupTime = types.Int64Value(risisOverload.Get("isisOverload.attributes.startupTime").Int())
 				} else {
 					data.Instances[c].Vrfs[nc].OverloadStartupTime = types.Int64Null()
+				}
+				if !data.Instances[c].Vrfs[nc].OverloadAdminState.IsNull() {
+					data.Instances[c].Vrfs[nc].OverloadAdminState = types.StringValue(risisOverload.Get("isisOverload.attributes.adminSt").String())
+				} else {
+					data.Instances[c].Vrfs[nc].OverloadAdminState = types.StringNull()
+				}
+				if !data.Instances[c].Vrfs[nc].OverloadBgpAsNumber.IsNull() {
+					data.Instances[c].Vrfs[nc].OverloadBgpAsNumber = types.Int64Value(risisOverload.Get("isisOverload.attributes.bgpAsNum").Int())
+				} else {
+					data.Instances[c].Vrfs[nc].OverloadBgpAsNumber = types.Int64Null()
+				}
+				if !data.Instances[c].Vrfs[nc].OverloadBgpAsNumberString.IsNull() {
+					data.Instances[c].Vrfs[nc].OverloadBgpAsNumberString = types.StringValue(risisOverload.Get("isisOverload.attributes.bgpAsNumStr").String())
+				} else {
+					data.Instances[c].Vrfs[nc].OverloadBgpAsNumberString = types.StringNull()
+				}
+				if !data.Instances[c].Vrfs[nc].OverloadSuppress.IsNull() {
+					data.Instances[c].Vrfs[nc].OverloadSuppress = types.StringValue(risisOverload.Get("isisOverload.attributes.suppress").String())
+				} else {
+					data.Instances[c].Vrfs[nc].OverloadSuppress = types.StringNull()
 				}
 			}
 		}
@@ -801,6 +1086,91 @@ func (data *ISIS) updateFromBody(res gjson.Result) {
 			data.Interfaces[c].EnableIpv4 = types.BoolValue(helpers.ParseNxosBoolean(risisInternalIf.Get("isisInternalIf.attributes.v4enable").String()))
 		} else {
 			data.Interfaces[c].EnableIpv4 = types.BoolNull()
+		}
+		if !data.Interfaces[c].AdminState.IsNull() {
+			data.Interfaces[c].AdminState = types.StringValue(risisInternalIf.Get("isisInternalIf.attributes.adminSt").String())
+		} else {
+			data.Interfaces[c].AdminState = types.StringNull()
+		}
+		if !data.Interfaces[c].CsnpIntervalL1.IsNull() {
+			data.Interfaces[c].CsnpIntervalL1 = types.Int64Value(risisInternalIf.Get("isisInternalIf.attributes.csnpIntvlLvl1").Int())
+		} else {
+			data.Interfaces[c].CsnpIntervalL1 = types.Int64Null()
+		}
+		if !data.Interfaces[c].CsnpIntervalL2.IsNull() {
+			data.Interfaces[c].CsnpIntervalL2 = types.Int64Value(risisInternalIf.Get("isisInternalIf.attributes.csnpIntvlLvl2").Int())
+		} else {
+			data.Interfaces[c].CsnpIntervalL2 = types.Int64Null()
+		}
+		if !data.Interfaces[c].Control.IsNull() {
+			data.Interfaces[c].Control = types.StringValue(risisInternalIf.Get("isisInternalIf.attributes.ctrl").String())
+		} else {
+			data.Interfaces[c].Control = types.StringNull()
+		}
+		if !data.Interfaces[c].Description.IsNull() {
+			data.Interfaces[c].Description = types.StringValue(risisInternalIf.Get("isisInternalIf.attributes.descr").String())
+		} else {
+			data.Interfaces[c].Description = types.StringNull()
+		}
+		if !data.Interfaces[c].LspRefreshInterval.IsNull() {
+			data.Interfaces[c].LspRefreshInterval = types.Int64Value(risisInternalIf.Get("isisInternalIf.attributes.lspRefreshIntvl").Int())
+		} else {
+			data.Interfaces[c].LspRefreshInterval = types.Int64Null()
+		}
+		if !data.Interfaces[c].MeshGroupBlocked.IsNull() {
+			data.Interfaces[c].MeshGroupBlocked = types.BoolValue(helpers.ParseNxosBoolean(risisInternalIf.Get("isisInternalIf.attributes.meshGroupBlocked").String()))
+		} else {
+			data.Interfaces[c].MeshGroupBlocked = types.BoolNull()
+		}
+		if !data.Interfaces[c].MeshGroupId.IsNull() {
+			data.Interfaces[c].MeshGroupId = types.Int64Value(risisInternalIf.Get("isisInternalIf.attributes.meshGroupId").Int())
+		} else {
+			data.Interfaces[c].MeshGroupId = types.Int64Null()
+		}
+		if !data.Interfaces[c].Ipv6MetricL1.IsNull() {
+			data.Interfaces[c].Ipv6MetricL1 = types.Int64Value(risisInternalIf.Get("isisInternalIf.attributes.mt2MetricLvl1").Int())
+		} else {
+			data.Interfaces[c].Ipv6MetricL1 = types.Int64Null()
+		}
+		if !data.Interfaces[c].Ipv6MetricL2.IsNull() {
+			data.Interfaces[c].Ipv6MetricL2 = types.Int64Value(risisInternalIf.Get("isisInternalIf.attributes.mt2MetricLvl2").Int())
+		} else {
+			data.Interfaces[c].Ipv6MetricL2 = types.Int64Null()
+		}
+		if !data.Interfaces[c].NFlagClear.IsNull() {
+			data.Interfaces[c].NFlagClear = types.BoolValue(helpers.ParseNxosBoolean(risisInternalIf.Get("isisInternalIf.attributes.nFlagClear").String()))
+		} else {
+			data.Interfaces[c].NFlagClear = types.BoolNull()
+		}
+		if !data.Interfaces[c].RetransmitInterval.IsNull() {
+			data.Interfaces[c].RetransmitInterval = types.Int64Value(risisInternalIf.Get("isisInternalIf.attributes.retransInterval").Int())
+		} else {
+			data.Interfaces[c].RetransmitInterval = types.Int64Null()
+		}
+		if !data.Interfaces[c].RetransmitThrottleInterval.IsNull() {
+			data.Interfaces[c].RetransmitThrottleInterval = types.Int64Value(risisInternalIf.Get("isisInternalIf.attributes.retransThrottleInterval").Int())
+		} else {
+			data.Interfaces[c].RetransmitThrottleInterval = types.Int64Null()
+		}
+		if !data.Interfaces[c].SuppressedState.IsNull() {
+			data.Interfaces[c].SuppressedState = types.BoolValue(helpers.ParseNxosBoolean(risisInternalIf.Get("isisInternalIf.attributes.suppressedState").String()))
+		} else {
+			data.Interfaces[c].SuppressedState = types.BoolNull()
+		}
+		if !data.Interfaces[c].Ipv4Bfd.IsNull() {
+			data.Interfaces[c].Ipv4Bfd = types.StringValue(risisInternalIf.Get("isisInternalIf.attributes.v4Bfd").String())
+		} else {
+			data.Interfaces[c].Ipv4Bfd = types.StringNull()
+		}
+		if !data.Interfaces[c].Ipv6Bfd.IsNull() {
+			data.Interfaces[c].Ipv6Bfd = types.StringValue(risisInternalIf.Get("isisInternalIf.attributes.v6Bfd").String())
+		} else {
+			data.Interfaces[c].Ipv6Bfd = types.StringNull()
+		}
+		if !data.Interfaces[c].Ipv6.IsNull() {
+			data.Interfaces[c].Ipv6 = types.BoolValue(helpers.ParseNxosBoolean(risisInternalIf.Get("isisInternalIf.attributes.v6enable").String()))
+		} else {
+			data.Interfaces[c].Ipv6 = types.BoolNull()
 		}
 	}
 }

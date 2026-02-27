@@ -50,6 +50,9 @@ data "nxos_isis" "example" {
 Read-Only:
 
 - `admin_state` (String) The administrative state of the object or policy.
+- `control` (String) The control state.
+- `flush_routes` (Boolean) Flush ISIS Routes on non graceful controlled restart.
+- `isolate` (Boolean) Isolate ISIS Instance from other process tags.
 - `name` (String) IS-IS instance name.
 - `vrfs` (Attributes List) List of IS-IS VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
 
@@ -68,13 +71,20 @@ Read-Only:
 - `authentication_type_l2` (String) Holds ISIS DOM Authentication-Type for Level-2.
 - `bandwidth_reference` (Number) The IS-IS domain bandwidth reference. This sets the default reference bandwidth used for calculating the IS-IS cost metric.
 - `bandwidth_reference_unit` (String) Holds ISIS Domain Bandwidth Reference Unit (Mbps or Gbps).
+- `control` (String) Holds ISIS Domain Control messages.
 - `is_type` (String) Holds ISIS Domain IS[Level] Type.
+- `lsp_lifetime` (Number) Holds ISIS Domain LSP Lifetime.
 - `metric_type` (String) Holds ISIS Domain Metric Style.
 - `mtu` (Number) The configuration of link-state packet (LSP) maximum transmission units (MTU) is supported. You can enable up to 4352 bytes.
 - `name` (String) VRF name.
 - `net` (String) Holds ISIS Domain Net value.
+- `overload_admin_state` (String) Admin State.
+- `overload_bgp_as_number` (Number) The BGP autonomous system number. This sets overload until BGP converges on this autonomous system number. This is not currently supported.
+- `overload_bgp_as_number_string` (String) BGP AS Num in supported format.
 - `overload_startup_time` (Number) The overload startup time. The overload state begins when the switch boots up and ends at the time specified as the overload startup time.
+- `overload_suppress` (String) Suppress Internal/External.
 - `passive_default` (String) Holds ISIS Domain passive-interface default level.
+- `queue_limit` (Number) Holds the ISIS queue limit retransmit value.
 
 <a id="nestedatt--instances--vrfs--address_families"></a>
 ### Nested Schema for `instances.vrfs.address_families`
@@ -82,10 +92,20 @@ Read-Only:
 Read-Only:
 
 - `address_family` (String) Type.
+- `control` (String) The address family controls. This determines the address family to run. Note that IPv4 and IPv6 are both supported.
+- `default_information_originate` (String) Holds ISIS Domain address family default-information originate state for Route.
+- `default_information_originate_route_map` (String) Holds Route-map name for ISIS Domain address family default-information originate.
+- `distance` (Number) Holds ISIS Domain address family Administrative Distance.
 - `enable_bfd` (Boolean) Enabling BFD on all ISIS domain interfaces.
+- `max_ecmp` (Number) Holds ISIS Domain address family Max ECMP value.
+- `multi_topology` (String) Holds ISIS Domain address family Multi-topology information.
 - `prefix_advertise_passive_l1` (Boolean) Prefix advertise passive only for level-1.
 - `prefix_advertise_passive_l2` (Boolean) Prefix advertise passive only level-2.
+- `router_id_interface` (String) Holds interface.
+- `router_id_ip_address` (String) Holds ip address to become router id.
 - `segment_routing_mpls` (Boolean) Segment routing for MPLS.
+- `table_map` (String) Holds Route-map name to filter routes downloaded.
+- `table_map_filter` (String) Enables table-map for Selective route.
 
 
 
@@ -95,6 +115,7 @@ Read-Only:
 
 Read-Only:
 
+- `admin_state` (String) The administrative state of the object or policy.
 - `authentication_check` (Boolean) Enabling Authentication check for ISIS interface without specific Level.
 - `authentication_check_l1` (Boolean) Enabling Authentication check for ISIS interface at Level1.
 - `authentication_check_l2` (Boolean) Enabling Authentication check for ISIS interface at Level2.
@@ -105,6 +126,10 @@ Read-Only:
 - `authentication_type_l1` (String) Holds ISIS Level-1 Authentication Type value for Interface.
 - `authentication_type_l2` (String) Holds ISIS Level-2 Authentication Type value for Interface.
 - `circuit_type` (String) Holds ISIS interface Circuit Type.
+- `control` (String) Holds ISIS interface Control messages.
+- `csnp_interval_l1` (Number) Holds ISIS Interface Level-1 CSNP Interval.
+- `csnp_interval_l2` (Number) Holds ISIS Interface Level-2 CSNP Interval.
+- `description` (String) Description.
 - `enable_ipv4` (Boolean) Enabling ISIS router tag on Interface's IPV4 family.
 - `hello_interval` (Number) Holds Interface Hello Interval value.
 - `hello_interval_l1` (Number) Holds ISIS interface Hello Interval Level-1 value.
@@ -115,13 +140,25 @@ Read-Only:
 - `hello_padding` (String) Holds ISIS Interface Hello Padding Info.
 - `instance_name` (String) Instance to which the interface belongs to.
 - `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `ipv4_bfd` (String) Holds ISIS Interface BFD Configruation.
+- `ipv6` (Boolean) Enabling ISIS router tag on Interface's IPV6 family.
+- `ipv6_bfd` (String) Holds Interface BFD Configruation for IPV6 family.
+- `ipv6_metric_l1` (Number) Holds ISIS interface IPV6 wide metric value for Level-1.
+- `ipv6_metric_l2` (Number) Holds ISIS interface IPV6 wide metric value for Level-2.
+- `lsp_refresh_interval` (Number) Holds ISIS Interface LSP Refresh Interval.
+- `mesh_group_blocked` (Boolean) Mesh group blocked value.
+- `mesh_group_id` (Number) Holds the ISIS mesh group ID value.
 - `metric_l1` (Number) Holds ISIS interface Metric level-1.
 - `metric_l2` (Number) Holds ISIS interface Metric level-2.
 - `mtu_check` (Boolean) Enabling Mtu check for ISIS interface without specific Level.
 - `mtu_check_l1` (Boolean) Enabling Mtu check for ISIS interface at Level1.
 - `mtu_check_l2` (Boolean) Enabling Mtu check for ISIS interface at Level2.
+- `n_flag_clear` (Boolean) Enabling N flag clear for ISIS interface.
 - `network_type_p2p` (String) Enabling Point-to-Point Network Type on ISIS Interface.
 - `passive` (String) Holds ISIS Passive Interface Info.
 - `priority_l1` (Number) Holds ISIS Interface Level-1 Circuit Priority.
 - `priority_l2` (Number) Holds ISIS Interface Level-2 Circuit Priority.
+- `retransmit_interval` (Number) Holds ISIS Interface Retransmit Interval.
+- `retransmit_throttle_interval` (Number) Holds ISIS Interface Retransmit Throttle Interval.
+- `suppressed_state` (Boolean) Suppress the prefix advertisement.
 - `vrf` (String) Dom to which the interface belongs to.

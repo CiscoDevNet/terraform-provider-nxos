@@ -29,8 +29,11 @@ This resource can manage the IS-IS configuration on NX-OS devices, including IS-
 resource "nxos_isis" "example" {
   admin_state = "enabled"
   instances = [{
-    name        = "ISIS1"
-    admin_state = "enabled"
+    name         = "ISIS1"
+    admin_state  = "enabled"
+    control      = "stateful-ha"
+    flush_routes = true
+    isolate      = true
     vrfs = [{
       name                     = "default"
       admin_state              = "enabled"
@@ -47,47 +50,81 @@ resource "nxos_isis" "example" {
       mtu                      = 2000
       net                      = "49.0001.0000.0000.3333.00"
       passive_default          = "l12"
+      control                  = "log-adj-changes"
+      lsp_lifetime             = 1000
+      queue_limit              = 3000
       address_families = [{
-        address_family              = "v4"
-        segment_routing_mpls        = true
-        enable_bfd                  = false
-        prefix_advertise_passive_l1 = true
-        prefix_advertise_passive_l2 = true
+        address_family                          = "v4"
+        segment_routing_mpls                    = true
+        enable_bfd                              = false
+        prefix_advertise_passive_l1             = true
+        prefix_advertise_passive_l2             = true
+        control                                 = "adj-check"
+        default_information_originate           = "on"
+        default_information_originate_route_map = "rm1"
+        distance                                = 100
+        max_ecmp                                = 4
+        multi_topology                          = "st"
+        router_id_interface                     = "lo0"
+        router_id_ip_address                    = "1.2.3.4"
+        table_map                               = "rm1"
+        table_map_filter                        = "enabled"
       }]
-      overload_startup_time = 60
+      overload_startup_time         = 60
+      overload_admin_state          = "always-on"
+      overload_bgp_as_number        = 100
+      overload_bgp_as_number_string = "100"
+      overload_suppress             = "interlevel"
     }]
   }]
   interfaces = [{
-    interface_id            = "eth1/10"
-    authentication_check    = false
-    authentication_check_l1 = false
-    authentication_check_l2 = false
-    authentication_key      = ""
-    authentication_key_l1   = ""
-    authentication_key_l2   = ""
-    authentication_type     = "unknown"
-    authentication_type_l1  = "unknown"
-    authentication_type_l2  = "unknown"
-    circuit_type            = "l2"
-    vrf                     = "default"
-    hello_interval          = 20
-    hello_interval_l1       = 20
-    hello_interval_l2       = 20
-    hello_multiplier        = 4
-    hello_multiplier_l1     = 4
-    hello_multiplier_l2     = 4
-    hello_padding           = "never"
-    instance_name           = "ISIS1"
-    metric_l1               = 1000
-    metric_l2               = 1000
-    mtu_check               = true
-    mtu_check_l1            = true
-    mtu_check_l2            = true
-    network_type_p2p        = "on"
-    passive                 = "l1"
-    priority_l1             = 80
-    priority_l2             = 80
-    enable_ipv4             = true
+    interface_id                 = "eth1/10"
+    authentication_check         = false
+    authentication_check_l1      = false
+    authentication_check_l2      = false
+    authentication_key           = ""
+    authentication_key_l1        = ""
+    authentication_key_l2        = ""
+    authentication_type          = "unknown"
+    authentication_type_l1       = "unknown"
+    authentication_type_l2       = "unknown"
+    circuit_type                 = "l2"
+    vrf                          = "default"
+    hello_interval               = 20
+    hello_interval_l1            = 20
+    hello_interval_l2            = 20
+    hello_multiplier             = 4
+    hello_multiplier_l1          = 4
+    hello_multiplier_l2          = 4
+    hello_padding                = "never"
+    instance_name                = "ISIS1"
+    metric_l1                    = 1000
+    metric_l2                    = 1000
+    mtu_check                    = true
+    mtu_check_l1                 = true
+    mtu_check_l2                 = true
+    network_type_p2p             = "on"
+    passive                      = "l1"
+    priority_l1                  = 80
+    priority_l2                  = 80
+    enable_ipv4                  = true
+    admin_state                  = "enabled"
+    csnp_interval_l1             = 30
+    csnp_interval_l2             = 30
+    control                      = "advert-tep"
+    description                  = "ISIS interface"
+    lsp_refresh_interval         = 100
+    mesh_group_blocked           = true
+    mesh_group_id                = 10
+    ipv6_metric_l1               = 1000
+    ipv6_metric_l2               = 1000
+    n_flag_clear                 = true
+    retransmit_interval          = 10
+    retransmit_throttle_interval = 100
+    suppressed_state             = true
+    ipv4_bfd                     = "enabled"
+    ipv6_bfd                     = "enabled"
+    ipv6                         = true
   }]
 }
 ```
@@ -118,6 +155,10 @@ Optional:
 
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
+- `control` (String) The control state.
+  - Choices: `stateful-ha`
+- `flush_routes` (Boolean) Flush ISIS Routes on non graceful controlled restart.
+- `isolate` (Boolean) Isolate ISIS Instance from other process tags.
 - `vrfs` (Attributes List) List of IS-IS VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
 
 <a id="nestedatt--instances--vrfs"></a>
@@ -144,17 +185,30 @@ Optional:
   - Range: `0`-`4294967295`
 - `bandwidth_reference_unit` (String) Holds ISIS Domain Bandwidth Reference Unit (Mbps or Gbps).
   - Choices: `mbps`, `gbps`
+- `control` (String) Holds ISIS Domain Control messages.
+  - Choices: `unspecified`, `log-adj-changes`, `hostname-dynamic-disable`
 - `is_type` (String) Holds ISIS Domain IS[Level] Type.
   - Choices: `l1`, `l2`, `l12`
+- `lsp_lifetime` (Number) Holds ISIS Domain LSP Lifetime.
+  - Range: `1`-`65535`
 - `metric_type` (String) Holds ISIS Domain Metric Style.
   - Choices: `narrow`, `wide`, `transition`
 - `mtu` (Number) The configuration of link-state packet (LSP) maximum transmission units (MTU) is supported. You can enable up to 4352 bytes.
   - Range: `256`-`4352`
 - `net` (String) Holds ISIS Domain Net value.
+- `overload_admin_state` (String) Admin State.
+  - Choices: `off`, `always-on`, `bootup`, `bgp-converge`, `bgp-converge-max-wait`
+- `overload_bgp_as_number` (Number) The BGP autonomous system number. This sets overload until BGP converges on this autonomous system number. This is not currently supported.
+  - Range: `0`-`65535`
+- `overload_bgp_as_number_string` (String) BGP AS Num in supported format.
 - `overload_startup_time` (Number) The overload startup time. The overload state begins when the switch boots up and ends at the time specified as the overload startup time.
   - Range: `5`-`86400`
+- `overload_suppress` (String) Suppress Internal/External.
+  - Choices: `interlevel`, `external`
 - `passive_default` (String) Holds ISIS Domain passive-interface default level.
   - Choices: `l1`, `l2`, `l12`, `unknown`
+- `queue_limit` (Number) Holds the ISIS queue limit retransmit value.
+  - Range: `200`-`65535`
 
 <a id="nestedatt--instances--vrfs--address_families"></a>
 ### Nested Schema for `instances.vrfs.address_families`
@@ -166,10 +220,26 @@ Required:
 
 Optional:
 
+- `control` (String) The address family controls. This determines the address family to run. Note that IPv4 and IPv6 are both supported.
+  - Choices: `adj-check`, `set-attached-bit`
+- `default_information_originate` (String) Holds ISIS Domain address family default-information originate state for Route.
+  - Choices: `off`, `on`, `always`
+- `default_information_originate_route_map` (String) Holds Route-map name for ISIS Domain address family default-information originate.
+- `distance` (Number) Holds ISIS Domain address family Administrative Distance.
+  - Range: `1`-`255`
 - `enable_bfd` (Boolean) Enabling BFD on all ISIS domain interfaces.
+- `max_ecmp` (Number) Holds ISIS Domain address family Max ECMP value.
+  - Range: `1`-`64`
+- `multi_topology` (String) Holds ISIS Domain address family Multi-topology information.
+  - Choices: `st`, `mt`, `mtt`
 - `prefix_advertise_passive_l1` (Boolean) Prefix advertise passive only for level-1.
 - `prefix_advertise_passive_l2` (Boolean) Prefix advertise passive only level-2.
+- `router_id_interface` (String) Holds interface.
+- `router_id_ip_address` (String) Holds ip address to become router id.
 - `segment_routing_mpls` (Boolean) Segment routing for MPLS.
+- `table_map` (String) Holds Route-map name to filter routes downloaded.
+- `table_map_filter` (String) Enables table-map for Selective route.
+  - Choices: `enabled`, `disabled`
 
 
 
@@ -183,6 +253,8 @@ Required:
 
 Optional:
 
+- `admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
 - `authentication_check` (Boolean) Enabling Authentication check for ISIS interface without specific Level.
 - `authentication_check_l1` (Boolean) Enabling Authentication check for ISIS interface at Level1.
 - `authentication_check_l2` (Boolean) Enabling Authentication check for ISIS interface at Level2.
@@ -197,6 +269,13 @@ Optional:
   - Choices: `clear`, `md5`, `unknown`
 - `circuit_type` (String) Holds ISIS interface Circuit Type.
   - Choices: `l1`, `l2`, `l12`
+- `control` (String) Holds ISIS interface Control messages.
+  - Choices: `advert-tep`, `passive`, `hello-padding`, `exchange-hostname`, `attached`, `supress-prefix-advert`
+- `csnp_interval_l1` (Number) Holds ISIS Interface Level-1 CSNP Interval.
+  - Range: `1`-`65535`
+- `csnp_interval_l2` (Number) Holds ISIS Interface Level-2 CSNP Interval.
+  - Range: `1`-`65535`
+- `description` (String) Description.
 - `enable_ipv4` (Boolean) Enabling ISIS router tag on Interface's IPV4 family.
 - `hello_interval` (Number) Holds Interface Hello Interval value.
   - Range: `1`-`65535`
@@ -213,6 +292,20 @@ Optional:
 - `hello_padding` (String) Holds ISIS Interface Hello Padding Info.
   - Choices: `always`, `transient`, `never`
 - `instance_name` (String) Instance to which the interface belongs to.
+- `ipv4_bfd` (String) Holds ISIS Interface BFD Configruation.
+  - Choices: `inheritVrf`, `enabled`, `disabled`
+- `ipv6` (Boolean) Enabling ISIS router tag on Interface's IPV6 family.
+- `ipv6_bfd` (String) Holds Interface BFD Configruation for IPV6 family.
+  - Choices: `inheritVrf`, `enabled`, `disabled`
+- `ipv6_metric_l1` (Number) Holds ISIS interface IPV6 wide metric value for Level-1.
+  - Range: `0`-`16777216`
+- `ipv6_metric_l2` (Number) Holds ISIS interface IPV6 wide metric value for Level-2.
+  - Range: `0`-`16777216`
+- `lsp_refresh_interval` (Number) Holds ISIS Interface LSP Refresh Interval.
+  - Range: `10`-`65535`
+- `mesh_group_blocked` (Boolean) Mesh group blocked value.
+- `mesh_group_id` (Number) Holds the ISIS mesh group ID value.
+  - Range: `0`-`4294967295`
 - `metric_l1` (Number) Holds ISIS interface Metric level-1.
   - Range: `0`-`16777216`
 - `metric_l2` (Number) Holds ISIS interface Metric level-2.
@@ -220,6 +313,7 @@ Optional:
 - `mtu_check` (Boolean) Enabling Mtu check for ISIS interface without specific Level.
 - `mtu_check_l1` (Boolean) Enabling Mtu check for ISIS interface at Level1.
 - `mtu_check_l2` (Boolean) Enabling Mtu check for ISIS interface at Level2.
+- `n_flag_clear` (Boolean) Enabling N flag clear for ISIS interface.
 - `network_type_p2p` (String) Enabling Point-to-Point Network Type on ISIS Interface.
   - Choices: `off`, `on`, `useAllISMac`
 - `passive` (String) Holds ISIS Passive Interface Info.
@@ -228,6 +322,11 @@ Optional:
   - Range: `0`-`127`
 - `priority_l2` (Number) Holds ISIS Interface Level-2 Circuit Priority.
   - Range: `0`-`127`
+- `retransmit_interval` (Number) Holds ISIS Interface Retransmit Interval.
+  - Range: `1`-`65535`
+- `retransmit_throttle_interval` (Number) Holds ISIS Interface Retransmit Throttle Interval.
+  - Range: `20`-`65535`
+- `suppressed_state` (Boolean) Suppress the prefix advertisement.
 - `vrf` (String) Dom to which the interface belongs to.
 
 ## Import

@@ -15,7 +15,6 @@ attributes:
     enum_values:
       - enabled
       - disabled
-    default_value: enabled
     example: enabled
 child_classes:
   - class_name: dhcpInst
@@ -90,7 +89,6 @@ child_classes:
         tf_name: instance_snooping_verify_mac_address_enabled
         type: Bool
         description: 'Snooping Verify Mac Address Enabled.'
-        default_value: true
         example: false
       - nxos_name: daiLogBufEntries
         tf_name: instance_dai_log_buffer_entries
@@ -98,7 +96,6 @@ child_classes:
         min_int: 1
         max_int: 1024
         description: 'DAI Log Buffer Entries.'
-        default_value: 32
         example: 64
       - nxos_name: daiValidateDst
         tf_name: instance_dai_validate_destination
@@ -136,7 +133,6 @@ child_classes:
         min_int: 0
         max_int: 1
         description: 'Relay Information Option Server-id-override-disable Enabled.'
-        default_value: 0
         example: 1
       - nxos_name: relaySubOptionFormatNonTLVEnabled
         tf_name: instance_relay_sub_option_format_non_tlv_enabled
@@ -214,7 +210,6 @@ child_classes:
             enum_values:
               - none
               - relay-info
-            default_value: none
             example: relay-info
           - nxos_name: subnetSelection
             tf_name: subnet_selection

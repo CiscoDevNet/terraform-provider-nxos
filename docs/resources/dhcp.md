@@ -79,11 +79,9 @@ resource "nxos_dhcp" "example" {
 
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-  - Default value: `enabled`
 - `device` (String) A device name from the provider configuration.
 - `instance_dai_log_buffer_entries` (Number) DAI Log Buffer Entries.
   - Range: `1`-`1024`
-  - Default value: `32`
 - `instance_dai_validate_destination` (Boolean) DAI Validate Type: dst-mac.
 - `instance_dai_validate_ip` (Boolean) DAI Validate Type: ip.
 - `instance_dai_validate_source` (Boolean) DAI Validate Type: src-mac.
@@ -95,7 +93,6 @@ resource "nxos_dhcp" "example" {
 - `instance_relay_information_option_enabled` (Boolean) Relay Information Option Enabled.
 - `instance_relay_information_option_server_id_override_disable_enabled` (Number) Relay Information Option Server-id-override-disable Enabled.
   - Range: `0`-`1`
-  - Default value: `0`
 - `instance_relay_information_option_trust_enabled` (Boolean) Relay Information Option Trust Enabled.
 - `instance_relay_information_option_vpn_enabled` (Boolean) Relay Information Option Vpn Enabled.
 - `instance_relay_information_trust_all_enabled` (Boolean) Relay Information Trust All Enabled.
@@ -111,7 +108,6 @@ resource "nxos_dhcp" "example" {
 - `instance_snooping_information_option_enabled` (Boolean) Snooping Information Option Enabled.
 - `instance_snooping_sub_option_format_non_tlv_enabled` (Boolean) Snooping Option82 Sub-Option Format Non-TLV Enabled.
 - `instance_snooping_verify_mac_address_enabled` (Boolean) Snooping Verify Mac Address Enabled.
-  - Default value: `true`
 - `instance_v4_relay_enabled` (Boolean) DHCPv4 Enabled.
 - `instance_v6_relay_enabled` (Boolean) DHCPv6 Enabled.
 - `instance_v6_smart_relay_global_enabled` (Boolean) V6 Smart Relay Global Enabled.
@@ -134,7 +130,6 @@ Optional:
 - `information_trusted_enabled` (Boolean) Information Trusted Enabled.
 - `options` (String) DHCP options.
   - Choices: `none`, `relay-info`
-  - Default value: `none`
 - `smart_relay_enabled` (Boolean) Smart Relay Enabled.
 - `subnet_broadcast_enabled` (Boolean) Subnet Broadcast Enabled.
 - `subnet_selection` (String) DHCP relay source subnet.

@@ -32,10 +32,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -81,10 +78,8 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				},
 			},
 			"admin_state": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").AddDefaultValueDescription("enabled").String,
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("enabled"),
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
@@ -138,16 +133,12 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Optional:            true,
 			},
 			"instance_snooping_verify_mac_address_enabled": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Snooping Verify Mac Address Enabled.").AddDefaultValueDescription("true").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Snooping Verify Mac Address Enabled.").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             booldefault.StaticBool(true),
 			},
 			"instance_dai_log_buffer_entries": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("DAI Log Buffer Entries.").AddIntegerRangeDescription(1, 1024).AddDefaultValueDescription("32").String,
+				MarkdownDescription: helpers.NewAttributeDescription("DAI Log Buffer Entries.").AddIntegerRangeDescription(1, 1024).String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(32),
 				Validators: []validator.Int64{
 					int64validator.Between(1, 1024),
 				},
@@ -177,10 +168,8 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Optional:            true,
 			},
 			"instance_relay_information_option_server_id_override_disable_enabled": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Relay Information Option Server-id-override-disable Enabled.").AddIntegerRangeDescription(0, 1).AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Relay Information Option Server-id-override-disable Enabled.").AddIntegerRangeDescription(0, 1).String,
 				Optional:            true,
-				Computed:            true,
-				Default:             int64default.StaticInt64(0),
 				Validators: []validator.Int64{
 					int64validator.Between(0, 1),
 				},
@@ -242,10 +231,8 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							Optional:            true,
 						},
 						"options": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("DHCP options.").AddStringEnumDescription("none", "relay-info").AddDefaultValueDescription("none").String,
+							MarkdownDescription: helpers.NewAttributeDescription("DHCP options.").AddStringEnumDescription("none", "relay-info").String,
 							Optional:            true,
-							Computed:            true,
-							Default:             stringdefault.StaticString("none"),
 							Validators: []validator.String{
 								stringvalidator.OneOf("none", "relay-info"),
 							},

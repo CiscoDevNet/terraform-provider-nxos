@@ -41,6 +41,7 @@ type ICMPv4 struct {
 	Dn                 types.String `tfsdk:"id"`
 	AdminState         types.String `tfsdk:"admin_state"`
 	InstanceAdminState types.String `tfsdk:"instance_admin_state"`
+	Control            types.String `tfsdk:"control"`
 	Vrfs               []ICMPv4Vrfs `tfsdk:"vrfs"`
 }
 
@@ -113,6 +114,9 @@ func (data ICMPv4) toBody() nxos.Body {
 		if (!data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
 		}
+		if (!data.Control.IsUnknown() && !data.Control.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "ctrl", data.Control.ValueString())
+		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for _, child := range data.Vrfs {
@@ -160,6 +164,7 @@ func (data *ICMPv4) fromBody(res gjson.Result) {
 			},
 		)
 		data.InstanceAdminState = types.StringValue(ricmpv4Inst.Get("icmpv4Inst.attributes.adminSt").String())
+		data.Control = types.StringValue(ricmpv4Inst.Get("icmpv4Inst.attributes.ctrl").String())
 		ricmpv4Inst.Get("icmpv4Inst.children").ForEach(
 			func(_, v gjson.Result) bool {
 				v.ForEach(
@@ -219,6 +224,11 @@ func (data *ICMPv4) updateFromBody(res gjson.Result) {
 		data.InstanceAdminState = types.StringValue(ricmpv4Inst.Get("icmpv4Inst.attributes.adminSt").String())
 	} else {
 		data.InstanceAdminState = types.StringNull()
+	}
+	if !data.Control.IsNull() {
+		data.Control = types.StringValue(ricmpv4Inst.Get("icmpv4Inst.attributes.ctrl").String())
+	} else {
+		data.Control = types.StringNull()
 	}
 	for c := range data.Vrfs {
 		var ricmpv4Dom gjson.Result

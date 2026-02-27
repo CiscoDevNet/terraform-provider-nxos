@@ -90,6 +90,10 @@ func (r *ICMPv4Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
+			"control": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("stateful-ha").String,
+				Optional:            true,
+			},
 			"vrfs": schema.ListNestedAttribute{
 				MarkdownDescription: "List of ICMPv4 VRF configurations.",
 				Optional:            true,

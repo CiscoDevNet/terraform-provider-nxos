@@ -36,35 +36,35 @@ import (
 func TestAccNxosDHCP(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_ipv6_relay_information_option_vpn_enabled", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_ipv6_relay_option_type_cisco_enabled", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_relay_information_option_enabled", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_relay_information_option_trust_enabled", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_relay_information_option_vpn_enabled", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_relay_information_trust_all_enabled", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_relay_sub_option_circuit_id_customized_enabled", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_relay_sub_option_circuit_id_format_string", "%p"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_relay_sub_option_type_cisco_enabled", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_smart_relay_global_enabled", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_snooping_enabled", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_snooping_information_option_enabled", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_snooping_verify_mac_address_enabled", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_dai_log_buffer_entries", "64"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_dai_validate_destination", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_dai_validate_ip", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_dai_validate_source", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_ipv6_relay_option79_enabled", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_packet_strict_validation", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_relay_dai_enabled", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_relay_information_option_server_id_override_disable_enabled", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_relay_sub_option_format_non_tlv_enabled", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_relay_v4_over_v6_enabled", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_relay_v6_iapd_route_add_enabled", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_snoop_sub_option_circuit_id_format_string", "%p"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_snooping_sub_option_format_non_tlv_enabled", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_v4_relay_enabled", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_v6_relay_enabled", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "instance_v6_smart_relay_global_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "ipv6_relay_information_option_vpn_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "ipv6_relay_option_type_cisco_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_information_option_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_information_option_trust_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_information_option_vpn_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_information_trust_all_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_sub_option_circuit_id_customized_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_sub_option_circuit_id_format_string", "%p"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_sub_option_type_cisco_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "smart_relay_global_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "snooping_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "snooping_information_option_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "snooping_verify_mac_address_enabled", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "dai_log_buffer_entries", "64"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "dai_validate_destination", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "dai_validate_ip", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "dai_validate_source", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "ipv6_relay_option79_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "packet_strict_validation", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_dai_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_information_option_server_id_override_disable_enabled", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_sub_option_format_non_tlv_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_v4_over_v6_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_v6_iapd_route_add_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "snoop_sub_option_circuit_id_format_string", "%p"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "snooping_sub_option_format_non_tlv_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "v4_relay_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "v6_relay_enabled", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "v6_smart_relay_global_enabled", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.0.interface_id", "eth1/10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.0.information_trusted_enabled", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.0.smart_relay_enabled", "true"))
@@ -143,35 +143,35 @@ func testAccNxosDHCPConfig_minimum() string {
 func testAccNxosDHCPConfig_all() string {
 	config := `resource "nxos_dhcp" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
-	config += `	instance_ipv6_relay_information_option_vpn_enabled = true` + "\n"
-	config += `	instance_ipv6_relay_option_type_cisco_enabled = true` + "\n"
-	config += `	instance_relay_information_option_enabled = true` + "\n"
-	config += `	instance_relay_information_option_trust_enabled = true` + "\n"
-	config += `	instance_relay_information_option_vpn_enabled = true` + "\n"
-	config += `	instance_relay_information_trust_all_enabled = true` + "\n"
-	config += `	instance_relay_sub_option_circuit_id_customized_enabled = true` + "\n"
-	config += `	instance_relay_sub_option_circuit_id_format_string = "%p"` + "\n"
-	config += `	instance_relay_sub_option_type_cisco_enabled = true` + "\n"
-	config += `	instance_smart_relay_global_enabled = true` + "\n"
-	config += `	instance_snooping_enabled = true` + "\n"
-	config += `	instance_snooping_information_option_enabled = true` + "\n"
-	config += `	instance_snooping_verify_mac_address_enabled = false` + "\n"
-	config += `	instance_dai_log_buffer_entries = 64` + "\n"
-	config += `	instance_dai_validate_destination = true` + "\n"
-	config += `	instance_dai_validate_ip = true` + "\n"
-	config += `	instance_dai_validate_source = true` + "\n"
-	config += `	instance_ipv6_relay_option79_enabled = true` + "\n"
-	config += `	instance_packet_strict_validation = true` + "\n"
-	config += `	instance_relay_dai_enabled = true` + "\n"
-	config += `	instance_relay_information_option_server_id_override_disable_enabled = 1` + "\n"
-	config += `	instance_relay_sub_option_format_non_tlv_enabled = true` + "\n"
-	config += `	instance_relay_v4_over_v6_enabled = true` + "\n"
-	config += `	instance_relay_v6_iapd_route_add_enabled = true` + "\n"
-	config += `	instance_snoop_sub_option_circuit_id_format_string = "%p"` + "\n"
-	config += `	instance_snooping_sub_option_format_non_tlv_enabled = true` + "\n"
-	config += `	instance_v4_relay_enabled = true` + "\n"
-	config += `	instance_v6_relay_enabled = true` + "\n"
-	config += `	instance_v6_smart_relay_global_enabled = true` + "\n"
+	config += `	ipv6_relay_information_option_vpn_enabled = true` + "\n"
+	config += `	ipv6_relay_option_type_cisco_enabled = true` + "\n"
+	config += `	relay_information_option_enabled = true` + "\n"
+	config += `	relay_information_option_trust_enabled = true` + "\n"
+	config += `	relay_information_option_vpn_enabled = true` + "\n"
+	config += `	relay_information_trust_all_enabled = true` + "\n"
+	config += `	relay_sub_option_circuit_id_customized_enabled = true` + "\n"
+	config += `	relay_sub_option_circuit_id_format_string = "%p"` + "\n"
+	config += `	relay_sub_option_type_cisco_enabled = true` + "\n"
+	config += `	smart_relay_global_enabled = true` + "\n"
+	config += `	snooping_enabled = true` + "\n"
+	config += `	snooping_information_option_enabled = true` + "\n"
+	config += `	snooping_verify_mac_address_enabled = false` + "\n"
+	config += `	dai_log_buffer_entries = 64` + "\n"
+	config += `	dai_validate_destination = true` + "\n"
+	config += `	dai_validate_ip = true` + "\n"
+	config += `	dai_validate_source = true` + "\n"
+	config += `	ipv6_relay_option79_enabled = true` + "\n"
+	config += `	packet_strict_validation = true` + "\n"
+	config += `	relay_dai_enabled = true` + "\n"
+	config += `	relay_information_option_server_id_override_disable_enabled = 1` + "\n"
+	config += `	relay_sub_option_format_non_tlv_enabled = true` + "\n"
+	config += `	relay_v4_over_v6_enabled = true` + "\n"
+	config += `	relay_v6_iapd_route_add_enabled = true` + "\n"
+	config += `	snoop_sub_option_circuit_id_format_string = "%p"` + "\n"
+	config += `	snooping_sub_option_format_non_tlv_enabled = true` + "\n"
+	config += `	v4_relay_enabled = true` + "\n"
+	config += `	v6_relay_enabled = true` + "\n"
+	config += `	v6_smart_relay_global_enabled = true` + "\n"
 	config += `	relay_interfaces = [{` + "\n"
 	config += `		interface_id = "eth1/10"` + "\n"
 	config += `		information_trusted_enabled = true` + "\n"

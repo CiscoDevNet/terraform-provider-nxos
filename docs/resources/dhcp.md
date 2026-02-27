@@ -25,36 +25,36 @@ This resource can manage the DHCP relay configuration on NX-OS devices, includin
 
 ```terraform
 resource "nxos_dhcp" "example" {
-  admin_state                                                          = "enabled"
-  instance_ipv6_relay_information_option_vpn_enabled                   = true
-  instance_ipv6_relay_option_type_cisco_enabled                        = true
-  instance_relay_information_option_enabled                            = true
-  instance_relay_information_option_trust_enabled                      = true
-  instance_relay_information_option_vpn_enabled                        = true
-  instance_relay_information_trust_all_enabled                         = true
-  instance_relay_sub_option_circuit_id_customized_enabled              = true
-  instance_relay_sub_option_circuit_id_format_string                   = "%p"
-  instance_relay_sub_option_type_cisco_enabled                         = true
-  instance_smart_relay_global_enabled                                  = true
-  instance_snooping_enabled                                            = true
-  instance_snooping_information_option_enabled                         = true
-  instance_snooping_verify_mac_address_enabled                         = false
-  instance_dai_log_buffer_entries                                      = 64
-  instance_dai_validate_destination                                    = true
-  instance_dai_validate_ip                                             = true
-  instance_dai_validate_source                                         = true
-  instance_ipv6_relay_option79_enabled                                 = true
-  instance_packet_strict_validation                                    = true
-  instance_relay_dai_enabled                                           = true
-  instance_relay_information_option_server_id_override_disable_enabled = 1
-  instance_relay_sub_option_format_non_tlv_enabled                     = true
-  instance_relay_v4_over_v6_enabled                                    = true
-  instance_relay_v6_iapd_route_add_enabled                             = true
-  instance_snoop_sub_option_circuit_id_format_string                   = "%p"
-  instance_snooping_sub_option_format_non_tlv_enabled                  = true
-  instance_v4_relay_enabled                                            = true
-  instance_v6_relay_enabled                                            = true
-  instance_v6_smart_relay_global_enabled                               = true
+  admin_state                                                 = "enabled"
+  ipv6_relay_information_option_vpn_enabled                   = true
+  ipv6_relay_option_type_cisco_enabled                        = true
+  relay_information_option_enabled                            = true
+  relay_information_option_trust_enabled                      = true
+  relay_information_option_vpn_enabled                        = true
+  relay_information_trust_all_enabled                         = true
+  relay_sub_option_circuit_id_customized_enabled              = true
+  relay_sub_option_circuit_id_format_string                   = "%p"
+  relay_sub_option_type_cisco_enabled                         = true
+  smart_relay_global_enabled                                  = true
+  snooping_enabled                                            = true
+  snooping_information_option_enabled                         = true
+  snooping_verify_mac_address_enabled                         = false
+  dai_log_buffer_entries                                      = 64
+  dai_validate_destination                                    = true
+  dai_validate_ip                                             = true
+  dai_validate_source                                         = true
+  ipv6_relay_option79_enabled                                 = true
+  packet_strict_validation                                    = true
+  relay_dai_enabled                                           = true
+  relay_information_option_server_id_override_disable_enabled = 1
+  relay_sub_option_format_non_tlv_enabled                     = true
+  relay_v4_over_v6_enabled                                    = true
+  relay_v6_iapd_route_add_enabled                             = true
+  snoop_sub_option_circuit_id_format_string                   = "%p"
+  snooping_sub_option_format_non_tlv_enabled                  = true
+  v4_relay_enabled                                            = true
+  v6_relay_enabled                                            = true
+  v6_smart_relay_global_enabled                               = true
   relay_interfaces = [{
     interface_id                = "eth1/10"
     information_trusted_enabled = true
@@ -79,39 +79,39 @@ resource "nxos_dhcp" "example" {
 
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-- `device` (String) A device name from the provider configuration.
-- `instance_dai_log_buffer_entries` (Number) DAI Log Buffer Entries.
+- `dai_log_buffer_entries` (Number) DAI Log Buffer Entries.
   - Range: `1`-`1024`
-- `instance_dai_validate_destination` (Boolean) DAI Validate Type: dst-mac.
-- `instance_dai_validate_ip` (Boolean) DAI Validate Type: ip.
-- `instance_dai_validate_source` (Boolean) DAI Validate Type: src-mac.
-- `instance_ipv6_relay_information_option_vpn_enabled` (Boolean) IPv6 Relay Information Option Vpn Enabled.
-- `instance_ipv6_relay_option79_enabled` (Boolean) IPv6 Relay Option79 Enabled.
-- `instance_ipv6_relay_option_type_cisco_enabled` (Boolean) IPv6 Relay Sub-Option Type Cisco Enabled.
-- `instance_packet_strict_validation` (Boolean) Pkt Strict Validation.
-- `instance_relay_dai_enabled` (Boolean) Dynamic ARP Inspection functionality with DHCP Relay is enabled.
-- `instance_relay_information_option_enabled` (Boolean) Relay Information Option Enabled.
-- `instance_relay_information_option_server_id_override_disable_enabled` (Number) Relay Information Option Server-id-override-disable Enabled.
+- `dai_validate_destination` (Boolean) DAI Validate Type: dst-mac.
+- `dai_validate_ip` (Boolean) DAI Validate Type: ip.
+- `dai_validate_source` (Boolean) DAI Validate Type: src-mac.
+- `device` (String) A device name from the provider configuration.
+- `ipv6_relay_information_option_vpn_enabled` (Boolean) IPv6 Relay Information Option Vpn Enabled.
+- `ipv6_relay_option79_enabled` (Boolean) IPv6 Relay Option79 Enabled.
+- `ipv6_relay_option_type_cisco_enabled` (Boolean) IPv6 Relay Sub-Option Type Cisco Enabled.
+- `packet_strict_validation` (Boolean) Pkt Strict Validation.
+- `relay_dai_enabled` (Boolean) Dynamic ARP Inspection functionality with DHCP Relay is enabled.
+- `relay_information_option_enabled` (Boolean) Relay Information Option Enabled.
+- `relay_information_option_server_id_override_disable_enabled` (Number) Relay Information Option Server-id-override-disable Enabled.
   - Range: `0`-`1`
-- `instance_relay_information_option_trust_enabled` (Boolean) Relay Information Option Trust Enabled.
-- `instance_relay_information_option_vpn_enabled` (Boolean) Relay Information Option Vpn Enabled.
-- `instance_relay_information_trust_all_enabled` (Boolean) Relay Information Trust All Enabled.
-- `instance_relay_sub_option_circuit_id_customized_enabled` (Boolean) Relay Sub-Option Circuit-id Customized Enabled.
-- `instance_relay_sub_option_circuit_id_format_string` (String) Relay Sub-Option Circuit-id Format String.
-- `instance_relay_sub_option_format_non_tlv_enabled` (Boolean) Relay Option82 Sub-Option Format Non-TLV Enabled.
-- `instance_relay_sub_option_type_cisco_enabled` (Boolean) Relay Sub-Option Type Cisco Enabled.
-- `instance_relay_v4_over_v6_enabled` (Boolean) v4 over v6 relay transport.
-- `instance_relay_v6_iapd_route_add_enabled` (Boolean) DHCPv6 IAPD route addition.
-- `instance_smart_relay_global_enabled` (Boolean) Smart Relay Global Enabled.
-- `instance_snoop_sub_option_circuit_id_format_string` (String) Snoop Sub-Option Circuit-id Format String.
-- `instance_snooping_enabled` (Boolean) Snooping Enabled.
-- `instance_snooping_information_option_enabled` (Boolean) Snooping Information Option Enabled.
-- `instance_snooping_sub_option_format_non_tlv_enabled` (Boolean) Snooping Option82 Sub-Option Format Non-TLV Enabled.
-- `instance_snooping_verify_mac_address_enabled` (Boolean) Snooping Verify Mac Address Enabled.
-- `instance_v4_relay_enabled` (Boolean) DHCPv4 Enabled.
-- `instance_v6_relay_enabled` (Boolean) DHCPv6 Enabled.
-- `instance_v6_smart_relay_global_enabled` (Boolean) V6 Smart Relay Global Enabled.
+- `relay_information_option_trust_enabled` (Boolean) Relay Information Option Trust Enabled.
+- `relay_information_option_vpn_enabled` (Boolean) Relay Information Option Vpn Enabled.
+- `relay_information_trust_all_enabled` (Boolean) Relay Information Trust All Enabled.
 - `relay_interfaces` (Attributes List) List of DHCP relay interfaces. (see [below for nested schema](#nestedatt--relay_interfaces))
+- `relay_sub_option_circuit_id_customized_enabled` (Boolean) Relay Sub-Option Circuit-id Customized Enabled.
+- `relay_sub_option_circuit_id_format_string` (String) Relay Sub-Option Circuit-id Format String.
+- `relay_sub_option_format_non_tlv_enabled` (Boolean) Relay Option82 Sub-Option Format Non-TLV Enabled.
+- `relay_sub_option_type_cisco_enabled` (Boolean) Relay Sub-Option Type Cisco Enabled.
+- `relay_v4_over_v6_enabled` (Boolean) v4 over v6 relay transport.
+- `relay_v6_iapd_route_add_enabled` (Boolean) DHCPv6 IAPD route addition.
+- `smart_relay_global_enabled` (Boolean) Smart Relay Global Enabled.
+- `snoop_sub_option_circuit_id_format_string` (String) Snoop Sub-Option Circuit-id Format String.
+- `snooping_enabled` (Boolean) Snooping Enabled.
+- `snooping_information_option_enabled` (Boolean) Snooping Information Option Enabled.
+- `snooping_sub_option_format_non_tlv_enabled` (Boolean) Snooping Option82 Sub-Option Format Non-TLV Enabled.
+- `snooping_verify_mac_address_enabled` (Boolean) Snooping Verify Mac Address Enabled.
+- `v4_relay_enabled` (Boolean) DHCPv4 Enabled.
+- `v6_relay_enabled` (Boolean) DHCPv6 Enabled.
+- `v6_smart_relay_global_enabled` (Boolean) V6 Smart Relay Global Enabled.
 
 ### Read-Only
 

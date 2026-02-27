@@ -23,16 +23,20 @@ This resource can manage a subinterface on NX-OS devices, including VLAN encapsu
 
 ```terraform
 resource "nxos_subinterface" "example" {
-  interface_id = "eth1/10.124"
-  admin_state  = "down"
-  bandwidth    = 1000
-  delay        = 10
-  description  = "My Description"
-  encap        = "vlan-124"
-  link_logging = "enable"
-  medium       = "broadcast"
-  mtu          = 1500
-  vrf_dn       = "sys/inst-VRF123"
+  interface_id            = "eth1/10.124"
+  admin_state             = "down"
+  bandwidth               = 1000
+  delay                   = 10
+  description             = "My Description"
+  encap                   = "vlan-124"
+  link_logging            = "enable"
+  medium                  = "broadcast"
+  mtu                     = 1500
+  mtu_inherit             = false
+  router_mac              = "AA:BB:CC:DD:EE:FF"
+  router_mac_ipv6_extract = "disable"
+  snmp_trap               = "disable"
+  vrf_dn                  = "sys/inst-VRF123"
 }
 ```
 
@@ -60,6 +64,12 @@ resource "nxos_subinterface" "example" {
   - Choices: `broadcast`, `p2p`
 - `mtu` (Number) The encapsulation routed interface MTU.
   - Range: `576`-`9216`
+- `mtu_inherit` (Boolean) The encapsulation routed interfac3 inherit MTU from global policy.
+- `router_mac` (String) The encapsulation routed interface MAC router.
+- `router_mac_ipv6_extract` (String) Disable/enable switchport ipv6 extract.
+  - Choices: `disable`, `enable`
+- `snmp_trap` (String) Administrative Port Snmp Trap State.
+  - Choices: `enable`, `disable`
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.
 
 ### Read-Only

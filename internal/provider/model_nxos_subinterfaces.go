@@ -26,6 +26,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -43,16 +44,20 @@ type Subinterfaces struct {
 }
 
 type SubinterfacesItems struct {
-	InterfaceId types.String `tfsdk:"interface_id"`
-	AdminState  types.String `tfsdk:"admin_state"`
-	Bandwidth   types.Int64  `tfsdk:"bandwidth"`
-	Delay       types.Int64  `tfsdk:"delay"`
-	Description types.String `tfsdk:"description"`
-	Encap       types.String `tfsdk:"encap"`
-	LinkLogging types.String `tfsdk:"link_logging"`
-	Medium      types.String `tfsdk:"medium"`
-	Mtu         types.Int64  `tfsdk:"mtu"`
-	VrfDn       types.String `tfsdk:"vrf_dn"`
+	InterfaceId          types.String `tfsdk:"interface_id"`
+	AdminState           types.String `tfsdk:"admin_state"`
+	Bandwidth            types.Int64  `tfsdk:"bandwidth"`
+	Delay                types.Int64  `tfsdk:"delay"`
+	Description          types.String `tfsdk:"description"`
+	Encap                types.String `tfsdk:"encap"`
+	LinkLogging          types.String `tfsdk:"link_logging"`
+	Medium               types.String `tfsdk:"medium"`
+	Mtu                  types.Int64  `tfsdk:"mtu"`
+	MtuInherit           types.Bool   `tfsdk:"mtu_inherit"`
+	RouterMac            types.String `tfsdk:"router_mac"`
+	RouterMacIpv6Extract types.String `tfsdk:"router_mac_ipv6_extract"`
+	SnmpTrap             types.String `tfsdk:"snmp_trap"`
+	VrfDn                types.String `tfsdk:"vrf_dn"`
 }
 
 type SubinterfacesIdentity struct {
@@ -138,6 +143,18 @@ func (data Subinterfaces) toBody() nxos.Body {
 		if (!item.Mtu.IsUnknown() && !item.Mtu.IsNull()) || false {
 			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"mtu", strconv.FormatInt(item.Mtu.ValueInt64(), 10))
 		}
+		if (!item.MtuInherit.IsUnknown() && !item.MtuInherit.IsNull()) || false {
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"mtuInherit", strconv.FormatBool(item.MtuInherit.ValueBool()))
+		}
+		if (!item.RouterMac.IsUnknown() && !item.RouterMac.IsNull()) || false {
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"routerMac", item.RouterMac.ValueString())
+		}
+		if (!item.RouterMacIpv6Extract.IsUnknown() && !item.RouterMacIpv6Extract.IsNull()) || false {
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"routerMacIpv6Extract", item.RouterMacIpv6Extract.ValueString())
+		}
+		if (!item.SnmpTrap.IsUnknown() && !item.SnmpTrap.IsNull()) || false {
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"snmpTrap", item.SnmpTrap.ValueString())
+		}
 		var attrs string
 		itemChildrenPath := data.getItemClassName() + ".children"
 		attrs = "{}"
@@ -209,6 +226,10 @@ func (data *Subinterfaces) fromBody(res gjson.Result) {
 				item.LinkLogging = types.StringValue(value.Get("attributes.linkLog").String())
 				item.Medium = types.StringValue(value.Get("attributes.mediumType").String())
 				item.Mtu = types.Int64Value(value.Get("attributes.mtu").Int())
+				item.MtuInherit = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.mtuInherit").String()))
+				item.RouterMac = types.StringValue(value.Get("attributes.routerMac").String())
+				item.RouterMacIpv6Extract = types.StringValue(value.Get("attributes.routerMacIpv6Extract").String())
+				item.SnmpTrap = types.StringValue(value.Get("attributes.snmpTrap").String())
 				{
 					var rnwRtVrfMbr gjson.Result
 					value.Get("children").ForEach(
@@ -289,6 +310,26 @@ func (data *Subinterfaces) updateFromBody(res gjson.Result) {
 						data.Items[i].Mtu = types.Int64Value(value.Get("attributes.mtu").Int())
 					} else {
 						data.Items[i].Mtu = types.Int64Null()
+					}
+					if !data.Items[i].MtuInherit.IsNull() {
+						data.Items[i].MtuInherit = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.mtuInherit").String()))
+					} else {
+						data.Items[i].MtuInherit = types.BoolNull()
+					}
+					if !data.Items[i].RouterMac.IsNull() {
+						data.Items[i].RouterMac = types.StringValue(value.Get("attributes.routerMac").String())
+					} else {
+						data.Items[i].RouterMac = types.StringNull()
+					}
+					if !data.Items[i].RouterMacIpv6Extract.IsNull() {
+						data.Items[i].RouterMacIpv6Extract = types.StringValue(value.Get("attributes.routerMacIpv6Extract").String())
+					} else {
+						data.Items[i].RouterMacIpv6Extract = types.StringNull()
+					}
+					if !data.Items[i].SnmpTrap.IsNull() {
+						data.Items[i].SnmpTrap = types.StringValue(value.Get("attributes.snmpTrap").String())
+					} else {
+						data.Items[i].SnmpTrap = types.StringNull()
 					}
 					{
 						var rnwRtVrfMbr gjson.Result

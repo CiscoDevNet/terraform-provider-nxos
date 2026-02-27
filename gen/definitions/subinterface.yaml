@@ -71,6 +71,32 @@ attributes:
     min_int: 576
     max_int: 9216
     example: 1500
+  - nxos_name: mtuInherit
+    tf_name: mtu_inherit
+    type: Bool
+    description: 'The encapsulation routed interfac3 inherit MTU from global policy.'
+    example: false
+  - nxos_name: routerMac
+    tf_name: router_mac
+    type: String
+    description: 'The encapsulation routed interface MAC router.'
+    example: 'AA:BB:CC:DD:EE:FF'
+  - nxos_name: routerMacIpv6Extract
+    tf_name: router_mac_ipv6_extract
+    type: String
+    description: 'Disable/enable switchport ipv6 extract.'
+    enum_values:
+      - disable
+      - enable
+    example: disable
+  - nxos_name: snmpTrap
+    tf_name: snmp_trap
+    type: String
+    description: 'Administrative Port Snmp Trap State.'
+    enum_values:
+      - enable
+      - disable
+    example: disable
 child_classes:
   - class_name: nwRtVrfMbr
     rn: rtvrfMbr

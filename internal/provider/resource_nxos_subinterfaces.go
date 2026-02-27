@@ -136,6 +136,28 @@ func (r *SubinterfacesResource) Schema(ctx context.Context, req resource.SchemaR
 								int64validator.Between(576, 9216),
 							},
 						},
+						"mtu_inherit": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The encapsulation routed interfac3 inherit MTU from global policy.").String,
+							Optional:            true,
+						},
+						"router_mac": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The encapsulation routed interface MAC router.").String,
+							Optional:            true,
+						},
+						"router_mac_ipv6_extract": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable/enable switchport ipv6 extract.").AddStringEnumDescription("disable", "enable").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
+						},
+						"snmp_trap": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Administrative Port Snmp Trap State.").AddStringEnumDescription("enable", "disable").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enable", "disable"),
+							},
+						},
 						"vrf_dn": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("DN of VRF. For example: `sys/inst-VRF1`.").String,
 							Optional:            true,

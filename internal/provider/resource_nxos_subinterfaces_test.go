@@ -43,6 +43,10 @@ func TestAccNxosSubinterfaces(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "items.0.link_logging", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "items.0.medium", "broadcast"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "items.0.mtu", "1500"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "items.0.mtu_inherit", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "items.0.router_mac", "AA:BB:CC:DD:EE:FF"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "items.0.router_mac_ipv6_extract", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "items.0.snmp_trap", "disable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_subinterfaces.test", "items.0.vrf_dn", "sys/inst-VRF123"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -124,6 +128,10 @@ func testAccNxosSubinterfacesConfig_all() string {
 	config += `		link_logging = "enable"` + "\n"
 	config += `		medium = "broadcast"` + "\n"
 	config += `		mtu = 1500` + "\n"
+	config += `		mtu_inherit = false` + "\n"
+	config += `		router_mac = "AA:BB:CC:DD:EE:FF"` + "\n"
+	config += `		router_mac_ipv6_extract = "disable"` + "\n"
+	config += `		snmp_trap = "disable"` + "\n"
 	config += `		vrf_dn = "sys/inst-VRF123"` + "\n"
 	config += `	}]` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"

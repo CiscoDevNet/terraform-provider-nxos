@@ -31,10 +31,21 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosBridgeDomains(t *testing.T) {
 	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bridge_domains.test", "svi_autostate", "disable"))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_bridge_domains.test", "bridge_domains.*", map[string]string{
-		"fabric_encap": "vlan-10",
-		"access_encap": "unknown",
-		"name":         "VLAN10",
+		"fabric_encap":        "vlan-10",
+		"access_encap":        "unknown",
+		"name":                "VLAN10",
+		"bridge_domain_state": "suspend",
+		"admin_state":         "active",
+		"bridge_mode":         "mac",
+		"control":             "untagged",
+		"forwarding_control":  "mdst-flood",
+		"forwarding_mode":     "bridge",
+		"long_name":           "false",
+		"mode":                "CE",
+		"vrf_name":            "default",
+		"cross_connect":       "disable",
 	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -57,10 +68,21 @@ func TestAccDataSourceNxosBridgeDomains(t *testing.T) {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 func testAccDataSourceNxosBridgeDomainsConfig() string {
 	config := `resource "nxos_bridge_domains" "test" {` + "\n"
+	config += `	svi_autostate = "disable"` + "\n"
 	config += `	bridge_domains = [{` + "\n"
 	config += `		fabric_encap = "vlan-10"` + "\n"
 	config += `		access_encap = "unknown"` + "\n"
 	config += `		name = "VLAN10"` + "\n"
+	config += `		bridge_domain_state = "suspend"` + "\n"
+	config += `		admin_state = "active"` + "\n"
+	config += `		bridge_mode = "mac"` + "\n"
+	config += `		control = "untagged"` + "\n"
+	config += `		forwarding_control = "mdst-flood"` + "\n"
+	config += `		forwarding_mode = "bridge"` + "\n"
+	config += `		long_name = false` + "\n"
+	config += `		mode = "CE"` + "\n"
+	config += `		vrf_name = "default"` + "\n"
+	config += `		cross_connect = "disable"` + "\n"
 	config += `	}]` + "\n"
 	config += `}` + "\n"
 

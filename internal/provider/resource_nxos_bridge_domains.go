@@ -26,12 +26,14 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-nxos"
@@ -74,6 +76,13 @@ func (r *BridgeDomainsResource) Schema(ctx context.Context, req resource.SchemaR
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"svi_autostate": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable/enable autoState for SVI interface.").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
 			"bridge_domains": schema.ListNestedAttribute{
 				MarkdownDescription: "List of bridge domains.",
 				Optional:            true,
@@ -93,6 +102,68 @@ func (r *BridgeDomainsResource) Schema(ctx context.Context, req resource.SchemaR
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The name of the object.").String,
 							Optional:            true,
+						},
+						"bridge_domain_state": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bridge Domain State can be active or suspended.").AddStringEnumDescription("suspend", "active").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("suspend", "active"),
+							},
+						},
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("admin state.").AddStringEnumDescription("suspend", "active").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("suspend", "active"),
+							},
+						},
+						"bridge_mode": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The Layer 2 bridge-domain parameter mode used by the node for enabling classical bridging or bridging with the IP address.").AddStringEnumDescription("ip", "mac").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("ip", "mac"),
+							},
+						},
+						"control": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("none", "untagged", "policy-enforced").String,
+							Optional:            true,
+						},
+						"forwarding_control": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The Layer 2 bridge-domain forwarding controls.").AddStringEnumDescription("mdst-flood", "arp-flood").String,
+							Optional:            true,
+						},
+						"forwarding_mode": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The Layer 2 bridge-domain parameter mode used by the node for enabling forwarding modes.").AddStringEnumDescription("route", "bridge").String,
+							Optional:            true,
+						},
+						"long_name": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable or disable long name of 128 characters for VLAN.").String,
+							Optional:            true,
+						},
+						"mac_packet_classify": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Vlan mac packet classify.").AddStringEnumDescription("disable", "enable").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
+						},
+						"mode": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Vlan mode.").AddStringEnumDescription("CE", "FabricPath").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("CE", "FabricPath"),
+							},
+						},
+						"vrf_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable or disable vrf name of 32 characters for VLAN.").String,
+							Optional:            true,
+						},
+						"cross_connect": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable Cross Connect on VLAN.").AddStringEnumDescription("disable", "enable").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
 						},
 					},
 				},

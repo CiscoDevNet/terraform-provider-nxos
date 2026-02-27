@@ -7,6 +7,15 @@ ds_description: This data source can read the bridge domain configuration on NX-
 res_description: This resource can manage the bridge domain configuration on NX-OS devices, including VLAN and VXLAN encapsulation mappings.
 doc_path: Layer%202/bd:Entity/
 doc_category: Switching
+attributes:
+  - nxos_name: sysDefaultSVIAutostate
+    tf_name: svi_autostate
+    type: String
+    description: 'Disable/enable autoState for SVI interface.'
+    enum_values:
+      - disable
+      - enable
+    example: disable
 child_classes:
   - class_name: l2BD
     doc_path: Layer%202/l2:BD/
@@ -31,3 +40,90 @@ child_classes:
         type: String
         description: 'The name of the object.'
         example: VLAN10
+      - nxos_name: BdState
+        tf_name: bridge_domain_state
+        type: String
+        description: 'Bridge Domain State can be active or suspended.'
+        enum_values:
+          - suspend
+          - active
+        example: suspend
+      - nxos_name: adminSt
+        tf_name: admin_state
+        type: String
+        description: 'admin state.'
+        enum_values:
+          - suspend
+          - active
+        example: active
+      - nxos_name: bridgeMode
+        tf_name: bridge_mode
+        type: String
+        description: 'The Layer 2 bridge-domain parameter mode used by the node for enabling classical bridging or bridging with the IP address.'
+        enum_values:
+          - ip
+          - mac
+        example: mac
+      - nxos_name: ctrl
+        tf_name: control
+        type: String
+        description: 'The control state.'
+        allow_non_enum_values: true
+        enum_values:
+          - none
+          - untagged
+          - policy-enforced
+        example: untagged
+      - nxos_name: fwdCtrl
+        tf_name: forwarding_control
+        type: String
+        description: 'The Layer 2 bridge-domain forwarding controls.'
+        allow_non_enum_values: true
+        enum_values:
+          - mdst-flood
+          - arp-flood
+        example: mdst-flood
+      - nxos_name: fwdMode
+        tf_name: forwarding_mode
+        type: String
+        description: 'The Layer 2 bridge-domain parameter mode used by the node for enabling forwarding modes.'
+        allow_non_enum_values: true
+        enum_values:
+          - route
+          - bridge
+        example: bridge
+      - nxos_name: longName
+        tf_name: long_name
+        type: Bool
+        description: 'Enable or disable long name of 128 characters for VLAN.'
+        example: false
+      - nxos_name: macPacketClassify
+        tf_name: mac_packet_classify
+        type: String
+        description: 'Vlan mac packet classify.'
+        enum_values:
+          - disable
+          - enable
+        example: enable
+        exclude_test: true
+      - nxos_name: mode
+        tf_name: mode
+        type: String
+        description: 'Vlan mode.'
+        enum_values:
+          - CE
+          - FabricPath
+        example: CE
+      - nxos_name: vrfName
+        tf_name: vrf_name
+        type: String
+        description: 'Enable or disable vrf name of 32 characters for VLAN.'
+        example: default
+      - nxos_name: xConnect
+        tf_name: cross_connect
+        type: String
+        description: 'Enable Cross Connect on VLAN.'
+        enum_values:
+          - disable
+          - enable
+        example: disable

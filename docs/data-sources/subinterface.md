@@ -49,4 +49,8 @@ data "nxos_subinterface" "example" {
 - `link_logging` (String) Interface Link Logging Enable.
 - `medium` (String) Interface Medium Type.
 - `mtu` (Number) The encapsulation routed interface MTU.
+- `mtu_inherit` (Boolean) The encapsulation routed interfac3 inherit MTU from global policy.
+- `router_mac` (String) The encapsulation routed interface MAC router.
+- `router_mac_ipv6_extract` (String) Disable/enable switchport ipv6 extract.
+- `snmp_trap` (String) Administrative Port Snmp Trap State.
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.

@@ -104,6 +104,22 @@ func (d *SubinterfaceDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "The encapsulation routed interface MTU.",
 				Computed:            true,
 			},
+			"mtu_inherit": schema.BoolAttribute{
+				MarkdownDescription: "The encapsulation routed interfac3 inherit MTU from global policy.",
+				Computed:            true,
+			},
+			"router_mac": schema.StringAttribute{
+				MarkdownDescription: "The encapsulation routed interface MAC router.",
+				Computed:            true,
+			},
+			"router_mac_ipv6_extract": schema.StringAttribute{
+				MarkdownDescription: "Disable/enable switchport ipv6 extract.",
+				Computed:            true,
+			},
+			"snmp_trap": schema.StringAttribute{
+				MarkdownDescription: "Administrative Port Snmp Trap State.",
+				Computed:            true,
+			},
 			"vrf_dn": schema.StringAttribute{
 				MarkdownDescription: "DN of VRF. For example: `sys/inst-VRF1`.",
 				Computed:            true,

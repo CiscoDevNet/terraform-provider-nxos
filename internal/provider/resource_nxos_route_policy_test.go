@@ -35,21 +35,41 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosRoutePolicy(t *testing.T) {
 	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.name", "PREFIX_LIST1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.description", "My prefix list"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.mode", "IPV4"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.entries.0.order", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.entries.0.action", "permit"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.entries.0.criteria", "inexact"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.entries.0.prefix", "192.168.1.0/24"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.entries.0.from_range", "26"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.entries.0.to_range", "32"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_prefix_lists.0.entries.0.mask", "255.255.255.0"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.name", "ROUTE_MAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.pbr_statistics", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.order", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.action", "permit"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.description", "My route map entry"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.drop_on_fail_v4", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.drop_on_fail_v6", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.force_order_v4", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.force_order_v6", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.load_share_v4", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.load_share_v6", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_default_next_hop_v4", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_default_next_hop_v6", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_vrf_v4", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_vrf_v6", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.verify_availability_v4", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.verify_availability_v6", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.match_route_prefix_lists.0.prefix_list_dn", "sys/rpm/pfxlistv4-[PREFIX_LIST1]"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_regular_community_additive", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_regular_community_no_community", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_regular_community_criteria", "none"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_regular_community_items.0.community", "regular:as2-nn2:65001:123"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_regular_community_items.0.description", "My community"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.set_regular_community_items.0.name", "COMMUNITY1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.0.entries.0.match_tags.0.tag", "12345"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -107,8 +127,11 @@ func testAccNxosRoutePolicyConfig_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosRoutePolicyConfig_all() string {
 	config := `resource "nxos_route_policy" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
 	config += `	ipv4_prefix_lists = [{` + "\n"
 	config += `		name = "PREFIX_LIST1"` + "\n"
+	config += `		description = "My prefix list"` + "\n"
+	config += `		mode = "IPV4"` + "\n"
 	config += `		entries = [{` + "\n"
 	config += `			order = 10` + "\n"
 	config += `			action = "permit"` + "\n"
@@ -116,13 +139,28 @@ func testAccNxosRoutePolicyConfig_all() string {
 	config += `			prefix = "192.168.1.0/24"` + "\n"
 	config += `			from_range = 26` + "\n"
 	config += `			to_range = 32` + "\n"
+	config += `			mask = "255.255.255.0"` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
 	config += `	route_maps = [{` + "\n"
 	config += `		name = "ROUTE_MAP1"` + "\n"
+	config += `		pbr_statistics = "enabled"` + "\n"
 	config += `		entries = [{` + "\n"
 	config += `			order = 10` + "\n"
 	config += `			action = "permit"` + "\n"
+	config += `			description = "My route map entry"` + "\n"
+	config += `			drop_on_fail_v4 = "enabled"` + "\n"
+	config += `			drop_on_fail_v6 = "enabled"` + "\n"
+	config += `			force_order_v4 = "enabled"` + "\n"
+	config += `			force_order_v6 = "enabled"` + "\n"
+	config += `			load_share_v4 = "enabled"` + "\n"
+	config += `			load_share_v6 = "enabled"` + "\n"
+	config += `			set_default_next_hop_v4 = "enabled"` + "\n"
+	config += `			set_default_next_hop_v6 = "enabled"` + "\n"
+	config += `			set_vrf_v4 = "enabled"` + "\n"
+	config += `			set_vrf_v6 = "enabled"` + "\n"
+	config += `			verify_availability_v4 = "enabled"` + "\n"
+	config += `			verify_availability_v6 = "enabled"` + "\n"
 	config += `			match_route_prefix_lists = [{` + "\n"
 	config += `				prefix_list_dn = "sys/rpm/pfxlistv4-[PREFIX_LIST1]"` + "\n"
 	config += `			}]` + "\n"
@@ -131,6 +169,8 @@ func testAccNxosRoutePolicyConfig_all() string {
 	config += `			set_regular_community_criteria = "none"` + "\n"
 	config += `			set_regular_community_items = [{` + "\n"
 	config += `				community = "regular:as2-nn2:65001:123"` + "\n"
+	config += `				description = "My community"` + "\n"
+	config += `				name = "COMMUNITY1"` + "\n"
 	config += `			}]` + "\n"
 	config += `			match_tags = [{` + "\n"
 	config += `				tag = 12345` + "\n"

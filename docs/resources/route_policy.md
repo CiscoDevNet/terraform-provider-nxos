@@ -31,8 +31,11 @@ This resource can manage the route policy configuration on NX-OS devices, includ
 
 ```terraform
 resource "nxos_route_policy" "example" {
+  admin_state = "enabled"
   ipv4_prefix_lists = [{
-    name = "PREFIX_LIST1"
+    name        = "PREFIX_LIST1"
+    description = "My prefix list"
+    mode        = "IPV4"
     entries = [{
       order      = 10
       action     = "permit"
@@ -40,13 +43,28 @@ resource "nxos_route_policy" "example" {
       prefix     = "192.168.1.0/24"
       from_range = 26
       to_range   = 32
+      mask       = "255.255.255.0"
     }]
   }]
   route_maps = [{
-    name = "ROUTE_MAP1"
+    name           = "ROUTE_MAP1"
+    pbr_statistics = "enabled"
     entries = [{
-      order  = 10
-      action = "permit"
+      order                   = 10
+      action                  = "permit"
+      description             = "My route map entry"
+      drop_on_fail_v4         = "enabled"
+      drop_on_fail_v6         = "enabled"
+      force_order_v4          = "enabled"
+      force_order_v6          = "enabled"
+      load_share_v4           = "enabled"
+      load_share_v6           = "enabled"
+      set_default_next_hop_v4 = "enabled"
+      set_default_next_hop_v6 = "enabled"
+      set_vrf_v4              = "enabled"
+      set_vrf_v6              = "enabled"
+      verify_availability_v4  = "enabled"
+      verify_availability_v6  = "enabled"
       match_route_prefix_lists = [{
         prefix_list_dn = "sys/rpm/pfxlistv4-[PREFIX_LIST1]"
       }]
@@ -54,7 +72,9 @@ resource "nxos_route_policy" "example" {
       set_regular_community_no_community = "disabled"
       set_regular_community_criteria     = "none"
       set_regular_community_items = [{
-        community = "regular:as2-nn2:65001:123"
+        community   = "regular:as2-nn2:65001:123"
+        description = "My community"
+        name        = "COMMUNITY1"
       }]
       match_tags = [{
         tag = 12345
@@ -69,6 +89,8 @@ resource "nxos_route_policy" "example" {
 
 ### Optional
 
+- `admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
 - `device` (String) A device name from the provider configuration.
 - `ipv4_prefix_lists` (Attributes List) List of IPv4 Prefix Lists. (see [below for nested schema](#nestedatt--ipv4_prefix_lists))
 - `route_maps` (Attributes List) List of Route Maps. (see [below for nested schema](#nestedatt--route_maps))
@@ -86,7 +108,10 @@ Required:
 
 Optional:
 
+- `description` (String) Description.
 - `entries` (Attributes List) IPv4 Prefix List entries. (see [below for nested schema](#nestedatt--ipv4_prefix_lists--entries))
+- `mode` (String) Mode of ipv4 prefix-list.
+  - Choices: `IPV4`
 
 <a id="nestedatt--ipv4_prefix_lists--entries"></a>
 ### Nested Schema for `ipv4_prefix_lists.entries`
@@ -104,6 +129,7 @@ Optional:
   - Choices: `exact`, `inexact`
 - `from_range` (Number) The start of a range used to describe the prefix length if the criteria is not an exact match.
   - Range: `0`-`128`
+- `mask` (String) Mask.
 - `prefix` (String) Specifies the OSPF route prefix.
 - `to_range` (Number) The end of a range to describe the prefix length if the criteria is not an exact match.
   - Range: `0`-`128`
@@ -120,6 +146,8 @@ Required:
 Optional:
 
 - `entries` (Attributes List) List of Route Map Entries. (see [below for nested schema](#nestedatt--route_maps--entries))
+- `pbr_statistics` (String) Route map pbr-statistics.
+  - Choices: `enabled`, `disabled`
 
 <a id="nestedatt--route_maps--entries"></a>
 ### Nested Schema for `route_maps.entries`
@@ -133,14 +161,39 @@ Optional:
 
 - `action` (String) Action.
   - Choices: `deny`, `permit`
+- `description` (String) Description.
+- `drop_on_fail_v4` (String) Drop On Fail V4 for v4 nexthop.
+  - Choices: `enabled`, `disabled`
+- `drop_on_fail_v6` (String) Drop On Fail V6 for v6 nexthop.
+  - Choices: `enabled`, `disabled`
+- `force_order_v4` (String) Force Order V4.
+  - Choices: `enabled`, `disabled`
+- `force_order_v6` (String) Force Order V6.
+  - Choices: `enabled`, `disabled`
+- `load_share_v4` (String) Load Sharing V4.
+  - Choices: `enabled`, `disabled`
+- `load_share_v6` (String) Load Sharing V6.
+  - Choices: `enabled`, `disabled`
 - `match_route_prefix_lists` (Attributes List) List of Match Route Prefix Lists. (see [below for nested schema](#nestedatt--route_maps--entries--match_route_prefix_lists))
 - `match_tags` (Attributes List) List of Match Tags. (see [below for nested schema](#nestedatt--route_maps--entries--match_tags))
+- `set_default_next_hop_v4` (String) Default V4 Next-hop Address.
+  - Choices: `enabled`, `disabled`
+- `set_default_next_hop_v6` (String) Default V6 Next-hop Address.
+  - Choices: `enabled`, `disabled`
 - `set_regular_community_additive` (String) Add To Existing Community.
   - Choices: `enabled`, `disabled`
 - `set_regular_community_criteria` (String) Criteria.
   - Choices: `none`, `append`, `replace`, `igp`, `pre-bestpath`
 - `set_regular_community_items` (Attributes List) List of Set Community Items. (see [below for nested schema](#nestedatt--route_maps--entries--set_regular_community_items))
 - `set_regular_community_no_community` (String) No Community Attribute.
+  - Choices: `enabled`, `disabled`
+- `set_vrf_v4` (String) Enable vrf based set ipv4 next-hop resolution.
+  - Choices: `enabled`, `disabled`
+- `set_vrf_v6` (String) Enable vrf based set ipv6 next-hop resolution.
+  - Choices: `enabled`, `disabled`
+- `verify_availability_v4` (String) Next Hop with V4 Verify Availability.
+  - Choices: `enabled`, `disabled`
+- `verify_availability_v6` (String) Next Hop with V6 Verify Availability.
   - Choices: `enabled`, `disabled`
 
 <a id="nestedatt--route_maps--entries--match_route_prefix_lists"></a>
@@ -166,6 +219,11 @@ Required:
 Required:
 
 - `community` (String) Community.
+
+Optional:
+
+- `description` (String) Description of the specified attribute.
+- `name` (String) Object name.
 
 ## Import
 

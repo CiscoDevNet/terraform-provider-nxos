@@ -78,6 +78,13 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
 			"ipv4_prefix_lists": schema.ListNestedAttribute{
 				MarkdownDescription: "List of IPv4 Prefix Lists.",
 				Optional:            true,
@@ -88,6 +95,17 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 							Required:            true,
 							PlanModifiers: []planmodifier.String{
 								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
+							Optional:            true,
+						},
+						"mode": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Mode of ipv4 prefix-list.").AddStringEnumDescription("IPV4").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("IPV4"),
 							},
 						},
 						"entries": schema.ListNestedAttribute{
@@ -137,6 +155,10 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 											int64validator.Between(0, 128),
 										},
 									},
+									"mask": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Mask.").String,
+										Optional:            true,
+									},
 								},
 							},
 						},
@@ -153,6 +175,13 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 							Required:            true,
 							PlanModifiers: []planmodifier.String{
 								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"pbr_statistics": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route map pbr-statistics.").AddStringEnumDescription("enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
 							},
 						},
 						"entries": schema.ListNestedAttribute{
@@ -175,6 +204,94 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 										Optional:            true,
 										Validators: []validator.String{
 											stringvalidator.OneOf("deny", "permit"),
+										},
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
+										Optional:            true,
+									},
+									"drop_on_fail_v4": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Drop On Fail V4 for v4 nexthop.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"drop_on_fail_v6": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Drop On Fail V6 for v6 nexthop.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"force_order_v4": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Force Order V4.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"force_order_v6": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Force Order V6.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"load_share_v4": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Load Sharing V4.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"load_share_v6": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Load Sharing V6.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"set_default_next_hop_v4": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Default V4 Next-hop Address.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"set_default_next_hop_v6": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Default V6 Next-hop Address.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"set_vrf_v4": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Enable vrf based set ipv4 next-hop resolution.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"set_vrf_v6": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Enable vrf based set ipv6 next-hop resolution.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"verify_availability_v4": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Next Hop with V4 Verify Availability.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"verify_availability_v6": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Next Hop with V6 Verify Availability.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
 										},
 									},
 									"match_route_prefix_lists": schema.ListNestedAttribute{
@@ -224,6 +341,14 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplace(),
 													},
+												},
+												"description": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+													Optional:            true,
+												},
+												"name": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
+													Optional:            true,
 												},
 											},
 										},

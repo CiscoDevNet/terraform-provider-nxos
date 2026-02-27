@@ -68,6 +68,10 @@ func (d *RoutePolicyDataSource) Schema(ctx context.Context, req datasource.Schem
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
+			"admin_state": schema.StringAttribute{
+				MarkdownDescription: "The administrative state of the object or policy.",
+				Computed:            true,
+			},
 			"ipv4_prefix_lists": schema.ListNestedAttribute{
 				MarkdownDescription: "List of IPv4 Prefix Lists.",
 				Computed:            true,
@@ -75,6 +79,14 @@ func (d *RoutePolicyDataSource) Schema(ctx context.Context, req datasource.Schem
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
 							MarkdownDescription: "Object name.",
+							Computed:            true,
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: "Description.",
+							Computed:            true,
+						},
+						"mode": schema.StringAttribute{
+							MarkdownDescription: "Mode of ipv4 prefix-list.",
 							Computed:            true,
 						},
 						"entries": schema.ListNestedAttribute{
@@ -106,6 +118,10 @@ func (d *RoutePolicyDataSource) Schema(ctx context.Context, req datasource.Schem
 										MarkdownDescription: "The end of a range to describe the prefix length if the criteria is not an exact match.",
 										Computed:            true,
 									},
+									"mask": schema.StringAttribute{
+										MarkdownDescription: "Mask.",
+										Computed:            true,
+									},
 								},
 							},
 						},
@@ -121,6 +137,10 @@ func (d *RoutePolicyDataSource) Schema(ctx context.Context, req datasource.Schem
 							MarkdownDescription: "Object name.",
 							Computed:            true,
 						},
+						"pbr_statistics": schema.StringAttribute{
+							MarkdownDescription: "Route map pbr-statistics.",
+							Computed:            true,
+						},
 						"entries": schema.ListNestedAttribute{
 							MarkdownDescription: "List of Route Map Entries.",
 							Computed:            true,
@@ -132,6 +152,58 @@ func (d *RoutePolicyDataSource) Schema(ctx context.Context, req datasource.Schem
 									},
 									"action": schema.StringAttribute{
 										MarkdownDescription: "Action.",
+										Computed:            true,
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: "Description.",
+										Computed:            true,
+									},
+									"drop_on_fail_v4": schema.StringAttribute{
+										MarkdownDescription: "Drop On Fail V4 for v4 nexthop.",
+										Computed:            true,
+									},
+									"drop_on_fail_v6": schema.StringAttribute{
+										MarkdownDescription: "Drop On Fail V6 for v6 nexthop.",
+										Computed:            true,
+									},
+									"force_order_v4": schema.StringAttribute{
+										MarkdownDescription: "Force Order V4.",
+										Computed:            true,
+									},
+									"force_order_v6": schema.StringAttribute{
+										MarkdownDescription: "Force Order V6.",
+										Computed:            true,
+									},
+									"load_share_v4": schema.StringAttribute{
+										MarkdownDescription: "Load Sharing V4.",
+										Computed:            true,
+									},
+									"load_share_v6": schema.StringAttribute{
+										MarkdownDescription: "Load Sharing V6.",
+										Computed:            true,
+									},
+									"set_default_next_hop_v4": schema.StringAttribute{
+										MarkdownDescription: "Default V4 Next-hop Address.",
+										Computed:            true,
+									},
+									"set_default_next_hop_v6": schema.StringAttribute{
+										MarkdownDescription: "Default V6 Next-hop Address.",
+										Computed:            true,
+									},
+									"set_vrf_v4": schema.StringAttribute{
+										MarkdownDescription: "Enable vrf based set ipv4 next-hop resolution.",
+										Computed:            true,
+									},
+									"set_vrf_v6": schema.StringAttribute{
+										MarkdownDescription: "Enable vrf based set ipv6 next-hop resolution.",
+										Computed:            true,
+									},
+									"verify_availability_v4": schema.StringAttribute{
+										MarkdownDescription: "Next Hop with V4 Verify Availability.",
+										Computed:            true,
+									},
+									"verify_availability_v6": schema.StringAttribute{
+										MarkdownDescription: "Next Hop with V6 Verify Availability.",
 										Computed:            true,
 									},
 									"match_route_prefix_lists": schema.ListNestedAttribute{
@@ -165,6 +237,14 @@ func (d *RoutePolicyDataSource) Schema(ctx context.Context, req datasource.Schem
 											Attributes: map[string]schema.Attribute{
 												"community": schema.StringAttribute{
 													MarkdownDescription: "Community.",
+													Computed:            true,
+												},
+												"description": schema.StringAttribute{
+													MarkdownDescription: "Description of the specified attribute.",
+													Computed:            true,
+												},
+												"name": schema.StringAttribute{
+													MarkdownDescription: "Object name.",
 													Computed:            true,
 												},
 											},

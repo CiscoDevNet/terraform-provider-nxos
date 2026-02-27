@@ -37,6 +37,23 @@ child_classes:
           - enabled
           - disabled
         example: enabled
+      - nxos_name: ctrl
+        tf_name: control
+        type: String
+        description: 'The control state.'
+        enum_values:
+          - stateful-ha
+        example: stateful-ha
+      - nxos_name: flushRoutes
+        tf_name: flush_routes
+        type: Bool
+        description: 'Flush ISIS Routes on non graceful controlled restart.'
+        example: true
+      - nxos_name: isolate
+        tf_name: isolate
+        type: Bool
+        description: 'Isolate ISIS Instance from other process tags.'
+        example: true
     child_classes:
       - class_name: isisDom
         doc_path: Routing%20and%20Forwarding/isis:Dom/
@@ -154,6 +171,29 @@ child_classes:
               - l12
               - unknown
             example: l12
+          - nxos_name: ctrl
+            tf_name: control
+            type: String
+            description: 'Holds ISIS Domain Control messages.'
+            enum_values:
+              - unspecified
+              - log-adj-changes
+              - hostname-dynamic-disable
+            example: log-adj-changes
+          - nxos_name: lspLifetime
+            tf_name: lsp_lifetime
+            type: Int64
+            min_int: 1
+            max_int: 65535
+            description: 'Holds ISIS Domain LSP Lifetime.'
+            example: 1000
+          - nxos_name: queueLimit
+            tf_name: queue_limit
+            type: Int64
+            min_int: 200
+            max_int: 65535
+            description: 'Holds the ISIS queue limit retransmit value.'
+            example: 3000
         child_classes:
           - class_name: isisDomAf
             doc_path: Routing%20and%20Forwarding/isis:DomAf/
@@ -191,6 +231,75 @@ child_classes:
                 type: Bool
                 description: 'Prefix advertise passive only level-2.'
                 example: true
+              - nxos_name: ctrl
+                tf_name: control
+                type: String
+                description: 'The address family controls. This determines the address family to run. Note that IPv4 and IPv6 are both supported.'
+                enum_values:
+                  - adj-check
+                  - set-attached-bit
+                example: adj-check
+              - nxos_name: defInfOrig
+                tf_name: default_information_originate
+                type: String
+                description: 'Holds ISIS Domain address family default-information originate state for Route.'
+                enum_values:
+                  - 'off'
+                  - 'on'
+                  - always
+                example: 'on'
+              - nxos_name: defInfOrigRtMap
+                tf_name: default_information_originate_route_map
+                type: String
+                description: 'Holds Route-map name for ISIS Domain address family default-information originate.'
+                example: rm1
+              - nxos_name: dist
+                tf_name: distance
+                type: Int64
+                min_int: 1
+                max_int: 255
+                description: 'Holds ISIS Domain address family Administrative Distance.'
+                example: 100
+              - nxos_name: maxEcmp
+                tf_name: max_ecmp
+                type: Int64
+                min_int: 1
+                max_int: 64
+                description: 'Holds ISIS Domain address family Max ECMP value.'
+                example: 4
+              - nxos_name: mtType
+                tf_name: multi_topology
+                type: String
+                description: 'Holds ISIS Domain address family Multi-topology information.'
+                enum_values:
+                  - st
+                  - mt
+                  - mtt
+                example: st
+              - nxos_name: rtrIdIf
+                tf_name: router_id_interface
+                type: String
+                description: 'Holds interface.'
+                example: lo0
+              - nxos_name: rtrIdIpAddr
+                tf_name: router_id_ip_address
+                type: String
+                description: 'Holds ip address to become router id.'
+                exclude_test: true
+                example: 1.2.3.4
+              - nxos_name: tblMap
+                tf_name: table_map
+                type: String
+                description: 'Holds Route-map name to filter routes downloaded.'
+                example: rm1
+              - nxos_name: tblMapFltr
+                tf_name: table_map_filter
+                type: String
+                description: 'Enables table-map for Selective route.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
           - class_name: isisOverload
             doc_path: Routing%20and%20Forwarding/isis:Overload/
             rn: overload
@@ -204,6 +313,37 @@ child_classes:
                 max_int: 86400
                 description: 'The overload startup time. The overload state begins when the switch boots up and ends at the time specified as the overload startup time.'
                 example: 60
+              - nxos_name: adminSt
+                tf_name: overload_admin_state
+                type: String
+                description: 'Admin State.'
+                enum_values:
+                  - 'off'
+                  - always-on
+                  - bootup
+                  - bgp-converge
+                  - bgp-converge-max-wait
+                example: always-on
+              - nxos_name: bgpAsNum
+                tf_name: overload_bgp_as_number
+                type: Int64
+                min_int: 0
+                max_int: 65535
+                description: 'The BGP autonomous system number. This sets overload until BGP converges on this autonomous system number. This is not currently supported.'
+                example: 100
+              - nxos_name: bgpAsNumStr
+                tf_name: overload_bgp_as_number_string
+                type: String
+                description: 'BGP AS Num in supported format.'
+                example: '100'
+              - nxos_name: suppress
+                tf_name: overload_suppress
+                type: String
+                description: 'Suppress Internal/External.'
+                enum_values:
+                  - interlevel
+                  - external
+                example: interlevel
   - class_name: isisInternalIf
     doc_path: Routing%20and%20Forwarding/isis:InternalIf/
     rn: if-[%s]
@@ -416,6 +556,126 @@ child_classes:
         tf_name: enable_ipv4
         type: Bool
         description: "Enabling ISIS router tag on Interface's IPV4 family."
+        example: true
+      - nxos_name: adminSt
+        tf_name: admin_state
+        type: String
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: csnpIntvlLvl1
+        tf_name: csnp_interval_l1
+        type: Int64
+        min_int: 1
+        max_int: 65535
+        description: 'Holds ISIS Interface Level-1 CSNP Interval.'
+        example: 30
+      - nxos_name: csnpIntvlLvl2
+        tf_name: csnp_interval_l2
+        type: Int64
+        min_int: 1
+        max_int: 65535
+        description: 'Holds ISIS Interface Level-2 CSNP Interval.'
+        example: 30
+      - nxos_name: ctrl
+        tf_name: control
+        type: String
+        description: 'Holds ISIS interface Control messages.'
+        enum_values:
+          - advert-tep
+          - passive
+          - hello-padding
+          - exchange-hostname
+          - attached
+          - supress-prefix-advert
+        example: advert-tep
+      - nxos_name: descr
+        tf_name: description
+        type: String
+        description: 'Description.'
+        example: 'ISIS interface'
+      - nxos_name: lspRefreshIntvl
+        tf_name: lsp_refresh_interval
+        type: Int64
+        min_int: 10
+        max_int: 65535
+        description: 'Holds ISIS Interface LSP Refresh Interval.'
+        example: 100
+      - nxos_name: meshGroupBlocked
+        tf_name: mesh_group_blocked
+        type: Bool
+        description: 'Mesh group blocked value.'
+        exclude_test: true
+        example: true
+      - nxos_name: meshGroupId
+        tf_name: mesh_group_id
+        type: Int64
+        min_int: 0
+        max_int: 4294967295
+        description: 'Holds the ISIS mesh group ID value.'
+        example: 10
+      - nxos_name: mt2MetricLvl1
+        tf_name: ipv6_metric_l1
+        type: Int64
+        min_int: 0
+        max_int: 16777216
+        description: 'Holds ISIS interface IPV6 wide metric value for Level-1.'
+        example: 1000
+      - nxos_name: mt2MetricLvl2
+        tf_name: ipv6_metric_l2
+        type: Int64
+        min_int: 0
+        max_int: 16777216
+        description: 'Holds ISIS interface IPV6 wide metric value for Level-2.'
+        example: 1000
+      - nxos_name: nFlagClear
+        tf_name: n_flag_clear
+        type: Bool
+        description: 'Enabling N flag clear for ISIS interface.'
+        example: true
+      - nxos_name: retransInterval
+        tf_name: retransmit_interval
+        type: Int64
+        min_int: 1
+        max_int: 65535
+        description: 'Holds ISIS Interface Retransmit Interval.'
+        example: 10
+      - nxos_name: retransThrottleInterval
+        tf_name: retransmit_throttle_interval
+        type: Int64
+        min_int: 20
+        max_int: 65535
+        description: 'Holds ISIS Interface Retransmit Throttle Interval.'
+        example: 100
+      - nxos_name: suppressedState
+        tf_name: suppressed_state
+        type: Bool
+        description: 'Suppress the prefix advertisement.'
+        example: true
+      - nxos_name: v4Bfd
+        tf_name: ipv4_bfd
+        type: String
+        description: 'Holds ISIS Interface BFD Configruation.'
+        enum_values:
+          - inheritVrf
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: v6Bfd
+        tf_name: ipv6_bfd
+        type: String
+        description: 'Holds Interface BFD Configruation for IPV6 family.'
+        enum_values:
+          - inheritVrf
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: v6enable
+        tf_name: enable_ipv6
+        type: Bool
+        description: "Enabling ISIS router tag on Interface's IPV6 family."
         example: true
 test_prerequisites:
   - dn: sys/fm/isis

@@ -103,6 +103,21 @@ func (r *ISISResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 								stringvalidator.OneOf("enabled", "disabled"),
 							},
 						},
+						"control": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("stateful-ha").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("stateful-ha"),
+							},
+						},
+						"flush_routes": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Flush ISIS Routes on non graceful controlled restart.").String,
+							Optional:            true,
+						},
+						"isolate": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Isolate ISIS Instance from other process tags.").String,
+							Optional:            true,
+						},
 						"vrfs": schema.ListNestedAttribute{
 							MarkdownDescription: "List of IS-IS VRFs.",
 							Optional:            true,
@@ -198,6 +213,27 @@ func (r *ISISResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 											stringvalidator.OneOf("l1", "l2", "l12", "unknown"),
 										},
 									},
+									"control": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Holds ISIS Domain Control messages.").AddStringEnumDescription("unspecified", "log-adj-changes", "hostname-dynamic-disable").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("unspecified", "log-adj-changes", "hostname-dynamic-disable"),
+										},
+									},
+									"lsp_lifetime": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Holds ISIS Domain LSP Lifetime.").AddIntegerRangeDescription(1, 65535).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"queue_limit": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Holds the ISIS queue limit retransmit value.").AddIntegerRangeDescription(200, 65535).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(200, 65535),
+										},
+									},
 									"address_families": schema.ListNestedAttribute{
 										MarkdownDescription: "List of IS-IS address families.",
 										Optional:            true,
@@ -229,6 +265,64 @@ func (r *ISISResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 													MarkdownDescription: helpers.NewAttributeDescription("Prefix advertise passive only level-2.").String,
 													Optional:            true,
 												},
+												"control": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("The address family controls. This determines the address family to run. Note that IPv4 and IPv6 are both supported.").AddStringEnumDescription("adj-check", "set-attached-bit").String,
+													Optional:            true,
+													Validators: []validator.String{
+														stringvalidator.OneOf("adj-check", "set-attached-bit"),
+													},
+												},
+												"default_information_originate": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Holds ISIS Domain address family default-information originate state for Route.").AddStringEnumDescription("off", "on", "always").String,
+													Optional:            true,
+													Validators: []validator.String{
+														stringvalidator.OneOf("off", "on", "always"),
+													},
+												},
+												"default_information_originate_route_map": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Holds Route-map name for ISIS Domain address family default-information originate.").String,
+													Optional:            true,
+												},
+												"distance": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Holds ISIS Domain address family Administrative Distance.").AddIntegerRangeDescription(1, 255).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 255),
+													},
+												},
+												"max_ecmp": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Holds ISIS Domain address family Max ECMP value.").AddIntegerRangeDescription(1, 64).String,
+													Optional:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 64),
+													},
+												},
+												"multi_topology": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Holds ISIS Domain address family Multi-topology information.").AddStringEnumDescription("st", "mt", "mtt").String,
+													Optional:            true,
+													Validators: []validator.String{
+														stringvalidator.OneOf("st", "mt", "mtt"),
+													},
+												},
+												"router_id_interface": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Holds interface.").String,
+													Optional:            true,
+												},
+												"router_id_ip_address": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Holds ip address to become router id.").String,
+													Optional:            true,
+												},
+												"table_map": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Holds Route-map name to filter routes downloaded.").String,
+													Optional:            true,
+												},
+												"table_map_filter": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Enables table-map for Selective route.").AddStringEnumDescription("enabled", "disabled").String,
+													Optional:            true,
+													Validators: []validator.String{
+														stringvalidator.OneOf("enabled", "disabled"),
+													},
+												},
 											},
 										},
 									},
@@ -237,6 +331,31 @@ func (r *ISISResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 										Optional:            true,
 										Validators: []validator.Int64{
 											int64validator.Between(5, 86400),
+										},
+									},
+									"overload_admin_state": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Admin State.").AddStringEnumDescription("off", "always-on", "bootup", "bgp-converge", "bgp-converge-max-wait").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("off", "always-on", "bootup", "bgp-converge", "bgp-converge-max-wait"),
+										},
+									},
+									"overload_bgp_as_number": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("The BGP autonomous system number. This sets overload until BGP converges on this autonomous system number. This is not currently supported.").AddIntegerRangeDescription(0, 65535).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 65535),
+										},
+									},
+									"overload_bgp_as_number_string": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("BGP AS Num in supported format.").String,
+										Optional:            true,
+									},
+									"overload_suppress": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Suppress Internal/External.").AddStringEnumDescription("interlevel", "external").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("interlevel", "external"),
 										},
 									},
 								},
@@ -422,6 +541,110 @@ func (r *ISISResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						},
 						"enable_ipv4": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Enabling ISIS router tag on Interface's IPV4 family.").String,
+							Optional:            true,
+						},
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("enabled", "disabled"),
+							},
+						},
+						"csnp_interval_l1": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Holds ISIS Interface Level-1 CSNP Interval.").AddIntegerRangeDescription(1, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"csnp_interval_l2": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Holds ISIS Interface Level-2 CSNP Interval.").AddIntegerRangeDescription(1, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"control": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Holds ISIS interface Control messages.").AddStringEnumDescription("advert-tep", "passive", "hello-padding", "exchange-hostname", "attached", "supress-prefix-advert").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("advert-tep", "passive", "hello-padding", "exchange-hostname", "attached", "supress-prefix-advert"),
+							},
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
+							Optional:            true,
+						},
+						"lsp_refresh_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Holds ISIS Interface LSP Refresh Interval.").AddIntegerRangeDescription(10, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(10, 65535),
+							},
+						},
+						"mesh_group_blocked": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Mesh group blocked value.").String,
+							Optional:            true,
+						},
+						"mesh_group_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Holds the ISIS mesh group ID value.").AddIntegerRangeDescription(0, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+						"ipv6_metric_l1": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Holds ISIS interface IPV6 wide metric value for Level-1.").AddIntegerRangeDescription(0, 16777216).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 16777216),
+							},
+						},
+						"ipv6_metric_l2": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Holds ISIS interface IPV6 wide metric value for Level-2.").AddIntegerRangeDescription(0, 16777216).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 16777216),
+							},
+						},
+						"n_flag_clear": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enabling N flag clear for ISIS interface.").String,
+							Optional:            true,
+						},
+						"retransmit_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Holds ISIS Interface Retransmit Interval.").AddIntegerRangeDescription(1, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"retransmit_throttle_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Holds ISIS Interface Retransmit Throttle Interval.").AddIntegerRangeDescription(20, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(20, 65535),
+							},
+						},
+						"suppressed_state": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Suppress the prefix advertisement.").String,
+							Optional:            true,
+						},
+						"ipv4_bfd": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Holds ISIS Interface BFD Configruation.").AddStringEnumDescription("inheritVrf", "enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("inheritVrf", "enabled", "disabled"),
+							},
+						},
+						"ipv6_bfd": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Holds Interface BFD Configruation for IPV6 family.").AddStringEnumDescription("inheritVrf", "enabled", "disabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("inheritVrf", "enabled", "disabled"),
+							},
+						},
+						"enable_ipv6": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enabling ISIS router tag on Interface's IPV6 family.").String,
 							Optional:            true,
 						},
 					},

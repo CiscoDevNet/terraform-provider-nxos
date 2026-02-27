@@ -38,6 +38,9 @@ func TestAccNxosISIS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.name", "ISIS1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.flush_routes", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.isolate", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.name", "default"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.authentication_check_l1", "false"))
@@ -53,12 +56,28 @@ func TestAccNxosISIS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.mtu", "2000"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.net", "49.0001.0000.0000.3333.00"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.passive_default", "l12"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.control", "log-adj-changes"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.lsp_lifetime", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.queue_limit", "3000"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.address_family", "v4"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.segment_routing_mpls", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.enable_bfd", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.prefix_advertise_passive_l1", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.prefix_advertise_passive_l2", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.control", "adj-check"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.default_information_originate", "on"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.default_information_originate_route_map", "rm1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.distance", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.max_ecmp", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.multi_topology", "st"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.router_id_interface", "lo0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.table_map", "rm1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.address_families.0.table_map_filter", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.overload_startup_time", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.overload_admin_state", "always-on"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.overload_bgp_as_number", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.overload_bgp_as_number_string", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.0.vrfs.0.overload_suppress", "interlevel"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.interface_id", "eth1/10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.authentication_check", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.authentication_check_l1", "false"))
@@ -89,6 +108,22 @@ func TestAccNxosISIS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.priority_l1", "80"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.priority_l2", "80"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.enable_ipv4", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.csnp_interval_l1", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.csnp_interval_l2", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.control", "advert-tep"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.description", "ISIS interface"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.lsp_refresh_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.mesh_group_id", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.ipv6_metric_l1", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.ipv6_metric_l2", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.n_flag_clear", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.retransmit_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.retransmit_throttle_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.suppressed_state", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.ipv4_bfd", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.ipv6_bfd", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.0.enable_ipv6", "true"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -169,6 +204,9 @@ func testAccNxosISISConfig_all() string {
 	config += `	instances = [{` + "\n"
 	config += `		name = "ISIS1"` + "\n"
 	config += `		admin_state = "enabled"` + "\n"
+	config += `		control = "stateful-ha"` + "\n"
+	config += `		flush_routes = true` + "\n"
+	config += `		isolate = true` + "\n"
 	config += `		vrfs = [{` + "\n"
 	config += `			name = "default"` + "\n"
 	config += `			admin_state = "enabled"` + "\n"
@@ -185,14 +223,30 @@ func testAccNxosISISConfig_all() string {
 	config += `			mtu = 2000` + "\n"
 	config += `			net = "49.0001.0000.0000.3333.00"` + "\n"
 	config += `			passive_default = "l12"` + "\n"
+	config += `			control = "log-adj-changes"` + "\n"
+	config += `			lsp_lifetime = 1000` + "\n"
+	config += `			queue_limit = 3000` + "\n"
 	config += `			address_families = [{` + "\n"
 	config += `				address_family = "v4"` + "\n"
 	config += `				segment_routing_mpls = true` + "\n"
 	config += `				enable_bfd = false` + "\n"
 	config += `				prefix_advertise_passive_l1 = true` + "\n"
 	config += `				prefix_advertise_passive_l2 = true` + "\n"
+	config += `				control = "adj-check"` + "\n"
+	config += `				default_information_originate = "on"` + "\n"
+	config += `				default_information_originate_route_map = "rm1"` + "\n"
+	config += `				distance = 100` + "\n"
+	config += `				max_ecmp = 4` + "\n"
+	config += `				multi_topology = "st"` + "\n"
+	config += `				router_id_interface = "lo0"` + "\n"
+	config += `				table_map = "rm1"` + "\n"
+	config += `				table_map_filter = "enabled"` + "\n"
 	config += `			}]` + "\n"
 	config += `			overload_startup_time = 60` + "\n"
+	config += `			overload_admin_state = "always-on"` + "\n"
+	config += `			overload_bgp_as_number = 100` + "\n"
+	config += `			overload_bgp_as_number_string = "100"` + "\n"
+	config += `			overload_suppress = "interlevel"` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
 	config += `	interfaces = [{` + "\n"
@@ -226,6 +280,22 @@ func testAccNxosISISConfig_all() string {
 	config += `		priority_l1 = 80` + "\n"
 	config += `		priority_l2 = 80` + "\n"
 	config += `		enable_ipv4 = true` + "\n"
+	config += `		admin_state = "enabled"` + "\n"
+	config += `		csnp_interval_l1 = 30` + "\n"
+	config += `		csnp_interval_l2 = 30` + "\n"
+	config += `		control = "advert-tep"` + "\n"
+	config += `		description = "ISIS interface"` + "\n"
+	config += `		lsp_refresh_interval = 100` + "\n"
+	config += `		mesh_group_id = 10` + "\n"
+	config += `		ipv6_metric_l1 = 1000` + "\n"
+	config += `		ipv6_metric_l2 = 1000` + "\n"
+	config += `		n_flag_clear = true` + "\n"
+	config += `		retransmit_interval = 10` + "\n"
+	config += `		retransmit_throttle_interval = 100` + "\n"
+	config += `		suppressed_state = true` + "\n"
+	config += `		ipv4_bfd = "enabled"` + "\n"
+	config += `		ipv6_bfd = "enabled"` + "\n"
+	config += `		enable_ipv6 = true` + "\n"
 	config += `	}]` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
 	config += `}` + "\n"

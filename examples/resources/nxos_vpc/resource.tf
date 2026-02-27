@@ -40,7 +40,7 @@ resource "nxos_vpc" "example" {
   keepalive_type_of_service_value              = 0
   keepalive_udp_port                           = 1234
   keepalive_vrf                                = "management"
-  peerlink_port_channel_id                     = "eth1/9"
+  peerlink_interface_id                        = "eth1/9"
   peerlink_admin_state                         = "enabled"
   peerlink_description                         = "My description"
   interfaces = [{

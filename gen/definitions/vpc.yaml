@@ -331,7 +331,7 @@ child_classes:
                 type: single
                 attributes:
                   - nxos_name: id
-                    tf_name: peerlink_port_channel_id
+                    tf_name: peerlink_interface_id
                     type: String
                     mandatory: true
                     description: "An identifier."
@@ -394,6 +394,8 @@ test_prerequisites:
     attributes:
       - name: id
         value: po1
+      - name: layer
+        value: Layer2
   - dn: sys/intf/phys-[eth1/9]
     class_name: l1PhysIf
     attributes:

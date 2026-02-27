@@ -232,7 +232,7 @@ func (d *VPCDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "vrf name.",
 				Computed:            true,
 			},
-			"peerlink_port_channel_id": schema.StringAttribute{
+			"peerlink_interface_id": schema.StringAttribute{
 				MarkdownDescription: "An identifier.",
 				Computed:            true,
 			},

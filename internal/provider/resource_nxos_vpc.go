@@ -335,7 +335,7 @@ func (r *VPCResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				MarkdownDescription: helpers.NewAttributeDescription("vrf name.").String,
 				Optional:            true,
 			},
-			"peerlink_port_channel_id": schema.StringAttribute{
+			"peerlink_interface_id": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("An identifier.").String,
 				Required:            true,
 			},

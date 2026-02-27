@@ -80,7 +80,7 @@ data "nxos_vpc" "example" {
 - `peer_switch` (String) vPC pair switches.
 - `peerlink_admin_state` (String) The administrative state of the object or policy.
 - `peerlink_description` (String) Description.
-- `peerlink_port_channel_id` (String) An identifier.
+- `peerlink_interface_id` (String) An identifier.
 - `role_priority` (Number) role priority.
 - `sys_mac` (String) system mac.
 - `system_priority` (Number) system priority.

@@ -76,7 +76,7 @@ func TestAccNxosVPC(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "keepalive_type_of_service_value", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "keepalive_udp_port", "1234"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "keepalive_vrf", "management"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "peerlink_port_channel_id", "eth1/9"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "peerlink_interface_id", "eth1/9"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "peerlink_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "peerlink_description", "My description"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "interfaces.0.vpc_interface_id", "1"))
@@ -146,6 +146,7 @@ resource "nxos_rest" "PreReq2" {
   class_name = "pcAggrIf"
   content = {
       id = "po1"
+      layer = "Layer2"
   }
   depends_on = [nxos_rest.PreReq1, ]
 }
@@ -216,7 +217,7 @@ func testAccNxosVPCConfig_all() string {
 	config += `	keepalive_type_of_service_value = 0` + "\n"
 	config += `	keepalive_udp_port = 1234` + "\n"
 	config += `	keepalive_vrf = "management"` + "\n"
-	config += `	peerlink_port_channel_id = "eth1/9"` + "\n"
+	config += `	peerlink_interface_id = "eth1/9"` + "\n"
 	config += `	peerlink_admin_state = "enabled"` + "\n"
 	config += `	peerlink_description = "My description"` + "\n"
 	config += `	interfaces = [{` + "\n"

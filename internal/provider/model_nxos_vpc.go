@@ -81,7 +81,7 @@ type VPC struct {
 	KeepaliveTypeOfServiceValue             types.Int64     `tfsdk:"keepalive_type_of_service_value"`
 	KeepaliveUdpPort                        types.Int64     `tfsdk:"keepalive_udp_port"`
 	KeepaliveVrf                            types.String    `tfsdk:"keepalive_vrf"`
-	PeerlinkPortChannelId                   types.String    `tfsdk:"peerlink_port_channel_id"`
+	PeerlinkInterfaceId                     types.String    `tfsdk:"peerlink_interface_id"`
 	PeerlinkAdminState                      types.String    `tfsdk:"peerlink_admin_state"`
 	PeerlinkDescription                     types.String    `tfsdk:"peerlink_description"`
 	Interfaces                              []VPCInterfaces `tfsdk:"interfaces"`
@@ -279,8 +279,8 @@ func (data VPC) toBody() nxos.Body {
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 				nestedChildrenPath := childBodyPath + ".children"
 				attrs = "{}"
-				if (!data.PeerlinkPortChannelId.IsUnknown() && !data.PeerlinkPortChannelId.IsNull()) || false {
-					attrs, _ = sjson.Set(attrs, "id", data.PeerlinkPortChannelId.ValueString())
+				if (!data.PeerlinkInterfaceId.IsUnknown() && !data.PeerlinkInterfaceId.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "id", data.PeerlinkInterfaceId.ValueString())
 				}
 				if (!data.PeerlinkAdminState.IsUnknown() && !data.PeerlinkAdminState.IsNull()) || false {
 					attrs, _ = sjson.Set(attrs, "adminSt", data.PeerlinkAdminState.ValueString())
@@ -410,7 +410,7 @@ func (data *VPC) fromBody(res gjson.Result) {
 							return true
 						},
 					)
-					data.PeerlinkPortChannelId = types.StringValue(rvpcPeerLink.Get("vpcPeerLink.attributes.id").String())
+					data.PeerlinkInterfaceId = types.StringValue(rvpcPeerLink.Get("vpcPeerLink.attributes.id").String())
 					data.PeerlinkAdminState = types.StringValue(rvpcPeerLink.Get("vpcPeerLink.attributes.adminSt").String())
 					data.PeerlinkDescription = types.StringValue(rvpcPeerLink.Get("vpcPeerLink.attributes.descr").String())
 				}
@@ -705,10 +705,10 @@ func (data *VPC) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
-				if !data.PeerlinkPortChannelId.IsNull() {
-					data.PeerlinkPortChannelId = types.StringValue(rvpcPeerLink.Get("vpcPeerLink.attributes.id").String())
+				if !data.PeerlinkInterfaceId.IsNull() {
+					data.PeerlinkInterfaceId = types.StringValue(rvpcPeerLink.Get("vpcPeerLink.attributes.id").String())
 				} else {
-					data.PeerlinkPortChannelId = types.StringNull()
+					data.PeerlinkInterfaceId = types.StringNull()
 				}
 				if !data.PeerlinkAdminState.IsNull() {
 					data.PeerlinkAdminState = types.StringValue(rvpcPeerLink.Get("vpcPeerLink.attributes.adminSt").String())

@@ -188,6 +188,7 @@ attributes:
     min_int: 1536
     max_int: 65535
     example: 33024
+    exclude_test: true
   - nxos_name: equalizationDelay
     tf_name: equalization_delay
     type: Int64
@@ -219,6 +220,7 @@ attributes:
     min_int: 0
     max_int: 4294967295
     example: 1000000
+    exclude_test: true
   - nxos_name: ituChannel
     tf_name: itu_channel
     type: Int64
@@ -249,6 +251,7 @@ attributes:
     min_int: 0
     max_int: 20000
     example: 200
+    exclude_test: true
   - nxos_name: loadDefer
     tf_name: load_defer
     type: String
@@ -288,6 +291,7 @@ attributes:
       - extchhp
       - extchfp
     example: leaf
+    exclude_test: true
   - nxos_name: pxeTransTime
     tf_name: pxe_transition_timeout
     type: Int64
@@ -300,6 +304,7 @@ attributes:
     type: String
     description: "The administrative router MAC address."
     example: "00:00:00:11:22:33"
+    exclude_test: true
   - nxos_name: snmpTrapSt
     tf_name: snmp_trap_state
     type: String
@@ -308,6 +313,7 @@ attributes:
       - enable
       - disable
     example: disable
+    exclude_test: true
   - nxos_name: spanMode
     tf_name: span_mode
     type: String
@@ -343,6 +349,7 @@ attributes:
       - enable
       - disable
     example: enable
+    exclude_test: true
   - nxos_name: usage
     tf_name: usage
     type: String

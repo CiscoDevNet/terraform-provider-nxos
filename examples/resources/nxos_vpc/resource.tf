@@ -1,6 +1,6 @@
 resource "nxos_vpc" "example" {
-  entity_admin_state                           = "enabled"
   admin_state                                  = "enabled"
+  instance_admin_state                         = "enabled"
   control                                      = "stateful-ha"
   domain_admin_state                           = "enabled"
   domain_id                                    = 100

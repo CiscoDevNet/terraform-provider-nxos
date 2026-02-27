@@ -31,8 +31,8 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosVPC(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "entity_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "instance_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "control", "stateful-ha"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "domain_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "domain_id", "100"))
@@ -131,8 +131,8 @@ resource "nxos_rest" "PreReq2" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 func testAccDataSourceNxosVPCConfig() string {
 	config := `resource "nxos_vpc" "test" {` + "\n"
-	config += `	entity_admin_state = "enabled"` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
+	config += `	instance_admin_state = "enabled"` + "\n"
 	config += `	control = "stateful-ha"` + "\n"
 	config += `	domain_admin_state = "enabled"` + "\n"
 	config += `	domain_id = 100` + "\n"

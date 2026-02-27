@@ -68,11 +68,11 @@ func (d *VPCDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
-			"entity_admin_state": schema.StringAttribute{
+			"admin_state": schema.StringAttribute{
 				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
-			"admin_state": schema.StringAttribute{
+			"instance_admin_state": schema.StringAttribute{
 				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},

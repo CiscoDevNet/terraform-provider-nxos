@@ -40,8 +40,8 @@ import (
 type VPC struct {
 	Device                                  types.String    `tfsdk:"device"`
 	Dn                                      types.String    `tfsdk:"id"`
-	EntityAdminState                        types.String    `tfsdk:"entity_admin_state"`
 	AdminState                              types.String    `tfsdk:"admin_state"`
+	InstanceAdminState                      types.String    `tfsdk:"instance_admin_state"`
 	Control                                 types.String    `tfsdk:"control"`
 	DomainAdminState                        types.String    `tfsdk:"domain_admin_state"`
 	DomainId                                types.Int64     `tfsdk:"domain_id"`
@@ -135,8 +135,8 @@ func (data VPC) getClassName() string {
 func (data VPC) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
-	if (!data.EntityAdminState.IsUnknown() && !data.EntityAdminState.IsNull()) || false {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.EntityAdminState.ValueString())
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", data.AdminState.ValueString())
 	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
@@ -144,8 +144,8 @@ func (data VPC) toBody() nxos.Body {
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".vpcInst"
 		attrs = "{}"
-		if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "adminSt", data.AdminState.ValueString())
+		if (!data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
 		}
 		if (!data.Control.IsUnknown() && !data.Control.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "ctrl", data.Control.ValueString())
@@ -321,7 +321,7 @@ func (data VPC) toBody() nxos.Body {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *VPC) fromBody(res gjson.Result) {
-	data.EntityAdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	{
 		var rvpcInst gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -334,7 +334,7 @@ func (data *VPC) fromBody(res gjson.Result) {
 				return true
 			},
 		)
-		data.AdminState = types.StringValue(rvpcInst.Get("vpcInst.attributes.adminSt").String())
+		data.InstanceAdminState = types.StringValue(rvpcInst.Get("vpcInst.attributes.adminSt").String())
 		data.Control = types.StringValue(rvpcInst.Get("vpcInst.attributes.ctrl").String())
 		{
 			var rvpcDom gjson.Result
@@ -453,10 +453,10 @@ func (data *VPC) fromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *VPC) updateFromBody(res gjson.Result) {
-	if !data.EntityAdminState.IsNull() {
-		data.EntityAdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
+	if !data.AdminState.IsNull() {
+		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminSt").String())
 	} else {
-		data.EntityAdminState = types.StringNull()
+		data.AdminState = types.StringNull()
 	}
 	var rvpcInst gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
@@ -469,10 +469,10 @@ func (data *VPC) updateFromBody(res gjson.Result) {
 			return true
 		},
 	)
-	if !data.AdminState.IsNull() {
-		data.AdminState = types.StringValue(rvpcInst.Get("vpcInst.attributes.adminSt").String())
+	if !data.InstanceAdminState.IsNull() {
+		data.InstanceAdminState = types.StringValue(rvpcInst.Get("vpcInst.attributes.adminSt").String())
 	} else {
-		data.AdminState = types.StringNull()
+		data.InstanceAdminState = types.StringNull()
 	}
 	if !data.Control.IsNull() {
 		data.Control = types.StringValue(rvpcInst.Get("vpcInst.attributes.ctrl").String())

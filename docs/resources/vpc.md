@@ -28,8 +28,8 @@ This resource can manage the vPC (Virtual Port Channel) configuration on NX-OS d
 
 ```terraform
 resource "nxos_vpc" "example" {
-  entity_admin_state                           = "enabled"
   admin_state                                  = "enabled"
+  instance_admin_state                         = "enabled"
   control                                      = "stateful-ha"
   domain_admin_state                           = "enabled"
   domain_id                                    = 100
@@ -113,12 +113,12 @@ resource "nxos_vpc" "example" {
   - Choices: `enabled`, `disabled`
 - `dscp` (Number) DSCP.
   - Range: `0`-`63`
-- `entity_admin_state` (String) The administrative state of the object or policy.
-  - Choices: `enabled`, `disabled`
 - `exclude_svi` (String) SVI List excluded from suspension when dual-active.
 - `fast_convergence` (String) Fast Convergence.
   - Choices: `enabled`, `disabled`
 - `graceful_consistency_check` (String) Graceful Type-1 Consistency Check.
+  - Choices: `enabled`, `disabled`
+- `instance_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
 - `interfaces` (Attributes List) List of vPC interfaces. (see [below for nested schema](#nestedatt--interfaces))
 - `keepalive_flush_timeout` (Number) flush timeout.

@@ -78,14 +78,14 @@ func (r *VPCResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"entity_admin_state": schema.StringAttribute{
+			"admin_state": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"admin_state": schema.StringAttribute{
+			"instance_admin_state": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
 				Validators: []validator.String{

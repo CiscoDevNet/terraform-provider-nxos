@@ -51,11 +51,11 @@ data "nxos_vpc" "example" {
 - `domain_admin_state` (String) vPC suspend locally.
 - `domain_id` (Number) Domain id.
 - `dscp` (Number) DSCP.
-- `entity_admin_state` (String) The administrative state of the object or policy.
 - `exclude_svi` (String) SVI List excluded from suspension when dual-active.
 - `fast_convergence` (String) Fast Convergence.
 - `graceful_consistency_check` (String) Graceful Type-1 Consistency Check.
 - `id` (String) The distinguished name of the object.
+- `instance_admin_state` (String) The administrative state of the object or policy.
 - `interfaces` (Attributes List) List of vPC interfaces. (see [below for nested schema](#nestedatt--interfaces))
 - `keepalive_destination_ip` (String) destination address.
 - `keepalive_flush_timeout` (Number) flush timeout.

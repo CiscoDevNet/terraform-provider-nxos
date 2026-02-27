@@ -68,6 +68,14 @@ func (d *NVODataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
+			"vxlan_udp_port": schema.Int64Attribute{
+				MarkdownDescription: "VxLAN UDP Port. Allowed value range is 1024-65535.",
+				Computed:            true,
+			},
+			"vxlan_udp_source_port_mode": schema.StringAttribute{
+				MarkdownDescription: "VxLAN UDP Source Port Mode.",
+				Computed:            true,
+			},
 			"nve_interfaces": schema.ListNestedAttribute{
 				MarkdownDescription: "NVE interface configuration.",
 				Computed:            true,
@@ -121,6 +129,46 @@ func (d *NVODataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							MarkdownDescription: "Suppress MAC Route.",
 							Computed:            true,
 						},
+						"anycast_source_interface": schema.StringAttribute{
+							MarkdownDescription: "Anycast Source Interface associated with the NVE. Must match first field in the output of `show intf brief`.",
+							Computed:            true,
+						},
+						"configuration_source": schema.StringAttribute{
+							MarkdownDescription: "Enable or disable VxLAN configuration via controller.",
+							Computed:            true,
+						},
+						"controller_id": schema.Int64Attribute{
+							MarkdownDescription: "Controller ID (applicable when host reachability proto is controller).",
+							Computed:            true,
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: "Description for the NVE.",
+							Computed:            true,
+						},
+						"encapsulation_type": schema.StringAttribute{
+							MarkdownDescription: "Encapsulation Type.",
+							Computed:            true,
+						},
+						"fabric_ready_time": schema.Int64Attribute{
+							MarkdownDescription: "Time in seconds after which fabric convergence is signalled.",
+							Computed:            true,
+						},
+						"multicast_routing_source_interface": schema.StringAttribute{
+							MarkdownDescription: "Multicast routing source interface.",
+							Computed:            true,
+						},
+						"multisite_virtual_mac": schema.StringAttribute{
+							MarkdownDescription: "Custom Multisite Virtual Router MAC address configuration.",
+							Computed:            true,
+						},
+						"suppress_nd": schema.BoolAttribute{
+							MarkdownDescription: "Suppress ND enabled for those VNIs that have suppress ARP already enabled on them.",
+							Computed:            true,
+						},
+						"virtual_mac": schema.StringAttribute{
+							MarkdownDescription: "Custom Virtual Router MAC address configuration for VPC VxLAN.",
+							Computed:            true,
+						},
 						"vnis": schema.ListNestedAttribute{
 							MarkdownDescription: "List of VNIs.",
 							Computed:            true,
@@ -144,6 +192,18 @@ func (d *NVODataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 									},
 									"suppress_arp": schema.StringAttribute{
 										MarkdownDescription: "Enable or disable ARP suppression for VNI(s).",
+										Computed:            true,
+									},
+									"legacy_mode": schema.BoolAttribute{
+										MarkdownDescription: "Indicates whether Multicast group configuration for the VNI(s) is configured in legacy mode or not.",
+										Computed:            true,
+									},
+									"multisite_multicast_group": schema.StringAttribute{
+										MarkdownDescription: "Configures multisite multicast group address for VNI(s).",
+										Computed:            true,
+									},
+									"spine_anycast_gateway": schema.BoolAttribute{
+										MarkdownDescription: "Enable or disable spine anycast gateway for VNI(s).",
 										Computed:            true,
 									},
 									"ingress_replication_protocol": schema.StringAttribute{

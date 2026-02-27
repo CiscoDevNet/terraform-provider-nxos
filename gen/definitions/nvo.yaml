@@ -7,6 +7,23 @@ res_description: This resource can manage the NVO (Network Virtualization Overla
 no_delete: true
 doc_path: Network%20Virtualization/nvo:Eps/
 doc_category: Overlay
+attributes:
+  - nxos_name: vxlanUDPPort
+    tf_name: vxlan_udp_port
+    type: Int64
+    description: 'VxLAN UDP Port. Allowed value range is 1024-65535.'
+    min_int: 1024
+    max_int: 65535
+    example: 4789
+  - nxos_name: vxlanUDPSrcPortMode
+    tf_name: vxlan_udp_source_port_mode
+    type: String
+    description: 'VxLAN UDP Source Port Mode.'
+    enum_values:
+      - low
+      - high
+      - rfc
+    example: rfc
 child_classes:
   - class_name: nvoEp
     doc_path: Network%20Virtualization/nvo:Ep/
@@ -87,6 +104,74 @@ child_classes:
         type: Bool
         description: 'Suppress MAC Route.'
         example: false
+      - nxos_name: anycastIntf
+        tf_name: anycast_source_interface
+        type: String
+        description: 'Anycast Source Interface associated with the NVE. Must match first field in the output of `show intf brief`.'
+        example: 'unspecified'
+      - nxos_name: cfgSrc
+        tf_name: configuration_source
+        type: String
+        description: 'Enable or disable VxLAN configuration via controller.'
+        enum_values:
+          - unknown
+          - cli
+          - controller
+        example: cli
+      - nxos_name: controllerId
+        tf_name: controller_id
+        type: Int64
+        description: 'Controller ID (applicable when host reachability proto is controller).'
+        min_int: 0
+        max_int: 4294967295
+        example: 0
+      - nxos_name: descr
+        tf_name: description
+        type: String
+        description: 'Description for the NVE.'
+        example: 'My NVE interface'
+      - nxos_name: encapType
+        tf_name: encapsulation_type
+        type: String
+        description: 'Encapsulation Type.'
+        enum_values:
+          - unknown
+          - vxlan
+          - vxlan-tun-ctrl-frame
+          - vxlan-tun-ctrl-frame-lacp
+          - vxlan-tun-ctrl-frame-stp
+          - dot1q
+          - dot1q-tun-ctrl-frame
+          - dot1q-tun-ctrl-frame-lacp
+          - dot1q-tun-ctrl-frame-stp
+        example: vxlan
+      - nxos_name: fabricReadyTime
+        tf_name: fabric_ready_time
+        type: Int64
+        description: 'Time in seconds after which fabric convergence is signalled.'
+        min_int: 0
+        max_int: 1200
+        example: 120
+      - nxos_name: mcastRtSrcIntf
+        tf_name: multicast_routing_source_interface
+        type: String
+        description: 'Multicast routing source interface.'
+        example: 'unspecified'
+      - nxos_name: multisiteVirtualMac
+        tf_name: multisite_virtual_mac
+        type: String
+        description: 'Custom Multisite Virtual Router MAC address configuration.'
+        example: '00:00:00:00:00:00'
+      - nxos_name: suppressND
+        tf_name: suppress_nd
+        type: Bool
+        description: 'Suppress ND enabled for those VNIs that have suppress ARP already enabled on them.'
+        example: true
+      - nxos_name: virtualMac
+        tf_name: virtual_mac
+        type: String
+        description: 'Custom Virtual Router MAC address configuration for VPC VxLAN.'
+        example: '00:00:00:00:00:00'
     child_classes:
       - class_name: nvoNws
         doc_path: Network%20Virtualization/nvo:Nws/
@@ -136,6 +221,21 @@ child_classes:
                   - enabled
                   - disabled
                 example: 'off'
+              - nxos_name: isLegacyMode
+                tf_name: legacy_mode
+                type: Bool
+                description: 'Indicates whether Multicast group configuration for the VNI(s) is configured in legacy mode or not.'
+                example: false
+              - nxos_name: multisiteMcastGroup
+                tf_name: multisite_multicast_group
+                type: String
+                description: 'Configures multisite multicast group address for VNI(s).'
+                example: '0.0.0.0'
+              - nxos_name: spineAnyCastGw
+                tf_name: spine_anycast_gateway
+                type: Bool
+                description: 'Enable or disable spine anycast gateway for VNI(s).'
+                example: false
             child_classes:
               - class_name: nvoIngRepl
                 doc_path: Network%20Virtualization/nvo:IngRepl/

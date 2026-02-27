@@ -31,19 +31,31 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosNVO(t *testing.T) {
 	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "vxlan_udp_port", "4789"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "vxlan_udp_source_port_mode", "rfc"))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_nvo.test", "nve_interfaces.*", map[string]string{
-		"id":                               "1",
-		"admin_state":                      "enabled",
-		"advertise_virtual_mac":            "true",
-		"hold_down_time":                   "60",
-		"host_reachability_protocol":       "bgp",
-		"ingress_replication_protocol_bgp": "true",
-		"multicast_group_l2":               "0.0.0.0",
-		"multicast_group_l3":               "0.0.0.0",
-		"multisite_source_interface":       "unspecified",
-		"source_interface":                 "lo0",
-		"suppress_arp":                     "true",
-		"suppress_mac_route":               "false",
+		"id":                                 "1",
+		"admin_state":                        "enabled",
+		"advertise_virtual_mac":              "true",
+		"hold_down_time":                     "60",
+		"host_reachability_protocol":         "bgp",
+		"ingress_replication_protocol_bgp":   "true",
+		"multicast_group_l2":                 "0.0.0.0",
+		"multicast_group_l3":                 "0.0.0.0",
+		"multisite_source_interface":         "unspecified",
+		"source_interface":                   "lo0",
+		"suppress_arp":                       "true",
+		"suppress_mac_route":                 "false",
+		"anycast_source_interface":           "unspecified",
+		"configuration_source":               "cli",
+		"controller_id":                      "0",
+		"description":                        "My NVE interface",
+		"encapsulation_type":                 "vxlan",
+		"fabric_ready_time":                  "120",
+		"multicast_routing_source_interface": "unspecified",
+		"multisite_virtual_mac":              "00:00:00:00:00:00",
+		"suppress_nd":                        "true",
+		"virtual_mac":                        "00:00:00:00:00:00",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_nvo.test", "nve_interfaces.*.vnis.*", map[string]string{
 		"vni":                           "103100",
@@ -51,6 +63,9 @@ func TestAccDataSourceNxosNVO(t *testing.T) {
 		"multicast_group":               "0.0.0.0",
 		"multisite_ingress_replication": "disable",
 		"suppress_arp":                  "off",
+		"legacy_mode":                   "false",
+		"multisite_multicast_group":     "0.0.0.0",
+		"spine_anycast_gateway":         "false",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_nvo.test", "nve_interfaces.*.vnis.*", map[string]string{
 		"ingress_replication_protocol": "bgp",
@@ -97,6 +112,8 @@ resource "nxos_rest" "PreReq1" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 func testAccDataSourceNxosNVOConfig() string {
 	config := `resource "nxos_nvo" "test" {` + "\n"
+	config += `	vxlan_udp_port = 4789` + "\n"
+	config += `	vxlan_udp_source_port_mode = "rfc"` + "\n"
 	config += `	nve_interfaces = [{` + "\n"
 	config += `		id = 1` + "\n"
 	config += `		admin_state = "enabled"` + "\n"
@@ -110,12 +127,25 @@ func testAccDataSourceNxosNVOConfig() string {
 	config += `		source_interface = "lo0"` + "\n"
 	config += `		suppress_arp = true` + "\n"
 	config += `		suppress_mac_route = false` + "\n"
+	config += `		anycast_source_interface = "unspecified"` + "\n"
+	config += `		configuration_source = "cli"` + "\n"
+	config += `		controller_id = 0` + "\n"
+	config += `		description = "My NVE interface"` + "\n"
+	config += `		encapsulation_type = "vxlan"` + "\n"
+	config += `		fabric_ready_time = 120` + "\n"
+	config += `		multicast_routing_source_interface = "unspecified"` + "\n"
+	config += `		multisite_virtual_mac = "00:00:00:00:00:00"` + "\n"
+	config += `		suppress_nd = true` + "\n"
+	config += `		virtual_mac = "00:00:00:00:00:00"` + "\n"
 	config += `		vnis = [{` + "\n"
 	config += `			vni = 103100` + "\n"
 	config += `			associate_vrf = false` + "\n"
 	config += `			multicast_group = "0.0.0.0"` + "\n"
 	config += `			multisite_ingress_replication = "disable"` + "\n"
 	config += `			suppress_arp = "off"` + "\n"
+	config += `			legacy_mode = false` + "\n"
+	config += `			multisite_multicast_group = "0.0.0.0"` + "\n"
+	config += `			spine_anycast_gateway = false` + "\n"
 	config += `			ingress_replication_protocol = "bgp"` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"

@@ -40,6 +40,8 @@ data "nxos_nvo" "example" {
 
 - `id` (String) The distinguished name of the object.
 - `nve_interfaces` (Attributes List) NVE interface configuration. (see [below for nested schema](#nestedatt--nve_interfaces))
+- `vxlan_udp_port` (Number) VxLAN UDP Port. Allowed value range is 1024-65535.
+- `vxlan_udp_source_port_mode` (String) VxLAN UDP Source Port Mode.
 
 <a id="nestedatt--nve_interfaces"></a>
 ### Nested Schema for `nve_interfaces`
@@ -48,16 +50,26 @@ Read-Only:
 
 - `admin_state` (String) Administrative Up or Down state of the NVE.
 - `advertise_virtual_mac` (Boolean) Enable or disable Virtual MAC Advertisement in VPC mode.
+- `anycast_source_interface` (String) Anycast Source Interface associated with the NVE. Must match first field in the output of `show intf brief`.
+- `configuration_source` (String) Enable or disable VxLAN configuration via controller.
+- `controller_id` (Number) Controller ID (applicable when host reachability proto is controller).
+- `description` (String) Description for the NVE.
+- `encapsulation_type` (String) Encapsulation Type.
+- `fabric_ready_time` (Number) Time in seconds after which fabric convergence is signalled.
 - `hold_down_time` (Number) Hold Down Time.
 - `host_reachability_protocol` (String) Host Reachability Protocol.
 - `id` (Number) Network Virtualization Overlay Endpoint (NVE) ID.
 - `ingress_replication_protocol_bgp` (Boolean) VxLAN Ingress Replication Protocol BGP.
 - `multicast_group_l2` (String) Base multicast group address for L2.
 - `multicast_group_l3` (String) Base multicast group address for L3.
+- `multicast_routing_source_interface` (String) Multicast routing source interface.
 - `multisite_source_interface` (String) Interface representing the Multisite Border Gateway. Must match first field in the output of `show int brief`.
+- `multisite_virtual_mac` (String) Custom Multisite Virtual Router MAC address configuration.
 - `source_interface` (String) Source Interface associated with the NVE. Must match first field in the output of `show int brief`.
 - `suppress_arp` (Boolean) Suppress ARP.
 - `suppress_mac_route` (Boolean) Suppress MAC Route.
+- `suppress_nd` (Boolean) Suppress ND enabled for those VNIs that have suppress ARP already enabled on them.
+- `virtual_mac` (String) Custom Virtual Router MAC address configuration for VPC VxLAN.
 - `vnis` (Attributes List) List of VNIs. (see [below for nested schema](#nestedatt--nve_interfaces--vnis))
 
 <a id="nestedatt--nve_interfaces--vnis"></a>
@@ -67,7 +79,10 @@ Read-Only:
 
 - `associate_vrf` (Boolean) Configures VNI(s) as L3 VNI.
 - `ingress_replication_protocol` (String) Configure VxLAN Ingress Replication mode.
+- `legacy_mode` (Boolean) Indicates whether Multicast group configuration for the VNI(s) is configured in legacy mode or not.
 - `multicast_group` (String) Configures multicast group address for VNI(s).
 - `multisite_ingress_replication` (String) Enable or disable Multisite Ingress Replication for VNI(s).
+- `multisite_multicast_group` (String) Configures multisite multicast group address for VNI(s).
+- `spine_anycast_gateway` (Boolean) Enable or disable spine anycast gateway for VNI(s).
 - `suppress_arp` (String) Enable or disable ARP suppression for VNI(s).
 - `vni` (Number) Configure Virtual Network ID.

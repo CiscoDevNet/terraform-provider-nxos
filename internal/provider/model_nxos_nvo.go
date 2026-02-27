@@ -38,25 +38,37 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type NVO struct {
-	Device        types.String       `tfsdk:"device"`
-	Dn            types.String       `tfsdk:"id"`
-	NveInterfaces []NVONveInterfaces `tfsdk:"nve_interfaces"`
+	Device                 types.String       `tfsdk:"device"`
+	Dn                     types.String       `tfsdk:"id"`
+	VxlanUdpPort           types.Int64        `tfsdk:"vxlan_udp_port"`
+	VxlanUdpSourcePortMode types.String       `tfsdk:"vxlan_udp_source_port_mode"`
+	NveInterfaces          []NVONveInterfaces `tfsdk:"nve_interfaces"`
 }
 
 type NVONveInterfaces struct {
-	Id                            types.Int64            `tfsdk:"id"`
-	AdminState                    types.String           `tfsdk:"admin_state"`
-	AdvertiseVirtualMac           types.Bool             `tfsdk:"advertise_virtual_mac"`
-	HoldDownTime                  types.Int64            `tfsdk:"hold_down_time"`
-	HostReachabilityProtocol      types.String           `tfsdk:"host_reachability_protocol"`
-	IngressReplicationProtocolBgp types.Bool             `tfsdk:"ingress_replication_protocol_bgp"`
-	MulticastGroupL2              types.String           `tfsdk:"multicast_group_l2"`
-	MulticastGroupL3              types.String           `tfsdk:"multicast_group_l3"`
-	MultisiteSourceInterface      types.String           `tfsdk:"multisite_source_interface"`
-	SourceInterface               types.String           `tfsdk:"source_interface"`
-	SuppressArp                   types.Bool             `tfsdk:"suppress_arp"`
-	SuppressMacRoute              types.Bool             `tfsdk:"suppress_mac_route"`
-	Vnis                          []NVONveInterfacesVnis `tfsdk:"vnis"`
+	Id                              types.Int64            `tfsdk:"id"`
+	AdminState                      types.String           `tfsdk:"admin_state"`
+	AdvertiseVirtualMac             types.Bool             `tfsdk:"advertise_virtual_mac"`
+	HoldDownTime                    types.Int64            `tfsdk:"hold_down_time"`
+	HostReachabilityProtocol        types.String           `tfsdk:"host_reachability_protocol"`
+	IngressReplicationProtocolBgp   types.Bool             `tfsdk:"ingress_replication_protocol_bgp"`
+	MulticastGroupL2                types.String           `tfsdk:"multicast_group_l2"`
+	MulticastGroupL3                types.String           `tfsdk:"multicast_group_l3"`
+	MultisiteSourceInterface        types.String           `tfsdk:"multisite_source_interface"`
+	SourceInterface                 types.String           `tfsdk:"source_interface"`
+	SuppressArp                     types.Bool             `tfsdk:"suppress_arp"`
+	SuppressMacRoute                types.Bool             `tfsdk:"suppress_mac_route"`
+	AnycastSourceInterface          types.String           `tfsdk:"anycast_source_interface"`
+	ConfigurationSource             types.String           `tfsdk:"configuration_source"`
+	ControllerId                    types.Int64            `tfsdk:"controller_id"`
+	Description                     types.String           `tfsdk:"description"`
+	EncapsulationType               types.String           `tfsdk:"encapsulation_type"`
+	FabricReadyTime                 types.Int64            `tfsdk:"fabric_ready_time"`
+	MulticastRoutingSourceInterface types.String           `tfsdk:"multicast_routing_source_interface"`
+	MultisiteVirtualMac             types.String           `tfsdk:"multisite_virtual_mac"`
+	SuppressNd                      types.Bool             `tfsdk:"suppress_nd"`
+	VirtualMac                      types.String           `tfsdk:"virtual_mac"`
+	Vnis                            []NVONveInterfacesVnis `tfsdk:"vnis"`
 }
 
 type NVONveInterfacesVnis struct {
@@ -65,6 +77,9 @@ type NVONveInterfacesVnis struct {
 	MulticastGroup              types.String `tfsdk:"multicast_group"`
 	MultisiteIngressReplication types.String `tfsdk:"multisite_ingress_replication"`
 	SuppressArp                 types.String `tfsdk:"suppress_arp"`
+	LegacyMode                  types.Bool   `tfsdk:"legacy_mode"`
+	MultisiteMulticastGroup     types.String `tfsdk:"multisite_multicast_group"`
+	SpineAnycastGateway         types.Bool   `tfsdk:"spine_anycast_gateway"`
 	IngressReplicationProtocol  types.String `tfsdk:"ingress_replication_protocol"`
 }
 
@@ -115,6 +130,12 @@ func (data NVO) getClassName() string {
 func (data NVO) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.VxlanUdpPort.IsUnknown() && !data.VxlanUdpPort.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"vxlanUDPPort", strconv.FormatInt(data.VxlanUdpPort.ValueInt64(), 10))
+	}
+	if (!data.VxlanUdpSourcePortMode.IsUnknown() && !data.VxlanUdpSourcePortMode.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"vxlanUDPSrcPortMode", data.VxlanUdpSourcePortMode.ValueString())
+	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	for _, child := range data.NveInterfaces {
@@ -155,6 +176,36 @@ func (data NVO) toBody() nxos.Body {
 		if (!child.SuppressMacRoute.IsUnknown() && !child.SuppressMacRoute.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "suppressMacRoute", strconv.FormatBool(child.SuppressMacRoute.ValueBool()))
 		}
+		if (!child.AnycastSourceInterface.IsUnknown() && !child.AnycastSourceInterface.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "anycastIntf", child.AnycastSourceInterface.ValueString())
+		}
+		if (!child.ConfigurationSource.IsUnknown() && !child.ConfigurationSource.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "cfgSrc", child.ConfigurationSource.ValueString())
+		}
+		if (!child.ControllerId.IsUnknown() && !child.ControllerId.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "controllerId", strconv.FormatInt(child.ControllerId.ValueInt64(), 10))
+		}
+		if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+		}
+		if (!child.EncapsulationType.IsUnknown() && !child.EncapsulationType.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "encapType", child.EncapsulationType.ValueString())
+		}
+		if (!child.FabricReadyTime.IsUnknown() && !child.FabricReadyTime.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "fabricReadyTime", strconv.FormatInt(child.FabricReadyTime.ValueInt64(), 10))
+		}
+		if (!child.MulticastRoutingSourceInterface.IsUnknown() && !child.MulticastRoutingSourceInterface.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "mcastRtSrcIntf", child.MulticastRoutingSourceInterface.ValueString())
+		}
+		if (!child.MultisiteVirtualMac.IsUnknown() && !child.MultisiteVirtualMac.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "multisiteVirtualMac", child.MultisiteVirtualMac.ValueString())
+		}
+		if (!child.SuppressNd.IsUnknown() && !child.SuppressNd.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "suppressND", strconv.FormatBool(child.SuppressNd.ValueBool()))
+		}
+		if (!child.VirtualMac.IsUnknown() && !child.VirtualMac.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "virtualMac", child.VirtualMac.ValueString())
+		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.nvoEp.attributes", attrs)
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
@@ -182,6 +233,15 @@ func (data NVO) toBody() nxos.Body {
 					if (!child.SuppressArp.IsUnknown() && !child.SuppressArp.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "suppressARP", child.SuppressArp.ValueString())
 					}
+					if (!child.LegacyMode.IsUnknown() && !child.LegacyMode.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "isLegacyMode", strconv.FormatBool(child.LegacyMode.ValueBool()))
+					}
+					if (!child.MultisiteMulticastGroup.IsUnknown() && !child.MultisiteMulticastGroup.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "multisiteMcastGroup", child.MultisiteMulticastGroup.ValueString())
+					}
+					if (!child.SpineAnycastGateway.IsUnknown() && !child.SpineAnycastGateway.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "spineAnyCastGw", strconv.FormatBool(child.SpineAnycastGateway.ValueBool()))
+					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.nvoNw.attributes", attrs)
 					{
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
@@ -207,6 +267,8 @@ func (data NVO) toBody() nxos.Body {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *NVO) fromBody(res gjson.Result) {
+	data.VxlanUdpPort = types.Int64Value(res.Get(data.getClassName() + ".attributes.vxlanUDPPort").Int())
+	data.VxlanUdpSourcePortMode = types.StringValue(res.Get(data.getClassName() + ".attributes.vxlanUDPSrcPortMode").String())
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
 			v.ForEach(
@@ -225,6 +287,16 @@ func (data *NVO) fromBody(res gjson.Result) {
 						child.SourceInterface = types.StringValue(value.Get("attributes.sourceInterface").String())
 						child.SuppressArp = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.suppressARP").String()))
 						child.SuppressMacRoute = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.suppressMacRoute").String()))
+						child.AnycastSourceInterface = types.StringValue(value.Get("attributes.anycastIntf").String())
+						child.ConfigurationSource = types.StringValue(value.Get("attributes.cfgSrc").String())
+						child.ControllerId = types.Int64Value(value.Get("attributes.controllerId").Int())
+						child.Description = types.StringValue(value.Get("attributes.descr").String())
+						child.EncapsulationType = types.StringValue(value.Get("attributes.encapType").String())
+						child.FabricReadyTime = types.Int64Value(value.Get("attributes.fabricReadyTime").Int())
+						child.MulticastRoutingSourceInterface = types.StringValue(value.Get("attributes.mcastRtSrcIntf").String())
+						child.MultisiteVirtualMac = types.StringValue(value.Get("attributes.multisiteVirtualMac").String())
+						child.SuppressNd = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.suppressND").String()))
+						child.VirtualMac = types.StringValue(value.Get("attributes.virtualMac").String())
 						{
 							var rnvoNws gjson.Result
 							value.Get("children").ForEach(
@@ -248,6 +320,9 @@ func (data *NVO) fromBody(res gjson.Result) {
 												nestedChildnvoNw.MulticastGroup = types.StringValue(nestedValue.Get("attributes.mcastGroup").String())
 												nestedChildnvoNw.MultisiteIngressReplication = types.StringValue(nestedValue.Get("attributes.multisiteIngRepl").String())
 												nestedChildnvoNw.SuppressArp = types.StringValue(nestedValue.Get("attributes.suppressARP").String())
+												nestedChildnvoNw.LegacyMode = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.isLegacyMode").String()))
+												nestedChildnvoNw.MultisiteMulticastGroup = types.StringValue(nestedValue.Get("attributes.multisiteMcastGroup").String())
+												nestedChildnvoNw.SpineAnycastGateway = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.spineAnyCastGw").String()))
 												{
 													var rnvoIngRepl gjson.Result
 													nestedValue.Get("children").ForEach(
@@ -286,6 +361,16 @@ func (data *NVO) fromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *NVO) updateFromBody(res gjson.Result) {
+	if !data.VxlanUdpPort.IsNull() {
+		data.VxlanUdpPort = types.Int64Value(res.Get(data.getClassName() + ".attributes.vxlanUDPPort").Int())
+	} else {
+		data.VxlanUdpPort = types.Int64Null()
+	}
+	if !data.VxlanUdpSourcePortMode.IsNull() {
+		data.VxlanUdpSourcePortMode = types.StringValue(res.Get(data.getClassName() + ".attributes.vxlanUDPSrcPortMode").String())
+	} else {
+		data.VxlanUdpSourcePortMode = types.StringNull()
+	}
 	for c := range data.NveInterfaces {
 		var rnvoEp gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -358,6 +443,56 @@ func (data *NVO) updateFromBody(res gjson.Result) {
 		} else {
 			data.NveInterfaces[c].SuppressMacRoute = types.BoolNull()
 		}
+		if !data.NveInterfaces[c].AnycastSourceInterface.IsNull() {
+			data.NveInterfaces[c].AnycastSourceInterface = types.StringValue(rnvoEp.Get("nvoEp.attributes.anycastIntf").String())
+		} else {
+			data.NveInterfaces[c].AnycastSourceInterface = types.StringNull()
+		}
+		if !data.NveInterfaces[c].ConfigurationSource.IsNull() {
+			data.NveInterfaces[c].ConfigurationSource = types.StringValue(rnvoEp.Get("nvoEp.attributes.cfgSrc").String())
+		} else {
+			data.NveInterfaces[c].ConfigurationSource = types.StringNull()
+		}
+		if !data.NveInterfaces[c].ControllerId.IsNull() {
+			data.NveInterfaces[c].ControllerId = types.Int64Value(rnvoEp.Get("nvoEp.attributes.controllerId").Int())
+		} else {
+			data.NveInterfaces[c].ControllerId = types.Int64Null()
+		}
+		if !data.NveInterfaces[c].Description.IsNull() {
+			data.NveInterfaces[c].Description = types.StringValue(rnvoEp.Get("nvoEp.attributes.descr").String())
+		} else {
+			data.NveInterfaces[c].Description = types.StringNull()
+		}
+		if !data.NveInterfaces[c].EncapsulationType.IsNull() {
+			data.NveInterfaces[c].EncapsulationType = types.StringValue(rnvoEp.Get("nvoEp.attributes.encapType").String())
+		} else {
+			data.NveInterfaces[c].EncapsulationType = types.StringNull()
+		}
+		if !data.NveInterfaces[c].FabricReadyTime.IsNull() {
+			data.NveInterfaces[c].FabricReadyTime = types.Int64Value(rnvoEp.Get("nvoEp.attributes.fabricReadyTime").Int())
+		} else {
+			data.NveInterfaces[c].FabricReadyTime = types.Int64Null()
+		}
+		if !data.NveInterfaces[c].MulticastRoutingSourceInterface.IsNull() {
+			data.NveInterfaces[c].MulticastRoutingSourceInterface = types.StringValue(rnvoEp.Get("nvoEp.attributes.mcastRtSrcIntf").String())
+		} else {
+			data.NveInterfaces[c].MulticastRoutingSourceInterface = types.StringNull()
+		}
+		if !data.NveInterfaces[c].MultisiteVirtualMac.IsNull() {
+			data.NveInterfaces[c].MultisiteVirtualMac = types.StringValue(rnvoEp.Get("nvoEp.attributes.multisiteVirtualMac").String())
+		} else {
+			data.NveInterfaces[c].MultisiteVirtualMac = types.StringNull()
+		}
+		if !data.NveInterfaces[c].SuppressNd.IsNull() {
+			data.NveInterfaces[c].SuppressNd = types.BoolValue(helpers.ParseNxosBoolean(rnvoEp.Get("nvoEp.attributes.suppressND").String()))
+		} else {
+			data.NveInterfaces[c].SuppressNd = types.BoolNull()
+		}
+		if !data.NveInterfaces[c].VirtualMac.IsNull() {
+			data.NveInterfaces[c].VirtualMac = types.StringValue(rnvoEp.Get("nvoEp.attributes.virtualMac").String())
+		} else {
+			data.NveInterfaces[c].VirtualMac = types.StringNull()
+		}
 		{
 			var rnvoNws gjson.Result
 			rnvoEp.Get("nvoEp.children").ForEach(
@@ -406,6 +541,21 @@ func (data *NVO) updateFromBody(res gjson.Result) {
 					data.NveInterfaces[c].Vnis[nc].SuppressArp = types.StringValue(rnvoNw.Get("nvoNw.attributes.suppressARP").String())
 				} else {
 					data.NveInterfaces[c].Vnis[nc].SuppressArp = types.StringNull()
+				}
+				if !data.NveInterfaces[c].Vnis[nc].LegacyMode.IsNull() {
+					data.NveInterfaces[c].Vnis[nc].LegacyMode = types.BoolValue(helpers.ParseNxosBoolean(rnvoNw.Get("nvoNw.attributes.isLegacyMode").String()))
+				} else {
+					data.NveInterfaces[c].Vnis[nc].LegacyMode = types.BoolNull()
+				}
+				if !data.NveInterfaces[c].Vnis[nc].MultisiteMulticastGroup.IsNull() {
+					data.NveInterfaces[c].Vnis[nc].MultisiteMulticastGroup = types.StringValue(rnvoNw.Get("nvoNw.attributes.multisiteMcastGroup").String())
+				} else {
+					data.NveInterfaces[c].Vnis[nc].MultisiteMulticastGroup = types.StringNull()
+				}
+				if !data.NveInterfaces[c].Vnis[nc].SpineAnycastGateway.IsNull() {
+					data.NveInterfaces[c].Vnis[nc].SpineAnycastGateway = types.BoolValue(helpers.ParseNxosBoolean(rnvoNw.Get("nvoNw.attributes.spineAnyCastGw").String()))
+				} else {
+					data.NveInterfaces[c].Vnis[nc].SpineAnycastGateway = types.BoolNull()
 				}
 				{
 					var rnvoIngRepl gjson.Result

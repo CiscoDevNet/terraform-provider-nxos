@@ -80,6 +80,78 @@ func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				MarkdownDescription: "System Default Admin St.",
 				Computed:            true,
 			},
+			"admin_link_down_syslog_level": schema.Int64Attribute{
+				MarkdownDescription: "Admin link-down syslog level.",
+				Computed:            true,
+			},
+			"admin_link_up_syslog_level": schema.Int64Attribute{
+				MarkdownDescription: "Admin link-up syslog level.",
+				Computed:            true,
+			},
+			"admin_state": schema.StringAttribute{
+				MarkdownDescription: "The administrative state of the object or policy.",
+				Computed:            true,
+			},
+			"allow_unsupported_sfp": schema.BoolAttribute{
+				MarkdownDescription: "Allow unsupported SFP.",
+				Computed:            true,
+			},
+			"chassis_infrastructure_adaptor_vlan": schema.Int64Attribute{
+				MarkdownDescription: "Chassis infra adaptor vlan id.",
+				Computed:            true,
+			},
+			"chassis_infrastructure_epds_port_number": schema.Int64Attribute{
+				MarkdownDescription: "Chassis infra EPDS port no.",
+				Computed:            true,
+			},
+			"chassis_infrastructure_ipv6_address": schema.StringAttribute{
+				MarkdownDescription: "Chassis infra IPv6 address.",
+				Computed:            true,
+			},
+			"chassis_infrastructure_vlan": schema.Int64Attribute{
+				MarkdownDescription: "Chassis infra vlan id.",
+				Computed:            true,
+			},
+			"chassis_management_instance": schema.StringAttribute{
+				MarkdownDescription: "Chassis MGMT instance.",
+				Computed:            true,
+			},
+			"chassis_management_instance_fabric_number": schema.StringAttribute{
+				MarkdownDescription: "Chassis MGMT fabric no.",
+				Computed:            true,
+			},
+			"control": schema.StringAttribute{
+				MarkdownDescription: "The control state.",
+				Computed:            true,
+			},
+			"interface_syslog_info": schema.StringAttribute{
+				MarkdownDescription: "Interface syslog info.",
+				Computed:            true,
+			},
+			"log_event": schema.StringAttribute{
+				MarkdownDescription: "Logging Interface events.",
+				Computed:            true,
+			},
+			"default_layer": schema.StringAttribute{
+				MarkdownDescription: "System Default Layer.",
+				Computed:            true,
+			},
+			"system_interface_admin_state": schema.StringAttribute{
+				MarkdownDescription: "System Interface Admin State.",
+				Computed:            true,
+			},
+			"system_link_failure_laser_on": schema.BoolAttribute{
+				MarkdownDescription: "Enable or disable the system link failure laser on.",
+				Computed:            true,
+			},
+			"system_storm_control_multi_threshold": schema.BoolAttribute{
+				MarkdownDescription: "Enable or disable the storm control multi threshold.",
+				Computed:            true,
+			},
+			"vlan_tag_native": schema.BoolAttribute{
+				MarkdownDescription: "Tag native vlan.",
+				Computed:            true,
+			},
 		},
 	}
 }

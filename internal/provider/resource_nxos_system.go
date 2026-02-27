@@ -95,6 +95,114 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					stringvalidator.OneOf("down", "up"),
 				},
 			},
+			"admin_link_down_syslog_level": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Admin link-down syslog level.").AddIntegerRangeDescription(0, 7).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
+				},
+			},
+			"admin_link_up_syslog_level": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Admin link-up syslog level.").AddIntegerRangeDescription(0, 7).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
+				},
+			},
+			"admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("disabled", "enabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disabled", "enabled"),
+				},
+			},
+			"allow_unsupported_sfp": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow unsupported SFP.").String,
+				Optional:            true,
+			},
+			"chassis_infrastructure_adaptor_vlan": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Chassis infra adaptor vlan id.").AddIntegerRangeDescription(0, 4092).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4092),
+				},
+			},
+			"chassis_infrastructure_epds_port_number": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Chassis infra EPDS port no.").AddIntegerRangeDescription(0, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 65535),
+				},
+			},
+			"chassis_infrastructure_ipv6_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Chassis infra IPv6 address.").String,
+				Optional:            true,
+			},
+			"chassis_infrastructure_vlan": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Chassis infra vlan id.").AddIntegerRangeDescription(0, 4092).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4092),
+				},
+			},
+			"chassis_management_instance": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Chassis MGMT instance.").String,
+				Optional:            true,
+			},
+			"chassis_management_instance_fabric_number": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Chassis MGMT fabric no.").AddStringEnumDescription("LeftFabric", "RightFabric", "UnknownFabric").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("LeftFabric", "RightFabric", "UnknownFabric"),
+				},
+			},
+			"control": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("stateful-ha").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("stateful-ha"),
+				},
+			},
+			"interface_syslog_info": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Interface syslog info.").AddStringEnumDescription("default", "info-1").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("default", "info-1"),
+				},
+			},
+			"log_event": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Logging Interface events.").AddStringEnumDescription("linkStatusDefault", "linkStatusEnable", "none", "trunkStatusDefault", "trunkStatusEnable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("linkStatusDefault", "linkStatusEnable", "none", "trunkStatusDefault", "trunkStatusEnable"),
+				},
+			},
+			"default_layer": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("System Default Layer.").AddStringEnumDescription("Layer1", "Layer2", "Layer3").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("Layer1", "Layer2", "Layer3"),
+				},
+			},
+			"system_interface_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("System Interface Admin State.").AddStringEnumDescription("down", "down-exclude-fabric", "up").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("down", "down-exclude-fabric", "up"),
+				},
+			},
+			"system_link_failure_laser_on": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable or disable the system link failure laser on.").String,
+				Optional:            true,
+			},
+			"system_storm_control_multi_threshold": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable or disable the storm control multi threshold.").String,
+				Optional:            true,
+			},
+			"vlan_tag_native": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Tag native vlan.").String,
+				Optional:            true,
+			},
 		},
 	}
 }

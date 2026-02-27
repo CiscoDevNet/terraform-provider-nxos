@@ -24,9 +24,27 @@ This resource can manage the system configuration on NX-OS devices, including th
 
 ```terraform
 resource "nxos_system" "example" {
-  name                = "LEAF1"
-  mtu                 = 9216
-  default_admin_state = "up"
+  name                                      = "LEAF1"
+  mtu                                       = 9216
+  default_admin_state                       = "up"
+  admin_link_down_syslog_level              = 4
+  admin_link_up_syslog_level                = 4
+  admin_state                               = "enabled"
+  allow_unsupported_sfp                     = true
+  chassis_infrastructure_adaptor_vlan       = 100
+  chassis_infrastructure_epds_port_number   = 100
+  chassis_infrastructure_ipv6_address       = "2001:db8::1"
+  chassis_infrastructure_vlan               = 100
+  chassis_management_instance               = "mgmt0"
+  chassis_management_instance_fabric_number = "LeftFabric"
+  control                                   = "stateful-ha"
+  interface_syslog_info                     = "info-1"
+  log_event                                 = "linkStatusEnable"
+  default_layer                             = "Layer3"
+  system_interface_admin_state              = "up"
+  system_link_failure_laser_on              = false
+  system_storm_control_multi_threshold      = false
+  vlan_tag_native                           = false
 }
 ```
 
@@ -35,12 +53,42 @@ resource "nxos_system" "example" {
 
 ### Optional
 
+- `admin_link_down_syslog_level` (Number) Admin link-down syslog level.
+  - Range: `0`-`7`
+- `admin_link_up_syslog_level` (Number) Admin link-up syslog level.
+  - Range: `0`-`7`
+- `admin_state` (String) The administrative state of the object or policy.
+  - Choices: `disabled`, `enabled`
+- `allow_unsupported_sfp` (Boolean) Allow unsupported SFP.
+- `chassis_infrastructure_adaptor_vlan` (Number) Chassis infra adaptor vlan id.
+  - Range: `0`-`4092`
+- `chassis_infrastructure_epds_port_number` (Number) Chassis infra EPDS port no.
+  - Range: `0`-`65535`
+- `chassis_infrastructure_ipv6_address` (String) Chassis infra IPv6 address.
+- `chassis_infrastructure_vlan` (Number) Chassis infra vlan id.
+  - Range: `0`-`4092`
+- `chassis_management_instance` (String) Chassis MGMT instance.
+- `chassis_management_instance_fabric_number` (String) Chassis MGMT fabric no.
+  - Choices: `LeftFabric`, `RightFabric`, `UnknownFabric`
+- `control` (String) The control state.
+  - Choices: `stateful-ha`
 - `default_admin_state` (String) System Default Admin St.
   - Choices: `down`, `up`
+- `default_layer` (String) System Default Layer.
+  - Choices: `Layer1`, `Layer2`, `Layer3`
 - `device` (String) A device name from the provider configuration.
+- `interface_syslog_info` (String) Interface syslog info.
+  - Choices: `default`, `info-1`
+- `log_event` (String) Logging Interface events.
+  - Choices: `linkStatusDefault`, `linkStatusEnable`, `none`, `trunkStatusDefault`, `trunkStatusEnable`
 - `mtu` (Number) System jumbo Mtu.
   - Range: `576`-`9216`
 - `name` (String) The system name (hostname).
+- `system_interface_admin_state` (String) System Interface Admin State.
+  - Choices: `down`, `down-exclude-fabric`, `up`
+- `system_link_failure_laser_on` (Boolean) Enable or disable the system link failure laser on.
+- `system_storm_control_multi_threshold` (Boolean) Enable or disable the storm control multi threshold.
+- `vlan_tag_native` (Boolean) Tag native vlan.
 
 ### Read-Only
 

@@ -43,3 +43,129 @@ child_classes:
               - up
             example: up
             delete_value: "DME_UNSET_PROPERTY_MARKER"
+          - nxos_name: adminLinkDownSyslogLevel
+            tf_name: admin_link_down_syslog_level
+            type: Int64
+            description: 'Admin link-down syslog level.'
+            min_int: 0
+            max_int: 7
+            example: 4
+          - nxos_name: adminLinkUpSyslogLevel
+            tf_name: admin_link_up_syslog_level
+            type: Int64
+            description: 'Admin link-up syslog level.'
+            min_int: 0
+            max_int: 7
+            example: 4
+          - nxos_name: adminSt
+            tf_name: admin_state
+            type: String
+            description: 'The administrative state of the object or policy.'
+            enum_values:
+              - disabled
+              - enabled
+            example: enabled
+          - nxos_name: allowUnsupportedSfp
+            tf_name: allow_unsupported_sfp
+            type: Bool
+            description: 'Allow unsupported SFP.'
+            example: "true"
+          - nxos_name: chassisInfraAdaptorVlan
+            tf_name: chassis_infrastructure_adaptor_vlan
+            type: Int64
+            description: 'Chassis infra adaptor vlan id.'
+            min_int: 0
+            max_int: 4092
+            example: 100
+          - nxos_name: chassisInfraEpdsPortNo
+            tf_name: chassis_infrastructure_epds_port_number
+            type: Int64
+            description: 'Chassis infra EPDS port no.'
+            min_int: 0
+            max_int: 65535
+            example: 100
+          - nxos_name: chassisInfraIPv6addr
+            tf_name: chassis_infrastructure_ipv6_address
+            type: String
+            description: 'Chassis infra IPv6 address.'
+            example: '2001:db8::1'
+          - nxos_name: chassisInfraVlan
+            tf_name: chassis_infrastructure_vlan
+            type: Int64
+            description: 'Chassis infra vlan id.'
+            min_int: 0
+            max_int: 4092
+            example: 100
+          - nxos_name: chassisMgmtInst
+            tf_name: chassis_management_instance
+            type: String
+            description: 'Chassis MGMT instance.'
+            example: 'mgmt0'
+          - nxos_name: chassisMgmtInstFabricNo
+            tf_name: chassis_management_instance_fabric_number
+            type: String
+            description: 'Chassis MGMT fabric no.'
+            enum_values:
+              - LeftFabric
+              - RightFabric
+              - UnknownFabric
+            example: LeftFabric
+          - nxos_name: ctrl
+            tf_name: control
+            type: String
+            description: 'The control state.'
+            enum_values:
+              - stateful-ha
+            example: stateful-ha
+          - nxos_name: ifSyslogInfo
+            tf_name: interface_syslog_info
+            type: String
+            description: 'Interface syslog info.'
+            enum_values:
+              - default
+              - info-1
+            example: info-1
+          - nxos_name: logEvent
+            tf_name: log_event
+            type: String
+            description: 'Logging Interface events.'
+            enum_values:
+              - linkStatusDefault
+              - linkStatusEnable
+              - none
+              - trunkStatusDefault
+              - trunkStatusEnable
+            example: linkStatusEnable
+          - nxos_name: systemDefaultLayer
+            tf_name: default_layer
+            type: String
+            description: 'System Default Layer.'
+            enum_values:
+              - Layer1
+              - Layer2
+              - Layer3
+            example: Layer3
+          - nxos_name: systemIfAdminState
+            tf_name: system_interface_admin_state
+            type: String
+            description: 'System Interface Admin State.'
+            enum_values:
+              - down
+              - down-exclude-fabric
+              - up
+            example: up
+          - nxos_name: systemLinkFailLaserOn
+            tf_name: system_link_failure_laser_on
+            type: Bool
+            description: 'Enable or disable the system link failure laser on.'
+            example: "false"
+          - nxos_name: systemStormControlMultiThreshold
+            tf_name: system_storm_control_multi_threshold
+            type: Bool
+            description: 'Enable or disable the storm control multi threshold.'
+            example: "false"
+          - nxos_name: vlanTagNative
+            tf_name: vlan_tag_native
+            type: Bool
+            description: 'Tag native vlan.'
+            example: "false"

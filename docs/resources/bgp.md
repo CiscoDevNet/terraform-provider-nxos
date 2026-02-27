@@ -37,17 +37,46 @@ This resource can manage the BGP configuration on NX-OS devices, including the B
 
 ```terraform
 resource "nxos_bgp" "example" {
-  admin_state             = "enabled"
-  instance_admin_state    = "enabled"
-  asn                     = "65001"
-  enhanced_error_handling = false
+  admin_state                              = "enabled"
+  instance_admin_state                     = "enabled"
+  asn                                      = "65001"
+  control                                  = "stateful-ha"
+  disable_policy_batching                  = "disabled"
+  disable_policy_batching_nexthop          = "disabled"
+  disable_policy_batching_ipv4_prefix_list = "PFX_LIST1"
+  disable_policy_batching_ipv6_prefix_list = "PFX_LIST_V6"
+  enhanced_error_handling                  = false
+  fabric_soo                               = "extended:as2-nn4:65001:100"
+  flush_routes                             = "disabled"
+  isolate                                  = "disabled"
+  isolate_route_map                        = "ISO_RT_MAP"
+  med_dampening_interval                   = 60
+  nexthop_suppress_default_resolution      = "disabled"
+  rd_dual                                  = "enabled"
+  rd_dual_id                               = 1
   vrfs = [{
     name                               = "default"
     router_id                          = "1.1.1.1"
+    alloc_index                        = 1
+    bestpath_first_always              = "disabled"
+    bestpath_interval                  = 300
+    bandwidth_reference                = 40000
+    bandwidth_reference_unit           = "mbps"
+    cluster_id                         = "1.2.3.4"
+    hold_time                          = 180
+    keepalive_interval                 = 60
+    local_asn                          = "65010"
+    max_as_limit                       = 1
+    mode                               = "fabric"
+    prefix_peer_timeout                = 90
+    prefix_peer_wait_time              = 90
+    reconnect_interval                 = 60
+    router_id_auto                     = "disabled"
     route_control_enforce_first_as     = "disabled"
     route_control_fib_accelerate       = "enabled"
     route_control_log_neighbor_changes = "enabled"
     route_control_suppress_routes      = "disabled"
+    graceful_restart_control           = "complete"
     graceful_restart_interval          = 240
     graceful_restart_stale_interval    = 1800
     address_families = [{
@@ -69,6 +98,26 @@ resource "nxos_bgp" "example" {
       table_map_route_map_name               = "ROUTE_MAP1"
       vni_ethernet_tag                       = "disabled"
       wait_igp_converged                     = "disabled"
+      advertise_system_mac                   = "disabled"
+      allocate_label_all                     = "disabled"
+      allocate_label_option_b                = "enabled"
+      allocate_label_route_map               = "LABEL_RT_MAP"
+      bestpath_origin_as_allow_invalid       = "disabled"
+      bestpath_origin_as_use_validity        = "disabled"
+      client_to_client_reflection            = "enabled"
+      default_metric                         = "100"
+      export_gateway_ip                      = "disabled"
+      igp_metric                             = 600
+      label_allocation_mode                  = "enabled"
+      max_path_unequal_cost                  = "disabled"
+      nexthop_load_balance_egress_multisite  = "disabled"
+      originate_map                          = "ORIG_MAP"
+      origin_as_validate                     = "disabled"
+      origin_as_validate_signal_ibgp         = "disabled"
+      retain_rt_route_map                    = "RETAIN_RT_MAP"
+      table_map_filter                       = "disabled"
+      timer_bestpath_defer                   = 100
+      timer_bestpath_defer_max               = 300
       advertised_prefixes = [{
         prefix    = "192.168.1.0/24"
         route_map = "rt-map"
@@ -80,45 +129,114 @@ resource "nxos_bgp" "example" {
         route_map         = "route_map_ospf_1"
         scope             = "inter"
         srv6_prefix_type  = "unspecified"
+        asn               = "65001"
       }]
     }]
     peer_templates = [{
-      name             = "SPINE-PEERS"
-      remote_asn       = "65002"
-      description      = "My Description"
-      peer_type        = "fabric-internal"
-      source_interface = "lo0"
+      name                           = "SPINE-PEERS"
+      remote_asn                     = "65002"
+      description                    = "My Description"
+      peer_type                      = "fabric-internal"
+      source_interface               = "lo0"
+      admin_state                    = "enabled"
+      affinity_group                 = 0
+      asn_type                       = "none"
+      bfd_type                       = "none"
+      bmp_server_1                   = "disabled"
+      bmp_server_2                   = "disabled"
+      capability_suppress_4_byte_asn = "disabled"
+      connection_mode                = "passive"
+      peer_control                   = "bfd"
+      hold_time                      = 180
+      keepalive_interval             = 60
+      log_neighbor_changes           = "none"
+      low_memory_exempt              = "disabled"
+      max_peer_count                 = 1
+      password_type                  = "LINE"
+      password                       = "secret_password"
+      private_as_control             = "none"
+      session_template               = "SESS_TEMPLATE"
+      ebgp_multihop_ttl              = 2
+      ttl_security_hops              = 1
       peer_template_address_families = [{
-        address_family          = "ipv4-ucast"
-        control                 = "nh-self,rr-client"
-        send_community_extended = "enabled"
-        send_community_standard = "enabled"
-        max_prefix_action       = "restart"
-        max_prefix_number       = 10000
-        max_prefix_restart_time = 1
-        max_prefix_threshold    = 30
+        address_family                = "ipv4-ucast"
+        control                       = "nh-self,rr-client"
+        send_community_extended       = "enabled"
+        send_community_standard       = "enabled"
+        advertise_gateway_ip          = "enabled"
+        advertisement_interval        = 1
+        advertise_local_labeled_route = "enabled"
+        aigp                          = "disabled"
+        allowed_self_as_count         = 0
+        as_override                   = "disabled"
+        default_originate             = "disabled"
+        default_originate_route_map   = "DEF_ORIG_MAP"
+        dmz_link_bandwidth            = "disabled"
+        encapsulation_mpls            = "disabled"
+        link_bandwidth_cumulative     = "disabled"
+        nexthop_thirdparty            = "enabled"
+        rewrite_rt_asn                = "disabled"
+        soft_reconfiguration_backup   = "none"
+        site_of_origin                = "extended:as2-nn4:65001:200"
+        unsuppress_map                = "UNSUPP_MAP"
+        weight                        = "100"
+        max_prefix_action             = "restart"
+        max_prefix_number             = 10000
+        max_prefix_restart_time       = 1
+        max_prefix_threshold          = 30
       }]
     }]
     peers = [{
-      address               = "192.168.0.1"
-      remote_asn            = "65002"
-      description           = "My description"
-      peer_template         = "SPINE-PEERS"
-      peer_type             = "fabric-internal"
-      source_interface      = "lo0"
-      hold_time             = 45
-      keepalive_interval    = 15
-      ebgp_multihop_ttl     = 5
-      peer_control          = "bfd,dis-conn-check"
-      password_type         = "LINE"
-      password              = "secret_password"
-      local_asn_propagation = "no-prepend"
-      local_asn             = "65001"
+      address                        = "192.168.0.1"
+      remote_asn                     = "65002"
+      description                    = "My description"
+      peer_template                  = "SPINE-PEERS"
+      peer_type                      = "fabric-internal"
+      source_interface               = "lo0"
+      hold_time                      = 45
+      keepalive_interval             = 15
+      ebgp_multihop_ttl              = 5
+      peer_control                   = "bfd,dis-conn-check"
+      password_type                  = "LINE"
+      password                       = "secret_password"
+      admin_state                    = "enabled"
+      affinity_group                 = 0
+      asn_type                       = "none"
+      bfd_type                       = "none"
+      bmp_server_1                   = "disabled"
+      bmp_server_2                   = "disabled"
+      capability_suppress_4_byte_asn = "disabled"
+      connection_mode                = "passive"
+      log_neighbor_changes           = "none"
+      low_memory_exempt              = "disabled"
+      max_peer_count                 = 1
+      private_as_control             = "none"
+      session_template               = "SESS_TEMPLATE"
+      ttl_security_hops              = 1
+      local_asn_propagation          = "no-prepend"
+      local_asn                      = "65001"
       peer_address_families = [{
-        address_family          = "ipv4-ucast"
-        control                 = "nh-self"
-        send_community_extended = "enabled"
-        send_community_standard = "enabled"
+        address_family                = "ipv4-ucast"
+        control                       = "nh-self"
+        send_community_extended       = "enabled"
+        send_community_standard       = "enabled"
+        advertise_gateway_ip          = "enabled"
+        advertisement_interval        = 1
+        advertise_local_labeled_route = "enabled"
+        aigp                          = "disabled"
+        allowed_self_as_count         = 0
+        as_override                   = "disabled"
+        default_originate             = "disabled"
+        default_originate_route_map   = "DEF_ORIG_MAP"
+        dmz_link_bandwidth            = "disabled"
+        encapsulation_mpls            = "disabled"
+        link_bandwidth_cumulative     = "disabled"
+        nexthop_thirdparty            = "enabled"
+        rewrite_rt_asn                = "disabled"
+        soft_reconfiguration_backup   = "none"
+        site_of_origin                = "extended:as2-nn4:65001:200"
+        unsuppress_map                = "UNSUPP_MAP"
+        weight                        = "100"
         route_controls = [{
           direction      = "in"
           route_map_name = "ROUTE_MAP1"
@@ -141,10 +259,32 @@ resource "nxos_bgp" "example" {
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
 - `asn` (String) Autonomous system number.
+- `control` (String) The control state.
+  - Choices: `stateful-ha`
 - `device` (String) A device name from the provider configuration.
+- `disable_policy_batching` (String) Disable Batching Evaluation To All Peers.
+  - Choices: `enabled`, `disabled`
+- `disable_policy_batching_ipv4_prefix_list` (String) Disable Batching Evaluation Of IPv4 Prefix Advertisements To All Peers.
+- `disable_policy_batching_ipv6_prefix_list` (String) Disable Batching Evaluation Of IPv6 Prefix Advertisements To All Peers.
+- `disable_policy_batching_nexthop` (String) Disable Batching Evaluation To Nexthop.
+  - Choices: `enabled`, `disabled`
 - `enhanced_error_handling` (Boolean) Enable BGP Enhanced Error Handling to prevent inadvertent session resets for minor errors. See RFC7606 for more details.
+- `fabric_soo` (String) Fabric Site of Origin extcommunity.
+- `flush_routes` (String) Flush routes in RIB upon controlled restart.
+  - Choices: `enabled`, `disabled`
 - `instance_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
+- `isolate` (String) Isolate router from BGP perspective.
+  - Choices: `enabled`, `disabled`, `include-local`, `custom`
+- `isolate_route_map` (String) Isolate Route Map Configuration.
+- `med_dampening_interval` (Number) Setting med dampening interval.
+  - Range: `60`-`4294967295`
+- `nexthop_suppress_default_resolution` (String) Suppress use of default route for nexthop address resolution.
+  - Choices: `enabled`, `disabled`
+- `rd_dual` (String) Generate Secondary Route Distinguisher for vxlan multisite border gateway.
+  - Choices: `enabled`, `disabled`
+- `rd_dual_id` (Number) ID to generate Secondary RD with ID:VNI format.
+  - Range: `1`-`65535`
 - `vrfs` (Attributes List) List of BGP VRFs. (see [below for nested schema](#nestedatt--vrfs))
 
 ### Read-Only
@@ -161,12 +301,40 @@ Required:
 Optional:
 
 - `address_families` (Attributes List) List of BGP address families. (see [below for nested schema](#nestedatt--vrfs--address_families))
+- `alloc_index` (Number) Allocate index for vrf (Value in the range 1-8000).
+  - Range: `1`-`8000`
+- `bandwidth_reference` (Number) Bandwidth reference value, holds the range from 1-4000000 if unit is mbps and holds range from 1-4000 if unit is gbps.
+  - Range: `0`-`4294967295`
+- `bandwidth_reference_unit` (String) Bandwidth reference unit (Mbps or Gbps).
+  - Choices: `mbps`, `gbps`
+- `bestpath_first_always` (String) Update delay option for first bestpath timeout.
+  - Choices: `enabled`, `disabled`
+- `bestpath_interval` (Number) Holds timeout for first bestpath after restart.
+  - Range: `1`-`3600`
+- `cluster_id` (String) The BGP route reflector ID (Cluster ID) that identifies the cluster of the route reflector domain.
+- `graceful_restart_control` (String) Graceful restart controls.
+  - Choices: `helper`, `complete`
 - `graceful_restart_interval` (Number) The graceful restart interval.
   - Range: `1`-`3600`
 - `graceful_restart_stale_interval` (Number) The stale interval for routes advertised by the BGP peer.
   - Range: `1`-`3600`
+- `hold_time` (Number) The time period to wait before declaring the neighbor device down.
+  - Range: `3`-`3600`
+- `keepalive_interval` (Number) The interval time between sending keepalive messages.
+  - Range: `0`-`3600`
+- `local_asn` (String) Local Asn for the EBGP neighbor.
+- `max_as_limit` (Number) Max AS-Path limit from EBGP neighbor.
+  - Range: `1`-`512`
+- `mode` (String) The BGP Domain mode.
+  - Choices: `fabric`, `external`, `proxy`
 - `peer_templates` (Attributes List) List of BGP peer templates. (see [below for nested schema](#nestedatt--vrfs--peer_templates))
 - `peers` (Attributes List) List of BGP peers. (see [below for nested schema](#nestedatt--vrfs--peers))
+- `prefix_peer_timeout` (Number) Prefix Peer Timeout in secs.
+  - Range: `0`-`1200`
+- `prefix_peer_wait_time` (Number) Prefix Peer Wait Time in secs.
+  - Range: `0`-`1200`
+- `reconnect_interval` (Number) Connection reconnect interval in secs.
+  - Range: `1`-`60`
 - `route_control_enforce_first_as` (String) Enforce First AS For EBgp. Can be configured only for VRF default.
   - Choices: `enabled`, `disabled`
 - `route_control_fib_accelerate` (String) Accelerate the hardware updates for IP/IPv6 adjacencies for neighbor. Can be configured only for VRF default.
@@ -176,6 +344,8 @@ Optional:
 - `route_control_suppress_routes` (String) Suppress Routes: Advertise only routes that are programmed in hardware to peers. Can be configured only for VRF default.
   - Choices: `enabled`, `disabled`
 - `router_id` (String) The BGP router ID.
+- `router_id_auto` (String) Automatically configured router identifier based on system MAC.
+  - Choices: `enabled`, `disabled`
 
 <a id="nestedatt--vrfs--address_families"></a>
 ### Nested Schema for `vrfs.address_families`
@@ -193,9 +363,29 @@ Optional:
   - Choices: `enabled`, `disabled`
 - `advertise_physical_ip_for_type5_routes` (String) Advertise physical IP for type-5 routes
   - Choices: `enabled`, `disabled`
+- `advertise_system_mac` (String) Advertise extra EVPN RT-2 with system MAC.
+  - Choices: `enabled`, `disabled`
 - `advertised_prefixes` (Attributes List) List of BGP advertised prefixes. (see [below for nested schema](#nestedatt--vrfs--address_families--advertised_prefixes))
+- `allocate_label_all` (String) Allocate labels for all routes.
+  - Choices: `enabled`, `disabled`
+- `allocate_label_option_b` (String) Allow allocation of option B labels.
+  - Choices: `enabled`, `disabled`
+- `allocate_label_route_map` (String) Allocate labels for selective routes.
+- `bestpath_origin_as_allow_invalid` (String) Allow invalid origin-AS in BGP bestpath selection.
+  - Choices: `enabled`, `disabled`
+- `bestpath_origin_as_use_validity` (String) Enable BGP bestpath selection to use RPKI origin-as validity.
+  - Choices: `enabled`, `disabled`
+- `client_to_client_reflection` (String) client-to-client Reflection of routes.
+  - Choices: `enabled`, `disabled`
 - `critical_nexthop_timeout` (String) The next-hop address tracking delay timer for critical next-hop reachability routes.
 - `default_information_originate` (String) default-information originate.
+  - Choices: `enabled`, `disabled`
+- `default_metric` (String) Default Metric.
+- `export_gateway_ip` (String) Export Gateway IP to Type-5 EVPN routes for VRF.
+  - Choices: `enabled`, `disabled`
+- `igp_metric` (Number) Dampen IGP metric-related changes.
+  - Range: `0`-`3600`
+- `label_allocation_mode` (String) per VRF label allocation mode.
   - Choices: `enabled`, `disabled`
 - `max_ecmp_paths` (Number) The maximum number of equal-cost paths for BGP load sharing.
   - Range: `1`-`512`
@@ -207,17 +397,33 @@ Optional:
   - Range: `1`-`512`
 - `max_mixed_ecmp_paths` (Number) Max mixed equal-cost multipath for local and remote paths.
   - Range: `1`-`512`
+- `max_path_unequal_cost` (String) Configure WUECMP based on weight derived from nexthop-metric by default.
+  - Choices: `enabled`, `disabled`
 - `next_hop_route_map_name` (String) Next hop route map name.
+- `nexthop_load_balance_egress_multisite` (String) Nexthop multisite for load-balance egress.
+  - Choices: `enabled`, `disabled`
 - `non_critical_nexthop_timeout` (String) The next-hop address tracking delay timer for non-critical next-hop reachability routes.
+- `origin_as_validate` (String) Enable RPKI origin-as validation for routes received from ebgp neighbors.
+  - Choices: `enabled`, `disabled`
+- `origin_as_validate_signal_ibgp` (String) Send Origin Validation State Extended Community to ibgp neighbors.
+  - Choices: `enabled`, `disabled`
+- `originate_map` (String) originate-map route map name.
 - `prefix_priority` (String) Enable prefix priority for AF
   - Choices: `none`, `high`
 - `redistributions` (Attributes List) List of BGP route redistributions. (see [below for nested schema](#nestedatt--vrfs--address_families--redistributions))
 - `retain_rt_all` (String) Retain Route Target All
   - Choices: `enabled`, `disabled`
+- `retain_rt_route_map` (String) Retain Route Target Route Map.
+- `table_map_filter` (String) Selective route download.
+  - Choices: `enabled`, `disabled`
 - `table_map_route_map_name` (String) Route-map name.
+- `timer_bestpath_defer` (Number) Configure bgp related timers.
+  - Range: `100`-`3000`
+- `timer_bestpath_defer_max` (Number) Configure bestpath defer timer.
+  - Range: `300`-`300000`
 - `vni_ethernet_tag` (String) Allow VNI in Ethernet Tag field in EVPN route
   - Choices: `enabled`, `disabled`
-- `wait_igp_converged` (String) Delay initial bestpath until redistributed IGPs have converged
+- `wait_igp_converged` (String) Delay initial bestpath until redistributed IGPs have converged.
   - Choices: `enabled`, `disabled`
 
 <a id="nestedatt--vrfs--address_families--advertised_prefixes"></a>
@@ -245,6 +451,7 @@ Required:
 
 Optional:
 
+- `asn` (String) The autonomous system number.
 - `route_map` (String) The name of the default route leak policy route map. This route map name is used to control distribution.
 - `scope` (String) The domain applicable to the capability.
   - Choices: `intra`, `inter`, `defrt`
@@ -262,12 +469,51 @@ Required:
 
 Optional:
 
+- `admin_state` (String) Administrative State.
+  - Choices: `enabled`, `disabled`
+- `affinity_group` (Number) Affinity group for the neighbor.
+  - Range: `0`-`65535`
+- `asn_type` (String) Specify peer ASN type as External or Internal.
+  - Choices: `none`, `external`, `internal`
+- `bfd_type` (String) Specify BFD session type.
+  - Choices: `none`, `singlehop`, `multihop`
+- `bmp_server_1` (String) Activate BMP Server 1.
+  - Choices: `enabled`, `disabled`
+- `bmp_server_2` (String) Activate BMP Server 2.
+  - Choices: `enabled`, `disabled`
+- `capability_suppress_4_byte_asn` (String) Capability Suppress 4-byte-as.
+  - Choices: `enabled`, `disabled`
+- `connection_mode` (String) Connection Mode.
+  - Choices: `passive`
 - `description` (String) Description.
+- `ebgp_multihop_ttl` (Number) eBGP Multihop.
+  - Range: `2`-`255`
+- `hold_time` (Number) Hold Interval.
+  - Range: `3`-`3600`
+- `keepalive_interval` (Number) Keepalive Interval.
+  - Range: `0`-`3600`
+- `log_neighbor_changes` (String) Log Neighbor Changes.
+  - Choices: `none`, `enable`, `disable`
+- `low_memory_exempt` (String) Low Memory Exempt.
+  - Choices: `enabled`, `disabled`
+- `max_peer_count` (Number) Maximum Peers for the prefix or interface.
+  - Range: `1`-`1000`
+- `password` (String) Configure a password for neighbor.
+- `password_type` (String) Password EnCrypt Type.
+  - Choices: `0`, `3`, `LINE`, `6`, `7`
+- `peer_control` (String) Control. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:
+  - Single value. Example: `bfd`
+  - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.
 - `peer_template_address_families` (Attributes List) List of BGP peer template address families. (see [below for nested schema](#nestedatt--vrfs--peer_templates--peer_template_address_families))
 - `peer_type` (String) Neighbor Fabric Type.
   - Choices: `fabric-internal`, `fabric-external`, `fabric-border-leaf`
+- `private_as_control` (String) Private AS Control.
+  - Choices: `none`, `remove-exclusive`, `remove-all`, `replace-as`
 - `remote_asn` (String) Autonomous System Number.
+- `session_template` (String) Importing Session Specific properties from Session Template.
 - `source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`.
+- `ttl_security_hops` (Number) Enable TTL Security Mechanism with hop counts specified for remote peers.
+  - Range: `1`-`254`
 
 <a id="nestedatt--vrfs--peer_templates--peer_template_address_families"></a>
 ### Nested Schema for `vrfs.peer_templates.peer_template_address_families`
@@ -279,9 +525,30 @@ Required:
 
 Optional:
 
+- `advertise_gateway_ip` (String) Advertise Gateway IP in Type-5 routes to neighbor.
+  - Choices: `enabled`, `disabled`
+- `advertise_local_labeled_route` (String) Advertise a route with local label to peer.
+  - Choices: `enabled`, `disabled`
+- `advertisement_interval` (Number) Neighbor advertisement interval.
+  - Range: `1`-`600`
+- `aigp` (String) Send and recieve AIGP attribute.
+  - Choices: `enabled`, `disabled`
+- `allowed_self_as_count` (Number) Allowed Self AS Count.
+  - Range: `0`-`10`
+- `as_override` (String) Override matching AS-number while sending update.
+  - Choices: `enabled`, `disabled`
 - `control` (String) Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:
   - Single value. Example: `nh-self`
   - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.
+- `default_originate` (String) Default Originate is enabled.
+  - Choices: `enabled`, `disabled`
+- `default_originate_route_map` (String) Default Originate Route Map.
+- `dmz_link_bandwidth` (String) Dmz-link-bandwidth.
+  - Choices: `enabled`, `disabled`
+- `encapsulation_mpls` (String) Configure encapsulation type for EVPN routes.
+  - Choices: `enabled`, `disabled`
+- `link_bandwidth_cumulative` (String) Link-bandwidth Cumulative.
+  - Choices: `enabled`, `disabled`
 - `max_prefix_action` (String) Action to do when limit is exceeded.
   - Choices: `log`, `shut`, `restart`
 - `max_prefix_number` (Number) Maximum number of prefixes allowed from the peer.
@@ -290,10 +557,19 @@ Optional:
   - Range: `1`-`65535`
 - `max_prefix_threshold` (Number) The threshold percentage of the maximum number of prefixes before a warning is issued.
   - Range: `1`-`100`
+- `nexthop_thirdparty` (String) Compute a third-party nexthop if possible.
+  - Choices: `enabled`, `disabled`
+- `rewrite_rt_asn` (String) Auto generate RTs for EBGP neighbor.
+  - Choices: `enabled`, `disabled`
 - `send_community_extended` (String) Send-community extended.
   - Choices: `enabled`, `disabled`
 - `send_community_standard` (String) Send-community standard.
   - Choices: `enabled`, `disabled`
+- `site_of_origin` (String) Site-of-origin extcommunity.
+- `soft_reconfiguration_backup` (String) Soft Reconfiguration.
+  - Choices: `none`, `inbound`, `inbound-always`
+- `unsuppress_map` (String) Route-map to selectively unsuppress suppressed routes.
+- `weight` (String) Weight for the neighbor.
 
 
 
@@ -307,6 +583,22 @@ Required:
 
 Optional:
 
+- `admin_state` (String) Administrative State.
+  - Choices: `enabled`, `disabled`
+- `affinity_group` (Number) Affinity group for the neighbor.
+  - Range: `0`-`65535`
+- `asn_type` (String) Specify peer ASN type as External or Internal.
+  - Choices: `none`, `external`, `internal`
+- `bfd_type` (String) Specify BFD session type.
+  - Choices: `none`, `singlehop`, `multihop`
+- `bmp_server_1` (String) Activate BMP Server 1.
+  - Choices: `enabled`, `disabled`
+- `bmp_server_2` (String) Activate BMP Server 2.
+  - Choices: `enabled`, `disabled`
+- `capability_suppress_4_byte_asn` (String) Capability Suppress 4-byte-as.
+  - Choices: `enabled`, `disabled`
+- `connection_mode` (String) BGP transport connection mode.
+  - Choices: `passive`
 - `description` (String) The name of the object.
 - `ebgp_multihop_ttl` (Number) eBGP Multihop TTL value.
   - Range: `2`-`255`
@@ -316,6 +608,12 @@ Optional:
   - Range: `0`-`3600`
 - `local_asn_propagation` (String) ASN Propagation.
   - Choices: `none`, `no-prepend`, `replace-as`, `dual-as`
+- `log_neighbor_changes` (String) Log messages for Neighbor up/down events.
+  - Choices: `none`, `enable`, `disable`
+- `low_memory_exempt` (String) Low Memory Exempt.
+  - Choices: `enabled`, `disabled`
+- `max_peer_count` (Number) Maximum Peers For Prefix.
+  - Range: `1`-`1000`
 - `password` (String) Password.
 - `password_type` (String) Password EnCrypt Type.
   - Choices: `0`, `3`, `LINE`, `6`, `7`
@@ -326,8 +624,13 @@ Optional:
 - `peer_template` (String) Peer Template To Import From.
 - `peer_type` (String) Neighbor Fabric Type.
   - Choices: `fabric-internal`, `fabric-external`, `fabric-border-leaf`
+- `private_as_control` (String) Remove private AS number from outbound updates.
+  - Choices: `none`, `remove-exclusive`, `remove-all`, `replace-as`
 - `remote_asn` (String) Autonomous System Number, takes value from (1-4294967295 | 1-65535[.(0-65535)]).
+- `session_template` (String) Peer Session Template To Import From.
 - `source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`.
+- `ttl_security_hops` (Number) Enable TTL Security Mechanism.
+  - Range: `1`-`254`
 
 <a id="nestedatt--vrfs--peers--peer_address_families"></a>
 ### Nested Schema for `vrfs.peers.peer_address_families`
@@ -339,15 +642,45 @@ Required:
 
 Optional:
 
+- `advertise_gateway_ip` (String) Advertise Gateway IP in Type-5 routes to neighbor.
+  - Choices: `enabled`, `disabled`
+- `advertise_local_labeled_route` (String) Advertise a route with local label to peer.
+  - Choices: `enabled`, `disabled`
+- `advertisement_interval` (Number) Neighbor advertisement interval.
+  - Range: `1`-`600`
+- `aigp` (String) Send and recieve AIGP attribute.
+  - Choices: `enabled`, `disabled`
+- `allowed_self_as_count` (Number) Allowed Self AS Count.
+  - Range: `0`-`10`
+- `as_override` (String) Override matching AS-number while sending update.
+  - Choices: `enabled`, `disabled`
 - `control` (String) Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:
   - Single value. Example: `nh-self`
   - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.
+- `default_originate` (String) Default Originate is enabled.
+  - Choices: `enabled`, `disabled`
+- `default_originate_route_map` (String) Default Originate Route Map.
+- `dmz_link_bandwidth` (String) Dmz-link-bandwidth.
+  - Choices: `enabled`, `disabled`
+- `encapsulation_mpls` (String) Configure encapsulation type for EVPN routes.
+  - Choices: `enabled`, `disabled`
+- `link_bandwidth_cumulative` (String) Link-bandwidth Cumulative.
+  - Choices: `enabled`, `disabled`
+- `nexthop_thirdparty` (String) Compute a third-party nexthop if possible.
+  - Choices: `enabled`, `disabled`
 - `prefix_list_controls` (Attributes List) List of BGP peer address family prefix list controls. (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families--prefix_list_controls))
+- `rewrite_rt_asn` (String) Auto generate RTs for EBGP neighbor.
+  - Choices: `enabled`, `disabled`
 - `route_controls` (Attributes List) List of BGP peer address family route controls. (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families--route_controls))
 - `send_community_extended` (String) Send-community extended.
   - Choices: `enabled`, `disabled`
 - `send_community_standard` (String) Send-community standard.
   - Choices: `enabled`, `disabled`
+- `site_of_origin` (String) Site-of-origin extcommunity.
+- `soft_reconfiguration_backup` (String) Soft Reconfiguration.
+  - Choices: `none`, `inbound`, `inbound-always`
+- `unsuppress_map` (String) Route-map to selectively unsuppress suppressed routes.
+- `weight` (String) Weight for the neighbor.
 
 <a id="nestedatt--vrfs--peers--peer_address_families--prefix_list_controls"></a>
 ### Nested Schema for `vrfs.peers.peer_address_families.prefix_list_controls`

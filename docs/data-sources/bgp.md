@@ -51,9 +51,22 @@ data "nxos_bgp" "example" {
 
 - `admin_state` (String) The administrative state of the object or policy.
 - `asn` (String) Autonomous system number.
+- `control` (String) The control state.
+- `disable_policy_batching` (String) Disable Batching Evaluation To All Peers.
+- `disable_policy_batching_ipv4_prefix_list` (String) Disable Batching Evaluation Of IPv4 Prefix Advertisements To All Peers.
+- `disable_policy_batching_ipv6_prefix_list` (String) Disable Batching Evaluation Of IPv6 Prefix Advertisements To All Peers.
+- `disable_policy_batching_nexthop` (String) Disable Batching Evaluation To Nexthop.
 - `enhanced_error_handling` (Boolean) Enable BGP Enhanced Error Handling to prevent inadvertent session resets for minor errors. See RFC7606 for more details.
+- `fabric_soo` (String) Fabric Site of Origin extcommunity.
+- `flush_routes` (String) Flush routes in RIB upon controlled restart.
 - `id` (String) The distinguished name of the object.
 - `instance_admin_state` (String) The administrative state of the object or policy.
+- `isolate` (String) Isolate router from BGP perspective.
+- `isolate_route_map` (String) Isolate Route Map Configuration.
+- `med_dampening_interval` (Number) Setting med dampening interval.
+- `nexthop_suppress_default_resolution` (String) Suppress use of default route for nexthop address resolution.
+- `rd_dual` (String) Generate Secondary Route Distinguisher for vxlan multisite border gateway.
+- `rd_dual_id` (Number) ID to generate Secondary RD with ID:VNI format.
 - `vrfs` (Attributes List) List of BGP VRFs. (see [below for nested schema](#nestedatt--vrfs))
 
 <a id="nestedatt--vrfs"></a>
@@ -62,16 +75,32 @@ data "nxos_bgp" "example" {
 Read-Only:
 
 - `address_families` (Attributes List) List of BGP address families. (see [below for nested schema](#nestedatt--vrfs--address_families))
+- `alloc_index` (Number) Allocate index for vrf (Value in the range 1-8000).
+- `bandwidth_reference` (Number) Bandwidth reference value, holds the range from 1-4000000 if unit is mbps and holds range from 1-4000 if unit is gbps.
+- `bandwidth_reference_unit` (String) Bandwidth reference unit (Mbps or Gbps).
+- `bestpath_first_always` (String) Update delay option for first bestpath timeout.
+- `bestpath_interval` (Number) Holds timeout for first bestpath after restart.
+- `cluster_id` (String) The BGP route reflector ID (Cluster ID) that identifies the cluster of the route reflector domain.
+- `graceful_restart_control` (String) Graceful restart controls.
 - `graceful_restart_interval` (Number) The graceful restart interval.
 - `graceful_restart_stale_interval` (Number) The stale interval for routes advertised by the BGP peer.
+- `hold_time` (Number) The time period to wait before declaring the neighbor device down.
+- `keepalive_interval` (Number) The interval time between sending keepalive messages.
+- `local_asn` (String) Local Asn for the EBGP neighbor.
+- `max_as_limit` (Number) Max AS-Path limit from EBGP neighbor.
+- `mode` (String) The BGP Domain mode.
 - `name` (String) The name of the object.
 - `peer_templates` (Attributes List) List of BGP peer templates. (see [below for nested schema](#nestedatt--vrfs--peer_templates))
 - `peers` (Attributes List) List of BGP peers. (see [below for nested schema](#nestedatt--vrfs--peers))
+- `prefix_peer_timeout` (Number) Prefix Peer Timeout in secs.
+- `prefix_peer_wait_time` (Number) Prefix Peer Wait Time in secs.
+- `reconnect_interval` (Number) Connection reconnect interval in secs.
 - `route_control_enforce_first_as` (String) Enforce First AS For EBgp. Can be configured only for VRF default.
 - `route_control_fib_accelerate` (String) Accelerate the hardware updates for IP/IPv6 adjacencies for neighbor. Can be configured only for VRF default.
 - `route_control_log_neighbor_changes` (String) Log Neighbor Changes.
 - `route_control_suppress_routes` (String) Suppress Routes: Advertise only routes that are programmed in hardware to peers. Can be configured only for VRF default.
 - `router_id` (String) The BGP router ID.
+- `router_id_auto` (String) Automatically configured router identifier based on system MAC.
 
 <a id="nestedatt--vrfs--address_families"></a>
 ### Nested Schema for `vrfs.address_families`
@@ -82,22 +111,42 @@ Read-Only:
 - `advertise_l2vpn_evpn` (String) Advertise L2vpn Evpn.
 - `advertise_only_active_routes` (String) Advertise only active routes to peers
 - `advertise_physical_ip_for_type5_routes` (String) Advertise physical IP for type-5 routes
+- `advertise_system_mac` (String) Advertise extra EVPN RT-2 with system MAC.
 - `advertised_prefixes` (Attributes List) List of BGP advertised prefixes. (see [below for nested schema](#nestedatt--vrfs--address_families--advertised_prefixes))
+- `allocate_label_all` (String) Allocate labels for all routes.
+- `allocate_label_option_b` (String) Allow allocation of option B labels.
+- `allocate_label_route_map` (String) Allocate labels for selective routes.
+- `bestpath_origin_as_allow_invalid` (String) Allow invalid origin-AS in BGP bestpath selection.
+- `bestpath_origin_as_use_validity` (String) Enable BGP bestpath selection to use RPKI origin-as validity.
+- `client_to_client_reflection` (String) client-to-client Reflection of routes.
 - `critical_nexthop_timeout` (String) The next-hop address tracking delay timer for critical next-hop reachability routes.
 - `default_information_originate` (String) default-information originate.
+- `default_metric` (String) Default Metric.
+- `export_gateway_ip` (String) Export Gateway IP to Type-5 EVPN routes for VRF.
+- `igp_metric` (Number) Dampen IGP metric-related changes.
+- `label_allocation_mode` (String) per VRF label allocation mode.
 - `max_ecmp_paths` (Number) The maximum number of equal-cost paths for BGP load sharing.
 - `max_external_ecmp_paths` (Number) Max External ECMP.
 - `max_external_internal_ecmp_paths` (Number) Max External Internal ECMP.
 - `max_local_ecmp_paths` (Number) Maximum number of equal-cost multipath for local paths.
 - `max_mixed_ecmp_paths` (Number) Max mixed equal-cost multipath for local and remote paths.
+- `max_path_unequal_cost` (String) Configure WUECMP based on weight derived from nexthop-metric by default.
 - `next_hop_route_map_name` (String) Next hop route map name.
+- `nexthop_load_balance_egress_multisite` (String) Nexthop multisite for load-balance egress.
 - `non_critical_nexthop_timeout` (String) The next-hop address tracking delay timer for non-critical next-hop reachability routes.
+- `origin_as_validate` (String) Enable RPKI origin-as validation for routes received from ebgp neighbors.
+- `origin_as_validate_signal_ibgp` (String) Send Origin Validation State Extended Community to ibgp neighbors.
+- `originate_map` (String) originate-map route map name.
 - `prefix_priority` (String) Enable prefix priority for AF
 - `redistributions` (Attributes List) List of BGP route redistributions. (see [below for nested schema](#nestedatt--vrfs--address_families--redistributions))
 - `retain_rt_all` (String) Retain Route Target All
+- `retain_rt_route_map` (String) Retain Route Target Route Map.
+- `table_map_filter` (String) Selective route download.
 - `table_map_route_map_name` (String) Route-map name.
+- `timer_bestpath_defer` (Number) Configure bgp related timers.
+- `timer_bestpath_defer_max` (Number) Configure bestpath defer timer.
 - `vni_ethernet_tag` (String) Allow VNI in Ethernet Tag field in EVPN route
-- `wait_igp_converged` (String) Delay initial bestpath until redistributed IGPs have converged
+- `wait_igp_converged` (String) Delay initial bestpath until redistributed IGPs have converged.
 
 <a id="nestedatt--vrfs--address_families--advertised_prefixes"></a>
 ### Nested Schema for `vrfs.address_families.advertised_prefixes`
@@ -114,6 +163,7 @@ Read-Only:
 
 Read-Only:
 
+- `asn` (String) The autonomous system number.
 - `protocol` (String) The list of protocols to match.
 - `protocol_instance` (String) The inter protocol route leak policy instance (Use `none` for `static` and `direct` protocols).
 - `route_map` (String) The name of the default route leak policy route map. This route map name is used to control distribution.
@@ -127,12 +177,34 @@ Read-Only:
 
 Read-Only:
 
+- `admin_state` (String) Administrative State.
+- `affinity_group` (Number) Affinity group for the neighbor.
+- `asn_type` (String) Specify peer ASN type as External or Internal.
+- `bfd_type` (String) Specify BFD session type.
+- `bmp_server_1` (String) Activate BMP Server 1.
+- `bmp_server_2` (String) Activate BMP Server 2.
+- `capability_suppress_4_byte_asn` (String) Capability Suppress 4-byte-as.
+- `connection_mode` (String) Connection Mode.
 - `description` (String) Description.
+- `ebgp_multihop_ttl` (Number) eBGP Multihop.
+- `hold_time` (Number) Hold Interval.
+- `keepalive_interval` (Number) Keepalive Interval.
+- `log_neighbor_changes` (String) Log Neighbor Changes.
+- `low_memory_exempt` (String) Low Memory Exempt.
+- `max_peer_count` (Number) Maximum Peers for the prefix or interface.
 - `name` (String) The name of the object.
+- `password` (String) Configure a password for neighbor.
+- `password_type` (String) Password EnCrypt Type.
+- `peer_control` (String) Control. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:
+  - Single value. Example: `bfd`
+  - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.
 - `peer_template_address_families` (Attributes List) List of BGP peer template address families. (see [below for nested schema](#nestedatt--vrfs--peer_templates--peer_template_address_families))
 - `peer_type` (String) Neighbor Fabric Type.
+- `private_as_control` (String) Private AS Control.
 - `remote_asn` (String) Autonomous System Number.
+- `session_template` (String) Importing Session Specific properties from Session Template.
 - `source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`.
+- `ttl_security_hops` (Number) Enable TTL Security Mechanism with hop counts specified for remote peers.
 
 <a id="nestedatt--vrfs--peer_templates--peer_template_address_families"></a>
 ### Nested Schema for `vrfs.peer_templates.peer_template_address_families`
@@ -140,15 +212,32 @@ Read-Only:
 Read-Only:
 
 - `address_family` (String) Type.
+- `advertise_gateway_ip` (String) Advertise Gateway IP in Type-5 routes to neighbor.
+- `advertise_local_labeled_route` (String) Advertise a route with local label to peer.
+- `advertisement_interval` (Number) Neighbor advertisement interval.
+- `aigp` (String) Send and recieve AIGP attribute.
+- `allowed_self_as_count` (Number) Allowed Self AS Count.
+- `as_override` (String) Override matching AS-number while sending update.
 - `control` (String) Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:
   - Single value. Example: `nh-self`
   - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.
+- `default_originate` (String) Default Originate is enabled.
+- `default_originate_route_map` (String) Default Originate Route Map.
+- `dmz_link_bandwidth` (String) Dmz-link-bandwidth.
+- `encapsulation_mpls` (String) Configure encapsulation type for EVPN routes.
+- `link_bandwidth_cumulative` (String) Link-bandwidth Cumulative.
 - `max_prefix_action` (String) Action to do when limit is exceeded.
 - `max_prefix_number` (Number) Maximum number of prefixes allowed from the peer.
 - `max_prefix_restart_time` (Number) The period of time in minutes before restarting the peer when the prefix limit is reached.
 - `max_prefix_threshold` (Number) The threshold percentage of the maximum number of prefixes before a warning is issued.
+- `nexthop_thirdparty` (String) Compute a third-party nexthop if possible.
+- `rewrite_rt_asn` (String) Auto generate RTs for EBGP neighbor.
 - `send_community_extended` (String) Send-community extended.
 - `send_community_standard` (String) Send-community standard.
+- `site_of_origin` (String) Site-of-origin extcommunity.
+- `soft_reconfiguration_backup` (String) Soft Reconfiguration.
+- `unsuppress_map` (String) Route-map to selectively unsuppress suppressed routes.
+- `weight` (String) Weight for the neighbor.
 
 
 
@@ -158,12 +247,23 @@ Read-Only:
 Read-Only:
 
 - `address` (String) Peer address.
+- `admin_state` (String) Administrative State.
+- `affinity_group` (Number) Affinity group for the neighbor.
+- `asn_type` (String) Specify peer ASN type as External or Internal.
+- `bfd_type` (String) Specify BFD session type.
+- `bmp_server_1` (String) Activate BMP Server 1.
+- `bmp_server_2` (String) Activate BMP Server 2.
+- `capability_suppress_4_byte_asn` (String) Capability Suppress 4-byte-as.
+- `connection_mode` (String) BGP transport connection mode.
 - `description` (String) The name of the object.
 - `ebgp_multihop_ttl` (Number) eBGP Multihop TTL value.
 - `hold_time` (Number) Hold Interval.
 - `keepalive_interval` (Number) Keepalive Interval.
 - `local_asn` (String) Local Autonomous System Number.
 - `local_asn_propagation` (String) ASN Propagation.
+- `log_neighbor_changes` (String) Log messages for Neighbor up/down events.
+- `low_memory_exempt` (String) Low Memory Exempt.
+- `max_peer_count` (Number) Maximum Peers For Prefix.
 - `password` (String) Password.
 - `password_type` (String) Password EnCrypt Type.
 - `peer_address_families` (Attributes List) List of BGP peer address families. (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families))
@@ -172,8 +272,11 @@ Read-Only:
   - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.
 - `peer_template` (String) Peer Template To Import From.
 - `peer_type` (String) Neighbor Fabric Type.
+- `private_as_control` (String) Remove private AS number from outbound updates.
 - `remote_asn` (String) Autonomous System Number, takes value from (1-4294967295 | 1-65535[.(0-65535)]).
+- `session_template` (String) Peer Session Template To Import From.
 - `source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`.
+- `ttl_security_hops` (Number) Enable TTL Security Mechanism.
 
 <a id="nestedatt--vrfs--peers--peer_address_families"></a>
 ### Nested Schema for `vrfs.peers.peer_address_families`
@@ -181,13 +284,30 @@ Read-Only:
 Read-Only:
 
 - `address_family` (String) Type.
+- `advertise_gateway_ip` (String) Advertise Gateway IP in Type-5 routes to neighbor.
+- `advertise_local_labeled_route` (String) Advertise a route with local label to peer.
+- `advertisement_interval` (Number) Neighbor advertisement interval.
+- `aigp` (String) Send and recieve AIGP attribute.
+- `allowed_self_as_count` (Number) Allowed Self AS Count.
+- `as_override` (String) Override matching AS-number while sending update.
 - `control` (String) Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:
   - Single value. Example: `nh-self`
   - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.
+- `default_originate` (String) Default Originate is enabled.
+- `default_originate_route_map` (String) Default Originate Route Map.
+- `dmz_link_bandwidth` (String) Dmz-link-bandwidth.
+- `encapsulation_mpls` (String) Configure encapsulation type for EVPN routes.
+- `link_bandwidth_cumulative` (String) Link-bandwidth Cumulative.
+- `nexthop_thirdparty` (String) Compute a third-party nexthop if possible.
 - `prefix_list_controls` (Attributes List) List of BGP peer address family prefix list controls. (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families--prefix_list_controls))
+- `rewrite_rt_asn` (String) Auto generate RTs for EBGP neighbor.
 - `route_controls` (Attributes List) List of BGP peer address family route controls. (see [below for nested schema](#nestedatt--vrfs--peers--peer_address_families--route_controls))
 - `send_community_extended` (String) Send-community extended.
 - `send_community_standard` (String) Send-community standard.
+- `site_of_origin` (String) Site-of-origin extcommunity.
+- `soft_reconfiguration_backup` (String) Soft Reconfiguration.
+- `unsuppress_map` (String) Route-map to selectively unsuppress suppressed routes.
+- `weight` (String) Weight for the neighbor.
 
 <a id="nestedatt--vrfs--peers--peer_address_families--prefix_list_controls"></a>
 ### Nested Schema for `vrfs.peers.peer_address_families.prefix_list_controls`

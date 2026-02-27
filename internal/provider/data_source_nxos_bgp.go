@@ -80,8 +80,60 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "Autonomous system number.",
 				Computed:            true,
 			},
+			"control": schema.StringAttribute{
+				MarkdownDescription: "The control state.",
+				Computed:            true,
+			},
+			"disable_policy_batching": schema.StringAttribute{
+				MarkdownDescription: "Disable Batching Evaluation To All Peers.",
+				Computed:            true,
+			},
+			"disable_policy_batching_nexthop": schema.StringAttribute{
+				MarkdownDescription: "Disable Batching Evaluation To Nexthop.",
+				Computed:            true,
+			},
+			"disable_policy_batching_ipv4_prefix_list": schema.StringAttribute{
+				MarkdownDescription: "Disable Batching Evaluation Of IPv4 Prefix Advertisements To All Peers.",
+				Computed:            true,
+			},
+			"disable_policy_batching_ipv6_prefix_list": schema.StringAttribute{
+				MarkdownDescription: "Disable Batching Evaluation Of IPv6 Prefix Advertisements To All Peers.",
+				Computed:            true,
+			},
 			"enhanced_error_handling": schema.BoolAttribute{
 				MarkdownDescription: "Enable BGP Enhanced Error Handling to prevent inadvertent session resets for minor errors. See RFC7606 for more details.",
+				Computed:            true,
+			},
+			"fabric_soo": schema.StringAttribute{
+				MarkdownDescription: "Fabric Site of Origin extcommunity.",
+				Computed:            true,
+			},
+			"flush_routes": schema.StringAttribute{
+				MarkdownDescription: "Flush routes in RIB upon controlled restart.",
+				Computed:            true,
+			},
+			"isolate": schema.StringAttribute{
+				MarkdownDescription: "Isolate router from BGP perspective.",
+				Computed:            true,
+			},
+			"isolate_route_map": schema.StringAttribute{
+				MarkdownDescription: "Isolate Route Map Configuration.",
+				Computed:            true,
+			},
+			"med_dampening_interval": schema.Int64Attribute{
+				MarkdownDescription: "Setting med dampening interval.",
+				Computed:            true,
+			},
+			"nexthop_suppress_default_resolution": schema.StringAttribute{
+				MarkdownDescription: "Suppress use of default route for nexthop address resolution.",
+				Computed:            true,
+			},
+			"rd_dual": schema.StringAttribute{
+				MarkdownDescription: "Generate Secondary Route Distinguisher for vxlan multisite border gateway.",
+				Computed:            true,
+			},
+			"rd_dual_id": schema.Int64Attribute{
+				MarkdownDescription: "ID to generate Secondary RD with ID:VNI format.",
 				Computed:            true,
 			},
 			"vrfs": schema.ListNestedAttribute{
@@ -95,6 +147,66 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 						},
 						"router_id": schema.StringAttribute{
 							MarkdownDescription: "The BGP router ID.",
+							Computed:            true,
+						},
+						"alloc_index": schema.Int64Attribute{
+							MarkdownDescription: "Allocate index for vrf (Value in the range 1-8000).",
+							Computed:            true,
+						},
+						"bestpath_first_always": schema.StringAttribute{
+							MarkdownDescription: "Update delay option for first bestpath timeout.",
+							Computed:            true,
+						},
+						"bestpath_interval": schema.Int64Attribute{
+							MarkdownDescription: "Holds timeout for first bestpath after restart.",
+							Computed:            true,
+						},
+						"bandwidth_reference": schema.Int64Attribute{
+							MarkdownDescription: "Bandwidth reference value, holds the range from 1-4000000 if unit is mbps and holds range from 1-4000 if unit is gbps.",
+							Computed:            true,
+						},
+						"bandwidth_reference_unit": schema.StringAttribute{
+							MarkdownDescription: "Bandwidth reference unit (Mbps or Gbps).",
+							Computed:            true,
+						},
+						"cluster_id": schema.StringAttribute{
+							MarkdownDescription: "The BGP route reflector ID (Cluster ID) that identifies the cluster of the route reflector domain.",
+							Computed:            true,
+						},
+						"hold_time": schema.Int64Attribute{
+							MarkdownDescription: "The time period to wait before declaring the neighbor device down.",
+							Computed:            true,
+						},
+						"keepalive_interval": schema.Int64Attribute{
+							MarkdownDescription: "The interval time between sending keepalive messages.",
+							Computed:            true,
+						},
+						"local_asn": schema.StringAttribute{
+							MarkdownDescription: "Local Asn for the EBGP neighbor.",
+							Computed:            true,
+						},
+						"max_as_limit": schema.Int64Attribute{
+							MarkdownDescription: "Max AS-Path limit from EBGP neighbor.",
+							Computed:            true,
+						},
+						"mode": schema.StringAttribute{
+							MarkdownDescription: "The BGP Domain mode.",
+							Computed:            true,
+						},
+						"prefix_peer_timeout": schema.Int64Attribute{
+							MarkdownDescription: "Prefix Peer Timeout in secs.",
+							Computed:            true,
+						},
+						"prefix_peer_wait_time": schema.Int64Attribute{
+							MarkdownDescription: "Prefix Peer Wait Time in secs.",
+							Computed:            true,
+						},
+						"reconnect_interval": schema.Int64Attribute{
+							MarkdownDescription: "Connection reconnect interval in secs.",
+							Computed:            true,
+						},
+						"router_id_auto": schema.StringAttribute{
+							MarkdownDescription: "Automatically configured router identifier based on system MAC.",
 							Computed:            true,
 						},
 						"route_control_enforce_first_as": schema.StringAttribute{
@@ -111,6 +223,10 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 						},
 						"route_control_suppress_routes": schema.StringAttribute{
 							MarkdownDescription: "Suppress Routes: Advertise only routes that are programmed in hardware to peers. Can be configured only for VRF default.",
+							Computed:            true,
+						},
+						"graceful_restart_control": schema.StringAttribute{
+							MarkdownDescription: "Graceful restart controls.",
 							Computed:            true,
 						},
 						"graceful_restart_interval": schema.Int64Attribute{
@@ -195,7 +311,87 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										Computed:            true,
 									},
 									"wait_igp_converged": schema.StringAttribute{
-										MarkdownDescription: "Delay initial bestpath until redistributed IGPs have converged",
+										MarkdownDescription: "Delay initial bestpath until redistributed IGPs have converged.",
+										Computed:            true,
+									},
+									"advertise_system_mac": schema.StringAttribute{
+										MarkdownDescription: "Advertise extra EVPN RT-2 with system MAC.",
+										Computed:            true,
+									},
+									"allocate_label_all": schema.StringAttribute{
+										MarkdownDescription: "Allocate labels for all routes.",
+										Computed:            true,
+									},
+									"allocate_label_option_b": schema.StringAttribute{
+										MarkdownDescription: "Allow allocation of option B labels.",
+										Computed:            true,
+									},
+									"allocate_label_route_map": schema.StringAttribute{
+										MarkdownDescription: "Allocate labels for selective routes.",
+										Computed:            true,
+									},
+									"bestpath_origin_as_allow_invalid": schema.StringAttribute{
+										MarkdownDescription: "Allow invalid origin-AS in BGP bestpath selection.",
+										Computed:            true,
+									},
+									"bestpath_origin_as_use_validity": schema.StringAttribute{
+										MarkdownDescription: "Enable BGP bestpath selection to use RPKI origin-as validity.",
+										Computed:            true,
+									},
+									"client_to_client_reflection": schema.StringAttribute{
+										MarkdownDescription: "client-to-client Reflection of routes.",
+										Computed:            true,
+									},
+									"default_metric": schema.StringAttribute{
+										MarkdownDescription: "Default Metric.",
+										Computed:            true,
+									},
+									"export_gateway_ip": schema.StringAttribute{
+										MarkdownDescription: "Export Gateway IP to Type-5 EVPN routes for VRF.",
+										Computed:            true,
+									},
+									"igp_metric": schema.Int64Attribute{
+										MarkdownDescription: "Dampen IGP metric-related changes.",
+										Computed:            true,
+									},
+									"label_allocation_mode": schema.StringAttribute{
+										MarkdownDescription: "per VRF label allocation mode.",
+										Computed:            true,
+									},
+									"max_path_unequal_cost": schema.StringAttribute{
+										MarkdownDescription: "Configure WUECMP based on weight derived from nexthop-metric by default.",
+										Computed:            true,
+									},
+									"nexthop_load_balance_egress_multisite": schema.StringAttribute{
+										MarkdownDescription: "Nexthop multisite for load-balance egress.",
+										Computed:            true,
+									},
+									"originate_map": schema.StringAttribute{
+										MarkdownDescription: "originate-map route map name.",
+										Computed:            true,
+									},
+									"origin_as_validate": schema.StringAttribute{
+										MarkdownDescription: "Enable RPKI origin-as validation for routes received from ebgp neighbors.",
+										Computed:            true,
+									},
+									"origin_as_validate_signal_ibgp": schema.StringAttribute{
+										MarkdownDescription: "Send Origin Validation State Extended Community to ibgp neighbors.",
+										Computed:            true,
+									},
+									"retain_rt_route_map": schema.StringAttribute{
+										MarkdownDescription: "Retain Route Target Route Map.",
+										Computed:            true,
+									},
+									"table_map_filter": schema.StringAttribute{
+										MarkdownDescription: "Selective route download.",
+										Computed:            true,
+									},
+									"timer_bestpath_defer": schema.Int64Attribute{
+										MarkdownDescription: "Configure bgp related timers.",
+										Computed:            true,
+									},
+									"timer_bestpath_defer_max": schema.Int64Attribute{
+										MarkdownDescription: "Configure bestpath defer timer.",
 										Computed:            true,
 									},
 									"advertised_prefixes": schema.ListNestedAttribute{
@@ -243,6 +439,10 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 													MarkdownDescription: "SRv6 Prefix Type; Valid only when proto is srv6.",
 													Computed:            true,
 												},
+												"asn": schema.StringAttribute{
+													MarkdownDescription: "The autonomous system number.",
+													Computed:            true,
+												},
 											},
 										},
 									},
@@ -274,6 +474,86 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										MarkdownDescription: "Source Interface. Must match first field in the output of `show intf brief`.",
 										Computed:            true,
 									},
+									"admin_state": schema.StringAttribute{
+										MarkdownDescription: "Administrative State.",
+										Computed:            true,
+									},
+									"affinity_group": schema.Int64Attribute{
+										MarkdownDescription: "Affinity group for the neighbor.",
+										Computed:            true,
+									},
+									"asn_type": schema.StringAttribute{
+										MarkdownDescription: "Specify peer ASN type as External or Internal.",
+										Computed:            true,
+									},
+									"bfd_type": schema.StringAttribute{
+										MarkdownDescription: "Specify BFD session type.",
+										Computed:            true,
+									},
+									"bmp_server_1": schema.StringAttribute{
+										MarkdownDescription: "Activate BMP Server 1.",
+										Computed:            true,
+									},
+									"bmp_server_2": schema.StringAttribute{
+										MarkdownDescription: "Activate BMP Server 2.",
+										Computed:            true,
+									},
+									"capability_suppress_4_byte_asn": schema.StringAttribute{
+										MarkdownDescription: "Capability Suppress 4-byte-as.",
+										Computed:            true,
+									},
+									"connection_mode": schema.StringAttribute{
+										MarkdownDescription: "Connection Mode.",
+										Computed:            true,
+									},
+									"peer_control": schema.StringAttribute{
+										MarkdownDescription: "Control. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.",
+										Computed:            true,
+									},
+									"hold_time": schema.Int64Attribute{
+										MarkdownDescription: "Hold Interval.",
+										Computed:            true,
+									},
+									"keepalive_interval": schema.Int64Attribute{
+										MarkdownDescription: "Keepalive Interval.",
+										Computed:            true,
+									},
+									"log_neighbor_changes": schema.StringAttribute{
+										MarkdownDescription: "Log Neighbor Changes.",
+										Computed:            true,
+									},
+									"low_memory_exempt": schema.StringAttribute{
+										MarkdownDescription: "Low Memory Exempt.",
+										Computed:            true,
+									},
+									"max_peer_count": schema.Int64Attribute{
+										MarkdownDescription: "Maximum Peers for the prefix or interface.",
+										Computed:            true,
+									},
+									"password_type": schema.StringAttribute{
+										MarkdownDescription: "Password EnCrypt Type.",
+										Computed:            true,
+									},
+									"password": schema.StringAttribute{
+										MarkdownDescription: "Configure a password for neighbor.",
+										Computed:            true,
+									},
+									"private_as_control": schema.StringAttribute{
+										MarkdownDescription: "Private AS Control.",
+										Computed:            true,
+									},
+									"session_template": schema.StringAttribute{
+										MarkdownDescription: "Importing Session Specific properties from Session Template.",
+										Computed:            true,
+									},
+									"ebgp_multihop_ttl": schema.Int64Attribute{
+										MarkdownDescription: "eBGP Multihop.",
+										Computed:            true,
+									},
+									"ttl_security_hops": schema.Int64Attribute{
+										MarkdownDescription: "Enable TTL Security Mechanism with hop counts specified for remote peers.",
+										Computed:            true,
+									},
 									"peer_template_address_families": schema.ListNestedAttribute{
 										MarkdownDescription: "List of BGP peer template address families.",
 										Computed:            true,
@@ -293,6 +573,74 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 												},
 												"send_community_standard": schema.StringAttribute{
 													MarkdownDescription: "Send-community standard.",
+													Computed:            true,
+												},
+												"advertise_gateway_ip": schema.StringAttribute{
+													MarkdownDescription: "Advertise Gateway IP in Type-5 routes to neighbor.",
+													Computed:            true,
+												},
+												"advertisement_interval": schema.Int64Attribute{
+													MarkdownDescription: "Neighbor advertisement interval.",
+													Computed:            true,
+												},
+												"advertise_local_labeled_route": schema.StringAttribute{
+													MarkdownDescription: "Advertise a route with local label to peer.",
+													Computed:            true,
+												},
+												"aigp": schema.StringAttribute{
+													MarkdownDescription: "Send and recieve AIGP attribute.",
+													Computed:            true,
+												},
+												"allowed_self_as_count": schema.Int64Attribute{
+													MarkdownDescription: "Allowed Self AS Count.",
+													Computed:            true,
+												},
+												"as_override": schema.StringAttribute{
+													MarkdownDescription: "Override matching AS-number while sending update.",
+													Computed:            true,
+												},
+												"default_originate": schema.StringAttribute{
+													MarkdownDescription: "Default Originate is enabled.",
+													Computed:            true,
+												},
+												"default_originate_route_map": schema.StringAttribute{
+													MarkdownDescription: "Default Originate Route Map.",
+													Computed:            true,
+												},
+												"dmz_link_bandwidth": schema.StringAttribute{
+													MarkdownDescription: "Dmz-link-bandwidth.",
+													Computed:            true,
+												},
+												"encapsulation_mpls": schema.StringAttribute{
+													MarkdownDescription: "Configure encapsulation type for EVPN routes.",
+													Computed:            true,
+												},
+												"link_bandwidth_cumulative": schema.StringAttribute{
+													MarkdownDescription: "Link-bandwidth Cumulative.",
+													Computed:            true,
+												},
+												"nexthop_thirdparty": schema.StringAttribute{
+													MarkdownDescription: "Compute a third-party nexthop if possible.",
+													Computed:            true,
+												},
+												"rewrite_rt_asn": schema.StringAttribute{
+													MarkdownDescription: "Auto generate RTs for EBGP neighbor.",
+													Computed:            true,
+												},
+												"soft_reconfiguration_backup": schema.StringAttribute{
+													MarkdownDescription: "Soft Reconfiguration.",
+													Computed:            true,
+												},
+												"site_of_origin": schema.StringAttribute{
+													MarkdownDescription: "Site-of-origin extcommunity.",
+													Computed:            true,
+												},
+												"unsuppress_map": schema.StringAttribute{
+													MarkdownDescription: "Route-map to selectively unsuppress suppressed routes.",
+													Computed:            true,
+												},
+												"weight": schema.StringAttribute{
+													MarkdownDescription: "Weight for the neighbor.",
 													Computed:            true,
 												},
 												"max_prefix_action": schema.StringAttribute{
@@ -370,6 +718,62 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 										MarkdownDescription: "Password.",
 										Computed:            true,
 									},
+									"admin_state": schema.StringAttribute{
+										MarkdownDescription: "Administrative State.",
+										Computed:            true,
+									},
+									"affinity_group": schema.Int64Attribute{
+										MarkdownDescription: "Affinity group for the neighbor.",
+										Computed:            true,
+									},
+									"asn_type": schema.StringAttribute{
+										MarkdownDescription: "Specify peer ASN type as External or Internal.",
+										Computed:            true,
+									},
+									"bfd_type": schema.StringAttribute{
+										MarkdownDescription: "Specify BFD session type.",
+										Computed:            true,
+									},
+									"bmp_server_1": schema.StringAttribute{
+										MarkdownDescription: "Activate BMP Server 1.",
+										Computed:            true,
+									},
+									"bmp_server_2": schema.StringAttribute{
+										MarkdownDescription: "Activate BMP Server 2.",
+										Computed:            true,
+									},
+									"capability_suppress_4_byte_asn": schema.StringAttribute{
+										MarkdownDescription: "Capability Suppress 4-byte-as.",
+										Computed:            true,
+									},
+									"connection_mode": schema.StringAttribute{
+										MarkdownDescription: "BGP transport connection mode.",
+										Computed:            true,
+									},
+									"log_neighbor_changes": schema.StringAttribute{
+										MarkdownDescription: "Log messages for Neighbor up/down events.",
+										Computed:            true,
+									},
+									"low_memory_exempt": schema.StringAttribute{
+										MarkdownDescription: "Low Memory Exempt.",
+										Computed:            true,
+									},
+									"max_peer_count": schema.Int64Attribute{
+										MarkdownDescription: "Maximum Peers For Prefix.",
+										Computed:            true,
+									},
+									"private_as_control": schema.StringAttribute{
+										MarkdownDescription: "Remove private AS number from outbound updates.",
+										Computed:            true,
+									},
+									"session_template": schema.StringAttribute{
+										MarkdownDescription: "Peer Session Template To Import From.",
+										Computed:            true,
+									},
+									"ttl_security_hops": schema.Int64Attribute{
+										MarkdownDescription: "Enable TTL Security Mechanism.",
+										Computed:            true,
+									},
 									"local_asn_propagation": schema.StringAttribute{
 										MarkdownDescription: "ASN Propagation.",
 										Computed:            true,
@@ -397,6 +801,74 @@ func (d *BGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 												},
 												"send_community_standard": schema.StringAttribute{
 													MarkdownDescription: "Send-community standard.",
+													Computed:            true,
+												},
+												"advertise_gateway_ip": schema.StringAttribute{
+													MarkdownDescription: "Advertise Gateway IP in Type-5 routes to neighbor.",
+													Computed:            true,
+												},
+												"advertisement_interval": schema.Int64Attribute{
+													MarkdownDescription: "Neighbor advertisement interval.",
+													Computed:            true,
+												},
+												"advertise_local_labeled_route": schema.StringAttribute{
+													MarkdownDescription: "Advertise a route with local label to peer.",
+													Computed:            true,
+												},
+												"aigp": schema.StringAttribute{
+													MarkdownDescription: "Send and recieve AIGP attribute.",
+													Computed:            true,
+												},
+												"allowed_self_as_count": schema.Int64Attribute{
+													MarkdownDescription: "Allowed Self AS Count.",
+													Computed:            true,
+												},
+												"as_override": schema.StringAttribute{
+													MarkdownDescription: "Override matching AS-number while sending update.",
+													Computed:            true,
+												},
+												"default_originate": schema.StringAttribute{
+													MarkdownDescription: "Default Originate is enabled.",
+													Computed:            true,
+												},
+												"default_originate_route_map": schema.StringAttribute{
+													MarkdownDescription: "Default Originate Route Map.",
+													Computed:            true,
+												},
+												"dmz_link_bandwidth": schema.StringAttribute{
+													MarkdownDescription: "Dmz-link-bandwidth.",
+													Computed:            true,
+												},
+												"encapsulation_mpls": schema.StringAttribute{
+													MarkdownDescription: "Configure encapsulation type for EVPN routes.",
+													Computed:            true,
+												},
+												"link_bandwidth_cumulative": schema.StringAttribute{
+													MarkdownDescription: "Link-bandwidth Cumulative.",
+													Computed:            true,
+												},
+												"nexthop_thirdparty": schema.StringAttribute{
+													MarkdownDescription: "Compute a third-party nexthop if possible.",
+													Computed:            true,
+												},
+												"rewrite_rt_asn": schema.StringAttribute{
+													MarkdownDescription: "Auto generate RTs for EBGP neighbor.",
+													Computed:            true,
+												},
+												"soft_reconfiguration_backup": schema.StringAttribute{
+													MarkdownDescription: "Soft Reconfiguration.",
+													Computed:            true,
+												},
+												"site_of_origin": schema.StringAttribute{
+													MarkdownDescription: "Site-of-origin extcommunity.",
+													Computed:            true,
+												},
+												"unsuppress_map": schema.StringAttribute{
+													MarkdownDescription: "Route-map to selectively unsuppress suppressed routes.",
+													Computed:            true,
+												},
+												"weight": schema.StringAttribute{
+													MarkdownDescription: "Weight for the neighbor.",
 													Computed:            true,
 												},
 												"route_controls": schema.ListNestedAttribute{

@@ -38,22 +38,51 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type BGP struct {
-	Device                types.String `tfsdk:"device"`
-	Dn                    types.String `tfsdk:"id"`
-	AdminState            types.String `tfsdk:"admin_state"`
-	InstanceAdminState    types.String `tfsdk:"instance_admin_state"`
-	Asn                   types.String `tfsdk:"asn"`
-	EnhancedErrorHandling types.Bool   `tfsdk:"enhanced_error_handling"`
-	Vrfs                  []BGPVrfs    `tfsdk:"vrfs"`
+	Device                              types.String `tfsdk:"device"`
+	Dn                                  types.String `tfsdk:"id"`
+	AdminState                          types.String `tfsdk:"admin_state"`
+	InstanceAdminState                  types.String `tfsdk:"instance_admin_state"`
+	Asn                                 types.String `tfsdk:"asn"`
+	Control                             types.String `tfsdk:"control"`
+	DisablePolicyBatching               types.String `tfsdk:"disable_policy_batching"`
+	DisablePolicyBatchingNexthop        types.String `tfsdk:"disable_policy_batching_nexthop"`
+	DisablePolicyBatchingIpv4PrefixList types.String `tfsdk:"disable_policy_batching_ipv4_prefix_list"`
+	DisablePolicyBatchingIpv6PrefixList types.String `tfsdk:"disable_policy_batching_ipv6_prefix_list"`
+	EnhancedErrorHandling               types.Bool   `tfsdk:"enhanced_error_handling"`
+	FabricSoo                           types.String `tfsdk:"fabric_soo"`
+	FlushRoutes                         types.String `tfsdk:"flush_routes"`
+	Isolate                             types.String `tfsdk:"isolate"`
+	IsolateRouteMap                     types.String `tfsdk:"isolate_route_map"`
+	MedDampeningInterval                types.Int64  `tfsdk:"med_dampening_interval"`
+	NexthopSuppressDefaultResolution    types.String `tfsdk:"nexthop_suppress_default_resolution"`
+	RdDual                              types.String `tfsdk:"rd_dual"`
+	RdDualId                            types.Int64  `tfsdk:"rd_dual_id"`
+	Vrfs                                []BGPVrfs    `tfsdk:"vrfs"`
 }
 
 type BGPVrfs struct {
 	Name                           types.String             `tfsdk:"name"`
 	RouterId                       types.String             `tfsdk:"router_id"`
+	AllocIndex                     types.Int64              `tfsdk:"alloc_index"`
+	BestpathFirstAlways            types.String             `tfsdk:"bestpath_first_always"`
+	BestpathInterval               types.Int64              `tfsdk:"bestpath_interval"`
+	BandwidthReference             types.Int64              `tfsdk:"bandwidth_reference"`
+	BandwidthReferenceUnit         types.String             `tfsdk:"bandwidth_reference_unit"`
+	ClusterId                      types.String             `tfsdk:"cluster_id"`
+	HoldTime                       types.Int64              `tfsdk:"hold_time"`
+	KeepaliveInterval              types.Int64              `tfsdk:"keepalive_interval"`
+	LocalAsn                       types.String             `tfsdk:"local_asn"`
+	MaxAsLimit                     types.Int64              `tfsdk:"max_as_limit"`
+	Mode                           types.String             `tfsdk:"mode"`
+	PrefixPeerTimeout              types.Int64              `tfsdk:"prefix_peer_timeout"`
+	PrefixPeerWaitTime             types.Int64              `tfsdk:"prefix_peer_wait_time"`
+	ReconnectInterval              types.Int64              `tfsdk:"reconnect_interval"`
+	RouterIdAuto                   types.String             `tfsdk:"router_id_auto"`
 	RouteControlEnforceFirstAs     types.String             `tfsdk:"route_control_enforce_first_as"`
 	RouteControlFibAccelerate      types.String             `tfsdk:"route_control_fib_accelerate"`
 	RouteControlLogNeighborChanges types.String             `tfsdk:"route_control_log_neighbor_changes"`
 	RouteControlSuppressRoutes     types.String             `tfsdk:"route_control_suppress_routes"`
+	GracefulRestartControl         types.String             `tfsdk:"graceful_restart_control"`
 	GracefulRestartInterval        types.Int64              `tfsdk:"graceful_restart_interval"`
 	GracefulRestartStaleInterval   types.Int64              `tfsdk:"graceful_restart_stale_interval"`
 	AddressFamilies                []BGPVrfsAddressFamilies `tfsdk:"address_families"`
@@ -80,6 +109,26 @@ type BGPVrfsAddressFamilies struct {
 	TableMapRouteMapName              types.String                               `tfsdk:"table_map_route_map_name"`
 	VniEthernetTag                    types.String                               `tfsdk:"vni_ethernet_tag"`
 	WaitIgpConverged                  types.String                               `tfsdk:"wait_igp_converged"`
+	AdvertiseSystemMac                types.String                               `tfsdk:"advertise_system_mac"`
+	AllocateLabelAll                  types.String                               `tfsdk:"allocate_label_all"`
+	AllocateLabelOptionB              types.String                               `tfsdk:"allocate_label_option_b"`
+	AllocateLabelRouteMap             types.String                               `tfsdk:"allocate_label_route_map"`
+	BestpathOriginAsAllowInvalid      types.String                               `tfsdk:"bestpath_origin_as_allow_invalid"`
+	BestpathOriginAsUseValidity       types.String                               `tfsdk:"bestpath_origin_as_use_validity"`
+	ClientToClientReflection          types.String                               `tfsdk:"client_to_client_reflection"`
+	DefaultMetric                     types.String                               `tfsdk:"default_metric"`
+	ExportGatewayIp                   types.String                               `tfsdk:"export_gateway_ip"`
+	IgpMetric                         types.Int64                                `tfsdk:"igp_metric"`
+	LabelAllocationMode               types.String                               `tfsdk:"label_allocation_mode"`
+	MaxPathUnequalCost                types.String                               `tfsdk:"max_path_unequal_cost"`
+	NexthopLoadBalanceEgressMultisite types.String                               `tfsdk:"nexthop_load_balance_egress_multisite"`
+	OriginateMap                      types.String                               `tfsdk:"originate_map"`
+	OriginAsValidate                  types.String                               `tfsdk:"origin_as_validate"`
+	OriginAsValidateSignalIbgp        types.String                               `tfsdk:"origin_as_validate_signal_ibgp"`
+	RetainRtRouteMap                  types.String                               `tfsdk:"retain_rt_route_map"`
+	TableMapFilter                    types.String                               `tfsdk:"table_map_filter"`
+	TimerBestpathDefer                types.Int64                                `tfsdk:"timer_bestpath_defer"`
+	TimerBestpathDeferMax             types.Int64                                `tfsdk:"timer_bestpath_defer_max"`
 	AdvertisedPrefixes                []BGPVrfsAddressFamiliesAdvertisedPrefixes `tfsdk:"advertised_prefixes"`
 	Redistributions                   []BGPVrfsAddressFamiliesRedistributions    `tfsdk:"redistributions"`
 }
@@ -96,6 +145,7 @@ type BGPVrfsAddressFamiliesRedistributions struct {
 	RouteMap         types.String `tfsdk:"route_map"`
 	Scope            types.String `tfsdk:"scope"`
 	Srv6PrefixType   types.String `tfsdk:"srv6_prefix_type"`
+	Asn              types.String `tfsdk:"asn"`
 }
 
 type BGPVrfsPeerTemplates struct {
@@ -104,45 +154,113 @@ type BGPVrfsPeerTemplates struct {
 	Description                 types.String                                      `tfsdk:"description"`
 	PeerType                    types.String                                      `tfsdk:"peer_type"`
 	SourceInterface             types.String                                      `tfsdk:"source_interface"`
+	AdminState                  types.String                                      `tfsdk:"admin_state"`
+	AffinityGroup               types.Int64                                       `tfsdk:"affinity_group"`
+	AsnType                     types.String                                      `tfsdk:"asn_type"`
+	BfdType                     types.String                                      `tfsdk:"bfd_type"`
+	BmpServer1                  types.String                                      `tfsdk:"bmp_server_1"`
+	BmpServer2                  types.String                                      `tfsdk:"bmp_server_2"`
+	CapabilitySuppress4ByteAsn  types.String                                      `tfsdk:"capability_suppress_4_byte_asn"`
+	ConnectionMode              types.String                                      `tfsdk:"connection_mode"`
+	PeerControl                 types.String                                      `tfsdk:"peer_control"`
+	HoldTime                    types.Int64                                       `tfsdk:"hold_time"`
+	KeepaliveInterval           types.Int64                                       `tfsdk:"keepalive_interval"`
+	LogNeighborChanges          types.String                                      `tfsdk:"log_neighbor_changes"`
+	LowMemoryExempt             types.String                                      `tfsdk:"low_memory_exempt"`
+	MaxPeerCount                types.Int64                                       `tfsdk:"max_peer_count"`
+	PasswordType                types.String                                      `tfsdk:"password_type"`
+	Password                    types.String                                      `tfsdk:"password"`
+	PrivateAsControl            types.String                                      `tfsdk:"private_as_control"`
+	SessionTemplate             types.String                                      `tfsdk:"session_template"`
+	EbgpMultihopTtl             types.Int64                                       `tfsdk:"ebgp_multihop_ttl"`
+	TtlSecurityHops             types.Int64                                       `tfsdk:"ttl_security_hops"`
 	PeerTemplateAddressFamilies []BGPVrfsPeerTemplatesPeerTemplateAddressFamilies `tfsdk:"peer_template_address_families"`
 }
 
 type BGPVrfsPeerTemplatesPeerTemplateAddressFamilies struct {
-	AddressFamily         types.String `tfsdk:"address_family"`
-	Control               types.String `tfsdk:"control"`
-	SendCommunityExtended types.String `tfsdk:"send_community_extended"`
-	SendCommunityStandard types.String `tfsdk:"send_community_standard"`
-	MaxPrefixAction       types.String `tfsdk:"max_prefix_action"`
-	MaxPrefixNumber       types.Int64  `tfsdk:"max_prefix_number"`
-	MaxPrefixRestartTime  types.Int64  `tfsdk:"max_prefix_restart_time"`
-	MaxPrefixThreshold    types.Int64  `tfsdk:"max_prefix_threshold"`
+	AddressFamily              types.String `tfsdk:"address_family"`
+	Control                    types.String `tfsdk:"control"`
+	SendCommunityExtended      types.String `tfsdk:"send_community_extended"`
+	SendCommunityStandard      types.String `tfsdk:"send_community_standard"`
+	AdvertiseGatewayIp         types.String `tfsdk:"advertise_gateway_ip"`
+	AdvertisementInterval      types.Int64  `tfsdk:"advertisement_interval"`
+	AdvertiseLocalLabeledRoute types.String `tfsdk:"advertise_local_labeled_route"`
+	Aigp                       types.String `tfsdk:"aigp"`
+	AllowedSelfAsCount         types.Int64  `tfsdk:"allowed_self_as_count"`
+	AsOverride                 types.String `tfsdk:"as_override"`
+	DefaultOriginate           types.String `tfsdk:"default_originate"`
+	DefaultOriginateRouteMap   types.String `tfsdk:"default_originate_route_map"`
+	DmzLinkBandwidth           types.String `tfsdk:"dmz_link_bandwidth"`
+	EncapsulationMpls          types.String `tfsdk:"encapsulation_mpls"`
+	LinkBandwidthCumulative    types.String `tfsdk:"link_bandwidth_cumulative"`
+	NexthopThirdparty          types.String `tfsdk:"nexthop_thirdparty"`
+	RewriteRtAsn               types.String `tfsdk:"rewrite_rt_asn"`
+	SoftReconfigurationBackup  types.String `tfsdk:"soft_reconfiguration_backup"`
+	SiteOfOrigin               types.String `tfsdk:"site_of_origin"`
+	UnsuppressMap              types.String `tfsdk:"unsuppress_map"`
+	Weight                     types.String `tfsdk:"weight"`
+	MaxPrefixAction            types.String `tfsdk:"max_prefix_action"`
+	MaxPrefixNumber            types.Int64  `tfsdk:"max_prefix_number"`
+	MaxPrefixRestartTime       types.Int64  `tfsdk:"max_prefix_restart_time"`
+	MaxPrefixThreshold         types.Int64  `tfsdk:"max_prefix_threshold"`
 }
 
 type BGPVrfsPeers struct {
-	Address             types.String                      `tfsdk:"address"`
-	RemoteAsn           types.String                      `tfsdk:"remote_asn"`
-	Description         types.String                      `tfsdk:"description"`
-	PeerTemplate        types.String                      `tfsdk:"peer_template"`
-	PeerType            types.String                      `tfsdk:"peer_type"`
-	SourceInterface     types.String                      `tfsdk:"source_interface"`
-	HoldTime            types.Int64                       `tfsdk:"hold_time"`
-	KeepaliveInterval   types.Int64                       `tfsdk:"keepalive_interval"`
-	EbgpMultihopTtl     types.Int64                       `tfsdk:"ebgp_multihop_ttl"`
-	PeerControl         types.String                      `tfsdk:"peer_control"`
-	PasswordType        types.String                      `tfsdk:"password_type"`
-	Password            types.String                      `tfsdk:"password"`
-	LocalAsnPropagation types.String                      `tfsdk:"local_asn_propagation"`
-	LocalAsn            types.String                      `tfsdk:"local_asn"`
-	PeerAddressFamilies []BGPVrfsPeersPeerAddressFamilies `tfsdk:"peer_address_families"`
+	Address                    types.String                      `tfsdk:"address"`
+	RemoteAsn                  types.String                      `tfsdk:"remote_asn"`
+	Description                types.String                      `tfsdk:"description"`
+	PeerTemplate               types.String                      `tfsdk:"peer_template"`
+	PeerType                   types.String                      `tfsdk:"peer_type"`
+	SourceInterface            types.String                      `tfsdk:"source_interface"`
+	HoldTime                   types.Int64                       `tfsdk:"hold_time"`
+	KeepaliveInterval          types.Int64                       `tfsdk:"keepalive_interval"`
+	EbgpMultihopTtl            types.Int64                       `tfsdk:"ebgp_multihop_ttl"`
+	PeerControl                types.String                      `tfsdk:"peer_control"`
+	PasswordType               types.String                      `tfsdk:"password_type"`
+	Password                   types.String                      `tfsdk:"password"`
+	AdminState                 types.String                      `tfsdk:"admin_state"`
+	AffinityGroup              types.Int64                       `tfsdk:"affinity_group"`
+	AsnType                    types.String                      `tfsdk:"asn_type"`
+	BfdType                    types.String                      `tfsdk:"bfd_type"`
+	BmpServer1                 types.String                      `tfsdk:"bmp_server_1"`
+	BmpServer2                 types.String                      `tfsdk:"bmp_server_2"`
+	CapabilitySuppress4ByteAsn types.String                      `tfsdk:"capability_suppress_4_byte_asn"`
+	ConnectionMode             types.String                      `tfsdk:"connection_mode"`
+	LogNeighborChanges         types.String                      `tfsdk:"log_neighbor_changes"`
+	LowMemoryExempt            types.String                      `tfsdk:"low_memory_exempt"`
+	MaxPeerCount               types.Int64                       `tfsdk:"max_peer_count"`
+	PrivateAsControl           types.String                      `tfsdk:"private_as_control"`
+	SessionTemplate            types.String                      `tfsdk:"session_template"`
+	TtlSecurityHops            types.Int64                       `tfsdk:"ttl_security_hops"`
+	LocalAsnPropagation        types.String                      `tfsdk:"local_asn_propagation"`
+	LocalAsn                   types.String                      `tfsdk:"local_asn"`
+	PeerAddressFamilies        []BGPVrfsPeersPeerAddressFamilies `tfsdk:"peer_address_families"`
 }
 
 type BGPVrfsPeersPeerAddressFamilies struct {
-	AddressFamily         types.String                                        `tfsdk:"address_family"`
-	Control               types.String                                        `tfsdk:"control"`
-	SendCommunityExtended types.String                                        `tfsdk:"send_community_extended"`
-	SendCommunityStandard types.String                                        `tfsdk:"send_community_standard"`
-	RouteControls         []BGPVrfsPeersPeerAddressFamiliesRouteControls      `tfsdk:"route_controls"`
-	PrefixListControls    []BGPVrfsPeersPeerAddressFamiliesPrefixListControls `tfsdk:"prefix_list_controls"`
+	AddressFamily              types.String                                        `tfsdk:"address_family"`
+	Control                    types.String                                        `tfsdk:"control"`
+	SendCommunityExtended      types.String                                        `tfsdk:"send_community_extended"`
+	SendCommunityStandard      types.String                                        `tfsdk:"send_community_standard"`
+	AdvertiseGatewayIp         types.String                                        `tfsdk:"advertise_gateway_ip"`
+	AdvertisementInterval      types.Int64                                         `tfsdk:"advertisement_interval"`
+	AdvertiseLocalLabeledRoute types.String                                        `tfsdk:"advertise_local_labeled_route"`
+	Aigp                       types.String                                        `tfsdk:"aigp"`
+	AllowedSelfAsCount         types.Int64                                         `tfsdk:"allowed_self_as_count"`
+	AsOverride                 types.String                                        `tfsdk:"as_override"`
+	DefaultOriginate           types.String                                        `tfsdk:"default_originate"`
+	DefaultOriginateRouteMap   types.String                                        `tfsdk:"default_originate_route_map"`
+	DmzLinkBandwidth           types.String                                        `tfsdk:"dmz_link_bandwidth"`
+	EncapsulationMpls          types.String                                        `tfsdk:"encapsulation_mpls"`
+	LinkBandwidthCumulative    types.String                                        `tfsdk:"link_bandwidth_cumulative"`
+	NexthopThirdparty          types.String                                        `tfsdk:"nexthop_thirdparty"`
+	RewriteRtAsn               types.String                                        `tfsdk:"rewrite_rt_asn"`
+	SoftReconfigurationBackup  types.String                                        `tfsdk:"soft_reconfiguration_backup"`
+	SiteOfOrigin               types.String                                        `tfsdk:"site_of_origin"`
+	UnsuppressMap              types.String                                        `tfsdk:"unsuppress_map"`
+	Weight                     types.String                                        `tfsdk:"weight"`
+	RouteControls              []BGPVrfsPeersPeerAddressFamiliesRouteControls      `tfsdk:"route_controls"`
+	PrefixListControls         []BGPVrfsPeersPeerAddressFamiliesPrefixListControls `tfsdk:"prefix_list_controls"`
 }
 
 type BGPVrfsPeersPeerAddressFamiliesRouteControls struct {
@@ -249,8 +367,47 @@ func (data BGP) toBody() nxos.Body {
 		if (!data.Asn.IsUnknown() && !data.Asn.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "asn", data.Asn.ValueString())
 		}
+		if (!data.Control.IsUnknown() && !data.Control.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "ctrl", data.Control.ValueString())
+		}
+		if (!data.DisablePolicyBatching.IsUnknown() && !data.DisablePolicyBatching.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "disPolBatch", data.DisablePolicyBatching.ValueString())
+		}
+		if (!data.DisablePolicyBatchingNexthop.IsUnknown() && !data.DisablePolicyBatchingNexthop.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "disPolBatchNexthop", data.DisablePolicyBatchingNexthop.ValueString())
+		}
+		if (!data.DisablePolicyBatchingIpv4PrefixList.IsUnknown() && !data.DisablePolicyBatchingIpv4PrefixList.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "disPolBatchv4PfxLst", data.DisablePolicyBatchingIpv4PrefixList.ValueString())
+		}
+		if (!data.DisablePolicyBatchingIpv6PrefixList.IsUnknown() && !data.DisablePolicyBatchingIpv6PrefixList.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "disPolBatchv6PfxLst", data.DisablePolicyBatchingIpv6PrefixList.ValueString())
+		}
 		if (!data.EnhancedErrorHandling.IsUnknown() && !data.EnhancedErrorHandling.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "enhancedErr", strconv.FormatBool(data.EnhancedErrorHandling.ValueBool()))
+		}
+		if (!data.FabricSoo.IsUnknown() && !data.FabricSoo.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "fabricSoo", data.FabricSoo.ValueString())
+		}
+		if (!data.FlushRoutes.IsUnknown() && !data.FlushRoutes.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "flushRoutes", data.FlushRoutes.ValueString())
+		}
+		if (!data.Isolate.IsUnknown() && !data.Isolate.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "isolate", data.Isolate.ValueString())
+		}
+		if (!data.IsolateRouteMap.IsUnknown() && !data.IsolateRouteMap.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "isolateRtMap", data.IsolateRouteMap.ValueString())
+		}
+		if (!data.MedDampeningInterval.IsUnknown() && !data.MedDampeningInterval.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "medDampIntvl", strconv.FormatInt(data.MedDampeningInterval.ValueInt64(), 10))
+		}
+		if (!data.NexthopSuppressDefaultResolution.IsUnknown() && !data.NexthopSuppressDefaultResolution.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "nhSupprDefRes", data.NexthopSuppressDefaultResolution.ValueString())
+		}
+		if (!data.RdDual.IsUnknown() && !data.RdDual.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "rdDual", data.RdDual.ValueString())
+		}
+		if (!data.RdDualId.IsUnknown() && !data.RdDualId.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "rdDualId", strconv.FormatInt(data.RdDualId.ValueInt64(), 10))
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
@@ -261,6 +418,51 @@ func (data BGP) toBody() nxos.Body {
 			}
 			if (!child.RouterId.IsUnknown() && !child.RouterId.IsNull()) || false {
 				attrs, _ = sjson.Set(attrs, "rtrId", child.RouterId.ValueString())
+			}
+			if (!child.AllocIndex.IsUnknown() && !child.AllocIndex.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "allocIndex", strconv.FormatInt(child.AllocIndex.ValueInt64(), 10))
+			}
+			if (!child.BestpathFirstAlways.IsUnknown() && !child.BestpathFirstAlways.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "always", child.BestpathFirstAlways.ValueString())
+			}
+			if (!child.BestpathInterval.IsUnknown() && !child.BestpathInterval.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "bestPathIntvl", strconv.FormatInt(child.BestpathInterval.ValueInt64(), 10))
+			}
+			if (!child.BandwidthReference.IsUnknown() && !child.BandwidthReference.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "bwRef", strconv.FormatInt(child.BandwidthReference.ValueInt64(), 10))
+			}
+			if (!child.BandwidthReferenceUnit.IsUnknown() && !child.BandwidthReferenceUnit.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "bwRefUnit", child.BandwidthReferenceUnit.ValueString())
+			}
+			if (!child.ClusterId.IsUnknown() && !child.ClusterId.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "clusterId", child.ClusterId.ValueString())
+			}
+			if (!child.HoldTime.IsUnknown() && !child.HoldTime.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "holdIntvl", strconv.FormatInt(child.HoldTime.ValueInt64(), 10))
+			}
+			if (!child.KeepaliveInterval.IsUnknown() && !child.KeepaliveInterval.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "kaIntvl", strconv.FormatInt(child.KeepaliveInterval.ValueInt64(), 10))
+			}
+			if (!child.LocalAsn.IsUnknown() && !child.LocalAsn.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "localAsn", child.LocalAsn.ValueString())
+			}
+			if (!child.MaxAsLimit.IsUnknown() && !child.MaxAsLimit.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "maxAsLimit", strconv.FormatInt(child.MaxAsLimit.ValueInt64(), 10))
+			}
+			if (!child.Mode.IsUnknown() && !child.Mode.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "mode", child.Mode.ValueString())
+			}
+			if (!child.PrefixPeerTimeout.IsUnknown() && !child.PrefixPeerTimeout.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "pfxPeerTimeout", strconv.FormatInt(child.PrefixPeerTimeout.ValueInt64(), 10))
+			}
+			if (!child.PrefixPeerWaitTime.IsUnknown() && !child.PrefixPeerWaitTime.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "pfxPeerWaitTime", strconv.FormatInt(child.PrefixPeerWaitTime.ValueInt64(), 10))
+			}
+			if (!child.ReconnectInterval.IsUnknown() && !child.ReconnectInterval.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "reConnIntvl", strconv.FormatInt(child.ReconnectInterval.ValueInt64(), 10))
+			}
+			if (!child.RouterIdAuto.IsUnknown() && !child.RouterIdAuto.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "rtrIdAuto", child.RouterIdAuto.ValueString())
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bgpDom.attributes", attrs)
 			{
@@ -283,6 +485,9 @@ func (data BGP) toBody() nxos.Body {
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bgpRtCtrl.attributes", attrs)
 				}
 				attrs = "{}"
+				if (!child.GracefulRestartControl.IsUnknown() && !child.GracefulRestartControl.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "ctrl", child.GracefulRestartControl.ValueString())
+				}
 				if (!child.GracefulRestartInterval.IsUnknown() && !child.GracefulRestartInterval.IsNull()) || false {
 					attrs, _ = sjson.Set(attrs, "restartIntvl", strconv.FormatInt(child.GracefulRestartInterval.ValueInt64(), 10))
 				}
@@ -348,6 +553,66 @@ func (data BGP) toBody() nxos.Body {
 					if (!child.WaitIgpConverged.IsUnknown() && !child.WaitIgpConverged.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "waitIgpConv", child.WaitIgpConverged.ValueString())
 					}
+					if (!child.AdvertiseSystemMac.IsUnknown() && !child.AdvertiseSystemMac.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "advSysMac", child.AdvertiseSystemMac.ValueString())
+					}
+					if (!child.AllocateLabelAll.IsUnknown() && !child.AllocateLabelAll.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "allocLblAll", child.AllocateLabelAll.ValueString())
+					}
+					if (!child.AllocateLabelOptionB.IsUnknown() && !child.AllocateLabelOptionB.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "allocLblOptB", child.AllocateLabelOptionB.ValueString())
+					}
+					if (!child.AllocateLabelRouteMap.IsUnknown() && !child.AllocateLabelRouteMap.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "allocLblRtMap", child.AllocateLabelRouteMap.ValueString())
+					}
+					if (!child.BestpathOriginAsAllowInvalid.IsUnknown() && !child.BestpathOriginAsAllowInvalid.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "bestPathOriginAsAllowInvalid", child.BestpathOriginAsAllowInvalid.ValueString())
+					}
+					if (!child.BestpathOriginAsUseValidity.IsUnknown() && !child.BestpathOriginAsUseValidity.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "bestPathOriginAsUseValidity", child.BestpathOriginAsUseValidity.ValueString())
+					}
+					if (!child.ClientToClientReflection.IsUnknown() && !child.ClientToClientReflection.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "clReflection", child.ClientToClientReflection.ValueString())
+					}
+					if (!child.DefaultMetric.IsUnknown() && !child.DefaultMetric.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "defMetric", child.DefaultMetric.ValueString())
+					}
+					if (!child.ExportGatewayIp.IsUnknown() && !child.ExportGatewayIp.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "exportGwIp", child.ExportGatewayIp.ValueString())
+					}
+					if (!child.IgpMetric.IsUnknown() && !child.IgpMetric.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "igpMetric", strconv.FormatInt(child.IgpMetric.ValueInt64(), 10))
+					}
+					if (!child.LabelAllocationMode.IsUnknown() && !child.LabelAllocationMode.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "lblAllocMod", child.LabelAllocationMode.ValueString())
+					}
+					if (!child.MaxPathUnequalCost.IsUnknown() && !child.MaxPathUnequalCost.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "maxPathUnequalCost", child.MaxPathUnequalCost.ValueString())
+					}
+					if (!child.NexthopLoadBalanceEgressMultisite.IsUnknown() && !child.NexthopLoadBalanceEgressMultisite.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "nhLdBalEgrMultiSite", child.NexthopLoadBalanceEgressMultisite.ValueString())
+					}
+					if (!child.OriginateMap.IsUnknown() && !child.OriginateMap.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "origMap", child.OriginateMap.ValueString())
+					}
+					if (!child.OriginAsValidate.IsUnknown() && !child.OriginAsValidate.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "originAsValidate", child.OriginAsValidate.ValueString())
+					}
+					if (!child.OriginAsValidateSignalIbgp.IsUnknown() && !child.OriginAsValidateSignalIbgp.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "originAsValidateSignalIbgp", child.OriginAsValidateSignalIbgp.ValueString())
+					}
+					if (!child.RetainRtRouteMap.IsUnknown() && !child.RetainRtRouteMap.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "retainRttRtMap", child.RetainRtRouteMap.ValueString())
+					}
+					if (!child.TableMapFilter.IsUnknown() && !child.TableMapFilter.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "tblMapFltr", child.TableMapFilter.ValueString())
+					}
+					if (!child.TimerBestpathDefer.IsUnknown() && !child.TimerBestpathDefer.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "tmrBstpthDfr", strconv.FormatInt(child.TimerBestpathDefer.ValueInt64(), 10))
+					}
+					if (!child.TimerBestpathDeferMax.IsUnknown() && !child.TimerBestpathDeferMax.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "tmrMax", strconv.FormatInt(child.TimerBestpathDeferMax.ValueInt64(), 10))
+					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bgpDomAf.attributes", attrs)
 					{
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
@@ -382,6 +647,9 @@ func (data BGP) toBody() nxos.Body {
 							if (!child.Srv6PrefixType.IsUnknown() && !child.Srv6PrefixType.IsNull()) || false {
 								attrs, _ = sjson.Set(attrs, "srv6PrefixType", child.Srv6PrefixType.ValueString())
 							}
+							if (!child.Asn.IsUnknown() && !child.Asn.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "asn", child.Asn.ValueString())
+							}
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bgpInterLeakP.attributes", attrs)
 						}
 					}
@@ -403,6 +671,66 @@ func (data BGP) toBody() nxos.Body {
 					if (!child.SourceInterface.IsUnknown() && !child.SourceInterface.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "srcIf", child.SourceInterface.ValueString())
 					}
+					if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
+					}
+					if (!child.AffinityGroup.IsUnknown() && !child.AffinityGroup.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "affGrp", strconv.FormatInt(child.AffinityGroup.ValueInt64(), 10))
+					}
+					if (!child.AsnType.IsUnknown() && !child.AsnType.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "asnType", child.AsnType.ValueString())
+					}
+					if (!child.BfdType.IsUnknown() && !child.BfdType.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "bfdType", child.BfdType.ValueString())
+					}
+					if (!child.BmpServer1.IsUnknown() && !child.BmpServer1.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "bmpSrvId1St", child.BmpServer1.ValueString())
+					}
+					if (!child.BmpServer2.IsUnknown() && !child.BmpServer2.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "bmpSrvId2St", child.BmpServer2.ValueString())
+					}
+					if (!child.CapabilitySuppress4ByteAsn.IsUnknown() && !child.CapabilitySuppress4ByteAsn.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "capSuppr4ByteAsn", child.CapabilitySuppress4ByteAsn.ValueString())
+					}
+					if (!child.ConnectionMode.IsUnknown() && !child.ConnectionMode.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "connMode", child.ConnectionMode.ValueString())
+					}
+					if (!child.PeerControl.IsUnknown() && !child.PeerControl.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "ctrl", child.PeerControl.ValueString())
+					}
+					if (!child.HoldTime.IsUnknown() && !child.HoldTime.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "holdIntvl", strconv.FormatInt(child.HoldTime.ValueInt64(), 10))
+					}
+					if (!child.KeepaliveInterval.IsUnknown() && !child.KeepaliveInterval.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "kaIntvl", strconv.FormatInt(child.KeepaliveInterval.ValueInt64(), 10))
+					}
+					if (!child.LogNeighborChanges.IsUnknown() && !child.LogNeighborChanges.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "logNbrChgs", child.LogNeighborChanges.ValueString())
+					}
+					if (!child.LowMemoryExempt.IsUnknown() && !child.LowMemoryExempt.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "lowMemExempt", child.LowMemoryExempt.ValueString())
+					}
+					if (!child.MaxPeerCount.IsUnknown() && !child.MaxPeerCount.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "maxPeerCnt", strconv.FormatInt(child.MaxPeerCount.ValueInt64(), 10))
+					}
+					if (!child.PasswordType.IsUnknown() && !child.PasswordType.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "passwdType", child.PasswordType.ValueString())
+					}
+					if (!child.Password.IsUnknown() && !child.Password.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "password", child.Password.ValueString())
+					}
+					if (!child.PrivateAsControl.IsUnknown() && !child.PrivateAsControl.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "privateASctrl", child.PrivateAsControl.ValueString())
+					}
+					if (!child.SessionTemplate.IsUnknown() && !child.SessionTemplate.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "sessionContImp", child.SessionTemplate.ValueString())
+					}
+					if (!child.EbgpMultihopTtl.IsUnknown() && !child.EbgpMultihopTtl.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "ttl", strconv.FormatInt(child.EbgpMultihopTtl.ValueInt64(), 10))
+					}
+					if (!child.TtlSecurityHops.IsUnknown() && !child.TtlSecurityHops.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "ttlScrtyHops", strconv.FormatInt(child.TtlSecurityHops.ValueInt64(), 10))
+					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bgpPeerCont.attributes", attrs)
 					{
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
@@ -420,6 +748,57 @@ func (data BGP) toBody() nxos.Body {
 							}
 							if (!child.SendCommunityStandard.IsUnknown() && !child.SendCommunityStandard.IsNull()) || false {
 								attrs, _ = sjson.Set(attrs, "sendComStd", child.SendCommunityStandard.ValueString())
+							}
+							if (!child.AdvertiseGatewayIp.IsUnknown() && !child.AdvertiseGatewayIp.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "advGwIp", child.AdvertiseGatewayIp.ValueString())
+							}
+							if (!child.AdvertisementInterval.IsUnknown() && !child.AdvertisementInterval.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "advIntvl", strconv.FormatInt(child.AdvertisementInterval.ValueInt64(), 10))
+							}
+							if (!child.AdvertiseLocalLabeledRoute.IsUnknown() && !child.AdvertiseLocalLabeledRoute.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "advLocalLblRt", child.AdvertiseLocalLabeledRoute.ValueString())
+							}
+							if (!child.Aigp.IsUnknown() && !child.Aigp.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "aigp", child.Aigp.ValueString())
+							}
+							if (!child.AllowedSelfAsCount.IsUnknown() && !child.AllowedSelfAsCount.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "allowedSelfAsCnt", strconv.FormatInt(child.AllowedSelfAsCount.ValueInt64(), 10))
+							}
+							if (!child.AsOverride.IsUnknown() && !child.AsOverride.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "asOverride", child.AsOverride.ValueString())
+							}
+							if (!child.DefaultOriginate.IsUnknown() && !child.DefaultOriginate.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "defOrg", child.DefaultOriginate.ValueString())
+							}
+							if (!child.DefaultOriginateRouteMap.IsUnknown() && !child.DefaultOriginateRouteMap.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "defOrgRtMap", child.DefaultOriginateRouteMap.ValueString())
+							}
+							if (!child.DmzLinkBandwidth.IsUnknown() && !child.DmzLinkBandwidth.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "dmzLinkBw", child.DmzLinkBandwidth.ValueString())
+							}
+							if (!child.EncapsulationMpls.IsUnknown() && !child.EncapsulationMpls.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "encapMpls", child.EncapsulationMpls.ValueString())
+							}
+							if (!child.LinkBandwidthCumulative.IsUnknown() && !child.LinkBandwidthCumulative.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "linkBwCum", child.LinkBandwidthCumulative.ValueString())
+							}
+							if (!child.NexthopThirdparty.IsUnknown() && !child.NexthopThirdparty.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "nhThirdparty", child.NexthopThirdparty.ValueString())
+							}
+							if (!child.RewriteRtAsn.IsUnknown() && !child.RewriteRtAsn.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "rewriteRtAsn", child.RewriteRtAsn.ValueString())
+							}
+							if (!child.SoftReconfigurationBackup.IsUnknown() && !child.SoftReconfigurationBackup.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "softReconfigBackup", child.SoftReconfigurationBackup.ValueString())
+							}
+							if (!child.SiteOfOrigin.IsUnknown() && !child.SiteOfOrigin.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "soo", child.SiteOfOrigin.ValueString())
+							}
+							if (!child.UnsuppressMap.IsUnknown() && !child.UnsuppressMap.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "unSupprMap", child.UnsuppressMap.ValueString())
+							}
+							if (!child.Weight.IsUnknown() && !child.Weight.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "wght", child.Weight.ValueString())
 							}
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bgpPeerAf.attributes", attrs)
 							{
@@ -483,6 +862,48 @@ func (data BGP) toBody() nxos.Body {
 					if (!child.Password.IsUnknown() && !child.Password.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "password", child.Password.ValueString())
 					}
+					if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
+					}
+					if (!child.AffinityGroup.IsUnknown() && !child.AffinityGroup.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "affGrp", strconv.FormatInt(child.AffinityGroup.ValueInt64(), 10))
+					}
+					if (!child.AsnType.IsUnknown() && !child.AsnType.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "asnType", child.AsnType.ValueString())
+					}
+					if (!child.BfdType.IsUnknown() && !child.BfdType.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "bfdType", child.BfdType.ValueString())
+					}
+					if (!child.BmpServer1.IsUnknown() && !child.BmpServer1.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "bmpSrvId1St", child.BmpServer1.ValueString())
+					}
+					if (!child.BmpServer2.IsUnknown() && !child.BmpServer2.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "bmpSrvId2St", child.BmpServer2.ValueString())
+					}
+					if (!child.CapabilitySuppress4ByteAsn.IsUnknown() && !child.CapabilitySuppress4ByteAsn.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "capSuppr4ByteAsn", child.CapabilitySuppress4ByteAsn.ValueString())
+					}
+					if (!child.ConnectionMode.IsUnknown() && !child.ConnectionMode.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "connMode", child.ConnectionMode.ValueString())
+					}
+					if (!child.LogNeighborChanges.IsUnknown() && !child.LogNeighborChanges.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "logNbrChgs", child.LogNeighborChanges.ValueString())
+					}
+					if (!child.LowMemoryExempt.IsUnknown() && !child.LowMemoryExempt.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "lowMemExempt", child.LowMemoryExempt.ValueString())
+					}
+					if (!child.MaxPeerCount.IsUnknown() && !child.MaxPeerCount.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "maxPeerCnt", strconv.FormatInt(child.MaxPeerCount.ValueInt64(), 10))
+					}
+					if (!child.PrivateAsControl.IsUnknown() && !child.PrivateAsControl.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "privateASctrl", child.PrivateAsControl.ValueString())
+					}
+					if (!child.SessionTemplate.IsUnknown() && !child.SessionTemplate.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "sessionContImp", child.SessionTemplate.ValueString())
+					}
+					if (!child.TtlSecurityHops.IsUnknown() && !child.TtlSecurityHops.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "ttlScrtyHops", strconv.FormatInt(child.TtlSecurityHops.ValueInt64(), 10))
+					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bgpPeer.attributes", attrs)
 					{
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
@@ -510,6 +931,57 @@ func (data BGP) toBody() nxos.Body {
 							}
 							if (!child.SendCommunityStandard.IsUnknown() && !child.SendCommunityStandard.IsNull()) || false {
 								attrs, _ = sjson.Set(attrs, "sendComStd", child.SendCommunityStandard.ValueString())
+							}
+							if (!child.AdvertiseGatewayIp.IsUnknown() && !child.AdvertiseGatewayIp.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "advGwIp", child.AdvertiseGatewayIp.ValueString())
+							}
+							if (!child.AdvertisementInterval.IsUnknown() && !child.AdvertisementInterval.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "advIntvl", strconv.FormatInt(child.AdvertisementInterval.ValueInt64(), 10))
+							}
+							if (!child.AdvertiseLocalLabeledRoute.IsUnknown() && !child.AdvertiseLocalLabeledRoute.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "advLocalLblRt", child.AdvertiseLocalLabeledRoute.ValueString())
+							}
+							if (!child.Aigp.IsUnknown() && !child.Aigp.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "aigp", child.Aigp.ValueString())
+							}
+							if (!child.AllowedSelfAsCount.IsUnknown() && !child.AllowedSelfAsCount.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "allowedSelfAsCnt", strconv.FormatInt(child.AllowedSelfAsCount.ValueInt64(), 10))
+							}
+							if (!child.AsOverride.IsUnknown() && !child.AsOverride.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "asOverride", child.AsOverride.ValueString())
+							}
+							if (!child.DefaultOriginate.IsUnknown() && !child.DefaultOriginate.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "defOrg", child.DefaultOriginate.ValueString())
+							}
+							if (!child.DefaultOriginateRouteMap.IsUnknown() && !child.DefaultOriginateRouteMap.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "defOrgRtMap", child.DefaultOriginateRouteMap.ValueString())
+							}
+							if (!child.DmzLinkBandwidth.IsUnknown() && !child.DmzLinkBandwidth.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "dmzLinkBw", child.DmzLinkBandwidth.ValueString())
+							}
+							if (!child.EncapsulationMpls.IsUnknown() && !child.EncapsulationMpls.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "encapMpls", child.EncapsulationMpls.ValueString())
+							}
+							if (!child.LinkBandwidthCumulative.IsUnknown() && !child.LinkBandwidthCumulative.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "linkBwCum", child.LinkBandwidthCumulative.ValueString())
+							}
+							if (!child.NexthopThirdparty.IsUnknown() && !child.NexthopThirdparty.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "nhThirdparty", child.NexthopThirdparty.ValueString())
+							}
+							if (!child.RewriteRtAsn.IsUnknown() && !child.RewriteRtAsn.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "rewriteRtAsn", child.RewriteRtAsn.ValueString())
+							}
+							if (!child.SoftReconfigurationBackup.IsUnknown() && !child.SoftReconfigurationBackup.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "softReconfigBackup", child.SoftReconfigurationBackup.ValueString())
+							}
+							if (!child.SiteOfOrigin.IsUnknown() && !child.SiteOfOrigin.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "soo", child.SiteOfOrigin.ValueString())
+							}
+							if (!child.UnsuppressMap.IsUnknown() && !child.UnsuppressMap.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "unSupprMap", child.UnsuppressMap.ValueString())
+							}
+							if (!child.Weight.IsUnknown() && !child.Weight.IsNull()) || false {
+								attrs, _ = sjson.Set(attrs, "wght", child.Weight.ValueString())
 							}
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bgpPeerAf.attributes", attrs)
 							{
@@ -566,7 +1038,20 @@ func (data *BGP) fromBody(res gjson.Result) {
 		)
 		data.InstanceAdminState = types.StringValue(rbgpInst.Get("bgpInst.attributes.adminSt").String())
 		data.Asn = types.StringValue(rbgpInst.Get("bgpInst.attributes.asn").String())
+		data.Control = types.StringValue(rbgpInst.Get("bgpInst.attributes.ctrl").String())
+		data.DisablePolicyBatching = types.StringValue(rbgpInst.Get("bgpInst.attributes.disPolBatch").String())
+		data.DisablePolicyBatchingNexthop = types.StringValue(rbgpInst.Get("bgpInst.attributes.disPolBatchNexthop").String())
+		data.DisablePolicyBatchingIpv4PrefixList = types.StringValue(rbgpInst.Get("bgpInst.attributes.disPolBatchv4PfxLst").String())
+		data.DisablePolicyBatchingIpv6PrefixList = types.StringValue(rbgpInst.Get("bgpInst.attributes.disPolBatchv6PfxLst").String())
 		data.EnhancedErrorHandling = types.BoolValue(helpers.ParseNxosBoolean(rbgpInst.Get("bgpInst.attributes.enhancedErr").String()))
+		data.FabricSoo = types.StringValue(rbgpInst.Get("bgpInst.attributes.fabricSoo").String())
+		data.FlushRoutes = types.StringValue(rbgpInst.Get("bgpInst.attributes.flushRoutes").String())
+		data.Isolate = types.StringValue(rbgpInst.Get("bgpInst.attributes.isolate").String())
+		data.IsolateRouteMap = types.StringValue(rbgpInst.Get("bgpInst.attributes.isolateRtMap").String())
+		data.MedDampeningInterval = types.Int64Value(rbgpInst.Get("bgpInst.attributes.medDampIntvl").Int())
+		data.NexthopSuppressDefaultResolution = types.StringValue(rbgpInst.Get("bgpInst.attributes.nhSupprDefRes").String())
+		data.RdDual = types.StringValue(rbgpInst.Get("bgpInst.attributes.rdDual").String())
+		data.RdDualId = types.Int64Value(rbgpInst.Get("bgpInst.attributes.rdDualId").Int())
 		rbgpInst.Get("bgpInst.children").ForEach(
 			func(_, v gjson.Result) bool {
 				v.ForEach(
@@ -575,6 +1060,21 @@ func (data *BGP) fromBody(res gjson.Result) {
 							var child BGPVrfs
 							child.Name = types.StringValue(value.Get("attributes.name").String())
 							child.RouterId = types.StringValue(value.Get("attributes.rtrId").String())
+							child.AllocIndex = types.Int64Value(value.Get("attributes.allocIndex").Int())
+							child.BestpathFirstAlways = types.StringValue(value.Get("attributes.always").String())
+							child.BestpathInterval = types.Int64Value(value.Get("attributes.bestPathIntvl").Int())
+							child.BandwidthReference = types.Int64Value(value.Get("attributes.bwRef").Int())
+							child.BandwidthReferenceUnit = types.StringValue(value.Get("attributes.bwRefUnit").String())
+							child.ClusterId = types.StringValue(value.Get("attributes.clusterId").String())
+							child.HoldTime = types.Int64Value(value.Get("attributes.holdIntvl").Int())
+							child.KeepaliveInterval = types.Int64Value(value.Get("attributes.kaIntvl").Int())
+							child.LocalAsn = types.StringValue(value.Get("attributes.localAsn").String())
+							child.MaxAsLimit = types.Int64Value(value.Get("attributes.maxAsLimit").Int())
+							child.Mode = types.StringValue(value.Get("attributes.mode").String())
+							child.PrefixPeerTimeout = types.Int64Value(value.Get("attributes.pfxPeerTimeout").Int())
+							child.PrefixPeerWaitTime = types.Int64Value(value.Get("attributes.pfxPeerWaitTime").Int())
+							child.ReconnectInterval = types.Int64Value(value.Get("attributes.reConnIntvl").Int())
+							child.RouterIdAuto = types.StringValue(value.Get("attributes.rtrIdAuto").String())
 							{
 								var rbgpRtCtrl gjson.Result
 								value.Get("children").ForEach(
@@ -604,6 +1104,7 @@ func (data *BGP) fromBody(res gjson.Result) {
 										return true
 									},
 								)
+								child.GracefulRestartControl = types.StringValue(rbgpGr.Get("bgpGr.attributes.ctrl").String())
 								child.GracefulRestartInterval = types.Int64Value(rbgpGr.Get("bgpGr.attributes.restartIntvl").Int())
 								child.GracefulRestartStaleInterval = types.Int64Value(rbgpGr.Get("bgpGr.attributes.staleIntvl").Int())
 							}
@@ -631,6 +1132,26 @@ func (data *BGP) fromBody(res gjson.Result) {
 												nestedChildbgpDomAf.TableMapRouteMapName = types.StringValue(nestedValue.Get("attributes.tblMap").String())
 												nestedChildbgpDomAf.VniEthernetTag = types.StringValue(nestedValue.Get("attributes.vniEthTag").String())
 												nestedChildbgpDomAf.WaitIgpConverged = types.StringValue(nestedValue.Get("attributes.waitIgpConv").String())
+												nestedChildbgpDomAf.AdvertiseSystemMac = types.StringValue(nestedValue.Get("attributes.advSysMac").String())
+												nestedChildbgpDomAf.AllocateLabelAll = types.StringValue(nestedValue.Get("attributes.allocLblAll").String())
+												nestedChildbgpDomAf.AllocateLabelOptionB = types.StringValue(nestedValue.Get("attributes.allocLblOptB").String())
+												nestedChildbgpDomAf.AllocateLabelRouteMap = types.StringValue(nestedValue.Get("attributes.allocLblRtMap").String())
+												nestedChildbgpDomAf.BestpathOriginAsAllowInvalid = types.StringValue(nestedValue.Get("attributes.bestPathOriginAsAllowInvalid").String())
+												nestedChildbgpDomAf.BestpathOriginAsUseValidity = types.StringValue(nestedValue.Get("attributes.bestPathOriginAsUseValidity").String())
+												nestedChildbgpDomAf.ClientToClientReflection = types.StringValue(nestedValue.Get("attributes.clReflection").String())
+												nestedChildbgpDomAf.DefaultMetric = types.StringValue(nestedValue.Get("attributes.defMetric").String())
+												nestedChildbgpDomAf.ExportGatewayIp = types.StringValue(nestedValue.Get("attributes.exportGwIp").String())
+												nestedChildbgpDomAf.IgpMetric = types.Int64Value(nestedValue.Get("attributes.igpMetric").Int())
+												nestedChildbgpDomAf.LabelAllocationMode = types.StringValue(nestedValue.Get("attributes.lblAllocMod").String())
+												nestedChildbgpDomAf.MaxPathUnequalCost = types.StringValue(nestedValue.Get("attributes.maxPathUnequalCost").String())
+												nestedChildbgpDomAf.NexthopLoadBalanceEgressMultisite = types.StringValue(nestedValue.Get("attributes.nhLdBalEgrMultiSite").String())
+												nestedChildbgpDomAf.OriginateMap = types.StringValue(nestedValue.Get("attributes.origMap").String())
+												nestedChildbgpDomAf.OriginAsValidate = types.StringValue(nestedValue.Get("attributes.originAsValidate").String())
+												nestedChildbgpDomAf.OriginAsValidateSignalIbgp = types.StringValue(nestedValue.Get("attributes.originAsValidateSignalIbgp").String())
+												nestedChildbgpDomAf.RetainRtRouteMap = types.StringValue(nestedValue.Get("attributes.retainRttRtMap").String())
+												nestedChildbgpDomAf.TableMapFilter = types.StringValue(nestedValue.Get("attributes.tblMapFltr").String())
+												nestedChildbgpDomAf.TimerBestpathDefer = types.Int64Value(nestedValue.Get("attributes.tmrBstpthDfr").Int())
+												nestedChildbgpDomAf.TimerBestpathDeferMax = types.Int64Value(nestedValue.Get("attributes.tmrMax").Int())
 												nestedValue.Get("children").ForEach(
 													func(_, nestedV gjson.Result) bool {
 														nestedV.ForEach(
@@ -659,6 +1180,7 @@ func (data *BGP) fromBody(res gjson.Result) {
 																	nestedChildbgpInterLeakP.RouteMap = types.StringValue(nestedValue.Get("attributes.rtMap").String())
 																	nestedChildbgpInterLeakP.Scope = types.StringValue(nestedValue.Get("attributes.scope").String())
 																	nestedChildbgpInterLeakP.Srv6PrefixType = types.StringValue(nestedValue.Get("attributes.srv6PrefixType").String())
+																	nestedChildbgpInterLeakP.Asn = types.StringValue(nestedValue.Get("attributes.asn").String())
 																	nestedChildbgpDomAf.Redistributions = append(nestedChildbgpDomAf.Redistributions, nestedChildbgpInterLeakP)
 																}
 																return true
@@ -686,6 +1208,25 @@ func (data *BGP) fromBody(res gjson.Result) {
 												nestedChildbgpPeerCont.Description = types.StringValue(nestedValue.Get("attributes.desc").String())
 												nestedChildbgpPeerCont.PeerType = types.StringValue(nestedValue.Get("attributes.peerType").String())
 												nestedChildbgpPeerCont.SourceInterface = types.StringValue(nestedValue.Get("attributes.srcIf").String())
+												nestedChildbgpPeerCont.AdminState = types.StringValue(nestedValue.Get("attributes.adminSt").String())
+												nestedChildbgpPeerCont.AffinityGroup = types.Int64Value(nestedValue.Get("attributes.affGrp").Int())
+												nestedChildbgpPeerCont.AsnType = types.StringValue(nestedValue.Get("attributes.asnType").String())
+												nestedChildbgpPeerCont.BfdType = types.StringValue(nestedValue.Get("attributes.bfdType").String())
+												nestedChildbgpPeerCont.BmpServer1 = types.StringValue(nestedValue.Get("attributes.bmpSrvId1St").String())
+												nestedChildbgpPeerCont.BmpServer2 = types.StringValue(nestedValue.Get("attributes.bmpSrvId2St").String())
+												nestedChildbgpPeerCont.CapabilitySuppress4ByteAsn = types.StringValue(nestedValue.Get("attributes.capSuppr4ByteAsn").String())
+												nestedChildbgpPeerCont.ConnectionMode = types.StringValue(nestedValue.Get("attributes.connMode").String())
+												nestedChildbgpPeerCont.PeerControl = types.StringValue(nestedValue.Get("attributes.ctrl").String())
+												nestedChildbgpPeerCont.HoldTime = types.Int64Value(nestedValue.Get("attributes.holdIntvl").Int())
+												nestedChildbgpPeerCont.KeepaliveInterval = types.Int64Value(nestedValue.Get("attributes.kaIntvl").Int())
+												nestedChildbgpPeerCont.LogNeighborChanges = types.StringValue(nestedValue.Get("attributes.logNbrChgs").String())
+												nestedChildbgpPeerCont.LowMemoryExempt = types.StringValue(nestedValue.Get("attributes.lowMemExempt").String())
+												nestedChildbgpPeerCont.MaxPeerCount = types.Int64Value(nestedValue.Get("attributes.maxPeerCnt").Int())
+												nestedChildbgpPeerCont.PasswordType = types.StringValue(nestedValue.Get("attributes.passwdType").String())
+												nestedChildbgpPeerCont.PrivateAsControl = types.StringValue(nestedValue.Get("attributes.privateASctrl").String())
+												nestedChildbgpPeerCont.SessionTemplate = types.StringValue(nestedValue.Get("attributes.sessionContImp").String())
+												nestedChildbgpPeerCont.EbgpMultihopTtl = types.Int64Value(nestedValue.Get("attributes.ttl").Int())
+												nestedChildbgpPeerCont.TtlSecurityHops = types.Int64Value(nestedValue.Get("attributes.ttlScrtyHops").Int())
 												nestedValue.Get("children").ForEach(
 													func(_, nestedV gjson.Result) bool {
 														nestedV.ForEach(
@@ -696,6 +1237,23 @@ func (data *BGP) fromBody(res gjson.Result) {
 																	nestedChildbgpPeerAf.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
 																	nestedChildbgpPeerAf.SendCommunityExtended = types.StringValue(nestedValue.Get("attributes.sendComExt").String())
 																	nestedChildbgpPeerAf.SendCommunityStandard = types.StringValue(nestedValue.Get("attributes.sendComStd").String())
+																	nestedChildbgpPeerAf.AdvertiseGatewayIp = types.StringValue(nestedValue.Get("attributes.advGwIp").String())
+																	nestedChildbgpPeerAf.AdvertisementInterval = types.Int64Value(nestedValue.Get("attributes.advIntvl").Int())
+																	nestedChildbgpPeerAf.AdvertiseLocalLabeledRoute = types.StringValue(nestedValue.Get("attributes.advLocalLblRt").String())
+																	nestedChildbgpPeerAf.Aigp = types.StringValue(nestedValue.Get("attributes.aigp").String())
+																	nestedChildbgpPeerAf.AllowedSelfAsCount = types.Int64Value(nestedValue.Get("attributes.allowedSelfAsCnt").Int())
+																	nestedChildbgpPeerAf.AsOverride = types.StringValue(nestedValue.Get("attributes.asOverride").String())
+																	nestedChildbgpPeerAf.DefaultOriginate = types.StringValue(nestedValue.Get("attributes.defOrg").String())
+																	nestedChildbgpPeerAf.DefaultOriginateRouteMap = types.StringValue(nestedValue.Get("attributes.defOrgRtMap").String())
+																	nestedChildbgpPeerAf.DmzLinkBandwidth = types.StringValue(nestedValue.Get("attributes.dmzLinkBw").String())
+																	nestedChildbgpPeerAf.EncapsulationMpls = types.StringValue(nestedValue.Get("attributes.encapMpls").String())
+																	nestedChildbgpPeerAf.LinkBandwidthCumulative = types.StringValue(nestedValue.Get("attributes.linkBwCum").String())
+																	nestedChildbgpPeerAf.NexthopThirdparty = types.StringValue(nestedValue.Get("attributes.nhThirdparty").String())
+																	nestedChildbgpPeerAf.RewriteRtAsn = types.StringValue(nestedValue.Get("attributes.rewriteRtAsn").String())
+																	nestedChildbgpPeerAf.SoftReconfigurationBackup = types.StringValue(nestedValue.Get("attributes.softReconfigBackup").String())
+																	nestedChildbgpPeerAf.SiteOfOrigin = types.StringValue(nestedValue.Get("attributes.soo").String())
+																	nestedChildbgpPeerAf.UnsuppressMap = types.StringValue(nestedValue.Get("attributes.unSupprMap").String())
+																	nestedChildbgpPeerAf.Weight = types.StringValue(nestedValue.Get("attributes.wght").String())
 																	{
 																		var rbgpMaxPfxP gjson.Result
 																		nestedValue.Get("children").ForEach(
@@ -746,6 +1304,20 @@ func (data *BGP) fromBody(res gjson.Result) {
 												nestedChildbgpPeer.EbgpMultihopTtl = types.Int64Value(nestedValue.Get("attributes.ttl").Int())
 												nestedChildbgpPeer.PeerControl = types.StringValue(nestedValue.Get("attributes.ctrl").String())
 												nestedChildbgpPeer.PasswordType = types.StringValue(nestedValue.Get("attributes.passwdType").String())
+												nestedChildbgpPeer.AdminState = types.StringValue(nestedValue.Get("attributes.adminSt").String())
+												nestedChildbgpPeer.AffinityGroup = types.Int64Value(nestedValue.Get("attributes.affGrp").Int())
+												nestedChildbgpPeer.AsnType = types.StringValue(nestedValue.Get("attributes.asnType").String())
+												nestedChildbgpPeer.BfdType = types.StringValue(nestedValue.Get("attributes.bfdType").String())
+												nestedChildbgpPeer.BmpServer1 = types.StringValue(nestedValue.Get("attributes.bmpSrvId1St").String())
+												nestedChildbgpPeer.BmpServer2 = types.StringValue(nestedValue.Get("attributes.bmpSrvId2St").String())
+												nestedChildbgpPeer.CapabilitySuppress4ByteAsn = types.StringValue(nestedValue.Get("attributes.capSuppr4ByteAsn").String())
+												nestedChildbgpPeer.ConnectionMode = types.StringValue(nestedValue.Get("attributes.connMode").String())
+												nestedChildbgpPeer.LogNeighborChanges = types.StringValue(nestedValue.Get("attributes.logNbrChgs").String())
+												nestedChildbgpPeer.LowMemoryExempt = types.StringValue(nestedValue.Get("attributes.lowMemExempt").String())
+												nestedChildbgpPeer.MaxPeerCount = types.Int64Value(nestedValue.Get("attributes.maxPeerCnt").Int())
+												nestedChildbgpPeer.PrivateAsControl = types.StringValue(nestedValue.Get("attributes.privateASctrl").String())
+												nestedChildbgpPeer.SessionTemplate = types.StringValue(nestedValue.Get("attributes.sessionContImp").String())
+												nestedChildbgpPeer.TtlSecurityHops = types.Int64Value(nestedValue.Get("attributes.ttlScrtyHops").Int())
 												{
 													var rbgpLocalAsn gjson.Result
 													nestedValue.Get("children").ForEach(
@@ -771,6 +1343,23 @@ func (data *BGP) fromBody(res gjson.Result) {
 																	nestedChildbgpPeerAf.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
 																	nestedChildbgpPeerAf.SendCommunityExtended = types.StringValue(nestedValue.Get("attributes.sendComExt").String())
 																	nestedChildbgpPeerAf.SendCommunityStandard = types.StringValue(nestedValue.Get("attributes.sendComStd").String())
+																	nestedChildbgpPeerAf.AdvertiseGatewayIp = types.StringValue(nestedValue.Get("attributes.advGwIp").String())
+																	nestedChildbgpPeerAf.AdvertisementInterval = types.Int64Value(nestedValue.Get("attributes.advIntvl").Int())
+																	nestedChildbgpPeerAf.AdvertiseLocalLabeledRoute = types.StringValue(nestedValue.Get("attributes.advLocalLblRt").String())
+																	nestedChildbgpPeerAf.Aigp = types.StringValue(nestedValue.Get("attributes.aigp").String())
+																	nestedChildbgpPeerAf.AllowedSelfAsCount = types.Int64Value(nestedValue.Get("attributes.allowedSelfAsCnt").Int())
+																	nestedChildbgpPeerAf.AsOverride = types.StringValue(nestedValue.Get("attributes.asOverride").String())
+																	nestedChildbgpPeerAf.DefaultOriginate = types.StringValue(nestedValue.Get("attributes.defOrg").String())
+																	nestedChildbgpPeerAf.DefaultOriginateRouteMap = types.StringValue(nestedValue.Get("attributes.defOrgRtMap").String())
+																	nestedChildbgpPeerAf.DmzLinkBandwidth = types.StringValue(nestedValue.Get("attributes.dmzLinkBw").String())
+																	nestedChildbgpPeerAf.EncapsulationMpls = types.StringValue(nestedValue.Get("attributes.encapMpls").String())
+																	nestedChildbgpPeerAf.LinkBandwidthCumulative = types.StringValue(nestedValue.Get("attributes.linkBwCum").String())
+																	nestedChildbgpPeerAf.NexthopThirdparty = types.StringValue(nestedValue.Get("attributes.nhThirdparty").String())
+																	nestedChildbgpPeerAf.RewriteRtAsn = types.StringValue(nestedValue.Get("attributes.rewriteRtAsn").String())
+																	nestedChildbgpPeerAf.SoftReconfigurationBackup = types.StringValue(nestedValue.Get("attributes.softReconfigBackup").String())
+																	nestedChildbgpPeerAf.SiteOfOrigin = types.StringValue(nestedValue.Get("attributes.soo").String())
+																	nestedChildbgpPeerAf.UnsuppressMap = types.StringValue(nestedValue.Get("attributes.unSupprMap").String())
+																	nestedChildbgpPeerAf.Weight = types.StringValue(nestedValue.Get("attributes.wght").String())
 																	nestedValue.Get("children").ForEach(
 																		func(_, nestedV gjson.Result) bool {
 																			nestedV.ForEach(
@@ -861,10 +1450,75 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 	} else {
 		data.Asn = types.StringNull()
 	}
+	if !data.Control.IsNull() {
+		data.Control = types.StringValue(rbgpInst.Get("bgpInst.attributes.ctrl").String())
+	} else {
+		data.Control = types.StringNull()
+	}
+	if !data.DisablePolicyBatching.IsNull() {
+		data.DisablePolicyBatching = types.StringValue(rbgpInst.Get("bgpInst.attributes.disPolBatch").String())
+	} else {
+		data.DisablePolicyBatching = types.StringNull()
+	}
+	if !data.DisablePolicyBatchingNexthop.IsNull() {
+		data.DisablePolicyBatchingNexthop = types.StringValue(rbgpInst.Get("bgpInst.attributes.disPolBatchNexthop").String())
+	} else {
+		data.DisablePolicyBatchingNexthop = types.StringNull()
+	}
+	if !data.DisablePolicyBatchingIpv4PrefixList.IsNull() {
+		data.DisablePolicyBatchingIpv4PrefixList = types.StringValue(rbgpInst.Get("bgpInst.attributes.disPolBatchv4PfxLst").String())
+	} else {
+		data.DisablePolicyBatchingIpv4PrefixList = types.StringNull()
+	}
+	if !data.DisablePolicyBatchingIpv6PrefixList.IsNull() {
+		data.DisablePolicyBatchingIpv6PrefixList = types.StringValue(rbgpInst.Get("bgpInst.attributes.disPolBatchv6PfxLst").String())
+	} else {
+		data.DisablePolicyBatchingIpv6PrefixList = types.StringNull()
+	}
 	if !data.EnhancedErrorHandling.IsNull() {
 		data.EnhancedErrorHandling = types.BoolValue(helpers.ParseNxosBoolean(rbgpInst.Get("bgpInst.attributes.enhancedErr").String()))
 	} else {
 		data.EnhancedErrorHandling = types.BoolNull()
+	}
+	if !data.FabricSoo.IsNull() {
+		data.FabricSoo = types.StringValue(rbgpInst.Get("bgpInst.attributes.fabricSoo").String())
+	} else {
+		data.FabricSoo = types.StringNull()
+	}
+	if !data.FlushRoutes.IsNull() {
+		data.FlushRoutes = types.StringValue(rbgpInst.Get("bgpInst.attributes.flushRoutes").String())
+	} else {
+		data.FlushRoutes = types.StringNull()
+	}
+	if !data.Isolate.IsNull() {
+		data.Isolate = types.StringValue(rbgpInst.Get("bgpInst.attributes.isolate").String())
+	} else {
+		data.Isolate = types.StringNull()
+	}
+	if !data.IsolateRouteMap.IsNull() {
+		data.IsolateRouteMap = types.StringValue(rbgpInst.Get("bgpInst.attributes.isolateRtMap").String())
+	} else {
+		data.IsolateRouteMap = types.StringNull()
+	}
+	if !data.MedDampeningInterval.IsNull() {
+		data.MedDampeningInterval = types.Int64Value(rbgpInst.Get("bgpInst.attributes.medDampIntvl").Int())
+	} else {
+		data.MedDampeningInterval = types.Int64Null()
+	}
+	if !data.NexthopSuppressDefaultResolution.IsNull() {
+		data.NexthopSuppressDefaultResolution = types.StringValue(rbgpInst.Get("bgpInst.attributes.nhSupprDefRes").String())
+	} else {
+		data.NexthopSuppressDefaultResolution = types.StringNull()
+	}
+	if !data.RdDual.IsNull() {
+		data.RdDual = types.StringValue(rbgpInst.Get("bgpInst.attributes.rdDual").String())
+	} else {
+		data.RdDual = types.StringNull()
+	}
+	if !data.RdDualId.IsNull() {
+		data.RdDualId = types.Int64Value(rbgpInst.Get("bgpInst.attributes.rdDualId").Int())
+	} else {
+		data.RdDualId = types.Int64Null()
 	}
 	for c := range data.Vrfs {
 		var rbgpDom gjson.Result
@@ -887,6 +1541,81 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 			data.Vrfs[c].RouterId = types.StringValue(rbgpDom.Get("bgpDom.attributes.rtrId").String())
 		} else {
 			data.Vrfs[c].RouterId = types.StringNull()
+		}
+		if !data.Vrfs[c].AllocIndex.IsNull() {
+			data.Vrfs[c].AllocIndex = types.Int64Value(rbgpDom.Get("bgpDom.attributes.allocIndex").Int())
+		} else {
+			data.Vrfs[c].AllocIndex = types.Int64Null()
+		}
+		if !data.Vrfs[c].BestpathFirstAlways.IsNull() {
+			data.Vrfs[c].BestpathFirstAlways = types.StringValue(rbgpDom.Get("bgpDom.attributes.always").String())
+		} else {
+			data.Vrfs[c].BestpathFirstAlways = types.StringNull()
+		}
+		if !data.Vrfs[c].BestpathInterval.IsNull() {
+			data.Vrfs[c].BestpathInterval = types.Int64Value(rbgpDom.Get("bgpDom.attributes.bestPathIntvl").Int())
+		} else {
+			data.Vrfs[c].BestpathInterval = types.Int64Null()
+		}
+		if !data.Vrfs[c].BandwidthReference.IsNull() {
+			data.Vrfs[c].BandwidthReference = types.Int64Value(rbgpDom.Get("bgpDom.attributes.bwRef").Int())
+		} else {
+			data.Vrfs[c].BandwidthReference = types.Int64Null()
+		}
+		if !data.Vrfs[c].BandwidthReferenceUnit.IsNull() {
+			data.Vrfs[c].BandwidthReferenceUnit = types.StringValue(rbgpDom.Get("bgpDom.attributes.bwRefUnit").String())
+		} else {
+			data.Vrfs[c].BandwidthReferenceUnit = types.StringNull()
+		}
+		if !data.Vrfs[c].ClusterId.IsNull() {
+			data.Vrfs[c].ClusterId = types.StringValue(rbgpDom.Get("bgpDom.attributes.clusterId").String())
+		} else {
+			data.Vrfs[c].ClusterId = types.StringNull()
+		}
+		if !data.Vrfs[c].HoldTime.IsNull() {
+			data.Vrfs[c].HoldTime = types.Int64Value(rbgpDom.Get("bgpDom.attributes.holdIntvl").Int())
+		} else {
+			data.Vrfs[c].HoldTime = types.Int64Null()
+		}
+		if !data.Vrfs[c].KeepaliveInterval.IsNull() {
+			data.Vrfs[c].KeepaliveInterval = types.Int64Value(rbgpDom.Get("bgpDom.attributes.kaIntvl").Int())
+		} else {
+			data.Vrfs[c].KeepaliveInterval = types.Int64Null()
+		}
+		if !data.Vrfs[c].LocalAsn.IsNull() {
+			data.Vrfs[c].LocalAsn = types.StringValue(rbgpDom.Get("bgpDom.attributes.localAsn").String())
+		} else {
+			data.Vrfs[c].LocalAsn = types.StringNull()
+		}
+		if !data.Vrfs[c].MaxAsLimit.IsNull() {
+			data.Vrfs[c].MaxAsLimit = types.Int64Value(rbgpDom.Get("bgpDom.attributes.maxAsLimit").Int())
+		} else {
+			data.Vrfs[c].MaxAsLimit = types.Int64Null()
+		}
+		if !data.Vrfs[c].Mode.IsNull() {
+			data.Vrfs[c].Mode = types.StringValue(rbgpDom.Get("bgpDom.attributes.mode").String())
+		} else {
+			data.Vrfs[c].Mode = types.StringNull()
+		}
+		if !data.Vrfs[c].PrefixPeerTimeout.IsNull() {
+			data.Vrfs[c].PrefixPeerTimeout = types.Int64Value(rbgpDom.Get("bgpDom.attributes.pfxPeerTimeout").Int())
+		} else {
+			data.Vrfs[c].PrefixPeerTimeout = types.Int64Null()
+		}
+		if !data.Vrfs[c].PrefixPeerWaitTime.IsNull() {
+			data.Vrfs[c].PrefixPeerWaitTime = types.Int64Value(rbgpDom.Get("bgpDom.attributes.pfxPeerWaitTime").Int())
+		} else {
+			data.Vrfs[c].PrefixPeerWaitTime = types.Int64Null()
+		}
+		if !data.Vrfs[c].ReconnectInterval.IsNull() {
+			data.Vrfs[c].ReconnectInterval = types.Int64Value(rbgpDom.Get("bgpDom.attributes.reConnIntvl").Int())
+		} else {
+			data.Vrfs[c].ReconnectInterval = types.Int64Null()
+		}
+		if !data.Vrfs[c].RouterIdAuto.IsNull() {
+			data.Vrfs[c].RouterIdAuto = types.StringValue(rbgpDom.Get("bgpDom.attributes.rtrIdAuto").String())
+		} else {
+			data.Vrfs[c].RouterIdAuto = types.StringNull()
 		}
 		{
 			var rbgpRtCtrl gjson.Result
@@ -933,6 +1662,11 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !data.Vrfs[c].GracefulRestartControl.IsNull() {
+				data.Vrfs[c].GracefulRestartControl = types.StringValue(rbgpGr.Get("bgpGr.attributes.ctrl").String())
+			} else {
+				data.Vrfs[c].GracefulRestartControl = types.StringNull()
+			}
 			if !data.Vrfs[c].GracefulRestartInterval.IsNull() {
 				data.Vrfs[c].GracefulRestartInterval = types.Int64Value(rbgpGr.Get("bgpGr.attributes.restartIntvl").Int())
 			} else {
@@ -1046,6 +1780,106 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 			} else {
 				data.Vrfs[c].AddressFamilies[nc].WaitIgpConverged = types.StringNull()
 			}
+			if !data.Vrfs[c].AddressFamilies[nc].AdvertiseSystemMac.IsNull() {
+				data.Vrfs[c].AddressFamilies[nc].AdvertiseSystemMac = types.StringValue(rbgpDomAf.Get("bgpDomAf.attributes.advSysMac").String())
+			} else {
+				data.Vrfs[c].AddressFamilies[nc].AdvertiseSystemMac = types.StringNull()
+			}
+			if !data.Vrfs[c].AddressFamilies[nc].AllocateLabelAll.IsNull() {
+				data.Vrfs[c].AddressFamilies[nc].AllocateLabelAll = types.StringValue(rbgpDomAf.Get("bgpDomAf.attributes.allocLblAll").String())
+			} else {
+				data.Vrfs[c].AddressFamilies[nc].AllocateLabelAll = types.StringNull()
+			}
+			if !data.Vrfs[c].AddressFamilies[nc].AllocateLabelOptionB.IsNull() {
+				data.Vrfs[c].AddressFamilies[nc].AllocateLabelOptionB = types.StringValue(rbgpDomAf.Get("bgpDomAf.attributes.allocLblOptB").String())
+			} else {
+				data.Vrfs[c].AddressFamilies[nc].AllocateLabelOptionB = types.StringNull()
+			}
+			if !data.Vrfs[c].AddressFamilies[nc].AllocateLabelRouteMap.IsNull() {
+				data.Vrfs[c].AddressFamilies[nc].AllocateLabelRouteMap = types.StringValue(rbgpDomAf.Get("bgpDomAf.attributes.allocLblRtMap").String())
+			} else {
+				data.Vrfs[c].AddressFamilies[nc].AllocateLabelRouteMap = types.StringNull()
+			}
+			if !data.Vrfs[c].AddressFamilies[nc].BestpathOriginAsAllowInvalid.IsNull() {
+				data.Vrfs[c].AddressFamilies[nc].BestpathOriginAsAllowInvalid = types.StringValue(rbgpDomAf.Get("bgpDomAf.attributes.bestPathOriginAsAllowInvalid").String())
+			} else {
+				data.Vrfs[c].AddressFamilies[nc].BestpathOriginAsAllowInvalid = types.StringNull()
+			}
+			if !data.Vrfs[c].AddressFamilies[nc].BestpathOriginAsUseValidity.IsNull() {
+				data.Vrfs[c].AddressFamilies[nc].BestpathOriginAsUseValidity = types.StringValue(rbgpDomAf.Get("bgpDomAf.attributes.bestPathOriginAsUseValidity").String())
+			} else {
+				data.Vrfs[c].AddressFamilies[nc].BestpathOriginAsUseValidity = types.StringNull()
+			}
+			if !data.Vrfs[c].AddressFamilies[nc].ClientToClientReflection.IsNull() {
+				data.Vrfs[c].AddressFamilies[nc].ClientToClientReflection = types.StringValue(rbgpDomAf.Get("bgpDomAf.attributes.clReflection").String())
+			} else {
+				data.Vrfs[c].AddressFamilies[nc].ClientToClientReflection = types.StringNull()
+			}
+			if !data.Vrfs[c].AddressFamilies[nc].DefaultMetric.IsNull() {
+				data.Vrfs[c].AddressFamilies[nc].DefaultMetric = types.StringValue(rbgpDomAf.Get("bgpDomAf.attributes.defMetric").String())
+			} else {
+				data.Vrfs[c].AddressFamilies[nc].DefaultMetric = types.StringNull()
+			}
+			if !data.Vrfs[c].AddressFamilies[nc].ExportGatewayIp.IsNull() {
+				data.Vrfs[c].AddressFamilies[nc].ExportGatewayIp = types.StringValue(rbgpDomAf.Get("bgpDomAf.attributes.exportGwIp").String())
+			} else {
+				data.Vrfs[c].AddressFamilies[nc].ExportGatewayIp = types.StringNull()
+			}
+			if !data.Vrfs[c].AddressFamilies[nc].IgpMetric.IsNull() {
+				data.Vrfs[c].AddressFamilies[nc].IgpMetric = types.Int64Value(rbgpDomAf.Get("bgpDomAf.attributes.igpMetric").Int())
+			} else {
+				data.Vrfs[c].AddressFamilies[nc].IgpMetric = types.Int64Null()
+			}
+			if !data.Vrfs[c].AddressFamilies[nc].LabelAllocationMode.IsNull() {
+				data.Vrfs[c].AddressFamilies[nc].LabelAllocationMode = types.StringValue(rbgpDomAf.Get("bgpDomAf.attributes.lblAllocMod").String())
+			} else {
+				data.Vrfs[c].AddressFamilies[nc].LabelAllocationMode = types.StringNull()
+			}
+			if !data.Vrfs[c].AddressFamilies[nc].MaxPathUnequalCost.IsNull() {
+				data.Vrfs[c].AddressFamilies[nc].MaxPathUnequalCost = types.StringValue(rbgpDomAf.Get("bgpDomAf.attributes.maxPathUnequalCost").String())
+			} else {
+				data.Vrfs[c].AddressFamilies[nc].MaxPathUnequalCost = types.StringNull()
+			}
+			if !data.Vrfs[c].AddressFamilies[nc].NexthopLoadBalanceEgressMultisite.IsNull() {
+				data.Vrfs[c].AddressFamilies[nc].NexthopLoadBalanceEgressMultisite = types.StringValue(rbgpDomAf.Get("bgpDomAf.attributes.nhLdBalEgrMultiSite").String())
+			} else {
+				data.Vrfs[c].AddressFamilies[nc].NexthopLoadBalanceEgressMultisite = types.StringNull()
+			}
+			if !data.Vrfs[c].AddressFamilies[nc].OriginateMap.IsNull() {
+				data.Vrfs[c].AddressFamilies[nc].OriginateMap = types.StringValue(rbgpDomAf.Get("bgpDomAf.attributes.origMap").String())
+			} else {
+				data.Vrfs[c].AddressFamilies[nc].OriginateMap = types.StringNull()
+			}
+			if !data.Vrfs[c].AddressFamilies[nc].OriginAsValidate.IsNull() {
+				data.Vrfs[c].AddressFamilies[nc].OriginAsValidate = types.StringValue(rbgpDomAf.Get("bgpDomAf.attributes.originAsValidate").String())
+			} else {
+				data.Vrfs[c].AddressFamilies[nc].OriginAsValidate = types.StringNull()
+			}
+			if !data.Vrfs[c].AddressFamilies[nc].OriginAsValidateSignalIbgp.IsNull() {
+				data.Vrfs[c].AddressFamilies[nc].OriginAsValidateSignalIbgp = types.StringValue(rbgpDomAf.Get("bgpDomAf.attributes.originAsValidateSignalIbgp").String())
+			} else {
+				data.Vrfs[c].AddressFamilies[nc].OriginAsValidateSignalIbgp = types.StringNull()
+			}
+			if !data.Vrfs[c].AddressFamilies[nc].RetainRtRouteMap.IsNull() {
+				data.Vrfs[c].AddressFamilies[nc].RetainRtRouteMap = types.StringValue(rbgpDomAf.Get("bgpDomAf.attributes.retainRttRtMap").String())
+			} else {
+				data.Vrfs[c].AddressFamilies[nc].RetainRtRouteMap = types.StringNull()
+			}
+			if !data.Vrfs[c].AddressFamilies[nc].TableMapFilter.IsNull() {
+				data.Vrfs[c].AddressFamilies[nc].TableMapFilter = types.StringValue(rbgpDomAf.Get("bgpDomAf.attributes.tblMapFltr").String())
+			} else {
+				data.Vrfs[c].AddressFamilies[nc].TableMapFilter = types.StringNull()
+			}
+			if !data.Vrfs[c].AddressFamilies[nc].TimerBestpathDefer.IsNull() {
+				data.Vrfs[c].AddressFamilies[nc].TimerBestpathDefer = types.Int64Value(rbgpDomAf.Get("bgpDomAf.attributes.tmrBstpthDfr").Int())
+			} else {
+				data.Vrfs[c].AddressFamilies[nc].TimerBestpathDefer = types.Int64Null()
+			}
+			if !data.Vrfs[c].AddressFamilies[nc].TimerBestpathDeferMax.IsNull() {
+				data.Vrfs[c].AddressFamilies[nc].TimerBestpathDeferMax = types.Int64Value(rbgpDomAf.Get("bgpDomAf.attributes.tmrMax").Int())
+			} else {
+				data.Vrfs[c].AddressFamilies[nc].TimerBestpathDeferMax = types.Int64Null()
+			}
 			for nc_ := range data.Vrfs[c].AddressFamilies[nc].AdvertisedPrefixes {
 				var rbgpAdvPrefix gjson.Result
 				rbgpDomAf.Get("bgpDomAf.children").ForEach(
@@ -1111,6 +1945,11 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 				} else {
 					data.Vrfs[c].AddressFamilies[nc].Redistributions[nc_].Srv6PrefixType = types.StringNull()
 				}
+				if !data.Vrfs[c].AddressFamilies[nc].Redistributions[nc_].Asn.IsNull() {
+					data.Vrfs[c].AddressFamilies[nc].Redistributions[nc_].Asn = types.StringValue(rbgpInterLeakP.Get("bgpInterLeakP.attributes.asn").String())
+				} else {
+					data.Vrfs[c].AddressFamilies[nc].Redistributions[nc_].Asn = types.StringNull()
+				}
 			}
 		}
 		for nc := range data.Vrfs[c].PeerTemplates {
@@ -1150,6 +1989,101 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 			} else {
 				data.Vrfs[c].PeerTemplates[nc].SourceInterface = types.StringNull()
 			}
+			if !data.Vrfs[c].PeerTemplates[nc].AdminState.IsNull() {
+				data.Vrfs[c].PeerTemplates[nc].AdminState = types.StringValue(rbgpPeerCont.Get("bgpPeerCont.attributes.adminSt").String())
+			} else {
+				data.Vrfs[c].PeerTemplates[nc].AdminState = types.StringNull()
+			}
+			if !data.Vrfs[c].PeerTemplates[nc].AffinityGroup.IsNull() {
+				data.Vrfs[c].PeerTemplates[nc].AffinityGroup = types.Int64Value(rbgpPeerCont.Get("bgpPeerCont.attributes.affGrp").Int())
+			} else {
+				data.Vrfs[c].PeerTemplates[nc].AffinityGroup = types.Int64Null()
+			}
+			if !data.Vrfs[c].PeerTemplates[nc].AsnType.IsNull() {
+				data.Vrfs[c].PeerTemplates[nc].AsnType = types.StringValue(rbgpPeerCont.Get("bgpPeerCont.attributes.asnType").String())
+			} else {
+				data.Vrfs[c].PeerTemplates[nc].AsnType = types.StringNull()
+			}
+			if !data.Vrfs[c].PeerTemplates[nc].BfdType.IsNull() {
+				data.Vrfs[c].PeerTemplates[nc].BfdType = types.StringValue(rbgpPeerCont.Get("bgpPeerCont.attributes.bfdType").String())
+			} else {
+				data.Vrfs[c].PeerTemplates[nc].BfdType = types.StringNull()
+			}
+			if !data.Vrfs[c].PeerTemplates[nc].BmpServer1.IsNull() {
+				data.Vrfs[c].PeerTemplates[nc].BmpServer1 = types.StringValue(rbgpPeerCont.Get("bgpPeerCont.attributes.bmpSrvId1St").String())
+			} else {
+				data.Vrfs[c].PeerTemplates[nc].BmpServer1 = types.StringNull()
+			}
+			if !data.Vrfs[c].PeerTemplates[nc].BmpServer2.IsNull() {
+				data.Vrfs[c].PeerTemplates[nc].BmpServer2 = types.StringValue(rbgpPeerCont.Get("bgpPeerCont.attributes.bmpSrvId2St").String())
+			} else {
+				data.Vrfs[c].PeerTemplates[nc].BmpServer2 = types.StringNull()
+			}
+			if !data.Vrfs[c].PeerTemplates[nc].CapabilitySuppress4ByteAsn.IsNull() {
+				data.Vrfs[c].PeerTemplates[nc].CapabilitySuppress4ByteAsn = types.StringValue(rbgpPeerCont.Get("bgpPeerCont.attributes.capSuppr4ByteAsn").String())
+			} else {
+				data.Vrfs[c].PeerTemplates[nc].CapabilitySuppress4ByteAsn = types.StringNull()
+			}
+			if !data.Vrfs[c].PeerTemplates[nc].ConnectionMode.IsNull() {
+				data.Vrfs[c].PeerTemplates[nc].ConnectionMode = types.StringValue(rbgpPeerCont.Get("bgpPeerCont.attributes.connMode").String())
+			} else {
+				data.Vrfs[c].PeerTemplates[nc].ConnectionMode = types.StringNull()
+			}
+			if !data.Vrfs[c].PeerTemplates[nc].PeerControl.IsNull() {
+				data.Vrfs[c].PeerTemplates[nc].PeerControl = types.StringValue(rbgpPeerCont.Get("bgpPeerCont.attributes.ctrl").String())
+			} else {
+				data.Vrfs[c].PeerTemplates[nc].PeerControl = types.StringNull()
+			}
+			if !data.Vrfs[c].PeerTemplates[nc].HoldTime.IsNull() {
+				data.Vrfs[c].PeerTemplates[nc].HoldTime = types.Int64Value(rbgpPeerCont.Get("bgpPeerCont.attributes.holdIntvl").Int())
+			} else {
+				data.Vrfs[c].PeerTemplates[nc].HoldTime = types.Int64Null()
+			}
+			if !data.Vrfs[c].PeerTemplates[nc].KeepaliveInterval.IsNull() {
+				data.Vrfs[c].PeerTemplates[nc].KeepaliveInterval = types.Int64Value(rbgpPeerCont.Get("bgpPeerCont.attributes.kaIntvl").Int())
+			} else {
+				data.Vrfs[c].PeerTemplates[nc].KeepaliveInterval = types.Int64Null()
+			}
+			if !data.Vrfs[c].PeerTemplates[nc].LogNeighborChanges.IsNull() {
+				data.Vrfs[c].PeerTemplates[nc].LogNeighborChanges = types.StringValue(rbgpPeerCont.Get("bgpPeerCont.attributes.logNbrChgs").String())
+			} else {
+				data.Vrfs[c].PeerTemplates[nc].LogNeighborChanges = types.StringNull()
+			}
+			if !data.Vrfs[c].PeerTemplates[nc].LowMemoryExempt.IsNull() {
+				data.Vrfs[c].PeerTemplates[nc].LowMemoryExempt = types.StringValue(rbgpPeerCont.Get("bgpPeerCont.attributes.lowMemExempt").String())
+			} else {
+				data.Vrfs[c].PeerTemplates[nc].LowMemoryExempt = types.StringNull()
+			}
+			if !data.Vrfs[c].PeerTemplates[nc].MaxPeerCount.IsNull() {
+				data.Vrfs[c].PeerTemplates[nc].MaxPeerCount = types.Int64Value(rbgpPeerCont.Get("bgpPeerCont.attributes.maxPeerCnt").Int())
+			} else {
+				data.Vrfs[c].PeerTemplates[nc].MaxPeerCount = types.Int64Null()
+			}
+			if !data.Vrfs[c].PeerTemplates[nc].PasswordType.IsNull() {
+				data.Vrfs[c].PeerTemplates[nc].PasswordType = types.StringValue(rbgpPeerCont.Get("bgpPeerCont.attributes.passwdType").String())
+			} else {
+				data.Vrfs[c].PeerTemplates[nc].PasswordType = types.StringNull()
+			}
+			if !data.Vrfs[c].PeerTemplates[nc].PrivateAsControl.IsNull() {
+				data.Vrfs[c].PeerTemplates[nc].PrivateAsControl = types.StringValue(rbgpPeerCont.Get("bgpPeerCont.attributes.privateASctrl").String())
+			} else {
+				data.Vrfs[c].PeerTemplates[nc].PrivateAsControl = types.StringNull()
+			}
+			if !data.Vrfs[c].PeerTemplates[nc].SessionTemplate.IsNull() {
+				data.Vrfs[c].PeerTemplates[nc].SessionTemplate = types.StringValue(rbgpPeerCont.Get("bgpPeerCont.attributes.sessionContImp").String())
+			} else {
+				data.Vrfs[c].PeerTemplates[nc].SessionTemplate = types.StringNull()
+			}
+			if !data.Vrfs[c].PeerTemplates[nc].EbgpMultihopTtl.IsNull() {
+				data.Vrfs[c].PeerTemplates[nc].EbgpMultihopTtl = types.Int64Value(rbgpPeerCont.Get("bgpPeerCont.attributes.ttl").Int())
+			} else {
+				data.Vrfs[c].PeerTemplates[nc].EbgpMultihopTtl = types.Int64Null()
+			}
+			if !data.Vrfs[c].PeerTemplates[nc].TtlSecurityHops.IsNull() {
+				data.Vrfs[c].PeerTemplates[nc].TtlSecurityHops = types.Int64Value(rbgpPeerCont.Get("bgpPeerCont.attributes.ttlScrtyHops").Int())
+			} else {
+				data.Vrfs[c].PeerTemplates[nc].TtlSecurityHops = types.Int64Null()
+			}
 			for nc_ := range data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies {
 				var rbgpPeerAf gjson.Result
 				rbgpPeerCont.Get("bgpPeerCont.children").ForEach(
@@ -1181,6 +2115,91 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].SendCommunityStandard = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.sendComStd").String())
 				} else {
 					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].SendCommunityStandard = types.StringNull()
+				}
+				if !data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].AdvertiseGatewayIp.IsNull() {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].AdvertiseGatewayIp = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.advGwIp").String())
+				} else {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].AdvertiseGatewayIp = types.StringNull()
+				}
+				if !data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].AdvertisementInterval.IsNull() {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].AdvertisementInterval = types.Int64Value(rbgpPeerAf.Get("bgpPeerAf.attributes.advIntvl").Int())
+				} else {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].AdvertisementInterval = types.Int64Null()
+				}
+				if !data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].AdvertiseLocalLabeledRoute.IsNull() {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].AdvertiseLocalLabeledRoute = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.advLocalLblRt").String())
+				} else {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].AdvertiseLocalLabeledRoute = types.StringNull()
+				}
+				if !data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].Aigp.IsNull() {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].Aigp = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.aigp").String())
+				} else {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].Aigp = types.StringNull()
+				}
+				if !data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].AllowedSelfAsCount.IsNull() {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].AllowedSelfAsCount = types.Int64Value(rbgpPeerAf.Get("bgpPeerAf.attributes.allowedSelfAsCnt").Int())
+				} else {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].AllowedSelfAsCount = types.Int64Null()
+				}
+				if !data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].AsOverride.IsNull() {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].AsOverride = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.asOverride").String())
+				} else {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].AsOverride = types.StringNull()
+				}
+				if !data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].DefaultOriginate.IsNull() {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].DefaultOriginate = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.defOrg").String())
+				} else {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].DefaultOriginate = types.StringNull()
+				}
+				if !data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].DefaultOriginateRouteMap.IsNull() {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].DefaultOriginateRouteMap = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.defOrgRtMap").String())
+				} else {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].DefaultOriginateRouteMap = types.StringNull()
+				}
+				if !data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].DmzLinkBandwidth.IsNull() {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].DmzLinkBandwidth = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.dmzLinkBw").String())
+				} else {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].DmzLinkBandwidth = types.StringNull()
+				}
+				if !data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].EncapsulationMpls.IsNull() {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].EncapsulationMpls = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.encapMpls").String())
+				} else {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].EncapsulationMpls = types.StringNull()
+				}
+				if !data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].LinkBandwidthCumulative.IsNull() {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].LinkBandwidthCumulative = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.linkBwCum").String())
+				} else {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].LinkBandwidthCumulative = types.StringNull()
+				}
+				if !data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].NexthopThirdparty.IsNull() {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].NexthopThirdparty = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.nhThirdparty").String())
+				} else {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].NexthopThirdparty = types.StringNull()
+				}
+				if !data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].RewriteRtAsn.IsNull() {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].RewriteRtAsn = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.rewriteRtAsn").String())
+				} else {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].RewriteRtAsn = types.StringNull()
+				}
+				if !data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].SoftReconfigurationBackup.IsNull() {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].SoftReconfigurationBackup = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.softReconfigBackup").String())
+				} else {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].SoftReconfigurationBackup = types.StringNull()
+				}
+				if !data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].SiteOfOrigin.IsNull() {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].SiteOfOrigin = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.soo").String())
+				} else {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].SiteOfOrigin = types.StringNull()
+				}
+				if !data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].UnsuppressMap.IsNull() {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].UnsuppressMap = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.unSupprMap").String())
+				} else {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].UnsuppressMap = types.StringNull()
+				}
+				if !data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].Weight.IsNull() {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].Weight = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.wght").String())
+				} else {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].Weight = types.StringNull()
 				}
 				{
 					var rbgpMaxPfxP gjson.Result
@@ -1284,6 +2303,76 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 			} else {
 				data.Vrfs[c].Peers[nc].PasswordType = types.StringNull()
 			}
+			if !data.Vrfs[c].Peers[nc].AdminState.IsNull() {
+				data.Vrfs[c].Peers[nc].AdminState = types.StringValue(rbgpPeer.Get("bgpPeer.attributes.adminSt").String())
+			} else {
+				data.Vrfs[c].Peers[nc].AdminState = types.StringNull()
+			}
+			if !data.Vrfs[c].Peers[nc].AffinityGroup.IsNull() {
+				data.Vrfs[c].Peers[nc].AffinityGroup = types.Int64Value(rbgpPeer.Get("bgpPeer.attributes.affGrp").Int())
+			} else {
+				data.Vrfs[c].Peers[nc].AffinityGroup = types.Int64Null()
+			}
+			if !data.Vrfs[c].Peers[nc].AsnType.IsNull() {
+				data.Vrfs[c].Peers[nc].AsnType = types.StringValue(rbgpPeer.Get("bgpPeer.attributes.asnType").String())
+			} else {
+				data.Vrfs[c].Peers[nc].AsnType = types.StringNull()
+			}
+			if !data.Vrfs[c].Peers[nc].BfdType.IsNull() {
+				data.Vrfs[c].Peers[nc].BfdType = types.StringValue(rbgpPeer.Get("bgpPeer.attributes.bfdType").String())
+			} else {
+				data.Vrfs[c].Peers[nc].BfdType = types.StringNull()
+			}
+			if !data.Vrfs[c].Peers[nc].BmpServer1.IsNull() {
+				data.Vrfs[c].Peers[nc].BmpServer1 = types.StringValue(rbgpPeer.Get("bgpPeer.attributes.bmpSrvId1St").String())
+			} else {
+				data.Vrfs[c].Peers[nc].BmpServer1 = types.StringNull()
+			}
+			if !data.Vrfs[c].Peers[nc].BmpServer2.IsNull() {
+				data.Vrfs[c].Peers[nc].BmpServer2 = types.StringValue(rbgpPeer.Get("bgpPeer.attributes.bmpSrvId2St").String())
+			} else {
+				data.Vrfs[c].Peers[nc].BmpServer2 = types.StringNull()
+			}
+			if !data.Vrfs[c].Peers[nc].CapabilitySuppress4ByteAsn.IsNull() {
+				data.Vrfs[c].Peers[nc].CapabilitySuppress4ByteAsn = types.StringValue(rbgpPeer.Get("bgpPeer.attributes.capSuppr4ByteAsn").String())
+			} else {
+				data.Vrfs[c].Peers[nc].CapabilitySuppress4ByteAsn = types.StringNull()
+			}
+			if !data.Vrfs[c].Peers[nc].ConnectionMode.IsNull() {
+				data.Vrfs[c].Peers[nc].ConnectionMode = types.StringValue(rbgpPeer.Get("bgpPeer.attributes.connMode").String())
+			} else {
+				data.Vrfs[c].Peers[nc].ConnectionMode = types.StringNull()
+			}
+			if !data.Vrfs[c].Peers[nc].LogNeighborChanges.IsNull() {
+				data.Vrfs[c].Peers[nc].LogNeighborChanges = types.StringValue(rbgpPeer.Get("bgpPeer.attributes.logNbrChgs").String())
+			} else {
+				data.Vrfs[c].Peers[nc].LogNeighborChanges = types.StringNull()
+			}
+			if !data.Vrfs[c].Peers[nc].LowMemoryExempt.IsNull() {
+				data.Vrfs[c].Peers[nc].LowMemoryExempt = types.StringValue(rbgpPeer.Get("bgpPeer.attributes.lowMemExempt").String())
+			} else {
+				data.Vrfs[c].Peers[nc].LowMemoryExempt = types.StringNull()
+			}
+			if !data.Vrfs[c].Peers[nc].MaxPeerCount.IsNull() {
+				data.Vrfs[c].Peers[nc].MaxPeerCount = types.Int64Value(rbgpPeer.Get("bgpPeer.attributes.maxPeerCnt").Int())
+			} else {
+				data.Vrfs[c].Peers[nc].MaxPeerCount = types.Int64Null()
+			}
+			if !data.Vrfs[c].Peers[nc].PrivateAsControl.IsNull() {
+				data.Vrfs[c].Peers[nc].PrivateAsControl = types.StringValue(rbgpPeer.Get("bgpPeer.attributes.privateASctrl").String())
+			} else {
+				data.Vrfs[c].Peers[nc].PrivateAsControl = types.StringNull()
+			}
+			if !data.Vrfs[c].Peers[nc].SessionTemplate.IsNull() {
+				data.Vrfs[c].Peers[nc].SessionTemplate = types.StringValue(rbgpPeer.Get("bgpPeer.attributes.sessionContImp").String())
+			} else {
+				data.Vrfs[c].Peers[nc].SessionTemplate = types.StringNull()
+			}
+			if !data.Vrfs[c].Peers[nc].TtlSecurityHops.IsNull() {
+				data.Vrfs[c].Peers[nc].TtlSecurityHops = types.Int64Value(rbgpPeer.Get("bgpPeer.attributes.ttlScrtyHops").Int())
+			} else {
+				data.Vrfs[c].Peers[nc].TtlSecurityHops = types.Int64Null()
+			}
 			{
 				var rbgpLocalAsn gjson.Result
 				rbgpPeer.Get("bgpPeer.children").ForEach(
@@ -1338,6 +2427,91 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].SendCommunityStandard = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.sendComStd").String())
 				} else {
 					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].SendCommunityStandard = types.StringNull()
+				}
+				if !data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].AdvertiseGatewayIp.IsNull() {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].AdvertiseGatewayIp = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.advGwIp").String())
+				} else {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].AdvertiseGatewayIp = types.StringNull()
+				}
+				if !data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].AdvertisementInterval.IsNull() {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].AdvertisementInterval = types.Int64Value(rbgpPeerAf.Get("bgpPeerAf.attributes.advIntvl").Int())
+				} else {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].AdvertisementInterval = types.Int64Null()
+				}
+				if !data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].AdvertiseLocalLabeledRoute.IsNull() {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].AdvertiseLocalLabeledRoute = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.advLocalLblRt").String())
+				} else {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].AdvertiseLocalLabeledRoute = types.StringNull()
+				}
+				if !data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].Aigp.IsNull() {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].Aigp = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.aigp").String())
+				} else {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].Aigp = types.StringNull()
+				}
+				if !data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].AllowedSelfAsCount.IsNull() {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].AllowedSelfAsCount = types.Int64Value(rbgpPeerAf.Get("bgpPeerAf.attributes.allowedSelfAsCnt").Int())
+				} else {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].AllowedSelfAsCount = types.Int64Null()
+				}
+				if !data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].AsOverride.IsNull() {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].AsOverride = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.asOverride").String())
+				} else {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].AsOverride = types.StringNull()
+				}
+				if !data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].DefaultOriginate.IsNull() {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].DefaultOriginate = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.defOrg").String())
+				} else {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].DefaultOriginate = types.StringNull()
+				}
+				if !data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].DefaultOriginateRouteMap.IsNull() {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].DefaultOriginateRouteMap = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.defOrgRtMap").String())
+				} else {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].DefaultOriginateRouteMap = types.StringNull()
+				}
+				if !data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].DmzLinkBandwidth.IsNull() {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].DmzLinkBandwidth = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.dmzLinkBw").String())
+				} else {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].DmzLinkBandwidth = types.StringNull()
+				}
+				if !data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].EncapsulationMpls.IsNull() {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].EncapsulationMpls = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.encapMpls").String())
+				} else {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].EncapsulationMpls = types.StringNull()
+				}
+				if !data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].LinkBandwidthCumulative.IsNull() {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].LinkBandwidthCumulative = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.linkBwCum").String())
+				} else {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].LinkBandwidthCumulative = types.StringNull()
+				}
+				if !data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].NexthopThirdparty.IsNull() {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].NexthopThirdparty = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.nhThirdparty").String())
+				} else {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].NexthopThirdparty = types.StringNull()
+				}
+				if !data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].RewriteRtAsn.IsNull() {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].RewriteRtAsn = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.rewriteRtAsn").String())
+				} else {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].RewriteRtAsn = types.StringNull()
+				}
+				if !data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].SoftReconfigurationBackup.IsNull() {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].SoftReconfigurationBackup = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.softReconfigBackup").String())
+				} else {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].SoftReconfigurationBackup = types.StringNull()
+				}
+				if !data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].SiteOfOrigin.IsNull() {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].SiteOfOrigin = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.soo").String())
+				} else {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].SiteOfOrigin = types.StringNull()
+				}
+				if !data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].UnsuppressMap.IsNull() {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].UnsuppressMap = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.unSupprMap").String())
+				} else {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].UnsuppressMap = types.StringNull()
+				}
+				if !data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].Weight.IsNull() {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].Weight = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.wght").String())
+				} else {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].Weight = types.StringNull()
 				}
 				for nc__ := range data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].RouteControls {
 					var rbgpRtCtrlP gjson.Result

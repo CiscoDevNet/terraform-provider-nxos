@@ -37,11 +37,107 @@ child_classes:
         requires_replace: true
         description: 'Autonomous system number.'
         example: '65001'
+      - nxos_name: ctrl
+        tf_name: control
+        type: String
+        description: 'The control state.'
+        allow_non_enum_values: true
+        enum_values:
+          - stateful-ha
+        example: stateful-ha
+      - nxos_name: disPolBatch
+        tf_name: disable_policy_batching
+        type: String
+        description: 'Disable Batching Evaluation To All Peers.'
+        enum_values:
+          - enabled
+          - disabled
+        example: disabled
+      - nxos_name: disPolBatchNexthop
+        tf_name: disable_policy_batching_nexthop
+        type: String
+        description: 'Disable Batching Evaluation To Nexthop.'
+        enum_values:
+          - enabled
+          - disabled
+        example: disabled
+      - nxos_name: disPolBatchv4PfxLst
+        tf_name: disable_policy_batching_ipv4_prefix_list
+        type: String
+        description: 'Disable Batching Evaluation Of IPv4 Prefix Advertisements To All Peers.'
+        example: PFX_LIST1
+      - nxos_name: disPolBatchv6PfxLst
+        tf_name: disable_policy_batching_ipv6_prefix_list
+        type: String
+        description: 'Disable Batching Evaluation Of IPv6 Prefix Advertisements To All Peers.'
+        example: PFX_LIST_V6
       - nxos_name: enhancedErr
         tf_name: enhanced_error_handling
         type: Bool
         description: 'Enable BGP Enhanced Error Handling to prevent inadvertent session resets for minor errors. See RFC7606 for more details.'
         example: false
+      - nxos_name: fabricSoo
+        tf_name: fabric_soo
+        type: String
+        description: 'Fabric Site of Origin extcommunity.'
+        example: 'extended:as2-nn4:65001:100'
+        exclude_test: true
+      - nxos_name: flushRoutes
+        tf_name: flush_routes
+        type: String
+        description: 'Flush routes in RIB upon controlled restart.'
+        enum_values:
+          - enabled
+          - disabled
+        example: disabled
+      - nxos_name: isolate
+        tf_name: isolate
+        type: String
+        description: 'Isolate router from BGP perspective.'
+        enum_values:
+          - enabled
+          - disabled
+          - include-local
+          - custom
+        example: disabled
+      - nxos_name: isolateRtMap
+        tf_name: isolate_route_map
+        type: String
+        description: 'Isolate Route Map Configuration.'
+        example: ISO_RT_MAP
+        exclude_test: true
+      - nxos_name: medDampIntvl
+        tf_name: med_dampening_interval
+        type: Int64
+        description: 'Setting med dampening interval.'
+        min_int: 60
+        max_int: 4294967295
+        example: 60
+        exclude_test: true
+      - nxos_name: nhSupprDefRes
+        tf_name: nexthop_suppress_default_resolution
+        type: String
+        description: 'Suppress use of default route for nexthop address resolution.'
+        enum_values:
+          - enabled
+          - disabled
+        example: disabled
+      - nxos_name: rdDual
+        tf_name: rd_dual
+        type: String
+        description: 'Generate Secondary Route Distinguisher for vxlan multisite border gateway.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: rdDualId
+        tf_name: rd_dual_id
+        type: Int64
+        description: 'ID to generate Secondary RD with ID:VNI format.'
+        min_int: 1
+        max_int: 65535
+        example: 1
+        exclude_test: true
     child_classes:
       - class_name: bgpDom
         doc_path: Routing%20and%20Forwarding/bgp:Dom/
@@ -61,6 +157,115 @@ child_classes:
             type: String
             description: 'The BGP router ID.'
             example: '1.1.1.1'
+          - nxos_name: allocIndex
+            tf_name: alloc_index
+            type: Int64
+            description: 'Allocate index for vrf (Value in the range 1-8000).'
+            min_int: 1
+            max_int: 8000
+            example: 1
+            exclude_test: true
+          - nxos_name: always
+            tf_name: bestpath_first_always
+            type: String
+            description: 'Update delay option for first bestpath timeout.'
+            enum_values:
+              - enabled
+              - disabled
+            example: disabled
+          - nxos_name: bestPathIntvl
+            tf_name: bestpath_interval
+            type: Int64
+            description: 'Holds timeout for first bestpath after restart.'
+            min_int: 1
+            max_int: 3600
+            example: 300
+          - nxos_name: bwRef
+            tf_name: bandwidth_reference
+            type: Int64
+            description: 'Bandwidth reference value, holds the range from 1-4000000 if unit is mbps and holds range from 1-4000 if unit is gbps.'
+            min_int: 0
+            max_int: 4294967295
+            example: 40000
+          - nxos_name: bwRefUnit
+            tf_name: bandwidth_reference_unit
+            type: String
+            description: 'Bandwidth reference unit (Mbps or Gbps).'
+            enum_values:
+              - mbps
+              - gbps
+            example: mbps
+          - nxos_name: clusterId
+            tf_name: cluster_id
+            type: String
+            description: 'The BGP route reflector ID (Cluster ID) that identifies the cluster of the route reflector domain.'
+            example: '1.2.3.4'
+          - nxos_name: holdIntvl
+            tf_name: hold_time
+            type: Int64
+            description: 'The time period to wait before declaring the neighbor device down.'
+            min_int: 3
+            max_int: 3600
+            example: 180
+          - nxos_name: kaIntvl
+            tf_name: keepalive_interval
+            type: Int64
+            description: 'The interval time between sending keepalive messages.'
+            min_int: 0
+            max_int: 3600
+            example: 60
+          - nxos_name: localAsn
+            tf_name: local_asn
+            type: String
+            description: 'Local Asn for the EBGP neighbor.'
+            example: '65010'
+            exclude_test: true
+          - nxos_name: maxAsLimit
+            tf_name: max_as_limit
+            type: Int64
+            description: 'Max AS-Path limit from EBGP neighbor.'
+            min_int: 1
+            max_int: 512
+            example: 1
+            exclude_test: true
+          - nxos_name: mode
+            tf_name: mode
+            type: String
+            description: 'The BGP Domain mode.'
+            enum_values:
+              - fabric
+              - external
+              - proxy
+            example: fabric
+          - nxos_name: pfxPeerTimeout
+            tf_name: prefix_peer_timeout
+            type: Int64
+            description: 'Prefix Peer Timeout in secs.'
+            min_int: 0
+            max_int: 1200
+            example: 90
+          - nxos_name: pfxPeerWaitTime
+            tf_name: prefix_peer_wait_time
+            type: Int64
+            description: 'Prefix Peer Wait Time in secs.'
+            min_int: 0
+            max_int: 1200
+            example: 90
+          - nxos_name: reConnIntvl
+            tf_name: reconnect_interval
+            type: Int64
+            description: 'Connection reconnect interval in secs.'
+            min_int: 1
+            max_int: 60
+            example: 60
+          - nxos_name: rtrIdAuto
+            tf_name: router_id_auto
+            type: String
+            description: 'Automatically configured router identifier based on system MAC.'
+            enum_values:
+              - enabled
+              - disabled
+            example: disabled
         child_classes:
           - class_name: bgpRtCtrl
             doc_path: Routing%20and%20Forwarding/bgp:RtCtrl/
@@ -108,6 +313,15 @@ child_classes:
             tf_name: graceful_restart
             description: 'BGP Graceful Restart configuration.'
             attributes:
+              - nxos_name: ctrl
+                tf_name: graceful_restart_control
+                type: String
+                description: 'Graceful restart controls.'
+                allow_non_enum_values: true
+                enum_values:
+                  - helper
+                  - complete
+                example: complete
               - nxos_name: restartIntvl
                 tf_name: graceful_restart_interval
                 type: Int64
@@ -265,11 +479,164 @@ child_classes:
               - nxos_name: waitIgpConv
                 tf_name: wait_igp_converged
                 type: String
-                description: 'Delay initial bestpath until redistributed IGPs have converged'
+                description: 'Delay initial bestpath until redistributed IGPs have converged.'
                 enum_values:
                   - enabled
                   - disabled
                 example: disabled
+              - nxos_name: advSysMac
+                tf_name: advertise_system_mac
+                type: String
+                description: 'Advertise extra EVPN RT-2 with system MAC.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: allocLblAll
+                tf_name: allocate_label_all
+                type: String
+                description: 'Allocate labels for all routes.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+                exclude_test: true
+              - nxos_name: allocLblOptB
+                tf_name: allocate_label_option_b
+                type: String
+                description: 'Allow allocation of option B labels.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+                exclude_test: true
+              - nxos_name: allocLblRtMap
+                tf_name: allocate_label_route_map
+                type: String
+                description: 'Allocate labels for selective routes.'
+                example: LABEL_RT_MAP
+                exclude_test: true
+              - nxos_name: bestPathOriginAsAllowInvalid
+                tf_name: bestpath_origin_as_allow_invalid
+                type: String
+                description: 'Allow invalid origin-AS in BGP bestpath selection.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: bestPathOriginAsUseValidity
+                tf_name: bestpath_origin_as_use_validity
+                type: String
+                description: 'Enable BGP bestpath selection to use RPKI origin-as validity.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: clReflection
+                tf_name: client_to_client_reflection
+                type: String
+                description: 'client-to-client Reflection of routes.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: defMetric
+                tf_name: default_metric
+                type: String
+                description: 'Default Metric.'
+                example: '100'
+              - nxos_name: exportGwIp
+                tf_name: export_gateway_ip
+                type: String
+                description: 'Export Gateway IP to Type-5 EVPN routes for VRF.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: igpMetric
+                tf_name: igp_metric
+                type: Int64
+                description: 'Dampen IGP metric-related changes.'
+                min_int: 0
+                max_int: 3600
+                example: 600
+              - nxos_name: lblAllocMod
+                tf_name: label_allocation_mode
+                type: String
+                description: 'per VRF label allocation mode.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+                exclude_test: true
+              - nxos_name: maxPathUnequalCost
+                tf_name: max_path_unequal_cost
+                type: String
+                description: 'Configure WUECMP based on weight derived from nexthop-metric by default.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: nhLdBalEgrMultiSite
+                tf_name: nexthop_load_balance_egress_multisite
+                type: String
+                description: 'Nexthop multisite for load-balance egress.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: origMap
+                tf_name: originate_map
+                type: String
+                description: 'originate-map route map name.'
+                example: ORIG_MAP
+                exclude_test: true
+              - nxos_name: originAsValidate
+                tf_name: origin_as_validate
+                type: String
+                description: 'Enable RPKI origin-as validation for routes received from ebgp neighbors.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: originAsValidateSignalIbgp
+                tf_name: origin_as_validate_signal_ibgp
+                type: String
+                description: 'Send Origin Validation State Extended Community to ibgp neighbors.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: retainRttRtMap
+                tf_name: retain_rt_route_map
+                type: String
+                description: 'Retain Route Target Route Map.'
+                example: RETAIN_RT_MAP
+                exclude_test: true
+              - nxos_name: tblMapFltr
+                tf_name: table_map_filter
+                type: String
+                description: 'Selective route download.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: tmrBstpthDfr
+                tf_name: timer_bestpath_defer
+                type: Int64
+                description: 'Configure bgp related timers.'
+                min_int: 100
+                max_int: 3000
+                example: 100
+                exclude_test: true
+              - nxos_name: tmrMax
+                tf_name: timer_bestpath_defer_max
+                type: Int64
+                description: 'Configure bestpath defer timer.'
+                min_int: 300
+                max_int: 300000
+                example: 300
+                exclude_test: true
             child_classes:
               - class_name: bgpAdvPrefix
                 doc_path: Routing%20and%20Forwarding/bgp:AdvPrefix/
@@ -356,6 +723,12 @@ child_classes:
                       - unspecified
                       - locator
                     example: 'unspecified'
+                  - nxos_name: asn
+                    tf_name: asn
+                    type: String
+                    description: 'The autonomous system number.'
+                    example: '65001'
+                    exclude_test: true
           - class_name: bgpPeerCont
             doc_path: Routing%20and%20Forwarding/bgp:PeerCont/
             rn: peercont-%s
@@ -393,6 +766,166 @@ child_classes:
                 type: String
                 description: 'Source Interface. Must match first field in the output of `show intf brief`.'
                 example: 'lo0'
+              - nxos_name: adminSt
+                tf_name: admin_state
+                type: String
+                description: 'Administrative State.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: affGrp
+                tf_name: affinity_group
+                type: Int64
+                description: 'Affinity group for the neighbor.'
+                min_int: 0
+                max_int: 65535
+                example: 0
+                exclude_test: true
+              - nxos_name: asnType
+                tf_name: asn_type
+                type: String
+                description: 'Specify peer ASN type as External or Internal.'
+                enum_values:
+                  - none
+                  - external
+                  - internal
+                example: none
+              - nxos_name: bfdType
+                tf_name: bfd_type
+                type: String
+                description: 'Specify BFD session type.'
+                enum_values:
+                  - none
+                  - singlehop
+                  - multihop
+                example: none
+              - nxos_name: bmpSrvId1St
+                tf_name: bmp_server_1
+                type: String
+                description: 'Activate BMP Server 1.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: bmpSrvId2St
+                tf_name: bmp_server_2
+                type: String
+                description: 'Activate BMP Server 2.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: capSuppr4ByteAsn
+                tf_name: capability_suppress_4_byte_asn
+                type: String
+                description: 'Capability Suppress 4-byte-as.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: connMode
+                tf_name: connection_mode
+                type: String
+                description: 'Connection Mode.'
+                allow_non_enum_values: true
+                enum_values:
+                  - passive
+                example: passive
+              - nxos_name: ctrl
+                tf_name: peer_control
+                type: String
+                description: 'Control. Choices: `bfd`, `dis-conn-check`, `cap-neg-off`, `no-dyn-cap`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,dis-conn-check`. In this case values must be in alphabetical order.'
+                example: bfd
+              - nxos_name: holdIntvl
+                tf_name: hold_time
+                type: Int64
+                description: 'Hold Interval.'
+                min_int: 3
+                max_int: 3600
+                example: 180
+              - nxos_name: kaIntvl
+                tf_name: keepalive_interval
+                type: Int64
+                description: 'Keepalive Interval.'
+                min_int: 0
+                max_int: 3600
+                example: 60
+              - nxos_name: logNbrChgs
+                tf_name: log_neighbor_changes
+                type: String
+                description: 'Log Neighbor Changes.'
+                enum_values:
+                  - none
+                  - enable
+                  - disable
+                example: none
+              - nxos_name: lowMemExempt
+                tf_name: low_memory_exempt
+                type: String
+                description: 'Low Memory Exempt.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: maxPeerCnt
+                tf_name: max_peer_count
+                type: Int64
+                description: 'Maximum Peers for the prefix or interface.'
+                min_int: 1
+                max_int: 1000
+                example: 1
+                exclude_test: true
+              - nxos_name: passwdType
+                tf_name: password_type
+                type: String
+                description: 'Password EnCrypt Type.'
+                enum_values:
+                  - '0'
+                  - '3'
+                  - LINE
+                  - '6'
+                  - '7'
+                example: LINE
+                exclude_test: true
+              - nxos_name: password
+                tf_name: password
+                description: 'Configure a password for neighbor.'
+                type: String
+                example: secret_password
+                write_only: true
+                exclude_test: true
+              - nxos_name: privateASctrl
+                tf_name: private_as_control
+                type: String
+                description: 'Private AS Control.'
+                enum_values:
+                  - none
+                  - remove-exclusive
+                  - remove-all
+                  - replace-as
+                example: none
+              - nxos_name: sessionContImp
+                tf_name: session_template
+                type: String
+                description: 'Importing Session Specific properties from Session Template.'
+                example: SESS_TEMPLATE
+              - nxos_name: ttl
+                tf_name: ebgp_multihop_ttl
+                type: Int64
+                description: 'eBGP Multihop.'
+                min_int: 2
+                max_int: 255
+                example: 2
+                exclude_test: true
+              - nxos_name: ttlScrtyHops
+                tf_name: ttl_security_hops
+                type: Int64
+                description: 'Enable TTL Security Mechanism with hop counts specified for remote peers.'
+                min_int: 1
+                max_int: 254
+                example: 1
+                exclude_test: true
             child_classes:
               - class_name: bgpPeerAf
                 doc_path: Routing%20and%20Forwarding/bgp:PeerAf/
@@ -435,6 +968,134 @@ child_classes:
                       - enabled
                       - disabled
                     example: enabled
+                  - nxos_name: advGwIp
+                    tf_name: advertise_gateway_ip
+                    type: String
+                    description: 'Advertise Gateway IP in Type-5 routes to neighbor.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                    exclude_test: true
+                  - nxos_name: advIntvl
+                    tf_name: advertisement_interval
+                    type: Int64
+                    description: 'Neighbor advertisement interval.'
+                    min_int: 1
+                    max_int: 600
+                    example: 1
+                    exclude_test: true
+                  - nxos_name: advLocalLblRt
+                    tf_name: advertise_local_labeled_route
+                    type: String
+                    description: 'Advertise a route with local label to peer.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                    exclude_test: true
+                  - nxos_name: aigp
+                    tf_name: aigp
+                    type: String
+                    description: 'Send and recieve AIGP attribute.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: disabled
+                  - nxos_name: allowedSelfAsCnt
+                    tf_name: allowed_self_as_count
+                    type: Int64
+                    description: 'Allowed Self AS Count.'
+                    min_int: 0
+                    max_int: 10
+                    example: 0
+                  - nxos_name: asOverride
+                    tf_name: as_override
+                    type: String
+                    description: 'Override matching AS-number while sending update.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: disabled
+                  - nxos_name: defOrg
+                    tf_name: default_originate
+                    type: String
+                    description: 'Default Originate is enabled.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: disabled
+                  - nxos_name: defOrgRtMap
+                    tf_name: default_originate_route_map
+                    type: String
+                    description: 'Default Originate Route Map.'
+                    example: DEF_ORIG_MAP
+                  - nxos_name: dmzLinkBw
+                    tf_name: dmz_link_bandwidth
+                    type: String
+                    description: 'Dmz-link-bandwidth.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: disabled
+                  - nxos_name: encapMpls
+                    tf_name: encapsulation_mpls
+                    type: String
+                    description: 'Configure encapsulation type for EVPN routes.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: disabled
+                    exclude_test: true
+                  - nxos_name: linkBwCum
+                    tf_name: link_bandwidth_cumulative
+                    type: String
+                    description: 'Link-bandwidth Cumulative.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: disabled
+                  - nxos_name: nhThirdparty
+                    tf_name: nexthop_thirdparty
+                    type: String
+                    description: 'Compute a third-party nexthop if possible.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                  - nxos_name: rewriteRtAsn
+                    tf_name: rewrite_rt_asn
+                    type: String
+                    description: 'Auto generate RTs for EBGP neighbor.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: disabled
+                  - nxos_name: softReconfigBackup
+                    tf_name: soft_reconfiguration_backup
+                    type: String
+                    description: 'Soft Reconfiguration.'
+                    enum_values:
+                      - none
+                      - inbound
+                      - inbound-always
+                    example: none
+                  - nxos_name: soo
+                    tf_name: site_of_origin
+                    type: String
+                    description: 'Site-of-origin extcommunity.'
+                    example: 'extended:as2-nn4:65001:200'
+                    exclude_test: true
+                  - nxos_name: unSupprMap
+                    tf_name: unsuppress_map
+                    type: String
+                    description: 'Route-map to selectively unsuppress suppressed routes.'
+                    example: UNSUPP_MAP
+                  - nxos_name: wght
+                    tf_name: weight
+                    type: String
+                    description: 'Weight for the neighbor.'
+                    example: '100'
                 child_classes:
                   - class_name: bgpMaxPfxP
                     doc_path: Routing%20and%20Forwarding/bgp:MaxPfxP/
@@ -559,6 +1220,120 @@ child_classes:
                 type: String
                 example: secret_password
                 write_only: true
+              - nxos_name: adminSt
+                tf_name: admin_state
+                type: String
+                description: 'Administrative State.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: affGrp
+                tf_name: affinity_group
+                type: Int64
+                description: 'Affinity group for the neighbor.'
+                min_int: 0
+                max_int: 65535
+                example: 0
+                exclude_test: true
+              - nxos_name: asnType
+                tf_name: asn_type
+                type: String
+                description: 'Specify peer ASN type as External or Internal.'
+                enum_values:
+                  - none
+                  - external
+                  - internal
+                example: none
+              - nxos_name: bfdType
+                tf_name: bfd_type
+                type: String
+                description: 'Specify BFD session type.'
+                enum_values:
+                  - none
+                  - singlehop
+                  - multihop
+                example: none
+              - nxos_name: bmpSrvId1St
+                tf_name: bmp_server_1
+                type: String
+                description: 'Activate BMP Server 1.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: bmpSrvId2St
+                tf_name: bmp_server_2
+                type: String
+                description: 'Activate BMP Server 2.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: capSuppr4ByteAsn
+                tf_name: capability_suppress_4_byte_asn
+                type: String
+                description: 'Capability Suppress 4-byte-as.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: connMode
+                tf_name: connection_mode
+                type: String
+                description: 'BGP transport connection mode.'
+                allow_non_enum_values: true
+                enum_values:
+                  - passive
+                example: passive
+              - nxos_name: logNbrChgs
+                tf_name: log_neighbor_changes
+                type: String
+                description: 'Log messages for Neighbor up/down events.'
+                enum_values:
+                  - none
+                  - enable
+                  - disable
+                example: none
+              - nxos_name: lowMemExempt
+                tf_name: low_memory_exempt
+                type: String
+                description: 'Low Memory Exempt.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: maxPeerCnt
+                tf_name: max_peer_count
+                type: Int64
+                description: 'Maximum Peers For Prefix.'
+                min_int: 1
+                max_int: 1000
+                example: 1
+                exclude_test: true
+              - nxos_name: privateASctrl
+                tf_name: private_as_control
+                type: String
+                description: 'Remove private AS number from outbound updates.'
+                enum_values:
+                  - none
+                  - remove-exclusive
+                  - remove-all
+                  - replace-as
+                example: none
+              - nxos_name: sessionContImp
+                tf_name: session_template
+                type: String
+                description: 'Peer Session Template To Import From.'
+                example: SESS_TEMPLATE
+              - nxos_name: ttlScrtyHops
+                tf_name: ttl_security_hops
+                type: Int64
+                description: 'Enable TTL Security Mechanism.'
+                min_int: 1
+                max_int: 254
+                example: 1
+                exclude_test: true
             child_classes:
               - class_name: bgpLocalAsn
                 doc_path: Routing%20and%20Forwarding/bgp:LocalAsn/
@@ -625,6 +1400,134 @@ child_classes:
                       - enabled
                       - disabled
                     example: enabled
+                  - nxos_name: advGwIp
+                    tf_name: advertise_gateway_ip
+                    type: String
+                    description: 'Advertise Gateway IP in Type-5 routes to neighbor.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                    exclude_test: true
+                  - nxos_name: advIntvl
+                    tf_name: advertisement_interval
+                    type: Int64
+                    description: 'Neighbor advertisement interval.'
+                    min_int: 1
+                    max_int: 600
+                    example: 1
+                    exclude_test: true
+                  - nxos_name: advLocalLblRt
+                    tf_name: advertise_local_labeled_route
+                    type: String
+                    description: 'Advertise a route with local label to peer.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                    exclude_test: true
+                  - nxos_name: aigp
+                    tf_name: aigp
+                    type: String
+                    description: 'Send and recieve AIGP attribute.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: disabled
+                  - nxos_name: allowedSelfAsCnt
+                    tf_name: allowed_self_as_count
+                    type: Int64
+                    description: 'Allowed Self AS Count.'
+                    min_int: 0
+                    max_int: 10
+                    example: 0
+                  - nxos_name: asOverride
+                    tf_name: as_override
+                    type: String
+                    description: 'Override matching AS-number while sending update.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: disabled
+                  - nxos_name: defOrg
+                    tf_name: default_originate
+                    type: String
+                    description: 'Default Originate is enabled.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: disabled
+                  - nxos_name: defOrgRtMap
+                    tf_name: default_originate_route_map
+                    type: String
+                    description: 'Default Originate Route Map.'
+                    example: DEF_ORIG_MAP
+                  - nxos_name: dmzLinkBw
+                    tf_name: dmz_link_bandwidth
+                    type: String
+                    description: 'Dmz-link-bandwidth.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: disabled
+                  - nxos_name: encapMpls
+                    tf_name: encapsulation_mpls
+                    type: String
+                    description: 'Configure encapsulation type for EVPN routes.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: disabled
+                    exclude_test: true
+                  - nxos_name: linkBwCum
+                    tf_name: link_bandwidth_cumulative
+                    type: String
+                    description: 'Link-bandwidth Cumulative.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: disabled
+                  - nxos_name: nhThirdparty
+                    tf_name: nexthop_thirdparty
+                    type: String
+                    description: 'Compute a third-party nexthop if possible.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                  - nxos_name: rewriteRtAsn
+                    tf_name: rewrite_rt_asn
+                    type: String
+                    description: 'Auto generate RTs for EBGP neighbor.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: disabled
+                  - nxos_name: softReconfigBackup
+                    tf_name: soft_reconfiguration_backup
+                    type: String
+                    description: 'Soft Reconfiguration.'
+                    enum_values:
+                      - none
+                      - inbound
+                      - inbound-always
+                    example: none
+                  - nxos_name: soo
+                    tf_name: site_of_origin
+                    type: String
+                    description: 'Site-of-origin extcommunity.'
+                    example: 'extended:as2-nn4:65001:200'
+                    exclude_test: true
+                  - nxos_name: unSupprMap
+                    tf_name: unsuppress_map
+                    type: String
+                    description: 'Route-map to selectively unsuppress suppressed routes.'
+                    example: UNSUPP_MAP
+                  - nxos_name: wght
+                    tf_name: weight
+                    type: String
+                    description: 'Weight for the neighbor.'
+                    example: '100'
                 child_classes:
                   - class_name: bgpRtCtrlP
                     doc_path: Routing%20and%20Forwarding/bgp:RtCtrlP/

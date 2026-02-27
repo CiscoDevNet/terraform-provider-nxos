@@ -94,7 +94,7 @@ func TestAccDataSourceNxosAccessLists(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceNxosAccessListsConfig(),
+				Config: testAccDataSourceNxosAccessListsPrerequisitesConfig + testAccDataSourceNxosAccessListsConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -104,6 +104,16 @@ func TestAccDataSourceNxosAccessLists(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccDataSourceNxosAccessListsPrerequisitesConfig = `
+resource "nxos_rest" "PreReq0" {
+  dn = "sys/intf/phys-[eth1/10]"
+  class_name = "l1PhysIf"
+  content = {
+      layer = "Layer3"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -164,6 +174,7 @@ func testAccDataSourceNxosAccessListsConfig() string {
 	config += `		interface_id = "eth1/10"` + "\n"
 	config += `		access_list_name = "ACL1"` + "\n"
 	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

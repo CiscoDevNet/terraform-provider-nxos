@@ -899,3 +899,9 @@ child_classes:
                         type: String
                         description: "Access Control List name."
                         example: ACL1
+test_prerequisites:
+  - dn: sys/intf/phys-[eth1/10]
+    class_name: l1PhysIf
+    attributes:
+      - name: layer
+        value: Layer3

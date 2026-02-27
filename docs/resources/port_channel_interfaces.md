@@ -59,7 +59,7 @@ resource "nxos_port_channel_interfaces" "example" {
     transmission_mode      = "not-a-trans-port"
     trunk_logging          = "enable"
     usage                  = "discovery"
-    user_configured_flags  = "admin_layer,admin_mtu,admin_state"
+    user_configured_flags  = "admin_layer,admin_state"
   }]
 }
 ```

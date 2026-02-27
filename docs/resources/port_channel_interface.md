@@ -65,7 +65,7 @@ resource "nxos_port_channel_interface" "example" {
   transmission_mode      = "not-a-trans-port"
   trunk_logging          = "enable"
   usage                  = "discovery"
-  user_configured_flags  = "admin_layer,admin_mtu,admin_state"
+  user_configured_flags  = "admin_layer,admin_state"
   vrf_dn                 = "sys/inst-default"
   members = [{
     interface_dn = "sys/intf/phys-[eth1/11]"

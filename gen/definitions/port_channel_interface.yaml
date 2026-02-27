@@ -375,7 +375,7 @@ attributes:
       - admin_mtu
     allow_non_enum_values: true
     description: "Port User Config Flags."
-    example: "admin_layer,admin_mtu,admin_state"
+    example: "admin_layer,admin_state"
 child_classes:
   - class_name: nwRtVrfMbr
     rn: rtvrfMbr

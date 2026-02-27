@@ -68,7 +68,7 @@ func TestAccNxosPortChannelInterfaces(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.squelch", "disable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.transmission_mode", "not-a-trans-port"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.usage", "discovery"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.user_configured_flags", "admin_layer,admin_mtu,admin_state"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.user_configured_flags", "admin_layer,admin_state"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.members.0.interface_dn", "sys/intf/phys-[eth1/11]"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.members.0.force", "true"))
 	var tfVersion *goversion.Version
@@ -176,7 +176,7 @@ func testAccNxosPortChannelInterfacesConfig_all() string {
 	config += `		squelch = "disable"` + "\n"
 	config += `		transmission_mode = "not-a-trans-port"` + "\n"
 	config += `		usage = "discovery"` + "\n"
-	config += `		user_configured_flags = "admin_layer,admin_mtu,admin_state"` + "\n"
+	config += `		user_configured_flags = "admin_layer,admin_state"` + "\n"
 	config += `		members = [{` + "\n"
 	config += `			interface_dn = "sys/intf/phys-[eth1/11]"` + "\n"
 	config += `			force = true` + "\n"

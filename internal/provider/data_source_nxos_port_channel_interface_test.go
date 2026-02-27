@@ -65,7 +65,7 @@ func TestAccDataSourceNxosPortChannelInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "squelch", "disable"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "transmission_mode", "not-a-trans-port"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "usage", "discovery"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "user_configured_flags", "admin_layer,admin_mtu,admin_state"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "user_configured_flags", "admin_layer,admin_state"))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_port_channel_interface.test", "members.*", map[string]string{
 		"interface_dn": "sys/intf/phys-[eth1/11]",
 		"force":        "true",
@@ -136,7 +136,7 @@ func testAccDataSourceNxosPortChannelInterfaceConfig() string {
 	config += `	squelch = "disable"` + "\n"
 	config += `	transmission_mode = "not-a-trans-port"` + "\n"
 	config += `	usage = "discovery"` + "\n"
-	config += `	user_configured_flags = "admin_layer,admin_mtu,admin_state"` + "\n"
+	config += `	user_configured_flags = "admin_layer,admin_state"` + "\n"
 	config += `	members = [{` + "\n"
 	config += `		interface_dn = "sys/intf/phys-[eth1/11]"` + "\n"
 	config += `		force = true` + "\n"

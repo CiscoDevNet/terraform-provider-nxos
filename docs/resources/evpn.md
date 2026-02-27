@@ -29,6 +29,8 @@ resource "nxos_evpn" "example" {
   vnis = [{
     encap               = "vxlan-123456"
     route_distinguisher = "rd:unknown:0:0"
+    table_map           = "ROUTE_MAP1"
+    table_map_filter    = false
     route_target_directions = [{
       type = "import"
       route_targets = [{
@@ -64,6 +66,8 @@ Optional:
 
 - `route_distinguisher` (String) Route Distinguisher. value in NX-OS DME format.
 - `route_target_directions` (Attributes List) List of EVPN VNI route target directions. (see [below for nested schema](#nestedatt--vnis--route_target_directions))
+- `table_map` (String) Route-map name for table-map command to filter routes.
+- `table_map_filter` (Boolean) Filter option used with table-map configuration for selective route download.
 
 <a id="nestedatt--vnis--route_target_directions"></a>
 ### Nested Schema for `vnis.route_target_directions`

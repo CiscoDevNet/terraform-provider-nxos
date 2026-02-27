@@ -26,6 +26,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -46,6 +47,8 @@ type EVPN struct {
 type EVPNVnis struct {
 	Encap                 types.String                    `tfsdk:"encap"`
 	RouteDistinguisher    types.String                    `tfsdk:"route_distinguisher"`
+	TableMap              types.String                    `tfsdk:"table_map"`
+	TableMapFilter        types.Bool                      `tfsdk:"table_map_filter"`
 	RouteTargetDirections []EVPNVnisRouteTargetDirections `tfsdk:"route_target_directions"`
 }
 
@@ -122,6 +125,12 @@ func (data EVPN) toBody() nxos.Body {
 		if (!child.RouteDistinguisher.IsUnknown() && !child.RouteDistinguisher.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "rd", child.RouteDistinguisher.ValueString())
 		}
+		if (!child.TableMap.IsUnknown() && !child.TableMap.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "tblMap", child.TableMap.ValueString())
+		}
+		if (!child.TableMapFilter.IsUnknown() && !child.TableMapFilter.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "tblMapFltr", strconv.FormatBool(child.TableMapFilter.ValueBool()))
+		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.rtctrlBDEvi.attributes", attrs)
 		{
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
@@ -164,6 +173,8 @@ func (data *EVPN) fromBody(res gjson.Result) {
 						var child EVPNVnis
 						child.Encap = types.StringValue(value.Get("attributes.encap").String())
 						child.RouteDistinguisher = types.StringValue(value.Get("attributes.rd").String())
+						child.TableMap = types.StringValue(value.Get("attributes.tblMap").String())
+						child.TableMapFilter = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.tblMapFltr").String()))
 						value.Get("children").ForEach(
 							func(_, nestedV gjson.Result) bool {
 								nestedV.ForEach(
@@ -235,6 +246,16 @@ func (data *EVPN) updateFromBody(res gjson.Result) {
 			data.Vnis[c].RouteDistinguisher = types.StringValue(rrtctrlBDEvi.Get("rtctrlBDEvi.attributes.rd").String())
 		} else {
 			data.Vnis[c].RouteDistinguisher = types.StringNull()
+		}
+		if !data.Vnis[c].TableMap.IsNull() {
+			data.Vnis[c].TableMap = types.StringValue(rrtctrlBDEvi.Get("rtctrlBDEvi.attributes.tblMap").String())
+		} else {
+			data.Vnis[c].TableMap = types.StringNull()
+		}
+		if !data.Vnis[c].TableMapFilter.IsNull() {
+			data.Vnis[c].TableMapFilter = types.BoolValue(helpers.ParseNxosBoolean(rrtctrlBDEvi.Get("rtctrlBDEvi.attributes.tblMapFltr").String()))
+		} else {
+			data.Vnis[c].TableMapFilter = types.BoolNull()
 		}
 		for nc := range data.Vnis[c].RouteTargetDirections {
 			var rrtctrlRttP gjson.Result

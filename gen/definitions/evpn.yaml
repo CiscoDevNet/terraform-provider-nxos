@@ -34,6 +34,16 @@ child_classes:
         type: String
         description: 'Route Distinguisher. value in NX-OS DME format.'
         example: 'rd:unknown:0:0'
+      - nxos_name: tblMap
+        tf_name: table_map
+        type: String
+        description: 'Route-map name for table-map command to filter routes.'
+        example: ROUTE_MAP1
+      - nxos_name: tblMapFltr
+        tf_name: table_map_filter
+        type: Bool
+        description: 'Filter option used with table-map configuration for selective route download.'
+        example: false
     child_classes:
       - class_name: rtctrlRttP
         doc_path: Routing%20and%20Forwarding/rtctrl:RttP/

@@ -85,6 +85,10 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							MarkdownDescription: "The administrative state of the object or policy.",
 							Computed:            true,
 						},
+						"control": schema.StringAttribute{
+							MarkdownDescription: "The control state.",
+							Computed:            true,
+						},
 						"vrfs": schema.ListNestedAttribute{
 							MarkdownDescription: "List of OSPF VRFs.",
 							Computed:            true,
@@ -118,8 +122,44 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										MarkdownDescription: "Router identifier for this domain.",
 										Computed:            true,
 									},
+									"capability_vrf_lite": schema.StringAttribute{
+										MarkdownDescription: "Capability vrf-lite for L3VPN or Ethernet VPN.",
+										Computed:            true,
+									},
 									"control": schema.StringAttribute{
 										MarkdownDescription: "Holds the controls bfd, name-lookup, default-passive and Segment Routing. Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`. Can be an empty string. Allowed formats:\n  - Single value. Example: `bfd`\n  - Multiple values (comma-separated). Example: `bfd,default-passive`. In this case values must be in alphabetical order.",
+										Computed:            true,
+									},
+									"default_metric": schema.Int64Attribute{
+										MarkdownDescription: "Default metric cost for redistributed routes.",
+										Computed:            true,
+									},
+									"default_route_nssa_pbit_clear": schema.BoolAttribute{
+										MarkdownDescription: "Override RFC 3101 behaviour and add default route on ABR even if P-bit is clear in received type-7 default route LSA.",
+										Computed:            true,
+									},
+									"discard_route": schema.StringAttribute{
+										MarkdownDescription: "Control bits for discard-route external and internal.",
+										Computed:            true,
+									},
+									"down_bit_ignore": schema.BoolAttribute{
+										MarkdownDescription: "Holds the status of Down-bit ignore.",
+										Computed:            true,
+									},
+									"max_ecmp": schema.Int64Attribute{
+										MarkdownDescription: "Maximum Equal Cost Multi Path(ECMP).",
+										Computed:            true,
+									},
+									"name_lookup_vrf": schema.StringAttribute{
+										MarkdownDescription: "Holds vrf name of dns-server for name-lookup.",
+										Computed:            true,
+									},
+									"rfc1583_compatible": schema.BoolAttribute{
+										MarkdownDescription: "RFC 1583 compatibility for external path preferences.",
+										Computed:            true,
+									},
+									"rfc1583_compatible_ios": schema.BoolAttribute{
+										MarkdownDescription: "RFC 1583 compatibility to IOS for external path preferences.",
 										Computed:            true,
 									},
 									"areas": schema.ListNestedAttribute{
@@ -139,12 +179,28 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 													MarkdownDescription: "Area cost, specifies cost for default summary LSAs, Used with nssa/stub area types.",
 													Computed:            true,
 												},
+												"control": schema.StringAttribute{
+													MarkdownDescription: "Area controls can be ABRs originate summary LSAs into other areas, redistributed LSAs or suppress forwarding address. Choices: `unspecified`, `summary`, `redistribute`, `suppress-fa`. Can be an empty string. Allowed formats:\n  - Single value. Example: `summary`\n  - Multiple values (comma-separated). Example: `redistribute,summary`. In this case values must be in alphabetical order.",
+													Computed:            true,
+												},
+												"nssa_translator_role": schema.StringAttribute{
+													MarkdownDescription: "Not-so-stubby area(NSSA) translator role.",
+													Computed:            true,
+												},
+												"segment_routing_mpls": schema.StringAttribute{
+													MarkdownDescription: "Segment routing mpls control.",
+													Computed:            true,
+												},
 												"type": schema.StringAttribute{
 													MarkdownDescription: "Area types can be stub, nssa, backbone etc.",
 													Computed:            true,
 												},
 											},
 										},
+									},
+									"max_metric_await_convergence_bgp_asn": schema.StringAttribute{
+										MarkdownDescription: "At startup, advertise max metric until convergence of BGP ASN.",
+										Computed:            true,
 									},
 									"max_metric_control": schema.StringAttribute{
 										MarkdownDescription: "Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:\n  - Single value. Example: `stub`\n  - Multiple values (comma-separated). Example: `stub,summary-lsa`. In this case values must be in alphabetical order.",
@@ -169,6 +225,10 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 											Attributes: map[string]schema.Attribute{
 												"interface_id": schema.StringAttribute{
 													MarkdownDescription: "Must match first field in the output of `show intf brief`. Example: `eth1/1`.",
+													Computed:            true,
+												},
+												"admin_state": schema.StringAttribute{
+													MarkdownDescription: "The administrative state of the object or policy.",
 													Computed:            true,
 												},
 												"advertise_secondaries": schema.BoolAttribute{
@@ -207,12 +267,32 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 													MarkdownDescription: "Priority, used in determining the designated router on this network.",
 													Computed:            true,
 												},
+												"control": schema.StringAttribute{
+													MarkdownDescription: "Interface controls can be MTU ignore, Advertise subnet. Choices: `unspecified`, `mtu-ignore`, `advert-subnet`. Can be an empty string. Allowed formats:\n  - Single value. Example: `mtu-ignore`\n  - Multiple values (comma-separated). Example: `advert-subnet,mtu-ignore`. In this case values must be in alphabetical order.",
+													Computed:            true,
+												},
+												"node_flag": schema.StringAttribute{
+													MarkdownDescription: "Node flag, determines if prefix attribute should have the node flag or not.",
+													Computed:            true,
+												},
+												"retransmit_interval": schema.Int64Attribute{
+													MarkdownDescription: "Retransmit interval, time between LSA retransmissions.",
+													Computed:            true,
+												},
+												"transmit_delay": schema.Int64Attribute{
+													MarkdownDescription: "Transmit delay, estimated time needed to send an LSA update packet.",
+													Computed:            true,
+												},
 												"authentication_key": schema.StringAttribute{
 													MarkdownDescription: "Key used for authenticatoin.",
 													Computed:            true,
 												},
 												"authentication_key_id": schema.Int64Attribute{
 													MarkdownDescription: "Key id used for authentication.",
+													Computed:            true,
+												},
+												"authentication_key_new": schema.StringAttribute{
+													MarkdownDescription: "Key used for authenticatoin.",
 													Computed:            true,
 												},
 												"authentication_key_secure_mode": schema.BoolAttribute{
@@ -224,6 +304,10 @@ func (d *OSPFDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 													Computed:            true,
 												},
 												"authentication_md5_key": schema.StringAttribute{
+													MarkdownDescription: "Authentication md5 key.",
+													Computed:            true,
+												},
+												"authentication_md5_key_new": schema.StringAttribute{
 													MarkdownDescription: "Authentication md5 key.",
 													Computed:            true,
 												},

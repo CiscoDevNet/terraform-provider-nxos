@@ -32,27 +32,42 @@ resource "nxos_ospf" "example" {
   instances = [{
     name        = "OSPF1"
     admin_state = "enabled"
+    control     = "stateful-ha"
     vrfs = [{
-      name                     = "VRF1"
-      log_adjacency_changes    = "brief"
-      admin_state              = "enabled"
-      bandwidth_reference      = 400000
-      bandwidth_reference_unit = "mbps"
-      distance                 = 110
-      router_id                = "34.56.78.90"
-      control                  = "bfd,default-passive"
+      name                          = "VRF1"
+      log_adjacency_changes         = "brief"
+      admin_state                   = "enabled"
+      bandwidth_reference           = 400000
+      bandwidth_reference_unit      = "mbps"
+      distance                      = 110
+      router_id                     = "34.56.78.90"
+      capability_vrf_lite           = "l3vpn"
+      control                       = "bfd,default-passive"
+      default_metric                = 1000
+      default_route_nssa_pbit_clear = true
+      discard_route                 = "ext,int"
+      down_bit_ignore               = true
+      max_ecmp                      = 16
+      name_lookup_vrf               = "default"
+      rfc1583_compatible            = true
+      rfc1583_compatible_ios        = true
       areas = [{
-        area_id             = "0.0.0.10"
-        authentication_type = "unspecified"
-        cost                = 10
-        type                = "stub"
+        area_id              = "0.0.0.10"
+        authentication_type  = "unspecified"
+        cost                 = 10
+        control              = "summary"
+        nssa_translator_role = "always"
+        segment_routing_mpls = "mpls"
+        type                 = "stub"
       }]
-      max_metric_control          = "external-lsa,startup,stub,summary-lsa"
-      max_metric_external_lsa     = 600
-      max_metric_summary_lsa      = 600
-      max_metric_startup_interval = 300
+      max_metric_await_convergence_bgp_asn = "65535"
+      max_metric_control                   = "external-lsa,startup,stub,summary-lsa"
+      max_metric_external_lsa              = 600
+      max_metric_summary_lsa               = 600
+      max_metric_startup_interval          = 300
       interfaces = [{
         interface_id                       = "eth1/10"
+        admin_state                        = "enabled"
         advertise_secondaries              = false
         area                               = "0.0.0.10"
         bfd                                = "disabled"
@@ -62,11 +77,17 @@ resource "nxos_ospf" "example" {
         network_type                       = "p2p"
         passive                            = "enabled"
         priority                           = 10
+        control                            = "mtu-ignore"
+        node_flag                          = "clear"
+        retransmit_interval                = 10
+        transmit_delay                     = 2
         authentication_key                 = "0 mykey"
         authentication_key_id              = 1
+        authentication_key_new             = "0 mykey"
         authentication_key_secure_mode     = false
         authentication_keychain            = "mykeychain"
         authentication_md5_key             = "0 mymd5key"
+        authentication_md5_key_new         = "0 mymd5key"
         authentication_md5_key_secure_mode = false
         authentication_type                = "none"
       }]
@@ -100,6 +121,8 @@ Optional:
 
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
+- `control` (String) The control state.
+  - Choices: `unspecified`, `stateful-ha`
 - `vrfs` (Attributes List) List of OSPF VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
 
 <a id="nestedatt--instances--vrfs"></a>
@@ -118,15 +141,26 @@ Optional:
   - Range: `0`-`4294967295`
 - `bandwidth_reference_unit` (String) Bandwidth reference unit (Mbps or Gbps).
   - Choices: `mbps`, `gbps`
+- `capability_vrf_lite` (String) Capability vrf-lite for L3VPN or Ethernet VPN.
+  - Choices: `unspecified`, `l3vpn`, `evpn`
 - `control` (String) Holds the controls bfd, name-lookup, default-passive and Segment Routing. Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`. Can be an empty string. Allowed formats:
   - Single value. Example: `bfd`
   - Multiple values (comma-separated). Example: `bfd,default-passive`. In this case values must be in alphabetical order.
   - Choices: `unspecified`, `bfd`, `name-lookup`, `default-passive`, `segrt`
+- `default_metric` (Number) Default metric cost for redistributed routes.
+  - Range: `0`-`16777214`
+- `default_route_nssa_pbit_clear` (Boolean) Override RFC 3101 behaviour and add default route on ABR even if P-bit is clear in received type-7 default route LSA.
+- `discard_route` (String) Control bits for discard-route external and internal.
+  - Choices: `unspecified`, `int`, `ext`
 - `distance` (Number) Administrative distance preference.
   - Range: `1`-`255`
+- `down_bit_ignore` (Boolean) Holds the status of Down-bit ignore.
 - `interfaces` (Attributes List) List of OSPF interfaces. (see [below for nested schema](#nestedatt--instances--vrfs--interfaces))
 - `log_adjacency_changes` (String) Adjacency change logging level.
   - Choices: `none`, `brief`, `detail`
+- `max_ecmp` (Number) Maximum Equal Cost Multi Path(ECMP).
+  - Range: `1`-`64`
+- `max_metric_await_convergence_bgp_asn` (String) At startup, advertise max metric until convergence of BGP ASN.
 - `max_metric_control` (String) Maximum Metric Controls - specifies when to send max-metric LSAs. Choices: `unspecified`, `summary-lsa`, `external-lsa`, `startup`, `stub`. Can be an empty string. Allowed formats:
   - Single value. Example: `stub`
   - Multiple values (comma-separated). Example: `stub,summary-lsa`. In this case values must be in alphabetical order.
@@ -137,6 +171,9 @@ Optional:
   - Range: `0`-`4294967295`
 - `max_metric_summary_lsa` (Number) Maximum metric value for summary LSAs.
   - Range: `0`-`16777215`
+- `name_lookup_vrf` (String) Holds vrf name of dns-server for name-lookup.
+- `rfc1583_compatible` (Boolean) RFC 1583 compatibility for external path preferences.
+- `rfc1583_compatible_ios` (Boolean) RFC 1583 compatibility to IOS for external path preferences.
 - `router_id` (String) Router identifier for this domain.
 
 <a id="nestedatt--instances--vrfs--areas"></a>
@@ -150,8 +187,16 @@ Optional:
 
 - `authentication_type` (String) Authentication type can be simple, none or md5.
   - Choices: `none`, `simple`, `md5`, `unspecified`
+- `control` (String) Area controls can be ABRs originate summary LSAs into other areas, redistributed LSAs or suppress forwarding address. Choices: `unspecified`, `summary`, `redistribute`, `suppress-fa`. Can be an empty string. Allowed formats:
+  - Single value. Example: `summary`
+  - Multiple values (comma-separated). Example: `redistribute,summary`. In this case values must be in alphabetical order.
+  - Choices: `unspecified`, `summary`, `redistribute`, `suppress-fa`
 - `cost` (Number) Area cost, specifies cost for default summary LSAs, Used with nssa/stub area types.
   - Range: `0`-`16777215`
+- `nssa_translator_role` (String) Not-so-stubby area(NSSA) translator role.
+  - Choices: `always`, `candidate`, `never`
+- `segment_routing_mpls` (String) Segment routing mpls control.
+  - Choices: `unspecified`, `mpls`, `disable`
 - `type` (String) Area types can be stub, nssa, backbone etc.
   - Choices: `regular`, `stub`, `nssa`
 
@@ -165,19 +210,27 @@ Required:
 
 Optional:
 
+- `admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
 - `advertise_secondaries` (Boolean) Advertise secondary IP addresses.
 - `area` (String) Area to which this interface belongs to.
 - `authentication_key` (String) Key used for authenticatoin.
 - `authentication_key_id` (Number) Key id used for authentication.
   - Range: `0`-`255`
+- `authentication_key_new` (String) Key used for authenticatoin.
 - `authentication_key_secure_mode` (Boolean) Encrypted authentication key or plain text key.
 - `authentication_keychain` (String) Authentication keychain.
 - `authentication_md5_key` (String) Authentication md5 key.
+- `authentication_md5_key_new` (String) Authentication md5 key.
 - `authentication_md5_key_secure_mode` (Boolean) Encrypted authentication md5 key or plain text key.
 - `authentication_type` (String) Authentication types can be simple, md5 or none.
   - Choices: `none`, `simple`, `md5`, `unspecified`
 - `bfd` (String) Bidirectional Forwarding Detection (BFD) control.
   - Choices: `unspecified`, `enabled`, `disabled`
+- `control` (String) Interface controls can be MTU ignore, Advertise subnet. Choices: `unspecified`, `mtu-ignore`, `advert-subnet`. Can be an empty string. Allowed formats:
+  - Single value. Example: `mtu-ignore`
+  - Multiple values (comma-separated). Example: `advert-subnet,mtu-ignore`. In this case values must be in alphabetical order.
+  - Choices: `mtu-ignore`, `advert-subnet`, `unspecified`
 - `cost` (Number) Specifies the cost of interface.
   - Range: `0`-`65535`
 - `dead_interval` (Number) Dead interval, interval after which router declares that neighbor as down.
@@ -186,10 +239,16 @@ Optional:
   - Range: `0`-`65535`
 - `network_type` (String) Holds the network type as point2point or broadcast.
   - Choices: `unspecified`, `p2p`, `bcast`
+- `node_flag` (String) Node flag, determines if prefix attribute should have the node flag or not.
+  - Choices: `unspecified`, `clear`
 - `passive` (String) Passive interface control. Interface can be configured as passive or non-passive.
   - Choices: `unspecified`, `enabled`, `disabled`
 - `priority` (Number) Priority, used in determining the designated router on this network.
   - Range: `0`-`255`
+- `retransmit_interval` (Number) Retransmit interval, time between LSA retransmissions.
+  - Range: `1`-`65535`
+- `transmit_delay` (Number) Transmit delay, estimated time needed to send an LSA update packet.
+  - Range: `1`-`450`
 
 ## Import
 

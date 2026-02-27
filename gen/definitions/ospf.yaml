@@ -37,6 +37,14 @@ child_classes:
           - enabled
           - disabled
         example: enabled
+      - nxos_name: ctrl
+        tf_name: control
+        type: String
+        description: 'The control state.'
+        enum_values:
+          - unspecified
+          - stateful-ha
+        example: stateful-ha
     child_classes:
       - class_name: ospfDom
         doc_path: Routing%20and%20Forwarding/ospf:Dom/
@@ -95,6 +103,15 @@ child_classes:
             type: String
             description: 'Router identifier for this domain.'
             example: 34.56.78.90
+          - nxos_name: capVrfLite
+            tf_name: capability_vrf_lite
+            type: String
+            description: 'Capability vrf-lite for L3VPN or Ethernet VPN.'
+            enum_values:
+              - unspecified
+              - l3vpn
+              - evpn
+            example: l3vpn
           - nxos_name: ctrl
             tf_name: control
             type: String
@@ -107,6 +124,55 @@ child_classes:
               - segrt
             allow_non_enum_values: true
             example: 'bfd,default-passive'
+          - nxos_name: defMetric
+            tf_name: default_metric
+            type: Int64
+            min_int: 0
+            max_int: 16777214
+            description: 'Default metric cost for redistributed routes.'
+            example: 1000
+          - nxos_name: defRtNssaPbitClear
+            tf_name: default_route_nssa_pbit_clear
+            type: Bool
+            description: 'Override RFC 3101 behaviour and add default route on ABR even if P-bit is clear in received type-7 default route LSA.'
+            example: true
+          - nxos_name: discardRoute
+            tf_name: discard_route
+            type: String
+            description: 'Control bits for discard-route external and internal.'
+            enum_values:
+              - unspecified
+              - int
+              - ext
+            allow_non_enum_values: true
+            example: 'ext,int'
+          - nxos_name: downbitIgnore
+            tf_name: down_bit_ignore
+            type: Bool
+            description: 'Holds the status of Down-bit ignore.'
+            example: true
+          - nxos_name: maxEcmp
+            tf_name: max_ecmp
+            type: Int64
+            min_int: 1
+            max_int: 64
+            description: 'Maximum Equal Cost Multi Path(ECMP).'
+            example: 16
+          - nxos_name: nameLookupVrf
+            tf_name: name_lookup_vrf
+            type: String
+            description: 'Holds vrf name of dns-server for name-lookup.'
+            example: default
+          - nxos_name: rfc1583Compat
+            tf_name: rfc1583_compatible
+            type: Bool
+            description: 'RFC 1583 compatibility for external path preferences.'
+            example: true
+          - nxos_name: rfc1583CompatIos
+            tf_name: rfc1583_compatible_ios
+            type: Bool
+            description: 'RFC 1583 compatibility to IOS for external path preferences.'
+            example: true
         child_classes:
           - class_name: ospfArea
             doc_path: Routing%20and%20Forwarding/ospf:Area/
@@ -138,6 +204,35 @@ child_classes:
                 max_int: 16777215
                 description: 'Area cost, specifies cost for default summary LSAs, Used with nssa/stub area types.'
                 example: 10
+              - nxos_name: ctrl
+                tf_name: control
+                type: String
+                description: 'Area controls can be ABRs originate summary LSAs into other areas, redistributed LSAs or suppress forwarding address. Choices: `unspecified`, `summary`, `redistribute`, `suppress-fa`. Can be an empty string. Allowed formats:\n  - Single value. Example: `summary`\n  - Multiple values (comma-separated). Example: `redistribute,summary`. In this case values must be in alphabetical order.'
+                enum_values:
+                  - unspecified
+                  - summary
+                  - redistribute
+                  - suppress-fa
+                allow_non_enum_values: true
+                example: summary
+              - nxos_name: nssaTransRole
+                tf_name: nssa_translator_role
+                type: String
+                description: 'Not-so-stubby area(NSSA) translator role.'
+                enum_values:
+                  - always
+                  - candidate
+                  - never
+                example: always
+              - nxos_name: sgmntRtgMpls
+                tf_name: segment_routing_mpls
+                type: String
+                description: 'Segment routing mpls control.'
+                enum_values:
+                  - unspecified
+                  - mpls
+                  - disable
+                example: mpls
               - nxos_name: type
                 tf_name: type
                 type: String
@@ -154,6 +249,11 @@ child_classes:
             tf_name: max_metric
             description: 'OSPF Max Metric Link State Advertisement configuration.'
             attributes:
+              - nxos_name: awaitConvBgpAsn
+                tf_name: max_metric_await_convergence_bgp_asn
+                type: String
+                description: 'At startup, advertise max metric until convergence of BGP ASN.'
+                example: '65535'
               - nxos_name: ctrl
                 tf_name: max_metric_control
                 type: String
@@ -200,6 +300,14 @@ child_classes:
                 id: true
                 description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
                 example: eth1/10
+              - nxos_name: adminSt
+                tf_name: admin_state
+                type: String
+                description: 'The administrative state of the object or policy.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
               - nxos_name: advertiseSecondaries
                 tf_name: advertise_secondaries
                 type: Bool
@@ -265,6 +373,38 @@ child_classes:
                 max_int: 255
                 description: 'Priority, used in determining the designated router on this network.'
                 example: 10
+              - nxos_name: ctrl
+                tf_name: control
+                type: String
+                description: 'Interface controls can be MTU ignore, Advertise subnet. Choices: `unspecified`, `mtu-ignore`, `advert-subnet`. Can be an empty string. Allowed formats:\n  - Single value. Example: `mtu-ignore`\n  - Multiple values (comma-separated). Example: `advert-subnet,mtu-ignore`. In this case values must be in alphabetical order.'
+                enum_values:
+                  - mtu-ignore
+                  - advert-subnet
+                  - unspecified
+                allow_non_enum_values: true
+                example: mtu-ignore
+              - nxos_name: nodeFlag
+                tf_name: node_flag
+                type: String
+                description: 'Node flag, determines if prefix attribute should have the node flag or not.'
+                enum_values:
+                  - unspecified
+                  - clear
+                example: clear
+              - nxos_name: rexmitIntvl
+                tf_name: retransmit_interval
+                type: Int64
+                min_int: 1
+                max_int: 65535
+                description: 'Retransmit interval, time between LSA retransmissions.'
+                example: 10
+              - nxos_name: xmitDelay
+                tf_name: transmit_delay
+                type: Int64
+                min_int: 1
+                max_int: 450
+                description: 'Transmit delay, estimated time needed to send an LSA update packet.'
+                example: 2
             child_classes:
               - class_name: ospfAuthNewP
                 doc_path: Routing%20and%20Forwarding/ospf:AuthNewP/
@@ -286,6 +426,12 @@ child_classes:
                     max_int: 255
                     description: 'Key id used for authentication.'
                     example: 1
+                  - nxos_name: keyNew
+                    tf_name: authentication_key_new
+                    type: String
+                    write_only: true
+                    description: 'Key used for authenticatoin.'
+                    example: 0 mykey
                   - nxos_name: keySecureMode
                     tf_name: authentication_key_secure_mode
                     type: Bool
@@ -298,6 +444,12 @@ child_classes:
                     example: mykeychain
                   - nxos_name: md5key
                     tf_name: authentication_md5_key
+                    type: String
+                    write_only: true
+                    description: 'Authentication md5 key.'
+                    example: 0 mymd5key
+                  - nxos_name: md5keyNew
+                    tf_name: authentication_md5_key_new
                     type: String
                     write_only: true
                     description: 'Authentication md5 key.'

@@ -35,31 +35,46 @@ func TestAccDataSourceNxosOSPF(t *testing.T) {
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospf.test", "instances.*", map[string]string{
 		"name":        "OSPF1",
 		"admin_state": "enabled",
+		"control":     "stateful-ha",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospf.test", "instances.*.vrfs.*", map[string]string{
-		"name":                     "VRF1",
-		"log_adjacency_changes":    "brief",
-		"admin_state":              "enabled",
-		"bandwidth_reference":      "400000",
-		"bandwidth_reference_unit": "mbps",
-		"distance":                 "110",
-		"router_id":                "34.56.78.90",
-		"control":                  "bfd,default-passive",
+		"name":                          "VRF1",
+		"log_adjacency_changes":         "brief",
+		"admin_state":                   "enabled",
+		"bandwidth_reference":           "400000",
+		"bandwidth_reference_unit":      "mbps",
+		"distance":                      "110",
+		"router_id":                     "34.56.78.90",
+		"capability_vrf_lite":           "l3vpn",
+		"control":                       "bfd,default-passive",
+		"default_metric":                "1000",
+		"default_route_nssa_pbit_clear": "true",
+		"discard_route":                 "ext,int",
+		"down_bit_ignore":               "true",
+		"max_ecmp":                      "16",
+		"name_lookup_vrf":               "default",
+		"rfc1583_compatible":            "true",
+		"rfc1583_compatible_ios":        "true",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospf.test", "instances.*.vrfs.*.areas.*", map[string]string{
-		"area_id":             "0.0.0.10",
-		"authentication_type": "unspecified",
-		"cost":                "10",
-		"type":                "stub",
+		"area_id":              "0.0.0.10",
+		"authentication_type":  "unspecified",
+		"cost":                 "10",
+		"control":              "summary",
+		"nssa_translator_role": "always",
+		"segment_routing_mpls": "mpls",
+		"type":                 "stub",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospf.test", "instances.*.vrfs.*", map[string]string{
-		"max_metric_control":          "external-lsa,startup,stub,summary-lsa",
-		"max_metric_external_lsa":     "600",
-		"max_metric_summary_lsa":      "600",
-		"max_metric_startup_interval": "300",
+		"max_metric_await_convergence_bgp_asn": "65535",
+		"max_metric_control":                   "external-lsa,startup,stub,summary-lsa",
+		"max_metric_external_lsa":              "600",
+		"max_metric_summary_lsa":               "600",
+		"max_metric_startup_interval":          "300",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospf.test", "instances.*.vrfs.*.interfaces.*", map[string]string{
 		"interface_id":          "eth1/10",
+		"admin_state":           "enabled",
 		"advertise_secondaries": "false",
 		"area":                  "0.0.0.10",
 		"bfd":                   "disabled",
@@ -69,6 +84,10 @@ func TestAccDataSourceNxosOSPF(t *testing.T) {
 		"network_type":          "p2p",
 		"passive":               "enabled",
 		"priority":              "10",
+		"control":               "mtu-ignore",
+		"node_flag":             "clear",
+		"retransmit_interval":   "10",
+		"transmit_delay":        "2",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospf.test", "instances.*.vrfs.*.interfaces.*", map[string]string{
 		"authentication_key_id":              "1",
@@ -141,6 +160,7 @@ func testAccDataSourceNxosOSPFConfig() string {
 	config += `	instances = [{` + "\n"
 	config += `		name = "OSPF1"` + "\n"
 	config += `		admin_state = "enabled"` + "\n"
+	config += `		control = "stateful-ha"` + "\n"
 	config += `		vrfs = [{` + "\n"
 	config += `			name = "VRF1"` + "\n"
 	config += `			log_adjacency_changes = "brief"` + "\n"
@@ -149,19 +169,33 @@ func testAccDataSourceNxosOSPFConfig() string {
 	config += `			bandwidth_reference_unit = "mbps"` + "\n"
 	config += `			distance = 110` + "\n"
 	config += `			router_id = "34.56.78.90"` + "\n"
+	config += `			capability_vrf_lite = "l3vpn"` + "\n"
 	config += `			control = "bfd,default-passive"` + "\n"
+	config += `			default_metric = 1000` + "\n"
+	config += `			default_route_nssa_pbit_clear = true` + "\n"
+	config += `			discard_route = "ext,int"` + "\n"
+	config += `			down_bit_ignore = true` + "\n"
+	config += `			max_ecmp = 16` + "\n"
+	config += `			name_lookup_vrf = "default"` + "\n"
+	config += `			rfc1583_compatible = true` + "\n"
+	config += `			rfc1583_compatible_ios = true` + "\n"
 	config += `			areas = [{` + "\n"
 	config += `				area_id = "0.0.0.10"` + "\n"
 	config += `				authentication_type = "unspecified"` + "\n"
 	config += `				cost = 10` + "\n"
+	config += `				control = "summary"` + "\n"
+	config += `				nssa_translator_role = "always"` + "\n"
+	config += `				segment_routing_mpls = "mpls"` + "\n"
 	config += `				type = "stub"` + "\n"
 	config += `			}]` + "\n"
+	config += `			max_metric_await_convergence_bgp_asn = "65535"` + "\n"
 	config += `			max_metric_control = "external-lsa,startup,stub,summary-lsa"` + "\n"
 	config += `			max_metric_external_lsa = 600` + "\n"
 	config += `			max_metric_summary_lsa = 600` + "\n"
 	config += `			max_metric_startup_interval = 300` + "\n"
 	config += `			interfaces = [{` + "\n"
 	config += `				interface_id = "eth1/10"` + "\n"
+	config += `				admin_state = "enabled"` + "\n"
 	config += `				advertise_secondaries = false` + "\n"
 	config += `				area = "0.0.0.10"` + "\n"
 	config += `				bfd = "disabled"` + "\n"
@@ -171,11 +205,17 @@ func testAccDataSourceNxosOSPFConfig() string {
 	config += `				network_type = "p2p"` + "\n"
 	config += `				passive = "enabled"` + "\n"
 	config += `				priority = 10` + "\n"
+	config += `				control = "mtu-ignore"` + "\n"
+	config += `				node_flag = "clear"` + "\n"
+	config += `				retransmit_interval = 10` + "\n"
+	config += `				transmit_delay = 2` + "\n"
 	config += `				authentication_key = "0 mykey"` + "\n"
 	config += `				authentication_key_id = 1` + "\n"
+	config += `				authentication_key_new = "0 mykey"` + "\n"
 	config += `				authentication_key_secure_mode = false` + "\n"
 	config += `				authentication_keychain = "mykeychain"` + "\n"
 	config += `				authentication_md5_key = "0 mymd5key"` + "\n"
+	config += `				authentication_md5_key_new = "0 mymd5key"` + "\n"
 	config += `				authentication_md5_key_secure_mode = false` + "\n"
 	config += `				authentication_type = "none"` + "\n"
 	config += `			}]` + "\n"

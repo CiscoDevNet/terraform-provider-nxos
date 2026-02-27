@@ -46,9 +46,9 @@ child_classes:
             type: String
             description: "Per Access Control Entries statistics."
             enum_values:
-              - off
-              - on
-            example: off
+              - "off"
+              - "on"
+            example: "off"
           - nxos_name: udfPresent
             tf_name: udf_present
             type: Bool

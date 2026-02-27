@@ -148,6 +148,90 @@ func (d *PortChannelInterfaceDataSource) Schema(ctx context.Context, req datasou
 				MarkdownDescription: "Configed Trunk Vlans.",
 				Computed:            true,
 			},
+			"dot1q_ether_type": schema.Int64Attribute{
+				MarkdownDescription: "The administrative port Dot1q ether-type. Dot1q Ether Type configures the TPID value in the VLAN tag field for packets received and sent by the interface.",
+				Computed:            true,
+			},
+			"equalization_delay": schema.Int64Attribute{
+				MarkdownDescription: "Administrative port equalization delay time.",
+				Computed:            true,
+			},
+			"graceful_convergence": schema.StringAttribute{
+				MarkdownDescription: "Graceful Convergence.",
+				Computed:            true,
+			},
+			"hash_distribution": schema.StringAttribute{
+				MarkdownDescription: "Hash distribution configured - adaptive/fixed.",
+				Computed:            true,
+			},
+			"inherit_bandwidth": schema.Int64Attribute{
+				MarkdownDescription: "Administrative port inherit bandwidth.",
+				Computed:            true,
+			},
+			"itu_channel": schema.Int64Attribute{
+				MarkdownDescription: "ITU Channel to support DWDM XCVR.",
+				Computed:            true,
+			},
+			"lacp_delay_mode": schema.StringAttribute{
+				MarkdownDescription: "Configuring LACP delay mode.",
+				Computed:            true,
+			},
+			"lacp_vpc_convergence": schema.StringAttribute{
+				MarkdownDescription: "LACP vpc convergence.",
+				Computed:            true,
+			},
+			"link_debounce_down": schema.Int64Attribute{
+				MarkdownDescription: "Administrative port link debounce interval.",
+				Computed:            true,
+			},
+			"load_defer": schema.StringAttribute{
+				MarkdownDescription: "Load Defer Member Ports.",
+				Computed:            true,
+			},
+			"mdix": schema.StringAttribute{
+				MarkdownDescription: "The administrative Mdix mode. The Medium-dependant interface crossover (Mdix) is when the interface automatically detects the required cable connection type (straight through or crossover) and configures the connection appropriately.",
+				Computed:            true,
+			},
+			"optics_loopback": schema.StringAttribute{
+				MarkdownDescription: "Configured Loopback.",
+				Computed:            true,
+			},
+			"port_type": schema.StringAttribute{
+				MarkdownDescription: "Type of the port: Fabric vs Leaf.",
+				Computed:            true,
+			},
+			"pxe_transition_timeout": schema.Int64Attribute{
+				MarkdownDescription: "PXE Individual Transition Timeout.",
+				Computed:            true,
+			},
+			"router_mac": schema.StringAttribute{
+				MarkdownDescription: "The administrative router MAC address.",
+				Computed:            true,
+			},
+			"snmp_trap_state": schema.StringAttribute{
+				MarkdownDescription: "Administrative port snmp trap state.",
+				Computed:            true,
+			},
+			"span_mode": schema.StringAttribute{
+				MarkdownDescription: "Administrative port span mode.",
+				Computed:            true,
+			},
+			"squelch": schema.StringAttribute{
+				MarkdownDescription: "Configured Squelch.",
+				Computed:            true,
+			},
+			"transmission_mode": schema.StringAttribute{
+				MarkdownDescription: "Administrative port layer1 mode.",
+				Computed:            true,
+			},
+			"trunk_logging": schema.StringAttribute{
+				MarkdownDescription: "Administrative trunk logging enable.",
+				Computed:            true,
+			},
+			"usage": schema.StringAttribute{
+				MarkdownDescription: "The port usage type.",
+				Computed:            true,
+			},
 			"user_configured_flags": schema.StringAttribute{
 				MarkdownDescription: "Port User Config Flags.",
 				Computed:            true,

@@ -47,21 +47,42 @@ data "nxos_port_channel_interface" "example" {
 - `bandwidth` (Number) The bandwidth parameter for a routed interface, port channel, or subinterface.
 - `delay` (Number) The administrative port delay time.
 - `description` (String) Interface description.
+- `dot1q_ether_type` (Number) The administrative port Dot1q ether-type. Dot1q Ether Type configures the TPID value in the VLAN tag field for packets received and sent by the interface.
 - `duplex` (String) Duplex.
+- `equalization_delay` (Number) Administrative port equalization delay time.
+- `graceful_convergence` (String) Graceful Convergence.
+- `hash_distribution` (String) Hash distribution configured - adaptive/fixed.
 - `id` (String) The distinguished name of the object.
+- `inherit_bandwidth` (Number) Administrative port inherit bandwidth.
+- `itu_channel` (Number) ITU Channel to support DWDM XCVR.
+- `lacp_delay_mode` (String) Configuring LACP delay mode.
+- `lacp_vpc_convergence` (String) LACP vpc convergence.
 - `layer` (String) Administrative port layer.
+- `link_debounce_down` (Number) Administrative port link debounce interval.
 - `link_logging` (String) Administrative link logging enable.
+- `load_defer` (String) Load Defer Member Ports.
 - `maximum_links` (Number) maximum links.
+- `mdix` (String) The administrative Mdix mode. The Medium-dependant interface crossover (Mdix) is when the interface automatically detects the required cable connection type (straight through or crossover) and configures the connection appropriately.
 - `medium` (String) The administrative port medium type.
 - `members` (Attributes List) List of port-channel member interfaces. (see [below for nested schema](#nestedatt--members))
 - `minimum_links` (Number) minimum links.
 - `mode` (String) Administrative port mode.
 - `mtu` (Number) Administrative port mtu.
 - `native_vlan` (String) Configured Native Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `optics_loopback` (String) Configured Loopback.
 - `port_channel_mode` (String) The aggregated interface protocol channel mode.
+- `port_type` (String) Type of the port: Fabric vs Leaf.
+- `pxe_transition_timeout` (Number) PXE Individual Transition Timeout.
+- `router_mac` (String) The administrative router MAC address.
+- `snmp_trap_state` (String) Administrative port snmp trap state.
+- `span_mode` (String) Administrative port span mode.
 - `speed` (String) Administrative port speed.
+- `squelch` (String) Configured Squelch.
 - `suspend_individual` (String) Suspend Individual Port.
+- `transmission_mode` (String) Administrative port layer1 mode.
+- `trunk_logging` (String) Administrative trunk logging enable.
 - `trunk_vlans` (String) Configed Trunk Vlans.
+- `usage` (String) The port usage type.
 - `user_configured_flags` (String) Port User Config Flags.
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.
 

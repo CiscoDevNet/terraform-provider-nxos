@@ -54,6 +54,27 @@ func TestAccNxosPortChannelInterfaces(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.native_vlan", "unknown"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.speed", "auto"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.trunk_vlans", "1-4094"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.dot1q_ether_type", "33024"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.equalization_delay", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.graceful_convergence", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.hash_distribution", "adaptive"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.inherit_bandwidth", "1000000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.itu_channel", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.lacp_delay_mode", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.lacp_vpc_convergence", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.link_debounce_down", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.load_defer", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.mdix", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.optics_loopback", "internal"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.port_type", "leaf"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.pxe_transition_timeout", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.router_mac", "00:00:00:11:22:33"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.snmp_trap_state", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.span_mode", "not-a-span-dest"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.squelch", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.transmission_mode", "not-a-trans-port"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.trunk_logging", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.usage", "discovery"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.user_configured_flags", "admin_layer,admin_mtu,admin_state"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.members.0.interface_dn", "sys/intf/phys-[eth1/11]"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interfaces.test", "items.0.members.0.force", "true"))
@@ -148,6 +169,27 @@ func testAccNxosPortChannelInterfacesConfig_all() string {
 	config += `		native_vlan = "unknown"` + "\n"
 	config += `		speed = "auto"` + "\n"
 	config += `		trunk_vlans = "1-4094"` + "\n"
+	config += `		dot1q_ether_type = 33024` + "\n"
+	config += `		equalization_delay = 5` + "\n"
+	config += `		graceful_convergence = "disable"` + "\n"
+	config += `		hash_distribution = "adaptive"` + "\n"
+	config += `		inherit_bandwidth = 1000000` + "\n"
+	config += `		itu_channel = 50` + "\n"
+	config += `		lacp_delay_mode = "enable"` + "\n"
+	config += `		lacp_vpc_convergence = "enable"` + "\n"
+	config += `		link_debounce_down = 200` + "\n"
+	config += `		load_defer = "enable"` + "\n"
+	config += `		mdix = "auto"` + "\n"
+	config += `		optics_loopback = "internal"` + "\n"
+	config += `		port_type = "leaf"` + "\n"
+	config += `		pxe_transition_timeout = 5` + "\n"
+	config += `		router_mac = "00:00:00:11:22:33"` + "\n"
+	config += `		snmp_trap_state = "disable"` + "\n"
+	config += `		span_mode = "not-a-span-dest"` + "\n"
+	config += `		squelch = "disable"` + "\n"
+	config += `		transmission_mode = "not-a-trans-port"` + "\n"
+	config += `		trunk_logging = "enable"` + "\n"
+	config += `		usage = "discovery"` + "\n"
 	config += `		user_configured_flags = "admin_layer,admin_mtu,admin_state"` + "\n"
 	config += `		members = [{` + "\n"
 	config += `			interface_dn = "sys/intf/phys-[eth1/11]"` + "\n"

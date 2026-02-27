@@ -84,31 +84,31 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
 			},
-			"ipv6_relay_information_option_vpn_enabled": schema.BoolAttribute{
+			"ipv6_relay_information_option_vpn": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPv6 Relay Information Option Vpn Enabled.").String,
 				Optional:            true,
 			},
-			"ipv6_relay_option_type_cisco_enabled": schema.BoolAttribute{
+			"ipv6_relay_option_type_cisco": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPv6 Relay Sub-Option Type Cisco Enabled.").String,
 				Optional:            true,
 			},
-			"relay_information_option_enabled": schema.BoolAttribute{
+			"relay_information_option": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Relay Information Option Enabled.").String,
 				Optional:            true,
 			},
-			"relay_information_option_trust_enabled": schema.BoolAttribute{
+			"relay_information_option_trust": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Relay Information Option Trust Enabled.").String,
 				Optional:            true,
 			},
-			"relay_information_option_vpn_enabled": schema.BoolAttribute{
+			"relay_information_option_vpn": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Relay Information Option Vpn Enabled.").String,
 				Optional:            true,
 			},
-			"relay_information_trust_all_enabled": schema.BoolAttribute{
+			"relay_information_trust_all": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Relay Information Trust All Enabled.").String,
 				Optional:            true,
 			},
-			"relay_sub_option_circuit_id_customized_enabled": schema.BoolAttribute{
+			"relay_sub_option_circuit_id_customized": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Relay Sub-Option Circuit-id Customized Enabled.").String,
 				Optional:            true,
 			},
@@ -116,23 +116,23 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				MarkdownDescription: helpers.NewAttributeDescription("Relay Sub-Option Circuit-id Format String.").String,
 				Optional:            true,
 			},
-			"relay_sub_option_type_cisco_enabled": schema.BoolAttribute{
+			"relay_sub_option_type_cisco": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Relay Sub-Option Type Cisco Enabled.").String,
 				Optional:            true,
 			},
-			"smart_relay_global_enabled": schema.BoolAttribute{
+			"smart_relay_global": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Smart Relay Global Enabled.").String,
 				Optional:            true,
 			},
-			"snooping_enabled": schema.BoolAttribute{
+			"snooping": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Snooping Enabled.").String,
 				Optional:            true,
 			},
-			"snooping_information_option_enabled": schema.BoolAttribute{
+			"snooping_information_option": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Snooping Information Option Enabled.").String,
 				Optional:            true,
 			},
-			"snooping_verify_mac_address_enabled": schema.BoolAttribute{
+			"snooping_verify_mac_address": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Snooping Verify Mac Address Enabled.").String,
 				Optional:            true,
 			},
@@ -155,7 +155,7 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				MarkdownDescription: helpers.NewAttributeDescription("DAI Validate Type: src-mac.").String,
 				Optional:            true,
 			},
-			"ipv6_relay_option79_enabled": schema.BoolAttribute{
+			"ipv6_relay_option79": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPv6 Relay Option79 Enabled.").String,
 				Optional:            true,
 			},
@@ -163,26 +163,26 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				MarkdownDescription: helpers.NewAttributeDescription("Pkt Strict Validation.").String,
 				Optional:            true,
 			},
-			"relay_dai_enabled": schema.BoolAttribute{
+			"relay_dai": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Dynamic ARP Inspection functionality with DHCP Relay is enabled.").String,
 				Optional:            true,
 			},
-			"relay_information_option_server_id_override_disable_enabled": schema.Int64Attribute{
+			"relay_information_option_server_id_override_disable": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Relay Information Option Server-id-override-disable Enabled.").AddIntegerRangeDescription(0, 1).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 1),
 				},
 			},
-			"relay_sub_option_format_non_tlv_enabled": schema.BoolAttribute{
+			"relay_sub_option_format_non_tlv": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Relay Option82 Sub-Option Format Non-TLV Enabled.").String,
 				Optional:            true,
 			},
-			"relay_v4_over_v6_enabled": schema.BoolAttribute{
+			"relay_v4_over_v6": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("v4 over v6 relay transport.").String,
 				Optional:            true,
 			},
-			"relay_v6_iapd_route_add_enabled": schema.BoolAttribute{
+			"relay_v6_iapd_route_add": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("DHCPv6 IAPD route addition.").String,
 				Optional:            true,
 			},
@@ -190,19 +190,19 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				MarkdownDescription: helpers.NewAttributeDescription("Snoop Sub-Option Circuit-id Format String.").String,
 				Optional:            true,
 			},
-			"snooping_sub_option_format_non_tlv_enabled": schema.BoolAttribute{
+			"snooping_sub_option_format_non_tlv": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Snooping Option82 Sub-Option Format Non-TLV Enabled.").String,
 				Optional:            true,
 			},
-			"v4_relay_enabled": schema.BoolAttribute{
+			"v4_relay": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("DHCPv4 Enabled.").String,
 				Optional:            true,
 			},
-			"v6_relay_enabled": schema.BoolAttribute{
+			"v6_relay": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("DHCPv6 Enabled.").String,
 				Optional:            true,
 			},
-			"v6_smart_relay_global_enabled": schema.BoolAttribute{
+			"v6_smart_relay_global": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("V6 Smart Relay Global Enabled.").String,
 				Optional:            true,
 			},
@@ -218,15 +218,15 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 								stringplanmodifier.RequiresReplace(),
 							},
 						},
-						"information_trusted_enabled": schema.BoolAttribute{
+						"information_trusted": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Information Trusted Enabled.").String,
 							Optional:            true,
 						},
-						"smart_relay_enabled": schema.BoolAttribute{
+						"smart_relay": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Smart Relay Enabled.").String,
 							Optional:            true,
 						},
-						"subnet_broadcast_enabled": schema.BoolAttribute{
+						"subnet_broadcast": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Subnet Broadcast Enabled.").String,
 							Optional:            true,
 						},
@@ -241,7 +241,7 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							MarkdownDescription: helpers.NewAttributeDescription("DHCP relay source subnet.").String,
 							Optional:            true,
 						},
-						"v6_smart_relay_enabled": schema.BoolAttribute{
+						"v6_smart_relay": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("V6 Smart Relay Enabled.").String,
 							Optional:            true,
 						},

@@ -37,11 +37,20 @@ func TestAccNxosSVIInterface(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "interface_id", "vlan293"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "admin_state", "down"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "autostate", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "bandwidth", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "carrier_delay", "200"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "delay", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "inband_management", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "load_interval_counter_1", "90"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "load_interval_counter_2", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "load_interval_counter_3", "90"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "mac_address", "00:25:B5:00:00:01"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "medium", "bcast"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "mtu", "9216"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "mtu_inherit", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "snmp_trap_link_status", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_svi_interface.test", "vrf_dn", "sys/inst-VRF123"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -116,11 +125,20 @@ func testAccNxosSVIInterfaceConfig_all() string {
 	config := `resource "nxos_svi_interface" "test" {` + "\n"
 	config += `	interface_id = "vlan293"` + "\n"
 	config += `	admin_state = "down"` + "\n"
+	config += `	autostate = false` + "\n"
 	config += `	bandwidth = 1000` + "\n"
+	config += `	carrier_delay = 200` + "\n"
 	config += `	delay = 10` + "\n"
 	config += `	description = "My Description"` + "\n"
+	config += `	inband_management = false` + "\n"
+	config += `	load_interval_counter_1 = 90` + "\n"
+	config += `	load_interval_counter_2 = 120` + "\n"
+	config += `	load_interval_counter_3 = 90` + "\n"
+	config += `	mac_address = "00:25:B5:00:00:01"` + "\n"
 	config += `	medium = "bcast"` + "\n"
 	config += `	mtu = 9216` + "\n"
+	config += `	mtu_inherit = false` + "\n"
+	config += `	snmp_trap_link_status = false` + "\n"
 	config += `	vrf_dn = "sys/inst-VRF123"` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
 	config += `}` + "\n"

@@ -26,6 +26,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -43,14 +44,24 @@ type SVIInterfaces struct {
 }
 
 type SVIInterfacesItems struct {
-	InterfaceId types.String `tfsdk:"interface_id"`
-	AdminState  types.String `tfsdk:"admin_state"`
-	Bandwidth   types.Int64  `tfsdk:"bandwidth"`
-	Delay       types.Int64  `tfsdk:"delay"`
-	Description types.String `tfsdk:"description"`
-	Medium      types.String `tfsdk:"medium"`
-	Mtu         types.Int64  `tfsdk:"mtu"`
-	VrfDn       types.String `tfsdk:"vrf_dn"`
+	InterfaceId          types.String `tfsdk:"interface_id"`
+	AdminState           types.String `tfsdk:"admin_state"`
+	Autostate            types.Bool   `tfsdk:"autostate"`
+	Bandwidth            types.Int64  `tfsdk:"bandwidth"`
+	CarrierDelay         types.Int64  `tfsdk:"carrier_delay"`
+	Delay                types.Int64  `tfsdk:"delay"`
+	Description          types.String `tfsdk:"description"`
+	InbandManagement     types.Bool   `tfsdk:"inband_management"`
+	LoadIntervalCounter1 types.Int64  `tfsdk:"load_interval_counter_1"`
+	LoadIntervalCounter2 types.Int64  `tfsdk:"load_interval_counter_2"`
+	LoadIntervalCounter3 types.Int64  `tfsdk:"load_interval_counter_3"`
+	MacAddress           types.String `tfsdk:"mac_address"`
+	Medium               types.String `tfsdk:"medium"`
+	Mtu                  types.Int64  `tfsdk:"mtu"`
+	MtuInherit           types.Bool   `tfsdk:"mtu_inherit"`
+	SnmpTrapLinkStatus   types.Bool   `tfsdk:"snmp_trap_link_status"`
+	VlanId               types.Int64  `tfsdk:"vlan_id"`
+	VrfDn                types.String `tfsdk:"vrf_dn"`
 }
 
 type SVIInterfacesIdentity struct {
@@ -115,8 +126,14 @@ func (data SVIInterfaces) toBody() nxos.Body {
 		if (!item.AdminState.IsUnknown() && !item.AdminState.IsNull()) || false {
 			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"adminSt", item.AdminState.ValueString())
 		}
+		if (!item.Autostate.IsUnknown() && !item.Autostate.IsNull()) || false {
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"autostate", strconv.FormatBool(item.Autostate.ValueBool()))
+		}
 		if (!item.Bandwidth.IsUnknown() && !item.Bandwidth.IsNull()) || false {
 			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"bw", strconv.FormatInt(item.Bandwidth.ValueInt64(), 10))
+		}
+		if (!item.CarrierDelay.IsUnknown() && !item.CarrierDelay.IsNull()) || false {
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"carDel", strconv.FormatInt(item.CarrierDelay.ValueInt64(), 10))
 		}
 		if (!item.Delay.IsUnknown() && !item.Delay.IsNull()) || false {
 			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"delay", strconv.FormatInt(item.Delay.ValueInt64(), 10))
@@ -124,11 +141,35 @@ func (data SVIInterfaces) toBody() nxos.Body {
 		if (!item.Description.IsUnknown() && !item.Description.IsNull()) || false {
 			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"descr", item.Description.ValueString())
 		}
+		if (!item.InbandManagement.IsUnknown() && !item.InbandManagement.IsNull()) || false {
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"inbMgmt", strconv.FormatBool(item.InbandManagement.ValueBool()))
+		}
+		if (!item.LoadIntervalCounter1.IsUnknown() && !item.LoadIntervalCounter1.IsNull()) || false {
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"loadIntvl1", strconv.FormatInt(item.LoadIntervalCounter1.ValueInt64(), 10))
+		}
+		if (!item.LoadIntervalCounter2.IsUnknown() && !item.LoadIntervalCounter2.IsNull()) || false {
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"loadIntvl2", strconv.FormatInt(item.LoadIntervalCounter2.ValueInt64(), 10))
+		}
+		if (!item.LoadIntervalCounter3.IsUnknown() && !item.LoadIntervalCounter3.IsNull()) || false {
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"loadIntvl3", strconv.FormatInt(item.LoadIntervalCounter3.ValueInt64(), 10))
+		}
+		if (!item.MacAddress.IsUnknown() && !item.MacAddress.IsNull()) || false {
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"mac", item.MacAddress.ValueString())
+		}
 		if (!item.Medium.IsUnknown() && !item.Medium.IsNull()) || false {
 			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"medium", item.Medium.ValueString())
 		}
 		if (!item.Mtu.IsUnknown() && !item.Mtu.IsNull()) || false {
 			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"mtu", strconv.FormatInt(item.Mtu.ValueInt64(), 10))
+		}
+		if (!item.MtuInherit.IsUnknown() && !item.MtuInherit.IsNull()) || false {
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"mtuInherit", strconv.FormatBool(item.MtuInherit.ValueBool()))
+		}
+		if (!item.SnmpTrapLinkStatus.IsUnknown() && !item.SnmpTrapLinkStatus.IsNull()) || false {
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"snmpTrap", strconv.FormatBool(item.SnmpTrapLinkStatus.ValueBool()))
+		}
+		if (!item.VlanId.IsUnknown() && !item.VlanId.IsNull()) || false {
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"vlanId", strconv.FormatInt(item.VlanId.ValueInt64(), 10))
 		}
 		var attrs string
 		itemChildrenPath := data.getItemClassName() + ".children"
@@ -194,11 +235,21 @@ func (data *SVIInterfaces) fromBody(res gjson.Result) {
 				item := SVIInterfacesItems{}
 				item.InterfaceId = types.StringValue(value.Get("attributes.id").String())
 				item.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
+				item.Autostate = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.autostate").String()))
 				item.Bandwidth = types.Int64Value(value.Get("attributes.bw").Int())
+				item.CarrierDelay = types.Int64Value(value.Get("attributes.carDel").Int())
 				item.Delay = types.Int64Value(value.Get("attributes.delay").Int())
 				item.Description = types.StringValue(value.Get("attributes.descr").String())
+				item.InbandManagement = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.inbMgmt").String()))
+				item.LoadIntervalCounter1 = types.Int64Value(value.Get("attributes.loadIntvl1").Int())
+				item.LoadIntervalCounter2 = types.Int64Value(value.Get("attributes.loadIntvl2").Int())
+				item.LoadIntervalCounter3 = types.Int64Value(value.Get("attributes.loadIntvl3").Int())
+				item.MacAddress = types.StringValue(value.Get("attributes.mac").String())
 				item.Medium = types.StringValue(value.Get("attributes.medium").String())
 				item.Mtu = types.Int64Value(value.Get("attributes.mtu").Int())
+				item.MtuInherit = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.mtuInherit").String()))
+				item.SnmpTrapLinkStatus = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.snmpTrap").String()))
+				item.VlanId = types.Int64Value(value.Get("attributes.vlanId").Int())
 				{
 					var rnwRtVrfMbr gjson.Result
 					value.Get("children").ForEach(
@@ -245,10 +296,20 @@ func (data *SVIInterfaces) updateFromBody(res gjson.Result) {
 					} else {
 						data.Items[i].AdminState = types.StringNull()
 					}
+					if !data.Items[i].Autostate.IsNull() {
+						data.Items[i].Autostate = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.autostate").String()))
+					} else {
+						data.Items[i].Autostate = types.BoolNull()
+					}
 					if !data.Items[i].Bandwidth.IsNull() {
 						data.Items[i].Bandwidth = types.Int64Value(value.Get("attributes.bw").Int())
 					} else {
 						data.Items[i].Bandwidth = types.Int64Null()
+					}
+					if !data.Items[i].CarrierDelay.IsNull() {
+						data.Items[i].CarrierDelay = types.Int64Value(value.Get("attributes.carDel").Int())
+					} else {
+						data.Items[i].CarrierDelay = types.Int64Null()
 					}
 					if !data.Items[i].Delay.IsNull() {
 						data.Items[i].Delay = types.Int64Value(value.Get("attributes.delay").Int())
@@ -260,6 +321,31 @@ func (data *SVIInterfaces) updateFromBody(res gjson.Result) {
 					} else {
 						data.Items[i].Description = types.StringNull()
 					}
+					if !data.Items[i].InbandManagement.IsNull() {
+						data.Items[i].InbandManagement = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.inbMgmt").String()))
+					} else {
+						data.Items[i].InbandManagement = types.BoolNull()
+					}
+					if !data.Items[i].LoadIntervalCounter1.IsNull() {
+						data.Items[i].LoadIntervalCounter1 = types.Int64Value(value.Get("attributes.loadIntvl1").Int())
+					} else {
+						data.Items[i].LoadIntervalCounter1 = types.Int64Null()
+					}
+					if !data.Items[i].LoadIntervalCounter2.IsNull() {
+						data.Items[i].LoadIntervalCounter2 = types.Int64Value(value.Get("attributes.loadIntvl2").Int())
+					} else {
+						data.Items[i].LoadIntervalCounter2 = types.Int64Null()
+					}
+					if !data.Items[i].LoadIntervalCounter3.IsNull() {
+						data.Items[i].LoadIntervalCounter3 = types.Int64Value(value.Get("attributes.loadIntvl3").Int())
+					} else {
+						data.Items[i].LoadIntervalCounter3 = types.Int64Null()
+					}
+					if !data.Items[i].MacAddress.IsNull() {
+						data.Items[i].MacAddress = types.StringValue(value.Get("attributes.mac").String())
+					} else {
+						data.Items[i].MacAddress = types.StringNull()
+					}
 					if !data.Items[i].Medium.IsNull() {
 						data.Items[i].Medium = types.StringValue(value.Get("attributes.medium").String())
 					} else {
@@ -269,6 +355,21 @@ func (data *SVIInterfaces) updateFromBody(res gjson.Result) {
 						data.Items[i].Mtu = types.Int64Value(value.Get("attributes.mtu").Int())
 					} else {
 						data.Items[i].Mtu = types.Int64Null()
+					}
+					if !data.Items[i].MtuInherit.IsNull() {
+						data.Items[i].MtuInherit = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.mtuInherit").String()))
+					} else {
+						data.Items[i].MtuInherit = types.BoolNull()
+					}
+					if !data.Items[i].SnmpTrapLinkStatus.IsNull() {
+						data.Items[i].SnmpTrapLinkStatus = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.snmpTrap").String()))
+					} else {
+						data.Items[i].SnmpTrapLinkStatus = types.BoolNull()
+					}
+					if !data.Items[i].VlanId.IsNull() {
+						data.Items[i].VlanId = types.Int64Value(value.Get("attributes.vlanId").Int())
+					} else {
+						data.Items[i].VlanId = types.Int64Null()
 					}
 					{
 						var rnwRtVrfMbr gjson.Result

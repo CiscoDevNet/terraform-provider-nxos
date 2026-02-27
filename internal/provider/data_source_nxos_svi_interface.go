@@ -76,8 +76,16 @@ func (d *SVIInterfaceDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "Administrative state.",
 				Computed:            true,
 			},
+			"autostate": schema.BoolAttribute{
+				MarkdownDescription: "Autostate Enabled?",
+				Computed:            true,
+			},
 			"bandwidth": schema.Int64Attribute{
 				MarkdownDescription: "Specifies the administrative port bandwidth.",
+				Computed:            true,
+			},
+			"carrier_delay": schema.Int64Attribute{
+				MarkdownDescription: "The hold period for which carrier transition, such as L2 interfacing going down, is ignored.",
 				Computed:            true,
 			},
 			"delay": schema.Int64Attribute{
@@ -88,12 +96,44 @@ func (d *SVIInterfaceDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "Tunnel Description.",
 				Computed:            true,
 			},
+			"inband_management": schema.BoolAttribute{
+				MarkdownDescription: "An in-band management interface configuration.",
+				Computed:            true,
+			},
+			"load_interval_counter_1": schema.Int64Attribute{
+				MarkdownDescription: "Load-averaging Interval 1.",
+				Computed:            true,
+			},
+			"load_interval_counter_2": schema.Int64Attribute{
+				MarkdownDescription: "Load-averaging Interval 2.",
+				Computed:            true,
+			},
+			"load_interval_counter_3": schema.Int64Attribute{
+				MarkdownDescription: "Load-averaging Interval 3.",
+				Computed:            true,
+			},
+			"mac_address": schema.StringAttribute{
+				MarkdownDescription: "The MAC address.",
+				Computed:            true,
+			},
 			"medium": schema.StringAttribute{
 				MarkdownDescription: "Indicates the administrative port medium type.",
 				Computed:            true,
 			},
 			"mtu": schema.Int64Attribute{
 				MarkdownDescription: "The administrative MTU port on the aggregated interface.",
+				Computed:            true,
+			},
+			"mtu_inherit": schema.BoolAttribute{
+				MarkdownDescription: "A property for specifying if the MTU is inherited from global policy.",
+				Computed:            true,
+			},
+			"snmp_trap_link_status": schema.BoolAttribute{
+				MarkdownDescription: "SNMP Trap Link Status Enabled?",
+				Computed:            true,
+			},
+			"vlan_id": schema.Int64Attribute{
+				MarkdownDescription: "The VLAN ID associated with the SVI.",
 				Computed:            true,
 			},
 			"vrf_dn": schema.StringAttribute{

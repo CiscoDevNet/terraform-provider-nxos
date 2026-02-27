@@ -41,10 +41,20 @@ data "nxos_svi_interface" "example" {
 ### Read-Only
 
 - `admin_state` (String) Administrative state.
+- `autostate` (Boolean) Autostate Enabled?
 - `bandwidth` (Number) Specifies the administrative port bandwidth.
+- `carrier_delay` (Number) The hold period for which carrier transition, such as L2 interfacing going down, is ignored.
 - `delay` (Number) Specifies the administrative port delay.
 - `description` (String) Tunnel Description.
 - `id` (String) The distinguished name of the object.
+- `inband_management` (Boolean) An in-band management interface configuration.
+- `load_interval_counter_1` (Number) Load-averaging Interval 1.
+- `load_interval_counter_2` (Number) Load-averaging Interval 2.
+- `load_interval_counter_3` (Number) Load-averaging Interval 3.
+- `mac_address` (String) The MAC address.
 - `medium` (String) Indicates the administrative port medium type.
 - `mtu` (Number) The administrative MTU port on the aggregated interface.
+- `mtu_inherit` (Boolean) A property for specifying if the MTU is inherited from global policy.
+- `snmp_trap_link_status` (Boolean) SNMP Trap Link Status Enabled?
+- `vlan_id` (Number) The VLAN ID associated with the SVI.
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.

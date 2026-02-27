@@ -91,11 +91,22 @@ func (r *SVIInterfaceResource) Schema(ctx context.Context, req resource.SchemaRe
 					stringvalidator.OneOf("down", "up"),
 				},
 			},
+			"autostate": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Autostate Enabled?").String,
+				Optional:            true,
+			},
 			"bandwidth": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specifies the administrative port bandwidth.").AddIntegerRangeDescription(1, 400000000).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 400000000),
+				},
+			},
+			"carrier_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The hold period for which carrier transition, such as L2 interfacing going down, is ignored.").AddIntegerRangeDescription(0, 60000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 60000),
 				},
 			},
 			"delay": schema.Int64Attribute{
@@ -107,6 +118,35 @@ func (r *SVIInterfaceResource) Schema(ctx context.Context, req resource.SchemaRe
 			},
 			"description": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Tunnel Description.").String,
+				Optional:            true,
+			},
+			"inband_management": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("An in-band management interface configuration.").String,
+				Optional:            true,
+			},
+			"load_interval_counter_1": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Load-averaging Interval 1.").AddIntegerRangeDescription(60, 600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(60, 600),
+				},
+			},
+			"load_interval_counter_2": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Load-averaging Interval 2.").AddIntegerRangeDescription(60, 600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(60, 600),
+				},
+			},
+			"load_interval_counter_3": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Load-averaging Interval 3.").AddIntegerRangeDescription(60, 600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(60, 600),
+				},
+			},
+			"mac_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The MAC address.").String,
 				Optional:            true,
 			},
 			"medium": schema.StringAttribute{
@@ -121,6 +161,21 @@ func (r *SVIInterfaceResource) Schema(ctx context.Context, req resource.SchemaRe
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(64, 9216),
+				},
+			},
+			"mtu_inherit": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("A property for specifying if the MTU is inherited from global policy.").String,
+				Optional:            true,
+			},
+			"snmp_trap_link_status": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SNMP Trap Link Status Enabled?").String,
+				Optional:            true,
+			},
+			"vlan_id": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The VLAN ID associated with the SVI.").AddIntegerRangeDescription(0, 4095).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4095),
 				},
 			},
 			"vrf_dn": schema.StringAttribute{

@@ -18,13 +18,23 @@ This resource can manage multiple svi_interface resources.
 ```terraform
 resource "nxos_svi_interfaces" "example" {
   items = [{
-    interface_id = "vlan293"
-    admin_state  = "down"
-    bandwidth    = 1000
-    delay        = 10
-    description  = "My Description"
-    medium       = "bcast"
-    mtu          = 9216
+    interface_id            = "vlan293"
+    admin_state             = "down"
+    autostate               = false
+    bandwidth               = 1000
+    carrier_delay           = 200
+    delay                   = 10
+    description             = "My Description"
+    inband_management       = false
+    load_interval_counter_1 = 90
+    load_interval_counter_2 = 120
+    load_interval_counter_3 = 90
+    mac_address             = "00:25:B5:00:00:01"
+    medium                  = "bcast"
+    mtu                     = 9216
+    mtu_inherit             = false
+    snmp_trap_link_status   = false
+    vlan_id                 = 100
   }]
 }
 ```
@@ -55,15 +65,30 @@ Optional:
 
 - `admin_state` (String) Administrative state.
   - Choices: `down`, `up`
+- `autostate` (Boolean) Autostate Enabled?
 - `bandwidth` (Number) Specifies the administrative port bandwidth.
   - Range: `1`-`400000000`
+- `carrier_delay` (Number) The hold period for which carrier transition, such as L2 interfacing going down, is ignored.
+  - Range: `0`-`60000`
 - `delay` (Number) Specifies the administrative port delay.
   - Range: `1`-`16777215`
 - `description` (String) Tunnel Description.
+- `inband_management` (Boolean) An in-band management interface configuration.
+- `load_interval_counter_1` (Number) Load-averaging Interval 1.
+  - Range: `60`-`600`
+- `load_interval_counter_2` (Number) Load-averaging Interval 2.
+  - Range: `60`-`600`
+- `load_interval_counter_3` (Number) Load-averaging Interval 3.
+  - Range: `60`-`600`
+- `mac_address` (String) The MAC address.
 - `medium` (String) Indicates the administrative port medium type.
   - Choices: `bcast`, `p2p`
 - `mtu` (Number) The administrative MTU port on the aggregated interface.
   - Range: `64`-`9216`
+- `mtu_inherit` (Boolean) A property for specifying if the MTU is inherited from global policy.
+- `snmp_trap_link_status` (Boolean) SNMP Trap Link Status Enabled?
+- `vlan_id` (Number) The VLAN ID associated with the SVI.
+  - Range: `0`-`4095`
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.
 
 ## Import

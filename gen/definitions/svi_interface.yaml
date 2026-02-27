@@ -23,6 +23,11 @@ attributes:
       - down
       - up
     example: down
+  - nxos_name: autostate
+    tf_name: autostate
+    type: Bool
+    description: 'Autostate Enabled?'
+    example: false
   - nxos_name: bw
     tf_name: bandwidth
     type: Int64
@@ -30,6 +35,13 @@ attributes:
     min_int: 1
     max_int: 400000000
     example: 1000
+  - nxos_name: carDel
+    tf_name: carrier_delay
+    type: Int64
+    description: 'The hold period for which carrier transition, such as L2 interfacing going down, is ignored.'
+    min_int: 0
+    max_int: 60000
+    example: 200
   - nxos_name: delay
     tf_name: delay
     type: Int64
@@ -42,6 +54,37 @@ attributes:
     type: String
     description: 'Tunnel Description.'
     example: My Description
+  - nxos_name: inbMgmt
+    tf_name: inband_management
+    type: Bool
+    description: 'An in-band management interface configuration.'
+    example: false
+  - nxos_name: loadIntvl1
+    tf_name: load_interval_counter_1
+    type: Int64
+    description: 'Load-averaging Interval 1.'
+    min_int: 60
+    max_int: 600
+    example: 90
+  - nxos_name: loadIntvl2
+    tf_name: load_interval_counter_2
+    type: Int64
+    description: 'Load-averaging Interval 2.'
+    min_int: 60
+    max_int: 600
+    example: 120
+  - nxos_name: loadIntvl3
+    tf_name: load_interval_counter_3
+    type: Int64
+    description: 'Load-averaging Interval 3.'
+    min_int: 60
+    max_int: 600
+    example: 90
+  - nxos_name: mac
+    tf_name: mac_address
+    type: String
+    description: 'The MAC address.'
+    example: 00:25:B5:00:00:01
   - nxos_name: medium
     tf_name: medium
     type: String
@@ -57,6 +100,24 @@ attributes:
     min_int: 64
     max_int: 9216
     example: 9216
+  - nxos_name: mtuInherit
+    tf_name: mtu_inherit
+    type: Bool
+    description: 'A property for specifying if the MTU is inherited from global policy.'
+    example: false
+  - nxos_name: snmpTrap
+    tf_name: snmp_trap_link_status
+    type: Bool
+    description: 'SNMP Trap Link Status Enabled?'
+    example: false
+  - nxos_name: vlanId
+    tf_name: vlan_id
+    type: Int64
+    description: 'The VLAN ID associated with the SVI.'
+    min_int: 0
+    max_int: 4095
+    exclude_test: true
+    example: 100
 child_classes:
   - class_name: nwRtVrfMbr
     rn: rtvrfMbr

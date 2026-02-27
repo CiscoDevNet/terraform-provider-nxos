@@ -45,8 +45,15 @@ data "nxos_pim" "example" {
 ### Read-Only
 
 - `admin_state` (String) The administrative state of the object or policy.
+- `control` (String) The control state.
+- `evpn_border_leaf` (Boolean) EVPN Border Leaf flag.
+- `extra_net` (Boolean) Extranet RPF Lookup.
 - `id` (String) The distinguished name of the object.
 - `instance_admin_state` (String) The administrative state of the object or policy.
+- `join_prune_delay` (Number) Inter Packet Delay.
+- `null_register_delay` (Number) Null Register Inter Batch Delay.
+- `null_register_number_of_routes` (Number) Null Register Number of Routes.
+- `register_stop` (Boolean) Register until stops.
 - `vrfs` (Attributes List) List of PIM VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
 
 <a id="nestedatt--vrfs"></a>
@@ -55,12 +62,24 @@ data "nxos_pim" "example" {
 Read-Only:
 
 - `admin_state` (String) Admin State.
+- `anycast_rp_description` (String) Description of the specified attribute.
 - `anycast_rp_local_interface` (String) Local Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `anycast_rp_name` (String) Object name.
 - `anycast_rp_peers` (Attributes List) List of PIM Anycast RP peer configurations. (see [below for nested schema](#nestedatt--vrfs--anycast_rp_peers))
 - `anycast_rp_source_interface` (String) Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `auto_enable` (Boolean) Auto Enable.
 - `bfd` (Boolean) BFD.
+- `control` (String) Domain Controls.
+- `flush_routes` (Boolean) Flush Routes.
 - `interfaces` (Attributes List) List of PIM interface configurations. (see [below for nested schema](#nestedatt--vrfs--interfaces))
+- `join_prune_delay` (Number) Join-Prune message inter-packet delay.
+- `log_neighbor_changes` (Boolean) Log Neighbhor changes.
+- `mtu` (Number) Maximum Transmission Unit.
 - `name` (String) VRF name.
+- `register_rate_limit` (Number) Register rate limit for data packets per second.
+- `rfc_strict` (Boolean) Do not process joins from unknown neighbors.
+- `spt_switch_graceful` (Boolean) Graceful switch to SPT.
+- `ssm_policy_description` (String) Description of the specified attribute.
 - `ssm_policy_name` (String) Policy name.
 - `ssm_range_group_list_1` (String) Group List.
 - `ssm_range_group_list_2` (String) Group List.
@@ -69,6 +88,7 @@ Read-Only:
 - `ssm_range_none` (Boolean) SSM None. Exclude standard SSM range (232.0.0.0/8).
 - `ssm_range_prefix_list` (String) Prefix List.
 - `ssm_range_route_map` (String) Route Map.
+- `static_rp_policy_description` (String) Description of the specified attribute.
 - `static_rp_policy_name` (String) Policy name.
 - `static_rps` (Attributes List) List of PIM Static RP configurations. (see [below for nested schema](#nestedatt--vrfs--static_rps))
 
@@ -88,9 +108,20 @@ Read-Only:
 
 - `admin_state` (String) The administrative state of the object or policy.
 - `bfd` (String) BFD Instance State.
+- `border` (Boolean) Border policy - Treat interface as boundary of PIM domain.
+- `border_router` (Boolean) Acts as a border router on configuration.
+- `control` (String) Interface Controls.
+- `description` (String) Description.
+- `dr_delay` (Number) Designated Router Delay value.
 - `dr_priority` (Number) Designated Router Priority level.
 - `interface_id` (String) Must match first field in the output of `show intf brief`. Example: `eth1/1`.
+- `join_prune_route_map` (String) Join Prune Policy name.
+- `name` (String) The name of the object.
+- `neighbor_prefix_list` (String) Neighbor prefix-list Policy.
+- `neighbor_route_map` (String) Neighbor route-map Policy.
 - `passive` (Boolean) Passive interface.
+- `pfm_sd_boundary` (Number) Pfm-sd boundary, in for restricting incoming pfm-sd message, out for restricting outgoing pfm-sd message.
+- `rfc_strict` (Boolean) Do not process joins from unknown neighbors on this interface.
 - `sparse_mode` (Boolean) Sparse mode.
 
 

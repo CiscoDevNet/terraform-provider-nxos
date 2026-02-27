@@ -38,40 +38,71 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type PIM struct {
-	Device             types.String `tfsdk:"device"`
-	Dn                 types.String `tfsdk:"id"`
-	AdminState         types.String `tfsdk:"admin_state"`
-	InstanceAdminState types.String `tfsdk:"instance_admin_state"`
-	Vrfs               []PIMVrfs    `tfsdk:"vrfs"`
+	Device                     types.String `tfsdk:"device"`
+	Dn                         types.String `tfsdk:"id"`
+	AdminState                 types.String `tfsdk:"admin_state"`
+	InstanceAdminState         types.String `tfsdk:"instance_admin_state"`
+	Control                    types.String `tfsdk:"control"`
+	EvpnBorderLeaf             types.Bool   `tfsdk:"evpn_border_leaf"`
+	ExtraNet                   types.Bool   `tfsdk:"extra_net"`
+	JoinPruneDelay             types.Int64  `tfsdk:"join_prune_delay"`
+	NullRegisterDelay          types.Int64  `tfsdk:"null_register_delay"`
+	NullRegisterNumberOfRoutes types.Int64  `tfsdk:"null_register_number_of_routes"`
+	RegisterStop               types.Bool   `tfsdk:"register_stop"`
+	Vrfs                       []PIMVrfs    `tfsdk:"vrfs"`
 }
 
 type PIMVrfs struct {
-	Name                     types.String            `tfsdk:"name"`
-	AdminState               types.String            `tfsdk:"admin_state"`
-	Bfd                      types.Bool              `tfsdk:"bfd"`
-	Interfaces               []PIMVrfsInterfaces     `tfsdk:"interfaces"`
-	SsmPolicyName            types.String            `tfsdk:"ssm_policy_name"`
-	SsmRangeGroupList1       types.String            `tfsdk:"ssm_range_group_list_1"`
-	SsmRangeGroupList2       types.String            `tfsdk:"ssm_range_group_list_2"`
-	SsmRangeGroupList3       types.String            `tfsdk:"ssm_range_group_list_3"`
-	SsmRangeGroupList4       types.String            `tfsdk:"ssm_range_group_list_4"`
-	SsmRangePrefixList       types.String            `tfsdk:"ssm_range_prefix_list"`
-	SsmRangeRouteMap         types.String            `tfsdk:"ssm_range_route_map"`
-	SsmRangeNone             types.Bool              `tfsdk:"ssm_range_none"`
-	StaticRpPolicyName       types.String            `tfsdk:"static_rp_policy_name"`
-	StaticRps                []PIMVrfsStaticRps      `tfsdk:"static_rps"`
-	AnycastRpLocalInterface  types.String            `tfsdk:"anycast_rp_local_interface"`
-	AnycastRpSourceInterface types.String            `tfsdk:"anycast_rp_source_interface"`
-	AnycastRpPeers           []PIMVrfsAnycastRpPeers `tfsdk:"anycast_rp_peers"`
+	Name                      types.String            `tfsdk:"name"`
+	AdminState                types.String            `tfsdk:"admin_state"`
+	Bfd                       types.Bool              `tfsdk:"bfd"`
+	AutoEnable                types.Bool              `tfsdk:"auto_enable"`
+	Control                   types.String            `tfsdk:"control"`
+	FlushRoutes               types.Bool              `tfsdk:"flush_routes"`
+	JoinPruneDelay            types.Int64             `tfsdk:"join_prune_delay"`
+	LogNeighborChanges        types.Bool              `tfsdk:"log_neighbor_changes"`
+	Mtu                       types.Int64             `tfsdk:"mtu"`
+	RegisterRateLimit         types.Int64             `tfsdk:"register_rate_limit"`
+	RfcStrict                 types.Bool              `tfsdk:"rfc_strict"`
+	SptSwitchGraceful         types.Bool              `tfsdk:"spt_switch_graceful"`
+	Interfaces                []PIMVrfsInterfaces     `tfsdk:"interfaces"`
+	SsmPolicyName             types.String            `tfsdk:"ssm_policy_name"`
+	SsmPolicyDescription      types.String            `tfsdk:"ssm_policy_description"`
+	SsmRangeGroupList1        types.String            `tfsdk:"ssm_range_group_list_1"`
+	SsmRangeGroupList2        types.String            `tfsdk:"ssm_range_group_list_2"`
+	SsmRangeGroupList3        types.String            `tfsdk:"ssm_range_group_list_3"`
+	SsmRangeGroupList4        types.String            `tfsdk:"ssm_range_group_list_4"`
+	SsmRangePrefixList        types.String            `tfsdk:"ssm_range_prefix_list"`
+	SsmRangeRouteMap          types.String            `tfsdk:"ssm_range_route_map"`
+	SsmRangeNone              types.Bool              `tfsdk:"ssm_range_none"`
+	StaticRpPolicyName        types.String            `tfsdk:"static_rp_policy_name"`
+	StaticRpPolicyDescription types.String            `tfsdk:"static_rp_policy_description"`
+	StaticRps                 []PIMVrfsStaticRps      `tfsdk:"static_rps"`
+	AnycastRpLocalInterface   types.String            `tfsdk:"anycast_rp_local_interface"`
+	AnycastRpSourceInterface  types.String            `tfsdk:"anycast_rp_source_interface"`
+	AnycastRpDescription      types.String            `tfsdk:"anycast_rp_description"`
+	AnycastRpName             types.String            `tfsdk:"anycast_rp_name"`
+	AnycastRpPeers            []PIMVrfsAnycastRpPeers `tfsdk:"anycast_rp_peers"`
 }
 
 type PIMVrfsInterfaces struct {
-	InterfaceId types.String `tfsdk:"interface_id"`
-	AdminState  types.String `tfsdk:"admin_state"`
-	Bfd         types.String `tfsdk:"bfd"`
-	DrPriority  types.Int64  `tfsdk:"dr_priority"`
-	Passive     types.Bool   `tfsdk:"passive"`
-	SparseMode  types.Bool   `tfsdk:"sparse_mode"`
+	InterfaceId        types.String `tfsdk:"interface_id"`
+	AdminState         types.String `tfsdk:"admin_state"`
+	Bfd                types.String `tfsdk:"bfd"`
+	DrPriority         types.Int64  `tfsdk:"dr_priority"`
+	Passive            types.Bool   `tfsdk:"passive"`
+	SparseMode         types.Bool   `tfsdk:"sparse_mode"`
+	Border             types.Bool   `tfsdk:"border"`
+	BorderRouter       types.Bool   `tfsdk:"border_router"`
+	Control            types.String `tfsdk:"control"`
+	Description        types.String `tfsdk:"description"`
+	DrDelay            types.Int64  `tfsdk:"dr_delay"`
+	JoinPruneRouteMap  types.String `tfsdk:"join_prune_route_map"`
+	Name               types.String `tfsdk:"name"`
+	NeighborRouteMap   types.String `tfsdk:"neighbor_route_map"`
+	NeighborPrefixList types.String `tfsdk:"neighbor_prefix_list"`
+	PfmSdBoundary      types.Int64  `tfsdk:"pfm_sd_boundary"`
+	RfcStrict          types.Bool   `tfsdk:"rfc_strict"`
 }
 
 type PIMVrfsStaticRps struct {
@@ -161,6 +192,27 @@ func (data PIM) toBody() nxos.Body {
 		if (!data.InstanceAdminState.IsUnknown() && !data.InstanceAdminState.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.InstanceAdminState.ValueString())
 		}
+		if (!data.Control.IsUnknown() && !data.Control.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "ctrl", data.Control.ValueString())
+		}
+		if (!data.EvpnBorderLeaf.IsUnknown() && !data.EvpnBorderLeaf.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "evpnBorderLeaf", strconv.FormatBool(data.EvpnBorderLeaf.ValueBool()))
+		}
+		if (!data.ExtraNet.IsUnknown() && !data.ExtraNet.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "extraNet", strconv.FormatBool(data.ExtraNet.ValueBool()))
+		}
+		if (!data.JoinPruneDelay.IsUnknown() && !data.JoinPruneDelay.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "jpDelay", strconv.FormatInt(data.JoinPruneDelay.ValueInt64(), 10))
+		}
+		if (!data.NullRegisterDelay.IsUnknown() && !data.NullRegisterDelay.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "nrDelay", strconv.FormatInt(data.NullRegisterDelay.ValueInt64(), 10))
+		}
+		if (!data.NullRegisterNumberOfRoutes.IsUnknown() && !data.NullRegisterNumberOfRoutes.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "nrNumRt", strconv.FormatInt(data.NullRegisterNumberOfRoutes.ValueInt64(), 10))
+		}
+		if (!data.RegisterStop.IsUnknown() && !data.RegisterStop.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "regStop", strconv.FormatBool(data.RegisterStop.ValueBool()))
+		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		for _, child := range data.Vrfs {
@@ -173,6 +225,33 @@ func (data PIM) toBody() nxos.Body {
 			}
 			if (!child.Bfd.IsUnknown() && !child.Bfd.IsNull()) || false {
 				attrs, _ = sjson.Set(attrs, "bfd", strconv.FormatBool(child.Bfd.ValueBool()))
+			}
+			if (!child.AutoEnable.IsUnknown() && !child.AutoEnable.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "autoEnable", strconv.FormatBool(child.AutoEnable.ValueBool()))
+			}
+			if (!child.Control.IsUnknown() && !child.Control.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
+			}
+			if (!child.FlushRoutes.IsUnknown() && !child.FlushRoutes.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "flushRoutes", strconv.FormatBool(child.FlushRoutes.ValueBool()))
+			}
+			if (!child.JoinPruneDelay.IsUnknown() && !child.JoinPruneDelay.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "jpDelay", strconv.FormatInt(child.JoinPruneDelay.ValueInt64(), 10))
+			}
+			if (!child.LogNeighborChanges.IsUnknown() && !child.LogNeighborChanges.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "logNbhChng", strconv.FormatBool(child.LogNeighborChanges.ValueBool()))
+			}
+			if (!child.Mtu.IsUnknown() && !child.Mtu.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "mtu", strconv.FormatInt(child.Mtu.ValueInt64(), 10))
+			}
+			if (!child.RegisterRateLimit.IsUnknown() && !child.RegisterRateLimit.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "regRateLmt", strconv.FormatInt(child.RegisterRateLimit.ValueInt64(), 10))
+			}
+			if (!child.RfcStrict.IsUnknown() && !child.RfcStrict.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "rfcStrict", strconv.FormatBool(child.RfcStrict.ValueBool()))
+			}
+			if (!child.SptSwitchGraceful.IsUnknown() && !child.SptSwitchGraceful.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "sptSwitchGraceful", strconv.FormatBool(child.SptSwitchGraceful.ValueBool()))
 			}
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pimDom.attributes", attrs)
 			{
@@ -198,6 +277,39 @@ func (data PIM) toBody() nxos.Body {
 					if (!child.SparseMode.IsUnknown() && !child.SparseMode.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "pimSparseMode", strconv.FormatBool(child.SparseMode.ValueBool()))
 					}
+					if (!child.Border.IsUnknown() && !child.Border.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "border", strconv.FormatBool(child.Border.ValueBool()))
+					}
+					if (!child.BorderRouter.IsUnknown() && !child.BorderRouter.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "borderRouter", strconv.FormatBool(child.BorderRouter.ValueBool()))
+					}
+					if (!child.Control.IsUnknown() && !child.Control.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
+					}
+					if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+					}
+					if (!child.DrDelay.IsUnknown() && !child.DrDelay.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "drDelay", strconv.FormatInt(child.DrDelay.ValueInt64(), 10))
+					}
+					if (!child.JoinPruneRouteMap.IsUnknown() && !child.JoinPruneRouteMap.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "jpRtMap", child.JoinPruneRouteMap.ValueString())
+					}
+					if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
+					}
+					if (!child.NeighborRouteMap.IsUnknown() && !child.NeighborRouteMap.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "neighRtMap", child.NeighborRouteMap.ValueString())
+					}
+					if (!child.NeighborPrefixList.IsUnknown() && !child.NeighborPrefixList.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "neighpfxList", child.NeighborPrefixList.ValueString())
+					}
+					if (!child.PfmSdBoundary.IsUnknown() && !child.PfmSdBoundary.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "pfmSdBoundary", strconv.FormatInt(child.PfmSdBoundary.ValueInt64(), 10))
+					}
+					if (!child.RfcStrict.IsUnknown() && !child.RfcStrict.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "rfcStrict", strconv.FormatBool(child.RfcStrict.ValueBool()))
+					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pimIf.attributes", attrs)
 				}
 				{
@@ -206,6 +318,9 @@ func (data PIM) toBody() nxos.Body {
 					attrs = "{}"
 					if (!child.SsmPolicyName.IsUnknown() && !child.SsmPolicyName.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "name", child.SsmPolicyName.ValueString())
+					}
+					if (!child.SsmPolicyDescription.IsUnknown() && !child.SsmPolicyDescription.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "descr", child.SsmPolicyDescription.ValueString())
 					}
 					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 					nestedChildrenPath := childBodyPath + ".children"
@@ -241,6 +356,9 @@ func (data PIM) toBody() nxos.Body {
 					attrs = "{}"
 					if (!child.StaticRpPolicyName.IsUnknown() && !child.StaticRpPolicyName.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "name", child.StaticRpPolicyName.ValueString())
+					}
+					if (!child.StaticRpPolicyDescription.IsUnknown() && !child.StaticRpPolicyDescription.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "descr", child.StaticRpPolicyDescription.ValueString())
 					}
 					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 					nestedChildrenPath := childBodyPath + ".children"
@@ -278,6 +396,12 @@ func (data PIM) toBody() nxos.Body {
 					}
 					if (!child.AnycastRpSourceInterface.IsUnknown() && !child.AnycastRpSourceInterface.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "srcIf", child.AnycastRpSourceInterface.ValueString())
+					}
+					if (!child.AnycastRpDescription.IsUnknown() && !child.AnycastRpDescription.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "descr", child.AnycastRpDescription.ValueString())
+					}
+					if (!child.AnycastRpName.IsUnknown() && !child.AnycastRpName.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "name", child.AnycastRpName.ValueString())
 					}
 					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 					nestedChildrenPath := childBodyPath + ".children"
@@ -318,6 +442,13 @@ func (data *PIM) fromBody(res gjson.Result) {
 			},
 		)
 		data.InstanceAdminState = types.StringValue(rpimInst.Get("pimInst.attributes.adminSt").String())
+		data.Control = types.StringValue(rpimInst.Get("pimInst.attributes.ctrl").String())
+		data.EvpnBorderLeaf = types.BoolValue(helpers.ParseNxosBoolean(rpimInst.Get("pimInst.attributes.evpnBorderLeaf").String()))
+		data.ExtraNet = types.BoolValue(helpers.ParseNxosBoolean(rpimInst.Get("pimInst.attributes.extraNet").String()))
+		data.JoinPruneDelay = types.Int64Value(rpimInst.Get("pimInst.attributes.jpDelay").Int())
+		data.NullRegisterDelay = types.Int64Value(rpimInst.Get("pimInst.attributes.nrDelay").Int())
+		data.NullRegisterNumberOfRoutes = types.Int64Value(rpimInst.Get("pimInst.attributes.nrNumRt").Int())
+		data.RegisterStop = types.BoolValue(helpers.ParseNxosBoolean(rpimInst.Get("pimInst.attributes.regStop").String()))
 		rpimInst.Get("pimInst.children").ForEach(
 			func(_, v gjson.Result) bool {
 				v.ForEach(
@@ -327,6 +458,15 @@ func (data *PIM) fromBody(res gjson.Result) {
 							child.Name = types.StringValue(value.Get("attributes.name").String())
 							child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
 							child.Bfd = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.bfd").String()))
+							child.AutoEnable = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.autoEnable").String()))
+							child.Control = types.StringValue(value.Get("attributes.ctrl").String())
+							child.FlushRoutes = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.flushRoutes").String()))
+							child.JoinPruneDelay = types.Int64Value(value.Get("attributes.jpDelay").Int())
+							child.LogNeighborChanges = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.logNbhChng").String()))
+							child.Mtu = types.Int64Value(value.Get("attributes.mtu").Int())
+							child.RegisterRateLimit = types.Int64Value(value.Get("attributes.regRateLmt").Int())
+							child.RfcStrict = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.rfcStrict").String()))
+							child.SptSwitchGraceful = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.sptSwitchGraceful").String()))
 							value.Get("children").ForEach(
 								func(_, nestedV gjson.Result) bool {
 									nestedV.ForEach(
@@ -339,6 +479,17 @@ func (data *PIM) fromBody(res gjson.Result) {
 												nestedChildpimIf.DrPriority = types.Int64Value(nestedValue.Get("attributes.drPrio").Int())
 												nestedChildpimIf.Passive = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.passive").String()))
 												nestedChildpimIf.SparseMode = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.pimSparseMode").String()))
+												nestedChildpimIf.Border = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.border").String()))
+												nestedChildpimIf.BorderRouter = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.borderRouter").String()))
+												nestedChildpimIf.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
+												nestedChildpimIf.Description = types.StringValue(nestedValue.Get("attributes.descr").String())
+												nestedChildpimIf.DrDelay = types.Int64Value(nestedValue.Get("attributes.drDelay").Int())
+												nestedChildpimIf.JoinPruneRouteMap = types.StringValue(nestedValue.Get("attributes.jpRtMap").String())
+												nestedChildpimIf.Name = types.StringValue(nestedValue.Get("attributes.name").String())
+												nestedChildpimIf.NeighborRouteMap = types.StringValue(nestedValue.Get("attributes.neighRtMap").String())
+												nestedChildpimIf.NeighborPrefixList = types.StringValue(nestedValue.Get("attributes.neighpfxList").String())
+												nestedChildpimIf.PfmSdBoundary = types.Int64Value(nestedValue.Get("attributes.pfmSdBoundary").Int())
+												nestedChildpimIf.RfcStrict = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.rfcStrict").String()))
 												child.Interfaces = append(child.Interfaces, nestedChildpimIf)
 											}
 											return true
@@ -360,6 +511,7 @@ func (data *PIM) fromBody(res gjson.Result) {
 									},
 								)
 								child.SsmPolicyName = types.StringValue(rpimSSMPatP.Get("pimSSMPatP.attributes.name").String())
+								child.SsmPolicyDescription = types.StringValue(rpimSSMPatP.Get("pimSSMPatP.attributes.descr").String())
 								{
 									var rpimSSMRangeP gjson.Result
 									rpimSSMPatP.Get("pimSSMPatP").Get("children").ForEach(
@@ -394,6 +546,7 @@ func (data *PIM) fromBody(res gjson.Result) {
 									},
 								)
 								child.StaticRpPolicyName = types.StringValue(rpimStaticRPP.Get("pimStaticRPP.attributes.name").String())
+								child.StaticRpPolicyDescription = types.StringValue(rpimStaticRPP.Get("pimStaticRPP.attributes.descr").String())
 								rpimStaticRPP.Get("pimStaticRPP").Get("children").ForEach(
 									func(_, nestedV gjson.Result) bool {
 										nestedV.ForEach(
@@ -441,6 +594,8 @@ func (data *PIM) fromBody(res gjson.Result) {
 								)
 								child.AnycastRpLocalInterface = types.StringValue(rpimAcastRPFuncP.Get("pimAcastRPFuncP.attributes.localIf").String())
 								child.AnycastRpSourceInterface = types.StringValue(rpimAcastRPFuncP.Get("pimAcastRPFuncP.attributes.srcIf").String())
+								child.AnycastRpDescription = types.StringValue(rpimAcastRPFuncP.Get("pimAcastRPFuncP.attributes.descr").String())
+								child.AnycastRpName = types.StringValue(rpimAcastRPFuncP.Get("pimAcastRPFuncP.attributes.name").String())
 								rpimAcastRPFuncP.Get("pimAcastRPFuncP").Get("children").ForEach(
 									func(_, nestedV gjson.Result) bool {
 										nestedV.ForEach(
@@ -495,6 +650,41 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 	} else {
 		data.InstanceAdminState = types.StringNull()
 	}
+	if !data.Control.IsNull() {
+		data.Control = types.StringValue(rpimInst.Get("pimInst.attributes.ctrl").String())
+	} else {
+		data.Control = types.StringNull()
+	}
+	if !data.EvpnBorderLeaf.IsNull() {
+		data.EvpnBorderLeaf = types.BoolValue(helpers.ParseNxosBoolean(rpimInst.Get("pimInst.attributes.evpnBorderLeaf").String()))
+	} else {
+		data.EvpnBorderLeaf = types.BoolNull()
+	}
+	if !data.ExtraNet.IsNull() {
+		data.ExtraNet = types.BoolValue(helpers.ParseNxosBoolean(rpimInst.Get("pimInst.attributes.extraNet").String()))
+	} else {
+		data.ExtraNet = types.BoolNull()
+	}
+	if !data.JoinPruneDelay.IsNull() {
+		data.JoinPruneDelay = types.Int64Value(rpimInst.Get("pimInst.attributes.jpDelay").Int())
+	} else {
+		data.JoinPruneDelay = types.Int64Null()
+	}
+	if !data.NullRegisterDelay.IsNull() {
+		data.NullRegisterDelay = types.Int64Value(rpimInst.Get("pimInst.attributes.nrDelay").Int())
+	} else {
+		data.NullRegisterDelay = types.Int64Null()
+	}
+	if !data.NullRegisterNumberOfRoutes.IsNull() {
+		data.NullRegisterNumberOfRoutes = types.Int64Value(rpimInst.Get("pimInst.attributes.nrNumRt").Int())
+	} else {
+		data.NullRegisterNumberOfRoutes = types.Int64Null()
+	}
+	if !data.RegisterStop.IsNull() {
+		data.RegisterStop = types.BoolValue(helpers.ParseNxosBoolean(rpimInst.Get("pimInst.attributes.regStop").String()))
+	} else {
+		data.RegisterStop = types.BoolNull()
+	}
 	for c := range data.Vrfs {
 		var rpimDom gjson.Result
 		rpimInst.Get("pimInst.children").ForEach(
@@ -521,6 +711,51 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 			data.Vrfs[c].Bfd = types.BoolValue(helpers.ParseNxosBoolean(rpimDom.Get("pimDom.attributes.bfd").String()))
 		} else {
 			data.Vrfs[c].Bfd = types.BoolNull()
+		}
+		if !data.Vrfs[c].AutoEnable.IsNull() {
+			data.Vrfs[c].AutoEnable = types.BoolValue(helpers.ParseNxosBoolean(rpimDom.Get("pimDom.attributes.autoEnable").String()))
+		} else {
+			data.Vrfs[c].AutoEnable = types.BoolNull()
+		}
+		if !data.Vrfs[c].Control.IsNull() {
+			data.Vrfs[c].Control = types.StringValue(rpimDom.Get("pimDom.attributes.ctrl").String())
+		} else {
+			data.Vrfs[c].Control = types.StringNull()
+		}
+		if !data.Vrfs[c].FlushRoutes.IsNull() {
+			data.Vrfs[c].FlushRoutes = types.BoolValue(helpers.ParseNxosBoolean(rpimDom.Get("pimDom.attributes.flushRoutes").String()))
+		} else {
+			data.Vrfs[c].FlushRoutes = types.BoolNull()
+		}
+		if !data.Vrfs[c].JoinPruneDelay.IsNull() {
+			data.Vrfs[c].JoinPruneDelay = types.Int64Value(rpimDom.Get("pimDom.attributes.jpDelay").Int())
+		} else {
+			data.Vrfs[c].JoinPruneDelay = types.Int64Null()
+		}
+		if !data.Vrfs[c].LogNeighborChanges.IsNull() {
+			data.Vrfs[c].LogNeighborChanges = types.BoolValue(helpers.ParseNxosBoolean(rpimDom.Get("pimDom.attributes.logNbhChng").String()))
+		} else {
+			data.Vrfs[c].LogNeighborChanges = types.BoolNull()
+		}
+		if !data.Vrfs[c].Mtu.IsNull() {
+			data.Vrfs[c].Mtu = types.Int64Value(rpimDom.Get("pimDom.attributes.mtu").Int())
+		} else {
+			data.Vrfs[c].Mtu = types.Int64Null()
+		}
+		if !data.Vrfs[c].RegisterRateLimit.IsNull() {
+			data.Vrfs[c].RegisterRateLimit = types.Int64Value(rpimDom.Get("pimDom.attributes.regRateLmt").Int())
+		} else {
+			data.Vrfs[c].RegisterRateLimit = types.Int64Null()
+		}
+		if !data.Vrfs[c].RfcStrict.IsNull() {
+			data.Vrfs[c].RfcStrict = types.BoolValue(helpers.ParseNxosBoolean(rpimDom.Get("pimDom.attributes.rfcStrict").String()))
+		} else {
+			data.Vrfs[c].RfcStrict = types.BoolNull()
+		}
+		if !data.Vrfs[c].SptSwitchGraceful.IsNull() {
+			data.Vrfs[c].SptSwitchGraceful = types.BoolValue(helpers.ParseNxosBoolean(rpimDom.Get("pimDom.attributes.sptSwitchGraceful").String()))
+		} else {
+			data.Vrfs[c].SptSwitchGraceful = types.BoolNull()
 		}
 		for nc := range data.Vrfs[c].Interfaces {
 			var rpimIf gjson.Result
@@ -564,6 +799,61 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 			} else {
 				data.Vrfs[c].Interfaces[nc].SparseMode = types.BoolNull()
 			}
+			if !data.Vrfs[c].Interfaces[nc].Border.IsNull() {
+				data.Vrfs[c].Interfaces[nc].Border = types.BoolValue(helpers.ParseNxosBoolean(rpimIf.Get("pimIf.attributes.border").String()))
+			} else {
+				data.Vrfs[c].Interfaces[nc].Border = types.BoolNull()
+			}
+			if !data.Vrfs[c].Interfaces[nc].BorderRouter.IsNull() {
+				data.Vrfs[c].Interfaces[nc].BorderRouter = types.BoolValue(helpers.ParseNxosBoolean(rpimIf.Get("pimIf.attributes.borderRouter").String()))
+			} else {
+				data.Vrfs[c].Interfaces[nc].BorderRouter = types.BoolNull()
+			}
+			if !data.Vrfs[c].Interfaces[nc].Control.IsNull() {
+				data.Vrfs[c].Interfaces[nc].Control = types.StringValue(rpimIf.Get("pimIf.attributes.ctrl").String())
+			} else {
+				data.Vrfs[c].Interfaces[nc].Control = types.StringNull()
+			}
+			if !data.Vrfs[c].Interfaces[nc].Description.IsNull() {
+				data.Vrfs[c].Interfaces[nc].Description = types.StringValue(rpimIf.Get("pimIf.attributes.descr").String())
+			} else {
+				data.Vrfs[c].Interfaces[nc].Description = types.StringNull()
+			}
+			if !data.Vrfs[c].Interfaces[nc].DrDelay.IsNull() {
+				data.Vrfs[c].Interfaces[nc].DrDelay = types.Int64Value(rpimIf.Get("pimIf.attributes.drDelay").Int())
+			} else {
+				data.Vrfs[c].Interfaces[nc].DrDelay = types.Int64Null()
+			}
+			if !data.Vrfs[c].Interfaces[nc].JoinPruneRouteMap.IsNull() {
+				data.Vrfs[c].Interfaces[nc].JoinPruneRouteMap = types.StringValue(rpimIf.Get("pimIf.attributes.jpRtMap").String())
+			} else {
+				data.Vrfs[c].Interfaces[nc].JoinPruneRouteMap = types.StringNull()
+			}
+			if !data.Vrfs[c].Interfaces[nc].Name.IsNull() {
+				data.Vrfs[c].Interfaces[nc].Name = types.StringValue(rpimIf.Get("pimIf.attributes.name").String())
+			} else {
+				data.Vrfs[c].Interfaces[nc].Name = types.StringNull()
+			}
+			if !data.Vrfs[c].Interfaces[nc].NeighborRouteMap.IsNull() {
+				data.Vrfs[c].Interfaces[nc].NeighborRouteMap = types.StringValue(rpimIf.Get("pimIf.attributes.neighRtMap").String())
+			} else {
+				data.Vrfs[c].Interfaces[nc].NeighborRouteMap = types.StringNull()
+			}
+			if !data.Vrfs[c].Interfaces[nc].NeighborPrefixList.IsNull() {
+				data.Vrfs[c].Interfaces[nc].NeighborPrefixList = types.StringValue(rpimIf.Get("pimIf.attributes.neighpfxList").String())
+			} else {
+				data.Vrfs[c].Interfaces[nc].NeighborPrefixList = types.StringNull()
+			}
+			if !data.Vrfs[c].Interfaces[nc].PfmSdBoundary.IsNull() {
+				data.Vrfs[c].Interfaces[nc].PfmSdBoundary = types.Int64Value(rpimIf.Get("pimIf.attributes.pfmSdBoundary").Int())
+			} else {
+				data.Vrfs[c].Interfaces[nc].PfmSdBoundary = types.Int64Null()
+			}
+			if !data.Vrfs[c].Interfaces[nc].RfcStrict.IsNull() {
+				data.Vrfs[c].Interfaces[nc].RfcStrict = types.BoolValue(helpers.ParseNxosBoolean(rpimIf.Get("pimIf.attributes.rfcStrict").String()))
+			} else {
+				data.Vrfs[c].Interfaces[nc].RfcStrict = types.BoolNull()
+			}
 		}
 		{
 			var rpimSSMPatP gjson.Result
@@ -581,6 +871,11 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 				data.Vrfs[c].SsmPolicyName = types.StringValue(rpimSSMPatP.Get("pimSSMPatP.attributes.name").String())
 			} else {
 				data.Vrfs[c].SsmPolicyName = types.StringNull()
+			}
+			if !data.Vrfs[c].SsmPolicyDescription.IsNull() {
+				data.Vrfs[c].SsmPolicyDescription = types.StringValue(rpimSSMPatP.Get("pimSSMPatP.attributes.descr").String())
+			} else {
+				data.Vrfs[c].SsmPolicyDescription = types.StringNull()
 			}
 			{
 				var rpimSSMRangeP gjson.Result
@@ -647,6 +942,11 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 				data.Vrfs[c].StaticRpPolicyName = types.StringValue(rpimStaticRPP.Get("pimStaticRPP.attributes.name").String())
 			} else {
 				data.Vrfs[c].StaticRpPolicyName = types.StringNull()
+			}
+			if !data.Vrfs[c].StaticRpPolicyDescription.IsNull() {
+				data.Vrfs[c].StaticRpPolicyDescription = types.StringValue(rpimStaticRPP.Get("pimStaticRPP.attributes.descr").String())
+			} else {
+				data.Vrfs[c].StaticRpPolicyDescription = types.StringNull()
 			}
 			for nc := range data.Vrfs[c].StaticRps {
 				var rpimStaticRP gjson.Result
@@ -717,6 +1017,16 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 			} else {
 				data.Vrfs[c].AnycastRpSourceInterface = types.StringNull()
 			}
+			if !data.Vrfs[c].AnycastRpDescription.IsNull() {
+				data.Vrfs[c].AnycastRpDescription = types.StringValue(rpimAcastRPFuncP.Get("pimAcastRPFuncP.attributes.descr").String())
+			} else {
+				data.Vrfs[c].AnycastRpDescription = types.StringNull()
+			}
+			if !data.Vrfs[c].AnycastRpName.IsNull() {
+				data.Vrfs[c].AnycastRpName = types.StringValue(rpimAcastRPFuncP.Get("pimAcastRPFuncP.attributes.name").String())
+			} else {
+				data.Vrfs[c].AnycastRpName = types.StringNull()
+			}
 			for nc := range data.Vrfs[c].AnycastRpPeers {
 				var rpimAcastRPPeer gjson.Result
 				rpimAcastRPFuncP.Get("pimAcastRPFuncP.children").ForEach(
@@ -755,10 +1065,17 @@ func (data PIM) toDeleteBody() nxos.Body {
 	}
 	childrenPath := data.getClassName() + ".children"
 	{
-		deleteBody := ""
-		deleteBody, _ = sjson.Set(deleteBody, "pimInst.attributes.rn", "inst")
-		deleteBody, _ = sjson.Set(deleteBody, "pimInst.attributes.status", "deleted")
-		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".pimInst"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		for _, child := range data.Vrfs {
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "pimDom.attributes.rn", child.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "pimDom.attributes.status", "deleted")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		}
 	}
 
 	return nxos.Body{body}

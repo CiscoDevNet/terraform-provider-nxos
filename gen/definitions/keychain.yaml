@@ -50,6 +50,30 @@ child_classes:
                 min_int: 0
                 max_int: 65535
                 example: 1
+              - nxos_name: cryptoAlgo
+                tf_name: cryptographic_algorithm
+                type: String
+                description: 'Cryptographic Algorithm used in key.'
+                enum_values:
+                  - NONE
+                  - MD5
+                  - HMAC-SHA-1
+                  - HMAC-SHA-256
+                  - HMAC-SHA-384
+                  - HMAC-SHA-512
+                  - 3DES
+                  - AES
+                example: AES
+              - nxos_name: encryptType
+                tf_name: encryption_type
+                type: String
+                description: 'Encryption type value based on user input.'
+                enum_values:
+                  - unencrypted
+                  - type7
+                  - type6
+                example: type7
+                exclude_test: true
               - nxos_name: keyString
                 tf_name: key_string
                 description: 'keyString provided by user for the keychain.'

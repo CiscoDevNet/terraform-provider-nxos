@@ -54,5 +54,7 @@ Read-Only:
 
 Read-Only:
 
+- `cryptographic_algorithm` (String) Cryptographic Algorithm used in key.
+- `encryption_type` (String) Encryption type value based on user input.
 - `key_id` (Number) keyId of classic key chain.
 - `key_string` (String) keyString provided by user for the keychain.

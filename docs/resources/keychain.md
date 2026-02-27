@@ -29,8 +29,10 @@ resource "nxos_keychain" "example" {
   keychains = [{
     name = "KEYCHAIN1"
     keys = [{
-      key_id     = 1
-      key_string = "secret_password"
+      key_id                  = 1
+      cryptographic_algorithm = "AES"
+      encryption_type         = "type7"
+      key_string              = "secret_password"
     }]
   }]
 }
@@ -71,6 +73,10 @@ Required:
 
 Optional:
 
+- `cryptographic_algorithm` (String) Cryptographic Algorithm used in key.
+  - Choices: `NONE`, `MD5`, `HMAC-SHA-1`, `HMAC-SHA-256`, `HMAC-SHA-384`, `HMAC-SHA-512`, `3DES`, `AES`
+- `encryption_type` (String) Encryption type value based on user input.
+  - Choices: `unencrypted`, `type7`, `type6`
 - `key_string` (String) keyString provided by user for the keychain.
 
 ## Import

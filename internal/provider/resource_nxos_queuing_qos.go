@@ -108,6 +108,14 @@ func (r *QueuingQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplace(),
 										},
 									},
+									"next_class_map": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Insert before the given class-map.").String,
+										Optional:            true,
+									},
+									"previous_class_map": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Insert after the given class-map.").String,
+										Optional:            true,
+									},
 									"priority": schema.Int64Attribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Optional priority level.").AddIntegerRangeDescription(1, 8).String,
 										Optional:            true,
@@ -131,6 +139,10 @@ func (r *QueuingQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 			"system_out_policy_map_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Policy-map Name.").String,
 				Required:            true,
+			},
+			"policy_map_statistics": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Turn on/off statistics.").String,
+				Optional:            true,
 			},
 		},
 	}

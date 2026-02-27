@@ -44,6 +44,7 @@ data "nxos_queuing_qos" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+- `policy_map_statistics` (Boolean) Turn on/off statistics.
 - `policy_maps` (Attributes List) List of policy maps. (see [below for nested schema](#nestedatt--policy_maps))
 - `system_out_policy_map_name` (String) Policy-map Name.
 
@@ -62,5 +63,7 @@ Read-Only:
 Read-Only:
 
 - `name` (String) Match using class-map.
+- `next_class_map` (String) Insert before the given class-map.
+- `previous_class_map` (String) Insert after the given class-map.
 - `priority` (Number) Optional priority level.
 - `remaining_bandwidth` (Number) Remaining bandwidth.

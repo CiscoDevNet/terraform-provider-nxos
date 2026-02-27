@@ -50,6 +50,18 @@ child_classes:
                 id: true
                 description: 'Match using class-map.'
                 example: c-out-q1
+              - nxos_name: nextCMap
+                tf_name: next_class_map
+                type: String
+                description: 'Insert before the given class-map.'
+                example: c-out-q2
+                exclude_test: true
+              - nxos_name: prevCMap
+                tf_name: previous_class_map
+                type: String
+                description: 'Insert after the given class-map.'
+                example: c-out-q2
+                exclude_test: true
             child_classes:
               - class_name: ipqosPriority
                 doc_path: Qos/ipqos:Priority/
@@ -112,6 +124,11 @@ child_classes:
                     mandatory: true
                     description: 'Policy-map Name.'
                     example: PM1
+                  - nxos_name: stats
+                    tf_name: policy_map_statistics
+                    type: Bool
+                    description: 'Turn on/off statistics.'
+                    example: false
 test_prerequisites:
   - dn: sys/ipqos/queuing/p/name-[PM1]
     class_name: ipqosPMapInst

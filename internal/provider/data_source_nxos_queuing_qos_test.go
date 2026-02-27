@@ -42,6 +42,7 @@ func TestAccDataSourceNxosQueuingQoS(t *testing.T) {
 		"priority": "1",
 	}))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "system_out_policy_map_name", "PM1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_map_statistics", "false"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -158,6 +159,7 @@ func testAccDataSourceNxosQueuingQoSConfig() string {
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
 	config += `	system_out_policy_map_name = "PM1"` + "\n"
+	config += `	policy_map_statistics = false` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, nxos_rest.PreReq7, nxos_rest.PreReq8, ]` + "\n"
 	config += `}` + "\n"
 

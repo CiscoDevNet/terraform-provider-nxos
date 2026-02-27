@@ -36,11 +36,14 @@ resource "nxos_queuing_qos" "example" {
     match_type = "match-any"
     match_class_maps = [{
       name                = "c-out-q1"
+      next_class_map      = "c-out-q2"
+      previous_class_map  = "c-out-q2"
       priority            = 1
       remaining_bandwidth = 10
     }]
   }]
   system_out_policy_map_name = "PM1"
+  policy_map_statistics      = false
 }
 ```
 
@@ -54,6 +57,7 @@ resource "nxos_queuing_qos" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
+- `policy_map_statistics` (Boolean) Turn on/off statistics.
 - `policy_maps` (Attributes List) List of policy maps. (see [below for nested schema](#nestedatt--policy_maps))
 
 ### Read-Only
@@ -82,6 +86,8 @@ Required:
 
 Optional:
 
+- `next_class_map` (String) Insert before the given class-map.
+- `previous_class_map` (String) Insert after the given class-map.
 - `priority` (Number) Optional priority level.
   - Range: `1`-`8`
 - `remaining_bandwidth` (Number) Remaining bandwidth.

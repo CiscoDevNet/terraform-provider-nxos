@@ -231,6 +231,275 @@ attributes:
     allow_non_enum_values: true
     example: 'admin_layer,admin_mtu,admin_state'
     delete_value: none
+  - nxos_name: beacon
+    tf_name: beacon
+    type: String
+    description: 'Beacon State.'
+    enum_values:
+      - 'on'
+      - 'off'
+    example: 'off'
+  - nxos_name: dfeAdaptiveTuning
+    tf_name: dfe_adaptive_tuning
+    type: String
+    description: 'DFE (Decision Feedback Equalizer) Adaptive Tuning.'
+    enum_values:
+      - disable
+      - enable
+    example: disable
+  - nxos_name: dfeTuningDelay
+    tf_name: dfe_tuning_delay
+    type: Int64
+    description: 'DFE (Decision Feedback Equalizer) Tuning Delay.'
+    min_int: 100
+    max_int: 10000
+    example: 500
+  - nxos_name: dot1qEtherType
+    tf_name: dot1q_ether_type
+    type: Int64
+    description: 'The administrative port Dot1q ether-type. Dot1q Ether Type configures the TPID value in the VLAN tag field for packets received and sent by the interface.'
+    min_int: 1536
+    max_int: 65535
+    example: 33024
+    exclude_test: true
+  - nxos_name: equalizationDelay
+    tf_name: equalization_delay
+    type: Int64
+    description: 'Administrative port equalization delay time.'
+    min_int: 0
+    max_int: 31
+    example: 1
+    exclude_test: true
+  - nxos_name: inhBw
+    tf_name: inherit_bandwidth
+    type: Int64
+    description: 'Administrative port inherit bandwidth.'
+    min_int: 0
+    max_int: 4294967295
+    example: 1000
+  - nxos_name: ituChannel
+    tf_name: itu_channel
+    type: Int64
+    description: 'ITU Channel to support DWDM XCVR.'
+    min_int: 1
+    max_int: 96
+    example: 50
+  - nxos_name: linkActiveJitterMgmt
+    tf_name: link_active_jitter_management
+    type: String
+    description: 'Administrative port link active-jitter-management.'
+    enum_values:
+      - disable
+      - enable
+    example: disable
+  - nxos_name: linkFlapErrDis
+    tf_name: link_flap_error_disable
+    type: String
+    description: 'Enable/Disable Link Flap Error Config.'
+    enum_values:
+      - disable
+      - enable
+    example: disable
+  - nxos_name: linkFlapErrorMax
+    tf_name: link_flap_error_max
+    type: Int64
+    description: 'Max Flaps allowed per time.'
+    min_int: 2
+    max_int: 30
+    example: 10
+  - nxos_name: linkFlapErrorSeconds
+    tf_name: link_flap_error_seconds
+    type: Int64
+    description: 'Time Allowed for max flaps.'
+    min_int: 5
+    max_int: 420
+    example: 60
+  - nxos_name: linkLoopback
+    tf_name: link_loopback
+    type: String
+    description: 'Link loopback configuration.'
+    enum_values:
+      - disable
+      - enable
+    example: disable
+  - nxos_name: linkMacUpTimer
+    tf_name: link_mac_up_timer
+    type: Int64
+    description: 'Administrative port link mac-up timer.'
+    min_int: 0
+    max_int: 120
+    example: 10
+  - nxos_name: linkMaxBringUpTimer
+    tf_name: link_max_bring_up_timer
+    type: Int64
+    description: 'Administrative port link mac-up timer max.'
+    min_int: 0
+    max_int: 120
+    example: 10
+  - nxos_name: linkTransmitReset
+    tf_name: link_transmit_reset
+    type: String
+    description: 'Link Transmit Reset.'
+    enum_values:
+      - disable
+      - enable
+    example: enable
+  - nxos_name: mdix
+    tf_name: mdix
+    type: String
+    description: 'The administrative Mdix mode. The Medium-dependant interface crossover (Mdix) is when the interface automatically detects the required cable connection type (straight through or crossover) and configures the connection appropriately.'
+    enum_values:
+      - auto
+      - mdi
+      - mdi-x
+    example: auto
+  - nxos_name: mediaType
+    tf_name: media_type
+    type: String
+    description: 'Phy interfaces media type.'
+    enum_values:
+      - none
+      - 10g-tx
+    example: none
+  - nxos_name: opticsLoopback
+    tf_name: optics_loopback
+    type: String
+    description: 'Configured Loopback.'
+    enum_values:
+      - disable
+      - internal
+      - line
+    example: disable
+  - nxos_name: packetTimestampEgressSourceId
+    tf_name: packet_timestamp_egress_source_id
+    type: Int64
+    description: 'Egress timestamp Source Id.'
+    min_int: 0
+    max_int: 8388606
+    example: 100
+  - nxos_name: packetTimestampIngressSourceId
+    tf_name: packet_timestamp_ingress_source_id
+    type: Int64
+    description: 'Ingress timestamp Source Id.'
+    min_int: 0
+    max_int: 8388606
+    example: 100
+  - nxos_name: packetTimestampState
+    tf_name: packet_timestamp_state
+    type: String
+    description: 'Packet timestamp feature state.'
+    enum_values:
+      - disable
+      - enable-ingress
+      - enable-egress
+      - enable-both
+    example: disable
+  - nxos_name: portT
+    tf_name: port_type
+    type: String
+    description: 'Type of the port: Fabric vs Leaf.'
+    enum_values:
+      - unknown
+      - eobc
+      - mgmt
+      - fab
+      - leaf
+      - extchhp
+      - extchfp
+    example: unknown
+  - nxos_name: routerMac
+    tf_name: router_mac
+    type: String
+    description: 'The administrative router MAC address.'
+    example: not-applicable
+  - nxos_name: snmpTrapSt
+    tf_name: snmp_trap_state
+    type: String
+    description: 'Administrative port snmp trap state.'
+    enum_values:
+      - enable
+      - disable
+    example: enable
+  - nxos_name: spanMode
+    tf_name: span_mode
+    type: String
+    description: 'Administrative port span mode.'
+    enum_values:
+      - not-a-span-dest
+      - span-dest
+      - span-dest-fwd
+      - span-dest-fwd-learn
+    example: not-a-span-dest
+  - nxos_name: squelch
+    tf_name: squelch
+    type: String
+    description: 'Configured Squelch.'
+    enum_values:
+      - enable
+      - disable
+    example: enable
+  - nxos_name: transMode
+    tf_name: transparent_mode
+    type: String
+    description: 'Administrative port layer1 mode.'
+    enum_values:
+      - not-a-trans-port
+      - trans-port
+    example: not-a-trans-port
+  - nxos_name: trunkLog
+    tf_name: trunk_logging
+    type: String
+    description: 'Administrative trunk logging enable.'
+    enum_values:
+      - default
+      - enable
+      - disable
+    example: default
+  - nxos_name: usage
+    tf_name: usage
+    type: String
+    description: 'The port usage type.'
+    enum_values:
+      - discovery
+      - epg
+      - fabric
+      - infra
+      - controller
+      - blacklist
+    allow_non_enum_values: true
+    example: discovery
+  - nxos_name: voicePortCos
+    tf_name: voice_port_cos
+    type: Int64
+    description: 'Voice Port Cos.'
+    min_int: -1
+    max_int: 7
+    example: 0
+  - nxos_name: voicePortTrust
+    tf_name: voice_port_trust
+    type: String
+    description: 'Voice Port Trust.'
+    enum_values:
+      - disable
+      - enable
+    example: disable
+  - nxos_name: voiceVlanId
+    tf_name: voice_vlan_id
+    type: Int64
+    description: 'Voice VLAN ID.'
+    min_int: 0
+    max_int: 4092
+    example: 0
+  - nxos_name: voiceVlanType
+    tf_name: voice_vlan_type
+    type: String
+    description: 'Voice vlan type.'
+    enum_values:
+      - none
+      - tagged
+      - dot1p
+      - untagged
+    example: none
 child_classes:
   - class_name: nwRtVrfMbr
     rn: rtvrfMbr

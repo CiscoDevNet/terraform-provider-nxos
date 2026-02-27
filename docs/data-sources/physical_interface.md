@@ -44,22 +44,55 @@ data "nxos_physical_interface" "example" {
 - `admin_state` (String) Administrative port state.
 - `auto_negotiation` (String) Administrative port auto-negotiation.
 - `bandwidth` (Number) The bandwidth parameter for a routed interface, port channel, or subinterface.
+- `beacon` (String) Beacon State.
 - `delay` (Number) The administrative port delay time.
 - `description` (String) Interface description.
+- `dfe_adaptive_tuning` (String) DFE (Decision Feedback Equalizer) Adaptive Tuning.
+- `dfe_tuning_delay` (Number) DFE (Decision Feedback Equalizer) Tuning Delay.
+- `dot1q_ether_type` (Number) The administrative port Dot1q ether-type. Dot1q Ether Type configures the TPID value in the VLAN tag field for packets received and sent by the interface.
 - `duplex` (String) Duplex.
+- `equalization_delay` (Number) Administrative port equalization delay time.
 - `fec_mode` (String) FEC Mode.
 - `id` (String) The distinguished name of the object.
+- `inherit_bandwidth` (Number) Administrative port inherit bandwidth.
+- `itu_channel` (Number) ITU Channel to support DWDM XCVR.
 - `layer` (String) Administrative port layer.
+- `link_active_jitter_management` (String) Administrative port link active-jitter-management.
 - `link_debounce_down` (Number) Administrative port link debounce interval.
 - `link_debounce_up` (Number) Link Debounce Interval - LinkUp Event.
+- `link_flap_error_disable` (String) Enable/Disable Link Flap Error Config.
+- `link_flap_error_max` (Number) Max Flaps allowed per time.
+- `link_flap_error_seconds` (Number) Time Allowed for max flaps.
 - `link_logging` (String) Administrative link logging enable.
+- `link_loopback` (String) Link loopback configuration.
+- `link_mac_up_timer` (Number) Administrative port link mac-up timer.
+- `link_max_bring_up_timer` (Number) Administrative port link mac-up timer max.
+- `link_transmit_reset` (String) Link Transmit Reset.
+- `mdix` (String) The administrative Mdix mode. The Medium-dependant interface crossover (Mdix) is when the interface automatically detects the required cable connection type (straight through or crossover) and configures the connection appropriately.
+- `media_type` (String) Phy interfaces media type.
 - `medium` (String) The administrative port medium type.
 - `mode` (String) Administrative port mode.
 - `mtu` (Number) Administrative port mtu.
 - `native_vlan` (String) Configured Native Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `optics_loopback` (String) Configured Loopback.
+- `packet_timestamp_egress_source_id` (Number) Egress timestamp Source Id.
+- `packet_timestamp_ingress_source_id` (Number) Ingress timestamp Source Id.
+- `packet_timestamp_state` (String) Packet timestamp feature state.
+- `port_type` (String) Type of the port: Fabric vs Leaf.
+- `router_mac` (String) The administrative router MAC address.
+- `snmp_trap_state` (String) Administrative port snmp trap state.
+- `span_mode` (String) Administrative port span mode.
 - `speed` (String) Administrative port speed.
 - `speed_group` (String) Speed Group.
+- `squelch` (String) Configured Squelch.
+- `transparent_mode` (String) Administrative port layer1 mode.
+- `trunk_logging` (String) Administrative trunk logging enable.
 - `trunk_vlans` (String) Configed Trunk Vlans.
 - `uni_directional_ethernet` (String) UDE (Uni-Directional Ethernet).
+- `usage` (String) The port usage type.
 - `user_configured_flags` (String) Port User Config Flags.
+- `voice_port_cos` (Number) Voice Port Cos.
+- `voice_port_trust` (String) Voice Port Trust.
+- `voice_vlan_id` (Number) Voice VLAN ID.
+- `voice_vlan_type` (String) Voice vlan type.
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.

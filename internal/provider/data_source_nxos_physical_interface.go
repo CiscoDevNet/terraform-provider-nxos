@@ -156,6 +156,138 @@ func (d *PhysicalInterfaceDataSource) Schema(ctx context.Context, req datasource
 				MarkdownDescription: "Port User Config Flags.",
 				Computed:            true,
 			},
+			"beacon": schema.StringAttribute{
+				MarkdownDescription: "Beacon State.",
+				Computed:            true,
+			},
+			"dfe_adaptive_tuning": schema.StringAttribute{
+				MarkdownDescription: "DFE (Decision Feedback Equalizer) Adaptive Tuning.",
+				Computed:            true,
+			},
+			"dfe_tuning_delay": schema.Int64Attribute{
+				MarkdownDescription: "DFE (Decision Feedback Equalizer) Tuning Delay.",
+				Computed:            true,
+			},
+			"dot1q_ether_type": schema.Int64Attribute{
+				MarkdownDescription: "The administrative port Dot1q ether-type. Dot1q Ether Type configures the TPID value in the VLAN tag field for packets received and sent by the interface.",
+				Computed:            true,
+			},
+			"equalization_delay": schema.Int64Attribute{
+				MarkdownDescription: "Administrative port equalization delay time.",
+				Computed:            true,
+			},
+			"inherit_bandwidth": schema.Int64Attribute{
+				MarkdownDescription: "Administrative port inherit bandwidth.",
+				Computed:            true,
+			},
+			"itu_channel": schema.Int64Attribute{
+				MarkdownDescription: "ITU Channel to support DWDM XCVR.",
+				Computed:            true,
+			},
+			"link_active_jitter_management": schema.StringAttribute{
+				MarkdownDescription: "Administrative port link active-jitter-management.",
+				Computed:            true,
+			},
+			"link_flap_error_disable": schema.StringAttribute{
+				MarkdownDescription: "Enable/Disable Link Flap Error Config.",
+				Computed:            true,
+			},
+			"link_flap_error_max": schema.Int64Attribute{
+				MarkdownDescription: "Max Flaps allowed per time.",
+				Computed:            true,
+			},
+			"link_flap_error_seconds": schema.Int64Attribute{
+				MarkdownDescription: "Time Allowed for max flaps.",
+				Computed:            true,
+			},
+			"link_loopback": schema.StringAttribute{
+				MarkdownDescription: "Link loopback configuration.",
+				Computed:            true,
+			},
+			"link_mac_up_timer": schema.Int64Attribute{
+				MarkdownDescription: "Administrative port link mac-up timer.",
+				Computed:            true,
+			},
+			"link_max_bring_up_timer": schema.Int64Attribute{
+				MarkdownDescription: "Administrative port link mac-up timer max.",
+				Computed:            true,
+			},
+			"link_transmit_reset": schema.StringAttribute{
+				MarkdownDescription: "Link Transmit Reset.",
+				Computed:            true,
+			},
+			"mdix": schema.StringAttribute{
+				MarkdownDescription: "The administrative Mdix mode. The Medium-dependant interface crossover (Mdix) is when the interface automatically detects the required cable connection type (straight through or crossover) and configures the connection appropriately.",
+				Computed:            true,
+			},
+			"media_type": schema.StringAttribute{
+				MarkdownDescription: "Phy interfaces media type.",
+				Computed:            true,
+			},
+			"optics_loopback": schema.StringAttribute{
+				MarkdownDescription: "Configured Loopback.",
+				Computed:            true,
+			},
+			"packet_timestamp_egress_source_id": schema.Int64Attribute{
+				MarkdownDescription: "Egress timestamp Source Id.",
+				Computed:            true,
+			},
+			"packet_timestamp_ingress_source_id": schema.Int64Attribute{
+				MarkdownDescription: "Ingress timestamp Source Id.",
+				Computed:            true,
+			},
+			"packet_timestamp_state": schema.StringAttribute{
+				MarkdownDescription: "Packet timestamp feature state.",
+				Computed:            true,
+			},
+			"port_type": schema.StringAttribute{
+				MarkdownDescription: "Type of the port: Fabric vs Leaf.",
+				Computed:            true,
+			},
+			"router_mac": schema.StringAttribute{
+				MarkdownDescription: "The administrative router MAC address.",
+				Computed:            true,
+			},
+			"snmp_trap_state": schema.StringAttribute{
+				MarkdownDescription: "Administrative port snmp trap state.",
+				Computed:            true,
+			},
+			"span_mode": schema.StringAttribute{
+				MarkdownDescription: "Administrative port span mode.",
+				Computed:            true,
+			},
+			"squelch": schema.StringAttribute{
+				MarkdownDescription: "Configured Squelch.",
+				Computed:            true,
+			},
+			"transparent_mode": schema.StringAttribute{
+				MarkdownDescription: "Administrative port layer1 mode.",
+				Computed:            true,
+			},
+			"trunk_logging": schema.StringAttribute{
+				MarkdownDescription: "Administrative trunk logging enable.",
+				Computed:            true,
+			},
+			"usage": schema.StringAttribute{
+				MarkdownDescription: "The port usage type.",
+				Computed:            true,
+			},
+			"voice_port_cos": schema.Int64Attribute{
+				MarkdownDescription: "Voice Port Cos.",
+				Computed:            true,
+			},
+			"voice_port_trust": schema.StringAttribute{
+				MarkdownDescription: "Voice Port Trust.",
+				Computed:            true,
+			},
+			"voice_vlan_id": schema.Int64Attribute{
+				MarkdownDescription: "Voice VLAN ID.",
+				Computed:            true,
+			},
+			"voice_vlan_type": schema.StringAttribute{
+				MarkdownDescription: "Voice vlan type.",
+				Computed:            true,
+			},
 			"vrf_dn": schema.StringAttribute{
 				MarkdownDescription: "DN of VRF. For example: `sys/inst-VRF1`.",
 				Computed:            true,

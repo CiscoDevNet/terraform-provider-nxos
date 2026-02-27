@@ -23,29 +23,62 @@ This resource can manage a physical interface on NX-OS devices, including settin
 
 ```terraform
 resource "nxos_physical_interface" "example" {
-  interface_id             = "eth1/10"
-  fec_mode                 = "auto"
-  access_vlan              = "unknown"
-  admin_state              = "down"
-  auto_negotiation         = "on"
-  bandwidth                = 1000
-  delay                    = 10
-  description              = "My Description"
-  duplex                   = "auto"
-  layer                    = "Layer3"
-  link_logging             = "enable"
-  link_debounce_down       = 200
-  link_debounce_up         = 0
-  medium                   = "broadcast"
-  mode                     = "access"
-  mtu                      = 1500
-  native_vlan              = "unknown"
-  speed                    = "auto"
-  speed_group              = "auto"
-  trunk_vlans              = "1-4094"
-  uni_directional_ethernet = "disable"
-  user_configured_flags    = "admin_layer,admin_mtu,admin_state"
-  vrf_dn                   = "sys/inst-default"
+  interface_id                       = "eth1/10"
+  fec_mode                           = "auto"
+  access_vlan                        = "unknown"
+  admin_state                        = "down"
+  auto_negotiation                   = "on"
+  bandwidth                          = 1000
+  delay                              = 10
+  description                        = "My Description"
+  duplex                             = "auto"
+  layer                              = "Layer3"
+  link_logging                       = "enable"
+  link_debounce_down                 = 200
+  link_debounce_up                   = 0
+  medium                             = "broadcast"
+  mode                               = "access"
+  mtu                                = 1500
+  native_vlan                        = "unknown"
+  speed                              = "auto"
+  speed_group                        = "auto"
+  trunk_vlans                        = "1-4094"
+  uni_directional_ethernet           = "disable"
+  user_configured_flags              = "admin_layer,admin_mtu,admin_state"
+  beacon                             = "off"
+  dfe_adaptive_tuning                = "disable"
+  dfe_tuning_delay                   = 500
+  dot1q_ether_type                   = 33024
+  equalization_delay                 = 1
+  inherit_bandwidth                  = 1000
+  itu_channel                        = 50
+  link_active_jitter_management      = "disable"
+  link_flap_error_disable            = "disable"
+  link_flap_error_max                = 10
+  link_flap_error_seconds            = 60
+  link_loopback                      = "disable"
+  link_mac_up_timer                  = 10
+  link_max_bring_up_timer            = 10
+  link_transmit_reset                = "enable"
+  mdix                               = "auto"
+  media_type                         = "none"
+  optics_loopback                    = "disable"
+  packet_timestamp_egress_source_id  = 100
+  packet_timestamp_ingress_source_id = 100
+  packet_timestamp_state             = "disable"
+  port_type                          = "unknown"
+  router_mac                         = "not-applicable"
+  snmp_trap_state                    = "enable"
+  span_mode                          = "not-a-span-dest"
+  squelch                            = "enable"
+  transparent_mode                   = "not-a-trans-port"
+  trunk_logging                      = "default"
+  usage                              = "discovery"
+  voice_port_cos                     = 0
+  voice_port_trust                   = "disable"
+  voice_vlan_id                      = 0
+  voice_vlan_type                    = "none"
+  vrf_dn                             = "sys/inst-default"
 }
 ```
 
@@ -65,22 +98,56 @@ resource "nxos_physical_interface" "example" {
   - Choices: `on`, `off`, `25G`
 - `bandwidth` (Number) The bandwidth parameter for a routed interface, port channel, or subinterface.
   - Range: `0`-`3200000000`
+- `beacon` (String) Beacon State.
+  - Choices: `on`, `off`
 - `delay` (Number) The administrative port delay time.
   - Range: `1`-`16777215`
 - `description` (String) Interface description.
 - `device` (String) A device name from the provider configuration.
+- `dfe_adaptive_tuning` (String) DFE (Decision Feedback Equalizer) Adaptive Tuning.
+  - Choices: `disable`, `enable`
+- `dfe_tuning_delay` (Number) DFE (Decision Feedback Equalizer) Tuning Delay.
+  - Range: `100`-`10000`
+- `dot1q_ether_type` (Number) The administrative port Dot1q ether-type. Dot1q Ether Type configures the TPID value in the VLAN tag field for packets received and sent by the interface.
+  - Range: `1536`-`65535`
 - `duplex` (String) Duplex.
   - Choices: `auto`, `full`, `half`
+- `equalization_delay` (Number) Administrative port equalization delay time.
+  - Range: `0`-`31`
 - `fec_mode` (String) FEC Mode.
   - Choices: `fc-fec`, `rs-fec`, `fec-off`, `auto`, `rs-ieee`, `rs-cons16`, `kp-fec`
+- `inherit_bandwidth` (Number) Administrative port inherit bandwidth.
+  - Range: `0`-`4294967295`
+- `itu_channel` (Number) ITU Channel to support DWDM XCVR.
+  - Range: `1`-`96`
 - `layer` (String) Administrative port layer.
   - Choices: `Layer1`, `Layer2`, `Layer3`
+- `link_active_jitter_management` (String) Administrative port link active-jitter-management.
+  - Choices: `disable`, `enable`
 - `link_debounce_down` (Number) Administrative port link debounce interval.
   - Range: `0`-`20000`
 - `link_debounce_up` (Number) Link Debounce Interval - LinkUp Event.
   - Range: `0`-`10000`
+- `link_flap_error_disable` (String) Enable/Disable Link Flap Error Config.
+  - Choices: `disable`, `enable`
+- `link_flap_error_max` (Number) Max Flaps allowed per time.
+  - Range: `2`-`30`
+- `link_flap_error_seconds` (Number) Time Allowed for max flaps.
+  - Range: `5`-`420`
 - `link_logging` (String) Administrative link logging enable.
   - Choices: `default`, `enable`, `disable`
+- `link_loopback` (String) Link loopback configuration.
+  - Choices: `disable`, `enable`
+- `link_mac_up_timer` (Number) Administrative port link mac-up timer.
+  - Range: `0`-`120`
+- `link_max_bring_up_timer` (Number) Administrative port link mac-up timer max.
+  - Range: `0`-`120`
+- `link_transmit_reset` (String) Link Transmit Reset.
+  - Choices: `disable`, `enable`
+- `mdix` (String) The administrative Mdix mode. The Medium-dependant interface crossover (Mdix) is when the interface automatically detects the required cable connection type (straight through or crossover) and configures the connection appropriately.
+  - Choices: `auto`, `mdi`, `mdi-x`
+- `media_type` (String) Phy interfaces media type.
+  - Choices: `none`, `10g-tx`
 - `medium` (String) The administrative port medium type.
   - Choices: `broadcast`, `p2p`
 - `mode` (String) Administrative port mode.
@@ -88,15 +155,46 @@ resource "nxos_physical_interface" "example" {
 - `mtu` (Number) Administrative port mtu.
   - Range: `576`-`9216`
 - `native_vlan` (String) Configured Native Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `optics_loopback` (String) Configured Loopback.
+  - Choices: `disable`, `internal`, `line`
+- `packet_timestamp_egress_source_id` (Number) Egress timestamp Source Id.
+  - Range: `0`-`8388606`
+- `packet_timestamp_ingress_source_id` (Number) Ingress timestamp Source Id.
+  - Range: `0`-`8388606`
+- `packet_timestamp_state` (String) Packet timestamp feature state.
+  - Choices: `disable`, `enable-ingress`, `enable-egress`, `enable-both`
+- `port_type` (String) Type of the port: Fabric vs Leaf.
+  - Choices: `unknown`, `eobc`, `mgmt`, `fab`, `leaf`, `extchhp`, `extchfp`
+- `router_mac` (String) The administrative router MAC address.
+- `snmp_trap_state` (String) Administrative port snmp trap state.
+  - Choices: `enable`, `disable`
+- `span_mode` (String) Administrative port span mode.
+  - Choices: `not-a-span-dest`, `span-dest`, `span-dest-fwd`, `span-dest-fwd-learn`
 - `speed` (String) Administrative port speed.
   - Choices: `unknown`, `100M`, `1G`, `10G`, `40G`, `auto`, `auto 100M`, `auto 100M 1G`, `100G`, `25G`, `10M`, `50G`, `200G`, `400G`, `2.5G`, `5G`, `auto 2.5G 5G 10G`, `auto 100M 1G 2.5G 5G`, `800G`
 - `speed_group` (String) Speed Group.
   - Choices: `unknown`, `1000`, `10000`, `40000`, `auto`, `25000`
+- `squelch` (String) Configured Squelch.
+  - Choices: `enable`, `disable`
+- `transparent_mode` (String) Administrative port layer1 mode.
+  - Choices: `not-a-trans-port`, `trans-port`
+- `trunk_logging` (String) Administrative trunk logging enable.
+  - Choices: `default`, `enable`, `disable`
 - `trunk_vlans` (String) Configed Trunk Vlans.
 - `uni_directional_ethernet` (String) UDE (Uni-Directional Ethernet).
   - Choices: `disable`, `send-only`, `receive-only`
+- `usage` (String) The port usage type.
+  - Choices: `discovery`, `epg`, `fabric`, `infra`, `controller`, `blacklist`
 - `user_configured_flags` (String) Port User Config Flags.
   - Choices: `none`, `admin_state`, `admin_layer`, `admin_router_mac`, `admin_dce_mode`, `admin_mtu`
+- `voice_port_cos` (Number) Voice Port Cos.
+  - Range: `-1`-`7`
+- `voice_port_trust` (String) Voice Port Trust.
+  - Choices: `disable`, `enable`
+- `voice_vlan_id` (Number) Voice VLAN ID.
+  - Range: `0`-`4092`
+- `voice_vlan_type` (String) Voice vlan type.
+  - Choices: `none`, `tagged`, `dot1p`, `untagged`
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.
 
 ### Read-Only

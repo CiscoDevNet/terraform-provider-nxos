@@ -56,6 +56,37 @@ func TestAccNxosPhysicalInterfaces(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.trunk_vlans", "1-4094"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.uni_directional_ethernet", "disable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.user_configured_flags", "admin_layer,admin_mtu,admin_state"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.beacon", "off"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.dfe_adaptive_tuning", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.dfe_tuning_delay", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.inherit_bandwidth", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.itu_channel", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.link_active_jitter_management", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.link_flap_error_disable", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.link_flap_error_max", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.link_flap_error_seconds", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.link_loopback", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.link_mac_up_timer", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.link_max_bring_up_timer", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.link_transmit_reset", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.mdix", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.media_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.optics_loopback", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.packet_timestamp_egress_source_id", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.packet_timestamp_ingress_source_id", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.packet_timestamp_state", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.port_type", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.router_mac", "not-applicable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.snmp_trap_state", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.span_mode", "not-a-span-dest"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.squelch", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.transparent_mode", "not-a-trans-port"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.trunk_logging", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.usage", "discovery"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.voice_port_cos", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.voice_port_trust", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.voice_vlan_id", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.voice_vlan_type", "none"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.vrf_dn", "sys/inst-default"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
@@ -138,6 +169,37 @@ func testAccNxosPhysicalInterfacesConfig_all() string {
 	config += `		trunk_vlans = "1-4094"` + "\n"
 	config += `		uni_directional_ethernet = "disable"` + "\n"
 	config += `		user_configured_flags = "admin_layer,admin_mtu,admin_state"` + "\n"
+	config += `		beacon = "off"` + "\n"
+	config += `		dfe_adaptive_tuning = "disable"` + "\n"
+	config += `		dfe_tuning_delay = 500` + "\n"
+	config += `		inherit_bandwidth = 1000` + "\n"
+	config += `		itu_channel = 50` + "\n"
+	config += `		link_active_jitter_management = "disable"` + "\n"
+	config += `		link_flap_error_disable = "disable"` + "\n"
+	config += `		link_flap_error_max = 10` + "\n"
+	config += `		link_flap_error_seconds = 60` + "\n"
+	config += `		link_loopback = "disable"` + "\n"
+	config += `		link_mac_up_timer = 10` + "\n"
+	config += `		link_max_bring_up_timer = 10` + "\n"
+	config += `		link_transmit_reset = "enable"` + "\n"
+	config += `		mdix = "auto"` + "\n"
+	config += `		media_type = "none"` + "\n"
+	config += `		optics_loopback = "disable"` + "\n"
+	config += `		packet_timestamp_egress_source_id = 100` + "\n"
+	config += `		packet_timestamp_ingress_source_id = 100` + "\n"
+	config += `		packet_timestamp_state = "disable"` + "\n"
+	config += `		port_type = "unknown"` + "\n"
+	config += `		router_mac = "not-applicable"` + "\n"
+	config += `		snmp_trap_state = "enable"` + "\n"
+	config += `		span_mode = "not-a-span-dest"` + "\n"
+	config += `		squelch = "enable"` + "\n"
+	config += `		transparent_mode = "not-a-trans-port"` + "\n"
+	config += `		trunk_logging = "default"` + "\n"
+	config += `		usage = "discovery"` + "\n"
+	config += `		voice_port_cos = 0` + "\n"
+	config += `		voice_port_trust = "disable"` + "\n"
+	config += `		voice_vlan_id = 0` + "\n"
+	config += `		voice_vlan_type = "none"` + "\n"
 	config += `		vrf_dn = "sys/inst-default"` + "\n"
 	config += `	}]` + "\n"
 	config += `}` + "\n"

@@ -26,6 +26,7 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -76,6 +77,94 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"alphabet_sequence": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disallow sequential alphabetical characters in password.").AddIntegerRangeDescription(0, 10).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 10),
+				},
+			},
+			"description": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+				Optional:            true,
+			},
+			"keyboard_sequence": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disallow sequential keyboard characters in password.").AddIntegerRangeDescription(0, 10).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 10),
+				},
+			},
+			"max_logins": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum Simultaneous Logins.").AddIntegerRangeDescription(0, 7).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
+				},
+			},
+			"min_unique": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Count for number of old password history accepted.").AddIntegerRangeDescription(0, 10).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 10),
+				},
+			},
+			"password_grace_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Grace time of user passphrase (in days).").AddIntegerRangeDescription(0, 99999).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 99999),
+				},
+			},
+			"password_life_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Lifetime of user passphrase (in days).").AddIntegerRangeDescription(0, 99999).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 99999),
+				},
+			},
+			"password_max_length": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Password max length.").AddIntegerRangeDescription(0, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 65535),
+				},
+			},
+			"password_min_length": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Password min length.").AddIntegerRangeDescription(0, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 65535),
+				},
+			},
+			"password_secure_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Password secure-mode.").AddStringEnumDescription("no", "yes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("no", "yes"),
+				},
+			},
+			"password_strength_check": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The password strength check, which specifies if the system enforces the strength of the user password.").AddStringEnumDescription("no", "yes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("no", "yes"),
+				},
+			},
+			"password_warning_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Warning time of user passphrase (in days).").AddIntegerRangeDescription(0, 99999).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 99999),
+				},
+			},
+			"service_password_recovery": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Service Password Recovery.").AddStringEnumDescription("no", "yes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("no", "yes"),
+				},
+			},
 			"users": schema.ListNestedAttribute{
 				MarkdownDescription: "List of users.",
 				Optional:            true,
@@ -88,12 +177,71 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 								stringplanmodifier.RequiresReplace(),
 							},
 						},
+						"account_status": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The status of the locally-authenticated user account.").AddStringEnumDescription("active", "inactive").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("active", "inactive"),
+							},
+						},
 						"allow_expired": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Allow expired user to be configured.").AddStringEnumDescription("no", "yes").String,
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("no", "yes"),
 							},
+						},
+						"clear_password_history": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Allows the administrator to clear the password history of a locally-authenticated user.").AddStringEnumDescription("no", "yes").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("no", "yes"),
+							},
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+							Optional:            true,
+						},
+						"email": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The email address of the locally-authenticated user.").String,
+							Optional:            true,
+						},
+						"expiration": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Account Expiration Date.").String,
+							Optional:            true,
+						},
+						"expires": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("A property to enable an expiration date for the locally-authenticated user account.").AddStringEnumDescription("no", "yes").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("no", "yes"),
+							},
+						},
+						"first_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The first name of the locally-authenticated user.").String,
+							Optional:            true,
+						},
+						"force": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Delete user entry forcibly.").AddStringEnumDescription("no", "yes").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("no", "yes"),
+							},
+						},
+						"last_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The last name of the locally-authenticated user.").String,
+							Optional:            true,
+						},
+						"password_hash": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Generate password hash for clear text password.").AddStringEnumDescription("unspecified", "pbkdf2", "scrypt").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("unspecified", "pbkdf2", "scrypt"),
+							},
+						},
+						"phone": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The phone number of the locally-authenticated user.").String,
+							Optional:            true,
 						},
 						"password": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The system user password.").String,
@@ -102,6 +250,20 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 						"password_encryption_type": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Password Encryption Type.").AddStringEnumDescription("clear", "Encrypt", "Pbkdf2", "scrypt", "unspecified").String,
 							Optional:            true,
+						},
+						"shell_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("User Shelltype Access.").AddStringEnumDescription("shellvsh", "shellbash").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("shellvsh", "shellbash"),
+							},
+						},
+						"unix_user_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The UNIX identifier of the locally-authenticated user.").AddIntegerRangeDescription(99, 15999).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(99, 15999),
+							},
 						},
 						"roles": schema.ListNestedAttribute{
 							MarkdownDescription: "User roles.",
@@ -113,6 +275,17 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 										Required:            true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplace(),
+										},
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+										Optional:            true,
+									},
+									"privilege_type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("The privilege type for a user role.").AddStringEnumDescription("noDataPriv", "readPriv", "writePriv").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("noDataPriv", "readPriv", "writePriv"),
 										},
 									},
 								},

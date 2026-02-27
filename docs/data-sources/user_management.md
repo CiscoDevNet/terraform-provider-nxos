@@ -37,7 +37,20 @@ data "nxos_user_management" "example" {
 
 ### Read-Only
 
+- `alphabet_sequence` (Number) Disallow sequential alphabetical characters in password.
+- `description` (String) Description of the specified attribute.
 - `id` (String) The distinguished name of the object.
+- `keyboard_sequence` (Number) Disallow sequential keyboard characters in password.
+- `max_logins` (Number) Maximum Simultaneous Logins.
+- `min_unique` (Number) Count for number of old password history accepted.
+- `password_grace_time` (Number) Grace time of user passphrase (in days).
+- `password_life_time` (Number) Lifetime of user passphrase (in days).
+- `password_max_length` (Number) Password max length.
+- `password_min_length` (Number) Password min length.
+- `password_secure_mode` (String) Password secure-mode.
+- `password_strength_check` (String) The password strength check, which specifies if the system enforces the strength of the user password.
+- `password_warning_time` (Number) Warning time of user passphrase (in days).
+- `service_password_recovery` (String) Service Password Recovery.
 - `users` (Attributes List) List of users. (see [below for nested schema](#nestedatt--users))
 
 <a id="nestedatt--users"></a>
@@ -45,15 +58,30 @@ data "nxos_user_management" "example" {
 
 Read-Only:
 
+- `account_status` (String) The status of the locally-authenticated user account.
 - `allow_expired` (String) Allow expired user to be configured.
+- `clear_password_history` (String) Allows the administrator to clear the password history of a locally-authenticated user.
+- `description` (String) Description of the specified attribute.
+- `email` (String) The email address of the locally-authenticated user.
+- `expiration` (String) Account Expiration Date.
+- `expires` (String) A property to enable an expiration date for the locally-authenticated user account.
+- `first_name` (String) The first name of the locally-authenticated user.
+- `force` (String) Delete user entry forcibly.
+- `last_name` (String) The last name of the locally-authenticated user.
 - `name` (String) Object name.
 - `password` (String) The system user password.
 - `password_encryption_type` (String) Password Encryption Type.
+- `password_hash` (String) Generate password hash for clear text password.
+- `phone` (String) The phone number of the locally-authenticated user.
 - `roles` (Attributes List) User roles. (see [below for nested schema](#nestedatt--users--roles))
+- `shell_type` (String) User Shelltype Access.
+- `unix_user_id` (Number) The UNIX identifier of the locally-authenticated user.
 
 <a id="nestedatt--users--roles"></a>
 ### Nested Schema for `users.roles`
 
 Read-Only:
 
+- `description` (String) Description of the specified attribute.
 - `name` (String) Object name.
+- `privilege_type` (String) The privilege type for a user role.

@@ -68,6 +68,50 @@ func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
+			"admin_state": schema.StringAttribute{
+				MarkdownDescription: "The administrative state of the object or policy.",
+				Computed:            true,
+			},
+			"instance_admin_state": schema.StringAttribute{
+				MarkdownDescription: "The administrative state of the object or policy.",
+				Computed:            true,
+			},
+			"instance_access_list_match_local": schema.StringAttribute{
+				MarkdownDescription: "Access-List Match Local.",
+				Computed:            true,
+			},
+			"instance_control": schema.StringAttribute{
+				MarkdownDescription: "The control state.",
+				Computed:            true,
+			},
+			"instance_hardware_ecmp_hash_offset_concatenation": schema.StringAttribute{
+				MarkdownDescription: "hardware Ecmp HashOffset Concatenation.",
+				Computed:            true,
+			},
+			"instance_hardware_ecmp_hash_offset_value": schema.Int64Attribute{
+				MarkdownDescription: "hardware Ecmp HashOffset Value.",
+				Computed:            true,
+			},
+			"instance_hardware_ecmp_hash_polynomial": schema.StringAttribute{
+				MarkdownDescription: "hardware Ecmp Hash-Polynomial.",
+				Computed:            true,
+			},
+			"instance_logging_level": schema.StringAttribute{
+				MarkdownDescription: "Logging level.",
+				Computed:            true,
+			},
+			"instance_redirect_syslog": schema.StringAttribute{
+				MarkdownDescription: "ipv4 redirect syslog.",
+				Computed:            true,
+			},
+			"instance_redirect_syslog_interval": schema.Int64Attribute{
+				MarkdownDescription: "redirect syslog interval.",
+				Computed:            true,
+			},
+			"instance_source_route": schema.StringAttribute{
+				MarkdownDescription: "Source-Route.",
+				Computed:            true,
+			},
 			"vrfs": schema.ListNestedAttribute{
 				MarkdownDescription: "List of IPv4 VRF configurations.",
 				Computed:            true,
@@ -77,6 +121,14 @@ func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							MarkdownDescription: "The name of the object.",
 							Computed:            true,
 						},
+						"auto_discard": schema.StringAttribute{
+							MarkdownDescription: "Auto-Discard.",
+							Computed:            true,
+						},
+						"icmp_errors_source_interface": schema.StringAttribute{
+							MarkdownDescription: "ICMP errors source-interface.",
+							Computed:            true,
+						},
 						"static_routes": schema.ListNestedAttribute{
 							MarkdownDescription: "List of IPv4 static routes.",
 							Computed:            true,
@@ -84,6 +136,22 @@ func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 								Attributes: map[string]schema.Attribute{
 									"prefix": schema.StringAttribute{
 										MarkdownDescription: "Prefix.",
+										Computed:            true,
+									},
+									"control": schema.StringAttribute{
+										MarkdownDescription: "Controls.",
+										Computed:            true,
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: "Description of the specified attribute.",
+										Computed:            true,
+									},
+									"preference": schema.Int64Attribute{
+										MarkdownDescription: "Preference.",
+										Computed:            true,
+									},
+									"tag": schema.Int64Attribute{
+										MarkdownDescription: "Tag.",
 										Computed:            true,
 									},
 									"next_hops": schema.ListNestedAttribute{
@@ -119,6 +187,14 @@ func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 													MarkdownDescription: "Tag value.",
 													Computed:            true,
 												},
+												"next_hop_name": schema.StringAttribute{
+													MarkdownDescription: "Next hop name.",
+													Computed:            true,
+												},
+												"rewrite_encapsulation": schema.StringAttribute{
+													MarkdownDescription: "Rewrite Encapsulation.",
+													Computed:            true,
+												},
 											},
 										},
 									},
@@ -150,6 +226,14 @@ func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										MarkdownDescription: "URPF Info.",
 										Computed:            true,
 									},
+									"directed_broadcast_acl": schema.StringAttribute{
+										MarkdownDescription: "IP directed broadcast ACL.",
+										Computed:            true,
+									},
+									"directed_broadcast": schema.StringAttribute{
+										MarkdownDescription: "IP directed broadcast.",
+										Computed:            true,
+									},
 									"addresses": schema.ListNestedAttribute{
 										MarkdownDescription: "List of IPv4 interface addresses.",
 										Computed:            true,
@@ -165,6 +249,22 @@ func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 												},
 												"tag": schema.Int64Attribute{
 													MarkdownDescription: "Route Tag.",
+													Computed:            true,
+												},
+												"control": schema.StringAttribute{
+													MarkdownDescription: "The control state.",
+													Computed:            true,
+												},
+												"preference": schema.Int64Attribute{
+													MarkdownDescription: "Preference.",
+													Computed:            true,
+												},
+												"use_bia": schema.StringAttribute{
+													MarkdownDescription: "Use Interface MAC Address.",
+													Computed:            true,
+												},
+												"vpc_peer": schema.StringAttribute{
+													MarkdownDescription: "VPC Peer.",
 													Computed:            true,
 												},
 											},

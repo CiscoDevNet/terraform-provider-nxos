@@ -28,30 +28,55 @@ This resource can manage the IPv4 configuration on NX-OS devices, including per-
 
 ```terraform
 resource "nxos_ipv4" "example" {
+  admin_state                                      = "enabled"
+  instance_admin_state                             = "enabled"
+  instance_access_list_match_local                 = "enabled"
+  instance_control                                 = "stateful-ha"
+  instance_hardware_ecmp_hash_offset_concatenation = "enabled"
+  instance_hardware_ecmp_hash_offset_value         = 10
+  instance_hardware_ecmp_hash_polynomial           = "CRC32HI"
+  instance_logging_level                           = "warning"
+  instance_redirect_syslog                         = "disabled"
+  instance_redirect_syslog_interval                = 120
+  instance_source_route                            = "disabled"
   vrfs = [{
-    name = "VRF1"
+    name                         = "VRF1"
+    auto_discard                 = "enabled"
+    icmp_errors_source_interface = "unspecified"
     static_routes = [{
-      prefix = "1.1.1.0/24"
+      prefix      = "1.1.1.0/24"
+      control     = "bfd"
+      description = "My Description"
+      preference  = 2
+      tag         = 10
       next_hops = [{
-        interface_id = "unspecified"
-        address      = "1.2.3.4"
-        vrf_name     = "default"
-        description  = "My Description"
-        object       = 10
-        preference   = 123
-        tag          = 10
+        interface_id          = "unspecified"
+        address               = "1.2.3.4"
+        vrf_name              = "default"
+        description           = "My Description"
+        object                = 10
+        preference            = 123
+        tag                   = 10
+        next_hop_name         = "nh1"
+        rewrite_encapsulation = "unknown"
       }]
     }]
     interfaces = [{
-      interface_id = "eth1/10"
-      drop_glean   = "disabled"
-      forward      = "disabled"
-      unnumbered   = "unspecified"
-      urpf         = "disabled"
+      interface_id           = "eth1/10"
+      drop_glean             = "disabled"
+      forward                = "disabled"
+      unnumbered             = "unspecified"
+      urpf                   = "disabled"
+      directed_broadcast_acl = "ACL1"
+      directed_broadcast     = "enabled"
       addresses = [{
-        address = "24.63.46.49/30"
-        type    = "primary"
-        tag     = 1234
+        address    = "24.63.46.49/30"
+        type       = "primary"
+        tag        = 1234
+        control    = "pervasive"
+        preference = 1
+        use_bia    = "enabled"
+        vpc_peer   = "10.0.0.1/30"
       }]
     }]
   }]
@@ -63,7 +88,29 @@ resource "nxos_ipv4" "example" {
 
 ### Optional
 
+- `admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
 - `device` (String) A device name from the provider configuration.
+- `instance_access_list_match_local` (String) Access-List Match Local.
+  - Choices: `enabled`, `disabled`
+- `instance_admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
+- `instance_control` (String) The control state.
+  - Choices: `stateful-ha`
+- `instance_hardware_ecmp_hash_offset_concatenation` (String) hardware Ecmp HashOffset Concatenation.
+  - Choices: `enabled`, `disabled`
+- `instance_hardware_ecmp_hash_offset_value` (Number) hardware Ecmp HashOffset Value.
+  - Range: `0`-`63`
+- `instance_hardware_ecmp_hash_polynomial` (String) hardware Ecmp Hash-Polynomial.
+  - Choices: `CRC16`, `CRC32HI`
+- `instance_logging_level` (String) Logging level.
+  - Choices: `emergency`, `alert`, `critical`, `error`, `warning`, `notification`, `informational`, `debug`
+- `instance_redirect_syslog` (String) ipv4 redirect syslog.
+  - Choices: `enabled`, `disabled`
+- `instance_redirect_syslog_interval` (Number) redirect syslog interval.
+  - Range: `30`-`1800`
+- `instance_source_route` (String) Source-Route.
+  - Choices: `enabled`, `disabled`
 - `vrfs` (Attributes List) List of IPv4 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))
 
 ### Read-Only
@@ -79,6 +126,9 @@ Required:
 
 Optional:
 
+- `auto_discard` (String) Auto-Discard.
+  - Choices: `enabled`, `disabled`
+- `icmp_errors_source_interface` (String) ICMP errors source-interface.
 - `interfaces` (Attributes List) List of IPv4 interfaces. (see [below for nested schema](#nestedatt--vrfs--interfaces))
 - `static_routes` (Attributes List) List of IPv4 static routes. (see [below for nested schema](#nestedatt--vrfs--static_routes))
 
@@ -92,6 +142,9 @@ Required:
 Optional:
 
 - `addresses` (Attributes List) List of IPv4 interface addresses. (see [below for nested schema](#nestedatt--vrfs--interfaces--addresses))
+- `directed_broadcast` (String) IP directed broadcast.
+  - Choices: `enabled`, `disabled`
+- `directed_broadcast_acl` (String) IP directed broadcast ACL.
 - `drop_glean` (String) ip drop-glean enabled/disabled.
   - Choices: `enabled`, `disabled`
 - `forward` (String) IP forward.
@@ -109,9 +162,16 @@ Required:
 
 Optional:
 
+- `control` (String) The control state.
+  - Choices: `pervasive`, `fabric-aware`, `eui64`, `anycast`
+- `preference` (Number) Preference.
+  - Range: `0`-`255`
 - `tag` (Number) Route Tag.
 - `type` (String) Type.
   - Choices: `primary`, `secondary`
+- `use_bia` (String) Use Interface MAC Address.
+  - Choices: `enabled`, `disabled`
+- `vpc_peer` (String) VPC Peer.
 
 
 
@@ -122,6 +182,16 @@ Required:
 
 - `next_hops` (Attributes List) List of next hops. (see [below for nested schema](#nestedatt--vrfs--static_routes--next_hops))
 - `prefix` (String) Prefix.
+
+Optional:
+
+- `control` (String) Controls.
+  - Choices: `pervasive`, `bfd`
+- `description` (String) Description of the specified attribute.
+- `preference` (Number) Preference.
+  - Range: `1`-`255`
+- `tag` (Number) Tag.
+  - Range: `0`-`4294967295`
 
 <a id="nestedatt--vrfs--static_routes--next_hops"></a>
 ### Nested Schema for `vrfs.static_routes.next_hops`
@@ -135,10 +205,12 @@ Required:
 Optional:
 
 - `description` (String) Description of the specified attribute.
+- `next_hop_name` (String) Next hop name.
 - `object` (Number) Object to be tracked.
   - Range: `0`-`4294967295`
 - `preference` (Number) Route preference.
   - Range: `0`-`255`
+- `rewrite_encapsulation` (String) Rewrite Encapsulation.
 - `tag` (Number) Tag value.
   - Range: `0`-`4294967295`
 

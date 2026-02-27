@@ -7,12 +7,111 @@ ds_description: This data source can read the IPv4 configuration on NX-OS device
 res_description: This resource can manage the IPv4 configuration on NX-OS devices, including per-VRF static routes with next hops and interface addresses.
 doc_path: Layer%203/ipv4:Entity/
 doc_category: Routing
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'The administrative state of the object or policy.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
 child_classes:
   - class_name: ipv4Inst
     doc_path: Layer%203/ipv4:Inst/
     rn: inst
     type: single
+    tf_name: instance
+    description: 'IPv4 instance configuration.'
     no_delete: true
+    attributes:
+      - nxos_name: adminSt
+        tf_name: instance_admin_state
+        type: String
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: accessListMatchLocal
+        tf_name: instance_access_list_match_local
+        type: String
+        description: 'Access-List Match Local.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: ctrl
+        tf_name: instance_control
+        type: String
+        description: 'The control state.'
+        allow_non_enum_values: true
+        enum_values:
+          - stateful-ha
+        example: stateful-ha
+      - nxos_name: hardwareEcmpHashOffsetConcat
+        tf_name: instance_hardware_ecmp_hash_offset_concatenation
+        type: String
+        description: 'hardware Ecmp HashOffset Concatenation.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        exclude_test: true
+      - nxos_name: hardwareEcmpHashOffsetValue
+        tf_name: instance_hardware_ecmp_hash_offset_value
+        type: Int64
+        description: 'hardware Ecmp HashOffset Value.'
+        min_int: 0
+        max_int: 63
+        example: 10
+        exclude_test: true
+      - nxos_name: hardwareEcmpHashPolynomial
+        tf_name: instance_hardware_ecmp_hash_polynomial
+        type: String
+        description: 'hardware Ecmp Hash-Polynomial.'
+        enum_values:
+          - CRC16
+          - CRC32HI
+        example: CRC32HI
+        exclude_test: true
+      - nxos_name: loggingLevel
+        tf_name: instance_logging_level
+        type: String
+        description: 'Logging level.'
+        enum_values:
+          - emergency
+          - alert
+          - critical
+          - error
+          - warning
+          - notification
+          - informational
+          - debug
+        example: warning
+      - nxos_name: redirectSyslog
+        tf_name: instance_redirect_syslog
+        type: String
+        description: 'ipv4 redirect syslog.'
+        enum_values:
+          - enabled
+          - disabled
+        example: disabled
+      - nxos_name: redirectSyslogInterval
+        tf_name: instance_redirect_syslog_interval
+        type: Int64
+        description: 'redirect syslog interval.'
+        min_int: 30
+        max_int: 1800
+        example: 120
+      - nxos_name: sourceRoute
+        tf_name: instance_source_route
+        type: String
+        description: 'Source-Route.'
+        enum_values:
+          - enabled
+          - disabled
+        example: disabled
     child_classes:
       - class_name: ipv4Dom
         doc_path: Layer%203/ipv4:Dom/
@@ -27,6 +126,19 @@ child_classes:
             id: true
             description: 'The name of the object.'
             example: VRF1
+          - nxos_name: autoDiscard
+            tf_name: auto_discard
+            type: String
+            description: 'Auto-Discard.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+          - nxos_name: ipIcmpErrorsSrcIntf
+            tf_name: icmp_errors_source_interface
+            type: String
+            description: 'ICMP errors source-interface.'
+            example: unspecified
         child_classes:
           - class_name: ipv4Route
             doc_path: Layer%203/ipv4:Route/
@@ -41,6 +153,34 @@ child_classes:
                 id: true
                 description: 'Prefix.'
                 example: '1.1.1.0/24'
+              - nxos_name: ctrl
+                tf_name: control
+                type: String
+                description: 'Controls.'
+                allow_non_enum_values: true
+                enum_values:
+                  - pervasive
+                  - bfd
+                example: bfd
+              - nxos_name: descr
+                tf_name: description
+                type: String
+                description: 'Description of the specified attribute.'
+                example: My Description
+              - nxos_name: pref
+                tf_name: preference
+                type: Int64
+                description: 'Preference.'
+                min_int: 1
+                max_int: 255
+                example: 2
+              - nxos_name: tag
+                tf_name: tag
+                type: Int64
+                description: 'Tag.'
+                min_int: 0
+                max_int: 4294967295
+                example: 10
             child_classes:
               - class_name: ipv4Nexthop
                 doc_path: Layer%203/ipv4:Nexthop/
@@ -94,6 +234,16 @@ child_classes:
                     min_int: 0
                     max_int: 4294967295
                     example: 10
+                  - nxos_name: rtname
+                    tf_name: next_hop_name
+                    type: String
+                    description: 'Next hop name.'
+                    example: nh1
+                  - nxos_name: rwEncap
+                    tf_name: rewrite_encapsulation
+                    type: String
+                    description: 'Rewrite Encapsulation.'
+                    example: unknown
           - class_name: ipv4If
             doc_path: Layer%203/ipv4:If/
             rn: if-[%s]
@@ -139,6 +289,19 @@ child_classes:
                   - loose-allow-default
                   - strict-allow-vni-hosts
                 example: disabled
+              - nxos_name: acl
+                tf_name: directed_broadcast_acl
+                type: String
+                description: 'IP directed broadcast ACL.'
+                example: ACL1
+              - nxos_name: directedBroadcast
+                tf_name: directed_broadcast
+                type: String
+                description: 'IP directed broadcast.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
             child_classes:
               - class_name: ipv4Addr
                 doc_path: Layer%203/ipv4:Addr/
@@ -166,7 +329,41 @@ child_classes:
                     type: Int64
                     description: 'Route Tag.'
                     example: 1234
+                  - nxos_name: ctrl
+                    tf_name: control
+                    type: String
+                    description: 'The control state.'
+                    allow_non_enum_values: true
+                    enum_values:
+                      - pervasive
+                      - fabric-aware
+                      - eui64
+                      - anycast
+                    example: pervasive
+                  - nxos_name: pref
+                    tf_name: preference
+                    type: Int64
+                    description: 'Preference.'
+                    min_int: 0
+                    max_int: 255
+                    example: 1
+                  - nxos_name: useBia
+                    tf_name: use_bia
+                    type: String
+                    description: 'Use Interface MAC Address.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                  - nxos_name: vpcPeer
+                    tf_name: vpc_peer
+                    type: String
+                    description: 'VPC Peer.'
+                    example: '10.0.0.1/30'
 test_prerequisites:
+  - dn: sys/inst-VRF1
+    class_name: l3Inst
+    no_delete: true
   - dn: sys/intf/phys-[eth1/10]
     class_name: l1PhysIf
     attributes:

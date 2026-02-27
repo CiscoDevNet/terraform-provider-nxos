@@ -35,8 +35,22 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosIPv4(t *testing.T) {
 	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "instance_access_list_match_local", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "instance_control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "instance_logging_level", "warning"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "instance_redirect_syslog", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "instance_redirect_syslog_interval", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "instance_source_route", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.auto_discard", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.icmp_errors_source_interface", "unspecified"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.prefix", "1.1.1.0/24"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.control", "bfd"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.preference", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.tag", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.interface_id", "unspecified"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.address", "1.2.3.4"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.vrf_name", "default"))
@@ -44,14 +58,22 @@ func TestAccNxosIPv4(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.object", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.preference", "123"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.tag", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.next_hop_name", "nh1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.static_routes.0.next_hops.0.rewrite_encapsulation", "unknown"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.interface_id", "eth1/10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.drop_glean", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.forward", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.unnumbered", "unspecified"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.urpf", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.directed_broadcast_acl", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.directed_broadcast", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.addresses.0.address", "24.63.46.49/30"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.addresses.0.type", "primary"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.addresses.0.tag", "1234"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.addresses.0.control", "pervasive"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.addresses.0.preference", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.addresses.0.use_bia", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv4.test", "vrfs.0.interfaces.0.addresses.0.vpc_peer", "10.0.0.1/30"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -95,6 +117,12 @@ func nxosIPv4ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosIPv4PrerequisitesConfig = `
 resource "nxos_rest" "PreReq0" {
+  dn = "sys/inst-VRF1"
+  class_name = "l3Inst"
+  delete = false
+}
+
+resource "nxos_rest" "PreReq1" {
   dn = "sys/intf/phys-[eth1/10]"
   class_name = "l1PhysIf"
   content = {
@@ -109,7 +137,7 @@ resource "nxos_rest" "PreReq0" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosIPv4Config_minimum() string {
 	config := `resource "nxos_ipv4" "test" {` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -119,10 +147,24 @@ func testAccNxosIPv4Config_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosIPv4Config_all() string {
 	config := `resource "nxos_ipv4" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	instance_admin_state = "enabled"` + "\n"
+	config += `	instance_access_list_match_local = "enabled"` + "\n"
+	config += `	instance_control = "stateful-ha"` + "\n"
+	config += `	instance_logging_level = "warning"` + "\n"
+	config += `	instance_redirect_syslog = "disabled"` + "\n"
+	config += `	instance_redirect_syslog_interval = 120` + "\n"
+	config += `	instance_source_route = "disabled"` + "\n"
 	config += `	vrfs = [{` + "\n"
 	config += `		name = "VRF1"` + "\n"
+	config += `		auto_discard = "enabled"` + "\n"
+	config += `		icmp_errors_source_interface = "unspecified"` + "\n"
 	config += `		static_routes = [{` + "\n"
 	config += `			prefix = "1.1.1.0/24"` + "\n"
+	config += `			control = "bfd"` + "\n"
+	config += `			description = "My Description"` + "\n"
+	config += `			preference = 2` + "\n"
+	config += `			tag = 10` + "\n"
 	config += `			next_hops = [{` + "\n"
 	config += `				interface_id = "unspecified"` + "\n"
 	config += `				address = "1.2.3.4"` + "\n"
@@ -131,6 +173,8 @@ func testAccNxosIPv4Config_all() string {
 	config += `				object = 10` + "\n"
 	config += `				preference = 123` + "\n"
 	config += `				tag = 10` + "\n"
+	config += `				next_hop_name = "nh1"` + "\n"
+	config += `				rewrite_encapsulation = "unknown"` + "\n"
 	config += `			}]` + "\n"
 	config += `		}]` + "\n"
 	config += `		interfaces = [{` + "\n"
@@ -139,14 +183,20 @@ func testAccNxosIPv4Config_all() string {
 	config += `			forward = "disabled"` + "\n"
 	config += `			unnumbered = "unspecified"` + "\n"
 	config += `			urpf = "disabled"` + "\n"
+	config += `			directed_broadcast_acl = "ACL1"` + "\n"
+	config += `			directed_broadcast = "enabled"` + "\n"
 	config += `			addresses = [{` + "\n"
 	config += `				address = "24.63.46.49/30"` + "\n"
 	config += `				type = "primary"` + "\n"
 	config += `				tag = 1234` + "\n"
+	config += `				control = "pervasive"` + "\n"
+	config += `				preference = 1` + "\n"
+	config += `				use_bia = "enabled"` + "\n"
+	config += `				vpc_peer = "10.0.0.1/30"` + "\n"
 	config += `			}]` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

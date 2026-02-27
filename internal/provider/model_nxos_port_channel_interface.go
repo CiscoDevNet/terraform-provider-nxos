@@ -38,31 +38,52 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type PortChannelInterface struct {
-	Device              types.String                  `tfsdk:"device"`
-	Dn                  types.String                  `tfsdk:"id"`
-	InterfaceId         types.String                  `tfsdk:"interface_id"`
-	PortChannelMode     types.String                  `tfsdk:"port_channel_mode"`
-	MinimumLinks        types.Int64                   `tfsdk:"minimum_links"`
-	MaximumLinks        types.Int64                   `tfsdk:"maximum_links"`
-	SuspendIndividual   types.String                  `tfsdk:"suspend_individual"`
-	AccessVlan          types.String                  `tfsdk:"access_vlan"`
-	AdminState          types.String                  `tfsdk:"admin_state"`
-	AutoNegotiation     types.String                  `tfsdk:"auto_negotiation"`
-	Bandwidth           types.Int64                   `tfsdk:"bandwidth"`
-	Delay               types.Int64                   `tfsdk:"delay"`
-	Description         types.String                  `tfsdk:"description"`
-	Duplex              types.String                  `tfsdk:"duplex"`
-	Layer               types.String                  `tfsdk:"layer"`
-	LinkLogging         types.String                  `tfsdk:"link_logging"`
-	Medium              types.String                  `tfsdk:"medium"`
-	Mode                types.String                  `tfsdk:"mode"`
-	Mtu                 types.Int64                   `tfsdk:"mtu"`
-	NativeVlan          types.String                  `tfsdk:"native_vlan"`
-	Speed               types.String                  `tfsdk:"speed"`
-	TrunkVlans          types.String                  `tfsdk:"trunk_vlans"`
-	UserConfiguredFlags types.String                  `tfsdk:"user_configured_flags"`
-	VrfDn               types.String                  `tfsdk:"vrf_dn"`
-	Members             []PortChannelInterfaceMembers `tfsdk:"members"`
+	Device               types.String                  `tfsdk:"device"`
+	Dn                   types.String                  `tfsdk:"id"`
+	InterfaceId          types.String                  `tfsdk:"interface_id"`
+	PortChannelMode      types.String                  `tfsdk:"port_channel_mode"`
+	MinimumLinks         types.Int64                   `tfsdk:"minimum_links"`
+	MaximumLinks         types.Int64                   `tfsdk:"maximum_links"`
+	SuspendIndividual    types.String                  `tfsdk:"suspend_individual"`
+	AccessVlan           types.String                  `tfsdk:"access_vlan"`
+	AdminState           types.String                  `tfsdk:"admin_state"`
+	AutoNegotiation      types.String                  `tfsdk:"auto_negotiation"`
+	Bandwidth            types.Int64                   `tfsdk:"bandwidth"`
+	Delay                types.Int64                   `tfsdk:"delay"`
+	Description          types.String                  `tfsdk:"description"`
+	Duplex               types.String                  `tfsdk:"duplex"`
+	Layer                types.String                  `tfsdk:"layer"`
+	LinkLogging          types.String                  `tfsdk:"link_logging"`
+	Medium               types.String                  `tfsdk:"medium"`
+	Mode                 types.String                  `tfsdk:"mode"`
+	Mtu                  types.Int64                   `tfsdk:"mtu"`
+	NativeVlan           types.String                  `tfsdk:"native_vlan"`
+	Speed                types.String                  `tfsdk:"speed"`
+	TrunkVlans           types.String                  `tfsdk:"trunk_vlans"`
+	Dot1qEtherType       types.Int64                   `tfsdk:"dot1q_ether_type"`
+	EqualizationDelay    types.Int64                   `tfsdk:"equalization_delay"`
+	GracefulConvergence  types.String                  `tfsdk:"graceful_convergence"`
+	HashDistribution     types.String                  `tfsdk:"hash_distribution"`
+	InheritBandwidth     types.Int64                   `tfsdk:"inherit_bandwidth"`
+	ItuChannel           types.Int64                   `tfsdk:"itu_channel"`
+	LacpDelayMode        types.String                  `tfsdk:"lacp_delay_mode"`
+	LacpVpcConvergence   types.String                  `tfsdk:"lacp_vpc_convergence"`
+	LinkDebounceDown     types.Int64                   `tfsdk:"link_debounce_down"`
+	LoadDefer            types.String                  `tfsdk:"load_defer"`
+	Mdix                 types.String                  `tfsdk:"mdix"`
+	OpticsLoopback       types.String                  `tfsdk:"optics_loopback"`
+	PortType             types.String                  `tfsdk:"port_type"`
+	PxeTransitionTimeout types.Int64                   `tfsdk:"pxe_transition_timeout"`
+	RouterMac            types.String                  `tfsdk:"router_mac"`
+	SnmpTrapState        types.String                  `tfsdk:"snmp_trap_state"`
+	SpanMode             types.String                  `tfsdk:"span_mode"`
+	Squelch              types.String                  `tfsdk:"squelch"`
+	TransmissionMode     types.String                  `tfsdk:"transmission_mode"`
+	TrunkLogging         types.String                  `tfsdk:"trunk_logging"`
+	Usage                types.String                  `tfsdk:"usage"`
+	UserConfiguredFlags  types.String                  `tfsdk:"user_configured_flags"`
+	VrfDn                types.String                  `tfsdk:"vrf_dn"`
+	Members              []PortChannelInterfaceMembers `tfsdk:"members"`
 }
 
 type PortChannelInterfaceMembers struct {
@@ -176,6 +197,69 @@ func (data PortChannelInterface) toBody() nxos.Body {
 	if (!data.TrunkVlans.IsUnknown() && !data.TrunkVlans.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"trunkVlans", data.TrunkVlans.ValueString())
 	}
+	if (!data.Dot1qEtherType.IsUnknown() && !data.Dot1qEtherType.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dot1qEtherType", strconv.FormatInt(data.Dot1qEtherType.ValueInt64(), 10))
+	}
+	if (!data.EqualizationDelay.IsUnknown() && !data.EqualizationDelay.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"equalizationDelay", strconv.FormatInt(data.EqualizationDelay.ValueInt64(), 10))
+	}
+	if (!data.GracefulConvergence.IsUnknown() && !data.GracefulConvergence.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"gracefulConv", data.GracefulConvergence.ValueString())
+	}
+	if (!data.HashDistribution.IsUnknown() && !data.HashDistribution.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"hashDist", data.HashDistribution.ValueString())
+	}
+	if (!data.InheritBandwidth.IsUnknown() && !data.InheritBandwidth.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"inhBw", strconv.FormatInt(data.InheritBandwidth.ValueInt64(), 10))
+	}
+	if (!data.ItuChannel.IsUnknown() && !data.ItuChannel.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ituChannel", strconv.FormatInt(data.ItuChannel.ValueInt64(), 10))
+	}
+	if (!data.LacpDelayMode.IsUnknown() && !data.LacpDelayMode.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"lacpDelayMode", data.LacpDelayMode.ValueString())
+	}
+	if (!data.LacpVpcConvergence.IsUnknown() && !data.LacpVpcConvergence.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"lacpVpcConvergence", data.LacpVpcConvergence.ValueString())
+	}
+	if (!data.LinkDebounceDown.IsUnknown() && !data.LinkDebounceDown.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkDebounce", strconv.FormatInt(data.LinkDebounceDown.ValueInt64(), 10))
+	}
+	if (!data.LoadDefer.IsUnknown() && !data.LoadDefer.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"loadDefer", data.LoadDefer.ValueString())
+	}
+	if (!data.Mdix.IsUnknown() && !data.Mdix.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mdix", data.Mdix.ValueString())
+	}
+	if (!data.OpticsLoopback.IsUnknown() && !data.OpticsLoopback.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"opticsLoopback", data.OpticsLoopback.ValueString())
+	}
+	if (!data.PortType.IsUnknown() && !data.PortType.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"portT", data.PortType.ValueString())
+	}
+	if (!data.PxeTransitionTimeout.IsUnknown() && !data.PxeTransitionTimeout.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pxeTransTime", strconv.FormatInt(data.PxeTransitionTimeout.ValueInt64(), 10))
+	}
+	if (!data.RouterMac.IsUnknown() && !data.RouterMac.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"routerMac", data.RouterMac.ValueString())
+	}
+	if (!data.SnmpTrapState.IsUnknown() && !data.SnmpTrapState.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"snmpTrapSt", data.SnmpTrapState.ValueString())
+	}
+	if (!data.SpanMode.IsUnknown() && !data.SpanMode.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"spanMode", data.SpanMode.ValueString())
+	}
+	if (!data.Squelch.IsUnknown() && !data.Squelch.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"squelch", data.Squelch.ValueString())
+	}
+	if (!data.TransmissionMode.IsUnknown() && !data.TransmissionMode.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"transMode", data.TransmissionMode.ValueString())
+	}
+	if (!data.TrunkLogging.IsUnknown() && !data.TrunkLogging.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"trunkLog", data.TrunkLogging.ValueString())
+	}
+	if (!data.Usage.IsUnknown() && !data.Usage.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"usage", data.Usage.ValueString())
+	}
 	if (!data.UserConfiguredFlags.IsUnknown() && !data.UserConfiguredFlags.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"userCfgdFlags", data.UserConfiguredFlags.ValueString())
 	}
@@ -227,6 +311,27 @@ func (data *PortChannelInterface) fromBody(res gjson.Result) {
 	data.NativeVlan = types.StringValue(res.Get(data.getClassName() + ".attributes.nativeVlan").String())
 	data.Speed = types.StringValue(res.Get(data.getClassName() + ".attributes.speed").String())
 	data.TrunkVlans = types.StringValue(res.Get(data.getClassName() + ".attributes.trunkVlans").String())
+	data.Dot1qEtherType = types.Int64Value(res.Get(data.getClassName() + ".attributes.dot1qEtherType").Int())
+	data.EqualizationDelay = types.Int64Value(res.Get(data.getClassName() + ".attributes.equalizationDelay").Int())
+	data.GracefulConvergence = types.StringValue(res.Get(data.getClassName() + ".attributes.gracefulConv").String())
+	data.HashDistribution = types.StringValue(res.Get(data.getClassName() + ".attributes.hashDist").String())
+	data.InheritBandwidth = types.Int64Value(res.Get(data.getClassName() + ".attributes.inhBw").Int())
+	data.ItuChannel = types.Int64Value(res.Get(data.getClassName() + ".attributes.ituChannel").Int())
+	data.LacpDelayMode = types.StringValue(res.Get(data.getClassName() + ".attributes.lacpDelayMode").String())
+	data.LacpVpcConvergence = types.StringValue(res.Get(data.getClassName() + ".attributes.lacpVpcConvergence").String())
+	data.LinkDebounceDown = types.Int64Value(res.Get(data.getClassName() + ".attributes.linkDebounce").Int())
+	data.LoadDefer = types.StringValue(res.Get(data.getClassName() + ".attributes.loadDefer").String())
+	data.Mdix = types.StringValue(res.Get(data.getClassName() + ".attributes.mdix").String())
+	data.OpticsLoopback = types.StringValue(res.Get(data.getClassName() + ".attributes.opticsLoopback").String())
+	data.PortType = types.StringValue(res.Get(data.getClassName() + ".attributes.portT").String())
+	data.PxeTransitionTimeout = types.Int64Value(res.Get(data.getClassName() + ".attributes.pxeTransTime").Int())
+	data.RouterMac = types.StringValue(res.Get(data.getClassName() + ".attributes.routerMac").String())
+	data.SnmpTrapState = types.StringValue(res.Get(data.getClassName() + ".attributes.snmpTrapSt").String())
+	data.SpanMode = types.StringValue(res.Get(data.getClassName() + ".attributes.spanMode").String())
+	data.Squelch = types.StringValue(res.Get(data.getClassName() + ".attributes.squelch").String())
+	data.TransmissionMode = types.StringValue(res.Get(data.getClassName() + ".attributes.transMode").String())
+	data.TrunkLogging = types.StringValue(res.Get(data.getClassName() + ".attributes.trunkLog").String())
+	data.Usage = types.StringValue(res.Get(data.getClassName() + ".attributes.usage").String())
 	data.UserConfiguredFlags = types.StringValue(res.Get(data.getClassName() + ".attributes.userCfgdFlags").String())
 	{
 		var rnwRtVrfMbr gjson.Result
@@ -364,6 +469,111 @@ func (data *PortChannelInterface) updateFromBody(res gjson.Result) {
 		data.TrunkVlans = types.StringValue(res.Get(data.getClassName() + ".attributes.trunkVlans").String())
 	} else {
 		data.TrunkVlans = types.StringNull()
+	}
+	if !data.Dot1qEtherType.IsNull() {
+		data.Dot1qEtherType = types.Int64Value(res.Get(data.getClassName() + ".attributes.dot1qEtherType").Int())
+	} else {
+		data.Dot1qEtherType = types.Int64Null()
+	}
+	if !data.EqualizationDelay.IsNull() {
+		data.EqualizationDelay = types.Int64Value(res.Get(data.getClassName() + ".attributes.equalizationDelay").Int())
+	} else {
+		data.EqualizationDelay = types.Int64Null()
+	}
+	if !data.GracefulConvergence.IsNull() {
+		data.GracefulConvergence = types.StringValue(res.Get(data.getClassName() + ".attributes.gracefulConv").String())
+	} else {
+		data.GracefulConvergence = types.StringNull()
+	}
+	if !data.HashDistribution.IsNull() {
+		data.HashDistribution = types.StringValue(res.Get(data.getClassName() + ".attributes.hashDist").String())
+	} else {
+		data.HashDistribution = types.StringNull()
+	}
+	if !data.InheritBandwidth.IsNull() {
+		data.InheritBandwidth = types.Int64Value(res.Get(data.getClassName() + ".attributes.inhBw").Int())
+	} else {
+		data.InheritBandwidth = types.Int64Null()
+	}
+	if !data.ItuChannel.IsNull() {
+		data.ItuChannel = types.Int64Value(res.Get(data.getClassName() + ".attributes.ituChannel").Int())
+	} else {
+		data.ItuChannel = types.Int64Null()
+	}
+	if !data.LacpDelayMode.IsNull() {
+		data.LacpDelayMode = types.StringValue(res.Get(data.getClassName() + ".attributes.lacpDelayMode").String())
+	} else {
+		data.LacpDelayMode = types.StringNull()
+	}
+	if !data.LacpVpcConvergence.IsNull() {
+		data.LacpVpcConvergence = types.StringValue(res.Get(data.getClassName() + ".attributes.lacpVpcConvergence").String())
+	} else {
+		data.LacpVpcConvergence = types.StringNull()
+	}
+	if !data.LinkDebounceDown.IsNull() {
+		data.LinkDebounceDown = types.Int64Value(res.Get(data.getClassName() + ".attributes.linkDebounce").Int())
+	} else {
+		data.LinkDebounceDown = types.Int64Null()
+	}
+	if !data.LoadDefer.IsNull() {
+		data.LoadDefer = types.StringValue(res.Get(data.getClassName() + ".attributes.loadDefer").String())
+	} else {
+		data.LoadDefer = types.StringNull()
+	}
+	if !data.Mdix.IsNull() {
+		data.Mdix = types.StringValue(res.Get(data.getClassName() + ".attributes.mdix").String())
+	} else {
+		data.Mdix = types.StringNull()
+	}
+	if !data.OpticsLoopback.IsNull() {
+		data.OpticsLoopback = types.StringValue(res.Get(data.getClassName() + ".attributes.opticsLoopback").String())
+	} else {
+		data.OpticsLoopback = types.StringNull()
+	}
+	if !data.PortType.IsNull() {
+		data.PortType = types.StringValue(res.Get(data.getClassName() + ".attributes.portT").String())
+	} else {
+		data.PortType = types.StringNull()
+	}
+	if !data.PxeTransitionTimeout.IsNull() {
+		data.PxeTransitionTimeout = types.Int64Value(res.Get(data.getClassName() + ".attributes.pxeTransTime").Int())
+	} else {
+		data.PxeTransitionTimeout = types.Int64Null()
+	}
+	if !data.RouterMac.IsNull() {
+		data.RouterMac = types.StringValue(res.Get(data.getClassName() + ".attributes.routerMac").String())
+	} else {
+		data.RouterMac = types.StringNull()
+	}
+	if !data.SnmpTrapState.IsNull() {
+		data.SnmpTrapState = types.StringValue(res.Get(data.getClassName() + ".attributes.snmpTrapSt").String())
+	} else {
+		data.SnmpTrapState = types.StringNull()
+	}
+	if !data.SpanMode.IsNull() {
+		data.SpanMode = types.StringValue(res.Get(data.getClassName() + ".attributes.spanMode").String())
+	} else {
+		data.SpanMode = types.StringNull()
+	}
+	if !data.Squelch.IsNull() {
+		data.Squelch = types.StringValue(res.Get(data.getClassName() + ".attributes.squelch").String())
+	} else {
+		data.Squelch = types.StringNull()
+	}
+	if !data.TransmissionMode.IsNull() {
+		data.TransmissionMode = types.StringValue(res.Get(data.getClassName() + ".attributes.transMode").String())
+	} else {
+		data.TransmissionMode = types.StringNull()
+	}
+	if !data.TrunkLogging.IsNull() {
+		data.TrunkLogging = types.StringValue(res.Get(data.getClassName() + ".attributes.trunkLog").String())
+	} else {
+		data.TrunkLogging = types.StringNull()
+	}
+	if !data.Usage.IsNull() {
+		data.Usage = types.StringValue(res.Get(data.getClassName() + ".attributes.usage").String())
+	} else {
+		data.Usage = types.StringNull()
 	}
 	if !data.UserConfiguredFlags.IsNull() {
 		data.UserConfiguredFlags = types.StringValue(res.Get(data.getClassName() + ".attributes.userCfgdFlags").String())

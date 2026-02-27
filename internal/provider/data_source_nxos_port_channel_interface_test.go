@@ -51,6 +51,20 @@ func TestAccDataSourceNxosPortChannelInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "native_vlan", "unknown"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "speed", "auto"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "trunk_vlans", "1-4094"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "equalization_delay", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "graceful_convergence", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "hash_distribution", "adaptive"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "itu_channel", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "lacp_delay_mode", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "lacp_vpc_convergence", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "load_defer", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "mdix", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "optics_loopback", "internal"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "pxe_transition_timeout", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "span_mode", "not-a-span-dest"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "squelch", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "transmission_mode", "not-a-trans-port"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "usage", "discovery"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "user_configured_flags", "admin_layer,admin_mtu,admin_state"))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_port_channel_interface.test", "members.*", map[string]string{
 		"interface_dn": "sys/intf/phys-[eth1/11]",
@@ -108,6 +122,20 @@ func testAccDataSourceNxosPortChannelInterfaceConfig() string {
 	config += `	native_vlan = "unknown"` + "\n"
 	config += `	speed = "auto"` + "\n"
 	config += `	trunk_vlans = "1-4094"` + "\n"
+	config += `	equalization_delay = 5` + "\n"
+	config += `	graceful_convergence = "disable"` + "\n"
+	config += `	hash_distribution = "adaptive"` + "\n"
+	config += `	itu_channel = 50` + "\n"
+	config += `	lacp_delay_mode = "enable"` + "\n"
+	config += `	lacp_vpc_convergence = "enable"` + "\n"
+	config += `	load_defer = "enable"` + "\n"
+	config += `	mdix = "auto"` + "\n"
+	config += `	optics_loopback = "internal"` + "\n"
+	config += `	pxe_transition_timeout = 5` + "\n"
+	config += `	span_mode = "not-a-span-dest"` + "\n"
+	config += `	squelch = "disable"` + "\n"
+	config += `	transmission_mode = "not-a-trans-port"` + "\n"
+	config += `	usage = "discovery"` + "\n"
 	config += `	user_configured_flags = "admin_layer,admin_mtu,admin_state"` + "\n"
 	config += `	members = [{` + "\n"
 	config += `		interface_dn = "sys/intf/phys-[eth1/11]"` + "\n"

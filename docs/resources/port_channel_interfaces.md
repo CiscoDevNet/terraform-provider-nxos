@@ -18,27 +18,48 @@ This resource can manage multiple port_channel_interface resources.
 ```terraform
 resource "nxos_port_channel_interfaces" "example" {
   items = [{
-    interface_id          = "po1"
-    port_channel_mode     = "active"
-    minimum_links         = 2
-    maximum_links         = 10
-    suspend_individual    = "disable"
-    access_vlan           = "vlan-1"
-    admin_state           = "up"
-    auto_negotiation      = "on"
-    bandwidth             = 0
-    delay                 = 1
-    description           = "My Description"
-    duplex                = "auto"
-    layer                 = "Layer2"
-    link_logging          = "enable"
-    medium                = "broadcast"
-    mode                  = "access"
-    mtu                   = 1500
-    native_vlan           = "unknown"
-    speed                 = "auto"
-    trunk_vlans           = "1-4094"
-    user_configured_flags = "admin_layer,admin_mtu,admin_state"
+    interface_id           = "po1"
+    port_channel_mode      = "active"
+    minimum_links          = 2
+    maximum_links          = 10
+    suspend_individual     = "disable"
+    access_vlan            = "vlan-1"
+    admin_state            = "up"
+    auto_negotiation       = "on"
+    bandwidth              = 0
+    delay                  = 1
+    description            = "My Description"
+    duplex                 = "auto"
+    layer                  = "Layer2"
+    link_logging           = "enable"
+    medium                 = "broadcast"
+    mode                   = "access"
+    mtu                    = 1500
+    native_vlan            = "unknown"
+    speed                  = "auto"
+    trunk_vlans            = "1-4094"
+    dot1q_ether_type       = 33024
+    equalization_delay     = 5
+    graceful_convergence   = "disable"
+    hash_distribution      = "adaptive"
+    inherit_bandwidth      = 1000000
+    itu_channel            = 50
+    lacp_delay_mode        = "enable"
+    lacp_vpc_convergence   = "enable"
+    link_debounce_down     = 200
+    load_defer             = "enable"
+    mdix                   = "auto"
+    optics_loopback        = "internal"
+    port_type              = "leaf"
+    pxe_transition_timeout = 5
+    router_mac             = "00:00:00:11:22:33"
+    snmp_trap_state        = "disable"
+    span_mode              = "not-a-span-dest"
+    squelch                = "disable"
+    transmission_mode      = "not-a-trans-port"
+    trunk_logging          = "enable"
+    usage                  = "discovery"
+    user_configured_flags  = "admin_layer,admin_mtu,admin_state"
   }]
 }
 ```
@@ -77,14 +98,36 @@ Optional:
 - `delay` (Number) The administrative port delay time.
   - Range: `1`-`16777215`
 - `description` (String) Interface description.
+- `dot1q_ether_type` (Number) The administrative port Dot1q ether-type. Dot1q Ether Type configures the TPID value in the VLAN tag field for packets received and sent by the interface.
+  - Range: `1536`-`65535`
 - `duplex` (String) Duplex.
   - Choices: `auto`, `full`, `half`
+- `equalization_delay` (Number) Administrative port equalization delay time.
+  - Range: `0`-`31`
+- `graceful_convergence` (String) Graceful Convergence.
+  - Choices: `enable`, `disable`
+- `hash_distribution` (String) Hash distribution configured - adaptive/fixed.
+  - Choices: `none`, `adaptive`, `fixed`
+- `inherit_bandwidth` (Number) Administrative port inherit bandwidth.
+  - Range: `0`-`4294967295`
+- `itu_channel` (Number) ITU Channel to support DWDM XCVR.
+  - Range: `1`-`96`
+- `lacp_delay_mode` (String) Configuring LACP delay mode.
+  - Choices: `enable`, `disable`
+- `lacp_vpc_convergence` (String) LACP vpc convergence.
+  - Choices: `enable`, `disable`
 - `layer` (String) Administrative port layer.
   - Choices: `Layer1`, `Layer2`, `Layer3`
+- `link_debounce_down` (Number) Administrative port link debounce interval.
+  - Range: `0`-`20000`
 - `link_logging` (String) Administrative link logging enable.
   - Choices: `default`, `enable`, `disable`
+- `load_defer` (String) Load Defer Member Ports.
+  - Choices: `enable`, `disable`
 - `maximum_links` (Number) maximum links.
   - Range: `1`-`32`
+- `mdix` (String) The administrative Mdix mode. The Medium-dependant interface crossover (Mdix) is when the interface automatically detects the required cable connection type (straight through or crossover) and configures the connection appropriately.
+  - Choices: `auto`, `mdi`, `mdi-x`
 - `medium` (String) The administrative port medium type.
   - Choices: `broadcast`, `p2p`
 - `members` (Attributes List) List of port-channel member interfaces. (see [below for nested schema](#nestedatt--items--members))
@@ -95,13 +138,32 @@ Optional:
 - `mtu` (Number) Administrative port mtu.
   - Range: `576`-`9216`
 - `native_vlan` (String) Configured Native Vlan. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `optics_loopback` (String) Configured Loopback.
+  - Choices: `disable`, `internal`, `line`
 - `port_channel_mode` (String) The aggregated interface protocol channel mode.
   - Choices: `on`, `static`, `active`, `passive`, `mac-pin`
+- `port_type` (String) Type of the port: Fabric vs Leaf.
+  - Choices: `unknown`, `eobc`, `mgmt`, `fab`, `leaf`, `extchhp`, `extchfp`
+- `pxe_transition_timeout` (Number) PXE Individual Transition Timeout.
+  - Range: `2`-`10`
+- `router_mac` (String) The administrative router MAC address.
+- `snmp_trap_state` (String) Administrative port snmp trap state.
+  - Choices: `enable`, `disable`
+- `span_mode` (String) Administrative port span mode.
+  - Choices: `not-a-span-dest`, `span-dest`, `span-dest-fwd`, `span-dest-fwd-learn`
 - `speed` (String) Administrative port speed.
   - Choices: `unknown`, `100M`, `1G`, `10G`, `40G`, `auto`, `auto 100M`, `auto 100M 1G`, `100G`, `25G`, `10M`, `50G`, `200G`, `400G`, `2.5G`, `5G`, `auto 2.5G 5G 10G`, `auto 100M 1G 2.5G 5G`, `800G`
+- `squelch` (String) Configured Squelch.
+  - Choices: `enable`, `disable`
 - `suspend_individual` (String) Suspend Individual Port.
   - Choices: `enable`, `disable`
+- `transmission_mode` (String) Administrative port layer1 mode.
+  - Choices: `not-a-trans-port`, `trans-port`
+- `trunk_logging` (String) Administrative trunk logging enable.
+  - Choices: `default`, `enable`, `disable`
 - `trunk_vlans` (String) Configed Trunk Vlans.
+- `usage` (String) The port usage type.
+  - Choices: `discovery`, `epg`, `fabric`, `infra`, `controller`, `blacklist`
 - `user_configured_flags` (String) Port User Config Flags.
   - Choices: `none`, `admin_state`, `admin_layer`, `admin_router_mac`, `admin_dce_mode`, `admin_mtu`
 - `vrf_dn` (String) DN of VRF. For example: `sys/inst-VRF1`.

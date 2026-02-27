@@ -35,6 +35,16 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosSpanningTree(t *testing.T) {
 	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "bridge_assurance", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "control", "normal,stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "fcoe", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "l2_gateway_stp_domain_id", "2048"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "linecard_issu", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "loopguard", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "mode", "mst"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "pathcost_option", "long"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.interface_id", "eth1/9"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.bpdu_filter", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.bpdu_guard", "enable"))
@@ -43,6 +53,11 @@ func TestAccNxosSpanningTree(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.link_type", "p2p"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.mode", "edge"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.priority", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.control", "bpdu-guard"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.description", "My interface description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.linecard_issu", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.prestandard_configuration", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.simulate_pvst", "enabled"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -99,6 +114,16 @@ func testAccNxosSpanningTreeConfig_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosSpanningTreeConfig_all() string {
 	config := `resource "nxos_spanning_tree" "test" {` + "\n"
+	config += `	admin_state = "enabled"` + "\n"
+	config += `	instance_admin_state = "enabled"` + "\n"
+	config += `	bridge_assurance = "disabled"` + "\n"
+	config += `	control = "normal,stateful-ha"` + "\n"
+	config += `	fcoe = "enabled"` + "\n"
+	config += `	l2_gateway_stp_domain_id = 2048` + "\n"
+	config += `	linecard_issu = "auto"` + "\n"
+	config += `	loopguard = "enabled"` + "\n"
+	config += `	mode = "mst"` + "\n"
+	config += `	pathcost_option = "long"` + "\n"
 	config += `	interfaces = [{` + "\n"
 	config += `		interface_id = "eth1/9"` + "\n"
 	config += `		bpdu_filter = "enable"` + "\n"
@@ -108,6 +133,11 @@ func testAccNxosSpanningTreeConfig_all() string {
 	config += `		link_type = "p2p"` + "\n"
 	config += `		mode = "edge"` + "\n"
 	config += `		priority = 200` + "\n"
+	config += `		control = "bpdu-guard"` + "\n"
+	config += `		description = "My interface description"` + "\n"
+	config += `		linecard_issu = "auto"` + "\n"
+	config += `		prestandard_configuration = "enabled"` + "\n"
+	config += `		simulate_pvst = "enabled"` + "\n"
 	config += `	}]` + "\n"
 	config += `}` + "\n"
 	return config

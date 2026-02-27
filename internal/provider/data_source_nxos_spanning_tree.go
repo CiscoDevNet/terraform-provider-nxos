@@ -68,6 +68,46 @@ func (d *SpanningTreeDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
+			"admin_state": schema.StringAttribute{
+				MarkdownDescription: "The administrative state of the object or policy.",
+				Computed:            true,
+			},
+			"instance_admin_state": schema.StringAttribute{
+				MarkdownDescription: "The administrative state of the object or policy.",
+				Computed:            true,
+			},
+			"bridge_assurance": schema.StringAttribute{
+				MarkdownDescription: "Enable spanning-tree bridge assurance on all ports.",
+				Computed:            true,
+			},
+			"control": schema.StringAttribute{
+				MarkdownDescription: "The control state.",
+				Computed:            true,
+			},
+			"fcoe": schema.StringAttribute{
+				MarkdownDescription: "Disable spanning tree for fcoe vlan.",
+				Computed:            true,
+			},
+			"l2_gateway_stp_domain_id": schema.Int64Attribute{
+				MarkdownDescription: "Spanning tree L2 Gateway Domain Id.",
+				Computed:            true,
+			},
+			"linecard_issu": schema.StringAttribute{
+				MarkdownDescription: "Linecard ISSU type.",
+				Computed:            true,
+			},
+			"loopguard": schema.StringAttribute{
+				MarkdownDescription: "Enable loop guard on all ports.",
+				Computed:            true,
+			},
+			"mode": schema.StringAttribute{
+				MarkdownDescription: "Spanning tree mode.",
+				Computed:            true,
+			},
+			"pathcost_option": schema.StringAttribute{
+				MarkdownDescription: "Spanning tree pathcost options.",
+				Computed:            true,
+			},
 			"interfaces": schema.ListNestedAttribute{
 				MarkdownDescription: "List of Spanning Tree interfaces.",
 				Computed:            true,
@@ -103,6 +143,26 @@ func (d *SpanningTreeDataSource) Schema(ctx context.Context, req datasource.Sche
 						},
 						"priority": schema.Int64Attribute{
 							MarkdownDescription: "Port Priority.",
+							Computed:            true,
+						},
+						"control": schema.StringAttribute{
+							MarkdownDescription: "Interface controls.",
+							Computed:            true,
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: "Description.",
+							Computed:            true,
+						},
+						"linecard_issu": schema.StringAttribute{
+							MarkdownDescription: "Port lc issu.",
+							Computed:            true,
+						},
+						"prestandard_configuration": schema.StringAttribute{
+							MarkdownDescription: "Port mst prestd.",
+							Computed:            true,
+						},
+						"simulate_pvst": schema.StringAttribute{
+							MarkdownDescription: "Port simulate pvst.",
 							Computed:            true,
 						},
 					},

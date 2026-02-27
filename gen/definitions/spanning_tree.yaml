@@ -7,13 +7,99 @@ ds_description: This data source can read the Spanning Tree configuration on NX-
 res_description: This resource can manage the Spanning Tree configuration on NX-OS devices, including per-interface settings such as BPDU filter, BPDU guard, cost, guard mode, and port priority.
 doc_path: Discovery%20Protocols/stp:Entity/
 doc_category: Switching
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    enum_values:
+      - enabled
+      - disabled
+    description: "The administrative state of the object or policy."
+    example: enabled
 child_classes:
   - class_name: stpInst
     rn: inst
     type: single
     no_delete: true
+    tf_name: instance
     description: 'Spanning Tree instance configuration.'
     doc_path: Discovery%20Protocols/stp:Inst/
+    attributes:
+      - nxos_name: adminSt
+        tf_name: instance_admin_state
+        type: String
+        enum_values:
+          - enabled
+          - disabled
+        description: "The administrative state of the object or policy."
+        example: enabled
+      - nxos_name: bridge
+        tf_name: bridge_assurance
+        type: String
+        enum_values:
+          - enabled
+          - disabled
+        description: "Enable spanning-tree bridge assurance on all ports."
+        example: disabled
+      - nxos_name: ctrl
+        tf_name: control
+        type: String
+        enum_values:
+          - normal
+          - stateful-ha
+        allow_non_enum_values: true
+        description: "The control state."
+        example: "normal,stateful-ha"
+      - nxos_name: fcoe
+        tf_name: fcoe
+        type: String
+        enum_values:
+          - enabled
+          - disabled
+        description: "Disable spanning tree for fcoe vlan."
+        example: enabled
+      - nxos_name: l2GStpDomId
+        tf_name: l2_gateway_stp_domain_id
+        type: Int64
+        min_int: 0
+        max_int: 200000000
+        description: "Spanning tree L2 Gateway Domain Id."
+        example: 2048
+      - nxos_name: lcIssu
+        tf_name: linecard_issu
+        type: String
+        enum_values:
+          - default
+          - disruptive
+          - non-disruptive
+          - auto
+        description: "Linecard ISSU type."
+        example: auto
+      - nxos_name: loopguard
+        tf_name: loopguard
+        type: String
+        enum_values:
+          - enabled
+          - disabled
+        description: "Enable loop guard on all ports."
+        example: enabled
+      - nxos_name: mode
+        tf_name: mode
+        type: String
+        enum_values:
+          - mst
+          - pvrst
+        description: "Spanning tree mode."
+        example: mst
+      - nxos_name: pathcostOp
+        tf_name: pathcost_option
+        type: String
+        enum_values:
+          - auto
+          - short
+          - long
+        description: "Spanning tree pathcost options."
+        example: long
     child_classes:
       - class_name: stpIf
         rn: if-[%s]
@@ -91,3 +177,45 @@ child_classes:
             max_int: 224
             description: "Port Priority."
             example: 200
+          - nxos_name: ctrl
+            tf_name: control
+            type: String
+            enum_values:
+              - unspecified
+              - bpdu-guard
+              - bpdu-filter
+            allow_non_enum_values: true
+            description: "Interface controls."
+            example: bpdu-guard
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: "Description."
+            example: "My interface description"
+          - nxos_name: lcIssu
+            tf_name: linecard_issu
+            type: String
+            enum_values:
+              - default
+              - disruptive
+              - non-disruptive
+              - auto
+            description: "Port lc issu."
+            example: auto
+          - nxos_name: prestdCfg
+            tf_name: prestandard_configuration
+            type: String
+            enum_values:
+              - enabled
+              - disabled
+            description: "Port mst prestd."
+            example: enabled
+          - nxos_name: simulatePvst
+            tf_name: simulate_pvst
+            type: String
+            enum_values:
+              - default
+              - enabled
+              - disabled
+            description: "Port simulate pvst."
+            example: enabled

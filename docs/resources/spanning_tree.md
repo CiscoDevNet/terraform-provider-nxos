@@ -24,15 +24,30 @@ This resource can manage the Spanning Tree configuration on NX-OS devices, inclu
 
 ```terraform
 resource "nxos_spanning_tree" "example" {
+  admin_state              = "enabled"
+  instance_admin_state     = "enabled"
+  bridge_assurance         = "disabled"
+  control                  = "normal,stateful-ha"
+  fcoe                     = "enabled"
+  l2_gateway_stp_domain_id = 2048
+  linecard_issu            = "auto"
+  loopguard                = "enabled"
+  mode                     = "mst"
+  pathcost_option          = "long"
   interfaces = [{
-    interface_id = "eth1/9"
-    bpdu_filter  = "enable"
-    bpdu_guard   = "enable"
-    cost         = 100
-    guard        = "root"
-    link_type    = "p2p"
-    mode         = "edge"
-    priority     = 200
+    interface_id              = "eth1/9"
+    bpdu_filter               = "enable"
+    bpdu_guard                = "enable"
+    cost                      = 100
+    guard                     = "root"
+    link_type                 = "p2p"
+    mode                      = "edge"
+    priority                  = 200
+    control                   = "bpdu-guard"
+    description               = "My interface description"
+    linecard_issu             = "auto"
+    prestandard_configuration = "enabled"
+    simulate_pvst             = "enabled"
   }]
 }
 ```
@@ -42,8 +57,28 @@ resource "nxos_spanning_tree" "example" {
 
 ### Optional
 
+- `admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
+- `bridge_assurance` (String) Enable spanning-tree bridge assurance on all ports.
+  - Choices: `enabled`, `disabled`
+- `control` (String) The control state.
+  - Choices: `normal`, `stateful-ha`
 - `device` (String) A device name from the provider configuration.
+- `fcoe` (String) Disable spanning tree for fcoe vlan.
+  - Choices: `enabled`, `disabled`
+- `instance_admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
 - `interfaces` (Attributes List) List of Spanning Tree interfaces. (see [below for nested schema](#nestedatt--interfaces))
+- `l2_gateway_stp_domain_id` (Number) Spanning tree L2 Gateway Domain Id.
+  - Range: `0`-`200000000`
+- `linecard_issu` (String) Linecard ISSU type.
+  - Choices: `default`, `disruptive`, `non-disruptive`, `auto`
+- `loopguard` (String) Enable loop guard on all ports.
+  - Choices: `enabled`, `disabled`
+- `mode` (String) Spanning tree mode.
+  - Choices: `mst`, `pvrst`
+- `pathcost_option` (String) Spanning tree pathcost options.
+  - Choices: `auto`, `short`, `long`
 
 ### Read-Only
 
@@ -62,16 +97,25 @@ Optional:
   - Choices: `default`, `enable`, `disable`
 - `bpdu_guard` (String) Guard Mode.
   - Choices: `default`, `enable`, `disable`
+- `control` (String) Interface controls.
+  - Choices: `unspecified`, `bpdu-guard`, `bpdu-filter`
 - `cost` (Number) Port Path Cost.
   - Range: `0`-`200000000`
+- `description` (String) Description.
 - `guard` (String) Guard Mode.
   - Choices: `default`, `root`, `loop`, `none`
+- `linecard_issu` (String) Port lc issu.
+  - Choices: `default`, `disruptive`, `non-disruptive`, `auto`
 - `link_type` (String) Link Type.
   - Choices: `auto`, `p2p`, `shared`
 - `mode` (String) Port mode.
   - Choices: `default`, `edge`, `network`, `normal`, `trunk`
+- `prestandard_configuration` (String) Port mst prestd.
+  - Choices: `enabled`, `disabled`
 - `priority` (Number) Port Priority.
   - Range: `0`-`224`
+- `simulate_pvst` (String) Port simulate pvst.
+  - Choices: `default`, `enabled`, `disabled`
 
 ## Import
 

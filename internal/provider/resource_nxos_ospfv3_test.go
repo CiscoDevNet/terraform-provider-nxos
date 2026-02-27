@@ -38,22 +38,31 @@ func TestAccNxosOSPFv3(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.name", "OSPFv3"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.flush_routes", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.isolate", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.name", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.bandwidth_reference", "400000"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.bandwidth_reference_unit", "mbps"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.router_id", "34.56.78.90"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.bfd_control", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.log_adjacency_changes", "brief"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.discard_route_external", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.discard_route_internal", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.name_lookup", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.passive_interface_default", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.areas.0.area_id", "0.0.0.10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.areas.0.redistribute", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.areas.0.nssa_translator_role", "always"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.areas.0.summary", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.areas.0.suppress_forward_address", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.areas.0.type", "regular"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.address_families.0.address_family_type", "ipv6-ucast"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.address_families.0.administrative_distance", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.address_families.0.default_metric", "1024"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.address_families.0.default_route_nssa_pbit_clear", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.0.vrfs.0.address_families.0.max_ecmp_cost", "16"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.interface_id", "eth1/4"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.advertise_secondaries", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.area", "0.0.0.10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.bfd_control", "disabled"))
@@ -63,6 +72,12 @@ func TestAccNxosOSPFv3(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.network_type", "p2p"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.passive", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.priority", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.instance_name", "OSPFv3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.instance_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.mtu_ignore", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.retransmit_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.0.transmit_delay", "5"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -154,6 +169,8 @@ func testAccNxosOSPFv3Config_all() string {
 	config += `	instances = [{` + "\n"
 	config += `		name = "OSPFv3"` + "\n"
 	config += `		admin_state = "enabled"` + "\n"
+	config += `		flush_routes = false` + "\n"
+	config += `		isolate = false` + "\n"
 	config += `		vrfs = [{` + "\n"
 	config += `			name = "VRF1"` + "\n"
 	config += `			admin_state = "enabled"` + "\n"
@@ -161,9 +178,15 @@ func testAccNxosOSPFv3Config_all() string {
 	config += `			bandwidth_reference_unit = "mbps"` + "\n"
 	config += `			router_id = "34.56.78.90"` + "\n"
 	config += `			bfd_control = false` + "\n"
+	config += `			log_adjacency_changes = "brief"` + "\n"
+	config += `			discard_route_external = false` + "\n"
+	config += `			discard_route_internal = false` + "\n"
+	config += `			name_lookup = true` + "\n"
+	config += `			passive_interface_default = false` + "\n"
 	config += `			areas = [{` + "\n"
 	config += `				area_id = "0.0.0.10"` + "\n"
 	config += `				redistribute = false` + "\n"
+	config += `				nssa_translator_role = "always"` + "\n"
 	config += `				summary = false` + "\n"
 	config += `				suppress_forward_address = false` + "\n"
 	config += `				type = "regular"` + "\n"
@@ -172,12 +195,13 @@ func testAccNxosOSPFv3Config_all() string {
 	config += `				address_family_type = "ipv6-ucast"` + "\n"
 	config += `				administrative_distance = "10"` + "\n"
 	config += `				default_metric = "1024"` + "\n"
+	config += `				default_route_nssa_pbit_clear = true` + "\n"
 	config += `				max_ecmp_cost = 16` + "\n"
 	config += `			}]` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
 	config += `	interfaces = [{` + "\n"
-	config += `		interface_id = "eth1/10"` + "\n"
+	config += `		interface_id = "eth1/4"` + "\n"
 	config += `		advertise_secondaries = false` + "\n"
 	config += `		area = "0.0.0.10"` + "\n"
 	config += `		bfd_control = "disabled"` + "\n"
@@ -187,6 +211,12 @@ func testAccNxosOSPFv3Config_all() string {
 	config += `		network_type = "p2p"` + "\n"
 	config += `		passive = "enabled"` + "\n"
 	config += `		priority = 10` + "\n"
+	config += `		admin_state = "enabled"` + "\n"
+	config += `		instance_name = "OSPFv3"` + "\n"
+	config += `		instance_id = 1` + "\n"
+	config += `		mtu_ignore = true` + "\n"
+	config += `		retransmit_interval = 10` + "\n"
+	config += `		transmit_delay = 5` + "\n"
 	config += `	}]` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
 	config += `}` + "\n"

@@ -33,32 +33,41 @@ func TestAccDataSourceNxosOSPFv3(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospfv3.test", "instances.*", map[string]string{
-		"name":        "OSPFv3",
-		"admin_state": "enabled",
+		"name":         "OSPFv3",
+		"admin_state":  "enabled",
+		"flush_routes": "false",
+		"isolate":      "false",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospfv3.test", "instances.*.vrfs.*", map[string]string{
-		"name":                     "VRF1",
-		"admin_state":              "enabled",
-		"bandwidth_reference":      "400000",
-		"bandwidth_reference_unit": "mbps",
-		"router_id":                "34.56.78.90",
-		"bfd_control":              "false",
+		"name":                      "VRF1",
+		"admin_state":               "enabled",
+		"bandwidth_reference":       "400000",
+		"bandwidth_reference_unit":  "mbps",
+		"router_id":                 "34.56.78.90",
+		"bfd_control":               "false",
+		"log_adjacency_changes":     "brief",
+		"discard_route_external":    "false",
+		"discard_route_internal":    "false",
+		"name_lookup":               "true",
+		"passive_interface_default": "false",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospfv3.test", "instances.*.vrfs.*.areas.*", map[string]string{
 		"area_id":                  "0.0.0.10",
 		"redistribute":             "false",
+		"nssa_translator_role":     "always",
 		"summary":                  "false",
 		"suppress_forward_address": "false",
 		"type":                     "regular",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospfv3.test", "instances.*.vrfs.*.address_families.*", map[string]string{
-		"address_family_type":     "ipv6-ucast",
-		"administrative_distance": "10",
-		"default_metric":          "1024",
-		"max_ecmp_cost":           "16",
+		"address_family_type":           "ipv6-ucast",
+		"administrative_distance":       "10",
+		"default_metric":                "1024",
+		"default_route_nssa_pbit_clear": "true",
+		"max_ecmp_cost":                 "16",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_ospfv3.test", "interfaces.*", map[string]string{
-		"interface_id":          "eth1/10",
+		"interface_id":          "eth1/4",
 		"advertise_secondaries": "false",
 		"area":                  "0.0.0.10",
 		"bfd_control":           "disabled",
@@ -68,6 +77,12 @@ func TestAccDataSourceNxosOSPFv3(t *testing.T) {
 		"network_type":          "p2p",
 		"passive":               "enabled",
 		"priority":              "10",
+		"admin_state":           "enabled",
+		"instance_name":         "OSPFv3",
+		"instance_id":           "1",
+		"mtu_ignore":            "true",
+		"retransmit_interval":   "10",
+		"transmit_delay":        "5",
 	}))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -124,6 +139,8 @@ func testAccDataSourceNxosOSPFv3Config() string {
 	config += `	instances = [{` + "\n"
 	config += `		name = "OSPFv3"` + "\n"
 	config += `		admin_state = "enabled"` + "\n"
+	config += `		flush_routes = false` + "\n"
+	config += `		isolate = false` + "\n"
 	config += `		vrfs = [{` + "\n"
 	config += `			name = "VRF1"` + "\n"
 	config += `			admin_state = "enabled"` + "\n"
@@ -131,9 +148,15 @@ func testAccDataSourceNxosOSPFv3Config() string {
 	config += `			bandwidth_reference_unit = "mbps"` + "\n"
 	config += `			router_id = "34.56.78.90"` + "\n"
 	config += `			bfd_control = false` + "\n"
+	config += `			log_adjacency_changes = "brief"` + "\n"
+	config += `			discard_route_external = false` + "\n"
+	config += `			discard_route_internal = false` + "\n"
+	config += `			name_lookup = true` + "\n"
+	config += `			passive_interface_default = false` + "\n"
 	config += `			areas = [{` + "\n"
 	config += `				area_id = "0.0.0.10"` + "\n"
 	config += `				redistribute = false` + "\n"
+	config += `				nssa_translator_role = "always"` + "\n"
 	config += `				summary = false` + "\n"
 	config += `				suppress_forward_address = false` + "\n"
 	config += `				type = "regular"` + "\n"
@@ -142,12 +165,13 @@ func testAccDataSourceNxosOSPFv3Config() string {
 	config += `				address_family_type = "ipv6-ucast"` + "\n"
 	config += `				administrative_distance = "10"` + "\n"
 	config += `				default_metric = "1024"` + "\n"
+	config += `				default_route_nssa_pbit_clear = true` + "\n"
 	config += `				max_ecmp_cost = 16` + "\n"
 	config += `			}]` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
 	config += `	interfaces = [{` + "\n"
-	config += `		interface_id = "eth1/10"` + "\n"
+	config += `		interface_id = "eth1/4"` + "\n"
 	config += `		advertise_secondaries = false` + "\n"
 	config += `		area = "0.0.0.10"` + "\n"
 	config += `		bfd_control = "disabled"` + "\n"
@@ -157,6 +181,12 @@ func testAccDataSourceNxosOSPFv3Config() string {
 	config += `		network_type = "p2p"` + "\n"
 	config += `		passive = "enabled"` + "\n"
 	config += `		priority = 10` + "\n"
+	config += `		admin_state = "enabled"` + "\n"
+	config += `		instance_name = "OSPFv3"` + "\n"
+	config += `		instance_id = 1` + "\n"
+	config += `		mtu_ignore = true` + "\n"
+	config += `		retransmit_interval = 10` + "\n"
+	config += `		transmit_delay = 5` + "\n"
 	config += `	}]` + "\n"
 	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
 	config += `}` + "\n"

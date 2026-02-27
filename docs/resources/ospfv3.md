@@ -29,32 +29,41 @@ This resource can manage the OSPFv3 configuration on NX-OS devices, including OS
 resource "nxos_ospfv3" "example" {
   admin_state = "enabled"
   instances = [{
-    name        = "OSPFv3"
-    admin_state = "enabled"
+    name         = "OSPFv3"
+    admin_state  = "enabled"
+    flush_routes = false
+    isolate      = false
     vrfs = [{
-      name                     = "VRF1"
-      admin_state              = "enabled"
-      bandwidth_reference      = 400000
-      bandwidth_reference_unit = "mbps"
-      router_id                = "34.56.78.90"
-      bfd_control              = false
+      name                      = "VRF1"
+      admin_state               = "enabled"
+      bandwidth_reference       = 400000
+      bandwidth_reference_unit  = "mbps"
+      router_id                 = "34.56.78.90"
+      bfd_control               = false
+      log_adjacency_changes     = "brief"
+      discard_route_external    = false
+      discard_route_internal    = false
+      name_lookup               = true
+      passive_interface_default = false
       areas = [{
         area_id                  = "0.0.0.10"
         redistribute             = false
+        nssa_translator_role     = "always"
         summary                  = false
         suppress_forward_address = false
         type                     = "regular"
       }]
       address_families = [{
-        address_family_type     = "ipv6-ucast"
-        administrative_distance = "10"
-        default_metric          = "1024"
-        max_ecmp_cost           = 16
+        address_family_type           = "ipv6-ucast"
+        administrative_distance       = "10"
+        default_metric                = "1024"
+        default_route_nssa_pbit_clear = true
+        max_ecmp_cost                 = 16
       }]
     }]
   }]
   interfaces = [{
-    interface_id          = "eth1/10"
+    interface_id          = "eth1/4"
     advertise_secondaries = false
     area                  = "0.0.0.10"
     bfd_control           = "disabled"
@@ -64,6 +73,12 @@ resource "nxos_ospfv3" "example" {
     network_type          = "p2p"
     passive               = "enabled"
     priority              = 10
+    admin_state           = "enabled"
+    instance_name         = "OSPFv3"
+    instance_id           = 1
+    mtu_ignore            = true
+    retransmit_interval   = 10
+    transmit_delay        = 5
   }]
 }
 ```
@@ -94,6 +109,8 @@ Optional:
 
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
+- `flush_routes` (Boolean) Flush routes on non-graceful controlled restart.
+- `isolate` (Boolean) Isolate this router from OSPFv3 perspective.
 - `vrfs` (Attributes List) List of OSPFv3 VRFs. (see [below for nested schema](#nestedatt--instances--vrfs))
 
 <a id="nestedatt--instances--vrfs"></a>
@@ -114,6 +131,12 @@ Optional:
 - `bandwidth_reference_unit` (String) Bandwidth reference unit (Mbps or Gbps).
   - Choices: `mbps`, `gbps`
 - `bfd_control` (Boolean) Holds the controls for bfd.
+- `discard_route_external` (Boolean) Holds the controls for discard-route external.
+- `discard_route_internal` (Boolean) Holds the controls for discard-route internal.
+- `log_adjacency_changes` (String) Adjacency change logging level.
+  - Choices: `none`, `brief`, `detail`
+- `name_lookup` (Boolean) Enable Name Lookup for OSPFv3 Neighbors.
+- `passive_interface_default` (Boolean) Suppress routing updates on the interface.
 - `router_id` (String) Router identifier for this VRF.
 
 <a id="nestedatt--instances--vrfs--address_families"></a>
@@ -128,6 +151,7 @@ Optional:
 
 - `administrative_distance` (String) Adminitrative distance. Value must be an integer range [1,255] or keyword: unspecified
 - `default_metric` (String) Default metric for redistributed routes. Value must be an integer range [0,16777214] or keyword: unspecified
+- `default_route_nssa_pbit_clear` (Boolean) Override RFC 3101 behaviour and add default route on ABR even if P-bit is clear in received type-7 default route LSA.
 - `max_ecmp_cost` (Number) Maximum Equal Cost Multi Path(ECMP).
   - Range: `1`-`64`
 
@@ -141,6 +165,8 @@ Required:
 
 Optional:
 
+- `nssa_translator_role` (String) Not-so-stubby area(NSSA) translator role.
+  - Choices: `always`, `candidate`, `never`
 - `redistribute` (Boolean) Send redistributed LSAs into NSSA area.
 - `summary` (Boolean) Originate summary LSA into other areas.
 - `suppress_forward_address` (Boolean) Supress forwarding address in translated LSA.
@@ -159,6 +185,8 @@ Required:
 
 Optional:
 
+- `admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
 - `advertise_secondaries` (Boolean) Advertise secondary IPv6 addresses.
 - `area` (String) Area associated with interface.
 - `bfd_control` (String) Bidirectional Forwarding Detection (BFD) control.
@@ -169,12 +197,20 @@ Optional:
   - Range: `0`-`65535`
 - `hello_interval` (Number) Interval between hello packets that OSPFv3 sends on the interface.
   - Range: `1`-`65535`
+- `instance_id` (Number) OSPFv3 instance identifier under interface.
+  - Range: `0`-`255`
+- `instance_name` (String) OSPFv3 instance name used with area command.
+- `mtu_ignore` (Boolean) Disable OSPF MTU mismatch detection.
 - `network_type` (String) Network Type, can be Point-to-point or Broadcast.
   - Choices: `none`, `p2p`, `bcast`
 - `passive` (String) Suppress routing updates on the interface.
   - Choices: `none`, `enabled`, `disabled`
 - `priority` (Number) Router priority, used in determining the designated router on this network.
   - Range: `0`-`255`
+- `retransmit_interval` (Number) Retransmit interval, the time between LSA retransmissions.
+  - Range: `1`-`65535`
+- `transmit_delay` (Number) Transmit delay, estimated time needed to send an LSA update packet.
+  - Range: `1`-`450`
 
 ## Import
 

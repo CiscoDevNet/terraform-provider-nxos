@@ -29,7 +29,13 @@ This resource can manage a VRF on NX-OS devices, including route distinguisher, 
 resource "nxos_vrf" "example" {
   name                = "VRF1"
   description         = "My VRF1 Description"
+  admin_state         = "admin-up"
+  controller_id       = 1
   encap               = "vxlan-103901"
+  l3vni               = false
+  oui                 = "000000"
+  vpn_id              = "100:200"
+  routing_encap       = "unknown"
   route_distinguisher = "rd:unknown:0:0"
   address_families = [{
     address_family = "ipv4-ucast"
@@ -56,10 +62,18 @@ resource "nxos_vrf" "example" {
 ### Optional
 
 - `address_families` (Attributes List) List of VRF address families. (see [below for nested schema](#nestedatt--address_families))
+- `admin_state` (String) VRF Admin State.
+  - Choices: `shutdown`, `admin-up`
+- `controller_id` (Number) Controller ID.
+  - Range: `0`-`16`
 - `description` (String) Description.
 - `device` (String) A device name from the provider configuration.
 - `encap` (String) Encap for this Context. Supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.
+- `l3vni` (Boolean) L3 VNI Interface Enable.
+- `oui` (String) VRF OUI.
 - `route_distinguisher` (String) Route Distinguisher. Value in NX-OS DME format.
+- `routing_encap` (String) Encapsulation of MPLS.
+- `vpn_id` (String) VRF VPN ID.
 
 ### Read-Only
 

@@ -26,6 +26,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -41,7 +42,13 @@ type VRF struct {
 	Dn                 types.String         `tfsdk:"id"`
 	Name               types.String         `tfsdk:"name"`
 	Description        types.String         `tfsdk:"description"`
+	AdminState         types.String         `tfsdk:"admin_state"`
+	ControllerId       types.Int64          `tfsdk:"controller_id"`
 	Encap              types.String         `tfsdk:"encap"`
+	L3vni              types.Bool           `tfsdk:"l3vni"`
+	Oui                types.String         `tfsdk:"oui"`
+	VpnId              types.String         `tfsdk:"vpn_id"`
+	RoutingEncap       types.String         `tfsdk:"routing_encap"`
 	RouteDistinguisher types.String         `tfsdk:"route_distinguisher"`
 	AddressFamilies    []VRFAddressFamilies `tfsdk:"address_families"`
 }
@@ -129,8 +136,23 @@ func (data VRF) toBody() nxos.Body {
 	if (!data.Description.IsUnknown() && !data.Description.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"descr", data.Description.ValueString())
 	}
+	if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminState", data.AdminState.ValueString())
+	}
+	if (!data.ControllerId.IsUnknown() && !data.ControllerId.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ctrlrId", strconv.FormatInt(data.ControllerId.ValueInt64(), 10))
+	}
 	if (!data.Encap.IsUnknown() && !data.Encap.IsNull()) || false {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"encap", data.Encap.ValueString())
+	}
+	if (!data.L3vni.IsUnknown() && !data.L3vni.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"l3vni", strconv.FormatBool(data.L3vni.ValueBool()))
+	}
+	if (!data.Oui.IsUnknown() && !data.Oui.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"oui", data.Oui.ValueString())
+	}
+	if (!data.VpnId.IsUnknown() && !data.VpnId.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"vpnId", data.VpnId.ValueString())
 	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
@@ -139,6 +161,9 @@ func (data VRF) toBody() nxos.Body {
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".rtctrlDom"
 		attrs = "{}"
 		attrs, _ = sjson.Set(attrs, "name", data.Name.ValueString())
+		if (!data.RoutingEncap.IsUnknown() && !data.RoutingEncap.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "encap", data.RoutingEncap.ValueString())
+		}
 		if (!data.RouteDistinguisher.IsUnknown() && !data.RouteDistinguisher.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "rd", data.RouteDistinguisher.ValueString())
 		}
@@ -196,7 +221,12 @@ func (data VRF) toBody() nxos.Body {
 func (data *VRF) fromBody(res gjson.Result) {
 	data.Name = types.StringValue(res.Get(data.getClassName() + ".attributes.name").String())
 	data.Description = types.StringValue(res.Get(data.getClassName() + ".attributes.descr").String())
+	data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminState").String())
+	data.ControllerId = types.Int64Value(res.Get(data.getClassName() + ".attributes.ctrlrId").Int())
 	data.Encap = types.StringValue(res.Get(data.getClassName() + ".attributes.encap").String())
+	data.L3vni = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.l3vni").String()))
+	data.Oui = types.StringValue(res.Get(data.getClassName() + ".attributes.oui").String())
+	data.VpnId = types.StringValue(res.Get(data.getClassName() + ".attributes.vpnId").String())
 	{
 		var rrtctrlDom gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -209,6 +239,7 @@ func (data *VRF) fromBody(res gjson.Result) {
 				return true
 			},
 		)
+		data.RoutingEncap = types.StringValue(rrtctrlDom.Get("rtctrlDom.attributes.encap").String())
 		data.RouteDistinguisher = types.StringValue(rrtctrlDom.Get("rtctrlDom.attributes.rd").String())
 		rrtctrlDom.Get("rtctrlDom.children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -288,10 +319,35 @@ func (data *VRF) updateFromBody(res gjson.Result) {
 	} else {
 		data.Description = types.StringNull()
 	}
+	if !data.AdminState.IsNull() {
+		data.AdminState = types.StringValue(res.Get(data.getClassName() + ".attributes.adminState").String())
+	} else {
+		data.AdminState = types.StringNull()
+	}
+	if !data.ControllerId.IsNull() {
+		data.ControllerId = types.Int64Value(res.Get(data.getClassName() + ".attributes.ctrlrId").Int())
+	} else {
+		data.ControllerId = types.Int64Null()
+	}
 	if !data.Encap.IsNull() {
 		data.Encap = types.StringValue(res.Get(data.getClassName() + ".attributes.encap").String())
 	} else {
 		data.Encap = types.StringNull()
+	}
+	if !data.L3vni.IsNull() {
+		data.L3vni = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.l3vni").String()))
+	} else {
+		data.L3vni = types.BoolNull()
+	}
+	if !data.Oui.IsNull() {
+		data.Oui = types.StringValue(res.Get(data.getClassName() + ".attributes.oui").String())
+	} else {
+		data.Oui = types.StringNull()
+	}
+	if !data.VpnId.IsNull() {
+		data.VpnId = types.StringValue(res.Get(data.getClassName() + ".attributes.vpnId").String())
+	} else {
+		data.VpnId = types.StringNull()
 	}
 	var rrtctrlDom gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
@@ -304,6 +360,11 @@ func (data *VRF) updateFromBody(res gjson.Result) {
 			return true
 		},
 	)
+	if !data.RoutingEncap.IsNull() {
+		data.RoutingEncap = types.StringValue(rrtctrlDom.Get("rtctrlDom.attributes.encap").String())
+	} else {
+		data.RoutingEncap = types.StringNull()
+	}
 	if !data.RouteDistinguisher.IsNull() {
 		data.RouteDistinguisher = types.StringValue(rrtctrlDom.Get("rtctrlDom.attributes.rd").String())
 	} else {

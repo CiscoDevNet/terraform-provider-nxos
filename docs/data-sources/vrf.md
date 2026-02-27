@@ -45,10 +45,16 @@ data "nxos_vrf" "example" {
 ### Read-Only
 
 - `address_families` (Attributes List) List of VRF address families. (see [below for nested schema](#nestedatt--address_families))
+- `admin_state` (String) VRF Admin State.
+- `controller_id` (Number) Controller ID.
 - `description` (String) Description.
 - `encap` (String) Encap for this Context. Supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.
 - `id` (String) The distinguished name of the object.
+- `l3vni` (Boolean) L3 VNI Interface Enable.
+- `oui` (String) VRF OUI.
 - `route_distinguisher` (String) Route Distinguisher. Value in NX-OS DME format.
+- `routing_encap` (String) Encapsulation of MPLS.
+- `vpn_id` (String) VRF VPN ID.
 
 <a id="nestedatt--address_families"></a>
 ### Nested Schema for `address_families`

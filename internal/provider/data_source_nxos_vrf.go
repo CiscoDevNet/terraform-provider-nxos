@@ -76,8 +76,32 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "Description.",
 				Computed:            true,
 			},
+			"admin_state": schema.StringAttribute{
+				MarkdownDescription: "VRF Admin State.",
+				Computed:            true,
+			},
+			"controller_id": schema.Int64Attribute{
+				MarkdownDescription: "Controller ID.",
+				Computed:            true,
+			},
 			"encap": schema.StringAttribute{
 				MarkdownDescription: "Encap for this Context. Supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.",
+				Computed:            true,
+			},
+			"l3vni": schema.BoolAttribute{
+				MarkdownDescription: "L3 VNI Interface Enable.",
+				Computed:            true,
+			},
+			"oui": schema.StringAttribute{
+				MarkdownDescription: "VRF OUI.",
+				Computed:            true,
+			},
+			"vpn_id": schema.StringAttribute{
+				MarkdownDescription: "VRF VPN ID.",
+				Computed:            true,
+			},
+			"routing_encap": schema.StringAttribute{
+				MarkdownDescription: "Encapsulation of MPLS.",
 				Computed:            true,
 			},
 			"route_distinguisher": schema.StringAttribute{

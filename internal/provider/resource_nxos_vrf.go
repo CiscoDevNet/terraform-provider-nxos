@@ -26,6 +26,7 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -87,8 +88,38 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
 				Optional:            true,
 			},
+			"admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("VRF Admin State.").AddStringEnumDescription("shutdown", "admin-up").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("shutdown", "admin-up"),
+				},
+			},
+			"controller_id": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Controller ID.").AddIntegerRangeDescription(0, 16).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 16),
+				},
+			},
 			"encap": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Encap for this Context. Supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.").String,
+				Optional:            true,
+			},
+			"l3vni": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("L3 VNI Interface Enable.").String,
+				Optional:            true,
+			},
+			"oui": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("VRF OUI.").String,
+				Optional:            true,
+			},
+			"vpn_id": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("VRF VPN ID.").String,
+				Optional:            true,
+			},
+			"routing_encap": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Encapsulation of MPLS.").String,
 				Optional:            true,
 			},
 			"route_distinguisher": schema.StringAttribute{

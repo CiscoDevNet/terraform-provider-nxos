@@ -26,6 +26,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -45,7 +46,13 @@ type VRFs struct {
 type VRFsItems struct {
 	Name               types.String          `tfsdk:"name"`
 	Description        types.String          `tfsdk:"description"`
+	AdminState         types.String          `tfsdk:"admin_state"`
+	ControllerId       types.Int64           `tfsdk:"controller_id"`
 	Encap              types.String          `tfsdk:"encap"`
+	L3vni              types.Bool            `tfsdk:"l3vni"`
+	Oui                types.String          `tfsdk:"oui"`
+	VpnId              types.String          `tfsdk:"vpn_id"`
+	RoutingEncap       types.String          `tfsdk:"routing_encap"`
 	RouteDistinguisher types.String          `tfsdk:"route_distinguisher"`
 	AddressFamilies    []VRFsAddressFamilies `tfsdk:"address_families"`
 }
@@ -131,8 +138,23 @@ func (data VRFs) toBody() nxos.Body {
 		if (!item.Description.IsUnknown() && !item.Description.IsNull()) || false {
 			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"descr", item.Description.ValueString())
 		}
+		if (!item.AdminState.IsUnknown() && !item.AdminState.IsNull()) || false {
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"adminState", item.AdminState.ValueString())
+		}
+		if (!item.ControllerId.IsUnknown() && !item.ControllerId.IsNull()) || false {
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"ctrlrId", strconv.FormatInt(item.ControllerId.ValueInt64(), 10))
+		}
 		if (!item.Encap.IsUnknown() && !item.Encap.IsNull()) || false {
 			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"encap", item.Encap.ValueString())
+		}
+		if (!item.L3vni.IsUnknown() && !item.L3vni.IsNull()) || false {
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"l3vni", strconv.FormatBool(item.L3vni.ValueBool()))
+		}
+		if (!item.Oui.IsUnknown() && !item.Oui.IsNull()) || false {
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"oui", item.Oui.ValueString())
+		}
+		if (!item.VpnId.IsUnknown() && !item.VpnId.IsNull()) || false {
+			itemBody, _ = sjson.Set(itemBody, data.getItemClassName()+".attributes."+"vpnId", item.VpnId.ValueString())
 		}
 		var attrs string
 		itemChildrenPath := data.getItemClassName() + ".children"
@@ -141,6 +163,9 @@ func (data VRFs) toBody() nxos.Body {
 			childBodyPath := itemChildrenPath + "." + strconv.Itoa(childIndex) + ".rtctrlDom"
 			attrs = "{}"
 			attrs, _ = sjson.Set(attrs, "name", item.Name.ValueString())
+			if (!item.RoutingEncap.IsUnknown() && !item.RoutingEncap.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "encap", item.RoutingEncap.ValueString())
+			}
 			if (!item.RouteDistinguisher.IsUnknown() && !item.RouteDistinguisher.IsNull()) || false {
 				attrs, _ = sjson.Set(attrs, "rd", item.RouteDistinguisher.ValueString())
 			}
@@ -242,7 +267,12 @@ func (data *VRFs) fromBody(res gjson.Result) {
 				item := VRFsItems{}
 				item.Name = types.StringValue(value.Get("attributes.name").String())
 				item.Description = types.StringValue(value.Get("attributes.descr").String())
+				item.AdminState = types.StringValue(value.Get("attributes.adminState").String())
+				item.ControllerId = types.Int64Value(value.Get("attributes.ctrlrId").Int())
 				item.Encap = types.StringValue(value.Get("attributes.encap").String())
+				item.L3vni = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.l3vni").String()))
+				item.Oui = types.StringValue(value.Get("attributes.oui").String())
+				item.VpnId = types.StringValue(value.Get("attributes.vpnId").String())
 				{
 					var rrtctrlDom gjson.Result
 					value.Get("children").ForEach(
@@ -255,6 +285,7 @@ func (data *VRFs) fromBody(res gjson.Result) {
 							return true
 						},
 					)
+					item.RoutingEncap = types.StringValue(rrtctrlDom.Get("rtctrlDom.attributes.encap").String())
 					item.RouteDistinguisher = types.StringValue(rrtctrlDom.Get("rtctrlDom.attributes.rd").String())
 					rrtctrlDom.Get("rtctrlDom").Get("children").ForEach(
 						func(_, nestedV gjson.Result) bool {
@@ -349,10 +380,35 @@ func (data *VRFs) updateFromBody(res gjson.Result) {
 					} else {
 						data.Items[i].Description = types.StringNull()
 					}
+					if !data.Items[i].AdminState.IsNull() {
+						data.Items[i].AdminState = types.StringValue(value.Get("attributes.adminState").String())
+					} else {
+						data.Items[i].AdminState = types.StringNull()
+					}
+					if !data.Items[i].ControllerId.IsNull() {
+						data.Items[i].ControllerId = types.Int64Value(value.Get("attributes.ctrlrId").Int())
+					} else {
+						data.Items[i].ControllerId = types.Int64Null()
+					}
 					if !data.Items[i].Encap.IsNull() {
 						data.Items[i].Encap = types.StringValue(value.Get("attributes.encap").String())
 					} else {
 						data.Items[i].Encap = types.StringNull()
+					}
+					if !data.Items[i].L3vni.IsNull() {
+						data.Items[i].L3vni = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.l3vni").String()))
+					} else {
+						data.Items[i].L3vni = types.BoolNull()
+					}
+					if !data.Items[i].Oui.IsNull() {
+						data.Items[i].Oui = types.StringValue(value.Get("attributes.oui").String())
+					} else {
+						data.Items[i].Oui = types.StringNull()
+					}
+					if !data.Items[i].VpnId.IsNull() {
+						data.Items[i].VpnId = types.StringValue(value.Get("attributes.vpnId").String())
+					} else {
+						data.Items[i].VpnId = types.StringNull()
 					}
 					{
 						var rrtctrlDom gjson.Result
@@ -366,6 +422,11 @@ func (data *VRFs) updateFromBody(res gjson.Result) {
 								return true
 							},
 						)
+						if !data.Items[i].RoutingEncap.IsNull() {
+							data.Items[i].RoutingEncap = types.StringValue(rrtctrlDom.Get("rtctrlDom.attributes.encap").String())
+						} else {
+							data.Items[i].RoutingEncap = types.StringNull()
+						}
 						if !data.Items[i].RouteDistinguisher.IsNull() {
 							data.Items[i].RouteDistinguisher = types.StringValue(rrtctrlDom.Get("rtctrlDom.attributes.rd").String())
 						} else {

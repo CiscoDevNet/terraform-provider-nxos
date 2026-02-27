@@ -1,5 +1,7 @@
 resource "nxos_vpc" "example" {
+  entity_admin_state                           = "enabled"
   admin_state                                  = "enabled"
+  control                                      = "stateful-ha"
   domain_admin_state                           = "enabled"
   domain_id                                    = 100
   auto_recovery                                = "enabled"
@@ -21,6 +23,10 @@ resource "nxos_vpc" "example" {
   system_priority                              = 100
   track                                        = 10
   virtual_ip                                   = "1.1.1.1"
+  delay_peer_link_bringup                      = 60
+  exclude_svi                                  = "1-2"
+  mac_bpdu_source_version_2                    = false
+  peer_gateway_exclude_vlan                    = "1-2"
   keepalive_destination_ip                     = "192.168.1.1"
   keepalive_flush_timeout                      = 3
   keepalive_interval                           = 1000
@@ -35,6 +41,8 @@ resource "nxos_vpc" "example" {
   keepalive_udp_port                           = 1234
   keepalive_vrf                                = "management"
   peerlink_port_channel_id                     = "po1"
+  peerlink_admin_state                         = "enabled"
+  peerlink_description                         = "My description"
   interfaces = [{
     vpc_interface_id          = 1
     port_channel_interface_dn = "sys/intf/aggr-[po1]"

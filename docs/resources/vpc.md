@@ -28,7 +28,9 @@ This resource can manage the vPC (Virtual Port Channel) configuration on NX-OS d
 
 ```terraform
 resource "nxos_vpc" "example" {
+  entity_admin_state                           = "enabled"
   admin_state                                  = "enabled"
+  control                                      = "stateful-ha"
   domain_admin_state                           = "enabled"
   domain_id                                    = 100
   auto_recovery                                = "enabled"
@@ -50,6 +52,10 @@ resource "nxos_vpc" "example" {
   system_priority                              = 100
   track                                        = 10
   virtual_ip                                   = "1.1.1.1"
+  delay_peer_link_bringup                      = 60
+  exclude_svi                                  = "1-2"
+  mac_bpdu_source_version_2                    = false
+  peer_gateway_exclude_vlan                    = "1-2"
   keepalive_destination_ip                     = "192.168.1.1"
   keepalive_flush_timeout                      = 3
   keepalive_interval                           = 1000
@@ -64,6 +70,8 @@ resource "nxos_vpc" "example" {
   keepalive_udp_port                           = 1234
   keepalive_vrf                                = "management"
   peerlink_port_channel_id                     = "po1"
+  peerlink_admin_state                         = "enabled"
+  peerlink_description                         = "My description"
   interfaces = [{
     vpc_interface_id          = 1
     port_channel_interface_dn = "sys/intf/aggr-[po1]"
@@ -90,6 +98,10 @@ resource "nxos_vpc" "example" {
   - Choices: `enabled`, `disabled`
 - `auto_recovery_interval` (Number) Auto Recovery interval.
   - Range: `60`-`3600`
+- `control` (String) The control state.
+  - Choices: `stateful-ha`
+- `delay_peer_link_bringup` (Number) Peer link delay timer.
+  - Range: `0`-`7200`
 - `delay_restore_orphan_port` (Number) Delay restore for orphan ports.
   - Range: `0`-`300`
 - `delay_restore_svi` (Number) Delay restore for SVI.
@@ -101,6 +113,9 @@ resource "nxos_vpc" "example" {
   - Choices: `enabled`, `disabled`
 - `dscp` (Number) DSCP.
   - Range: `0`-`63`
+- `entity_admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
+- `exclude_svi` (String) SVI List excluded from suspension when dual-active.
 - `fast_convergence` (String) Fast Convergence.
   - Choices: `enabled`, `disabled`
 - `graceful_consistency_check` (String) Graceful Type-1 Consistency Check.
@@ -133,11 +148,16 @@ resource "nxos_vpc" "example" {
   - Choices: `enabled`, `disabled`
 - `l3_peer_router_syslog_interval` (Number) L3 Peer Router Syslog Interval.
   - Range: `1`-`3600`
+- `mac_bpdu_source_version_2` (Boolean) Version 2 bpdu source mac-address.
 - `peer_gateway` (String) Peer Gateway.
   - Choices: `enabled`, `disabled`
+- `peer_gateway_exclude_vlan` (String) Exclude VLAN List.
 - `peer_ip` (String) vpc peer IP address.
 - `peer_switch` (String) vPC pair switches.
   - Choices: `enabled`, `disabled`
+- `peerlink_admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
+- `peerlink_description` (String) Description.
 - `role_priority` (Number) role priority.
   - Range: `1`-`65535`
 - `sys_mac` (String) system mac.

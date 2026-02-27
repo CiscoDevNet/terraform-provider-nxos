@@ -43,12 +43,16 @@ data "nxos_vpc" "example" {
 - `admin_state` (String) The administrative state of the object or policy.
 - `auto_recovery` (String) Auto Recovery.
 - `auto_recovery_interval` (Number) Auto Recovery interval.
+- `control` (String) The control state.
+- `delay_peer_link_bringup` (Number) Peer link delay timer.
 - `delay_restore_orphan_port` (Number) Delay restore for orphan ports.
 - `delay_restore_svi` (Number) Delay restore for SVI.
 - `delay_restore_vpc` (Number) Delay restore for vPC links.
 - `domain_admin_state` (String) vPC suspend locally.
 - `domain_id` (Number) Domain id.
 - `dscp` (Number) DSCP.
+- `entity_admin_state` (String) The administrative state of the object or policy.
+- `exclude_svi` (String) SVI List excluded from suspension when dual-active.
 - `fast_convergence` (String) Fast Convergence.
 - `graceful_consistency_check` (String) Graceful Type-1 Consistency Check.
 - `id` (String) The distinguished name of the object.
@@ -69,9 +73,13 @@ data "nxos_vpc" "example" {
 - `l3_peer_router` (String) L3 Peer Router.
 - `l3_peer_router_syslog` (String) L3 Peer Router Syslog.
 - `l3_peer_router_syslog_interval` (Number) L3 Peer Router Syslog Interval.
+- `mac_bpdu_source_version_2` (Boolean) Version 2 bpdu source mac-address.
 - `peer_gateway` (String) Peer Gateway.
+- `peer_gateway_exclude_vlan` (String) Exclude VLAN List.
 - `peer_ip` (String) vpc peer IP address.
 - `peer_switch` (String) vPC pair switches.
+- `peerlink_admin_state` (String) The administrative state of the object or policy.
+- `peerlink_description` (String) Description.
 - `peerlink_port_channel_id` (String) An identifier.
 - `role_priority` (Number) role priority.
 - `sys_mac` (String) system mac.

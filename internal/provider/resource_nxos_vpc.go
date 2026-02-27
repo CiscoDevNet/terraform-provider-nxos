@@ -78,12 +78,23 @@ func (r *VPCResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"entity_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
 			"admin_state": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("enabled", "disabled"),
 				},
+			},
+			"control": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("stateful-ha").String,
+				Optional:            true,
 			},
 			"domain_admin_state": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("vPC suspend locally.").AddStringEnumDescription("enabled", "disabled").String,
@@ -223,6 +234,25 @@ func (r *VPCResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				MarkdownDescription: helpers.NewAttributeDescription("vpc virtual IP address (vIP).").String,
 				Optional:            true,
 			},
+			"delay_peer_link_bringup": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Peer link delay timer.").AddIntegerRangeDescription(0, 7200).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7200),
+				},
+			},
+			"exclude_svi": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SVI List excluded from suspension when dual-active.").String,
+				Optional:            true,
+			},
+			"mac_bpdu_source_version_2": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Version 2 bpdu source mac-address.").String,
+				Optional:            true,
+			},
+			"peer_gateway_exclude_vlan": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Exclude VLAN List.").String,
+				Optional:            true,
+			},
 			"keepalive_destination_ip": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("destination address.").String,
 				Required:            true,
@@ -308,6 +338,17 @@ func (r *VPCResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 			"peerlink_port_channel_id": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("An identifier.").String,
 				Required:            true,
+			},
+			"peerlink_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"peerlink_description": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
+				Optional:            true,
 			},
 			"interfaces": schema.ListNestedAttribute{
 				MarkdownDescription: "List of vPC interfaces.",

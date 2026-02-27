@@ -68,8 +68,16 @@ func (d *VPCDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
+			"entity_admin_state": schema.StringAttribute{
+				MarkdownDescription: "The administrative state of the object or policy.",
+				Computed:            true,
+			},
 			"admin_state": schema.StringAttribute{
 				MarkdownDescription: "The administrative state of the object or policy.",
+				Computed:            true,
+			},
+			"control": schema.StringAttribute{
+				MarkdownDescription: "The control state.",
 				Computed:            true,
 			},
 			"domain_admin_state": schema.StringAttribute{
@@ -156,6 +164,22 @@ func (d *VPCDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "vpc virtual IP address (vIP).",
 				Computed:            true,
 			},
+			"delay_peer_link_bringup": schema.Int64Attribute{
+				MarkdownDescription: "Peer link delay timer.",
+				Computed:            true,
+			},
+			"exclude_svi": schema.StringAttribute{
+				MarkdownDescription: "SVI List excluded from suspension when dual-active.",
+				Computed:            true,
+			},
+			"mac_bpdu_source_version_2": schema.BoolAttribute{
+				MarkdownDescription: "Version 2 bpdu source mac-address.",
+				Computed:            true,
+			},
+			"peer_gateway_exclude_vlan": schema.StringAttribute{
+				MarkdownDescription: "Exclude VLAN List.",
+				Computed:            true,
+			},
 			"keepalive_destination_ip": schema.StringAttribute{
 				MarkdownDescription: "destination address.",
 				Computed:            true,
@@ -210,6 +234,14 @@ func (d *VPCDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 			},
 			"peerlink_port_channel_id": schema.StringAttribute{
 				MarkdownDescription: "An identifier.",
+				Computed:            true,
+			},
+			"peerlink_admin_state": schema.StringAttribute{
+				MarkdownDescription: "The administrative state of the object or policy.",
+				Computed:            true,
+			},
+			"peerlink_description": schema.StringAttribute{
+				MarkdownDescription: "Description.",
 				Computed:            true,
 			},
 			"interfaces": schema.ListNestedAttribute{

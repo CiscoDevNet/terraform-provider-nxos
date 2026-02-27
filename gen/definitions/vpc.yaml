@@ -6,7 +6,15 @@ ds_description: This data source can read the vPC (Virtual Port Channel) configu
 res_description: This resource can manage the vPC (Virtual Port Channel) configuration on NX-OS devices, including the vPC domain with peer settings, keepalive, role priority, and peer gateway options.
 doc_path: System/vpc:Entity/
 doc_category: Switching
-attributes: []
+attributes:
+  - nxos_name: adminSt
+    tf_name: entity_admin_state
+    type: String
+    description: "The administrative state of the object or policy."
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
 child_classes:
   - class_name: vpcInst
     doc_path: System/vpc:Inst/
@@ -21,6 +29,14 @@ child_classes:
           - enabled
           - disabled
         example: enabled
+      - nxos_name: ctrl
+        tf_name: control
+        type: String
+        description: "The control state."
+        allow_non_enum_values: true
+        enum_values:
+          - stateful-ha
+        example: stateful-ha
     child_classes:
       - class_name: vpcDom
         doc_path: System/vpc:Dom/
@@ -177,6 +193,28 @@ child_classes:
             type: String
             description: "vpc virtual IP address (vIP)."
             example: 1.1.1.1
+          - nxos_name: delayPeerLinkBringup
+            tf_name: delay_peer_link_bringup
+            type: Int64
+            description: "Peer link delay timer."
+            min_int: 0
+            max_int: 7200
+            example: 60
+          - nxos_name: excludeSVI
+            tf_name: exclude_svi
+            type: String
+            description: "SVI List excluded from suspension when dual-active."
+            example: "1-2"
+          - nxos_name: macBpduSrcVer2
+            tf_name: mac_bpdu_source_version_2
+            type: Bool
+            description: "Version 2 bpdu source mac-address."
+            example: "false"
+          - nxos_name: peerGWExcludeVLAN
+            tf_name: peer_gateway_exclude_vlan
+            type: String
+            description: "Exclude VLAN List."
+            example: "1-2"
         child_classes:
           - class_name: vpcKeepalive
             doc_path: System/vpc:Keepalive/
@@ -298,6 +336,19 @@ child_classes:
                     mandatory: true
                     description: "An identifier."
                     example: "po1"
+                  - nxos_name: adminSt
+                    tf_name: peerlink_admin_state
+                    type: String
+                    description: "The administrative state of the object or policy."
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                  - nxos_name: descr
+                    tf_name: peerlink_description
+                    type: String
+                    description: "Description."
+                    example: "My description"
           - class_name: vpcIf
             doc_path: System/vpc:If/
             rn: if-%v

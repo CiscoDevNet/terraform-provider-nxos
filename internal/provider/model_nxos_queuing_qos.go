@@ -26,6 +26,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -41,6 +42,7 @@ type QueuingQoS struct {
 	Dn                     types.String           `tfsdk:"id"`
 	PolicyMaps             []QueuingQoSPolicyMaps `tfsdk:"policy_maps"`
 	SystemOutPolicyMapName types.String           `tfsdk:"system_out_policy_map_name"`
+	PolicyMapStatistics    types.Bool             `tfsdk:"policy_map_statistics"`
 }
 
 type QueuingQoSPolicyMaps struct {
@@ -51,6 +53,8 @@ type QueuingQoSPolicyMaps struct {
 
 type QueuingQoSPolicyMapsMatchClassMaps struct {
 	Name               types.String `tfsdk:"name"`
+	NextClassMap       types.String `tfsdk:"next_class_map"`
+	PreviousClassMap   types.String `tfsdk:"previous_class_map"`
 	Priority           types.Int64  `tfsdk:"priority"`
 	RemainingBandwidth types.Int64  `tfsdk:"remaining_bandwidth"`
 }
@@ -127,6 +131,12 @@ func (data QueuingQoS) toBody() nxos.Body {
 					if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
 						attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
 					}
+					if (!child.NextClassMap.IsUnknown() && !child.NextClassMap.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "nextCMap", child.NextClassMap.ValueString())
+					}
+					if (!child.PreviousClassMap.IsUnknown() && !child.PreviousClassMap.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "prevCMap", child.PreviousClassMap.ValueString())
+					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosMatchCMap.attributes", attrs)
 					{
 						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
@@ -172,6 +182,9 @@ func (data QueuingQoS) toBody() nxos.Body {
 				if (!data.SystemOutPolicyMapName.IsUnknown() && !data.SystemOutPolicyMapName.IsNull()) || false {
 					attrs, _ = sjson.Set(attrs, "name", data.SystemOutPolicyMapName.ValueString())
 				}
+				if (!data.PolicyMapStatistics.IsUnknown() && !data.PolicyMapStatistics.IsNull()) || false {
+					attrs, _ = sjson.Set(attrs, "stats", strconv.FormatBool(data.PolicyMapStatistics.ValueBool()))
+				}
 				if attrs != "{}" || false {
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipqosInst.attributes", attrs)
 				}
@@ -214,6 +227,8 @@ func (data *QueuingQoS) fromBody(res gjson.Result) {
 											if nestedClassname.String() == "ipqosMatchCMap" {
 												var nestedChildipqosMatchCMap QueuingQoSPolicyMapsMatchClassMaps
 												nestedChildipqosMatchCMap.Name = types.StringValue(nestedValue.Get("attributes.name").String())
+												nestedChildipqosMatchCMap.NextClassMap = types.StringValue(nestedValue.Get("attributes.nextCMap").String())
+												nestedChildipqosMatchCMap.PreviousClassMap = types.StringValue(nestedValue.Get("attributes.prevCMap").String())
 												{
 													var ripqosPriority gjson.Result
 													nestedValue.Get("children").ForEach(
@@ -308,6 +323,7 @@ func (data *QueuingQoS) fromBody(res gjson.Result) {
 						},
 					)
 					data.SystemOutPolicyMapName = types.StringValue(ripqosInst.Get("ipqosInst.attributes.name").String())
+					data.PolicyMapStatistics = types.BoolValue(helpers.ParseNxosBoolean(ripqosInst.Get("ipqosInst.attributes.stats").String()))
 				}
 			}
 		}
@@ -368,6 +384,16 @@ func (data *QueuingQoS) updateFromBody(res gjson.Result) {
 				data.PolicyMaps[c].MatchClassMaps[nc].Name = types.StringValue(ripqosMatchCMap.Get("ipqosMatchCMap.attributes.name").String())
 			} else {
 				data.PolicyMaps[c].MatchClassMaps[nc].Name = types.StringNull()
+			}
+			if !data.PolicyMaps[c].MatchClassMaps[nc].NextClassMap.IsNull() {
+				data.PolicyMaps[c].MatchClassMaps[nc].NextClassMap = types.StringValue(ripqosMatchCMap.Get("ipqosMatchCMap.attributes.nextCMap").String())
+			} else {
+				data.PolicyMaps[c].MatchClassMaps[nc].NextClassMap = types.StringNull()
+			}
+			if !data.PolicyMaps[c].MatchClassMaps[nc].PreviousClassMap.IsNull() {
+				data.PolicyMaps[c].MatchClassMaps[nc].PreviousClassMap = types.StringValue(ripqosMatchCMap.Get("ipqosMatchCMap.attributes.prevCMap").String())
+			} else {
+				data.PolicyMaps[c].MatchClassMaps[nc].PreviousClassMap = types.StringNull()
 			}
 			{
 				var ripqosPriority gjson.Result
@@ -458,6 +484,11 @@ func (data *QueuingQoS) updateFromBody(res gjson.Result) {
 					data.SystemOutPolicyMapName = types.StringValue(ripqosInst.Get("ipqosInst.attributes.name").String())
 				} else {
 					data.SystemOutPolicyMapName = types.StringNull()
+				}
+				if !data.PolicyMapStatistics.IsNull() {
+					data.PolicyMapStatistics = types.BoolValue(helpers.ParseNxosBoolean(ripqosInst.Get("ipqosInst.attributes.stats").String()))
+				} else {
+					data.PolicyMapStatistics = types.BoolNull()
 				}
 			}
 		}

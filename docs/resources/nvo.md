@@ -27,7 +27,7 @@ This resource can manage the NVO (Network Virtualization Overlay) configuration 
 ```terraform
 resource "nxos_nvo" "example" {
   vxlan_udp_port             = 4789
-  vxlan_udp_source_port_mode = "rfc"
+  vxlan_udp_source_port_mode = "high"
   nve_interfaces = [{
     id                                 = 1
     admin_state                        = "enabled"
@@ -46,10 +46,10 @@ resource "nxos_nvo" "example" {
     controller_id                      = 0
     description                        = "My NVE interface"
     encapsulation_type                 = "vxlan"
-    fabric_ready_time                  = 120
+    fabric_ready_time                  = 30
     multicast_routing_source_interface = "unspecified"
     multisite_virtual_mac              = "00:00:00:00:00:00"
-    suppress_nd                        = true
+    suppress_nd                        = false
     virtual_mac                        = "00:00:00:00:00:00"
     vnis = [{
       vni                           = 103100

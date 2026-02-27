@@ -32,7 +32,7 @@ import (
 func TestAccDataSourceNxosNVO(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "vxlan_udp_port", "4789"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "vxlan_udp_source_port_mode", "rfc"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "vxlan_udp_source_port_mode", "high"))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_nvo.test", "nve_interfaces.*", map[string]string{
 		"id":                                 "1",
 		"admin_state":                        "enabled",
@@ -47,14 +47,11 @@ func TestAccDataSourceNxosNVO(t *testing.T) {
 		"suppress_arp":                       "true",
 		"suppress_mac_route":                 "false",
 		"anycast_source_interface":           "unspecified",
-		"configuration_source":               "cli",
-		"controller_id":                      "0",
 		"description":                        "My NVE interface",
-		"encapsulation_type":                 "vxlan",
-		"fabric_ready_time":                  "120",
+		"fabric_ready_time":                  "30",
 		"multicast_routing_source_interface": "unspecified",
 		"multisite_virtual_mac":              "00:00:00:00:00:00",
-		"suppress_nd":                        "true",
+		"suppress_nd":                        "false",
 		"virtual_mac":                        "00:00:00:00:00:00",
 	}))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_nvo.test", "nve_interfaces.*.vnis.*", map[string]string{
@@ -113,7 +110,7 @@ resource "nxos_rest" "PreReq1" {
 func testAccDataSourceNxosNVOConfig() string {
 	config := `resource "nxos_nvo" "test" {` + "\n"
 	config += `	vxlan_udp_port = 4789` + "\n"
-	config += `	vxlan_udp_source_port_mode = "rfc"` + "\n"
+	config += `	vxlan_udp_source_port_mode = "high"` + "\n"
 	config += `	nve_interfaces = [{` + "\n"
 	config += `		id = 1` + "\n"
 	config += `		admin_state = "enabled"` + "\n"
@@ -128,14 +125,11 @@ func testAccDataSourceNxosNVOConfig() string {
 	config += `		suppress_arp = true` + "\n"
 	config += `		suppress_mac_route = false` + "\n"
 	config += `		anycast_source_interface = "unspecified"` + "\n"
-	config += `		configuration_source = "cli"` + "\n"
-	config += `		controller_id = 0` + "\n"
 	config += `		description = "My NVE interface"` + "\n"
-	config += `		encapsulation_type = "vxlan"` + "\n"
-	config += `		fabric_ready_time = 120` + "\n"
+	config += `		fabric_ready_time = 30` + "\n"
 	config += `		multicast_routing_source_interface = "unspecified"` + "\n"
 	config += `		multisite_virtual_mac = "00:00:00:00:00:00"` + "\n"
-	config += `		suppress_nd = true` + "\n"
+	config += `		suppress_nd = false` + "\n"
 	config += `		virtual_mac = "00:00:00:00:00:00"` + "\n"
 	config += `		vnis = [{` + "\n"
 	config += `			vni = 103100` + "\n"

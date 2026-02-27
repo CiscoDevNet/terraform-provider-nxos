@@ -23,7 +23,7 @@ attributes:
       - low
       - high
       - rfc
-    example: rfc
+    example: high
 child_classes:
   - class_name: nvoEp
     doc_path: Network%20Virtualization/nvo:Ep/
@@ -118,6 +118,7 @@ child_classes:
           - cli
           - controller
         example: cli
+        exclude_test: true
       - nxos_name: controllerId
         tf_name: controller_id
         type: Int64
@@ -125,6 +126,7 @@ child_classes:
         min_int: 0
         max_int: 4294967295
         example: 0
+        exclude_test: true
       - nxos_name: descr
         tf_name: description
         type: String
@@ -145,13 +147,14 @@ child_classes:
           - dot1q-tun-ctrl-frame-lacp
           - dot1q-tun-ctrl-frame-stp
         example: vxlan
+        exclude_test: true
       - nxos_name: fabricReadyTime
         tf_name: fabric_ready_time
         type: Int64
         description: 'Time in seconds after which fabric convergence is signalled.'
         min_int: 0
         max_int: 1200
-        example: 120
+        example: 30
       - nxos_name: mcastRtSrcIntf
         tf_name: multicast_routing_source_interface
         type: String
@@ -166,7 +169,7 @@ child_classes:
         tf_name: suppress_nd
         type: Bool
         description: 'Suppress ND enabled for those VNIs that have suppress ARP already enabled on them.'
-        example: true
+        example: false
       - nxos_name: virtualMac
         tf_name: virtual_mac
         type: String

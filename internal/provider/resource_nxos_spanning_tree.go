@@ -119,7 +119,7 @@ func (r *SpanningTreeResource) Schema(ctx context.Context, req resource.SchemaRe
 					int64validator.Between(0, 200000000),
 				},
 			},
-			"lc_issu": schema.StringAttribute{
+			"linecard_issu": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Linecard ISSU type.").AddStringEnumDescription("default", "disruptive", "non-disruptive", "auto").String,
 				Optional:            true,
 				Validators: []validator.String{
@@ -216,7 +216,7 @@ func (r *SpanningTreeResource) Schema(ctx context.Context, req resource.SchemaRe
 							MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
 							Optional:            true,
 						},
-						"lc_issu": schema.StringAttribute{
+						"linecard_issu": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Port lc issu.").AddStringEnumDescription("default", "disruptive", "non-disruptive", "auto").String,
 							Optional:            true,
 							Validators: []validator.String{

@@ -92,7 +92,7 @@ func (d *SpanningTreeDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "Spanning tree L2 Gateway Domain Id.",
 				Computed:            true,
 			},
-			"lc_issu": schema.StringAttribute{
+			"linecard_issu": schema.StringAttribute{
 				MarkdownDescription: "Linecard ISSU type.",
 				Computed:            true,
 			},
@@ -153,7 +153,7 @@ func (d *SpanningTreeDataSource) Schema(ctx context.Context, req datasource.Sche
 							MarkdownDescription: "Description.",
 							Computed:            true,
 						},
-						"lc_issu": schema.StringAttribute{
+						"linecard_issu": schema.StringAttribute{
 							MarkdownDescription: "Port lc issu.",
 							Computed:            true,
 						},

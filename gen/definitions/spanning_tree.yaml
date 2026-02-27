@@ -65,7 +65,7 @@ child_classes:
         description: "Spanning tree L2 Gateway Domain Id."
         example: 2048
       - nxos_name: lcIssu
-        tf_name: lc_issu
+        tf_name: linecard_issu
         type: String
         enum_values:
           - default
@@ -192,7 +192,7 @@ child_classes:
             description: "Description."
             example: "My interface description"
           - nxos_name: lcIssu
-            tf_name: lc_issu
+            tf_name: linecard_issu
             type: String
             enum_values:
               - default

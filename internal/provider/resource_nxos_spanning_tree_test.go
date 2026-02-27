@@ -41,7 +41,7 @@ func TestAccNxosSpanningTree(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "control", "stateful-ha"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "fcoe", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "l2_gateway_stp_domain_id", "2048"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "lc_issu", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "linecard_issu", "auto"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "loopguard", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "mode", "mst"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "pathcost_option", "long"))
@@ -55,7 +55,7 @@ func TestAccNxosSpanningTree(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.priority", "200"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.control", "bpdu-guard"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.description", "My interface description"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.lc_issu", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.linecard_issu", "auto"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.prestandard_configuration", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.0.simulate_pvst", "enabled"))
 	var tfVersion *goversion.Version
@@ -120,7 +120,7 @@ func testAccNxosSpanningTreeConfig_all() string {
 	config += `	control = "stateful-ha"` + "\n"
 	config += `	fcoe = "enabled"` + "\n"
 	config += `	l2_gateway_stp_domain_id = 2048` + "\n"
-	config += `	lc_issu = "auto"` + "\n"
+	config += `	linecard_issu = "auto"` + "\n"
 	config += `	loopguard = "enabled"` + "\n"
 	config += `	mode = "mst"` + "\n"
 	config += `	pathcost_option = "long"` + "\n"
@@ -135,7 +135,7 @@ func testAccNxosSpanningTreeConfig_all() string {
 	config += `		priority = 200` + "\n"
 	config += `		control = "bpdu-guard"` + "\n"
 	config += `		description = "My interface description"` + "\n"
-	config += `		lc_issu = "auto"` + "\n"
+	config += `		linecard_issu = "auto"` + "\n"
 	config += `		prestandard_configuration = "enabled"` + "\n"
 	config += `		simulate_pvst = "enabled"` + "\n"
 	config += `	}]` + "\n"

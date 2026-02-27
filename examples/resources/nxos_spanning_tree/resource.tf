@@ -5,7 +5,7 @@ resource "nxos_spanning_tree" "example" {
   control                  = "stateful-ha"
   fcoe                     = "enabled"
   l2_gateway_stp_domain_id = 2048
-  lc_issu                  = "auto"
+  linecard_issu            = "auto"
   loopguard                = "enabled"
   mode                     = "mst"
   pathcost_option          = "long"
@@ -20,7 +20,7 @@ resource "nxos_spanning_tree" "example" {
     priority                  = 200
     control                   = "bpdu-guard"
     description               = "My interface description"
-    lc_issu                   = "auto"
+    linecard_issu             = "auto"
     prestandard_configuration = "enabled"
     simulate_pvst             = "enabled"
   }]

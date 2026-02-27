@@ -45,7 +45,7 @@ type SpanningTree struct {
 	Control              types.String             `tfsdk:"control"`
 	Fcoe                 types.String             `tfsdk:"fcoe"`
 	L2GatewayStpDomainId types.Int64              `tfsdk:"l2_gateway_stp_domain_id"`
-	LcIssu               types.String             `tfsdk:"lc_issu"`
+	LinecardIssu         types.String             `tfsdk:"linecard_issu"`
 	Loopguard            types.String             `tfsdk:"loopguard"`
 	Mode                 types.String             `tfsdk:"mode"`
 	PathcostOption       types.String             `tfsdk:"pathcost_option"`
@@ -63,7 +63,7 @@ type SpanningTreeInterfaces struct {
 	Priority                 types.Int64  `tfsdk:"priority"`
 	Control                  types.String `tfsdk:"control"`
 	Description              types.String `tfsdk:"description"`
-	LcIssu                   types.String `tfsdk:"lc_issu"`
+	LinecardIssu             types.String `tfsdk:"linecard_issu"`
 	PrestandardConfiguration types.String `tfsdk:"prestandard_configuration"`
 	SimulatePvst             types.String `tfsdk:"simulate_pvst"`
 }
@@ -135,8 +135,8 @@ func (data SpanningTree) toBody() nxos.Body {
 		if (!data.L2GatewayStpDomainId.IsUnknown() && !data.L2GatewayStpDomainId.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "l2GStpDomId", strconv.FormatInt(data.L2GatewayStpDomainId.ValueInt64(), 10))
 		}
-		if (!data.LcIssu.IsUnknown() && !data.LcIssu.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "lcIssu", data.LcIssu.ValueString())
+		if (!data.LinecardIssu.IsUnknown() && !data.LinecardIssu.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "lcIssu", data.LinecardIssu.ValueString())
 		}
 		if (!data.Loopguard.IsUnknown() && !data.Loopguard.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "loopguard", data.Loopguard.ValueString())
@@ -181,8 +181,8 @@ func (data SpanningTree) toBody() nxos.Body {
 			if (!child.Description.IsUnknown() && !child.Description.IsNull()) || false {
 				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
 			}
-			if (!child.LcIssu.IsUnknown() && !child.LcIssu.IsNull()) || false {
-				attrs, _ = sjson.Set(attrs, "lcIssu", child.LcIssu.ValueString())
+			if (!child.LinecardIssu.IsUnknown() && !child.LinecardIssu.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "lcIssu", child.LinecardIssu.ValueString())
 			}
 			if (!child.PrestandardConfiguration.IsUnknown() && !child.PrestandardConfiguration.IsNull()) || false {
 				attrs, _ = sjson.Set(attrs, "prestdCfg", child.PrestandardConfiguration.ValueString())
@@ -220,7 +220,7 @@ func (data *SpanningTree) fromBody(res gjson.Result) {
 		data.Control = types.StringValue(rstpInst.Get("stpInst.attributes.ctrl").String())
 		data.Fcoe = types.StringValue(rstpInst.Get("stpInst.attributes.fcoe").String())
 		data.L2GatewayStpDomainId = types.Int64Value(rstpInst.Get("stpInst.attributes.l2GStpDomId").Int())
-		data.LcIssu = types.StringValue(rstpInst.Get("stpInst.attributes.lcIssu").String())
+		data.LinecardIssu = types.StringValue(rstpInst.Get("stpInst.attributes.lcIssu").String())
 		data.Loopguard = types.StringValue(rstpInst.Get("stpInst.attributes.loopguard").String())
 		data.Mode = types.StringValue(rstpInst.Get("stpInst.attributes.mode").String())
 		data.PathcostOption = types.StringValue(rstpInst.Get("stpInst.attributes.pathcostOp").String())
@@ -240,7 +240,7 @@ func (data *SpanningTree) fromBody(res gjson.Result) {
 							child.Priority = types.Int64Value(value.Get("attributes.priority").Int())
 							child.Control = types.StringValue(value.Get("attributes.ctrl").String())
 							child.Description = types.StringValue(value.Get("attributes.descr").String())
-							child.LcIssu = types.StringValue(value.Get("attributes.lcIssu").String())
+							child.LinecardIssu = types.StringValue(value.Get("attributes.lcIssu").String())
 							child.PrestandardConfiguration = types.StringValue(value.Get("attributes.prestdCfg").String())
 							child.SimulatePvst = types.StringValue(value.Get("attributes.simulatePvst").String())
 							data.Interfaces = append(data.Interfaces, child)
@@ -300,10 +300,10 @@ func (data *SpanningTree) updateFromBody(res gjson.Result) {
 	} else {
 		data.L2GatewayStpDomainId = types.Int64Null()
 	}
-	if !data.LcIssu.IsNull() {
-		data.LcIssu = types.StringValue(rstpInst.Get("stpInst.attributes.lcIssu").String())
+	if !data.LinecardIssu.IsNull() {
+		data.LinecardIssu = types.StringValue(rstpInst.Get("stpInst.attributes.lcIssu").String())
 	} else {
-		data.LcIssu = types.StringNull()
+		data.LinecardIssu = types.StringNull()
 	}
 	if !data.Loopguard.IsNull() {
 		data.Loopguard = types.StringValue(rstpInst.Get("stpInst.attributes.loopguard").String())
@@ -382,10 +382,10 @@ func (data *SpanningTree) updateFromBody(res gjson.Result) {
 		} else {
 			data.Interfaces[c].Description = types.StringNull()
 		}
-		if !data.Interfaces[c].LcIssu.IsNull() {
-			data.Interfaces[c].LcIssu = types.StringValue(rstpIf.Get("stpIf.attributes.lcIssu").String())
+		if !data.Interfaces[c].LinecardIssu.IsNull() {
+			data.Interfaces[c].LinecardIssu = types.StringValue(rstpIf.Get("stpIf.attributes.lcIssu").String())
 		} else {
-			data.Interfaces[c].LcIssu = types.StringNull()
+			data.Interfaces[c].LinecardIssu = types.StringNull()
 		}
 		if !data.Interfaces[c].PrestandardConfiguration.IsNull() {
 			data.Interfaces[c].PrestandardConfiguration = types.StringValue(rstpIf.Get("stpIf.attributes.prestdCfg").String())

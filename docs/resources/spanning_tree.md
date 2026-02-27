@@ -30,7 +30,7 @@ resource "nxos_spanning_tree" "example" {
   control                  = "stateful-ha"
   fcoe                     = "enabled"
   l2_gateway_stp_domain_id = 2048
-  lc_issu                  = "auto"
+  linecard_issu            = "auto"
   loopguard                = "enabled"
   mode                     = "mst"
   pathcost_option          = "long"
@@ -45,7 +45,7 @@ resource "nxos_spanning_tree" "example" {
     priority                  = 200
     control                   = "bpdu-guard"
     description               = "My interface description"
-    lc_issu                   = "auto"
+    linecard_issu             = "auto"
     prestandard_configuration = "enabled"
     simulate_pvst             = "enabled"
   }]
@@ -71,7 +71,7 @@ resource "nxos_spanning_tree" "example" {
 - `interfaces` (Attributes List) List of Spanning Tree interfaces. (see [below for nested schema](#nestedatt--interfaces))
 - `l2_gateway_stp_domain_id` (Number) Spanning tree L2 Gateway Domain Id.
   - Range: `0`-`200000000`
-- `lc_issu` (String) Linecard ISSU type.
+- `linecard_issu` (String) Linecard ISSU type.
   - Choices: `default`, `disruptive`, `non-disruptive`, `auto`
 - `loopguard` (String) Enable loop guard on all ports.
   - Choices: `enabled`, `disabled`
@@ -104,7 +104,7 @@ Optional:
 - `description` (String) Description.
 - `guard` (String) Guard Mode.
   - Choices: `default`, `root`, `loop`, `none`
-- `lc_issu` (String) Port lc issu.
+- `linecard_issu` (String) Port lc issu.
   - Choices: `default`, `disruptive`, `non-disruptive`, `auto`
 - `link_type` (String) Link Type.
   - Choices: `auto`, `p2p`, `shared`

@@ -37,7 +37,7 @@ func TestAccDataSourceNxosSpanningTree(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "control", "stateful-ha"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "fcoe", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "l2_gateway_stp_domain_id", "2048"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "lc_issu", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "linecard_issu", "auto"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "loopguard", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "mode", "mst"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "pathcost_option", "long"))
@@ -52,7 +52,7 @@ func TestAccDataSourceNxosSpanningTree(t *testing.T) {
 		"priority":                  "200",
 		"control":                   "bpdu-guard",
 		"description":               "My interface description",
-		"lc_issu":                   "auto",
+		"linecard_issu":             "auto",
 		"prestandard_configuration": "enabled",
 		"simulate_pvst":             "enabled",
 	}))
@@ -83,7 +83,7 @@ func testAccDataSourceNxosSpanningTreeConfig() string {
 	config += `	control = "stateful-ha"` + "\n"
 	config += `	fcoe = "enabled"` + "\n"
 	config += `	l2_gateway_stp_domain_id = 2048` + "\n"
-	config += `	lc_issu = "auto"` + "\n"
+	config += `	linecard_issu = "auto"` + "\n"
 	config += `	loopguard = "enabled"` + "\n"
 	config += `	mode = "mst"` + "\n"
 	config += `	pathcost_option = "long"` + "\n"
@@ -98,7 +98,7 @@ func testAccDataSourceNxosSpanningTreeConfig() string {
 	config += `		priority = 200` + "\n"
 	config += `		control = "bpdu-guard"` + "\n"
 	config += `		description = "My interface description"` + "\n"
-	config += `		lc_issu = "auto"` + "\n"
+	config += `		linecard_issu = "auto"` + "\n"
 	config += `		prestandard_configuration = "enabled"` + "\n"
 	config += `		simulate_pvst = "enabled"` + "\n"
 	config += `	}]` + "\n"

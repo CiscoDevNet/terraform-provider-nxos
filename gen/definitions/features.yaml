@@ -225,7 +225,7 @@ child_classes:
     type: single
     no_delete: true
     description: 'Next Generation Multicast VPN feature configuration.'
-    doc_path: Feature%20Management/fm:NgMvpn/
+    doc_path: Feature%20Management/fm:Ngmvpn/
     attributes:
       - nxos_name: adminSt
         tf_name: ngmvpn

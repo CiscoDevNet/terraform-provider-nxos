@@ -35,14 +35,14 @@ child_classes:
         description: "Anycast Gateway MAC address."
         example: "20:20:00:00:10:10"
       - nxos_name: adminDist
-        tf_name: instance_administrative_distance
+        tf_name: administrative_distance
         type: Int64
         min_int: 1
         max_int: 255
         description: "Set the administrative distance for HMM."
         example: 150
       - nxos_name: ctrl
-        tf_name: instance_control
+        tf_name: control
         type: String
         description: "The control state."
         allow_non_enum_values: true
@@ -50,14 +50,14 @@ child_classes:
           - stateful-ha
         example: stateful-ha
       - nxos_name: limitVlanMac
-        tf_name: instance_limit_vlan_mac
+        tf_name: limit_vlan_mac
         type: Int64
         min_int: 5
         max_int: 4096
         description: "This is to limit the number of hosts learnt by HMM in the same subnet with same MAC information."
         example: 100
       - nxos_name: selHostProbe
-        tf_name: instance_selective_host_probe
+        tf_name: selective_host_probe
         type: String
         description: "When set to True, host mobility will be triggered when a remote host route exists irrespective of the sequence id."
         enum_values:

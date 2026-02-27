@@ -38,9 +38,9 @@ func TestAccNxosHMM(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "instance_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "anycast_mac", "20:20:00:00:10:10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "instance_administrative_distance", "150"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "instance_control", "stateful-ha"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "instance_limit_vlan_mac", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "administrative_distance", "150"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "limit_vlan_mac", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "interfaces.0.interface_id", "vlan10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "interfaces.0.admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_hmm.test", "interfaces.0.mode", "anycastGW"))
@@ -143,9 +143,9 @@ func testAccNxosHMMConfig_all() string {
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	instance_admin_state = "enabled"` + "\n"
 	config += `	anycast_mac = "20:20:00:00:10:10"` + "\n"
-	config += `	instance_administrative_distance = 150` + "\n"
-	config += `	instance_control = "stateful-ha"` + "\n"
-	config += `	instance_limit_vlan_mac = 100` + "\n"
+	config += `	administrative_distance = 150` + "\n"
+	config += `	control = "stateful-ha"` + "\n"
+	config += `	limit_vlan_mac = 100` + "\n"
 	config += `	interfaces = [{` + "\n"
 	config += `		interface_id = "vlan10"` + "\n"
 	config += `		admin_state = "enabled"` + "\n"

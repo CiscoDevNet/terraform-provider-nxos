@@ -95,25 +95,25 @@ func (r *HMMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				MarkdownDescription: helpers.NewAttributeDescription("Anycast Gateway MAC address.").String,
 				Optional:            true,
 			},
-			"instance_administrative_distance": schema.Int64Attribute{
+			"administrative_distance": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set the administrative distance for HMM.").AddIntegerRangeDescription(1, 255).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 255),
 				},
 			},
-			"instance_control": schema.StringAttribute{
+			"control": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("stateful-ha").String,
 				Optional:            true,
 			},
-			"instance_limit_vlan_mac": schema.Int64Attribute{
+			"limit_vlan_mac": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("This is to limit the number of hosts learnt by HMM in the same subnet with same MAC information.").AddIntegerRangeDescription(5, 4096).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(5, 4096),
 				},
 			},
-			"instance_selective_host_probe": schema.StringAttribute{
+			"selective_host_probe": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("When set to True, host mobility will be triggered when a remote host route exists irrespective of the sequence id.").AddStringEnumDescription("no", "yes").String,
 				Optional:            true,
 				Validators: []validator.String{

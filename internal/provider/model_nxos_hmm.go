@@ -37,16 +37,16 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type HMM struct {
-	Device                         types.String    `tfsdk:"device"`
-	Dn                             types.String    `tfsdk:"id"`
-	AdminState                     types.String    `tfsdk:"admin_state"`
-	InstanceAdminState             types.String    `tfsdk:"instance_admin_state"`
-	AnycastMac                     types.String    `tfsdk:"anycast_mac"`
-	InstanceAdministrativeDistance types.Int64     `tfsdk:"instance_administrative_distance"`
-	InstanceControl                types.String    `tfsdk:"instance_control"`
-	InstanceLimitVlanMac           types.Int64     `tfsdk:"instance_limit_vlan_mac"`
-	InstanceSelectiveHostProbe     types.String    `tfsdk:"instance_selective_host_probe"`
-	Interfaces                     []HMMInterfaces `tfsdk:"interfaces"`
+	Device                 types.String    `tfsdk:"device"`
+	Dn                     types.String    `tfsdk:"id"`
+	AdminState             types.String    `tfsdk:"admin_state"`
+	InstanceAdminState     types.String    `tfsdk:"instance_admin_state"`
+	AnycastMac             types.String    `tfsdk:"anycast_mac"`
+	AdministrativeDistance types.Int64     `tfsdk:"administrative_distance"`
+	Control                types.String    `tfsdk:"control"`
+	LimitVlanMac           types.Int64     `tfsdk:"limit_vlan_mac"`
+	SelectiveHostProbe     types.String    `tfsdk:"selective_host_probe"`
+	Interfaces             []HMMInterfaces `tfsdk:"interfaces"`
 }
 
 type HMMInterfaces struct {
@@ -114,17 +114,17 @@ func (data HMM) toBody() nxos.Body {
 		if (!data.AnycastMac.IsUnknown() && !data.AnycastMac.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "amac", data.AnycastMac.ValueString())
 		}
-		if (!data.InstanceAdministrativeDistance.IsUnknown() && !data.InstanceAdministrativeDistance.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "adminDist", strconv.FormatInt(data.InstanceAdministrativeDistance.ValueInt64(), 10))
+		if (!data.AdministrativeDistance.IsUnknown() && !data.AdministrativeDistance.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "adminDist", strconv.FormatInt(data.AdministrativeDistance.ValueInt64(), 10))
 		}
-		if (!data.InstanceControl.IsUnknown() && !data.InstanceControl.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "ctrl", data.InstanceControl.ValueString())
+		if (!data.Control.IsUnknown() && !data.Control.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "ctrl", data.Control.ValueString())
 		}
-		if (!data.InstanceLimitVlanMac.IsUnknown() && !data.InstanceLimitVlanMac.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "limitVlanMac", strconv.FormatInt(data.InstanceLimitVlanMac.ValueInt64(), 10))
+		if (!data.LimitVlanMac.IsUnknown() && !data.LimitVlanMac.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "limitVlanMac", strconv.FormatInt(data.LimitVlanMac.ValueInt64(), 10))
 		}
-		if (!data.InstanceSelectiveHostProbe.IsUnknown() && !data.InstanceSelectiveHostProbe.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "selHostProbe", data.InstanceSelectiveHostProbe.ValueString())
+		if (!data.SelectiveHostProbe.IsUnknown() && !data.SelectiveHostProbe.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "selHostProbe", data.SelectiveHostProbe.ValueString())
 		}
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
@@ -169,10 +169,10 @@ func (data *HMM) fromBody(res gjson.Result) {
 		)
 		data.InstanceAdminState = types.StringValue(rhmmFwdInst.Get("hmmFwdInst.attributes.adminSt").String())
 		data.AnycastMac = types.StringValue(rhmmFwdInst.Get("hmmFwdInst.attributes.amac").String())
-		data.InstanceAdministrativeDistance = types.Int64Value(rhmmFwdInst.Get("hmmFwdInst.attributes.adminDist").Int())
-		data.InstanceControl = types.StringValue(rhmmFwdInst.Get("hmmFwdInst.attributes.ctrl").String())
-		data.InstanceLimitVlanMac = types.Int64Value(rhmmFwdInst.Get("hmmFwdInst.attributes.limitVlanMac").Int())
-		data.InstanceSelectiveHostProbe = types.StringValue(rhmmFwdInst.Get("hmmFwdInst.attributes.selHostProbe").String())
+		data.AdministrativeDistance = types.Int64Value(rhmmFwdInst.Get("hmmFwdInst.attributes.adminDist").Int())
+		data.Control = types.StringValue(rhmmFwdInst.Get("hmmFwdInst.attributes.ctrl").String())
+		data.LimitVlanMac = types.Int64Value(rhmmFwdInst.Get("hmmFwdInst.attributes.limitVlanMac").Int())
+		data.SelectiveHostProbe = types.StringValue(rhmmFwdInst.Get("hmmFwdInst.attributes.selHostProbe").String())
 		rhmmFwdInst.Get("hmmFwdInst.children").ForEach(
 			func(_, v gjson.Result) bool {
 				v.ForEach(
@@ -225,25 +225,25 @@ func (data *HMM) updateFromBody(res gjson.Result) {
 	} else {
 		data.AnycastMac = types.StringNull()
 	}
-	if !data.InstanceAdministrativeDistance.IsNull() {
-		data.InstanceAdministrativeDistance = types.Int64Value(rhmmFwdInst.Get("hmmFwdInst.attributes.adminDist").Int())
+	if !data.AdministrativeDistance.IsNull() {
+		data.AdministrativeDistance = types.Int64Value(rhmmFwdInst.Get("hmmFwdInst.attributes.adminDist").Int())
 	} else {
-		data.InstanceAdministrativeDistance = types.Int64Null()
+		data.AdministrativeDistance = types.Int64Null()
 	}
-	if !data.InstanceControl.IsNull() {
-		data.InstanceControl = types.StringValue(rhmmFwdInst.Get("hmmFwdInst.attributes.ctrl").String())
+	if !data.Control.IsNull() {
+		data.Control = types.StringValue(rhmmFwdInst.Get("hmmFwdInst.attributes.ctrl").String())
 	} else {
-		data.InstanceControl = types.StringNull()
+		data.Control = types.StringNull()
 	}
-	if !data.InstanceLimitVlanMac.IsNull() {
-		data.InstanceLimitVlanMac = types.Int64Value(rhmmFwdInst.Get("hmmFwdInst.attributes.limitVlanMac").Int())
+	if !data.LimitVlanMac.IsNull() {
+		data.LimitVlanMac = types.Int64Value(rhmmFwdInst.Get("hmmFwdInst.attributes.limitVlanMac").Int())
 	} else {
-		data.InstanceLimitVlanMac = types.Int64Null()
+		data.LimitVlanMac = types.Int64Null()
 	}
-	if !data.InstanceSelectiveHostProbe.IsNull() {
-		data.InstanceSelectiveHostProbe = types.StringValue(rhmmFwdInst.Get("hmmFwdInst.attributes.selHostProbe").String())
+	if !data.SelectiveHostProbe.IsNull() {
+		data.SelectiveHostProbe = types.StringValue(rhmmFwdInst.Get("hmmFwdInst.attributes.selHostProbe").String())
 	} else {
-		data.InstanceSelectiveHostProbe = types.StringNull()
+		data.SelectiveHostProbe = types.StringNull()
 	}
 	for c := range data.Interfaces {
 		var rhmmFwdIf gjson.Result

@@ -80,19 +80,19 @@ func (d *HMMDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "Anycast Gateway MAC address.",
 				Computed:            true,
 			},
-			"instance_administrative_distance": schema.Int64Attribute{
+			"administrative_distance": schema.Int64Attribute{
 				MarkdownDescription: "Set the administrative distance for HMM.",
 				Computed:            true,
 			},
-			"instance_control": schema.StringAttribute{
+			"control": schema.StringAttribute{
 				MarkdownDescription: "The control state.",
 				Computed:            true,
 			},
-			"instance_limit_vlan_mac": schema.Int64Attribute{
+			"limit_vlan_mac": schema.Int64Attribute{
 				MarkdownDescription: "This is to limit the number of hosts learnt by HMM in the same subnet with same MAC information.",
 				Computed:            true,
 			},
-			"instance_selective_host_probe": schema.StringAttribute{
+			"selective_host_probe": schema.StringAttribute{
 				MarkdownDescription: "When set to True, host mobility will be triggered when a remote host route exists irrespective of the sequence id.",
 				Computed:            true,
 			},

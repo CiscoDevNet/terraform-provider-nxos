@@ -24,13 +24,13 @@ This resource can manage the Host Mobility Manager (HMM) configuration on NX-OS 
 
 ```terraform
 resource "nxos_hmm" "example" {
-  admin_state                      = "enabled"
-  instance_admin_state             = "enabled"
-  anycast_mac                      = "20:20:00:00:10:10"
-  instance_administrative_distance = 150
-  instance_control                 = "stateful-ha"
-  instance_limit_vlan_mac          = 100
-  instance_selective_host_probe    = "yes"
+  admin_state             = "enabled"
+  instance_admin_state    = "enabled"
+  anycast_mac             = "20:20:00:00:10:10"
+  administrative_distance = 150
+  control                 = "stateful-ha"
+  limit_vlan_mac          = 100
+  selective_host_probe    = "yes"
   interfaces = [{
     interface_id = "vlan10"
     admin_state  = "enabled"
@@ -47,19 +47,19 @@ resource "nxos_hmm" "example" {
 
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
+- `administrative_distance` (Number) Set the administrative distance for HMM.
+  - Range: `1`-`255`
 - `anycast_mac` (String) Anycast Gateway MAC address.
+- `control` (String) The control state.
+  - Choices: `stateful-ha`
 - `device` (String) A device name from the provider configuration.
 - `instance_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
-- `instance_administrative_distance` (Number) Set the administrative distance for HMM.
-  - Range: `1`-`255`
-- `instance_control` (String) The control state.
-  - Choices: `stateful-ha`
-- `instance_limit_vlan_mac` (Number) This is to limit the number of hosts learnt by HMM in the same subnet with same MAC information.
-  - Range: `5`-`4096`
-- `instance_selective_host_probe` (String) When set to True, host mobility will be triggered when a remote host route exists irrespective of the sequence id.
-  - Choices: `no`, `yes`
 - `interfaces` (Attributes List) List of HMM Fabric Forwarding interfaces. (see [below for nested schema](#nestedatt--interfaces))
+- `limit_vlan_mac` (Number) This is to limit the number of hosts learnt by HMM in the same subnet with same MAC information.
+  - Range: `5`-`4096`
+- `selective_host_probe` (String) When set to True, host mobility will be triggered when a remote host route exists irrespective of the sequence id.
+  - Choices: `no`, `yes`
 
 ### Read-Only
 

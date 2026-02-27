@@ -37,14 +37,14 @@ data "nxos_hmm" "example" {
 ### Read-Only
 
 - `admin_state` (String) The administrative state of the object or policy.
+- `administrative_distance` (Number) Set the administrative distance for HMM.
 - `anycast_mac` (String) Anycast Gateway MAC address.
+- `control` (String) The control state.
 - `id` (String) The distinguished name of the object.
 - `instance_admin_state` (String) The administrative state of the object or policy.
-- `instance_administrative_distance` (Number) Set the administrative distance for HMM.
-- `instance_control` (String) The control state.
-- `instance_limit_vlan_mac` (Number) This is to limit the number of hosts learnt by HMM in the same subnet with same MAC information.
-- `instance_selective_host_probe` (String) When set to True, host mobility will be triggered when a remote host route exists irrespective of the sequence id.
 - `interfaces` (Attributes List) List of HMM Fabric Forwarding interfaces. (see [below for nested schema](#nestedatt--interfaces))
+- `limit_vlan_mac` (Number) This is to limit the number of hosts learnt by HMM in the same subnet with same MAC information.
+- `selective_host_probe` (String) When set to True, host mobility will be triggered when a remote host route exists irrespective of the sequence id.
 
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`

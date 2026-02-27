@@ -37,6 +37,7 @@ data "nxos_bridge_domains" "example" {
 
 - `bridge_domains` (Attributes List) List of bridge domains. (see [below for nested schema](#nestedatt--bridge_domains))
 - `id` (String) The distinguished name of the object.
+- `svi_autostate` (String) Disable/enable autoState for SVI interface.
 
 <a id="nestedatt--bridge_domains"></a>
 ### Nested Schema for `bridge_domains`
@@ -44,5 +45,16 @@ data "nxos_bridge_domains" "example" {
 Read-Only:
 
 - `access_encap` (String) The Layer 2 access encapsulation (VLAN or VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `admin_state` (String) admin state.
+- `bridge_domain_state` (String) Bridge Domain State can be active or suspended.
+- `bridge_mode` (String) The Layer 2 bridge-domain parameter mode used by the node for enabling classical bridging or bridging with the IP address.
+- `control` (String) The control state.
+- `cross_connect` (String) Enable Cross Connect on VLAN.
 - `fabric_encap` (String) The Layer 2 bridge-domain Fabric encapsulation (VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `forwarding_control` (String) The Layer 2 bridge-domain forwarding controls.
+- `forwarding_mode` (String) The Layer 2 bridge-domain parameter mode used by the node for enabling forwarding modes.
+- `long_name` (Boolean) Enable or disable long name of 128 characters for VLAN.
+- `mac_packet_classify` (String) Vlan mac packet classify.
+- `mode` (String) Vlan mode.
 - `name` (String) The name of the object.
+- `vrf_name` (String) Enable or disable vrf name of 32 characters for VLAN.

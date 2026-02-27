@@ -68,6 +68,10 @@ func (d *BridgeDomainsDataSource) Schema(ctx context.Context, req datasource.Sch
 				MarkdownDescription: "The distinguished name of the object.",
 				Computed:            true,
 			},
+			"svi_autostate": schema.StringAttribute{
+				MarkdownDescription: "Disable/enable autoState for SVI interface.",
+				Computed:            true,
+			},
 			"bridge_domains": schema.ListNestedAttribute{
 				MarkdownDescription: "List of bridge domains.",
 				Computed:            true,
@@ -83,6 +87,50 @@ func (d *BridgeDomainsDataSource) Schema(ctx context.Context, req datasource.Sch
 						},
 						"name": schema.StringAttribute{
 							MarkdownDescription: "The name of the object.",
+							Computed:            true,
+						},
+						"bridge_domain_state": schema.StringAttribute{
+							MarkdownDescription: "Bridge Domain State can be active or suspended.",
+							Computed:            true,
+						},
+						"admin_state": schema.StringAttribute{
+							MarkdownDescription: "admin state.",
+							Computed:            true,
+						},
+						"bridge_mode": schema.StringAttribute{
+							MarkdownDescription: "The Layer 2 bridge-domain parameter mode used by the node for enabling classical bridging or bridging with the IP address.",
+							Computed:            true,
+						},
+						"control": schema.StringAttribute{
+							MarkdownDescription: "The control state.",
+							Computed:            true,
+						},
+						"forwarding_control": schema.StringAttribute{
+							MarkdownDescription: "The Layer 2 bridge-domain forwarding controls.",
+							Computed:            true,
+						},
+						"forwarding_mode": schema.StringAttribute{
+							MarkdownDescription: "The Layer 2 bridge-domain parameter mode used by the node for enabling forwarding modes.",
+							Computed:            true,
+						},
+						"long_name": schema.BoolAttribute{
+							MarkdownDescription: "Enable or disable long name of 128 characters for VLAN.",
+							Computed:            true,
+						},
+						"mac_packet_classify": schema.StringAttribute{
+							MarkdownDescription: "Vlan mac packet classify.",
+							Computed:            true,
+						},
+						"mode": schema.StringAttribute{
+							MarkdownDescription: "Vlan mode.",
+							Computed:            true,
+						},
+						"vrf_name": schema.StringAttribute{
+							MarkdownDescription: "Enable or disable vrf name of 32 characters for VLAN.",
+							Computed:            true,
+						},
+						"cross_connect": schema.StringAttribute{
+							MarkdownDescription: "Enable Cross Connect on VLAN.",
 							Computed:            true,
 						},
 					},

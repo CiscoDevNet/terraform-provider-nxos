@@ -24,7 +24,9 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
 	"github.com/tidwall/gjson"
@@ -38,13 +40,25 @@ import (
 type BridgeDomains struct {
 	Device        types.String                 `tfsdk:"device"`
 	Dn            types.String                 `tfsdk:"id"`
+	SviAutostate  types.String                 `tfsdk:"svi_autostate"`
 	BridgeDomains []BridgeDomainsBridgeDomains `tfsdk:"bridge_domains"`
 }
 
 type BridgeDomainsBridgeDomains struct {
-	FabricEncap types.String `tfsdk:"fabric_encap"`
-	AccessEncap types.String `tfsdk:"access_encap"`
-	Name        types.String `tfsdk:"name"`
+	FabricEncap       types.String `tfsdk:"fabric_encap"`
+	AccessEncap       types.String `tfsdk:"access_encap"`
+	Name              types.String `tfsdk:"name"`
+	BridgeDomainState types.String `tfsdk:"bridge_domain_state"`
+	AdminState        types.String `tfsdk:"admin_state"`
+	BridgeMode        types.String `tfsdk:"bridge_mode"`
+	Control           types.String `tfsdk:"control"`
+	ForwardingControl types.String `tfsdk:"forwarding_control"`
+	ForwardingMode    types.String `tfsdk:"forwarding_mode"`
+	LongName          types.Bool   `tfsdk:"long_name"`
+	MacPacketClassify types.String `tfsdk:"mac_packet_classify"`
+	Mode              types.String `tfsdk:"mode"`
+	VrfName           types.String `tfsdk:"vrf_name"`
+	CrossConnect      types.String `tfsdk:"cross_connect"`
 }
 
 type BridgeDomainsIdentity struct {
@@ -90,6 +104,9 @@ func (data BridgeDomains) getClassName() string {
 func (data BridgeDomains) toBody() nxos.Body {
 	body := ""
 	body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
+	if (!data.SviAutostate.IsUnknown() && !data.SviAutostate.IsNull()) || false {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"sysDefaultSVIAutostate", data.SviAutostate.ValueString())
+	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
 	for _, child := range data.BridgeDomains {
@@ -103,6 +120,39 @@ func (data BridgeDomains) toBody() nxos.Body {
 		if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
 			attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
 		}
+		if (!child.BridgeDomainState.IsUnknown() && !child.BridgeDomainState.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "BdState", child.BridgeDomainState.ValueString())
+		}
+		if (!child.AdminState.IsUnknown() && !child.AdminState.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
+		}
+		if (!child.BridgeMode.IsUnknown() && !child.BridgeMode.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "bridgeMode", child.BridgeMode.ValueString())
+		}
+		if (!child.Control.IsUnknown() && !child.Control.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
+		}
+		if (!child.ForwardingControl.IsUnknown() && !child.ForwardingControl.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "fwdCtrl", child.ForwardingControl.ValueString())
+		}
+		if (!child.ForwardingMode.IsUnknown() && !child.ForwardingMode.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "fwdMode", child.ForwardingMode.ValueString())
+		}
+		if (!child.LongName.IsUnknown() && !child.LongName.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "longName", strconv.FormatBool(child.LongName.ValueBool()))
+		}
+		if (!child.MacPacketClassify.IsUnknown() && !child.MacPacketClassify.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "macPacketClassify", child.MacPacketClassify.ValueString())
+		}
+		if (!child.Mode.IsUnknown() && !child.Mode.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "mode", child.Mode.ValueString())
+		}
+		if (!child.VrfName.IsUnknown() && !child.VrfName.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "vrfName", child.VrfName.ValueString())
+		}
+		if (!child.CrossConnect.IsUnknown() && !child.CrossConnect.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "xConnect", child.CrossConnect.ValueString())
+		}
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.l2BD.attributes", attrs)
 	}
 
@@ -114,6 +164,7 @@ func (data BridgeDomains) toBody() nxos.Body {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *BridgeDomains) fromBody(res gjson.Result) {
+	data.SviAutostate = types.StringValue(res.Get(data.getClassName() + ".attributes.sysDefaultSVIAutostate").String())
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
 			v.ForEach(
@@ -123,6 +174,17 @@ func (data *BridgeDomains) fromBody(res gjson.Result) {
 						child.FabricEncap = types.StringValue(value.Get("attributes.fabEncap").String())
 						child.AccessEncap = types.StringValue(value.Get("attributes.accEncap").String())
 						child.Name = types.StringValue(value.Get("attributes.name").String())
+						child.BridgeDomainState = types.StringValue(value.Get("attributes.BdState").String())
+						child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
+						child.BridgeMode = types.StringValue(value.Get("attributes.bridgeMode").String())
+						child.Control = types.StringValue(value.Get("attributes.ctrl").String())
+						child.ForwardingControl = types.StringValue(value.Get("attributes.fwdCtrl").String())
+						child.ForwardingMode = types.StringValue(value.Get("attributes.fwdMode").String())
+						child.LongName = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.longName").String()))
+						child.MacPacketClassify = types.StringValue(value.Get("attributes.macPacketClassify").String())
+						child.Mode = types.StringValue(value.Get("attributes.mode").String())
+						child.VrfName = types.StringValue(value.Get("attributes.vrfName").String())
+						child.CrossConnect = types.StringValue(value.Get("attributes.xConnect").String())
 						data.BridgeDomains = append(data.BridgeDomains, child)
 					}
 					return true
@@ -138,6 +200,11 @@ func (data *BridgeDomains) fromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *BridgeDomains) updateFromBody(res gjson.Result) {
+	if !data.SviAutostate.IsNull() {
+		data.SviAutostate = types.StringValue(res.Get(data.getClassName() + ".attributes.sysDefaultSVIAutostate").String())
+	} else {
+		data.SviAutostate = types.StringNull()
+	}
 	for c := range data.BridgeDomains {
 		var rl2BD gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -164,6 +231,61 @@ func (data *BridgeDomains) updateFromBody(res gjson.Result) {
 			data.BridgeDomains[c].Name = types.StringValue(rl2BD.Get("l2BD.attributes.name").String())
 		} else {
 			data.BridgeDomains[c].Name = types.StringNull()
+		}
+		if !data.BridgeDomains[c].BridgeDomainState.IsNull() {
+			data.BridgeDomains[c].BridgeDomainState = types.StringValue(rl2BD.Get("l2BD.attributes.BdState").String())
+		} else {
+			data.BridgeDomains[c].BridgeDomainState = types.StringNull()
+		}
+		if !data.BridgeDomains[c].AdminState.IsNull() {
+			data.BridgeDomains[c].AdminState = types.StringValue(rl2BD.Get("l2BD.attributes.adminSt").String())
+		} else {
+			data.BridgeDomains[c].AdminState = types.StringNull()
+		}
+		if !data.BridgeDomains[c].BridgeMode.IsNull() {
+			data.BridgeDomains[c].BridgeMode = types.StringValue(rl2BD.Get("l2BD.attributes.bridgeMode").String())
+		} else {
+			data.BridgeDomains[c].BridgeMode = types.StringNull()
+		}
+		if !data.BridgeDomains[c].Control.IsNull() {
+			data.BridgeDomains[c].Control = types.StringValue(rl2BD.Get("l2BD.attributes.ctrl").String())
+		} else {
+			data.BridgeDomains[c].Control = types.StringNull()
+		}
+		if !data.BridgeDomains[c].ForwardingControl.IsNull() {
+			data.BridgeDomains[c].ForwardingControl = types.StringValue(rl2BD.Get("l2BD.attributes.fwdCtrl").String())
+		} else {
+			data.BridgeDomains[c].ForwardingControl = types.StringNull()
+		}
+		if !data.BridgeDomains[c].ForwardingMode.IsNull() {
+			data.BridgeDomains[c].ForwardingMode = types.StringValue(rl2BD.Get("l2BD.attributes.fwdMode").String())
+		} else {
+			data.BridgeDomains[c].ForwardingMode = types.StringNull()
+		}
+		if !data.BridgeDomains[c].LongName.IsNull() {
+			data.BridgeDomains[c].LongName = types.BoolValue(helpers.ParseNxosBoolean(rl2BD.Get("l2BD.attributes.longName").String()))
+		} else {
+			data.BridgeDomains[c].LongName = types.BoolNull()
+		}
+		if !data.BridgeDomains[c].MacPacketClassify.IsNull() {
+			data.BridgeDomains[c].MacPacketClassify = types.StringValue(rl2BD.Get("l2BD.attributes.macPacketClassify").String())
+		} else {
+			data.BridgeDomains[c].MacPacketClassify = types.StringNull()
+		}
+		if !data.BridgeDomains[c].Mode.IsNull() {
+			data.BridgeDomains[c].Mode = types.StringValue(rl2BD.Get("l2BD.attributes.mode").String())
+		} else {
+			data.BridgeDomains[c].Mode = types.StringNull()
+		}
+		if !data.BridgeDomains[c].VrfName.IsNull() {
+			data.BridgeDomains[c].VrfName = types.StringValue(rl2BD.Get("l2BD.attributes.vrfName").String())
+		} else {
+			data.BridgeDomains[c].VrfName = types.StringNull()
+		}
+		if !data.BridgeDomains[c].CrossConnect.IsNull() {
+			data.BridgeDomains[c].CrossConnect = types.StringValue(rl2BD.Get("l2BD.attributes.xConnect").String())
+		} else {
+			data.BridgeDomains[c].CrossConnect = types.StringNull()
 		}
 	}
 }

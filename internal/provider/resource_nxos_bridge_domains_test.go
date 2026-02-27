@@ -35,9 +35,20 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosBridgeDomains(t *testing.T) {
 	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domains.test", "svi_autostate", "disable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domains.test", "bridge_domains.0.fabric_encap", "vlan-10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domains.test", "bridge_domains.0.access_encap", "unknown"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domains.test", "bridge_domains.0.name", "VLAN10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domains.test", "bridge_domains.0.bridge_domain_state", "suspend"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domains.test", "bridge_domains.0.admin_state", "active"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domains.test", "bridge_domains.0.bridge_mode", "mac"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domains.test", "bridge_domains.0.control", "untagged"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domains.test", "bridge_domains.0.forwarding_control", "mdst-flood"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domains.test", "bridge_domains.0.forwarding_mode", "bridge"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domains.test", "bridge_domains.0.long_name", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domains.test", "bridge_domains.0.mode", "CE"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domains.test", "bridge_domains.0.vrf_name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domains.test", "bridge_domains.0.cross_connect", "disable"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -94,10 +105,21 @@ func testAccNxosBridgeDomainsConfig_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosBridgeDomainsConfig_all() string {
 	config := `resource "nxos_bridge_domains" "test" {` + "\n"
+	config += `	svi_autostate = "disable"` + "\n"
 	config += `	bridge_domains = [{` + "\n"
 	config += `		fabric_encap = "vlan-10"` + "\n"
 	config += `		access_encap = "unknown"` + "\n"
 	config += `		name = "VLAN10"` + "\n"
+	config += `		bridge_domain_state = "suspend"` + "\n"
+	config += `		admin_state = "active"` + "\n"
+	config += `		bridge_mode = "mac"` + "\n"
+	config += `		control = "untagged"` + "\n"
+	config += `		forwarding_control = "mdst-flood"` + "\n"
+	config += `		forwarding_mode = "bridge"` + "\n"
+	config += `		long_name = false` + "\n"
+	config += `		mode = "CE"` + "\n"
+	config += `		vrf_name = "default"` + "\n"
+	config += `		cross_connect = "disable"` + "\n"
 	config += `	}]` + "\n"
 	config += `}` + "\n"
 	return config

@@ -23,10 +23,22 @@ This resource can manage the bridge domain configuration on NX-OS devices, inclu
 
 ```terraform
 resource "nxos_bridge_domains" "example" {
+  svi_autostate = "disable"
   bridge_domains = [{
-    fabric_encap = "vlan-10"
-    access_encap = "unknown"
-    name         = "VLAN10"
+    fabric_encap        = "vlan-10"
+    access_encap        = "unknown"
+    name                = "VLAN10"
+    bridge_domain_state = "suspend"
+    admin_state         = "active"
+    bridge_mode         = "mac"
+    control             = "untagged"
+    forwarding_control  = "mdst-flood"
+    forwarding_mode     = "bridge"
+    long_name           = false
+    mac_packet_classify = "enable"
+    mode                = "CE"
+    vrf_name            = "default"
+    cross_connect       = "disable"
   }]
 }
 ```
@@ -38,6 +50,9 @@ resource "nxos_bridge_domains" "example" {
 
 - `bridge_domains` (Attributes List) List of bridge domains. (see [below for nested schema](#nestedatt--bridge_domains))
 - `device` (String) A device name from the provider configuration.
+- `svi_autostate` (String) Disable/enable autoState for SVI interface.
+  - Choices: `disable`, `enable`
+  - Default value: `enable`
 
 ### Read-Only
 
@@ -53,7 +68,36 @@ Required:
 Optional:
 
 - `access_encap` (String) The Layer 2 access encapsulation (VLAN or VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
+- `admin_state` (String) admin state.
+  - Choices: `suspend`, `active`
+  - Default value: `active`
+- `bridge_domain_state` (String) Bridge Domain State can be active or suspended.
+  - Choices: `suspend`, `active`
+  - Default value: `active`
+- `bridge_mode` (String) The Layer 2 bridge-domain parameter mode used by the node for enabling classical bridging or bridging with the IP address.
+  - Choices: `ip`, `mac`
+  - Default value: `mac`
+- `control` (String) The control state.
+  - Choices: `none`, `untagged`, `policy-enforced`
+- `cross_connect` (String) Enable Cross Connect on VLAN.
+  - Choices: `disable`, `enable`
+  - Default value: `disable`
+- `forwarding_control` (String) The Layer 2 bridge-domain forwarding controls.
+  - Choices: `mdst-flood`, `arp-flood`
+  - Default value: `mdst-flood`
+- `forwarding_mode` (String) The Layer 2 bridge-domain parameter mode used by the node for enabling forwarding modes.
+  - Choices: `route`, `bridge`
+  - Default value: `route,bridge`
+- `long_name` (Boolean) Enable or disable long name of 128 characters for VLAN.
+  - Default value: `false`
+- `mac_packet_classify` (String) Vlan mac packet classify.
+  - Choices: `disable`, `enable`
+  - Default value: `disable`
+- `mode` (String) Vlan mode.
+  - Choices: `CE`, `FabricPath`
+  - Default value: `CE`
 - `name` (String) The name of the object.
+- `vrf_name` (String) Enable or disable vrf name of 32 characters for VLAN.
 
 ## Import
 

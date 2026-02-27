@@ -36,7 +36,13 @@ func TestAccNxosVRFs(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.name", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.description", "My VRF1 Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.admin_state", "admin-up"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.controller_id", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.encap", "vxlan-103901"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.l3vni", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.oui", "000000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.vpn_id", "100:200"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.routing_encap", "unknown"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.route_distinguisher", "rd:unknown:0:0"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.address_families.0.address_family", "ipv4-ucast"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vrfs.test", "items.0.address_families.0.route_target_address_families.0.route_target_address_family", "ipv4-ucast"))
@@ -115,7 +121,13 @@ func testAccNxosVRFsConfig_all() string {
 	config += `	items = [{` + "\n"
 	config += `		name = "VRF1"` + "\n"
 	config += `		description = "My VRF1 Description"` + "\n"
+	config += `		admin_state = "admin-up"` + "\n"
+	config += `		controller_id = 1` + "\n"
 	config += `		encap = "vxlan-103901"` + "\n"
+	config += `		l3vni = false` + "\n"
+	config += `		oui = "000000"` + "\n"
+	config += `		vpn_id = "100:200"` + "\n"
+	config += `		routing_encap = "unknown"` + "\n"
 	config += `		route_distinguisher = "rd:unknown:0:0"` + "\n"
 	config += `		address_families = [{` + "\n"
 	config += `			address_family = "ipv4-ucast"` + "\n"

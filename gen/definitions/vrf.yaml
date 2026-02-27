@@ -20,11 +20,41 @@ attributes:
     type: String
     description: 'Description.'
     example: My VRF1 Description
+  - nxos_name: adminState
+    tf_name: admin_state
+    type: String
+    description: 'VRF Admin State.'
+    enum_values:
+      - shutdown
+      - admin-up
+    example: admin-up
+  - nxos_name: ctrlrId
+    tf_name: controller_id
+    type: Int64
+    min_int: 0
+    max_int: 16
+    description: 'Controller ID.'
+    example: 1
   - nxos_name: encap
     tf_name: encap
     type: String
     description: 'Encap for this Context. Supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.'
     example: vxlan-103901
+  - nxos_name: l3vni
+    tf_name: l3vni
+    type: Bool
+    description: 'L3 VNI Interface Enable.'
+    example: false
+  - nxos_name: oui
+    tf_name: oui
+    type: String
+    description: 'VRF OUI.'
+    example: '000000'
+  - nxos_name: vpnId
+    tf_name: vpn_id
+    type: String
+    description: 'VRF VPN ID.'
+    example: '100:200'
 child_classes:
   - class_name: rtctrlDom
     doc_path: Routing%20and%20Forwarding/rtctrl:Dom/
@@ -33,6 +63,11 @@ child_classes:
     tf_name: routing
     description: 'VRF routing configuration.'
     attributes:
+      - nxos_name: encap
+        tf_name: routing_encap
+        type: String
+        description: 'Encapsulation of MPLS.'
+        example: unknown
       - nxos_name: rd
         tf_name: route_distinguisher
         type: String

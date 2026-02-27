@@ -18,9 +18,14 @@ This resource can manage multiple vrf resources.
 ```terraform
 resource "nxos_vrfs" "example" {
   items = [{
-    name        = "VRF1"
-    description = "My VRF1 Description"
-    encap       = "vxlan-103901"
+    name          = "VRF1"
+    description   = "My VRF1 Description"
+    admin_state   = "admin-up"
+    controller_id = 1
+    encap         = "vxlan-103901"
+    l3vni         = false
+    oui           = "000000"
+    vpn_id        = "100:200"
   }]
 }
 ```
@@ -50,9 +55,17 @@ Required:
 Optional:
 
 - `address_families` (Attributes List) List of VRF address families. (see [below for nested schema](#nestedatt--items--address_families))
+- `admin_state` (String) VRF Admin State.
+  - Choices: `shutdown`, `admin-up`
+- `controller_id` (Number) Controller ID.
+  - Range: `0`-`16`
 - `description` (String) Description.
 - `encap` (String) Encap for this Context. Supported formats: `unknown`, `vlan-%d` or `vxlan-%d`.
+- `l3vni` (Boolean) L3 VNI Interface Enable.
+- `oui` (String) VRF OUI.
 - `route_distinguisher` (String) Route Distinguisher. Value in NX-OS DME format.
+- `routing_encap` (String) Encapsulation of MPLS.
+- `vpn_id` (String) VRF VPN ID.
 
 <a id="nestedatt--items--address_families"></a>
 ### Nested Schema for `items.address_families`

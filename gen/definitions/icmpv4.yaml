@@ -29,6 +29,14 @@ child_classes:
           - enabled
           - disabled
         example: enabled
+      - nxos_name: ctrl
+        tf_name: control
+        type: String
+        description: 'The control state.'
+        allow_non_enum_values: true
+        enum_values:
+          - stateful-ha
+        example: stateful-ha
     child_classes:
       - class_name: icmpv4Dom
         rn: dom-%s

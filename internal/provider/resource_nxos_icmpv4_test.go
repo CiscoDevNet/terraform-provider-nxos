@@ -37,6 +37,7 @@ func TestAccNxosICMPv4(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_icmpv4.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_icmpv4.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_icmpv4.test", "control", "stateful-ha"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_icmpv4.test", "vrfs.0.name", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_icmpv4.test", "vrfs.0.interfaces.0.id", "vlan10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_icmpv4.test", "vrfs.0.interfaces.0.control", "port-unreachable"))
@@ -119,6 +120,7 @@ func testAccNxosICMPv4Config_all() string {
 	config := `resource "nxos_icmpv4" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	instance_admin_state = "enabled"` + "\n"
+	config += `	control = "stateful-ha"` + "\n"
 	config += `	vrfs = [{` + "\n"
 	config += `		name = "VRF1"` + "\n"
 	config += `		interfaces = [{` + "\n"

@@ -76,6 +76,10 @@ func (d *ICMPv4DataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
+			"control": schema.StringAttribute{
+				MarkdownDescription: "The control state.",
+				Computed:            true,
+			},
 			"vrfs": schema.ListNestedAttribute{
 				MarkdownDescription: "List of ICMPv4 VRF configurations.",
 				Computed:            true,

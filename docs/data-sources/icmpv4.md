@@ -38,6 +38,7 @@ data "nxos_icmpv4" "example" {
 ### Read-Only
 
 - `admin_state` (String) The administrative state of the object or policy.
+- `control` (String) The control state.
 - `id` (String) The distinguished name of the object.
 - `instance_admin_state` (String) The administrative state of the object or policy.
 - `vrfs` (Attributes List) List of ICMPv4 VRF configurations. (see [below for nested schema](#nestedatt--vrfs))

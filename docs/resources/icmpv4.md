@@ -27,6 +27,7 @@ This resource can manage the ICMPv4 configuration on NX-OS devices, including pe
 resource "nxos_icmpv4" "example" {
   admin_state          = "enabled"
   instance_admin_state = "enabled"
+  control              = "stateful-ha"
   vrfs = [{
     name = "VRF1"
     interfaces = [{
@@ -44,6 +45,8 @@ resource "nxos_icmpv4" "example" {
 
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
+- `control` (String) The control state.
+  - Choices: `stateful-ha`
 - `device` (String) A device name from the provider configuration.
 - `instance_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`

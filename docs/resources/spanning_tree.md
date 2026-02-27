@@ -27,7 +27,7 @@ resource "nxos_spanning_tree" "example" {
   admin_state              = "enabled"
   instance_admin_state     = "enabled"
   bridge_assurance         = "disabled"
-  control                  = "stateful-ha"
+  control                  = "normal,stateful-ha"
   fcoe                     = "enabled"
   l2_gateway_stp_domain_id = 2048
   linecard_issu            = "auto"

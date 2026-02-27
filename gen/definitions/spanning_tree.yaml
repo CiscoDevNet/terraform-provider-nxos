@@ -47,8 +47,9 @@ child_classes:
         enum_values:
           - normal
           - stateful-ha
+        allow_non_enum_values: true
         description: "The control state."
-        example: stateful-ha
+        example: "normal,stateful-ha"
       - nxos_name: fcoe
         tf_name: fcoe
         type: String

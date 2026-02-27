@@ -101,9 +101,6 @@ func (r *SpanningTreeResource) Schema(ctx context.Context, req resource.SchemaRe
 			"control": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("normal", "stateful-ha").String,
 				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("normal", "stateful-ha"),
-				},
 			},
 			"fcoe": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Disable spanning tree for fcoe vlan.").AddStringEnumDescription("enabled", "disabled").String,

@@ -34,7 +34,7 @@ func TestAccDataSourceNxosSpanningTree(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "instance_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "bridge_assurance", "disabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "control", "normal,stateful-ha"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "fcoe", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "l2_gateway_stp_domain_id", "2048"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "linecard_issu", "auto"))
@@ -80,7 +80,7 @@ func testAccDataSourceNxosSpanningTreeConfig() string {
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	instance_admin_state = "enabled"` + "\n"
 	config += `	bridge_assurance = "disabled"` + "\n"
-	config += `	control = "stateful-ha"` + "\n"
+	config += `	control = "normal,stateful-ha"` + "\n"
 	config += `	fcoe = "enabled"` + "\n"
 	config += `	l2_gateway_stp_domain_id = 2048` + "\n"
 	config += `	linecard_issu = "auto"` + "\n"

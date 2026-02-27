@@ -85,6 +85,14 @@ func (d *EVPNDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 							MarkdownDescription: "Route Distinguisher. value in NX-OS DME format.",
 							Computed:            true,
 						},
+						"table_map": schema.StringAttribute{
+							MarkdownDescription: "Route-map name for table-map command to filter routes.",
+							Computed:            true,
+						},
+						"table_map_filter": schema.BoolAttribute{
+							MarkdownDescription: "Filter option used with table-map configuration for selective route download.",
+							Computed:            true,
+						},
 						"route_target_directions": schema.ListNestedAttribute{
 							MarkdownDescription: "List of EVPN VNI route target directions.",
 							Computed:            true,

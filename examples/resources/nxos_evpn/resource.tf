@@ -3,6 +3,8 @@ resource "nxos_evpn" "example" {
   vnis = [{
     encap               = "vxlan-123456"
     route_distinguisher = "rd:unknown:0:0"
+    table_map           = "ROUTE_MAP1"
+    table_map_filter    = false
     route_target_directions = [{
       type = "import"
       route_targets = [{

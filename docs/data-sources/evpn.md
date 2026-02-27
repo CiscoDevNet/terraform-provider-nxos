@@ -49,6 +49,8 @@ Read-Only:
 - `encap` (String) Encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.
 - `route_distinguisher` (String) Route Distinguisher. value in NX-OS DME format.
 - `route_target_directions` (Attributes List) List of EVPN VNI route target directions. (see [below for nested schema](#nestedatt--vnis--route_target_directions))
+- `table_map` (String) Route-map name for table-map command to filter routes.
+- `table_map_filter` (Boolean) Filter option used with table-map configuration for selective route download.
 
 <a id="nestedatt--vnis--route_target_directions"></a>
 ### Nested Schema for `vnis.route_target_directions`

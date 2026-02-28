@@ -31,7 +31,7 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosPortChannelInterface(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "interface_id", "po1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "interface_id", "po123"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_mode", "active"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "minimum_links", "2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "maximum_links", "10"))
@@ -102,7 +102,7 @@ resource "nxos_rest" "PreReq0" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 func testAccDataSourceNxosPortChannelInterfaceConfig() string {
 	config := `resource "nxos_port_channel_interface" "test" {` + "\n"
-	config += `	interface_id = "po1"` + "\n"
+	config += `	interface_id = "po123"` + "\n"
 	config += `	port_channel_mode = "active"` + "\n"
 	config += `	minimum_links = 2` + "\n"
 	config += `	maximum_links = 10` + "\n"
@@ -146,7 +146,7 @@ func testAccDataSourceNxosPortChannelInterfaceConfig() string {
 
 	config += `
 data "nxos_port_channel_interface" "test" {
-	interface_id = "po1"
+	interface_id = "po123"
 	depends_on = [nxos_port_channel_interface.test]
 }
 	`

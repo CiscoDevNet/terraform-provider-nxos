@@ -24,7 +24,7 @@ This data source can read the configuration of a port-channel interface on NX-OS
 
 ```terraform
 data "nxos_port_channel_interface" "example" {
-  interface_id = "po1"
+  interface_id = "po123"
 }
 ```
 

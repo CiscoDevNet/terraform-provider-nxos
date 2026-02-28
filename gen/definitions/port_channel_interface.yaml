@@ -14,7 +14,7 @@ attributes:
     type: String
     id: true
     description: "Must match first field in the output of `show intf brief`. Example: `po1`."
-    example: po1
+    example: po123
   - nxos_name: pcMode
     tf_name: port_channel_mode
     type: String

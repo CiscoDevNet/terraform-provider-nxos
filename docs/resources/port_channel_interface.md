@@ -24,7 +24,7 @@ This resource can manage a port-channel interface on NX-OS devices, including ch
 
 ```terraform
 resource "nxos_port_channel_interface" "example" {
-  interface_id           = "po1"
+  interface_id           = "po123"
   port_channel_mode      = "active"
   minimum_links          = 2
   maximum_links          = 10

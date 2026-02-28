@@ -57,7 +57,7 @@ func (d *UserManagementDataSource) Metadata(_ context.Context, req datasource.Me
 func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.", "aaaUserEp", "Security%20and%20Policing/aaa:UserEp/").AddAdditionalDocs([]string{"aaaUser", "aaaUserDomain", "aaaUserRole"}, []string{"Security%20and%20Policing/aaa:User/", "Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.", "aaaUserEp", "Security%20and%20Policing/aaa:UserEp/").AddAdditionalDocs([]string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole"}, []string{"Security%20and%20Policing/aaa:PreLoginBanner", "Security%20and%20Policing/aaa:PostLoginBanner", "Security%20and%20Policing/aaa:User/", "Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -118,6 +118,46 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 			},
 			"service_password_recovery": schema.StringAttribute{
 				MarkdownDescription: "Service Password Recovery.",
+				Computed:            true,
+			},
+			"pre_login_banner_description": schema.StringAttribute{
+				MarkdownDescription: "Description of the specified attribute.",
+				Computed:            true,
+			},
+			"pre_login_banner_name": schema.StringAttribute{
+				MarkdownDescription: "Object name.",
+				Computed:            true,
+			},
+			"pre_login_banner_owner_key": schema.StringAttribute{
+				MarkdownDescription: "The key for enabling clients to own their data for entity correlation.",
+				Computed:            true,
+			},
+			"pre_login_banner_message": schema.StringAttribute{
+				MarkdownDescription: "A message displayed in the banner.",
+				Computed:            true,
+			},
+			"pre_login_banner_owner_tag": schema.StringAttribute{
+				MarkdownDescription: "A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+				Computed:            true,
+			},
+			"post_login_banner_description": schema.StringAttribute{
+				MarkdownDescription: "Description of the specified attribute.",
+				Computed:            true,
+			},
+			"post_login_banner_name": schema.StringAttribute{
+				MarkdownDescription: "Object name.",
+				Computed:            true,
+			},
+			"post_login_banner_owner_key": schema.StringAttribute{
+				MarkdownDescription: "The key for enabling clients to own their data for entity correlation.",
+				Computed:            true,
+			},
+			"post_login_banner_message": schema.StringAttribute{
+				MarkdownDescription: "A message displayed in the banner.",
+				Computed:            true,
+			},
+			"post_login_banner_owner_tag": schema.StringAttribute{
+				MarkdownDescription: "A tag for enabling clients to add their own data. For example, to indicate who created this object.",
 				Computed:            true,
 			},
 			"users": schema.ListNestedAttribute{

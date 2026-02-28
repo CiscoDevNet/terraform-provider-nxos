@@ -6,7 +6,7 @@ description: |-
   This resource can manage the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.
   API Documentation: aaaUserEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserEp/
   Additional API Documentation
-  aaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:User/aaaUserDomain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserDomain/aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserRole/
+  aaaPreLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PreLoginBanneraaaPostLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PostLoginBanneraaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:User/aaaUserDomain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserDomain/aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserRole/
 ---
 
 # nxos_user_management (Resource)
@@ -17,6 +17,8 @@ This resource can manage the user management configuration on NX-OS devices, inc
 
 ### Additional API Documentation
 
+- [aaaPreLoginBanner](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PreLoginBanner)
+- [aaaPostLoginBanner](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PostLoginBanner)
 - [aaaUser](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:User/)
 - [aaaUserDomain](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserDomain/)
 - [aaaUserRole](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserRole/)
@@ -25,19 +27,29 @@ This resource can manage the user management configuration on NX-OS devices, inc
 
 ```terraform
 resource "nxos_user_management" "example" {
-  alphabet_sequence         = 3
-  description               = "User management policy"
-  keyboard_sequence         = 3
-  max_logins                = 4
-  min_unique                = 3
-  password_grace_time       = 5
-  password_life_time        = 90
-  password_max_length       = 127
-  password_min_length       = 10
-  password_secure_mode      = "no"
-  password_strength_check   = "no"
-  password_warning_time     = 10
-  service_password_recovery = "no"
+  alphabet_sequence             = 3
+  description                   = "User management policy"
+  keyboard_sequence             = 3
+  max_logins                    = 4
+  min_unique                    = 3
+  password_grace_time           = 5
+  password_life_time            = 90
+  password_max_length           = 127
+  password_min_length           = 10
+  password_secure_mode          = "no"
+  password_strength_check       = "no"
+  password_warning_time         = 10
+  service_password_recovery     = "no"
+  pre_login_banner_description  = "Pre-login banner"
+  pre_login_banner_name         = "prelogin"
+  pre_login_banner_owner_key    = "owner1"
+  pre_login_banner_message      = "Authorized users only."
+  pre_login_banner_owner_tag    = "tag1"
+  post_login_banner_description = "Post-login banner"
+  post_login_banner_name        = "postlogin"
+  post_login_banner_owner_key   = "owner1"
+  post_login_banner_message     = "Welcome to the system."
+  post_login_banner_owner_tag   = "tag1"
   users = [{
     name                     = "user1"
     account_status           = "active"
@@ -94,6 +106,16 @@ resource "nxos_user_management" "example" {
   - Choices: `no`, `yes`
 - `password_warning_time` (Number) Warning time of user passphrase (in days).
   - Range: `0`-`99999`
+- `post_login_banner_description` (String) Description of the specified attribute.
+- `post_login_banner_message` (String) A message displayed in the banner.
+- `post_login_banner_name` (String) Object name.
+- `post_login_banner_owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `post_login_banner_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+- `pre_login_banner_description` (String) Description of the specified attribute.
+- `pre_login_banner_message` (String) A message displayed in the banner.
+- `pre_login_banner_name` (String) Object name.
+- `pre_login_banner_owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `pre_login_banner_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
 - `service_password_recovery` (String) Service Password Recovery.
   - Choices: `no`, `yes`
 - `users` (Attributes List) List of users. (see [below for nested schema](#nestedatt--users))

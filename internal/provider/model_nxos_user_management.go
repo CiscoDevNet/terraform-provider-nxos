@@ -37,22 +37,32 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type UserManagement struct {
-	Device                  types.String          `tfsdk:"device"`
-	Dn                      types.String          `tfsdk:"id"`
-	AlphabetSequence        types.Int64           `tfsdk:"alphabet_sequence"`
-	Description             types.String          `tfsdk:"description"`
-	KeyboardSequence        types.Int64           `tfsdk:"keyboard_sequence"`
-	MaxLogins               types.Int64           `tfsdk:"max_logins"`
-	MinUnique               types.Int64           `tfsdk:"min_unique"`
-	PasswordGraceTime       types.Int64           `tfsdk:"password_grace_time"`
-	PasswordLifeTime        types.Int64           `tfsdk:"password_life_time"`
-	PasswordMaxLength       types.Int64           `tfsdk:"password_max_length"`
-	PasswordMinLength       types.Int64           `tfsdk:"password_min_length"`
-	PasswordSecureMode      types.String          `tfsdk:"password_secure_mode"`
-	PasswordStrengthCheck   types.String          `tfsdk:"password_strength_check"`
-	PasswordWarningTime     types.Int64           `tfsdk:"password_warning_time"`
-	ServicePasswordRecovery types.String          `tfsdk:"service_password_recovery"`
-	Users                   []UserManagementUsers `tfsdk:"users"`
+	Device                     types.String          `tfsdk:"device"`
+	Dn                         types.String          `tfsdk:"id"`
+	AlphabetSequence           types.Int64           `tfsdk:"alphabet_sequence"`
+	Description                types.String          `tfsdk:"description"`
+	KeyboardSequence           types.Int64           `tfsdk:"keyboard_sequence"`
+	MaxLogins                  types.Int64           `tfsdk:"max_logins"`
+	MinUnique                  types.Int64           `tfsdk:"min_unique"`
+	PasswordGraceTime          types.Int64           `tfsdk:"password_grace_time"`
+	PasswordLifeTime           types.Int64           `tfsdk:"password_life_time"`
+	PasswordMaxLength          types.Int64           `tfsdk:"password_max_length"`
+	PasswordMinLength          types.Int64           `tfsdk:"password_min_length"`
+	PasswordSecureMode         types.String          `tfsdk:"password_secure_mode"`
+	PasswordStrengthCheck      types.String          `tfsdk:"password_strength_check"`
+	PasswordWarningTime        types.Int64           `tfsdk:"password_warning_time"`
+	ServicePasswordRecovery    types.String          `tfsdk:"service_password_recovery"`
+	PreLoginBannerDescription  types.String          `tfsdk:"pre_login_banner_description"`
+	PreLoginBannerName         types.String          `tfsdk:"pre_login_banner_name"`
+	PreLoginBannerOwnerKey     types.String          `tfsdk:"pre_login_banner_owner_key"`
+	PreLoginBannerMessage      types.String          `tfsdk:"pre_login_banner_message"`
+	PreLoginBannerOwnerTag     types.String          `tfsdk:"pre_login_banner_owner_tag"`
+	PostLoginBannerDescription types.String          `tfsdk:"post_login_banner_description"`
+	PostLoginBannerName        types.String          `tfsdk:"post_login_banner_name"`
+	PostLoginBannerOwnerKey    types.String          `tfsdk:"post_login_banner_owner_key"`
+	PostLoginBannerMessage     types.String          `tfsdk:"post_login_banner_message"`
+	PostLoginBannerOwnerTag    types.String          `tfsdk:"post_login_banner_owner_tag"`
+	Users                      []UserManagementUsers `tfsdk:"users"`
 }
 
 type UserManagementUsers struct {
@@ -170,6 +180,44 @@ func (data UserManagement) toBody() nxos.Body {
 	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
+	attrs = "{}"
+	if (!data.PreLoginBannerDescription.IsUnknown() && !data.PreLoginBannerDescription.IsNull()) || false {
+		attrs, _ = sjson.Set(attrs, "descr", data.PreLoginBannerDescription.ValueString())
+	}
+	if (!data.PreLoginBannerName.IsUnknown() && !data.PreLoginBannerName.IsNull()) || false {
+		attrs, _ = sjson.Set(attrs, "name", data.PreLoginBannerName.ValueString())
+	}
+	if (!data.PreLoginBannerOwnerKey.IsUnknown() && !data.PreLoginBannerOwnerKey.IsNull()) || false {
+		attrs, _ = sjson.Set(attrs, "ownerKey", data.PreLoginBannerOwnerKey.ValueString())
+	}
+	if (!data.PreLoginBannerMessage.IsUnknown() && !data.PreLoginBannerMessage.IsNull()) || false {
+		attrs, _ = sjson.Set(attrs, "message", data.PreLoginBannerMessage.ValueString())
+	}
+	if (!data.PreLoginBannerOwnerTag.IsUnknown() && !data.PreLoginBannerOwnerTag.IsNull()) || false {
+		attrs, _ = sjson.Set(attrs, "ownerTag", data.PreLoginBannerOwnerTag.ValueString())
+	}
+	if attrs != "{}" || false {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.aaaPreLoginBanner.attributes", attrs)
+	}
+	attrs = "{}"
+	if (!data.PostLoginBannerDescription.IsUnknown() && !data.PostLoginBannerDescription.IsNull()) || false {
+		attrs, _ = sjson.Set(attrs, "descr", data.PostLoginBannerDescription.ValueString())
+	}
+	if (!data.PostLoginBannerName.IsUnknown() && !data.PostLoginBannerName.IsNull()) || false {
+		attrs, _ = sjson.Set(attrs, "name", data.PostLoginBannerName.ValueString())
+	}
+	if (!data.PostLoginBannerOwnerKey.IsUnknown() && !data.PostLoginBannerOwnerKey.IsNull()) || false {
+		attrs, _ = sjson.Set(attrs, "ownerKey", data.PostLoginBannerOwnerKey.ValueString())
+	}
+	if (!data.PostLoginBannerMessage.IsUnknown() && !data.PostLoginBannerMessage.IsNull()) || false {
+		attrs, _ = sjson.Set(attrs, "message", data.PostLoginBannerMessage.ValueString())
+	}
+	if (!data.PostLoginBannerOwnerTag.IsUnknown() && !data.PostLoginBannerOwnerTag.IsNull()) || false {
+		attrs, _ = sjson.Set(attrs, "ownerTag", data.PostLoginBannerOwnerTag.ValueString())
+	}
+	if attrs != "{}" || false {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.aaaPostLoginBanner.attributes", attrs)
+	}
 	for _, child := range data.Users {
 		attrs = "{}"
 		if (!child.Name.IsUnknown() && !child.Name.IsNull()) || false {
@@ -272,6 +320,42 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 	data.PasswordStrengthCheck = types.StringValue(res.Get(data.getClassName() + ".attributes.pwdStrengthCheck").String())
 	data.PasswordWarningTime = types.Int64Value(res.Get(data.getClassName() + ".attributes.pwdWarningTime").Int())
 	data.ServicePasswordRecovery = types.StringValue(res.Get(data.getClassName() + ".attributes.svcPwdRecovery").String())
+	{
+		var raaaPreLoginBanner gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("aaaPreLoginBanner.attributes.rn").String()
+				if key == "preloginbanner" {
+					raaaPreLoginBanner = v
+					return false
+				}
+				return true
+			},
+		)
+		data.PreLoginBannerDescription = types.StringValue(raaaPreLoginBanner.Get("aaaPreLoginBanner.attributes.descr").String())
+		data.PreLoginBannerName = types.StringValue(raaaPreLoginBanner.Get("aaaPreLoginBanner.attributes.name").String())
+		data.PreLoginBannerOwnerKey = types.StringValue(raaaPreLoginBanner.Get("aaaPreLoginBanner.attributes.ownerKey").String())
+		data.PreLoginBannerMessage = types.StringValue(raaaPreLoginBanner.Get("aaaPreLoginBanner.attributes.message").String())
+		data.PreLoginBannerOwnerTag = types.StringValue(raaaPreLoginBanner.Get("aaaPreLoginBanner.attributes.ownerTag").String())
+	}
+	{
+		var raaaPostLoginBanner gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("aaaPostLoginBanner.attributes.rn").String()
+				if key == "postloginbanner" {
+					raaaPostLoginBanner = v
+					return false
+				}
+				return true
+			},
+		)
+		data.PostLoginBannerDescription = types.StringValue(raaaPostLoginBanner.Get("aaaPostLoginBanner.attributes.descr").String())
+		data.PostLoginBannerName = types.StringValue(raaaPostLoginBanner.Get("aaaPostLoginBanner.attributes.name").String())
+		data.PostLoginBannerOwnerKey = types.StringValue(raaaPostLoginBanner.Get("aaaPostLoginBanner.attributes.ownerKey").String())
+		data.PostLoginBannerMessage = types.StringValue(raaaPostLoginBanner.Get("aaaPostLoginBanner.attributes.message").String())
+		data.PostLoginBannerOwnerTag = types.StringValue(raaaPostLoginBanner.Get("aaaPostLoginBanner.attributes.ownerTag").String())
+	}
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
 			v.ForEach(
@@ -402,6 +486,78 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 		data.ServicePasswordRecovery = types.StringValue(res.Get(data.getClassName() + ".attributes.svcPwdRecovery").String())
 	} else {
 		data.ServicePasswordRecovery = types.StringNull()
+	}
+	var raaaPreLoginBanner gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("aaaPreLoginBanner.attributes.rn").String()
+			if key == "preloginbanner" {
+				raaaPreLoginBanner = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.PreLoginBannerDescription.IsNull() {
+		data.PreLoginBannerDescription = types.StringValue(raaaPreLoginBanner.Get("aaaPreLoginBanner.attributes.descr").String())
+	} else {
+		data.PreLoginBannerDescription = types.StringNull()
+	}
+	if !data.PreLoginBannerName.IsNull() {
+		data.PreLoginBannerName = types.StringValue(raaaPreLoginBanner.Get("aaaPreLoginBanner.attributes.name").String())
+	} else {
+		data.PreLoginBannerName = types.StringNull()
+	}
+	if !data.PreLoginBannerOwnerKey.IsNull() {
+		data.PreLoginBannerOwnerKey = types.StringValue(raaaPreLoginBanner.Get("aaaPreLoginBanner.attributes.ownerKey").String())
+	} else {
+		data.PreLoginBannerOwnerKey = types.StringNull()
+	}
+	if !data.PreLoginBannerMessage.IsNull() {
+		data.PreLoginBannerMessage = types.StringValue(raaaPreLoginBanner.Get("aaaPreLoginBanner.attributes.message").String())
+	} else {
+		data.PreLoginBannerMessage = types.StringNull()
+	}
+	if !data.PreLoginBannerOwnerTag.IsNull() {
+		data.PreLoginBannerOwnerTag = types.StringValue(raaaPreLoginBanner.Get("aaaPreLoginBanner.attributes.ownerTag").String())
+	} else {
+		data.PreLoginBannerOwnerTag = types.StringNull()
+	}
+	var raaaPostLoginBanner gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("aaaPostLoginBanner.attributes.rn").String()
+			if key == "postloginbanner" {
+				raaaPostLoginBanner = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.PostLoginBannerDescription.IsNull() {
+		data.PostLoginBannerDescription = types.StringValue(raaaPostLoginBanner.Get("aaaPostLoginBanner.attributes.descr").String())
+	} else {
+		data.PostLoginBannerDescription = types.StringNull()
+	}
+	if !data.PostLoginBannerName.IsNull() {
+		data.PostLoginBannerName = types.StringValue(raaaPostLoginBanner.Get("aaaPostLoginBanner.attributes.name").String())
+	} else {
+		data.PostLoginBannerName = types.StringNull()
+	}
+	if !data.PostLoginBannerOwnerKey.IsNull() {
+		data.PostLoginBannerOwnerKey = types.StringValue(raaaPostLoginBanner.Get("aaaPostLoginBanner.attributes.ownerKey").String())
+	} else {
+		data.PostLoginBannerOwnerKey = types.StringNull()
+	}
+	if !data.PostLoginBannerMessage.IsNull() {
+		data.PostLoginBannerMessage = types.StringValue(raaaPostLoginBanner.Get("aaaPostLoginBanner.attributes.message").String())
+	} else {
+		data.PostLoginBannerMessage = types.StringNull()
+	}
+	if !data.PostLoginBannerOwnerTag.IsNull() {
+		data.PostLoginBannerOwnerTag = types.StringValue(raaaPostLoginBanner.Get("aaaPostLoginBanner.attributes.ownerTag").String())
+	} else {
+		data.PostLoginBannerOwnerTag = types.StringNull()
 	}
 	for c := range data.Users {
 		var raaaUser gjson.Result
@@ -544,6 +700,22 @@ func (data UserManagement) toDeleteBody() nxos.Body {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	}
 	childrenPath := data.getClassName() + ".children"
+	{
+		childBody := ""
+		if childBody != "" {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaPreLoginBanner"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+		}
+	}
+	{
+		childBody := ""
+		if childBody != "" {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaPostLoginBanner"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+		}
+	}
 	for _, child := range data.Users {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "aaaUser.attributes.rn", child.getRn())

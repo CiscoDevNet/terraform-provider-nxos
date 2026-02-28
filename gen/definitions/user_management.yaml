@@ -101,6 +101,70 @@ attributes:
     description: "Service Password Recovery."
     example: "no"
 child_classes:
+  - class_name: aaaPreLoginBanner
+    doc_path: Security%20and%20Policing/aaa:PreLoginBanner
+    rn: preloginbanner
+    type: single
+    no_delete: true
+    attributes:
+      - nxos_name: descr
+        tf_name: pre_login_banner_description
+        type: String
+        description: "Description of the specified attribute."
+        example: "Pre-login banner"
+      - nxos_name: name
+        tf_name: pre_login_banner_name
+        type: String
+        description: "Object name."
+        example: "prelogin"
+        exclude_test: true
+      - nxos_name: ownerKey
+        tf_name: pre_login_banner_owner_key
+        type: String
+        description: "The key for enabling clients to own their data for entity correlation."
+        example: "owner1"
+      - nxos_name: message
+        tf_name: pre_login_banner_message
+        type: String
+        description: "A message displayed in the banner."
+        example: "Authorized users only."
+      - nxos_name: ownerTag
+        tf_name: pre_login_banner_owner_tag
+        type: String
+        description: "A tag for enabling clients to add their own data. For example, to indicate who created this object."
+        example: "tag1"
+  - class_name: aaaPostLoginBanner
+    doc_path: Security%20and%20Policing/aaa:PostLoginBanner
+    rn: postloginbanner
+    type: single
+    no_delete: true
+    attributes:
+      - nxos_name: descr
+        tf_name: post_login_banner_description
+        type: String
+        description: "Description of the specified attribute."
+        example: "Post-login banner"
+      - nxos_name: name
+        tf_name: post_login_banner_name
+        type: String
+        description: "Object name."
+        example: "postlogin"
+        exclude_test: true
+      - nxos_name: ownerKey
+        tf_name: post_login_banner_owner_key
+        type: String
+        description: "The key for enabling clients to own their data for entity correlation."
+        example: "owner1"
+      - nxos_name: message
+        tf_name: post_login_banner_message
+        type: String
+        description: "A message displayed in the banner."
+        example: "Welcome to the system."
+      - nxos_name: ownerTag
+        tf_name: post_login_banner_owner_tag
+        type: String
+        description: "A tag for enabling clients to add their own data. For example, to indicate who created this object."
+        example: "tag1"
   - class_name: aaaUser
     doc_path: Security%20and%20Policing/aaa:User/
     rn: user-[%s]

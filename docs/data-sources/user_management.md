@@ -6,7 +6,7 @@ description: |-
   This data source can read the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.
   API Documentation: aaaUserEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserEp/
   Additional API Documentation
-  aaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:User/aaaUserDomain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserDomain/aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserRole/
+  aaaPreLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PreLoginBanneraaaPostLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PostLoginBanneraaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:User/aaaUserDomain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserDomain/aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserRole/
 ---
 
 # nxos_user_management (Data Source)
@@ -17,6 +17,8 @@ This data source can read the user management configuration on NX-OS devices, in
 
 ### Additional API Documentation
 
+- [aaaPreLoginBanner](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PreLoginBanner)
+- [aaaPostLoginBanner](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PostLoginBanner)
 - [aaaUser](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:User/)
 - [aaaUserDomain](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserDomain/)
 - [aaaUserRole](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserRole/)
@@ -50,6 +52,16 @@ data "nxos_user_management" "example" {
 - `password_secure_mode` (String) Password secure-mode.
 - `password_strength_check` (String) The password strength check, which specifies if the system enforces the strength of the user password.
 - `password_warning_time` (Number) Warning time of user passphrase (in days).
+- `post_login_banner_description` (String) Description of the specified attribute.
+- `post_login_banner_message` (String) A message displayed in the banner.
+- `post_login_banner_name` (String) Object name.
+- `post_login_banner_owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `post_login_banner_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+- `pre_login_banner_description` (String) Description of the specified attribute.
+- `pre_login_banner_message` (String) A message displayed in the banner.
+- `pre_login_banner_name` (String) Object name.
+- `pre_login_banner_owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `pre_login_banner_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
 - `service_password_recovery` (String) Service Password Recovery.
 - `users` (Attributes List) List of users. (see [below for nested schema](#nestedatt--users))
 

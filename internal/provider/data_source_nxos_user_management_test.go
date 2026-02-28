@@ -44,6 +44,14 @@ func TestAccDataSourceNxosUserManagement(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "password_strength_check", "no"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "password_warning_time", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "service_password_recovery", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "pre_login_banner_description", "Pre-login banner"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "pre_login_banner_owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "pre_login_banner_message", "Authorized users only."))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "pre_login_banner_owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "post_login_banner_description", "Post-login banner"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "post_login_banner_owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "post_login_banner_message", "Welcome to the system."))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "post_login_banner_owner_tag", "tag1"))
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_user_management.test", "users.*", map[string]string{
 		"name":                   "user1",
 		"account_status":         "active",
@@ -98,6 +106,14 @@ func testAccDataSourceNxosUserManagementConfig() string {
 	config += `	password_strength_check = "no"` + "\n"
 	config += `	password_warning_time = 10` + "\n"
 	config += `	service_password_recovery = "no"` + "\n"
+	config += `	pre_login_banner_description = "Pre-login banner"` + "\n"
+	config += `	pre_login_banner_owner_key = "owner1"` + "\n"
+	config += `	pre_login_banner_message = "Authorized users only."` + "\n"
+	config += `	pre_login_banner_owner_tag = "tag1"` + "\n"
+	config += `	post_login_banner_description = "Post-login banner"` + "\n"
+	config += `	post_login_banner_owner_key = "owner1"` + "\n"
+	config += `	post_login_banner_message = "Welcome to the system."` + "\n"
+	config += `	post_login_banner_owner_tag = "tag1"` + "\n"
 	config += `	users = [{` + "\n"
 	config += `		name = "user1"` + "\n"
 	config += `		account_status = "active"` + "\n"

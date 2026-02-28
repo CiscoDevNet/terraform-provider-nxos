@@ -41,7 +41,6 @@ func TestAccDataSourceNxosPortChannelInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "auto_negotiation", "on"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "bandwidth", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "delay", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "description", "My Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "duplex", "auto"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "layer", "Layer2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "link_logging", "enable"))
@@ -112,7 +111,6 @@ func testAccDataSourceNxosPortChannelInterfaceConfig() string {
 	config += `	auto_negotiation = "on"` + "\n"
 	config += `	bandwidth = 0` + "\n"
 	config += `	delay = 1` + "\n"
-	config += `	description = "My Description"` + "\n"
 	config += `	duplex = "auto"` + "\n"
 	config += `	layer = "Layer2"` + "\n"
 	config += `	link_logging = "enable"` + "\n"

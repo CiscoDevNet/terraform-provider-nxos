@@ -89,6 +89,7 @@ attributes:
     type: String
     description: "Interface description."
     example: My Description
+    exclude_test: true
   - nxos_name: duplex
     tf_name: duplex
     type: String

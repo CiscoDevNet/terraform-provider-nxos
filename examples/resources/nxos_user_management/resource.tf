@@ -46,4 +46,41 @@ resource "nxos_user_management" "example" {
       privilege_type = "readPriv"
     }]
   }]
+  tacacs_deadtime         = 5
+  tacacs_description      = "TACACS+ settings"
+  tacacs_key              = "secret123"
+  tacacs_key_encryption   = "0"
+  tacacs_logging_level    = 4
+  tacacs_name             = "tacacsplus"
+  tacacs_owner_key        = "owner1"
+  tacacs_owner_tag        = "tag1"
+  tacacs_retries          = 3
+  tacacs_source_interface = "unspecified"
+  tacacs_timeout          = 10
+  tacacs_providers = [{
+    name                     = "10.1.1.1"
+    authentication_protocol  = "chap"
+    description              = "TACACS+ provider"
+    key                      = "secret123"
+    key_encryption           = "0"
+    monitoring_idle_time     = 10
+    monitoring_password      = "monpass"
+    monitoring_password_type = "0"
+    monitoring_user          = "monuser"
+    owner_key                = "owner1"
+    owner_tag                = "tag1"
+    port                     = 149
+    retries                  = 3
+    single_connection        = "yes"
+    timeout                  = 10
+  }]
+  tacacs_provider_groups = [{
+    name             = "TACACS_GROUP1"
+    deadtime         = 5
+    description      = "TACACS+ provider group"
+    owner_key        = "owner1"
+    owner_tag        = "tag1"
+    source_interface = "unspecified"
+    vrf              = "default"
+  }]
 }

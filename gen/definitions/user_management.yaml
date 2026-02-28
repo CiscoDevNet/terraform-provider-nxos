@@ -333,3 +333,248 @@ child_classes:
                   - "writePriv"
                 description: "The privilege type for a user role."
                 example: "readPriv"
+  - class_name: aaaTacacsPlusEp
+    doc_path: Security%20and%20Policing/aaa:TacacsPlusEp/
+    rn: tacacsext
+    type: single
+    no_delete: true
+    attributes:
+      - nxos_name: deadtime
+        tf_name: tacacs_deadtime
+        type: Int64
+        min_int: 0
+        max_int: 1440
+        description: "Duration for which non-reachable server is skipped."
+        example: 5
+      - nxos_name: descr
+        tf_name: tacacs_description
+        type: String
+        description: "Description of the specified attribute."
+        example: "TACACS+ settings"
+      - nxos_name: key
+        tf_name: tacacs_key
+        type: String
+        description: "Global TACACS+ server shared secret."
+        write_only: true
+        exclude_test: true
+        example: "secret123"
+      - nxos_name: keyEnc
+        tf_name: tacacs_key_encryption
+        type: String
+        enum_values:
+          - "0"
+          - "6"
+          - "7"
+        description: "Default key encryption."
+        example: "0"
+        exclude_test: true
+      - nxos_name: loggingLevel
+        tf_name: tacacs_logging_level
+        type: Int64
+        min_int: 0
+        max_int: 7
+        description: "Tacacs Logging level."
+        example: 4
+        exclude_test: true
+      - nxos_name: name
+        tf_name: tacacs_name
+        type: String
+        description: "Object name."
+        example: "tacacsplus"
+        exclude_test: true
+      - nxos_name: ownerKey
+        tf_name: tacacs_owner_key
+        type: String
+        description: "The key for enabling clients to own their data for entity correlation."
+        example: "owner1"
+      - nxos_name: ownerTag
+        tf_name: tacacs_owner_tag
+        type: String
+        description: "A tag for enabling clients to add their own data. For example, to indicate who created this object."
+        example: "tag1"
+      - nxos_name: retries
+        tf_name: tacacs_retries
+        type: Int64
+        min_int: 0
+        max_int: 5
+        description: "The number of attempts that the authentication method is tried."
+        example: 3
+      - nxos_name: srcIf
+        tf_name: tacacs_source_interface
+        type: String
+        description: "Source Interface."
+        example: "unspecified"
+      - nxos_name: timeout
+        tf_name: tacacs_timeout
+        type: Int64
+        min_int: 1
+        max_int: 60
+        description: "The amount of time between authentication attempts."
+        example: 10
+    child_classes:
+      - class_name: aaaTacacsPlusProvider
+        doc_path: Security%20and%20Policing/aaa:TacacsPlusProvider/
+        rn: tacacsplusprovider-[%s]
+        tf_name: tacacs_providers
+        description: "TACACS+ providers."
+        type: list
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: "Object name."
+            example: "10.1.1.1"
+          - nxos_name: authProtocol
+            tf_name: authentication_protocol
+            type: String
+            enum_values:
+              - pap
+              - chap
+              - mschap
+              - mschapv2
+              - ascii
+            description: "The TACACS+ authentication protocol."
+            example: "chap"
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: "Description of the specified attribute."
+            example: "TACACS+ provider"
+          - nxos_name: key
+            tf_name: key
+            type: String
+            description: "A password for the AAA provider database."
+            write_only: true
+            exclude_test: true
+            example: "secret123"
+          - nxos_name: keyEnc
+            tf_name: key_encryption
+            type: String
+            enum_values:
+              - "0"
+              - "6"
+              - "7"
+            description: "Default key encryption."
+            example: "0"
+            exclude_test: true
+          - nxos_name: monitoringIdleTime
+            tf_name: monitoring_idle_time
+            type: Int64
+            min_int: 0
+            max_int: 1440
+            description: "Idle timer to monitor tacacs server."
+            example: 10
+          - nxos_name: monitoringPassword
+            tf_name: monitoring_password
+            type: String
+            description: "Periodic Server Monitoring Password."
+            write_only: true
+            exclude_test: true
+            example: "monpass"
+          - nxos_name: monitoringPasswordType
+            tf_name: monitoring_password_type
+            type: String
+            enum_values:
+              - "0"
+              - "7"
+            description: "Monitoring password type."
+            example: "0"
+            exclude_test: true
+          - nxos_name: monitoringUser
+            tf_name: monitoring_user
+            type: String
+            description: "Periodic Server Monitoring Username."
+            example: "monuser"
+            exclude_test: true
+          - nxos_name: ownerKey
+            tf_name: owner_key
+            type: String
+            description: "The key for enabling clients to own their data for entity correlation."
+            example: "owner1"
+          - nxos_name: ownerTag
+            tf_name: owner_tag
+            type: String
+            description: "A tag for enabling clients to add their own data. For example, to indicate who created this object."
+            example: "tag1"
+          - nxos_name: port
+            tf_name: port
+            type: Int64
+            min_int: 1
+            max_int: 65535
+            description: "The service port number for the TACACS+ service."
+            example: 149
+          - nxos_name: retries
+            tf_name: retries
+            type: Int64
+            min_int: 0
+            max_int: 5
+            description: "Retries."
+            example: 3
+          - nxos_name: singleConnection
+            tf_name: single_connection
+            type: String
+            enum_values:
+              - "no"
+              - "yes"
+            description: "TACACS+ single connection mode enabled."
+            example: "yes"
+          - nxos_name: timeout
+            tf_name: timeout
+            type: Int64
+            min_int: 0
+            max_int: 60
+            description: "The amount of time between authentication attempts."
+            example: 10
+      - class_name: aaaTacacsPlusProviderGroup
+        doc_path: Security%20and%20Policing/aaa:TacacsPlusProviderGroup/
+        rn: tacacsplusprovidergroup-[%s]
+        tf_name: tacacs_provider_groups
+        description: "TACACS+ provider groups."
+        type: list
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: "Object name."
+            example: "TACACS_GROUP1"
+          - nxos_name: deadtime
+            tf_name: deadtime
+            type: Int64
+            min_int: 0
+            max_int: 1440
+            description: "Duration for which non-reachable server is skipped."
+            example: 5
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: "Description of the specified attribute."
+            example: "TACACS+ provider group"
+          - nxos_name: ownerKey
+            tf_name: owner_key
+            type: String
+            description: "The key for enabling clients to own their data for entity correlation."
+            example: "owner1"
+          - nxos_name: ownerTag
+            tf_name: owner_tag
+            type: String
+            description: "A tag for enabling clients to add their own data. For example, to indicate who created this object."
+            example: "tag1"
+          - nxos_name: srcIf
+            tf_name: source_interface
+            type: String
+            description: "Source Interface."
+            example: "unspecified"
+          - nxos_name: vrf
+            tf_name: vrf
+            type: String
+            description: "VRF."
+            example: "default"
+test_prerequisites:
+  - dn: sys/fm/tacacsplus
+    class_name: fmTacacsplus
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled

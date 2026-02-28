@@ -72,6 +72,30 @@ func TestAccNxosUserManagement(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.0.roles.0.name", "network-operator"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.0.roles.0.description", "Operator role"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.0.roles.0.privilege_type", "readPriv"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_deadtime", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_description", "TACACS+ settings"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_retries", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_source_interface", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_timeout", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_providers.0.name", "10.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_providers.0.authentication_protocol", "chap"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_providers.0.description", "TACACS+ provider"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_providers.0.monitoring_idle_time", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_providers.0.owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_providers.0.owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_providers.0.port", "149"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_providers.0.retries", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_providers.0.single_connection", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_providers.0.timeout", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_provider_groups.0.name", "TACACS_GROUP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_provider_groups.0.deadtime", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_provider_groups.0.description", "TACACS+ provider group"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_provider_groups.0.owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_provider_groups.0.owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_provider_groups.0.source_interface", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_provider_groups.0.vrf", "default"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -81,7 +105,7 @@ func TestAccNxosUserManagement(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosUserManagementConfig_all(),
+				Config: testAccNxosUserManagementPrerequisitesConfig + testAccNxosUserManagementConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
@@ -113,12 +137,24 @@ func nxosUserManagementImportStateIdFunc(resourceName string) resource.ImportSta
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccNxosUserManagementPrerequisitesConfig = `
+resource "nxos_dme" "PreReq0" {
+  dn = "sys/fm/tacacsplus"
+  class_name = "fmTacacsplus"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosUserManagementConfig_minimum() string {
 	config := `resource "nxos_user_management" "test" {` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -169,6 +205,35 @@ func testAccNxosUserManagementConfig_all() string {
 	config += `			privilege_type = "readPriv"` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
+	config += `	tacacs_deadtime = 5` + "\n"
+	config += `	tacacs_description = "TACACS+ settings"` + "\n"
+	config += `	tacacs_owner_key = "owner1"` + "\n"
+	config += `	tacacs_owner_tag = "tag1"` + "\n"
+	config += `	tacacs_retries = 3` + "\n"
+	config += `	tacacs_source_interface = "unspecified"` + "\n"
+	config += `	tacacs_timeout = 10` + "\n"
+	config += `	tacacs_providers = [{` + "\n"
+	config += `		name = "10.1.1.1"` + "\n"
+	config += `		authentication_protocol = "chap"` + "\n"
+	config += `		description = "TACACS+ provider"` + "\n"
+	config += `		monitoring_idle_time = 10` + "\n"
+	config += `		owner_key = "owner1"` + "\n"
+	config += `		owner_tag = "tag1"` + "\n"
+	config += `		port = 149` + "\n"
+	config += `		retries = 3` + "\n"
+	config += `		single_connection = "yes"` + "\n"
+	config += `		timeout = 10` + "\n"
+	config += `	}]` + "\n"
+	config += `	tacacs_provider_groups = [{` + "\n"
+	config += `		name = "TACACS_GROUP1"` + "\n"
+	config += `		deadtime = 5` + "\n"
+	config += `		description = "TACACS+ provider group"` + "\n"
+	config += `		owner_key = "owner1"` + "\n"
+	config += `		owner_tag = "tag1"` + "\n"
+	config += `		source_interface = "unspecified"` + "\n"
+	config += `		vrf = "default"` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

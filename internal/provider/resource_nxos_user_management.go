@@ -63,7 +63,7 @@ func (r *UserManagementResource) Metadata(ctx context.Context, req resource.Meta
 func (r *UserManagementResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.", "aaaUserEp", "Security%20and%20Policing/aaa:UserEp/").AddAdditionalDocs([]string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole"}, []string{"Security%20and%20Policing/aaa:PreLoginBanner", "Security%20and%20Policing/aaa:PostLoginBanner", "Security%20and%20Policing/aaa:User/", "Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.", "aaaUserEp", "Security%20and%20Policing/aaa:UserEp/").AddAdditionalDocs([]string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup"}, []string{"Security%20and%20Policing/aaa:PreLoginBanner", "Security%20and%20Policing/aaa:PostLoginBanner", "Security%20and%20Policing/aaa:User/", "Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/", "Security%20and%20Policing/aaa:TacacsPlusEp/", "Security%20and%20Policing/aaa:TacacsPlusProvider/", "Security%20and%20Policing/aaa:TacacsPlusProviderGroup/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -330,6 +330,202 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 									},
 								},
 							},
+						},
+					},
+				},
+			},
+			"tacacs_deadtime": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Duration for which non-reachable server is skipped.").AddIntegerRangeDescription(0, 1440).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 1440),
+				},
+			},
+			"tacacs_description": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+				Optional:            true,
+			},
+			"tacacs_key": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Global TACACS+ server shared secret.").String,
+				Optional:            true,
+			},
+			"tacacs_key_encryption": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Default key encryption.").AddStringEnumDescription("0", "6", "7").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("0", "6", "7"),
+				},
+			},
+			"tacacs_logging_level": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Tacacs Logging level.").AddIntegerRangeDescription(0, 7).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
+				},
+			},
+			"tacacs_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
+				Optional:            true,
+			},
+			"tacacs_owner_key": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The key for enabling clients to own their data for entity correlation.").String,
+				Optional:            true,
+			},
+			"tacacs_owner_tag": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("A tag for enabling clients to add their own data. For example, to indicate who created this object.").String,
+				Optional:            true,
+			},
+			"tacacs_retries": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The number of attempts that the authentication method is tried.").AddIntegerRangeDescription(0, 5).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 5),
+				},
+			},
+			"tacacs_source_interface": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Source Interface.").String,
+				Optional:            true,
+			},
+			"tacacs_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The amount of time between authentication attempts.").AddIntegerRangeDescription(1, 60).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 60),
+				},
+			},
+			"tacacs_providers": schema.ListNestedAttribute{
+				MarkdownDescription: "TACACS+ providers.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"authentication_protocol": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The TACACS+ authentication protocol.").AddStringEnumDescription("pap", "chap", "mschap", "mschapv2", "ascii").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("pap", "chap", "mschap", "mschapv2", "ascii"),
+							},
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+							Optional:            true,
+						},
+						"key": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("A password for the AAA provider database.").String,
+							Optional:            true,
+						},
+						"key_encryption": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Default key encryption.").AddStringEnumDescription("0", "6", "7").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("0", "6", "7"),
+							},
+						},
+						"monitoring_idle_time": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Idle timer to monitor tacacs server.").AddIntegerRangeDescription(0, 1440).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 1440),
+							},
+						},
+						"monitoring_password": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Periodic Server Monitoring Password.").String,
+							Optional:            true,
+						},
+						"monitoring_password_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Monitoring password type.").AddStringEnumDescription("0", "7").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("0", "7"),
+							},
+						},
+						"monitoring_user": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Periodic Server Monitoring Username.").String,
+							Optional:            true,
+						},
+						"owner_key": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The key for enabling clients to own their data for entity correlation.").String,
+							Optional:            true,
+						},
+						"owner_tag": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("A tag for enabling clients to add their own data. For example, to indicate who created this object.").String,
+							Optional:            true,
+						},
+						"port": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The service port number for the TACACS+ service.").AddIntegerRangeDescription(1, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"retries": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Retries.").AddIntegerRangeDescription(0, 5).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 5),
+							},
+						},
+						"single_connection": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("TACACS+ single connection mode enabled.").AddStringEnumDescription("no", "yes").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("no", "yes"),
+							},
+						},
+						"timeout": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The amount of time between authentication attempts.").AddIntegerRangeDescription(0, 60).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 60),
+							},
+						},
+					},
+				},
+			},
+			"tacacs_provider_groups": schema.ListNestedAttribute{
+				MarkdownDescription: "TACACS+ provider groups.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"deadtime": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Duration for which non-reachable server is skipped.").AddIntegerRangeDescription(0, 1440).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 1440),
+							},
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+							Optional:            true,
+						},
+						"owner_key": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The key for enabling clients to own their data for entity correlation.").String,
+							Optional:            true,
+						},
+						"owner_tag": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("A tag for enabling clients to add their own data. For example, to indicate who created this object.").String,
+							Optional:            true,
+						},
+						"source_interface": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Source Interface.").String,
+							Optional:            true,
+						},
+						"vrf": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("VRF.").String,
+							Optional:            true,
 						},
 					},
 				},

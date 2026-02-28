@@ -6,7 +6,7 @@ description: |-
   This data source can read the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.
   API Documentation: aaaUserEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserEp/
   Additional API Documentation
-  aaaPreLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PreLoginBanneraaaPostLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PostLoginBanneraaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:User/aaaUserDomain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserDomain/aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserRole/
+  aaaPreLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PreLoginBanneraaaPostLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:PostLoginBanneraaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:User/aaaUserDomain https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserDomain/aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserRole/aaaTacacsPlusEp https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusEp/aaaTacacsPlusProvider https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusProvider/aaaTacacsPlusProviderGroup https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusProviderGroup/
 ---
 
 # nxos_user_management (Data Source)
@@ -22,6 +22,9 @@ This data source can read the user management configuration on NX-OS devices, in
 - [aaaUser](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:User/)
 - [aaaUserDomain](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserDomain/)
 - [aaaUserRole](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:UserRole/)
+- [aaaTacacsPlusEp](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusEp/)
+- [aaaTacacsPlusProvider](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusProvider/)
+- [aaaTacacsPlusProviderGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Security%20and%20Policing/aaa:TacacsPlusProviderGroup/)
 
 ## Example Usage
 
@@ -63,7 +66,56 @@ data "nxos_user_management" "example" {
 - `pre_login_banner_owner_key` (String) The key for enabling clients to own their data for entity correlation.
 - `pre_login_banner_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
 - `service_password_recovery` (String) Service Password Recovery.
+- `tacacs_deadtime` (Number) Duration for which non-reachable server is skipped.
+- `tacacs_description` (String) Description of the specified attribute.
+- `tacacs_key` (String) Global TACACS+ server shared secret.
+- `tacacs_key_encryption` (String) Default key encryption.
+- `tacacs_logging_level` (Number) Tacacs Logging level.
+- `tacacs_name` (String) Object name.
+- `tacacs_owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `tacacs_owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+- `tacacs_provider_groups` (Attributes List) TACACS+ provider groups. (see [below for nested schema](#nestedatt--tacacs_provider_groups))
+- `tacacs_providers` (Attributes List) TACACS+ providers. (see [below for nested schema](#nestedatt--tacacs_providers))
+- `tacacs_retries` (Number) The number of attempts that the authentication method is tried.
+- `tacacs_source_interface` (String) Source Interface.
+- `tacacs_timeout` (Number) The amount of time between authentication attempts.
 - `users` (Attributes List) List of users. (see [below for nested schema](#nestedatt--users))
+
+<a id="nestedatt--tacacs_provider_groups"></a>
+### Nested Schema for `tacacs_provider_groups`
+
+Read-Only:
+
+- `deadtime` (Number) Duration for which non-reachable server is skipped.
+- `description` (String) Description of the specified attribute.
+- `name` (String) Object name.
+- `owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+- `source_interface` (String) Source Interface.
+- `vrf` (String) VRF.
+
+
+<a id="nestedatt--tacacs_providers"></a>
+### Nested Schema for `tacacs_providers`
+
+Read-Only:
+
+- `authentication_protocol` (String) The TACACS+ authentication protocol.
+- `description` (String) Description of the specified attribute.
+- `key` (String) A password for the AAA provider database.
+- `key_encryption` (String) Default key encryption.
+- `monitoring_idle_time` (Number) Idle timer to monitor tacacs server.
+- `monitoring_password` (String) Periodic Server Monitoring Password.
+- `monitoring_password_type` (String) Monitoring password type.
+- `monitoring_user` (String) Periodic Server Monitoring Username.
+- `name` (String) Object name.
+- `owner_key` (String) The key for enabling clients to own their data for entity correlation.
+- `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
+- `port` (Number) The service port number for the TACACS+ service.
+- `retries` (Number) Retries.
+- `single_connection` (String) TACACS+ single connection mode enabled.
+- `timeout` (Number) The amount of time between authentication attempts.
+
 
 <a id="nestedatt--users"></a>
 ### Nested Schema for `users`

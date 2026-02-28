@@ -57,7 +57,7 @@ func (d *UserManagementDataSource) Metadata(_ context.Context, req datasource.Me
 func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.", "aaaUserEp", "Security%20and%20Policing/aaa:UserEp/").AddAdditionalDocs([]string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole"}, []string{"Security%20and%20Policing/aaa:PreLoginBanner", "Security%20and%20Policing/aaa:PostLoginBanner", "Security%20and%20Policing/aaa:User/", "Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.", "aaaUserEp", "Security%20and%20Policing/aaa:UserEp/").AddAdditionalDocs([]string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup"}, []string{"Security%20and%20Policing/aaa:PreLoginBanner", "Security%20and%20Policing/aaa:PostLoginBanner", "Security%20and%20Policing/aaa:User/", "Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/", "Security%20and%20Policing/aaa:TacacsPlusEp/", "Security%20and%20Policing/aaa:TacacsPlusProvider/", "Security%20and%20Policing/aaa:TacacsPlusProviderGroup/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -252,6 +252,154 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 									},
 								},
 							},
+						},
+					},
+				},
+			},
+			"tacacs_deadtime": schema.Int64Attribute{
+				MarkdownDescription: "Duration for which non-reachable server is skipped.",
+				Computed:            true,
+			},
+			"tacacs_description": schema.StringAttribute{
+				MarkdownDescription: "Description of the specified attribute.",
+				Computed:            true,
+			},
+			"tacacs_key": schema.StringAttribute{
+				MarkdownDescription: "Global TACACS+ server shared secret.",
+				Computed:            true,
+			},
+			"tacacs_key_encryption": schema.StringAttribute{
+				MarkdownDescription: "Default key encryption.",
+				Computed:            true,
+			},
+			"tacacs_logging_level": schema.Int64Attribute{
+				MarkdownDescription: "Tacacs Logging level.",
+				Computed:            true,
+			},
+			"tacacs_name": schema.StringAttribute{
+				MarkdownDescription: "Object name.",
+				Computed:            true,
+			},
+			"tacacs_owner_key": schema.StringAttribute{
+				MarkdownDescription: "The key for enabling clients to own their data for entity correlation.",
+				Computed:            true,
+			},
+			"tacacs_owner_tag": schema.StringAttribute{
+				MarkdownDescription: "A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+				Computed:            true,
+			},
+			"tacacs_retries": schema.Int64Attribute{
+				MarkdownDescription: "The number of attempts that the authentication method is tried.",
+				Computed:            true,
+			},
+			"tacacs_source_interface": schema.StringAttribute{
+				MarkdownDescription: "Source Interface.",
+				Computed:            true,
+			},
+			"tacacs_timeout": schema.Int64Attribute{
+				MarkdownDescription: "The amount of time between authentication attempts.",
+				Computed:            true,
+			},
+			"tacacs_providers": schema.ListNestedAttribute{
+				MarkdownDescription: "TACACS+ providers.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Object name.",
+							Computed:            true,
+						},
+						"authentication_protocol": schema.StringAttribute{
+							MarkdownDescription: "The TACACS+ authentication protocol.",
+							Computed:            true,
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"key": schema.StringAttribute{
+							MarkdownDescription: "A password for the AAA provider database.",
+							Computed:            true,
+						},
+						"key_encryption": schema.StringAttribute{
+							MarkdownDescription: "Default key encryption.",
+							Computed:            true,
+						},
+						"monitoring_idle_time": schema.Int64Attribute{
+							MarkdownDescription: "Idle timer to monitor tacacs server.",
+							Computed:            true,
+						},
+						"monitoring_password": schema.StringAttribute{
+							MarkdownDescription: "Periodic Server Monitoring Password.",
+							Computed:            true,
+						},
+						"monitoring_password_type": schema.StringAttribute{
+							MarkdownDescription: "Monitoring password type.",
+							Computed:            true,
+						},
+						"monitoring_user": schema.StringAttribute{
+							MarkdownDescription: "Periodic Server Monitoring Username.",
+							Computed:            true,
+						},
+						"owner_key": schema.StringAttribute{
+							MarkdownDescription: "The key for enabling clients to own their data for entity correlation.",
+							Computed:            true,
+						},
+						"owner_tag": schema.StringAttribute{
+							MarkdownDescription: "A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+							Computed:            true,
+						},
+						"port": schema.Int64Attribute{
+							MarkdownDescription: "The service port number for the TACACS+ service.",
+							Computed:            true,
+						},
+						"retries": schema.Int64Attribute{
+							MarkdownDescription: "Retries.",
+							Computed:            true,
+						},
+						"single_connection": schema.StringAttribute{
+							MarkdownDescription: "TACACS+ single connection mode enabled.",
+							Computed:            true,
+						},
+						"timeout": schema.Int64Attribute{
+							MarkdownDescription: "The amount of time between authentication attempts.",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"tacacs_provider_groups": schema.ListNestedAttribute{
+				MarkdownDescription: "TACACS+ provider groups.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Object name.",
+							Computed:            true,
+						},
+						"deadtime": schema.Int64Attribute{
+							MarkdownDescription: "Duration for which non-reachable server is skipped.",
+							Computed:            true,
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"owner_key": schema.StringAttribute{
+							MarkdownDescription: "The key for enabling clients to own their data for entity correlation.",
+							Computed:            true,
+						},
+						"owner_tag": schema.StringAttribute{
+							MarkdownDescription: "A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+							Computed:            true,
+						},
+						"source_interface": schema.StringAttribute{
+							MarkdownDescription: "Source Interface.",
+							Computed:            true,
+						},
+						"vrf": schema.StringAttribute{
+							MarkdownDescription: "VRF.",
+							Computed:            true,
 						},
 					},
 				},

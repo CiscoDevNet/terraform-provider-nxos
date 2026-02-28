@@ -18,6 +18,7 @@ description: |-
 - Add `nxos_loopback_interfaces` bulk resource
 - Add `nxos_port_channel_interfaces` bulk resource
 - Add `nxos_subinterfaces` bulk resource
+- Add `nxos_hsrp` resource and data source
 - BREAKING CHANGE: Remove `nxos_ipv4_vrf` resource and data source, `nxos_ipv4_vrfs` bulk resource, `nxos_ipv4_static_route` resource and data source, `nxos_ipv4_interface` resource and data source, and `nxos_ipv4_interface_address` resource and data source, IPv4 configuration is now managed as a single `nxos_ipv4` resource and data source
 - BREAKING CHANGE: Remove `nxos_ipv6_vrf` resource and data source, `nxos_ipv6_vrfs` bulk resource, `nxos_ipv6_static_route` resource and data source, `nxos_ipv6_interface` resource and data source, and `nxos_ipv6_interface_address` resource and data source, IPv6 configuration is now managed as a single `nxos_ipv6` resource and data source
 - BREAKING CHANGE: Remove `nxos_ethernet` resource and data source, ethernet configuration is now managed as part of `nxos_system` resource and data source

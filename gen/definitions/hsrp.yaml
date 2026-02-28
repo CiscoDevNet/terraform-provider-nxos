@@ -1,0 +1,358 @@
+---
+name: HSRP
+class_name: hsrpEntity
+dn: sys/hsrp
+ds_description: This data source can read the HSRP configuration on NX-OS devices, including HSRP instances, interfaces, and group settings such as priority, timers, authentication, and preemption.
+res_description: This resource can manage the HSRP configuration on NX-OS devices, including HSRP instances, interfaces, and group settings such as priority, timers, authentication, and preemption.
+doc_path: System/hsrp:Entity/
+doc_category: Routing
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'The administrative state of the object or policy.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+child_classes:
+  - class_name: hsrpInst
+    doc_path: System/hsrp:Inst/
+    rn: inst
+    type: single
+    tf_name: instance
+    description: 'HSRP instance configuration.'
+    attributes:
+      - nxos_name: adminSt
+        tf_name: instance_admin_state
+        type: String
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: bfd
+        tf_name: bfd
+        type: String
+        description: 'Global flag to enable/disable bfd on all interfaces.'
+        enum_values:
+          - disabled
+          - enabled
+        example: enabled
+      - nxos_name: ctrl
+        tf_name: control
+        type: String
+        description: 'The control state.'
+        enum_values:
+          - stateful-ha
+        allow_non_enum_values: true
+        example: stateful-ha
+      - nxos_name: extendedHoldIntvl
+        tf_name: extended_hold_interval
+        type: Int64
+        min_int: 10
+        max_int: 255
+        description: 'HSRP extended hold interval, in seconds, for both IPv4 and IPv6 groups. Extends the HSRP hold timers during a controlled switchover or ISSU.'
+        example: 30
+      - nxos_name: extendedHoldIntvlCfg
+        tf_name: extended_hold_interval_configuration
+        type: String
+        description: 'Enables/Disables hsrp extended hold interval.'
+        enum_values:
+          - disabled
+          - enabled
+        example: disabled
+    child_classes:
+      - class_name: hsrpIf
+        doc_path: System/hsrp:If/
+        rn: if-[%s]
+        type: list
+        tf_name: interfaces
+        description: 'List of HSRP interfaces.'
+        attributes:
+          - nxos_name: id
+            tf_name: interface_id
+            type: String
+            id: true
+            description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+            example: vlan10
+          - nxos_name: adminSt
+            tf_name: admin_state
+            type: String
+            description: 'The administrative state of the object or policy.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+          - nxos_name: bfd
+            tf_name: bfd
+            type: String
+            description: 'Enables/disables BFD on an HSRP interface.'
+            enum_values:
+              - disabled
+              - enabled
+            example: disabled
+          - nxos_name: biaScope
+            tf_name: bia_scope
+            type: String
+            description: 'Use-Bia Scope.'
+            enum_values:
+              - global
+              - local
+            example: local
+          - nxos_name: ctrl
+            tf_name: control
+            type: String
+            description: 'Controls.'
+            enum_values:
+              - bia
+            allow_non_enum_values: true
+            example: bia
+          - nxos_name: delayIntfMin
+            tf_name: delay_minimum
+            type: Int64
+            min_int: 0
+            max_int: 10000
+            description: 'Delay in seconds, to start HSRP state machine after receiving interface moving to Up state.'
+            example: 5
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: 'Description.'
+            example: My HSRP interface
+          - nxos_name: macRefreshIntvl
+            tf_name: mac_refresh_interval
+            type: Int64
+            min_int: 0
+            max_int: 10000
+            description: 'The MAC refresh interval in seconds, for the HSRP slave group on the interface.'
+            example: 30
+          - nxos_name: macRefreshIntvlCfg
+            tf_name: mac_refresh_interval_configuration
+            type: String
+            description: 'Enables/Disables hsrp MAC refresh interval.'
+            enum_values:
+              - disabled
+              - enabled
+            example: disabled
+          - nxos_name: name
+            tf_name: name
+            type: String
+            description: 'The name of the object.'
+            example: myHsrpIf
+          - nxos_name: reloadDelay
+            tf_name: reload_delay
+            type: Int64
+            min_int: 0
+            max_int: 10000
+            description: 'Delay in seconds, to start HSRP state machine after the system-reload.'
+            example: 5
+          - nxos_name: version
+            tf_name: version
+            type: String
+            description: 'Hsrp version.'
+            enum_values:
+              - v1
+              - v2
+            example: v2
+        child_classes:
+          - class_name: hsrpGroup
+            doc_path: System/hsrp:Group/
+            rn: grp-%v-%s
+            type: list
+            tf_name: groups
+            description: 'List of HSRP groups.'
+            attributes:
+              - nxos_name: id
+                tf_name: group_id
+                type: Int64
+                id: true
+                min_int: 0
+                max_int: 4095
+                description: 'Group Id.'
+                example: 1
+              - nxos_name: af
+                tf_name: address_family
+                type: String
+                id: true
+                description: 'Group Address Family.'
+                enum_values:
+                  - ipv4
+                  - ipv6
+                example: ipv4
+              - nxos_name: authMd5CompatibilityMode
+                tf_name: authentication_md5_compatibility_mode
+                type: String
+                description: 'Enables compatibility mode for MD5 type-7 authentication.'
+                enum_values:
+                  - disabled
+                  - enabled
+                example: disabled
+                exclude_test: true
+              - nxos_name: authMd5KeyChainName
+                tf_name: authentication_md5_key_chain_name
+                type: String
+                description: 'Authentication MD5 Key Chain Name.'
+                example: myKeyChain
+                exclude_test: true
+              - nxos_name: authMd5KeyName
+                tf_name: authentication_md5_key_name
+                type: String
+                description: 'Authentication Md5 Key Name.'
+                example: myKey
+                exclude_test: true
+              - nxos_name: authMd5KeyStringType
+                tf_name: authentication_md5_key_string_type
+                type: String
+                description: 'Authentication MD5 Key String Type.'
+                enum_values:
+                  - unencrypted
+                  - hidden
+                example: unencrypted
+                exclude_test: true
+              - nxos_name: authMd5Timeout
+                tf_name: authentication_md5_timeout
+                type: Int64
+                min_int: 0
+                max_int: 32767
+                description: 'timeout for when HSRP will only accept a new key.'
+                example: 100
+                exclude_test: true
+              - nxos_name: authMd5Type
+                tf_name: authentication_md5_type
+                type: String
+                description: 'Type of MD5 Authentication.'
+                enum_values:
+                  - key-chain
+                  - key-string
+                example: key-string
+                exclude_test: true
+              - nxos_name: authSecret
+                tf_name: authentication_secret
+                type: String
+                write_only: true
+                description: 'Plain text authentication string for the group.'
+                example: cisco123
+                exclude_test: true
+              - nxos_name: authType
+                tf_name: authentication_type
+                type: String
+                description: 'Authentication Type for the group.'
+                enum_values:
+                  - simple
+                  - md5
+                example: simple
+              - nxos_name: ctrl
+                tf_name: control
+                type: String
+                description: 'Group control bits.'
+                enum_values:
+                  - preempt
+                allow_non_enum_values: true
+                example: preempt
+              - nxos_name: follow
+                tf_name: follow
+                type: String
+                description: 'Master name string to follow.'
+                example: masterGroup
+                exclude_test: true
+              - nxos_name: fwdLwrThrld
+                tf_name: forwarding_lower_threshold
+                type: Int64
+                min_int: 0
+                max_int: 255
+                description: 'Fowarding Lower Threshold.'
+                example: 1
+              - nxos_name: helloIntvl
+                tf_name: hello_interval
+                type: Int64
+                min_int: 250
+                max_int: 254000
+                description: 'Hello Interval.'
+                example: 1000
+              - nxos_name: holdIntvl
+                tf_name: hold_interval
+                type: Int64
+                min_int: 750
+                max_int: 255000
+                description: 'Hold Interval.'
+                example: 3000
+              - nxos_name: ip
+                tf_name: ip_address
+                type: String
+                description: 'Primary IP Address.'
+                example: 10.0.0.1
+              - nxos_name: ipObtainMode
+                tf_name: ip_obtain_mode
+                type: String
+                description: 'IP Obtain Mode.'
+                enum_values:
+                  - admin
+                  - auto
+                  - learn
+                example: admin
+              - nxos_name: mac
+                tf_name: mac_address
+                type: String
+                description: 'Configured MAC address for the group.'
+                example: 00:00:00:00:00:01
+                exclude_test: true
+              - nxos_name: name
+                tf_name: name
+                type: String
+                description: 'Master name string.'
+                example: myHsrpGroup
+              - nxos_name: preemptDelayMin
+                tf_name: preempt_delay_minimum
+                type: Int64
+                min_int: 0
+                max_int: 3600
+                description: 'Miminum delay before preempt.'
+                example: 10
+              - nxos_name: preemptDelayReload
+                tf_name: preempt_delay_reload
+                type: Int64
+                min_int: 0
+                max_int: 3600
+                description: 'Preempt delay after a switch reload.'
+                example: 10
+              - nxos_name: preemptDelaySync
+                tf_name: preempt_delay_sync
+                type: Int64
+                min_int: 0
+                max_int: 3600
+                description: 'Wait for IP redundancy clients.'
+                example: 10
+              - nxos_name: prio
+                tf_name: priority
+                type: Int64
+                min_int: 0
+                max_int: 255
+                description: 'Group Priority.'
+                example: 110
+test_prerequisites:
+  - dn: sys/fm/hsrp
+    class_name: fmHsrp
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/fm/bfd
+    class_name: fmBfd
+    no_delete: true
+    dependencies: [0]
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/fm/ifvlan
+    class_name: fmInterfaceVlan
+    dependencies: [1]
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/intf/svi-[vlan10]
+    class_name: sviIf
+    dependencies: [2]
+    attributes:
+      - name: id
+        value: vlan10

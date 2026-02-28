@@ -8,6 +8,7 @@ doc_path: Interfaces/pc:AggrIf/
 doc_category: Interface
 bulk_resource: true
 parent_class_name: interfaceEntity
+test_tags: [PORT_CHANNEL_INTERFACE]
 attributes:
   - nxos_name: id
     tf_name: interface_id

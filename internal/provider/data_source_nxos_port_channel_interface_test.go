@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -30,6 +31,9 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 func TestAccDataSourceNxosPortChannelInterface(t *testing.T) {
+	if os.Getenv("PORT_CHANNEL_INTERFACE") == "" {
+		t.Skip("skipping test, set environment variable PORT_CHANNEL_INTERFACE")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "interface_id", "po123"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_mode", "active"))

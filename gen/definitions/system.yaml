@@ -339,3 +339,294 @@ child_classes:
                       - enabled
                     example: enabled
                     exclude_test: true
+  - class_name: ndEntity
+    doc_path: Discovery%20Protocols/nd%3AEntity/
+    rn: nd
+    type: single
+    no_delete: true
+    attributes:
+      - nxos_name: adminSt
+        tf_name: nd_admin_state
+        type: String
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+    child_classes:
+      - class_name: ndInst
+        doc_path: Discovery%20Protocols/nd%3AInst/
+        rn: inst
+        type: single
+        no_delete: true
+        attributes:
+          - nxos_name: acceptSolicitNghbrEntry
+            tf_name: nd_accept_solicit_neighbor_entry
+            type: String
+            description: 'Accept or no-accept entry in Solicit neighbor advertisement.'
+            enum_values:
+              - none
+              - accept
+              - no-accept
+            example: accept
+          - nxos_name: adminSt
+            tf_name: nd_instance_admin_state
+            type: String
+            description: 'The administrative state of the object or policy.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+          - nxos_name: agingInterval
+            tf_name: nd_aging_interval
+            type: Int64
+            description: 'Aging Interval.'
+            min_int: 300
+            max_int: 65535
+            example: 1500
+          - nxos_name: cacheLimit
+            tf_name: nd_cache_limit
+            type: Int64
+            description: 'Cache Limit.'
+            min_int: 1
+            max_int: 614400
+            example: 200000
+          - nxos_name: cacheSyslogRate
+            tf_name: nd_cache_syslog_rate
+            type: Int64
+            description: 'Cache Syslog Rate.'
+            min_int: 1
+            max_int: 1000
+            example: 5
+          - nxos_name: ctrl
+            tf_name: nd_control
+            type: String
+            description: 'The control state.'
+            enum_values:
+              - stateful-ha
+            example: stateful-ha
+            exclude_test: true
+          - nxos_name: ipv6AdjRouteDistance
+            tf_name: nd_ipv6_adjacency_route_distance
+            type: Int64
+            description: 'Ipv6 Adjacency Route Distance.'
+            min_int: 2
+            max_int: 250
+            example: 200
+          - nxos_name: offListTimeout
+            tf_name: nd_off_list_timeout
+            type: Int64
+            description: 'Off-list timeout.'
+            min_int: 180
+            max_int: 1800
+            example: 300
+          - nxos_name: probeIntervalForSolicitNghbr
+            tf_name: nd_probe_interval_for_solicit_neighbor
+            type: Int64
+            description: 'Probe interval.'
+            min_int: 0
+            max_int: 20
+            example: 10
+          - nxos_name: solicitNghbrAdvertisement
+            tf_name: nd_solicit_neighbor_advertisement
+            type: String
+            description: 'Solicit neighbor advertisement.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+        child_classes:
+          - class_name: ndDom
+            doc_path: Discovery%20Protocols/nd%3ADom/
+            rn: dom-[%s]
+            type: list
+            tf_name: nd_vrfs
+            description: 'Neighbor Discovery Domain.'
+            attributes:
+              - nxos_name: name
+                tf_name: name
+                type: String
+                id: true
+                description: 'The name of the object.'
+                example: default
+                exclude_test: true
+            child_classes:
+              - class_name: ndIf
+                doc_path: Discovery%20Protocols/nd%3AIf/
+                rn: if-[%s]
+                type: list
+                tf_name: interfaces
+                description: 'Neighbor Discovery Interface.'
+                attributes:
+                  - nxos_name: id
+                    tf_name: interface_id
+                    type: String
+                    id: true
+                    description: 'An identifier.'
+                    example: vlan100
+                    exclude_test: true
+                  - nxos_name: bootFileUrl
+                    tf_name: boot_file_url
+                    type: String
+                    description: 'The URL for a boot file in string.'
+                    example: 'tftp://192.168.1.1/boot'
+                    exclude_test: true
+                  - nxos_name: ctrl
+                    tf_name: control
+                    type: String
+                    description: 'Controls.'
+                    enum_values:
+                      - redirects
+                      - managed-cfg
+                      - other-cfg
+                      - suppress-ra
+                      - suppress-ra-mtu
+                    allow_non_enum_values: true
+                    example: redirects
+                    exclude_test: true
+                  - nxos_name: dadAttempts
+                    tf_name: dad_attempts
+                    type: Int64
+                    description: 'Dad attempts.'
+                    min_int: 0
+                    max_int: 15
+                    example: 3
+                    exclude_test: true
+                  - nxos_name: dadnsInterval
+                    tf_name: dadns_interval
+                    type: Int64
+                    description: 'Dadns interval.'
+                    min_int: 1000
+                    max_int: 6000
+                    example: 3000
+                    exclude_test: true
+                  - nxos_name: defaultRaLifetime
+                    tf_name: default_ra_lifetime
+                    type: String
+                    description: 'Default RA Lifetime enabled.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: disabled
+                    exclude_test: true
+                  - nxos_name: delAdjOnMacDel
+                    tf_name: delete_adjacency_on_mac_delete
+                    type: String
+                    description: 'Delete adj on mac delete notif without probe.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                    exclude_test: true
+                  - nxos_name: dnsSearchListSuppress
+                    tf_name: dns_search_list_suppress
+                    type: String
+                    description: 'Do not send DNSSL in router advertisement.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                    exclude_test: true
+                  - nxos_name: dnsSuppress
+                    tf_name: dns_suppress
+                    type: String
+                    description: 'Do not send RDNSS in router advertisement.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                    exclude_test: true
+                  - nxos_name: hopLimit
+                    tf_name: hop_limit
+                    type: Int64
+                    description: 'Hop limit.'
+                    min_int: 0
+                    max_int: 255
+                    example: 128
+                    exclude_test: true
+                  - nxos_name: macExtract
+                    tf_name: mac_extract
+                    type: String
+                    description: 'Extract next hop MAC address.'
+                    enum_values:
+                      - none
+                      - nud-phase
+                      - exclude-nud-phase
+                    example: nud-phase
+                    exclude_test: true
+                  - nxos_name: mtu
+                    tf_name: mtu
+                    type: Int64
+                    description: 'MTU.'
+                    min_int: 1280
+                    max_int: 65535
+                    example: 9000
+                    exclude_test: true
+                  - nxos_name: nsIntvl
+                    tf_name: neighbor_solicit_interval
+                    type: Int64
+                    description: 'Neighbor Solicit Interval.'
+                    min_int: 1000
+                    max_int: 3600000
+                    example: 2000
+                    exclude_test: true
+                  - nxos_name: raIntvl
+                    tf_name: ra_interval
+                    type: Int64
+                    description: 'Router Advertisement Interval.'
+                    min_int: 4
+                    max_int: 1800
+                    example: 300
+                    exclude_test: true
+                  - nxos_name: raIntvlMin
+                    tf_name: ra_interval_min
+                    type: Int64
+                    description: 'Router Advertisement Interval Minimum.'
+                    min_int: 3
+                    max_int: 1350
+                    example: 100
+                    exclude_test: true
+                  - nxos_name: raLifetime
+                    tf_name: ra_lifetime
+                    type: Int64
+                    description: 'Router Advertisement lifetime.'
+                    min_int: 0
+                    max_int: 9000
+                    example: 900
+                    exclude_test: true
+                  - nxos_name: reachableTime
+                    tf_name: reachable_time
+                    type: Int64
+                    description: 'Reachable time.'
+                    min_int: 0
+                    max_int: 3600000
+                    example: 30000
+                    exclude_test: true
+                  - nxos_name: retransTimer
+                    tf_name: retransmit_timer
+                    type: Int64
+                    description: 'Retransmit timer.'
+                    min_int: 0
+                    max_int: 4294967295
+                    example: 5000
+                    exclude_test: true
+                  - nxos_name: routeSuppress
+                    tf_name: route_suppress
+                    type: String
+                    description: 'Do Not send Route Information in RA.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                    exclude_test: true
+                  - nxos_name: routerPreference
+                    tf_name: router_preference
+                    type: String
+                    description: 'Set Router Preference (RFC 4191).'
+                    enum_values:
+                      - unspecified
+                      - low
+                      - medium
+                      - high
+                    example: high
+                    exclude_test: true

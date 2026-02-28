@@ -64,7 +64,7 @@ func (r *SystemResource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.", "topSystem", "System/top:System/").AddAdditionalDocs([]string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.", "topSystem", "System/top:System/").AddAdditionalDocs([]string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -343,6 +343,240 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("disabled", "enabled"),
+							},
+						},
+					},
+				},
+			},
+			"nd_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"nd_accept_solicit_neighbor_entry": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Accept or no-accept entry in Solicit neighbor advertisement.").AddStringEnumDescription("none", "accept", "no-accept").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("none", "accept", "no-accept"),
+				},
+			},
+			"nd_instance_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"nd_aging_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Aging Interval.").AddIntegerRangeDescription(300, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(300, 65535),
+				},
+			},
+			"nd_cache_limit": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Cache Limit.").AddIntegerRangeDescription(1, 614400).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 614400),
+				},
+			},
+			"nd_cache_syslog_rate": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Cache Syslog Rate.").AddIntegerRangeDescription(1, 1000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 1000),
+				},
+			},
+			"nd_control": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("stateful-ha").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("stateful-ha"),
+				},
+			},
+			"nd_ipv6_adjacency_route_distance": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ipv6 Adjacency Route Distance.").AddIntegerRangeDescription(2, 250).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(2, 250),
+				},
+			},
+			"nd_off_list_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Off-list timeout.").AddIntegerRangeDescription(180, 1800).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(180, 1800),
+				},
+			},
+			"nd_probe_interval_for_solicit_neighbor": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Probe interval.").AddIntegerRangeDescription(0, 20).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 20),
+				},
+			},
+			"nd_solicit_neighbor_advertisement": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Solicit neighbor advertisement.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"nd_vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: "Neighbor Discovery Domain.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The name of the object.").String,
+							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
+						},
+						"interfaces": schema.ListNestedAttribute{
+							MarkdownDescription: "Neighbor Discovery Interface.",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"interface_id": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("An identifier.").String,
+										Required:            true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplace(),
+										},
+									},
+									"boot_file_url": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("The URL for a boot file in string.").String,
+										Optional:            true,
+									},
+									"control": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Controls.").AddStringEnumDescription("redirects", "managed-cfg", "other-cfg", "suppress-ra", "suppress-ra-mtu").String,
+										Optional:            true,
+									},
+									"dad_attempts": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Dad attempts.").AddIntegerRangeDescription(0, 15).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 15),
+										},
+									},
+									"dadns_interval": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Dadns interval.").AddIntegerRangeDescription(1000, 6000).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1000, 6000),
+										},
+									},
+									"default_ra_lifetime": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Default RA Lifetime enabled.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"delete_adjacency_on_mac_delete": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Delete adj on mac delete notif without probe.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"dns_search_list_suppress": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Do not send DNSSL in router advertisement.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"dns_suppress": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Do not send RDNSS in router advertisement.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"hop_limit": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Hop limit.").AddIntegerRangeDescription(0, 255).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 255),
+										},
+									},
+									"mac_extract": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Extract next hop MAC address.").AddStringEnumDescription("none", "nud-phase", "exclude-nud-phase").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("none", "nud-phase", "exclude-nud-phase"),
+										},
+									},
+									"mtu": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("MTU.").AddIntegerRangeDescription(1280, 65535).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1280, 65535),
+										},
+									},
+									"neighbor_solicit_interval": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Neighbor Solicit Interval.").AddIntegerRangeDescription(1000, 3600000).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1000, 3600000),
+										},
+									},
+									"ra_interval": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Router Advertisement Interval.").AddIntegerRangeDescription(4, 1800).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(4, 1800),
+										},
+									},
+									"ra_interval_min": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Router Advertisement Interval Minimum.").AddIntegerRangeDescription(3, 1350).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(3, 1350),
+										},
+									},
+									"ra_lifetime": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Router Advertisement lifetime.").AddIntegerRangeDescription(0, 9000).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 9000),
+										},
+									},
+									"reachable_time": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Reachable time.").AddIntegerRangeDescription(0, 3600000).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 3600000),
+										},
+									},
+									"retransmit_timer": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Retransmit timer.").AddIntegerRangeDescription(0, 4294967295).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 4294967295),
+										},
+									},
+									"route_suppress": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Do Not send Route Information in RA.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"router_preference": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Set Router Preference (RFC 4191).").AddStringEnumDescription("unspecified", "low", "medium", "high").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("unspecified", "low", "medium", "high"),
+										},
+									},
+								},
 							},
 						},
 					},

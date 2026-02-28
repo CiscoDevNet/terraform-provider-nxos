@@ -72,6 +72,16 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "arp_resolve_outside_subnet", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "arp_suppression_timeout", "300"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "arp_timeout", "1800"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "nd_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "nd_accept_solicit_neighbor_entry", "accept"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "nd_instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "nd_aging_interval", "1500"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "nd_cache_limit", "200000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "nd_cache_syslog_rate", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "nd_ipv6_adjacency_route_distance", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "nd_off_list_timeout", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "nd_probe_interval_for_solicit_neighbor", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "nd_solicit_neighbor_advertisement", "enabled"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -165,6 +175,16 @@ func testAccNxosSystemConfig_all() string {
 	config += `	arp_resolve_outside_subnet = "enabled"` + "\n"
 	config += `	arp_suppression_timeout = 300` + "\n"
 	config += `	arp_timeout = 1800` + "\n"
+	config += `	nd_admin_state = "enabled"` + "\n"
+	config += `	nd_accept_solicit_neighbor_entry = "accept"` + "\n"
+	config += `	nd_instance_admin_state = "enabled"` + "\n"
+	config += `	nd_aging_interval = 1500` + "\n"
+	config += `	nd_cache_limit = 200000` + "\n"
+	config += `	nd_cache_syslog_rate = 5` + "\n"
+	config += `	nd_ipv6_adjacency_route_distance = 200` + "\n"
+	config += `	nd_off_list_timeout = 300` + "\n"
+	config += `	nd_probe_interval_for_solicit_neighbor = 10` + "\n"
+	config += `	nd_solicit_neighbor_advertisement = "enabled"` + "\n"
 	config += `}` + "\n"
 	return config
 }

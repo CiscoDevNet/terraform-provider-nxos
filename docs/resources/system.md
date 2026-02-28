@@ -6,7 +6,7 @@ description: |-
   This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.
   API Documentation: topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/
   Additional API Documentation
-  ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/
+  ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/
 ---
 
 # nxos_system (Resource)
@@ -23,6 +23,10 @@ This resource can manage the system configuration on NX-OS devices, including th
 - [arpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/)
 - [arpVpc](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/)
 - [arpVpcDom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/)
+- [ndEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/)
+- [ndInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/)
+- [ndDom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/)
+- [ndIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/)
 
 ## Example Usage
 
@@ -69,6 +73,42 @@ resource "nxos_system" "example" {
   arp_vpc_domains = [{
     domain_id = 100
     arp_sync  = "enabled"
+  }]
+  nd_admin_state                         = "enabled"
+  nd_accept_solicit_neighbor_entry       = "accept"
+  nd_instance_admin_state                = "enabled"
+  nd_aging_interval                      = 1500
+  nd_cache_limit                         = 200000
+  nd_cache_syslog_rate                   = 5
+  nd_control                             = "stateful-ha"
+  nd_ipv6_adjacency_route_distance       = 200
+  nd_off_list_timeout                    = 300
+  nd_probe_interval_for_solicit_neighbor = 10
+  nd_solicit_neighbor_advertisement      = "enabled"
+  nd_vrfs = [{
+    name = "default"
+    interfaces = [{
+      interface_id                   = "vlan100"
+      boot_file_url                  = "tftp://192.168.1.1/boot"
+      control                        = "redirects"
+      dad_attempts                   = 3
+      dadns_interval                 = 3000
+      default_ra_lifetime            = "disabled"
+      delete_adjacency_on_mac_delete = "enabled"
+      dns_search_list_suppress       = "enabled"
+      dns_suppress                   = "enabled"
+      hop_limit                      = 128
+      mac_extract                    = "nud-phase"
+      mtu                            = 9000
+      neighbor_solicit_interval      = 2000
+      ra_interval                    = 300
+      ra_interval_min                = 100
+      ra_lifetime                    = 900
+      reachable_time                 = 30000
+      retransmit_timer               = 5000
+      route_suppress                 = "enabled"
+      router_preference              = "high"
+    }]
   }]
 }
 ```
@@ -149,6 +189,29 @@ resource "nxos_system" "example" {
 - `ethernet_system_storm_control_multi_threshold` (Boolean) Enable or disable the storm control multi threshold.
 - `ethernet_vlan_tag_native` (Boolean) Tag native vlan.
 - `name` (String) The system name (hostname).
+- `nd_accept_solicit_neighbor_entry` (String) Accept or no-accept entry in Solicit neighbor advertisement.
+  - Choices: `none`, `accept`, `no-accept`
+- `nd_admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
+- `nd_aging_interval` (Number) Aging Interval.
+  - Range: `300`-`65535`
+- `nd_cache_limit` (Number) Cache Limit.
+  - Range: `1`-`614400`
+- `nd_cache_syslog_rate` (Number) Cache Syslog Rate.
+  - Range: `1`-`1000`
+- `nd_control` (String) The control state.
+  - Choices: `stateful-ha`
+- `nd_instance_admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
+- `nd_ipv6_adjacency_route_distance` (Number) Ipv6 Adjacency Route Distance.
+  - Range: `2`-`250`
+- `nd_off_list_timeout` (Number) Off-list timeout.
+  - Range: `180`-`1800`
+- `nd_probe_interval_for_solicit_neighbor` (Number) Probe interval.
+  - Range: `0`-`20`
+- `nd_solicit_neighbor_advertisement` (String) Solicit neighbor advertisement.
+  - Choices: `enabled`, `disabled`
+- `nd_vrfs` (Attributes List) Neighbor Discovery Domain. (see [below for nested schema](#nestedatt--nd_vrfs))
 
 ### Read-Only
 
@@ -166,6 +229,65 @@ Optional:
 
 - `arp_sync` (String) ARP Sync.
   - Choices: `disabled`, `enabled`
+
+
+<a id="nestedatt--nd_vrfs"></a>
+### Nested Schema for `nd_vrfs`
+
+Required:
+
+- `name` (String) The name of the object.
+
+Optional:
+
+- `interfaces` (Attributes List) Neighbor Discovery Interface. (see [below for nested schema](#nestedatt--nd_vrfs--interfaces))
+
+<a id="nestedatt--nd_vrfs--interfaces"></a>
+### Nested Schema for `nd_vrfs.interfaces`
+
+Required:
+
+- `interface_id` (String) An identifier.
+
+Optional:
+
+- `boot_file_url` (String) The URL for a boot file in string.
+- `control` (String) Controls.
+  - Choices: `redirects`, `managed-cfg`, `other-cfg`, `suppress-ra`, `suppress-ra-mtu`
+- `dad_attempts` (Number) Dad attempts.
+  - Range: `0`-`15`
+- `dadns_interval` (Number) Dadns interval.
+  - Range: `1000`-`6000`
+- `default_ra_lifetime` (String) Default RA Lifetime enabled.
+  - Choices: `enabled`, `disabled`
+- `delete_adjacency_on_mac_delete` (String) Delete adj on mac delete notif without probe.
+  - Choices: `enabled`, `disabled`
+- `dns_search_list_suppress` (String) Do not send DNSSL in router advertisement.
+  - Choices: `enabled`, `disabled`
+- `dns_suppress` (String) Do not send RDNSS in router advertisement.
+  - Choices: `enabled`, `disabled`
+- `hop_limit` (Number) Hop limit.
+  - Range: `0`-`255`
+- `mac_extract` (String) Extract next hop MAC address.
+  - Choices: `none`, `nud-phase`, `exclude-nud-phase`
+- `mtu` (Number) MTU.
+  - Range: `1280`-`65535`
+- `neighbor_solicit_interval` (Number) Neighbor Solicit Interval.
+  - Range: `1000`-`3600000`
+- `ra_interval` (Number) Router Advertisement Interval.
+  - Range: `4`-`1800`
+- `ra_interval_min` (Number) Router Advertisement Interval Minimum.
+  - Range: `3`-`1350`
+- `ra_lifetime` (Number) Router Advertisement lifetime.
+  - Range: `0`-`9000`
+- `reachable_time` (Number) Reachable time.
+  - Range: `0`-`3600000`
+- `retransmit_timer` (Number) Retransmit timer.
+  - Range: `0`-`4294967295`
+- `route_suppress` (String) Do Not send Route Information in RA.
+  - Choices: `enabled`, `disabled`
+- `router_preference` (String) Set Router Preference (RFC 4191).
+  - Choices: `unspecified`, `low`, `medium`, `high`
 
 ## Import
 

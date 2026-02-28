@@ -6,7 +6,7 @@ description: |-
   This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.
   API Documentation: topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/
   Additional API Documentation
-  ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/
+  ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/
 ---
 
 # nxos_system (Data Source)
@@ -23,6 +23,10 @@ This data source can read the system configuration on NX-OS devices, including t
 - [arpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/)
 - [arpVpc](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/)
 - [arpVpcDom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/)
+- [ndEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AEntity/)
+- [ndInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AInst/)
+- [ndDom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3ADom/)
+- [ndIf](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Discovery%20Protocols/nd%3AIf/)
 
 ## Example Usage
 
@@ -80,6 +84,18 @@ data "nxos_system" "example" {
 - `ethernet_vlan_tag_native` (Boolean) Tag native vlan.
 - `id` (String) The distinguished name of the object.
 - `name` (String) The system name (hostname).
+- `nd_accept_solicit_neighbor_entry` (String) Accept or no-accept entry in Solicit neighbor advertisement.
+- `nd_admin_state` (String) The administrative state of the object or policy.
+- `nd_aging_interval` (Number) Aging Interval.
+- `nd_cache_limit` (Number) Cache Limit.
+- `nd_cache_syslog_rate` (Number) Cache Syslog Rate.
+- `nd_control` (String) The control state.
+- `nd_instance_admin_state` (String) The administrative state of the object or policy.
+- `nd_ipv6_adjacency_route_distance` (Number) Ipv6 Adjacency Route Distance.
+- `nd_off_list_timeout` (Number) Off-list timeout.
+- `nd_probe_interval_for_solicit_neighbor` (Number) Probe interval.
+- `nd_solicit_neighbor_advertisement` (String) Solicit neighbor advertisement.
+- `nd_vrfs` (Attributes List) Neighbor Discovery Domain. (see [below for nested schema](#nestedatt--nd_vrfs))
 
 <a id="nestedatt--arp_vpc_domains"></a>
 ### Nested Schema for `arp_vpc_domains`
@@ -88,3 +104,38 @@ Read-Only:
 
 - `arp_sync` (String) ARP Sync.
 - `domain_id` (Number) VPC domain id.
+
+
+<a id="nestedatt--nd_vrfs"></a>
+### Nested Schema for `nd_vrfs`
+
+Read-Only:
+
+- `interfaces` (Attributes List) Neighbor Discovery Interface. (see [below for nested schema](#nestedatt--nd_vrfs--interfaces))
+- `name` (String) The name of the object.
+
+<a id="nestedatt--nd_vrfs--interfaces"></a>
+### Nested Schema for `nd_vrfs.interfaces`
+
+Read-Only:
+
+- `boot_file_url` (String) The URL for a boot file in string.
+- `control` (String) Controls.
+- `dad_attempts` (Number) Dad attempts.
+- `dadns_interval` (Number) Dadns interval.
+- `default_ra_lifetime` (String) Default RA Lifetime enabled.
+- `delete_adjacency_on_mac_delete` (String) Delete adj on mac delete notif without probe.
+- `dns_search_list_suppress` (String) Do not send DNSSL in router advertisement.
+- `dns_suppress` (String) Do not send RDNSS in router advertisement.
+- `hop_limit` (Number) Hop limit.
+- `interface_id` (String) An identifier.
+- `mac_extract` (String) Extract next hop MAC address.
+- `mtu` (Number) MTU.
+- `neighbor_solicit_interval` (Number) Neighbor Solicit Interval.
+- `ra_interval` (Number) Router Advertisement Interval.
+- `ra_interval_min` (Number) Router Advertisement Interval Minimum.
+- `ra_lifetime` (Number) Router Advertisement lifetime.
+- `reachable_time` (Number) Reachable time.
+- `retransmit_timer` (Number) Retransmit timer.
+- `route_suppress` (String) Do Not send Route Information in RA.
+- `router_preference` (String) Set Router Preference (RFC 4191).

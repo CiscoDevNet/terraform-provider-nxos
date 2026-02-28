@@ -41,4 +41,40 @@ resource "nxos_system" "example" {
     domain_id = 100
     arp_sync  = "enabled"
   }]
+  nd_admin_state                         = "enabled"
+  nd_accept_solicit_neighbor_entry       = "accept"
+  nd_instance_admin_state                = "enabled"
+  nd_aging_interval                      = 1500
+  nd_cache_limit                         = 200000
+  nd_cache_syslog_rate                   = 5
+  nd_control                             = "stateful-ha"
+  nd_ipv6_adjacency_route_distance       = 200
+  nd_off_list_timeout                    = 300
+  nd_probe_interval_for_solicit_neighbor = 10
+  nd_solicit_neighbor_advertisement      = "enabled"
+  nd_vrfs = [{
+    name = "default"
+    interfaces = [{
+      interface_id                   = "vlan100"
+      boot_file_url                  = "tftp://192.168.1.1/boot"
+      control                        = "redirects"
+      dad_attempts                   = 3
+      dadns_interval                 = 3000
+      default_ra_lifetime            = "disabled"
+      delete_adjacency_on_mac_delete = "enabled"
+      dns_search_list_suppress       = "enabled"
+      dns_suppress                   = "enabled"
+      hop_limit                      = 128
+      mac_extract                    = "nud-phase"
+      mtu                            = 9000
+      neighbor_solicit_interval      = 2000
+      ra_interval                    = 300
+      ra_interval_min                = 100
+      ra_lifetime                    = 900
+      reachable_time                 = 30000
+      retransmit_timer               = 5000
+      route_suppress                 = "enabled"
+      router_preference              = "high"
+    }]
+  }]
 }

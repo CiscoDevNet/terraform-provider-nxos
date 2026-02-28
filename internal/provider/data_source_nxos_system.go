@@ -57,7 +57,7 @@ func (d *SystemDataSource) Metadata(_ context.Context, req datasource.MetadataRe
 func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.", "topSystem", "System/top:System/").AddAdditionalDocs([]string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.", "topSystem", "System/top:System/").AddAdditionalDocs([]string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -232,6 +232,150 @@ func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 						"arp_sync": schema.StringAttribute{
 							MarkdownDescription: "ARP Sync.",
 							Computed:            true,
+						},
+					},
+				},
+			},
+			"nd_admin_state": schema.StringAttribute{
+				MarkdownDescription: "The administrative state of the object or policy.",
+				Computed:            true,
+			},
+			"nd_accept_solicit_neighbor_entry": schema.StringAttribute{
+				MarkdownDescription: "Accept or no-accept entry in Solicit neighbor advertisement.",
+				Computed:            true,
+			},
+			"nd_instance_admin_state": schema.StringAttribute{
+				MarkdownDescription: "The administrative state of the object or policy.",
+				Computed:            true,
+			},
+			"nd_aging_interval": schema.Int64Attribute{
+				MarkdownDescription: "Aging Interval.",
+				Computed:            true,
+			},
+			"nd_cache_limit": schema.Int64Attribute{
+				MarkdownDescription: "Cache Limit.",
+				Computed:            true,
+			},
+			"nd_cache_syslog_rate": schema.Int64Attribute{
+				MarkdownDescription: "Cache Syslog Rate.",
+				Computed:            true,
+			},
+			"nd_control": schema.StringAttribute{
+				MarkdownDescription: "The control state.",
+				Computed:            true,
+			},
+			"nd_ipv6_adjacency_route_distance": schema.Int64Attribute{
+				MarkdownDescription: "Ipv6 Adjacency Route Distance.",
+				Computed:            true,
+			},
+			"nd_off_list_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Off-list timeout.",
+				Computed:            true,
+			},
+			"nd_probe_interval_for_solicit_neighbor": schema.Int64Attribute{
+				MarkdownDescription: "Probe interval.",
+				Computed:            true,
+			},
+			"nd_solicit_neighbor_advertisement": schema.StringAttribute{
+				MarkdownDescription: "Solicit neighbor advertisement.",
+				Computed:            true,
+			},
+			"nd_vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: "Neighbor Discovery Domain.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "The name of the object.",
+							Computed:            true,
+						},
+						"interfaces": schema.ListNestedAttribute{
+							MarkdownDescription: "Neighbor Discovery Interface.",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"interface_id": schema.StringAttribute{
+										MarkdownDescription: "An identifier.",
+										Computed:            true,
+									},
+									"boot_file_url": schema.StringAttribute{
+										MarkdownDescription: "The URL for a boot file in string.",
+										Computed:            true,
+									},
+									"control": schema.StringAttribute{
+										MarkdownDescription: "Controls.",
+										Computed:            true,
+									},
+									"dad_attempts": schema.Int64Attribute{
+										MarkdownDescription: "Dad attempts.",
+										Computed:            true,
+									},
+									"dadns_interval": schema.Int64Attribute{
+										MarkdownDescription: "Dadns interval.",
+										Computed:            true,
+									},
+									"default_ra_lifetime": schema.StringAttribute{
+										MarkdownDescription: "Default RA Lifetime enabled.",
+										Computed:            true,
+									},
+									"delete_adjacency_on_mac_delete": schema.StringAttribute{
+										MarkdownDescription: "Delete adj on mac delete notif without probe.",
+										Computed:            true,
+									},
+									"dns_search_list_suppress": schema.StringAttribute{
+										MarkdownDescription: "Do not send DNSSL in router advertisement.",
+										Computed:            true,
+									},
+									"dns_suppress": schema.StringAttribute{
+										MarkdownDescription: "Do not send RDNSS in router advertisement.",
+										Computed:            true,
+									},
+									"hop_limit": schema.Int64Attribute{
+										MarkdownDescription: "Hop limit.",
+										Computed:            true,
+									},
+									"mac_extract": schema.StringAttribute{
+										MarkdownDescription: "Extract next hop MAC address.",
+										Computed:            true,
+									},
+									"mtu": schema.Int64Attribute{
+										MarkdownDescription: "MTU.",
+										Computed:            true,
+									},
+									"neighbor_solicit_interval": schema.Int64Attribute{
+										MarkdownDescription: "Neighbor Solicit Interval.",
+										Computed:            true,
+									},
+									"ra_interval": schema.Int64Attribute{
+										MarkdownDescription: "Router Advertisement Interval.",
+										Computed:            true,
+									},
+									"ra_interval_min": schema.Int64Attribute{
+										MarkdownDescription: "Router Advertisement Interval Minimum.",
+										Computed:            true,
+									},
+									"ra_lifetime": schema.Int64Attribute{
+										MarkdownDescription: "Router Advertisement lifetime.",
+										Computed:            true,
+									},
+									"reachable_time": schema.Int64Attribute{
+										MarkdownDescription: "Reachable time.",
+										Computed:            true,
+									},
+									"retransmit_timer": schema.Int64Attribute{
+										MarkdownDescription: "Retransmit timer.",
+										Computed:            true,
+									},
+									"route_suppress": schema.StringAttribute{
+										MarkdownDescription: "Do Not send Route Information in RA.",
+										Computed:            true,
+									},
+									"router_preference": schema.StringAttribute{
+										MarkdownDescription: "Set Router Preference (RFC 4191).",
+										Computed:            true,
+									},
+								},
+							},
 						},
 					},
 				},

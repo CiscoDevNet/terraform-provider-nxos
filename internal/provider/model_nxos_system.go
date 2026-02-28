@@ -23,6 +23,7 @@ package provider
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -37,29 +38,52 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type System struct {
-	Device                                types.String `tfsdk:"device"`
-	Dn                                    types.String `tfsdk:"id"`
-	Name                                  types.String `tfsdk:"name"`
-	Mtu                                   types.Int64  `tfsdk:"mtu"`
-	DefaultAdminState                     types.String `tfsdk:"default_admin_state"`
-	AdminLinkDownSyslogLevel              types.Int64  `tfsdk:"admin_link_down_syslog_level"`
-	AdminLinkUpSyslogLevel                types.Int64  `tfsdk:"admin_link_up_syslog_level"`
-	AdminState                            types.String `tfsdk:"admin_state"`
-	AllowUnsupportedSfp                   types.Bool   `tfsdk:"allow_unsupported_sfp"`
-	ChassisInfrastructureAdaptorVlan      types.Int64  `tfsdk:"chassis_infrastructure_adaptor_vlan"`
-	ChassisInfrastructureEpdsPortNumber   types.Int64  `tfsdk:"chassis_infrastructure_epds_port_number"`
-	ChassisInfrastructureIpv6Address      types.String `tfsdk:"chassis_infrastructure_ipv6_address"`
-	ChassisInfrastructureVlan             types.Int64  `tfsdk:"chassis_infrastructure_vlan"`
-	ChassisManagementInstance             types.String `tfsdk:"chassis_management_instance"`
-	ChassisManagementInstanceFabricNumber types.String `tfsdk:"chassis_management_instance_fabric_number"`
-	Control                               types.String `tfsdk:"control"`
-	InterfaceSyslogInfo                   types.String `tfsdk:"interface_syslog_info"`
-	LogEvent                              types.String `tfsdk:"log_event"`
-	DefaultLayer                          types.String `tfsdk:"default_layer"`
-	SystemInterfaceAdminState             types.String `tfsdk:"system_interface_admin_state"`
-	SystemLinkFailureLaserOn              types.Bool   `tfsdk:"system_link_failure_laser_on"`
-	SystemStormControlMultiThreshold      types.Bool   `tfsdk:"system_storm_control_multi_threshold"`
-	VlanTagNative                         types.Bool   `tfsdk:"vlan_tag_native"`
+	Device                                        types.String          `tfsdk:"device"`
+	Dn                                            types.String          `tfsdk:"id"`
+	Name                                          types.String          `tfsdk:"name"`
+	EthernetMtu                                   types.Int64           `tfsdk:"ethernet_mtu"`
+	EthernetDefaultAdminState                     types.String          `tfsdk:"ethernet_default_admin_state"`
+	EthernetAdminLinkDownSyslogLevel              types.Int64           `tfsdk:"ethernet_admin_link_down_syslog_level"`
+	EthernetAdminLinkUpSyslogLevel                types.Int64           `tfsdk:"ethernet_admin_link_up_syslog_level"`
+	EthernetAdminState                            types.String          `tfsdk:"ethernet_admin_state"`
+	EthernetAllowUnsupportedSfp                   types.Bool            `tfsdk:"ethernet_allow_unsupported_sfp"`
+	EthernetChassisInfrastructureAdaptorVlan      types.Int64           `tfsdk:"ethernet_chassis_infrastructure_adaptor_vlan"`
+	EthernetChassisInfrastructureEpdsPortNumber   types.Int64           `tfsdk:"ethernet_chassis_infrastructure_epds_port_number"`
+	EthernetChassisInfrastructureIpv6Address      types.String          `tfsdk:"ethernet_chassis_infrastructure_ipv6_address"`
+	EthernetChassisInfrastructureVlan             types.Int64           `tfsdk:"ethernet_chassis_infrastructure_vlan"`
+	EthernetChassisManagementInstance             types.String          `tfsdk:"ethernet_chassis_management_instance"`
+	EthernetChassisManagementInstanceFabricNumber types.String          `tfsdk:"ethernet_chassis_management_instance_fabric_number"`
+	EthernetControl                               types.String          `tfsdk:"ethernet_control"`
+	EthernetInterfaceSyslogInfo                   types.String          `tfsdk:"ethernet_interface_syslog_info"`
+	EthernetLogEvent                              types.String          `tfsdk:"ethernet_log_event"`
+	EthernetDefaultLayer                          types.String          `tfsdk:"ethernet_default_layer"`
+	EthernetSystemInterfaceAdminState             types.String          `tfsdk:"ethernet_system_interface_admin_state"`
+	EthernetSystemLinkFailureLaserOn              types.Bool            `tfsdk:"ethernet_system_link_failure_laser_on"`
+	EthernetSystemStormControlMultiThreshold      types.Bool            `tfsdk:"ethernet_system_storm_control_multi_threshold"`
+	EthernetVlanTagNative                         types.Bool            `tfsdk:"ethernet_vlan_tag_native"`
+	ArpAdminState                                 types.String          `tfsdk:"arp_admin_state"`
+	ArpInstanceAdminState                         types.String          `tfsdk:"arp_instance_admin_state"`
+	ArpAllowStaticArpOutsideSubnet                types.String          `tfsdk:"arp_allow_static_arp_outside_subnet"`
+	ArpUnnumberedSviSoftwareReplication           types.String          `tfsdk:"arp_unnumbered_svi_software_replication"`
+	ArpCacheLimit                                 types.Int64           `tfsdk:"arp_cache_limit"`
+	ArpCacheSyslogRate                            types.Int64           `tfsdk:"arp_cache_syslog_rate"`
+	ArpControl                                    types.String          `tfsdk:"arp_control"`
+	ArpEvpnTimeout                                types.Int64           `tfsdk:"arp_evpn_timeout"`
+	ArpInterfaceCacheLimit                        types.Int64           `tfsdk:"arp_interface_cache_limit"`
+	ArpIpAdjacencyRouteDistance                   types.Int64           `tfsdk:"arp_ip_adjacency_route_distance"`
+	ArpIpArpCos                                   types.Int64           `tfsdk:"arp_ip_arp_cos"`
+	ArpOffListTimeout                             types.Int64           `tfsdk:"arp_off_list_timeout"`
+	ArpRarpFabricForwarding                       types.String          `tfsdk:"arp_rarp_fabric_forwarding"`
+	ArpRarpFabricForwardingRate                   types.Int64           `tfsdk:"arp_rarp_fabric_forwarding_rate"`
+	ArpResolveOutsideSubnet                       types.String          `tfsdk:"arp_resolve_outside_subnet"`
+	ArpSuppressionTimeout                         types.Int64           `tfsdk:"arp_suppression_timeout"`
+	ArpTimeout                                    types.Int64           `tfsdk:"arp_timeout"`
+	ArpVpcDomains                                 []SystemArpVpcDomains `tfsdk:"arp_vpc_domains"`
+}
+
+type SystemArpVpcDomains struct {
+	DomainId types.Int64  `tfsdk:"domain_id"`
+	ArpSync  types.String `tfsdk:"arp_sync"`
 }
 
 type SystemIdentity struct {
@@ -90,6 +114,10 @@ func (data System) getDn() string {
 	return "sys"
 }
 
+func (data SystemArpVpcDomains) getRn() string {
+	return fmt.Sprintf("dom-[%v]", data.DomainId.ValueInt64())
+}
+
 func (data System) getClassName() string {
 	return "topSystem"
 }
@@ -113,68 +141,150 @@ func (data System) toBody() nxos.Body {
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
 		nestedChildrenPath := childBodyPath + ".children"
 		attrs = "{}"
-		if (!data.Mtu.IsUnknown() && !data.Mtu.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "systemJumboMtu", strconv.FormatInt(data.Mtu.ValueInt64(), 10))
+		if (!data.EthernetMtu.IsUnknown() && !data.EthernetMtu.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "systemJumboMtu", strconv.FormatInt(data.EthernetMtu.ValueInt64(), 10))
 		}
-		if (!data.DefaultAdminState.IsUnknown() && !data.DefaultAdminState.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "systemDefaultAdminSt", data.DefaultAdminState.ValueString())
+		if (!data.EthernetDefaultAdminState.IsUnknown() && !data.EthernetDefaultAdminState.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "systemDefaultAdminSt", data.EthernetDefaultAdminState.ValueString())
 		}
-		if (!data.AdminLinkDownSyslogLevel.IsUnknown() && !data.AdminLinkDownSyslogLevel.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "adminLinkDownSyslogLevel", strconv.FormatInt(data.AdminLinkDownSyslogLevel.ValueInt64(), 10))
+		if (!data.EthernetAdminLinkDownSyslogLevel.IsUnknown() && !data.EthernetAdminLinkDownSyslogLevel.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "adminLinkDownSyslogLevel", strconv.FormatInt(data.EthernetAdminLinkDownSyslogLevel.ValueInt64(), 10))
 		}
-		if (!data.AdminLinkUpSyslogLevel.IsUnknown() && !data.AdminLinkUpSyslogLevel.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "adminLinkUpSyslogLevel", strconv.FormatInt(data.AdminLinkUpSyslogLevel.ValueInt64(), 10))
+		if (!data.EthernetAdminLinkUpSyslogLevel.IsUnknown() && !data.EthernetAdminLinkUpSyslogLevel.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "adminLinkUpSyslogLevel", strconv.FormatInt(data.EthernetAdminLinkUpSyslogLevel.ValueInt64(), 10))
 		}
-		if (!data.AdminState.IsUnknown() && !data.AdminState.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "adminSt", data.AdminState.ValueString())
+		if (!data.EthernetAdminState.IsUnknown() && !data.EthernetAdminState.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.EthernetAdminState.ValueString())
 		}
-		if (!data.AllowUnsupportedSfp.IsUnknown() && !data.AllowUnsupportedSfp.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "allowUnsupportedSfp", strconv.FormatBool(data.AllowUnsupportedSfp.ValueBool()))
+		if (!data.EthernetAllowUnsupportedSfp.IsUnknown() && !data.EthernetAllowUnsupportedSfp.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "allowUnsupportedSfp", strconv.FormatBool(data.EthernetAllowUnsupportedSfp.ValueBool()))
 		}
-		if (!data.ChassisInfrastructureAdaptorVlan.IsUnknown() && !data.ChassisInfrastructureAdaptorVlan.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "chassisInfraAdaptorVlan", strconv.FormatInt(data.ChassisInfrastructureAdaptorVlan.ValueInt64(), 10))
+		if (!data.EthernetChassisInfrastructureAdaptorVlan.IsUnknown() && !data.EthernetChassisInfrastructureAdaptorVlan.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "chassisInfraAdaptorVlan", strconv.FormatInt(data.EthernetChassisInfrastructureAdaptorVlan.ValueInt64(), 10))
 		}
-		if (!data.ChassisInfrastructureEpdsPortNumber.IsUnknown() && !data.ChassisInfrastructureEpdsPortNumber.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "chassisInfraEpdsPortNo", strconv.FormatInt(data.ChassisInfrastructureEpdsPortNumber.ValueInt64(), 10))
+		if (!data.EthernetChassisInfrastructureEpdsPortNumber.IsUnknown() && !data.EthernetChassisInfrastructureEpdsPortNumber.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "chassisInfraEpdsPortNo", strconv.FormatInt(data.EthernetChassisInfrastructureEpdsPortNumber.ValueInt64(), 10))
 		}
-		if (!data.ChassisInfrastructureIpv6Address.IsUnknown() && !data.ChassisInfrastructureIpv6Address.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "chassisInfraIPv6addr", data.ChassisInfrastructureIpv6Address.ValueString())
+		if (!data.EthernetChassisInfrastructureIpv6Address.IsUnknown() && !data.EthernetChassisInfrastructureIpv6Address.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "chassisInfraIPv6addr", data.EthernetChassisInfrastructureIpv6Address.ValueString())
 		}
-		if (!data.ChassisInfrastructureVlan.IsUnknown() && !data.ChassisInfrastructureVlan.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "chassisInfraVlan", strconv.FormatInt(data.ChassisInfrastructureVlan.ValueInt64(), 10))
+		if (!data.EthernetChassisInfrastructureVlan.IsUnknown() && !data.EthernetChassisInfrastructureVlan.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "chassisInfraVlan", strconv.FormatInt(data.EthernetChassisInfrastructureVlan.ValueInt64(), 10))
 		}
-		if (!data.ChassisManagementInstance.IsUnknown() && !data.ChassisManagementInstance.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "chassisMgmtInst", data.ChassisManagementInstance.ValueString())
+		if (!data.EthernetChassisManagementInstance.IsUnknown() && !data.EthernetChassisManagementInstance.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "chassisMgmtInst", data.EthernetChassisManagementInstance.ValueString())
 		}
-		if (!data.ChassisManagementInstanceFabricNumber.IsUnknown() && !data.ChassisManagementInstanceFabricNumber.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "chassisMgmtInstFabricNo", data.ChassisManagementInstanceFabricNumber.ValueString())
+		if (!data.EthernetChassisManagementInstanceFabricNumber.IsUnknown() && !data.EthernetChassisManagementInstanceFabricNumber.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "chassisMgmtInstFabricNo", data.EthernetChassisManagementInstanceFabricNumber.ValueString())
 		}
-		if (!data.Control.IsUnknown() && !data.Control.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "ctrl", data.Control.ValueString())
+		if (!data.EthernetControl.IsUnknown() && !data.EthernetControl.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "ctrl", data.EthernetControl.ValueString())
 		}
-		if (!data.InterfaceSyslogInfo.IsUnknown() && !data.InterfaceSyslogInfo.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "ifSyslogInfo", data.InterfaceSyslogInfo.ValueString())
+		if (!data.EthernetInterfaceSyslogInfo.IsUnknown() && !data.EthernetInterfaceSyslogInfo.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "ifSyslogInfo", data.EthernetInterfaceSyslogInfo.ValueString())
 		}
-		if (!data.LogEvent.IsUnknown() && !data.LogEvent.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "logEvent", data.LogEvent.ValueString())
+		if (!data.EthernetLogEvent.IsUnknown() && !data.EthernetLogEvent.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "logEvent", data.EthernetLogEvent.ValueString())
 		}
-		if (!data.DefaultLayer.IsUnknown() && !data.DefaultLayer.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "systemDefaultLayer", data.DefaultLayer.ValueString())
+		if (!data.EthernetDefaultLayer.IsUnknown() && !data.EthernetDefaultLayer.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "systemDefaultLayer", data.EthernetDefaultLayer.ValueString())
 		}
-		if (!data.SystemInterfaceAdminState.IsUnknown() && !data.SystemInterfaceAdminState.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "systemIfAdminState", data.SystemInterfaceAdminState.ValueString())
+		if (!data.EthernetSystemInterfaceAdminState.IsUnknown() && !data.EthernetSystemInterfaceAdminState.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "systemIfAdminState", data.EthernetSystemInterfaceAdminState.ValueString())
 		}
-		if (!data.SystemLinkFailureLaserOn.IsUnknown() && !data.SystemLinkFailureLaserOn.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "systemLinkFailLaserOn", strconv.FormatBool(data.SystemLinkFailureLaserOn.ValueBool()))
+		if (!data.EthernetSystemLinkFailureLaserOn.IsUnknown() && !data.EthernetSystemLinkFailureLaserOn.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "systemLinkFailLaserOn", strconv.FormatBool(data.EthernetSystemLinkFailureLaserOn.ValueBool()))
 		}
-		if (!data.SystemStormControlMultiThreshold.IsUnknown() && !data.SystemStormControlMultiThreshold.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "systemStormControlMultiThreshold", strconv.FormatBool(data.SystemStormControlMultiThreshold.ValueBool()))
+		if (!data.EthernetSystemStormControlMultiThreshold.IsUnknown() && !data.EthernetSystemStormControlMultiThreshold.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "systemStormControlMultiThreshold", strconv.FormatBool(data.EthernetSystemStormControlMultiThreshold.ValueBool()))
 		}
-		if (!data.VlanTagNative.IsUnknown() && !data.VlanTagNative.IsNull()) || false {
-			attrs, _ = sjson.Set(attrs, "vlanTagNative", strconv.FormatBool(data.VlanTagNative.ValueBool()))
+		if (!data.EthernetVlanTagNative.IsUnknown() && !data.EthernetVlanTagNative.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "vlanTagNative", strconv.FormatBool(data.EthernetVlanTagNative.ValueBool()))
 		}
 		if attrs != "{}" || false {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ethpmInst.attributes", attrs)
+		}
+	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".arpEntity"
+		attrs = "{}"
+		if (!data.ArpAdminState.IsUnknown() && !data.ArpAdminState.IsNull()) || false {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.ArpAdminState.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+		nestedChildrenPath := childBodyPath + ".children"
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".arpInst"
+			attrs = "{}"
+			if (!data.ArpInstanceAdminState.IsUnknown() && !data.ArpInstanceAdminState.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "adminSt", data.ArpInstanceAdminState.ValueString())
+			}
+			if (!data.ArpAllowStaticArpOutsideSubnet.IsUnknown() && !data.ArpAllowStaticArpOutsideSubnet.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "allowStaticArpOutsideSubnet", data.ArpAllowStaticArpOutsideSubnet.ValueString())
+			}
+			if (!data.ArpUnnumberedSviSoftwareReplication.IsUnknown() && !data.ArpUnnumberedSviSoftwareReplication.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "arpUnnumSviSwReplication", data.ArpUnnumberedSviSoftwareReplication.ValueString())
+			}
+			if (!data.ArpCacheLimit.IsUnknown() && !data.ArpCacheLimit.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "cacheLimit", strconv.FormatInt(data.ArpCacheLimit.ValueInt64(), 10))
+			}
+			if (!data.ArpCacheSyslogRate.IsUnknown() && !data.ArpCacheSyslogRate.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "cacheSyslogRate", strconv.FormatInt(data.ArpCacheSyslogRate.ValueInt64(), 10))
+			}
+			if (!data.ArpControl.IsUnknown() && !data.ArpControl.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "ctrl", data.ArpControl.ValueString())
+			}
+			if (!data.ArpEvpnTimeout.IsUnknown() && !data.ArpEvpnTimeout.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "evpn_timeout", strconv.FormatInt(data.ArpEvpnTimeout.ValueInt64(), 10))
+			}
+			if (!data.ArpInterfaceCacheLimit.IsUnknown() && !data.ArpInterfaceCacheLimit.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "intfCacheLimit", strconv.FormatInt(data.ArpInterfaceCacheLimit.ValueInt64(), 10))
+			}
+			if (!data.ArpIpAdjacencyRouteDistance.IsUnknown() && !data.ArpIpAdjacencyRouteDistance.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "ipAdjRouteDistance", strconv.FormatInt(data.ArpIpAdjacencyRouteDistance.ValueInt64(), 10))
+			}
+			if (!data.ArpIpArpCos.IsUnknown() && !data.ArpIpArpCos.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "ipArpCos", strconv.FormatInt(data.ArpIpArpCos.ValueInt64(), 10))
+			}
+			if (!data.ArpOffListTimeout.IsUnknown() && !data.ArpOffListTimeout.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "offListTimeout", strconv.FormatInt(data.ArpOffListTimeout.ValueInt64(), 10))
+			}
+			if (!data.ArpRarpFabricForwarding.IsUnknown() && !data.ArpRarpFabricForwarding.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "rarpFabricFwding", data.ArpRarpFabricForwarding.ValueString())
+			}
+			if (!data.ArpRarpFabricForwardingRate.IsUnknown() && !data.ArpRarpFabricForwardingRate.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "rarpFabricFwdingRate", strconv.FormatInt(data.ArpRarpFabricForwardingRate.ValueInt64(), 10))
+			}
+			if (!data.ArpResolveOutsideSubnet.IsUnknown() && !data.ArpResolveOutsideSubnet.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "resolveARPOutsideSubnet", data.ArpResolveOutsideSubnet.ValueString())
+			}
+			if (!data.ArpSuppressionTimeout.IsUnknown() && !data.ArpSuppressionTimeout.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "suppression_timeout", strconv.FormatInt(data.ArpSuppressionTimeout.ValueInt64(), 10))
+			}
+			if (!data.ArpTimeout.IsUnknown() && !data.ArpTimeout.IsNull()) || false {
+				attrs, _ = sjson.Set(attrs, "timeout", strconv.FormatInt(data.ArpTimeout.ValueInt64(), 10))
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+			nestedChildrenPath := childBodyPath + ".children"
+			{
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".arpVpc"
+				attrs = "{}"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", attrs)
+				nestedChildrenPath := childBodyPath + ".children"
+				for _, child := range data.ArpVpcDomains {
+					attrs = "{}"
+					if (!child.DomainId.IsUnknown() && !child.DomainId.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "domainId", strconv.FormatInt(child.DomainId.ValueInt64(), 10))
+					}
+					if (!child.ArpSync.IsUnknown() && !child.ArpSync.IsNull()) || false {
+						attrs, _ = sjson.Set(attrs, "arpSync", child.ArpSync.ValueString())
+					}
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.arpVpcDom.attributes", attrs)
+				}
+			}
 		}
 	}
 
@@ -211,26 +321,98 @@ func (data *System) fromBody(res gjson.Result) {
 					return true
 				},
 			)
-			data.Mtu = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.systemJumboMtu").Int())
-			data.DefaultAdminState = types.StringValue(rethpmInst.Get("ethpmInst.attributes.systemDefaultAdminSt").String())
-			data.AdminLinkDownSyslogLevel = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.adminLinkDownSyslogLevel").Int())
-			data.AdminLinkUpSyslogLevel = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.adminLinkUpSyslogLevel").Int())
-			data.AdminState = types.StringValue(rethpmInst.Get("ethpmInst.attributes.adminSt").String())
-			data.AllowUnsupportedSfp = types.BoolValue(helpers.ParseNxosBoolean(rethpmInst.Get("ethpmInst.attributes.allowUnsupportedSfp").String()))
-			data.ChassisInfrastructureAdaptorVlan = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.chassisInfraAdaptorVlan").Int())
-			data.ChassisInfrastructureEpdsPortNumber = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.chassisInfraEpdsPortNo").Int())
-			data.ChassisInfrastructureIpv6Address = types.StringValue(rethpmInst.Get("ethpmInst.attributes.chassisInfraIPv6addr").String())
-			data.ChassisInfrastructureVlan = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.chassisInfraVlan").Int())
-			data.ChassisManagementInstance = types.StringValue(rethpmInst.Get("ethpmInst.attributes.chassisMgmtInst").String())
-			data.ChassisManagementInstanceFabricNumber = types.StringValue(rethpmInst.Get("ethpmInst.attributes.chassisMgmtInstFabricNo").String())
-			data.Control = types.StringValue(rethpmInst.Get("ethpmInst.attributes.ctrl").String())
-			data.InterfaceSyslogInfo = types.StringValue(rethpmInst.Get("ethpmInst.attributes.ifSyslogInfo").String())
-			data.LogEvent = types.StringValue(rethpmInst.Get("ethpmInst.attributes.logEvent").String())
-			data.DefaultLayer = types.StringValue(rethpmInst.Get("ethpmInst.attributes.systemDefaultLayer").String())
-			data.SystemInterfaceAdminState = types.StringValue(rethpmInst.Get("ethpmInst.attributes.systemIfAdminState").String())
-			data.SystemLinkFailureLaserOn = types.BoolValue(helpers.ParseNxosBoolean(rethpmInst.Get("ethpmInst.attributes.systemLinkFailLaserOn").String()))
-			data.SystemStormControlMultiThreshold = types.BoolValue(helpers.ParseNxosBoolean(rethpmInst.Get("ethpmInst.attributes.systemStormControlMultiThreshold").String()))
-			data.VlanTagNative = types.BoolValue(helpers.ParseNxosBoolean(rethpmInst.Get("ethpmInst.attributes.vlanTagNative").String()))
+			data.EthernetMtu = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.systemJumboMtu").Int())
+			data.EthernetDefaultAdminState = types.StringValue(rethpmInst.Get("ethpmInst.attributes.systemDefaultAdminSt").String())
+			data.EthernetAdminLinkDownSyslogLevel = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.adminLinkDownSyslogLevel").Int())
+			data.EthernetAdminLinkUpSyslogLevel = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.adminLinkUpSyslogLevel").Int())
+			data.EthernetAdminState = types.StringValue(rethpmInst.Get("ethpmInst.attributes.adminSt").String())
+			data.EthernetAllowUnsupportedSfp = types.BoolValue(helpers.ParseNxosBoolean(rethpmInst.Get("ethpmInst.attributes.allowUnsupportedSfp").String()))
+			data.EthernetChassisInfrastructureAdaptorVlan = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.chassisInfraAdaptorVlan").Int())
+			data.EthernetChassisInfrastructureEpdsPortNumber = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.chassisInfraEpdsPortNo").Int())
+			data.EthernetChassisInfrastructureIpv6Address = types.StringValue(rethpmInst.Get("ethpmInst.attributes.chassisInfraIPv6addr").String())
+			data.EthernetChassisInfrastructureVlan = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.chassisInfraVlan").Int())
+			data.EthernetChassisManagementInstance = types.StringValue(rethpmInst.Get("ethpmInst.attributes.chassisMgmtInst").String())
+			data.EthernetChassisManagementInstanceFabricNumber = types.StringValue(rethpmInst.Get("ethpmInst.attributes.chassisMgmtInstFabricNo").String())
+			data.EthernetControl = types.StringValue(rethpmInst.Get("ethpmInst.attributes.ctrl").String())
+			data.EthernetInterfaceSyslogInfo = types.StringValue(rethpmInst.Get("ethpmInst.attributes.ifSyslogInfo").String())
+			data.EthernetLogEvent = types.StringValue(rethpmInst.Get("ethpmInst.attributes.logEvent").String())
+			data.EthernetDefaultLayer = types.StringValue(rethpmInst.Get("ethpmInst.attributes.systemDefaultLayer").String())
+			data.EthernetSystemInterfaceAdminState = types.StringValue(rethpmInst.Get("ethpmInst.attributes.systemIfAdminState").String())
+			data.EthernetSystemLinkFailureLaserOn = types.BoolValue(helpers.ParseNxosBoolean(rethpmInst.Get("ethpmInst.attributes.systemLinkFailLaserOn").String()))
+			data.EthernetSystemStormControlMultiThreshold = types.BoolValue(helpers.ParseNxosBoolean(rethpmInst.Get("ethpmInst.attributes.systemStormControlMultiThreshold").String()))
+			data.EthernetVlanTagNative = types.BoolValue(helpers.ParseNxosBoolean(rethpmInst.Get("ethpmInst.attributes.vlanTagNative").String()))
+		}
+	}
+	{
+		var rarpEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("arpEntity.attributes.rn").String()
+				if key == "arp" {
+					rarpEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		data.ArpAdminState = types.StringValue(rarpEntity.Get("arpEntity.attributes.adminSt").String())
+		{
+			var rarpInst gjson.Result
+			rarpEntity.Get("arpEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("arpInst.attributes.rn").String()
+					if key == "inst" {
+						rarpInst = v
+						return false
+					}
+					return true
+				},
+			)
+			data.ArpInstanceAdminState = types.StringValue(rarpInst.Get("arpInst.attributes.adminSt").String())
+			data.ArpAllowStaticArpOutsideSubnet = types.StringValue(rarpInst.Get("arpInst.attributes.allowStaticArpOutsideSubnet").String())
+			data.ArpUnnumberedSviSoftwareReplication = types.StringValue(rarpInst.Get("arpInst.attributes.arpUnnumSviSwReplication").String())
+			data.ArpCacheLimit = types.Int64Value(rarpInst.Get("arpInst.attributes.cacheLimit").Int())
+			data.ArpCacheSyslogRate = types.Int64Value(rarpInst.Get("arpInst.attributes.cacheSyslogRate").Int())
+			data.ArpControl = types.StringValue(rarpInst.Get("arpInst.attributes.ctrl").String())
+			data.ArpEvpnTimeout = types.Int64Value(rarpInst.Get("arpInst.attributes.evpn_timeout").Int())
+			data.ArpInterfaceCacheLimit = types.Int64Value(rarpInst.Get("arpInst.attributes.intfCacheLimit").Int())
+			data.ArpIpAdjacencyRouteDistance = types.Int64Value(rarpInst.Get("arpInst.attributes.ipAdjRouteDistance").Int())
+			data.ArpIpArpCos = types.Int64Value(rarpInst.Get("arpInst.attributes.ipArpCos").Int())
+			data.ArpOffListTimeout = types.Int64Value(rarpInst.Get("arpInst.attributes.offListTimeout").Int())
+			data.ArpRarpFabricForwarding = types.StringValue(rarpInst.Get("arpInst.attributes.rarpFabricFwding").String())
+			data.ArpRarpFabricForwardingRate = types.Int64Value(rarpInst.Get("arpInst.attributes.rarpFabricFwdingRate").Int())
+			data.ArpResolveOutsideSubnet = types.StringValue(rarpInst.Get("arpInst.attributes.resolveARPOutsideSubnet").String())
+			data.ArpSuppressionTimeout = types.Int64Value(rarpInst.Get("arpInst.attributes.suppression_timeout").Int())
+			data.ArpTimeout = types.Int64Value(rarpInst.Get("arpInst.attributes.timeout").Int())
+			{
+				var rarpVpc gjson.Result
+				rarpInst.Get("arpInst.children").ForEach(
+					func(_, v gjson.Result) bool {
+						key := v.Get("arpVpc.attributes.rn").String()
+						if key == "vpc" {
+							rarpVpc = v
+							return false
+						}
+						return true
+					},
+				)
+				rarpVpc.Get("arpVpc.children").ForEach(
+					func(_, v gjson.Result) bool {
+						v.ForEach(
+							func(classname, value gjson.Result) bool {
+								if classname.String() == "arpVpcDom" {
+									var child SystemArpVpcDomains
+									child.DomainId = types.Int64Value(value.Get("attributes.domainId").Int())
+									child.ArpSync = types.StringValue(value.Get("attributes.arpSync").String())
+									data.ArpVpcDomains = append(data.ArpVpcDomains, child)
+								}
+								return true
+							},
+						)
+						return true
+					},
+				)
+			}
 		}
 	}
 }
@@ -268,105 +450,250 @@ func (data *System) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
-		if !data.Mtu.IsNull() {
-			data.Mtu = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.systemJumboMtu").Int())
+		if !data.EthernetMtu.IsNull() {
+			data.EthernetMtu = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.systemJumboMtu").Int())
 		} else {
-			data.Mtu = types.Int64Null()
+			data.EthernetMtu = types.Int64Null()
 		}
-		if !data.DefaultAdminState.IsNull() {
-			data.DefaultAdminState = types.StringValue(rethpmInst.Get("ethpmInst.attributes.systemDefaultAdminSt").String())
+		if !data.EthernetDefaultAdminState.IsNull() {
+			data.EthernetDefaultAdminState = types.StringValue(rethpmInst.Get("ethpmInst.attributes.systemDefaultAdminSt").String())
 		} else {
-			data.DefaultAdminState = types.StringNull()
+			data.EthernetDefaultAdminState = types.StringNull()
 		}
-		if !data.AdminLinkDownSyslogLevel.IsNull() {
-			data.AdminLinkDownSyslogLevel = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.adminLinkDownSyslogLevel").Int())
+		if !data.EthernetAdminLinkDownSyslogLevel.IsNull() {
+			data.EthernetAdminLinkDownSyslogLevel = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.adminLinkDownSyslogLevel").Int())
 		} else {
-			data.AdminLinkDownSyslogLevel = types.Int64Null()
+			data.EthernetAdminLinkDownSyslogLevel = types.Int64Null()
 		}
-		if !data.AdminLinkUpSyslogLevel.IsNull() {
-			data.AdminLinkUpSyslogLevel = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.adminLinkUpSyslogLevel").Int())
+		if !data.EthernetAdminLinkUpSyslogLevel.IsNull() {
+			data.EthernetAdminLinkUpSyslogLevel = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.adminLinkUpSyslogLevel").Int())
 		} else {
-			data.AdminLinkUpSyslogLevel = types.Int64Null()
+			data.EthernetAdminLinkUpSyslogLevel = types.Int64Null()
 		}
-		if !data.AdminState.IsNull() {
-			data.AdminState = types.StringValue(rethpmInst.Get("ethpmInst.attributes.adminSt").String())
+		if !data.EthernetAdminState.IsNull() {
+			data.EthernetAdminState = types.StringValue(rethpmInst.Get("ethpmInst.attributes.adminSt").String())
 		} else {
-			data.AdminState = types.StringNull()
+			data.EthernetAdminState = types.StringNull()
 		}
-		if !data.AllowUnsupportedSfp.IsNull() {
-			data.AllowUnsupportedSfp = types.BoolValue(helpers.ParseNxosBoolean(rethpmInst.Get("ethpmInst.attributes.allowUnsupportedSfp").String()))
+		if !data.EthernetAllowUnsupportedSfp.IsNull() {
+			data.EthernetAllowUnsupportedSfp = types.BoolValue(helpers.ParseNxosBoolean(rethpmInst.Get("ethpmInst.attributes.allowUnsupportedSfp").String()))
 		} else {
-			data.AllowUnsupportedSfp = types.BoolNull()
+			data.EthernetAllowUnsupportedSfp = types.BoolNull()
 		}
-		if !data.ChassisInfrastructureAdaptorVlan.IsNull() {
-			data.ChassisInfrastructureAdaptorVlan = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.chassisInfraAdaptorVlan").Int())
+		if !data.EthernetChassisInfrastructureAdaptorVlan.IsNull() {
+			data.EthernetChassisInfrastructureAdaptorVlan = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.chassisInfraAdaptorVlan").Int())
 		} else {
-			data.ChassisInfrastructureAdaptorVlan = types.Int64Null()
+			data.EthernetChassisInfrastructureAdaptorVlan = types.Int64Null()
 		}
-		if !data.ChassisInfrastructureEpdsPortNumber.IsNull() {
-			data.ChassisInfrastructureEpdsPortNumber = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.chassisInfraEpdsPortNo").Int())
+		if !data.EthernetChassisInfrastructureEpdsPortNumber.IsNull() {
+			data.EthernetChassisInfrastructureEpdsPortNumber = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.chassisInfraEpdsPortNo").Int())
 		} else {
-			data.ChassisInfrastructureEpdsPortNumber = types.Int64Null()
+			data.EthernetChassisInfrastructureEpdsPortNumber = types.Int64Null()
 		}
-		if !data.ChassisInfrastructureIpv6Address.IsNull() {
-			data.ChassisInfrastructureIpv6Address = types.StringValue(rethpmInst.Get("ethpmInst.attributes.chassisInfraIPv6addr").String())
+		if !data.EthernetChassisInfrastructureIpv6Address.IsNull() {
+			data.EthernetChassisInfrastructureIpv6Address = types.StringValue(rethpmInst.Get("ethpmInst.attributes.chassisInfraIPv6addr").String())
 		} else {
-			data.ChassisInfrastructureIpv6Address = types.StringNull()
+			data.EthernetChassisInfrastructureIpv6Address = types.StringNull()
 		}
-		if !data.ChassisInfrastructureVlan.IsNull() {
-			data.ChassisInfrastructureVlan = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.chassisInfraVlan").Int())
+		if !data.EthernetChassisInfrastructureVlan.IsNull() {
+			data.EthernetChassisInfrastructureVlan = types.Int64Value(rethpmInst.Get("ethpmInst.attributes.chassisInfraVlan").Int())
 		} else {
-			data.ChassisInfrastructureVlan = types.Int64Null()
+			data.EthernetChassisInfrastructureVlan = types.Int64Null()
 		}
-		if !data.ChassisManagementInstance.IsNull() {
-			data.ChassisManagementInstance = types.StringValue(rethpmInst.Get("ethpmInst.attributes.chassisMgmtInst").String())
+		if !data.EthernetChassisManagementInstance.IsNull() {
+			data.EthernetChassisManagementInstance = types.StringValue(rethpmInst.Get("ethpmInst.attributes.chassisMgmtInst").String())
 		} else {
-			data.ChassisManagementInstance = types.StringNull()
+			data.EthernetChassisManagementInstance = types.StringNull()
 		}
-		if !data.ChassisManagementInstanceFabricNumber.IsNull() {
-			data.ChassisManagementInstanceFabricNumber = types.StringValue(rethpmInst.Get("ethpmInst.attributes.chassisMgmtInstFabricNo").String())
+		if !data.EthernetChassisManagementInstanceFabricNumber.IsNull() {
+			data.EthernetChassisManagementInstanceFabricNumber = types.StringValue(rethpmInst.Get("ethpmInst.attributes.chassisMgmtInstFabricNo").String())
 		} else {
-			data.ChassisManagementInstanceFabricNumber = types.StringNull()
+			data.EthernetChassisManagementInstanceFabricNumber = types.StringNull()
 		}
-		if !data.Control.IsNull() {
-			data.Control = types.StringValue(rethpmInst.Get("ethpmInst.attributes.ctrl").String())
+		if !data.EthernetControl.IsNull() {
+			data.EthernetControl = types.StringValue(rethpmInst.Get("ethpmInst.attributes.ctrl").String())
 		} else {
-			data.Control = types.StringNull()
+			data.EthernetControl = types.StringNull()
 		}
-		if !data.InterfaceSyslogInfo.IsNull() {
-			data.InterfaceSyslogInfo = types.StringValue(rethpmInst.Get("ethpmInst.attributes.ifSyslogInfo").String())
+		if !data.EthernetInterfaceSyslogInfo.IsNull() {
+			data.EthernetInterfaceSyslogInfo = types.StringValue(rethpmInst.Get("ethpmInst.attributes.ifSyslogInfo").String())
 		} else {
-			data.InterfaceSyslogInfo = types.StringNull()
+			data.EthernetInterfaceSyslogInfo = types.StringNull()
 		}
-		if !data.LogEvent.IsNull() {
-			data.LogEvent = types.StringValue(rethpmInst.Get("ethpmInst.attributes.logEvent").String())
+		if !data.EthernetLogEvent.IsNull() {
+			data.EthernetLogEvent = types.StringValue(rethpmInst.Get("ethpmInst.attributes.logEvent").String())
 		} else {
-			data.LogEvent = types.StringNull()
+			data.EthernetLogEvent = types.StringNull()
 		}
-		if !data.DefaultLayer.IsNull() {
-			data.DefaultLayer = types.StringValue(rethpmInst.Get("ethpmInst.attributes.systemDefaultLayer").String())
+		if !data.EthernetDefaultLayer.IsNull() {
+			data.EthernetDefaultLayer = types.StringValue(rethpmInst.Get("ethpmInst.attributes.systemDefaultLayer").String())
 		} else {
-			data.DefaultLayer = types.StringNull()
+			data.EthernetDefaultLayer = types.StringNull()
 		}
-		if !data.SystemInterfaceAdminState.IsNull() {
-			data.SystemInterfaceAdminState = types.StringValue(rethpmInst.Get("ethpmInst.attributes.systemIfAdminState").String())
+		if !data.EthernetSystemInterfaceAdminState.IsNull() {
+			data.EthernetSystemInterfaceAdminState = types.StringValue(rethpmInst.Get("ethpmInst.attributes.systemIfAdminState").String())
 		} else {
-			data.SystemInterfaceAdminState = types.StringNull()
+			data.EthernetSystemInterfaceAdminState = types.StringNull()
 		}
-		if !data.SystemLinkFailureLaserOn.IsNull() {
-			data.SystemLinkFailureLaserOn = types.BoolValue(helpers.ParseNxosBoolean(rethpmInst.Get("ethpmInst.attributes.systemLinkFailLaserOn").String()))
+		if !data.EthernetSystemLinkFailureLaserOn.IsNull() {
+			data.EthernetSystemLinkFailureLaserOn = types.BoolValue(helpers.ParseNxosBoolean(rethpmInst.Get("ethpmInst.attributes.systemLinkFailLaserOn").String()))
 		} else {
-			data.SystemLinkFailureLaserOn = types.BoolNull()
+			data.EthernetSystemLinkFailureLaserOn = types.BoolNull()
 		}
-		if !data.SystemStormControlMultiThreshold.IsNull() {
-			data.SystemStormControlMultiThreshold = types.BoolValue(helpers.ParseNxosBoolean(rethpmInst.Get("ethpmInst.attributes.systemStormControlMultiThreshold").String()))
+		if !data.EthernetSystemStormControlMultiThreshold.IsNull() {
+			data.EthernetSystemStormControlMultiThreshold = types.BoolValue(helpers.ParseNxosBoolean(rethpmInst.Get("ethpmInst.attributes.systemStormControlMultiThreshold").String()))
 		} else {
-			data.SystemStormControlMultiThreshold = types.BoolNull()
+			data.EthernetSystemStormControlMultiThreshold = types.BoolNull()
 		}
-		if !data.VlanTagNative.IsNull() {
-			data.VlanTagNative = types.BoolValue(helpers.ParseNxosBoolean(rethpmInst.Get("ethpmInst.attributes.vlanTagNative").String()))
+		if !data.EthernetVlanTagNative.IsNull() {
+			data.EthernetVlanTagNative = types.BoolValue(helpers.ParseNxosBoolean(rethpmInst.Get("ethpmInst.attributes.vlanTagNative").String()))
 		} else {
-			data.VlanTagNative = types.BoolNull()
+			data.EthernetVlanTagNative = types.BoolNull()
+		}
+	}
+	var rarpEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			key := v.Get("arpEntity.attributes.rn").String()
+			if key == "arp" {
+				rarpEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.ArpAdminState.IsNull() {
+		data.ArpAdminState = types.StringValue(rarpEntity.Get("arpEntity.attributes.adminSt").String())
+	} else {
+		data.ArpAdminState = types.StringNull()
+	}
+	{
+		var rarpInst gjson.Result
+		rarpEntity.Get("arpEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				key := v.Get("arpInst.attributes.rn").String()
+				if key == "inst" {
+					rarpInst = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.ArpInstanceAdminState.IsNull() {
+			data.ArpInstanceAdminState = types.StringValue(rarpInst.Get("arpInst.attributes.adminSt").String())
+		} else {
+			data.ArpInstanceAdminState = types.StringNull()
+		}
+		if !data.ArpAllowStaticArpOutsideSubnet.IsNull() {
+			data.ArpAllowStaticArpOutsideSubnet = types.StringValue(rarpInst.Get("arpInst.attributes.allowStaticArpOutsideSubnet").String())
+		} else {
+			data.ArpAllowStaticArpOutsideSubnet = types.StringNull()
+		}
+		if !data.ArpUnnumberedSviSoftwareReplication.IsNull() {
+			data.ArpUnnumberedSviSoftwareReplication = types.StringValue(rarpInst.Get("arpInst.attributes.arpUnnumSviSwReplication").String())
+		} else {
+			data.ArpUnnumberedSviSoftwareReplication = types.StringNull()
+		}
+		if !data.ArpCacheLimit.IsNull() {
+			data.ArpCacheLimit = types.Int64Value(rarpInst.Get("arpInst.attributes.cacheLimit").Int())
+		} else {
+			data.ArpCacheLimit = types.Int64Null()
+		}
+		if !data.ArpCacheSyslogRate.IsNull() {
+			data.ArpCacheSyslogRate = types.Int64Value(rarpInst.Get("arpInst.attributes.cacheSyslogRate").Int())
+		} else {
+			data.ArpCacheSyslogRate = types.Int64Null()
+		}
+		if !data.ArpControl.IsNull() {
+			data.ArpControl = types.StringValue(rarpInst.Get("arpInst.attributes.ctrl").String())
+		} else {
+			data.ArpControl = types.StringNull()
+		}
+		if !data.ArpEvpnTimeout.IsNull() {
+			data.ArpEvpnTimeout = types.Int64Value(rarpInst.Get("arpInst.attributes.evpn_timeout").Int())
+		} else {
+			data.ArpEvpnTimeout = types.Int64Null()
+		}
+		if !data.ArpInterfaceCacheLimit.IsNull() {
+			data.ArpInterfaceCacheLimit = types.Int64Value(rarpInst.Get("arpInst.attributes.intfCacheLimit").Int())
+		} else {
+			data.ArpInterfaceCacheLimit = types.Int64Null()
+		}
+		if !data.ArpIpAdjacencyRouteDistance.IsNull() {
+			data.ArpIpAdjacencyRouteDistance = types.Int64Value(rarpInst.Get("arpInst.attributes.ipAdjRouteDistance").Int())
+		} else {
+			data.ArpIpAdjacencyRouteDistance = types.Int64Null()
+		}
+		if !data.ArpIpArpCos.IsNull() {
+			data.ArpIpArpCos = types.Int64Value(rarpInst.Get("arpInst.attributes.ipArpCos").Int())
+		} else {
+			data.ArpIpArpCos = types.Int64Null()
+		}
+		if !data.ArpOffListTimeout.IsNull() {
+			data.ArpOffListTimeout = types.Int64Value(rarpInst.Get("arpInst.attributes.offListTimeout").Int())
+		} else {
+			data.ArpOffListTimeout = types.Int64Null()
+		}
+		if !data.ArpRarpFabricForwarding.IsNull() {
+			data.ArpRarpFabricForwarding = types.StringValue(rarpInst.Get("arpInst.attributes.rarpFabricFwding").String())
+		} else {
+			data.ArpRarpFabricForwarding = types.StringNull()
+		}
+		if !data.ArpRarpFabricForwardingRate.IsNull() {
+			data.ArpRarpFabricForwardingRate = types.Int64Value(rarpInst.Get("arpInst.attributes.rarpFabricFwdingRate").Int())
+		} else {
+			data.ArpRarpFabricForwardingRate = types.Int64Null()
+		}
+		if !data.ArpResolveOutsideSubnet.IsNull() {
+			data.ArpResolveOutsideSubnet = types.StringValue(rarpInst.Get("arpInst.attributes.resolveARPOutsideSubnet").String())
+		} else {
+			data.ArpResolveOutsideSubnet = types.StringNull()
+		}
+		if !data.ArpSuppressionTimeout.IsNull() {
+			data.ArpSuppressionTimeout = types.Int64Value(rarpInst.Get("arpInst.attributes.suppression_timeout").Int())
+		} else {
+			data.ArpSuppressionTimeout = types.Int64Null()
+		}
+		if !data.ArpTimeout.IsNull() {
+			data.ArpTimeout = types.Int64Value(rarpInst.Get("arpInst.attributes.timeout").Int())
+		} else {
+			data.ArpTimeout = types.Int64Null()
+		}
+		{
+			var rarpVpc gjson.Result
+			rarpInst.Get("arpInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					key := v.Get("arpVpc.attributes.rn").String()
+					if key == "vpc" {
+						rarpVpc = v
+						return false
+					}
+					return true
+				},
+			)
+			for c := range data.ArpVpcDomains {
+				var rarpVpcDom gjson.Result
+				rarpVpc.Get("arpVpc.children").ForEach(
+					func(_, v gjson.Result) bool {
+						key := v.Get("arpVpcDom.attributes.rn").String()
+						if key == data.ArpVpcDomains[c].getRn() {
+							rarpVpcDom = v
+							return false
+						}
+						return true
+					},
+				)
+				if !data.ArpVpcDomains[c].DomainId.IsNull() {
+					data.ArpVpcDomains[c].DomainId = types.Int64Value(rarpVpcDom.Get("arpVpcDom.attributes.domainId").Int())
+				} else {
+					data.ArpVpcDomains[c].DomainId = types.Int64Null()
+				}
+				if !data.ArpVpcDomains[c].ArpSync.IsNull() {
+					data.ArpVpcDomains[c].ArpSync = types.StringValue(rarpVpcDom.Get("arpVpcDom.attributes.arpSync").String())
+				} else {
+					data.ArpVpcDomains[c].ArpSync = types.StringNull()
+				}
+			}
 		}
 	}
 }
@@ -389,10 +716,10 @@ func (data System) toDeleteBody() nxos.Body {
 		_ = nestedChildrenPath
 		{
 			childBody := ""
-			if !data.Mtu.IsNull() {
+			if !data.EthernetMtu.IsNull() {
 				childBody, _ = sjson.Set(childBody, "systemJumboMtu", strconv.FormatInt(9216, 10))
 			}
-			if !data.DefaultAdminState.IsNull() {
+			if !data.EthernetDefaultAdminState.IsNull() {
 				childBody, _ = sjson.Set(childBody, "systemDefaultAdminSt", "DME_UNSET_PROPERTY_MARKER")
 			}
 			if childBody != "" {
@@ -402,8 +729,50 @@ func (data System) toDeleteBody() nxos.Body {
 			}
 		}
 	}
+	{
+		childIndex := len(gjson.Get(body, childrenPath).Array())
+		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".arpEntity"
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+			childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".arpInst"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			{
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "arpVpc.attributes.rn", "vpc")
+				deleteBody, _ = sjson.Set(deleteBody, "arpVpc.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+		}
+	}
 
 	return nxos.Body{body}
+}
+
+func (data System) toBodyWithDeletes(ctx context.Context, state System) nxos.Body {
+	body := data.toBody()
+	bodyPath := data.getClassName() + ".children"
+	_ = bodyPath
+	for _, stateChild := range state.ArpVpcDomains {
+		found := false
+		for _, planChild := range data.ArpVpcDomains {
+			if stateChild.DomainId == planChild.DomainId {
+				found = true
+				break
+			}
+		}
+		if !found {
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "arpVpcDom.attributes.rn", stateChild.getRn())
+			deleteBody, _ = sjson.Set(deleteBody, "arpVpcDom.attributes.status", "deleted")
+			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.arpEntity.children"+".0.arpInst.children"+".0.arpVpc.children"+".-1", deleteBody)
+		}
+	}
+	return body
 }
 
 // End of section. //template:end toDeleteBody

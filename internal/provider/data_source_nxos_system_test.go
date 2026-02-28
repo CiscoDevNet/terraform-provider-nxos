@@ -32,26 +32,42 @@ import (
 func TestAccDataSourceNxosSystem(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "name", "LEAF1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "mtu", "9216"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "default_admin_state", "up"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "admin_link_down_syslog_level", "4"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "admin_link_up_syslog_level", "4"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "allow_unsupported_sfp", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "chassis_infrastructure_adaptor_vlan", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "chassis_infrastructure_epds_port_number", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "chassis_infrastructure_ipv6_address", "2001:db8::1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "chassis_infrastructure_vlan", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "chassis_management_instance", "mgmt0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "chassis_management_instance_fabric_number", "LeftFabric"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "control", "stateful-ha"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "interface_syslog_info", "info-1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "log_event", "linkStatusEnable"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "default_layer", "Layer3"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "system_interface_admin_state", "up"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "system_link_failure_laser_on", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "system_storm_control_multi_threshold", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vlan_tag_native", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_mtu", "9216"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_default_admin_state", "up"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_admin_link_down_syslog_level", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_admin_link_up_syslog_level", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_allow_unsupported_sfp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_chassis_infrastructure_adaptor_vlan", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_chassis_infrastructure_epds_port_number", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_chassis_infrastructure_ipv6_address", "2001:db8::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_chassis_infrastructure_vlan", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_chassis_management_instance", "mgmt0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_chassis_management_instance_fabric_number", "LeftFabric"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_interface_syslog_info", "info-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_log_event", "linkStatusEnable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_default_layer", "Layer3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_system_interface_admin_state", "up"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_system_link_failure_laser_on", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_system_storm_control_multi_threshold", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_vlan_tag_native", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_allow_static_arp_outside_subnet", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_unnumbered_svi_software_replication", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_cache_limit", "200000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_cache_syslog_rate", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_evpn_timeout", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_interface_cache_limit", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_ip_adjacency_route_distance", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_ip_arp_cos", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_off_list_timeout", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_rarp_fabric_forwarding", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_rarp_fabric_forwarding_rate", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_resolve_outside_subnet", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_suppression_timeout", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_timeout", "1800"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -74,26 +90,42 @@ func TestAccDataSourceNxosSystem(t *testing.T) {
 func testAccDataSourceNxosSystemConfig() string {
 	config := `resource "nxos_system" "test" {` + "\n"
 	config += `	name = "LEAF1"` + "\n"
-	config += `	mtu = 9216` + "\n"
-	config += `	default_admin_state = "up"` + "\n"
-	config += `	admin_link_down_syslog_level = 4` + "\n"
-	config += `	admin_link_up_syslog_level = 4` + "\n"
-	config += `	admin_state = "enabled"` + "\n"
-	config += `	allow_unsupported_sfp = true` + "\n"
-	config += `	chassis_infrastructure_adaptor_vlan = 100` + "\n"
-	config += `	chassis_infrastructure_epds_port_number = 100` + "\n"
-	config += `	chassis_infrastructure_ipv6_address = "2001:db8::1"` + "\n"
-	config += `	chassis_infrastructure_vlan = 100` + "\n"
-	config += `	chassis_management_instance = "mgmt0"` + "\n"
-	config += `	chassis_management_instance_fabric_number = "LeftFabric"` + "\n"
-	config += `	control = "stateful-ha"` + "\n"
-	config += `	interface_syslog_info = "info-1"` + "\n"
-	config += `	log_event = "linkStatusEnable"` + "\n"
-	config += `	default_layer = "Layer3"` + "\n"
-	config += `	system_interface_admin_state = "up"` + "\n"
-	config += `	system_link_failure_laser_on = false` + "\n"
-	config += `	system_storm_control_multi_threshold = false` + "\n"
-	config += `	vlan_tag_native = false` + "\n"
+	config += `	ethernet_mtu = 9216` + "\n"
+	config += `	ethernet_default_admin_state = "up"` + "\n"
+	config += `	ethernet_admin_link_down_syslog_level = 4` + "\n"
+	config += `	ethernet_admin_link_up_syslog_level = 4` + "\n"
+	config += `	ethernet_admin_state = "enabled"` + "\n"
+	config += `	ethernet_allow_unsupported_sfp = true` + "\n"
+	config += `	ethernet_chassis_infrastructure_adaptor_vlan = 100` + "\n"
+	config += `	ethernet_chassis_infrastructure_epds_port_number = 100` + "\n"
+	config += `	ethernet_chassis_infrastructure_ipv6_address = "2001:db8::1"` + "\n"
+	config += `	ethernet_chassis_infrastructure_vlan = 100` + "\n"
+	config += `	ethernet_chassis_management_instance = "mgmt0"` + "\n"
+	config += `	ethernet_chassis_management_instance_fabric_number = "LeftFabric"` + "\n"
+	config += `	ethernet_control = "stateful-ha"` + "\n"
+	config += `	ethernet_interface_syslog_info = "info-1"` + "\n"
+	config += `	ethernet_log_event = "linkStatusEnable"` + "\n"
+	config += `	ethernet_default_layer = "Layer3"` + "\n"
+	config += `	ethernet_system_interface_admin_state = "up"` + "\n"
+	config += `	ethernet_system_link_failure_laser_on = false` + "\n"
+	config += `	ethernet_system_storm_control_multi_threshold = false` + "\n"
+	config += `	ethernet_vlan_tag_native = false` + "\n"
+	config += `	arp_admin_state = "enabled"` + "\n"
+	config += `	arp_instance_admin_state = "enabled"` + "\n"
+	config += `	arp_allow_static_arp_outside_subnet = "enabled"` + "\n"
+	config += `	arp_unnumbered_svi_software_replication = "enabled"` + "\n"
+	config += `	arp_cache_limit = 200000` + "\n"
+	config += `	arp_cache_syslog_rate = 5` + "\n"
+	config += `	arp_evpn_timeout = 3000` + "\n"
+	config += `	arp_interface_cache_limit = 1000` + "\n"
+	config += `	arp_ip_adjacency_route_distance = 200` + "\n"
+	config += `	arp_ip_arp_cos = 4` + "\n"
+	config += `	arp_off_list_timeout = 300` + "\n"
+	config += `	arp_rarp_fabric_forwarding = "enabled"` + "\n"
+	config += `	arp_rarp_fabric_forwarding_rate = 300` + "\n"
+	config += `	arp_resolve_outside_subnet = "enabled"` + "\n"
+	config += `	arp_suppression_timeout = 300` + "\n"
+	config += `	arp_timeout = 1800` + "\n"
 	config += `}` + "\n"
 
 	config += `

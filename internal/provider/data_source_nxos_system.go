@@ -57,7 +57,7 @@ func (d *SystemDataSource) Metadata(_ context.Context, req datasource.MetadataRe
 func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.", "topSystem", "System/top:System/").AddAdditionalDocs([]string{"ethpmEntity", "ethpmInst"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.", "topSystem", "System/top:System/").AddAdditionalDocs([]string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -72,85 +72,169 @@ func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				MarkdownDescription: "The system name (hostname).",
 				Computed:            true,
 			},
-			"mtu": schema.Int64Attribute{
+			"ethernet_mtu": schema.Int64Attribute{
 				MarkdownDescription: "System jumbo Mtu.",
 				Computed:            true,
 			},
-			"default_admin_state": schema.StringAttribute{
+			"ethernet_default_admin_state": schema.StringAttribute{
 				MarkdownDescription: "System Default Admin St.",
 				Computed:            true,
 			},
-			"admin_link_down_syslog_level": schema.Int64Attribute{
+			"ethernet_admin_link_down_syslog_level": schema.Int64Attribute{
 				MarkdownDescription: "Admin link-down syslog level.",
 				Computed:            true,
 			},
-			"admin_link_up_syslog_level": schema.Int64Attribute{
+			"ethernet_admin_link_up_syslog_level": schema.Int64Attribute{
 				MarkdownDescription: "Admin link-up syslog level.",
 				Computed:            true,
 			},
-			"admin_state": schema.StringAttribute{
+			"ethernet_admin_state": schema.StringAttribute{
 				MarkdownDescription: "The administrative state of the object or policy.",
 				Computed:            true,
 			},
-			"allow_unsupported_sfp": schema.BoolAttribute{
+			"ethernet_allow_unsupported_sfp": schema.BoolAttribute{
 				MarkdownDescription: "Allow unsupported SFP.",
 				Computed:            true,
 			},
-			"chassis_infrastructure_adaptor_vlan": schema.Int64Attribute{
+			"ethernet_chassis_infrastructure_adaptor_vlan": schema.Int64Attribute{
 				MarkdownDescription: "Chassis infra adaptor vlan id.",
 				Computed:            true,
 			},
-			"chassis_infrastructure_epds_port_number": schema.Int64Attribute{
+			"ethernet_chassis_infrastructure_epds_port_number": schema.Int64Attribute{
 				MarkdownDescription: "Chassis infra EPDS port no.",
 				Computed:            true,
 			},
-			"chassis_infrastructure_ipv6_address": schema.StringAttribute{
+			"ethernet_chassis_infrastructure_ipv6_address": schema.StringAttribute{
 				MarkdownDescription: "Chassis infra IPv6 address.",
 				Computed:            true,
 			},
-			"chassis_infrastructure_vlan": schema.Int64Attribute{
+			"ethernet_chassis_infrastructure_vlan": schema.Int64Attribute{
 				MarkdownDescription: "Chassis infra vlan id.",
 				Computed:            true,
 			},
-			"chassis_management_instance": schema.StringAttribute{
+			"ethernet_chassis_management_instance": schema.StringAttribute{
 				MarkdownDescription: "Chassis MGMT instance.",
 				Computed:            true,
 			},
-			"chassis_management_instance_fabric_number": schema.StringAttribute{
+			"ethernet_chassis_management_instance_fabric_number": schema.StringAttribute{
 				MarkdownDescription: "Chassis MGMT fabric no.",
 				Computed:            true,
 			},
-			"control": schema.StringAttribute{
+			"ethernet_control": schema.StringAttribute{
 				MarkdownDescription: "The control state.",
 				Computed:            true,
 			},
-			"interface_syslog_info": schema.StringAttribute{
+			"ethernet_interface_syslog_info": schema.StringAttribute{
 				MarkdownDescription: "Interface syslog info.",
 				Computed:            true,
 			},
-			"log_event": schema.StringAttribute{
+			"ethernet_log_event": schema.StringAttribute{
 				MarkdownDescription: "Logging Interface events.",
 				Computed:            true,
 			},
-			"default_layer": schema.StringAttribute{
+			"ethernet_default_layer": schema.StringAttribute{
 				MarkdownDescription: "System Default Layer.",
 				Computed:            true,
 			},
-			"system_interface_admin_state": schema.StringAttribute{
+			"ethernet_system_interface_admin_state": schema.StringAttribute{
 				MarkdownDescription: "System Interface Admin State.",
 				Computed:            true,
 			},
-			"system_link_failure_laser_on": schema.BoolAttribute{
+			"ethernet_system_link_failure_laser_on": schema.BoolAttribute{
 				MarkdownDescription: "Enable or disable the system link failure laser on.",
 				Computed:            true,
 			},
-			"system_storm_control_multi_threshold": schema.BoolAttribute{
+			"ethernet_system_storm_control_multi_threshold": schema.BoolAttribute{
 				MarkdownDescription: "Enable or disable the storm control multi threshold.",
 				Computed:            true,
 			},
-			"vlan_tag_native": schema.BoolAttribute{
+			"ethernet_vlan_tag_native": schema.BoolAttribute{
 				MarkdownDescription: "Tag native vlan.",
 				Computed:            true,
+			},
+			"arp_admin_state": schema.StringAttribute{
+				MarkdownDescription: "The administrative state of the object or policy.",
+				Computed:            true,
+			},
+			"arp_instance_admin_state": schema.StringAttribute{
+				MarkdownDescription: "The administrative state of the object or policy.",
+				Computed:            true,
+			},
+			"arp_allow_static_arp_outside_subnet": schema.StringAttribute{
+				MarkdownDescription: "Allow Static ARP Outside Subnet.",
+				Computed:            true,
+			},
+			"arp_unnumbered_svi_software_replication": schema.StringAttribute{
+				MarkdownDescription: "ARP Packets Replication In Software For Unnumbered SVI.",
+				Computed:            true,
+			},
+			"arp_cache_limit": schema.Int64Attribute{
+				MarkdownDescription: "Cache Limit.",
+				Computed:            true,
+			},
+			"arp_cache_syslog_rate": schema.Int64Attribute{
+				MarkdownDescription: "Cache Syslog Rate.",
+				Computed:            true,
+			},
+			"arp_control": schema.StringAttribute{
+				MarkdownDescription: "The control state.",
+				Computed:            true,
+			},
+			"arp_evpn_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Refresh in EVPN on host moves.",
+				Computed:            true,
+			},
+			"arp_interface_cache_limit": schema.Int64Attribute{
+				MarkdownDescription: "ARP Cache limit for all Interface.",
+				Computed:            true,
+			},
+			"arp_ip_adjacency_route_distance": schema.Int64Attribute{
+				MarkdownDescription: "IP Adjacency Route Distance.",
+				Computed:            true,
+			},
+			"arp_ip_arp_cos": schema.Int64Attribute{
+				MarkdownDescription: "COS for ARP packet.",
+				Computed:            true,
+			},
+			"arp_off_list_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Off-list timeout.",
+				Computed:            true,
+			},
+			"arp_rarp_fabric_forwarding": schema.StringAttribute{
+				MarkdownDescription: "RARP Fabric Forwarding.",
+				Computed:            true,
+			},
+			"arp_rarp_fabric_forwarding_rate": schema.Int64Attribute{
+				MarkdownDescription: "RARP Fabric Forwarding Rate.",
+				Computed:            true,
+			},
+			"arp_resolve_outside_subnet": schema.StringAttribute{
+				MarkdownDescription: "Allow ARP Outside Subnet Response.",
+				Computed:            true,
+			},
+			"arp_suppression_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Suppression Timeout.",
+				Computed:            true,
+			},
+			"arp_timeout": schema.Int64Attribute{
+				MarkdownDescription: "ARP Global Timeout.",
+				Computed:            true,
+			},
+			"arp_vpc_domains": schema.ListNestedAttribute{
+				MarkdownDescription: "ARP VPC Domain.",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"domain_id": schema.Int64Attribute{
+							MarkdownDescription: "VPC domain id.",
+							Computed:            true,
+						},
+						"arp_sync": schema.StringAttribute{
+							MarkdownDescription: "ARP Sync.",
+							Computed:            true,
+						},
+					},
+				},
 			},
 		},
 	}
@@ -186,7 +270,7 @@ func (d *SystemDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 	}
 
 	queries := []func(*nxos.Req){}
-	queries = append(queries, nxos.Query("rsp-subtree-depth", "2"))
+	queries = append(queries, nxos.Query("rsp-subtree-depth", "4"))
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

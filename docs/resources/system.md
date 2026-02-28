@@ -6,7 +6,7 @@ description: |-
   This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.
   API Documentation: topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/
   Additional API Documentation
-  ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/
+  ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/
 ---
 
 # nxos_system (Resource)
@@ -19,32 +19,57 @@ This resource can manage the system configuration on NX-OS devices, including th
 
 - [ethpmEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/)
 - [ethpmInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/)
+- [arpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/)
+- [arpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/)
+- [arpVpc](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/)
+- [arpVpcDom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/)
 
 ## Example Usage
 
 ```terraform
 resource "nxos_system" "example" {
-  name                                      = "LEAF1"
-  mtu                                       = 9216
-  default_admin_state                       = "up"
-  admin_link_down_syslog_level              = 4
-  admin_link_up_syslog_level                = 4
-  admin_state                               = "enabled"
-  allow_unsupported_sfp                     = true
-  chassis_infrastructure_adaptor_vlan       = 100
-  chassis_infrastructure_epds_port_number   = 100
-  chassis_infrastructure_ipv6_address       = "2001:db8::1"
-  chassis_infrastructure_vlan               = 100
-  chassis_management_instance               = "mgmt0"
-  chassis_management_instance_fabric_number = "LeftFabric"
-  control                                   = "stateful-ha"
-  interface_syslog_info                     = "info-1"
-  log_event                                 = "linkStatusEnable"
-  default_layer                             = "Layer3"
-  system_interface_admin_state              = "up"
-  system_link_failure_laser_on              = false
-  system_storm_control_multi_threshold      = false
-  vlan_tag_native                           = false
+  name                                               = "LEAF1"
+  ethernet_mtu                                       = 9216
+  ethernet_default_admin_state                       = "up"
+  ethernet_admin_link_down_syslog_level              = 4
+  ethernet_admin_link_up_syslog_level                = 4
+  ethernet_admin_state                               = "enabled"
+  ethernet_allow_unsupported_sfp                     = true
+  ethernet_chassis_infrastructure_adaptor_vlan       = 100
+  ethernet_chassis_infrastructure_epds_port_number   = 100
+  ethernet_chassis_infrastructure_ipv6_address       = "2001:db8::1"
+  ethernet_chassis_infrastructure_vlan               = 100
+  ethernet_chassis_management_instance               = "mgmt0"
+  ethernet_chassis_management_instance_fabric_number = "LeftFabric"
+  ethernet_control                                   = "stateful-ha"
+  ethernet_interface_syslog_info                     = "info-1"
+  ethernet_log_event                                 = "linkStatusEnable"
+  ethernet_default_layer                             = "Layer3"
+  ethernet_system_interface_admin_state              = "up"
+  ethernet_system_link_failure_laser_on              = false
+  ethernet_system_storm_control_multi_threshold      = false
+  ethernet_vlan_tag_native                           = false
+  arp_admin_state                                    = "enabled"
+  arp_instance_admin_state                           = "enabled"
+  arp_allow_static_arp_outside_subnet                = "enabled"
+  arp_unnumbered_svi_software_replication            = "enabled"
+  arp_cache_limit                                    = 200000
+  arp_cache_syslog_rate                              = 5
+  arp_control                                        = "stateful-ha"
+  arp_evpn_timeout                                   = 3000
+  arp_interface_cache_limit                          = 1000
+  arp_ip_adjacency_route_distance                    = 200
+  arp_ip_arp_cos                                     = 4
+  arp_off_list_timeout                               = 300
+  arp_rarp_fabric_forwarding                         = "enabled"
+  arp_rarp_fabric_forwarding_rate                    = 300
+  arp_resolve_outside_subnet                         = "enabled"
+  arp_suppression_timeout                            = 300
+  arp_timeout                                        = 1800
+  arp_vpc_domains = [{
+    domain_id = 100
+    arp_sync  = "enabled"
+  }]
 }
 ```
 
@@ -53,46 +78,94 @@ resource "nxos_system" "example" {
 
 ### Optional
 
-- `admin_link_down_syslog_level` (Number) Admin link-down syslog level.
-  - Range: `0`-`7`
-- `admin_link_up_syslog_level` (Number) Admin link-up syslog level.
-  - Range: `0`-`7`
-- `admin_state` (String) The administrative state of the object or policy.
-  - Choices: `disabled`, `enabled`
-- `allow_unsupported_sfp` (Boolean) Allow unsupported SFP.
-- `chassis_infrastructure_adaptor_vlan` (Number) Chassis infra adaptor vlan id.
-  - Range: `0`-`4092`
-- `chassis_infrastructure_epds_port_number` (Number) Chassis infra EPDS port no.
-  - Range: `0`-`65535`
-- `chassis_infrastructure_ipv6_address` (String) Chassis infra IPv6 address.
-- `chassis_infrastructure_vlan` (Number) Chassis infra vlan id.
-  - Range: `0`-`4092`
-- `chassis_management_instance` (String) Chassis MGMT instance.
-- `chassis_management_instance_fabric_number` (String) Chassis MGMT fabric no.
-  - Choices: `LeftFabric`, `RightFabric`, `UnknownFabric`
-- `control` (String) The control state.
+- `arp_admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
+- `arp_allow_static_arp_outside_subnet` (String) Allow Static ARP Outside Subnet.
+  - Choices: `enabled`, `disabled`
+- `arp_cache_limit` (Number) Cache Limit.
+  - Range: `1`-`614400`
+- `arp_cache_syslog_rate` (Number) Cache Syslog Rate.
+  - Range: `1`-`1000`
+- `arp_control` (String) The control state.
   - Choices: `stateful-ha`
-- `default_admin_state` (String) System Default Admin St.
-  - Choices: `down`, `up`
-- `default_layer` (String) System Default Layer.
-  - Choices: `Layer1`, `Layer2`, `Layer3`
+- `arp_evpn_timeout` (Number) Refresh in EVPN on host moves.
+  - Range: `2000`-`30000`
+- `arp_instance_admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
+- `arp_interface_cache_limit` (Number) ARP Cache limit for all Interface.
+  - Range: `0`-`128000`
+- `arp_ip_adjacency_route_distance` (Number) IP Adjacency Route Distance.
+  - Range: `2`-`250`
+- `arp_ip_arp_cos` (Number) COS for ARP packet.
+  - Range: `0`-`7`
+- `arp_off_list_timeout` (Number) Off-list timeout.
+  - Range: `180`-`1800`
+- `arp_rarp_fabric_forwarding` (String) RARP Fabric Forwarding.
+  - Choices: `enabled`, `disabled`
+- `arp_rarp_fabric_forwarding_rate` (Number) RARP Fabric Forwarding Rate.
+  - Range: `200`-`400`
+- `arp_resolve_outside_subnet` (String) Allow ARP Outside Subnet Response.
+  - Choices: `enabled`, `disabled`
+- `arp_suppression_timeout` (Number) Suppression Timeout.
+  - Range: `0`-`28800`
+- `arp_timeout` (Number) ARP Global Timeout.
+  - Range: `0`-`28800`
+- `arp_unnumbered_svi_software_replication` (String) ARP Packets Replication In Software For Unnumbered SVI.
+  - Choices: `enabled`, `disabled`
+- `arp_vpc_domains` (Attributes List) ARP VPC Domain. (see [below for nested schema](#nestedatt--arp_vpc_domains))
 - `device` (String) A device name from the provider configuration.
-- `interface_syslog_info` (String) Interface syslog info.
+- `ethernet_admin_link_down_syslog_level` (Number) Admin link-down syslog level.
+  - Range: `0`-`7`
+- `ethernet_admin_link_up_syslog_level` (Number) Admin link-up syslog level.
+  - Range: `0`-`7`
+- `ethernet_admin_state` (String) The administrative state of the object or policy.
+  - Choices: `disabled`, `enabled`
+- `ethernet_allow_unsupported_sfp` (Boolean) Allow unsupported SFP.
+- `ethernet_chassis_infrastructure_adaptor_vlan` (Number) Chassis infra adaptor vlan id.
+  - Range: `0`-`4092`
+- `ethernet_chassis_infrastructure_epds_port_number` (Number) Chassis infra EPDS port no.
+  - Range: `0`-`65535`
+- `ethernet_chassis_infrastructure_ipv6_address` (String) Chassis infra IPv6 address.
+- `ethernet_chassis_infrastructure_vlan` (Number) Chassis infra vlan id.
+  - Range: `0`-`4092`
+- `ethernet_chassis_management_instance` (String) Chassis MGMT instance.
+- `ethernet_chassis_management_instance_fabric_number` (String) Chassis MGMT fabric no.
+  - Choices: `LeftFabric`, `RightFabric`, `UnknownFabric`
+- `ethernet_control` (String) The control state.
+  - Choices: `stateful-ha`
+- `ethernet_default_admin_state` (String) System Default Admin St.
+  - Choices: `down`, `up`
+- `ethernet_default_layer` (String) System Default Layer.
+  - Choices: `Layer1`, `Layer2`, `Layer3`
+- `ethernet_interface_syslog_info` (String) Interface syslog info.
   - Choices: `default`, `info-1`
-- `log_event` (String) Logging Interface events.
+- `ethernet_log_event` (String) Logging Interface events.
   - Choices: `linkStatusDefault`, `linkStatusEnable`, `none`, `trunkStatusDefault`, `trunkStatusEnable`
-- `mtu` (Number) System jumbo Mtu.
+- `ethernet_mtu` (Number) System jumbo Mtu.
   - Range: `576`-`9216`
-- `name` (String) The system name (hostname).
-- `system_interface_admin_state` (String) System Interface Admin State.
+- `ethernet_system_interface_admin_state` (String) System Interface Admin State.
   - Choices: `down`, `down-exclude-fabric`, `up`
-- `system_link_failure_laser_on` (Boolean) Enable or disable the system link failure laser on.
-- `system_storm_control_multi_threshold` (Boolean) Enable or disable the storm control multi threshold.
-- `vlan_tag_native` (Boolean) Tag native vlan.
+- `ethernet_system_link_failure_laser_on` (Boolean) Enable or disable the system link failure laser on.
+- `ethernet_system_storm_control_multi_threshold` (Boolean) Enable or disable the storm control multi threshold.
+- `ethernet_vlan_tag_native` (Boolean) Tag native vlan.
+- `name` (String) The system name (hostname).
 
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--arp_vpc_domains"></a>
+### Nested Schema for `arp_vpc_domains`
+
+Required:
+
+- `domain_id` (Number) VPC domain id.
+  - Range: `1`-`1000`
+
+Optional:
+
+- `arp_sync` (String) ARP Sync.
+  - Choices: `disabled`, `enabled`
 
 ## Import
 

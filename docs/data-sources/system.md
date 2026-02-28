@@ -6,7 +6,7 @@ description: |-
   This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.
   API Documentation: topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/System/top:System/
   Additional API Documentation
-  ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/
+  ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/
 ---
 
 # nxos_system (Data Source)
@@ -19,6 +19,10 @@ This data source can read the system configuration on NX-OS devices, including t
 
 - [ethpmEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Entity/)
 - [ethpmInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Interfaces/ethpm:Inst/)
+- [arpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AEntity/)
+- [arpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AInst/)
+- [arpVpc](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpc/)
+- [arpVpcDom](https://pubhub.devnetcloud.com/media/dme-docs-10-5-3/docs/Address%20Resolution/arp%3AVpcDom/)
 
 ## Example Usage
 
@@ -36,25 +40,51 @@ data "nxos_system" "example" {
 
 ### Read-Only
 
-- `admin_link_down_syslog_level` (Number) Admin link-down syslog level.
-- `admin_link_up_syslog_level` (Number) Admin link-up syslog level.
-- `admin_state` (String) The administrative state of the object or policy.
-- `allow_unsupported_sfp` (Boolean) Allow unsupported SFP.
-- `chassis_infrastructure_adaptor_vlan` (Number) Chassis infra adaptor vlan id.
-- `chassis_infrastructure_epds_port_number` (Number) Chassis infra EPDS port no.
-- `chassis_infrastructure_ipv6_address` (String) Chassis infra IPv6 address.
-- `chassis_infrastructure_vlan` (Number) Chassis infra vlan id.
-- `chassis_management_instance` (String) Chassis MGMT instance.
-- `chassis_management_instance_fabric_number` (String) Chassis MGMT fabric no.
-- `control` (String) The control state.
-- `default_admin_state` (String) System Default Admin St.
-- `default_layer` (String) System Default Layer.
+- `arp_admin_state` (String) The administrative state of the object or policy.
+- `arp_allow_static_arp_outside_subnet` (String) Allow Static ARP Outside Subnet.
+- `arp_cache_limit` (Number) Cache Limit.
+- `arp_cache_syslog_rate` (Number) Cache Syslog Rate.
+- `arp_control` (String) The control state.
+- `arp_evpn_timeout` (Number) Refresh in EVPN on host moves.
+- `arp_instance_admin_state` (String) The administrative state of the object or policy.
+- `arp_interface_cache_limit` (Number) ARP Cache limit for all Interface.
+- `arp_ip_adjacency_route_distance` (Number) IP Adjacency Route Distance.
+- `arp_ip_arp_cos` (Number) COS for ARP packet.
+- `arp_off_list_timeout` (Number) Off-list timeout.
+- `arp_rarp_fabric_forwarding` (String) RARP Fabric Forwarding.
+- `arp_rarp_fabric_forwarding_rate` (Number) RARP Fabric Forwarding Rate.
+- `arp_resolve_outside_subnet` (String) Allow ARP Outside Subnet Response.
+- `arp_suppression_timeout` (Number) Suppression Timeout.
+- `arp_timeout` (Number) ARP Global Timeout.
+- `arp_unnumbered_svi_software_replication` (String) ARP Packets Replication In Software For Unnumbered SVI.
+- `arp_vpc_domains` (Attributes List) ARP VPC Domain. (see [below for nested schema](#nestedatt--arp_vpc_domains))
+- `ethernet_admin_link_down_syslog_level` (Number) Admin link-down syslog level.
+- `ethernet_admin_link_up_syslog_level` (Number) Admin link-up syslog level.
+- `ethernet_admin_state` (String) The administrative state of the object or policy.
+- `ethernet_allow_unsupported_sfp` (Boolean) Allow unsupported SFP.
+- `ethernet_chassis_infrastructure_adaptor_vlan` (Number) Chassis infra adaptor vlan id.
+- `ethernet_chassis_infrastructure_epds_port_number` (Number) Chassis infra EPDS port no.
+- `ethernet_chassis_infrastructure_ipv6_address` (String) Chassis infra IPv6 address.
+- `ethernet_chassis_infrastructure_vlan` (Number) Chassis infra vlan id.
+- `ethernet_chassis_management_instance` (String) Chassis MGMT instance.
+- `ethernet_chassis_management_instance_fabric_number` (String) Chassis MGMT fabric no.
+- `ethernet_control` (String) The control state.
+- `ethernet_default_admin_state` (String) System Default Admin St.
+- `ethernet_default_layer` (String) System Default Layer.
+- `ethernet_interface_syslog_info` (String) Interface syslog info.
+- `ethernet_log_event` (String) Logging Interface events.
+- `ethernet_mtu` (Number) System jumbo Mtu.
+- `ethernet_system_interface_admin_state` (String) System Interface Admin State.
+- `ethernet_system_link_failure_laser_on` (Boolean) Enable or disable the system link failure laser on.
+- `ethernet_system_storm_control_multi_threshold` (Boolean) Enable or disable the storm control multi threshold.
+- `ethernet_vlan_tag_native` (Boolean) Tag native vlan.
 - `id` (String) The distinguished name of the object.
-- `interface_syslog_info` (String) Interface syslog info.
-- `log_event` (String) Logging Interface events.
-- `mtu` (Number) System jumbo Mtu.
 - `name` (String) The system name (hostname).
-- `system_interface_admin_state` (String) System Interface Admin State.
-- `system_link_failure_laser_on` (Boolean) Enable or disable the system link failure laser on.
-- `system_storm_control_multi_threshold` (Boolean) Enable or disable the storm control multi threshold.
-- `vlan_tag_native` (Boolean) Tag native vlan.
+
+<a id="nestedatt--arp_vpc_domains"></a>
+### Nested Schema for `arp_vpc_domains`
+
+Read-Only:
+
+- `arp_sync` (String) ARP Sync.
+- `domain_id` (Number) VPC domain id.

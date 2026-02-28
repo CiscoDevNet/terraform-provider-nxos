@@ -27,7 +27,7 @@ child_classes:
         no_delete: true
         attributes:
           - nxos_name: systemJumboMtu
-            tf_name: mtu
+            tf_name: ethernet_mtu
             type: Int64
             description: 'System jumbo Mtu.'
             min_int: 576
@@ -35,7 +35,7 @@ child_classes:
             example: 9216
             delete_value: 9216
           - nxos_name: systemDefaultAdminSt
-            tf_name: default_admin_state
+            tf_name: ethernet_default_admin_state
             type: String
             description: "System Default Admin St."
             enum_values:
@@ -44,21 +44,21 @@ child_classes:
             example: up
             delete_value: "DME_UNSET_PROPERTY_MARKER"
           - nxos_name: adminLinkDownSyslogLevel
-            tf_name: admin_link_down_syslog_level
+            tf_name: ethernet_admin_link_down_syslog_level
             type: Int64
             description: 'Admin link-down syslog level.'
             min_int: 0
             max_int: 7
             example: 4
           - nxos_name: adminLinkUpSyslogLevel
-            tf_name: admin_link_up_syslog_level
+            tf_name: ethernet_admin_link_up_syslog_level
             type: Int64
             description: 'Admin link-up syslog level.'
             min_int: 0
             max_int: 7
             example: 4
           - nxos_name: adminSt
-            tf_name: admin_state
+            tf_name: ethernet_admin_state
             type: String
             description: 'The administrative state of the object or policy.'
             enum_values:
@@ -66,43 +66,43 @@ child_classes:
               - enabled
             example: enabled
           - nxos_name: allowUnsupportedSfp
-            tf_name: allow_unsupported_sfp
+            tf_name: ethernet_allow_unsupported_sfp
             type: Bool
             description: 'Allow unsupported SFP.'
             example: "true"
           - nxos_name: chassisInfraAdaptorVlan
-            tf_name: chassis_infrastructure_adaptor_vlan
+            tf_name: ethernet_chassis_infrastructure_adaptor_vlan
             type: Int64
             description: 'Chassis infra adaptor vlan id.'
             min_int: 0
             max_int: 4092
             example: 100
           - nxos_name: chassisInfraEpdsPortNo
-            tf_name: chassis_infrastructure_epds_port_number
+            tf_name: ethernet_chassis_infrastructure_epds_port_number
             type: Int64
             description: 'Chassis infra EPDS port no.'
             min_int: 0
             max_int: 65535
             example: 100
           - nxos_name: chassisInfraIPv6addr
-            tf_name: chassis_infrastructure_ipv6_address
+            tf_name: ethernet_chassis_infrastructure_ipv6_address
             type: String
             description: 'Chassis infra IPv6 address.'
             example: '2001:db8::1'
           - nxos_name: chassisInfraVlan
-            tf_name: chassis_infrastructure_vlan
+            tf_name: ethernet_chassis_infrastructure_vlan
             type: Int64
             description: 'Chassis infra vlan id.'
             min_int: 0
             max_int: 4092
             example: 100
           - nxos_name: chassisMgmtInst
-            tf_name: chassis_management_instance
+            tf_name: ethernet_chassis_management_instance
             type: String
             description: 'Chassis MGMT instance.'
             example: 'mgmt0'
           - nxos_name: chassisMgmtInstFabricNo
-            tf_name: chassis_management_instance_fabric_number
+            tf_name: ethernet_chassis_management_instance_fabric_number
             type: String
             description: 'Chassis MGMT fabric no.'
             enum_values:
@@ -111,14 +111,14 @@ child_classes:
               - UnknownFabric
             example: LeftFabric
           - nxos_name: ctrl
-            tf_name: control
+            tf_name: ethernet_control
             type: String
             description: 'The control state.'
             enum_values:
               - stateful-ha
             example: stateful-ha
           - nxos_name: ifSyslogInfo
-            tf_name: interface_syslog_info
+            tf_name: ethernet_interface_syslog_info
             type: String
             description: 'Interface syslog info.'
             enum_values:
@@ -126,7 +126,7 @@ child_classes:
               - info-1
             example: info-1
           - nxos_name: logEvent
-            tf_name: log_event
+            tf_name: ethernet_log_event
             type: String
             description: 'Logging Interface events.'
             enum_values:
@@ -137,7 +137,7 @@ child_classes:
               - trunkStatusEnable
             example: linkStatusEnable
           - nxos_name: systemDefaultLayer
-            tf_name: default_layer
+            tf_name: ethernet_default_layer
             type: String
             description: 'System Default Layer.'
             enum_values:
@@ -146,7 +146,7 @@ child_classes:
               - Layer3
             example: Layer3
           - nxos_name: systemIfAdminState
-            tf_name: system_interface_admin_state
+            tf_name: ethernet_system_interface_admin_state
             type: String
             description: 'System Interface Admin State.'
             enum_values:
@@ -155,17 +155,187 @@ child_classes:
               - up
             example: up
           - nxos_name: systemLinkFailLaserOn
-            tf_name: system_link_failure_laser_on
+            tf_name: ethernet_system_link_failure_laser_on
             type: Bool
             description: 'Enable or disable the system link failure laser on.'
             example: "false"
           - nxos_name: systemStormControlMultiThreshold
-            tf_name: system_storm_control_multi_threshold
+            tf_name: ethernet_system_storm_control_multi_threshold
             type: Bool
             description: 'Enable or disable the storm control multi threshold.'
             example: "false"
           - nxos_name: vlanTagNative
-            tf_name: vlan_tag_native
+            tf_name: ethernet_vlan_tag_native
             type: Bool
             description: 'Tag native vlan.'
             example: "false"
+  - class_name: arpEntity
+    doc_path: Address%20Resolution/arp%3AEntity/
+    rn: arp
+    type: single
+    no_delete: true
+    attributes:
+      - nxos_name: adminSt
+        tf_name: arp_admin_state
+        type: String
+        description: "The administrative state of the object or policy."
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+    child_classes:
+      - class_name: arpInst
+        doc_path: Address%20Resolution/arp%3AInst/
+        rn: inst
+        type: single
+        no_delete: true
+        attributes:
+          - nxos_name: adminSt
+            tf_name: arp_instance_admin_state
+            type: String
+            description: "The administrative state of the object or policy."
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+          - nxos_name: allowStaticArpOutsideSubnet
+            tf_name: arp_allow_static_arp_outside_subnet
+            type: String
+            description: "Allow Static ARP Outside Subnet."
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+          - nxos_name: arpUnnumSviSwReplication
+            tf_name: arp_unnumbered_svi_software_replication
+            type: String
+            description: "ARP Packets Replication In Software For Unnumbered SVI."
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+          - nxos_name: cacheLimit
+            tf_name: arp_cache_limit
+            type: Int64
+            min_int: 1
+            max_int: 614400
+            description: "Cache Limit."
+            example: 200000
+          - nxos_name: cacheSyslogRate
+            tf_name: arp_cache_syslog_rate
+            type: Int64
+            min_int: 1
+            max_int: 1000
+            description: "Cache Syslog Rate."
+            example: 5
+          - nxos_name: ctrl
+            tf_name: arp_control
+            type: String
+            description: "The control state."
+            enum_values:
+              - stateful-ha
+            example: stateful-ha
+            exclude_test: true
+          - nxos_name: evpn_timeout
+            tf_name: arp_evpn_timeout
+            type: Int64
+            min_int: 2000
+            max_int: 30000
+            description: "Refresh in EVPN on host moves."
+            example: 3000
+          - nxos_name: intfCacheLimit
+            tf_name: arp_interface_cache_limit
+            type: Int64
+            min_int: 0
+            max_int: 128000
+            description: "ARP Cache limit for all Interface."
+            example: 1000
+          - nxos_name: ipAdjRouteDistance
+            tf_name: arp_ip_adjacency_route_distance
+            type: Int64
+            min_int: 2
+            max_int: 250
+            description: "IP Adjacency Route Distance."
+            example: 200
+          - nxos_name: ipArpCos
+            tf_name: arp_ip_arp_cos
+            type: Int64
+            min_int: 0
+            max_int: 7
+            description: "COS for ARP packet."
+            example: 4
+          - nxos_name: offListTimeout
+            tf_name: arp_off_list_timeout
+            type: Int64
+            min_int: 180
+            max_int: 1800
+            description: "Off-list timeout."
+            example: 300
+          - nxos_name: rarpFabricFwding
+            tf_name: arp_rarp_fabric_forwarding
+            type: String
+            description: "RARP Fabric Forwarding."
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+          - nxos_name: rarpFabricFwdingRate
+            tf_name: arp_rarp_fabric_forwarding_rate
+            type: Int64
+            min_int: 200
+            max_int: 400
+            description: "RARP Fabric Forwarding Rate."
+            example: 300
+          - nxos_name: resolveARPOutsideSubnet
+            tf_name: arp_resolve_outside_subnet
+            type: String
+            description: "Allow ARP Outside Subnet Response."
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+          - nxos_name: suppression_timeout
+            tf_name: arp_suppression_timeout
+            type: Int64
+            min_int: 0
+            max_int: 28800
+            description: "Suppression Timeout."
+            example: 300
+          - nxos_name: timeout
+            tf_name: arp_timeout
+            type: Int64
+            min_int: 0
+            max_int: 28800
+            description: "ARP Global Timeout."
+            example: 1800
+        child_classes:
+          - class_name: arpVpc
+            doc_path: Address%20Resolution/arp%3AVpc/
+            rn: vpc
+            type: single
+            child_classes:
+              - class_name: arpVpcDom
+                doc_path: Address%20Resolution/arp%3AVpcDom/
+                rn: dom-[%v]
+                type: list
+                tf_name: arp_vpc_domains
+                description: "ARP VPC Domain."
+                attributes:
+                  - nxos_name: domainId
+                    tf_name: domain_id
+                    type: Int64
+                    id: true
+                    min_int: 1
+                    max_int: 1000
+                    description: "VPC domain id."
+                    example: 100
+                    exclude_test: true
+                  - nxos_name: arpSync
+                    tf_name: arp_sync
+                    type: String
+                    description: "ARP Sync."
+                    enum_values:
+                      - disabled
+                      - enabled
+                    example: enabled
+                    exclude_test: true

@@ -32,6 +32,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -63,7 +64,7 @@ func (r *SystemResource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.", "topSystem", "System/top:System/").AddAdditionalDocs([]string{"ethpmEntity", "ethpmInst"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, and default admin state settings.", "topSystem", "System/top:System/").AddAdditionalDocs([]string{"ethpmEntity", "ethpmInst", "arpEntity", "arpInst", "arpVpc", "arpVpcDom"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -81,127 +82,271 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				MarkdownDescription: helpers.NewAttributeDescription("The system name (hostname).").String,
 				Optional:            true,
 			},
-			"mtu": schema.Int64Attribute{
+			"ethernet_mtu": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("System jumbo Mtu.").AddIntegerRangeDescription(576, 9216).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(576, 9216),
 				},
 			},
-			"default_admin_state": schema.StringAttribute{
+			"ethernet_default_admin_state": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("System Default Admin St.").AddStringEnumDescription("down", "up").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("down", "up"),
 				},
 			},
-			"admin_link_down_syslog_level": schema.Int64Attribute{
+			"ethernet_admin_link_down_syslog_level": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Admin link-down syslog level.").AddIntegerRangeDescription(0, 7).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 7),
 				},
 			},
-			"admin_link_up_syslog_level": schema.Int64Attribute{
+			"ethernet_admin_link_up_syslog_level": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Admin link-up syslog level.").AddIntegerRangeDescription(0, 7).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 7),
 				},
 			},
-			"admin_state": schema.StringAttribute{
+			"ethernet_admin_state": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("disabled", "enabled").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disabled", "enabled"),
 				},
 			},
-			"allow_unsupported_sfp": schema.BoolAttribute{
+			"ethernet_allow_unsupported_sfp": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Allow unsupported SFP.").String,
 				Optional:            true,
 			},
-			"chassis_infrastructure_adaptor_vlan": schema.Int64Attribute{
+			"ethernet_chassis_infrastructure_adaptor_vlan": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Chassis infra adaptor vlan id.").AddIntegerRangeDescription(0, 4092).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4092),
 				},
 			},
-			"chassis_infrastructure_epds_port_number": schema.Int64Attribute{
+			"ethernet_chassis_infrastructure_epds_port_number": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Chassis infra EPDS port no.").AddIntegerRangeDescription(0, 65535).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 65535),
 				},
 			},
-			"chassis_infrastructure_ipv6_address": schema.StringAttribute{
+			"ethernet_chassis_infrastructure_ipv6_address": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Chassis infra IPv6 address.").String,
 				Optional:            true,
 			},
-			"chassis_infrastructure_vlan": schema.Int64Attribute{
+			"ethernet_chassis_infrastructure_vlan": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Chassis infra vlan id.").AddIntegerRangeDescription(0, 4092).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4092),
 				},
 			},
-			"chassis_management_instance": schema.StringAttribute{
+			"ethernet_chassis_management_instance": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Chassis MGMT instance.").String,
 				Optional:            true,
 			},
-			"chassis_management_instance_fabric_number": schema.StringAttribute{
+			"ethernet_chassis_management_instance_fabric_number": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Chassis MGMT fabric no.").AddStringEnumDescription("LeftFabric", "RightFabric", "UnknownFabric").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("LeftFabric", "RightFabric", "UnknownFabric"),
 				},
 			},
-			"control": schema.StringAttribute{
+			"ethernet_control": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("stateful-ha").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("stateful-ha"),
 				},
 			},
-			"interface_syslog_info": schema.StringAttribute{
+			"ethernet_interface_syslog_info": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Interface syslog info.").AddStringEnumDescription("default", "info-1").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("default", "info-1"),
 				},
 			},
-			"log_event": schema.StringAttribute{
+			"ethernet_log_event": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Logging Interface events.").AddStringEnumDescription("linkStatusDefault", "linkStatusEnable", "none", "trunkStatusDefault", "trunkStatusEnable").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("linkStatusDefault", "linkStatusEnable", "none", "trunkStatusDefault", "trunkStatusEnable"),
 				},
 			},
-			"default_layer": schema.StringAttribute{
+			"ethernet_default_layer": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("System Default Layer.").AddStringEnumDescription("Layer1", "Layer2", "Layer3").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("Layer1", "Layer2", "Layer3"),
 				},
 			},
-			"system_interface_admin_state": schema.StringAttribute{
+			"ethernet_system_interface_admin_state": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("System Interface Admin State.").AddStringEnumDescription("down", "down-exclude-fabric", "up").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("down", "down-exclude-fabric", "up"),
 				},
 			},
-			"system_link_failure_laser_on": schema.BoolAttribute{
+			"ethernet_system_link_failure_laser_on": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable or disable the system link failure laser on.").String,
 				Optional:            true,
 			},
-			"system_storm_control_multi_threshold": schema.BoolAttribute{
+			"ethernet_system_storm_control_multi_threshold": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable or disable the storm control multi threshold.").String,
 				Optional:            true,
 			},
-			"vlan_tag_native": schema.BoolAttribute{
+			"ethernet_vlan_tag_native": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Tag native vlan.").String,
 				Optional:            true,
+			},
+			"arp_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"arp_instance_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"arp_allow_static_arp_outside_subnet": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow Static ARP Outside Subnet.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"arp_unnumbered_svi_software_replication": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ARP Packets Replication In Software For Unnumbered SVI.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"arp_cache_limit": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Cache Limit.").AddIntegerRangeDescription(1, 614400).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 614400),
+				},
+			},
+			"arp_cache_syslog_rate": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Cache Syslog Rate.").AddIntegerRangeDescription(1, 1000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 1000),
+				},
+			},
+			"arp_control": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("stateful-ha").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("stateful-ha"),
+				},
+			},
+			"arp_evpn_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Refresh in EVPN on host moves.").AddIntegerRangeDescription(2000, 30000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(2000, 30000),
+				},
+			},
+			"arp_interface_cache_limit": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ARP Cache limit for all Interface.").AddIntegerRangeDescription(0, 128000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 128000),
+				},
+			},
+			"arp_ip_adjacency_route_distance": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IP Adjacency Route Distance.").AddIntegerRangeDescription(2, 250).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(2, 250),
+				},
+			},
+			"arp_ip_arp_cos": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("COS for ARP packet.").AddIntegerRangeDescription(0, 7).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
+				},
+			},
+			"arp_off_list_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Off-list timeout.").AddIntegerRangeDescription(180, 1800).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(180, 1800),
+				},
+			},
+			"arp_rarp_fabric_forwarding": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("RARP Fabric Forwarding.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"arp_rarp_fabric_forwarding_rate": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("RARP Fabric Forwarding Rate.").AddIntegerRangeDescription(200, 400).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(200, 400),
+				},
+			},
+			"arp_resolve_outside_subnet": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow ARP Outside Subnet Response.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"arp_suppression_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Suppression Timeout.").AddIntegerRangeDescription(0, 28800).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 28800),
+				},
+			},
+			"arp_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ARP Global Timeout.").AddIntegerRangeDescription(0, 28800).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 28800),
+				},
+			},
+			"arp_vpc_domains": schema.ListNestedAttribute{
+				MarkdownDescription: "ARP VPC Domain.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"domain_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("VPC domain id.").AddIntegerRangeDescription(1, 1000).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 1000),
+							},
+							PlanModifiers: []planmodifier.Int64{
+								int64planmodifier.RequiresReplace(),
+							},
+						},
+						"arp_sync": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ARP Sync.").AddStringEnumDescription("disabled", "enabled").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disabled", "enabled"),
+							},
+						},
+					},
+				},
 			},
 		},
 	}
@@ -305,7 +450,7 @@ func (r *SystemResource) Read(ctx context.Context, req resource.ReadRequest, res
 
 	if device.Managed {
 		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
-		queries = append(queries, nxos.Query("rsp-subtree-depth", "2"))
+		queries = append(queries, nxos.Query("rsp-subtree-depth", "4"))
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
@@ -348,6 +493,14 @@ func (r *SystemResource) Update(ctx context.Context, req resource.UpdateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	var state System
+
+	// Read state
+	diags = req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.getDn()))
 
@@ -358,7 +511,7 @@ func (r *SystemResource) Update(ctx context.Context, req resource.UpdateRequest,
 	}
 
 	if device.Managed {
-		body := plan.toBody()
+		body := plan.toBodyWithDeletes(ctx, state)
 		_, err := device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))

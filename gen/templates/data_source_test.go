@@ -79,6 +79,7 @@ import (
 {{- end}}
 {{- else if eq .Type "list"}}
 {{- $newSetPath := printf "%s%s.*" $pathPrefix $list}}
+{{- if hasTestAttrs .Attributes}}
 	checks = append(checks, resource.TestCheckTypeSetElemNestedAttrs("data.nxos_{{snakeCase $name}}.test", "{{$newSetPath}}", map[string]string{
 		{{- range .Attributes}}
 		{{- if and (not .ExcludeTest) (not .WriteOnly)}}
@@ -86,6 +87,7 @@ import (
 		{{- end}}
 		{{- end}}
 	}))
+{{- end}}
 {{- if .TfChildClasses}}
 {{- template "dsTestChecksTemplate" (makeMap "Name" $name "Children" .TfChildClasses "PathPrefix" (printf "%s%s.*." $pathPrefix $list) "InList" true "SetPath" $newSetPath)}}
 {{- end}}
@@ -181,6 +183,7 @@ resource "nxos_dme" "PreReq{{$index}}" {
 {{- template "testConfigChildrenTemplate" (makeMap "Children" .TfChildClasses "Indent" $indent)}}
 {{- end}}
 {{- else if eq .Type "list"}}
+{{- if hasTestAttrs .Attributes}}
 	config += `{{$indent}}{{.TfName}} = [{` + "\n"
 {{- range .Attributes}}
 {{- if not .ExcludeTest}}
@@ -197,6 +200,7 @@ resource "nxos_dme" "PreReq{{$index}}" {
 {{- template "testConfigChildrenTemplate" (makeMap "Children" .TfChildClasses "Indent" (printf "%s\t" $indent))}}
 {{- end}}
 	config += `{{$indent}}}]` + "\n"
+{{- end}}
 {{- end}}
 {{- end}}
 {{- end}}

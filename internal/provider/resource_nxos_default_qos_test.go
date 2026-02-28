@@ -110,7 +110,7 @@ func nxosDefaultQoSImportStateIdFunc(resourceName string) resource.ImportStateId
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosDefaultQoSPrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
+resource "nxos_dme" "PreReq0" {
   dn = "sys/ipqos/dflt/c/name-[Voice]"
   class_name = "ipqosCMapInst"
   content = {
@@ -118,7 +118,7 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
-resource "nxos_rest" "PreReq1" {
+resource "nxos_dme" "PreReq1" {
   dn = "sys/ipqos/dflt/p/name-[PM1]"
   class_name = "ipqosPMapInst"
   content = {
@@ -133,7 +133,7 @@ resource "nxos_rest" "PreReq1" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosDefaultQoSConfig_minimum() string {
 	config := `resource "nxos_default_qos" "test" {` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -186,7 +186,7 @@ func testAccNxosDefaultQoSConfig_all() string {
 	config += `		policy_map_name = "PM1"` + "\n"
 	config += `		policy_map_statistics = false` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

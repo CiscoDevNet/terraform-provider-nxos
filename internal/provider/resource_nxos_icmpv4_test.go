@@ -83,7 +83,7 @@ func nxosICMPv4ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosICMPv4PrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
+resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/ifvlan"
   class_name = "fmInterfaceVlan"
   delete = false
@@ -92,13 +92,13 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
-resource "nxos_rest" "PreReq1" {
+resource "nxos_dme" "PreReq1" {
   dn = "sys/intf/svi-[vlan10]"
   class_name = "sviIf"
   content = {
       id = "vlan10"
   }
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_dme.PreReq0, ]
 }
 
 `
@@ -108,7 +108,7 @@ resource "nxos_rest" "PreReq1" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosICMPv4Config_minimum() string {
 	config := `resource "nxos_icmpv4" "test" {` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -128,7 +128,7 @@ func testAccNxosICMPv4Config_all() string {
 	config += `			control = "port-unreachable"` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -232,7 +232,7 @@ func nxosBGPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosBGPPrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
+resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/bgp"
   class_name = "fmBgp"
   delete = false
@@ -241,14 +241,14 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
-resource "nxos_rest" "PreReq1" {
+resource "nxos_dme" "PreReq1" {
   dn = "sys/fm/bfd"
   class_name = "fmBfd"
   delete = false
   content = {
       adminSt = "enabled"
   }
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_dme.PreReq0, ]
 }
 
 `
@@ -258,7 +258,7 @@ resource "nxos_rest" "PreReq1" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosBGPConfig_minimum() string {
 	config := `resource "nxos_bgp" "test" {` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -443,7 +443,7 @@ func testAccNxosBGPConfig_all() string {
 	config += `			}]` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

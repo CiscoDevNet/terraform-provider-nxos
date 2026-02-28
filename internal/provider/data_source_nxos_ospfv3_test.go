@@ -100,7 +100,7 @@ func TestAccDataSourceNxosOSPFv3(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosOSPFv3PrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
+resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/ospfv3"
   class_name = "fmOspfv3"
   delete = false
@@ -109,23 +109,23 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
-resource "nxos_rest" "PreReq1" {
+resource "nxos_dme" "PreReq1" {
   dn = "sys/fm/bfd"
   class_name = "fmBfd"
   delete = false
   content = {
       adminSt = "enabled"
   }
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_dme.PreReq0, ]
 }
 
-resource "nxos_rest" "PreReq2" {
+resource "nxos_dme" "PreReq2" {
   dn = "sys/intf/phys-[eth1/4]"
   class_name = "l1PhysIf"
   content = {
       layer = "Layer3"
   }
-  depends_on = [nxos_rest.PreReq1, ]
+  depends_on = [nxos_dme.PreReq1, ]
 }
 
 `
@@ -188,7 +188,7 @@ func testAccDataSourceNxosOSPFv3Config() string {
 	config += `		retransmit_interval = 10` + "\n"
 	config += `		transmit_delay = 5` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

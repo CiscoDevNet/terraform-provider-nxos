@@ -166,7 +166,7 @@ func nxosISISImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosISISPrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
+resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/isis"
   class_name = "fmIsis"
   delete = false
@@ -175,7 +175,7 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
-resource "nxos_rest" "PreReq1" {
+resource "nxos_dme" "PreReq1" {
   dn = "sys/intf/phys-[eth1/10]"
   class_name = "l1PhysIf"
   content = {
@@ -190,7 +190,7 @@ resource "nxos_rest" "PreReq1" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosISISConfig_minimum() string {
 	config := `resource "nxos_isis" "test" {` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -297,7 +297,7 @@ func testAccNxosISISConfig_all() string {
 	config += `		ipv6_bfd = "enabled"` + "\n"
 	config += `		ipv6 = true` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

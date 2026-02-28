@@ -85,7 +85,7 @@ func TestAccDataSourceNxosPortChannelInterface(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosPortChannelInterfacePrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
+resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/lacp"
   class_name = "fmLacp"
   delete = false
@@ -139,7 +139,7 @@ func testAccDataSourceNxosPortChannelInterfaceConfig() string {
 	config += `		interface_dn = "sys/intf/phys-[eth1/11]"` + "\n"
 	config += `		force = true` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

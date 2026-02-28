@@ -96,7 +96,7 @@ func TestAccDataSourceNxosDefaultQoS(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosDefaultQoSPrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
+resource "nxos_dme" "PreReq0" {
   dn = "sys/ipqos/dflt/c/name-[Voice]"
   class_name = "ipqosCMapInst"
   content = {
@@ -104,7 +104,7 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
-resource "nxos_rest" "PreReq1" {
+resource "nxos_dme" "PreReq1" {
   dn = "sys/ipqos/dflt/p/name-[PM1]"
   class_name = "ipqosPMapInst"
   content = {
@@ -162,7 +162,7 @@ func testAccDataSourceNxosDefaultQoSConfig() string {
 	config += `		policy_map_name = "PM1"` + "\n"
 	config += `		policy_map_statistics = false` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

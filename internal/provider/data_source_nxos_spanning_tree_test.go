@@ -72,7 +72,7 @@ func TestAccDataSourceNxosSpanningTree(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosSpanningTreePrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
+resource "nxos_dme" "PreReq0" {
   dn = "sys/intf/phys-[eth1/9]"
   class_name = "l1PhysIf"
   content = {
@@ -112,7 +112,7 @@ func testAccDataSourceNxosSpanningTreeConfig() string {
 	config += `		prestandard_configuration = "enabled"` + "\n"
 	config += `		simulate_pvst = "enabled"` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

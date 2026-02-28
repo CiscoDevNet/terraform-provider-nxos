@@ -154,7 +154,7 @@ func nxos{{camelCase .Name}}ImportStateIdFunc(resourceName string) resource.Impo
 {{- if .TestPrerequisites}}
 const testAccNxos{{camelCase .Name}}PrerequisitesConfig = `
 {{- range $index, $item := .TestPrerequisites}}
-resource "nxos_rest" "PreReq{{$index}}" {
+resource "nxos_dme" "PreReq{{$index}}" {
   dn = "{{.Dn}}"
   class_name = "{{.ClassName}}"
   {{- if .NoDelete}}
@@ -168,7 +168,7 @@ resource "nxos_rest" "PreReq{{$index}}" {
   }
   {{- end}}
   {{- if .Dependencies}}
-  depends_on = [{{range .Dependencies}}nxos_rest.PreReq{{.}}, {{end}}]
+  depends_on = [{{range .Dependencies}}nxos_dme.PreReq{{.}}, {{end}}]
   {{- end}}
 }
 {{ end}}
@@ -192,7 +192,7 @@ func testAccNxos{{camelCase .Name}}Config_minimum() string {
 	{{- end}}
 	{{- end}}
 	{{- if .TestPrerequisites}}
-	config += `	depends_on = [{{range $index, $item := .TestPrerequisites}}nxos_rest.PreReq{{$index}}, {{end}}]` + "\n"
+	config += `	depends_on = [{{range $index, $item := .TestPrerequisites}}nxos_dme.PreReq{{$index}}, {{end}}]` + "\n"
 	{{- end}}
 	config += `}` + "\n"
 	return config
@@ -264,7 +264,7 @@ func testAccNxos{{camelCase .Name}}Config_all() string {
 	{{- end}}
 	{{- template "testConfigChildrenTemplate" (makeMap "Children" .TfChildClasses "Indent" "\t")}}
 	{{- if .TestPrerequisites}}
-	config += `	depends_on = [{{range $index, $item := .TestPrerequisites}}nxos_rest.PreReq{{$index}}, {{end}}]` + "\n"
+	config += `	depends_on = [{{range $index, $item := .TestPrerequisites}}nxos_dme.PreReq{{$index}}, {{end}}]` + "\n"
 	{{- end}}
 	config += `}` + "\n"
 	return config

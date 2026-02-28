@@ -117,7 +117,7 @@ func TestAccDataSourceNxosPIM(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosPIMPrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
+resource "nxos_dme" "PreReq0" {
   dn = "sys/intf/phys-[eth1/10]"
   class_name = "l1PhysIf"
   content = {
@@ -126,7 +126,7 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
-resource "nxos_rest" "PreReq1" {
+resource "nxos_dme" "PreReq1" {
   dn = "sys/fm/pim"
   class_name = "fmPim"
   delete = false
@@ -204,7 +204,7 @@ func testAccDataSourceNxosPIMConfig() string {
 	config += `			rp_set_address = "20.1.1.1/32"` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

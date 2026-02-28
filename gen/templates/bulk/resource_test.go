@@ -190,7 +190,7 @@ func nxos{{camelCase .BulkName}}ImportStateIdFunc(resourceName string) resource.
 {{- if .TestPrerequisites}}
 const testAccNxos{{camelCase .BulkName}}PrerequisitesConfig = `
 {{- range $index, $item := .TestPrerequisites}}
-resource "nxos_rest" "PreReq{{$index}}" {
+resource "nxos_dme" "PreReq{{$index}}" {
   dn = "{{.Dn}}"
   class_name = "{{.ClassName}}"
   {{- if .NoDelete}}
@@ -204,7 +204,7 @@ resource "nxos_rest" "PreReq{{$index}}" {
   }
   {{- end}}
   {{- if .Dependencies}}
-  depends_on = [{{range .Dependencies}}nxos_rest.PreReq{{.}}, {{end}}]
+  depends_on = [{{range .Dependencies}}nxos_dme.PreReq{{.}}, {{end}}]
   {{- end}}
 }
 {{ end}}
@@ -230,7 +230,7 @@ func testAccNxos{{camelCase .BulkName}}Config_minimum() string {
 	{{- end}}
 	config += `	}]` + "\n"
 	{{- if .TestPrerequisites}}
-	config += `	depends_on = [{{range $index, $item := .TestPrerequisites}}nxos_rest.PreReq{{$index}}, {{end}}]` + "\n"
+	config += `	depends_on = [{{range $index, $item := .TestPrerequisites}}nxos_dme.PreReq{{$index}}, {{end}}]` + "\n"
 	{{- end}}
 	config += `}` + "\n"
 	return config
@@ -256,7 +256,7 @@ func testAccNxos{{camelCase .BulkName}}Config_all() string {
 	{{- template "bulkTestConfigChildrenTemplate" (makeMap "Children" .TfChildClasses "Indent" "\t\t")}}
 	config += `	}]` + "\n"
 	{{- if .TestPrerequisites}}
-	config += `	depends_on = [{{range $index, $item := .TestPrerequisites}}nxos_rest.PreReq{{$index}}, {{end}}]` + "\n"
+	config += `	depends_on = [{{range $index, $item := .TestPrerequisites}}nxos_dme.PreReq{{$index}}, {{end}}]` + "\n"
 	{{- end}}
 	config += `}` + "\n"
 	return config

@@ -93,7 +93,7 @@ func nxosSubinterfaceImportStateIdFunc(resourceName string) resource.ImportState
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosSubinterfacePrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
+resource "nxos_dme" "PreReq0" {
   dn = "sys/intf/phys-[eth1/10]"
   class_name = "l1PhysIf"
   content = {
@@ -110,7 +110,7 @@ resource "nxos_rest" "PreReq0" {
 func testAccNxosSubinterfaceConfig_minimum() string {
 	config := `resource "nxos_subinterface" "test" {` + "\n"
 	config += `	interface_id = "eth1/10.124"` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -134,7 +134,7 @@ func testAccNxosSubinterfaceConfig_all() string {
 	config += `	router_mac_ipv6_extract = "disable"` + "\n"
 	config += `	snmp_trap = "disable"` + "\n"
 	config += `	vrf_dn = "sys/inst-VRF123"` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

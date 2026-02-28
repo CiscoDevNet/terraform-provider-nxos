@@ -7,7 +7,7 @@ description: |-
 
 # Supported Objects
 
-For the following DME objects a corresponding Terraform resource and data source exists. All other objects can be managed with the `nxos_rest` [resource](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/rest).
+For the following DME objects a corresponding Terraform resource and data source exists. All other objects can be managed with the `nxos_dme` [resource](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/resources/dme).
 
 | DME object | Terraform Resource | Terraform Data Source |
 |------------|--------------------|-----------------------|

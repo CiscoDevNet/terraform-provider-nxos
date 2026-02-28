@@ -123,7 +123,7 @@ func nxosVPCImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosVPCPrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
+resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/vpc"
   class_name = "fmVpc"
   delete = false
@@ -132,7 +132,7 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
-resource "nxos_rest" "PreReq1" {
+resource "nxos_dme" "PreReq1" {
   dn = "sys/fm/lacp"
   class_name = "fmLacp"
   delete = false
@@ -141,17 +141,17 @@ resource "nxos_rest" "PreReq1" {
   }
 }
 
-resource "nxos_rest" "PreReq2" {
+resource "nxos_dme" "PreReq2" {
   dn = "sys/intf/aggr-[po1]"
   class_name = "pcAggrIf"
   content = {
       id = "po1"
       layer = "Layer2"
   }
-  depends_on = [nxos_rest.PreReq1, ]
+  depends_on = [nxos_dme.PreReq1, ]
 }
 
-resource "nxos_rest" "PreReq3" {
+resource "nxos_dme" "PreReq3" {
   dn = "sys/intf/phys-[eth1/9]"
   class_name = "l1PhysIf"
   content = {
@@ -166,7 +166,7 @@ resource "nxos_rest" "PreReq3" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosVPCConfig_minimum() string {
 	config := `resource "nxos_vpc" "test" {` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -224,7 +224,7 @@ func testAccNxosVPCConfig_all() string {
 	config += `		vpc_interface_id = 1` + "\n"
 	config += `		port_channel_interface_dn = "sys/intf/aggr-[po1]"` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

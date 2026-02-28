@@ -28,29 +28,29 @@ import (
 	"github.com/tidwall/sjson"
 )
 
-type RestModel struct {
-	Device    types.String     `tfsdk:"device"`
-	Id        types.String     `tfsdk:"id"`
-	Dn        types.String     `tfsdk:"dn"`
-	ClassName types.String     `tfsdk:"class_name"`
-	Delete    types.Bool       `tfsdk:"delete"`
-	Content   types.Map        `tfsdk:"content"`
-	Children  []RestModelChild `tfsdk:"children"`
+type DmeModel struct {
+	Device    types.String    `tfsdk:"device"`
+	Id        types.String    `tfsdk:"id"`
+	Dn        types.String    `tfsdk:"dn"`
+	ClassName types.String    `tfsdk:"class_name"`
+	Delete    types.Bool      `tfsdk:"delete"`
+	Content   types.Map       `tfsdk:"content"`
+	Children  []DmeModelChild `tfsdk:"children"`
 }
 
-type RestModelChild struct {
+type DmeModelChild struct {
 	Rn        types.String `tfsdk:"rn"`
 	ClassName types.String `tfsdk:"class_name"`
 	Content   types.Map    `tfsdk:"content"`
 }
 
-type RestIdentity struct {
+type DmeIdentity struct {
 	Device    types.String `tfsdk:"device"`
 	Dn        types.String `tfsdk:"dn"`
 	ClassName types.String `tfsdk:"class_name"`
 }
 
-func (data *RestIdentity) toIdentity(ctx context.Context, plan *RestModel) {
+func (data *DmeIdentity) toIdentity(ctx context.Context, plan *DmeModel) {
 	if plan.Device.IsNull() {
 		data.Device = types.StringValue("")
 	} else {
@@ -60,7 +60,7 @@ func (data *RestIdentity) toIdentity(ctx context.Context, plan *RestModel) {
 	data.ClassName = plan.ClassName
 }
 
-func (data *RestModel) fromIdentity(ctx context.Context, identity *RestIdentity) {
+func (data *DmeModel) fromIdentity(ctx context.Context, identity *DmeIdentity) {
 	if identity.Device.ValueString() == "" {
 		data.Device = types.StringNull()
 	} else {
@@ -70,7 +70,7 @@ func (data *RestModel) fromIdentity(ctx context.Context, identity *RestIdentity)
 	data.ClassName = identity.ClassName
 }
 
-type RestDataSourceModel struct {
+type DmeDataSourceModel struct {
 	Device    types.String `tfsdk:"device"`
 	Id        types.String `tfsdk:"id"`
 	Dn        types.String `tfsdk:"dn"`
@@ -78,7 +78,7 @@ type RestDataSourceModel struct {
 	Content   types.Map    `tfsdk:"content"`
 }
 
-func (data RestModel) toBody(ctx context.Context) nxos.Body {
+func (data DmeModel) toBody(ctx context.Context) nxos.Body {
 	body := nxos.Body{}
 
 	className := data.ClassName.ValueString()
@@ -104,7 +104,7 @@ func (data RestModel) toBody(ctx context.Context) nxos.Body {
 	return body
 }
 
-func (data *RestModel) fromBody(ctx context.Context, res gjson.Result, all bool) {
+func (data *DmeModel) fromBody(ctx context.Context, res gjson.Result, all bool) {
 	if !res.Exists() {
 		data.Id = types.StringNull()
 		return

@@ -1,1 +1,0 @@
-terraform import "nxos_rest.l1PhysIf" "sys/intf/phys-[eth1/1],l1PhysIf"

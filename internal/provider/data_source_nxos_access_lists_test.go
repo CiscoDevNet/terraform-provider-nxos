@@ -105,7 +105,7 @@ func TestAccDataSourceNxosAccessLists(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosAccessListsPrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
+resource "nxos_dme" "PreReq0" {
   dn = "sys/intf/phys-[eth1/10]"
   class_name = "l1PhysIf"
   content = {
@@ -174,7 +174,7 @@ func testAccDataSourceNxosAccessListsConfig() string {
 	config += `		interface_id = "eth1/10"` + "\n"
 	config += `		access_list_name = "ACL1"` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

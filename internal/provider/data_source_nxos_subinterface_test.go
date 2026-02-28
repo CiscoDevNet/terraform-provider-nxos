@@ -61,7 +61,7 @@ func TestAccDataSourceNxosSubinterface(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceNxosSubinterfacePrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
+resource "nxos_dme" "PreReq0" {
   dn = "sys/intf/phys-[eth1/10]"
   class_name = "l1PhysIf"
   content = {
@@ -91,7 +91,7 @@ func testAccDataSourceNxosSubinterfaceConfig() string {
 	config += `	router_mac_ipv6_extract = "disable"` + "\n"
 	config += `	snmp_trap = "disable"` + "\n"
 	config += `	vrf_dn = "sys/inst-VRF123"` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

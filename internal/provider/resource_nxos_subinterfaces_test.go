@@ -89,7 +89,7 @@ func nxosSubinterfacesImportStateIdFunc(resourceName string) resource.ImportStat
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosSubinterfacesPrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
+resource "nxos_dme" "PreReq0" {
   dn = "sys/intf/phys-[eth1/10]"
   class_name = "l1PhysIf"
   content = {
@@ -108,7 +108,7 @@ func testAccNxosSubinterfacesConfig_minimum() string {
 	config += `	items = [{` + "\n"
 	config += `		interface_id = "eth1/10.124"` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -134,7 +134,7 @@ func testAccNxosSubinterfacesConfig_all() string {
 	config += `		snmp_trap = "disable"` + "\n"
 	config += `		vrf_dn = "sys/inst-VRF123"` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

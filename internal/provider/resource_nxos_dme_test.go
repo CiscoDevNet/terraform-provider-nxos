@@ -26,7 +26,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
-func TestAccNxosRest(t *testing.T) {
+func TestAccNxosDme(t *testing.T) {
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -36,62 +36,62 @@ func TestAccNxosRest(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosRestConfig_empty(),
+				Config: testAccNxosDmeConfig_empty(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_rest.l1PhysIf", "class_name", "l1PhysIf"),
-					resource.TestCheckResourceAttr("nxos_rest.l1PhysIf", "id", "sys/intf/phys-[eth1/1]"),
+					resource.TestCheckResourceAttr("nxos_dme.l1PhysIf", "class_name", "l1PhysIf"),
+					resource.TestCheckResourceAttr("nxos_dme.l1PhysIf", "id", "sys/intf/phys-[eth1/1]"),
 				),
 			},
 			{
-				Config: testAccNxosRestConfig_child(),
+				Config: testAccNxosDmeConfig_child(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_rest.ipqosCMapInst", "class_name", "ipqosCMapInst"),
-					resource.TestCheckResourceAttr("nxos_rest.ipqosCMapInst", "id", "sys/ipqos/dflt/c/name-[CM1]"),
-					resource.TestCheckResourceAttr("nxos_rest.ipqosCMapInst", "children.0.content.val", "ef"),
+					resource.TestCheckResourceAttr("nxos_dme.ipqosCMapInst", "class_name", "ipqosCMapInst"),
+					resource.TestCheckResourceAttr("nxos_dme.ipqosCMapInst", "id", "sys/ipqos/dflt/c/name-[CM1]"),
+					resource.TestCheckResourceAttr("nxos_dme.ipqosCMapInst", "children.0.content.val", "ef"),
 				),
 			},
 			{
-				Config: testAccNxosRestConfig_interface("Create description"),
+				Config: testAccNxosDmeConfig_interface("Create description"),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_rest.l1PhysIf", "class_name", "l1PhysIf"),
-					resource.TestCheckResourceAttr("nxos_rest.l1PhysIf", "id", "sys/intf/phys-[eth1/1]"),
-					resource.TestCheckResourceAttr("nxos_rest.l1PhysIf", "content.descr", "Create description"),
+					resource.TestCheckResourceAttr("nxos_dme.l1PhysIf", "class_name", "l1PhysIf"),
+					resource.TestCheckResourceAttr("nxos_dme.l1PhysIf", "id", "sys/intf/phys-[eth1/1]"),
+					resource.TestCheckResourceAttr("nxos_dme.l1PhysIf", "content.descr", "Create description"),
 				),
 			},
 			{
-				ResourceName:  "nxos_rest.l1PhysIf",
+				ResourceName:  "nxos_dme.l1PhysIf",
 				ImportState:   true,
 				ImportStateId: "sys/intf/phys-[eth1/1],l1PhysIf",
 			},
 			{
-				ResourceName:       "nxos_rest.l1PhysIf",
+				ResourceName:       "nxos_dme.l1PhysIf",
 				ImportState:        true,
 				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
 				ExpectNonEmptyPlan: true,
 				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 			{
-				Config: testAccNxosRestConfig_interface("Updated description"),
+				Config: testAccNxosDmeConfig_interface("Updated description"),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("nxos_rest.l1PhysIf", "content.descr", "Updated description"),
+					resource.TestCheckResourceAttr("nxos_dme.l1PhysIf", "content.descr", "Updated description"),
 				),
 			},
 		},
 	})
 }
 
-func testAccNxosRestConfig_empty() string {
+func testAccNxosDmeConfig_empty() string {
 	return `
-	resource "nxos_rest" "l1PhysIf" {
+	resource "nxos_dme" "l1PhysIf" {
 		dn = "sys/intf/phys-[eth1/1]"
 		class_name = "l1PhysIf"
 	}
 	`
 }
 
-func testAccNxosRestConfig_interface(description string) string {
+func testAccNxosDmeConfig_interface(description string) string {
 	return fmt.Sprintf(`
-	resource "nxos_rest" "l1PhysIf" {
+	resource "nxos_dme" "l1PhysIf" {
 		dn = "sys/intf/phys-[eth1/1]"
 		class_name = "l1PhysIf"
 		content = {
@@ -102,9 +102,9 @@ func testAccNxosRestConfig_interface(description string) string {
 	`, description)
 }
 
-func testAccNxosRestConfig_child() string {
+func testAccNxosDmeConfig_child() string {
 	return `
-	resource "nxos_rest" "ipqosCMapInst" {
+	resource "nxos_dme" "ipqosCMapInst" {
 		dn = "sys/ipqos/dflt/c/name-[CM1]"
 		class_name = "ipqosCMapInst"
 		content = {

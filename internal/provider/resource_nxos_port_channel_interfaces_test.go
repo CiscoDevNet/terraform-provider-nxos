@@ -111,7 +111,7 @@ func nxosPortChannelInterfacesImportStateIdFunc(resourceName string) resource.Im
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosPortChannelInterfacesPrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
+resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/lacp"
   class_name = "fmLacp"
   delete = false
@@ -130,7 +130,7 @@ func testAccNxosPortChannelInterfacesConfig_minimum() string {
 	config += `	items = [{` + "\n"
 	config += `		interface_id = "po123"` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -180,7 +180,7 @@ func testAccNxosPortChannelInterfacesConfig_all() string {
 	config += `			force = true` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

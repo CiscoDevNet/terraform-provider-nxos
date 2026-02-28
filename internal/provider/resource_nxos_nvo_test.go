@@ -107,7 +107,7 @@ func nxosNVOImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosNVOPrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
+resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/nvo"
   class_name = "fmNvo"
   delete = false
@@ -116,14 +116,14 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
-resource "nxos_rest" "PreReq1" {
+resource "nxos_dme" "PreReq1" {
   dn = "sys/fm/evpn"
   class_name = "fmEvpn"
   delete = false
   content = {
       adminSt = "enabled"
   }
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_dme.PreReq0, ]
 }
 
 `
@@ -133,7 +133,7 @@ resource "nxos_rest" "PreReq1" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosNVOConfig_minimum() string {
 	config := `resource "nxos_nvo" "test" {` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -177,7 +177,7 @@ func testAccNxosNVOConfig_all() string {
 	config += `			ingress_replication_protocol = "bgp"` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -87,7 +87,7 @@ func nxosHMMImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosHMMPrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
+resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/ifvlan"
   class_name = "fmInterfaceVlan"
   delete = false
@@ -96,16 +96,16 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
-resource "nxos_rest" "PreReq1" {
+resource "nxos_dme" "PreReq1" {
   dn = "sys/intf/svi-[vlan10]"
   class_name = "sviIf"
   content = {
       id = "vlan10"
   }
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_dme.PreReq0, ]
 }
 
-resource "nxos_rest" "PreReq2" {
+resource "nxos_dme" "PreReq2" {
   dn = "sys/fm/hmm"
   class_name = "fmHmm"
   delete = false
@@ -114,7 +114,7 @@ resource "nxos_rest" "PreReq2" {
   }
 }
 
-resource "nxos_rest" "PreReq3" {
+resource "nxos_dme" "PreReq3" {
   dn = "sys/fm/evpn"
   class_name = "fmEvpn"
   delete = false
@@ -130,7 +130,7 @@ resource "nxos_rest" "PreReq3" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosHMMConfig_minimum() string {
 	config := `resource "nxos_hmm" "test" {` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -152,7 +152,7 @@ func testAccNxosHMMConfig_all() string {
 	config += `		mode = "anycastGW"` + "\n"
 	config += `		description = "My Description"` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

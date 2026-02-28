@@ -9,6 +9,7 @@ description: |-
 
 ## Unreleased
 
+- BREAKING CHANGE: Rename `nxos_rest` resource and data source to `nxos_dme`
 - BREAKING CHANGE: Rename `nxos_user` resource and data source to `nxos_user_management`
 - BREAKING CHANGE: Remove `nxos_bridge_domain` resource and data source, bridge domain configuration is now managed as a single `nxos_bridge_domains` resource and data source
 - Add `nxos_vrfs` bulk resource

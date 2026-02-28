@@ -36,22 +36,22 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &RestResource{}
-var _ resource.ResourceWithIdentity = &RestResource{}
+var _ resource.Resource = &DmeResource{}
+var _ resource.ResourceWithIdentity = &DmeResource{}
 
-func NewRestResource() resource.Resource {
-	return &RestResource{}
+func NewDmeResource() resource.Resource {
+	return &DmeResource{}
 }
 
-type RestResource struct {
+type DmeResource struct {
 	data *NxosProviderData
 }
 
-func (r *RestResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_rest"
+func (r *DmeResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_dme"
 }
 
-func (r *RestResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *DmeResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "Manages NX-OS DME Objects via REST API calls. This resource can manage a single API object and its children. It is able to read the state and therefore reconcile configuration drift.",
@@ -118,7 +118,7 @@ func (r *RestResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 	}
 }
 
-func (r *RestResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+func (r *DmeResource) IdentitySchema(ctx context.Context, req resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
 	resp.IdentitySchema = identityschema.Schema{
 		Attributes: map[string]identityschema.Attribute{
 			"dn": identityschema.StringAttribute{
@@ -137,7 +137,7 @@ func (r *RestResource) IdentitySchema(ctx context.Context, req resource.Identity
 	}
 }
 
-func (r *RestResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *DmeResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -146,8 +146,8 @@ func (r *RestResource) Configure(ctx context.Context, req resource.ConfigureRequ
 	r.data = req.ProviderData.(*NxosProviderData)
 }
 
-func (r *RestResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan RestModel
+func (r *DmeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan DmeModel
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -174,7 +174,7 @@ func (r *RestResource) Create(ctx context.Context, req resource.CreateRequest, r
 	}
 
 	plan.Id = plan.Dn
-	var identity RestIdentity
+	var identity DmeIdentity
 	identity.toIdentity(ctx, &plan)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.Id.ValueString()))
@@ -187,8 +187,8 @@ func (r *RestResource) Create(ctx context.Context, req resource.CreateRequest, r
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
-func (r *RestResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state RestModel
+func (r *DmeResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state DmeModel
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -199,7 +199,7 @@ func (r *RestResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 
 	// Read identity if available (requires Terraform >= 1.12.0)
 	if req.Identity != nil && !req.Identity.Raw.IsNull() {
-		var identity RestIdentity
+		var identity DmeIdentity
 		diags = req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
@@ -233,7 +233,7 @@ func (r *RestResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		state.fromBody(ctx, res, imp)
 	}
 
-	var identity RestIdentity
+	var identity DmeIdentity
 	identity.toIdentity(ctx, &state)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
@@ -246,8 +246,8 @@ func (r *RestResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
-func (r *RestResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan RestModel
+func (r *DmeResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan DmeModel
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -277,14 +277,14 @@ func (r *RestResource) Update(ctx context.Context, req resource.UpdateRequest, r
 
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
-	var identity RestIdentity
+	var identity DmeIdentity
 	identity.toIdentity(ctx, &plan)
 	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *RestResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state RestModel
+func (r *DmeResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state DmeModel
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -321,7 +321,7 @@ func (r *RestResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *RestResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *DmeResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	if req.ID != "" || req.Identity == nil || req.Identity.Raw.IsNull() {
 		idParts := strings.Split(req.ID, ",")
 		idParts = helpers.RemoveEmptyStrings(idParts)
@@ -351,7 +351,7 @@ func (r *RestResource) ImportState(ctx context.Context, req resource.ImportState
 
 		tflog.Debug(ctx, fmt.Sprintf("%s: Import finished successfully", idParts[0]))
 	} else {
-		var identity RestIdentity
+		var identity DmeIdentity
 		diags := req.Identity.Get(ctx, &identity)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return

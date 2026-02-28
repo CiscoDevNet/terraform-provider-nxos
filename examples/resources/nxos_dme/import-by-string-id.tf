@@ -1,4 +1,4 @@
 import {
-  to = nxos_rest.example
+  to = nxos_dme.example
   id = "<dn>,<class_name>"
 }

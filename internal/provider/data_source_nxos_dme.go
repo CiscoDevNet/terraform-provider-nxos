@@ -30,23 +30,23 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &RestDataSource{}
-	_ datasource.DataSourceWithConfigure = &RestDataSource{}
+	_ datasource.DataSource              = &DmeDataSource{}
+	_ datasource.DataSourceWithConfigure = &DmeDataSource{}
 )
 
-func NewRestDataSource() datasource.DataSource {
-	return &RestDataSource{}
+func NewDmeDataSource() datasource.DataSource {
+	return &DmeDataSource{}
 }
 
-type RestDataSource struct {
+type DmeDataSource struct {
 	data *NxosProviderData
 }
 
-func (d *RestDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_rest"
+func (d *DmeDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_dme"
 }
 
-func (d *RestDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *DmeDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This data source can read one NX-OS DME object.",
@@ -77,7 +77,7 @@ func (d *RestDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 	}
 }
 
-func (d *RestDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *DmeDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -85,8 +85,8 @@ func (d *RestDataSource) Configure(_ context.Context, req datasource.ConfigureRe
 	d.data = req.ProviderData.(*NxosProviderData)
 }
 
-func (d *RestDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config, state RestDataSourceModel
+func (d *DmeDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config, state DmeDataSourceModel
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

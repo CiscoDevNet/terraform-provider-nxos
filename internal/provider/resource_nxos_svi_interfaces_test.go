@@ -92,7 +92,7 @@ func nxosSVIInterfacesImportStateIdFunc(resourceName string) resource.ImportStat
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosSVIInterfacesPrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
+resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/ifvlan"
   class_name = "fmInterfaceVlan"
   delete = false
@@ -111,7 +111,7 @@ func testAccNxosSVIInterfacesConfig_minimum() string {
 	config += `	items = [{` + "\n"
 	config += `		interface_id = "vlan293"` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -140,7 +140,7 @@ func testAccNxosSVIInterfacesConfig_all() string {
 	config += `		snmp_trap_link_status = false` + "\n"
 	config += `		vrf_dn = "sys/inst-VRF123"` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

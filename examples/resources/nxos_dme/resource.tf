@@ -1,4 +1,4 @@
-resource "nxos_rest" "l1PhysIf" {
+resource "nxos_dme" "l1PhysIf" {
   dn         = "sys/intf/phys-[eth1/1]"
   class_name = "l1PhysIf"
   content = {
@@ -7,7 +7,7 @@ resource "nxos_rest" "l1PhysIf" {
   }
 }
 
-resource "nxos_rest" "ipqosCMapInst" {
+resource "nxos_dme" "ipqosCMapInst" {
   dn         = "sys/ipqos/dflt/c/name-[CM1]"
   class_name = "ipqosCMapInst"
   content = {

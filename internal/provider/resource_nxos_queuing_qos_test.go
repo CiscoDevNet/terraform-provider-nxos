@@ -83,7 +83,7 @@ func nxosQueuingQoSImportStateIdFunc(resourceName string) resource.ImportStateId
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosQueuingQoSPrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
+resource "nxos_dme" "PreReq0" {
   dn = "sys/ipqos/queuing/p/name-[PM1]"
   class_name = "ipqosPMapInst"
   content = {
@@ -91,80 +91,80 @@ resource "nxos_rest" "PreReq0" {
   }
 }
 
-resource "nxos_rest" "PreReq1" {
+resource "nxos_dme" "PreReq1" {
   dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q1]"
   class_name = "ipqosMatchCMap"
   content = {
       name = "c-out-q1"
   }
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_dme.PreReq0, ]
 }
 
-resource "nxos_rest" "PreReq2" {
+resource "nxos_dme" "PreReq2" {
   dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q1]/prio"
   class_name = "ipqosPriority"
   delete = false
   content = {
       level = "1"
   }
-  depends_on = [nxos_rest.PreReq1, ]
+  depends_on = [nxos_dme.PreReq1, ]
 }
 
-resource "nxos_rest" "PreReq3" {
+resource "nxos_dme" "PreReq3" {
   dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q2]"
   class_name = "ipqosMatchCMap"
   content = {
       name = "c-out-q2"
   }
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_dme.PreReq0, ]
 }
 
-resource "nxos_rest" "PreReq4" {
+resource "nxos_dme" "PreReq4" {
   dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q2]/setRemBW"
   class_name = "ipqosSetRemBW"
   delete = false
   content = {
       val = "10"
   }
-  depends_on = [nxos_rest.PreReq3, ]
+  depends_on = [nxos_dme.PreReq3, ]
 }
 
-resource "nxos_rest" "PreReq5" {
+resource "nxos_dme" "PreReq5" {
   dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q3]"
   class_name = "ipqosMatchCMap"
   content = {
       name = "c-out-q3"
   }
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_dme.PreReq0, ]
 }
 
-resource "nxos_rest" "PreReq6" {
+resource "nxos_dme" "PreReq6" {
   dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q3]/setRemBW"
   class_name = "ipqosSetRemBW"
   delete = false
   content = {
       val = "10"
   }
-  depends_on = [nxos_rest.PreReq5, ]
+  depends_on = [nxos_dme.PreReq5, ]
 }
 
-resource "nxos_rest" "PreReq7" {
+resource "nxos_dme" "PreReq7" {
   dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q-default]"
   class_name = "ipqosMatchCMap"
   content = {
       name = "c-out-q-default"
   }
-  depends_on = [nxos_rest.PreReq0, ]
+  depends_on = [nxos_dme.PreReq0, ]
 }
 
-resource "nxos_rest" "PreReq8" {
+resource "nxos_dme" "PreReq8" {
   dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q-default]/setRemBW"
   class_name = "ipqosSetRemBW"
   delete = false
   content = {
       val = "10"
   }
-  depends_on = [nxos_rest.PreReq7, ]
+  depends_on = [nxos_dme.PreReq7, ]
 }
 
 `
@@ -174,7 +174,7 @@ resource "nxos_rest" "PreReq8" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosQueuingQoSConfig_minimum() string {
 	config := `resource "nxos_queuing_qos" "test" {` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, nxos_rest.PreReq7, nxos_rest.PreReq8, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -194,7 +194,7 @@ func testAccNxosQueuingQoSConfig_all() string {
 	config += `	}]` + "\n"
 	config += `	system_out_policy_map_name = "PM1"` + "\n"
 	config += `	policy_map_statistics = false` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, nxos_rest.PreReq1, nxos_rest.PreReq2, nxos_rest.PreReq3, nxos_rest.PreReq4, nxos_rest.PreReq5, nxos_rest.PreReq6, nxos_rest.PreReq7, nxos_rest.PreReq8, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

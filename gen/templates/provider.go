@@ -334,7 +334,7 @@ func (p *NxosProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 
 func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		NewRestResource,
+		NewDmeResource,
 		NewSaveConfigResource,
 		NewCliResource,
 		{{- range .}}
@@ -348,7 +348,7 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 
 func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
-		NewRestDataSource,
+		NewDmeDataSource,
 		{{- range .}}
 		New{{camelCase .Name}}DataSource,
 		{{- end}}

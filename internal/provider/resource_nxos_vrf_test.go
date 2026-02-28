@@ -91,7 +91,7 @@ func nxosVRFImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccNxosVRFPrerequisitesConfig = `
-resource "nxos_rest" "PreReq0" {
+resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/bgp"
   class_name = "fmBgp"
   delete = false
@@ -108,7 +108,7 @@ resource "nxos_rest" "PreReq0" {
 func testAccNxosVRFConfig_minimum() string {
 	config := `resource "nxos_vrf" "test" {` + "\n"
 	config += `	name = "VRF1"` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -138,7 +138,7 @@ func testAccNxosVRFConfig_all() string {
 	config += `			}]` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [nxos_rest.PreReq0, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

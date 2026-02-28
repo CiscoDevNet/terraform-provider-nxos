@@ -1,5 +1,5 @@
 import {
-  to = nxos_rest.example
+  to = nxos_dme.example
   identity = {
     "dn" : "<dn>"
     "class_name" : "<class_name>"

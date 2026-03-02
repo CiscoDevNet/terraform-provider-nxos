@@ -14,9 +14,9 @@ A resource can be imported by using the `terraform import` command or by using a
 An example for importing a resource using the `import` block with a string-based `id` is shown below. Assuming we have the following resource in our configuration:
 
 ```terraform
-resource "nxos_bgp_vrf" "bgp_vrf" {
-  asn  = "65001"
-  name = "default"
+resource "nxos_vrf" "vrf1" {
+  name        = "VRF1"
+  description = "My VRF1 Description"
 }
 ```
 
@@ -24,23 +24,23 @@ We could add an import block to import the resource as shown below:
 
 ```terraform
 import {
-  to = nxos_bgp_vrf.bgp_vrf
-  id = "65001,default"
+  to = nxos_vrf.vrf1
+  id = "VRF1"
 }
 ```
 
-This will populate the state for the `nxos_bgp_vrf` resource for the "default" device. When managing multiple devices, the device name can be appended to the import identifier using a comma as a separator:
+This will populate the state for the `nxos_vrf` resource for the "default" device. When managing multiple devices, the device name can be appended to the import identifier using a comma as a separator:
 
 ```terraform
-resource "nxos_bgp_vrf" "bgp_vrf" {
-  device = "LEAF-1"
-  asn    = "65001"
-  name   = "default"
+resource "nxos_vrf" "vrf1" {
+  device      = "LEAF-1"
+  name        = "VRF1"
+  description = "My VRF1 Description"
 }
 
 import {
-  to = nxos_bgp_vrf.bgp_vrf
-  id = "65001,default,LEAF-1"
+  to = nxos_vrf.vrf1
+  id = "VRF1,LEAF-1"
 }
 ```
 
@@ -50,10 +50,9 @@ Resources also support identity-based imports using an `identity` block. This pr
 
 ```terraform
 import {
-  to = nxos_bgp_vrf.bgp_vrf
+  to = nxos_vrf.vrf1
   identity = {
-    "asn"  = "65001"
-    "name" = "default"
+    "name" = "VRF1"
   }
 }
 ```
@@ -61,17 +60,16 @@ import {
 When managing multiple devices, the `device` attribute can be included in the identity block:
 
 ```terraform
-resource "nxos_bgp_vrf" "bgp_vrf" {
-  device = "LEAF-1"
-  asn    = "65001"
-  name   = "default"
+resource "nxos_vrf" "vrf1" {
+  device      = "LEAF-1"
+  name        = "VRF1"
+  description = "My VRF1 Description"
 }
 
 import {
-  to = nxos_bgp_vrf.bgp_vrf
+  to = nxos_vrf.vrf1
   identity = {
-    "asn"    = "65001"
-    "name"   = "default"
+    "name"   = "VRF1"
     "device" = "LEAF-1"
   }
 }

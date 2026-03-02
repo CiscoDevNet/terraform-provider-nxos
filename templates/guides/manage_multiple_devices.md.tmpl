@@ -24,16 +24,16 @@ provider "nxos" {
   url      = "https://10.1.1.2"
 }
 
-resource "nxos_bridge_domain" "LEAF-1-VLAN10" {
-  provider     = nxos.LEAF-1
-  fabric_encap = "vlan-10"
-  name         = "VLAN10"
+resource "nxos_vrf" "LEAF-1-VRF1" {
+  provider    = nxos.LEAF-1
+  name        = "VRF1"
+  description = "My VRF1 Description"
 }
 
-resource "nxos_bridge_domain" "LEAF-2-VLAN10" {
-  provider     = nxos.LEAF-2
-  fabric_encap = "vlan-10"
-  name         = "VLAN10"
+resource "nxos_vrf" "LEAF-2-VRF1" {
+  provider    = nxos.LEAF-2
+  name        = "VRF1"
+  description = "My VRF1 Description"
 }
 ```
 
@@ -67,11 +67,11 @@ provider "nxos" {
   devices  = concat(local.leafs, local.spines)
 }
 
-resource "nxos_bridge_domain" "VLAN10" {
-  for_each     = toset([for leaf in local.leafs : leaf.name])
-  device       = each.key
-  fabric_encap = "vlan-10"
-  name         = "VLAN010"
+resource "nxos_vrf" "VRF1" {
+  for_each    = toset([for leaf in local.leafs : leaf.name])
+  device      = each.key
+  name        = "VRF1"
+  description = "My VRF1 Description"
 }
 ```
 
@@ -114,11 +114,11 @@ provider "nxos" {
   devices  = local.devices
 }
 
-resource "nxos_bridge_domain" "VLAN10" {
-  for_each     = toset([for device in local.devices : device.name])
-  device       = each.key
-  fabric_encap = "vlan-10"
-  name         = "VLAN010"
+resource "nxos_vrf" "VRF1" {
+  for_each    = toset([for device in local.devices : device.name])
+  device      = each.key
+  name        = "VRF1"
+  description = "My VRF1 Description"
 }
 ```
 

@@ -38,8 +38,8 @@ resource "nxos_system" "example" {
 We can then enable the BGP feature, which is a prerequisite for any BGP configuration.
 
 ```hcl
-resource "nxos_feature_bgp" "example" {
-  admin_state = "enabled"
+resource "nxos_features" "example" {
+  bgp = "enabled"
 }
 ```
 
@@ -48,6 +48,7 @@ Now we add a loopback interface.
 ```hcl
 resource "nxos_loopback_interface" "example" {
   interface_id = "lo0"
+  admin_state  = "up"
   description  = "Loopback0"
 }
 ```

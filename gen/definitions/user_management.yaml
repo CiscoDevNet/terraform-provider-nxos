@@ -95,7 +95,7 @@ attributes:
       - "yes"
     description: "The password strength check, which specifies if the system enforces the strength of the user password."
     example: "no"
-    delete_value: true
+    delete_value: "yes"
   - nxos_name: pwdWarningTime
     tf_name: password_warning_time
     type: Int64
@@ -112,7 +112,7 @@ attributes:
       - "yes"
     description: "Service Password Recovery."
     example: "no"
-    delete_value: true
+    delete_value: "yes"
 child_classes:
   - class_name: aaaPreLoginBanner
     doc_path: Security%20and%20Policing/aaa:PreLoginBanner

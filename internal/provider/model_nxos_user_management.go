@@ -1145,13 +1145,13 @@ func (data UserManagement) toDeleteBody() nxos.Body {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdSecureMode", "yes")
 	}
 	if !data.PasswordStrengthCheck.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdStrengthCheck", "true")
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdStrengthCheck", "yes")
 	}
 	if !data.PasswordWarningTime.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdWarningTime", strconv.FormatInt(14, 10))
 	}
 	if !data.ServicePasswordRecovery.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"svcPwdRecovery", "true")
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"svcPwdRecovery", "yes")
 	}
 	if body == "" {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})

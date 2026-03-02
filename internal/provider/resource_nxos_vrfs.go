@@ -85,9 +85,6 @@ func (r *VRFsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"description": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
@@ -297,6 +294,11 @@ func (r *VRFsResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		res, err := device.Client.GetDn(state.getDn(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
+			return
+		}
+
+		if !res.Exists() {
+			resp.State.RemoveResource(ctx)
 			return
 		}
 

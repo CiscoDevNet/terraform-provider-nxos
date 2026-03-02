@@ -25,6 +25,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -450,8 +451,9 @@ func (data *{{camelCase .BulkName}}) fromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *{{camelCase .BulkName}}) updateFromBody(res gjson.Result) {
-	for i := range data.Items {
+	for i := len(data.Items) - 1; i >= 0; i-- {
 		// Find the matching item in the response by id attributes
+		var matchedValue gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(func(_, v gjson.Result) bool {
 			v.ForEach(func(classname, value gjson.Result) bool {
 				if classname.String() == data.getItemClassName() {
@@ -466,30 +468,39 @@ func (data *{{camelCase .BulkName}}) updateFromBody(res gjson.Result) {
 					}
 					{{- end}}
 					{{- end}}
-					// Found matching item, update attributes
-					{{- range .Attributes}}
-					{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
-					if !data.Items[i].{{toGoName .TfName}}.IsNull() {
-						{{- if eq .Type "Int64"}}
-						data.Items[i].{{toGoName .TfName}} = types.Int64Value(value.Get("attributes.{{.NxosName}}").Int())
-						{{- else if eq .Type "Bool"}}
-						data.Items[i].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.{{.NxosName}}").String()))
-						{{- else if eq .Type "String"}}
-						data.Items[i].{{toGoName .TfName}} = types.StringValue(value.Get("attributes.{{.NxosName}}").String())
-						{{- end}}
-					} else {
-						data.Items[i].{{toGoName .TfName}} = types.{{.Type}}Null()
-					}
-					{{- end}}
-					{{- end}}
-					{{- if .ChildClasses}}
-					{{- template "bulkUpdateFromBodyChildrenTemplate" (makeMap "TypePrefix" $bulkName "Children" .ChildClasses "ValueVar" "value" "DataExpr" (printf "data.Items[i]") "RnArgs" (rnFormatArgs "data.Items[i]" .Attributes))}}
-					{{- end}}
+					matchedValue = value
+					return false
 				}
 				return true
 			})
+			if matchedValue.Exists() {
+				return false
+			}
 			return true
 		})
+		if !matchedValue.Exists() {
+			data.Items = slices.Delete(data.Items, i, i+1)
+			continue
+		}
+		// Found matching item, update attributes
+		{{- range .Attributes}}
+		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
+		if !data.Items[i].{{toGoName .TfName}}.IsNull() {
+			{{- if eq .Type "Int64"}}
+			data.Items[i].{{toGoName .TfName}} = types.Int64Value(matchedValue.Get("attributes.{{.NxosName}}").Int())
+			{{- else if eq .Type "Bool"}}
+			data.Items[i].{{toGoName .TfName}} = types.BoolValue(helpers.ParseNxosBoolean(matchedValue.Get("attributes.{{.NxosName}}").String()))
+			{{- else if eq .Type "String"}}
+			data.Items[i].{{toGoName .TfName}} = types.StringValue(matchedValue.Get("attributes.{{.NxosName}}").String())
+			{{- end}}
+		} else {
+			data.Items[i].{{toGoName .TfName}} = types.{{.Type}}Null()
+		}
+		{{- end}}
+		{{- end}}
+		{{- if .ChildClasses}}
+		{{- template "bulkUpdateFromBodyChildrenTemplate" (makeMap "TypePrefix" $bulkName "Children" .ChildClasses "ValueVar" "matchedValue" "DataExpr" (printf "data.Items[i]") "RnArgs" (rnFormatArgs "data.Items[i]" .Attributes))}}
+		{{- end}}
 	}
 }
 
@@ -558,7 +569,7 @@ func (data *{{camelCase .BulkName}}) updateFromBody(res gjson.Result) {
 	{{- end}}
 	}
 {{- else if eq .Type "list"}}
-	for {{$indexVar}} := range {{$dataExpr}}.{{$list}} {
+	for {{$indexVar}} := len({{$dataExpr}}.{{$list}}) - 1; {{$indexVar}} >= 0; {{$indexVar}}-- {
 		var r{{$childClassName}} gjson.Result
 		{{$valueVar}}.Get("children").ForEach(
 			func(_, nestedV gjson.Result) bool {
@@ -570,6 +581,10 @@ func (data *{{camelCase .BulkName}}) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !r{{$childClassName}}.Exists() {
+			{{$dataExpr}}.{{$list}} = slices.Delete({{$dataExpr}}.{{$list}}, {{$indexVar}}, {{$indexVar}}+1)
+			continue
+		}
 		{{- range .Attributes}}
 		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
 		if !{{$dataExpr}}.{{$list}}[{{$indexVar}}].{{toGoName .TfName}}.IsNull() {

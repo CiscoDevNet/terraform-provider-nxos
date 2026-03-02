@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/go-nxos"
@@ -210,58 +211,68 @@ func (data *LoopbackInterfaces) fromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *LoopbackInterfaces) updateFromBody(res gjson.Result) {
-	for i := range data.Items {
+	for i := len(data.Items) - 1; i >= 0; i-- {
 		// Find the matching item in the response by id attributes
+		var matchedValue gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(func(_, v gjson.Result) bool {
 			v.ForEach(func(classname, value gjson.Result) bool {
 				if classname.String() == data.getItemClassName() {
 					if value.Get("attributes.id").String() != data.Items[i].InterfaceId.ValueString() {
 						return true
 					}
-					// Found matching item, update attributes
-					if !data.Items[i].InterfaceId.IsNull() {
-						data.Items[i].InterfaceId = types.StringValue(value.Get("attributes.id").String())
-					} else {
-						data.Items[i].InterfaceId = types.StringNull()
-					}
-					if !data.Items[i].AdminState.IsNull() {
-						data.Items[i].AdminState = types.StringValue(value.Get("attributes.adminSt").String())
-					} else {
-						data.Items[i].AdminState = types.StringNull()
-					}
-					if !data.Items[i].Description.IsNull() {
-						data.Items[i].Description = types.StringValue(value.Get("attributes.descr").String())
-					} else {
-						data.Items[i].Description = types.StringNull()
-					}
-					if !data.Items[i].LinkLogging.IsNull() {
-						data.Items[i].LinkLogging = types.StringValue(value.Get("attributes.linkLog").String())
-					} else {
-						data.Items[i].LinkLogging = types.StringNull()
-					}
-					{
-						var rnwRtVrfMbr gjson.Result
-						value.Get("children").ForEach(
-							func(_, nestedV gjson.Result) bool {
-								key := nestedV.Get("nwRtVrfMbr.attributes.rn").String()
-								if key == "rtvrfMbr" {
-									rnwRtVrfMbr = nestedV
-									return false
-								}
-								return true
-							},
-						)
-						if !data.Items[i].VrfDn.IsNull() {
-							data.Items[i].VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
-						} else {
-							data.Items[i].VrfDn = types.StringNull()
-						}
-					}
+					matchedValue = value
+					return false
 				}
 				return true
 			})
+			if matchedValue.Exists() {
+				return false
+			}
 			return true
 		})
+		if !matchedValue.Exists() {
+			data.Items = slices.Delete(data.Items, i, i+1)
+			continue
+		}
+		// Found matching item, update attributes
+		if !data.Items[i].InterfaceId.IsNull() {
+			data.Items[i].InterfaceId = types.StringValue(matchedValue.Get("attributes.id").String())
+		} else {
+			data.Items[i].InterfaceId = types.StringNull()
+		}
+		if !data.Items[i].AdminState.IsNull() {
+			data.Items[i].AdminState = types.StringValue(matchedValue.Get("attributes.adminSt").String())
+		} else {
+			data.Items[i].AdminState = types.StringNull()
+		}
+		if !data.Items[i].Description.IsNull() {
+			data.Items[i].Description = types.StringValue(matchedValue.Get("attributes.descr").String())
+		} else {
+			data.Items[i].Description = types.StringNull()
+		}
+		if !data.Items[i].LinkLogging.IsNull() {
+			data.Items[i].LinkLogging = types.StringValue(matchedValue.Get("attributes.linkLog").String())
+		} else {
+			data.Items[i].LinkLogging = types.StringNull()
+		}
+		{
+			var rnwRtVrfMbr gjson.Result
+			matchedValue.Get("children").ForEach(
+				func(_, nestedV gjson.Result) bool {
+					key := nestedV.Get("nwRtVrfMbr.attributes.rn").String()
+					if key == "rtvrfMbr" {
+						rnwRtVrfMbr = nestedV
+						return false
+					}
+					return true
+				},
+			)
+			if !data.Items[i].VrfDn.IsNull() {
+				data.Items[i].VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
+			} else {
+				data.Items[i].VrfDn = types.StringNull()
+			}
+		}
 	}
 }
 

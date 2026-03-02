@@ -85,9 +85,6 @@ func (r *SVIInterfacesResource) Schema(ctx context.Context, req resource.SchemaR
 						"interface_id": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `vlan100`.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("down", "up").String,
@@ -296,6 +293,11 @@ func (r *SVIInterfacesResource) Read(ctx context.Context, req resource.ReadReque
 		res, err := device.Client.GetDn(state.getDn(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
+			return
+		}
+
+		if !res.Exists() {
+			resp.State.RemoveResource(ctx)
 			return
 		}
 

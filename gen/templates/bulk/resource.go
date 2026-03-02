@@ -139,11 +139,6 @@ func (r *{{camelCase .BulkName}}Resource) Schema(ctx context.Context, req resour
 								int64validator.Between({{.MinInt}}, {{.MaxInt}}),
 							},
 							{{- end}}
-							{{- if or .Id .RequiresReplace}}
-							PlanModifiers: []planmodifier.{{.Type}}{
-								{{snakeCase .Type}}planmodifier.RequiresReplace(),
-							},
-							{{- end}}
 						},
 						{{- end}}
 						{{- end}}
@@ -211,11 +206,6 @@ func (r *{{camelCase .BulkName}}Resource) Schema(ctx context.Context, req resour
 							{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
 							Validators: []validator.Int64{
 								int64validator.Between({{.MinInt}}, {{.MaxInt}}),
-							},
-							{{- end}}
-							{{- if .RequiresReplace}}
-							PlanModifiers: []planmodifier.{{.Type}}{
-								{{snakeCase .Type}}planmodifier.RequiresReplace(),
 							},
 							{{- end}}
 						},
@@ -340,6 +330,11 @@ func (r *{{camelCase .BulkName}}Resource) Read(ctx context.Context, req resource
 		res, err := device.Client.GetDn(state.getDn(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
+			return
+		}
+
+		if !res.Exists() {
+			resp.State.RemoveResource(ctx)
 			return
 		}
 

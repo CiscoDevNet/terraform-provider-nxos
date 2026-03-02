@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -434,271 +435,285 @@ func (data *PortChannelInterfaces) fromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *PortChannelInterfaces) updateFromBody(res gjson.Result) {
-	for i := range data.Items {
+	for i := len(data.Items) - 1; i >= 0; i-- {
 		// Find the matching item in the response by id attributes
+		var matchedValue gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(func(_, v gjson.Result) bool {
 			v.ForEach(func(classname, value gjson.Result) bool {
 				if classname.String() == data.getItemClassName() {
 					if value.Get("attributes.id").String() != data.Items[i].InterfaceId.ValueString() {
 						return true
 					}
-					// Found matching item, update attributes
-					if !data.Items[i].InterfaceId.IsNull() {
-						data.Items[i].InterfaceId = types.StringValue(value.Get("attributes.id").String())
-					} else {
-						data.Items[i].InterfaceId = types.StringNull()
-					}
-					if !data.Items[i].PortChannelMode.IsNull() {
-						data.Items[i].PortChannelMode = types.StringValue(value.Get("attributes.pcMode").String())
-					} else {
-						data.Items[i].PortChannelMode = types.StringNull()
-					}
-					if !data.Items[i].MinimumLinks.IsNull() {
-						data.Items[i].MinimumLinks = types.Int64Value(value.Get("attributes.minLinks").Int())
-					} else {
-						data.Items[i].MinimumLinks = types.Int64Null()
-					}
-					if !data.Items[i].MaximumLinks.IsNull() {
-						data.Items[i].MaximumLinks = types.Int64Value(value.Get("attributes.maxLinks").Int())
-					} else {
-						data.Items[i].MaximumLinks = types.Int64Null()
-					}
-					if !data.Items[i].SuspendIndividual.IsNull() {
-						data.Items[i].SuspendIndividual = types.StringValue(value.Get("attributes.suspIndividual").String())
-					} else {
-						data.Items[i].SuspendIndividual = types.StringNull()
-					}
-					if !data.Items[i].AccessVlan.IsNull() {
-						data.Items[i].AccessVlan = types.StringValue(value.Get("attributes.accessVlan").String())
-					} else {
-						data.Items[i].AccessVlan = types.StringNull()
-					}
-					if !data.Items[i].AdminState.IsNull() {
-						data.Items[i].AdminState = types.StringValue(value.Get("attributes.adminSt").String())
-					} else {
-						data.Items[i].AdminState = types.StringNull()
-					}
-					if !data.Items[i].AutoNegotiation.IsNull() {
-						data.Items[i].AutoNegotiation = types.StringValue(value.Get("attributes.autoNeg").String())
-					} else {
-						data.Items[i].AutoNegotiation = types.StringNull()
-					}
-					if !data.Items[i].Bandwidth.IsNull() {
-						data.Items[i].Bandwidth = types.Int64Value(value.Get("attributes.bw").Int())
-					} else {
-						data.Items[i].Bandwidth = types.Int64Null()
-					}
-					if !data.Items[i].Delay.IsNull() {
-						data.Items[i].Delay = types.Int64Value(value.Get("attributes.delay").Int())
-					} else {
-						data.Items[i].Delay = types.Int64Null()
-					}
-					if !data.Items[i].Description.IsNull() {
-						data.Items[i].Description = types.StringValue(value.Get("attributes.descr").String())
-					} else {
-						data.Items[i].Description = types.StringNull()
-					}
-					if !data.Items[i].Duplex.IsNull() {
-						data.Items[i].Duplex = types.StringValue(value.Get("attributes.duplex").String())
-					} else {
-						data.Items[i].Duplex = types.StringNull()
-					}
-					if !data.Items[i].Layer.IsNull() {
-						data.Items[i].Layer = types.StringValue(value.Get("attributes.layer").String())
-					} else {
-						data.Items[i].Layer = types.StringNull()
-					}
-					if !data.Items[i].LinkLogging.IsNull() {
-						data.Items[i].LinkLogging = types.StringValue(value.Get("attributes.linkLog").String())
-					} else {
-						data.Items[i].LinkLogging = types.StringNull()
-					}
-					if !data.Items[i].Medium.IsNull() {
-						data.Items[i].Medium = types.StringValue(value.Get("attributes.medium").String())
-					} else {
-						data.Items[i].Medium = types.StringNull()
-					}
-					if !data.Items[i].Mode.IsNull() {
-						data.Items[i].Mode = types.StringValue(value.Get("attributes.mode").String())
-					} else {
-						data.Items[i].Mode = types.StringNull()
-					}
-					if !data.Items[i].Mtu.IsNull() {
-						data.Items[i].Mtu = types.Int64Value(value.Get("attributes.mtu").Int())
-					} else {
-						data.Items[i].Mtu = types.Int64Null()
-					}
-					if !data.Items[i].NativeVlan.IsNull() {
-						data.Items[i].NativeVlan = types.StringValue(value.Get("attributes.nativeVlan").String())
-					} else {
-						data.Items[i].NativeVlan = types.StringNull()
-					}
-					if !data.Items[i].Speed.IsNull() {
-						data.Items[i].Speed = types.StringValue(value.Get("attributes.speed").String())
-					} else {
-						data.Items[i].Speed = types.StringNull()
-					}
-					if !data.Items[i].TrunkVlans.IsNull() {
-						data.Items[i].TrunkVlans = types.StringValue(value.Get("attributes.trunkVlans").String())
-					} else {
-						data.Items[i].TrunkVlans = types.StringNull()
-					}
-					if !data.Items[i].Dot1qEtherType.IsNull() {
-						data.Items[i].Dot1qEtherType = types.Int64Value(value.Get("attributes.dot1qEtherType").Int())
-					} else {
-						data.Items[i].Dot1qEtherType = types.Int64Null()
-					}
-					if !data.Items[i].EqualizationDelay.IsNull() {
-						data.Items[i].EqualizationDelay = types.Int64Value(value.Get("attributes.equalizationDelay").Int())
-					} else {
-						data.Items[i].EqualizationDelay = types.Int64Null()
-					}
-					if !data.Items[i].GracefulConvergence.IsNull() {
-						data.Items[i].GracefulConvergence = types.StringValue(value.Get("attributes.gracefulConv").String())
-					} else {
-						data.Items[i].GracefulConvergence = types.StringNull()
-					}
-					if !data.Items[i].HashDistribution.IsNull() {
-						data.Items[i].HashDistribution = types.StringValue(value.Get("attributes.hashDist").String())
-					} else {
-						data.Items[i].HashDistribution = types.StringNull()
-					}
-					if !data.Items[i].InheritBandwidth.IsNull() {
-						data.Items[i].InheritBandwidth = types.Int64Value(value.Get("attributes.inhBw").Int())
-					} else {
-						data.Items[i].InheritBandwidth = types.Int64Null()
-					}
-					if !data.Items[i].ItuChannel.IsNull() {
-						data.Items[i].ItuChannel = types.Int64Value(value.Get("attributes.ituChannel").Int())
-					} else {
-						data.Items[i].ItuChannel = types.Int64Null()
-					}
-					if !data.Items[i].LacpDelayMode.IsNull() {
-						data.Items[i].LacpDelayMode = types.StringValue(value.Get("attributes.lacpDelayMode").String())
-					} else {
-						data.Items[i].LacpDelayMode = types.StringNull()
-					}
-					if !data.Items[i].LacpVpcConvergence.IsNull() {
-						data.Items[i].LacpVpcConvergence = types.StringValue(value.Get("attributes.lacpVpcConvergence").String())
-					} else {
-						data.Items[i].LacpVpcConvergence = types.StringNull()
-					}
-					if !data.Items[i].LinkDebounceDown.IsNull() {
-						data.Items[i].LinkDebounceDown = types.Int64Value(value.Get("attributes.linkDebounce").Int())
-					} else {
-						data.Items[i].LinkDebounceDown = types.Int64Null()
-					}
-					if !data.Items[i].LoadDefer.IsNull() {
-						data.Items[i].LoadDefer = types.StringValue(value.Get("attributes.loadDefer").String())
-					} else {
-						data.Items[i].LoadDefer = types.StringNull()
-					}
-					if !data.Items[i].Mdix.IsNull() {
-						data.Items[i].Mdix = types.StringValue(value.Get("attributes.mdix").String())
-					} else {
-						data.Items[i].Mdix = types.StringNull()
-					}
-					if !data.Items[i].OpticsLoopback.IsNull() {
-						data.Items[i].OpticsLoopback = types.StringValue(value.Get("attributes.opticsLoopback").String())
-					} else {
-						data.Items[i].OpticsLoopback = types.StringNull()
-					}
-					if !data.Items[i].PortType.IsNull() {
-						data.Items[i].PortType = types.StringValue(value.Get("attributes.portT").String())
-					} else {
-						data.Items[i].PortType = types.StringNull()
-					}
-					if !data.Items[i].PxeTransitionTimeout.IsNull() {
-						data.Items[i].PxeTransitionTimeout = types.Int64Value(value.Get("attributes.pxeTransTime").Int())
-					} else {
-						data.Items[i].PxeTransitionTimeout = types.Int64Null()
-					}
-					if !data.Items[i].RouterMac.IsNull() {
-						data.Items[i].RouterMac = types.StringValue(value.Get("attributes.routerMac").String())
-					} else {
-						data.Items[i].RouterMac = types.StringNull()
-					}
-					if !data.Items[i].SnmpTrapState.IsNull() {
-						data.Items[i].SnmpTrapState = types.StringValue(value.Get("attributes.snmpTrapSt").String())
-					} else {
-						data.Items[i].SnmpTrapState = types.StringNull()
-					}
-					if !data.Items[i].SpanMode.IsNull() {
-						data.Items[i].SpanMode = types.StringValue(value.Get("attributes.spanMode").String())
-					} else {
-						data.Items[i].SpanMode = types.StringNull()
-					}
-					if !data.Items[i].Squelch.IsNull() {
-						data.Items[i].Squelch = types.StringValue(value.Get("attributes.squelch").String())
-					} else {
-						data.Items[i].Squelch = types.StringNull()
-					}
-					if !data.Items[i].TransmissionMode.IsNull() {
-						data.Items[i].TransmissionMode = types.StringValue(value.Get("attributes.transMode").String())
-					} else {
-						data.Items[i].TransmissionMode = types.StringNull()
-					}
-					if !data.Items[i].TrunkLogging.IsNull() {
-						data.Items[i].TrunkLogging = types.StringValue(value.Get("attributes.trunkLog").String())
-					} else {
-						data.Items[i].TrunkLogging = types.StringNull()
-					}
-					if !data.Items[i].Usage.IsNull() {
-						data.Items[i].Usage = types.StringValue(value.Get("attributes.usage").String())
-					} else {
-						data.Items[i].Usage = types.StringNull()
-					}
-					if !data.Items[i].UserConfiguredFlags.IsNull() {
-						data.Items[i].UserConfiguredFlags = types.StringValue(value.Get("attributes.userCfgdFlags").String())
-					} else {
-						data.Items[i].UserConfiguredFlags = types.StringNull()
-					}
-					{
-						var rnwRtVrfMbr gjson.Result
-						value.Get("children").ForEach(
-							func(_, nestedV gjson.Result) bool {
-								key := nestedV.Get("nwRtVrfMbr.attributes.rn").String()
-								if key == "rtvrfMbr" {
-									rnwRtVrfMbr = nestedV
-									return false
-								}
-								return true
-							},
-						)
-						if !data.Items[i].VrfDn.IsNull() {
-							data.Items[i].VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
-						} else {
-							data.Items[i].VrfDn = types.StringNull()
-						}
-					}
-					for c := range data.Items[i].Members {
-						var rpcRsMbrIfs gjson.Result
-						value.Get("children").ForEach(
-							func(_, nestedV gjson.Result) bool {
-								key := nestedV.Get("pcRsMbrIfs.attributes.rn").String()
-								if key == fmt.Sprintf("rsmbrIfs-[%s]", data.Items[i].Members[c].InterfaceDn.ValueString()) {
-									rpcRsMbrIfs = nestedV
-									return false
-								}
-								return true
-							},
-						)
-						if !data.Items[i].Members[c].InterfaceDn.IsNull() {
-							data.Items[i].Members[c].InterfaceDn = types.StringValue(rpcRsMbrIfs.Get("pcRsMbrIfs.attributes.tDn").String())
-						} else {
-							data.Items[i].Members[c].InterfaceDn = types.StringNull()
-						}
-						if !data.Items[i].Members[c].Force.IsNull() {
-							data.Items[i].Members[c].Force = types.BoolValue(helpers.ParseNxosBoolean(rpcRsMbrIfs.Get("pcRsMbrIfs.attributes.isMbrForce").String()))
-						} else {
-							data.Items[i].Members[c].Force = types.BoolNull()
-						}
-					}
+					matchedValue = value
+					return false
 				}
 				return true
 			})
+			if matchedValue.Exists() {
+				return false
+			}
 			return true
 		})
+		if !matchedValue.Exists() {
+			data.Items = slices.Delete(data.Items, i, i+1)
+			continue
+		}
+		// Found matching item, update attributes
+		if !data.Items[i].InterfaceId.IsNull() {
+			data.Items[i].InterfaceId = types.StringValue(matchedValue.Get("attributes.id").String())
+		} else {
+			data.Items[i].InterfaceId = types.StringNull()
+		}
+		if !data.Items[i].PortChannelMode.IsNull() {
+			data.Items[i].PortChannelMode = types.StringValue(matchedValue.Get("attributes.pcMode").String())
+		} else {
+			data.Items[i].PortChannelMode = types.StringNull()
+		}
+		if !data.Items[i].MinimumLinks.IsNull() {
+			data.Items[i].MinimumLinks = types.Int64Value(matchedValue.Get("attributes.minLinks").Int())
+		} else {
+			data.Items[i].MinimumLinks = types.Int64Null()
+		}
+		if !data.Items[i].MaximumLinks.IsNull() {
+			data.Items[i].MaximumLinks = types.Int64Value(matchedValue.Get("attributes.maxLinks").Int())
+		} else {
+			data.Items[i].MaximumLinks = types.Int64Null()
+		}
+		if !data.Items[i].SuspendIndividual.IsNull() {
+			data.Items[i].SuspendIndividual = types.StringValue(matchedValue.Get("attributes.suspIndividual").String())
+		} else {
+			data.Items[i].SuspendIndividual = types.StringNull()
+		}
+		if !data.Items[i].AccessVlan.IsNull() {
+			data.Items[i].AccessVlan = types.StringValue(matchedValue.Get("attributes.accessVlan").String())
+		} else {
+			data.Items[i].AccessVlan = types.StringNull()
+		}
+		if !data.Items[i].AdminState.IsNull() {
+			data.Items[i].AdminState = types.StringValue(matchedValue.Get("attributes.adminSt").String())
+		} else {
+			data.Items[i].AdminState = types.StringNull()
+		}
+		if !data.Items[i].AutoNegotiation.IsNull() {
+			data.Items[i].AutoNegotiation = types.StringValue(matchedValue.Get("attributes.autoNeg").String())
+		} else {
+			data.Items[i].AutoNegotiation = types.StringNull()
+		}
+		if !data.Items[i].Bandwidth.IsNull() {
+			data.Items[i].Bandwidth = types.Int64Value(matchedValue.Get("attributes.bw").Int())
+		} else {
+			data.Items[i].Bandwidth = types.Int64Null()
+		}
+		if !data.Items[i].Delay.IsNull() {
+			data.Items[i].Delay = types.Int64Value(matchedValue.Get("attributes.delay").Int())
+		} else {
+			data.Items[i].Delay = types.Int64Null()
+		}
+		if !data.Items[i].Description.IsNull() {
+			data.Items[i].Description = types.StringValue(matchedValue.Get("attributes.descr").String())
+		} else {
+			data.Items[i].Description = types.StringNull()
+		}
+		if !data.Items[i].Duplex.IsNull() {
+			data.Items[i].Duplex = types.StringValue(matchedValue.Get("attributes.duplex").String())
+		} else {
+			data.Items[i].Duplex = types.StringNull()
+		}
+		if !data.Items[i].Layer.IsNull() {
+			data.Items[i].Layer = types.StringValue(matchedValue.Get("attributes.layer").String())
+		} else {
+			data.Items[i].Layer = types.StringNull()
+		}
+		if !data.Items[i].LinkLogging.IsNull() {
+			data.Items[i].LinkLogging = types.StringValue(matchedValue.Get("attributes.linkLog").String())
+		} else {
+			data.Items[i].LinkLogging = types.StringNull()
+		}
+		if !data.Items[i].Medium.IsNull() {
+			data.Items[i].Medium = types.StringValue(matchedValue.Get("attributes.medium").String())
+		} else {
+			data.Items[i].Medium = types.StringNull()
+		}
+		if !data.Items[i].Mode.IsNull() {
+			data.Items[i].Mode = types.StringValue(matchedValue.Get("attributes.mode").String())
+		} else {
+			data.Items[i].Mode = types.StringNull()
+		}
+		if !data.Items[i].Mtu.IsNull() {
+			data.Items[i].Mtu = types.Int64Value(matchedValue.Get("attributes.mtu").Int())
+		} else {
+			data.Items[i].Mtu = types.Int64Null()
+		}
+		if !data.Items[i].NativeVlan.IsNull() {
+			data.Items[i].NativeVlan = types.StringValue(matchedValue.Get("attributes.nativeVlan").String())
+		} else {
+			data.Items[i].NativeVlan = types.StringNull()
+		}
+		if !data.Items[i].Speed.IsNull() {
+			data.Items[i].Speed = types.StringValue(matchedValue.Get("attributes.speed").String())
+		} else {
+			data.Items[i].Speed = types.StringNull()
+		}
+		if !data.Items[i].TrunkVlans.IsNull() {
+			data.Items[i].TrunkVlans = types.StringValue(matchedValue.Get("attributes.trunkVlans").String())
+		} else {
+			data.Items[i].TrunkVlans = types.StringNull()
+		}
+		if !data.Items[i].Dot1qEtherType.IsNull() {
+			data.Items[i].Dot1qEtherType = types.Int64Value(matchedValue.Get("attributes.dot1qEtherType").Int())
+		} else {
+			data.Items[i].Dot1qEtherType = types.Int64Null()
+		}
+		if !data.Items[i].EqualizationDelay.IsNull() {
+			data.Items[i].EqualizationDelay = types.Int64Value(matchedValue.Get("attributes.equalizationDelay").Int())
+		} else {
+			data.Items[i].EqualizationDelay = types.Int64Null()
+		}
+		if !data.Items[i].GracefulConvergence.IsNull() {
+			data.Items[i].GracefulConvergence = types.StringValue(matchedValue.Get("attributes.gracefulConv").String())
+		} else {
+			data.Items[i].GracefulConvergence = types.StringNull()
+		}
+		if !data.Items[i].HashDistribution.IsNull() {
+			data.Items[i].HashDistribution = types.StringValue(matchedValue.Get("attributes.hashDist").String())
+		} else {
+			data.Items[i].HashDistribution = types.StringNull()
+		}
+		if !data.Items[i].InheritBandwidth.IsNull() {
+			data.Items[i].InheritBandwidth = types.Int64Value(matchedValue.Get("attributes.inhBw").Int())
+		} else {
+			data.Items[i].InheritBandwidth = types.Int64Null()
+		}
+		if !data.Items[i].ItuChannel.IsNull() {
+			data.Items[i].ItuChannel = types.Int64Value(matchedValue.Get("attributes.ituChannel").Int())
+		} else {
+			data.Items[i].ItuChannel = types.Int64Null()
+		}
+		if !data.Items[i].LacpDelayMode.IsNull() {
+			data.Items[i].LacpDelayMode = types.StringValue(matchedValue.Get("attributes.lacpDelayMode").String())
+		} else {
+			data.Items[i].LacpDelayMode = types.StringNull()
+		}
+		if !data.Items[i].LacpVpcConvergence.IsNull() {
+			data.Items[i].LacpVpcConvergence = types.StringValue(matchedValue.Get("attributes.lacpVpcConvergence").String())
+		} else {
+			data.Items[i].LacpVpcConvergence = types.StringNull()
+		}
+		if !data.Items[i].LinkDebounceDown.IsNull() {
+			data.Items[i].LinkDebounceDown = types.Int64Value(matchedValue.Get("attributes.linkDebounce").Int())
+		} else {
+			data.Items[i].LinkDebounceDown = types.Int64Null()
+		}
+		if !data.Items[i].LoadDefer.IsNull() {
+			data.Items[i].LoadDefer = types.StringValue(matchedValue.Get("attributes.loadDefer").String())
+		} else {
+			data.Items[i].LoadDefer = types.StringNull()
+		}
+		if !data.Items[i].Mdix.IsNull() {
+			data.Items[i].Mdix = types.StringValue(matchedValue.Get("attributes.mdix").String())
+		} else {
+			data.Items[i].Mdix = types.StringNull()
+		}
+		if !data.Items[i].OpticsLoopback.IsNull() {
+			data.Items[i].OpticsLoopback = types.StringValue(matchedValue.Get("attributes.opticsLoopback").String())
+		} else {
+			data.Items[i].OpticsLoopback = types.StringNull()
+		}
+		if !data.Items[i].PortType.IsNull() {
+			data.Items[i].PortType = types.StringValue(matchedValue.Get("attributes.portT").String())
+		} else {
+			data.Items[i].PortType = types.StringNull()
+		}
+		if !data.Items[i].PxeTransitionTimeout.IsNull() {
+			data.Items[i].PxeTransitionTimeout = types.Int64Value(matchedValue.Get("attributes.pxeTransTime").Int())
+		} else {
+			data.Items[i].PxeTransitionTimeout = types.Int64Null()
+		}
+		if !data.Items[i].RouterMac.IsNull() {
+			data.Items[i].RouterMac = types.StringValue(matchedValue.Get("attributes.routerMac").String())
+		} else {
+			data.Items[i].RouterMac = types.StringNull()
+		}
+		if !data.Items[i].SnmpTrapState.IsNull() {
+			data.Items[i].SnmpTrapState = types.StringValue(matchedValue.Get("attributes.snmpTrapSt").String())
+		} else {
+			data.Items[i].SnmpTrapState = types.StringNull()
+		}
+		if !data.Items[i].SpanMode.IsNull() {
+			data.Items[i].SpanMode = types.StringValue(matchedValue.Get("attributes.spanMode").String())
+		} else {
+			data.Items[i].SpanMode = types.StringNull()
+		}
+		if !data.Items[i].Squelch.IsNull() {
+			data.Items[i].Squelch = types.StringValue(matchedValue.Get("attributes.squelch").String())
+		} else {
+			data.Items[i].Squelch = types.StringNull()
+		}
+		if !data.Items[i].TransmissionMode.IsNull() {
+			data.Items[i].TransmissionMode = types.StringValue(matchedValue.Get("attributes.transMode").String())
+		} else {
+			data.Items[i].TransmissionMode = types.StringNull()
+		}
+		if !data.Items[i].TrunkLogging.IsNull() {
+			data.Items[i].TrunkLogging = types.StringValue(matchedValue.Get("attributes.trunkLog").String())
+		} else {
+			data.Items[i].TrunkLogging = types.StringNull()
+		}
+		if !data.Items[i].Usage.IsNull() {
+			data.Items[i].Usage = types.StringValue(matchedValue.Get("attributes.usage").String())
+		} else {
+			data.Items[i].Usage = types.StringNull()
+		}
+		if !data.Items[i].UserConfiguredFlags.IsNull() {
+			data.Items[i].UserConfiguredFlags = types.StringValue(matchedValue.Get("attributes.userCfgdFlags").String())
+		} else {
+			data.Items[i].UserConfiguredFlags = types.StringNull()
+		}
+		{
+			var rnwRtVrfMbr gjson.Result
+			matchedValue.Get("children").ForEach(
+				func(_, nestedV gjson.Result) bool {
+					key := nestedV.Get("nwRtVrfMbr.attributes.rn").String()
+					if key == "rtvrfMbr" {
+						rnwRtVrfMbr = nestedV
+						return false
+					}
+					return true
+				},
+			)
+			if !data.Items[i].VrfDn.IsNull() {
+				data.Items[i].VrfDn = types.StringValue(rnwRtVrfMbr.Get("nwRtVrfMbr.attributes.tDn").String())
+			} else {
+				data.Items[i].VrfDn = types.StringNull()
+			}
+		}
+		for c := len(data.Items[i].Members) - 1; c >= 0; c-- {
+			var rpcRsMbrIfs gjson.Result
+			matchedValue.Get("children").ForEach(
+				func(_, nestedV gjson.Result) bool {
+					key := nestedV.Get("pcRsMbrIfs.attributes.rn").String()
+					if key == fmt.Sprintf("rsmbrIfs-[%s]", data.Items[i].Members[c].InterfaceDn.ValueString()) {
+						rpcRsMbrIfs = nestedV
+						return false
+					}
+					return true
+				},
+			)
+			if !rpcRsMbrIfs.Exists() {
+				data.Items[i].Members = slices.Delete(data.Items[i].Members, c, c+1)
+				continue
+			}
+			if !data.Items[i].Members[c].InterfaceDn.IsNull() {
+				data.Items[i].Members[c].InterfaceDn = types.StringValue(rpcRsMbrIfs.Get("pcRsMbrIfs.attributes.tDn").String())
+			} else {
+				data.Items[i].Members[c].InterfaceDn = types.StringNull()
+			}
+			if !data.Items[i].Members[c].Force.IsNull() {
+				data.Items[i].Members[c].Force = types.BoolValue(helpers.ParseNxosBoolean(rpcRsMbrIfs.Get("pcRsMbrIfs.attributes.isMbrForce").String()))
+			} else {
+				data.Items[i].Members[c].Force = types.BoolNull()
+			}
+		}
 	}
 }
 

@@ -85,9 +85,6 @@ func (r *PortChannelInterfacesResource) Schema(ctx context.Context, req resource
 						"interface_id": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `po1`.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"port_channel_mode": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The aggregated interface protocol channel mode.").AddStringEnumDescription("on", "static", "active", "passive", "mac-pin").String,
@@ -484,6 +481,11 @@ func (r *PortChannelInterfacesResource) Read(ctx context.Context, req resource.R
 		res, err := device.Client.GetDn(state.getDn(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
+			return
+		}
+
+		if !res.Exists() {
+			resp.State.RemoveResource(ctx)
 			return
 		}
 

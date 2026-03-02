@@ -273,6 +273,11 @@ func (r *SubinterfaceResource) Read(ctx context.Context, req resource.ReadReques
 			return
 		}
 
+		if !res.Exists() {
+			resp.State.RemoveResource(ctx)
+			return
+		}
+
 		imp, diags := helpers.IsFlagImporting(ctx, req)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return

@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -361,155 +362,181 @@ func (data *VRFs) fromBody(res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *VRFs) updateFromBody(res gjson.Result) {
-	for i := range data.Items {
+	for i := len(data.Items) - 1; i >= 0; i-- {
 		// Find the matching item in the response by id attributes
+		var matchedValue gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(func(_, v gjson.Result) bool {
 			v.ForEach(func(classname, value gjson.Result) bool {
 				if classname.String() == data.getItemClassName() {
 					if value.Get("attributes.name").String() != data.Items[i].Name.ValueString() {
 						return true
 					}
-					// Found matching item, update attributes
-					if !data.Items[i].Name.IsNull() {
-						data.Items[i].Name = types.StringValue(value.Get("attributes.name").String())
-					} else {
-						data.Items[i].Name = types.StringNull()
+					matchedValue = value
+					return false
+				}
+				return true
+			})
+			if matchedValue.Exists() {
+				return false
+			}
+			return true
+		})
+		if !matchedValue.Exists() {
+			data.Items = slices.Delete(data.Items, i, i+1)
+			continue
+		}
+		// Found matching item, update attributes
+		if !data.Items[i].Name.IsNull() {
+			data.Items[i].Name = types.StringValue(matchedValue.Get("attributes.name").String())
+		} else {
+			data.Items[i].Name = types.StringNull()
+		}
+		if !data.Items[i].Description.IsNull() {
+			data.Items[i].Description = types.StringValue(matchedValue.Get("attributes.descr").String())
+		} else {
+			data.Items[i].Description = types.StringNull()
+		}
+		if !data.Items[i].AdminState.IsNull() {
+			data.Items[i].AdminState = types.StringValue(matchedValue.Get("attributes.adminState").String())
+		} else {
+			data.Items[i].AdminState = types.StringNull()
+		}
+		if !data.Items[i].ControllerId.IsNull() {
+			data.Items[i].ControllerId = types.Int64Value(matchedValue.Get("attributes.ctrlrId").Int())
+		} else {
+			data.Items[i].ControllerId = types.Int64Null()
+		}
+		if !data.Items[i].Encap.IsNull() {
+			data.Items[i].Encap = types.StringValue(matchedValue.Get("attributes.encap").String())
+		} else {
+			data.Items[i].Encap = types.StringNull()
+		}
+		if !data.Items[i].L3vni.IsNull() {
+			data.Items[i].L3vni = types.BoolValue(helpers.ParseNxosBoolean(matchedValue.Get("attributes.l3vni").String()))
+		} else {
+			data.Items[i].L3vni = types.BoolNull()
+		}
+		if !data.Items[i].Oui.IsNull() {
+			data.Items[i].Oui = types.StringValue(matchedValue.Get("attributes.oui").String())
+		} else {
+			data.Items[i].Oui = types.StringNull()
+		}
+		if !data.Items[i].VpnId.IsNull() {
+			data.Items[i].VpnId = types.StringValue(matchedValue.Get("attributes.vpnId").String())
+		} else {
+			data.Items[i].VpnId = types.StringNull()
+		}
+		{
+			var rrtctrlDom gjson.Result
+			matchedValue.Get("children").ForEach(
+				func(_, nestedV gjson.Result) bool {
+					key := nestedV.Get("rtctrlDom.attributes.rn").String()
+					if key == fmt.Sprintf("dom-%[1]s", data.Items[i].Name.ValueString()) {
+						rrtctrlDom = nestedV
+						return false
 					}
-					if !data.Items[i].Description.IsNull() {
-						data.Items[i].Description = types.StringValue(value.Get("attributes.descr").String())
-					} else {
-						data.Items[i].Description = types.StringNull()
+					return true
+				},
+			)
+			if !data.Items[i].RoutingEncap.IsNull() {
+				data.Items[i].RoutingEncap = types.StringValue(rrtctrlDom.Get("rtctrlDom.attributes.encap").String())
+			} else {
+				data.Items[i].RoutingEncap = types.StringNull()
+			}
+			if !data.Items[i].RouteDistinguisher.IsNull() {
+				data.Items[i].RouteDistinguisher = types.StringValue(rrtctrlDom.Get("rtctrlDom.attributes.rd").String())
+			} else {
+				data.Items[i].RouteDistinguisher = types.StringNull()
+			}
+			for c := len(data.Items[i].AddressFamilies) - 1; c >= 0; c-- {
+				var rrtctrlDomAf gjson.Result
+				rrtctrlDom.Get("rtctrlDom").Get("children").ForEach(
+					func(_, nestedV gjson.Result) bool {
+						key := nestedV.Get("rtctrlDomAf.attributes.rn").String()
+						if key == fmt.Sprintf("af-[%s]", data.Items[i].AddressFamilies[c].AddressFamily.ValueString()) {
+							rrtctrlDomAf = nestedV
+							return false
+						}
+						return true
+					},
+				)
+				if !rrtctrlDomAf.Exists() {
+					data.Items[i].AddressFamilies = slices.Delete(data.Items[i].AddressFamilies, c, c+1)
+					continue
+				}
+				if !data.Items[i].AddressFamilies[c].AddressFamily.IsNull() {
+					data.Items[i].AddressFamilies[c].AddressFamily = types.StringValue(rrtctrlDomAf.Get("rtctrlDomAf.attributes.type").String())
+				} else {
+					data.Items[i].AddressFamilies[c].AddressFamily = types.StringNull()
+				}
+				for cc := len(data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies) - 1; cc >= 0; cc-- {
+					var rrtctrlAfCtrl gjson.Result
+					rrtctrlDomAf.Get("rtctrlDomAf").Get("children").ForEach(
+						func(_, nestedV gjson.Result) bool {
+							key := nestedV.Get("rtctrlAfCtrl.attributes.rn").String()
+							if key == fmt.Sprintf("ctrl-[%s]", data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetAddressFamily.ValueString()) {
+								rrtctrlAfCtrl = nestedV
+								return false
+							}
+							return true
+						},
+					)
+					if !rrtctrlAfCtrl.Exists() {
+						data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies = slices.Delete(data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies, cc, cc+1)
+						continue
 					}
-					if !data.Items[i].AdminState.IsNull() {
-						data.Items[i].AdminState = types.StringValue(value.Get("attributes.adminState").String())
+					if !data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetAddressFamily.IsNull() {
+						data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetAddressFamily = types.StringValue(rrtctrlAfCtrl.Get("rtctrlAfCtrl.attributes.type").String())
 					} else {
-						data.Items[i].AdminState = types.StringNull()
+						data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetAddressFamily = types.StringNull()
 					}
-					if !data.Items[i].ControllerId.IsNull() {
-						data.Items[i].ControllerId = types.Int64Value(value.Get("attributes.ctrlrId").Int())
-					} else {
-						data.Items[i].ControllerId = types.Int64Null()
-					}
-					if !data.Items[i].Encap.IsNull() {
-						data.Items[i].Encap = types.StringValue(value.Get("attributes.encap").String())
-					} else {
-						data.Items[i].Encap = types.StringNull()
-					}
-					if !data.Items[i].L3vni.IsNull() {
-						data.Items[i].L3vni = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.l3vni").String()))
-					} else {
-						data.Items[i].L3vni = types.BoolNull()
-					}
-					if !data.Items[i].Oui.IsNull() {
-						data.Items[i].Oui = types.StringValue(value.Get("attributes.oui").String())
-					} else {
-						data.Items[i].Oui = types.StringNull()
-					}
-					if !data.Items[i].VpnId.IsNull() {
-						data.Items[i].VpnId = types.StringValue(value.Get("attributes.vpnId").String())
-					} else {
-						data.Items[i].VpnId = types.StringNull()
-					}
-					{
-						var rrtctrlDom gjson.Result
-						value.Get("children").ForEach(
+					for ccc := len(data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections) - 1; ccc >= 0; ccc-- {
+						var rrtctrlRttP gjson.Result
+						rrtctrlAfCtrl.Get("rtctrlAfCtrl").Get("children").ForEach(
 							func(_, nestedV gjson.Result) bool {
-								key := nestedV.Get("rtctrlDom.attributes.rn").String()
-								if key == fmt.Sprintf("dom-%[1]s", data.Items[i].Name.ValueString()) {
-									rrtctrlDom = nestedV
+								key := nestedV.Get("rtctrlRttP.attributes.rn").String()
+								if key == fmt.Sprintf("rttp-%s", data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections[ccc].Direction.ValueString()) {
+									rrtctrlRttP = nestedV
 									return false
 								}
 								return true
 							},
 						)
-						if !data.Items[i].RoutingEncap.IsNull() {
-							data.Items[i].RoutingEncap = types.StringValue(rrtctrlDom.Get("rtctrlDom.attributes.encap").String())
-						} else {
-							data.Items[i].RoutingEncap = types.StringNull()
+						if !rrtctrlRttP.Exists() {
+							data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections = slices.Delete(data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections, ccc, ccc+1)
+							continue
 						}
-						if !data.Items[i].RouteDistinguisher.IsNull() {
-							data.Items[i].RouteDistinguisher = types.StringValue(rrtctrlDom.Get("rtctrlDom.attributes.rd").String())
+						if !data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections[ccc].Direction.IsNull() {
+							data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections[ccc].Direction = types.StringValue(rrtctrlRttP.Get("rtctrlRttP.attributes.type").String())
 						} else {
-							data.Items[i].RouteDistinguisher = types.StringNull()
+							data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections[ccc].Direction = types.StringNull()
 						}
-						for c := range data.Items[i].AddressFamilies {
-							var rrtctrlDomAf gjson.Result
-							rrtctrlDom.Get("rtctrlDom").Get("children").ForEach(
+						for cccc := len(data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections[ccc].RouteTargets) - 1; cccc >= 0; cccc-- {
+							var rrtctrlRttEntry gjson.Result
+							rrtctrlRttP.Get("rtctrlRttP").Get("children").ForEach(
 								func(_, nestedV gjson.Result) bool {
-									key := nestedV.Get("rtctrlDomAf.attributes.rn").String()
-									if key == fmt.Sprintf("af-[%s]", data.Items[i].AddressFamilies[c].AddressFamily.ValueString()) {
-										rrtctrlDomAf = nestedV
+									key := nestedV.Get("rtctrlRttEntry.attributes.rn").String()
+									if key == fmt.Sprintf("ent-[%s]", data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections[ccc].RouteTargets[cccc].RouteTarget.ValueString()) {
+										rrtctrlRttEntry = nestedV
 										return false
 									}
 									return true
 								},
 							)
-							if !data.Items[i].AddressFamilies[c].AddressFamily.IsNull() {
-								data.Items[i].AddressFamilies[c].AddressFamily = types.StringValue(rrtctrlDomAf.Get("rtctrlDomAf.attributes.type").String())
-							} else {
-								data.Items[i].AddressFamilies[c].AddressFamily = types.StringNull()
+							if !rrtctrlRttEntry.Exists() {
+								data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections[ccc].RouteTargets = slices.Delete(data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections[ccc].RouteTargets, cccc, cccc+1)
+								continue
 							}
-							for cc := range data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies {
-								var rrtctrlAfCtrl gjson.Result
-								rrtctrlDomAf.Get("rtctrlDomAf").Get("children").ForEach(
-									func(_, nestedV gjson.Result) bool {
-										key := nestedV.Get("rtctrlAfCtrl.attributes.rn").String()
-										if key == fmt.Sprintf("ctrl-[%s]", data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetAddressFamily.ValueString()) {
-											rrtctrlAfCtrl = nestedV
-											return false
-										}
-										return true
-									},
-								)
-								if !data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetAddressFamily.IsNull() {
-									data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetAddressFamily = types.StringValue(rrtctrlAfCtrl.Get("rtctrlAfCtrl.attributes.type").String())
-								} else {
-									data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetAddressFamily = types.StringNull()
-								}
-								for ccc := range data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections {
-									var rrtctrlRttP gjson.Result
-									rrtctrlAfCtrl.Get("rtctrlAfCtrl").Get("children").ForEach(
-										func(_, nestedV gjson.Result) bool {
-											key := nestedV.Get("rtctrlRttP.attributes.rn").String()
-											if key == fmt.Sprintf("rttp-%s", data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections[ccc].Direction.ValueString()) {
-												rrtctrlRttP = nestedV
-												return false
-											}
-											return true
-										},
-									)
-									if !data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections[ccc].Direction.IsNull() {
-										data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections[ccc].Direction = types.StringValue(rrtctrlRttP.Get("rtctrlRttP.attributes.type").String())
-									} else {
-										data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections[ccc].Direction = types.StringNull()
-									}
-									for cccc := range data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections[ccc].RouteTargets {
-										var rrtctrlRttEntry gjson.Result
-										rrtctrlRttP.Get("rtctrlRttP").Get("children").ForEach(
-											func(_, nestedV gjson.Result) bool {
-												key := nestedV.Get("rtctrlRttEntry.attributes.rn").String()
-												if key == fmt.Sprintf("ent-[%s]", data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections[ccc].RouteTargets[cccc].RouteTarget.ValueString()) {
-													rrtctrlRttEntry = nestedV
-													return false
-												}
-												return true
-											},
-										)
-										if !data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections[ccc].RouteTargets[cccc].RouteTarget.IsNull() {
-											data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections[ccc].RouteTargets[cccc].RouteTarget = types.StringValue(rrtctrlRttEntry.Get("rtctrlRttEntry.attributes.rtt").String())
-										} else {
-											data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections[ccc].RouteTargets[cccc].RouteTarget = types.StringNull()
-										}
-									}
-								}
+							if !data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections[ccc].RouteTargets[cccc].RouteTarget.IsNull() {
+								data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections[ccc].RouteTargets[cccc].RouteTarget = types.StringValue(rrtctrlRttEntry.Get("rtctrlRttEntry.attributes.rtt").String())
+							} else {
+								data.Items[i].AddressFamilies[c].RouteTargetAddressFamilies[cc].RouteTargetDirections[ccc].RouteTargets[cccc].RouteTarget = types.StringNull()
 							}
 						}
 					}
 				}
-				return true
-			})
-			return true
-		})
+			}
+		}
 	}
 }
 

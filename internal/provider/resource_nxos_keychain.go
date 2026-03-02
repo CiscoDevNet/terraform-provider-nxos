@@ -238,6 +238,11 @@ func (r *KeychainResource) Read(ctx context.Context, req resource.ReadRequest, r
 			return
 		}
 
+		if !res.Exists() {
+			resp.State.RemoveResource(ctx)
+			return
+		}
+
 		imp, diags := helpers.IsFlagImporting(ctx, req)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return

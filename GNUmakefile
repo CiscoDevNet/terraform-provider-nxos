@@ -15,7 +15,8 @@ verify:
 	go run gen/scripts/verify_delete_values.go
 
 # Run acceptance tests
-# Usage: make test [NAME=TestName] [DEBUG=1]
+# Usage: make test [NAME=<definition name or test regex>] [DEBUG=1]
+# NAME can be a definition name (e.g., "BGP", "Loopback Interface") or a test regex (e.g., TestAccNxosBGP)
 .PHONY: test
 test:
 	@echo "========================================="
@@ -25,11 +26,22 @@ test:
 		echo "SKIPPED: NXOS_URL is not configured"; \
 		echo "To enable tests, configure NXOS_URL, NXOS_USERNAME, and NXOS_PASSWORD in your .env file"; \
 	else \
+		TEST_NAME=""; \
+		if [ -n "$(NAME)" ]; then \
+			MATCH=$$(grep -rl '^name: $(NAME)$$' gen/definitions/*.yaml | head -1); \
+			if [ -n "$${MATCH}" ]; then \
+				CAMEL=$$(echo "$(NAME)" | tr -d ' '); \
+				TEST_NAME="TestAcc.*Nxos$${CAMEL}"; \
+				echo "Resolved definition '$(NAME)' to test pattern: $${TEST_NAME}"; \
+			else \
+				TEST_NAME="$(NAME)"; \
+			fi; \
+		fi; \
 		$(if $(DEBUG),echo "Debug mode enabled - logs will be written to test-output.log";) \
-		$(if $(NAME),echo "Running tests matching: $(NAME)";) \
+		if [ -n "$${TEST_NAME}" ]; then echo "Running tests matching: $${TEST_NAME}"; fi; \
 		TF_ACC=1 \
 		$(if $(DEBUG),TF_LOG=Trace) \
-		go test -v $(if $(NAME),-run $(NAME)) $(TESTARGS) -count 1 -timeout 120m ./internal/provider $(if $(DEBUG),2>&1 | tee test-output.log); \
+		go test -v $${TEST_NAME:+-run "$${TEST_NAME}"} $(TESTARGS) -count 1 -timeout 120m ./internal/provider $(if $(DEBUG),2>&1 | tee test-output.log); \
 	fi
 
 # Update all files from a single definition

@@ -42,7 +42,7 @@ type YamlConfig struct {
 var docPaths = []string{"./docs/data-sources/", "./docs/resources/", "./docs/actions/"}
 
 var extraDocs = map[string]string{
-	"rest":        "General",
+	"dme":         "General",
 	"save_config": "General",
 	"cli":         "General",
 }

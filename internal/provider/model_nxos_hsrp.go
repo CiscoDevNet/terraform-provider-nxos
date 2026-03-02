@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -419,7 +420,7 @@ func (data *HSRP) updateFromBody(res gjson.Result) {
 	} else {
 		data.ExtendedHoldIntervalConfiguration = types.StringNull()
 	}
-	for c := range data.Interfaces {
+	for c := len(data.Interfaces) - 1; c >= 0; c-- {
 		var rhsrpIf gjson.Result
 		rhsrpInst.Get("hsrpInst.children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -431,6 +432,10 @@ func (data *HSRP) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !rhsrpIf.Exists() {
+			data.Interfaces = slices.Delete(data.Interfaces, c, c+1)
+			continue
+		}
 		if !data.Interfaces[c].InterfaceId.IsNull() {
 			data.Interfaces[c].InterfaceId = types.StringValue(rhsrpIf.Get("hsrpIf.attributes.id").String())
 		} else {
@@ -491,7 +496,7 @@ func (data *HSRP) updateFromBody(res gjson.Result) {
 		} else {
 			data.Interfaces[c].Version = types.StringNull()
 		}
-		for nc := range data.Interfaces[c].Groups {
+		for nc := len(data.Interfaces[c].Groups) - 1; nc >= 0; nc-- {
 			var rhsrpGroup gjson.Result
 			rhsrpIf.Get("hsrpIf.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -503,6 +508,10 @@ func (data *HSRP) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !rhsrpGroup.Exists() {
+				data.Interfaces[c].Groups = slices.Delete(data.Interfaces[c].Groups, nc, nc+1)
+				continue
+			}
 			if !data.Interfaces[c].Groups[nc].GroupId.IsNull() {
 				data.Interfaces[c].Groups[nc].GroupId = types.Int64Value(rhsrpGroup.Get("hsrpGroup.attributes.id").Int())
 			} else {

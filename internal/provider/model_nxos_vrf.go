@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -370,7 +371,7 @@ func (data *VRF) updateFromBody(res gjson.Result) {
 	} else {
 		data.RouteDistinguisher = types.StringNull()
 	}
-	for c := range data.AddressFamilies {
+	for c := len(data.AddressFamilies) - 1; c >= 0; c-- {
 		var rrtctrlDomAf gjson.Result
 		rrtctrlDom.Get("rtctrlDom.children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -382,12 +383,16 @@ func (data *VRF) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !rrtctrlDomAf.Exists() {
+			data.AddressFamilies = slices.Delete(data.AddressFamilies, c, c+1)
+			continue
+		}
 		if !data.AddressFamilies[c].AddressFamily.IsNull() {
 			data.AddressFamilies[c].AddressFamily = types.StringValue(rrtctrlDomAf.Get("rtctrlDomAf.attributes.type").String())
 		} else {
 			data.AddressFamilies[c].AddressFamily = types.StringNull()
 		}
-		for nc := range data.AddressFamilies[c].RouteTargetAddressFamilies {
+		for nc := len(data.AddressFamilies[c].RouteTargetAddressFamilies) - 1; nc >= 0; nc-- {
 			var rrtctrlAfCtrl gjson.Result
 			rrtctrlDomAf.Get("rtctrlDomAf.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -399,12 +404,16 @@ func (data *VRF) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !rrtctrlAfCtrl.Exists() {
+				data.AddressFamilies[c].RouteTargetAddressFamilies = slices.Delete(data.AddressFamilies[c].RouteTargetAddressFamilies, nc, nc+1)
+				continue
+			}
 			if !data.AddressFamilies[c].RouteTargetAddressFamilies[nc].RouteTargetAddressFamily.IsNull() {
 				data.AddressFamilies[c].RouteTargetAddressFamilies[nc].RouteTargetAddressFamily = types.StringValue(rrtctrlAfCtrl.Get("rtctrlAfCtrl.attributes.type").String())
 			} else {
 				data.AddressFamilies[c].RouteTargetAddressFamilies[nc].RouteTargetAddressFamily = types.StringNull()
 			}
-			for nc_ := range data.AddressFamilies[c].RouteTargetAddressFamilies[nc].RouteTargetDirections {
+			for nc_ := len(data.AddressFamilies[c].RouteTargetAddressFamilies[nc].RouteTargetDirections) - 1; nc_ >= 0; nc_-- {
 				var rrtctrlRttP gjson.Result
 				rrtctrlAfCtrl.Get("rtctrlAfCtrl.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -416,12 +425,16 @@ func (data *VRF) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !rrtctrlRttP.Exists() {
+					data.AddressFamilies[c].RouteTargetAddressFamilies[nc].RouteTargetDirections = slices.Delete(data.AddressFamilies[c].RouteTargetAddressFamilies[nc].RouteTargetDirections, nc_, nc_+1)
+					continue
+				}
 				if !data.AddressFamilies[c].RouteTargetAddressFamilies[nc].RouteTargetDirections[nc_].Direction.IsNull() {
 					data.AddressFamilies[c].RouteTargetAddressFamilies[nc].RouteTargetDirections[nc_].Direction = types.StringValue(rrtctrlRttP.Get("rtctrlRttP.attributes.type").String())
 				} else {
 					data.AddressFamilies[c].RouteTargetAddressFamilies[nc].RouteTargetDirections[nc_].Direction = types.StringNull()
 				}
-				for nc__ := range data.AddressFamilies[c].RouteTargetAddressFamilies[nc].RouteTargetDirections[nc_].RouteTargets {
+				for nc__ := len(data.AddressFamilies[c].RouteTargetAddressFamilies[nc].RouteTargetDirections[nc_].RouteTargets) - 1; nc__ >= 0; nc__-- {
 					var rrtctrlRttEntry gjson.Result
 					rrtctrlRttP.Get("rtctrlRttP.children").ForEach(
 						func(_, v gjson.Result) bool {
@@ -433,6 +446,10 @@ func (data *VRF) updateFromBody(res gjson.Result) {
 							return true
 						},
 					)
+					if !rrtctrlRttEntry.Exists() {
+						data.AddressFamilies[c].RouteTargetAddressFamilies[nc].RouteTargetDirections[nc_].RouteTargets = slices.Delete(data.AddressFamilies[c].RouteTargetAddressFamilies[nc].RouteTargetDirections[nc_].RouteTargets, nc__, nc__+1)
+						continue
+					}
 					if !data.AddressFamilies[c].RouteTargetAddressFamilies[nc].RouteTargetDirections[nc_].RouteTargets[nc__].RouteTarget.IsNull() {
 						data.AddressFamilies[c].RouteTargetAddressFamilies[nc].RouteTargetDirections[nc_].RouteTargets[nc__].RouteTarget = types.StringValue(rrtctrlRttEntry.Get("rtctrlRttEntry.attributes.rtt").String())
 					} else {

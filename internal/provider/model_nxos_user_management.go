@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -793,7 +794,7 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 	} else {
 		data.PostLoginBannerOwnerTag = types.StringNull()
 	}
-	for c := range data.Users {
+	for c := len(data.Users) - 1; c >= 0; c-- {
 		var raaaUser gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -805,6 +806,10 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !raaaUser.Exists() {
+			data.Users = slices.Delete(data.Users, c, c+1)
+			continue
+		}
 		if !data.Users[c].Name.IsNull() {
 			data.Users[c].Name = types.StringValue(raaaUser.Get("aaaUser.attributes.name").String())
 		} else {
@@ -892,7 +897,7 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
-			for nc := range data.Users[c].Roles {
+			for nc := len(data.Users[c].Roles) - 1; nc >= 0; nc-- {
 				var raaaUserRole gjson.Result
 				raaaUserDomain.Get("aaaUserDomain.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -904,6 +909,10 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !raaaUserRole.Exists() {
+					data.Users[c].Roles = slices.Delete(data.Users[c].Roles, nc, nc+1)
+					continue
+				}
 				if !data.Users[c].Roles[nc].Name.IsNull() {
 					data.Users[c].Roles[nc].Name = types.StringValue(raaaUserRole.Get("aaaUserRole.attributes.name").String())
 				} else {
@@ -983,7 +992,7 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 	} else {
 		data.TacacsTimeout = types.Int64Null()
 	}
-	for c := range data.TacacsProviders {
+	for c := len(data.TacacsProviders) - 1; c >= 0; c-- {
 		var raaaTacacsPlusProvider gjson.Result
 		raaaTacacsPlusEp.Get("aaaTacacsPlusEp.children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -995,6 +1004,10 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !raaaTacacsPlusProvider.Exists() {
+			data.TacacsProviders = slices.Delete(data.TacacsProviders, c, c+1)
+			continue
+		}
 		if !data.TacacsProviders[c].Name.IsNull() {
 			data.TacacsProviders[c].Name = types.StringValue(raaaTacacsPlusProvider.Get("aaaTacacsPlusProvider.attributes.name").String())
 		} else {
@@ -1061,7 +1074,7 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 			data.TacacsProviders[c].Timeout = types.Int64Null()
 		}
 	}
-	for c := range data.TacacsProviderGroups {
+	for c := len(data.TacacsProviderGroups) - 1; c >= 0; c-- {
 		var raaaTacacsPlusProviderGroup gjson.Result
 		raaaTacacsPlusEp.Get("aaaTacacsPlusEp.children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -1073,6 +1086,10 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !raaaTacacsPlusProviderGroup.Exists() {
+			data.TacacsProviderGroups = slices.Delete(data.TacacsProviderGroups, c, c+1)
+			continue
+		}
 		if !data.TacacsProviderGroups[c].Name.IsNull() {
 			data.TacacsProviderGroups[c].Name = types.StringValue(raaaTacacsPlusProviderGroup.Get("aaaTacacsPlusProviderGroup.attributes.name").String())
 		} else {

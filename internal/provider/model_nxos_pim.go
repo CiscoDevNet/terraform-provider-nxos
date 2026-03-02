@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -685,7 +686,7 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 	} else {
 		data.RegisterStop = types.BoolNull()
 	}
-	for c := range data.Vrfs {
+	for c := len(data.Vrfs) - 1; c >= 0; c-- {
 		var rpimDom gjson.Result
 		rpimInst.Get("pimInst.children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -697,6 +698,10 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !rpimDom.Exists() {
+			data.Vrfs = slices.Delete(data.Vrfs, c, c+1)
+			continue
+		}
 		if !data.Vrfs[c].Name.IsNull() {
 			data.Vrfs[c].Name = types.StringValue(rpimDom.Get("pimDom.attributes.name").String())
 		} else {
@@ -757,7 +762,7 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 		} else {
 			data.Vrfs[c].SptSwitchGraceful = types.BoolNull()
 		}
-		for nc := range data.Vrfs[c].Interfaces {
+		for nc := len(data.Vrfs[c].Interfaces) - 1; nc >= 0; nc-- {
 			var rpimIf gjson.Result
 			rpimDom.Get("pimDom.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -769,6 +774,10 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !rpimIf.Exists() {
+				data.Vrfs[c].Interfaces = slices.Delete(data.Vrfs[c].Interfaces, nc, nc+1)
+				continue
+			}
 			if !data.Vrfs[c].Interfaces[nc].InterfaceId.IsNull() {
 				data.Vrfs[c].Interfaces[nc].InterfaceId = types.StringValue(rpimIf.Get("pimIf.attributes.id").String())
 			} else {
@@ -948,7 +957,7 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 			} else {
 				data.Vrfs[c].StaticRpPolicyDescription = types.StringNull()
 			}
-			for nc := range data.Vrfs[c].StaticRps {
+			for nc := len(data.Vrfs[c].StaticRps) - 1; nc >= 0; nc-- {
 				var rpimStaticRP gjson.Result
 				rpimStaticRPP.Get("pimStaticRPP.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -960,12 +969,16 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !rpimStaticRP.Exists() {
+					data.Vrfs[c].StaticRps = slices.Delete(data.Vrfs[c].StaticRps, nc, nc+1)
+					continue
+				}
 				if !data.Vrfs[c].StaticRps[nc].Address.IsNull() {
 					data.Vrfs[c].StaticRps[nc].Address = types.StringValue(rpimStaticRP.Get("pimStaticRP.attributes.addr").String())
 				} else {
 					data.Vrfs[c].StaticRps[nc].Address = types.StringNull()
 				}
-				for nc_ := range data.Vrfs[c].StaticRps[nc].GroupLists {
+				for nc_ := len(data.Vrfs[c].StaticRps[nc].GroupLists) - 1; nc_ >= 0; nc_-- {
 					var rpimRPGrpList gjson.Result
 					rpimStaticRP.Get("pimStaticRP.children").ForEach(
 						func(_, v gjson.Result) bool {
@@ -977,6 +990,10 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 							return true
 						},
 					)
+					if !rpimRPGrpList.Exists() {
+						data.Vrfs[c].StaticRps[nc].GroupLists = slices.Delete(data.Vrfs[c].StaticRps[nc].GroupLists, nc_, nc_+1)
+						continue
+					}
 					if !data.Vrfs[c].StaticRps[nc].GroupLists[nc_].Address.IsNull() {
 						data.Vrfs[c].StaticRps[nc].GroupLists[nc_].Address = types.StringValue(rpimRPGrpList.Get("pimRPGrpList.attributes.grpListName").String())
 					} else {
@@ -1027,7 +1044,7 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 			} else {
 				data.Vrfs[c].AnycastRpName = types.StringNull()
 			}
-			for nc := range data.Vrfs[c].AnycastRpPeers {
+			for nc := len(data.Vrfs[c].AnycastRpPeers) - 1; nc >= 0; nc-- {
 				var rpimAcastRPPeer gjson.Result
 				rpimAcastRPFuncP.Get("pimAcastRPFuncP.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -1039,6 +1056,10 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !rpimAcastRPPeer.Exists() {
+					data.Vrfs[c].AnycastRpPeers = slices.Delete(data.Vrfs[c].AnycastRpPeers, nc, nc+1)
+					continue
+				}
 				if !data.Vrfs[c].AnycastRpPeers[nc].Address.IsNull() {
 					data.Vrfs[c].AnycastRpPeers[nc].Address = types.StringValue(rpimAcastRPPeer.Get("pimAcastRPPeer.attributes.addr").String())
 				} else {

@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -205,7 +206,7 @@ func (data *BridgeDomains) updateFromBody(res gjson.Result) {
 	} else {
 		data.SviAutostate = types.StringNull()
 	}
-	for c := range data.BridgeDomains {
+	for c := len(data.BridgeDomains) - 1; c >= 0; c-- {
 		var rl2BD gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -217,6 +218,10 @@ func (data *BridgeDomains) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !rl2BD.Exists() {
+			data.BridgeDomains = slices.Delete(data.BridgeDomains, c, c+1)
+			continue
+		}
 		if !data.BridgeDomains[c].FabricEncap.IsNull() {
 			data.BridgeDomains[c].FabricEncap = types.StringValue(rl2BD.Get("l2BD.attributes.fabEncap").String())
 		} else {

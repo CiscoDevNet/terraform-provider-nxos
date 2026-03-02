@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -230,7 +231,7 @@ func (data *ICMPv4) updateFromBody(res gjson.Result) {
 	} else {
 		data.Control = types.StringNull()
 	}
-	for c := range data.Vrfs {
+	for c := len(data.Vrfs) - 1; c >= 0; c-- {
 		var ricmpv4Dom gjson.Result
 		ricmpv4Inst.Get("icmpv4Inst.children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -242,12 +243,16 @@ func (data *ICMPv4) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !ricmpv4Dom.Exists() {
+			data.Vrfs = slices.Delete(data.Vrfs, c, c+1)
+			continue
+		}
 		if !data.Vrfs[c].Name.IsNull() {
 			data.Vrfs[c].Name = types.StringValue(ricmpv4Dom.Get("icmpv4Dom.attributes.name").String())
 		} else {
 			data.Vrfs[c].Name = types.StringNull()
 		}
-		for nc := range data.Vrfs[c].Interfaces {
+		for nc := len(data.Vrfs[c].Interfaces) - 1; nc >= 0; nc-- {
 			var ricmpv4If gjson.Result
 			ricmpv4Dom.Get("icmpv4Dom.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -259,6 +264,10 @@ func (data *ICMPv4) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !ricmpv4If.Exists() {
+				data.Vrfs[c].Interfaces = slices.Delete(data.Vrfs[c].Interfaces, nc, nc+1)
+				continue
+			}
 			if !data.Vrfs[c].Interfaces[nc].Id.IsNull() {
 				data.Vrfs[c].Interfaces[nc].Id = types.StringValue(ricmpv4If.Get("icmpv4If.attributes.id").String())
 			} else {

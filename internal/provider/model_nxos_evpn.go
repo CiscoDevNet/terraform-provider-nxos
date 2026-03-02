@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -225,7 +226,7 @@ func (data *EVPN) updateFromBody(res gjson.Result) {
 	} else {
 		data.AdminState = types.StringNull()
 	}
-	for c := range data.Vnis {
+	for c := len(data.Vnis) - 1; c >= 0; c-- {
 		var rrtctrlBDEvi gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -237,6 +238,10 @@ func (data *EVPN) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !rrtctrlBDEvi.Exists() {
+			data.Vnis = slices.Delete(data.Vnis, c, c+1)
+			continue
+		}
 		if !data.Vnis[c].Encap.IsNull() {
 			data.Vnis[c].Encap = types.StringValue(rrtctrlBDEvi.Get("rtctrlBDEvi.attributes.encap").String())
 		} else {
@@ -257,7 +262,7 @@ func (data *EVPN) updateFromBody(res gjson.Result) {
 		} else {
 			data.Vnis[c].TableMapFilter = types.BoolNull()
 		}
-		for nc := range data.Vnis[c].RouteTargetDirections {
+		for nc := len(data.Vnis[c].RouteTargetDirections) - 1; nc >= 0; nc-- {
 			var rrtctrlRttP gjson.Result
 			rrtctrlBDEvi.Get("rtctrlBDEvi.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -269,12 +274,16 @@ func (data *EVPN) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !rrtctrlRttP.Exists() {
+				data.Vnis[c].RouteTargetDirections = slices.Delete(data.Vnis[c].RouteTargetDirections, nc, nc+1)
+				continue
+			}
 			if !data.Vnis[c].RouteTargetDirections[nc].Type.IsNull() {
 				data.Vnis[c].RouteTargetDirections[nc].Type = types.StringValue(rrtctrlRttP.Get("rtctrlRttP.attributes.type").String())
 			} else {
 				data.Vnis[c].RouteTargetDirections[nc].Type = types.StringNull()
 			}
-			for nc_ := range data.Vnis[c].RouteTargetDirections[nc].RouteTargets {
+			for nc_ := len(data.Vnis[c].RouteTargetDirections[nc].RouteTargets) - 1; nc_ >= 0; nc_-- {
 				var rrtctrlRttEntry gjson.Result
 				rrtctrlRttP.Get("rtctrlRttP.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -286,6 +295,10 @@ func (data *EVPN) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !rrtctrlRttEntry.Exists() {
+					data.Vnis[c].RouteTargetDirections[nc].RouteTargets = slices.Delete(data.Vnis[c].RouteTargetDirections[nc].RouteTargets, nc_, nc_+1)
+					continue
+				}
 				if !data.Vnis[c].RouteTargetDirections[nc].RouteTargets[nc_].RouteTarget.IsNull() {
 					data.Vnis[c].RouteTargetDirections[nc].RouteTargets[nc_].RouteTarget = types.StringValue(rrtctrlRttEntry.Get("rtctrlRttEntry.attributes.rtt").String())
 				} else {

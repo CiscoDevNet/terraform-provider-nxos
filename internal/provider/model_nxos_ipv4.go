@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -536,7 +537,7 @@ func (data *IPv4) updateFromBody(res gjson.Result) {
 	} else {
 		data.SourceRoute = types.StringNull()
 	}
-	for c := range data.Vrfs {
+	for c := len(data.Vrfs) - 1; c >= 0; c-- {
 		var ripv4Dom gjson.Result
 		ripv4Inst.Get("ipv4Inst.children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -548,6 +549,10 @@ func (data *IPv4) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !ripv4Dom.Exists() {
+			data.Vrfs = slices.Delete(data.Vrfs, c, c+1)
+			continue
+		}
 		if !data.Vrfs[c].Name.IsNull() {
 			data.Vrfs[c].Name = types.StringValue(ripv4Dom.Get("ipv4Dom.attributes.name").String())
 		} else {
@@ -563,7 +568,7 @@ func (data *IPv4) updateFromBody(res gjson.Result) {
 		} else {
 			data.Vrfs[c].IcmpErrorsSourceInterface = types.StringNull()
 		}
-		for nc := range data.Vrfs[c].StaticRoutes {
+		for nc := len(data.Vrfs[c].StaticRoutes) - 1; nc >= 0; nc-- {
 			var ripv4Route gjson.Result
 			ripv4Dom.Get("ipv4Dom.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -575,6 +580,10 @@ func (data *IPv4) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !ripv4Route.Exists() {
+				data.Vrfs[c].StaticRoutes = slices.Delete(data.Vrfs[c].StaticRoutes, nc, nc+1)
+				continue
+			}
 			if !data.Vrfs[c].StaticRoutes[nc].Prefix.IsNull() {
 				data.Vrfs[c].StaticRoutes[nc].Prefix = types.StringValue(ripv4Route.Get("ipv4Route.attributes.prefix").String())
 			} else {
@@ -600,7 +609,7 @@ func (data *IPv4) updateFromBody(res gjson.Result) {
 			} else {
 				data.Vrfs[c].StaticRoutes[nc].Tag = types.Int64Null()
 			}
-			for nc_ := range data.Vrfs[c].StaticRoutes[nc].NextHops {
+			for nc_ := len(data.Vrfs[c].StaticRoutes[nc].NextHops) - 1; nc_ >= 0; nc_-- {
 				var ripv4Nexthop gjson.Result
 				ripv4Route.Get("ipv4Route.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -612,6 +621,10 @@ func (data *IPv4) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !ripv4Nexthop.Exists() {
+					data.Vrfs[c].StaticRoutes[nc].NextHops = slices.Delete(data.Vrfs[c].StaticRoutes[nc].NextHops, nc_, nc_+1)
+					continue
+				}
 				if !data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].InterfaceId.IsNull() {
 					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].InterfaceId = types.StringValue(ripv4Nexthop.Get("ipv4Nexthop.attributes.nhIf").String())
 				} else {
@@ -659,7 +672,7 @@ func (data *IPv4) updateFromBody(res gjson.Result) {
 				}
 			}
 		}
-		for nc := range data.Vrfs[c].Interfaces {
+		for nc := len(data.Vrfs[c].Interfaces) - 1; nc >= 0; nc-- {
 			var ripv4If gjson.Result
 			ripv4Dom.Get("ipv4Dom.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -671,6 +684,10 @@ func (data *IPv4) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !ripv4If.Exists() {
+				data.Vrfs[c].Interfaces = slices.Delete(data.Vrfs[c].Interfaces, nc, nc+1)
+				continue
+			}
 			if !data.Vrfs[c].Interfaces[nc].InterfaceId.IsNull() {
 				data.Vrfs[c].Interfaces[nc].InterfaceId = types.StringValue(ripv4If.Get("ipv4If.attributes.id").String())
 			} else {
@@ -706,7 +723,7 @@ func (data *IPv4) updateFromBody(res gjson.Result) {
 			} else {
 				data.Vrfs[c].Interfaces[nc].DirectedBroadcast = types.StringNull()
 			}
-			for nc_ := range data.Vrfs[c].Interfaces[nc].Addresses {
+			for nc_ := len(data.Vrfs[c].Interfaces[nc].Addresses) - 1; nc_ >= 0; nc_-- {
 				var ripv4Addr gjson.Result
 				ripv4If.Get("ipv4If.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -718,6 +735,10 @@ func (data *IPv4) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !ripv4Addr.Exists() {
+					data.Vrfs[c].Interfaces[nc].Addresses = slices.Delete(data.Vrfs[c].Interfaces[nc].Addresses, nc_, nc_+1)
+					continue
+				}
 				if !data.Vrfs[c].Interfaces[nc].Addresses[nc_].Address.IsNull() {
 					data.Vrfs[c].Interfaces[nc].Addresses[nc_].Address = types.StringValue(ripv4Addr.Get("ipv4Addr.attributes.addr").String())
 				} else {

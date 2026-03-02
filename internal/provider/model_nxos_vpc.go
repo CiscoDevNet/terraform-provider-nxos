@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -722,7 +723,7 @@ func (data *VPC) updateFromBody(res gjson.Result) {
 				}
 			}
 		}
-		for c := range data.Interfaces {
+		for c := len(data.Interfaces) - 1; c >= 0; c-- {
 			var rvpcIf gjson.Result
 			rvpcDom.Get("vpcDom.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -734,6 +735,10 @@ func (data *VPC) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !rvpcIf.Exists() {
+				data.Interfaces = slices.Delete(data.Interfaces, c, c+1)
+				continue
+			}
 			if !data.Interfaces[c].VpcInterfaceId.IsNull() {
 				data.Interfaces[c].VpcInterfaceId = types.Int64Value(rvpcIf.Get("vpcIf.attributes.id").Int())
 			} else {

@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -371,7 +372,7 @@ func (data *NVO) updateFromBody(res gjson.Result) {
 	} else {
 		data.VxlanUdpSourcePortMode = types.StringNull()
 	}
-	for c := range data.NveInterfaces {
+	for c := len(data.NveInterfaces) - 1; c >= 0; c-- {
 		var rnvoEp gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -383,6 +384,10 @@ func (data *NVO) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !rnvoEp.Exists() {
+			data.NveInterfaces = slices.Delete(data.NveInterfaces, c, c+1)
+			continue
+		}
 		if !data.NveInterfaces[c].Id.IsNull() {
 			data.NveInterfaces[c].Id = types.Int64Value(rnvoEp.Get("nvoEp.attributes.epId").Int())
 		} else {
@@ -505,7 +510,7 @@ func (data *NVO) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
-			for nc := range data.NveInterfaces[c].Vnis {
+			for nc := len(data.NveInterfaces[c].Vnis) - 1; nc >= 0; nc-- {
 				var rnvoNw gjson.Result
 				rnvoNws.Get("nvoNws.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -517,6 +522,10 @@ func (data *NVO) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !rnvoNw.Exists() {
+					data.NveInterfaces[c].Vnis = slices.Delete(data.NveInterfaces[c].Vnis, nc, nc+1)
+					continue
+				}
 				if !data.NveInterfaces[c].Vnis[nc].Vni.IsNull() {
 					data.NveInterfaces[c].Vnis[nc].Vni = types.Int64Value(rnvoNw.Get("nvoNw.attributes.vni").Int())
 				} else {

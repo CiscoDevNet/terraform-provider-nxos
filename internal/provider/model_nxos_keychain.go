@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -219,7 +220,7 @@ func (data *Keychain) updateFromBody(res gjson.Result) {
 			return true
 		},
 	)
-	for c := range data.Keychains {
+	for c := len(data.Keychains) - 1; c >= 0; c-- {
 		var rkcmgrClassicKeychain gjson.Result
 		rkcmgrKeychains.Get("kcmgrKeychains.children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -231,12 +232,16 @@ func (data *Keychain) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !rkcmgrClassicKeychain.Exists() {
+			data.Keychains = slices.Delete(data.Keychains, c, c+1)
+			continue
+		}
 		if !data.Keychains[c].Name.IsNull() {
 			data.Keychains[c].Name = types.StringValue(rkcmgrClassicKeychain.Get("kcmgrClassicKeychain.attributes.keychainName").String())
 		} else {
 			data.Keychains[c].Name = types.StringNull()
 		}
-		for nc := range data.Keychains[c].Keys {
+		for nc := len(data.Keychains[c].Keys) - 1; nc >= 0; nc-- {
 			var rkcmgrKey gjson.Result
 			rkcmgrClassicKeychain.Get("kcmgrClassicKeychain.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -248,6 +253,10 @@ func (data *Keychain) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !rkcmgrKey.Exists() {
+				data.Keychains[c].Keys = slices.Delete(data.Keychains[c].Keys, nc, nc+1)
+				continue
+			}
 			if !data.Keychains[c].Keys[nc].KeyId.IsNull() {
 				data.Keychains[c].Keys[nc].KeyId = types.Int64Value(rkcmgrKey.Get("kcmgrKey.attributes.keyId").Int())
 			} else {

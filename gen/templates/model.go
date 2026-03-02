@@ -25,6 +25,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -561,7 +562,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 	}
 {{- end}}
 {{- else if eq .Type "list"}}
-	for c := range {{$dataAccessor}}.{{$list}} {
+	for c := len({{$dataAccessor}}.{{$list}}) - 1; c >= 0; c-- {
 		var r{{$childClassName}} gjson.Result
 		{{$resExpr}}.ForEach(
 			func(_, v gjson.Result) bool {
@@ -573,6 +574,10 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !r{{$childClassName}}.Exists() {
+			{{$dataAccessor}}.{{$list}} = slices.Delete({{$dataAccessor}}.{{$list}}, c, c+1)
+			continue
+		}
 		{{- range .Attributes}}
 		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
 		if !{{$dataAccessor}}.{{$list}}[c].{{toGoName .TfName}}.IsNull() {
@@ -648,7 +653,7 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 	{{- end}}
 	}
 {{- else if eq .Type "list"}}
-	for {{$indexVar}} := range {{$dataListExpr}}.{{$list}} {
+	for {{$indexVar}} := len({{$dataListExpr}}.{{$list}}) - 1; {{$indexVar}} >= 0; {{$indexVar}}-- {
 		var r{{$childClassName}} gjson.Result
 		{{$resExpr}}.ForEach(
 			func(_, v gjson.Result) bool {
@@ -660,6 +665,10 @@ func (data *{{camelCase .Name}}) fromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !r{{$childClassName}}.Exists() {
+			{{$dataListExpr}}.{{$list}} = slices.Delete({{$dataListExpr}}.{{$list}}, {{$indexVar}}, {{$indexVar}}+1)
+			continue
+		}
 		{{- range .Attributes}}
 		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
 		if !{{$dataListExpr}}.{{$list}}[{{$indexVar}}].{{toGoName .TfName}}.IsNull() {
@@ -746,7 +755,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 	{{- template "updateFromBodySingleChildTemplate" (makeMap "TypePrefix" $name "Children" .ChildClasses "ResExpr" (printf "r%s.Get(\"%s.children\")" $childClassName $childClassName) "DataAccessor" "data" "RnArgs" (rnFormatArgs "data" $.Attributes))}}
 	{{- end}}
 	{{- else if eq .Type "list"}}
-	for c := range data.{{toGoName .TfName}} {
+	for c := len(data.{{$list}}) - 1; c >= 0; c-- {
 		var r{{$childClassName}} gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -758,6 +767,10 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !r{{$childClassName}}.Exists() {
+			data.{{$list}} = slices.Delete(data.{{$list}}, c, c+1)
+			continue
+		}
 		{{- range .Attributes}}
 		{{- if and (not .Value) (not .ReferenceOnly) (not .WriteOnly)}}
 		if !data.{{$list}}[c].{{toGoName .TfName}}.IsNull() {

@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -675,7 +676,7 @@ func (data *AccessLists) updateFromBody(res gjson.Result) {
 			return true
 		},
 	)
-	for c := range data.AccessLists {
+	for c := len(data.AccessLists) - 1; c >= 0; c-- {
 		var ripv4aclACL gjson.Result
 		ripv4aclAF.Get("ipv4aclAF.children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -687,6 +688,10 @@ func (data *AccessLists) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !ripv4aclACL.Exists() {
+			data.AccessLists = slices.Delete(data.AccessLists, c, c+1)
+			continue
+		}
 		if !data.AccessLists[c].Name.IsNull() {
 			data.AccessLists[c].Name = types.StringValue(ripv4aclACL.Get("ipv4aclACL.attributes.name").String())
 		} else {
@@ -712,7 +717,7 @@ func (data *AccessLists) updateFromBody(res gjson.Result) {
 		} else {
 			data.AccessLists[c].UdfPresent = types.BoolNull()
 		}
-		for nc := range data.AccessLists[c].Entries {
+		for nc := len(data.AccessLists[c].Entries) - 1; nc >= 0; nc-- {
 			var ripv4aclACE gjson.Result
 			ripv4aclACL.Get("ipv4aclACL.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -724,6 +729,10 @@ func (data *AccessLists) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !ripv4aclACE.Exists() {
+				data.AccessLists[c].Entries = slices.Delete(data.AccessLists[c].Entries, nc, nc+1)
+				continue
+			}
 			if !data.AccessLists[c].Entries[nc].SequenceNumber.IsNull() {
 				data.AccessLists[c].Entries[nc].SequenceNumber = types.Int64Value(ripv4aclACE.Get("ipv4aclACE.attributes.seqNum").Int())
 			} else {
@@ -1040,7 +1049,7 @@ func (data *AccessLists) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
-			for c := range data.IngressInterfaces {
+			for c := len(data.IngressInterfaces) - 1; c >= 0; c-- {
 				var raclIf gjson.Result
 				raclIngress.Get("aclIngress.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -1052,6 +1061,10 @@ func (data *AccessLists) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !raclIf.Exists() {
+					data.IngressInterfaces = slices.Delete(data.IngressInterfaces, c, c+1)
+					continue
+				}
 				if !data.IngressInterfaces[c].InterfaceId.IsNull() {
 					data.IngressInterfaces[c].InterfaceId = types.StringValue(raclIf.Get("aclIf.attributes.name").String())
 				} else {
@@ -1089,7 +1102,7 @@ func (data *AccessLists) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
-			for c := range data.EgressInterfaces {
+			for c := len(data.EgressInterfaces) - 1; c >= 0; c-- {
 				var raclIf gjson.Result
 				raclEgress.Get("aclEgress.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -1101,6 +1114,10 @@ func (data *AccessLists) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !raclIf.Exists() {
+					data.EgressInterfaces = slices.Delete(data.EgressInterfaces, c, c+1)
+					continue
+				}
 				if !data.EgressInterfaces[c].InterfaceId.IsNull() {
 					data.EgressInterfaces[c].InterfaceId = types.StringValue(raclIf.Get("aclIf.attributes.name").String())
 				} else {

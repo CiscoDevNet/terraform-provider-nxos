@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -346,7 +347,7 @@ func (data *QueuingQoS) updateFromBody(res gjson.Result) {
 			return true
 		},
 	)
-	for c := range data.PolicyMaps {
+	for c := len(data.PolicyMaps) - 1; c >= 0; c-- {
 		var ripqosPMapInst gjson.Result
 		ripqosPMapEntity.Get("ipqosPMapEntity.children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -358,6 +359,10 @@ func (data *QueuingQoS) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !ripqosPMapInst.Exists() {
+			data.PolicyMaps = slices.Delete(data.PolicyMaps, c, c+1)
+			continue
+		}
 		if !data.PolicyMaps[c].Name.IsNull() {
 			data.PolicyMaps[c].Name = types.StringValue(ripqosPMapInst.Get("ipqosPMapInst.attributes.name").String())
 		} else {
@@ -368,7 +373,7 @@ func (data *QueuingQoS) updateFromBody(res gjson.Result) {
 		} else {
 			data.PolicyMaps[c].MatchType = types.StringNull()
 		}
-		for nc := range data.PolicyMaps[c].MatchClassMaps {
+		for nc := len(data.PolicyMaps[c].MatchClassMaps) - 1; nc >= 0; nc-- {
 			var ripqosMatchCMap gjson.Result
 			ripqosPMapInst.Get("ipqosPMapInst.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -380,6 +385,10 @@ func (data *QueuingQoS) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !ripqosMatchCMap.Exists() {
+				data.PolicyMaps[c].MatchClassMaps = slices.Delete(data.PolicyMaps[c].MatchClassMaps, nc, nc+1)
+				continue
+			}
 			if !data.PolicyMaps[c].MatchClassMaps[nc].Name.IsNull() {
 				data.PolicyMaps[c].MatchClassMaps[nc].Name = types.StringValue(ripqosMatchCMap.Get("ipqosMatchCMap.attributes.name").String())
 			} else {

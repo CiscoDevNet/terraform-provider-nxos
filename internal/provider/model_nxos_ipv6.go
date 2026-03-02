@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -496,7 +497,7 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 	} else {
 		data.SwitchPackets = types.StringNull()
 	}
-	for c := range data.Vrfs {
+	for c := len(data.Vrfs) - 1; c >= 0; c-- {
 		var ripv6Dom gjson.Result
 		ripv6Inst.Get("ipv6Inst.children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -508,12 +509,16 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !ripv6Dom.Exists() {
+			data.Vrfs = slices.Delete(data.Vrfs, c, c+1)
+			continue
+		}
 		if !data.Vrfs[c].Name.IsNull() {
 			data.Vrfs[c].Name = types.StringValue(ripv6Dom.Get("ipv6Dom.attributes.name").String())
 		} else {
 			data.Vrfs[c].Name = types.StringNull()
 		}
-		for nc := range data.Vrfs[c].StaticRoutes {
+		for nc := len(data.Vrfs[c].StaticRoutes) - 1; nc >= 0; nc-- {
 			var ripv6Route gjson.Result
 			ripv6Dom.Get("ipv6Dom.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -525,6 +530,10 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !ripv6Route.Exists() {
+				data.Vrfs[c].StaticRoutes = slices.Delete(data.Vrfs[c].StaticRoutes, nc, nc+1)
+				continue
+			}
 			if !data.Vrfs[c].StaticRoutes[nc].Prefix.IsNull() {
 				data.Vrfs[c].StaticRoutes[nc].Prefix = types.StringValue(ripv6Route.Get("ipv6Route.attributes.prefix").String())
 			} else {
@@ -550,7 +559,7 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 			} else {
 				data.Vrfs[c].StaticRoutes[nc].Tag = types.Int64Null()
 			}
-			for nc_ := range data.Vrfs[c].StaticRoutes[nc].NextHops {
+			for nc_ := len(data.Vrfs[c].StaticRoutes[nc].NextHops) - 1; nc_ >= 0; nc_-- {
 				var ripv6Nexthop gjson.Result
 				ripv6Route.Get("ipv6Route.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -562,6 +571,10 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !ripv6Nexthop.Exists() {
+					data.Vrfs[c].StaticRoutes[nc].NextHops = slices.Delete(data.Vrfs[c].StaticRoutes[nc].NextHops, nc_, nc_+1)
+					continue
+				}
 				if !data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].InterfaceId.IsNull() {
 					data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].InterfaceId = types.StringValue(ripv6Nexthop.Get("ipv6Nexthop.attributes.nhIf").String())
 				} else {
@@ -609,7 +622,7 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 				}
 			}
 		}
-		for nc := range data.Vrfs[c].Interfaces {
+		for nc := len(data.Vrfs[c].Interfaces) - 1; nc >= 0; nc-- {
 			var ripv6If gjson.Result
 			ripv6Dom.Get("ipv6Dom.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -621,6 +634,10 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !ripv6If.Exists() {
+				data.Vrfs[c].Interfaces = slices.Delete(data.Vrfs[c].Interfaces, nc, nc+1)
+				continue
+			}
 			if !data.Vrfs[c].Interfaces[nc].InterfaceId.IsNull() {
 				data.Vrfs[c].Interfaces[nc].InterfaceId = types.StringValue(ripv6If.Get("ipv6If.attributes.id").String())
 			} else {
@@ -661,7 +678,7 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 			} else {
 				data.Vrfs[c].Interfaces[nc].LinkLocalAddress = types.StringNull()
 			}
-			for nc_ := range data.Vrfs[c].Interfaces[nc].Addresses {
+			for nc_ := len(data.Vrfs[c].Interfaces[nc].Addresses) - 1; nc_ >= 0; nc_-- {
 				var ripv6Addr gjson.Result
 				ripv6If.Get("ipv6If.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -673,6 +690,10 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !ripv6Addr.Exists() {
+					data.Vrfs[c].Interfaces[nc].Addresses = slices.Delete(data.Vrfs[c].Interfaces[nc].Addresses, nc_, nc_+1)
+					continue
+				}
 				if !data.Vrfs[c].Interfaces[nc].Addresses[nc_].Address.IsNull() {
 					data.Vrfs[c].Interfaces[nc].Addresses[nc_].Address = types.StringValue(ripv6Addr.Get("ipv6Addr.attributes.addr").String())
 				} else {

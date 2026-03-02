@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -536,7 +537,7 @@ func (data *DHCP) updateFromBody(res gjson.Result) {
 	} else {
 		data.V6SmartRelayGlobal = types.BoolNull()
 	}
-	for c := range data.RelayInterfaces {
+	for c := len(data.RelayInterfaces) - 1; c >= 0; c-- {
 		var rdhcpRelayIf gjson.Result
 		rdhcpInst.Get("dhcpInst.children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -548,6 +549,10 @@ func (data *DHCP) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !rdhcpRelayIf.Exists() {
+			data.RelayInterfaces = slices.Delete(data.RelayInterfaces, c, c+1)
+			continue
+		}
 		if !data.RelayInterfaces[c].InterfaceId.IsNull() {
 			data.RelayInterfaces[c].InterfaceId = types.StringValue(rdhcpRelayIf.Get("dhcpRelayIf.attributes.id").String())
 		} else {
@@ -583,7 +588,7 @@ func (data *DHCP) updateFromBody(res gjson.Result) {
 		} else {
 			data.RelayInterfaces[c].V6SmartRelay = types.BoolNull()
 		}
-		for nc := range data.RelayInterfaces[c].Addresses {
+		for nc := len(data.RelayInterfaces[c].Addresses) - 1; nc >= 0; nc-- {
 			var rdhcpRelayAddr gjson.Result
 			rdhcpRelayIf.Get("dhcpRelayIf.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -595,6 +600,10 @@ func (data *DHCP) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !rdhcpRelayAddr.Exists() {
+				data.RelayInterfaces[c].Addresses = slices.Delete(data.RelayInterfaces[c].Addresses, nc, nc+1)
+				continue
+			}
 			if !data.RelayInterfaces[c].Addresses[nc].Vrf.IsNull() {
 				data.RelayInterfaces[c].Addresses[nc].Vrf = types.StringValue(rdhcpRelayAddr.Get("dhcpRelayAddr.attributes.vrf").String())
 			} else {

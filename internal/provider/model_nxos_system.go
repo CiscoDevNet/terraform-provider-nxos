@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -927,7 +928,7 @@ func (data *System) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
-			for c := range data.ArpVpcDomains {
+			for c := len(data.ArpVpcDomains) - 1; c >= 0; c-- {
 				var rarpVpcDom gjson.Result
 				rarpVpc.Get("arpVpc.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -939,6 +940,10 @@ func (data *System) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !rarpVpcDom.Exists() {
+					data.ArpVpcDomains = slices.Delete(data.ArpVpcDomains, c, c+1)
+					continue
+				}
 				if !data.ArpVpcDomains[c].DomainId.IsNull() {
 					data.ArpVpcDomains[c].DomainId = types.Int64Value(rarpVpcDom.Get("arpVpcDom.attributes.domainId").Int())
 				} else {
@@ -1030,7 +1035,7 @@ func (data *System) updateFromBody(res gjson.Result) {
 		} else {
 			data.NdSolicitNeighborAdvertisement = types.StringNull()
 		}
-		for c := range data.NdVrfs {
+		for c := len(data.NdVrfs) - 1; c >= 0; c-- {
 			var rndDom gjson.Result
 			rndInst.Get("ndInst.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -1042,12 +1047,16 @@ func (data *System) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !rndDom.Exists() {
+				data.NdVrfs = slices.Delete(data.NdVrfs, c, c+1)
+				continue
+			}
 			if !data.NdVrfs[c].Name.IsNull() {
 				data.NdVrfs[c].Name = types.StringValue(rndDom.Get("ndDom.attributes.name").String())
 			} else {
 				data.NdVrfs[c].Name = types.StringNull()
 			}
-			for nc := range data.NdVrfs[c].Interfaces {
+			for nc := len(data.NdVrfs[c].Interfaces) - 1; nc >= 0; nc-- {
 				var rndIf gjson.Result
 				rndDom.Get("ndDom.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -1059,6 +1068,10 @@ func (data *System) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !rndIf.Exists() {
+					data.NdVrfs[c].Interfaces = slices.Delete(data.NdVrfs[c].Interfaces, nc, nc+1)
+					continue
+				}
 				if !data.NdVrfs[c].Interfaces[nc].InterfaceId.IsNull() {
 					data.NdVrfs[c].Interfaces[nc].InterfaceId = types.StringValue(rndIf.Get("ndIf.attributes.id").String())
 				} else {

@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -1520,7 +1521,7 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 	} else {
 		data.RdDualId = types.Int64Null()
 	}
-	for c := range data.Vrfs {
+	for c := len(data.Vrfs) - 1; c >= 0; c-- {
 		var rbgpDom gjson.Result
 		rbgpInst.Get("bgpInst.children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -1532,6 +1533,10 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !rbgpDom.Exists() {
+			data.Vrfs = slices.Delete(data.Vrfs, c, c+1)
+			continue
+		}
 		if !data.Vrfs[c].Name.IsNull() {
 			data.Vrfs[c].Name = types.StringValue(rbgpDom.Get("bgpDom.attributes.name").String())
 		} else {
@@ -1678,7 +1683,7 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 				data.Vrfs[c].GracefulRestartStaleInterval = types.Int64Null()
 			}
 		}
-		for nc := range data.Vrfs[c].AddressFamilies {
+		for nc := len(data.Vrfs[c].AddressFamilies) - 1; nc >= 0; nc-- {
 			var rbgpDomAf gjson.Result
 			rbgpDom.Get("bgpDom.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -1690,6 +1695,10 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !rbgpDomAf.Exists() {
+				data.Vrfs[c].AddressFamilies = slices.Delete(data.Vrfs[c].AddressFamilies, nc, nc+1)
+				continue
+			}
 			if !data.Vrfs[c].AddressFamilies[nc].AddressFamily.IsNull() {
 				data.Vrfs[c].AddressFamilies[nc].AddressFamily = types.StringValue(rbgpDomAf.Get("bgpDomAf.attributes.type").String())
 			} else {
@@ -1880,7 +1889,7 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 			} else {
 				data.Vrfs[c].AddressFamilies[nc].TimerBestpathDeferMax = types.Int64Null()
 			}
-			for nc_ := range data.Vrfs[c].AddressFamilies[nc].AdvertisedPrefixes {
+			for nc_ := len(data.Vrfs[c].AddressFamilies[nc].AdvertisedPrefixes) - 1; nc_ >= 0; nc_-- {
 				var rbgpAdvPrefix gjson.Result
 				rbgpDomAf.Get("bgpDomAf.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -1892,6 +1901,10 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !rbgpAdvPrefix.Exists() {
+					data.Vrfs[c].AddressFamilies[nc].AdvertisedPrefixes = slices.Delete(data.Vrfs[c].AddressFamilies[nc].AdvertisedPrefixes, nc_, nc_+1)
+					continue
+				}
 				if !data.Vrfs[c].AddressFamilies[nc].AdvertisedPrefixes[nc_].Prefix.IsNull() {
 					data.Vrfs[c].AddressFamilies[nc].AdvertisedPrefixes[nc_].Prefix = types.StringValue(rbgpAdvPrefix.Get("bgpAdvPrefix.attributes.addr").String())
 				} else {
@@ -1908,7 +1921,7 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 					data.Vrfs[c].AddressFamilies[nc].AdvertisedPrefixes[nc_].Evpn = types.StringNull()
 				}
 			}
-			for nc_ := range data.Vrfs[c].AddressFamilies[nc].Redistributions {
+			for nc_ := len(data.Vrfs[c].AddressFamilies[nc].Redistributions) - 1; nc_ >= 0; nc_-- {
 				var rbgpInterLeakP gjson.Result
 				rbgpDomAf.Get("bgpDomAf.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -1920,6 +1933,10 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !rbgpInterLeakP.Exists() {
+					data.Vrfs[c].AddressFamilies[nc].Redistributions = slices.Delete(data.Vrfs[c].AddressFamilies[nc].Redistributions, nc_, nc_+1)
+					continue
+				}
 				if !data.Vrfs[c].AddressFamilies[nc].Redistributions[nc_].Protocol.IsNull() {
 					data.Vrfs[c].AddressFamilies[nc].Redistributions[nc_].Protocol = types.StringValue(rbgpInterLeakP.Get("bgpInterLeakP.attributes.proto").String())
 				} else {
@@ -1952,7 +1969,7 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 				}
 			}
 		}
-		for nc := range data.Vrfs[c].PeerTemplates {
+		for nc := len(data.Vrfs[c].PeerTemplates) - 1; nc >= 0; nc-- {
 			var rbgpPeerCont gjson.Result
 			rbgpDom.Get("bgpDom.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -1964,6 +1981,10 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !rbgpPeerCont.Exists() {
+				data.Vrfs[c].PeerTemplates = slices.Delete(data.Vrfs[c].PeerTemplates, nc, nc+1)
+				continue
+			}
 			if !data.Vrfs[c].PeerTemplates[nc].Name.IsNull() {
 				data.Vrfs[c].PeerTemplates[nc].Name = types.StringValue(rbgpPeerCont.Get("bgpPeerCont.attributes.name").String())
 			} else {
@@ -2084,7 +2105,7 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 			} else {
 				data.Vrfs[c].PeerTemplates[nc].TtlSecurityHops = types.Int64Null()
 			}
-			for nc_ := range data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies {
+			for nc_ := len(data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies) - 1; nc_ >= 0; nc_-- {
 				var rbgpPeerAf gjson.Result
 				rbgpPeerCont.Get("bgpPeerCont.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -2096,6 +2117,10 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !rbgpPeerAf.Exists() {
+					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies = slices.Delete(data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies, nc_, nc_+1)
+					continue
+				}
 				if !data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].AddressFamily.IsNull() {
 					data.Vrfs[c].PeerTemplates[nc].PeerTemplateAddressFamilies[nc_].AddressFamily = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.type").String())
 				} else {
@@ -2236,7 +2261,7 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 				}
 			}
 		}
-		for nc := range data.Vrfs[c].Peers {
+		for nc := len(data.Vrfs[c].Peers) - 1; nc >= 0; nc-- {
 			var rbgpPeer gjson.Result
 			rbgpDom.Get("bgpDom.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -2248,6 +2273,10 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !rbgpPeer.Exists() {
+				data.Vrfs[c].Peers = slices.Delete(data.Vrfs[c].Peers, nc, nc+1)
+				continue
+			}
 			if !data.Vrfs[c].Peers[nc].Address.IsNull() {
 				data.Vrfs[c].Peers[nc].Address = types.StringValue(rbgpPeer.Get("bgpPeer.attributes.addr").String())
 			} else {
@@ -2396,7 +2425,7 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 					data.Vrfs[c].Peers[nc].LocalAsn = types.StringNull()
 				}
 			}
-			for nc_ := range data.Vrfs[c].Peers[nc].PeerAddressFamilies {
+			for nc_ := len(data.Vrfs[c].Peers[nc].PeerAddressFamilies) - 1; nc_ >= 0; nc_-- {
 				var rbgpPeerAf gjson.Result
 				rbgpPeer.Get("bgpPeer.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -2408,6 +2437,10 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !rbgpPeerAf.Exists() {
+					data.Vrfs[c].Peers[nc].PeerAddressFamilies = slices.Delete(data.Vrfs[c].Peers[nc].PeerAddressFamilies, nc_, nc_+1)
+					continue
+				}
 				if !data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].AddressFamily.IsNull() {
 					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].AddressFamily = types.StringValue(rbgpPeerAf.Get("bgpPeerAf.attributes.type").String())
 				} else {
@@ -2513,7 +2546,7 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 				} else {
 					data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].Weight = types.StringNull()
 				}
-				for nc__ := range data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].RouteControls {
+				for nc__ := len(data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].RouteControls) - 1; nc__ >= 0; nc__-- {
 					var rbgpRtCtrlP gjson.Result
 					rbgpPeerAf.Get("bgpPeerAf.children").ForEach(
 						func(_, v gjson.Result) bool {
@@ -2525,6 +2558,10 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 							return true
 						},
 					)
+					if !rbgpRtCtrlP.Exists() {
+						data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].RouteControls = slices.Delete(data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].RouteControls, nc__, nc__+1)
+						continue
+					}
 					if !data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].RouteControls[nc__].Direction.IsNull() {
 						data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].RouteControls[nc__].Direction = types.StringValue(rbgpRtCtrlP.Get("bgpRtCtrlP.attributes.direction").String())
 					} else {
@@ -2536,7 +2573,7 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 						data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].RouteControls[nc__].RouteMapName = types.StringNull()
 					}
 				}
-				for nc__ := range data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].PrefixListControls {
+				for nc__ := len(data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].PrefixListControls) - 1; nc__ >= 0; nc__-- {
 					var rbgpPfxCtrlP gjson.Result
 					rbgpPeerAf.Get("bgpPeerAf.children").ForEach(
 						func(_, v gjson.Result) bool {
@@ -2548,6 +2585,10 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 							return true
 						},
 					)
+					if !rbgpPfxCtrlP.Exists() {
+						data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].PrefixListControls = slices.Delete(data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].PrefixListControls, nc__, nc__+1)
+						continue
+					}
 					if !data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].PrefixListControls[nc__].Direction.IsNull() {
 						data.Vrfs[c].Peers[nc].PeerAddressFamilies[nc_].PrefixListControls[nc__].Direction = types.StringValue(rbgpPfxCtrlP.Get("bgpPfxCtrlP.attributes.direction").String())
 					} else {

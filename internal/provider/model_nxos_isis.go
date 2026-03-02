@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -683,7 +684,7 @@ func (data *ISIS) updateFromBody(res gjson.Result) {
 	} else {
 		data.AdminState = types.StringNull()
 	}
-	for c := range data.Instances {
+	for c := len(data.Instances) - 1; c >= 0; c-- {
 		var risisInst gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -695,6 +696,10 @@ func (data *ISIS) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !risisInst.Exists() {
+			data.Instances = slices.Delete(data.Instances, c, c+1)
+			continue
+		}
 		if !data.Instances[c].Name.IsNull() {
 			data.Instances[c].Name = types.StringValue(risisInst.Get("isisInst.attributes.name").String())
 		} else {
@@ -720,7 +725,7 @@ func (data *ISIS) updateFromBody(res gjson.Result) {
 		} else {
 			data.Instances[c].Isolate = types.BoolNull()
 		}
-		for nc := range data.Instances[c].Vrfs {
+		for nc := len(data.Instances[c].Vrfs) - 1; nc >= 0; nc-- {
 			var risisDom gjson.Result
 			risisInst.Get("isisInst.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -732,6 +737,10 @@ func (data *ISIS) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !risisDom.Exists() {
+				data.Instances[c].Vrfs = slices.Delete(data.Instances[c].Vrfs, nc, nc+1)
+				continue
+			}
 			if !data.Instances[c].Vrfs[nc].Name.IsNull() {
 				data.Instances[c].Vrfs[nc].Name = types.StringValue(risisDom.Get("isisDom.attributes.name").String())
 			} else {
@@ -812,7 +821,7 @@ func (data *ISIS) updateFromBody(res gjson.Result) {
 			} else {
 				data.Instances[c].Vrfs[nc].QueueLimit = types.Int64Null()
 			}
-			for nc_ := range data.Instances[c].Vrfs[nc].AddressFamilies {
+			for nc_ := len(data.Instances[c].Vrfs[nc].AddressFamilies) - 1; nc_ >= 0; nc_-- {
 				var risisDomAf gjson.Result
 				risisDom.Get("isisDom.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -824,6 +833,10 @@ func (data *ISIS) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !risisDomAf.Exists() {
+					data.Instances[c].Vrfs[nc].AddressFamilies = slices.Delete(data.Instances[c].Vrfs[nc].AddressFamilies, nc_, nc_+1)
+					continue
+				}
 				if !data.Instances[c].Vrfs[nc].AddressFamilies[nc_].AddressFamily.IsNull() {
 					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].AddressFamily = types.StringValue(risisDomAf.Get("isisDomAf.attributes.type").String())
 				} else {
@@ -940,7 +953,7 @@ func (data *ISIS) updateFromBody(res gjson.Result) {
 			}
 		}
 	}
-	for c := range data.Interfaces {
+	for c := len(data.Interfaces) - 1; c >= 0; c-- {
 		var risisInternalIf gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -952,6 +965,10 @@ func (data *ISIS) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !risisInternalIf.Exists() {
+			data.Interfaces = slices.Delete(data.Interfaces, c, c+1)
+			continue
+		}
 		if !data.Interfaces[c].InterfaceId.IsNull() {
 			data.Interfaces[c].InterfaceId = types.StringValue(risisInternalIf.Get("isisInternalIf.attributes.id").String())
 		} else {

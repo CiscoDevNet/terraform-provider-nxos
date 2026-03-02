@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -260,7 +261,7 @@ func (data *NTP) updateFromBody(res gjson.Result) {
 	} else {
 		data.RateLimit = types.Int64Null()
 	}
-	for c := range data.Servers {
+	for c := len(data.Servers) - 1; c >= 0; c-- {
 		var rdatetimeNtpProvider gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -272,6 +273,10 @@ func (data *NTP) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !rdatetimeNtpProvider.Exists() {
+			data.Servers = slices.Delete(data.Servers, c, c+1)
+			continue
+		}
 		if !data.Servers[c].Name.IsNull() {
 			data.Servers[c].Name = types.StringValue(rdatetimeNtpProvider.Get("datetimeNtpProvider.attributes.name").String())
 		} else {

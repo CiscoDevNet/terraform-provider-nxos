@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -457,7 +458,7 @@ func (data *OSPFv3) updateFromBody(res gjson.Result) {
 	} else {
 		data.AdminState = types.StringNull()
 	}
-	for c := range data.Instances {
+	for c := len(data.Instances) - 1; c >= 0; c-- {
 		var rospfv3Inst gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -469,6 +470,10 @@ func (data *OSPFv3) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !rospfv3Inst.Exists() {
+			data.Instances = slices.Delete(data.Instances, c, c+1)
+			continue
+		}
 		if !data.Instances[c].Name.IsNull() {
 			data.Instances[c].Name = types.StringValue(rospfv3Inst.Get("ospfv3Inst.attributes.name").String())
 		} else {
@@ -489,7 +494,7 @@ func (data *OSPFv3) updateFromBody(res gjson.Result) {
 		} else {
 			data.Instances[c].Isolate = types.BoolNull()
 		}
-		for nc := range data.Instances[c].Vrfs {
+		for nc := len(data.Instances[c].Vrfs) - 1; nc >= 0; nc-- {
 			var rospfv3Dom gjson.Result
 			rospfv3Inst.Get("ospfv3Inst.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -501,6 +506,10 @@ func (data *OSPFv3) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !rospfv3Dom.Exists() {
+				data.Instances[c].Vrfs = slices.Delete(data.Instances[c].Vrfs, nc, nc+1)
+				continue
+			}
 			if !data.Instances[c].Vrfs[nc].Name.IsNull() {
 				data.Instances[c].Vrfs[nc].Name = types.StringValue(rospfv3Dom.Get("ospfv3Dom.attributes.name").String())
 			} else {
@@ -556,7 +565,7 @@ func (data *OSPFv3) updateFromBody(res gjson.Result) {
 			} else {
 				data.Instances[c].Vrfs[nc].PassiveInterfaceDefault = types.BoolNull()
 			}
-			for nc_ := range data.Instances[c].Vrfs[nc].Areas {
+			for nc_ := len(data.Instances[c].Vrfs[nc].Areas) - 1; nc_ >= 0; nc_-- {
 				var rospfv3Area gjson.Result
 				rospfv3Dom.Get("ospfv3Dom.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -568,6 +577,10 @@ func (data *OSPFv3) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !rospfv3Area.Exists() {
+					data.Instances[c].Vrfs[nc].Areas = slices.Delete(data.Instances[c].Vrfs[nc].Areas, nc_, nc_+1)
+					continue
+				}
 				if !data.Instances[c].Vrfs[nc].Areas[nc_].AreaId.IsNull() {
 					data.Instances[c].Vrfs[nc].Areas[nc_].AreaId = types.StringValue(rospfv3Area.Get("ospfv3Area.attributes.id").String())
 				} else {
@@ -599,7 +612,7 @@ func (data *OSPFv3) updateFromBody(res gjson.Result) {
 					data.Instances[c].Vrfs[nc].Areas[nc_].Type = types.StringNull()
 				}
 			}
-			for nc_ := range data.Instances[c].Vrfs[nc].AddressFamilies {
+			for nc_ := len(data.Instances[c].Vrfs[nc].AddressFamilies) - 1; nc_ >= 0; nc_-- {
 				var rospfv3DomAf gjson.Result
 				rospfv3Dom.Get("ospfv3Dom.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -611,6 +624,10 @@ func (data *OSPFv3) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !rospfv3DomAf.Exists() {
+					data.Instances[c].Vrfs[nc].AddressFamilies = slices.Delete(data.Instances[c].Vrfs[nc].AddressFamilies, nc_, nc_+1)
+					continue
+				}
 				if !data.Instances[c].Vrfs[nc].AddressFamilies[nc_].AddressFamilyType.IsNull() {
 					data.Instances[c].Vrfs[nc].AddressFamilies[nc_].AddressFamilyType = types.StringValue(rospfv3DomAf.Get("ospfv3DomAf.attributes.type").String())
 				} else {
@@ -639,7 +656,7 @@ func (data *OSPFv3) updateFromBody(res gjson.Result) {
 			}
 		}
 	}
-	for c := range data.Interfaces {
+	for c := len(data.Interfaces) - 1; c >= 0; c-- {
 		var rospfv3If gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -651,6 +668,10 @@ func (data *OSPFv3) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !rospfv3If.Exists() {
+			data.Interfaces = slices.Delete(data.Interfaces, c, c+1)
+			continue
+		}
 		if !data.Interfaces[c].InterfaceId.IsNull() {
 			data.Interfaces[c].InterfaceId = types.StringValue(rospfv3If.Get("ospfv3If.attributes.id").String())
 		} else {

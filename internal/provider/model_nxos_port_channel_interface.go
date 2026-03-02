@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -596,7 +597,7 @@ func (data *PortChannelInterface) updateFromBody(res gjson.Result) {
 	} else {
 		data.VrfDn = types.StringNull()
 	}
-	for c := range data.Members {
+	for c := len(data.Members) - 1; c >= 0; c-- {
 		var rpcRsMbrIfs gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -608,6 +609,10 @@ func (data *PortChannelInterface) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !rpcRsMbrIfs.Exists() {
+			data.Members = slices.Delete(data.Members, c, c+1)
+			continue
+		}
 		if !data.Members[c].InterfaceDn.IsNull() {
 			data.Members[c].InterfaceDn = types.StringValue(rpcRsMbrIfs.Get("pcRsMbrIfs.attributes.tDn").String())
 		} else {

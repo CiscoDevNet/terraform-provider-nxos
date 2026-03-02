@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -562,7 +563,7 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 			return true
 		},
 	)
-	for c := range data.ClassMaps {
+	for c := len(data.ClassMaps) - 1; c >= 0; c-- {
 		var ripqosCMapInst gjson.Result
 		ripqosCMapEntity.Get("ipqosCMapEntity.children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -574,6 +575,10 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !ripqosCMapInst.Exists() {
+			data.ClassMaps = slices.Delete(data.ClassMaps, c, c+1)
+			continue
+		}
 		if !data.ClassMaps[c].Name.IsNull() {
 			data.ClassMaps[c].Name = types.StringValue(ripqosCMapInst.Get("ipqosCMapInst.attributes.name").String())
 		} else {
@@ -584,7 +589,7 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 		} else {
 			data.ClassMaps[c].MatchType = types.StringNull()
 		}
-		for nc := range data.ClassMaps[c].DscpValues {
+		for nc := len(data.ClassMaps[c].DscpValues) - 1; nc >= 0; nc-- {
 			var ripqosDscp gjson.Result
 			ripqosCMapInst.Get("ipqosCMapInst.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -596,6 +601,10 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !ripqosDscp.Exists() {
+				data.ClassMaps[c].DscpValues = slices.Delete(data.ClassMaps[c].DscpValues, nc, nc+1)
+				continue
+			}
 			if !data.ClassMaps[c].DscpValues[nc].Value.IsNull() {
 				data.ClassMaps[c].DscpValues[nc].Value = types.StringValue(ripqosDscp.Get("ipqosDscp.attributes.val").String())
 			} else {
@@ -614,7 +623,7 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 			return true
 		},
 	)
-	for c := range data.PolicyMaps {
+	for c := len(data.PolicyMaps) - 1; c >= 0; c-- {
 		var ripqosPMapInst gjson.Result
 		ripqosPMapEntity.Get("ipqosPMapEntity.children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -626,6 +635,10 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !ripqosPMapInst.Exists() {
+			data.PolicyMaps = slices.Delete(data.PolicyMaps, c, c+1)
+			continue
+		}
 		if !data.PolicyMaps[c].Name.IsNull() {
 			data.PolicyMaps[c].Name = types.StringValue(ripqosPMapInst.Get("ipqosPMapInst.attributes.name").String())
 		} else {
@@ -636,7 +649,7 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 		} else {
 			data.PolicyMaps[c].MatchType = types.StringNull()
 		}
-		for nc := range data.PolicyMaps[c].MatchClassMaps {
+		for nc := len(data.PolicyMaps[c].MatchClassMaps) - 1; nc >= 0; nc-- {
 			var ripqosMatchCMap gjson.Result
 			ripqosPMapInst.Get("ipqosPMapInst.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -648,6 +661,10 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !ripqosMatchCMap.Exists() {
+				data.PolicyMaps[c].MatchClassMaps = slices.Delete(data.PolicyMaps[c].MatchClassMaps, nc, nc+1)
+				continue
+			}
 			if !data.PolicyMaps[c].MatchClassMaps[nc].Name.IsNull() {
 				data.PolicyMaps[c].MatchClassMaps[nc].Name = types.StringValue(ripqosMatchCMap.Get("ipqosMatchCMap.attributes.name").String())
 			} else {
@@ -834,7 +851,7 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
-		for c := range data.PolicyInterfaceIn {
+		for c := len(data.PolicyInterfaceIn) - 1; c >= 0; c-- {
 			var ripqosIf gjson.Result
 			ripqosIngress.Get("ipqosIngress.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -846,6 +863,10 @@ func (data *DefaultQoS) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !ripqosIf.Exists() {
+				data.PolicyInterfaceIn = slices.Delete(data.PolicyInterfaceIn, c, c+1)
+				continue
+			}
 			if !data.PolicyInterfaceIn[c].InterfaceId.IsNull() {
 				data.PolicyInterfaceIn[c].InterfaceId = types.StringValue(ripqosIf.Get("ipqosIf.attributes.name").String())
 			} else {

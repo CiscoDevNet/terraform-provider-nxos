@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -173,7 +174,7 @@ func (data *Logging) updateFromBody(res gjson.Result) {
 			return true
 		},
 	)
-	for c := range data.Facilities {
+	for c := len(data.Facilities) - 1; c >= 0; c-- {
 		var rloggingFacility gjson.Result
 		rloggingLogLevel.Get("loggingLogLevel.children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -185,6 +186,10 @@ func (data *Logging) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !rloggingFacility.Exists() {
+			data.Facilities = slices.Delete(data.Facilities, c, c+1)
+			continue
+		}
 		if !data.Facilities[c].Name.IsNull() {
 			data.Facilities[c].Name = types.StringValue(rloggingFacility.Get("loggingFacility.attributes.facilityName").String())
 		} else {

@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -535,7 +536,7 @@ func (data *OSPF) updateFromBody(res gjson.Result) {
 	} else {
 		data.AdminState = types.StringNull()
 	}
-	for c := range data.Instances {
+	for c := len(data.Instances) - 1; c >= 0; c-- {
 		var rospfInst gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -547,6 +548,10 @@ func (data *OSPF) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !rospfInst.Exists() {
+			data.Instances = slices.Delete(data.Instances, c, c+1)
+			continue
+		}
 		if !data.Instances[c].Name.IsNull() {
 			data.Instances[c].Name = types.StringValue(rospfInst.Get("ospfInst.attributes.name").String())
 		} else {
@@ -562,7 +567,7 @@ func (data *OSPF) updateFromBody(res gjson.Result) {
 		} else {
 			data.Instances[c].Control = types.StringNull()
 		}
-		for nc := range data.Instances[c].Vrfs {
+		for nc := len(data.Instances[c].Vrfs) - 1; nc >= 0; nc-- {
 			var rospfDom gjson.Result
 			rospfInst.Get("ospfInst.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -574,6 +579,10 @@ func (data *OSPF) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !rospfDom.Exists() {
+				data.Instances[c].Vrfs = slices.Delete(data.Instances[c].Vrfs, nc, nc+1)
+				continue
+			}
 			if !data.Instances[c].Vrfs[nc].Name.IsNull() {
 				data.Instances[c].Vrfs[nc].Name = types.StringValue(rospfDom.Get("ospfDom.attributes.name").String())
 			} else {
@@ -659,7 +668,7 @@ func (data *OSPF) updateFromBody(res gjson.Result) {
 			} else {
 				data.Instances[c].Vrfs[nc].Rfc1583CompatibleIos = types.BoolNull()
 			}
-			for nc_ := range data.Instances[c].Vrfs[nc].Areas {
+			for nc_ := len(data.Instances[c].Vrfs[nc].Areas) - 1; nc_ >= 0; nc_-- {
 				var rospfArea gjson.Result
 				rospfDom.Get("ospfDom.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -671,6 +680,10 @@ func (data *OSPF) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !rospfArea.Exists() {
+					data.Instances[c].Vrfs[nc].Areas = slices.Delete(data.Instances[c].Vrfs[nc].Areas, nc_, nc_+1)
+					continue
+				}
 				if !data.Instances[c].Vrfs[nc].Areas[nc_].AreaId.IsNull() {
 					data.Instances[c].Vrfs[nc].Areas[nc_].AreaId = types.StringValue(rospfArea.Get("ospfArea.attributes.id").String())
 				} else {
@@ -745,7 +758,7 @@ func (data *OSPF) updateFromBody(res gjson.Result) {
 					data.Instances[c].Vrfs[nc].MaxMetricStartupInterval = types.Int64Null()
 				}
 			}
-			for nc_ := range data.Instances[c].Vrfs[nc].Interfaces {
+			for nc_ := len(data.Instances[c].Vrfs[nc].Interfaces) - 1; nc_ >= 0; nc_-- {
 				var rospfIf gjson.Result
 				rospfDom.Get("ospfDom.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -757,6 +770,10 @@ func (data *OSPF) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !rospfIf.Exists() {
+					data.Instances[c].Vrfs[nc].Interfaces = slices.Delete(data.Instances[c].Vrfs[nc].Interfaces, nc_, nc_+1)
+					continue
+				}
 				if !data.Instances[c].Vrfs[nc].Interfaces[nc_].InterfaceId.IsNull() {
 					data.Instances[c].Vrfs[nc].Interfaces[nc_].InterfaceId = types.StringValue(rospfIf.Get("ospfIf.attributes.id").String())
 				} else {

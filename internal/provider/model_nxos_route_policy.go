@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -517,7 +518,7 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 	} else {
 		data.AdminState = types.StringNull()
 	}
-	for c := range data.Ipv4PrefixLists {
+	for c := len(data.Ipv4PrefixLists) - 1; c >= 0; c-- {
 		var rrtpfxRuleV4 gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -529,6 +530,10 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !rrtpfxRuleV4.Exists() {
+			data.Ipv4PrefixLists = slices.Delete(data.Ipv4PrefixLists, c, c+1)
+			continue
+		}
 		if !data.Ipv4PrefixLists[c].Name.IsNull() {
 			data.Ipv4PrefixLists[c].Name = types.StringValue(rrtpfxRuleV4.Get("rtpfxRuleV4.attributes.name").String())
 		} else {
@@ -544,7 +549,7 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 		} else {
 			data.Ipv4PrefixLists[c].Mode = types.StringNull()
 		}
-		for nc := range data.Ipv4PrefixLists[c].Entries {
+		for nc := len(data.Ipv4PrefixLists[c].Entries) - 1; nc >= 0; nc-- {
 			var rrtpfxEntry gjson.Result
 			rrtpfxRuleV4.Get("rtpfxRuleV4.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -556,6 +561,10 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !rrtpfxEntry.Exists() {
+				data.Ipv4PrefixLists[c].Entries = slices.Delete(data.Ipv4PrefixLists[c].Entries, nc, nc+1)
+				continue
+			}
 			if !data.Ipv4PrefixLists[c].Entries[nc].Order.IsNull() {
 				data.Ipv4PrefixLists[c].Entries[nc].Order = types.Int64Value(rrtpfxEntry.Get("rtpfxEntry.attributes.order").Int())
 			} else {
@@ -593,7 +602,7 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 			}
 		}
 	}
-	for c := range data.RouteMaps {
+	for c := len(data.RouteMaps) - 1; c >= 0; c-- {
 		var rrtmapRule gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -605,6 +614,10 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !rrtmapRule.Exists() {
+			data.RouteMaps = slices.Delete(data.RouteMaps, c, c+1)
+			continue
+		}
 		if !data.RouteMaps[c].Name.IsNull() {
 			data.RouteMaps[c].Name = types.StringValue(rrtmapRule.Get("rtmapRule.attributes.name").String())
 		} else {
@@ -615,7 +628,7 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 		} else {
 			data.RouteMaps[c].PbrStatistics = types.StringNull()
 		}
-		for nc := range data.RouteMaps[c].Entries {
+		for nc := len(data.RouteMaps[c].Entries) - 1; nc >= 0; nc-- {
 			var rrtmapEntry gjson.Result
 			rrtmapRule.Get("rtmapRule.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -627,6 +640,10 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 					return true
 				},
 			)
+			if !rrtmapEntry.Exists() {
+				data.RouteMaps[c].Entries = slices.Delete(data.RouteMaps[c].Entries, nc, nc+1)
+				continue
+			}
 			if !data.RouteMaps[c].Entries[nc].Order.IsNull() {
 				data.RouteMaps[c].Entries[nc].Order = types.Int64Value(rrtmapEntry.Get("rtmapEntry.attributes.order").Int())
 			} else {
@@ -714,7 +731,7 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
-				for nc_ := range data.RouteMaps[c].Entries[nc].MatchRoutePrefixLists {
+				for nc_ := len(data.RouteMaps[c].Entries[nc].MatchRoutePrefixLists) - 1; nc_ >= 0; nc_-- {
 					var rrtmapRsRtDstAtt gjson.Result
 					rrtmapMatchRtDst.Get("rtmapMatchRtDst.children").ForEach(
 						func(_, v gjson.Result) bool {
@@ -726,6 +743,10 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 							return true
 						},
 					)
+					if !rrtmapRsRtDstAtt.Exists() {
+						data.RouteMaps[c].Entries[nc].MatchRoutePrefixLists = slices.Delete(data.RouteMaps[c].Entries[nc].MatchRoutePrefixLists, nc_, nc_+1)
+						continue
+					}
 					if !data.RouteMaps[c].Entries[nc].MatchRoutePrefixLists[nc_].PrefixListDn.IsNull() {
 						data.RouteMaps[c].Entries[nc].MatchRoutePrefixLists[nc_].PrefixListDn = types.StringValue(rrtmapRsRtDstAtt.Get("rtmapRsRtDstAtt.attributes.tDn").String())
 					} else {
@@ -760,7 +781,7 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 				} else {
 					data.RouteMaps[c].Entries[nc].SetRegularCommunityCriteria = types.StringNull()
 				}
-				for nc_ := range data.RouteMaps[c].Entries[nc].SetRegularCommunityItems {
+				for nc_ := len(data.RouteMaps[c].Entries[nc].SetRegularCommunityItems) - 1; nc_ >= 0; nc_-- {
 					var rrtregcomItem gjson.Result
 					rrtmapSetRegComm.Get("rtmapSetRegComm.children").ForEach(
 						func(_, v gjson.Result) bool {
@@ -772,6 +793,10 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 							return true
 						},
 					)
+					if !rrtregcomItem.Exists() {
+						data.RouteMaps[c].Entries[nc].SetRegularCommunityItems = slices.Delete(data.RouteMaps[c].Entries[nc].SetRegularCommunityItems, nc_, nc_+1)
+						continue
+					}
 					if !data.RouteMaps[c].Entries[nc].SetRegularCommunityItems[nc_].Community.IsNull() {
 						data.RouteMaps[c].Entries[nc].SetRegularCommunityItems[nc_].Community = types.StringValue(rrtregcomItem.Get("rtregcomItem.attributes.community").String())
 					} else {
@@ -789,7 +814,7 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 					}
 				}
 			}
-			for nc_ := range data.RouteMaps[c].Entries[nc].MatchTags {
+			for nc_ := len(data.RouteMaps[c].Entries[nc].MatchTags) - 1; nc_ >= 0; nc_-- {
 				var rrtmapMatchRtTag gjson.Result
 				rrtmapEntry.Get("rtmapEntry.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -801,6 +826,10 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 						return true
 					},
 				)
+				if !rrtmapMatchRtTag.Exists() {
+					data.RouteMaps[c].Entries[nc].MatchTags = slices.Delete(data.RouteMaps[c].Entries[nc].MatchTags, nc_, nc_+1)
+					continue
+				}
 				if !data.RouteMaps[c].Entries[nc].MatchTags[nc_].Tag.IsNull() {
 					data.RouteMaps[c].Entries[nc].MatchTags[nc_].Tag = types.Int64Value(rrtmapMatchRtTag.Get("rtmapMatchRtTag.attributes.tag").Int())
 				} else {

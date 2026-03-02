@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -245,7 +246,7 @@ func (data *HMM) updateFromBody(res gjson.Result) {
 	} else {
 		data.SelectiveHostProbe = types.StringNull()
 	}
-	for c := range data.Interfaces {
+	for c := len(data.Interfaces) - 1; c >= 0; c-- {
 		var rhmmFwdIf gjson.Result
 		rhmmFwdInst.Get("hmmFwdInst.children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -257,6 +258,10 @@ func (data *HMM) updateFromBody(res gjson.Result) {
 				return true
 			},
 		)
+		if !rhmmFwdIf.Exists() {
+			data.Interfaces = slices.Delete(data.Interfaces, c, c+1)
+			continue
+		}
 		if !data.Interfaces[c].InterfaceId.IsNull() {
 			data.Interfaces[c].InterfaceId = types.StringValue(rhmmFwdIf.Get("hmmFwdIf.attributes.id").String())
 		} else {

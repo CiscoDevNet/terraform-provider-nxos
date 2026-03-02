@@ -15,8 +15,8 @@ verify:
 	go run gen/scripts/verify_delete_values.go
 
 # Run acceptance tests
-# Usage: make test [NAME=<definition name or test regex>] [DEBUG=1]
-# NAME can be a definition name (e.g., "BGP", "Loopback Interface") or a test regex (e.g., TestAccNxosBGP)
+# Usage: make test [NAME="Definition Name"] [DEBUG=1]
+# NAME must be a definition name (e.g., "BGP", "Loopback Interface") matching the name: field in gen/definitions/*.yaml
 .PHONY: test
 test:
 	@echo "========================================="
@@ -34,7 +34,8 @@ test:
 				TEST_NAME="TestAcc.*Nxos$${CAMEL}"; \
 				echo "Resolved definition '$(NAME)' to test pattern: $${TEST_NAME}"; \
 			else \
-				TEST_NAME="$(NAME)"; \
+				echo "ERROR: No definition found matching '$(NAME)' in gen/definitions/*.yaml"; \
+				exit 1; \
 			fi; \
 		fi; \
 		$(if $(DEBUG),echo "Debug mode enabled - logs will be written to test-output.log";) \

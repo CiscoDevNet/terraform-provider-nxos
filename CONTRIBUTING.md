@@ -90,9 +90,6 @@ make test
 # Run tests for a specific definition (by name from gen/definitions/*.yaml)
 make test NAME="BGP"
 make test NAME="Loopback Interface"
-
-# Run tests matching an exact test regex (backward compatible)
-make test NAME=TestAccNxosBGP
 ```
 
 ## Sending Pull Requests

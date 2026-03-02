@@ -85,6 +85,9 @@ func (r *PortChannelInterfacesResource) Schema(ctx context.Context, req resource
 						"interface_id": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `po1`.").String,
 							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
 						},
 						"port_channel_mode": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The aggregated interface protocol channel mode.").AddStringEnumDescription("on", "static", "active", "passive", "mac-pin").String,

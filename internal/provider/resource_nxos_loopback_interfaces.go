@@ -84,6 +84,9 @@ func (r *LoopbackInterfacesResource) Schema(ctx context.Context, req resource.Sc
 						"interface_id": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `lo123`.").String,
 							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
 						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Administrative state.").AddStringEnumDescription("down", "up").String,

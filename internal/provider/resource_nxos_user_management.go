@@ -213,9 +213,6 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"account_status": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The status of the locally-authenticated user account.").AddStringEnumDescription("active", "inactive").String,
@@ -313,9 +310,6 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 									"name": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
 										Required:            true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
-										},
 									},
 									"description": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
@@ -401,9 +395,6 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"authentication_protocol": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The TACACS+ authentication protocol.").AddStringEnumDescription("pap", "chap", "mschap", "mschapv2", "ascii").String,
@@ -496,9 +487,6 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"deadtime": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Duration for which non-reachable server is skipped.").AddIntegerRangeDescription(0, 1440).String,

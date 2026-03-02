@@ -85,6 +85,9 @@ func (r *VRFsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
 						},
 						"description": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Description.").String,

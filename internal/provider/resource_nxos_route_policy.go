@@ -32,7 +32,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -93,9 +92,6 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"description": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Description.").String,
@@ -118,9 +114,6 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 										Required:            true,
 										Validators: []validator.Int64{
 											int64validator.Between(1, 4294967294),
-										},
-										PlanModifiers: []planmodifier.Int64{
-											int64planmodifier.RequiresReplace(),
 										},
 									},
 									"action": schema.StringAttribute{
@@ -173,9 +166,6 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"pbr_statistics": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Route map pbr-statistics.").AddStringEnumDescription("enabled", "disabled").String,
@@ -194,9 +184,6 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 										Required:            true,
 										Validators: []validator.Int64{
 											int64validator.Between(0, 65535),
-										},
-										PlanModifiers: []planmodifier.Int64{
-											int64planmodifier.RequiresReplace(),
 										},
 									},
 									"action": schema.StringAttribute{
@@ -302,9 +289,6 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 												"prefix_list_dn": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("DN of Prefix List. For example: `sys/rpm/pfxlistv4-[PREFIX_LIST1]`").String,
 													Required:            true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplace(),
-													},
 												},
 											},
 										},
@@ -338,9 +322,6 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 												"community": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Community.").String,
 													Required:            true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplace(),
-													},
 												},
 												"description": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
@@ -363,9 +344,6 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 													Required:            true,
 													Validators: []validator.Int64{
 														int64validator.Between(0, 4294967295),
-													},
-													PlanModifiers: []planmodifier.Int64{
-														int64planmodifier.RequiresReplace(),
 													},
 												},
 											},

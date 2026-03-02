@@ -32,7 +32,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -125,9 +124,6 @@ func (r *HSRPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						"interface_id": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
@@ -208,18 +204,12 @@ func (r *HSRPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 										Validators: []validator.Int64{
 											int64validator.Between(0, 4095),
 										},
-										PlanModifiers: []planmodifier.Int64{
-											int64planmodifier.RequiresReplace(),
-										},
 									},
 									"address_family": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Group Address Family.").AddStringEnumDescription("ipv4", "ipv6").String,
 										Required:            true,
 										Validators: []validator.String{
 											stringvalidator.OneOf("ipv4", "ipv6"),
-										},
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
 										},
 									},
 									"authentication_md5_compatibility_mode": schema.StringAttribute{

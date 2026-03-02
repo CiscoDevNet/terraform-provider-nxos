@@ -131,9 +131,6 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"static_routes": schema.ListNestedAttribute{
 							MarkdownDescription: "List of IPv6 static routes.",
@@ -143,9 +140,6 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 									"prefix": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Prefix.").String,
 										Required:            true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
-										},
 									},
 									"control": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Controls.").AddStringEnumDescription("pervasive", "bfd").String,
@@ -177,23 +171,14 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 												"interface_id": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief` or `unspecified`. Example: `eth1/1` or `vlan100`.").String,
 													Required:            true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplace(),
-													},
 												},
 												"address": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Nexthop Address.").String,
 													Required:            true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplace(),
-													},
 												},
 												"vrf_name": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Nexthop VRF.").String,
 													Required:            true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplace(),
-													},
 												},
 												"description": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
@@ -242,9 +227,6 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 									"interface_id": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 										Required:            true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
-										},
 									},
 									"auto_configuration": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("IPv6 Stateless address autoconfig.").AddStringEnumDescription("enabled", "disabled").String,
@@ -300,9 +282,6 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 												"address": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Address.").String,
 													Required:            true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplace(),
-													},
 												},
 												"type": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Type.").AddStringEnumDescription("primary", "secondary").String,

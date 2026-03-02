@@ -85,9 +85,6 @@ func (r *QueuingQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Name of policy-map.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"match_type": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Match-any, match-all or match-first.").AddStringEnumDescription("match-any", "match-all", "match-first").String,
@@ -104,9 +101,6 @@ func (r *QueuingQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 									"name": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Match using class-map.").String,
 										Required:            true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
-										},
 									},
 									"next_class_map": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Insert before the given class-map.").String,

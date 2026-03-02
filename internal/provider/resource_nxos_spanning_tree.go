@@ -152,9 +152,6 @@ func (r *SpanningTreeResource) Schema(ctx context.Context, req resource.SchemaRe
 						"interface_id": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"bpdu_filter": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("bpdufilter mode.").AddStringEnumDescription("default", "enable", "disable").String,

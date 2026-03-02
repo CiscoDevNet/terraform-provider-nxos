@@ -32,7 +32,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -86,9 +85,6 @@ func (r *AccessListsResource) Schema(ctx context.Context, req resource.SchemaReq
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Name of Access lists.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"fragments": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Fragments type for IPv4 and IPv6.").AddStringEnumDescription("disabled", "deny-all", "permit-all").String,
@@ -122,9 +118,6 @@ func (r *AccessListsResource) Schema(ctx context.Context, req resource.SchemaReq
 										Required:            true,
 										Validators: []validator.Int64{
 											int64validator.Between(0, 4294967295),
-										},
-										PlanModifiers: []planmodifier.Int64{
-											int64planmodifier.RequiresReplace(),
 										},
 									},
 									"ack": schema.BoolAttribute{
@@ -417,9 +410,6 @@ func (r *AccessListsResource) Schema(ctx context.Context, req resource.SchemaReq
 						"interface_id": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"access_list_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Access Control List name.").String,
@@ -436,9 +426,6 @@ func (r *AccessListsResource) Schema(ctx context.Context, req resource.SchemaReq
 						"interface_id": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"access_list_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Access Control List name.").String,

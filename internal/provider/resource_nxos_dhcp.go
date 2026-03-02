@@ -214,9 +214,6 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						"interface_id": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"information_trusted": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Information Trusted Enabled.").String,
@@ -253,16 +250,10 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 									"vrf": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("vrf in which the dhcp server is present. Valid only when the client is in a different vrf from the server vrf.").String,
 										Required:            true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
-										},
 									},
 									"address": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("IPv4 or IPv6 address.").String,
 										Required:            true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
-										},
 									},
 									"counter": schema.Int64Attribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Counter.").AddIntegerRangeDescription(0, 65535).String,

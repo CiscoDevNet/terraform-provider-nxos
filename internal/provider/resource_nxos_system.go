@@ -32,7 +32,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -334,9 +333,6 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 1000),
 							},
-							PlanModifiers: []planmodifier.Int64{
-								int64planmodifier.RequiresReplace(),
-							},
 						},
 						"arp_sync": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("ARP Sync.").AddStringEnumDescription("disabled", "enabled").String,
@@ -433,9 +429,6 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The name of the object.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"interfaces": schema.ListNestedAttribute{
 							MarkdownDescription: "Neighbor Discovery Interface.",
@@ -445,9 +438,6 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"interface_id": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("An identifier.").String,
 										Required:            true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
-										},
 									},
 									"boot_file_url": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("The URL for a boot file in string.").String,

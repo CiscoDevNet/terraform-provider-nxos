@@ -101,9 +101,6 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 							Validators: []validator.String{
 								stringvalidator.OneOf("spanning-tree", "session-mgr", "radius", "security", "plugin", "cdp", "bootvar", "aaa", "interface-vlan", "vshd", "cfs", "monitor", "ntp", "acllog", "track", "pltfm_config", "lacp"),
 							},
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"level": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Logging severity level for individual facility name.").AddStringEnumDescription("emergencies", "alerts", "critical", "errors", "warnings", "notifications", "information", "debugging").String,

@@ -92,9 +92,6 @@ func (r *ISISResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IS-IS instance name.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
@@ -126,9 +123,6 @@ func (r *ISISResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 									"name": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 										Required:            true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
-										},
 									},
 									"admin_state": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Holds ISIS Domain Administative state.").AddStringEnumDescription("enabled", "disabled").String,
@@ -244,9 +238,6 @@ func (r *ISISResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 													Required:            true,
 													Validators: []validator.String{
 														stringvalidator.OneOf("v4", "v6"),
-													},
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplace(),
 													},
 												},
 												"segment_routing_mpls": schema.BoolAttribute{
@@ -372,9 +363,6 @@ func (r *ISISResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						"interface_id": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"authentication_check": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Enabling Authentication check for ISIS interface without specific Level.").String,

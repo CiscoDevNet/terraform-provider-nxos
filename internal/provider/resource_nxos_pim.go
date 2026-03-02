@@ -139,9 +139,6 @@ func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Admin State.").AddStringEnumDescription("enabled", "disabled").String,
@@ -210,9 +207,6 @@ func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 									"interface_id": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 										Required:            true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
-										},
 									},
 									"admin_state": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
@@ -351,9 +345,6 @@ func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 									"address": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Address.").String,
 										Required:            true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
-										},
 									},
 									"group_lists": schema.ListNestedAttribute{
 										MarkdownDescription: "List of PIM Static RP group list configurations.",
@@ -363,9 +354,6 @@ func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 												"address": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Group List address information.").String,
 													Required:            true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplace(),
-													},
 												},
 												"bidir": schema.BoolAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Flag to treat Group Ranges as BiDir.").String,
@@ -405,16 +393,10 @@ func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 									"address": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Address.").String,
 										Required:            true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
-										},
 									},
 									"rp_set_address": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("IP Address of node performing the function.").String,
 										Required:            true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
-										},
 									},
 								},
 							},

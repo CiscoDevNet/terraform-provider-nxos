@@ -137,9 +137,6 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							Validators: []validator.String{
 								stringvalidator.OneOf("ipv4-ucast", "ipv4-mcast", "vpnv4-ucast", "ipv6-ucast", "ipv6-mcast", "vpnv6-ucast", "vpnv6-mcast", "l2vpn-evpn", "ipv4-lucast", "ipv6-lucast", "lnkstate", "ipv4-mvpn", "ipv6-mvpn", "l2vpn-vpls", "ipv4-mdt"),
 							},
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"route_target_address_families": schema.ListNestedAttribute{
 							MarkdownDescription: "List of VRF route target address families.",
@@ -151,9 +148,6 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 										Required:            true,
 										Validators: []validator.String{
 											stringvalidator.OneOf("ipv4-ucast", "ipv4-mcast", "vpnv4-ucast", "ipv6-ucast", "ipv6-mcast", "vpnv6-ucast", "vpnv6-mcast", "l2vpn-evpn", "ipv4-lucast", "ipv6-lucast", "lnkstate", "ipv4-mvpn", "ipv6-mvpn", "l2vpn-vpls", "ipv4-mdt"),
-										},
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
 										},
 									},
 									"route_target_directions": schema.ListNestedAttribute{
@@ -167,9 +161,6 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 													Validators: []validator.String{
 														stringvalidator.OneOf("import", "export"),
 													},
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplace(),
-													},
 												},
 												"route_targets": schema.ListNestedAttribute{
 													MarkdownDescription: "List of VRF route target entries.",
@@ -179,9 +170,6 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 															"route_target": schema.StringAttribute{
 																MarkdownDescription: helpers.NewAttributeDescription("Route Target. Value in NX-OS DME format.").String,
 																Required:            true,
-																PlanModifiers: []planmodifier.String{
-																	stringplanmodifier.RequiresReplace(),
-																},
 															},
 														},
 													},

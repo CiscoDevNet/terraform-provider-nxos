@@ -85,9 +85,6 @@ func (r *DefaultQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Name of class-map.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"match_type": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Match-any, match-all or match-first.").AddStringEnumDescription("match-any", "match-all", "match-first").String,
@@ -104,9 +101,6 @@ func (r *DefaultQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 									"value": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Dscp value.").String,
 										Required:            true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
-										},
 									},
 								},
 							},
@@ -122,9 +116,6 @@ func (r *DefaultQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Name of policy-map.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"match_type": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Match-any, match-all or match-first.").AddStringEnumDescription("match-any", "match-all", "match-first").String,
@@ -141,9 +132,6 @@ func (r *DefaultQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 									"name": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Match using class-map.").String,
 										Required:            true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
-										},
 									},
 									"next_class_map": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Insert before the given class-map.").String,
@@ -335,9 +323,6 @@ func (r *DefaultQoSResource) Schema(ctx context.Context, req resource.SchemaRequ
 						"interface_id": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"policy_map_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Policy-map Name.").String,

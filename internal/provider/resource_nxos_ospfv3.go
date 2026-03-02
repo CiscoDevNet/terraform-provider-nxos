@@ -92,9 +92,6 @@ func (r *OSPFv3Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("OSPFv3 instance name.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
@@ -119,9 +116,6 @@ func (r *OSPFv3Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 									"name": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 										Required:            true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
-										},
 									},
 									"admin_state": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("OSPFv3 VRF administrative state.").AddStringEnumDescription("enabled", "disabled").String,
@@ -183,9 +177,6 @@ func (r *OSPFv3Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 												"area_id": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Area Id as an integer or ip address.").String,
 													Required:            true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplace(),
-													},
 												},
 												"redistribute": schema.BoolAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Send redistributed LSAs into NSSA area.").String,
@@ -227,9 +218,6 @@ func (r *OSPFv3Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 													Validators: []validator.String{
 														stringvalidator.OneOf("ipv6-ucast"),
 													},
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplace(),
-													},
 												},
 												"administrative_distance": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Adminitrative distance. Value must be an integer range [1,255] or keyword: unspecified").String,
@@ -267,9 +255,6 @@ func (r *OSPFv3Resource) Schema(ctx context.Context, req resource.SchemaRequest,
 						"interface_id": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"advertise_secondaries": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Advertise secondary IPv6 addresses.").String,

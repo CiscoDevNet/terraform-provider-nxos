@@ -183,7 +183,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 					int64validator.Between({{.MinInt}}, {{.MaxInt}}),
 				},
 				{{- end}}
-				{{- if or .Id .RequiresReplace}}
+				{{- if .RequiresReplace}}
 				PlanModifiers: []planmodifier.{{.Type}}{
 					{{snakeCase .Type}}planmodifier.RequiresReplace(),
 				},

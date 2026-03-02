@@ -91,9 +91,6 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						"encap": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Encapsulation. Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"route_distinguisher": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Route Distinguisher. value in NX-OS DME format.").String,
@@ -118,9 +115,6 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 										Validators: []validator.String{
 											stringvalidator.OneOf("import", "export"),
 										},
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
-										},
 									},
 									"route_targets": schema.ListNestedAttribute{
 										MarkdownDescription: "List of EVPN VNI route target entries.",
@@ -130,9 +124,6 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 												"route_target": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Route Target. in NX-OS DME format.").String,
 													Required:            true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplace(),
-													},
 												},
 											},
 										},

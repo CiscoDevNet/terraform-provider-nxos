@@ -85,6 +85,9 @@ func (r *PhysicalInterfacesResource) Schema(ctx context.Context, req resource.Sc
 						"interface_id": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 							Required:            true,
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.RequiresReplace(),
+							},
 						},
 						"fec_mode": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("FEC Mode.").AddStringEnumDescription("fc-fec", "rs-fec", "fec-off", "auto", "rs-ieee", "rs-cons16", "kp-fec").String,

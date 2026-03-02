@@ -92,9 +92,6 @@ func (r *OSPFResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("OSPF instance name.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"admin_state": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
@@ -118,9 +115,6 @@ func (r *OSPFResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 									"name": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 										Required:            true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
-										},
 									},
 									"log_adjacency_changes": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Adjacency change logging level.").AddStringEnumDescription("none", "brief", "detail").String,
@@ -218,9 +212,6 @@ func (r *OSPFResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 												"area_id": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Area identifier to which a network or interface belongs in IPv4 address format.").String,
 													Required:            true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplace(),
-													},
 												},
 												"authentication_type": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Authentication type can be simple, none or md5.").AddStringEnumDescription("none", "simple", "md5", "unspecified").String,
@@ -301,9 +292,6 @@ func (r *OSPFResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 												"interface_id": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
 													Required:            true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplace(),
-													},
 												},
 												"admin_state": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,

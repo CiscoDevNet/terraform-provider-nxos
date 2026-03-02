@@ -155,9 +155,6 @@ func (r *NTPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("NTP server or peer address.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"vrf": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Identifies the VRF for the NTP providers.").String,

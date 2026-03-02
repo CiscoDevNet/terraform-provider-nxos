@@ -362,9 +362,6 @@ func (r *PortChannelInterfaceResource) Schema(ctx context.Context, req resource.
 						"interface_dn": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("DN of interface. For example: `sys/intf/phys-[eth1/1]`.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"force": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Channel group force.").String,

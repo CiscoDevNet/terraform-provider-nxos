@@ -91,9 +91,6 @@ func (r *BridgeDomainsResource) Schema(ctx context.Context, req resource.SchemaR
 						"fabric_encap": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The Layer 2 bridge-domain Fabric encapsulation (VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"access_encap": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The Layer 2 access encapsulation (VLAN or VNID). Possible values are `unknown`, `vlan-XX` or `vxlan-XX`.").String,

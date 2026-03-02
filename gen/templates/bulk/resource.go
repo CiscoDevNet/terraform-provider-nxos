@@ -139,6 +139,11 @@ func (r *{{camelCase .BulkName}}Resource) Schema(ctx context.Context, req resour
 								int64validator.Between({{.MinInt}}, {{.MaxInt}}),
 							},
 							{{- end}}
+							{{- if or .Id .RequiresReplace}}
+							PlanModifiers: []planmodifier.{{.Type}}{
+								{{snakeCase .Type}}planmodifier.RequiresReplace(),
+							},
+							{{- end}}
 						},
 						{{- end}}
 						{{- end}}
@@ -206,6 +211,11 @@ func (r *{{camelCase .BulkName}}Resource) Schema(ctx context.Context, req resour
 							{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
 							Validators: []validator.Int64{
 								int64validator.Between({{.MinInt}}, {{.MaxInt}}),
+							},
+							{{- end}}
+							{{- if .RequiresReplace}}
+							PlanModifiers: []planmodifier.{{.Type}}{
+								{{snakeCase .Type}}planmodifier.RequiresReplace(),
 							},
 							{{- end}}
 						},

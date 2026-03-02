@@ -186,9 +186,6 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The name of the object.").String,
 							Required:            true,
-							PlanModifiers: []planmodifier.String{
-								stringplanmodifier.RequiresReplace(),
-							},
 						},
 						"router_id": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The BGP router ID.").String,
@@ -349,9 +346,6 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 										Required:            true,
 										Validators: []validator.String{
 											stringvalidator.OneOf("ipv4-ucast", "ipv4-mcast", "vpnv4-ucast", "ipv6-ucast", "ipv6-mcast", "vpnv6-ucast", "vpnv6-mcast", "l2vpn-evpn", "ipv4-lucast", "ipv6-lucast", "lnkstate", "ipv4-mvpn", "ipv6-mvpn", "l2vpn-vpls", "ipv4-mdt"),
-										},
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
 										},
 									},
 									"critical_nexthop_timeout": schema.StringAttribute{
@@ -597,9 +591,6 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 												"prefix": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("IP address of the network or prefix to advertise.").String,
 													Required:            true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplace(),
-													},
 												},
 												"route_map": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Route map to modify attributes.").String,
@@ -626,16 +617,10 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 													Validators: []validator.String{
 														stringvalidator.OneOf("unspecified", "static", "direct", "bgp", "isis", "ospf", "ospfv3", "eigrp", "host", "rip", "amt", "lisp", "hmm", "am", "srv6", "dhcpv6", "icmpv6"),
 													},
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplace(),
-													},
 												},
 												"protocol_instance": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("The inter protocol route leak policy instance (Use `none` for `static` and `direct` protocols).").String,
 													Required:            true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplace(),
-													},
 												},
 												"route_map": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("The name of the default route leak policy route map. This route map name is used to control distribution.").String,
@@ -673,9 +658,6 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 									"name": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("The name of the object.").String,
 										Required:            true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
-										},
 									},
 									"remote_asn": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Autonomous System Number.").String,
@@ -834,9 +816,6 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 													Required:            true,
 													Validators: []validator.String{
 														stringvalidator.OneOf("ipv4-ucast", "vpnv4-ucast", "ipv6-ucast", "vpnv6-ucast", "l2vpn-evpn", "lnkstate"),
-													},
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplace(),
 													},
 												},
 												"control": schema.StringAttribute{
@@ -1006,9 +985,6 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 									"address": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Peer address.").String,
 										Required:            true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplace(),
-										},
 									},
 									"remote_asn": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Autonomous System Number, takes value from (1-4294967295 | 1-65535[.(0-65535)]).").String,
@@ -1183,9 +1159,6 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 													Validators: []validator.String{
 														stringvalidator.OneOf("ipv4-ucast", "ipv4-mvpn", "vpnv4-ucast", "ipv6-ucast", "vpnv6-ucast", "l2vpn-evpn", "lnkstate"),
 													},
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplace(),
-													},
 												},
 												"control": schema.StringAttribute{
 													MarkdownDescription: helpers.NewAttributeDescription("Peer address-family control. Choices: `rr-client`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `default-originate`, `advertisement-interval`, `suppress-inactive`, `nh-self-all`. Can be an empty string. Allowed formats:\n  - Single value. Example: `nh-self`\n  - Multiple values (comma-separated). Example: `dis-peer-as-check,nh-self,rr-client,suppress-inactive`. In this case values must be in alphabetical order.").String,
@@ -1323,9 +1296,6 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 																Validators: []validator.String{
 																	stringvalidator.OneOf("in", "out"),
 																},
-																PlanModifiers: []planmodifier.String{
-																	stringplanmodifier.RequiresReplace(),
-																},
 															},
 															"route_map_name": schema.StringAttribute{
 																MarkdownDescription: helpers.NewAttributeDescription("Route Map.").String,
@@ -1344,9 +1314,6 @@ func (r *BGPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 																Required:            true,
 																Validators: []validator.String{
 																	stringvalidator.OneOf("in", "out"),
-																},
-																PlanModifiers: []planmodifier.String{
-																	stringplanmodifier.RequiresReplace(),
 																},
 															},
 															"list": schema.StringAttribute{

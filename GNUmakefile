@@ -6,6 +6,14 @@ ifneq (,$(wildcard ./.env))
     export
 endif
 
+# Verify definition YAML files
+.PHONY: verify
+verify:
+	@echo "========================================="
+	@echo "Verifying definition YAML files..."
+	@echo "========================================="
+	go run gen/scripts/verify_delete_values.go
+
 # Run acceptance tests
 # Usage: make test [NAME=TestName] [DEBUG=1]
 .PHONY: test
@@ -28,7 +36,7 @@ test:
 # Usage: make gen NAME="Logging"
 # NAME: The name of the definition, e.g. "Logging"
 .PHONY: gen
-gen:
+gen: verify
 	go run ./gen/generator.go "$(NAME)"
 	go run golang.org/x/tools/cmd/goimports -w internal/provider/
 	terraform fmt -recursive ./examples/

@@ -732,6 +732,24 @@ func (data IPv6) toDeleteBody() nxos.Body {
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipv6Inst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		if !data.AccessListMatchLocal.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"accessListMatchLocal", "disabled")
+		}
+		if !data.AdminState.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"adminSt", "enabled")
+		}
+		if !data.DropNdFragments.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"dropNdFragments", "disabled")
+		}
+		if !data.QueuePackets.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"queuePackets", "disabled")
+		}
+		if !data.StaticNeighborOutsideSubnet.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"staticNeighborOutsideSubnet", "disabled")
+		}
+		if !data.SwitchPackets.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"switchPackets", "disabled")
+		}
 		nestedChildrenPath := childBodyPath + ".children"
 		_ = nestedChildrenPath
 		for _, child := range data.Vrfs {

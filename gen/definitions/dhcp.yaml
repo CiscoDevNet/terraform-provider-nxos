@@ -16,6 +16,7 @@ attributes:
       - enabled
       - disabled
     example: enabled
+    delete_value: enabled
 child_classes:
   - class_name: dhcpInst
     rn: inst
@@ -30,66 +31,79 @@ child_classes:
         type: Bool
         description: 'IPv6 Relay Information Option Vpn Enabled.'
         example: true
+        delete_value: false
       - nxos_name: Ipv6RelayOptionTypeCiscoEnabled
         tf_name: ipv6_relay_option_type_cisco
         type: Bool
         description: 'IPv6 Relay Sub-Option Type Cisco Enabled.'
         example: true
+        delete_value: false
       - nxos_name: RelayInformationOptionEnabled
         tf_name: relay_information_option
         type: Bool
         description: 'Relay Information Option Enabled.'
         example: true
+        delete_value: false
       - nxos_name: RelayInformationOptionTrustEnabled
         tf_name: relay_information_option_trust
         type: Bool
         description: 'Relay Information Option Trust Enabled.'
         example: true
+        delete_value: false
       - nxos_name: RelayInformationOptionVpnEnabled
         tf_name: relay_information_option_vpn
         type: Bool
         description: 'Relay Information Option Vpn Enabled.'
         example: true
+        delete_value: false
       - nxos_name: RelayInformationTrustAllEnabled
         tf_name: relay_information_trust_all
         type: Bool
         description: 'Relay Information Trust All Enabled.'
         example: true
+        delete_value: false
       - nxos_name: RelaySubOptionCircuitIdCustomizedEnabled
         tf_name: relay_sub_option_circuit_id_customized
         type: Bool
         description: 'Relay Sub-Option Circuit-id Customized Enabled.'
         example: true
+        delete_value: false
       - nxos_name: RelaySubOptionCircuitIdFormatString
         tf_name: relay_sub_option_circuit_id_format_string
         type: String
         description: 'Relay Sub-Option Circuit-id Format String.'
         example: '%p'
+        delete_value: ''
       - nxos_name: RelaySubOptionTypeCiscoEnabled
         tf_name: relay_sub_option_type_cisco
         type: Bool
         description: 'Relay Sub-Option Type Cisco Enabled.'
         example: true
+        delete_value: false
       - nxos_name: SmartRelayGlobalEnabled
         tf_name: smart_relay_global
         type: Bool
         description: 'Smart Relay Global Enabled.'
         example: true
+        delete_value: false
       - nxos_name: SnoopingEnabled
         tf_name: snooping
         type: Bool
         description: 'Snooping Enabled.'
         example: true
+        delete_value: false
       - nxos_name: SnoopingInformationOptionEnabled
         tf_name: snooping_information_option
         type: Bool
         description: 'Snooping Information Option Enabled.'
         example: true
+        delete_value: false
       - nxos_name: SnoopingVerifyMacAddressEnabled
         tf_name: snooping_verify_mac_address
         type: Bool
         description: 'Snooping Verify Mac Address Enabled.'
         example: false
+        delete_value: true
       - nxos_name: daiLogBufEntries
         tf_name: dai_log_buffer_entries
         type: Int64
@@ -97,36 +111,43 @@ child_classes:
         max_int: 1024
         description: 'DAI Log Buffer Entries.'
         example: 64
+        delete_value: 32
       - nxos_name: daiValidateDst
         tf_name: dai_validate_destination
         type: Bool
         description: 'DAI Validate Type: dst-mac.'
         example: true
+        delete_value: false
       - nxos_name: daiValidateIp
         tf_name: dai_validate_ip
         type: Bool
         description: 'DAI Validate Type: ip.'
         example: true
+        delete_value: false
       - nxos_name: daiValidateSrc
         tf_name: dai_validate_source
         type: Bool
         description: 'DAI Validate Type: src-mac.'
         example: true
+        delete_value: false
       - nxos_name: ipv6RelayOption79Enabled
         tf_name: ipv6_relay_option79
         type: Bool
         description: 'IPv6 Relay Option79 Enabled.'
         example: true
+        delete_value: false
       - nxos_name: pktStrictVal
         tf_name: packet_strict_validation
         type: Bool
         description: 'Pkt Strict Validation.'
         example: true
+        delete_value: false
       - nxos_name: relayDAIEnabled
         tf_name: relay_dai
         type: Bool
         description: 'Dynamic ARP Inspection functionality with DHCP Relay is enabled.'
         example: true
+        delete_value: false
       - nxos_name: relayInformationOptionServerIdOverrideDisableEnabled
         tf_name: relay_information_option_server_id_override
         type: Int64
@@ -134,46 +155,55 @@ child_classes:
         max_int: 1
         description: 'Relay Information Option Server-id-override-disable Enabled.'
         example: 1
+        delete_value: 0
       - nxos_name: relaySubOptionFormatNonTLVEnabled
         tf_name: relay_sub_option_format_non_tlv
         type: Bool
         description: 'Relay Option82 Sub-Option Format Non-TLV Enabled.'
         example: true
+        delete_value: false
       - nxos_name: relayV4overV6Enabled
         tf_name: relay_v4_over_v6
         type: Bool
         description: 'v4 over v6 relay transport.'
         example: true
+        delete_value: false
       - nxos_name: relayV6IAPDRouteAddEnabled
         tf_name: relay_v6_iapd_route_add
         type: Bool
         description: 'DHCPv6 IAPD route addition.'
         example: true
+        delete_value: false
       - nxos_name: snoopSubOptionCircuitIdFormatString
         tf_name: snoop_sub_option_circuit_id_format_string
         type: String
         description: 'Snoop Sub-Option Circuit-id Format String.'
         example: '%p'
+        delete_value: ''
       - nxos_name: snoopingSubOptionFormatNonTLVEnabled
         tf_name: snooping_sub_option_format_non_tlv
         type: Bool
         description: 'Snooping Option82 Sub-Option Format Non-TLV Enabled.'
         example: true
+        delete_value: false
       - nxos_name: v4RelayEnabled
         tf_name: v4_relay
         type: Bool
         description: 'DHCPv4 Enabled.'
         example: true
+        delete_value: false
       - nxos_name: v6RelayEnabled
         tf_name: v6_relay
         type: Bool
         description: 'DHCPv6 Enabled.'
         example: true
+        delete_value: false
       - nxos_name: v6SmartRelayGlobalEnabled
         tf_name: v6_smart_relay_global
         type: Bool
         description: 'V6 Smart Relay Global Enabled.'
         example: true
+        delete_value: false
     child_classes:
       - class_name: dhcpRelayIf
         rn: relayif-[%s]

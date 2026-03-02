@@ -24,6 +24,7 @@ child_classes:
           - enabled
           - disabled
         example: enabled
+        delete_value: disabled
       - nxos_name: adminSt
         tf_name: admin_state
         type: String
@@ -32,6 +33,7 @@ child_classes:
           - enabled
           - disabled
         example: enabled
+        delete_value: enabled
       - nxos_name: ctrl
         tf_name: control
         type: String
@@ -40,6 +42,7 @@ child_classes:
         enum_values:
           - stateful-ha
         example: stateful-ha
+        delete_value: ''
       - nxos_name: dropNdFragments
         tf_name: drop_nd_fragments
         type: String
@@ -48,6 +51,7 @@ child_classes:
           - enabled
           - disabled
         example: enabled
+        delete_value: disabled
       - nxos_name: queuePackets
         tf_name: queue_packets
         type: String
@@ -56,6 +60,7 @@ child_classes:
           - enabled
           - disabled
         example: enabled
+        delete_value: disabled
       - nxos_name: staticNeighborOutsideSubnet
         tf_name: static_neighbor_outside_subnet
         type: String
@@ -64,6 +69,7 @@ child_classes:
           - enabled
           - disabled
         example: enabled
+        delete_value: disabled
       - nxos_name: switchPackets
         tf_name: switch_packets
         type: String
@@ -73,6 +79,7 @@ child_classes:
           - all
           - lla
         example: all
+        delete_value: disabled
     child_classes:
       - class_name: ipv6Dom
         doc_path: Layer%203/ipv6:Dom/

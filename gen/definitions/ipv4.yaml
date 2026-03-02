@@ -16,6 +16,7 @@ attributes:
       - enabled
       - disabled
     example: enabled
+    delete_value: enabled
 child_classes:
   - class_name: ipv4Inst
     doc_path: Layer%203/ipv4:Inst/
@@ -33,6 +34,7 @@ child_classes:
           - enabled
           - disabled
         example: enabled
+        delete_value: enabled
       - nxos_name: accessListMatchLocal
         tf_name: access_list_match_local
         type: String
@@ -41,6 +43,7 @@ child_classes:
           - enabled
           - disabled
         example: enabled
+        delete_value: disabled
       - nxos_name: ctrl
         tf_name: control
         type: String
@@ -48,6 +51,7 @@ child_classes:
         allow_non_enum_values: true
         enum_values:
           - stateful-ha
+        delete_value: ''
         example: stateful-ha
       - nxos_name: hardwareEcmpHashOffsetConcat
         tf_name: hardware_ecmp_hash_offset_concatenation
@@ -58,6 +62,7 @@ child_classes:
           - disabled
         example: enabled
         exclude_test: true
+        delete_value: disabled
       - nxos_name: hardwareEcmpHashOffsetValue
         tf_name: hardware_ecmp_hash_offset_value
         type: Int64
@@ -66,6 +71,7 @@ child_classes:
         max_int: 63
         example: 10
         exclude_test: true
+        delete_value: 0
       - nxos_name: hardwareEcmpHashPolynomial
         tf_name: hardware_ecmp_hash_polynomial
         type: String
@@ -75,6 +81,7 @@ child_classes:
           - CRC32HI
         example: CRC32HI
         exclude_test: true
+        delete_value: CRC16
       - nxos_name: loggingLevel
         tf_name: logging_level
         type: String
@@ -89,6 +96,7 @@ child_classes:
           - informational
           - debug
         example: warning
+        delete_value: error
       - nxos_name: redirectSyslog
         tf_name: redirect_syslog
         type: String
@@ -97,6 +105,7 @@ child_classes:
           - enabled
           - disabled
         example: disabled
+        delete_value: enabled
       - nxos_name: redirectSyslogInterval
         tf_name: redirect_syslog_interval
         type: Int64
@@ -104,6 +113,7 @@ child_classes:
         min_int: 30
         max_int: 1800
         example: 120
+        delete_value: 60
       - nxos_name: sourceRoute
         tf_name: source_route
         type: String
@@ -112,6 +122,7 @@ child_classes:
           - enabled
           - disabled
         example: disabled
+        delete_value: enabled
     child_classes:
       - class_name: ipv4Dom
         doc_path: Layer%203/ipv4:Dom/

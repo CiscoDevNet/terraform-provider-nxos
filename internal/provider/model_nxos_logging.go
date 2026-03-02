@@ -212,6 +212,12 @@ func (data Logging) toDeleteBody() nxos.Body {
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".loggingLogLevel"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		if !data.All.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"all", "unspecified")
+		}
+		if !data.Level.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"severityLevel", "notifications")
+		}
 		nestedChildrenPath := childBodyPath + ".children"
 		_ = nestedChildrenPath
 	}

@@ -13,6 +13,7 @@ attributes:
     type: String
     description: 'The system name (hostname).'
     example: 'LEAF1'
+    delete_value: ''
 child_classes:
   - class_name: ethpmEntity
     doc_path: Interfaces/ethpm:Entity/
@@ -42,7 +43,7 @@ child_classes:
               - down
               - up
             example: up
-            delete_value: "DME_UNSET_PROPERTY_MARKER"
+            delete_value: up
           - nxos_name: adminLinkDownSyslogLevel
             tf_name: ethernet_admin_link_down_syslog_level
             type: Int64
@@ -50,6 +51,7 @@ child_classes:
             min_int: 0
             max_int: 7
             example: 4
+            delete_value: 5
           - nxos_name: adminLinkUpSyslogLevel
             tf_name: ethernet_admin_link_up_syslog_level
             type: Int64
@@ -57,6 +59,7 @@ child_classes:
             min_int: 0
             max_int: 7
             example: 4
+            delete_value: 5
           - nxos_name: adminSt
             tf_name: ethernet_admin_state
             type: String
@@ -65,11 +68,13 @@ child_classes:
               - disabled
               - enabled
             example: enabled
+            delete_value: enabled
           - nxos_name: allowUnsupportedSfp
             tf_name: ethernet_allow_unsupported_sfp
             type: Bool
             description: 'Allow unsupported SFP.'
             example: "true"
+            delete_value: true
           - nxos_name: chassisInfraAdaptorVlan
             tf_name: ethernet_chassis_infrastructure_adaptor_vlan
             type: Int64
@@ -77,6 +82,7 @@ child_classes:
             min_int: 0
             max_int: 4092
             example: 100
+            delete_value: 0
           - nxos_name: chassisInfraEpdsPortNo
             tf_name: ethernet_chassis_infrastructure_epds_port_number
             type: Int64
@@ -84,11 +90,13 @@ child_classes:
             min_int: 0
             max_int: 65535
             example: 100
+            delete_value: 0
           - nxos_name: chassisInfraIPv6addr
             tf_name: ethernet_chassis_infrastructure_ipv6_address
             type: String
             description: 'Chassis infra IPv6 address.'
             example: '2001:db8::1'
+            delete_value: ''
           - nxos_name: chassisInfraVlan
             tf_name: ethernet_chassis_infrastructure_vlan
             type: Int64
@@ -96,11 +104,13 @@ child_classes:
             min_int: 0
             max_int: 4092
             example: 100
+            delete_value: 0
           - nxos_name: chassisMgmtInst
             tf_name: ethernet_chassis_management_instance
             type: String
             description: 'Chassis MGMT instance.'
             example: 'mgmt0'
+            delete_value: default
           - nxos_name: chassisMgmtInstFabricNo
             tf_name: ethernet_chassis_management_instance_fabric_number
             type: String
@@ -110,6 +120,7 @@ child_classes:
               - RightFabric
               - UnknownFabric
             example: LeftFabric
+            delete_value: UnknownFabric
           - nxos_name: ctrl
             tf_name: ethernet_control
             type: String
@@ -117,6 +128,7 @@ child_classes:
             enum_values:
               - stateful-ha
             example: stateful-ha
+            delete_value: ''
           - nxos_name: ifSyslogInfo
             tf_name: ethernet_interface_syslog_info
             type: String
@@ -125,6 +137,7 @@ child_classes:
               - default
               - info-1
             example: info-1
+            delete_value: default
           - nxos_name: logEvent
             tf_name: ethernet_log_event
             type: String
@@ -136,6 +149,7 @@ child_classes:
               - trunkStatusDefault
               - trunkStatusEnable
             example: linkStatusEnable
+            delete_value: '7'
           - nxos_name: systemDefaultLayer
             tf_name: ethernet_default_layer
             type: String
@@ -145,6 +159,7 @@ child_classes:
               - Layer2
               - Layer3
             example: Layer3
+            delete_value: Layer2
           - nxos_name: systemIfAdminState
             tf_name: ethernet_system_interface_admin_state
             type: String
@@ -154,21 +169,25 @@ child_classes:
               - down-exclude-fabric
               - up
             example: up
+            delete_value: up
           - nxos_name: systemLinkFailLaserOn
             tf_name: ethernet_system_link_failure_laser_on
             type: Bool
             description: 'Enable or disable the system link failure laser on.'
             example: "false"
+            delete_value: false
           - nxos_name: systemStormControlMultiThreshold
             tf_name: ethernet_system_storm_control_multi_threshold
             type: Bool
             description: 'Enable or disable the storm control multi threshold.'
             example: "false"
+            delete_value: false
           - nxos_name: vlanTagNative
             tf_name: ethernet_vlan_tag_native
             type: Bool
             description: 'Tag native vlan.'
             example: "false"
+            delete_value: false
   - class_name: arpEntity
     doc_path: Address%20Resolution/arp%3AEntity/
     rn: arp
@@ -183,6 +202,7 @@ child_classes:
           - enabled
           - disabled
         example: enabled
+        delete_value: enabled
     child_classes:
       - class_name: arpInst
         doc_path: Address%20Resolution/arp%3AInst/
@@ -198,6 +218,7 @@ child_classes:
               - enabled
               - disabled
             example: enabled
+            delete_value: enabled
           - nxos_name: allowStaticArpOutsideSubnet
             tf_name: arp_allow_static_arp_outside_subnet
             type: String
@@ -206,6 +227,7 @@ child_classes:
               - enabled
               - disabled
             example: enabled
+            delete_value: disabled
           - nxos_name: arpUnnumSviSwReplication
             tf_name: arp_unnumbered_svi_software_replication
             type: String
@@ -214,6 +236,7 @@ child_classes:
               - enabled
               - disabled
             example: enabled
+            delete_value: disabled
           - nxos_name: cacheLimit
             tf_name: arp_cache_limit
             type: Int64
@@ -221,6 +244,7 @@ child_classes:
             max_int: 614400
             description: "Cache Limit."
             example: 200000
+            delete_value: 196608
           - nxos_name: cacheSyslogRate
             tf_name: arp_cache_syslog_rate
             type: Int64
@@ -228,6 +252,7 @@ child_classes:
             max_int: 1000
             description: "Cache Syslog Rate."
             example: 5
+            delete_value: 1
           - nxos_name: ctrl
             tf_name: arp_control
             type: String
@@ -235,6 +260,7 @@ child_classes:
             enum_values:
               - stateful-ha
             example: stateful-ha
+            delete_value: ''
             exclude_test: true
           - nxos_name: evpn_timeout
             tf_name: arp_evpn_timeout
@@ -243,6 +269,7 @@ child_classes:
             max_int: 30000
             description: "Refresh in EVPN on host moves."
             example: 3000
+            delete_value: 600
           - nxos_name: intfCacheLimit
             tf_name: arp_interface_cache_limit
             type: Int64
@@ -250,6 +277,7 @@ child_classes:
             max_int: 128000
             description: "ARP Cache limit for all Interface."
             example: 1000
+            delete_value: 0
           - nxos_name: ipAdjRouteDistance
             tf_name: arp_ip_adjacency_route_distance
             type: Int64
@@ -257,6 +285,7 @@ child_classes:
             max_int: 250
             description: "IP Adjacency Route Distance."
             example: 200
+            delete_value: 250
           - nxos_name: ipArpCos
             tf_name: arp_ip_arp_cos
             type: Int64
@@ -264,6 +293,7 @@ child_classes:
             max_int: 7
             description: "COS for ARP packet."
             example: 4
+            delete_value: 6
           - nxos_name: offListTimeout
             tf_name: arp_off_list_timeout
             type: Int64
@@ -271,6 +301,7 @@ child_classes:
             max_int: 1800
             description: "Off-list timeout."
             example: 300
+            delete_value: 180
           - nxos_name: rarpFabricFwding
             tf_name: arp_rarp_fabric_forwarding
             type: String
@@ -279,6 +310,7 @@ child_classes:
               - enabled
               - disabled
             example: enabled
+            delete_value: disabled
           - nxos_name: rarpFabricFwdingRate
             tf_name: arp_rarp_fabric_forwarding_rate
             type: Int64
@@ -286,6 +318,7 @@ child_classes:
             max_int: 400
             description: "RARP Fabric Forwarding Rate."
             example: 300
+            delete_value: 200
           - nxos_name: resolveARPOutsideSubnet
             tf_name: arp_resolve_outside_subnet
             type: String
@@ -294,6 +327,7 @@ child_classes:
               - enabled
               - disabled
             example: enabled
+            delete_value: disabled
           - nxos_name: suppression_timeout
             tf_name: arp_suppression_timeout
             type: Int64
@@ -301,6 +335,7 @@ child_classes:
             max_int: 28800
             description: "Suppression Timeout."
             example: 300
+            delete_value: 0
           - nxos_name: timeout
             tf_name: arp_timeout
             type: Int64
@@ -308,6 +343,7 @@ child_classes:
             max_int: 28800
             description: "ARP Global Timeout."
             example: 1800
+            delete_value: 1500
         child_classes:
           - class_name: arpVpc
             doc_path: Address%20Resolution/arp%3AVpc/
@@ -353,6 +389,7 @@ child_classes:
           - enabled
           - disabled
         example: enabled
+        delete_value: enabled
     child_classes:
       - class_name: ndInst
         doc_path: Discovery%20Protocols/nd%3AInst/
@@ -369,6 +406,7 @@ child_classes:
               - accept
               - no-accept
             example: accept
+            delete_value: none
           - nxos_name: adminSt
             tf_name: nd_instance_admin_state
             type: String
@@ -377,6 +415,7 @@ child_classes:
               - enabled
               - disabled
             example: enabled
+            delete_value: enabled
           - nxos_name: agingInterval
             tf_name: nd_aging_interval
             type: Int64
@@ -384,6 +423,7 @@ child_classes:
             min_int: 300
             max_int: 65535
             example: 1500
+            delete_value: 1380
           - nxos_name: cacheLimit
             tf_name: nd_cache_limit
             type: Int64
@@ -391,6 +431,7 @@ child_classes:
             min_int: 1
             max_int: 614400
             example: 200000
+            delete_value: 196608
           - nxos_name: cacheSyslogRate
             tf_name: nd_cache_syslog_rate
             type: Int64
@@ -398,6 +439,7 @@ child_classes:
             min_int: 1
             max_int: 1000
             example: 5
+            delete_value: 1
           - nxos_name: ctrl
             tf_name: nd_control
             type: String
@@ -406,6 +448,7 @@ child_classes:
               - stateful-ha
             example: stateful-ha
             exclude_test: true
+            delete_value: ''
           - nxos_name: ipv6AdjRouteDistance
             tf_name: nd_ipv6_adjacency_route_distance
             type: Int64
@@ -413,6 +456,7 @@ child_classes:
             min_int: 2
             max_int: 250
             example: 200
+            delete_value: 250
           - nxos_name: offListTimeout
             tf_name: nd_off_list_timeout
             type: Int64
@@ -420,6 +464,7 @@ child_classes:
             min_int: 180
             max_int: 1800
             example: 300
+            delete_value: 180
           - nxos_name: probeIntervalForSolicitNghbr
             tf_name: nd_probe_interval_for_solicit_neighbor
             type: Int64
@@ -427,6 +472,7 @@ child_classes:
             min_int: 0
             max_int: 20
             example: 10
+            delete_value: 5
           - nxos_name: solicitNghbrAdvertisement
             tf_name: nd_solicit_neighbor_advertisement
             type: String
@@ -435,6 +481,7 @@ child_classes:
               - enabled
               - disabled
             example: enabled
+            delete_value: disabled
         child_classes:
           - class_name: ndDom
             doc_path: Discovery%20Protocols/nd%3ADom/
@@ -471,6 +518,7 @@ child_classes:
                     description: 'The URL for a boot file in string.'
                     example: 'tftp://192.168.1.1/boot'
                     exclude_test: true
+                    delete_value: ''
                   - nxos_name: ctrl
                     tf_name: control
                     type: String
@@ -484,6 +532,7 @@ child_classes:
                     allow_non_enum_values: true
                     example: redirects
                     exclude_test: true
+                    delete_value: ''
                   - nxos_name: dadAttempts
                     tf_name: dad_attempts
                     type: Int64
@@ -492,6 +541,7 @@ child_classes:
                     max_int: 15
                     example: 3
                     exclude_test: true
+                    delete_value: 1
                   - nxos_name: dadnsInterval
                     tf_name: dadns_interval
                     type: Int64
@@ -500,6 +550,7 @@ child_classes:
                     max_int: 6000
                     example: 3000
                     exclude_test: true
+                    delete_value: 5000
                   - nxos_name: defaultRaLifetime
                     tf_name: default_ra_lifetime
                     type: String
@@ -509,6 +560,7 @@ child_classes:
                       - disabled
                     example: disabled
                     exclude_test: true
+                    delete_value: enabled
                   - nxos_name: delAdjOnMacDel
                     tf_name: delete_adjacency_on_mac_delete
                     type: String
@@ -518,6 +570,7 @@ child_classes:
                       - disabled
                     example: enabled
                     exclude_test: true
+                    delete_value: disabled
                   - nxos_name: dnsSearchListSuppress
                     tf_name: dns_search_list_suppress
                     type: String
@@ -527,6 +580,7 @@ child_classes:
                       - disabled
                     example: enabled
                     exclude_test: true
+                    delete_value: disabled
                   - nxos_name: dnsSuppress
                     tf_name: dns_suppress
                     type: String
@@ -536,6 +590,7 @@ child_classes:
                       - disabled
                     example: enabled
                     exclude_test: true
+                    delete_value: disabled
                   - nxos_name: hopLimit
                     tf_name: hop_limit
                     type: Int64
@@ -544,6 +599,7 @@ child_classes:
                     max_int: 255
                     example: 128
                     exclude_test: true
+                    delete_value: 64
                   - nxos_name: macExtract
                     tf_name: mac_extract
                     type: String
@@ -554,6 +610,7 @@ child_classes:
                       - exclude-nud-phase
                     example: nud-phase
                     exclude_test: true
+                    delete_value: none
                   - nxos_name: mtu
                     tf_name: mtu
                     type: Int64
@@ -562,6 +619,7 @@ child_classes:
                     max_int: 65535
                     example: 9000
                     exclude_test: true
+                    delete_value: 1500
                   - nxos_name: nsIntvl
                     tf_name: neighbor_solicit_interval
                     type: Int64
@@ -570,6 +628,7 @@ child_classes:
                     max_int: 3600000
                     example: 2000
                     exclude_test: true
+                    delete_value: 1000
                   - nxos_name: raIntvl
                     tf_name: ra_interval
                     type: Int64
@@ -578,6 +637,7 @@ child_classes:
                     max_int: 1800
                     example: 300
                     exclude_test: true
+                    delete_value: 600
                   - nxos_name: raIntvlMin
                     tf_name: ra_interval_min
                     type: Int64
@@ -586,6 +646,7 @@ child_classes:
                     max_int: 1350
                     example: 100
                     exclude_test: true
+                    delete_value: 200
                   - nxos_name: raLifetime
                     tf_name: ra_lifetime
                     type: Int64
@@ -594,6 +655,7 @@ child_classes:
                     max_int: 9000
                     example: 900
                     exclude_test: true
+                    delete_value: 1800
                   - nxos_name: reachableTime
                     tf_name: reachable_time
                     type: Int64
@@ -602,6 +664,7 @@ child_classes:
                     max_int: 3600000
                     example: 30000
                     exclude_test: true
+                    delete_value: 0
                   - nxos_name: retransTimer
                     tf_name: retransmit_timer
                     type: Int64
@@ -610,6 +673,7 @@ child_classes:
                     max_int: 4294967295
                     example: 5000
                     exclude_test: true
+                    delete_value: 0
                   - nxos_name: routeSuppress
                     tf_name: route_suppress
                     type: String
@@ -619,6 +683,7 @@ child_classes:
                       - disabled
                     example: enabled
                     exclude_test: true
+                    delete_value: disabled
                   - nxos_name: routerPreference
                     tf_name: router_preference
                     type: String
@@ -630,3 +695,4 @@ child_classes:
                       - high
                     example: high
                     exclude_test: true
+                    delete_value: unspecified

@@ -1117,6 +1117,42 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 
 func (data UserManagement) toDeleteBody() nxos.Body {
 	body := ""
+	if !data.AlphabetSequence.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"alphabetSequence", strconv.FormatInt(0, 10))
+	}
+	if !data.KeyboardSequence.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"keyBoardSequence", strconv.FormatInt(0, 10))
+	}
+	if !data.MaxLogins.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"maxLogins", strconv.FormatInt(0, 10))
+	}
+	if !data.MinUnique.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"minUnique", strconv.FormatInt(0, 10))
+	}
+	if !data.PasswordGraceTime.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdGraceTime", strconv.FormatInt(3, 10))
+	}
+	if !data.PasswordLifeTime.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdLifeTime", strconv.FormatInt(99999, 10))
+	}
+	if !data.PasswordMaxLength.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdMaxLength", strconv.FormatInt(127, 10))
+	}
+	if !data.PasswordMinLength.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdMinLength", strconv.FormatInt(8, 10))
+	}
+	if !data.PasswordSecureMode.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdSecureMode", "yes")
+	}
+	if !data.PasswordStrengthCheck.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdStrengthCheck", "true")
+	}
+	if !data.PasswordWarningTime.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"pwdWarningTime", strconv.FormatInt(14, 10))
+	}
+	if !data.ServicePasswordRecovery.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"svcPwdRecovery", "true")
+	}
 	if body == "" {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	}
@@ -1147,6 +1183,21 @@ func (data UserManagement) toDeleteBody() nxos.Body {
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaTacacsPlusEp"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		if !data.TacacsDeadtime.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"deadtime", strconv.FormatInt(0, 10))
+		}
+		if !data.TacacsKeyEncryption.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"keyEnc", "0")
+		}
+		if !data.TacacsLoggingLevel.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"loggingLevel", strconv.FormatInt(3, 10))
+		}
+		if !data.TacacsRetries.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"retries", strconv.FormatInt(1, 10))
+		}
+		if !data.TacacsTimeout.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"timeout", strconv.FormatInt(5, 10))
+		}
 		nestedChildrenPath := childBodyPath + ".children"
 		_ = nestedChildrenPath
 		for _, child := range data.TacacsProviders {

@@ -406,6 +406,9 @@ func (data *SpanningTree) updateFromBody(res gjson.Result) {
 
 func (data SpanningTree) toDeleteBody() nxos.Body {
 	body := ""
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "enabled")
+	}
 	if body == "" {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	}
@@ -414,6 +417,33 @@ func (data SpanningTree) toDeleteBody() nxos.Body {
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".stpInst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		if !data.InstanceAdminState.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"adminSt", "enabled")
+		}
+		if !data.BridgeAssurance.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"bridge", "enabled")
+		}
+		if !data.Control.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"ctrl", "normal")
+		}
+		if !data.Fcoe.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"fcoe", "disabled")
+		}
+		if !data.L2GatewayStpDomainId.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"l2GStpDomId", strconv.FormatInt(1024, 10))
+		}
+		if !data.LinecardIssu.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"lcIssu", "default")
+		}
+		if !data.Loopguard.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"loopguard", "disabled")
+		}
+		if !data.Mode.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"mode", "pvrst")
+		}
+		if !data.PathcostOption.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"pathcostOp", "short")
+		}
 		nestedChildrenPath := childBodyPath + ".children"
 		_ = nestedChildrenPath
 	}

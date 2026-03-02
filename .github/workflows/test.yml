@@ -34,6 +34,7 @@ jobs:
       - uses: hashicorp/setup-terraform@v4
       - run: pip install yamale
       - run: yamale -s gen/schema/schema.yaml gen/definitions/
+      - run: go run gen/scripts/verify_delete_values.go
       - run: go mod download
       - run: go generate
       - run: git diff --exit-code

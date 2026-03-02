@@ -704,7 +704,7 @@ func (data PhysicalInterface) toDeleteBody() nxos.Body {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"accessVlan", "vlan-1")
 	}
 	if !data.AdminState.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "up")
 	}
 	if !data.AutoNegotiation.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"autoNeg", "on")
@@ -714,9 +714,6 @@ func (data PhysicalInterface) toDeleteBody() nxos.Body {
 	}
 	if !data.Delay.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"delay", strconv.FormatInt(1, 10))
-	}
-	if !data.Description.IsNull() {
-		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
 	}
 	if !data.Duplex.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"duplex", "auto")
@@ -759,6 +756,105 @@ func (data PhysicalInterface) toDeleteBody() nxos.Body {
 	}
 	if !data.UserConfiguredFlags.IsNull() {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"userCfgdFlags", "none")
+	}
+	if !data.Beacon.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"beacon", "off")
+	}
+	if !data.DfeAdaptiveTuning.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dfeAdaptiveTuning", "enable")
+	}
+	if !data.DfeTuningDelay.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dfeTuningDelay", strconv.FormatInt(100, 10))
+	}
+	if !data.Dot1qEtherType.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"dot1qEtherType", strconv.FormatInt(33024, 10))
+	}
+	if !data.EqualizationDelay.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"equalizationDelay", strconv.FormatInt(0, 10))
+	}
+	if !data.InheritBandwidth.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"inhBw", strconv.FormatInt(4294967295, 10))
+	}
+	if !data.ItuChannel.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"ituChannel", strconv.FormatInt(32, 10))
+	}
+	if !data.LinkActiveJitterManagement.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkActiveJitterMgmt", "disable")
+	}
+	if !data.LinkFlapErrorDisable.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkFlapErrDis", "disable")
+	}
+	if !data.LinkFlapErrorMax.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkFlapErrorMax", strconv.FormatInt(30, 10))
+	}
+	if !data.LinkFlapErrorSeconds.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkFlapErrorSeconds", strconv.FormatInt(420, 10))
+	}
+	if !data.LinkLoopback.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkLoopback", "disable")
+	}
+	if !data.LinkMacUpTimer.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkMacUpTimer", strconv.FormatInt(0, 10))
+	}
+	if !data.LinkMaxBringUpTimer.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkMaxBringUpTimer", strconv.FormatInt(0, 10))
+	}
+	if !data.LinkTransmitReset.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"linkTransmitReset", "enable")
+	}
+	if !data.Mdix.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mdix", "auto")
+	}
+	if !data.MediaType.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"mediaType", "none")
+	}
+	if !data.OpticsLoopback.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"opticsLoopback", "disable")
+	}
+	if !data.PacketTimestampEgressSourceId.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"packetTimestampEgressSourceId", strconv.FormatInt(0, 10))
+	}
+	if !data.PacketTimestampIngressSourceId.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"packetTimestampIngressSourceId", strconv.FormatInt(0, 10))
+	}
+	if !data.PacketTimestampState.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"packetTimestampState", "disable")
+	}
+	if !data.PortType.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"portT", "unknown")
+	}
+	if !data.RouterMac.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"routerMac", "not-applicable")
+	}
+	if !data.SnmpTrapState.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"snmpTrapSt", "enable")
+	}
+	if !data.SpanMode.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"spanMode", "not-a-span-dest")
+	}
+	if !data.Squelch.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"squelch", "enable")
+	}
+	if !data.TransparentMode.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"transMode", "not-a-trans-port")
+	}
+	if !data.TrunkLogging.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"trunkLog", "default")
+	}
+	if !data.Usage.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"usage", "discovery")
+	}
+	if !data.VoicePortCos.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"voicePortCos", strconv.FormatInt(-1, 10))
+	}
+	if !data.VoicePortTrust.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"voicePortTrust", "disable")
+	}
+	if !data.VoiceVlanId.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"voiceVlanId", strconv.FormatInt(0, 10))
+	}
+	if !data.VoiceVlanType.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"voiceVlanType", "none")
 	}
 	if body == "" {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})

@@ -15,6 +15,7 @@ attributes:
     min_int: 1024
     max_int: 65535
     example: 4789
+    delete_value: 4789
   - nxos_name: vxlanUDPSrcPortMode
     tf_name: vxlan_udp_source_port_mode
     type: String
@@ -24,6 +25,7 @@ attributes:
       - high
       - rfc
     example: high
+    delete_value: low
 child_classes:
   - class_name: nvoEp
     doc_path: Network%20Virtualization/nvo:Ep/

@@ -5,7 +5,7 @@ dn: sys/bd
 no_delete: true
 ds_description: This data source can read the bridge domain configuration on NX-OS devices, including VLAN and VXLAN encapsulation mappings.
 res_description: This resource can manage the bridge domain configuration on NX-OS devices, including VLAN and VXLAN encapsulation mappings.
-doc_path: Layer%202/bd:Entity/
+doc_path: Bridge%20Domain/bd:Entity/
 doc_category: Switching
 attributes:
   - nxos_name: sysDefaultSVIAutostate
@@ -16,6 +16,7 @@ attributes:
       - disable
       - enable
     example: disable
+    delete_value: enable
 child_classes:
   - class_name: l2BD
     doc_path: Layer%202/l2:BD/

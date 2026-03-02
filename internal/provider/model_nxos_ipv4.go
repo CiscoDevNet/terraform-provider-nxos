@@ -764,6 +764,9 @@ func (data *IPv4) updateFromBody(res gjson.Result) {
 
 func (data IPv4) toDeleteBody() nxos.Body {
 	body := ""
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "enabled")
+	}
 	if body == "" {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	}
@@ -772,6 +775,33 @@ func (data IPv4) toDeleteBody() nxos.Body {
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipv4Inst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		if !data.InstanceAdminState.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"adminSt", "enabled")
+		}
+		if !data.AccessListMatchLocal.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"accessListMatchLocal", "disabled")
+		}
+		if !data.HardwareEcmpHashOffsetConcatenation.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"hardwareEcmpHashOffsetConcat", "disabled")
+		}
+		if !data.HardwareEcmpHashOffsetValue.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"hardwareEcmpHashOffsetValue", strconv.FormatInt(0, 10))
+		}
+		if !data.HardwareEcmpHashPolynomial.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"hardwareEcmpHashPolynomial", "CRC16")
+		}
+		if !data.LoggingLevel.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"loggingLevel", "error")
+		}
+		if !data.RedirectSyslog.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"redirectSyslog", "enabled")
+		}
+		if !data.RedirectSyslogInterval.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"redirectSyslogInterval", strconv.FormatInt(60, 10))
+		}
+		if !data.SourceRoute.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"sourceRoute", "enabled")
+		}
 		nestedChildrenPath := childBodyPath + ".children"
 		_ = nestedChildrenPath
 		for _, child := range data.Vrfs {

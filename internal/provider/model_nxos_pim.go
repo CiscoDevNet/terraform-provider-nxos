@@ -1060,6 +1060,9 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 
 func (data PIM) toDeleteBody() nxos.Body {
 	body := ""
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "enabled")
+	}
 	if body == "" {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	}
@@ -1068,6 +1071,27 @@ func (data PIM) toDeleteBody() nxos.Body {
 		childIndex := len(gjson.Get(body, childrenPath).Array())
 		childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".pimInst"
 		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", "{}")
+		if !data.InstanceAdminState.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"adminSt", "enabled")
+		}
+		if !data.EvpnBorderLeaf.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"evpnBorderLeaf", strconv.FormatBool(false))
+		}
+		if !data.ExtraNet.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"extraNet", strconv.FormatBool(false))
+		}
+		if !data.JoinPruneDelay.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"jpDelay", strconv.FormatInt(100, 10))
+		}
+		if !data.NullRegisterDelay.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"nrDelay", strconv.FormatInt(3, 10))
+		}
+		if !data.NullRegisterNumberOfRoutes.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"nrNumRt", strconv.FormatInt(1, 10))
+		}
+		if !data.RegisterStop.IsNull() {
+			body, _ = sjson.Set(body, childBodyPath+".attributes."+"regStop", strconv.FormatBool(false))
+		}
 		nestedChildrenPath := childBodyPath + ".children"
 		_ = nestedChildrenPath
 		for _, child := range data.Vrfs {

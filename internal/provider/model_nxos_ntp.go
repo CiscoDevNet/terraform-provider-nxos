@@ -316,6 +316,36 @@ func (data *NTP) updateFromBody(res gjson.Result) {
 
 func (data NTP) toDeleteBody() nxos.Body {
 	body := ""
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"adminSt", "enabled")
+	}
+	if !data.AllowControl.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"allowControl", "disabled")
+	}
+	if !data.AllowPrivate.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"allowPrivate", "disabled")
+	}
+	if !data.AuthenticationState.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"authSt", "disabled")
+	}
+	if !data.Logging.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"logging", "disabled")
+	}
+	if !data.LoggingLevel.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"loggingLevel", "critical")
+	}
+	if !data.Master.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"master", "disabled")
+	}
+	if !data.MasterStratum.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"masterStratum", strconv.FormatInt(8, 10))
+	}
+	if !data.Passive.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"passive", "disabled")
+	}
+	if !data.RateLimit.IsNull() {
+		body, _ = sjson.Set(body, data.getClassName()+".attributes."+"rateLimit", strconv.FormatInt(3, 10))
+	}
 	if body == "" {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	}

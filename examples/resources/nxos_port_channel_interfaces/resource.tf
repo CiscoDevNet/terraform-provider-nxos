@@ -1,5 +1,5 @@
 resource "nxos_port_channel_interfaces" "example" {
-  items = [{
+  port_channel_interfaces = [{
     interface_id           = "po123"
     port_channel_mode      = "active"
     minimum_links          = 2
@@ -42,5 +42,10 @@ resource "nxos_port_channel_interfaces" "example" {
     trunk_logging          = "enable"
     usage                  = "discovery"
     user_configured_flags  = "admin_layer,admin_state"
+    vrf_dn                 = "sys/inst-default"
+    members = [{
+      interface_dn = "sys/intf/phys-[eth1/11]"
+      force        = true
+    }]
   }]
 }

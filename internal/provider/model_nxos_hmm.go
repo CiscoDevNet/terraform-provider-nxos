@@ -250,8 +250,7 @@ func (data *HMM) updateFromBody(res gjson.Result) {
 		var rhmmFwdIf gjson.Result
 		rhmmFwdInst.Get("hmmFwdInst.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("hmmFwdIf.attributes.rn").String()
-				if key == data.Interfaces[c].getRn() {
+				if v.Get("hmmFwdIf.attributes.id").String() == data.Interfaces[c].InterfaceId.ValueString() {
 					rhmmFwdIf = v
 					return false
 				}

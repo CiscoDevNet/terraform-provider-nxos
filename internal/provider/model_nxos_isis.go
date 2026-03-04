@@ -688,8 +688,7 @@ func (data *ISIS) updateFromBody(res gjson.Result) {
 		var risisInst gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("isisInst.attributes.rn").String()
-				if key == data.Instances[c].getRn() {
+				if v.Get("isisInst.attributes.name").String() == data.Instances[c].Name.ValueString() {
 					risisInst = v
 					return false
 				}
@@ -729,8 +728,7 @@ func (data *ISIS) updateFromBody(res gjson.Result) {
 			var risisDom gjson.Result
 			risisInst.Get("isisInst.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("isisDom.attributes.rn").String()
-					if key == data.Instances[c].Vrfs[nc].getRn() {
+					if v.Get("isisDom.attributes.name").String() == data.Instances[c].Vrfs[nc].Name.ValueString() {
 						risisDom = v
 						return false
 					}
@@ -825,8 +823,7 @@ func (data *ISIS) updateFromBody(res gjson.Result) {
 				var risisDomAf gjson.Result
 				risisDom.Get("isisDom.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("isisDomAf.attributes.rn").String()
-						if key == data.Instances[c].Vrfs[nc].AddressFamilies[nc_].getRn() {
+						if v.Get("isisDomAf.attributes.type").String() == data.Instances[c].Vrfs[nc].AddressFamilies[nc_].AddressFamily.ValueString() {
 							risisDomAf = v
 							return false
 						}
@@ -957,8 +954,7 @@ func (data *ISIS) updateFromBody(res gjson.Result) {
 		var risisInternalIf gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("isisInternalIf.attributes.rn").String()
-				if key == data.Interfaces[c].getRn() {
+				if v.Get("isisInternalIf.attributes.id").String() == data.Interfaces[c].InterfaceId.ValueString() {
 					risisInternalIf = v
 					return false
 				}

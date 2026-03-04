@@ -690,8 +690,7 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 		var rpimDom gjson.Result
 		rpimInst.Get("pimInst.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("pimDom.attributes.rn").String()
-				if key == data.Vrfs[c].getRn() {
+				if v.Get("pimDom.attributes.name").String() == data.Vrfs[c].Name.ValueString() {
 					rpimDom = v
 					return false
 				}
@@ -766,8 +765,7 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 			var rpimIf gjson.Result
 			rpimDom.Get("pimDom.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("pimIf.attributes.rn").String()
-					if key == data.Vrfs[c].Interfaces[nc].getRn() {
+					if v.Get("pimIf.attributes.id").String() == data.Vrfs[c].Interfaces[nc].InterfaceId.ValueString() {
 						rpimIf = v
 						return false
 					}
@@ -961,8 +959,7 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 				var rpimStaticRP gjson.Result
 				rpimStaticRPP.Get("pimStaticRPP.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("pimStaticRP.attributes.rn").String()
-						if key == data.Vrfs[c].StaticRps[nc].getRn() {
+						if v.Get("pimStaticRP.attributes.addr").String() == data.Vrfs[c].StaticRps[nc].Address.ValueString() {
 							rpimStaticRP = v
 							return false
 						}
@@ -982,8 +979,7 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 					var rpimRPGrpList gjson.Result
 					rpimStaticRP.Get("pimStaticRP.children").ForEach(
 						func(_, v gjson.Result) bool {
-							key := v.Get("pimRPGrpList.attributes.rn").String()
-							if key == data.Vrfs[c].StaticRps[nc].GroupLists[nc_].getRn() {
+							if v.Get("pimRPGrpList.attributes.grpListName").String() == data.Vrfs[c].StaticRps[nc].GroupLists[nc_].Address.ValueString() {
 								rpimRPGrpList = v
 								return false
 							}
@@ -1048,8 +1044,8 @@ func (data *PIM) updateFromBody(res gjson.Result) {
 				var rpimAcastRPPeer gjson.Result
 				rpimAcastRPFuncP.Get("pimAcastRPFuncP.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("pimAcastRPPeer.attributes.rn").String()
-						if key == data.Vrfs[c].AnycastRpPeers[nc].getRn() {
+						if v.Get("pimAcastRPPeer.attributes.addr").String() == data.Vrfs[c].AnycastRpPeers[nc].Address.ValueString() &&
+							v.Get("pimAcastRPPeer.attributes.rpSetAddr").String() == data.Vrfs[c].AnycastRpPeers[nc].RpSetAddress.ValueString() {
 							rpimAcastRPPeer = v
 							return false
 						}

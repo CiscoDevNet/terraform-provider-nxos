@@ -727,8 +727,7 @@ func (data *VPC) updateFromBody(res gjson.Result) {
 			var rvpcIf gjson.Result
 			rvpcDom.Get("vpcDom.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("vpcIf.attributes.rn").String()
-					if key == data.Interfaces[c].getRn() {
+					if v.Get("vpcIf.attributes.id").String() == strconv.FormatInt(data.Interfaces[c].VpcInterfaceId.ValueInt64(), 10) {
 						rvpcIf = v
 						return false
 					}

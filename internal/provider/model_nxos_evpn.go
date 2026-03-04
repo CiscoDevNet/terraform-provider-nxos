@@ -230,8 +230,7 @@ func (data *EVPN) updateFromBody(res gjson.Result) {
 		var rrtctrlBDEvi gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("rtctrlBDEvi.attributes.rn").String()
-				if key == data.Vnis[c].getRn() {
+				if v.Get("rtctrlBDEvi.attributes.encap").String() == data.Vnis[c].Encap.ValueString() {
 					rrtctrlBDEvi = v
 					return false
 				}
@@ -266,8 +265,7 @@ func (data *EVPN) updateFromBody(res gjson.Result) {
 			var rrtctrlRttP gjson.Result
 			rrtctrlBDEvi.Get("rtctrlBDEvi.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("rtctrlRttP.attributes.rn").String()
-					if key == data.Vnis[c].RouteTargetDirections[nc].getRn() {
+					if v.Get("rtctrlRttP.attributes.type").String() == data.Vnis[c].RouteTargetDirections[nc].Type.ValueString() {
 						rrtctrlRttP = v
 						return false
 					}
@@ -287,8 +285,7 @@ func (data *EVPN) updateFromBody(res gjson.Result) {
 				var rrtctrlRttEntry gjson.Result
 				rrtctrlRttP.Get("rtctrlRttP.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("rtctrlRttEntry.attributes.rn").String()
-						if key == data.Vnis[c].RouteTargetDirections[nc].RouteTargets[nc_].getRn() {
+						if v.Get("rtctrlRttEntry.attributes.rtt").String() == data.Vnis[c].RouteTargetDirections[nc].RouteTargets[nc_].RouteTarget.ValueString() {
 							rrtctrlRttEntry = v
 							return false
 						}

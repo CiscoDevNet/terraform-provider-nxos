@@ -296,8 +296,7 @@ func (r *NTPResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 	}
 
 	if device.Managed {
-		queries := []func(*nxos.Req){nxos.Query("rsp-prop-include", "config-only")}
-		queries = append(queries, nxos.Query("rsp-subtree", "children"))
+		queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "datetimeNtpProvider")}
 		res, err := device.Client.GetDn(state.Dn.ValueString(), queries...)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

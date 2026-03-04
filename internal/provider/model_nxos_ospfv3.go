@@ -462,8 +462,7 @@ func (data *OSPFv3) updateFromBody(res gjson.Result) {
 		var rospfv3Inst gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("ospfv3Inst.attributes.rn").String()
-				if key == data.Instances[c].getRn() {
+				if v.Get("ospfv3Inst.attributes.name").String() == data.Instances[c].Name.ValueString() {
 					rospfv3Inst = v
 					return false
 				}
@@ -498,8 +497,7 @@ func (data *OSPFv3) updateFromBody(res gjson.Result) {
 			var rospfv3Dom gjson.Result
 			rospfv3Inst.Get("ospfv3Inst.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("ospfv3Dom.attributes.rn").String()
-					if key == data.Instances[c].Vrfs[nc].getRn() {
+					if v.Get("ospfv3Dom.attributes.name").String() == data.Instances[c].Vrfs[nc].Name.ValueString() {
 						rospfv3Dom = v
 						return false
 					}
@@ -569,8 +567,7 @@ func (data *OSPFv3) updateFromBody(res gjson.Result) {
 				var rospfv3Area gjson.Result
 				rospfv3Dom.Get("ospfv3Dom.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("ospfv3Area.attributes.rn").String()
-						if key == data.Instances[c].Vrfs[nc].Areas[nc_].getRn() {
+						if v.Get("ospfv3Area.attributes.id").String() == data.Instances[c].Vrfs[nc].Areas[nc_].AreaId.ValueString() {
 							rospfv3Area = v
 							return false
 						}
@@ -616,8 +613,7 @@ func (data *OSPFv3) updateFromBody(res gjson.Result) {
 				var rospfv3DomAf gjson.Result
 				rospfv3Dom.Get("ospfv3Dom.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("ospfv3DomAf.attributes.rn").String()
-						if key == data.Instances[c].Vrfs[nc].AddressFamilies[nc_].getRn() {
+						if v.Get("ospfv3DomAf.attributes.type").String() == data.Instances[c].Vrfs[nc].AddressFamilies[nc_].AddressFamilyType.ValueString() {
 							rospfv3DomAf = v
 							return false
 						}
@@ -660,8 +656,7 @@ func (data *OSPFv3) updateFromBody(res gjson.Result) {
 		var rospfv3If gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("ospfv3If.attributes.rn").String()
-				if key == data.Interfaces[c].getRn() {
+				if v.Get("ospfv3If.attributes.id").String() == data.Interfaces[c].InterfaceId.ValueString() {
 					rospfv3If = v
 					return false
 				}

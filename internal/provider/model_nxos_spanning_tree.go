@@ -325,8 +325,7 @@ func (data *SpanningTree) updateFromBody(res gjson.Result) {
 		var rstpIf gjson.Result
 		rstpInst.Get("stpInst.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("stpIf.attributes.rn").String()
-				if key == data.Interfaces[c].getRn() {
+				if v.Get("stpIf.attributes.id").String() == data.Interfaces[c].InterfaceId.ValueString() {
 					rstpIf = v
 					return false
 				}
@@ -451,6 +450,22 @@ func (data SpanningTree) toDeleteBody() nxos.Body {
 		}
 		nestedChildrenPath := childBodyPath + ".children"
 		_ = nestedChildrenPath
+		for _, child := range data.Interfaces {
+			childBody := ""
+			childBody, _ = sjson.Set(childBody, "rn", child.getRn())
+			childBody, _ = sjson.Set(childBody, "bpdufilter", "default")
+			childBody, _ = sjson.Set(childBody, "bpduguard", "default")
+			childBody, _ = sjson.Set(childBody, "cost", strconv.FormatInt(0, 10))
+			childBody, _ = sjson.Set(childBody, "guard", "default")
+			childBody, _ = sjson.Set(childBody, "linkType", "auto")
+			childBody, _ = sjson.Set(childBody, "mode", "default")
+			childBody, _ = sjson.Set(childBody, "priority", strconv.FormatInt(128, 10))
+			childBody, _ = sjson.Set(childBody, "ctrl", "unspecified")
+			childBody, _ = sjson.Set(childBody, "lcIssu", "default")
+			childBody, _ = sjson.Set(childBody, "prestdCfg", "disabled")
+			childBody, _ = sjson.Set(childBody, "simulatePvst", "default")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.stpIf.attributes", childBody)
+		}
 	}
 
 	return nxos.Body{body}
@@ -471,7 +486,17 @@ func (data SpanningTree) toBodyWithDeletes(ctx context.Context, state SpanningTr
 		if !found {
 			deleteBody := ""
 			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.rn", stateChild.getRn())
-			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.status", "deleted")
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.bpdufilter", "default")
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.bpduguard", "default")
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.cost", strconv.FormatInt(0, 10))
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.guard", "default")
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.linkType", "auto")
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.mode", "default")
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.priority", strconv.FormatInt(128, 10))
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.ctrl", "unspecified")
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.lcIssu", "default")
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.prestdCfg", "disabled")
+			deleteBody, _ = sjson.Set(deleteBody, "stpIf.attributes.simulatePvst", "default")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.stpInst.children"+".-1", deleteBody)
 		}
 	}

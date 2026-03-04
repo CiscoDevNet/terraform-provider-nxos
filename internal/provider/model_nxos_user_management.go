@@ -798,8 +798,7 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 		var raaaUser gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("aaaUser.attributes.rn").String()
-				if key == data.Users[c].getRn() {
+				if v.Get("aaaUser.attributes.name").String() == data.Users[c].Name.ValueString() {
 					raaaUser = v
 					return false
 				}
@@ -901,8 +900,7 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 				var raaaUserRole gjson.Result
 				raaaUserDomain.Get("aaaUserDomain.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("aaaUserRole.attributes.rn").String()
-						if key == data.Users[c].Roles[nc].getRn() {
+						if v.Get("aaaUserRole.attributes.name").String() == data.Users[c].Roles[nc].Name.ValueString() {
 							raaaUserRole = v
 							return false
 						}
@@ -996,8 +994,7 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 		var raaaTacacsPlusProvider gjson.Result
 		raaaTacacsPlusEp.Get("aaaTacacsPlusEp.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("aaaTacacsPlusProvider.attributes.rn").String()
-				if key == data.TacacsProviders[c].getRn() {
+				if v.Get("aaaTacacsPlusProvider.attributes.name").String() == data.TacacsProviders[c].Name.ValueString() {
 					raaaTacacsPlusProvider = v
 					return false
 				}
@@ -1078,8 +1075,7 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 		var raaaTacacsPlusProviderGroup gjson.Result
 		raaaTacacsPlusEp.Get("aaaTacacsPlusEp.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("aaaTacacsPlusProviderGroup.attributes.rn").String()
-				if key == data.TacacsProviderGroups[c].getRn() {
+				if v.Get("aaaTacacsPlusProviderGroup.attributes.name").String() == data.TacacsProviderGroups[c].Name.ValueString() {
 					raaaTacacsPlusProviderGroup = v
 					return false
 				}

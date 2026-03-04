@@ -224,8 +224,7 @@ func (data *Keychain) updateFromBody(res gjson.Result) {
 		var rkcmgrClassicKeychain gjson.Result
 		rkcmgrKeychains.Get("kcmgrKeychains.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("kcmgrClassicKeychain.attributes.rn").String()
-				if key == data.Keychains[c].getRn() {
+				if v.Get("kcmgrClassicKeychain.attributes.keychainName").String() == data.Keychains[c].Name.ValueString() {
 					rkcmgrClassicKeychain = v
 					return false
 				}
@@ -245,8 +244,7 @@ func (data *Keychain) updateFromBody(res gjson.Result) {
 			var rkcmgrKey gjson.Result
 			rkcmgrClassicKeychain.Get("kcmgrClassicKeychain.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("kcmgrKey.attributes.rn").String()
-					if key == data.Keychains[c].Keys[nc].getRn() {
+					if v.Get("kcmgrKey.attributes.keyId").String() == strconv.FormatInt(data.Keychains[c].Keys[nc].KeyId.ValueInt64(), 10) {
 						rkcmgrKey = v
 						return false
 					}

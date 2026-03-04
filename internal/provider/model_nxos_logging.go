@@ -178,8 +178,7 @@ func (data *Logging) updateFromBody(res gjson.Result) {
 		var rloggingFacility gjson.Result
 		rloggingLogLevel.Get("loggingLogLevel.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("loggingFacility.attributes.rn").String()
-				if key == data.Facilities[c].getRn() {
+				if v.Get("loggingFacility.attributes.facilityName").String() == data.Facilities[c].Name.ValueString() {
 					rloggingFacility = v
 					return false
 				}
@@ -225,6 +224,12 @@ func (data Logging) toDeleteBody() nxos.Body {
 		}
 		nestedChildrenPath := childBodyPath + ".children"
 		_ = nestedChildrenPath
+		for _, child := range data.Facilities {
+			childBody := ""
+			childBody, _ = sjson.Set(childBody, "rn", child.getRn())
+			childBody, _ = sjson.Set(childBody, "severityLevel", "notifications")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.loggingFacility.attributes", childBody)
+		}
 	}
 
 	return nxos.Body{body}
@@ -245,7 +250,7 @@ func (data Logging) toBodyWithDeletes(ctx context.Context, state Logging) nxos.B
 		if !found {
 			deleteBody := ""
 			deleteBody, _ = sjson.Set(deleteBody, "loggingFacility.attributes.rn", stateChild.getRn())
-			deleteBody, _ = sjson.Set(deleteBody, "loggingFacility.attributes.status", "deleted")
+			deleteBody, _ = sjson.Set(deleteBody, "loggingFacility.attributes.severityLevel", "notifications")
 			body.Str, _ = sjson.SetRaw(body.Str, bodyPath+".0.loggingLogLevel.children"+".-1", deleteBody)
 		}
 	}

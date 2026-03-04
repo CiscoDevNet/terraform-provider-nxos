@@ -540,8 +540,7 @@ func (data *OSPF) updateFromBody(res gjson.Result) {
 		var rospfInst gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("ospfInst.attributes.rn").String()
-				if key == data.Instances[c].getRn() {
+				if v.Get("ospfInst.attributes.name").String() == data.Instances[c].Name.ValueString() {
 					rospfInst = v
 					return false
 				}
@@ -571,8 +570,7 @@ func (data *OSPF) updateFromBody(res gjson.Result) {
 			var rospfDom gjson.Result
 			rospfInst.Get("ospfInst.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("ospfDom.attributes.rn").String()
-					if key == data.Instances[c].Vrfs[nc].getRn() {
+					if v.Get("ospfDom.attributes.name").String() == data.Instances[c].Vrfs[nc].Name.ValueString() {
 						rospfDom = v
 						return false
 					}
@@ -672,8 +670,7 @@ func (data *OSPF) updateFromBody(res gjson.Result) {
 				var rospfArea gjson.Result
 				rospfDom.Get("ospfDom.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("ospfArea.attributes.rn").String()
-						if key == data.Instances[c].Vrfs[nc].Areas[nc_].getRn() {
+						if v.Get("ospfArea.attributes.id").String() == data.Instances[c].Vrfs[nc].Areas[nc_].AreaId.ValueString() {
 							rospfArea = v
 							return false
 						}
@@ -762,8 +759,7 @@ func (data *OSPF) updateFromBody(res gjson.Result) {
 				var rospfIf gjson.Result
 				rospfDom.Get("ospfDom.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("ospfIf.attributes.rn").String()
-						if key == data.Instances[c].Vrfs[nc].Interfaces[nc_].getRn() {
+						if v.Get("ospfIf.attributes.id").String() == data.Instances[c].Vrfs[nc].Interfaces[nc_].InterfaceId.ValueString() {
 							rospfIf = v
 							return false
 						}

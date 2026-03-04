@@ -1,5 +1,5 @@
 resource "nxos_subinterfaces" "example" {
-  items = [{
+  subinterfaces = [{
     interface_id            = "eth1/10.124"
     admin_state             = "down"
     bandwidth               = 1000
@@ -13,5 +13,6 @@ resource "nxos_subinterfaces" "example" {
     router_mac              = "AA:BB:CC:DD:EE:FF"
     router_mac_ipv6_extract = "disable"
     snmp_trap               = "disable"
+    vrf_dn                  = "sys/inst-VRF123"
   }]
 }

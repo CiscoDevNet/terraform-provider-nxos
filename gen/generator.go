@@ -22,7 +22,6 @@ package main
 import (
 	"bufio"
 	"bytes"
-	"fmt"
 	"log"
 	"os"
 	"path"
@@ -104,44 +103,6 @@ var templates = []t{
 	},
 }
 
-var bulkTemplates = []t{
-	{
-		path:   "./gen/templates/bulk/model.go",
-		prefix: "./internal/provider/model_nxos_",
-		suffix: ".go",
-	},
-	{
-		path:   "./gen/templates/bulk/resource.go",
-		prefix: "./internal/provider/resource_nxos_",
-		suffix: ".go",
-	},
-	{
-		path:   "./gen/templates/bulk/resource_test.go",
-		prefix: "./internal/provider/resource_nxos_",
-		suffix: "_test.go",
-	},
-	{
-		path:   "./gen/templates/bulk/resource.tf",
-		prefix: "./examples/resources/nxos_",
-		suffix: "/resource.tf",
-	},
-	{
-		path:   "./gen/templates/bulk/import.sh",
-		prefix: "./examples/resources/nxos_",
-		suffix: "/import.sh",
-	},
-	{
-		path:   "./gen/templates/bulk/import-by-string-id.tf",
-		prefix: "./examples/resources/nxos_",
-		suffix: "/import-by-string-id.tf",
-	},
-	{
-		path:   "./gen/templates/bulk/import-by-identity.tf",
-		prefix: "./examples/resources/nxos_",
-		suffix: "/import-by-identity.tf",
-	},
-}
-
 type YamlConfig struct {
 	Name              string                 `yaml:"name"`
 	ClassName         string                 `yaml:"class_name"`
@@ -158,9 +119,6 @@ type YamlConfig struct {
 	ChildClasses      []YamlConfigChildClass `yaml:"child_classes"`
 	TfChildClasses    []YamlConfigChildClass `yaml:"-"`
 	TestPrerequisites []YamlTest             `yaml:"test_prerequisites"`
-	BulkResource      bool                   `yaml:"bulk_resource"`
-	BulkName          string                 `yaml:"bulk_name"`
-	ParentClassName   string                 `yaml:"parent_class_name"`
 }
 
 type YamlConfigAttribute struct {
@@ -271,33 +229,6 @@ func HasWriteOnly(attributes []YamlConfigAttribute) bool {
 	return false
 }
 
-// Templating helper function to get example dn
-func GetExampleDn(dn string, attributes []YamlConfigAttribute) string {
-	a := make([]interface{}, 0, len(attributes))
-	for _, attr := range attributes {
-		if attr.Id {
-			a = append(a, attr.Example)
-		}
-	}
-	return fmt.Sprintf(dn, a...)
-}
-
-// Templating helper function to identify last element of list
-func IsLast(index int, len int) bool {
-	return index+1 == len
-}
-
-// Templating helper function to count non-reference attributes
-func LenNoRef(attributes []YamlConfigAttribute) int {
-	count := 0
-	for _, attr := range attributes {
-		if !attr.ReferenceOnly {
-			count += 1
-		}
-	}
-	return count
-}
-
 // Templating helper function to support arithmetic addition
 func Add(a, b int) int {
 	return a + b
@@ -327,31 +258,6 @@ func ChildDocPaths(children []YamlConfigChildClass) []string {
 	return paths
 }
 
-// Templating helper function to check if any child class has nested children
-func HasNestedChildren(children []YamlConfigChildClass) bool {
-	for _, c := range children {
-		if len(c.ChildClasses) > 0 {
-			return true
-		}
-	}
-	return false
-}
-
-// Templating helper function to compute the maximum nesting depth of child classes
-func MaxChildDepth(children []YamlConfigChildClass) int {
-	if len(children) == 0 {
-		return 0
-	}
-	maxDepth := 0
-	for _, c := range children {
-		d := MaxChildDepth(c.ChildClasses)
-		if d > maxDepth {
-			maxDepth = d
-		}
-	}
-	return maxDepth + 1
-}
-
 // Templating helper function to return import attributes (reference_only or id)
 func ImportAttributes(config YamlConfig) []YamlConfigAttribute {
 	attributes := []YamlConfigAttribute{}
@@ -367,16 +273,6 @@ func ImportAttributes(config YamlConfig) []YamlConfigAttribute {
 func HasTestAttrs(attributes []YamlConfigAttribute) bool {
 	for _, attr := range attributes {
 		if !attr.ExcludeTest && !attr.WriteOnly {
-			return true
-		}
-	}
-	return false
-}
-
-// Templating helper function to check if any attribute has a delete_value
-func HasDeleteValue(attributes []YamlConfigAttribute) bool {
-	for _, attr := range attributes {
-		if attr.DeleteValue != "" && !attr.ReferenceOnly {
 			return true
 		}
 	}
@@ -420,16 +316,6 @@ func RnFormatArgs(prefix string, attributes []YamlConfigAttribute) string {
 	return strings.Join(args, ", ")
 }
 
-// ParentDn extracts the parent DN from a DN pattern.
-// e.g., "sys/bd/bd-[%s]" → "sys/bd"
-func ParentDn(dn string) string {
-	idx := strings.LastIndex(dn, "/")
-	if idx == -1 {
-		return dn
-	}
-	return dn[:idx]
-}
-
 // ChildRn extracts the child RN from a DN pattern.
 // e.g., "sys/bd/bd-[%s]" → "bd-[%s]"
 func ChildRn(dn string) string {
@@ -438,39 +324,6 @@ func ChildRn(dn string) string {
 		return dn
 	}
 	return dn[idx+1:]
-}
-
-// BulkImportAttributes returns only reference_only attributes (used for bulk resource import).
-func BulkImportAttributes(config YamlConfig) []YamlConfigAttribute {
-	attributes := []YamlConfigAttribute{}
-	for _, attr := range config.Attributes {
-		if attr.ReferenceOnly {
-			attributes = append(attributes, attr)
-		}
-	}
-	return attributes
-}
-
-// BulkItemAttributes returns non-reference_only attributes (the actual item attributes).
-func BulkItemAttributes(config YamlConfig) []YamlConfigAttribute {
-	attributes := []YamlConfigAttribute{}
-	for _, attr := range config.Attributes {
-		if !attr.ReferenceOnly {
-			attributes = append(attributes, attr)
-		}
-	}
-	return attributes
-}
-
-// BulkIdAttributes returns attributes that are id attributes (used for matching items).
-func BulkIdAttributes(config YamlConfig) []YamlConfigAttribute {
-	attributes := []YamlConfigAttribute{}
-	for _, attr := range config.Attributes {
-		if attr.Id {
-			attributes = append(attributes, attr)
-		}
-	}
-	return attributes
 }
 
 // Templating helper function to create a map from key-value pairs for passing multiple values to {{template}}
@@ -484,32 +337,33 @@ func MakeMap(pairs ...interface{}) map[string]interface{} {
 
 // Map of templating functions
 var functions = template.FuncMap{
-	"toGoName":           ToGoName,
-	"camelCase":          CamelCase,
-	"snakeCase":          SnakeCase,
-	"hasId":              HasId,
-	"getExampleDn":       GetExampleDn,
-	"isLast":             IsLast,
-	"sprintf":            fmt.Sprintf,
-	"lenNoRef":           LenNoRef,
-	"add":                Add,
-	"childDocClassNames": ChildDocClassNames,
-	"childDocPaths":      ChildDocPaths,
-	"hasNestedChildren":  HasNestedChildren,
-	"maxChildDepth":      MaxChildDepth,
-	"hasWriteOnly":       HasWriteOnly,
-	"importAttributes":   ImportAttributes,
-	"hasDeleteValue":      HasDeleteValue,
+	"toGoName":            ToGoName,
+	"camelCase":           CamelCase,
+	"snakeCase":           SnakeCase,
+	"hasId":               HasId,
+	"add":                 Add,
+	"childDocClassNames":  ChildDocClassNames,
+	"childDocPaths":       ChildDocPaths,
+	"hasWriteOnly":        HasWriteOnly,
+	"importAttributes":    ImportAttributes,
 	"hasListChildClasses": HasListChildClasses,
 	"hasTestAttrs":        HasTestAttrs,
 	"makeMap":             MakeMap,
 	"rnHasDynamicSegment": RnHasDynamicSegment,
 	"rnFormatArgs":        RnFormatArgs,
-	"parentDn":            ParentDn,
 	"childRn":             ChildRn,
-	"bulkImportAttributes": BulkImportAttributes,
-	"bulkItemAttributes":   BulkItemAttributes,
-	"bulkIdAttributes":     BulkIdAttributes,
+	"allChildClassNames":  AllChildClassNames,
+	"join":                strings.Join,
+}
+
+// AllChildClassNames recursively collects all child class names.
+func AllChildClassNames(children []YamlConfigChildClass) []string {
+	var names []string
+	for _, c := range children {
+		names = append(names, c.ClassName)
+		names = append(names, AllChildClassNames(c.ChildClasses)...)
+	}
+	return names
 }
 
 // buildTfChildClasses builds the TfChildClasses list by promoting children
@@ -673,15 +527,6 @@ func main() {
 	for i := range configs {
 		configs[i].TfChildClasses = buildTfChildClasses(configs[i].ChildClasses)
 		buildChildTfChildClasses(configs[i].ChildClasses)
-		// Auto-pluralize bulk name if not explicitly set
-		if configs[i].BulkResource && configs[i].BulkName == "" {
-			name := configs[i].Name
-			if strings.HasSuffix(name, "y") {
-				configs[i].BulkName = name[:len(name)-1] + "ies"
-			} else {
-				configs[i].BulkName = name + "s"
-			}
-		}
 	}
 
 	for _, config := range configs {
@@ -691,12 +536,6 @@ func main() {
 		// Iterate over templates
 		for _, t := range templates {
 			renderTemplate(t.path, t.prefix+SnakeCase(config.Name)+t.suffix, config)
-		}
-		// Iterate over bulk templates
-		if config.BulkResource {
-			for _, t := range bulkTemplates {
-				renderTemplate(t.path, t.prefix+SnakeCase(config.BulkName)+t.suffix, config)
-			}
 		}
 	}
 

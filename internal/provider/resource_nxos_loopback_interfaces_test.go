@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"testing"
 
 	goversion "github.com/hashicorp/go-version"
@@ -34,11 +35,11 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosLoopbackInterfaces(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "items.0.interface_id", "lo123"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "items.0.admin_state", "down"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "items.0.description", "My Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "items.0.link_logging", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "items.0.vrf_dn", "sys/inst-default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "loopback_interfaces.0.interface_id", "lo123"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "loopback_interfaces.0.admin_state", "down"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "loopback_interfaces.0.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "loopback_interfaces.0.link_logging", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interfaces.test", "loopback_interfaces.0.vrf_dn", "sys/inst-default"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -72,7 +73,8 @@ func TestAccNxosLoopbackInterfaces(t *testing.T) {
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxosLoopbackInterfacesImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
-		return "", nil
+
+		return fmt.Sprintf(""), nil
 	}
 }
 
@@ -85,9 +87,6 @@ func nxosLoopbackInterfacesImportStateIdFunc(resourceName string) resource.Impor
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosLoopbackInterfacesConfig_minimum() string {
 	config := `resource "nxos_loopback_interfaces" "test" {` + "\n"
-	config += `	items = [{` + "\n"
-	config += `		interface_id = "lo123"` + "\n"
-	config += `	}]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -97,7 +96,7 @@ func testAccNxosLoopbackInterfacesConfig_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosLoopbackInterfacesConfig_all() string {
 	config := `resource "nxos_loopback_interfaces" "test" {` + "\n"
-	config += `	items = [{` + "\n"
+	config += `	loopback_interfaces = [{` + "\n"
 	config += `		interface_id = "lo123"` + "\n"
 	config += `		admin_state = "down"` + "\n"
 	config += `		description = "My Description"` + "\n"

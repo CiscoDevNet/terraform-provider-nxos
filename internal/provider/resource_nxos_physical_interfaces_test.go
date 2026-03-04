@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"testing"
 
 	goversion "github.com/hashicorp/go-version"
@@ -34,60 +35,60 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 func TestAccNxosPhysicalInterfaces(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.interface_id", "eth1/10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.fec_mode", "auto"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.access_vlan", "unknown"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.admin_state", "down"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.auto_negotiation", "on"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.bandwidth", "1000"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.delay", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.description", "My Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.duplex", "auto"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.layer", "Layer3"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.link_logging", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.link_debounce_down", "200"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.link_debounce_up", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.medium", "broadcast"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.mode", "access"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.mtu", "1500"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.native_vlan", "unknown"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.speed", "auto"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.speed_group", "auto"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.trunk_vlans", "1-4094"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.uni_directional_ethernet", "disable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.user_configured_flags", "admin_layer,admin_mtu,admin_state"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.beacon", "off"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.dfe_adaptive_tuning", "disable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.dfe_tuning_delay", "500"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.inherit_bandwidth", "1000"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.itu_channel", "50"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.link_active_jitter_management", "disable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.link_flap_error_disable", "disable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.link_flap_error_max", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.link_flap_error_seconds", "60"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.link_loopback", "disable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.link_mac_up_timer", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.link_max_bring_up_timer", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.link_transmit_reset", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.mdix", "auto"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.media_type", "none"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.optics_loopback", "disable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.packet_timestamp_egress_source_id", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.packet_timestamp_ingress_source_id", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.packet_timestamp_state", "disable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.port_type", "unknown"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.router_mac", "not-applicable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.snmp_trap_state", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.span_mode", "not-a-span-dest"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.squelch", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.transparent_mode", "not-a-trans-port"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.trunk_logging", "default"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.usage", "discovery"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.voice_port_cos", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.voice_port_trust", "disable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.voice_vlan_id", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.voice_vlan_type", "none"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "items.0.vrf_dn", "sys/inst-default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.fec_mode", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.access_vlan", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.admin_state", "down"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.auto_negotiation", "on"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.bandwidth", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.delay", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.duplex", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.layer", "Layer3"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.link_logging", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.link_debounce_down", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.link_debounce_up", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.medium", "broadcast"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.mode", "access"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.mtu", "1500"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.native_vlan", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.speed", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.speed_group", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.trunk_vlans", "1-4094"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.uni_directional_ethernet", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.user_configured_flags", "admin_layer,admin_mtu,admin_state"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.beacon", "off"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.dfe_adaptive_tuning", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.dfe_tuning_delay", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.inherit_bandwidth", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.itu_channel", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.link_active_jitter_management", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.link_flap_error_disable", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.link_flap_error_max", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.link_flap_error_seconds", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.link_loopback", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.link_mac_up_timer", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.link_max_bring_up_timer", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.link_transmit_reset", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.mdix", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.media_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.optics_loopback", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.packet_timestamp_egress_source_id", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.packet_timestamp_ingress_source_id", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.packet_timestamp_state", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.port_type", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.router_mac", "not-applicable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.snmp_trap_state", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.span_mode", "not-a-span-dest"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.squelch", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.transparent_mode", "not-a-trans-port"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.trunk_logging", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.usage", "discovery"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.voice_port_cos", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.voice_port_trust", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.voice_vlan_id", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.voice_vlan_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_physical_interfaces.test", "physical_interfaces.0.vrf_dn", "sys/inst-default"))
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -121,7 +122,8 @@ func TestAccNxosPhysicalInterfaces(t *testing.T) {
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 func nxosPhysicalInterfacesImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
-		return "", nil
+
+		return fmt.Sprintf(""), nil
 	}
 }
 
@@ -134,9 +136,6 @@ func nxosPhysicalInterfacesImportStateIdFunc(resourceName string) resource.Impor
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccNxosPhysicalInterfacesConfig_minimum() string {
 	config := `resource "nxos_physical_interfaces" "test" {` + "\n"
-	config += `	items = [{` + "\n"
-	config += `		interface_id = "eth1/10"` + "\n"
-	config += `	}]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -146,7 +145,7 @@ func testAccNxosPhysicalInterfacesConfig_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccNxosPhysicalInterfacesConfig_all() string {
 	config := `resource "nxos_physical_interfaces" "test" {` + "\n"
-	config += `	items = [{` + "\n"
+	config += `	physical_interfaces = [{` + "\n"
 	config += `		interface_id = "eth1/10"` + "\n"
 	config += `		fec_mode = "auto"` + "\n"
 	config += `		access_vlan = "unknown"` + "\n"

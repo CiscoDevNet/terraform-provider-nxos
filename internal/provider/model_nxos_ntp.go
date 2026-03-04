@@ -265,8 +265,7 @@ func (data *NTP) updateFromBody(res gjson.Result) {
 		var rdatetimeNtpProvider gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("datetimeNtpProvider.attributes.rn").String()
-				if key == data.Servers[c].getRn() {
+				if v.Get("datetimeNtpProvider.attributes.name").String() == data.Servers[c].Name.ValueString() {
 					rdatetimeNtpProvider = v
 					return false
 				}

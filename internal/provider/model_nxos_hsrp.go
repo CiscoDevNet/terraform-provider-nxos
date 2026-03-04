@@ -424,8 +424,7 @@ func (data *HSRP) updateFromBody(res gjson.Result) {
 		var rhsrpIf gjson.Result
 		rhsrpInst.Get("hsrpInst.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("hsrpIf.attributes.rn").String()
-				if key == data.Interfaces[c].getRn() {
+				if v.Get("hsrpIf.attributes.id").String() == data.Interfaces[c].InterfaceId.ValueString() {
 					rhsrpIf = v
 					return false
 				}
@@ -500,8 +499,8 @@ func (data *HSRP) updateFromBody(res gjson.Result) {
 			var rhsrpGroup gjson.Result
 			rhsrpIf.Get("hsrpIf.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("hsrpGroup.attributes.rn").String()
-					if key == data.Interfaces[c].Groups[nc].getRn() {
+					if v.Get("hsrpGroup.attributes.id").String() == strconv.FormatInt(data.Interfaces[c].Groups[nc].GroupId.ValueInt64(), 10) &&
+						v.Get("hsrpGroup.attributes.af").String() == data.Interfaces[c].Groups[nc].AddressFamily.ValueString() {
 						rhsrpGroup = v
 						return false
 					}

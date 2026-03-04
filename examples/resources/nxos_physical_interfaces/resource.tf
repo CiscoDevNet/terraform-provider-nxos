@@ -1,5 +1,5 @@
 resource "nxos_physical_interfaces" "example" {
-  items = [{
+  physical_interfaces = [{
     interface_id                       = "eth1/10"
     fec_mode                           = "auto"
     access_vlan                        = "unknown"
@@ -55,5 +55,6 @@ resource "nxos_physical_interfaces" "example" {
     voice_port_trust                   = "disable"
     voice_vlan_id                      = 0
     voice_vlan_type                    = "none"
+    vrf_dn                             = "sys/inst-default"
   }]
 }

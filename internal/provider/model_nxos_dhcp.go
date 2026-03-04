@@ -541,8 +541,7 @@ func (data *DHCP) updateFromBody(res gjson.Result) {
 		var rdhcpRelayIf gjson.Result
 		rdhcpInst.Get("dhcpInst.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("dhcpRelayIf.attributes.rn").String()
-				if key == data.RelayInterfaces[c].getRn() {
+				if v.Get("dhcpRelayIf.attributes.id").String() == data.RelayInterfaces[c].InterfaceId.ValueString() {
 					rdhcpRelayIf = v
 					return false
 				}
@@ -592,8 +591,8 @@ func (data *DHCP) updateFromBody(res gjson.Result) {
 			var rdhcpRelayAddr gjson.Result
 			rdhcpRelayIf.Get("dhcpRelayIf.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("dhcpRelayAddr.attributes.rn").String()
-					if key == data.RelayInterfaces[c].Addresses[nc].getRn() {
+					if v.Get("dhcpRelayAddr.attributes.vrf").String() == data.RelayInterfaces[c].Addresses[nc].Vrf.ValueString() &&
+						v.Get("dhcpRelayAddr.attributes.address").String() == data.RelayInterfaces[c].Addresses[nc].Address.ValueString() {
 						rdhcpRelayAddr = v
 						return false
 					}

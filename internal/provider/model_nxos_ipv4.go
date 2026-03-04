@@ -541,8 +541,7 @@ func (data *IPv4) updateFromBody(res gjson.Result) {
 		var ripv4Dom gjson.Result
 		ripv4Inst.Get("ipv4Inst.children").ForEach(
 			func(_, v gjson.Result) bool {
-				key := v.Get("ipv4Dom.attributes.rn").String()
-				if key == data.Vrfs[c].getRn() {
+				if v.Get("ipv4Dom.attributes.name").String() == data.Vrfs[c].Name.ValueString() {
 					ripv4Dom = v
 					return false
 				}
@@ -572,8 +571,7 @@ func (data *IPv4) updateFromBody(res gjson.Result) {
 			var ripv4Route gjson.Result
 			ripv4Dom.Get("ipv4Dom.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("ipv4Route.attributes.rn").String()
-					if key == data.Vrfs[c].StaticRoutes[nc].getRn() {
+					if v.Get("ipv4Route.attributes.prefix").String() == data.Vrfs[c].StaticRoutes[nc].Prefix.ValueString() {
 						ripv4Route = v
 						return false
 					}
@@ -613,8 +611,9 @@ func (data *IPv4) updateFromBody(res gjson.Result) {
 				var ripv4Nexthop gjson.Result
 				ripv4Route.Get("ipv4Route.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("ipv4Nexthop.attributes.rn").String()
-						if key == data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].getRn() {
+						if v.Get("ipv4Nexthop.attributes.nhIf").String() == data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].InterfaceId.ValueString() &&
+							v.Get("ipv4Nexthop.attributes.nhAddr").String() == data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].Address.ValueString() &&
+							v.Get("ipv4Nexthop.attributes.nhVrf").String() == data.Vrfs[c].StaticRoutes[nc].NextHops[nc_].VrfName.ValueString() {
 							ripv4Nexthop = v
 							return false
 						}
@@ -676,8 +675,7 @@ func (data *IPv4) updateFromBody(res gjson.Result) {
 			var ripv4If gjson.Result
 			ripv4Dom.Get("ipv4Dom.children").ForEach(
 				func(_, v gjson.Result) bool {
-					key := v.Get("ipv4If.attributes.rn").String()
-					if key == data.Vrfs[c].Interfaces[nc].getRn() {
+					if v.Get("ipv4If.attributes.id").String() == data.Vrfs[c].Interfaces[nc].InterfaceId.ValueString() {
 						ripv4If = v
 						return false
 					}
@@ -727,8 +725,7 @@ func (data *IPv4) updateFromBody(res gjson.Result) {
 				var ripv4Addr gjson.Result
 				ripv4If.Get("ipv4If.children").ForEach(
 					func(_, v gjson.Result) bool {
-						key := v.Get("ipv4Addr.attributes.rn").String()
-						if key == data.Vrfs[c].Interfaces[nc].Addresses[nc_].getRn() {
+						if v.Get("ipv4Addr.attributes.addr").String() == data.Vrfs[c].Interfaces[nc].Addresses[nc_].Address.ValueString() {
 							ripv4Addr = v
 							return false
 						}

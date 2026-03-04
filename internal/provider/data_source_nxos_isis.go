@@ -496,9 +496,7 @@ func (d *ISISDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-
-	queries := []func(*nxos.Req){}
-	queries = append(queries, nxos.Query("rsp-subtree-depth", "3"))
+	queries := []func(*nxos.Req){nxos.Query("rsp-subtree", "full"), nxos.Query("rsp-subtree-class", "isisInst,isisDom,isisDomAf,isisOverload,isisInternalIf")}
 	res, err := device.Client.GetDn(config.getDn(), queries...)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))

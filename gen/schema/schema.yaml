@@ -47,6 +47,7 @@ child_classes:
   mandatory: bool(required=False) # Set to true if the child class(es) are mandatory
   no_delete: bool(required=False) # Set to true if the child class should not be deleted
   always_include: bool(required=False) # Always include child class in payload even when attributes are empty
+  test_tags: list(str(), required=False) # List of test tags, child class only included in test if env var is set
   attributes: list(include('attribute'), required=False) # List of child class attributes
   child_classes: list(include('child_classes'), required=False) # List of child classes to be included inline
 
